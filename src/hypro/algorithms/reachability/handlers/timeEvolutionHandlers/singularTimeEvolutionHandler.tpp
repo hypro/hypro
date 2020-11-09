@@ -1,5 +1,5 @@
 #include "singularTimeEvolutionHandler.h"
-#define SINGULAR_TIME_EVOL_USE_HPOLYTOPE
+//#define SINGULAR_TIME_EVOL_USE_HPOLYTOPE
 
 namespace hypro {
 template <typename StateSet>
@@ -25,7 +25,6 @@ StateSet singularApplyTimeEvolution( const StateSet& initialSet, const std::vect
 	return timeElapse;
 }
 
-
 template <typename StateSet>
 StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const std::vector<Point<typename StateSet::NumberType>>& flowVertices, tNumber timeBound ) {
 #ifdef SINGULAR_TIME_EVOL_USE_HPOLYTOPE
@@ -36,7 +35,7 @@ StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const st
 
 	auto timeElapseHPol = initSetHPol.minkowskiSum( flowShiftHPol );
 	StateSet timeElapse;
-	convert(timeElapseHPol, timeElapse);
+	convert( timeElapseHPol, timeElapse );
 	timeElapse.removeRedundancy();
 	return timeElapse;
 
