@@ -19,8 +19,8 @@ template <typename Number, typename IdxType>
 matrix_t<Number> removeRows( const matrix_t<Number>& original, const std::vector<IdxType>& rowIndices ) {
 	// compute all rows that need to remain, select those.
 	std::vector<IdxType> remainingRows;
-	for ( IdxType i = 0; i < original.rows(); ++i ) {
-		if ( std::find( rowIndices.begin(), rowIndices.end(), i ) == rowIndices.end() ) {
+	for ( Eigen::Index i = 0; i < original.rows(); ++i ) {
+		if ( std::find( rowIndices.begin(), rowIndices.end(), IdxType( i ) ) == rowIndices.end() ) {
 			remainingRows.emplace_back( i );
 		}
 	}
