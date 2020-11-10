@@ -3,7 +3,7 @@ var searchData=
   ['rawcoordinates',['rawCoordinates',['../classhypro_1_1_point.html#a6043b600ceea75a32970ab2939027ac1',1,'hypro::Point']]],
   ['rays',['rays',['../classhypro_1_1_v_polytope_t.html#a9516e6e03083930cf279aa96d514d011',1,'hypro::VPolytopeT']]],
   ['reach',['Reach',['../classhypro_1_1reachability_1_1_reach.html#ad94fb32064b0bf29945ecb2d9a27a865',1,'hypro::reachability::Reach']]],
-  ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1_reachability_settings.html#af91b99cf64b956259347ba1595d0ad4d',1,'hypro::ReachabilitySettings']]],
+  ['reachabilitysettings',['ReachabilitySettings',['../structhypro_1_1_reachability_settings.html#abaf86ebcab5e03841a2a1c077452d77f',1,'hypro::ReachabilitySettings']]],
   ['reachsingular',['ReachSingular',['../classhypro_1_1reachability_1_1_reach_singular.html#a2342adfd68867fa0b386335c4f81276d',1,'hypro::reachability::ReachSingular']]],
   ['rectangularanalyzer',['RectangularAnalyzer',['../classhypro_1_1_rectangular_analyzer.html#a944f8a795ade0b26abe2b9362f24e50c',1,'hypro::RectangularAnalyzer::RectangularAnalyzer()=delete'],['../classhypro_1_1_rectangular_analyzer.html#a3de280c34125071b0e23273495eae81a',1,'hypro::RectangularAnalyzer::RectangularAnalyzer(const HybridAutomaton&lt; Number &gt; &amp;ha, const Settings &amp;setting)']]],
   ['rectangularworker',['RectangularWorker',['../classhypro_1_1_rectangular_worker.html#ac88809c07f542e2c0b1ea42fa1484319',1,'hypro::RectangularWorker']]],

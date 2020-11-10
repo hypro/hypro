@@ -1,6 +1,5 @@
 var classhypro_1_1_location =
 [
-    [ "flowVariant", "classhypro_1_1_location.html#a4d904357a17bca8b5e90b577d06a4e42", null ],
     [ "transitionVector", "classhypro_1_1_location.html#a5b1c1bd231cc31fcf7bda4bf2752ac75", null ],
     [ "Location", "classhypro_1_1_location.html#a5341ef657623c4188e479cf17c39ef11", null ],
     [ "Location", "classhypro_1_1_location.html#a9949750959f5a116d427ffe81f2d121c", null ],
@@ -15,7 +14,7 @@ var classhypro_1_1_location =
     [ "dimension", "classhypro_1_1_location.html#ab56663403e32b53f04661ca1c685f993", null ],
     [ "getDotRepresentation", "classhypro_1_1_location.html#a00e08686c4582cda2df4c2084dcabf9a", null ],
     [ "getExternalInput", "classhypro_1_1_location.html#a385adc86c40a3c7c44017bd22ea06370", null ],
-    [ "getFlows", "classhypro_1_1_location.html#a6822984a4635d8c19e34577322bc1deb", null ],
+    [ "getFlows", "classhypro_1_1_location.html#ae8a17006ba20ae8aa92a832a716323b9", null ],
     [ "getFlowTypes", "classhypro_1_1_location.html#a78f9f356db9ec3ef95cf30e3a992d3e9", null ],
     [ "getId", "classhypro_1_1_location.html#a00d1e50edc314d7228eb8673f975cc85", null ],
     [ "getInvariant", "classhypro_1_1_location.html#acf2a88e7cce8962765ae1f2468934952", null ],

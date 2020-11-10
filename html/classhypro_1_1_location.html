@@ -135,9 +135,6 @@ Public Types</h2></td></tr>
 <tr class="memitem:a5b1c1bd231cc31fcf7bda4bf2752ac75"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5b1c1bd231cc31fcf7bda4bf2752ac75"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>transitionVector</b> = std::vector&lt; std::unique_ptr&lt; <a class="el" href="classhypro_1_1_transition.html">Transition</a>&lt; Number &gt;&gt;&gt;</td></tr>
 <tr class="separator:a5b1c1bd231cc31fcf7bda4bf2752ac75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d904357a17bca8b5e90b577d06a4e42"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d904357a17bca8b5e90b577d06a4e42"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>flowVariant</b> = std::variant&lt; <a class="el" href="classhypro_1_1linear_flow.html">linearFlow</a>&lt; Number &gt;, <a class="el" href="classhypro_1_1rectangular_flow.html">rectangularFlow</a>&lt; Number &gt;&gt;</td></tr>
-<tr class="separator:a4d904357a17bca8b5e90b577d06a4e42"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -181,10 +178,10 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <a class="el" href="classhypro_1_1rectangular_flow.html">rectangularFlow</a>&lt; Number &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_location.html#a90c6d2414f91e16f6bfe76d4a1891eff">getRectangularFlow</a> (std::size_t I=0) const </td></tr>
 <tr class="memdesc:a90c6d2414f91e16f6bfe76d4a1891eff"><td class="mdescLeft">&#160;</td><td class="mdescRight">returns a rectangular flow for a subspace. The type of subspace needs to be rectangular, otherwise this operation fails. <br /></td></tr>
 <tr class="separator:a90c6d2414f91e16f6bfe76d4a1891eff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6822984a4635d8c19e34577322bc1deb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6822984a4635d8c19e34577322bc1deb"></a>
-const std::vector&lt; flowVariant &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_location.html#a6822984a4635d8c19e34577322bc1deb">getFlows</a> () const </td></tr>
-<tr class="memdesc:a6822984a4635d8c19e34577322bc1deb"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for vector of flow-variants <br /></td></tr>
-<tr class="separator:a6822984a4635d8c19e34577322bc1deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8a17006ba20ae8aa92a832a716323b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae8a17006ba20ae8aa92a832a716323b9"></a>
+const std::vector&lt; flowVariant&lt; Number &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_location.html#ae8a17006ba20ae8aa92a832a716323b9">getFlows</a> () const </td></tr>
+<tr class="memdesc:ae8a17006ba20ae8aa92a832a716323b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for vector of flow-variants <br /></td></tr>
+<tr class="separator:ae8a17006ba20ae8aa92a832a716323b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a78f9f356db9ec3ef95cf30e3a992d3e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a78f9f356db9ec3ef95cf30e3a992d3e9"></a>
 const std::vector&lt; <a class="el" href="namespacehypro.html#ade3e42b7b774f60999db5eb776027882">DynamicType</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classhypro_1_1_location.html#a78f9f356db9ec3ef95cf30e3a992d3e9">getFlowTypes</a> () const </td></tr>
 <tr class="memdesc:a78f9f356db9ec3ef95cf30e3a992d3e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">getter for vector of flow types <br /></td></tr>

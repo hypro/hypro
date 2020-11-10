@@ -1,6 +1,5 @@
 var NAVTREEINDEX8 =
 {
-"classhypro_1_1_project_op.html#af672a70ac9a0498f9696c93215961f1a":[8,0,2,194,3],
 "classhypro_1_1_project_op.html#afab2f654a49da8cbe5bdb89d461a8b0a":[8,0,2,194,13],
 "classhypro_1_1_project_op.html#aff28beab7b1f1d882d354b86466482dd":[8,0,2,194,2],
 "classhypro_1_1_quickhull_algorithm_3_01_number_00_01_euclidian_00_01_enable_if_exact_3_01_number_01_4_01_4.html":[8,0,2,196],
@@ -249,5 +248,6 @@ var NAVTREEINDEX8 =
 "classhypro_1_1_root_grow_node.html#aa1d57c35ca94b75dab2a918d84de6f8b":[8,0,2,221,15],
 "classhypro_1_1_root_grow_node.html#aae3cea666daf995e5bf22e78d04ec018":[8,0,2,221,20],
 "classhypro_1_1_root_grow_node.html#ab5b019a9a5ff66ef750d69c616107323":[8,0,2,221,25],
-"classhypro_1_1_root_grow_node.html#abf4d6e2e56f843eecdfacb30d1ca63dd":[8,0,2,221,3]
+"classhypro_1_1_root_grow_node.html#abf4d6e2e56f843eecdfacb30d1ca63dd":[8,0,2,221,3],
+"classhypro_1_1_root_grow_node.html#ac3f1dd792a64c26195e0e34413037be3":[8,0,2,221,30]
 };

@@ -17,7 +17,7 @@ var searchData=
   ['getfacets',['getFacets',['../classhypro_1_1_quickhull_algorithm_3_01_number_00_01_euclidian_00_01_enable_if_exact_3_01_number_01_4_01_4.html#a9c6237e52694ff8a9e3a12eb8c239362',1,'hypro::QuickhullAlgorithm&lt; Number, Euclidian, EnableIfExact&lt; Number &gt; &gt;']]],
   ['getflowpipe',['getFlowpipe',['../classhypro_1_1_rectangular_worker.html#a5373b8e24adea205fa917fc92c36c8e5',1,'hypro::RectangularWorker::getFlowpipe()'],['../classhypro_1_1_singular_worker.html#a8c9b8a4c43e9cfeb43c3f2bb2df6e4a6',1,'hypro::SingularWorker::getFlowpipe()'],['../classhypro_1_1_reach_tree_node.html#a2496f89561d50a6b0087006ab17ca1fe',1,'hypro::ReachTreeNode::getFlowpipe()']]],
   ['getflowpipes',['getFlowpipes',['../classhypro_1_1_rectangular_analyzer.html#a60784603b3614450f4ef7f3e774aa7e7',1,'hypro::RectangularAnalyzer']]],
-  ['getflows',['getFlows',['../classhypro_1_1_location.html#a6822984a4635d8c19e34577322bc1deb',1,'hypro::Location']]],
+  ['getflows',['getFlows',['../classhypro_1_1_location.html#ae8a17006ba20ae8aa92a832a716323b9',1,'hypro::Location']]],
   ['getflowtypes',['getFlowTypes',['../classhypro_1_1_location.html#a78f9f356db9ec3ef95cf30e3a992d3e9',1,'hypro::Location']]],
   ['getglobalbadstates',['getGlobalBadStates',['../classhypro_1_1_hybrid_automaton.html#a2b31e1b3a0a8674f187c7905d08ba5b6',1,'hypro::HybridAutomaton']]],
   ['gethash',['getHash',['../classhypro_1_1_vertex_container.html#a144e240d9723fb1352dd222f1e15c722',1,'hypro::VertexContainer']]],

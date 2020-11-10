@@ -1,6 +1,5 @@
 var NAVTREEINDEX13 =
 {
-"classhypro_1_1generic_type_visitor.html#a3903e858811f0b6cbee1f453275ced76":[8,0,2,100,0],
 "classhypro_1_1generic_unite_visitor.html":[8,0,2,101],
 "classhypro_1_1generic_unite_visitor.html#a8d326a3b5c61db0d66ea1ba4b175027a":[8,0,2,101,0],
 "classhypro_1_1generic_unite_visitor.html#abbb89f1b4de9c0c66d08821170825049":[8,0,2,101,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX13 =
 "converter_to_zonotope_8tpp_source.html":[9,0,1,0,2,2,14],
 "convex_hull_8h_source.html":[9,0,1,0,3,14],
 "datastructures_2_facet_8h_source.html":[9,0,1,0,1,2],
-"datastructures_2_hybrid_automaton_2flow_2typetraits_8h_source.html":[9,0,1,0,1,0,1,6]
+"datastructures_2_hybrid_automaton_2flow_2typetraits_8h_source.html":[9,0,1,0,1,0,1,6],
+"datastructures_2reachability_2_strategy_8h_source.html":[9,0,1,0,1,1,17]
 };

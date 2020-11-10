@@ -2617,7 +2617,6 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/LinTrafoParameters.h:18: warning: Member power (variable) of class hypro::LinTrafoParameters is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/LinTrafoParameters.h:10: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:40: warning: Member transitionVector (typedef) of class hypro::Location is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:41: warning: Member flowVariant (typedef) of class hypro::Location is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:103: warning: Member getExternalInput() const  (function) of class hypro::Location is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:157: warning: argument 'rhs' of command @param is not found in the argument list of hypro::Location< Number >::getDotRepresentation(const std::vector< std::string > &vars) const
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:157: warning: argument 'rhsVars' of command @param is not found in the argument list of hypro::Location< Number >::getDotRepresentation(const std::vector< std::string > &vars) const
@@ -2633,8 +2632,8 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Filewriter.h:16: warning: Member clearFile() const  (function) of class hypro::LockedFileWriter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/logging/Filewriter.h:22: warning: Member operator<<(const std::string &content) const  (function) of class hypro::LockedFileWriter is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/multithreading/LockableBase.h:11: warning: Member getMutex() const  (function) of class hypro::LockableBase is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:287: warning: Member operator()(const Location< Number > *lhs, const Location< Number > *rhs) const  (function) of class hypro::locPtrComp is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:288: warning: Member operator()(const std::unique_ptr< Location< Number >> &lhs, const std::unique_ptr< Location< Number >> &rhs) const  (function) of class hypro::locPtrComp is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:300: warning: Member operator()(const Location< Number > *lhs, const Location< Number > *rhs) const  (function) of class hypro::locPtrComp is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:301: warning: Member operator()(const std::unique_ptr< Location< Number >> &lhs, const std::unique_ptr< Location< Number >> &rhs) const  (function) of class hypro::locPtrComp is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/LRUCache.h:38: warning: Member LRUCache(std::size_t size) (function) of class hypro::LRUCache is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/LRUCache.h:43: warning: Member begin() (function) of class hypro::LRUCache is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/LRUCache.h:44: warning: Member end() (function) of class hypro::LRUCache is not documented.
@@ -3142,7 +3141,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:166: warning: Member assignment_type (typedef) of class hypro::Range is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:165: warning: Member assignments (variable) of class hypro::Range is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/TaylorModel/TaylorModel.h:182: warning: Member operator<<(std::ostream &os, const Range< N > &range) (friend) of class hypro::Range is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:114: warning: Member ReachabilitySettings(const ReachabilitySettings &orig)=default (function) of class hypro::ReachabilitySettings is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:105: warning: Member ReachabilitySettings(const ReachabilitySettings &orig)=default (function) of class hypro::ReachabilitySettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:88: warning: Member timeBound (variable) of class hypro::ReachabilitySettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:97: warning: Member useGuardTimingInformation (variable) of class hypro::ReachabilitySettings is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/reachability/Settings.h:98: warning: Member useBadStateTimingInformation (variable) of class hypro::ReachabilitySettings is not documented.
@@ -4483,7 +4482,7 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:436: warning: Member operator()(hypro::Halfspace< Number > const &Halfspace) const  (function) of class std::hash< hypro::Halfspace< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:139: warning: Member operator()(const hypro::IntervalAssignment< Number > &reset) const  (function) of class std::hash< hypro::IntervalAssignment< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/flow/linear.h:145: warning: Member operator()(const hypro::linearFlow< Number > &f) const  (function) of class std::hash< hypro::linearFlow< Number > > is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:312: warning: Member operator()(const hypro::Location< Number > &loc) const  (function) of class std::hash< hypro::Location< Number > > is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Location.h:325: warning: Member operator()(const hypro::Location< Number > &loc) const  (function) of class std::hash< hypro::Location< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/adaptions_eigen/adaptions_eigen.h:430: warning: Member operator()(hypro::matrix_t< Number > const &matrix) const  (function) of class std::hash< hypro::matrix_t< Number > > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/ResetTypes.h:148: warning: Member operator()(const hypro::NoneAssignment &reset) const  (function) of class std::hash< hypro::NoneAssignment > is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Point.h:692: warning: Member operator()(hypro::Point< Number > const &point) const  (function) of class std::hash< hypro::Point< Number > > is not documented.
