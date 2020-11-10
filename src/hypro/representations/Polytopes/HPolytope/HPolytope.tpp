@@ -490,9 +490,10 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vert
 		for ( auto facet : facetEnumerator.getFacets() ) {
 			vertices.emplace_back( this->dimension() );
 			//The resulting points can't be points at infinity
-			if ( facet.mOffset == 0 ) {
-				std::cout << "Polytope is unbounded." << std::endl;
-			} else {
+			//if ( facet.mOffset == 0 ) {
+			//std::cout << "Polytope is unbounded." << std::endl;
+			//} else {
+			if ( facet.mOffset != 0 ) {
 				facet.mNormal /= facet.mOffset;
 				vertices.back() = convert<mpq_class, Number>( facet.mNormal );
 			}
