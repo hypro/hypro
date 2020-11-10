@@ -671,7 +671,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:797: warning: documented symbol `Point< Number > hypro::PolytopeT::computeMaxPoint' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:818: warning: documented symbol `Point< Number > hypro::PolytopeT::computeInitVertex' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytope/Polytope.tpp:835: warning: documented symbol `Point< Number > hypro::PolytopeT::localSearch' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:1095: warning: no uniquely matching class member found for 
+/home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/HPolytope/HPolytope.tpp:1096: warning: no uniquely matching class member found for 
   template < Number, Converter, Setting >
   bool hypro::HPolytopeT< Number, Converter, Setting >::contains(const hypro::HPolytopeT< Number, hypro::Converter< Number >, Setting > &rhs) const
 Possible candidates:
