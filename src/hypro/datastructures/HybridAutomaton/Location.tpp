@@ -544,7 +544,7 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 template <typename Number>
 void Location<Number>::decompose( const Decomposition& decomposition ) {
 	auto newFlowTypes = decomposition.subspaceTypes;
-	std::vector<flowVariant> newFlows;
+	std::vector<flowVariant<Number>> newFlows;
 	using Matrix = matrix_t<Number>;
 
 	auto& vpool = VariablePool::getInstance();
