@@ -922,7 +922,6 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/util/plotting/Plotter.h:78: warning: documented symbol `Singleton< Plotter< Number > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/statistics/statistics.h:28: warning: documented symbol `Singleton< Statistician >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/util/VariablePool.h:29: warning: documented symbol `Singleton< VariablePool >' was not declared or defined.
-error: Problems running bibtex. Verify that the command 'perl --version' works from the command line. Exit code: 2
 /home/travis/build/hypro/hypro/src/hypro/util/sequenceGeneration/SequenceGenerator.h:16: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:313: warning: Found unknown command `\detail'
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Halfspace.h:339: warning: Found unknown command `\detail'
@@ -949,18 +948,9 @@ error: Problems running bibtex. Verify that the command 'perl --version' works f
 /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:24: warning: Member sample(const SetType &in, unsigned k=0) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/util/sampling/sampling.h:87: warning: Member sample(const carl::Interval< tNumber > guardIntersectInterval, unsigned k=0) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/doc/markdown/gettingStarted/installation.md:18: warning: found subsection command outside of section context!
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:20: warning: \cite command to 'isat' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:20: warning: \cite command to 'BagnaraHZ08SCP' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:20: warning: \cite command to 'polymake' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:47: warning: \cite command to 'BagnaraHZ08SCP' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:47: warning: \cite command to 'polymake' does not have an associated number
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:63: warning: Found unknown command `\cora'
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:70: warning: expected whitespace after { command
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: Found unknown command `\spaceex'
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'LeGuernicG10' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'FrehseLGDRLRGDM11' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'stc' does not have an associated number
-/home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/generalStateSets.md:78: warning: \cite command to 'Frehse2015' does not have an associated number
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/usage.md:3: warning: unable to resolve reference to `hypro::GeometricObject<Number,DerivedShape>' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/usage.md:23: warning: unable to resolve reference to `example_HPolytope.cpp' for \ref command
 /home/travis/build/hypro/hypro/doc/markdown/stateSetRepresentations/usage.md:25: warning: unable to resolve reference to `example_bouncingBall.cpp' for \ref command
