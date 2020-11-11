@@ -19,6 +19,7 @@ Currently we provide an <a href="https://hypro.github.io/hypro/html/index.html" 
 
 Current TravisCi build state:
 
+github actions: ![CMake](https://github.com/hypro/hypro/workflows/CMake/badge.svg)
 master: [![Build Status](https://travis-ci.com/hypro/hypro.svg?branch=master)](https://travis-ci.com/hypro/hypro)
 alpha:  [![Build Status](https://travis-ci.com/hypro/hypro.svg?branch=alpha)](https://travis-ci.com/hypro/hypro)
 coverage: [![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=hypro&metric=alert_status)](https://sonarcloud.io/dashboard?id=hypro)
