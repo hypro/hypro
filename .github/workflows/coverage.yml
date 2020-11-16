@@ -10,7 +10,6 @@ on:
       - master
       - alpha 
 
-name: Main Workflow
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
