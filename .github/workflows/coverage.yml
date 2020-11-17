@@ -18,9 +18,12 @@ jobs:
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
+        
+    - name: Show files
+      run: ls -lah
   
     - name: Copy Sonarcloud Properties File
-      run: cp ${{ runner.workspace }}/.travis/sonar-project.properties ${{ runner.workspace }}
+      run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
