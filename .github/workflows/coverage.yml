@@ -19,8 +19,8 @@ jobs:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
         
-    - name: Show files
-      run: ls -lah
+    - name: Configure Project
+      run: mkdir build && cd build && cmake .. && cd .. && ls -lah .travis/
   
     - name: Copy Sonarcloud Properties File
       run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
