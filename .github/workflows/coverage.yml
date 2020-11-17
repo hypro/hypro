@@ -19,6 +19,31 @@ jobs:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
         
+    - name: Create Dependencies Environment
+      shell: bash
+      working-directory: ${{runner.workspace}}
+      run: cmake -E make_directory ${{runner.workspace}}/dependencies
+
+    - name: Download Dependencies
+      shell: bash
+      working-directory: ${{runner.workspace}}/dependencies
+      run: git clone --depth 1 --branch 19.10 https://github.com/smtrat/carl carl && sudo apt install libeigen3-dev uuid-dev
+      
+    - name: Create Build Environment for Dependencies
+      shell: bash
+      working-directory: ${{runner.workspace}}/dependencies
+      run: cmake -E make_directory ${{runner.workspace}}/dependencies/carl/build
+      
+    - name: Configure Dependencies
+      shell: bash
+      working-directory: ${{runner.workspace}}/dependencies/carl/build
+      run: cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+      
+    - name: Build Dependencies
+      shell: bash
+      working-directory: ${{runner.workspace}}/dependencies/carl/build
+      run: cmake --build . --config $BUILD_TYPE -j 3 --target carl
+        
     - name: Configure Project
       run: mkdir build && cd build && cmake .. && cd .. && ls -lah .travis/
   
