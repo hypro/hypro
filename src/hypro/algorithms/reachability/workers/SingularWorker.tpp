@@ -17,14 +17,15 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 
 	Representation initialSet = task.getInitialSet();
 
-	auto [containment, segment] = intersect( initialSet, task.getLocation()->getInvariant() );
+	auto [containment, segment] = intersect( initialSet, task.getLocation()->getInvariant(), mSubspace );
 	if ( containment == CONTAINMENT::NO ) {
+		std::cout << "Singular: No intersect with invariant in initial\n";
 		return REACHABILITY_RESULT::SAFE;
 	}
 	// add state to flowpipe
-	mFlowpipe.addState( segment );
+	//mFlowpipe.addState( segment );
 
-	std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, task.getLocation(), mHybridAutomaton );
+	std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, task.getLocation(), mHybridAutomaton, mSubspace );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;
@@ -37,40 +38,37 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 	// construct point describing the dynamics
 	std::vector<Point<Number>> dynamics;
 	// The last column of the flow matrix are the constant derivatives. Only take the head to have consistent dimensions with the initial set
-	dynamics.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow().getFlowMatrix().col( initialSet.dimension() ) ).head( initialSet.dimension() ) );
+	dynamics.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow( mSubspace ).getFlowMatrix().col( initialSet.dimension() ) ).head( initialSet.dimension() ) );
 
 	if ( !useTimestep ) {
 		Representation timeSuccessors = singularApplyBoundedTimeEvolution( segment, dynamics, carl::convert<tNumber, Number>( mSettings.localTimeHorizon ) );
-		auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant() );
+		auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant(), mSubspace );
 		if ( invariantContainment == CONTAINMENT::NO ) {
 			return REACHABILITY_RESULT::SAFE;
 		}
 		// add state to flowpipe
 		mFlowpipe.addState( constrainedTimeSuccessors );
-		std::tie( containment, segment ) = ltiIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton );
+		std::tie( containment, segment ) = ltiIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton, mSubspace );
 		if ( containment != CONTAINMENT::NO ) {
 			// Todo: memorize the intersecting state set and keep state.
 			return REACHABILITY_RESULT::UNKNOWN;
 		}
 	} else {
-		tNumber elapsedTime = 0;
-		Representation timeSuccessors = segment;
-		do {
-			std::cout <<  carl::toDouble(elapsedTime) << "\n";
-			elapsedTime += mSettings.fixedTimeStep;
-			timeSuccessors = singularApplyBoundedTimeEvolution( timeSuccessors, dynamics, mSettings.fixedTimeStep );
-			auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant() );
+		Representation initialSet = segment;
+		for ( tNumber elapsedTime = 0; elapsedTime < mSettings.localTimeHorizon; elapsedTime += mSettings.fixedTimeStep ){
+			Representation timeSuccessors = singularApplyTimeStep( initialSet, dynamics, elapsedTime, elapsedTime + mSettings.fixedTimeStep );
+			auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant(), mSubspace );
 			if ( invariantContainment == CONTAINMENT::NO ) {
 				return REACHABILITY_RESULT::SAFE;
 			}
 			// add state to flowpipe
 			mFlowpipe.addState( constrainedTimeSuccessors );
-			std::tie( containment, segment ) = ltiIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton );
+			containment = ltiIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton, mSubspace ).first;
 			if ( containment != CONTAINMENT::NO ) {
 				// Todo: memorize the intersecting state set and keep state.
 				return REACHABILITY_RESULT::UNKNOWN;
 			}
-		} while ( elapsedTime < mSettings.localTimeHorizon );
+		}
 	}
 
 	return REACHABILITY_RESULT::SAFE;
