@@ -6,15 +6,15 @@ template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
     std::vector<WorkerVariant> workers;
     // Set up workers
+    std::vector<TimeTransformationCache<Number>> subspaceTransformationCache( mDecomposition.subspaces.size() );
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
-        WorkerVariant worker;
         switch( mDecomposition.subspaceTypes[ subspace ] ) {
             case DynamicType::discrete:
                 [[fallthrough]];
             case DynamicType::timed:
                 [[fallthrough]];
             case DynamicType::singular:
-                worker = SingularWorker<Representation>{ *mHybridAutomaton, mFixedParameters };
+                workers.push_back( WorkerVariant{ SingularWorker<Representation>{ *mHybridAutomaton, mFixedParameters, subspace } } );
                 break;
             case DynamicType::rectangular:
                 // Todo: Initialize rectangular worker
@@ -22,13 +22,12 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
             case DynamicType::affine:
                 [[fallthrough]];
             case DynamicType::linear:
-                worker = LTIWorker<Representation>{ *mHybridAutomaton, mParameters, mFixedParameters.localTimeHorizon, TimeTransformationCache<Number>() };
+                workers.push_back( LTIWorker<Representation>{ *mHybridAutomaton, mParameters, mFixedParameters.localTimeHorizon, subspaceTransformationCache[subspace], subspace } );
                 break;
             default:
                 assert( false );
                 break;
         }
-        workers.push_back( worker );
     }
 
     while ( !mWorkQueue.empty() ) {
@@ -46,7 +45,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
 
             // 1. + 2. Call workers; create flowpipe
             WorkerVariant subspaceWorker = workers[ subspace ];
-            REACHABILITY_RESULT safetyResult = std::visit( detail::computeTimeSuccessorVisitor{ subspace, currentNodes }, subspaceWorker );
+            REACHABILITY_RESULT safetyResult = std::visit( detail::computeTimeSuccessorVisitor<Representation>{ subspace, currentNodes }, subspaceWorker );
             if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
                 unsafeSubspaces.push_back( subspace );
             }
@@ -66,7 +65,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         for ( std::size_t subspace = mDecomposition.subspaces.size() - 1;; --subspace ) {
             if ( currentNodes[ subspace ]->getFlowpipe().size() <= minimalSegmentCount ) {
                 // Nothing to remove
-                if ( subspace == unsafeSubspaces.back() ) {
+                if ( unsafeSubspaces.size() > 0 && subspace == unsafeSubspaces.back() ) {
                     // Unsafe state is within time limit
                     return { Failure{ currentNodes[ subspace ] } };
                 }
@@ -74,6 +73,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
             else {
                 // todo: remove elements from flowpipe (?) or create new node for subspace
             }
+            if ( subspace == 0 ) break;
         }
 
     }

@@ -19,13 +19,16 @@ struct computeTimeSuccessorVisitor{
 	std::size_t subspaceIndex;
 	std::vector<ReachTreeNode<Representation>*> nodes;
     REACHABILITY_RESULT operator()( SingularWorker<Representation>& worker ) {
-        REACHABILITY_RESULT res = worker.computeTimeSuccessors( nodes[ subspaceIndex ], true );
+        REACHABILITY_RESULT res = worker.computeTimeSuccessors( *nodes[ subspaceIndex ], true );
         auto& flowpipe = nodes[ subspaceIndex ]->getFlowpipe();
         flowpipe.insert( flowpipe.begin(), worker.getFlowpipe().begin(), worker.getFlowpipe().end() );
         return res;    	
     }
     REACHABILITY_RESULT operator()( LTIWorker<Representation>& worker ) {
     	return worker.computeTimeSuccessors( nodes[ subspaceIndex ]->getInitialSet(), nodes[ subspaceIndex ]->getLocation(), std::back_inserter( nodes[ subspaceIndex ]->getFlowpipe() ) );
+    }
+    REACHABILITY_RESULT operator()( RectangularWorker<Representation>& worker ) {
+      return REACHABILITY_RESULT::SAFE;
     }
     // Todo: rectangular worker
 };
@@ -54,13 +57,13 @@ class DecompositionalAnalyzer {
                  Decomposition const& decomposition,
                  FixedAnalysisParameters const& fixedParameters,
                  AnalysisParameters const& parameters,
-                 std::vector<std::vector<ReachTreeNode<Representation>>>& roots )
+                 std::vector<std::vector<ReachTreeNode<Representation>*>>& roots )
         : mHybridAutomaton( &ha )
         , mDecomposition( decomposition )
         , mFixedParameters( fixedParameters )
         , mParameters( parameters ) {
         for ( auto& root : roots ) {
-            mWorkQueue.push_front( &root );
+            mWorkQueue.push_front( root );
         }
     }
 
@@ -70,9 +73,9 @@ class DecompositionalAnalyzer {
   protected:
     std::deque<NodeVector> mWorkQueue;
     HybridAutomaton<Number> const* mHybridAutomaton;
+    Decomposition mDecomposition;
     FixedAnalysisParameters mFixedParameters;
     AnalysisParameters mParameters;
-    Decomposition mDecomposition;
 };
 
 }  // namespace hypro
