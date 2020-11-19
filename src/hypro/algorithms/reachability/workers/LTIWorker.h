@@ -25,8 +25,9 @@ class LTIWorker {
   public:
 	struct JumpSuccessorGen;
 
-	LTIWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
+	LTIWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache, std::size_t subspace = 0 )
 		: mHybridAutomaton( ha )
+		, mSubspace( subspace )
 		, mSettings( settings )
 		, mLocalTimeHorizon( localTimeHorizon )
 		, mTrafoCache( trafoCache ) {}
@@ -42,6 +43,7 @@ class LTIWorker {
 	const AnalysisParameters& mSettings;			  ///< analysis settings
 	tNumber mLocalTimeHorizon;						  ///< local time horizon
 	TimeTransformationCache<Number>& mTrafoCache;	  ///< cache for matrix exponential
+	std::size_t mSubspace;
 
 	size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
 };

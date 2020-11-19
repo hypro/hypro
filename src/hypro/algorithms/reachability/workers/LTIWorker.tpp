@@ -5,9 +5,9 @@ namespace hypro {
 template <typename Representation>
 template <typename OutputIt>
 REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const {
-	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, mSettings.timeStep ), mSettings.timeStep );
+	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow( mSubspace ), mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ), mSettings.timeStep );
 
-	auto [containment, segment] = intersect( firstSegment, loc->getInvariant() );
+	auto [containment, segment] = intersect( firstSegment, loc->getInvariant(), mSubspace );
 	//If the first segment did not fulfill the invariant of the location, the jump here should not have been made
 	assert( containment != CONTAINMENT::NO );
 
@@ -16,7 +16,7 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	++out;
 
 	// intersect with badstates
-	std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton );
+	std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton, mSubspace );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;
@@ -24,8 +24,8 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 
 	// while not done
 	for ( size_t segmentCount = 1; segmentCount < mNumSegments; ++segmentCount ) {
-		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
-		std::tie( containment, segment ) = intersect( segment, loc->getInvariant() );
+		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ) );
+		std::tie( containment, segment ) = intersect( segment, loc->getInvariant(), mSubspace );
 		if ( containment == CONTAINMENT::NO ) {
 			return REACHABILITY_RESULT::SAFE;
 		}
@@ -34,7 +34,7 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 		++out;
 
 		// intersect with badstates
-		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton );
+		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton, mSubspace );
 		if ( containment != CONTAINMENT::NO ) {
 			// Todo: memorize the intersecting state set and keep state.
 			return REACHABILITY_RESULT::UNKNOWN;

@@ -91,12 +91,12 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 };
 
 template <class Representation, class Number>
-std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> const& ha ) {
+std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> const& ha, std::size_t I = 0 ) {
 	std::vector<ReachTreeNode<Representation>> roots{};
 
-	std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ), []( auto const& locCond ) {
+	std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ), [ I ]( auto const& locCond ) {
 		auto const& [location, condition] = locCond;
-		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix(), condition.getVector() }, { 0, 0 } };
+		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix( I ), condition.getVector( I ) }, { 0, 0 } };
 	} );
 
 	return roots;

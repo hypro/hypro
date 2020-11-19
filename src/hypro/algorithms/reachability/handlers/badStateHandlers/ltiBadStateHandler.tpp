@@ -3,10 +3,10 @@
 namespace hypro {
 
 template <typename Representation, typename Number>
-std::pair<CONTAINMENT, Representation> ltiIntersectBadStates( const Representation& valuationSet, Location<Number> const* location, const HybridAutomaton<Number>& automaton ) {
+std::pair<CONTAINMENT, Representation> ltiIntersectBadStates( const Representation& valuationSet, Location<Number> const* location, const HybridAutomaton<Number>& automaton, std::size_t I ) {
 	auto localBadState = automaton.getLocalBadStates().find( location );
 	if ( localBadState != automaton.getLocalBadStates().end() ) {
-		std::pair<CONTAINMENT, Representation> badStatePair = intersect( valuationSet, localBadState->second );
+		std::pair<CONTAINMENT, Representation> badStatePair = intersect( valuationSet, localBadState->second, I );
 		if ( badStatePair.first != hypro::CONTAINMENT::NO ) {
 			DEBUG( "hydra.worker", "Intersection with local bad states. (intersection type " << badStatePair.first << ")" );
 			return badStatePair;
@@ -16,7 +16,7 @@ std::pair<CONTAINMENT, Representation> ltiIntersectBadStates( const Representati
 	// check global bad states
 	for ( const auto& badState : automaton.getGlobalBadStates() ) {
 		// at least one global bad Representation in this subspace
-		std::pair<CONTAINMENT, Representation> badStatePair = intersect( valuationSet, badState );
+		std::pair<CONTAINMENT, Representation> badStatePair = intersect( valuationSet, badState, I );
 		if ( badStatePair.first != CONTAINMENT::NO ) {
 			DEBUG( "hydra.worker", "Intersection with global bad states" );
 			return badStatePair;
