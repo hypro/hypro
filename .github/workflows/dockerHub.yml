@@ -42,7 +42,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ushamandya/simplewhale:latest
+          tags: hypro/hypro:${GITHUB_REF##*/}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
