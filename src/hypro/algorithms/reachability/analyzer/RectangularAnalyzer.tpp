@@ -18,23 +18,18 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::run() {
 
 template <typename State>
 REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
-	// initialize queue
-	for ( auto& [location, condition] : mHybridAutomaton.getInitialStates() ) {
-		// create initial state
-		State initialState{ location };
-		initialState.setSet( typename State::template nth_representation<0>{ condition.getMatrix(), condition.getVector() } );
-		initialState.setTimestamp( carl::Interval<tNumber>( 0 ) );
-
-		// create node from state
-		auto initialNode{ std::make_unique<ReachTreeNode<State>>( location, initialState, carl::Interval<SegmentInd>( 0 ) ) };
-		// add to reachTree
-		mReachTree.emplace_back( std::move( initialNode ) );
-		// add to queue
-		mWorkQueue.push( mReachTree.back().get() );
+	// create reachTree if not already present
+	if(mReachTree.empty()) {
+		mReachTree = makeRoots<State>( mHybridAutomaton );
 	}
 
+	// initialize queue
+	for(const auto& rtNode : mReachTree) {
+		mWorkQueue.emplace_back(rtNode);
+	}
+
+	RectangularWorker<State> worker{ mHybridAutomaton, mAnalysisSettings };
 	while ( !mWorkQueue.empty() ) {
-		RectangularWorker<State> worker{ mHybridAutomaton, mAnalysisSettings };
 		ReachTreeNode<State>* currentNode = mWorkQueue.front();
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
@@ -58,15 +53,6 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 				// update reachTree
 				// time is not considered in rectangular analysis so we store a dummy
 				auto& childNode = currentNode->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
-				/*
-				auto* childNode = new ReachTreeNode<State>{ jmpSucc };
-				childNode->setParent( currentNode );
-				currentNode->addChild( childNode );
-
-				// update path (global time)
-				childNode->addTimeStepToPath( carl::Interval<tNumber>( worker.getFlowpipe().begin()->getTimestamp().lower(), jmpSucc.getTimestamp().upper() ) );
-				childNode->addTransitionToPath( transitionStatesPair.first, jmpSucc.getTimestamp() );
-				*/
 
 				// create Task
 				mWorkQueue.push( &childNode );

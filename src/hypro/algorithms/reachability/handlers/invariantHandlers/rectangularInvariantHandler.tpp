@@ -2,19 +2,18 @@
 
 namespace hypro {
 template <typename State>
-std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateSet ) {
+std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateSet, const Location<Number>* loc ) {
 	// check if initial Valuation fulfills Invariant
-	assert( stateSet.getLocation() != nullptr );
 	CONTAINMENT containmentResult = CONTAINMENT::BOT;
 
-	TRACE( "hydra.worker", "Check invariant: " << stateSet.getLocation()->getInvariant() << " for set " << stateSet );
+	//TRACE( "hydra.worker", "Check invariant: " << stateSet.getLocation()->getInvariant() << " for set " << stateSet );
 
 	// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 	// create carlPolytope, as intersection is defined for those
 	// TEMPORARY!
 	State invariant(stateSet);
-	if ( !stateSet.getLocation()->getInvariant().empty() ){
-		invariant = State{ CarlPolytope<typename State::NumberType>{ stateSet.getLocation()->getInvariant().getMatrix(), stateSet.getLocation()->getInvariant().getVector() } };
+	if ( !loc->getInvariant().empty() ){
+		invariant = State{ CarlPolytope<typename State::NumberType>{ loc->getInvariant().getMatrix(), loc->getInvariant().getVector() } };
 	}
 
 	// State invariant{ CarlPolytope<typename State::NumberType>{ stateSet.getLocation()->getInvariant().getMatrix(), stateSet.getLocation()->getInvariant().getVector() } };

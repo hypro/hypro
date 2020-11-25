@@ -15,7 +15,7 @@ template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const ReachTreeNode<State>& task ) {
 	State initialSet = task.getInitialSet();
 
-	auto [containment, segment] = rectangularIntersectInvariant( initialSet );
+	auto [containment, segment] = rectangularIntersectInvariant( initialSet, task.getLocation() );
 	if ( containment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
@@ -23,15 +23,15 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const Reach
 	// add state to flowpipe
 	mFlowpipe.addState( segment );
 
-	std::tie( containment, segment ) = rectangularIntersectBadStates( segment, mHybridAutomaton );
+	std::tie( containment, segment ) = rectangularIntersectBadStates( segment, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 
 	// compute time successor states
-	State timeSuccessors = rectangularApplyTimeEvolution( segment, initialSet.getLocation()->getRectangularFlow() );
-	auto [invariantContainment, constrainedTimeSuccessors] = rectangularIntersectInvariant( timeSuccessors );
+	State timeSuccessors = rectangularApplyTimeEvolution( segment, task.getLocation()->getRectangularFlow() );
+	auto [invariantContainment, constrainedTimeSuccessors] = rectangularIntersectInvariant( timeSuccessors, task.getLocation() );
 	if ( invariantContainment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
@@ -39,7 +39,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const Reach
 	// add state to flowpipe
 	mFlowpipe.addState( constrainedTimeSuccessors );
 
-	std::tie( containment, segment ) = rectangularIntersectBadStates( constrainedTimeSuccessors, mHybridAutomaton );
+	std::tie( containment, segment ) = rectangularIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;
@@ -80,7 +80,7 @@ template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( const ReachTreeNode<State>& task ) {
 	State badSet = task.getInitialSet();
 
-	auto [containment, segment] = rectangularIntersectInvariant( badSet );
+	auto [containment, segment] = rectangularIntersectInvariant( badSet, task.getLocation() );
 	if ( containment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
@@ -88,7 +88,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( const Rea
 	// add state to flowpipe
 	mFlowpipe.addState( segment );
 
-	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( segment, mHybridAutomaton );
+	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( segment, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;
@@ -97,7 +97,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( const Rea
 	// compute time predecessors states
 	State timePredecessors = rectangularApplyReverseTimeEvolution( segment, badSet.getLocation()->getRectangularFlow() );
 	std::cout << "time" << std::endl;
-	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors );
+	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors, task.getLocation() );
 	if ( invariantContainment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
@@ -105,7 +105,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( const Rea
 	// add state to flowpipe
 	mFlowpipe.addState( constrainedTimePredecessors );
 
-	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( constrainedTimePredecessors, mHybridAutomaton );
+	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( constrainedTimePredecessors, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
 		return REACHABILITY_RESULT::UNKNOWN;

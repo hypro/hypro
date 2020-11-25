@@ -1,19 +1,19 @@
 #include "rectangularBadStateHandler.h"
 
 namespace hypro {
-template <typename State>
-std::pair<CONTAINMENT, State> rectangularIntersectBadStates( const State& stateSet, const HybridAutomaton<typename State::NumberType>& automaton ) {
+template <typename State, typename Location>
+std::pair<CONTAINMENT, State> rectangularIntersectBadStates( const State& stateSet, const Location* loc, const HybridAutomaton<typename State::NumberType>& automaton ) {
 	TRACE( "hydra.worker.continuous", "Having a total of " << automaton.getLocalBadStates().size() << " local bad states." );
-	auto localBadState = automaton.getLocalBadStates().find( stateSet.getLocation() );
+	auto localBadState = automaton.getLocalBadStates().find( loc );
 	if ( localBadState != automaton.getLocalBadStates().end() ) {
 		TRACE( "hydra.worker.continuous", "Checking local bad state: " << localBadState->second );
 
 		// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 		// create carlPolytope, as intersection is defined for those
-		CarlPolytope<typename State::NumberType> badStateConstraints{ localBadState->second.getMatrix(), localBadState->second.getVector() };
+		State badStateConstraints{ localBadState->second.getMatrix(), localBadState->second.getVector() };
 
 		// intersect
-		auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( stateSet.getSet() ).intersect( badStateConstraints );
+		auto resultingSet = stateSet.intersect( badStateConstraints );
 
 		// reduction
 		resultingSet.removeRedundancy();
@@ -33,10 +33,10 @@ std::pair<CONTAINMENT, State> rectangularIntersectBadStates( const State& stateS
 			// at least one global bad state in this subspace
 			// create constraints for invariant. Note that we need to properly match dimension indices with variable names at some point.
 			// create carlPolytope, as intersection is defined for those
-			CarlPolytope<typename State::NumberType> badStateConstraints{ badState.getMatrix(), badState.getVector() };
+			State badStateConstraints{ badState.getMatrix(), badState.getVector() };
 
 			// intersect
-			auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( stateSet.getSet() ).intersect( badStateConstraints );
+			auto resultingSet = stateSet.intersect( badStateConstraints );
 
 			// reduction
 			resultingSet.removeRedundancy();
@@ -50,19 +50,19 @@ std::pair<CONTAINMENT, State> rectangularIntersectBadStates( const State& stateS
 	return std::make_pair( CONTAINMENT::NO, stateSet );
 }
 
-template <typename State>
-std::pair<CONTAINMENT, State> rectangularBadIntersectInitialStates( const State& stateSet, const HybridAutomaton<typename State::NumberType>& automaton ) {
+template <typename State, typename Location>
+std::pair<CONTAINMENT, State> rectangularBadIntersectInitialStates( const State& stateSet, const Location* loc, const HybridAutomaton<typename State::NumberType>& automaton ) {
 	TRACE( "hydra.worker.continuous", "Having a total of " << automaton.getInitialStates().size() << " initial states." );
-	auto initialState = automaton.getInitialStates().find( stateSet.getLocation() );
+	auto initialState = automaton.getInitialStates().find( loc );
 	if ( initialState != automaton.getInitialStates().end() ) {
 		TRACE( "hydra.worker.continuous", "Checking initial state: " << initialState->second );
 
 		// create constraints for initial state set
 		// create carlPolytope, as intersection is defined for those
-		CarlPolytope<typename State::NumberType> initialConstraints{ initialState->second.getMatrix(), initialState->second.getVector() };
+		State initialConstraints{ initialState->second.getMatrix(), initialState->second.getVector() };
 
 		// intersect
-		auto resultingSet = std::get<CarlPolytope<typename State::NumberType>>( stateSet.getSet() ).intersect( initialConstraints );
+		auto resultingSet = stateSet.intersect( initialConstraints );
 
 		// reduction
 		resultingSet.removeRedundancy();

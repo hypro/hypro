@@ -24,6 +24,12 @@ class RectangularAnalyzer {
 		, mAnalysisSettings( setting )
 		, mReachTree() {
 	}
+	/// constructor from automaton and settings with additional reachTree
+	RectangularAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting,  )
+		: mHybridAutomaton( ha )
+		, mAnalysisSettings( setting )
+		, mReachTree() {
+	}
 	/// main method for reachability analysis
 	REACHABILITY_RESULT run();
 	REACHABILITY_RESULT forwardRun();
@@ -36,7 +42,7 @@ class RectangularAnalyzer {
 	std::vector<Flowpipe<State>> mFlowpipes;						///< Storage for already computed flowpipes
 	HybridAutomaton<Number> mHybridAutomaton;						///< Automaton which is analyzed
 	Settings mAnalysisSettings;										///< Settings used for analysis
-	std::vector<std::unique_ptr<ReachTreeNode<State>>> mReachTree;	///< Forest of ReachTrees computed
+	std::vector<ReachTreeNode<State>> mReachTree;	///< Forest of ReachTrees computed
 };
 
 }  // namespace hypro

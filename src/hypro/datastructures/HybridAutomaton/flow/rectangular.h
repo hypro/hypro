@@ -84,6 +84,25 @@ class rectangularFlow {
 		}
 		return out;
 	}
+
+	std::vector<Point<Number>> vertices() const {
+		PermutationSequenceGenerator<WithReturningNoOrder> sequencer{2,dim};
+	std::vector<Point<Number>> flowVertices;
+	while(!sequencer.end()) {
+		std::vector<std::size_t> selection = sequencer();
+		Point<Number> vertex{vector_t<Number>::Zero(dim)};
+		for(std::size_t i = 0; i < selection.size(); ++i) {
+			assert(selection[i] == 1 || selection[i] == 0)
+			if(selection[i] == 0) {
+				vertex[i] = flow.getFlowIntervals()[VariablePool::getInstance().carlVarByIndex(i)].lower();
+			} else {
+				vertex[i] = flow.getFlowIntervals()[VariablePool::getInstance().carlVarByIndex(i)].upper();
+			}
+		}
+		flowVertices.emplace_back(std::move(vertex));
+	}
+	return flowVertices;
+	}
 };
 
 }  // namespace hypro
