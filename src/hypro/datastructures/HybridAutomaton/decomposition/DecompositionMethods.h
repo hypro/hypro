@@ -33,6 +33,9 @@ template <typename Number>
 bool checkDecomposed( const HybridAutomaton<Number> &automaton );
 template <typename Number>
 std::pair<HybridAutomaton<Number>, Decomposition> decomposeAutomaton( const HybridAutomaton<Number> &automaton );
+// Adds a clock to the automaton as the last variable in the given subspace
+template <typename Number>
+void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace );
 
 namespace detail {
 /// adds edges in the subspace graph for related variables of a linear transformation
@@ -50,6 +53,9 @@ void addEdgesForRectTrafo( const std::vector<carl::Interval<Number>> &intervals,
 /// adds edges in the subspace graph for related variables in an interval assignment
 template <typename Number>
 void addEdgesForRectMap( const std::map<carl::Variable, carl::Interval<Number>> &map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
+// adds a clock to the condition as the last variable in the given subspace
+template <typename Number>
+Condition<Number> addClockToCondition( Condition<Number> cond, std::size_t subspace );
 }  // namespace detail
 
 /// checks whether the automaton is a timed automaton
