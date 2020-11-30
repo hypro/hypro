@@ -19,7 +19,6 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 
 	auto [containment, segment] = intersect( initialSet, task.getLocation()->getInvariant(), mSubspace );
 	if ( containment == CONTAINMENT::NO ) {
-		std::cout << "Singular: No intersect with invariant in initial\n";
 		return REACHABILITY_RESULT::SAFE;
 	}
 	// add state to flowpipe
@@ -33,7 +32,7 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 
 	// compute time successor states
 	// assert singular flow
-	assert( task.getLocation()->getLinearFlow().getFlowMatrix().leftCols( initialSet.dimension() ) == matrix_t<Number>::Zero( initialSet.dimension() + 1, initialSet.dimension() ) );
+	assert( task.getLocation()->getLinearFlow( mSubspace ).getFlowMatrix().leftCols( initialSet.dimension() ) == matrix_t<Number>::Zero( initialSet.dimension() + 1, initialSet.dimension() ) );
 
 	// construct point describing the dynamics
 	std::vector<Point<Number>> dynamics;

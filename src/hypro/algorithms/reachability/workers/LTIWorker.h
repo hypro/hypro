@@ -27,10 +27,10 @@ class LTIWorker {
 
 	LTIWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache, std::size_t subspace = 0 )
 		: mHybridAutomaton( ha )
-		, mSubspace( subspace )
 		, mSettings( settings )
 		, mLocalTimeHorizon( localTimeHorizon )
-		, mTrafoCache( trafoCache ) {}
+		, mTrafoCache( trafoCache )
+		, mSubspace( subspace ) {}
 
 	template <typename OutputIt>
 	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const;

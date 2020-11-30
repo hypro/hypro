@@ -379,7 +379,7 @@ Condition<Number> addClockToCondition( Condition<Number> cond, std::size_t subsp
     auto matrix = cond.getMatrix( subspace );
     matrix_t<Number> newConditionMatrix( matrix.rows(), matrix.cols() + 1 );
     newConditionMatrix.leftCols( matrix.cols() ) = matrix;
-    for ( std::size_t i = 0; i < newConditionMatrix.rows(); ++i ) {
+    for ( Eigen::Index i = 0; i < newConditionMatrix.rows(); ++i ) {
         newConditionMatrix( i, newConditionMatrix.cols() - 1 ) = 0;
     }
     cond.setMatrix( newConditionMatrix, subspace );
@@ -397,7 +397,7 @@ Condition<Number> addClockToInitial( Condition<Number> cond, std::size_t subspac
 	auto condVector = initialWithouClock.getVector( subspace );
 	condMatrix.conservativeResize( condMatrix.rows() + 2, condMatrix.cols() );
 	condVector.conservativeResize( condVector.rows() + 2 );
-	for( std::size_t i = 0; i < condMatrix.cols() - 1; ++i ) {
+	for( Eigen::Index i = 0; i < condMatrix.cols() - 1; ++i ) {
 		condMatrix( condMatrix.rows() - 2, i ) = 0;
 		condMatrix( condMatrix.rows() - 1, i ) = 0;
 	}
