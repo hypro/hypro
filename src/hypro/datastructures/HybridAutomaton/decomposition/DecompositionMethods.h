@@ -56,6 +56,9 @@ void addEdgesForRectMap( const std::map<carl::Variable, carl::Interval<Number>> 
 // adds a clock to the condition as the last variable in the given subspace
 template <typename Number>
 Condition<Number> addClockToCondition( Condition<Number> cond, std::size_t subspace );
+// adds clock to the condition and two additional constraints that set the clock to 0
+template <typename Number>
+Condition<Number> addClockToInitial( Condition<Number> cond, std::size_t subspace );
 }  // namespace detail
 
 /// checks whether the automaton is a timed automaton

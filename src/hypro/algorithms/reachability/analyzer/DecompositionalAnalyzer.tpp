@@ -33,19 +33,19 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         NodeVector currentNodes = mWorkQueue.front();
         mWorkQueue.pop_front();
 
-        Box<Number> invariantSatisfyingTime{ Point<Number>( 0 ), Point<Number>( mFixedParameters.localTimeHorizon ) };
+        Box<Number> invariantSatisfyingTime( std::vector<Point<Number>>( { Point<Number>( 0 ), Point<Number>( carl::convert<tNumber, Number>( mFixedParameters.localTimeHorizon ) ) } ) );
 
         for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
             // Compute time successors
             WorkerVariant subspaceWorker = workers[ subspace ];
-            Box<Number> timeInterval = std::visit( detail::computeTimeSuccessorVisitor<Representation>{ subspace, currentNodes }, subspaceWorker );
+            Box<Number> timeInterval = std::visit( detail::computeTimeSuccessorVisitor<Representation>{ subspace, currentNodes, mFixedParameters.fixedTimeStep, mParameters.timeStep }, subspaceWorker );
             invariantSatisfyingTime = invariantSatisfyingTime.intersect( timeInterval );
             // todo: can continue with next in queue if invariantSatisfyingTime.empty()
         }
 
         for ( std::size_t subspace = 0; subspace <mDecomposition.subspaces.size(); ++subspace ) {
             // intersect each subspace with the valid time interval
-            std::size_t subspaceDimension = mDecomposition.subspaces[ subspace ].size();
+            
             if ( mDecomposition.subspaceTypes[ subspace ] != DynamicType::linear && mDecomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
                 // in this case the last variable is a clock
                 // intersect each segment with the valid time interval
@@ -64,16 +64,21 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
             } else {
                 // keep all segments corresponding to a global time interval that has non empty intersection with the invariant timing
                 // compute global time of the segments via the initial timing of the node (getTimings)
-                int firstSegment = lower( ( carl::toDouble( invariantSatisfyingTime.min().rawCoordinates()[0] ) - currentNodes[ subspace ].getTimings().upper() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep );
-                int lastSegment = upper( ( carl::toDouble( invariantSatisfyingTime.max().rawCoordinates()[0] ) - currentNodes[ subspace ].getTimings().lower() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep );
+                int firstSegment = floor( carl::toDouble( ( carl::toDouble( invariantSatisfyingTime.min().rawCoordinates()[0] ) - currentNodes[ subspace ]->getTimings().upper() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
+                int lastSegment = ceil( carl::toDouble ( ( carl::toDouble( invariantSatisfyingTime.max().rawCoordinates()[0] ) - currentNodes[ subspace ]->getTimings().lower() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
+                // potential bug: if we delete segments, we lose track of time
+                // three options: 1. replace segments that don't satisfy invariant with empty set (what is intersection with empty set in terms of guards/bad states?)
+                // 2. don't delete/replace segments, just make sure to only consider valid segments when checking guard/bad states. This may be weird with plotting
+                // 3. make sure (assert and think) that firstSegment == 0. Then we can just throw away the last segments without losing track of time
                 auto& flowpipe = currentNodes[ subspace ]->getFlowpipe();
-                assert( firstSegment >= 0 && lastSegment <= flowpipe.size() );
+                assert( firstSegment == 0 && lastSegment <= flowpipe.size() );
                 flowpipe = std::vector<Representation>( flowpipe.begin() + firstSegment, flowpipe.begin() + lastSegment );
             }
 
         }
 
     }
+    return { DecompositionalSuccess{} };
 
 }
 

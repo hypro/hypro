@@ -14,21 +14,36 @@
 namespace hypro {
 namespace detail {
 
+// get the time interval covered by the segment if the last variable is the clock
+template <typename Representation>
+auto getTimeInterval( const Representation& segment ) -> Box<typename Representation::NumberType> {
+    using Number = typename Representation::NumberType;
+    vector_t<Number>clockDirection = vector_t<Number>::Zero( segment.dimension() );
+    clockDirection( segment.dimension() - 1 ) = 1;
+    Point<Number> timeLower = Point<Number>( segment.evaluate( clockDirection ).supportValue );
+    Point<Number> timeUpper = Point<Number>( segment.evaluate( -1 * clockDirection ).supportValue );
+    return Box<Number>( std::vector<Point<Number>>( { timeLower, timeUpper } ) );
+
+}
+
+
 // Visitors to call worker functions
 template <typename Representation>
 struct computeTimeSuccessorVisitor {
   using Number = typename Representation::NumberType;
   std::size_t subspaceIndex;
   std::vector<ReachTreeNode<Representation>*> nodes;
+  tNumber fixedTimeStep;
+  tNumber timeStep;
     // return time interval covered by the time successors
     Box<Number> operator()( SingularWorker<Representation>& worker ) {
-        REACHABILITY_RESULT res = worker.computeTimeSuccessors( *nodes[ subspaceIndex ] );
+        worker.computeTimeSuccessors( *nodes[ subspaceIndex ] );
         auto& flowpipe = nodes[ subspaceIndex ]->getFlowpipe();
         flowpipe.insert( flowpipe.begin(), worker.getFlowpipe().begin(), worker.getFlowpipe().end() );
         // the second segment covers the entire time interval
         if ( flowpipe.size() == 0 ) {
             // invariant is initially violated
-            return Representation::Empty( 1 );
+            return Box<Number>::Empty();
         }
         assert( flowpipe.size() == 2 );
         // last variable is the clock
@@ -39,27 +54,18 @@ struct computeTimeSuccessorVisitor {
         auto& flowpipe = nodes[ subspaceIndex ]->getFlowpipe();
         assert( flowpipe.size() > 0 );
         // get global time interval
-        Number timeLower = nodes[ subspaceIndex ]->getTimings().lower()*worker.mFixedParameters.fixedTimeStep;
-        Number timeUpper = nodes[ subspaceIndex ]->getTimings().upper()*worker.mFixedParameters.fixedTimeStep + flowpipe.size()*worker.mParameters.timeStep;
-        return Box<Number>{ Point<Number>( timeLower ), Point<Number>( timeUpper ) };
+        Number timeLower = carl::convert<tNumber, Number>( nodes[ subspaceIndex ]->getTimings().lower()*fixedTimeStep );
+        Number timeUpper = carl::convert<tNumber, Number>( nodes[ subspaceIndex ]->getTimings().upper()*fixedTimeStep + flowpipe.size()*timeStep );
+        return Box<Number>( std::vector<Point<Number>>( { Point<Number>( timeLower ), Point<Number>( timeUpper ) } ) );
     }
     Box<Number> operator()( RectangularWorker<Representation>& worker ) {
         // Todo: rectangular worker. Should be very similar to singular case
+        worker.getFlowpipe();
         return Box<Number>::Empty();
     }
 };
 
-// get the time interval covered by the segment if the last variable is the clock
-template <typename Representation>
-auto getTimeInterval( const Representation& segment ) -> Box<typename Representation::NumberType> {
-    using Number = typename Representation::NumberType;
-    vector_t<Number>clockDirection = vector_t<Number>::Zero( segment.dimension() );
-    clockDirection( segment.dimension() ) = 1;
-    Point<Number> timeLower = Point<Number>( segment.evaluate( clockDirection ).supportValue );
-    Point<Number> timeUpper = Point<Number>( segment.evaluate( -1 * clockDirection ).supportValue );
-    return Box<Number>{ timeLower, timeUpper };
 
-}
 
 /*
 template <typename Representation>
@@ -82,12 +88,6 @@ struct computeTimeSuccessorVisitorSegments {
 };
 */
 } // namespace detail
-
-template <typename Number>
-void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace );
-template <typename Number>
-void addClockToCondition( Condition<Number>& cond, std::size_t subspace );
-
 
 // indicates that the analysis succeeded, i.e. no intersection with bad states
 struct DecompositionalSuccess {};

@@ -386,6 +386,31 @@ Condition<Number> addClockToCondition( Condition<Number> cond, std::size_t subsp
     return cond;
 }
 
+template <typename Number>
+Condition<Number> addClockToInitial( Condition<Number> cond, std::size_t subspace ) {
+	if ( cond.empty() ) {
+		return cond;
+	}
+	auto initialWithouClock = addClockToCondition( cond, subspace );
+	// Initial for clock is 0:
+	auto condMatrix = initialWithouClock.getMatrix( subspace );
+	auto condVector = initialWithouClock.getVector( subspace );
+	condMatrix.conservativeResize( condMatrix.rows() + 2, condMatrix.cols() );
+	condVector.conservativeResize( condVector.rows() + 2 );
+	for( std::size_t i = 0; i < condMatrix.cols() - 1; ++i ) {
+		condMatrix( condMatrix.rows() - 2, i ) = 0;
+		condMatrix( condMatrix.rows() - 1, i ) = 0;
+	}
+	condMatrix( condMatrix.rows() - 2, condMatrix.cols() - 1 ) = 1;
+	condMatrix( condMatrix.rows() - 1, condMatrix.cols() - 1 ) = -1;
+	condVector( condVector.rows() - 2 ) = 0;
+	condVector( condVector.rows() - 1 ) = 0;
+	initialWithouClock.setMatrix( condMatrix, subspace );
+	initialWithouClock.setVector( condVector, subspace );
+	return initialWithouClock;
+
+}
+
 }  // namespace detail
 
 template <typename Number>
@@ -612,7 +637,7 @@ void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace ) {
         // initial states
         std::map<const Location<Number>*, Condition<Number>> newInitialStates;
         for ( auto& [loc, cond] : ha.getInitialStates() ) {
-            newInitialStates[ loc ] = detail::addClockToCondition( cond, subspace );
+            newInitialStates[ loc ] = detail::addClockToInitial( cond, subspace );
         }
         ha.setInitialStates( newInitialStates );
         // local bad states
