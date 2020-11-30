@@ -44,3 +44,13 @@
 1. Intersect each subspace with its bad states and get the time interval of the intersection
   (subspaces that have no bad states should be ignored)
 2. If the intersection of the extracted time intervals is nonempty, the system is unsafe
+
+# Jumps
+### General idea
+1. For each transition get the enabled time intervals (as intersection) in a similar way as for bad states
+2. If an interval is nonempty, intersect the guard-satisfying segments with the time interval
+  (as in time elapse) and let the workers compute the jump successors
+
+### Notes:
+* For one transition there can be multiple time intervals where the guard is enabled, these
+  should be handled individually.
