@@ -5,7 +5,9 @@ namespace hypro {
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
     std::vector<WorkerVariant> workers;
-    // Set up workers
+    /*
+        Initialize workers
+    */
     std::vector<TimeTransformationCache<Number>> subspaceTransformationCache( mDecomposition.subspaces.size() );
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
         switch( mDecomposition.subspaceTypes[ subspace ] ) {
@@ -33,49 +35,104 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         NodeVector currentNodes = mWorkQueue.front();
         mWorkQueue.pop_front();
 
-        Box<Number> invariantSatisfyingTime( std::vector<Point<Number>>( { Point<Number>( 0 ), Point<Number>( carl::convert<tNumber, Number>( mFixedParameters.localTimeHorizon ) ) } ) );
-
+        /*  
+            Compute time successors
+        */
+        carl::Interval<Number> invariantSatisfyingTime( Number( 0 ), carl::convert<tNumber, Number>( mFixedParameters.localTimeHorizon ) );
         for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
-            // Compute time successors
             WorkerVariant subspaceWorker = workers[ subspace ];
-            Box<Number> timeInterval = std::visit( detail::computeTimeSuccessorVisitor<Representation>{ subspace, currentNodes, mFixedParameters.fixedTimeStep, mParameters.timeStep }, subspaceWorker );
-            invariantSatisfyingTime = invariantSatisfyingTime.intersect( timeInterval );
-            // todo: can continue with next in queue if invariantSatisfyingTime.empty()
+            auto timeInterval = std::visit( detail::computeTimeSuccessorVisitor<Representation>{ subspace, currentNodes, mFixedParameters.fixedTimeStep, mParameters.timeStep }, subspaceWorker );
+            invariantSatisfyingTime = carl::set_intersection( invariantSatisfyingTime, timeInterval );
+            // todo: can continue with next in queue if invariantSatisfyingTime.isEmpty()
         }
 
-        for ( std::size_t subspace = 0; subspace <mDecomposition.subspaces.size(); ++subspace ) {
-            // intersect each subspace with the valid time interval
-            
-            if ( mDecomposition.subspaceTypes[ subspace ] != DynamicType::linear && mDecomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-                // in this case the last variable is a clock
-                // intersect each segment with the valid time interval by converting to hpolytope and inserting time constraints
-                std::size_t subspaceDimension = mDecomposition.subspaces[ subspace ].size();
-                vector_t<Number> timeVector = vector_t<Number>::Zero( subspaceDimension + 1 );
-                timeVector( subspaceDimension ) = 1;
-                Halfspace<Number> h1( timeVector, invariantSatisfyingTime.max().rawCoordinates()[0] );
-                Halfspace<Number> h2( -1 * timeVector, invariantSatisfyingTime.min().rawCoordinates()[0] );
-                auto& flowpipe = currentNodes[ subspace ]->getFlowpipe();
-                for ( std::size_t i = 0; i < flowpipe.size(); ++i ) {
-                    HPolytope<Number> hpol;
-                    convert( flowpipe[i], hpol );
-                    hpol.insert( h1 );
-                    hpol.insert( h2 );
-                    convert( hpol, flowpipe[i] );
-                    // todo: remove empty segments
+        // intersect each subspace with the valid time interval
+        for ( auto subspace : mSingularTypeSubspaces ) {
+            // last variable is a clock. intersect each segment with the valid time interval
+            for ( auto& segment : currentNodes[ subspace ]->getFlowpipe() ) {
+                segment = detail::intersectSegmentWithTimeInterval( segment, invariantSatisfyingTime, segment.dimension() - 1 );
+            }
+        }
+        for ( auto subspace : mLtiTypeSubspaces ) {
+            // keep all segments corresponding to a global time interval that has non empty intersection with the invariant timing
+            int firstSegment = floor( carl::toDouble( ( carl::toDouble( invariantSatisfyingTime.lower() ) - currentNodes[ subspace ]->getTimings().upper() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
+            int lastSegment = ceil( carl::toDouble ( ( carl::toDouble( invariantSatisfyingTime.upper() ) - currentNodes[ subspace ]->getTimings().lower() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
+            auto& flowpipe = currentNodes[ subspace ]->getFlowpipe();
+            // firstSegment should equal 0 because the first segment always satisfies the invariant, so just the last segments are thrown away
+            assert( firstSegment == 0 && lastSegment <= flowpipe.size() );            
+            flowpipe = std::vector<Representation>( flowpipe.begin() + firstSegment, flowpipe.begin() + lastSegment );
+        }
+
+
+        /*
+            Check safety
+        */
+        auto badStates = mHybridAutomaton->getGlobalBadStates();
+        auto localBadState = mHybridAutomaton->getLocalBadStates().find( currentNodes[ 0 ]->getLocation() );
+        if ( localBadState != mHybridAutomaton->getLocalBadStates().end() ) {
+            badStates.push_back( localBadState->second );
+        }
+
+        for ( auto badState : badStates ) {
+            carl::Interval<Number> badTimeInterval( Number( 0 ), carl::convert<tNumber, Number>( mFixedParameters.localTimeHorizon ) );
+
+            // Check singular type subspaces to build the time interval with potentially reachable bad states
+            for ( auto subspace : mSingularTypeSubspaces ) {
+                auto flowpipe = currentNodes[ subspace ]->getFlowpipe();
+                assert( flowpipe.size() == 2 );
+                auto [containment, badStatesSubspace] = intersect( flowpipe[ 1 ], badState, subspace );
+                if ( containment != CONTAINMENT::NO ) {
+                    auto badSubspaceTime = detail::getTimeInterval( badStatesSubspace, badStatesSubspace.dimension() - 1 );
+                    badTimeInterval = carl::set_intersection( badTimeInterval, badSubspaceTime );
+                }                
+                if ( badTimeInterval.isEmpty() ) {
+                    break;
                 }
-            } else {
-                // keep all segments corresponding to a global time interval that has non empty intersection with the invariant timing
-                // compute global time of the segments via the initial timing of the node (getTimings)
-                int firstSegment = floor( carl::toDouble( ( carl::toDouble( invariantSatisfyingTime.min().rawCoordinates()[0] ) - currentNodes[ subspace ]->getTimings().upper() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
-                int lastSegment = ceil( carl::toDouble ( ( carl::toDouble( invariantSatisfyingTime.max().rawCoordinates()[0] ) - currentNodes[ subspace ]->getTimings().lower() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
-                auto& flowpipe = currentNodes[ subspace ]->getFlowpipe();
-                assert( firstSegment == 0 && lastSegment <= flowpipe.size() );
-                // firstSegment should equal 1 because the first segment always satisfies the invariant, so just the last segments are thrown away
-                // this means we don't lose track of time
-                flowpipe = std::vector<Representation>( flowpipe.begin() + firstSegment, flowpipe.begin() + lastSegment );
+            }
+            if ( badTimeInterval.isEmpty() ) {
+                continue;
             }
 
+            // build set of global segment-indices that cover the previously computed time interval
+            int firstSegmentToCheck = floor( carl::toDouble( carl::toDouble( badTimeInterval.lower() ) / mFixedParameters.fixedTimeStep ) );
+            int lastSegmentToCheck = ceil( carl::toDouble( carl::toDouble( badTimeInterval.upper() ) / mFixedParameters.fixedTimeStep ) );            
+            std::set<SegmentInd> segmentsToCheck;
+            for ( int i = firstSegmentToCheck; i <= lastSegmentToCheck; ++i ) {
+                segmentsToCheck.insert( i );
+            }
+            // check lti-type subspaces
+            for ( auto subspace : mLtiTypeSubspaces ) {
+                auto flowpipe = currentNodes[ subspace ]->getFlowpipe();
+                int timingLower = currentNodes[ subspace ]->getTimings().lower();
+                int timingUpper = currentNodes[ subspace ]->getTimings().upper();
+                for ( std::size_t segmentIndex = 0; segmentIndex < flowpipe.size(); ++segmentIndex ) {
+                    // if the segment covers a time period that is potentially unsafe, compute intersection with bad state
+                    TRIBOOL segmentUnsafe = TRIBOOL::NSET;
+                    // convert to global index by considering offset and specific time step
+                    for ( std::size_t globalIndex = timingLower + segmentIndex*mParameters.timeStepFactor; globalIndex < timingUpper + segmentIndex*mParameters.timeStepFactor; ++globalIndex ) {
+                        if ( segmentsToCheck.find( globalIndex ) != segmentsToCheck.end() ) {
+                            if ( segmentUnsafe != TRIBOOL::NSET ) {
+                                if ( intersect( flowpipe[ segmentIndex ], badState, subspace ).first != CONTAINMENT::NO ) {
+                                    segmentUnsafe = TRIBOOL::TRUE;
+                                } else {
+                                    segmentUnsafe = TRIBOOL::FALSE;
+                                }
+                            }
+                            if ( segmentUnsafe == TRIBOOL::FALSE ) {
+                                segmentsToCheck.erase( globalIndex );
+                            }
+                        }
+                    }
+
+                }
+            }
+            if ( !segmentsToCheck.empty() ) {
+                // todo: figure out which set to return (maybe build a set from all subspaces?)
+                return { Failure{ currentNodes[ 0 ] } };
+            }
         }
+        
+
 
     }
     return { DecompositionalSuccess{} };

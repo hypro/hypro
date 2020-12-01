@@ -7,25 +7,13 @@
 #include "../workers/LTIWorker.h"
 #include "../workers/RectangularWorker.h"
 #include "./ReturnTypes.h"
+#include "./DecompositionalUtil.h"
 
 #include <queue>
 
 
 namespace hypro {
 namespace detail {
-
-// get the time interval covered by the segment if the last variable is the clock
-template <typename Representation>
-auto getTimeInterval( const Representation& segment ) -> Box<typename Representation::NumberType> {
-    using Number = typename Representation::NumberType;
-    vector_t<Number>clockDirection = vector_t<Number>::Zero( segment.dimension() );
-    clockDirection( segment.dimension() - 1 ) = 1;
-    Point<Number> timeLower = Point<Number>( segment.evaluate( clockDirection ).supportValue );
-    Point<Number> timeUpper = Point<Number>( segment.evaluate( -1 * clockDirection ).supportValue );
-    return Box<Number>( std::vector<Point<Number>>( { timeLower, timeUpper } ) );
-
-}
-
 
 // Visitors to call worker functions
 template <typename Representation>
@@ -36,57 +24,34 @@ struct computeTimeSuccessorVisitor {
   tNumber fixedTimeStep;
   tNumber timeStep;
     // return time interval covered by the time successors
-    Box<Number> operator()( SingularWorker<Representation>& worker ) {
+    carl::Interval<Number> operator()( SingularWorker<Representation>& worker ) {
         worker.computeTimeSuccessors( *nodes[ subspaceIndex ] );
         auto& flowpipe = nodes[ subspaceIndex ]->getFlowpipe();
         flowpipe.insert( flowpipe.begin(), worker.getFlowpipe().begin(), worker.getFlowpipe().end() );
         // the second segment covers the entire time interval
         if ( flowpipe.size() == 0 ) {
             // invariant is initially violated
-            return Box<Number>::Empty();
+            return carl::Interval<Number>::emptyInterval();
         }
         assert( flowpipe.size() == 2 );
         // last variable is the clock
-        return getTimeInterval( flowpipe[1] );
+        return getTimeInterval( flowpipe[1], flowpipe[1].dimension() - 1 );
     }
-    Box<Number> operator()( LTIWorker<Representation>& worker ) {
+    carl::Interval<Number> operator()( LTIWorker<Representation>& worker ) {
         worker.computeTimeSuccessors( nodes[ subspaceIndex ]->getInitialSet(), nodes[ subspaceIndex ]->getLocation(), std::back_inserter( nodes[ subspaceIndex ]->getFlowpipe() ) );
         auto& flowpipe = nodes[ subspaceIndex ]->getFlowpipe();
         assert( flowpipe.size() > 0 );
         // get global time interval
         Number timeLower = carl::convert<tNumber, Number>( nodes[ subspaceIndex ]->getTimings().lower()*fixedTimeStep );
         Number timeUpper = carl::convert<tNumber, Number>( nodes[ subspaceIndex ]->getTimings().upper()*fixedTimeStep + flowpipe.size()*timeStep );
-        return Box<Number>( std::vector<Point<Number>>( { Point<Number>( timeLower ), Point<Number>( timeUpper ) } ) );
+        return carl::Interval<Number>( timeLower , timeUpper );
     }
-    Box<Number> operator()( RectangularWorker<Representation>& worker ) {
+    carl::Interval<Number> operator()( RectangularWorker<Representation>& worker ) {
         // Todo: rectangular worker. Should be very similar to singular case
         worker.getFlowpipe();
-        return Box<Number>::Empty();
+        return carl::Interval<Number>::emptyInterval();
     }
 };
-
-
-
-/*
-template <typename Representation>
-struct computeTimeSuccessorVisitorSegments {
-  std::size_t subspaceIndex;
-  std::vector<ReachTreeNode<Representation>*> nodes;
-    REACHABILITY_RESULT operator()( SingularWorker<Representation>& worker ) {
-        REACHABILITY_RESULT res = worker.computeTimeSuccessors( *nodes[ subspaceIndex ] );
-        auto& flowpipe = nodes[ subspaceIndex ]->getFlowpipe();
-        flowpipe.insert( flowpipe.begin(), worker.getFlowpipe().begin(), worker.getFlowpipe().end() );
-        return res;
-    }
-    REACHABILITY_RESULT operator()( LTIWorker<Representation>& worker ) {
-        return worker.computeTimeSuccessors( nodes[ subspaceIndex ]->getInitialSet(), nodes[ subspaceIndex ]->getLocation(), std::back_inserter( nodes[ subspaceIndex ]->getFlowpipe() ) );
-    }
-    REACHABILITY_RESULT operator()( RectangularWorker<Representation>& worker ) {
-        // Todo: rectangular worker
-        return REACHABILITY_RESULT::SAFE;
-    }
-};
-*/
 } // namespace detail
 
 // indicates that the analysis succeeded, i.e. no intersection with bad states
@@ -118,6 +83,13 @@ class DecompositionalAnalyzer {
         for ( auto& root : roots ) {
             mWorkQueue.push_front( root );
         }
+        for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+            if ( decomposition.subspaceTypes[ subspace ] == DynamicType::linear || decomposition.subspaceTypes[ subspace ] == DynamicType::affine ) {
+                mLtiTypeSubspaces.push_back( subspace );
+            } else {
+                mSingularTypeSubspaces.push_back( subspace );
+            }
+        }
     }
 
     DecompositionalResult run();
@@ -129,6 +101,8 @@ class DecompositionalAnalyzer {
     Decomposition mDecomposition;
     FixedAnalysisParameters mFixedParameters;
     AnalysisParameters mParameters;
+    std::vector<std::size_t> mSingularTypeSubspaces; // holds the subspaces that have a clock and compute all time successors at once
+    std::vector<std::size_t> mLtiTypeSubspaces;      // holds the subspaces that have no clock and have multiple segments
 };
 
 }  // namespace hypro
