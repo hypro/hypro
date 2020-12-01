@@ -41,9 +41,13 @@
 
 # Checking safety
 ### General idea
-1. Intersect each subspace with its bad states and get the time interval of the intersection
-  (subspaces that have no bad states should be ignored)
-2. If the intersection of the extracted time intervals is nonempty, the system is unsafe
+* Iterate over the local and global bad states
+* For each bad state, first get the bad time intervals for the singular/rectangular/timed subspaces
+  (These should really be intervals) and intersect them
+* From this interval determine the segments to check in the other subspaces (i.e. build index set)
+* For each LTI subspace intersect each segment with the bad state and if the intersection is empty,
+  remove the segment-index from the index set.
+* If at the end the index set is not empty, the system is unsafe.
 
 # Jumps
 ### General idea
