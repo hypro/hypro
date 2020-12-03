@@ -75,12 +75,16 @@ class DecompositionalAnalyzer {
                  Decomposition const& decomposition,
                  FixedAnalysisParameters const& fixedParameters,
                  AnalysisParameters const& parameters,
-                 std::vector<std::vector<ReachTreeNode<Representation>*>>& roots )
+                 std::vector<std::vector<ReachTreeNode<Representation>>>& roots )
         : mHybridAutomaton( &ha )
         , mDecomposition( decomposition )
         , mFixedParameters( fixedParameters )
         , mParameters( parameters ) {
-        for ( auto& root : roots ) {
+        for ( auto& subspaceRoots : roots ) {
+            NodeVector root;
+            for ( int subspace = decomposition.subspaces.size() - 1; subspace >= 0; --subspace ) {
+                root.push_back( &subspaceRoots[ subspace ] );
+            }
             mWorkQueue.push_front( root );
         }
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {

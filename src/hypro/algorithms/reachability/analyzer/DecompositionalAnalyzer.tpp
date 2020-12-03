@@ -109,9 +109,9 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                     // if the segment covers a time period that is potentially unsafe, compute intersection with bad state
                     TRIBOOL segmentUnsafe = TRIBOOL::NSET;
                     // convert to global index by considering offset and specific time step
-                    for ( std::size_t globalIndex = timingLower + segmentIndex*mParameters.timeStepFactor; globalIndex < timingUpper + segmentIndex*mParameters.timeStepFactor; ++globalIndex ) {
-                        if ( segmentsToCheck.find( globalIndex ) != segmentsToCheck.end() ) {
-                            if ( segmentUnsafe != TRIBOOL::NSET ) {
+                    for ( std::size_t globalIndex = timingLower + segmentIndex*mParameters.timeStepFactor; globalIndex <= timingUpper + segmentIndex*mParameters.timeStepFactor; ++globalIndex ) {
+                        if ( segmentsToCheck.find( globalIndex ) != segmentsToCheck.end() ) {                            
+                            if ( segmentUnsafe == TRIBOOL::NSET ) {
                                 if ( intersect( flowpipe[ segmentIndex ], badState, subspace ).first != CONTAINMENT::NO ) {
                                     segmentUnsafe = TRIBOOL::TRUE;
                                 } else {

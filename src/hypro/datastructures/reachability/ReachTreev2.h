@@ -102,6 +102,21 @@ std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> co
 	return roots;
 }
 
+template <class Representation, class Number>
+std::vector<std::vector<ReachTreeNode<Representation>>> makeDecompositionalRoots( HybridAutomaton<Number> const& ha, Decomposition decomposition ) {
+	std::vector<std::vector<ReachTreeNode<Representation>>> roots{};
+	// for each initial set, create one vector (of size #subspaces) of nodes
+	for ( auto const& [location, condition] : ha.getInitialStates() ) {
+		std::vector<ReachTreeNode<Representation>> nodeVector;
+		for ( int subspace = decomposition.subspaces.size() - 1; subspace >= 0; --subspace ) {
+			ReachTreeNode<Representation> node{ location, Representation{ condition.getMatrix( subspace ), condition.getVector( subspace ) }, { 0, 0 } };
+			nodeVector.push_back( std::move( node ) );
+		}
+		roots.push_back( std::move( nodeVector ) );
+	}
+	return roots;
+}
+
 template <class RTN>
 struct RTN_Rep_i;
 
