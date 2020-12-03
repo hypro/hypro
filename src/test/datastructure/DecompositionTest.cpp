@@ -2,6 +2,7 @@
 #include "../../hypro/datastructures/HybridAutomaton/decomposition/DecompositionMethods.h"
 #include "../../hypro/util/VariablePool.h"
 #include "gtest/gtest.h"
+#include <hypro/algorithms/reachability/analyzer/DecompositionalAnalyzer.h>
 
 using namespace hypro;
 
@@ -561,7 +562,7 @@ TEST( DecompositionMethodsTest, decomposeAutomaton1 ) {
 }
 
 TEST( DecompositionMethodsTest, decomposeAutomaton2 ) {
-    using Number = double;
+    using Number = mpq_class;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
 
@@ -588,6 +589,20 @@ TEST( DecompositionMethodsTest, decomposeAutomaton2 ) {
 	EXPECT_EQ( expectedFlow1, loc->getLinearFlow( 0 ).getFlowMatrix() );
 	EXPECT_EQ( expectedFlow2, loc->getLinearFlow( 1 ).getFlowMatrix() );
     EXPECT_EQ( expectedInitial, decomposedHa.getInitialStates().at( loc ) );
+
+    using Representation = hypro::VPolytope<Number>;
+    addClockToAutomaton( decomposedHa, 0 );
+    //addClockToAutomaton( decomposedHa, 1 );
+    decomposition.subspaceTypes[1] = DynamicType::linear;
+    //ReachTreeNode<Representation> roots0 = std::move( makeRoots<Representation>( decomposedHa, 0 )[0] );
+    //ReachTreeNode<Representation> roots1 = std::move( makeRoots<Representation>( decomposedHa, 1 )[0] );
+    //std::vector<std::vector<ReachTreeNode<Representation>*>> roots{ { &roots0, &roots1 } };
+    auto roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
+    std::cout << "Location: " << roots[0][0].getLocation() << "\n";
+
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{1, 5, 0.1}, AnalysisParameters{ 0.1 }, roots );
+    analyzer.run();
+
 }
 
 TEST( DecompositionMethodsTest, decomposeAutomaton3 ) {
@@ -769,3 +784,41 @@ TEST( DecompositionMethodsTest, decomposeAutomaton8 ) {
     Transition<Number> trans = *decomposedHa.getLocations()[ 0 ]->getTransitions()[0].get();
     EXPECT_EQ( expectedTrans, trans );
 }
+/*
+TEST( AddClocks, clock1 ) {
+    using Number = double;
+
+    auto ha = multipleLocationsHa<Number>();
+    std::cout << "Flow before:\n";
+    for ( auto& loc: ha.getLocations() ) {
+        std::cout << loc->getLinearFlow().getFlowMatrix() << "\n";
+    }
+    addClockToAutomaton( ha, 0 );
+    std::cout << "Flow after:\n";
+    for ( auto& loc: ha.getLocations() ) {
+        std::cout << loc->getLinearFlow().getFlowMatrix() << "\n";
+    }
+
+}
+
+TEST( AddClocks, clock2 ) {
+    using Number = double;
+    auto ha = transitiveDependentHa<Number>();
+    std::cout << "Flow before:\n";
+    for ( auto& loc: ha.getLocations() ) {
+        std::cout << loc->getLinearFlow().getFlowMatrix() << "\n";
+    }
+    std::cout << "Invariants before:\n";
+    for ( auto& loc: ha.getLocations() ) {
+        std::cout << loc->getInvariant() << "\n";
+    }
+    addClockToAutomaton( ha, 0 );
+    std::cout << "Flow after:\n";
+    for ( auto& loc: ha.getLocations() ) {
+        std::cout << loc->getLinearFlow().getFlowMatrix() << "\n";
+    }
+    std::cout << "Invariants after:\n";
+    for ( auto& loc: ha.getLocations() ) {
+        std::cout << loc->getInvariant() << "\n";
+    }
+}*/
