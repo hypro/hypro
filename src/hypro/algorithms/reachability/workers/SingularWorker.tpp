@@ -12,7 +12,7 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeForwardReachability( 
 }
 
 template <typename Representation>
-REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, bool useTimestep ) {
+REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, bool checkSafety ) {
 	using Number = typename Representation::NumberType;
 
 	Representation initialSet = task.getInitialSet();
@@ -24,10 +24,12 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 	// add state to flowpipe
 	mFlowpipe.addState( segment );
 
-	std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, task.getLocation(), mHybridAutomaton, mSubspace );
-	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
-		return REACHABILITY_RESULT::UNKNOWN;
+	if ( checkSafety ) {
+		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, task.getLocation(), mHybridAutomaton, mSubspace );
+		if ( containment != CONTAINMENT::NO ) {
+			// Todo: memorize the intersecting state set and keep state.
+			return REACHABILITY_RESULT::UNKNOWN;
+		}
 	}
 
 	// compute time successor states
@@ -39,37 +41,20 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 	// The last column of the flow matrix are the constant derivatives. Only take the head to have consistent dimensions with the initial set
 	dynamics.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow( mSubspace ).getFlowMatrix().col( initialSet.dimension() ) ).head( initialSet.dimension() ) );
 
-	if ( !useTimestep ) {
-		Representation timeSuccessors = singularApplyBoundedTimeEvolution( segment, dynamics, carl::convert<tNumber, Number>( mSettings.localTimeHorizon ) );
-		auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant(), mSubspace );
-		if ( invariantContainment == CONTAINMENT::NO ) {
-			return REACHABILITY_RESULT::SAFE;
-		}
-		// add state to flowpipe
-		mFlowpipe.addState( constrainedTimeSuccessors );
+	Representation timeSuccessors = singularApplyBoundedTimeEvolution( segment, dynamics, carl::convert<tNumber, Number>( mSettings.localTimeHorizon ) );
+	auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant(), mSubspace );
+	if ( invariantContainment == CONTAINMENT::NO ) {
+		return REACHABILITY_RESULT::SAFE;
+	}
+	// add state to flowpipe
+	mFlowpipe.addState( constrainedTimeSuccessors );
+	if ( checkSafety ) {
 		std::tie( containment, segment ) = ltiIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton, mSubspace );
 		if ( containment != CONTAINMENT::NO ) {
 			// Todo: memorize the intersecting state set and keep state.
 			return REACHABILITY_RESULT::UNKNOWN;
 		}
-	} else {
-		Representation initialSet = segment;
-		for ( tNumber elapsedTime = 0; elapsedTime < mSettings.localTimeHorizon; elapsedTime += mSettings.fixedTimeStep ){
-			Representation timeSuccessors = singularApplyTimeStep( initialSet, dynamics, elapsedTime, elapsedTime + mSettings.fixedTimeStep );
-			auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant(), mSubspace );
-			if ( invariantContainment == CONTAINMENT::NO ) {
-				return REACHABILITY_RESULT::SAFE;
-			}
-			// add state to flowpipe
-			mFlowpipe.addState( constrainedTimeSuccessors );
-			containment = ltiIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton, mSubspace ).first;
-			if ( containment != CONTAINMENT::NO ) {
-				// Todo: memorize the intersecting state set and keep state.
-				return REACHABILITY_RESULT::UNKNOWN;
-			}
-		}
 	}
-
 	return REACHABILITY_RESULT::SAFE;
 }
 

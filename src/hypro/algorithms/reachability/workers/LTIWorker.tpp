@@ -4,7 +4,7 @@ namespace hypro {
 
 template <typename Representation>
 template <typename OutputIt>
-REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const {
+REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out, bool checkSafety ) const {
 	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow( mSubspace ), mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ), mSettings.timeStep );
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant(), mSubspace );
@@ -16,10 +16,12 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	++out;
 
 	// intersect with badstates
-	std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton, mSubspace );
-	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
-		return REACHABILITY_RESULT::UNKNOWN;
+	if ( checkSafety ) {
+		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton, mSubspace );
+		if ( containment != CONTAINMENT::NO ) {
+			// Todo: memorize the intersecting state set and keep state.
+			return REACHABILITY_RESULT::UNKNOWN;
+		}
 	}
 
 	// while not done
@@ -34,10 +36,12 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 		++out;
 
 		// intersect with badstates
-		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton, mSubspace );
-		if ( containment != CONTAINMENT::NO ) {
-			// Todo: memorize the intersecting state set and keep state.
-			return REACHABILITY_RESULT::UNKNOWN;
+		if ( checkSafety ) {
+			std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton, mSubspace );
+			if ( containment != CONTAINMENT::NO ) {
+				// Todo: memorize the intersecting state set and keep state.
+				return REACHABILITY_RESULT::UNKNOWN;
+			}
 		}
 	}
 	return REACHABILITY_RESULT::SAFE;

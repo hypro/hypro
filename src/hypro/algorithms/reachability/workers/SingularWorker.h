@@ -36,7 +36,7 @@ class SingularWorker {
 	/// computes a time transition followed by a discrete transition
 	REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<Representation>& task );
 	/// computes a time transition
-	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, bool useTimestep = false );
+	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, bool checkSafety = true );
 	/// computes a discrete transition. Requires available time successors.
 	void computeJumpSuccessors( const ReachTreeNode<Representation>& task );
 	/// getter for discrete jump successor sets
