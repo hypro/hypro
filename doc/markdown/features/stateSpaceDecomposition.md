@@ -50,11 +50,20 @@
 * If at the end the index set is not empty, the system is unsafe.
 
 # Jumps
-### General idea
-1. For each transition get the enabled time intervals (as intersection) in a similar way as for bad states
-2. If an interval is nonempty, intersect the guard-satisfying segments with the time interval
-  (as in time elapse) and let the workers compute the jump successors
+### General idea (Do for each transition)
+* Iterate over singular/timed/rectangular subspaces first
+* For each of these subspaces compute the guard-intersection, the reset and the intersection with the
+  new invariant. From this we get a time interval, where the jump is possible in the singular subspaces
+* To handle the lti subspaces first get the segments that are within this time interval and also satisfy the guard (guard intersection)
+* Perform aggregation and reset with the segments. If (aggregated sets of) reset segments don't satisfy
+  the new invariant, drop the corresponding indices and segments in *all* lti-subspaces
+* We end up with a list of segment indices (intervals if aggregated), where the guard+invariant is satisfied
+  in all subspaces
+* For each of these intersect the singular subspaces with the corresponding time interval and add them
+  all together as a child node
 
 ### Notes:
-* For one transition there can be multiple time intervals where the guard is enabled, these
-  should be handled individually.
+* It can happen that in the child node the segment covers a time of e.g. [1.0, 1.2] but the singular
+  subspaces were intersected with the time interval [1.1, 1.2]. However the singular time interval
+  will be a subset of the segment-time interval and after the next time elapse it is still guaranteed
+  that the first segment should be kept.
