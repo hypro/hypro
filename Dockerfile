@@ -8,7 +8,6 @@ RUN apt-get update \
     pkg-config \
     libboost-dev
 COPY / /root/hypro/
-RUN cd /root/hypro \
-    && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. \
-    && make resources \
-    && make
+RUN cd /root/hypro && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
+RUN cd /root/hypro/build && make resources -j2
+RUN cd /root/hypro/build && make -j2
