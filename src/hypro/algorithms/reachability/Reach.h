@@ -86,6 +86,34 @@ class ReachSingular {
 	}
 };
 
+template <class Representation, template<class T> class Method>
+class ReachBase {
+  public:
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
+
+  protected:
+	Method<Representation> mAnalyzer; ///< Analyzer instance
+
+  public:
+	/**
+	 * @brief Constructor for a basic reachability analysis method.
+	 *
+	 * @param _automaton The analyzed automaton.
+	 * @param _settings The reachability analysis settings.
+	 */
+	ReachBase( const HybridAutomaton<typename Representation::NumberType>& automaton, const FixedAnalysisParameters& fixedParameters, std::vector<ReachTreeNode<Representation>>& roots )
+		: mAnalyzer( automaton, fixedParameters, roots ) {}
+
+	/**
+	 * @brief Computes the forward reachability of the given automaton.
+	 * @details
+	 * @return The flowpipe as a result of this computation.
+	 */
+	REACHABILITY_RESULT computeForwardReachability() {
+		return mAnalyzer.run().result();
+	}
+};
+
 }  // namespace reachability
 }  // namespace hypro
 
