@@ -13,6 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
       UtilityTest.cpp
       QuickhullTest.cpp
       QuickIntersectionTest.cpp
+      RectangularReachabilityTest.cpp
       SingularReachabilityTest.cpp
       TimeEvolutionTest.cpp
       #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken

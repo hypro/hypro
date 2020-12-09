@@ -2,7 +2,7 @@
 
 namespace hypro {
 template <typename State>
-std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateSet, const Location<Number>* loc ) {
+std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateSet, const Location<typename State::NumberType>* loc ) {
 	// check if initial Valuation fulfills Invariant
 	CONTAINMENT containmentResult = CONTAINMENT::BOT;
 

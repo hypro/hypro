@@ -25,10 +25,10 @@ class RectangularAnalyzer {
 		, mReachTree() {
 	}
 	/// constructor from automaton and settings with additional reachTree
-	RectangularAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting,  )
+	RectangularAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting, std::vector<ReachTreeNode<State>>& roots )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting )
-		, mReachTree() {
+		, mReachTree(roots) {
 	}
 	/// main method for reachability analysis
 	REACHABILITY_RESULT run();

@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../util/sequenceGeneration/SequenceGenerator.h"
 #include <carl/core/Variable.h>
 #include <carl/interval/Interval.h>
 #include <iosfwd>
@@ -8,24 +9,26 @@ namespace hypro {
 
 template <typename Number>
 class rectangularFlow {
+  public:
+	using flowMap = typename std::map<carl::Variable, carl::Interval<Number>>;
   private:
-	std::map<carl::Variable, carl::Interval<Number>> mFlowIntervals;
+	flowMap mFlowIntervals;
 
   public:
 	rectangularFlow() = default;
 	rectangularFlow( const rectangularFlow<Number>& in ) = default;
-	explicit rectangularFlow( const std::map<carl::Variable, carl::Interval<Number>>& intervals )
+	explicit rectangularFlow( const flowMap& intervals )
 		: mFlowIntervals( intervals ) {}
 	virtual ~rectangularFlow() {}
 
 	static DynamicType type() { return DynamicType::rectangular; }
 
-	void setFlowIntervals( const std::map<carl::Variable, carl::Interval<Number>>& in ) { mFlowIntervals = in; }
+	void setFlowIntervals( const flowMap& in ) { mFlowIntervals = in; }
 	void setFlowIntervalForDimension( const carl::Interval<Number>& intv, carl::Variable dim ) {
 		mFlowIntervals[dim] = intv;
 	}
 
-	const std::map<carl::Variable, carl::Interval<Number>>& getFlowIntervals() const { return mFlowIntervals; }
+	const flowMap& getFlowIntervals() const { return mFlowIntervals; }
 	const carl::Interval<Number>& getFlowIntervalForDimension( carl::Variable dim ) const {
 		assert( mFlowIntervals.find( dim ) != mFlowIntervals.end() );
 		return mFlowIntervals.at( dim );
@@ -86,21 +89,23 @@ class rectangularFlow {
 	}
 
 	std::vector<Point<Number>> vertices() const {
-		PermutationSequenceGenerator<WithReturningNoOrder> sequencer{2,dim};
-	std::vector<Point<Number>> flowVertices;
-	while(!sequencer.end()) {
-		std::vector<std::size_t> selection = sequencer();
-		Point<Number> vertex{vector_t<Number>::Zero(dim)};
-		for(std::size_t i = 0; i < selection.size(); ++i) {
-			assert(selection[i] == 1 || selection[i] == 0)
-			if(selection[i] == 0) {
-				vertex[i] = flow.getFlowIntervals()[VariablePool::getInstance().carlVarByIndex(i)].lower();
-			} else {
-				vertex[i] = flow.getFlowIntervals()[VariablePool::getInstance().carlVarByIndex(i)].upper();
+		// enumerate all 2^d combinations of interval bounds to obtain all vertices.
+		std::size_t dim = this->size();
+		Combinator sequencer{2,dim};
+		std::vector<Point<Number>> flowVertices;
+		while(!sequencer.end()) {
+			std::vector<std::size_t> selection = sequencer();
+			Point<Number> vertex{vector_t<Number>::Zero(dim)};
+			for(std::size_t i = 0; i < selection.size(); ++i) {
+				assert(selection[i] == 1 || selection[i] == 0);
+				if(selection[i] == 0) {
+					vertex[i] = this->getFlowIntervals()[VariablePool::getInstance().carlVarByIndex(i)].lower();
+				} else {
+					vertex[i] = this->getFlowIntervals()[VariablePool::getInstance().carlVarByIndex(i)].upper();
+				}
 			}
+			flowVertices.emplace_back(std::move(vertex));
 		}
-		flowVertices.emplace_back(std::move(vertex));
-	}
 	return flowVertices;
 	}
 };

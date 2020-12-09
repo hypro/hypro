@@ -119,8 +119,8 @@ State rectangularApplyReverseTimeEvolution( const State& badSet, const rectangul
 	return res;
 }
 
-template < template <typename Number> PolyhedralRepresentation>
-PolyhedralRepresentation<Number> rectangularApplyTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<typename State::NumberType>& flow ) {
+template < template <typename> typename PolyhedralRepresentation, typename Number>
+PolyhedralRepresentation<Number> rectangularApplyTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<Number>& flow ) {
 	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
 	assert(flow.dimension() == initialSet.dimension());
 
@@ -138,13 +138,13 @@ PolyhedralRepresentation<Number> rectangularApplyTimeEvolution( const Polyhedral
 	timeElapsePolytope.setRays( combinedRays );
 
 	// Convert back
-	StateSet timeElapse;
+	PolyhedralRepresentation<Number> timeElapse;
 	convert( timeElapsePolytope, timeElapse );
 	return timeElapse;
 }
 
-template < template <typename Number> PolyhedralRepresentation>
-PolyhedralRepresentation<Number> rectangularApplyBoundedTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<typename State::NumberType>& flow, tNumber timeBound ) {
+template < template <typename> typename PolyhedralRepresentation, typename Number>
+PolyhedralRepresentation<Number> rectangularApplyBoundedTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<Number>& flow, tNumber timeBound ) {
 	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
 	assert(flow.dimension() == initialSet.dimension());
 
@@ -157,29 +157,25 @@ PolyhedralRepresentation<Number> rectangularApplyBoundedTimeEvolution( const Pol
 	// compute vertices from bounded rays
 	for ( const auto& vertex : initSetPolytope.vertices() ) {
 		for ( const auto& ray : combinedRays ) {
-			newVertices.emplace_back( Point<Number>( vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray ) );
+			timeElapsePolytope.emplace_back(  vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray  );
 		}
 	}
-
-	// update vertices
-	timeElapsePolytope.insert( newVertices.begin(), newVertices.end() );
 	assert( timeElapsePolytope.rays().empty() );
 
 	// Convert back
-	StateSet timeElapse;
+	PolyhedralRepresentation<Number> timeElapse;
 	convert( timeElapsePolytope, timeElapse );
 	return timeElapse;
 }
 
-template < template < typename Number> PolyhedralRepresentation>
-PolyhedralRepresentation<Number> rectangularApplyReverseTimeEvolution( const PolyhedralRepresentation<Number>& badSet, const rectangularFlow<typename State::NumberType>& flow ) {
+template < template < typename > typename PolyhedralRepresentation, typename Number>
+PolyhedralRepresentation<Number> rectangularApplyReverseTimeEvolution( const PolyhedralRepresentation<Number>& badSet, const rectangularFlow<Number>& flow ) {
 	assert(false);
 	return badSet;
 }
 
 template <typename Number>
 CarlPolytope<Number> rectangularApplyTimeEvolution( const CarlPolytope<Number>& initialSet, const rectangularFlow<Number>& flow ) {
-	using Number = typename State::NumberType;
 	auto& vpool = hypro::VariablePool::getInstance();
 	// get initial state
 	CarlPolytope<Number> initial = initialSet;
@@ -203,7 +199,7 @@ CarlPolytope<Number> rectangularApplyTimeEvolution( const CarlPolytope<Number>& 
 			// store var to eliminate later
 			variablesToEliminate.push_back( newV );
 			// add flow conditions for new variables, we use the variable mapping provided by the flow
-			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber, typename State::NumberType>( v, newV, t, flow.getFlowIntervalForDimension( v ) );
+			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber, Number>( v, newV, t, flow.getFlowIntervalForDimension( v ) );
 
 			TRACE( "hydra.worker", "Use flow constraints: " );
 #ifdef HYPRO_LOGGING
@@ -235,7 +231,6 @@ CarlPolytope<Number> rectangularApplyTimeEvolution( const CarlPolytope<Number>& 
 
 template <typename Number>
 CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number>& badSet, const rectangularFlow<Number>& flow ) {
-	using Number = typename State::NumberType;
 	auto& vpool = hypro::VariablePool::getInstance();
 	// get bad state
 	CarlPolytope<Number> bad = badSet;
@@ -259,7 +254,7 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 			// store var to eliminate later
 			variablesToEliminate.push_back( newV );
 			// add flow conditions for new variables, we use the variable mapping provided by the flow
-			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber, typename State::NumberType>( newV, v, t, flow.getFlowIntervalForDimension( v ) );
+			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber, Number>( newV, v, t, flow.getFlowIntervalForDimension( v ) );
 
 			TRACE( "hydra.worker", "Use flow constraints: " );
 #ifdef HYPRO_LOGGING
