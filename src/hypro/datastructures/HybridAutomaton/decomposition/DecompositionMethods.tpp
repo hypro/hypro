@@ -391,10 +391,11 @@ Condition<Number> addClockToInitial( Condition<Number> cond, std::size_t subspac
 	if ( cond.empty() ) {
 		return cond;
 	}
-	auto initialWithouClock = addClockToCondition( cond, subspace );
+	auto initialWithoutClock = addClockToCondition( cond, subspace );
+	//std::cout << "With clock: " << initialWithoutClock << "\n";
 	// Initial for clock is 0:
-	auto condMatrix = initialWithouClock.getMatrix( subspace );
-	auto condVector = initialWithouClock.getVector( subspace );
+	auto condMatrix = initialWithoutClock.getMatrix( subspace );
+	auto condVector = initialWithoutClock.getVector( subspace );
 	condMatrix.conservativeResize( condMatrix.rows() + 2, condMatrix.cols() );
 	condVector.conservativeResize( condVector.rows() + 2 );
 	for( Eigen::Index i = 0; i < condMatrix.cols() - 1; ++i ) {
@@ -405,9 +406,9 @@ Condition<Number> addClockToInitial( Condition<Number> cond, std::size_t subspac
 	condMatrix( condMatrix.rows() - 1, condMatrix.cols() - 1 ) = -1;
 	condVector( condVector.rows() - 2 ) = 0;
 	condVector( condVector.rows() - 1 ) = 0;
-	initialWithouClock.setMatrix( condMatrix, subspace );
-	initialWithouClock.setVector( condVector, subspace );
-	return initialWithouClock;
+	initialWithoutClock.setMatrix( condMatrix, subspace );
+	initialWithoutClock.setVector( condVector, subspace );
+	return initialWithoutClock;
 
 }
 
@@ -425,6 +426,9 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 	//check flow and invariant of locations
 	for ( auto locPtr : automaton.getLocations() ) {
 		// Automaton is not decomposed so every location should have exactly one flow
+		if ( locPtr->getNumberSubspaces() != 1 ) {
+			std::cout << "Number subspaces: " << locPtr->getNumberSubspaces() << "\n";
+		}
 		assert( locPtr->getNumberSubspaces() == 1 && "Subspace decomposition called on decomposed automaton" );
 		switch ( locPtr->getFlowTypes()[ 0 ] ) {
 			case DynamicType::discrete:
@@ -631,49 +635,53 @@ void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace ) {
             newFlowMatrix( dim, dim + 1 ) = 1;
             loc->setFlow( newFlowMatrix, subspace );
         }
-
         // invariant
         loc->setInvariant( detail::addClockToCondition( loc->getInvariant(), subspace ) );
-        // initial states
-        std::map<const Location<Number>*, Condition<Number>> newInitialStates;
-        for ( auto& [loc, cond] : ha.getInitialStates() ) {
-            newInitialStates[ loc ] = detail::addClockToInitial( cond, subspace );
-        }
-        ha.setInitialStates( newInitialStates );
-        // local bad states
-        std::map<const Location<Number>*, Condition<Number>> newLocalBadStates;
-        for ( auto& [loc, cond] : ha.getLocalBadStates() ) {
-            newLocalBadStates[ loc ] = detail::addClockToCondition( cond, subspace );
-        }
-        ha.setLocalBadStates( newLocalBadStates );
-        // global bad states
-        std::vector<Condition<Number>> newGlobalBadStates;
-        for ( auto& badState : ha.getGlobalBadStates() ) {
-            newGlobalBadStates.push_back( detail::addClockToCondition( badState, subspace ) );
-        }
-        ha.setGlobalBadStates( newGlobalBadStates );
-        // transitions
-        for ( auto& trans : ha.getTransitions() ) {
-            // guards
-            trans->setGuard( detail::addClockToCondition( trans->getGuard(), subspace ) );
-            // resets
-            auto reset = trans->getReset();
-            if ( reset.size() < subspace ) {
-                auto resetMatrix = reset.getMatrix( subspace );
-                auto resetVec = reset.getVector( subspace );
-                auto resetIntervals = reset.getIntervals( subspace );
-                resetMatrix.conservativeResize( resetMatrix.rows() + 1, resetMatrix.cols() + 1 );
-                resetMatrix.bottomRows( 1 ) = vector_t<Number>::Zero( resetMatrix.cols() );
-                resetMatrix.rightCols( 1 ) = vector_t<Number>::Zero( resetMatrix.rows() );
-                resetMatrix( resetMatrix.rows() - 1, resetMatrix.cols() - 1 ) = 1;
-                resetVec.conservativeResize( resetVec.rows() + 1 );
-                resetVec( resetVec.rows() - 1 ) = 0;
-                resetIntervals.push_back( carl::Interval<Number>() );
-                reset.setMatrix( resetMatrix, subspace );
-                reset.setVector( resetVec, subspace );
-                reset.setIntervals( resetIntervals, subspace );
-                trans->setReset( reset );
-            }
+
+    }
+    // local bad states
+    std::map<const Location<Number>*, Condition<Number>> newLocalBadStates;
+    for ( auto& [loc, cond] : ha.getLocalBadStates() ) {
+        newLocalBadStates[ loc ] = detail::addClockToCondition( cond, subspace );
+    }
+    ha.setLocalBadStates( newLocalBadStates );
+    // global bad states
+    std::vector<Condition<Number>> newGlobalBadStates;
+    for ( auto& badState : ha.getGlobalBadStates() ) {
+        newGlobalBadStates.push_back( detail::addClockToCondition( badState, subspace ) );
+    }
+    ha.setGlobalBadStates( newGlobalBadStates );
+    // initial states
+    std::map<const Location<Number>*, Condition<Number>> newInitialStates;
+    for ( auto& [loc, cond] : ha.getInitialStates() ) {
+        newInitialStates[ loc ] = detail::addClockToInitial( cond, subspace );
+    }
+    ha.setInitialStates( newInitialStates );
+    // transitions
+    for ( auto& trans : ha.getTransitions() ) {
+        // guards
+        trans->setGuard( detail::addClockToCondition( trans->getGuard(), subspace ) );
+        // resets
+        auto reset = trans->getReset();
+        if ( reset.size() > subspace ) {
+            auto resetMatrix = reset.getMatrix( subspace );
+            auto resetVec = reset.getVector( subspace );
+            auto resetIntervals = reset.getIntervals( subspace );
+
+            resetMatrix.conservativeResize( resetMatrix.rows() + 1, resetMatrix.cols() + 1 );
+            resetMatrix.bottomRows( 1 ) = matrix_t<Number>::Zero( 1, resetMatrix.cols() );
+            resetMatrix.rightCols( 1 ) = matrix_t<Number>::Zero( resetMatrix.rows(), 1 );
+            resetMatrix( resetMatrix.rows() - 1, resetMatrix.cols() - 1 ) = 1;
+
+            resetVec.conservativeResize( resetVec.rows() + 1 );
+            resetVec( resetVec.rows() - 1 ) = 0;
+
+            resetIntervals.push_back( carl::Interval<Number>() );
+
+            reset.setMatrix( resetMatrix, subspace );
+            reset.setVector( resetVec, subspace );
+            reset.setIntervals( resetIntervals, subspace );
+            trans->setReset( reset );
         }
     }
 }
