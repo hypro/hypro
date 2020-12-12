@@ -37,6 +37,7 @@ class LTIWorker {
 
 	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const;
 	JumpSuccessorGen getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number> const* transition ) const;
+	std::vector<TimedValuationSet<Representation>> computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<Number> const* trans ) const;
 
   protected:
 	const HybridAutomaton<Number>& mHybridAutomaton;  ///< hybrid automaton to analyze

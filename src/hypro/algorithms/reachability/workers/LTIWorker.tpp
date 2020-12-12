@@ -228,4 +228,40 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 	return successors;
 }
 
+template<typename Representation>
+std::vector<TimedValuationSet<Representation>> LTIWorker<Representation>::computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<Number> const* transition ) const {
+	std::size_t blockSize = 1;
+	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+		if ( mSettings.clustering > 0 ) {
+			blockSize = ( predecessors.size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
+		} else {
+			blockSize = predecessors.size();
+		}
+
+	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
+		if ( transition->getAggregation() == Aggregation::clustering ) {
+			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
+		}
+	}
+	auto valuationSets = aggregate<Representation>( blockSize, predecessors );
+
+	// applyReset
+	//for ( auto& valuationSets : successors ) {
+		for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
+			it->valuationSet = applyReset( it->valuationSet, transition->getReset(), mSubspace );
+			CONTAINMENT containment;
+			std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant(), mSubspace );
+			if ( containment == CONTAINMENT::NO ) {
+				it = valuationSets.erase( it );
+			} else {
+				it->valuationSet.reduceRepresentation();
+				++it;
+			}
+		}
+	//}
+
+	return valuationSets;
+}
+
+
 }  // namespace hypro

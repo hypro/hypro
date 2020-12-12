@@ -65,7 +65,7 @@ void SingularWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<
 	JumpPredecessors transitionEnablingStateSets;
 	for ( auto& stateSet : mFlowpipe ) {
 		for ( const auto& transitionPtr : task.getLocation()->getTransitions() ) {
-			auto [containment, set] = intersect( stateSet, transitionPtr->getGuard() );
+			auto [containment, set] = intersect( stateSet, transitionPtr->getGuard(), mSubspace );
 			if ( containment != CONTAINMENT::NO ) {
 				transitionEnablingStateSets[transitionPtr.get()] = { set };
 			}
@@ -79,7 +79,7 @@ void SingularWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<
 template <typename Representation>
 void SingularWorker<Representation>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {
 	singularJumpHandler<Representation> jmpHandler;
-	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets );
+	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets, mSubspace );
 }
 
 template <typename Representation>
