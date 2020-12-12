@@ -12,7 +12,7 @@ std::pair<CONTAINMENT, Representation> intersect( Representation const& valuatio
 	if ( condition.empty() ) {
 		return std::make_pair( CONTAINMENT::FULL, valuationSet );
 	}
-	assert( valuationSet.dimension() == condition.dimension() );
+	//assert( valuationSet.dimension() == condition.dimension() );
 	return valuationSet.satisfiesHalfspaces( condition.getMatrix( I ), condition.getVector( I ) );
 }
 
@@ -32,8 +32,8 @@ Representation applyTimeEvolution( Representation const& valuationSet, matrix_t<
 }
 
 template <class Representation, class Number>
-Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset ) {
-	return valuationSet.affineTransformation( reset.getMatrix(), reset.getVector() );
+Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset, std::size_t subspace = 0 ) {
+	return valuationSet.affineTransformation( reset.getMatrix( subspace ), reset.getVector( subspace ) );
 }
 
 }  // namespace hypro

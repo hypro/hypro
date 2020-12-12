@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Representation>
-auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& states ) -> TransitionStateMap {
+auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& states, std::size_t subspace ) -> TransitionStateMap {
 	// holds a mapping of transitions to already processed (i.e. aggregated, resetted and reduced) states
 	TransitionStateMap processedStates;
 
@@ -16,10 +16,10 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 			Representation newState( state );
 
 			// apply reset function
-			applyReset( newState, transitionPtr );
+			applyReset( newState, transitionPtr, subspace );
 
 			// check invariant in new location
-			auto [containment, stateSet] = intersect( newState, transitionPtr->getTarget()->getInvariant() );
+			auto [containment, stateSet] = intersect( newState, transitionPtr->getTarget()->getInvariant(), subspace );
 			if ( containment == CONTAINMENT::NO ) {
 				continue;
 			}
@@ -39,13 +39,13 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 }
 
 template <typename Representation>
-void singularJumpHandler<Representation>::applyReset( Representation& stateSet, Transition<Number>* transitionPtr ) const {
+void singularJumpHandler<Representation>::applyReset( Representation& stateSet, Transition<Number>* transitionPtr, std::size_t subspace ) const {
 	// We have 3 different implementations for applying resets and want to check that they all give the same result.
 	// Note: applyResetFM is the one that definitely works.
 	// Todo: Decide for one implementation and remove other 2
 	if ( !transitionPtr->getReset().empty() ) {
-		assert( transitionPtr->getReset().getAffineReset().isIdentity() && "Singular automata do not support linear/affine resets." );		
-		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset();
+		assert( transitionPtr->getReset().getAffineReset( subspace ).isIdentity() && "Singular automata do not support linear/affine resets." );
+		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset( subspace );
 		if ( !intervalReset.isIdentity() ) {
 			auto transformedSet1 = applyResetFM( stateSet, intervalReset );
 #ifndef NDEBUG
