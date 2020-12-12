@@ -170,7 +170,9 @@ class DecompositionalAnalyzer {
     DecompositionalResult run();
 
   private:
+    // Compute time interval where all singular subspaces have the condition enabled as a subset of maxEnabledTime
     carl::Interval<Number> getSingularEnabledTime( const Condition<Number>& condition, const carl::Interval<Number>& maxEnabledTime, const NodeVector& currentNodes );
+    // compute indexed segments where all lti subspaces have the condition enabled as a subset of maxEnabledTime
     std::map<std::size_t, std::vector<IndexedValuationSet<Representation>>> getLtiEnabledSegments( const Condition<Number>& condition, const carl::Interval<Number> maxEnabledTime, const NodeVector& currentNodes );
 
   protected:
