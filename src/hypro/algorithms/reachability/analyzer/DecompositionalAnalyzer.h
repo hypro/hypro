@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include "../../../datastructures/reachability/Flowpipe.h"
 #include "../../../datastructures/reachability/ReachTreev2.h"
 #include "../../../types.h"
@@ -17,16 +17,28 @@ namespace detail {
 
 // Visitors to call worker functions
 template <typename Representation>
+struct resetWorkerVisitor {
+    void operator()( SingularWorker<Representation>& worker ) {
+        worker.reset();
+    }
+    void operator()( RectangularWorker<Representation>& ) {
+        // worker.reset();
+    }
+    void operator()( LTIWorker<Representation>& ) {
+        return;
+    }
+};
+
+template <typename Representation>
 struct computeTimeSuccessorVisitor {
   using Number = typename Representation::NumberType;
-  std::size_t subspaceIndex;
-  std::vector<ReachTreeNode<Representation>*> nodes;
+  ReachTreeNode<Representation>* task;
   tNumber fixedTimeStep;
   tNumber timeStep;
     // return time interval covered by the time successors
     carl::Interval<Number> operator()( SingularWorker<Representation>& worker ) {
-        worker.computeTimeSuccessors( *nodes[ subspaceIndex ] );
-        auto& flowpipe = nodes[ subspaceIndex ]->getFlowpipe();
+        worker.computeTimeSuccessors( *task, false );
+        auto& flowpipe = task->getFlowpipe();
         flowpipe.insert( flowpipe.begin(), worker.getFlowpipe().begin(), worker.getFlowpipe().end() );
         // the second segment covers the entire time interval
         if ( flowpipe.size() == 0 ) {
@@ -38,20 +50,79 @@ struct computeTimeSuccessorVisitor {
         return getTimeInterval( flowpipe[1], flowpipe[1].dimension() - 1 );
     }
     carl::Interval<Number> operator()( LTIWorker<Representation>& worker ) {
-        worker.computeTimeSuccessors( nodes[ subspaceIndex ]->getInitialSet(), nodes[ subspaceIndex ]->getLocation(), std::back_inserter( nodes[ subspaceIndex ]->getFlowpipe() ) );
-        auto& flowpipe = nodes[ subspaceIndex ]->getFlowpipe();
+        worker.computeTimeSuccessors( task->getInitialSet(), task->getLocation(), std::back_inserter( task->getFlowpipe() ), false );
+        auto& flowpipe = task->getFlowpipe();
         assert( flowpipe.size() > 0 );
         // get global time interval
-        Number timeLower = carl::convert<tNumber, Number>( nodes[ subspaceIndex ]->getTimings().lower()*fixedTimeStep );
-        Number timeUpper = carl::convert<tNumber, Number>( nodes[ subspaceIndex ]->getTimings().upper()*fixedTimeStep + flowpipe.size()*timeStep );
+        Number timeLower = carl::convert<tNumber, Number>( task->getTimings().lower()*fixedTimeStep );
+        Number timeUpper = carl::convert<tNumber, Number>( task->getTimings().upper()*fixedTimeStep + flowpipe.size()*timeStep );
         return carl::Interval<Number>( timeLower , timeUpper );
     }
-    carl::Interval<Number> operator()( RectangularWorker<Representation>& worker ) {
+    carl::Interval<Number> operator()( RectangularWorker<Representation>& ) {
         // Todo: rectangular worker. Should be very similar to singular case
-        worker.getFlowpipe();
         return carl::Interval<Number>::emptyInterval();
     }
 };
+
+template <typename Representation>
+struct computeSingularJumpSuccessorVisitor {
+  ReachTreeNode<Representation>* task;
+    void operator()( SingularWorker<Representation>& worker ) {
+        worker.computeJumpSuccessors( *task );
+    }
+    void operator()( RectangularWorker<Representation>& ) {
+        // todo
+        return;
+    }
+    void operator()( LTIWorker<Representation>& ) {
+        assert( false && "Singular jump successor computation called for lti subspace." );
+    }
+};
+
+template <typename Representation>
+struct getSingularJumpSuccessorVisitor {
+  using Number = typename Representation::NumberType;
+  Transition<Number>* trans;
+    Representation operator()( SingularWorker<Representation>& worker ) {
+        auto it = worker.getJumpSuccessorSets().find( trans );
+        if ( it != worker.getJumpSuccessorSets().end() ) {
+            auto successorList = it->second;
+            // size 2 if initial set intersects guard, else 1. Either way, only need the last (jump with full flowpipe)
+            assert( successorList.size() == 1 || successorList.size() == 2 );
+            return successorList.size() == 1 ? successorList[ 0 ] : successorList[ 1 ];
+        }
+        else {
+            return Representation::Empty();
+        }
+    }
+    Representation operator()( RectangularWorker<Representation>& ) {
+        //todo
+        return Representation::Empty();
+    }
+    Representation operator()( LTIWorker<Representation>& ) {
+        assert( false && "Singular jump successor getter called for lti subspace." );
+        return Representation::Empty();
+    }
+};
+
+template <typename Representation>
+struct getLtiJumpSuccessorVisitor {
+  using Number = typename Representation::NumberType;
+  Transition<Number>* transition;
+  std::vector<IndexedValuationSet<Representation>> guardEnabledSets;
+    std::vector<TimedValuationSet<Representation>> operator()( SingularWorker<Representation>& ) {
+        assert( false );
+        return std::vector<TimedValuationSet<Representation>>();
+    }
+    std::vector<TimedValuationSet<Representation>> operator()( RectangularWorker<Representation>& ) {
+        assert( false );
+        return std::vector<TimedValuationSet<Representation>>();
+    }
+    std::vector<TimedValuationSet<Representation>> operator()( LTIWorker<Representation>& worker ) {
+        return worker.computeJumpSuccessorsForGuardEnabled( guardEnabledSets, transition );
+    }
+};
+
 } // namespace detail
 
 // indicates that the analysis succeeded, i.e. no intersection with bad states
@@ -97,7 +168,10 @@ class DecompositionalAnalyzer {
     }
 
     DecompositionalResult run();
-    void addToQueue( NodeVector nodes ) { mWorkQueue.push_front( nodes ); }
+
+  private:
+    carl::Interval<Number> getSingularEnabledTime( const Condition<Number>& condition, const carl::Interval<Number>& maxEnabledTime, const NodeVector& currentNodes );
+    std::map<std::size_t, std::vector<IndexedValuationSet<Representation>>> getLtiEnabledSegments( const Condition<Number>& condition, const carl::Interval<Number> maxEnabledTime, const NodeVector& currentNodes );
 
   protected:
     std::deque<NodeVector> mWorkQueue;
