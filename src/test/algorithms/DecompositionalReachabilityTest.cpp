@@ -48,7 +48,7 @@ HybridAutomaton<Number> makeHa() {
 
 template <typename Number>
 hypro::HybridAutomaton<Number> makeHaJumps() {
-    // Three-dimensional HA with two locations
+    // Three-dimensional HA with two locations. First subspace is lti, second is singular
     using Matrix = hypro::matrix_t<Number>;
     using Vector = hypro::vector_t<Number>;
 
@@ -70,15 +70,15 @@ hypro::HybridAutomaton<Number> makeHaJumps() {
     uniqueLoc0->setFlow( flow0 );
 
     // Set flow x' = 1, y' = x + 2, z' = -1 in loc1
-    Matrix flow1 = Matrix::Zero( 3, 3 );
+    Matrix flow1 = Matrix::Zero( 4, 4 );
     flow1( 0, 2 ) = 1;
     flow1( 1, 1 ) = 1;
-    flow1( 1, 2 ) = 2;
+    flow1( 1, 3 ) = 2;
     flow1( 2, 3 ) = -1;
     uniqueLoc1->setFlow( flow1 );
 
     // Set invariant x <= 3 in loc0 and loc1
-    Matrix invariantConstraints = Matrix::Zero( 1, 2 );
+    Matrix invariantConstraints = Matrix::Zero( 1, 3 );
     invariantConstraints( 0, 0 ) = 1;
     Vector invariantConstants = 3 * Vector::Ones( 1 );
     uniqueLoc0->setInvariant( { invariantConstraints, invariantConstants } );
@@ -86,17 +86,21 @@ hypro::HybridAutomaton<Number> makeHaJumps() {
 
     // Construct transitions
     // l0 -> l0 with guard x >= 1 and reset x := 0, y := 0
-    Matrix transConstraint = Matrix::Zero( 1, 2 );
+    Matrix transConstraint = Matrix::Zero( 1, 3 );
     Vector transConstants = -1 * Vector::Ones( 1 );
     transConstraint( 0, 0 ) = -1;
     hypro::Condition<Number> guard( transConstraint, transConstants );
-    hypro::Reset<Number> reset{ { { 0, 0 }, { 0, 0 } } };
+    Matrix resetMat = Matrix::Zero( 3, 3 );
+    Vector resetVec = Vector::Zero( 3 );
+    resetMat( 2, 2 ) = 1;
+    hypro::Reset<Number> reset( resetMat, resetVec );
+
 
     std::unique_ptr<hypro::Transition<Number>> trans0 =
           std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
 
     // l0 -> l1 with guard y <= -2 and no reset
-    transConstraint = Matrix::Zero( 1, 2 );
+    transConstraint = Matrix::Zero( 1, 3 );
     transConstants = -2 * Vector::Ones( 1 );
     transConstraint( 0, 1 ) = 1;
     guard = hypro::Condition<Number>( transConstraint, transConstants );
@@ -105,11 +109,16 @@ hypro::HybridAutomaton<Number> makeHaJumps() {
     std::unique_ptr<hypro::Transition<Number>> trans1 =
           std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
-    // Set initial state x = 0, y = 0, aff = 1
-    Matrix initialConstraints = Matrix::Zero( 4, 2 );
-    Vector initialConstants = Vector::Zero( 4 );
-    initialConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
-    initialConstants << 0, 0, 0, 0;
+    // Set initial state x = 0, y = 0, z = 1
+    Matrix initialConstraints = Matrix::Zero( 6, 3 );
+    Vector initialConstants = Vector::Zero( 6 );
+    initialConstraints << 1, 0, 0,
+                          -1, 0, 0,
+                          0, 1, 0,
+                          0, -1, 0,
+                          0, 0, 1,
+                          0, 0, -1;
+    initialConstants << 0, 0, 0, 0, 1, -1;
 
     // Create HA
     uniqueLoc0->addTransition( std::move( trans0 ) );
@@ -200,7 +209,7 @@ hypro::HybridAutomaton<Number> singularHa() {
 
 
 TEST( DecompositionalAnalysis, NoBadStatesNoJumps ) {
-    using Number = double;
+    using Number = mpq_class;
     using Representation = VPolytope<Number>;
 
     auto ha = makeHa<Number>();
@@ -216,7 +225,7 @@ TEST( DecompositionalAnalysis, NoBadStatesNoJumps ) {
 }
 
 TEST( DecompositionalAnalysis, SafeNoJumps ) {
-    using Number = double;
+    using Number = mpq_class;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = VPolytope<Number>;
@@ -242,7 +251,7 @@ TEST( DecompositionalAnalysis, SafeNoJumps ) {
 }
 
 TEST( DecompositionalAnalysis, UnsafeNoJumps ) {
-    using Number = double;
+    using Number = mpq_class;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = VPolytope<Number>;
@@ -281,5 +290,24 @@ TEST( DecompositionalAnalysis, SingularJumps ) {
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
     DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{1, 50, 0.1}, AnalysisParameters{ 0.1 }, roots );
+    analyzer.run();
+}
+
+TEST( DecompositionalAnalysis, MixedJumps ) {
+    using Number = mpq_class;
+    using Representation = VPolytope<Number>;
+
+    auto ha = makeHaJumps<Number>();
+    auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
+    EXPECT_EQ( DynamicType::linear, decomposition.subspaceTypes[ 0 ] );
+    EXPECT_EQ( DynamicType::singular, decomposition.subspaceTypes[ 1 ] );
+    for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace );
+        }
+    }
+    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{1, 10, 0.1}, AnalysisParameters{ 0.1 }, roots );
+
     analyzer.run();
 }
