@@ -63,11 +63,17 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         }
         for ( auto subspace : mLtiTypeSubspaces ) {
             // keep all segments corresponding to a global time interval that has non empty intersection with the invariant timing
-            std::size_t firstSegment = floor( carl::toDouble( ( carl::toDouble( invariantSatisfyingTime.lower() ) - currentNodes[ subspace ]->getTimings().upper() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
+            std::size_t firstSegment = 0;
             std::size_t lastSegment = ceil( carl::toDouble ( ( carl::toDouble( invariantSatisfyingTime.upper() ) - currentNodes[ subspace ]->getTimings().lower() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
             auto& flowpipe = currentNodes[ subspace ]->getFlowpipe();
+#ifndef NDEBUG
             // firstSegment should equal 0 because the first segment always satisfies the invariant, so just the last segments are thrown away
-            assert( firstSegment == 0 && lastSegment <= flowpipe.size() );
+            if ( std::is_same_v<Number, mpq_class> ) {
+                int cFirstSegment = floor( carl::toDouble( ( invariantSatisfyingTime.lower() - currentNodes[ subspace ]->getTimings().upper() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
+                assert( cFirstSegment == 0 );
+                assert( lastSegment <= flowpipe.size() );
+            }
+#endif
             flowpipe = std::vector<Representation>( flowpipe.begin() + firstSegment, flowpipe.begin() + lastSegment );
         }
 
@@ -157,11 +163,12 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                         }
                     }
                     if ( !segmentEnabled ) {
-                        // some subspaces doesn't have a successor with the time interval
+                        // some subspace doesn't have a successor with the time interval
                         continue;
                     }
+                    // segment n covers time interval [n*timeStep + (n+1)*timeStep]
                     carl::Interval<Number> successorTime( carl::convert<tNumber, Number>( mFixedParameters.fixedTimeStep )*segmentInterval.lower(),
-                                                          carl::convert<tNumber, Number>( mFixedParameters.fixedTimeStep )*segmentInterval.upper() );
+                                                          carl::convert<tNumber, Number>( mFixedParameters.fixedTimeStep )*( segmentInterval.upper() + 1 ) );
                     for ( auto subspace : mSingularTypeSubspaces ) {
                         auto subspaceSuccessor = detail::intersectSegmentWithTimeInterval( singularSuccessors[ subspace ], successorTime, singularSuccessors[ subspace ].dimension() - 1 );
                         auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSuccessor, segmentInterval, transition.get() );
