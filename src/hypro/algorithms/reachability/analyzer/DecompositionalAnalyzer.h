@@ -82,9 +82,9 @@ struct computeSingularJumpSuccessorVisitor {
 template <typename Representation>
 struct getSingularJumpSuccessorVisitor {
   using Number = typename Representation::NumberType;
-  Transition<Number>* trans;
+  Transition<Number>* transition;
     Representation operator()( SingularWorker<Representation>& worker ) {
-        auto it = worker.getJumpSuccessorSets().find( trans );
+        auto it = worker.getJumpSuccessorSets().find( transition );
         if ( it != worker.getJumpSuccessorSets().end() ) {
             auto successorList = it->second;
             // size 2 if initial set intersects guard, else 1. Either way, only need the last (jump with full flowpipe)
@@ -135,12 +135,15 @@ class DecompositionalAnalyzer {
     using Number = typename Representation::NumberType;
     using NodeVector = std::vector<ReachTreeNode<Representation>*>;
     using RepVector = std::vector<Representation>;
-    using WorkerVariant = std::variant<LTIWorker<Representation>,
-                                       SingularWorker<Representation>,
-                                       RectangularWorker<Representation>>;
+    using SingularSuccessors = std::map<std::size_t, Representation>;
+    using LTIPredecessors = std::map<std::size_t, std::vector<IndexedValuationSet<Representation>>>;
+    using LTISuccessors = std::map<std::size_t, std::vector<TimedValuationSet<Representation>>>;
 
   public:
     using DecompositionalResult = AnalysisResult<DecompositionalSuccess, Failure<Representation>>;
+    using WorkerVariant = std::variant<LTIWorker<Representation>,
+                                       SingularWorker<Representation>,
+                                       RectangularWorker<Representation>>;
 
     DecompositionalAnalyzer( HybridAutomaton<Number> const& ha,
                  Decomposition const& decomposition,
@@ -170,10 +173,54 @@ class DecompositionalAnalyzer {
     DecompositionalResult run();
 
   private:
+    auto initializeWorkers(
+        std::vector<TimeTransformationCache<Number>>& subspaceTransformationCache )
+            -> std::vector<WorkerVariant>;
+    auto computeTimeSuccessorsGetEnabledTime(
+        NodeVector& currentNodes,
+        std::vector<WorkerVariant>& workers )
+            -> carl::Interval<Number>;
+    void intersectSubspacesWithTimeInterval(
+        NodeVector& currentNodes,
+        const carl::Interval<Number>& timeInterval );
     // Compute time interval where all singular subspaces have the condition enabled as a subset of maxEnabledTime
-    carl::Interval<Number> getSingularEnabledTime( const Condition<Number>& condition, const carl::Interval<Number>& maxEnabledTime, const NodeVector& currentNodes );
+    auto getSingularEnabledTime(
+        const NodeVector& currentNodes,
+        const Condition<Number>& condition,
+        const carl::Interval<Number>& maxEnabledTime )
+            -> carl::Interval<Number>;
     // compute indexed segments where all lti subspaces have the condition enabled as a subset of maxEnabledTime
-    std::map<std::size_t, std::vector<IndexedValuationSet<Representation>>> getLtiEnabledSegments( const Condition<Number>& condition, const carl::Interval<Number> maxEnabledTime, const NodeVector& currentNodes );
+    auto getLtiEnabledSegments(
+        const NodeVector& currentNodes,
+        const Condition<Number>& condition,
+        const carl::Interval<Number> maxEnabledTime )
+            -> LTIPredecessors;
+    auto getSingularJumpSuccessors(
+        std::vector<WorkerVariant>& workers,
+        Transition<Number>* transition )
+            -> std::pair<carl::Interval<Number>, SingularSuccessors>;
+    auto getLtiJumpSuccessors(
+        NodeVector& currentNodes,
+        std::vector<WorkerVariant>& workers,
+        Transition<Number>* transition,
+        carl::Interval<Number> singularEnabledTime )
+            -> LTISuccessors;
+    auto makeChildrenForSegmentInterval(
+        NodeVector& currentNodes,
+        const Transition<Number>* transition,
+        const carl::Interval<SegmentInd>& segmentInterval,
+        SingularSuccessors singularSuccessors,
+        LTISuccessors ltiSuccessors )
+            -> std::optional<std::vector<ReachTreeNode<Representation>*>>;
+    auto makeChildrenForTimeInterval(
+        NodeVector& currentNodes,
+        const Transition<Number>* transition,
+        const carl::Interval<Number>& timeInterval,
+        SingularSuccessors singularSuccessors )
+            -> std::vector<ReachTreeNode<Representation>*>;
+
+
+
 
   protected:
     std::deque<NodeVector> mWorkQueue;
@@ -183,6 +230,8 @@ class DecompositionalAnalyzer {
     AnalysisParameters mParameters;
     std::vector<std::size_t> mSingularTypeSubspaces; // holds the subspaces that have a clock and compute all time successors at once
     std::vector<std::size_t> mLtiTypeSubspaces;      // holds the subspaces that have no clock and have multiple segments
+
+    tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 )*mFixedParameters.localTimeHorizon;
 };
 
 }  // namespace hypro
