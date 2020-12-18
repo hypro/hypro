@@ -255,9 +255,12 @@ std::optional<std::vector<ReachTreeNode<Representation>*>> DecompositionalAnalyz
         segmentEnabled = false;
         for ( auto& [ subspaceSuccessor, segments ] : ltiSuccessors[ subspace ] ) {
             if ( segments == segmentInterval ) {
+                // todo: child nodes are created even if not all subspaces are enabled. This should be unproblematic
+                //       because the workqueue will not be pushed to but could be done better.
                 segmentEnabled = true;
                 auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSuccessor, segmentInterval, transition );
                 child[ subspace ] = &subspaceChild;
+                break;
             }
         }
         if ( !segmentEnabled ) {

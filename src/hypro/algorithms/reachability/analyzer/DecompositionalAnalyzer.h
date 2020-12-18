@@ -1,13 +1,13 @@
 #pragma once
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
-#include "../../../datastructures/reachability/Flowpipe.h"
-#include "../../../datastructures/reachability/ReachTreev2.h"
-#include "../../../types.h"
-#include "../workers/SingularWorker.h"
-#include "../workers/LTIWorker.h"
-#include "../workers/RectangularWorker.h"
-#include "./ReturnTypes.h"
-#include "./DecompositionalUtil.h"
+#include <hypro/datastructures/reachability/Flowpipe.h>
+#include <hypro/datastructures/reachability/ReachTreev2.h>
+#include <hypro/types.h>
+#include <hypro/algorithms/reachability/workers/SingularWorker.h>
+#include <hypro/algorithms/reachability/workers/LTIWorker.h>
+#include <hypro/algorithms/reachability/workers/RectangularWorker.h>
+#include <hypro/algorithms/reachability/analyzer/ReturnTypes.h>
+#include <hypro/algorithms/reachability/analyzer/DecompositionalUtil.h>
 
 #include <queue>
 
@@ -15,7 +15,10 @@
 namespace hypro {
 namespace detail {
 
-// Visitors to call worker functions
+/**
+ * @brief       Worker-visitor to reset workers for new task.
+ * @tparam      Representation      The used state set representation type.
+ */
 template <typename Representation>
 struct resetWorkerVisitor {
     void operator()( SingularWorker<Representation>& worker ) {
@@ -29,6 +32,14 @@ struct resetWorkerVisitor {
     }
 };
 
+/**
+ * @brief       Worker-visitor to compute the time successors for the given task.
+ * @tparam      Representation      The used state set representation type.
+ * @param       task                The current task.
+ * @param       fixedTimeStep       The fixed time step of the analyzer using the visitor.
+ * @param       timeStep            The analyzer specific time step (for using multiple analyzers).
+ * @return      The time interval where the subspace satisfies the invariant.
+ */
 template <typename Representation>
 struct computeTimeSuccessorVisitor {
   using Number = typename Representation::NumberType;
@@ -64,6 +75,11 @@ struct computeTimeSuccessorVisitor {
     }
 };
 
+/**
+ * @brief       Worker-visitor to compute the jump successors for the given task.
+ * @tparam      Representation      The used state set representation type.
+ * @param       task                The current task.
+ */
 template <typename Representation>
 struct computeSingularJumpSuccessorVisitor {
   ReachTreeNode<Representation>* task;
@@ -79,6 +95,13 @@ struct computeSingularJumpSuccessorVisitor {
     }
 };
 
+
+/**
+ * @brief       Worker-visitor to get the jump successors for the given transition in singular subspaces.
+ * @tparam      Representation      The used state set representation type.
+ * @param       transition          The transition for which to get successors.
+ * @return      The jump successor as Representation set.
+ */
 template <typename Representation>
 struct getSingularJumpSuccessorVisitor {
   using Number = typename Representation::NumberType;
@@ -105,6 +128,13 @@ struct getSingularJumpSuccessorVisitor {
     }
 };
 
+/**
+ * @brief       Worker-visitor to get the jump successors for the given transition in lti subspaces.
+ * @tparam      Representation      The used state set representation type.
+ * @param       transition          The transition for which to get successors.
+ * @param       guardEnabledSets    The jump predecessors.
+ * @return      The jump successor as Representation set.
+ */
 template <typename Representation>
 struct getLtiJumpSuccessorVisitor {
   using Number = typename Representation::NumberType;
@@ -129,7 +159,10 @@ struct getLtiJumpSuccessorVisitor {
 struct DecompositionalSuccess {};
 
 
-
+/**
+ * @brief      Class implementing a reachability analysis algorithm for decomposed hybrid automata.
+ * @tparam     Representation  The used state set representation type.
+ */
 template <typename Representation>
 class DecompositionalAnalyzer {
     using Number = typename Representation::NumberType;
@@ -145,6 +178,14 @@ class DecompositionalAnalyzer {
                                        SingularWorker<Representation>,
                                        RectangularWorker<Representation>>;
 
+    /**
+     * @brief       Construct a new DecompositionalAnalyzer object.
+     * @param       ha                  The decomposed hybrid automaton to analyze.
+     * @param       decomposition       The decomposition information corresponding to the ha.
+     * @param       fixedParameters     The fixed analysis parameters.
+     * @param       parameters          The analyzer specific parameters (for using multiple analyzers).
+     * @param       roots               The roots for the analysis tree (one root for each subspace).
+     */
     DecompositionalAnalyzer( HybridAutomaton<Number> const& ha,
                  Decomposition const& decomposition,
                  FixedAnalysisParameters const& fixedParameters,
@@ -170,41 +211,107 @@ class DecompositionalAnalyzer {
         }
     }
 
+    /**
+     * @brief       Perform safety analysis.
+     * @return      A result object indicating either success (safety) or failure (bad states reachable).
+     */
     DecompositionalResult run();
 
   private:
+    /**
+     * @brief       Initialize workers for the subspaces.
+     * @param       subspaceTransformationCache     A vector for caching computation in lti workers.
+     * @return      The initizalized workers as vector of variants.
+     */
     auto initializeWorkers(
         std::vector<TimeTransformationCache<Number>>& subspaceTransformationCache )
             -> std::vector<WorkerVariant>;
+
+    /**
+     * @brief       Compute time successors in all subspaces.
+     * @param       currentNodes    The current reachtree-nodes to store the successor sets.
+     * @param       workers         The vector of worker variants to use for computation.
+     * @return      The time interval where all subspaces satisfy their respective invariants.
+     */
     auto computeTimeSuccessorsGetEnabledTime(
         NodeVector& currentNodes,
         std::vector<WorkerVariant>& workers )
             -> carl::Interval<Number>;
+
+    /**
+     * @brief       Compute time successors in all subspaces.
+     * @param       currentNodes    The current reachtree-nodes to store the constrained successor sets.
+     * @param       workers         The vector of worker variants to use for computation.
+     * @return      The time interval where all subspaces satisfy their respective invariants.
+     */
     void intersectSubspacesWithTimeInterval(
         NodeVector& currentNodes,
         const carl::Interval<Number>& timeInterval );
-    // Compute time interval where all singular subspaces have the condition enabled as a subset of maxEnabledTime
+
+    /**
+     * @brief       Compute the time interval where all singular subspaces satisfy a condition as subset of a maximal time interval.
+     * @param       currentNodes    The current reachtree-nodes to access the flowpipes.
+     * @param       condition       The condition to intersect with.
+     * @param       maxEnabledTime  The maximal time interval where the condition can be enabled (e.g. invariant satisfying time).
+     * @return      The time interval where all singular subspaces satisfy the condition simultaneously.
+     */
     auto getSingularEnabledTime(
         const NodeVector& currentNodes,
         const Condition<Number>& condition,
         const carl::Interval<Number>& maxEnabledTime )
             -> carl::Interval<Number>;
-    // compute indexed segments where all lti subspaces have the condition enabled as a subset of maxEnabledTime
+
+
+    /**
+     * @brief       Compute the segments where all lti subspaces satisfy a condition as subset of a maximal time interval.
+     * @param       currentNodes    The current reachtree-nodes to access the flowpipes.
+     * @param       condition       The condition to intersect with.
+     * @param       maxEnabledTime  The maximal time interval where the condition can be enabled (e.g. invariant satisfying time).
+     * @return      The segments for each subspace where all lti subspaces satisfy the condition simultaneously.
+     */
     auto getLtiEnabledSegments(
         const NodeVector& currentNodes,
         const Condition<Number>& condition,
         const carl::Interval<Number> maxEnabledTime )
             -> LTIPredecessors;
+
+    /**
+     * @brief       Get the singular jump successors for a transition and the time interval where all successors satisfy the invariant.
+     * @param       workers         The vector of worker variants to use for computation.
+     * @param       transition      The transition to get successors for.
+     * @return      Pair of time interval where the jump can be taken in all subspaces and the unconstrained successors
+                    for each subspace.
+     */
     auto getSingularJumpSuccessors(
         std::vector<WorkerVariant>& workers,
         Transition<Number>* transition )
             -> std::pair<carl::Interval<Number>, SingularSuccessors>;
+
+    /**
+     * @brief       Compute the LTI jump successors for a transition in a given time interval.
+     * @param       workers             The vector of worker variants to use for computation.
+     * @param       transition          The transition to get successors for.
+     * @param       singularEnabledTime A time interval to constrain successors with previous information.
+     * @return      The successors for each subspace.
+     */
     auto getLtiJumpSuccessors(
         NodeVector& currentNodes,
         std::vector<WorkerVariant>& workers,
         Transition<Number>* transition,
         carl::Interval<Number> singularEnabledTime )
             -> LTISuccessors;
+
+    /**
+     * @brief       Create children in all subspace-trees if a transition can be taken in a time interval
+                    given by an interval of segment-indices and indicate whether the transition can be taken.
+     * @param       currentNodes        The current reachtree-nodes to store child-nodes.
+     * @param       transition          The transition to make child-nodes for.
+     * @param       segmentInterval     An interval of segment indices corresponding to the time interval.
+     * @param       singularSuccessors  The (unconstrained) successor sets of the transition for the singular subspaces.
+     * @param       ltiSuccessors       The successor sets oof the transition for the lti subspaces.
+     * @return      Nothing if the transition cannot be taken in the given segment-interval
+                    or the created child-nodes.
+     */
     auto makeChildrenForSegmentInterval(
         NodeVector& currentNodes,
         const Transition<Number>* transition,
@@ -212,6 +319,15 @@ class DecompositionalAnalyzer {
         SingularSuccessors singularSuccessors,
         LTISuccessors ltiSuccessors )
             -> std::optional<std::vector<ReachTreeNode<Representation>*>>;
+
+    /**
+     * @brief       Create children in all singular-subspace-trees if a transition can be taken in a time interval.
+     * @param       currentNodes        The current reachtree-nodes to store child-nodes.
+     * @param       transition          The transition to make child-nodes for.
+     * @param       timeInterval        The time interval in which to take the transition.
+     * @param       singularSuccessors  The (unconstrained) successor sets of the transition for the singular subspaces.
+     * @return      The created child-nodes
+     */
     auto makeChildrenForTimeInterval(
         NodeVector& currentNodes,
         const Transition<Number>* transition,
@@ -223,11 +339,11 @@ class DecompositionalAnalyzer {
 
 
   protected:
-    std::deque<NodeVector> mWorkQueue;
-    HybridAutomaton<Number> const* mHybridAutomaton;
-    Decomposition mDecomposition;
-    FixedAnalysisParameters mFixedParameters;
-    AnalysisParameters mParameters;
+    std::deque<NodeVector> mWorkQueue;               // holds the tasks that still need to be computed
+    HybridAutomaton<Number> const* mHybridAutomaton; // holds a pointer to the decomposed automaton
+    Decomposition mDecomposition;                    // holds decomposition information correpsonding to the automaton
+    FixedAnalysisParameters mFixedParameters;        // holds common analysis parameters for all analyzers
+    AnalysisParameters mParameters;                  // holds analyzer specific parameters
     std::vector<std::size_t> mSingularTypeSubspaces; // holds the subspaces that have a clock and compute all time successors at once
     std::vector<std::size_t> mLtiTypeSubspaces;      // holds the subspaces that have no clock and have multiple segments
 
