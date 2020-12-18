@@ -1,6 +1,6 @@
 namespace hypro {
 namespace detail {
-// get the time interval covered by the segment if the last variable is the clock
+// get the time interval covered by the segment
 template <typename Representation>
 carl::Interval<typename Representation::NumberType> getTimeInterval( const Representation& segment, int clockIndex ) {
     using Number = typename Representation::NumberType;
@@ -34,5 +34,14 @@ Representation intersectSegmentWithTimeInterval( const Representation& segment, 
     return constrainedSegment;
 }
 
+template <typename Number>
+std::vector<Condition<Number>> collectBadStates( const HybridAutomaton<Number>* ha, const Location<Number>* loc ) {
+    auto badStates = ha->getGlobalBadStates();
+    auto localBadState = ha->getLocalBadStates().find( loc );
+    if ( localBadState != ha->getLocalBadStates().end() ) {
+        badStates.push_back( localBadState->second );
+    }
+    return badStates;
+}
 } // namespace detail
 } // namespace hypro
