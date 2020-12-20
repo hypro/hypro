@@ -294,8 +294,8 @@ bool isRectangularAutomaton( const HybridAutomaton<Number> &ha ) {
 
 template <typename Number>
 bool checkDecomposed( const HybridAutomaton<Number> &automaton ) {
-	for ( const auto &[locPtr, condition] : automaton.getInitialStates() ) {
-		if ( condition.size() > 1 ) {
+	for ( const auto &locConditionPair : automaton.getInitialStates() ) {
+		if ( locConditionPair.second.size() > 1 ) {
 			return true;
 		}
 	}
@@ -462,8 +462,8 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 	}
 
 	//check local bad states
-	for ( const auto &[locPtr, condition] : automaton.getLocalBadStates() ) {
-		detail::addEdgesForCondition( condition, G );
+	for ( const auto &locConditionPair : automaton.getLocalBadStates() ) {
+		detail::addEdgesForCondition( locConditionPair.second, G );
 	}
 	//check global bad states
 	for ( const auto &condition : automaton.getGlobalBadStates() ) {

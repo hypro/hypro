@@ -173,10 +173,10 @@ auto DecompositionalAnalyzer<Representation>::getLtiEnabledSegments(
         // return empty map
         return LTIPredecessors();
     }
-    int firstSegmentToCheck = floor( carl::toDouble( carl::toDouble( maxEnabledTime.lower() ) / mFixedParameters.fixedTimeStep ) );
-    int lastSegmentToCheck = ceil( carl::toDouble( carl::toDouble( maxEnabledTime.upper() ) / mFixedParameters.fixedTimeStep ) );
+    SegmentInd firstSegmentToCheck = floor( carl::toDouble( carl::toDouble( maxEnabledTime.lower() ) / mFixedParameters.fixedTimeStep ) );
+    SegmentInd lastSegmentToCheck = ceil( carl::toDouble( carl::toDouble( maxEnabledTime.upper() ) / mFixedParameters.fixedTimeStep ) );
     std::set<SegmentInd> enabledSegmentIndices;
-    for ( int i = firstSegmentToCheck; i <= lastSegmentToCheck; ++i ) {
+    for ( SegmentInd i = firstSegmentToCheck; i <= lastSegmentToCheck; ++i ) {
         enabledSegmentIndices.insert( i );
     }
 
@@ -184,13 +184,13 @@ auto DecompositionalAnalyzer<Representation>::getLtiEnabledSegments(
     for ( auto subspace : mLtiTypeSubspaces ) {
         std::vector<IndexedValuationSet<Representation>> subspaceEnablingSegments;
         auto flowpipe = currentNodes[ subspace ]->getFlowpipe();
-        int timingLower = currentNodes[ subspace ]->getTimings().lower();
-        int timingUpper = currentNodes[ subspace ]->getTimings().upper();
-        for ( std::size_t segmentIndex = 0; segmentIndex < flowpipe.size(); ++segmentIndex ) {
+        SegmentInd timingLower = currentNodes[ subspace ]->getTimings().lower();
+        SegmentInd timingUpper = currentNodes[ subspace ]->getTimings().upper();
+        for ( SegmentInd segmentIndex = 0, flowpipeSize = flowpipe.size(); segmentIndex < flowpipeSize; ++segmentIndex ) {
             // if the segment covers a time period that is potentially enabled, compute intersection with condition
             auto [containment, enabledSet] = intersect( flowpipe[ segmentIndex ], condition, subspace );
             // convert to global index by considering offset and specific time step
-            int globalIndex = timingLower + segmentIndex*mParameters.timeStepFactor;
+            SegmentInd globalIndex = timingLower + segmentIndex*mParameters.timeStepFactor;
             if ( containment != CONTAINMENT::NO ) {
                 subspaceEnablingSegments.push_back( IndexedValuationSet<Representation>{ enabledSet, globalIndex } );
             } else {

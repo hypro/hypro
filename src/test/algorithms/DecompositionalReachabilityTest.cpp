@@ -299,7 +299,7 @@ TEST( DecompositionalAnalysis, MixedJumps ) {
 
     auto ha = makeHaJumps<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
-    ASSERT_EQ( 2, decomposition.subspaces.size() );
+    ASSERT_EQ( (std::size_t) 2, decomposition.subspaces.size() );
     EXPECT_EQ( DynamicType::linear, decomposition.subspaceTypes[ 0 ] );
     EXPECT_EQ( DynamicType::singular, decomposition.subspaceTypes[ 1 ] );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
