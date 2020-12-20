@@ -535,9 +535,9 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::discrete;
 					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
 					} else {
@@ -546,7 +546,7 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 					break;
 				case DynamicType::timed:
 					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
 					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
@@ -559,7 +559,7 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 					break;
 				case DynamicType::singular:
 					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {

@@ -78,8 +78,6 @@ auto DecompositionalAnalyzer<Representation>::initializeWorkers(
     std::vector<WorkerVariant> workers;
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
         switch( mDecomposition.subspaceTypes[ subspace ] ) {
-            case DynamicType::discrete:
-                [[fallthrough]];
             case DynamicType::timed:
                 [[fallthrough]];
             case DynamicType::singular:
@@ -90,6 +88,8 @@ auto DecompositionalAnalyzer<Representation>::initializeWorkers(
             case DynamicType::rectangular:
                 // Todo: Initialize rectangular worker
                 break;
+            case DynamicType::discrete:
+                [[fallthrough]];
             case DynamicType::affine:
                 [[fallthrough]];
             case DynamicType::linear:
