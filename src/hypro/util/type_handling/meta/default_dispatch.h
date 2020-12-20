@@ -21,9 +21,10 @@ using DefaultRepresentations =
 			RepresentationCombinations<
 				  SupportFunctionT, SupportFunctionSetting, NoBoxReduction, NoBoxDetection, NoTrafoReduction, NoReduction, PolytopeSupportFunctionSetting>,
 			RepresentationCombinations<
-				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>,
-			RepresentationCombinations<
-				  TemplatePolyhedronT, TemplatePolyhedronDefault>>;
+				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>
+			//RepresentationCombinations<
+			//	  TemplatePolyhedronT, TemplatePolyhedronDefault>
+			>;
 
 using PolytopalRepresentations =
 	  TypeList<
