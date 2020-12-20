@@ -71,7 +71,7 @@ hypro::HybridAutomaton<Number> makeHaJumps() {
 
     // Set flow x' = 1, y' = x + 2, z' = -1 in loc1
     Matrix flow1 = Matrix::Zero( 4, 4 );
-    flow1( 0, 2 ) = 1;
+    flow1( 0, 1 ) = 1;
     flow1( 1, 1 ) = 1;
     flow1( 1, 3 ) = 2;
     flow1( 2, 3 ) = -1;
@@ -104,7 +104,7 @@ hypro::HybridAutomaton<Number> makeHaJumps() {
     transConstants = -2 * Vector::Ones( 1 );
     transConstraint( 0, 1 ) = 1;
     guard = hypro::Condition<Number>( transConstraint, transConstants );
-    reset = hypro::Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
+    reset = hypro::Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>(), carl::Interval<Number>() } );
 
     std::unique_ptr<hypro::Transition<Number>> trans1 =
           std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
@@ -299,6 +299,7 @@ TEST( DecompositionalAnalysis, MixedJumps ) {
 
     auto ha = makeHaJumps<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
+    ASSERT_EQ( 2, decomposition.subspaces.size() );
     EXPECT_EQ( DynamicType::linear, decomposition.subspaceTypes[ 0 ] );
     EXPECT_EQ( DynamicType::singular, decomposition.subspaceTypes[ 1 ] );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
