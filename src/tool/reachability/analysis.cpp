@@ -44,6 +44,24 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 }
 
 template <typename State>
+std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting ) {
+	START_BENCHMARK_OPERATION( "Verification" );
+	auto roots = makeDecompositionalRoots<State>( decomposedHa, decomposition );
+	DecompositionalAnalyzer<State> analyzer{ decomposedHa, decomposition, 
+		setting.fixedParameters(), setting.strategy().front(), roots };
+	auto result = analyzer.run();
+	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
+		std::cout << "Could not verify safety." << std::endl;
+	} else {
+		std::cout << "The model is safe." << std::endl;
+	}
+	EVALUATE_BENCHMARK_RESULT( "Verification" );
+
+	std::vector<PlotData<FullState>> plotData{};
+	return plotData;
+}
+
+template <typename State>
 std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
 	auto roots = makeRoots<State>( automaton );
@@ -129,6 +147,13 @@ std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& a
 	return plotData;
 }
 
+struct DecompositionalDispatcher {
+	template <typename Rep>
+	auto operator()( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting ) {
+		return decompositional_analyze<Rep>( decomposedHa, decomposition, setting );
+	}
+};
+
 struct LTIDispatcher {
 	template <typename Rep>
 	auto operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
@@ -144,6 +169,13 @@ struct SingularDispatcher {
 };
 
 AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, PreprocessingInformation information ) {
+	if ( information.decomposition.subspaces.size() > 1 ) {
+		// decompositional analysis
+		return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
+																	setting.strategy().front().representation_setting, DecompositionalDispatcher{},
+																	information.decomposedHa, information.decomposition, setting ) };
+	}
+
 	switch ( information.dynamic ) {
 		case DynamicType::affine:
 			[[fallthrough]];

@@ -26,7 +26,8 @@ int main( int argc, char const* argv[] ) {
 
 	// perform preprocessing
 	auto preprocessingInformation = hydra::preprocessing::preprocess( automaton,
-																	  reachSettings );
+																	  reachSettings,
+																	  options["decompose"].as<bool>() );
 
 	// combine parsed settings and cli flags
 	auto settings = hydra::processSettings( reachSettings, options );
