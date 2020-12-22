@@ -71,8 +71,9 @@ jobs:
       run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
     
     - name: SonarCloud Scan
-      working-directory: ${{runner.workspace}}/hypro
       uses: SonarSource/sonarcloud-github-action@master
+      with:
+        projectBaseDir: ${{runner.workspace}}/hypro
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
