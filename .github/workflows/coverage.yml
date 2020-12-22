@@ -8,7 +8,8 @@ on:
   push:
     branches: 
       - master
-      - alpha 
+      - alpha
+      - hypro-sonarcloud
 
 jobs:
   sonarcloud:
