@@ -27,7 +27,12 @@ jobs:
     - name: Download Dependencies
       shell: bash
       working-directory: ${{runner.workspace}}/dependencies
-      run: git clone --depth 1 --branch 19.10 https://github.com/smtrat/carl carl && sudo apt install libeigen3-dev uuid-dev
+      run: git clone --depth 1 --branch 19.10 https://github.com/smtrat/carl carl && && sudo apt install libeigen3-dev uuid-dev
+    
+    - name: Download & Unzip Build-wrapper
+      shell: bash
+      working-directory: ${{runner.workspace}}/dependencies
+      run: curl https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip --output build-wrapper-linux-x86.zip && unzip build-wrapper-linux-x86.zip
       
     - name: Cache Dependencies
       id: cache-dependencies
@@ -55,7 +60,11 @@ jobs:
       run: cmake --build . --config $BUILD_TYPE -j 3 --target carl
         
     - name: Configure Project
-      run: mkdir build && cd build && cmake .. && cd .. && ls -lah .travis/
+      run: mkdir build && cd build && cmake ..
+    
+    - name: Build Project with Build-wrapper
+      working-directory: ${{runner.workspace}}/hypro/build
+      run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86 make 
   
     - name: Copy Sonarcloud Properties File
       run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
