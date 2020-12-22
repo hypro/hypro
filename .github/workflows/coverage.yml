@@ -62,6 +62,10 @@ jobs:
         
     - name: Configure Project
       run: mkdir build && cd build && cmake ..
+
+    - name: List files and folders
+      working-directory: ${{runner.workspace}}
+      run: pwd && ls -la && cd build && pwd && ls -la && cd ../../ && pwd && ls -la
     
     - name: Build Project with Build-wrapper
       working-directory: ${{runner.workspace}}/hypro/build
