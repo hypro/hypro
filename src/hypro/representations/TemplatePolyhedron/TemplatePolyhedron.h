@@ -205,7 +205,7 @@ class TemplatePolyhedronT : private GeometricObjectBase {
 	 * @param[in]  _direction  The direction/cost function.
 	 * @return     Maximum towards _direction.
 	 */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true ) const;
 
 	/**
 	 * @brief      Multi-evaluation function (convex linear optimization).
