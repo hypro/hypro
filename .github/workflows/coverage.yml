@@ -70,6 +70,10 @@ jobs:
     - name: Copy Sonarcloud Properties File
       run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
     
+    - name: List files etc
+      working-directory: ${{runner.workspace}}/hypro/build
+      run: ls -la && pwd && cd bw-outputs && ls -la && pwd
+    
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
       with:
