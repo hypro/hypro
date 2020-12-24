@@ -70,6 +70,7 @@ if(HYPRO_BUILD_OFFLINE)
 set_property(DIRECTORY ${hypro_SOURCE_DIR} PROPERTY EP_UPDATE_DISCONNECTED 1)
 endif()
 
+file(RELATIVE_PATH relBinaryDir ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties.in ${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties )
 
 ###########################################################################################
