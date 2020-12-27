@@ -519,14 +519,14 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 		for ( auto & loc : automaton.getLocations() ) {
 			switch ( subspaceTypes[ subspaceIndex ] ) {
 				case DynamicType::undefined:
-					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::discrete;
-					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
+					if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
 					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::rectangular;
+					} else if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::discrete;
 					} else {
 						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					}
@@ -545,27 +545,27 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 					}
 					break;
 				case DynamicType::timed:
-					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
+					if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
 					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					} else if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					} else {
 						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					}
 					break;
 				case DynamicType::singular:
-					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
+					if ( isTimedSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
 					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
 						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
+					} else if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
+						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					} else {
 						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
 					}
