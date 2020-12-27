@@ -9,7 +9,7 @@ sonar.projectVersion=${hypro_VERSION}
 # This property is optional if sonar.modules is set.
 sonar.language=cpp
 #sonar.sources=src/hypro, src/tool
-sonar.exclusions= src/hypro/parser/**/*, src/hypro/util/linearOptimization/clp/*, src/hypro/util/matlab/**/*
+sonar.exclusions= src/hypro/parser/**/*, src/hypro/util/linearOptimization/clp/*, src/hypro/util/matlab/**/*, .git/**/*, examples/**/*
 sonar.cpp.file.suffixes=.h,.tpp,.cpp
 sonar.c.file.suffixes=.c
 
