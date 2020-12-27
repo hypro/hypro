@@ -6,7 +6,7 @@ name: Coverage
 # events but only for the master branch
 on:
   push:
-    branches: 
+    branches:
       - master
       - alpha
       - hypro-sonarcloud
@@ -15,71 +15,70 @@ jobs:
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        # Disabling shallow clone is recommended for improving relevancy of reporting
-        fetch-depth: 0
-        
-    - name: Create Dependencies Environment
-      shell: bash
-      working-directory: ${{runner.workspace}}
-      run: cmake -E make_directory ${{runner.workspace}}/dependencies
+      - uses: actions/checkout@v2
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
 
-    - name: Download Dependencies
-      shell: bash
-      working-directory: ${{runner.workspace}}/dependencies
-      run: git clone --depth 1 --branch 19.10 https://github.com/smtrat/carl carl && sudo apt install libeigen3-dev uuid-dev
-    
-    - name: Download & Unzip Build-wrapper
-      shell: bash
-      working-directory: ${{runner.workspace}}/dependencies
-      run: curl https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip --output build-wrapper-linux-x86.zip && unzip build-wrapper-linux-x86.zip
-      
-    - name: Cache Dependencies
-      id: cache-dependencies
-      uses: actions/cache@v2
-      with:
-        path: ${{runner.workspace}}/dependencies
-        key: ${{ runner.os }}-deps
-      
-    - name: Create Build Environment for Dependencies
-      shell: bash
-      working-directory: ${{runner.workspace}}/dependencies
-      if: steps.cache-dependencies.outputs.cache-hit != 'true'
-      run: cmake -E make_directory ${{runner.workspace}}/dependencies/carl/build
-      
-    - name: Configure Dependencies
-      shell: bash
-      working-directory: ${{runner.workspace}}/dependencies/carl/build
-      if: steps.cache-dependencies.outputs.cache-hit != 'true'
-      run: cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
-      
-    - name: Build Dependencies
-      shell: bash
-      working-directory: ${{runner.workspace}}/dependencies/carl/build
-      if: steps.cache-dependencies.outputs.cache-hit != 'true'
-      run: cmake --build . --config $BUILD_TYPE -j 3 --target carl
-        
-    - name: Configure Project
-      run: mkdir build && cd build && cmake ..
-    
-    - name: Build Project with Build-wrapper
-      working-directory: ${{runner.workspace}}/hypro/build
-      run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/build/bw-outputs make 
-  
-    - name: Copy Sonarcloud Properties File
-      run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
-    
-    - name: List files etc
-      working-directory: ${{runner.workspace}}/hypro/build
-      run: ls -la && pwd && cd bw-outputs && ls -la && pwd
-    
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@master
-      with:
-        projectBaseDir: ${{runner.workspace}}/hypro
-        args: -X -Dsonar.verbose=true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Create Dependencies Environment
+        shell: bash
+        working-directory: ${{runner.workspace}}
+        run: cmake -E make_directory ${{runner.workspace}}/dependencies
 
+      - name: Download Dependencies
+        shell: bash
+        working-directory: ${{runner.workspace}}/dependencies
+        run: git clone --depth 1 --branch 19.10 https://github.com/smtrat/carl carl && sudo apt install libeigen3-dev uuid-dev
+
+      - name: Download & Unzip Build-wrapper
+        shell: bash
+        working-directory: ${{runner.workspace}}/dependencies
+        run: curl https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip --output build-wrapper-linux-x86.zip && unzip build-wrapper-linux-x86.zip
+
+      - name: Cache Dependencies
+        id: cache-dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{runner.workspace}}/dependencies
+          key: ${{ runner.os }}-deps
+
+      - name: Create Build Environment for Dependencies
+        shell: bash
+        working-directory: ${{runner.workspace}}/dependencies
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: cmake -E make_directory ${{runner.workspace}}/dependencies/carl/build
+
+      - name: Configure Dependencies
+        shell: bash
+        working-directory: ${{runner.workspace}}/dependencies/carl/build
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+
+      - name: Build Dependencies
+        shell: bash
+        working-directory: ${{runner.workspace}}/dependencies/carl/build
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        run: cmake --build . --config $BUILD_TYPE -j 3 --target carl
+
+      - name: Configure Project
+        run: mkdir build && cd build && cmake ..
+
+      - name: Build Project with Build-wrapper
+        working-directory: ${{runner.workspace}}/hypro/build
+        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/build/bw-outputs make
+
+      - name: Copy Sonarcloud Properties File
+        run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
+
+      - name: List files etc
+        working-directory: ${{runner.workspace}}/hypro/build
+        run: ls -la && pwd && cd bw-outputs && ls -la && pwd
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: ${{runner.workspace}}/hypro/build
+          args: -X -Dsonar.verbose=true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
