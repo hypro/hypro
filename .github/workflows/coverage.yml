@@ -65,19 +65,15 @@ jobs:
 
       - name: Build Project with Build-wrapper
         working-directory: ${{runner.workspace}}/hypro/build
-        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/build/bw-outputs make
+        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/bw-outputs make
 
       - name: Copy Sonarcloud Properties File
-        run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro/build
-
-      - name: List files etc
-        working-directory: ${{runner.workspace}}/hypro/build
-        run: ls -la && pwd && cd bw-outputs && ls -la && pwd
+        run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         with:
-          projectBaseDir: ${{runner.workspace}}/hypro/build
+          projectBaseDir: ${{runner.workspace}}/hypro
           args: -X -Dsonar.verbose=true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
