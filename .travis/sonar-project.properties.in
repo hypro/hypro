@@ -18,11 +18,10 @@ sonar.cfamily.cache.enabled=false
 sonar.cfamily.threads=2
 
 # Encoding of the source code. Default is default system encoding
-#sonar.sourceEncoding=UTF-8"
+sonar.sourceEncoding=UTF-8
 
-##sonar.cfamily.build-wrapper-output=${PROJECT_BINARY_DIR}/bw-outputs
-###sonar.cfamily.gcov.reportsPath=hypro_coverage.info
-##sonar.cfamily.llvm-cov.reportPath=${PROJECT_BINARY_DIR}/hypro_coverage.info
-#sonar.cfamily.build-wrapper-output=bw-outputs
+sonar.cfamily.build-wrapper-output=${relBinaryDir}/bw-outputs
+#sonar.cfamily.gcov.reportsPath=${relBinaryDir}/hypro_coverage.info
+#sonar.cfamily.llvm-cov.reportPath=${PROJECTrelBinaryDir_BINARY_DIR}/hypro_coverage.info
 #sonar.cfamily.llvm-cov.reportPath=hypro_coverage.info
 

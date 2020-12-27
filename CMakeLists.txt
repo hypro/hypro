@@ -40,7 +40,7 @@ option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
 option(HYPRO_BUILD_OFFLINE "Do not attempt to update ressources (work offline)." OFF)
-option(HYPRO_LOGGING "Allow logging." ON)
+option(HYPRO_LOGGING "Allow logging." OFF)
 option(HYPRO_MATLAB_BINDINGS "Create Matlab bindings." OFF)
 option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF)
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
@@ -70,6 +70,7 @@ if(HYPRO_BUILD_OFFLINE)
 set_property(DIRECTORY ${hypro_SOURCE_DIR} PROPERTY EP_UPDATE_DISCONNECTED 1)
 endif()
 
+file(RELATIVE_PATH relBinaryDir ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties.in ${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties )
 
 ###########################################################################################
