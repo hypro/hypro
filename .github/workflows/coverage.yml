@@ -68,7 +68,7 @@ jobs:
         run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/build/bw-outputs make
 
       - name: Copy Sonarcloud Properties File
-        run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
+        run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro/build
 
       - name: List files etc
         working-directory: ${{runner.workspace}}/hypro/build
