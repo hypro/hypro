@@ -30,4 +30,10 @@ struct JumpSuccessor {
 	std::vector<TimedValuationSet<Representation>> valuationSets{};
 };
 
+template <typename Number>
+struct TimeInformation {
+    carl::Interval<Number> localTime{ carl::Interval<Number>::emptyInterval() };
+    carl::Interval<Number> globalTime{ carl::Interval<Number>::emptyInterval() };
+};
+
 }  // namespace hypro
