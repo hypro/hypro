@@ -217,6 +217,7 @@ TEST( DecompositionalAnalysis, NoBadStatesNoJumps ) {
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
             addClockToAutomaton( decomposedHa, subspace );
+            addClockToAutomaton( decomposedHa, subspace );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
@@ -241,6 +242,7 @@ TEST( DecompositionalAnalysis, SafeNoJumps ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace );
             addClockToAutomaton( decomposedHa, subspace );
         }
     }
@@ -268,6 +270,7 @@ TEST( DecompositionalAnalysis, UnsafeNoJumps ) {
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
             addClockToAutomaton( decomposedHa, subspace );
+            addClockToAutomaton( decomposedHa, subspace );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
@@ -285,6 +288,7 @@ TEST( DecompositionalAnalysis, SingularJumps ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace );
             addClockToAutomaton( decomposedHa, subspace );
         }
     }
@@ -304,6 +308,7 @@ TEST( DecompositionalAnalysis, MixedJumps ) {
     EXPECT_EQ( DynamicType::singular, decomposition.subspaceTypes[ 1 ] );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace );
             addClockToAutomaton( decomposedHa, subspace );
         }
     }

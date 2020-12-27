@@ -19,14 +19,14 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         } );
 
         // Time successors
-        auto invariantSatisfyingTime = computeTimeSuccessorsGetEnabledTime( currentNodes, workers );
-        intersectSubspacesWithTimeInterval( currentNodes, invariantSatisfyingTime );
+        TimeInformation<Number> invariantSatisfyingTime = computeTimeSuccessorsGetEnabledTime( currentNodes, workers );
+        intersectSubspacesWithClock( currentNodes, invariantSatisfyingTime );
 
 
         // Check safety
         for ( auto badState : detail::collectBadStates( mHybridAutomaton, currentLoc ) ) {
-            auto badTimeInterval = getSingularEnabledTime( currentNodes, badState, invariantSatisfyingTime );
-            auto badSegments = getLtiEnabledSegments( currentNodes, badState, badTimeInterval );
+            auto badTime = getSingularEnabledTime( currentNodes, badState, invariantSatisfyingTime );
+            auto badSegments = getLtiEnabledSegments( currentNodes, badState, badTime );
             if ( std::any_of( badSegments.begin(), badSegments.end(), []( const auto& segmentVector ) {
                     return segmentVector.second.size() > 0; } ) ) {
                 return { Failure{ currentNodes[ 0 ] } };
@@ -63,7 +63,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                 }
             } else {
                 // case 2: only singular/rectangular subspaces -> exactly one successor
-                auto childNode = makeChildrenForTimeInterval( currentNodes, transition.get(), transitionEnabledTime, singularJumpSuccessors );
+                auto childNode = makeChildrenForClockValues( currentNodes, transition.get(), transitionEnabledTime, singularJumpSuccessors );
                 mWorkQueue.push_back( childNode );
             }
         }
@@ -110,97 +110,113 @@ auto DecompositionalAnalyzer<Representation>::initializeWorkers(
 
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::computeTimeSuccessorsGetEnabledTime(
-  NodeVector& currentNodes, std::vector<WorkerVariant>& workers ) -> carl::Interval<Number> {
-    carl::Interval<Number> invariantSatisfyingTime( Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );
+  NodeVector& currentNodes, std::vector<WorkerVariant>& workers ) -> TimeInformation<Number> {
+    TimeInformation<Number> invariantSatTime{
+        carl::Interval<Number>( Number( 0 ), carl::convert<tNumber, Number>( mFixedParameters.localTimeHorizon ) ),
+        carl::Interval<Number>( Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) ) };
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
-        auto globalTimeInterval = std::visit( detail::computeTimeSuccessorVisitor<Representation>{
+        TimeInformation<Number> invariantSatTimeSubspace = std::visit( detail::computeTimeSuccessorVisitor<Representation>{
             currentNodes[ subspace ], mFixedParameters.fixedTimeStep, mParameters.timeStep }, workers[ subspace ] );
-        invariantSatisfyingTime = carl::set_intersection( invariantSatisfyingTime, globalTimeInterval );
+        invariantSatTime = detail::intersectTimeInformation( invariantSatTime, invariantSatTimeSubspace );
     }
-    return invariantSatisfyingTime;
+    return invariantSatTime;
 }
 
 template <typename Representation>
-void DecompositionalAnalyzer<Representation>::intersectSubspacesWithTimeInterval(
-  NodeVector& currentNodes, const carl::Interval<Number>& timeInterval ) {
+void DecompositionalAnalyzer<Representation>::intersectSubspacesWithClock(
+  NodeVector& currentNodes, const TimeInformation<Number>& clock ) {
     for ( auto subspace : mSingularTypeSubspaces ) {
         // last variable is a clock. intersect each segment with the valid time interval
         for ( auto& segment : currentNodes[ subspace ]->getFlowpipe() ) {
-            segment = detail::intersectSegmentWithTimeInterval( segment, timeInterval, segment.dimension() - 1 );
+            segment = detail::intersectSegmentWithClock( segment, clock, segment.dimension() - 2, segment.dimension() - 1 );
         }
     }
     for ( auto subspace : mLtiTypeSubspaces ) {
-        // keep all segments corresponding to a global time interval that has non empty intersection with the invariant timing
+        // keep a set of segments that covers the clock. First segment to keep is always the first
+        SegmentInd timingLower = currentNodes[ subspace ]->getTimings().lower();
+        SegmentInd timingUpper = currentNodes[ subspace ]->getTimings().upper();
+        tNumber sizeOfSegments = ( 1 + timingUpper - timingLower ) * mFixedParameters.fixedTimeStep;
         std::size_t firstSegment = 0;
-        std::size_t lastSegment = ceil( carl::toDouble (
-            ( timeInterval.upper() - currentNodes[ subspace ]->getTimings().lower() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
+        std::size_t lastSegment = std::round( carl::toDouble( std::max(
+            0,
+            std::min(
+                carl::ceil( ( clock.localTime.upper() - sizeOfSegments ) / mParameters.timeStep ),
+                carl::ceil( ( clock.globalTime.upper() - ( timingLower*mFixedParameters.fixedTimeStep + sizeOfSegments ) ) / mParameters.timeStep )
+        ) ) ) );
         auto& flowpipe = currentNodes[ subspace ]->getFlowpipe();
-#ifndef NDEBUG
-        // firstSegment should equal 0 because the first segment always satisfies the invariant, so just the last segments are thrown away
-        if ( std::is_same_v<Number, mpq_class> ) {
-            int cFirstSegment = floor( carl::toDouble(
-                ( timeInterval.lower() - currentNodes[ subspace ]->getTimings().upper() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
-            assert( cFirstSegment == 0 );
-            assert( lastSegment <= flowpipe.size() );
-        }
-#endif
-        flowpipe = std::vector<Representation>( flowpipe.begin() + firstSegment, flowpipe.begin() + lastSegment );
+//#ifndef NDEBUG
+//        // assert that even when calculating firstSegment == 0 (only works with exact number types)
+//        if ( std::is_same_v<Number, mpq_class> ) {
+//            int cFirstSegment = floor( carl::toDouble(
+//                ( timeInterval.lower() - currentNodes[ subspace ]->getTimings().upper() * mFixedParameters.fixedTimeStep ) / mParameters.timeStep ) );
+//            assert( cFirstSegment == 0 );
+//            assert( lastSegment <= flowpipe.size() );
+//        }
+//#endif
+        flowpipe = std::vector<Representation>( flowpipe.begin() + firstSegment, flowpipe.begin() + lastSegment + 1 );
     }
 }
 
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::getSingularEnabledTime(
-  const NodeVector& currentNodes, const Condition<Number>& condition, const carl::Interval<Number>& maxEnabledTime ) -> carl::Interval<Number> {
-    carl::Interval<Number> enabledTime = maxEnabledTime;
+  const NodeVector& currentNodes, const Condition<Number>& condition, const TimeInformation<Number>& maxEnabledTime ) -> TimeInformation<Number> {
+    TimeInformation<Number> enabledTime = maxEnabledTime;
     for ( auto subspace : mSingularTypeSubspaces ) {
         auto flowpipe = currentNodes[ subspace ]->getFlowpipe();
         assert( flowpipe.size() == 2 );
         auto [containment, enabledSet] = intersect( flowpipe[ 1 ], condition, subspace );
         if ( containment == CONTAINMENT::NO ) {
-            return carl::Interval<Number>::emptyInterval();
+            return TimeInformation<Number>{};
         }
-        auto enabledTimeSubspace = detail::getTimeInterval( enabledSet, enabledSet.dimension() - 1 );
-        enabledTime = carl::set_intersection( enabledTime, enabledTimeSubspace );
+        auto enabledTimeSubspace = detail::getClockValues( enabledSet, enabledSet.dimension() - 2, enabledSet.dimension() - 1 );
+        enabledTime = detail::intersectTimeInformation( enabledTime, enabledTimeSubspace );
     }
     return enabledTime;
 }
 
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::getLtiEnabledSegments(
-  const NodeVector& currentNodes, const Condition<Number>& condition, const carl::Interval<Number> maxEnabledTime ) -> LTIPredecessors {
-    // build set of global segment-indices that cover the previously computed time interval
-    if ( maxEnabledTime.isEmpty() ) {
+  const NodeVector& currentNodes, const Condition<Number>& condition, const TimeInformation<Number> maxEnabledTime ) -> LTIPredecessors {
+    if ( maxEnabledTime.localTime.isEmpty() || maxEnabledTime.globalTime.isEmpty() ) {
         // return empty map
         return LTIPredecessors();
     }
-    SegmentInd firstSegmentToCheck = floor( carl::toDouble( carl::toDouble( maxEnabledTime.lower() ) / mFixedParameters.fixedTimeStep ) );
-    SegmentInd lastSegmentToCheck = ceil( carl::toDouble( carl::toDouble( maxEnabledTime.upper() ) / mFixedParameters.fixedTimeStep ) );
+
+    // build set of global segment indices (index in flowpipe + timingOffset) to check
+    SegmentInd firstSegmentInGlobalTimeInterval = std::round( carl::toDouble( carl::floor( maxEnabledTime.globalTime.lower() / mFixedParameters.fixedTimeStep ) ) );
+    SegmentInd lastSegmentInGlobalTimeInterval = std::round( carl::toDouble( carl::ceil( maxEnabledTime.globalTime.upper() / mFixedParameters.fixedTimeStep ) ) );
     std::set<SegmentInd> enabledSegmentIndices;
-    for ( SegmentInd i = firstSegmentToCheck; i <= lastSegmentToCheck; ++i ) {
+    for ( SegmentInd i = firstSegmentInGlobalTimeInterval; i <= lastSegmentInGlobalTimeInterval; ++i ) {
         enabledSegmentIndices.insert( i );
     }
 
     std::map<std::size_t, std::vector<IndexedValuationSet<Representation>>> enablingSegments;
     for ( auto subspace : mLtiTypeSubspaces ) {
-        std::vector<IndexedValuationSet<Representation>> subspaceEnablingSegments;
+        std::vector<IndexedValuationSet<Representation>> subspaceEnabledSegments;
         auto flowpipe = currentNodes[ subspace ]->getFlowpipe();
-        SegmentInd timingLower = currentNodes[ subspace ]->getTimings().lower();
-        SegmentInd timingUpper = currentNodes[ subspace ]->getTimings().upper();
-        for ( SegmentInd segmentIndex = 0, flowpipeSize = flowpipe.size(); segmentIndex < flowpipeSize; ++segmentIndex ) {
+        SegmentInd timeOffsetLower = currentNodes[ subspace ]->getTimings().lower();
+        SegmentInd timeOffsetUpper = currentNodes[ subspace ]->getTimings().upper();
+        tNumber segmentSize = ( timeOffsetUpper - timeOffsetLower + 1 )*mFixedParameters.fixedTimeStep;
+        // check segments that lie in enabled local time interval
+        SegmentInd firstSegmentToCheck = std::max( 0,
+            (SegmentInd) std::round( carl::toDouble( carl::floor( ( maxEnabledTime.localTime.lower() - segmentSize ) / mParameters.timeStep ) ) ) );
+        SegmentInd lastSegmentToCheck = std::min( (int) flowpipe.size() - 1,
+            (SegmentInd) std::round( carl::toDouble( carl::ceil ( ( maxEnabledTime.localTime.upper() - segmentSize ) / mParameters.timeStep ) ) ) );
+        for ( SegmentInd segmentIndex = firstSegmentToCheck; segmentIndex <= lastSegmentToCheck; ++segmentIndex ) {
             // if the segment covers a time period that is potentially enabled, compute intersection with condition
             auto [containment, enabledSet] = intersect( flowpipe[ segmentIndex ], condition, subspace );
             // convert to global index by considering offset and specific time step
-            SegmentInd globalIndex = timingLower + segmentIndex*mParameters.timeStepFactor;
+            SegmentInd globalIndex = timeOffsetLower + segmentIndex*mParameters.timeStepFactor;
             if ( containment != CONTAINMENT::NO ) {
-                subspaceEnablingSegments.push_back( IndexedValuationSet<Representation>{ enabledSet, globalIndex } );
+                subspaceEnabledSegments.push_back( IndexedValuationSet<Representation>{ enabledSet, globalIndex } );
             } else {
-                while ( globalIndex <= timingUpper + segmentIndex*mParameters.timeStepFactor ) {
+                while ( globalIndex <= timeOffsetUpper + segmentIndex*mParameters.timeStepFactor ) {
                     enabledSegmentIndices.erase( globalIndex );
                     ++globalIndex;
                 }
             }
         }
-        enablingSegments[ subspace ] = subspaceEnablingSegments;
+        enablingSegments[ subspace ] = subspaceEnabledSegments;
     }
 
     for ( auto subspace : mLtiTypeSubspaces ) {
@@ -218,21 +234,24 @@ auto DecompositionalAnalyzer<Representation>::getLtiEnabledSegments(
 
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::getSingularJumpSuccessors(
-  std::vector<WorkerVariant>& workers, Transition<Number>* transition ) -> std::pair<carl::Interval<Number>, SingularSuccessors> {
-    carl::Interval<Number> enabledTimeInterval( Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );
+  std::vector<WorkerVariant>& workers, Transition<Number>* transition ) -> std::pair<TimeInformation<Number>, SingularSuccessors> {
+    TimeInformation<Number> enabledTime{
+        carl::Interval<Number>( Number( 0 ), carl::convert<tNumber, Number>( mFixedParameters.localTimeHorizon ) ),
+        carl::Interval<Number>( Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) ) };
     SingularSuccessors singularSuccessors;
     for ( auto subspace : mSingularTypeSubspaces ) {
         auto subspaceSuccessorSet = std::visit( detail::getSingularJumpSuccessorVisitor<Representation>{ transition }, workers[ subspace ] );
         singularSuccessors[ subspace ] = subspaceSuccessorSet;
-        enabledTimeInterval = carl::set_intersection( enabledTimeInterval, detail::getTimeInterval( subspaceSuccessorSet, subspaceSuccessorSet.dimension() - 1 ) );
+        enabledTime = detail::intersectTimeInformation(
+            enabledTime, detail::getClockValues( subspaceSuccessorSet, subspaceSuccessorSet.dimension() - 2, subspaceSuccessorSet.dimension() - 1 ) );
     }
-    return std::make_pair( enabledTimeInterval, singularSuccessors );
+    return std::make_pair( enabledTime, singularSuccessors );
 }
 
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::getLtiJumpSuccessors(
   NodeVector& currentNodes, std::vector<WorkerVariant>& workers,
-  Transition<Number>* transition, carl::Interval<Number> singularEnabledTime ) -> LTISuccessors {
+  Transition<Number>* transition, TimeInformation<Number> singularEnabledTime ) -> LTISuccessors {
     auto ltiJumpPredecessorSets = getLtiEnabledSegments( currentNodes, transition->getGuard(), singularEnabledTime );
     if ( ltiJumpPredecessorSets.empty() ) {
         return LTISuccessors();
@@ -267,9 +286,11 @@ std::optional<std::vector<ReachTreeNode<Representation>*>> DecompositionalAnalyz
             return {};
         }
     }
-    carl::Interval<Number> successorTime( carl::convert<tNumber, Number>( mFixedParameters.fixedTimeStep )*segmentInterval.lower(),
-                                          carl::convert<tNumber, Number>( mFixedParameters.fixedTimeStep )*( segmentInterval.upper() + 1 ) );
-    auto singularChildren = makeChildrenForTimeInterval( currentNodes, transition, successorTime, singularSuccessors );
+    carl::Interval<Number> successorTimeGlobal( carl::convert<tNumber, Number>( mFixedParameters.fixedTimeStep )*segmentInterval.lower(),
+                                                carl::convert<tNumber, Number>( mFixedParameters.fixedTimeStep )*( segmentInterval.upper() + 1 ) );
+    carl::Interval<Number> successorTimeLocal( Number( 0 ), carl::convert<tNumber, Number>( mFixedParameters.localTimeHorizon ) );
+    auto singularChildren = makeChildrenForClockValues(
+        currentNodes, transition, TimeInformation<Number>{ successorTimeLocal, successorTimeGlobal }, singularSuccessors );
     for ( auto subspace : mSingularTypeSubspaces ) {
         child[ subspace ] = singularChildren[ subspace ];
     }
@@ -277,12 +298,14 @@ std::optional<std::vector<ReachTreeNode<Representation>*>> DecompositionalAnalyz
 }
 
 template <typename Representation>
-std::vector<ReachTreeNode<Representation>*> DecompositionalAnalyzer<Representation>::makeChildrenForTimeInterval(
-  NodeVector& currentNodes, const Transition<Number>* transition, const carl::Interval<Number>& timeInterval, SingularSuccessors singularSuccessors ) {
+std::vector<ReachTreeNode<Representation>*> DecompositionalAnalyzer<Representation>::makeChildrenForClockValues(
+  NodeVector& currentNodes, const Transition<Number>* transition, const TimeInformation<Number>& timeInterval, SingularSuccessors singularSuccessors ) {
     NodeVector child( mDecomposition.subspaces.size() );
     for ( auto subspace : mSingularTypeSubspaces ) {
-        auto subspaceSuccessor = detail::intersectSegmentWithTimeInterval( singularSuccessors[ subspace ], timeInterval, singularSuccessors[ subspace ].dimension() - 1 );
-        auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSuccessor, carl::Interval<SegmentInd>(0, 0), transition );
+        auto subspaceSuccessor = detail::intersectSegmentWithClock(
+            singularSuccessors[ subspace ], timeInterval, singularSuccessors[ subspace ].dimension() - 2, singularSuccessors[ subspace ].dimension() - 1 );
+        subspaceSuccessor = detail::resetClock( subspaceSuccessor, subspaceSuccessor.dimension() - 2 );
+        auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSuccessor, carl::Interval<SegmentInd>( 0, 0 ), transition );
         child[ subspace ] = &subspaceChild;
     }
     return child;
