@@ -35,29 +35,29 @@ jobs:
         working-directory: ${{runner.workspace}}/dependencies
         run: curl https://sonarcloud.io/static/cpp/build-wrapper-linux-x86.zip --output build-wrapper-linux-x86.zip && unzip build-wrapper-linux-x86.zip
 
-      - name: Cache Dependencies
-        id: cache-dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{runner.workspace}}/dependencies
-          key: ${{ runner.os }}-deps
+      #- name: Cache Dependencies
+      #  id: cache-dependencies
+      #  uses: actions/cache@v2
+      #  with:
+      #    path: ${{runner.workspace}}/dependencies
+      #    key: ${{ runner.os }}-deps
 
       - name: Create Build Environment for Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        #   if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: cmake -E make_directory ${{runner.workspace}}/dependencies/carl/build
 
       - name: Configure Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies/carl/build
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        #  if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
 
       - name: Build Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies/carl/build
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        #  if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: cmake --build . --config $BUILD_TYPE -j 3 --target carl
 
       - name: Configure Project
