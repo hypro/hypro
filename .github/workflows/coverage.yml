@@ -61,14 +61,16 @@ jobs:
         run: cmake --build . --config $BUILD_TYPE -j 3 --target carl
 
       - name: Configure Project
+        working-directory: ${{runner.workspace}}/hypro
         run: mkdir build && cd build && cmake ..
 
       - name: Build Project with Build-wrapper
         working-directory: ${{runner.workspace}}/hypro/build
-        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/build/bw-outputs make
+        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/build/bw-outputs make clean all
 
       - name: Copy Sonarcloud Properties File
-        run: cp ${{ runner.workspace }}/hypro/.travis/sonar-project.properties ${{ runner.workspace }}/hypro
+        working-directory: ${{runner.workspace}}/hypro
+        run: cp .travis/sonar-project.properties .
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
