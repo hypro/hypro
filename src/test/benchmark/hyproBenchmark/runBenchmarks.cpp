@@ -11,6 +11,7 @@
 #include "box/benchmarkBox.h"
 #include "polytopes/benchmarkPolytope.h"
 #include "algorithms/singularAnalysis/benchmarkSingularAnalyzer.h"
+#include "algorithms/decompositionalAnalysis/benchmarkDecompositionalAnalyzer.h"
 #include "supportFunction/benchmark_sf.h"
 #include "types.h"
 #include <hypro/flags.h>
@@ -35,6 +36,9 @@ int main( int argc, char const *argv[] ) {
 	s.maxDimension = 5;
 	s.iterations = 4;
 	benchmark::singularAnalysis::run( s );
+
+	std::cout << "Benchmark decompositional analyzer." << std::endl;
+	benchmark::decompositionalAnalysis::run( s );
 
 	// std::cout << "Benchmark support functions." << std::endl;
 	// benchmark::sf::run( s );
