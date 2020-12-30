@@ -177,17 +177,20 @@ void SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	  std::function<void( RootGrowNode<Number, Converter, Setting>* )>&& aggregate ) const {
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, Parameters<Dummy>& )> tNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> {
-		transform( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		//transform( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		transform( n );
 		return Parameters<Dummy>( Dummy() );
 	};
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, Parameters<Dummy>& )> cNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> {
-		compute( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		//compute( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		compute( n );
 		return Parameters<Dummy>( Dummy() );
 	};
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, std::vector<Parameters<Dummy>>&, Parameters<Dummy>& )> aNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, std::vector<Parameters<Dummy>>&, Parameters<Dummy>& ) -> Parameters<Dummy> {
-		aggregate( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		//aggregate( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		aggregate( n );
 		return Parameters<Dummy>( Dummy() );
 	};
 	Parameters<Dummy> noInitParams = Parameters<Dummy>( Dummy() );
