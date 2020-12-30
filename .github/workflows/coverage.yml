@@ -41,7 +41,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{runner.workspace}}/dependencies
-          key: ${{ runner.os }}-deps-${{ hashFiles('${{runner.workspace}}/dependencies/**') }}
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/*.h', '**/*.cpp', '**/*.tpp') }}
 
       - name: Create Build Environment for Dependencies
         shell: bash
@@ -52,13 +52,11 @@ jobs:
       - name: Configure Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies/carl/build
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
 
       - name: Build Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies/carl/build
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: cmake --build . --config $BUILD_TYPE -j 3 --target carl
 
       - name: Configure Project
