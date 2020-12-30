@@ -106,6 +106,8 @@ class Facet {
 		}
 	}
 
+	Facet& operator=( const Facet& other ) = default;
+
 	~Facet() {}
 
 	/**

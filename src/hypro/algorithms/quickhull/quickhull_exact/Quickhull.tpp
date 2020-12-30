@@ -7,12 +7,14 @@ ExactQuickhull<Number, Euclidian>::QuickhullAlgorithm( pointVector_t& points, di
 	: points( points )
 	, dimension( dimension )
 	, fSpace( points, dimension ) {
+#ifndef NDEBUG
 	assert( !points.empty() );
 	if constexpr ( Euclidian ) {
 		assert( points[0].rows() == (int)dimension );
 	} else {
 		assert( points[0].rows() == (int)dimension + 1 );
 	}
+#endif
 }
 
 template <typename Number, bool Euclidian>
@@ -122,6 +124,7 @@ void ExactQuickhull<Number, Euclidian>::buildInitialPolytope() {
 
 		fSpace.facets.front().mNeighbors[i] = fSpace.facets.size() - 1;	 //Set i-th neighbor of initial facet to the created facet.
 
+#ifndef NDEBUG
 		for ( facet_ind_t other_i = 0; other_i < fSpace.facets.size() - 1; ++other_i ) {
 			if constexpr ( Euclidian ) {
 				assert( fSpace.facets[other_i].mNormal != createdFacet.mNormal );
@@ -130,6 +133,7 @@ void ExactQuickhull<Number, Euclidian>::buildInitialPolytope() {
 						fSpace.facets[other_i].mOffset != createdFacet.mOffset );
 			}
 		}
+#endif
 
 		createdFacet.mNeighbors[insertedAt] = 0;
 		findConeNeighbors( fSpace.facets.size() - 1 );
