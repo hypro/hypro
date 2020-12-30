@@ -61,7 +61,7 @@ jobs:
 
       - name: Configure Project
         working-directory: ${{runner.workspace}}/hypro
-        run: mkdir build && cd build && cmake ..
+        run: mkdir build && cd build && cmake -DHYPRO_COVERAGE=ON ..
 
       - name: Copy Sonarcloud Properties File
         working-directory: ${{runner.workspace}}/hypro
@@ -69,7 +69,7 @@ jobs:
 
       - name: Build Project with Build-wrapper
         working-directory: ${{runner.workspace}}/hypro/build
-        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/bw-output make clean all
+        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/bw-output make clean all hypro_coverage
 
       - name: SonarCloud Scan
         #uses: SonarSource/sonarcloud-github-action@master
