@@ -93,7 +93,6 @@ void ConvexHull<Number>::toDual() {
 
 template <typename Number>
 void ConvexHull<Number>::toPrimal( const std::vector<Point<Number>> points ) {
-	//std::cout << __func__ << " created " << points.size() << " points in dual." << std::endl;
 	for ( const auto& p : points ) {
 		mHsv.push_back( Halfspace<Number>( p.rawCoordinates(), Number( 1 ) ) );
 		assert( mHsv.back().normal() == p.rawCoordinates() );
@@ -101,12 +100,12 @@ void ConvexHull<Number>::toPrimal( const std::vector<Point<Number>> points ) {
 }
 
 template <typename Number>
-void ConvexHull<Number>::convexHullVertices() {  //!!modify the points
+void ConvexHull<Number>::convexHullVertices() {	 //!!modify the points
 #ifndef NDEBUG
-	std::cout << __func__ << ": Input:" << std::endl;
+	DEBUG( "hypro.convexHull", "Input:" );
 	std::vector<Point<Number>> originalPoints;
 	for ( const auto& vertex : mPoints ) {
-		std::cout << vertex << std::endl;
+		DEBUG( "hypro.convexHull", "vertex: " << vertex );
 		originalPoints.push_back( vertex );
 	}
 #endif
@@ -146,7 +145,7 @@ void ConvexHull<Number>::convexHullVertices() {  //!!modify the points
 			for ( const auto& l : ev.getLinealtySpace() ) {
 				mHsv.push_back( Halfspace<Number>( l, Number( 0 ) ) );
 				mHsv.push_back( Halfspace<Number>( -1 * l, Number( 0 ) ) );
-				std::cout << "LinealtySpace NOT empty!" << std::endl;
+				DEBUG( "hypro.convexHull", "LinealtySpace NOT empty!" );
 			}
 			// convert back to primal to extract the facets.
 			toPrimal( ev.getPoints() );
@@ -154,18 +153,18 @@ void ConvexHull<Number>::convexHullVertices() {  //!!modify the points
 		// revert translation to the barycenter to the original position.
 		translateHsv();
 		// debug output.
-		std::cout << __func__ << ": Result: " << std::endl;
+		DEBUG( "hypro.convexHull", "Result:" );
 		for ( const auto& plane : mHsv ) {
-			std::cout << plane << std::endl;
+			DEBUG( "hypro.convexHull", "plane:" << plane );
 		}
 
 #ifndef NDEBUG
 		for ( const auto plane : mHsv ) {
-			std::cout << "Plane: " << plane << std::endl;
+			DEBUG( "hypro.convexHull", "plane:" << plane );
 			for ( const auto point : originalPoints ) {
-				std::cout << "contains " << point << std::endl;
+				DEBUG( "hypro.convexHull", "contains:" << point );
 				if ( !plane.contains( point ) ) {
-					std::cout << "diff: " << point.rawCoordinates().dot( plane.normal() ) << " VS (<=) " << plane.offset() << std::endl;
+					DEBUG( "hypro.convexHull", "diff: " << point.rawCoordinates().dot( plane.normal() ) << " VS (<=) " << plane.offset() );
 				}
 				assert( plane.contains( point ) );
 			}
@@ -242,7 +241,7 @@ void ConvexHull<Number>::polyhedriclHull() {
 		ch.conicHull();
 		std::vector<Halfspace<Number>> hsv = ch.getConeHsv();
 		for ( auto& hs : hsv ) {
-			hs.setOffset( hs.offset() - hs.normal()[hs.normal().size() - 1] );  //projection fonction
+			hs.setOffset( hs.offset() - hs.normal()[hs.normal().size() - 1] );	//projection fonction
 			vector_t<Number> aux = vector_t<Number>( hs.normal().size() - 1 );
 			for ( unsigned index = 0; index < hs.normal().size() - 1; ++index ) {
 				aux[index] = hs.normal()[index];
@@ -268,7 +267,7 @@ void ConvexHull<Number>::translateHsv() {
 	}
 }
 
-template <typename Number>  //not used
+template <typename Number>	//not used
 void ConvexHull<Number>::projectOnLinealty() {
 	if ( mPoints.size() != 0 && mLinealtySpace.size() != 0 ) {
 		unsigned dim = mPoints[0].rawCoordinates().size();
@@ -281,10 +280,7 @@ void ConvexHull<Number>::projectOnLinealty() {
 				nextLineatyVector = nextLineatyVector - projectionBase[vectorIndex] * ( projectionBase[vectorIndex].dot( nextLineatyVector ) / norms[vectorIndex] );
 			}
 			int i = 0;
-			while ( i < nextLineatyVector.size() ) {
-				if ( nextLineatyVector[i] != 0 ) {
-					break;
-				}
+			while ( i < nextLineatyVector.size() && nextLineatyVector[i] == 0 ) {
 				++i;
 			}
 			if ( i < nextLineatyVector.size() ) {

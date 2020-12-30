@@ -28,7 +28,7 @@ class ConvexHull {
 	/// copy constructor
 	ConvexHull( const ConvexHull<Number>& _orig ) = default;
 	/// constructor from a point set
-	ConvexHull( const std::vector<Point<Number>> points );
+	explicit ConvexHull( const std::vector<Point<Number>> points );
 	/// constructor from a point set and a cone
 	ConvexHull( const std::vector<Point<Number>> points, const std::vector<vector_t<Number>> cone );
 	/// constructor from a point set, a cone, and a lineality space

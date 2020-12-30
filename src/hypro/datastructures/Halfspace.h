@@ -271,7 +271,7 @@ class Halfspace {
 	 * @param      a     The left-hand-side.
 	 * @param      b     The right-hand-side.
 	 */
-	friend void swap( Halfspace<Number>& a, Halfspace<Number>& b ) {
+	friend void swap( Halfspace<Number>& a, Halfspace<Number>& b ) noexcept {
 		swap( a.mNormal, b.mNormal );
 		swap( a.mScalar, b.mScalar );
 	}

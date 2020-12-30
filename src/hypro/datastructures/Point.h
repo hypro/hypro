@@ -77,7 +77,7 @@ class Point {
 	 * @brief      Move-copy constructor.
 	 * @param[in]  _p  The original.
 	 */
-	Point( Point<Number>&& _p ) = default;
+	Point( Point<Number>&& _p ) noexcept = default;
 
 	/**
 	 * @brief 	Copy constructor with number type conversion.
