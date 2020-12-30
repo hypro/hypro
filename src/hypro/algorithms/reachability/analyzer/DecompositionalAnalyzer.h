@@ -173,9 +173,9 @@ class DecompositionalAnalyzer {
     using Number = typename Representation::NumberType;
     using NodeVector = std::vector<ReachTreeNode<Representation>*>;
     using RepVector = std::vector<Representation>;
-    using SingularSuccessors = std::map<std::size_t, Representation>;
+    using JumpSuccessors = std::map<std::size_t, Representation>;
     using LTIPredecessors = std::map<std::size_t, std::vector<IndexedValuationSet<Representation>>>;
-    using LTISuccessors = std::map<std::size_t, std::vector<TimedValuationSet<Representation>>>;
+    using LTISuccessorCandidates = std::map<std::size_t, std::vector<TimedValuationSet<Representation>>>;
 
   public:
     using DecompositionalResult = AnalysisResult<DecompositionalSuccess, Failure<Representation>>;
@@ -260,6 +260,18 @@ class DecompositionalAnalyzer {
         const TimeInformation<Number>& clock );
 
     /**
+     * @brief       Check if intersection with a bad state is empty.
+     * @param       currentNodes            The current reachtree-nodes where the flowpipes are stored.
+     * @param       badState                The bad state condition to check.
+     * @param       invariantSatisfyingTime The time where the invariant is satisfied in all subspaces.
+     * @return      `true` if the bad state is not reachable and `false` otherwise.
+     */
+    bool isSafe(
+        const NodeVector& currentNodes,
+        const Condition<Number>& badState,
+        const TimeInformation<Number>& invariantSatisfyingTime );
+
+    /**
      * @brief       Compute the time interval where all singular subspaces satisfy a condition as subset of maximal time intervals.
      * @param       currentNodes    The current reachtree-nodes to access the flowpipes.
      * @param       condition       The condition to intersect with.
@@ -296,10 +308,10 @@ class DecompositionalAnalyzer {
     auto getSingularJumpSuccessors(
         std::vector<WorkerVariant>& workers,
         Transition<Number>* transition )
-            -> std::pair<TimeInformation<Number>, SingularSuccessors>;
+            -> std::pair<TimeInformation<Number>, JumpSuccessors>;
 
     /**
-     * @brief       Compute the LTI jump successors for a transition in a given time.
+     * @brief       Compute the (non-synchronized) LTI jump successors for a transition in a given time.
      * @param       workers             The vector of worker variants to use for computation.
      * @param       transition          The transition to get successors for.
      * @param       singularEnabledTime Clock values to constrain successors with previous information.
@@ -310,7 +322,20 @@ class DecompositionalAnalyzer {
         std::vector<WorkerVariant>& workers,
         Transition<Number>* transition,
         TimeInformation<Number> singularEnabledTime )
-            -> LTISuccessors;
+            -> LTISuccessorCandidates;
+
+    /**
+     * @brief       Check that in every lti subspace there is a successor for the given segmentInterval
+     *              and collect them.
+     * @param       ltiSuccessorCandidates  The successors for the subspaces (non-synchronized)
+     * @param       segmentInterval         The segmentInterval for which to collect successors.
+     * @return      Nothing if some subspace does not have a successor with the segmentInterval (jump can't be taken simultaneously)
+     *              or the successors for the interval.
+     */
+    auto pruneLtiSuccessors(
+        LTISuccessorCandidates& ltiSuccessorCandidates,
+        const carl::Interval<SegmentInd>& segmentInterval )
+            -> std::optional<JumpSuccessors>;
 
     /**
      * @brief       Create children in all subspace-trees if a transition can be taken in a time interval
@@ -327,12 +352,12 @@ class DecompositionalAnalyzer {
         NodeVector& currentNodes,
         const Transition<Number>* transition,
         const carl::Interval<SegmentInd>& segmentInterval,
-        SingularSuccessors singularSuccessors,
-        LTISuccessors ltiSuccessors )
-            -> std::optional<std::vector<ReachTreeNode<Representation>*>>;
+        JumpSuccessors singularSuccessors,
+        JumpSuccessors ltiSuccessors )
+            -> std::vector<ReachTreeNode<Representation>*>;
 
     /**
-     * @brief       Create children in all singular-subspace-trees if a transition can be taken for local/global clock values.
+     * @brief       Create children in all singular-subspace-trees for local/global clock values.
      * @param       currentNodes        The current reachtree-nodes to store child-nodes.
      * @param       transition          The transition to make child-nodes for.
      * @param       clock               The local/global time intervals in which to take the transition.
@@ -343,7 +368,7 @@ class DecompositionalAnalyzer {
         NodeVector& currentNodes,
         const Transition<Number>* transition,
         const TimeInformation<Number>& clock,
-        SingularSuccessors singularSuccessors )
+        JumpSuccessors singularSuccessors )
             -> std::vector<ReachTreeNode<Representation>*>;
 
 

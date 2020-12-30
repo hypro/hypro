@@ -25,11 +25,8 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
 
         // Check safety
         for ( auto badState : detail::collectBadStates( mHybridAutomaton, currentLoc ) ) {
-            auto badTime = getSingularEnabledTime( currentNodes, badState, invariantSatisfyingTime );
-            auto badSegments = getLtiEnabledSegments( currentNodes, badState, badTime );
-            if ( std::any_of( badSegments.begin(), badSegments.end(), []( const auto& segmentVector ) {
-                    return segmentVector.second.size() > 0; } ) ) {
-                return { Failure{ currentNodes[ 0 ] } };
+            if ( !isSafe( currentNodes, badState, invariantSatisfyingTime ) ) {
+                return { Failure {currentNodes[ 0 ] } };
             }
         }
 
@@ -46,19 +43,21 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         for ( const auto& transition : currentLoc->getTransitions() ) {
             // get jump successors
             auto [transitionEnabledTime, singularJumpSuccessors] = getSingularJumpSuccessors( workers, transition.get() );
-            auto ltiJumpSuccessors = getLtiJumpSuccessors(currentNodes, workers, transition.get(), transitionEnabledTime );
+            auto ltiSuccessorCandidates = getLtiJumpSuccessors(currentNodes, workers, transition.get(), transitionEnabledTime );
             if ( ( singularJumpSuccessors.empty() && mSingularTypeSubspaces.size() > 0 ) ||
-                 ( ltiJumpSuccessors.empty() && mLtiTypeSubspaces.size() > 0 ) ) {
+                 ( ltiSuccessorCandidates.empty() && mLtiTypeSubspaces.size() > 0 ) ) {
                 continue;
             }
 
             // create child nodes
             if ( mLtiTypeSubspaces.size() > 0 ) {
                 // case 1: there are lti subspaces -> one successor per (aggregated) segment
-                for ( auto& [ successorSet, segmentInterval ] : ltiJumpSuccessors[ mLtiTypeSubspaces[ 0 ] ] ) {
-                    auto childNode = makeChildrenForSegmentInterval( currentNodes, transition.get(), segmentInterval, singularJumpSuccessors, ltiJumpSuccessors );
-                    if ( childNode.has_value() ) {
-                        mWorkQueue.push_back( childNode.value() );
+                for ( auto& [ successorSet, segmentInterval ] : ltiSuccessorCandidates[ mLtiTypeSubspaces[ 0 ] ] ) {
+                    // check that for every subspace there is a successor with the segmentInterval, otherwise skip
+                    auto prunedSuccessors = pruneLtiSuccessors( ltiSuccessorCandidates, segmentInterval );
+                    if ( prunedSuccessors.has_value() ) {
+                        auto childNode = makeChildrenForSegmentInterval( currentNodes, transition.get(), segmentInterval, singularJumpSuccessors, prunedSuccessors.value() );
+                        mWorkQueue.push_back( childNode );
                     }
                 }
             } else {
@@ -158,6 +157,19 @@ void DecompositionalAnalyzer<Representation>::intersectSubspacesWithClock(
 }
 
 template <typename Representation>
+bool DecompositionalAnalyzer<Representation>::isSafe(
+  const NodeVector& currentNodes, const Condition<Number>& badState, const TimeInformation<Number>& invariantSatisfyingTime ) {
+    auto badTime = getSingularEnabledTime( currentNodes, badState, invariantSatisfyingTime );
+    if ( mLtiTypeSubspaces.size() == 0 ) {
+        return ( badTime.localTime.isEmpty() || badTime.globalTime.isEmpty() );
+    } else {
+        auto badSegments = getLtiEnabledSegments( currentNodes, badState, badTime );
+        return ( std::all_of( badSegments.begin(), badSegments.end(), []( const auto& segmentVector ) {
+                return segmentVector.second.size() == 0; } ) );
+    }
+}
+
+template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::getSingularEnabledTime(
   const NodeVector& currentNodes, const Condition<Number>& condition, const TimeInformation<Number>& maxEnabledTime ) -> TimeInformation<Number> {
     TimeInformation<Number> enabledTime = maxEnabledTime;
@@ -234,11 +246,11 @@ auto DecompositionalAnalyzer<Representation>::getLtiEnabledSegments(
 
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::getSingularJumpSuccessors(
-  std::vector<WorkerVariant>& workers, Transition<Number>* transition ) -> std::pair<TimeInformation<Number>, SingularSuccessors> {
+  std::vector<WorkerVariant>& workers, Transition<Number>* transition ) -> std::pair<TimeInformation<Number>, JumpSuccessors> {
     TimeInformation<Number> enabledTime{
         carl::Interval<Number>( Number( 0 ), carl::convert<tNumber, Number>( mFixedParameters.localTimeHorizon ) ),
         carl::Interval<Number>( Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) ) };
-    SingularSuccessors singularSuccessors;
+    JumpSuccessors singularSuccessors;
     for ( auto subspace : mSingularTypeSubspaces ) {
         auto subspaceSuccessorSet = std::visit( detail::getSingularJumpSuccessorVisitor<Representation>{ transition }, workers[ subspace ] );
         singularSuccessors[ subspace ] = subspaceSuccessorSet;
@@ -251,12 +263,12 @@ auto DecompositionalAnalyzer<Representation>::getSingularJumpSuccessors(
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::getLtiJumpSuccessors(
   NodeVector& currentNodes, std::vector<WorkerVariant>& workers,
-  Transition<Number>* transition, TimeInformation<Number> singularEnabledTime ) -> LTISuccessors {
+  Transition<Number>* transition, TimeInformation<Number> singularEnabledTime ) -> LTISuccessorCandidates {
     auto ltiJumpPredecessorSets = getLtiEnabledSegments( currentNodes, transition->getGuard(), singularEnabledTime );
     if ( ltiJumpPredecessorSets.empty() ) {
-        return LTISuccessors();
+        return LTISuccessorCandidates();
     }
-    LTISuccessors ltiSuccessors;
+    LTISuccessorCandidates ltiSuccessors;
     for ( auto subspace : mLtiTypeSubspaces ) {
         ltiSuccessors[ subspace ] = std::visit(
             detail::getLtiJumpSuccessorVisitor<Representation>{ transition, ltiJumpPredecessorSets[ subspace ] }, workers[ subspace ] );
@@ -265,26 +277,33 @@ auto DecompositionalAnalyzer<Representation>::getLtiJumpSuccessors(
 }
 
 template <typename Representation>
-std::optional<std::vector<ReachTreeNode<Representation>*>> DecompositionalAnalyzer<Representation>::makeChildrenForSegmentInterval(
-  NodeVector& currentNodes, const Transition<Number>* transition, const carl::Interval<SegmentInd>& segmentInterval, SingularSuccessors singularSuccessors,
-  LTISuccessors ltiSuccessors ) {
-    bool segmentEnabled;
-    NodeVector child( mDecomposition.subspaces.size() );
+auto DecompositionalAnalyzer<Representation>::pruneLtiSuccessors(
+  LTISuccessorCandidates& ltiSuccessorCandidates, const carl::Interval<SegmentInd>& segmentInterval ) -> std::optional<JumpSuccessors> {
+    JumpSuccessors successors;
+    bool segmentIntervalEnabled;
     for ( auto subspace : mLtiTypeSubspaces ) {
-        segmentEnabled = false;
-        for ( auto& [ subspaceSuccessor, segments ] : ltiSuccessors[ subspace ] ) {
+        segmentIntervalEnabled = false;
+        for ( auto& [ subspaceSuccessor, segments ] : ltiSuccessorCandidates[ subspace ] ) {
             if ( segments == segmentInterval ) {
-                // todo: child nodes are created even if not all subspaces are enabled. This should be unproblematic
-                //       because the workqueue will not be pushed to but could be done better.
-                segmentEnabled = true;
-                auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSuccessor, segmentInterval, transition );
-                child[ subspace ] = &subspaceChild;
-                break;
+                segmentIntervalEnabled = true;
+                successors[ subspace ] = subspaceSuccessor;
             }
         }
-        if ( !segmentEnabled ) {
+        if ( !segmentIntervalEnabled ) {
             return {};
         }
+    }
+    return successors;
+}
+
+template <typename Representation>
+std::vector<ReachTreeNode<Representation>*> DecompositionalAnalyzer<Representation>::makeChildrenForSegmentInterval(
+  NodeVector& currentNodes, const Transition<Number>* transition, const carl::Interval<SegmentInd>& segmentInterval, JumpSuccessors singularSuccessors,
+  JumpSuccessors ltiSuccessors ) {
+    NodeVector child( mDecomposition.subspaces.size() );
+    for ( auto subspace : mLtiTypeSubspaces ) {
+        auto& subspaceChild = currentNodes[ subspace ]->addChild( ltiSuccessors[ subspace ], segmentInterval, transition );
+        child[ subspace ] = &subspaceChild;
     }
     carl::Interval<Number> successorTimeGlobal( carl::convert<tNumber, Number>( mFixedParameters.fixedTimeStep )*segmentInterval.lower(),
                                                 carl::convert<tNumber, Number>( mFixedParameters.fixedTimeStep )*( segmentInterval.upper() + 1 ) );
@@ -299,7 +318,7 @@ std::optional<std::vector<ReachTreeNode<Representation>*>> DecompositionalAnalyz
 
 template <typename Representation>
 std::vector<ReachTreeNode<Representation>*> DecompositionalAnalyzer<Representation>::makeChildrenForClockValues(
-  NodeVector& currentNodes, const Transition<Number>* transition, const TimeInformation<Number>& timeInterval, SingularSuccessors singularSuccessors ) {
+  NodeVector& currentNodes, const Transition<Number>* transition, const TimeInformation<Number>& timeInterval, JumpSuccessors singularSuccessors ) {
     NodeVector child( mDecomposition.subspaces.size() );
     for ( auto subspace : mSingularTypeSubspaces ) {
         auto subspaceSuccessor = detail::intersectSegmentWithClock(
