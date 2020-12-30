@@ -36,7 +36,6 @@ class Dictionary {
 	Dictionary( const matrix_t<Number>& rhs, std::vector<Eigen::Index> base, std::vector<Eigen::Index> cobase );
 	Dictionary( const matrix_t<Number>& rhs, std::vector<Eigen::Index> base, std::vector<Eigen::Index> cobase, ConstrainSet<Number> constrains );
 	Dictionary& operator=( const Dictionary& other ) = default;
-	Dictionary& operator=( Dictionary&& other ) = default;
 
 	/**
 	 * @brief Build a dictionary with mDictionary=rhs, mB=base and mN=cobase.
