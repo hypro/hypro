@@ -18,7 +18,7 @@ class ConstrainSet {
 		return constrainSet[index];
 	}
 
-	std::size_t size() const {
+	[[nodiscard]] std::size_t size() const {
 		return constrainSet.size();
 	}
 
@@ -39,18 +39,18 @@ class ConstrainSet {
 	bool outside( Eigen::Index& index, Number& diff, const std::vector<Eigen::Index>& baseIndices ) {
 		index = constrainSet.size() + 1;
 		diff = 0;
-		for ( std::size_t i = 0; i < baseIndices.size() - 1; ++i ) {																			// iterate over the base indices
-			if ( ( index == Eigen::Index( constrainSet.size() + 1 ) ||																			// if nothing found OR
-				   baseIndices[i] - 1 < baseIndices[index] )																					// What does this mean?
-				 && not( std::get<0>( std::get<0>( constrainSet[baseIndices[i] - 1] ) ) ||														// not ( unbounded lower bound
-						 std::get<1>( std::get<0>( constrainSet[baseIndices[i] - 1] ) ) <= std::get<2>( constrainSet[baseIndices[i] - 1] ) ) )  // OR lb <= assignment)
+		for ( std::size_t i = 0; i < baseIndices.size() - 1; ++i ) {																		  // iterate over the base indices
+			if ( ( index == Eigen::Index( constrainSet.size() + 1 ) ||																		  // if nothing found OR
+				   baseIndices[i] - 1 < baseIndices[index] )																				  // What does this mean?
+				 && !( std::get<0>( std::get<0>( constrainSet[baseIndices[i] - 1] ) ) ||													  // not ( unbounded lower bound
+					   std::get<1>( std::get<0>( constrainSet[baseIndices[i] - 1] ) ) <= std::get<2>( constrainSet[baseIndices[i] - 1] ) ) )  // OR lb <= assignment)
 			{
 				index = Eigen::Index( i );
 				diff = std::get<1>( std::get<0>( constrainSet[baseIndices[i] - 1] ) ) - std::get<2>( constrainSet[baseIndices[i] - 1] );
-			} else if ( ( index == Eigen::Index( constrainSet.size() + 1 ) ||																		   // if nothing found OR
-						  baseIndices[i] - 1 < baseIndices[index] )																					   // SOMETHING
-						&& not( std::get<0>( std::get<1>( constrainSet[baseIndices[i] - 1] ) ) ||													   // not (upper unbounded
-								std::get<1>( std::get<1>( constrainSet[baseIndices[i] - 1] ) ) >= std::get<2>( constrainSet[baseIndices[i] - 1] ) ) )  // OR ub >= assignment
+			} else if ( ( index == Eigen::Index( constrainSet.size() + 1 ) ||																		 // if nothing found OR
+						  baseIndices[i] - 1 < baseIndices[index] )																					 // SOMETHING
+						&& !( std::get<0>( std::get<1>( constrainSet[baseIndices[i] - 1] ) ) ||														 // not (upper unbounded
+							  std::get<1>( std::get<1>( constrainSet[baseIndices[i] - 1] ) ) >= std::get<2>( constrainSet[baseIndices[i] - 1] ) ) )	 // OR ub >= assignment
 			{
 				index = Eigen::Index( i );
 				diff = std::get<1>( std::get<1>( constrainSet[baseIndices[i] - 1] ) ) - std::get<2>( constrainSet[baseIndices[i] - 1] );
@@ -94,27 +94,32 @@ class ConstrainSet {
 		}
 	}
 
-	void setLowerBoundToValue( const std::size_t index ) {  //not used
+	void setLowerBoundToValue( const std::size_t index ) {	//not used
 		std::get<1>( std::get<0>( constrainSet[index] ) ) = std::get<2>( constrainSet[index] );
 	}
 
-	void print() const {
-		std::cout << "\n";
+	[[deprecated( "Use outstream-operator instead" )]] void print() const {
+		std::cout << *this;
+	}
+
+	std::ostream& operator<<( std::ostream& out ) {
+		out << "\n";
 		for ( std::size_t i = 0; i < constrainSet.size(); ++i ) {
-			std::cout << i + 1 << ": (";
+			out << i + 1 << ": (";
 			if ( std::get<0>( std::get<0>( constrainSet[i] ) ) ) {
-				std::cout << "-infty";
+				out << "-infty";
 			} else {
-				std::cout << std::get<1>( std::get<0>( constrainSet[i] ) );
+				out << std::get<1>( std::get<0>( constrainSet[i] ) );
 			}
-			std::cout << ",";
+			out << ",";
 			if ( std::get<0>( std::get<1>( constrainSet[i] ) ) ) {
-				std::cout << "infty";
+				out << "infty";
 			} else {
-				std::cout << std::get<1>( std::get<1>( constrainSet[i] ) );
+				out << std::get<1>( std::get<1>( constrainSet[i] ) );
 			}
-			std::cout << ")    value: " << std::get<2>( constrainSet[i] ) << "\n";
+			out << ")    value: " << std::get<2>( constrainSet[i] ) << "\n";
 		}
+		return out;
 	}
 
 	Point<Number> toPoint( std::size_t dimension ) const {
@@ -129,8 +134,8 @@ class ConstrainSet {
 		return ( not( std::get<0>( std::get<0>( constrainSet[var] ) ) ) && std::get<1>( std::get<0>( constrainSet[var] ) ) == std::get<2>( constrainSet[var] ) ) || ( not( std::get<0>( std::get<1>( constrainSet[var] ) ) ) && std::get<1>( std::get<1>( constrainSet[var] ) ) == std::get<2>( constrainSet[var] ) );
 	}
 
-	bool finiteLowerBound( std::size_t var ) const {
-		return not( std::get<0>( std::get<0>( constrainSet[var] ) ) );
+	[[nodiscard]] bool finiteLowerBound( std::size_t var ) const {
+		return !( std::get<0>( std::get<0>( constrainSet[var] ) ) );
 	}
 
 	/**
