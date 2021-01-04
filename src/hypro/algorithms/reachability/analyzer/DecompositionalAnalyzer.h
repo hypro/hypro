@@ -215,9 +215,7 @@ class DecompositionalAnalyzer {
             mWorkQueue.push_front( root );
         }
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-            if ( decomposition.subspaceTypes[ subspace ] == DynamicType::linear ||
-                 decomposition.subspaceTypes[ subspace ] == DynamicType::affine ||
-                 decomposition.subspaceTypes[ subspace ] == DynamicType::discrete ) {
+            if ( !isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
                 mLtiTypeSubspaces.push_back( subspace );
             } else {
                 mSingularTypeSubspaces.push_back( subspace );

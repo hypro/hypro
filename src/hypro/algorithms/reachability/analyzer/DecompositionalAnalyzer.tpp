@@ -287,6 +287,7 @@ auto DecompositionalAnalyzer<Representation>::pruneLtiSuccessors(
             if ( segments == segmentInterval ) {
                 segmentIntervalEnabled = true;
                 successors[ subspace ] = subspaceSuccessor;
+                break;
             }
         }
         if ( !segmentIntervalEnabled ) {
