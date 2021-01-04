@@ -1,4 +1,5 @@
 #include "singularJumpHandler.h"
+//#define SINGULAR_JUMPS_TEST_RESET_VARIANTS
 
 namespace hypro {
 
@@ -48,7 +49,7 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset( subspace );
 		if ( !intervalReset.isIdentity() ) {
 			auto transformedSet1 = applyResetFM( stateSet, intervalReset );
-#ifndef NDEBUG
+#ifdef SINGULAR_JUMPS_TEST_RESET_VARIANTS
 			auto transformedSet2 = applyResetFindZeroConstraints( stateSet, intervalReset );
 			auto transformedSet3 = applyResetProjectAndExpand( stateSet, intervalReset );
 			assert( transformedSet1.contains( transformedSet2 ) && transformedSet2.contains( transformedSet1 ) );
