@@ -483,6 +483,20 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 	return res;
 }
 
+std::pair<std::size_t, std::size_t> getSubspaceIndexOfDimension( std::size_t dimension, const Decomposition& decomposition ) {
+    std::size_t accumulatedDimensions = 0;
+    std::size_t subspaceSize;
+    for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
+        subspaceSize = decomposition.subspaces[ subspace ].size();
+        if ( accumulatedDimensions + subspaceSize > dimension ) {
+            return std::make_pair( subspace, dimension - accumulatedDimensions );
+        }
+        accumulatedDimensions += subspaceSize;
+    }
+    assert ( false && "Dimension not found in decomposition (dimension too large)" );
+    return std::make_pair( 0, 0 );
+}
+
 template <typename Number>
 std::pair<HybridAutomaton<Number>, Decomposition> decomposeAutomaton( const HybridAutomaton<Number> &automaton ) {
 	// compute decomposition
