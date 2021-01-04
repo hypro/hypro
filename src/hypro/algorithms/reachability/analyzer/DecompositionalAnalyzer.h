@@ -209,13 +209,15 @@ class DecompositionalAnalyzer {
         , mParameters( parameters ) {
         for ( auto& subspaceRoots : roots ) {
             NodeVector root;
-            for ( int subspace = decomposition.subspaces.size() - 1; subspace >= 0; --subspace ) {
+            for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
                 root.push_back( &subspaceRoots[ subspace ] );
             }
             mWorkQueue.push_front( root );
         }
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-            if ( decomposition.subspaceTypes[ subspace ] == DynamicType::linear || decomposition.subspaceTypes[ subspace ] == DynamicType::affine ) {
+            if ( decomposition.subspaceTypes[ subspace ] == DynamicType::linear ||
+                 decomposition.subspaceTypes[ subspace ] == DynamicType::affine ||
+                 decomposition.subspaceTypes[ subspace ] == DynamicType::discrete ) {
                 mLtiTypeSubspaces.push_back( subspace );
             } else {
                 mSingularTypeSubspaces.push_back( subspace );

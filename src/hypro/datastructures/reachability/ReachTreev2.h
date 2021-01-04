@@ -108,7 +108,7 @@ std::vector<std::vector<ReachTreeNode<Representation>>> makeDecompositionalRoots
 	// for each initial set, create one vector (of size #subspaces) of nodes
 	for ( auto const& [location, condition] : ha.getInitialStates() ) {
 		std::vector<ReachTreeNode<Representation>> nodeVector;
-		for ( int subspace = decomposition.subspaces.size() - 1; subspace >= 0; --subspace ) {
+		for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
 			ReachTreeNode<Representation> node{ location, Representation{ condition.getMatrix( subspace ), condition.getVector( subspace ) }, { 0, 0 } };
 			nodeVector.push_back( std::move( node ) );
 		}
