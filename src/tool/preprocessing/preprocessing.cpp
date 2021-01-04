@@ -11,8 +11,8 @@ hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::
     if ( decompose ) {
         auto [decomposedHa, decomposition] = decomposeAutomaton( automaton );
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-            if ( decomposition.subspaceTypes[ subspace ] != hypro::DynamicType::linear && decomposition.subspaceTypes[ subspace ] != hypro::DynamicType::affine ) {
-                addClockToAutomaton( decomposedHa, subspace );
+            if ( isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
+                addClockToAutomaton( decomposedHa, subspace, 2);
             }
         }
         information.decomposition = decomposition;

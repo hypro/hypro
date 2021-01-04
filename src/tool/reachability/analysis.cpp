@@ -43,11 +43,11 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 	return plotData;
 }
 
-template <typename State>
+template <typename Representation>
 std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	auto roots = makeDecompositionalRoots<State>( decomposedHa, decomposition );
-	DecompositionalAnalyzer<State> analyzer{ decomposedHa, decomposition, 
+	auto roots = makeDecompositionalRoots<Representation>( decomposedHa, decomposition );
+	DecompositionalAnalyzer<Representation> analyzer{ decomposedHa, decomposition,
 		setting.fixedParameters(), setting.strategy().front(), roots };
 	auto result = analyzer.run();
 	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -58,6 +58,34 @@ std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Numbe
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
 	std::vector<PlotData<FullState>> plotData{};
+
+	std::vector<typename boost::iterator_range<TreeIterator<ReachTreeNode<Representation>>>::iterator> nodeIterators( decomposition.subspaces.size() );
+	std::vector<typename boost::iterator_range<TreeIterator<ReachTreeNode<Representation>>>::iterator> nodeIteratorEndings( decomposition.subspaces.size() );
+	for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
+		std::vector<ReachTreeNode<Representation>*> subspaceRoots;
+		for ( auto& root : roots ) {
+			subspaceRoots.push_back( &root[ subspace ] );
+		}
+		auto orderedRoots = preorder( subspaceRoots );
+		nodeIterators[subspace] = orderedRoots.begin();
+		nodeIteratorEndings[subspace] = orderedRoots.end();
+	}
+	std::vector<ReachTreeNode<Representation>*> nodes( decomposition.subspaces.size() );
+	// all subspace trees have the same structure
+	while ( nodeIterators[ 0 ] != nodeIteratorEndings[ 0 ] ) {
+		for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
+			nodes[ subspace ] = &( *nodeIterators[ subspace ] );
+			++nodeIterators[ subspace ];
+		}
+		for ( auto& segment : composeFlowpipes( nodes, decomposition, setting.fixedParameters().fixedTimeStep, setting.strategy().front().timeStep ) ) {
+			FullState state{};
+			for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
+				state.setSet( segment[ subspace ], subspace );
+			}
+			plotData.push_back( PlotData{ state, 0, 0 } );
+		}
+
+	}
 	return plotData;
 }
 

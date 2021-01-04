@@ -54,7 +54,12 @@ int main( int argc, char const* argv[] ) {
 
 		for ( const auto& segment : result.plotData ) {
 			std::cout << "\r" << segmentCount++ << "/" << result.plotData.size() << "..." << std::flush;
-			plt.addObject( reduceToDimensions( segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices(), plotSettings.plotDimensions[pic] ) );
+			if ( options["decompose"].as<bool>() ) {
+				assert( plotSettings.plotDimensions[pic].size() == 2 );
+				plt.addObject( composeSubspaces( segment.sets, plotSettings.plotDimensions[pic][0], plotSettings.plotDimensions[pic][1], preprocessingInformation.decomposition ) );
+			} else {
+				plt.addObject( reduceToDimensions( segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices(), plotSettings.plotDimensions[pic] ) );
+			}
 		}
 
 		plt.plot2d( plotSettings.plottingFileType );  // writes to .plt file for pdf creation
