@@ -608,82 +608,84 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 }
 
 template <typename Number>
-void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace ) {
+void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std::size_t clockCount ) {
     // adds clock to flow as last variable
-    for ( auto& loc : ha.getLocations() ) {
-        if ( loc->getFlowTypes()[ subspace ] == DynamicType::rectangular ) {
-            // rectangular flow
-            auto clockVariable = VariablePool::getInstance().newCarlVariable();
-            auto flow = loc->getRectangularFlow( subspace );
-            flow.setFlowIntervalForDimension( carl::Interval<Number>( 1, 1 ), clockVariable );
-        } else {
-            // linear flow types
-            auto flowMatrix = loc->getLinearFlow( subspace ).getFlowMatrix();
-            std::size_t dim = flowMatrix.rows() - 1;
-            // add clock as last variable (second to last row/col, since last row/col is affine)
-            matrix_t<Number> newFlowMatrix( flowMatrix.rows() + 1, flowMatrix.cols() + 1 );
-            // flow for variables doesn't change
-            newFlowMatrix.topLeftCorner( dim, dim ) = flowMatrix.topLeftCorner( dim, dim );
-            for ( std::size_t i = 0; i < dim; ++i ) {
-                // no variable depends on the clock
-                newFlowMatrix( i, dim ) = 0;
-                // old affine coefficients
-                newFlowMatrix( i, dim + 1 ) = flowMatrix( i, dim );
-            }
-            // bottom 2 rows for clock + affine
-            newFlowMatrix.bottomRows( 2 ) = matrix_t<Number>::Zero( 2, dim + 2 );
-            newFlowMatrix( dim, dim + 1 ) = 1;
-            loc->setFlow( newFlowMatrix, subspace );
-        }
-        // invariant
-        loc->setInvariant( detail::addClockToCondition( loc->getInvariant(), subspace ) );
+    for ( std::size_t clockNumber = 0; clockNumber < clockCount; ++clockNumber ) {
+	    for ( auto& loc : ha.getLocations() ) {
+	        if ( loc->getFlowTypes()[ subspace ] == DynamicType::rectangular ) {
+	            // rectangular flow
+	            auto clockVariable = VariablePool::getInstance().newCarlVariable();
+	            auto flow = loc->getRectangularFlow( subspace );
+	            flow.setFlowIntervalForDimension( carl::Interval<Number>( 1, 1 ), clockVariable );
+	        } else {
+	            // linear flow types
+	            auto flowMatrix = loc->getLinearFlow( subspace ).getFlowMatrix();
+	            std::size_t dim = flowMatrix.rows() - 1;
+	            // add clock as last variable (second to last row/col, since last row/col is affine)
+	            matrix_t<Number> newFlowMatrix( flowMatrix.rows() + 1, flowMatrix.cols() + 1 );
+	            // flow for variables doesn't change
+	            newFlowMatrix.topLeftCorner( dim, dim ) = flowMatrix.topLeftCorner( dim, dim );
+	            for ( std::size_t i = 0; i < dim; ++i ) {
+	                // no variable depends on the clock
+	                newFlowMatrix( i, dim ) = 0;
+	                // old affine coefficients
+	                newFlowMatrix( i, dim + 1 ) = flowMatrix( i, dim );
+	            }
+	            // bottom 2 rows for clock + affine
+	            newFlowMatrix.bottomRows( 2 ) = matrix_t<Number>::Zero( 2, dim + 2 );
+	            newFlowMatrix( dim, dim + 1 ) = 1;
+	            loc->setFlow( newFlowMatrix, subspace );
+	        }
+	        // invariant
+	        loc->setInvariant( detail::addClockToCondition( loc->getInvariant(), subspace ) );
 
-    }
-    // local bad states
-    std::map<const Location<Number>*, Condition<Number>> newLocalBadStates;
-    for ( auto& [loc, cond] : ha.getLocalBadStates() ) {
-        newLocalBadStates[ loc ] = detail::addClockToCondition( cond, subspace );
-    }
-    ha.setLocalBadStates( newLocalBadStates );
-    // global bad states
-    std::vector<Condition<Number>> newGlobalBadStates;
-    for ( auto& badState : ha.getGlobalBadStates() ) {
-        newGlobalBadStates.push_back( detail::addClockToCondition( badState, subspace ) );
-    }
-    ha.setGlobalBadStates( newGlobalBadStates );
-    // initial states
-    std::map<const Location<Number>*, Condition<Number>> newInitialStates;
-    for ( auto& [loc, cond] : ha.getInitialStates() ) {
-        newInitialStates[ loc ] = detail::addClockToInitial( cond, subspace );
-    }
-    ha.setInitialStates( newInitialStates );
-    // transitions
-    for ( auto& trans : ha.getTransitions() ) {
-        // guards
-        trans->setGuard( detail::addClockToCondition( trans->getGuard(), subspace ) );
-        // resets
-        auto reset = trans->getReset();
-        if ( reset.size() > subspace ) {
-            auto resetMatrix = reset.getMatrix( subspace );
-            auto resetVec = reset.getVector( subspace );
-            auto resetIntervals = reset.getIntervals( subspace );
+	    }
+	    // local bad states
+	    std::map<const Location<Number>*, Condition<Number>> newLocalBadStates;
+	    for ( auto& [loc, cond] : ha.getLocalBadStates() ) {
+	        newLocalBadStates[ loc ] = detail::addClockToCondition( cond, subspace );
+	    }
+	    ha.setLocalBadStates( newLocalBadStates );
+	    // global bad states
+	    std::vector<Condition<Number>> newGlobalBadStates;
+	    for ( auto& badState : ha.getGlobalBadStates() ) {
+	        newGlobalBadStates.push_back( detail::addClockToCondition( badState, subspace ) );
+	    }
+	    ha.setGlobalBadStates( newGlobalBadStates );
+	    // initial states
+	    std::map<const Location<Number>*, Condition<Number>> newInitialStates;
+	    for ( auto& [loc, cond] : ha.getInitialStates() ) {
+	        newInitialStates[ loc ] = detail::addClockToInitial( cond, subspace );
+	    }
+	    ha.setInitialStates( newInitialStates );
+	    // transitions
+	    for ( auto& trans : ha.getTransitions() ) {
+	        // guards
+	        trans->setGuard( detail::addClockToCondition( trans->getGuard(), subspace ) );
+	        // resets
+	        auto reset = trans->getReset();
+	        if ( reset.size() > subspace ) {
+	            auto resetMatrix = reset.getMatrix( subspace );
+	            auto resetVec = reset.getVector( subspace );
+	            auto resetIntervals = reset.getIntervals( subspace );
 
-            resetMatrix.conservativeResize( resetMatrix.rows() + 1, resetMatrix.cols() + 1 );
-            resetMatrix.bottomRows( 1 ) = matrix_t<Number>::Zero( 1, resetMatrix.cols() );
-            resetMatrix.rightCols( 1 ) = matrix_t<Number>::Zero( resetMatrix.rows(), 1 );
-            resetMatrix( resetMatrix.rows() - 1, resetMatrix.cols() - 1 ) = 1;
+	            resetMatrix.conservativeResize( resetMatrix.rows() + 1, resetMatrix.cols() + 1 );
+	            resetMatrix.bottomRows( 1 ) = matrix_t<Number>::Zero( 1, resetMatrix.cols() );
+	            resetMatrix.rightCols( 1 ) = matrix_t<Number>::Zero( resetMatrix.rows(), 1 );
+	            resetMatrix( resetMatrix.rows() - 1, resetMatrix.cols() - 1 ) = 1;
 
-            resetVec.conservativeResize( resetVec.rows() + 1 );
-            resetVec( resetVec.rows() - 1 ) = 0;
+	            resetVec.conservativeResize( resetVec.rows() + 1 );
+	            resetVec( resetVec.rows() - 1 ) = 0;
 
-            resetIntervals.push_back( carl::Interval<Number>() );
+	            resetIntervals.push_back( carl::Interval<Number>() );
 
-            reset.setMatrix( resetMatrix, subspace );
-            reset.setVector( resetVec, subspace );
-            reset.setIntervals( resetIntervals, subspace );
-            trans->setReset( reset );
-        }
-    }
+	            reset.setMatrix( resetMatrix, subspace );
+	            reset.setVector( resetVec, subspace );
+	            reset.setIntervals( resetIntervals, subspace );
+	            trans->setReset( reset );
+	        }
+	    }
+	}
 }
 
 

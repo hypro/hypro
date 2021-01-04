@@ -34,8 +34,7 @@ Results<std::size_t> decompositionalSingularTimeElapse( const Settings& settings
         auto [decomposedHa, decomposition] = hypro::decomposeAutomaton( ha );
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
             if ( decomposition.subspaceTypes[ subspace ] != hypro::DynamicType::linear && decomposition.subspaceTypes[ subspace ] != hypro::DynamicType::affine ) {
-                hypro::addClockToAutomaton( decomposedHa, subspace );
-                hypro::addClockToAutomaton( decomposedHa, subspace );
+                hypro::addClockToAutomaton( decomposedHa, subspace, 2 );
             }
         }
 
@@ -79,8 +78,7 @@ Results<std::size_t> decompositionalSingularJumps( const Settings& settings ) {
         auto [decomposedHa, decomposition] = hypro::decomposeAutomaton( ha );
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
             if ( decomposition.subspaceTypes[ subspace ] != hypro::DynamicType::linear && decomposition.subspaceTypes[ subspace ] != hypro::DynamicType::affine ) {
-                hypro::addClockToAutomaton( decomposedHa, subspace );
-                hypro::addClockToAutomaton( decomposedHa, subspace );
+                hypro::addClockToAutomaton( decomposedHa, subspace, 2 );
             }
         }
         auto roots = hypro::makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );        
