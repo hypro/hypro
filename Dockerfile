@@ -1,5 +1,5 @@
 #FROM fefrei/carl:19.01
-FROM smtrat/carl:19.10
+FROM smtrat/carl:latest
 RUN apt-get update \
     && apt-get install -y \
     gcc-8-base \
