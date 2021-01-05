@@ -108,7 +108,7 @@ template <typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonotope( const BoxT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
 	std::size_t dim = _source.dimension();								  //gets dimension from source object
 	std::vector<carl::Interval<Number>> intervals = _source.intervals();  //gets intervals from source object
-	matrix_t<Number> generators = matrix_t<Number>::Zero( dim, dim );	 //defines an empty generator matrix for dim generators
+	matrix_t<Number> generators = matrix_t<Number>::Zero( dim, dim );	  //defines an empty generator matrix for dim generators
 	vector_t<Number> center = vector_t<Number>( dim );					  //defines an empty center vector
 
 	for ( std::size_t i = 0; i < dim; ++i ) {							  //for every dimension
@@ -231,7 +231,7 @@ ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonot
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 
@@ -275,7 +275,7 @@ ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonot
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 
@@ -449,7 +449,7 @@ ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonot
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 
@@ -493,7 +493,7 @@ ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonot
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 
@@ -640,11 +640,11 @@ ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonot
 	return res;
 }
 
-template<typename Number>
-template<typename ZonotopeSetting, typename inSetting>
-ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE mode){
-    auto tmp = toVPolytope(source);
-    return Converter<Number>::toZonotope(tmp, mode);
+template <typename Number>
+template <typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonotope( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE mode ) {
+	auto tmp = toVPolytope( source );
+	return Converter<Number>::toZonotope( tmp, mode );
 }
 
 //template<typename Number>

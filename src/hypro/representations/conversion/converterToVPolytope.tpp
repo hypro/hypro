@@ -235,7 +235,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 
@@ -273,7 +273,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 
@@ -311,7 +311,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 
@@ -342,17 +342,17 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 }
 
 //conversion from H-Polytope to V-Polytope (no differentiation between conversion modes - always EXACT)
-template<typename Number>
-template<typename VPolySetting, typename inSetting>
-VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const CarlPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
+template <typename Number>
+template <typename VPolySetting, typename inSetting>
+VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolytope( const CarlPolytopeT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
 	//exact conversion
-	return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.matrix(), _source.vector());
+	return VPolytopeT<Number, Converter<Number>, VPolySetting>( _source.matrix(), _source.vector() );
 }
 
-template<typename Number>
-template<typename VPolySetting, typename inSetting>
-VPolytopeT<Number,Converter<Number>,VPolySetting> Converter<Number>::toVPolytope( const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ){
-    return VPolytopeT<Number,Converter<Number>,VPolySetting>(_source.matrix(), _source.vector());
+template <typename Number>
+template <typename VPolySetting, typename inSetting>
+VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolytope( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
+	return VPolytopeT<Number, Converter<Number>, VPolySetting>( _source.matrix(), _source.vector() );
 }
 
 //template<typename Number>
@@ -507,7 +507,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 
@@ -545,7 +545,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 
@@ -583,7 +583,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size(), dim );
 

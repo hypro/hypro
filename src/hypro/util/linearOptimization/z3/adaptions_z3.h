@@ -1,6 +1,6 @@
 
 #pragma once
-#include "flags.h"
+#include "../../../flags.h"
 #ifdef HYPRO_USE_Z3
 #include "helper_methods.h"
 #include "z3Convenience.h"

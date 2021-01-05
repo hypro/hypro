@@ -156,7 +156,7 @@ class Path {
 
 	// legacy operations - replace them
 	std::size_t size() const;
-	TPathElement<Number, tNumber> at( int index ) const;
+	TPathElement<Number, tNumber> at( std::size_t index ) const;
 	void pop_front();
 	void push_front( const TPathElement<Number, tNumber>& elem );
 

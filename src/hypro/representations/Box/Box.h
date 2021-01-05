@@ -11,9 +11,9 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
-#include "../../util/Permutator.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/sequenceGeneration/SequenceGenerator.h"
 #include "../../util/templateDirections.h"
 #include "../helperMethods/isBox.h"
 #include "BoxSetting.h"

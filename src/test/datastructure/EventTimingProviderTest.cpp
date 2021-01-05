@@ -33,7 +33,10 @@ class EventTimingTest : public ::testing::Test {
 		initNode->rGetTimings().insertInvariant( carl::Interval<T>( 0, 10 ), CONTAINMENT::FULL );
 	}
 
-	void TearDown() override { EventTimingProvider<double>::getInstance().clear(); }
+	void TearDown() override {
+		EventTimingProvider<double>::getInstance().clear();
+		delete loc;
+	}
 
 	Location<double>* loc;
 	Transition<double>* tRaw;
@@ -50,9 +53,9 @@ TEST_F( EventTimingTest, FindPath1 ) {
 
 	// create some fictional path using location and transition.
 	Path<double, T> p1{
-		  {carl::Interval<T>( 0, 3 )},
-		  {tRaw, carl::Interval<T>( 1, 2 )},
-		  {carl::Interval<T>( T( 1.5 ), 5 )},
+		  { carl::Interval<T>( 0, 3 ) },
+		  { tRaw, carl::Interval<T>( 1, 2 ) },
+		  { carl::Interval<T>( T( 1.5 ), 5 ) },
 	};
 
 	// the path expects one transition event and consequently a child node, which is not yet present
@@ -89,9 +92,9 @@ TEST_F( EventTimingTest, FindPath2 ) {
 
 	// create some fictional path using location and transition.
 	Path<double, T> p1{
-		  {carl::Interval<T>( 0, 3 )},
-		  {tRaw, carl::Interval<T>( 1, 3 )},
-		  {carl::Interval<T>( T( 1.5 ), 5 )},
+		  { carl::Interval<T>( 0, 3 ) },
+		  { tRaw, carl::Interval<T>( 1, 3 ) },
+		  { carl::Interval<T>( T( 1.5 ), 5 ) },
 	};
 
 	// the path expects one transition event and consequently a child node, which is not yet present
@@ -136,16 +139,16 @@ TEST_F( EventTimingTest, FindPath3 ) {
 
 	// create some fictional path using location and transition.
 	Path<double, T> p1{
-		  {carl::Interval<T>( 0, 3 )},
-		  {tRaw, carl::Interval<T>( 1, 3 )},
-		  {carl::Interval<T>( 1, 5 )},
+		  { carl::Interval<T>( 0, 3 ) },
+		  { tRaw, carl::Interval<T>( 1, 3 ) },
+		  { carl::Interval<T>( 1, 5 ) },
 	};
 
 	// path which should work
 	Path<double, T> p2{
-		  {carl::Interval<T>( 0, 3 )},
-		  {tRaw, carl::Interval<T>( 1, 2 )},
-		  {carl::Interval<T>( 1, 2 )},
+		  { carl::Interval<T>( 0, 3 ) },
+		  { tRaw, carl::Interval<T>( 1, 2 ) },
+		  { carl::Interval<T>( 1, 2 ) },
 	};
 
 	// the path expects one transition event and consequently a child node, which is not yet present
@@ -202,9 +205,9 @@ TEST_F( EventTimingTest, FindPath4 ) {
 
 	// create some fictional path using location and transition.
 	Path<double, T> p1{
-		  {carl::Interval<T>( 0, 3 )},
-		  {tRaw, carl::Interval<T>( 2, 3 )},
-		  {carl::Interval<T>( 2, 5 )},
+		  { carl::Interval<T>( 0, 3 ) },
+		  { tRaw, carl::Interval<T>( 2, 3 ) },
+		  { carl::Interval<T>( 2, 5 ) },
 	};
 
 	// add transition event
@@ -260,9 +263,9 @@ TEST_F( EventTimingTest, FindPath5 ) {
 
 	// create some fictional path using location and transition.
 	Path<double, T> p1{
-		  {carl::Interval<T>( 0, 3 )},
-		  {tRaw, carl::Interval<T>( 2, 3 )},
-		  {carl::Interval<T>( 2, 5 )},
+		  { carl::Interval<T>( 0, 3 ) },
+		  { tRaw, carl::Interval<T>( 2, 3 ) },
+		  { carl::Interval<T>( 2, 5 ) },
 	};
 
 	// add transition event

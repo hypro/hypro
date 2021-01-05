@@ -132,7 +132,7 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, templateDirectionCnt );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( templateDirectionCnt, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( templateDirectionCnt, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size() + additionalDirections.size(), dim );
 
@@ -234,10 +234,10 @@ template <typename Number>
 template <typename HPolySetting, typename inSetting>
 HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolytope( const DifferenceBoundsT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
 	assert( _source.getDBM().rows() == _source.getDBM().cols() );
-	int numclocks = _source.getDBM().cols() - 1;
-	int numconstraints = 0;  //all entries of the DBM (except the diagonal and inifinities) define a constraint
-	for ( int i = 0; i < _source.getDBM().rows(); i++ ) {
-		for ( int j = 0; j < _source.getDBM().rows(); j++ ) {
+	Eigen::Index numclocks = _source.getDBM().cols() - 1;
+	Eigen::Index numconstraints = 0;  //all entries of the DBM (except the diagonal and inifinities) define a constraint
+	for ( Eigen::Index i = 0; i < _source.getDBM().rows(); i++ ) {
+		for ( Eigen::Index j = 0; j < _source.getDBM().rows(); j++ ) {
 			if ( i != j && !( _source.getDBM()( i, j ).second == DifferenceBoundsT<Number, Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::INFTY ) ) {
 				numconstraints++;
 			}
@@ -247,23 +247,23 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 	hypro::matrix_t<Number> HPolyConstraints = hypro::matrix_t<Number>::Zero( numconstraints, numclocks );
 	hypro::vector_t<Number> HPolyConstants = hypro::vector_t<Number>::Zero( numconstraints );
 
-	int counter = 0;  // counter for indexing constraints
-	for ( int i = 0; i < _source.getDBM().rows(); i++ ) {
-		for ( int j = 0; j < _source.getDBM().cols(); j++ ) {
+	Eigen::Index counter = 0;  // counter for indexing constraints
+	for ( Eigen::Index i = 0; i < _source.getDBM().rows(); i++ ) {
+		for ( Eigen::Index j = 0; j < _source.getDBM().cols(); j++ ) {
 			// do not consider diagonals
 			if ( i != j && !( _source.getDBM()( i, j ).second == DifferenceBoundsT<Number, Converter<Number>, DifferenceBoundsSetting>::BOUND_TYPE::INFTY ) ) {
 				// the constraint to add
 				matrix_t<Number> constraintVars = matrix_t<Number>::Zero( 1, numclocks );
 				if ( i == 0 ) {
 					// constraint of the form 0-x_j <= c_ij
-					constraintVars( 0, j - 1 ) = -1.0;  // j-1 because we don't consider static clock 0
+					constraintVars( 0, j - 1 ) = -1.0;	// j-1 because we don't consider static clock 0
 				} else if ( j == 0 ) {
 					// constraint of the form x_i - 0  <= c_ij
 					constraintVars( 0, i - 1 ) = 1.0;  // i-1 because we don't consider static clock 0
 				} else {
 					// constraint of the form x_i - x_j  <= c_ij
-					constraintVars( 0, i - 1 ) = 1.0;   // i-1 because we don't consider static clock 0
-					constraintVars( 0, j - 1 ) = -1.0;  // j-1 because we don't consider static clock 0
+					constraintVars( 0, i - 1 ) = 1.0;	// i-1 because we don't consider static clock 0
+					constraintVars( 0, j - 1 ) = -1.0;	// j-1 because we don't consider static clock 0
 				}
 				HPolyConstraints.row( counter ) = constraintVars;
 				HPolyConstants( counter, 0 ) = _source.getDBM()( i, j ).first;
@@ -305,10 +305,10 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 	return HPolytopeT<Number, Converter<Number>, HPolySetting>( source.getHalfspaces() );
 }
 
-template<typename Number>
-template<typename HPolySetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE){
-	return HPolytopeT<Number,Converter<Number>,HPolySetting>(source.matrix(), source.vector());
+template <typename Number>
+template <typename HPolySetting, typename inSetting>
+HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolytope( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE ) {
+	return HPolytopeT<Number, Converter<Number>, HPolySetting>( source.matrix(), source.vector() );
 }
 
 //template<typename Number>
@@ -317,10 +317,9 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 //	return HPolytopeT<Number,Converter<Number>,HPolySetting>();
 //}
 
-template<typename Number>
-template<typename HPolySetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections){
-	
+template <typename Number>
+template <typename HPolySetting, typename inSetting>
+HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolytope( const SupportFunctionNewT<Number, Converter<Number>, inSetting>& _source, const std::vector<vector_t<Number>>& additionalDirections, const CONV_MODE, std::size_t numberOfDirections ) {
 	//gets dimension of source object
 	//assert(!_source.empty());
 	std::size_t dim = _source.dimension();
@@ -333,7 +332,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 		//computes a vector of template directions based on the dimension and the requested number of directions which should get evaluated
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( dim, numberOfDirections );
 		//only continue if size of the vector is not greater than the upper bound for maximum evaluations (uniformly distributed directions for higher dimensions yield many necessary evaluations)
-		assert( templateDirections.size() <= std::pow( numberOfDirections, dim ) );
+		assert( templateDirections.size() <= std::size_t( std::pow( numberOfDirections, dim ) ) );
 		//creates a matrix with one row for each direction and one column for each dimension
 		matrix_t<Number> templateDirectionMatrix = matrix_t<Number>( templateDirections.size() + additionalDirections.size(), dim );
 
@@ -387,7 +386,7 @@ HPolytopeT<Number,Converter<Number>,HPolySetting> Converter<Number>::toHPolytope
 			}
 		}
 		//std::cout << __func__ << ": compute template ... " << std::endl;
-		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( projections, numberOfDirections, dim );  // TODO: ATTENTION, 8 is hardcoded here.
+		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( projections, numberOfDirections, dim );	 // TODO: ATTENTION, 8 is hardcoded here.
 		//std::cout << "done." << std::endl;
 		for ( auto direction : additionalDirections ) {
 			// project direction

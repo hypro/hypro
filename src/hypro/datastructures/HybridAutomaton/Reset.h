@@ -71,6 +71,8 @@ class Reset {
 	void setMatrix( const matrix_t<Number>& in, std::size_t I = 0 );
 	void setIntervals( const std::vector<carl::Interval<Number>>& intervals, std::size_t I = 0 );
 
+	bool isAffineIdentity() const;
+	bool isIntervalIdentity() const;
 	bool isIdentity() const;
 
 	std::size_t hash() const;

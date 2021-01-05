@@ -40,34 +40,163 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 
 template <typename Representation>
 void singularJumpHandler<Representation>::applyReset( Representation& stateSet, Transition<Number>* transitionPtr ) const {
+	// We have 3 different implementations for applying resets and want to check that they all give the same result.
+	// Note: applyResetFM is the one that definitely works.
+	// Todo: Decide for one implementation and remove other 2
 	if ( !transitionPtr->getReset().empty() ) {
-		assert( transitionPtr->getReset().getAffineReset().isIdentity() && "Singular automata do not support linear/affine resets." );
-
+		assert( transitionPtr->getReset().getAffineReset().isIdentity() && "Singular automata do not support linear/affine resets." );		
 		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset();
 		if ( !intervalReset.isIdentity() ) {
-			std::vector<std::size_t> projectOutDimensions;
-			HPolytope<Number> projectedSet = Converter<Number>::toHPolytope( stateSet );
-			std::vector<Halfspace<Number>> newConstraints;
-			for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
-				if ( !intervalReset.mIntervals[i].isEmpty() ) {
-					// non-empty intervals represent some reset different from identity -> project out dimension, memorize new interval bounds
-					projectOutDimensions.push_back( i );
-					// create and store new interval bounds
-					vector_t<Number> normal = vector_t<Number>::Zero( stateSet.dimension() );
-					normal( i ) = Number( 1 );
-					newConstraints.emplace_back( normal, intervalReset.mIntervals[i].upper() );
-					normal = -normal;
-					newConstraints.emplace_back( normal, intervalReset.mIntervals[i].lower() );
-				}
-			}
-			// add interval bounds as new constraints
-			projectedSet = projectedSet.projectOutConservative( projectOutDimensions );
-			projectedSet.insert( newConstraints.begin(), newConstraints.end() );
+			auto transformedSet1 = applyResetFM( stateSet, intervalReset );
+#ifndef NDEBUG
+			auto transformedSet2 = applyResetFindZeroConstraints( stateSet, intervalReset );
+			auto transformedSet3 = applyResetProjectAndExpand( stateSet, intervalReset );
+			assert( transformedSet1.contains( transformedSet2 ) && transformedSet2.contains( transformedSet1 ) );
+			assert( transformedSet1.contains( transformedSet3 ) && transformedSet3.contains( transformedSet1 ) );
+#endif
+			convert( transformedSet1, stateSet );
+		}
+	}	
+}
 
-			// convert back and assign to original representation type
-			convert( projectedSet, stateSet );
+
+template <typename Representation, typename Number>
+HPolytope<Number> applyResetFM( Representation& stateSet, IntervalAssignment<Number> intervalReset ) {
+	// Apply reset using FM (definitely works, is slow)
+    std::vector<std::size_t> projectOutDimensions;
+    HPolytope<Number> projectedSet = Converter<Number>::toHPolytope( stateSet );
+    std::vector<Halfspace<Number>> newConstraints;
+    for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
+        if ( !intervalReset.mIntervals[i].isEmpty() ) {
+            // non-empty intervals represent some reset different from identity -> project out dimension, memorize new interval bounds
+            projectOutDimensions.push_back( i );
+            // create and store new interval bounds
+            vector_t<Number> normal = vector_t<Number>::Zero( stateSet.dimension() );
+            normal( i ) = Number( 1 );
+            newConstraints.emplace_back( normal, intervalReset.mIntervals[i].upper() );
+            normal = -normal;
+            newConstraints.emplace_back( normal, -intervalReset.mIntervals[i].lower() );
+        }
+    }
+    // add interval bounds as new constraints
+    projectedSet = projectedSet.projectOutConservative( projectOutDimensions );
+    projectedSet.insert( newConstraints.begin(), newConstraints.end() );
+
+    return projectedSet;
+}
+
+template <typename Representation, typename Number>
+HPolytope<Number> applyResetFindZeroConstraints( Representation& stateSet, IntervalAssignment<Number> intervalReset ) {
+	// Apply reset by identifying 0-constraints of variables reset to non-zero value
+	// Uses FM right now (should work, relatively slow)
+
+	std::vector<std::size_t> projectOutDimensions;
+	std::set<std::size_t> resetToZeroDimensions;
+	VPolytope<Number> projectedSet = Converter<Number>::toVPolytope( stateSet );
+	std::vector<Halfspace<Number>> newConstraints;
+	for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
+		if ( !intervalReset.mIntervals[i].isEmpty() ) {
+			if ( intervalReset.mIntervals[i].lower() == 0 && intervalReset.mIntervals[i].upper() == 0 ) {
+				// reset to zero: solve via linear transformation
+				resetToZeroDimensions.insert( i );
+			} else {
+				// non-empty intervals represent some reset different from identity and from zero-> project out dimension, memorize new interval bounds
+				projectOutDimensions.push_back( i );
+				// create and store new interval bounds
+				vector_t<Number> normal = vector_t<Number>::Zero( stateSet.dimension() );
+				normal( i ) = Number( 1 );
+				newConstraints.emplace_back( normal, intervalReset.mIntervals[i].upper() );
+				normal = -normal;
+				newConstraints.emplace_back( normal, -intervalReset.mIntervals[i].lower() );
+			}
 		}
 	}
+
+	// set entries in resetToZeroDimensions and projectOutDimensions to zero
+	for ( auto& vertex : projectedSet.rVertices() ) {
+		for ( Eigen::Index i = 0; i < vertex.rawCoordinates().rows(); ++i ) {
+			if ( std::find( resetToZeroDimensions.begin(), resetToZeroDimensions.end(), std::size_t( i ) ) != resetToZeroDimensions.end() ) {
+				vertex[i] = 0;
+				// a selected dimension cannot be in both sets
+				continue;
+			}
+			/*
+			if ( std::find( projectOutDimensions.begin(), projectOutDimensions.end(), std::size_t( i ) ) != projectOutDimensions.end() ) {
+				vertex[i] = 0;
+			}
+			*/
+		}
+	}
+	HPolytope<Number> transformedSet = Converter<Number>::toHPolytope( projectedSet );
+
+	// find bounding constraints for dimensions which are not reset to zero and remove them
+	// Assumption: Those constraints do have non-zero entries in their normal vectors only for those bounding constraints
+	// temporary: FM elimination
+	auto [constraints, constants] = eliminateCols( transformedSet.matrix(), transformedSet.vector(), projectOutDimensions, true );
+	transformedSet = HPolytope<Number>{ constraints, constants };
+
+	// add interval bounds as new constraints
+	transformedSet.insert( newConstraints.begin(), newConstraints.end() );
+
+	// TODO convert to V-Rep., set entries in resetToZeroDimensions and projectOutDimensions to zero. Convert to H-rep, remove constraints (detect syntactically) on projectOutDimensions, insert new constraints.
+
+	return transformedSet;
+
+}
+
+template <typename Representation, typename Number>
+HPolytope<Number> applyResetProjectAndExpand( Representation& stateSet, IntervalAssignment<Number> intervalReset ) {
+	// Apply reset by projecting reset-dimensions to 0 and removing all constraints on them
+	// Fastest, want to test in practice to confirm that it works
+    
+    std::vector<std::size_t> resetDimensions;
+    std::vector<std::size_t> resetToNonZeroDimensions;
+    std::vector<Halfspace<Number>> newConstraints;
+    for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
+        if ( !intervalReset.mIntervals[i].isEmpty() ) {
+            resetDimensions.push_back( i );
+            if ( intervalReset.mIntervals[i].lower() != 0 || intervalReset.mIntervals[i].upper() != 0 ) {
+                // reset to zero is solved via linear transformation
+                resetToNonZeroDimensions.push_back( i );
+                vector_t<Number> normal = vector_t<Number>::Zero( stateSet.dimension() );
+                normal( i ) = Number( 1 );
+                newConstraints.emplace_back( normal, intervalReset.mIntervals[i].upper() );
+                normal = -normal;
+                newConstraints.emplace_back( normal, -intervalReset.mIntervals[i].lower() );
+            }                       
+        }
+    }
+
+    // set entries in resetDimensions to zero: Convert to VPolytope, set dimensions to 0, convert back
+    VPolytope<Number> projectedSet = Converter<Number>::toVPolytope( stateSet );
+    for ( auto& vertex : projectedSet.rVertices() ) {
+        for ( auto i : resetDimensions ) {
+            vertex[i] = 0;
+        }
+    }
+            
+	HPolytope<Number> transformedSet = Converter<Number>::toHPolytope( projectedSet );
+
+	// Remove constraints on dimensions that are not reset to 0
+	auto constraintMatrix = transformedSet.matrix();
+	auto constraintVector = transformedSet.vector();
+	for ( Eigen::Index row = 0; row < constraintMatrix.rows(); ++row ) {
+	    for ( auto i : resetToNonZeroDimensions ) {
+	        constraintMatrix( row, i ) = 0;
+	    }
+	}
+
+	// remove redundant constraints. This also removes zero-rows in the constraint matrix
+	Optimizer<Number> opt( constraintMatrix, constraintVector );
+	auto redundant = opt.redundantConstraints();
+	constraintMatrix = removeRows( constraintMatrix, redundant );
+	constraintVector = removeRows( constraintVector, redundant );
+
+	transformedSet = HPolytope<Number>{ constraintMatrix, constraintVector };
+	// add interval bounds as new constraints
+	transformedSet.insert( newConstraints.begin(), newConstraints.end() );
+
+	return transformedSet;
 }
 
 template <typename Representation>

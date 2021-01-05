@@ -499,7 +499,7 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		initConvexHull( points, facets );
 		pointsNotContainedInFacets( points, facets, unassignedPoints, assignedPoints );	 // Determine points which belong to a facet
 
-		for ( auto facet : facets ) {
+		for ( auto& facet : facets ) {
 			for ( auto point : unassignedPoints ) {
 				if ( facet->isAbove( point ) ) {  // isAbove
 					facet->addPointToOutsideSet( point );

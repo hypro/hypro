@@ -43,7 +43,7 @@ jobs:
       addons:
         apt:
           sources: [*sources_base]
-          packages: [*packages_base, g++-7, gcc-7, doxygen, graphviz]
+          packages: [*packages_base, g++-7, gcc-7, doxygen, graphviz, texlive-base]
       env: COMPILER=g++-7 FLAGS=-DCREATE_DOC=ON CC=gcc-7 CXX=g++-7
     - os: linux
       compiler: g++-8

@@ -540,8 +540,8 @@ std::vector<Point<Number>> Plotter<Number>::grahamScan( const std::vector<Point<
 	stack.push( min );
 	stack.push( sortedPoints.begin()->second );
 	sortedPoints.erase( sortedPoints.begin() );
-	unsigned i = 0;
-	unsigned n = sortedPoints.size();
+	std::size_t i = 0;
+	std::size_t n = sortedPoints.size();
 
 	// main loop -> check the two topmost elements of the stack and one third,
 	// new point

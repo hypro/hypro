@@ -490,9 +490,10 @@ typename std::vector<Point<Number>> HPolytopeT<Number, Converter, Setting>::vert
 		for ( auto facet : facetEnumerator.getFacets() ) {
 			vertices.emplace_back( this->dimension() );
 			//The resulting points can't be points at infinity
-			if ( facet.mOffset == 0 ) {
-				std::cout << "Polytope is unbounded." << std::endl;
-			} else {
+			//if ( facet.mOffset == 0 ) {
+			//std::cout << "Polytope is unbounded." << std::endl;
+			//} else {
+			if ( facet.mOffset != 0 ) {
 				facet.mNormal /= facet.mOffset;
 				vertices.back() = convert<mpq_class, Number>( facet.mNormal );
 			}
@@ -882,8 +883,14 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::p
 			projectionMatrix( i, i ) = 0;
 		}
 
-		return this->linearTransformation( projectionMatrix );
+		auto res = this->linearTransformation( projectionMatrix );
+
+		// TODO detect bounding constraints (syntactically) in res, remove them.
+		// Bounding constraints: Those which ensure that all variables in dimensions are zero
+
+		return res;
 	} else {
+		// Via Fourier-Motzkin variable elimination
 		auto [newConstraints, newConstants] = eliminateCols( this->matrix(), this->vector(), dimensions, true );
 		return { newConstraints, newConstants };
 	}

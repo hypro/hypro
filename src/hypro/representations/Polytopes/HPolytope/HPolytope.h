@@ -12,9 +12,9 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../../algorithms/quantifierElimination/qe.h"
 #include "../../../algorithms/quickhull/Quickhull.h"
 #include "../../../types.h"
-#include "../../../util/Permutator.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
+#include "../../../util/sequenceGeneration/SequenceGenerator.h"
 #include "../../../util/templateDirections.h"
 #include "../../../util/typetraits.h"
 #include "HPolytopeSetting.h"
@@ -75,6 +75,13 @@ class HPolytopeT : private GeometricObjectBase {
 	 */
 	//HPolytopeT( const HPolytopeT& orig ) = default;
 	HPolytopeT( const HPolytopeT& orig );
+
+	template <typename M, typename C, typename S, carl::DisableIf<std::is_same<M, Number>> = carl::dummy>
+	HPolytopeT( const HPolytopeT<M, C, S>& in ) {
+		HalfspaceVector convertedSpaces;
+		std::transform( in.constraints().begin(), in.constraints().end(), std::back_inserter( convertedSpaces ), [&]( const auto& constraint ) { return Halfspace<Number>( convert<M, Number>( constraint.normal() ), carl::convert<M, Number>( constraint.offset() ) ); } );
+		*this = HPolytopeT( convertedSpaces );
+	}
 
 	/**
 	 * @brief Constructor from a vector of halfspaces.

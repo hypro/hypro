@@ -138,86 +138,15 @@ TEST( OptimizerTest, checkConsistency ) {
 	EXPECT_NEAR_VECTORS( controlVec, res.optimumValue, 1.0e-8 );
 }
 
-TEST( OptimizerTest, Maximize ) {
-	// Constraints as box around center with corners (2,2)(2,-2)(-2,2)(-2,-2)
-	matrix_t<double> boxMat = matrix_t<double>::Zero( 4, 2 );
-	boxMat << 1, 0, -1, 0, 0, 1, 0, -1;
-	vector_t<double> boxVec = vector_t<double>::Zero( 4 );
-	boxVec << 2, 2, 2, 2;
-	Optimizer<double> op( boxMat, boxVec, true );
-	auto res = op.evaluate( vector_t<double>::Ones( 2 ), false );
-	vector_t<double> controlVec = 2.0 * vector_t<double>::Ones( 2 );
-	EXPECT_NEAR( 4.0, res.supportValue, 1.0e-8 );
-	EXPECT_EQ( SOLUTION::FEAS, res.errorCode );
-	EXPECT_NEAR_VECTORS( controlVec, res.optimumValue, 1.0e-8 );
-
-	vector_t<double> objective = vector_t<double>::Zero( 2 );
-	objective << -2, 1;
-	controlVec = vector_t<double>::Zero( 2 );
-	controlVec << -2, 2;
-	res = op.evaluate( objective, false );
-	EXPECT_NEAR( 6.0, res.supportValue, 1.0e-8 );
-	EXPECT_EQ( SOLUTION::FEAS, res.errorCode );
-	EXPECT_NEAR_VECTORS( controlVec, res.optimumValue, 1.0e-8 );
-
-	res = op.evaluate( 0.1 * vector_t<double>::Ones( 2 ), false );
-	EXPECT_EQ( SOLUTION::FEAS, res.errorCode );
-	EXPECT_NEAR( 0.4, res.supportValue, 1.0e-8 );
-}
-
-TEST( OptimizerTest, optimizeUnbounded ) {
-	matrix_t<double> mat = matrix_t<double>::Zero( 2, 2 );
-	mat << 1, 0, 0, 1;
+TEST( OptimizerTest, oneDimensional ) {
+	matrix_t<double> mat = matrix_t<double>::Zero( 2, 1 );
+	mat << 1, -1;
 	vector_t<double> vec = vector_t<double>::Ones( 2 );
-	Optimizer<double> op( mat, vec, false );
-	auto res = op.evaluate( vector_t<double>::Ones( 2 ), false );
-	EXPECT_EQ( SOLUTION::INFTY, res.errorCode );
-}
-
-TEST( OptimizerTest, setVector ) {
-	// Maximize with first constraint vector
-	matrix_t<double> boxMat = matrix_t<double>::Zero( 4, 2 );
-	boxMat << 1, 0, -1, 0, 0, 1, 0, -1;
-	vector_t<double> boxVec = vector_t<double>::Zero( 4 );
-	boxVec << 2, 2, 2, 2;
-	Optimizer<double> op( boxMat, boxVec, true );
-	auto res = op.evaluate( vector_t<double>::Ones( 2 ), false );
-	vector_t<double> controlVec = 2.0 * vector_t<double>::Ones( 2 );
-	EXPECT_NEAR( 4.0, res.supportValue, 1.0e-8 );
+	std::cout << mat << vec << std::endl;
+	Optimizer<double> op( mat, vec );
+	auto res = op.evaluate( vector_t<double>::Ones( 1 ), false );
 	EXPECT_EQ( SOLUTION::FEAS, res.errorCode );
-	EXPECT_NEAR_VECTORS( controlVec, res.optimumValue, 1.0e-8 );
-
-	// Switch to second constraint vector and maximize again
-	boxVec << 3, 3, 3, 3;
-	op.setVector( boxVec );
-	res = op.evaluate( vector_t<double>::Ones( 2 ), false );
-	controlVec = 3.0 * vector_t<double>::Ones( 2 );
-	EXPECT_NEAR( 6.0, res.supportValue, 1.0e-8 );
-	EXPECT_EQ( SOLUTION::FEAS, res.errorCode );
-	EXPECT_NEAR_VECTORS( controlVec, res.optimumValue, 1.0e-8 );
-}
-
-TEST( OptimizerTest, checkConsistency ) {
-	// Constraints as box around center with corners (2,2)(2,-2)(-2,2)(-2,-2)
-	matrix_t<double> boxMat = matrix_t<double>::Zero( 4, 2 );
-	boxMat << 1, 0, -1, 0, 0, 1, 0, -1;
-	vector_t<double> boxVec = vector_t<double>::Zero( 4 );
-	boxVec << 2, 2, 2, 2;
-	Optimizer<double> op( boxMat, boxVec );
-	bool res = op.checkConsistency();
-	EXPECT_TRUE( res );
-
-	// switching to unsatisfiable constraints
-	boxVec << 2, -3, 2, 2;
-	op.setVector( boxVec );
-	res = op.checkConsistency();
-	EXPECT_FALSE( res );
-
-	// single point
-	boxVec << 0, 0, 0, 0;
-	op.setVector( boxVec );
-	res = op.checkConsistency();
-	EXPECT_TRUE( res );
+	EXPECT_NEAR( 1, res.supportValue, 1.0e-8 );
 }
 
 TEST( OptimizerTest, checkPoint ) {

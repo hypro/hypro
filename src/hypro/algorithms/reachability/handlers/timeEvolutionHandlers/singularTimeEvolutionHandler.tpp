@@ -1,4 +1,5 @@
 #include "singularTimeEvolutionHandler.h"
+//#define SINGULAR_TIME_EVOL_USE_HPOLYTOPE
 
 namespace hypro {
 template <typename StateSet>
@@ -26,6 +27,19 @@ StateSet singularApplyTimeEvolution( const StateSet& initialSet, const std::vect
 
 template <typename StateSet>
 StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const std::vector<Point<typename StateSet::NumberType>>& flowVertices, tNumber timeBound ) {
+#ifdef SINGULAR_TIME_EVOL_USE_HPOLYTOPE
+	using Number = typename StateSet::NumberType;
+	HPolytope<Number> initSetHPol = hypro::Converter<Number>::toHPolytope( initialSet );
+	VPolytope<Number> flowShiftVPol( { carl::convert<tNumber, Number>( timeBound ) * flowVertices[0], Point<Number>::Zero( initSetHPol.dimension() ) } );
+	HPolytope<Number> flowShiftHPol = hypro::Converter<Number>::toHPolytope( flowShiftVPol );
+
+	auto timeElapseHPol = initSetHPol.minkowskiSum( flowShiftHPol );
+	StateSet timeElapse;
+	convert( timeElapseHPol, timeElapse );
+	timeElapse.removeRedundancy();
+	return timeElapse;
+
+#else
 	using Number = typename StateSet::NumberType;
 	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
 	VPolytope<Number> flowSetPolytope{ flowVertices };
@@ -49,14 +63,15 @@ StateSet singularApplyBoundedTimeEvolution( const StateSet& initialSet, const st
 
 	// update vertices
 	timeElapsePolytope.insert( newVertices.begin(), newVertices.end() );
-	timeElapsePolytope.removeRedundancy();
 
 	assert( timeElapsePolytope.rays().empty() );
 
 	// Convert back
 	StateSet timeElapse;
 	convert( timeElapsePolytope, timeElapse );
+	timeElapse.removeRedundancy();
 	return timeElapse;
+#endif
 }
 
 }  // namespace hypro

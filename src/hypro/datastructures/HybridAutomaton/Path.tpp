@@ -281,7 +281,7 @@ std::size_t Path<Number, tNumber>::size() const {
 }
 
 template <typename Number, typename tNumber>
-TPathElement<Number, tNumber> Path<Number, tNumber>::at( int index ) const {
+TPathElement<Number, tNumber> Path<Number, tNumber>::at( std::size_t index ) const {
 	return mPath.at( index );
 }
 

@@ -77,6 +77,15 @@ class linearFlow {
 		return mNoFlow == TRIBOOL::TRUE;
 	}
 
+	bool hasNoFlow( std::size_t varIndex ) const {
+		assert( Eigen::Index( varIndex ) < mFlowMatrix.rows() );
+		return mFlowMatrix.row( varIndex ).isZero();
+	}
+
+	bool hasFlow( std::size_t varIndex ) const {
+		return !hasNoFlow( varIndex );
+	}
+
 	DynamicType getDynamicsType() const {
 		if ( isTimed() ) {
 			return DynamicType::timed;

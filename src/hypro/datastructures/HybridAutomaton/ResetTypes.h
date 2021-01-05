@@ -68,7 +68,7 @@ struct IntervalAssignment {
 
 	static ResetType type() { return ResetType::interval; }
 
-	std::size_t size() { return mIntervals.size(); }
+	std::size_t size() const { return mIntervals.size(); }
 
 	bool isIdentity() const {
 		return std::all_of( mIntervals.begin(), mIntervals.end(), []( const auto& i ) { return i.isEmpty(); } );

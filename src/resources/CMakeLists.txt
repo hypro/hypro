@@ -12,7 +12,7 @@ SET(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources )
 SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR} )
 
 if(carl_FOUND)
-	message(STATUS "Use system version of CArL")
+	message(STATUS "Use system version of CArL version ${carl_VERSION}")
 else()
 	message( FATAL_ERROR "Please install a version of CArL." )
 	#message("-- Download version of CArL")

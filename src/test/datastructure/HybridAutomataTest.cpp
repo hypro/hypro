@@ -300,6 +300,12 @@ TYPED_TEST( HybridAutomataTest, TransitionTest ) {
 	t->setTriggerTime( TypeParam( 1 ) );
 	EXPECT_TRUE( t->isTimeTriggered() );
 	EXPECT_EQ( t->getTriggerTime(), TypeParam( 1 ) );
+
+	Reset<TypeParam> empty{};
+	EXPECT_TRUE( empty.isIdentity() );
+	EXPECT_TRUE( empty.isAffineIdentity() );
+	EXPECT_TRUE( empty.isIntervalIdentity() );
+	EXPECT_TRUE( empty.isIntervalIdentity() );
 }
 
 /**
@@ -417,4 +423,22 @@ TYPED_TEST( HybridAutomataTest, HashTest ) {
 	EXPECT_TRUE( r1.hash() != 0 );
 	Reset<TypeParam> r2 = r1;
 	EXPECT_TRUE( r1.hash() == r2.hash() );
+}
+
+TYPED_TEST( HybridAutomataTest, FlowUtility ) {
+	using Matrix = matrix_t<TypeParam>;
+
+	Matrix flow1 = Matrix::Zero( 3, 3 );
+	linearFlow<TypeParam> f1{ flow1 };
+
+	EXPECT_FALSE( f1.hasFlow( 0 ) );
+	EXPECT_FALSE( f1.hasFlow( 1 ) );
+	EXPECT_FALSE( f1.hasFlow( 2 ) );
+
+	auto flow2 = flow1;
+	flow2( 1, 1 ) = 2;
+	linearFlow<TypeParam> f2{ flow2 };
+	EXPECT_FALSE( f2.hasFlow( 0 ) );
+	EXPECT_TRUE( f2.hasFlow( 1 ) );
+	EXPECT_FALSE( f2.hasFlow( 2 ) );
 }

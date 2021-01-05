@@ -4,149 +4,171 @@
  */
 
 #include "../defines.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/State.h"
-#include "datastructures/HybridAutomaton/output/Flowstar.h"
-#include "parser/antlr4-flowstar/ParserWrapper.h"
-#include "representations/GeometricObjectBase.h"
-#include "util/multithreading/Filewriter.h"
 #include "gtest/gtest.h"
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/HybridAutomaton/output/Flowstar.h>
+#include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/util/logging/Filewriter.h>
 
-using namespace hypro;
+template <typename Number>
+hypro::HybridAutomaton<Number> createSingularAutomaton() {
+	// automaton created from a parametric location tree of a hybrid Petri net
+	using Matrix = hypro::matrix_t<Number>;
+	using Vector = hypro::vector_t<Number>;
 
-using valuation_t = VPolytope<double>;
+	hypro::HybridAutomaton<Number> res;
 
-class HybridAutomataOutputTest : public ::testing::Test {
-	/**
-	 * Test Setup:
-	 * one hybrid automaton which consists of two locations that are connected by one transition
-	 */
-  protected:
-	virtual void SetUp() {
-		/*
-		 * Location Setup
-		 */
+	// get location pointers
+	auto* locAllOn = res.createLocation();
+	locAllOn->setName( "allOn" );
+	auto* locInOffFirst = res.createLocation();
+	locInOffFirst->setName( "inOffFirst" );
+	auto* locOutOffFirst = res.createLocation();
+	locOutOffFirst->setName( "outOffFirst" );
+	auto* locAllOff = res.createLocation();
+	locAllOff->setName( "allOff" );
+	auto* locRateAdaptationUp = res.createLocation();
+	locRateAdaptationUp->setName( "rateAdaptationUp" );
+	auto* locRateAdaptationLo = res.createLocation();
+	locRateAdaptationLo->setName( "rateAdaptationLo" );
 
-		loc1 = std::make_unique<Location<double>>();
-		loc2 = std::make_unique<Location<double>>();
+	// set dynamics, variable order: t,s,x,aff
+	Eigen::Index aff = 3;
+	Eigen::Index t = 0;
+	Eigen::Index s = 1;
+	Eigen::Index x = 2;
+	Matrix dynamics = Matrix::Zero( 4, 4 );
+	dynamics( t, aff ) = 1;	 // t' = 1
 
-		trans = std::make_unique<Transition<double>>();
+	dynamics( s, aff ) = 1;	 // s' = 1
+	dynamics( x, aff ) = 1;	 // x' = 1
+	locAllOn->setLinearFlow( { dynamics } );
 
-		invariantVec( 0 ) = 10;
-		invariantVec( 1 ) = 20;
+	dynamics( s, aff ) = 0;	  // s' = 1
+	dynamics( x, aff ) = -1;  // x' = -1
+	locInOffFirst->setLinearFlow( { dynamics } );
 
-		invariantMat( 0, 0 ) = 2;
-		invariantMat( 0, 1 ) = 0;
-		invariantMat( 1, 0 ) = 0;
-		invariantMat( 1, 1 ) = 3;
+	dynamics( s, aff ) = 1;	 // s' = 1
+	dynamics( x, aff ) = 2;	 // x' = 2
+	locOutOffFirst->setLinearFlow( { dynamics } );
 
-		loc1->setInvariant( Condition<double>( invariantMat, invariantVec ) );
-		loc1->setName( "Location1" );
+	dynamics( s, aff ) = 0;	 // s' = 0
+	dynamics( x, aff ) = 0;	 // x' = 0
+	locAllOff->setLinearFlow( { dynamics } );
+	locRateAdaptationLo->setLinearFlow( { dynamics } );
 
-		inv.setMatrix( invariantMat );
-		inv.setVector( invariantVec );
+	dynamics( s, aff ) = 1;	 // s' = 1
+	dynamics( x, aff ) = 0;	 // x' = 0
+	locRateAdaptationUp->setLinearFlow( { dynamics } );
 
-		loc2->setInvariant( inv );
-		loc2->setName( "Location2" );
+	// set invariants
+	Matrix constraints = Matrix::Zero( 4, 3 );
+	Vector constants = Vector::Zero( 4 );
 
-		locationMat( 0, 0 ) = 2;
-		locationMat( 0, 1 ) = 0;
-		locationMat( 1, 0 ) = 0;
-		locationMat( 1, 1 ) = 1;
+	// global invariants: t <= 15, x in [0,10]
+	constraints( 0, t ) = 1;
+	constants( 0 ) = 15;
+	constraints( 1, x ) = 1;
+	constants( 1 ) = 10;
+	constraints( 2, x ) = -1;
+	constants( 2 ) = 0;
 
-		loc1->setFlow( locationMat );
-		loc2->setFlow( locationMat );
+	locOutOffFirst->setInvariant( { constraints, constants } );
+	locAllOff->setInvariant( { constraints, constants } );
+	locRateAdaptationUp->setInvariant( { constraints, constants } );
 
-		/*
-		 * Transition Setup
-		 */
-		guard.setMatrix( inv.getMatrix() );
-		guard.setVector( inv.getVector() );
+	// t <= 5
+	constraints( 3, t ) = 1;
+	constants( 3 ) = 5;
 
-		reset.setMatrix( inv.getMatrix() );
-		reset.setVector( inv.getVector() );
+	locAllOn->setInvariant( { constraints, constants } );
+	locInOffFirst->setInvariant( { constraints, constants } );
+	locRateAdaptationLo->setInvariant( { constraints, constants } );
 
-		trans->setGuard( guard );
-		trans->setSource( loc1.get() );
-		trans->setTarget( loc2.get() );
-		trans->setReset( reset );
+	// transitions with guards
+	Matrix guardConstraints = Matrix::Zero( 2, 3 );
+	Vector guardConstants = Vector::Zero( 2 );
 
-		/*
-		 * Hybrid Automaton Setup
-		 */
+	// guard t = 5
+	guardConstraints( 0, t ) = 1;
+	guardConstraints( 1, t ) = -1;
+	guardConstants( 0 ) = 5;
+	guardConstants( 1 ) = -5;
 
-		initLocSet.push_back( loc1.get() );
+	locAllOn->createTransition( locInOffFirst );
+	auto* t1 = locAllOn->createTransition( locOutOffFirst );
+	auto* t2 = locInOffFirst->createTransition( locRateAdaptationLo );
+	auto* t3 = locInOffFirst->createTransition( locAllOff );
+	auto* t4 = locOutOffFirst->createTransition( locRateAdaptationUp );
+	locOutOffFirst->createTransition( locAllOff );
+	auto* t6 = locRateAdaptationLo->createTransition( locAllOff );
+	locRateAdaptationUp->createTransition( locAllOff );
 
-		locSet.emplace_back( std::move( loc1 ) );
-		locSet.emplace_back( std::move( loc2 ) );
-		hybrid.setLocations( std::move( locSet ) );
+	t1->setGuard( { guardConstraints, guardConstants } );
+	t3->setGuard( { guardConstraints, guardConstants } );
+	t6->setGuard( { guardConstraints, guardConstants } );
 
-		// Polytope for InitialValuation & Guard Assignment
-		coordinates( 0 ) = 2;
-		coordinates( 1 ) = 3;
+	// guard x = 0
+	guardConstraints = Matrix::Zero( 2, 3 );
+	guardConstants = Vector::Zero( 2 );
+	guardConstraints( 0, x ) = 1;
+	guardConstraints( 1, x ) = -1;
+	guardConstants( 0 ) = 0;
+	guardConstants( 1 ) = -0;
 
-		std::vector<vector_t<double>> vecSet;
-		vecSet.push_back( coordinates );
-		poly = valuation_t( vecSet );
-		auto hpoly = Converter<double>::toHPolytope( poly );
+	t2->setGuard( { guardConstraints, guardConstants } );
 
-		for ( auto loc : initLocSet ) {
-			hybrid.addInitialState( loc, Condition<double>( hpoly.matrix(), hpoly.vector() ) );
-		}
+	// guard x = 10
+	guardConstants( 0 ) = 10;
+	guardConstants( 1 ) = -10;
 
-		ptrSet.emplace_back( std::move( trans ) );
-		// transSet.emplace_back(std::move(trans));
+	t4->setGuard( { guardConstraints, guardConstants } );
 
-		hybrid.getLocation( "Location1" )->setTransitions( std::move( ptrSet ) );
-		// loc1->setTransitions(ptrSet);
-		// hybrid.setTransitions(std::move(transSet));
-	}
+	// initial states: x=z=t=0, aff = 1
+	Matrix initialConstraints = Matrix::Zero( 6, 3 );
+	Vector initialConstants = Vector::Zero( 6 );
+	initialConstraints( 0, t ) = 1;
+	initialConstraints( 1, t ) = -1;
+	initialConstraints( 2, x ) = 1;
+	initialConstraints( 3, x ) = -1;
+	initialConstraints( 4, s ) = 1;
+	initialConstraints( 5, s ) = -1;
 
-	virtual void TearDown() {
-		// delete loc1;
-		// delete loc2;
-		// delete trans;
-	}
+	res.addInitialState( locAllOn, { initialConstraints, initialConstants } );
 
-	// Hybrid Automaton Objects: Locations, Transitions, Automaton itself
-
-	std::unique_ptr<Location<double>> loc1;
-	std::unique_ptr<Location<double>> loc2;
-	std::unique_ptr<Transition<double>> trans;
-	HybridAutomaton<double> hybrid;
-
-	// Other Objects: Vectors, Matrices, Guards...
-	vector_t<double> invariantVec = vector_t<double>( 2, 1 );
-	matrix_t<double> invariantMat = matrix_t<double>( 2, 2 );
-	Condition<double> inv;
-	matrix_t<double> locationMat = matrix_t<double>::Zero( 3, 3 );
-
-	Condition<double> guard;
-
-	Reset<double> reset;
-
-	std::vector<std::unique_ptr<Location<double>>> locSet;
-
-	std::vector<Location<double>*> initLocSet;
-
-	std::vector<std::unique_ptr<Transition<double>>> transSet;
-	std::vector<std::unique_ptr<Transition<double>>> ptrSet;
-
-	vector_t<double> coordinates = vector_t<double>( 2, 1 );
-	valuation_t poly;
-};
+	return res;
+}
 
 /**
  * Hybrid Automaton Test
  */
-TEST_F( HybridAutomataOutputTest, HybridAutomatonTest ) {
-	LockedFileWriter out( "tmp.model" );
+TEST( HybridAutomataOutputTest, HybridAutomatonTest ) {
+	hypro::LockedFileWriter out{ "tmp.model" };
 	out.clearFile();
-	out << toFlowstarFormat( hybrid );
+	auto automaton{ createSingularAutomaton<mpq_class>() };
+	std::cout << hypro::toFlowstarFormat( automaton, hypro::ReachabilitySettings{ 1, 1, 1 } );
+	out << hypro::toFlowstarFormat( automaton, hypro::ReachabilitySettings{ 1, 1, 1 } );
 
-	// std::tuple<HybridAutomaton<double,State_t<double,double>>, ReachabilitySettings> parsedResult =
-	// parseFlowstarFile<double>(std::string("tmp.model")); std::remove("tmp.model");
+	auto [automatonParsed, settings] = hypro::parseFlowstarFile<mpq_class>( std::string( "tmp.model" ) );
+	// std::remove( "tmp.model" );
 
-	// EXPECT_EQ(std::get<0>(parsedResult), h1);
+	auto otherLocs = automatonParsed.getLocations();
+	for ( auto loc : automaton.getLocations() ) {
+		bool found = false;
+		std::cout << "Compare loc " << *loc << " To " << std::endl << std::endl;
+		for ( auto otherLoc : otherLocs ) {
+			std::cout << *otherLoc << std::endl;
+			if ( *loc == *otherLoc ) {
+				found = true;
+				std::cout << "Equal" << std::endl << std::endl;
+				break;
+			} else {
+				std::cout << "NOT Equal" << std::endl << std::endl;
+			}
+		}
+		EXPECT_TRUE( found );
+	}
+
+	EXPECT_EQ( automaton, automatonParsed );
 	SUCCEED();
 }

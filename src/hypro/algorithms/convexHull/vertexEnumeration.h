@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../util/Permutator.h"
+#include "../../util/sequenceGeneration/SequenceGenerator.h"
 #include "Dictionary.h"
 
 #include <string>
@@ -82,7 +82,7 @@ class VertexEnumeration {
 		 * @brief If the candidate is independent from the collection, returns the smallest non nul coordinate,
 		 * -1 otherwise.
 		 */
-	int linearIndependance( std::map<int, vector_t<Number>> collection, vector_t<Number>& candidateRef ) const;  //not used
+	int linearIndependance( std::map<int, vector_t<Number>> collection, vector_t<Number>& candidateRef ) const;	 //not used
 
 	/**
 		 * @return A set of the index of d independent hyperplanes of mHsv.

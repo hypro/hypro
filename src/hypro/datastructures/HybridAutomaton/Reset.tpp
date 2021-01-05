@@ -83,8 +83,18 @@ void Reset<Number>::setIntervals( const std::vector<carl::Interval<Number>>& int
 }
 
 template <typename Number>
+bool Reset<Number>::isAffineIdentity() const {
+	return mAffineResets.empty() || std::all_of( mAffineResets.begin(), mAffineResets.end(), []( const auto& affineReset ) { return affineReset.isIdentity(); } );
+}
+
+template <typename Number>
+bool Reset<Number>::isIntervalIdentity() const {
+	return mIntervalResets.empty() || std::all_of( mIntervalResets.begin(), mIntervalResets.end(), []( const auto& intervals ) { return intervals.isIdentity(); } );
+}
+
+template <typename Number>
 bool Reset<Number>::isIdentity() const {
-	return std::all_of( mAffineResets.begin(), mAffineResets.end(), []( const auto& affineReset ) { return affineReset.isIdentity(); } ) && ( mIntervalResets.empty() || std::all_of( mIntervalResets.begin(), mIntervalResets.end(), []( const auto& intervals ) { return intervals.isIdentity(); } ) );
+	return isAffineIdentity() && isIntervalIdentity();
 }
 
 template <typename Number>

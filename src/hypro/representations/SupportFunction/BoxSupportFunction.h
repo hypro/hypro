@@ -6,13 +6,14 @@
 
 #pragma once
 
-#include "../../util/Permutator.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/sequenceGeneration/SequenceGenerator.h"
 #include "../../util/statistics/statistics.h"
 #include "util.h"
 
 #include <carl/interval/Interval.h>
 #include <map>
+
 
 namespace hypro {
 
@@ -94,7 +95,7 @@ class BoxSupportFunction {
 		for ( const auto& i : rhs.mBox ) {
 			lhs << i << std::endl;
 		}
-		return lhs;  // << rhs.getBox();
+		return lhs;	 // << rhs.getBox();
 	}
 };
 }  // namespace hypro

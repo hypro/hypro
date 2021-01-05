@@ -17,7 +17,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		TreeTest.cpp
 		#StrategyTest.cpp
 		HybridAutomataTest.cpp
-		##HybridAutomataOutputTest.cpp
+		#HybridAutomataOutputTest.cpp
 		WorkQueueTest.cpp
 		##HybridAutomataParallelCompositionTest.cpp
 	)
@@ -43,6 +43,12 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	cotire(runDatastructureTests)
 
 	add_test( NAME datastructures COMMAND runDatastructureTests )
+
+	if(DEVELOPER)
+	set_property(TEST datastructures PROPERTY
+		ENVIRONMENT LD_PRELOAD=${asanLocation}
+	)
+	endif()
 
 	add_dependencies(allTests runDatastructureTests)
 endif()

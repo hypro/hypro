@@ -2,6 +2,7 @@
 #include "../../../carlTypes.h"
 #include "../../../datastructures/Halfspace.h"
 #include "../../../util/VariablePool.h"
+#include "../../../util/adaptions_carl/adaptions_formula.h"
 
 namespace hypro {
 
@@ -50,19 +51,19 @@ vector_t<D> constraintNormal( const ConstraintT<N>& c, std::size_t dim ) {
 	TRACE( "hypro.representations.carlPolytope", "Compute normal from " << c << " with dimension " << dim );
 	vector_t<D> normal = vector_t<D>::Zero( dim );
 	for ( const auto& var : c.variables() ) {
-		assert( VariablePool::getInstance().hasDimension( var ) );
+		assert( VariablePool::getInstance().hasDimension( getVar( var ) ) );
 		assert( c.lhs().isLinear() );
-		assert( c.lhs().coeff( var, 1 ).isNumber() );
+		assert( c.lhs().coeff( getVar( var ), 1 ).isNumber() );
 		TRACE( "hypro.representations.carlPolytope",
-			   "Variable " << var << " with dimension "
-						   << VariablePool::getInstance().id( var ) );
+			   "Variable " << getVar( var ) << " with dimension "
+						   << VariablePool::getInstance().id( getVar( var ) ) );
 		if ( c.relation() == carl::Relation::LEQ || c.relation() == carl::Relation::LESS ||
 			 c.relation() == carl::Relation::EQ ) {
-			normal( VariablePool::getInstance().id( var ) ) =
-				  carl::convert<N, D>( c.lhs().coeff( var, 1 ).constantPart() );
+			normal( VariablePool::getInstance().id( getVar( var ) ) ) =
+				  carl::convert<N, D>( c.lhs().coeff( getVar( var ), 1 ).constantPart() );
 		} else {
-			normal( VariablePool::getInstance().id( var ) ) =
-				  -carl::convert<N, D>( c.lhs().coeff( var, 1 ).constantPart() );
+			normal( VariablePool::getInstance().id( getVar( var ) ) ) =
+				  -carl::convert<N, D>( c.lhs().coeff( getVar( var ), 1 ).constantPart() );
 		}
 	}
 	return normal;

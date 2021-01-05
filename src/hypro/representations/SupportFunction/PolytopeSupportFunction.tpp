@@ -25,7 +25,7 @@ PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( matrix_t<Numb
 }
 
 template <typename Number, class Setting>
-PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::vector<Halfspace<Number>> &_planes ) {
+PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::vector<Halfspace<Number>>& _planes ) {
 	TRACE( "hypro.representations.supportFunction", "" );
 	assert( !_planes.empty() );
 	mConstraints = matrix_t<Number>( _planes.size(), _planes[0].dimension() );
@@ -33,7 +33,7 @@ PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::ve
 	mDimension = _planes[0].dimension();
 
 	unsigned pos = 0;
-	for ( const auto &plane : _planes ) {
+	for ( const auto& plane : _planes ) {
 		mConstraints.row( pos ) = plane.normal().transpose();
 		mConstraintConstants( pos ) = plane.offset();
 		++pos;
@@ -43,7 +43,7 @@ PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::ve
 }
 
 template <typename Number, class Setting>
-PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::vector<Point<Number>> &_points ) {
+PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::vector<Point<Number>>& _points ) {
 	TRACE( "hypro.representations.supportFunction", "" );
 	//std::cout << __func__ << std::endl;
 	if ( !_points.empty() ) {
@@ -52,7 +52,7 @@ PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::ve
 		//std::cout << "Space dimension is " << mDimension << std::endl;
 		// check affine independence - verify object dimension.
 		std::vector<vector_t<Number>> coordinates;
-		for ( const auto &vertex : _points ) {
+		for ( const auto& vertex : _points ) {
 			coordinates.emplace_back( vertex.rawCoordinates() );
 		}
 		int effectiveDim = effectiveDimension( coordinates );
@@ -67,7 +67,7 @@ PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::ve
 			mConstraintConstants = vector_t<Number>( boxConstraints.size() );
 
 			unsigned rowCnt = 0;
-			for ( const auto &constraint : boxConstraints ) {
+			for ( const auto& constraint : boxConstraints ) {
 				mConstraints.row( rowCnt ) = constraint.normal();
 				mConstraintConstants( rowCnt ) = constraint.offset();
 				++rowCnt;
@@ -80,7 +80,7 @@ PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::ve
 			mConstraintConstants = vector_t<Number>( facets.size() );
 
 			unsigned rowCnt = 0;
-			for ( auto &facet : facets ) {
+			for ( auto& facet : facets ) {
 				assert( facet->halfspace().contains( _points ) );
 				mConstraints.row( rowCnt ) = facet->halfspace().normal();
 				mConstraintConstants( rowCnt ) = facet->halfspace().offset();
@@ -93,7 +93,7 @@ PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const std::ve
 }
 
 template <typename Number, class Setting>
-PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const PolytopeSupportFunction<Number, Setting> &_origin )
+PolytopeSupportFunction<Number, Setting>::PolytopeSupportFunction( const PolytopeSupportFunction<Number, Setting>& _origin )
 	: mConstraints( _origin.constraints() )
 	, mConstraintConstants( _origin.constants() )
 	, mOpt( mConstraints, mConstraintConstants )
@@ -108,7 +108,7 @@ PolytopeSupportFunction<Number, Setting>::~PolytopeSupportFunction() {
 }
 
 template <typename Number, class Setting>
-PolytopeSupportFunction<Number, Setting> &PolytopeSupportFunction<Number, Setting>::operator=( const PolytopeSupportFunction<Number, Setting> &_orig ) {
+PolytopeSupportFunction<Number, Setting>& PolytopeSupportFunction<Number, Setting>::operator=( const PolytopeSupportFunction<Number, Setting>& _orig ) {
 	TRACE( "hypro.representations.supportFunction", "" );
 	this->mConstraints = _orig.mConstraints;
 	this->mConstraintConstants = _orig.mConstraintConstants;
@@ -237,7 +237,7 @@ Point<Number> PolytopeSupportFunction<Number, Setting>::supremumPoint() const {
 }
 
 template <typename Number, class Setting>
-EvaluationResult<Number> PolytopeSupportFunction<Number, Setting>::evaluate( const vector_t<Number> &l, bool useExact ) const {
+EvaluationResult<Number> PolytopeSupportFunction<Number, Setting>::evaluate( const vector_t<Number>& l, bool useExact ) const {
 	TRACE( "hypro.representations.supportFunction", "" );
 	// catch half-space
 	if ( mConstraints.rows() == 1 ) {
@@ -254,7 +254,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number, Setting>::evaluate( con
 				++i;
 			}
 			if ( l( i ) == 0 ) {
-				return EvaluationResult<Number>();  // TODO: Check if this is correct -> we evaluated something weird with a weird direction (both zero vertors).
+				return EvaluationResult<Number>();	// TODO: Check if this is correct -> we evaluated something weird with a weird direction (both zero vertors).
 			}
 			pointOnPlane( i ) = mConstraintConstants( 0 );
 			return EvaluationResult<Number>( mConstraintConstants( 0 ), pointOnPlane, SOLUTION::FEAS );
@@ -279,7 +279,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number, Setting>::evaluate( con
 }
 
 template <typename Number, class Setting>
-std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number, Setting>::multiEvaluate( const matrix_t<Number> &_A, bool useExact, bool ) const {
+std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number, Setting>::multiEvaluate( const matrix_t<Number>& _A, bool useExact, bool ) const {
 	assert( std::size_t( _A.cols() ) == mDimension );
 	std::vector<EvaluationResult<Number>> res;
 	TRACE( "hypro.representations.supportFunction", "Evaluate in directions " << matrix_t<double>( convert<Number, double>( _A ) ) << std::endl
@@ -319,12 +319,12 @@ std::vector<EvaluationResult<Number>> PolytopeSupportFunction<Number, Setting>::
 }
 
 template <typename Number, class Setting>
-bool PolytopeSupportFunction<Number, Setting>::contains( const Point<Number> &_point ) const {
+bool PolytopeSupportFunction<Number, Setting>::contains( const Point<Number>& _point ) const {
 	return this->contains( _point.rawCoordinates() );
 }
 
 template <typename Number, class Setting>
-bool PolytopeSupportFunction<Number, Setting>::contains( const vector_t<Number> &_point ) const {
+bool PolytopeSupportFunction<Number, Setting>::contains( const vector_t<Number>& _point ) const {
 	assert( mConstraints.rows() == mConstraintConstants.rows() );
 	assert( mConstraints.cols() == _point.rows() );
 	//std::cout << "Matrix " << mConstraints << " contains " << _point << std::endl;
@@ -359,9 +359,9 @@ template <typename Number, class Setting>
 std::string PolytopeSupportFunction<Number, Setting>::getDotRepresentation() const {
 	std::stringstream s;
 	s << "<TR><TD>";
-	for ( auto idCTXPair : mOpt.getGLPContexts() ) {
-		s << &idCTXPair.second << "<BR>";
-	}
+	//for ( auto idCTXPair : mOpt.getGLPContexts() ) {
+	//	s << &idCTXPair.second << "<BR>";
+	//}
 	s << "</TD></TR>";
 	return s.str();
 }

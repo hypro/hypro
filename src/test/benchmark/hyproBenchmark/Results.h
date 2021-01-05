@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Result.h"
-#include <util/convenienceOperators.h>
+#include <hypro/util/convenienceOperators.h>
 #include <chrono>
 #include <iostream>
 #include <fstream>

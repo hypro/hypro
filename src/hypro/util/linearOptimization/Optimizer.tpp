@@ -17,7 +17,6 @@ void Optimizer<Number>::cleanContexts() {
 		TRACE( "hypro.optimizer", "Deleted lp instance." );
 		mGlpkContexts.erase( ctxtItGlpk );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContexts.size() );
-		* /
 	}
 #endif
 #ifdef HYPRO_USE_CLP
@@ -32,7 +31,7 @@ void Optimizer<Number>::cleanContexts() {
 	}
 #endif
 	assert( isSane() );
-}
+}  // namespace hypro
 
 template <typename Number>
 const matrix_t<Number>& Optimizer<Number>::matrix() const {
@@ -411,16 +410,14 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 template <typename Number>
 bool Optimizer<Number>::isSane() const {
 #ifndef NDEBUG
-	/*
-		TRACE("hypro.optimizer","Have " << mGlpkContexts.size() << " instances to check.");
-		for(const auto& glpPair : mGlpkContexts) {
-			if(glpPair.second.mConstraintsSet && (!glpPair.second.mInitialized || !glpPair.second.arraysCreated))
-				return false;
-			if(glpPair.second.arraysCreated && (glpPair.second.ia == nullptr || glpPair.second.ja == nullptr || glpPair.second.ar == nullptr))
-				return false;
-			TRACE("hypro.optimizer","Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane.");
-		}
-	*/
+	TRACE( "hypro.optimizer", "Have " << mGlpkContexts.size() << " instances to check." );
+	for ( const auto& glpPair : mGlpkContexts ) {
+		if ( glpPair.second.mConstraintsSet && ( !glpPair.second.mInitialized || !glpPair.second.arraysCreated ) )
+			return false;
+		if ( glpPair.second.arraysCreated && ( glpPair.second.ia == nullptr || glpPair.second.ja == nullptr || glpPair.second.ar == nullptr ) )
+			return false;
+		TRACE( "hypro.optimizer", "Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane." );
+	}
 #endif
 	return true;
 }
@@ -428,9 +425,8 @@ bool Optimizer<Number>::isSane() const {
 template <typename Number>
 void Optimizer<Number>::initialize() const {
 	assert( isSane() );
-	//assert( hasContext( std::this_thread::get_id() ) );
-	//mGlpkContext[std::this_thread::get_id()].createLPInstance();
-	//assert( mGlpkContext[std::this_thread::get_id()].mInitialized == true );
+	mGlpkContexts[std::this_thread::get_id()].createLPInstance();
+	assert( mGlpkContexts[std::this_thread::get_id()].mInitialized == true );
 
 #if defined( HYPRO_USE_GLPK )
 	if ( mGlpkContexts.find( std::this_thread::get_id() ) == mGlpkContexts.end() ) {
@@ -438,7 +434,6 @@ void Optimizer<Number>::initialize() const {
 		TRACE( "hypro.optimizer", "Actual creation." );
 #ifdef HYPRO_STATISTICS
 		contextConstructions++;
-		//std::cout << "Constructions: " << contextConstructions << ", deletions: " << contextDeletions << std::endl;
 #endif
 		mGlpkContexts.emplace( std::this_thread::get_id(), glpk_context() );
 	}

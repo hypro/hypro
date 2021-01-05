@@ -136,17 +136,17 @@ std::vector<Point<Number>> DifferenceBoundsT<Number, Converter, Setting>::vertic
 	// A time Horizon can be defined that avoids plotting of potentially infinite polytopes
 	if ( getTimeHorizon() != 0.0 ) {
 		// we need 2 additional timeHorizon constraint for each clock (except 0 clock)
-		int numclocks = getDBM().cols() - 1;
+		Eigen::Index numclocks = getDBM().cols() - 1;
 		//constraints of the polytope
 		hypro::matrix_t<Number> HPolyConstraints = poly.matrix();
 		hypro::vector_t<Number> HPolyConstants = poly.vector();
-		int numconstraints = HPolyConstraints.rows();
+		Eigen::Index numconstraints = HPolyConstraints.rows();
 		HPolyConstraints.conservativeResize( numconstraints + 2 * numclocks, HPolyConstraints.cols() );
 		//HPolyConstants.conservativeResize(numconstraints+2*numclocks, HPolyConstraints.cols());
 		HPolyConstants.conservativeResize( numconstraints + 2 * numclocks );
 
-		int counter = numconstraints;  //start at next row
-		for ( int i = 0; i < numclocks; i++ ) {
+		Eigen::Index counter = numconstraints;	//start at next row
+		for ( Eigen::Index i = 0; i < numclocks; i++ ) {
 			// for each clock add a timehorizon so the polytope to plot is finite in plus direction
 			matrix_t<Number> constraintVars = matrix_t<Number>::Zero( 1, numclocks );
 			constraintVars( 0, i ) = 1.0;
