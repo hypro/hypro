@@ -17,7 +17,7 @@ void Optimizer<Number>::cleanContexts() {
 		TRACE( "hypro.optimizer", "Deleted lp instance." );
 		mGlpkContexts.erase( ctxtItGlpk );
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContexts.size() );
-		*/
+		* /
 	}
 #endif
 #ifdef HYPRO_USE_CLP
@@ -269,15 +269,15 @@ EvaluationResult<Number> Optimizer<Number>::evaluate( const vector_t<Number>& _d
 		};
 
 #if HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
-	res = glpkOptimizeLinearPostSolve( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
+		res = glpkOptimizeLinearPostSolve( mGlpkContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_CLP
-	res = clpOptimizeLinearPostSolve( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
+		res = clpOptimizeLinearPostSolve( mClpContexts[std::this_thread::get_id()], _direction, mConstraintMatrix, mConstraintVector, useExactGlpk, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
-	res = soplexOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
+		res = soplexOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
-	res = smtratOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
+		res = smtratOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-	res = z3OptimizeLinearPostSolve( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, res );
+		res = z3OptimizeLinearPostSolve( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, res );
 #endif
 	}
 	return res;
