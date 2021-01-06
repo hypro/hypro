@@ -483,7 +483,7 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 	return res;
 }
 
-std::pair<std::size_t, std::size_t> getSubspaceIndexOfDimension( std::size_t dimension, const Decomposition& decomposition ) {
+inline std::pair<std::size_t, std::size_t> getSubspaceIndexOfDimension( std::size_t dimension, const Decomposition& decomposition ) {
     std::size_t accumulatedDimensions = 0;
     std::size_t subspaceSize;
     for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {

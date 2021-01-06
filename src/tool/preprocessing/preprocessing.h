@@ -6,7 +6,7 @@
 #include <hypro/datastructures/HybridAutomaton/decomposition/DecompositionMethods.h>
 #include <hypro/datastructures/reachability/PreprocessingInformation.h>
 #include <hypro/datastructures/reachability/Settings.h>
-#include "hypro/algorithms/reachability/analyzer/DecompositionalUtil.h"
+#include <hypro/algorithms/reachability/analyzer/DecompositionalUtil.h>
 
 namespace hydra {
 namespace preprocessing {

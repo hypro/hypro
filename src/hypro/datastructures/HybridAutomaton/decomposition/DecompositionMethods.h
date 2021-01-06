@@ -28,7 +28,7 @@ representation_name getRepresentationForSubspace( const Location<Number> &loc, s
 template <typename Number>
 std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomaton<Number> &automaton );
 // Returns the subspace and index in the subspace of the dimension in the given decomposition
-std::pair<std::size_t, std::size_t> getSubspaceIndexOfDimension( std::size_t dimension, const Decomposition& decomposition );
+inline std::pair<std::size_t, std::size_t> getSubspaceIndexOfDimension( std::size_t dimension, const Decomposition& decomposition );
 template <typename Number>
 std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Number>& automaton );
 template <typename Number>

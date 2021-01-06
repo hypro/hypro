@@ -1,22 +1,11 @@
-#pragma once
-#include <hypro/types.h>
-#include <hypro/algorithms/reachability/types.h>
-#include <hypro/algorithms/reachability/analyzer/DecompositionalUtil.h>
-#include <hypro/datastructures/HybridAutomaton/decomposition/DecompositionMethods.h>
+#include "DecompositionalUtil.h"
 
 namespace hypro {
 
-/**
- * @brief       Construct vertices of two-dimensional projection of the segment on dim1 and dim2.
- * @details     The dimension indices are absolute, i.e. referring to the original, not decomposed automaton.
- *              If both dimensions are in a subspace with a clock, then the vertices will be synchronized
- *              using the clock values, otherwise the cartesian product of the subspace-sets will be constructed.
- * @tparam      State           A templated State class used to represent the segment.
- * @param       dim1            The dimension of the first variable to compose.
- * @param       dim2            The dimension of the second variable to compose.
- * @param       decomposition   Information on the decomposition used to compute the subspaces of the variables. 
- * @return      The vertices of the composed and projected set.
- */
+inline bool isClockedSubspace( const DynamicType dynamics ) {
+    return ( dynamics != DynamicType::affine && dynamics != DynamicType::linear && dynamics != DynamicType::discrete );
+}
+
 template <typename State>
 std::vector<Point<typename State::NumberType>> composeSubspaces( const State& segment, std::size_t dim1, std::size_t dim2, Decomposition decomposition ) {
     using Number = typename State::NumberType;
@@ -45,18 +34,6 @@ std::vector<Point<typename State::NumberType>> composeSubspaces( const State& se
     return joinedVertices;
 }
 
-/**
- * @brief       Join flowpipes of subspaces and return a single flowpipe with vectors representing the composed segments.
- * @details     If there is any subspace without clock (i.e. it has multiple segments for each flowpipe and uses a time-step)
- *              Then the flowpipes are synchronized using that time step (discretized time). Otherwise each flowpipe
- *              has one segment for each subspace that represents the entire time-elapse.
- * @tparam      Representation  The state-set representation of the segments in the flowpipes.
- * @param       nodes           Pointers to the nodes holding the flowpipes (one for each subspace).
- * @param       decomposition   Information on the decomposition. 
- * @param       timeStep        The analyzer specific time step used in analysis.
- * @param       fixedTimeStep   The fixed time step used in analysis.
- * @return      A single flowpipe with vectors as segments representing the subspace-sets.
- */
 template <typename Representation>
 std::vector<std::vector<Representation>> composeFlowpipes( const std::vector<ReachTreeNode<Representation>*>& nodes, const Decomposition& decomposition, tNumber timeStep, tNumber fixedTimeStep ) {
     using Number = typename Representation::NumberType;
@@ -95,4 +72,86 @@ std::vector<std::vector<Representation>> composeFlowpipes( const std::vector<Rea
     }
     return res;
 }
+
+
+namespace detail {
+
+template <typename Representation>
+TimeInformation<typename Representation::NumberType> getClockValues( const Representation& segment, int clockIndexLocal, int clockIndexGlobal ) {
+    using Number = typename Representation::NumberType;
+    if ( segment.empty() ) {
+        return TimeInformation<Number>{};
+    }
+    vector_t<Number> localClockDirection = vector_t<Number>::Zero( segment.dimension() );
+    localClockDirection( clockIndexLocal ) = 1;
+    Number localUpper = segment.evaluate( localClockDirection ).supportValue;
+    Number localLower = -1 * segment.evaluate( -1 * localClockDirection ).supportValue;
+
+    vector_t<Number> globalClockDirection = vector_t<Number>::Zero( segment.dimension() );
+    globalClockDirection( clockIndexGlobal ) = 1;
+    Number globalUpper = segment.evaluate( globalClockDirection ).supportValue;
+    Number globalLower = -1 * segment.evaluate( -1 * globalClockDirection ).supportValue;
+
+    return TimeInformation<Number> {
+        carl::Interval<Number>( localLower, localUpper ),
+        carl::Interval<Number>( globalLower, globalUpper ) };
+
 }
+
+template <typename Representation>
+Representation intersectSegmentWithClock(
+        const Representation& segment, TimeInformation<typename Representation::NumberType> clock, int clockIndexLocal, int clockIndexGlobal ) {
+    using Number = typename Representation::NumberType;
+    if ( segment.empty() ) {
+        return segment;
+    }
+    if ( clock.localTime.isUnbounded() && clock.globalTime.isUnbounded() ) {
+        return segment;
+    }
+    vector_t<Number> localClockDirection = vector_t<Number>::Zero( segment.dimension() );
+    localClockDirection( clockIndexLocal ) = 1;
+    Halfspace<Number> localUpper( localClockDirection, clock.localTime.upper() );
+    Halfspace<Number> localLower( -1 * localClockDirection, clock.localTime.lower() );
+
+    vector_t<Number> globalClockDirection = vector_t<Number>::Zero( segment.dimension() );
+    globalClockDirection( clockIndexGlobal ) = 1;
+    Halfspace<Number> globalUpper( globalClockDirection, clock.globalTime.upper() );
+    Halfspace<Number> globalLower( -1 * globalClockDirection, -1 * clock.globalTime.lower() );
+
+    HPolytope<Number> segmentAsHpol;
+    Representation constrainedSegment;
+    convert( segment, segmentAsHpol );
+    segmentAsHpol.insert( globalUpper );
+    segmentAsHpol.insert( globalLower );
+    segmentAsHpol.insert( localUpper );
+    segmentAsHpol.insert( localLower );
+    convert( segmentAsHpol, constrainedSegment );
+    return constrainedSegment;
+}
+
+template <typename Number>
+TimeInformation<Number> intersectTimeInformation( const TimeInformation<Number>& clock1, const TimeInformation<Number>& clock2 ) {
+    return TimeInformation<Number> {
+        carl::set_intersection( clock1.localTime, clock2.localTime ),
+        carl::set_intersection( clock1.globalTime, clock2.globalTime ) };
+}
+
+template <typename Representation>
+Representation resetClock( const Representation& segment, int clockIndex ) {
+    using Number = typename Representation::NumberType;
+    matrix_t<Number> resetMat = matrix_t<Number>::Identity( segment.dimension(), segment.dimension() );
+    resetMat( clockIndex, clockIndex ) = 0;
+    return segment.linearTransformation( resetMat );
+}
+
+template <typename Number>
+std::vector<Condition<Number>> collectBadStates( const HybridAutomaton<Number>* ha, const Location<Number>* loc ) {
+    auto badStates = ha->getGlobalBadStates();
+    auto localBadState = ha->getLocalBadStates().find( loc );
+    if ( localBadState != ha->getLocalBadStates().end() ) {
+        badStates.push_back( localBadState->second );
+    }
+    return badStates;
+}
+} // namespace detail
+} // namespace hypro
