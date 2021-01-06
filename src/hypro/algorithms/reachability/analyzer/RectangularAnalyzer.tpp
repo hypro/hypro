@@ -8,10 +8,11 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::run() {
 	if ( mAnalysisSettings.strategy().front().reachability_analysis_method == REACH_SETTING::FORWARD ) {
 		// forward analysis
 		safetyResult = forwardRun();
-	} else {
-		// backward analysis
-		safetyResult = backwardRun();
 	}
+	//else {
+	//	// backward analysis
+	//	safetyResult = backwardRun();
+	//}
 
 	return safetyResult;
 }
@@ -63,6 +64,7 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 	return REACHABILITY_RESULT::SAFE;
 }
 
+/*
 template <typename State>
 REACHABILITY_RESULT RectangularAnalyzer<State>::backwardRun() {
 	// initialize queue
@@ -118,26 +120,27 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::backwardRun() {
 			for ( const auto jmpPre : transitionStatesPair.second ) {
 				// update reachTree
 
-				/*
-				auto* parentNode = new ReachTreeNode<State>{ jmpPre };
-				parentNode->addChild( currentNode );
-				currentNode->setParent( parentNode );
 
-				// update path (global time)
-				currentNode->addTimeStepToPath( carl::Interval<tNumber>( jmpPre.getTimestamp().lower(), worker.getFlowpipe().begin()->getTimestamp().upper() ) );
-				currentNode->addTransitionToPath( transitionStatesPair.first, worker.getFlowpipe().begin()->getTimestamp() );
-				*/
+			//	auto* parentNode = new ReachTreeNode<State>{ jmpPre };
+			//	parentNode->addChild( currentNode );
+			//	currentNode->setParent( parentNode );
+//
+			//	// update path (global time)
+			//	currentNode->addTimeStepToPath( carl::Interval<tNumber>( jmpPre.getTimestamp().lower(), worker.//getFlowpipe().begin()->getTimestamp().upper() ) );
+			//	currentNode->addTransitionToPath( transitionStatesPair.first, worker.getFlowpipe().begin()->getTimestamp//() );
 
-				// Stefan: We have changed the code such that the tree grows from the bad states down instead of growing at the root upwards.
-				auto& childNode = currentNode->addChild( jmpPre, carl::Interval<SegmentInd>( 0 ), transitionStatesPair.first );
 
-				// create Task
-				mWorkQueue.push( &childNode );
-			}
-		}
-	}
+// Stefan: We have changed the code such that the tree grows from the bad states down instead of growing at the root upwards.
+auto& childNode = currentNode -> addChild( jmpPre, carl::Interval<SegmentInd>( 0 ), transitionStatesPair.first );
 
-	return REACHABILITY_RESULT::SAFE;
+// create Task
+mWorkQueue.push( &childNode );
+}  // namespace hypro
 }
+}
+
+return REACHABILITY_RESULT::SAFE;
+}
+*/
 
 }  // namespace hypro
