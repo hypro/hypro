@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../util/sequenceGeneration/SequenceGenerator.h"
+
 #include <carl/core/Variable.h>
 #include <carl/interval/Interval.h>
 #include <iosfwd>
@@ -11,6 +12,7 @@ template <typename Number>
 class rectangularFlow {
   public:
 	using flowMap = typename std::map<carl::Variable, carl::Interval<Number>>;
+
   private:
 	flowMap mFlowIntervals;
 
@@ -91,22 +93,22 @@ class rectangularFlow {
 	std::vector<Point<Number>> vertices() const {
 		// enumerate all 2^d combinations of interval bounds to obtain all vertices.
 		std::size_t dim = this->size();
-		Combinator sequencer{2,dim};
+		Combinator sequencer{ 2, dim };
 		std::vector<Point<Number>> flowVertices;
-		while(!sequencer.end()) {
+		while ( !sequencer.end() ) {
 			std::vector<std::size_t> selection = sequencer();
-			Point<Number> vertex{vector_t<Number>::Zero(dim)};
-			for(std::size_t i = 0; i < selection.size(); ++i) {
-				assert(selection[i] == 1 || selection[i] == 0);
-				if(selection[i] == 0) {
-					vertex[i] = this->getFlowIntervals()[VariablePool::getInstance().carlVarByIndex(i)].lower();
+			Point<Number> vertex{ vector_t<Number>::Zero( dim ) };
+			for ( std::size_t i = 0; i < selection.size(); ++i ) {
+				assert( selection[i] == 1 || selection[i] == 0 );
+				if ( selection[i] == 0 ) {
+					vertex[i] = this->getFlowIntervals().at( VariablePool::getInstance().carlVarByIndex( i ) ).lower();
 				} else {
-					vertex[i] = this->getFlowIntervals()[VariablePool::getInstance().carlVarByIndex(i)].upper();
+					vertex[i] = this->getFlowIntervals().at( VariablePool::getInstance().carlVarByIndex( i ) ).upper();
 				}
 			}
-			flowVertices.emplace_back(std::move(vertex));
+			flowVertices.emplace_back( std::move( vertex ) );
 		}
-	return flowVertices;
+		return flowVertices;
 	}
 };
 
