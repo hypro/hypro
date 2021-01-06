@@ -1,17 +1,16 @@
 #include "rectangularGuardHandler.h"
 
 namespace hypro {
-template <typename State>
-void rectangularGuardHandler<State>::operator()( const State& state ) {
-	assert( !state.getTimestamp().isEmpty() );
 
+template <typename Representation>
+void rectangularGuardHandler<Representation>::operator()( const Representation& state, const Location<Number>* loc ) {
 	// TRACE( "hydra.worker.discrete", "Applying handler " << this->handlerName() );
 
-	for ( auto& transitionPtr : state.getLocation()->getTransitions() ) {
+	for ( auto& transitionPtr : loc->getTransitions() ) {
 		CONTAINMENT containmentResult = CONTAINMENT::BOT;
-		State guard(state);
-		if ( !transitionPtr->getGuard().empty() ){
-			guard = State{ CarlPolytope<typename State::NumberType>{ transitionPtr->getGuard().getMatrix(), transitionPtr->getGuard().getVector() } };
+		Representation guard( state );
+		if ( !transitionPtr->getGuard().empty() ) {
+			guard = Representation{ transitionPtr->getGuard().getMatrix(), transitionPtr->getGuard().getVector() };
 		}
 
 		// intersect
@@ -26,7 +25,7 @@ void rectangularGuardHandler<State>::operator()( const State& state ) {
 		resultingSet.removeRedundancy();
 
 		// return containment information
-		if ( resultingSet.isEmpty() ) {
+		if ( resultingSet.empty() ) {
 			containmentResult = CONTAINMENT::NO;
 		} else if ( containmentResult != CONTAINMENT::FULL ) {
 			containmentResult = CONTAINMENT::PARTIAL;
