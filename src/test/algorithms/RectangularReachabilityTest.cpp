@@ -349,7 +349,7 @@ TEST( RectangularRechabilityTest, WorkerConstruction ) {
 	auto worker = hypro::RectangularWorker<VPoly>( automaton, settings );
 	SUCCEED();
 }
-/*
+
 TEST( RectangularRechabilityTest, ReacherConstruction ) {
 	using Number = mpq_class;
 	using VPoly = hypro::VPolytope<Number>;
@@ -369,8 +369,7 @@ TEST( RectangularRechabilityTest, ReacherConstruction ) {
 	auto reach = hypro::reachability::ReachBase<VPoly, hypro::RectangularAnalyzer<VPoly>>( automaton, settings, roots );
 	SUCCEED();
 }
-*/
-/*
+
 TEST( RectangularRechabilityTest, ComputeReachability1 ) {
 	using Number = mpq_class;
 	using VPoly = hypro::VPolytope<Number>;
@@ -400,7 +399,6 @@ TEST( RectangularRechabilityTest, ComputeReachability1 ) {
 		flowpipes.insert( flowpipes.end(), fp.begin(), fp.end() );
 	} );
 }
-*/
 
 /*
 TEST( RectangularRechabilityTest, SingularAnalyzer ) {
