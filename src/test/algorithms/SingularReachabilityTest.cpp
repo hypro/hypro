@@ -146,7 +146,7 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 	Vector transConstants = -1 * Vector::Ones( 1 );
 	transConstraint( 0, 0 ) = -1;
 	hypro::Condition<Number> guard( transConstraint, transConstants );
-	hypro::Reset<Number> reset{ { { 0, 0 }, { 0, 0 } } };
+	hypro::Reset<Number> reset{ { carl::Interval<Number>{ 0, 0 }, carl::Interval<Number>{ 0, 0 } } };
 
 	std::unique_ptr<hypro::Transition<Number>> trans0 =
 		  std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
@@ -202,12 +202,12 @@ hypro::HybridAutomaton<Number> createSingularHA4() {
 	Matrix transConstraint = Matrix::Ones( 1, 1 );
 	Vector transConstants = Vector::Zero( 1 );
 	hypro::Condition<Number> guard( transConstraint, transConstants );
-	hypro::Reset<Number> reset{ { { 1, 1 } } };
+	hypro::Reset<Number> reset{ { carl::Interval<Number>{ 1, 1 } } };
 
 	std::unique_ptr<hypro::Transition<Number>> trans0 =
 		  std::make_unique<hypro::Transition<Number>>( loc.get(), loc.get(), guard, reset );
 
-	reset = hypro::Reset<Number>{ { { -1, -1 } } };
+	reset = hypro::Reset<Number>{ { carl::Interval<Number>{ -1, -1 } } };
 	std::unique_ptr<hypro::Transition<Number>> trans1 =
 		  std::make_unique<hypro::Transition<Number>>( loc.get(), loc.get(), guard, reset );
 

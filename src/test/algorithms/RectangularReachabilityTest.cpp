@@ -1,8 +1,8 @@
 #include "../defines.h"
 #include "gtest/gtest.h"
+#include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
 #include <hypro/algorithms/reachability/workers/RectangularWorker.h>
-#include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/datastructures/reachability/Settings.h>
@@ -16,7 +16,6 @@ using Interval = carl::Interval<Number>;
 using Vector = hypro::vector_t<Number>;
 using Point = hypro::Point<Number>;
 
-
 template <typename Number>
 hypro::HybridAutomaton<Number> createRectangularHA() {
 	// One-dimensional HA with one location
@@ -27,16 +26,16 @@ hypro::HybridAutomaton<Number> createRectangularHA() {
 	auto loc = res.createLocation();
 
 	// Set flow x' = [1,2]
-	Interval flow{1,2};
+	Interval flow{ 1, 2 };
 	typename hypro::rectangularFlow<Number>::flowMap fMap;
-	fMap[hypro::VariablePool::getInstance().carlVarByIndex(0)] = flow; 
-	loc->setFlow( {hypro::rectangularFlow<Number>{ fMap } } );
+	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flow;
+	loc->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
 
 	// Set invariant x <= 10
 	Matrix invariantConstraints = Matrix::Zero( 1, 1 );
 	invariantConstraints( 0, 0 ) = 1;
 	Vector invariantConstants = Vector::Zero( 1 );
-	invariantConstants(0) = 10;
+	invariantConstants( 0 ) = 10;
 	loc->setInvariant( { invariantConstraints, invariantConstants } );
 
 	// Set initial state x = 0, aff = 1
@@ -60,24 +59,23 @@ hypro::HybridAutomaton<Number> createRectangularHA2() {
 	auto loc = res.createLocation();
 
 	// Set flow x' = [1,2]
-	Interval flow{1,2};
+	Interval flow{ 1, 2 };
 	typename hypro::rectangularFlow<Number>::flowMap fMap;
-	fMap[hypro::VariablePool::getInstance().carlVarByIndex(0)] = flow; 
-	loc->setFlow( {hypro::rectangularFlow<Number>{ fMap } } );
+	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flow;
+	loc->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
 
 	// Set invariant x <= 10
 	Matrix invariantConstraints = Matrix::Zero( 1, 1 );
 	invariantConstraints( 0, 0 ) = 1;
 	Vector invariantConstants = Vector::Zero( 1 );
-	invariantConstants(0) = 10;
+	invariantConstants( 0 ) = 10;
 	loc->setInvariant( { invariantConstraints, invariantConstants } );
 
 	// Create second location
 	auto loc2 = res.createLocation();
 
 	// Add transition from first to second location with no guard and no reset
-	auto transition = loc->createTransition(loc2);
-
+	auto transition = loc->createTransition( loc2 );
 
 	// Set initial state x = 0, aff = 1
 	Matrix initialConstraints = Matrix::Zero( 2, 1 );
@@ -344,7 +342,9 @@ TEST( RectangularRechabilityTest, WorkerConstruction ) {
 	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
 	analysisParameters.representation_type = hypro::representation_name::polytope_v;
 
-	hypro::Settings settings{ {}, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, { analysisParameters } };
+	hypro::Settings settings{ {},
+							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
+							  { analysisParameters } };
 
 	auto worker = hypro::RectangularWorker<VPoly>( automaton, settings );
 	SUCCEED();
@@ -362,10 +362,11 @@ TEST( RectangularRechabilityTest, ReacherConstruction ) {
 	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
 	analysisParameters.representation_type = hypro::representation_name::polytope_v;
 
-	hypro::Settings settings{ {}, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, { analysisParameters } };
+	hypro::Settings settings{ {},
+							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
+							  { analysisParameters } };
 
-	auto reach = hypro::reachability::ReachBase<VPoly, hypro::RectangularAnalyzer<VPoly>>(
-		  automaton, settings, roots );
+	auto reach = hypro::reachability::ReachBase<VPoly, hypro::RectangularAnalyzer<VPoly>>( automaton, settings, roots );
 	SUCCEED();
 }
 
@@ -381,18 +382,22 @@ TEST( RectangularRechabilityTest, ComputeReachability1 ) {
 	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
 	analysisParameters.representation_type = hypro::representation_name::polytope_v;
 
-	hypro::Settings settings{ {}, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, { analysisParameters } };
+	hypro::Settings settings{ {},
+							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
+							  { analysisParameters } };
 
-	auto reach = hypro::reachability::ReachBase<VPoly, hypro::RectangularAnalyzer<VPoly>>(
-		  automaton, settings, roots );
+	auto reach = hypro::reachability::ReachBase<VPoly, hypro::RectangularAnalyzer<VPoly>>( automaton, settings, roots );
 
 	// call verifier, validate result
 	auto reachabilityResult = reach.computeForwardReachability();
-	EXPECT_EQ(REACHABILITY_RESULT::SAFE, reachabilityResult);
-	
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
+
 	// validate computed flowpipes
-	std::vector<std::vector<VPoly>> flowpipes; 
-	std::transform(roots.begin(), roots.end(), std::back_inserter(flowpipes), [&](auto& root){return getFlowpipes(root);});
+	std::vector<std::vector<VPoly>> flowpipes;
+	std::for_each( roots.begin(), roots.end(), [&]( auto& root ) {
+		auto fp = getFlowpipes( root );
+		flowpipes.insert( flowpipes.end(), fp.begin(), fp.end() );
+	} );
 }
 
 /*

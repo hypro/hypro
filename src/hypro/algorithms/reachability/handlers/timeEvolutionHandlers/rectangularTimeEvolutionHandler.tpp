@@ -6,7 +6,7 @@ State rectangularApplyTimeEvolution( const State& initialSet, const rectangularF
 	using Number = typename State::NumberType;
 	auto& vpool = hypro::VariablePool::getInstance();
 	// get initial state
-	CarlPolytope<Number> initial = std::get<CarlPolytope<Number>>( initialSet.getSet() );
+	CarlPolytope<Number> initial = Converter<Number>::toCarlPolytope( initialSet );
 	// storage to build elimination query
 	std::vector<carl::Variable> variablesToEliminate;
 	// add variable for time elapse
@@ -54,9 +54,8 @@ State rectangularApplyTimeEvolution( const State& initialSet, const rectangularF
 
 	DEBUG( "hydra.worker", "State set after time elapse: " << initial );
 
-	State res(initialSet);
-	res.setSet(initial);
-
+	State res;
+	convert( initial, res );
 	return res;
 }
 
@@ -113,16 +112,16 @@ State rectangularApplyReverseTimeEvolution( const State& badSet, const rectangul
 
 	DEBUG( "hydra.worker", "State set after time elapse: " << bad );
 
-	State res(badSet);
-	res.setSet(bad);
+	State res( badSet );
+	res.setSet( bad );
 
 	return res;
 }
 
-template < template <typename> typename PolyhedralRepresentation, typename Number>
+template <template <typename> typename PolyhedralRepresentation, typename Number>
 PolyhedralRepresentation<Number> rectangularApplyTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<Number>& flow ) {
 	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
-	assert(flow.dimension() == initialSet.dimension());
+	assert( flow.dimension() == initialSet.dimension() );
 
 	VPolytope<Number> flowSetPolytope{ flow.vertices() };
 	VPolytope<Number> timeElapsePolytope{ initSetPolytope.vertices() };
@@ -143,10 +142,10 @@ PolyhedralRepresentation<Number> rectangularApplyTimeEvolution( const Polyhedral
 	return timeElapse;
 }
 
-template < template <typename> typename PolyhedralRepresentation, typename Number>
+template <template <typename> typename PolyhedralRepresentation, typename Number>
 PolyhedralRepresentation<Number> rectangularApplyBoundedTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<Number>& flow, tNumber timeBound ) {
 	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
-	assert(flow.dimension() == initialSet.dimension());
+	assert( flow.dimension() == initialSet.dimension() );
 
 	VPolytope<Number> flowSetPolytope{ flow.vertices() };
 	VPolytope<Number> timeElapsePolytope{ initSetPolytope.vertices() };
@@ -157,7 +156,7 @@ PolyhedralRepresentation<Number> rectangularApplyBoundedTimeEvolution( const Pol
 	// compute vertices from bounded rays
 	for ( const auto& vertex : initSetPolytope.vertices() ) {
 		for ( const auto& ray : combinedRays ) {
-			timeElapsePolytope.emplace_back(  vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray  );
+			timeElapsePolytope.emplace_back( vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray );
 		}
 	}
 	assert( timeElapsePolytope.rays().empty() );
@@ -168,9 +167,9 @@ PolyhedralRepresentation<Number> rectangularApplyBoundedTimeEvolution( const Pol
 	return timeElapse;
 }
 
-template < template < typename > typename PolyhedralRepresentation, typename Number>
+template <template <typename> typename PolyhedralRepresentation, typename Number>
 PolyhedralRepresentation<Number> rectangularApplyReverseTimeEvolution( const PolyhedralRepresentation<Number>& badSet, const rectangularFlow<Number>& flow ) {
-	assert(false);
+	assert( false );
 	return badSet;
 }
 
@@ -283,7 +282,5 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 
 	return bad;
 }
-
-
 
 }  // namespace hypro

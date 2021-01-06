@@ -95,7 +95,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( const Rea
 	}
 
 	// compute time predecessors states
-	State timePredecessors = rectangularApplyReverseTimeEvolution( segment, badSet.getLocation()->getRectangularFlow() );
+	State timePredecessors = rectangularApplyReverseTimeEvolution( segment, task.getLocation()->getRectangularFlow() );
 	std::cout << "time" << std::endl;
 	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors, task.getLocation() );
 	if ( invariantContainment == CONTAINMENT::NO ) {

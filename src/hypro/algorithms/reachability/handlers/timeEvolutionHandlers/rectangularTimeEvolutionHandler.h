@@ -2,6 +2,8 @@
 #include "../../../../datastructures/HybridAutomaton/State.h"
 #include "../../../../datastructures/HybridAutomaton/flow/rectangular.h"
 #include "../../../../datastructures/HybridAutomaton/flow/rectangularOperations.h"
+#include "../../../../representations/GeometricObjectBase.h"
+#include "../../../../representations/conversion/conversionHelper.h"
 #include "../IHandler.h"
 
 #include <sstream>
@@ -15,13 +17,13 @@ State rectangularApplyTimeEvolution( const State& initialSet, const rectangularF
 template <typename State>
 State rectangularApplyReverseTimeEvolution( const State& badSet, const rectangularFlow<typename State::NumberType>& flow );
 
-template < template <typename > typename PolyhedralRepresentation, typename Number>
+template <template <typename> typename PolyhedralRepresentation, typename Number>
 PolyhedralRepresentation<Number> rectangularApplyTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<Number>& flow );
 
-template < template <typename > typename PolyhedralRepresentation, typename Number>
+template <template <typename> typename PolyhedralRepresentation, typename Number>
 PolyhedralRepresentation<Number> rectangularApplyBoundedTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<Number>& flow, tNumber timeBound );
 
-template < template < typename > typename PolyhedralRepresentation, typename Number>
+template <template <typename> typename PolyhedralRepresentation, typename Number>
 PolyhedralRepresentation<Number> rectangularApplyReverseTimeEvolution( const PolyhedralRepresentation<Number>& badSet, const rectangularFlow<Number>& flow );
 
 template <typename Number>

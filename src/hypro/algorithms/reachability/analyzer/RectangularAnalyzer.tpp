@@ -19,13 +19,13 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::run() {
 template <typename State>
 REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 	// create reachTree if not already present
-	if(mReachTree.empty()) {
+	if ( mReachTree.empty() ) {
 		mReachTree = makeRoots<State>( mHybridAutomaton );
 	}
 
 	// initialize queue
-	for(const auto& rtNode : mReachTree) {
-		mWorkQueue.emplace_back(rtNode);
+	for ( auto& rtNode : mReachTree ) {
+		mWorkQueue.push( &rtNode );
 	}
 
 	RectangularWorker<State> worker{ mHybridAutomaton, mAnalysisSettings };
@@ -68,32 +68,28 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::backwardRun() {
 	// initialize queue
 	for ( auto& [location, condition] : mHybridAutomaton.getLocalBadStates() ) {
 		// create local bad state
-		State badState{ location };
-		badState.setSet( typename State::template nth_representation<0>{ condition.getMatrix(), condition.getVector() } );
-		badState.setTimestamp( carl::Interval<tNumber>( 0 ) );
+		State badState{ condition.getMatrix(), condition.getVector() };
 
 		// create node from state
-		auto badNode{ std::make_unique<ReachTreeNode<State>>( location, badState, carl::Interval<SegmentInd>( 0 ) ) };
+		auto badNode{ ReachTreeNode<State>( location, badState, carl::Interval<SegmentInd>( 0 ) ) };
 		// add to reachTree
 		mReachTree.emplace_back( std::move( badNode ) );
 		// add to queue
-		mWorkQueue.push( mReachTree.back().get() );
+		mWorkQueue.push( &mReachTree.back() );
 	}
 
 	for ( auto& condition : mHybridAutomaton.getGlobalBadStates() ) {
 		if ( condition.getMatrix().rows() != 0 ) {
 			for ( auto& location : mHybridAutomaton.getLocations() ) {
 				// create global bad state
-				State badState{ location };
-				badState.setSet( typename State::template nth_representation<0>{ condition.getMatrix(), condition.getVector() } );
-				badState.setTimestamp( carl::Interval<tNumber>( 0 ) );
+				State badState{ condition.getMatrix(), condition.getVector() };
 
 				// create node from state
-				auto badNode{ std::make_unique<ReachTreeNode<State>>( location, badState, carl::Interval<SegmentInd>( 0 ) ) };
+				auto badNode{ ReachTreeNode<State>( location, badState, carl::Interval<SegmentInd>( 0 ) ) };
 				// add to reachTree
 				mReachTree.emplace_back( std::move( badNode ) );
 				// add to queue
-				mWorkQueue.push( mReachTree.back().get() );
+				mWorkQueue.push( &mReachTree.back() );
 			}
 		}
 	}
