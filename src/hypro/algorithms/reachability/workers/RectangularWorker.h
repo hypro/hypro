@@ -37,7 +37,7 @@ class RectangularWorker {
 	/// computes a time transition
 	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<State>& task );
 	/// computes a discrete transition. Requires available time successors.
-	void computeJumpSuccessors();
+	void computeJumpSuccessors( const Location<Number>* location );
 	/// getter for discrete jump successor sets
 	REACHABILITY_RESULT computeBackwardReachability( const ReachTreeNode<State>& task );
 	REACHABILITY_RESULT computeTimePredecessors( const ReachTreeNode<State>& task );

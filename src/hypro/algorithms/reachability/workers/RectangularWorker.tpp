@@ -7,7 +7,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( const 
 	if ( computeTimeSuccessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
-	computeJumpSuccessors();
+	computeJumpSuccessors( task.getLocation() );
 	return REACHABILITY_RESULT::SAFE;
 }
 
@@ -49,11 +49,11 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const Reach
 }
 
 template <typename State>
-void RectangularWorker<State>::computeJumpSuccessors() {
+void RectangularWorker<State>::computeJumpSuccessors( const Location<Number>* location ) {
 	// for each transition intersect each computed time successor set with the guard. If the intersection is non-empty, store for post-processing.
 	rectangularGuardHandler<State> guardHandler;
 	for ( auto& state : mFlowpipe ) {
-		guardHandler( state );
+		guardHandler( state, location );
 	}
 
 	// post processing: apply reset on those sets, intersect the sets with the invariant of the target location. If the resulting state set is non-empty, add it to the jump successors set.
@@ -62,8 +62,8 @@ void RectangularWorker<State>::computeJumpSuccessors() {
 
 template <typename State>
 void RectangularWorker<State>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {
-	rectangularJumpHandler<State> jmpHandler;
-	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets, nullptr, mSettings.strategy().front() );
+	singularJumpHandler<State> jmpHandler;
+	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets );
 }
 
 template <typename State>
