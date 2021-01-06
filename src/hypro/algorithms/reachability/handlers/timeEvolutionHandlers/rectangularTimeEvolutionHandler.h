@@ -11,20 +11,20 @@
 
 namespace hypro {
 
-template <typename State>
-State rectangularApplyTimeEvolution( const State& initialSet, const rectangularFlow<typename State::NumberType>& flow );
+template <typename Number, class... Reps>
+State<Number, Reps...> rectangularApplyTimeEvolution( const State<Number, Reps...>& initialSet, const rectangularFlow<Number>& flow );
 
-template <typename State>
-State rectangularApplyReverseTimeEvolution( const State& badSet, const rectangularFlow<typename State::NumberType>& flow );
+template <typename Number, class... Reps>
+State<Number, Reps...> rectangularApplyReverseTimeEvolution( const State<Number, Reps...>& badSet, const rectangularFlow<Number>& flow );
 
-template <template <typename> typename PolyhedralRepresentation, typename Number>
-PolyhedralRepresentation<Number> rectangularApplyTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<Number>& flow );
+template <template <typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting>
+PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyTimeEvolution( const PolyhedralRepresentation<Number, Converter, Setting>& initialSet, const rectangularFlow<Number>& flow );
 
-template <template <typename> typename PolyhedralRepresentation, typename Number>
-PolyhedralRepresentation<Number> rectangularApplyBoundedTimeEvolution( const PolyhedralRepresentation<Number>& initialSet, const rectangularFlow<Number>& flow, tNumber timeBound );
+template <template <typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting>
+PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTimeEvolution( const PolyhedralRepresentation<Number, Converter, Setting>& initialSet, const rectangularFlow<Number>& flow, tNumber timeBound );
 
-template <template <typename> typename PolyhedralRepresentation, typename Number>
-PolyhedralRepresentation<Number> rectangularApplyReverseTimeEvolution( const PolyhedralRepresentation<Number>& badSet, const rectangularFlow<Number>& flow );
+template <template <typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting>
+PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTimeEvolution( const PolyhedralRepresentation<Number, Converter, Setting>& badSet, const rectangularFlow<Number>& flow );
 
 template <typename Number>
 CarlPolytope<Number> rectangularApplyTimeEvolution( const CarlPolytope<Number>& initialSet, const rectangularFlow<Number>& flow );
