@@ -11,6 +11,11 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         NodeVector currentNodes = mWorkQueue.front();
         mWorkQueue.pop_front();
 
+        if ( !checkConsistency( currentNodes ) ) {
+            // empty initial set, skip this iteration
+            continue;
+        }
+
         auto currentLoc = currentNodes[ 0 ]->getLocation();
 
         // Reset workers
@@ -105,6 +110,15 @@ auto DecompositionalAnalyzer<Representation>::initializeWorkers(
         }
     }
     return workers;
+}
+
+template <typename Representation>
+bool DecompositionalAnalyzer<Representation>::checkConsistency( NodeVector& currentNodes ) {
+    if ( std::any_of( currentNodes.begin(), currentNodes.end(), []( const auto& node ) {
+                return node->getInitialSet().empty(); } ) ) {
+        return false;
+    }
+    return true;
 }
 
 template <typename Representation>

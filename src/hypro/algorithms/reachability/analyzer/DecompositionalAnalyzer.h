@@ -240,6 +240,15 @@ class DecompositionalAnalyzer {
             -> std::vector<WorkerVariant>;
 
     /**
+     * @brief       Pre-computational check that nodes are consistent (e.g. no initial set is empty).
+     * @param       currentNodes    The current reachtree-nodes to analyze.
+     * @return      `true` if all checks pass, `false` otherwise.
+     */
+    bool checkConsistency(
+        NodeVector& currentNodes );
+
+
+    /**
      * @brief       Compute time successors in all subspaces.
      * @param       currentNodes    The current reachtree-nodes to store the successor sets.
      * @param       workers         The vector of worker variants to use for computation.
