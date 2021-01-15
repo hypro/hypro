@@ -24,7 +24,7 @@ struct AnalysisParameters {
 
 struct FixedAnalysisParameters {
 	size_t jumpDepth{ std::numeric_limits<int>::max() };  ///< bound for maximal number of executed jumps
-	tNumber localTimeHorizon = 0;						  ///< bound for maximal duration of time elapse per flowpipe
+	tNumber localTimeHorizon = 0;						  ///< bound for maximal duration of time elapse per flowpipe, use negative value for unbounded time (not always supported)
 	tNumber fixedTimeStep = 0;							  ///< a time step that all timesteps of the analysis parameters are multiples of, i.e. fixedTimeStep * timeStepFactor = timeStep.
 														  /// computed on construction of the setting as the (fractional) gcd of the time steps
 #if HYPRO_USE_PPL
@@ -85,14 +85,14 @@ class Settings {
  * @brief      Struct for reachability analysis algorithm settings.
  */
 struct ReachabilitySettings {
-	tNumber timeBound;									   /// The local time horizon.
-	int jumpDepth;										   /// The maximal number of jumps, i.e. the depth of the search tree.
-	tNumber timeStep;									   /// Time step size.
-	std::string fileName;								   /// Name for the output file (plotting).
-	unsigned long pplDenomimator;						   /// Common denominator for ppl-numbers (only relevant if ppl is used).
-	std::vector<std::vector<std::size_t>> plotDimensions;  /// A set of dimension pairs to plot.
-	bool uniformBloating = false;						   /// Bloating settings.
-	int clustering = -1;								   /// -1 = off, 0 = all (aggregation), i = maximal number of segments to unify
+	tNumber timeBound = 0;											   /// The local time horizon.
+	int jumpDepth = 0;												   /// The maximal number of jumps, i.e. the depth of the search tree.
+	tNumber timeStep = 0;											   /// Time step size.
+	std::string fileName = "out";									   /// Name for the output file (plotting).
+	unsigned long pplDenomimator = 0;								   /// Common denominator for ppl-numbers (only relevant if ppl is used).
+	std::vector<std::vector<std::size_t>> plotDimensions{ { 0, 1 } };  /// A set of dimension pairs to plot.
+	bool uniformBloating = false;									   /// Bloating settings.
+	int clustering = -1;											   /// -1 = off, 0 = all (aggregation), i = maximal number of segments to unify
 	bool useInvariantTimingInformation = true;
 	bool useGuardTimingInformation = true;
 	bool useBadStateTimingInformation = true;
@@ -100,16 +100,7 @@ struct ReachabilitySettings {
 	/**
      * @brief      Default constructor.
      */
-	ReachabilitySettings()
-		: timeBound( 0 )
-		, jumpDepth( 0 )
-		, timeStep( 0 )
-		, fileName( "out" )
-		, pplDenomimator( 0 ) {
-		plotDimensions.push_back( std::vector<std::size_t>() );
-		plotDimensions[0].push_back( 0 );
-		plotDimensions[0].push_back( 1 );
-	}
+	ReachabilitySettings() = default;
 
 	ReachabilitySettings( const ReachabilitySettings& orig ) = default;
 

@@ -34,21 +34,21 @@ target_include_directories(${PROJECT_NAME}-objects
 	)
 
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
+	target_link_libraries(${PROJECT_NAME}-static PUBLIC GLPK_STATIC)
+	if(HYPRO_USE_CLP)
+		target_link_libraries(${PROJECT_NAME}-static PUBLIC coinUtils_STATIC)
+		target_link_libraries(${PROJECT_NAME}-static PUBLIC clp_STATIC)
+	endif()
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC carl-static)
 	get_target_property(libs carl-static INTERFACE_LINK_LIBRARIES)
 	foreach(item ${libs})
 		target_link_libraries(${PROJECT_NAME}-static PUBLIC ${item})
 	endforeach()
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC Boost_program_options_STATIC)
-	target_link_libraries(${PROJECT_NAME}-static PUBLIC GLPK_STATIC)
-	if(HYPRO_USE_CLP)
-		target_link_libraries(${PROJECT_NAME}-static PUBLIC coinUtils_STATIC)
-		target_link_libraries(${PROJECT_NAME}-static PUBLIC clp_STATIC)
-	endif()
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC ANTLR4_STATIC)
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
 	target_include_directories(${PROJECT_NAME}-static
-		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
+		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
 		PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
@@ -65,12 +65,6 @@ target_include_directories(${PROJECT_NAME}-objects
 	)
 
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
-	target_link_libraries(${PROJECT_NAME}-shared PUBLIC carl-shared)
-	get_target_property(libs carl-shared INTERFACE_LINK_LIBRARIES)
-	foreach(item ${libs})
-		target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${item})
-	endforeach()
-	target_link_libraries(${PROJECT_NAME}-shared PUBLIC Boost_program_options_SHARED)
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC GLPK_STATIC)
 	if(HYPRO_USE_CLP)
 		target_link_libraries(${PROJECT_NAME}-shared PUBLIC coinUtils_SHARED)
@@ -79,6 +73,12 @@ target_include_directories(${PROJECT_NAME}-objects
 	if(HYPRO_USE_SOPLEX)
 		target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${soplex_LIBRARY})
 	endif()
+	target_link_libraries(${PROJECT_NAME}-shared PUBLIC carl-shared)
+	get_target_property(libs carl-shared INTERFACE_LINK_LIBRARIES)
+	foreach(item ${libs})
+		target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${item})
+	endforeach()
+	target_link_libraries(${PROJECT_NAME}-shared PUBLIC Boost_program_options_SHARED)
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC ANTLR4_SHARED)
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread)
 	if(HYPRO_USE_SMTRAT)
@@ -90,7 +90,7 @@ target_include_directories(${PROJECT_NAME}-objects
 	endif()
 
 	target_include_directories(${PROJECT_NAME}-shared
-		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
+		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
 		PUBLIC
 		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>

@@ -14,7 +14,7 @@ LTIContext<State>::LTIContext( const TaskType& t,
 	, mLocalCEXQueue( localCEXQueue )
 	, mLocalSegments( localSegments )
 	, mSettings( settings )
-	, mTransitionTimings( HierarchicalIntervalVector<CONTAINMENT, tNumber>( std::vector<CONTAINMENT>( {CONTAINMENT::BOT, CONTAINMENT::FULL, CONTAINMENT::NO, CONTAINMENT::YES} ) ) ) {
+	, mTransitionTimings( HierarchicalIntervalVector<CONTAINMENT, tNumber>( std::vector<CONTAINMENT>( { CONTAINMENT::BOT, CONTAINMENT::FULL, CONTAINMENT::NO, CONTAINMENT::YES } ) ) ) {
 	mTransitionTimings.initialize( CONTAINMENT::BOT, SettingsProvider<State>::getInstance().getReachabilitySettings().timeBound * SettingsProvider<State>::getInstance().getReachabilitySettings().jumpDepth );
 	mComputationState = State( mTask->treeNode->getStateAtLevel( mTask->btInfo.btLevel ) );
 }

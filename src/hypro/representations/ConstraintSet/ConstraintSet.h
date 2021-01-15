@@ -198,10 +198,10 @@ class ConstraintSetT {
 	}
 
 	/**
-	 * @brief      Storage size determination.
-	 * @return     Size of the required memory.
+	 * @brief      Returns number of constraints.
+	 * @return     The number of constraints.
 	 */
-	std::size_t size() const { return 1; }
+	std::size_t size() const { return mConstraints.rows(); }
 
 	static representation_name type() { return representation_name::constraint_set; }
 

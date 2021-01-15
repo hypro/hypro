@@ -224,6 +224,18 @@ TYPED_TEST( HybridAutomataTest, LocationTest ) {
 	EXPECT_EQ( std::size_t( 1 ), loc.getTransitions().size() );
 }
 
+/// Flow-types test
+TYPED_TEST( HybridAutomataTest, FlowTest ) {
+	using Interval = carl::Interval<TypeParam>;
+	
+	typename rectangularFlow<TypeParam>::flowMap fmap;
+	fmap[VariablePool::getInstance().carlVarByIndex(0)] = Interval(0,1);
+	rectangularFlow<TypeParam> rectFlow{ fmap };
+	EXPECT_EQ(rectFlow.type(), DynamicType::rectangular);
+	EXPECT_EQ(rectFlow.size(), 1);
+	EXPECT_EQ(rectFlow.dimension(), 1);
+}
+
 /*
 TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 {

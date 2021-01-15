@@ -38,10 +38,10 @@ template <typename Number>
 class Location {
   public:
 	using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
-	using flowVariant = std::variant<linearFlow<Number>, rectangularFlow<Number>>;
+	//using flowVariant = std::variant<linearFlow<Number>, rectangularFlow<Number>>;
 
   private:
-	std::vector<flowVariant> mFlows;					 ///< Dynamics
+	std::vector<flowVariant<Number>> mFlows;			 ///< Dynamics
 	std::vector<DynamicType> mFlowTypes;				 ///< Types of dynamics
 	std::vector<carl::Interval<Number>> mExternalInput;	 ///< External input/disturbance
 	bool mHasExternalInput = false;						 ///< Cache-flag
@@ -83,7 +83,7 @@ class Location {
 		return std::get<rectangularFlow<Number>>( mFlows[I] );
 	}
 	/// getter for vector of flow-variants
-	const std::vector<flowVariant>& getFlows() const {
+	const std::vector<flowVariant<Number>>& getFlows() const {
 		assert( isConsistent() );
 		return mFlows;
 	}
@@ -172,24 +172,31 @@ class Location {
 	/// equal comparison
 	inline bool operator==( const Location<Number>& rhs ) const {
 		//TRACE("hypro.datastructures","Comparison of " << *this << " and " << rhs);
+		/*
 		if ( this->hash() != rhs.hash() ) {
 			//TRACE("hypro.datastructures","Hash " << this->hash() << " and " << rhs.hash() << " not equal.");
+			std::cout << "Hash not equal" << std::endl;
 			return false;
 		}
+		*/
 		if ( mName != rhs.getName() ) {
 			//TRACE("hypro.datastructures","Name not equal.");
+			std::cout << "Name not equal" << std::endl;
 			return false;
 		}
 		if ( mInvariant != rhs.getInvariant() ) {
 			//TRACE("hypro.datastructures","Invariants not equal.");
+			std::cout << "Invariant not equal" << std::endl;
 			return false;
 		}
 		if ( mFlows.size() != rhs.getFlows().size() ) {
 			//TRACE("hypro.datastructures","Number of flows not equal.");
+			std::cout << "FlowCount not equal" << std::endl;
 			return false;
 		}
 		if ( mFlowTypes.size() != rhs.getFlowTypes().size() ) {
 			//TRACE("hypro.datastructures","Number of flows not equal.");
+			std::cout << "FlowTypesCount not equal" << std::endl;
 			return false;
 		}
 		for ( std::size_t i = 0; i < mFlows.size(); ++i ) {
@@ -199,11 +206,13 @@ class Location {
 			switch ( mFlowTypes[i] ) {
 				case DynamicType::linear:
 					if ( std::get<linearFlow<Number>>( mFlows[i] ) != std::get<linearFlow<Number>>( rhs.getFlows()[i] ) ) {
+						std::cout << "Dynamics not equal" << std::endl;
 						return false;
 					}
 					break;
 				case DynamicType::rectangular:
 					if ( std::get<rectangularFlow<Number>>( mFlows[i] ) != std::get<rectangularFlow<Number>>( rhs.getFlows()[i] ) ) {
+						std::cout << "Dynamics not equal" << std::endl;
 						return false;
 					}
 					break;
@@ -213,13 +222,17 @@ class Location {
 					break;
 			}
 		}
+		/*
 		if ( mExternalInput != rhs.getExternalInput() ) {
 			//TRACE("hypro.datastructures","External input not equal.");
+			std::cout << "ExtIn not equal" << std::endl;
 			return false;
 		}
+		*/
 
 		if ( mTransitions.size() != rhs.getTransitions().size() ) {
 			//TRACE( "hypro.datastructures", "Number of transitions not equal." );
+			std::cout << "TransitionCount not equal" << std::endl;
 			return false;
 		}
 		/*

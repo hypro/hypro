@@ -549,7 +549,7 @@ void Location<Number>::decompose( const std::vector<std::vector<std::size_t>>& p
 		// Already decomposed or empty flow
 		return;
 	}
-	std::vector<flowVariant> newFlows;
+	std::vector<flowVariant<Number>> newFlows;
 	std::vector<DynamicType> newFlowTypes;
 
 	auto& vpool = VariablePool::getInstance();

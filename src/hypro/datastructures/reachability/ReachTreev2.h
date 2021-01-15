@@ -96,7 +96,7 @@ std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> co
 
 	std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ), [ I ]( auto const& locCond ) {
 		auto const& [location, condition] = locCond;
-		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix( I ), condition.getVector( I ) }, { 0, 0 } };
+		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix( I ), condition.getVector( I ) }, carl::Interval<SegmentInd>( 0, 0 ) };
 	} );
 
 	return roots;
