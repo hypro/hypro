@@ -2,8 +2,6 @@
  * Defines the datatypes for the tests.
  * @author Benedikt Seidl
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
- * @version 2015-02-01
- * @since	2013-09-01
  */
 
 #pragma once
@@ -11,7 +9,7 @@
 #include "util.h"
 #include "gtest/gtest.h"
 #include <hypro/config.h>
-
+#include <hypro/representations/GeometricObjectBase.h>
 
 typedef ::testing::Types<
 #ifdef USE_MPFR_FLOAT
@@ -38,6 +36,17 @@ typedef ::testing::Types<
 #endif
 	  mpq_class>
 	  rationalTypes;
+
+typedef ::testing::Types<
+#ifdef HYPRO_USE_PPL
+	  hypro::Polytope<mpq_class>,
+#endif
+	  hypro::VPolytope<mpq_class>
+	  //, hypro::HPolytope<mpq_class>
+	  ,
+	  hypro::CarlPolytope<mpq_class> >
+	  polyhedralTypes;
+
 // List tests which should be typed
 
 // Algorithm
@@ -47,6 +56,7 @@ TYPED_TEST_CASE( BoxReachabilityTest, allTypes );
 TYPED_TEST_CASE( VertexEnumerationTest, allTypes );
 TYPED_TEST_CASE( QuickhullTest, allTypes );
 TYPED_TEST_CASE( QuickIntersectionTest, allTypes );
+TYPED_TEST_CASE( RectangularReachabilityTest, polyhedralTypes );
 
 // Benchmark
 TYPED_TEST_CASE( Benchmark, allTypes );

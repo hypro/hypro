@@ -16,6 +16,29 @@ using Interval = carl::Interval<Number>;
 using Vector = hypro::vector_t<Number>;
 using Point = hypro::Point<Number>;
 
+template <typename T>
+class RectangularReachabilityTest : public testing::Test {
+  protected:
+	virtual void SetUp() {}
+	virtual void TearDown() {}
+
+  public:
+};
+
+/// Tests whether a point is contained in a flowpipe segment
+template <typename Representation>
+bool is_reachable_in( const hypro::Point<typename Representation::NumberType>& sample, const Representation& segment ) {
+	return segment.contains( sample );
+}
+
+/// Tests whether a point is contained in a flowpipe
+template <typename Representation>
+bool is_reachable_in( const hypro::Point<typename Representation::NumberType>& sample,
+					  const std::vector<Representation>& flowpipe ) {
+	return std::any_of( flowpipe.begin(), flowpipe.end(),
+						[&]( const auto& segment ) { return is_reachable_in( sample, segment ); } );
+}
+
 template <typename Number>
 hypro::HybridAutomaton<Number> createRectangularHA() {
 	// One-dimensional HA with one location
@@ -73,9 +96,13 @@ hypro::HybridAutomaton<Number> createRectangularHA2() {
 
 	// Create second location
 	auto loc2 = res.createLocation();
+	flow = Interval{ 0, 1 };
+	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flow;
+	loc2->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
+	loc2->setInvariant( { invariantConstraints, invariantConstants } );
 
 	// Add transition from first to second location with no guard and no reset
-	auto transition = loc->createTransition( loc2 );
+	loc->createTransition( loc2 );
 
 	// Set initial state x = 0, aff = 1
 	Matrix initialConstraints = Matrix::Zero( 2, 1 );
@@ -106,15 +133,19 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 	uniqueLoc1->setName( "l1" );
 
 	// Set flow x' = 1, y' = -1 in loc0
-	Matrix flow0 = Matrix::Zero( 3, 3 );
-	flow0( 0, 2 ) = 1;
-	flow0( 1, 2 ) = -1;
-	uniqueLoc0->setFlow( flow0 );
+	Interval flowx{ 1, 1 };
+	Interval flowy{ -1, -1 };
+	typename hypro::rectangularFlow<Number>::flowMap fMap;
+	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flowx;
+	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 1 )] = flowy;
+	uniqueLoc0->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
 
-	// Set flow x' = 0, y' = 1 in loc1
-	Matrix flow1 = Matrix::Zero( 3, 3 );
-	flow1( 1, 2 ) = 1;
-	uniqueLoc1->setFlow( flow1 );
+	// Set flow x' = 0, y' = -1 in loc1
+	flowx = Interval{ 0, 0 };
+	flowy = Interval{ -1, -1 };
+	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flowx;
+	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 1 )] = flowy;
+	uniqueLoc1->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
 
 	// Set invariant x <= 3 in loc0 and loc1
 	Matrix invariantConstraints = Matrix::Zero( 1, 2 );
@@ -129,7 +160,7 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 	Vector transConstants = -1 * Vector::Ones( 1 );
 	transConstraint( 0, 0 ) = -1;
 	hypro::Condition<Number> guard( transConstraint, transConstants );
-	hypro::Reset<Number> reset{ { { 0, 0 }, { 0, 0 } } };
+	hypro::Reset<Number> reset{ { carl::Interval<Number>{ 0, 0 }, carl::Interval<Number>{ 0, 0 } } };
 
 	std::unique_ptr<hypro::Transition<Number>> trans0 =
 		  std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
@@ -331,11 +362,8 @@ hypro::HybridAutomaton<Number> createPLTSingularAutomaton() {
 	return res;
 }
 
-TEST( RectangularRechabilityTest, WorkerConstruction ) {
-	using Number = mpq_class;
-	using VPoly = hypro::VPolytope<Number>;
-
-	auto automaton = createRectangularHA<Number>();
+TYPED_TEST( RectangularReachabilityTest, WorkerConstruction ) {
+	auto automaton = createRectangularHA<typename TypeParam::NumberType>();
 
 	hypro::AnalysisParameters analysisParameters;
 	analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
@@ -346,16 +374,15 @@ TEST( RectangularRechabilityTest, WorkerConstruction ) {
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
 							  { analysisParameters } };
 
-	auto worker = hypro::RectangularWorker<VPoly>( automaton, settings );
+	auto worker = hypro::RectangularWorker<TypeParam>( automaton, settings );
 	SUCCEED();
 }
 
-TEST( RectangularRechabilityTest, ReacherConstruction ) {
-	using Number = mpq_class;
-	using VPoly = hypro::VPolytope<Number>;
+TYPED_TEST( RectangularReachabilityTest, ReacherConstruction ) {
+	using Number = typename TypeParam::NumberType;
 
 	auto automaton = createRectangularHA<Number>();
-	auto roots = hypro::makeRoots<VPoly, Number>( automaton );
+	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
 
 	hypro::AnalysisParameters analysisParameters;
 	analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
@@ -366,16 +393,17 @@ TEST( RectangularRechabilityTest, ReacherConstruction ) {
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
 							  { analysisParameters } };
 
-	auto reach = hypro::reachability::ReachBase<VPoly, hypro::RectangularAnalyzer<VPoly>>( automaton, settings, roots );
+	auto reach = hypro::reachability::ReachBase<TypeParam, hypro::RectangularAnalyzer<TypeParam>>( automaton, settings,
+																								   roots );
 	SUCCEED();
 }
 
-TEST( RectangularRechabilityTest, ComputeReachability1 ) {
-	using Number = mpq_class;
-	using VPoly = hypro::VPolytope<Number>;
+TYPED_TEST( RectangularReachabilityTest, ComputeReachability1 ) {
+	using Number = typename TypeParam::NumberType;
 
 	auto automaton = createRectangularHA<Number>();
-	auto roots = hypro::makeRoots<VPoly, Number>( automaton );
+	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
+	EXPECT_EQ( std::size_t( 1 ), roots.size() );
 
 	hypro::AnalysisParameters analysisParameters;
 	analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
@@ -386,83 +414,123 @@ TEST( RectangularRechabilityTest, ComputeReachability1 ) {
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
 							  { analysisParameters } };
 
-	auto reach = hypro::reachability::ReachBase<VPoly, hypro::RectangularAnalyzer<VPoly>>( automaton, settings, roots );
+	auto reach = hypro::reachability::ReachBase<TypeParam, hypro::RectangularAnalyzer<TypeParam>>( automaton, settings,
+																								   roots );
 
 	// call verifier, validate result
 	auto reachabilityResult = reach.computeForwardReachability();
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
 
 	// validate computed flowpipes
-	std::vector<std::vector<VPoly>> flowpipes;
+	std::vector<TypeParam> flowpipes;
 	std::for_each( roots.begin(), roots.end(), [&]( auto& root ) {
 		auto fp = getFlowpipes( root );
-		flowpipes.insert( flowpipes.end(), fp.begin(), fp.end() );
+		std::for_each( fp.begin(), fp.end(), [&]( const auto& flowpipe ) {
+			flowpipes.insert( flowpipes.end(), flowpipe.begin(), flowpipe.end() );
+		} );
 	} );
+
+	std::for_each( flowpipes.begin(), flowpipes.end(),
+				   [&]( const auto& segment ) { std::cout << "segment: " << segment << std::endl; } );
+
+	// checks
+	EXPECT_EQ( std::size_t( 1 ), flowpipes.size() );
+	EXPECT_TRUE( is_reachable_in( Point{ 0 }, flowpipes ) );  // initial set
+	EXPECT_TRUE( is_reachable_in( Point{ 8 }, flowpipes ) );  // maximal time elapse
+	EXPECT_FALSE( is_reachable_in( Point{ 8.1 }, flowpipes ) );
+	EXPECT_FALSE( is_reachable_in( Point{ -0.1 }, flowpipes ) );
 }
 
-/*
-TEST( RectangularRechabilityTest, SingularAnalyzer ) {
-	// Create automaton and analyzer
-	auto automaton = createRectangularHA<Number>();
+TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumps ) {
+	using Number = typename TypeParam::NumberType;
 
-	// Add bad states and analyze
-	// 1. x >= 0.5 (unsafe)
-	Matrix badStateMat = Matrix::Zero( 1, 1 );
-	badStateMat << -1;
-	Vector badStateVec = -0.5 * Vector::Ones( 1 );
+	auto automaton = createRectangularHA2<Number>();
+	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
+	EXPECT_EQ( std::size_t( 1 ), roots.size() );
 
-	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
-	auto initialNodes1 = hypro::makeRoots<VPoly, Number>( automaton );
-	auto analyzer = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::FixedAnalysisParameters{ 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes1 );
-	auto result = analyzer.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result.result() );
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_v;
 
-	// Compare flowpipes. Expect one flowpipe with two Polytopes (one for initial state and one for final)
-	auto flowpipes = hypro::getFlowpipes( initialNodes1 );
-	EXPECT_TRUE( flowpipes.size() == 1 );
-	EXPECT_TRUE( flowpipes[0].size() == 2 );
+	hypro::Settings settings{ {},
+							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
+							  { analysisParameters } };
 
-	// Initial contains only x = 0, final is the line segment x = [0, 1]
-	VPoly init( { Point{ 0 } } );
-	VPoly final( { Point{ 0 }, Point{ 1 } } );
-	EXPECT_EQ( init, flowpipes[0].begin()[0] );
-	EXPECT_EQ( final, flowpipes[0].begin()[1] );
+	auto reach = hypro::reachability::ReachBase<TypeParam, hypro::RectangularAnalyzer<TypeParam>>( automaton, settings,
+																								   roots );
+
+	// call verifier, validate result
+	auto reachabilityResult = reach.computeForwardReachability();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
+
+	// validate computed flowpipes
+	std::vector<TypeParam> flowpipes;
+	std::for_each( roots.begin(), roots.end(), [&]( auto& root ) {
+		auto fp = getFlowpipes( root );
+		std::for_each( fp.begin(), fp.end(), [&]( const auto& flowpipe ) {
+			flowpipes.insert( flowpipes.end(), flowpipe.begin(), flowpipe.end() );
+		} );
+	} );
+
+	std::for_each( flowpipes.begin(), flowpipes.end(),
+				   [&]( const auto& segment ) { std::cout << "segment: " << segment << std::endl; } );
+
+	// checks
+	EXPECT_EQ( std::size_t( 2 ), flowpipes.size() );
+	EXPECT_TRUE( is_reachable_in( Point{ 0 }, flowpipes ) );  // initial set, also in loc 2
+	EXPECT_TRUE( is_reachable_in( Point{ 8 }, flowpipes ) );  // maximal time elapse loc 1
+	EXPECT_FALSE( is_reachable_in( Point{ -0.1 }, flowpipes ) );
+	EXPECT_TRUE( is_reachable_in( Point{ 10 }, flowpipes ) );  // maximal time elapse loc 2
+	EXPECT_FALSE( is_reachable_in( Point{ 10.1 }, flowpipes ) );
+	EXPECT_FALSE( flowpipes[0].contains( Point{ 8.1 } ) );
 }
 
-TEST( RectangularRechabilityTest, SingularAnalyzer2 ) {
-	// 2. x >= 2 (safe)
-	Matrix badStateMat = Matrix::Zero( 1, 1 );
-	badStateMat << -1;
-	Vector badStateVec = -0.5 * Vector::Ones( 1 );
+TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumpsTwoDimensions ) {
+	using Number = typename TypeParam::NumberType;
 
-	auto automaton = createRectangularHA<Number>();
+	auto automaton = createRectangularHA3<Number>();
+	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
+	EXPECT_EQ( std::size_t( 1 ), roots.size() );
 
-	badStateVec = -2 * Vector::Ones( 1 );
-	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
-	auto initialNodes2 = hypro::makeRoots<VPoly, Number>( automaton );
-	auto analyzer2 = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::FixedAnalysisParameters{ 0, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) }, initialNodes2 );
-	auto result = analyzer2.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_v;
+
+	hypro::Settings settings{ {},
+							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
+							  { analysisParameters } };
+
+	auto reach = hypro::reachability::ReachBase<TypeParam, hypro::RectangularAnalyzer<TypeParam>>( automaton, settings,
+																								   roots );
+
+	// call verifier, validate result
+	auto reachabilityResult = reach.computeForwardReachability();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
+
+	// validate computed flowpipes
+	std::vector<TypeParam> flowpipes;
+	std::for_each( roots.begin(), roots.end(), [&]( auto& root ) {
+		auto fp = getFlowpipes( root );
+		std::for_each( fp.begin(), fp.end(), [&]( const auto& flowpipe ) {
+			flowpipes.insert( flowpipes.end(), flowpipe.begin(), flowpipe.end() );
+		} );
+	} );
+
+	std::for_each( flowpipes.begin(), flowpipes.end(),
+				   [&]( const auto& segment ) { std::cout << "segment: " << segment << std::endl; } );
+
+	// checks
+	EXPECT_EQ( std::size_t( 11 ), flowpipes.size() );
+	EXPECT_TRUE( is_reachable_in( Point{ 0, 0 }, flowpipes ) );	 // initial set
+	EXPECT_TRUE( is_reachable_in( Point{ 3, -3 }, flowpipes ) );
+	EXPECT_TRUE( is_reachable_in( Point{ 2, -2 }, flowpipes ) );
+	EXPECT_TRUE( is_reachable_in( Point{ 2, -6 }, flowpipes ) );
+	EXPECT_TRUE( is_reachable_in( Point{ 3, -7 }, flowpipes ) );
+
+	EXPECT_FALSE( is_reachable_in( Point{ 3, -7.1 }, flowpipes ) );
+	EXPECT_FALSE( is_reachable_in( Point{ 2, -6.1 }, flowpipes ) );
+	EXPECT_FALSE( is_reachable_in( Point{ 3, -2.9 }, flowpipes ) );
+	EXPECT_FALSE( is_reachable_in( Point{ 2, -1.9 }, flowpipes ) );
 }
-
-TEST( RectangularRechabilityTest, SingularAnalyzer3 ) {
-	// 3. x >= 0.5 with time horizon 0.2 (safe)
-	Matrix badStateMat = Matrix::Zero( 1, 1 );
-	badStateMat << -1;
-	Vector badStateVec = -0.5 * Vector::Ones( 1 );
-
-	auto automaton = createRectangularHA<Number>();
-
-	badStateVec = -0.5 * Vector::Ones( 1 );
-	automaton.setGlobalBadStates( { hypro::Condition<Number>( badStateMat, badStateVec ) } );
-	auto initialNodes3 = hypro::makeRoots<VPoly, Number>( automaton );
-	auto analyzer3 = hypro::SingularAnalyzer<VPoly>(
-		  automaton, hypro::FixedAnalysisParameters{ 0, hypro::tNumber( 0.2 ), hypro::tNumber( 0.01 ) },
-		  initialNodes3 );
-	auto result = analyzer3.run();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
-}
-
-*/
