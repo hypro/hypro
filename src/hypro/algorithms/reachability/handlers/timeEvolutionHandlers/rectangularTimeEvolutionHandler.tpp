@@ -152,12 +152,14 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTime
 	VPolytope<Number> timeElapsePolytope{ initSetPolytope.vertices() };
 	// set rays
 	auto combinedRays = initSetPolytope.rays();
-	// add rays from flow set
-	combinedRays.insert( flowSetPolytope.rays().begin(), flowSetPolytope.rays().end() );
+	// add rays originating from vertices of the flow set
+	std::for_each( flowSetPolytope.vertices().begin(), flowSetPolytope.vertices().end(), [&]( const auto& point ) {
+		combinedRays.insert( point.rawCoordinates() );
+	} );
 	// compute vertices from bounded rays
 	for ( const auto& vertex : initSetPolytope.vertices() ) {
 		for ( const auto& ray : combinedRays ) {
-			timeElapsePolytope.emplace_back( vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray );
+			timeElapsePolytope.emplace_back( Point<Number>{ vector_t<Number>( vertex.rawCoordinates() + carl::convert<tNumber, Number>( timeBound ) * ray ) } );
 		}
 	}
 	assert( timeElapsePolytope.rays().empty() );

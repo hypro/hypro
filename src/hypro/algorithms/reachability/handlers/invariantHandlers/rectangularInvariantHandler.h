@@ -2,8 +2,8 @@
 #include "../IHandler.h"
 
 namespace hypro {
-template <typename State>
-std::pair<CONTAINMENT, State> rectangularIntersectInvariant( const State& stateSet, const Location<typename State::NumberType>* loc );
+template <typename Representation>
+std::pair<CONTAINMENT, Representation> rectangularIntersectInvariant( const Representation& stateSet, const Location<typename Representation::NumberType>* loc );
 }  // namespace hypro
 
 #include "rectangularInvariantHandler.tpp"

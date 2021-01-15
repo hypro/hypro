@@ -8,6 +8,7 @@
 #include "../handlers/guardHandlers/rectangularGuardHandler.h"
 #include "../handlers/invariantHandlers/rectangularInvariantHandler.h"
 #include "../handlers/jumpHandlers/rectangularJumpHandler.h"
+#include "../handlers/jumpHandlers/singularJumpHandler.h"
 #include "../handlers/resetHandlers/rectangularResetHandler.h"
 #include "../handlers/timeEvolutionHandlers/rectangularTimeEvolutionHandler.h"
 
@@ -33,14 +34,14 @@ class RectangularWorker {
 		: mHybridAutomaton( ha )
 		, mSettings( settings ) {}
 	/// computes a time transition followed by a discrete transition
-	REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<State>& task );
+	REACHABILITY_RESULT computeForwardReachability( ReachTreeNode<State>& task );
 	/// computes a time transition
-	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<State>& task );
+	REACHABILITY_RESULT computeTimeSuccessors( ReachTreeNode<State>& task );
 	/// computes a discrete transition. Requires available time successors.
 	void computeJumpSuccessors( const Location<Number>* location );
 	/// getter for discrete jump successor sets
-	REACHABILITY_RESULT computeBackwardReachability( const ReachTreeNode<State>& task );
-	REACHABILITY_RESULT computeTimePredecessors( const ReachTreeNode<State>& task );
+	REACHABILITY_RESULT computeBackwardReachability( ReachTreeNode<State>& task );
+	REACHABILITY_RESULT computeTimePredecessors( ReachTreeNode<State>& task );
 	void computeJumpPredecessors();
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
 	const JumpSuccessors& getJumpPredecessorSets() const { return mJumpPredecessorSets; }

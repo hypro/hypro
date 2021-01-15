@@ -3,7 +3,8 @@
 namespace hypro {
 
 template <typename State>
-REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( const ReachTreeNode<State>& task ) {
+REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( ReachTreeNode<State>& task ) {
+	DEBUG( "hypro.reachability.rectangular", "Start forward computation in worker" );
 	if ( computeTimeSuccessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
@@ -12,7 +13,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( const 
 }
 
 template <typename State>
-REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const ReachTreeNode<State>& task ) {
+REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( ReachTreeNode<State>& task ) {
 	State initialSet = task.getInitialSet();
 	DEBUG( "hypro.reachability.rectangular", "Compute time successors for initial set " << initialSet << " in location " << *task.getLocation() );
 
@@ -21,9 +22,6 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const Reach
 		DEBUG( "hypro.reachability.rectangular", "Initial set not contained in the invariant" );
 		return REACHABILITY_RESULT::SAFE;
 	}
-
-	// add state to flowpipe
-	mFlowpipe.addState( segment );
 
 	std::tie( containment, segment ) = rectangularIntersectBadStates( segment, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
@@ -36,15 +34,28 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const Reach
 	}
 
 	// compute time successor states
-	State timeSuccessors = rectangularApplyTimeEvolution( segment, task.getLocation()->getRectangularFlow() );
+	State timeSuccessors{ segment };
+	if ( mSettings.fixedParameters().localTimeHorizon < 0 ) {
+		timeSuccessors = std::move( rectangularApplyTimeEvolution( segment, task.getLocation()->getRectangularFlow() ) );
+	} else {
+		timeSuccessors = std::move( rectangularApplyBoundedTimeEvolution( segment, task.getLocation()->getRectangularFlow(), mSettings.fixedParameters().localTimeHorizon ) );
+	}
+
+	TRACE( "hypro.reachability.rectangular", "Time successors: " << timeSuccessors );
 	auto [invariantContainment, constrainedTimeSuccessors] = rectangularIntersectInvariant( timeSuccessors, task.getLocation() );
 	TRACE( "hypro.reachability.rectangular", "Time successors constrained by invariants: " << constrainedTimeSuccessors );
 	if ( invariantContainment == CONTAINMENT::NO ) {
+		DEBUG( "hypro.reachability.rectangular", "Time successors are not contained in the invariant, return SAFE (This should never happen)" );
+		assert( false && "It cannot happen that time successors, which include the initial set completely invalidate the invariant region, if the initial set is at least partially contained in the invariant region." );
+		// add state to flowpipe
+		mFlowpipe.addState( constrainedTimeSuccessors );
+		task.getFlowpipe().push_back( constrainedTimeSuccessors );
 		return REACHABILITY_RESULT::SAFE;
 	}
 
 	// add state to flowpipe
 	mFlowpipe.addState( constrainedTimeSuccessors );
+	task.getFlowpipe().push_back( constrainedTimeSuccessors );
 
 	std::tie( containment, segment ) = rectangularIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
@@ -75,7 +86,7 @@ void RectangularWorker<State>::postProcessJumpSuccessors( const JumpSuccessors& 
 }
 
 template <typename State>
-REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( const ReachTreeNode<State>& task ) {
+REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( ReachTreeNode<State>& task ) {
 	std::cout << "backward automata is " << mHybridAutomaton << std::endl;
 	if ( computeTimePredecessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
@@ -85,7 +96,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( const
 }
 
 template <typename State>
-REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( const ReachTreeNode<State>& task ) {
+REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTreeNode<State>& task ) {
 	State badSet = task.getInitialSet();
 
 	auto [containment, segment] = rectangularIntersectInvariant( badSet, task.getLocation() );
