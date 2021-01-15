@@ -69,7 +69,11 @@ jobs:
 
       - name: Build Project with Build-wrapper
         working-directory: ${{runner.workspace}}/hypro/build
-        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/bw-output make clean all hypro_coverage
+        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/bw-output make clean all
+
+      - name: Run coverage
+        working-directory: ${{runner.workspace}}/hypro/build
+        run: make hypro_coverage
 
       - name: SonarCloud Scan
         #uses: SonarSource/sonarcloud-github-action@master
