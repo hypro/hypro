@@ -38,6 +38,9 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 		REACHABILITY_RESULT safetyResult;
 		TRACE( "hypro.reachability.rectangular", "Analyze node at depth " << currentNode->getDepth() );
 
+		// reset worker state
+		worker.clear();
+		// in case the jump depth is reached, only compute time successors
 		if ( currentNode->getDepth() < mAnalysisSettings.fixedParameters().jumpDepth ) {
 			safetyResult = worker.computeForwardReachability( *currentNode );
 		} else {

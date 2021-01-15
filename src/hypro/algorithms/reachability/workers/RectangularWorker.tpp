@@ -140,4 +140,11 @@ void RectangularWorker<State>::reverseProcessJumpPredecessors( const JumpSuccess
 	rectangularJumpHandler<State> jmpHandler;
 	mJumpPredecessorSets = jmpHandler.applyReverseJump( guardSatisfyingSets, nullptr, mSettings.strategy().front() );
 }
+
+template <typename State>
+void RectangularWorker<State>::clear() {
+	mFlowpipe.clear();
+	mJumpPredecessorSets.clear();
+	mJumpSuccessorSets.clear();
+}
 }  // namespace hypro

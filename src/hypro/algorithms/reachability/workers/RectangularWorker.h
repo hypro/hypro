@@ -46,6 +46,8 @@ class RectangularWorker {
 	const JumpSuccessors& getJumpPredecessorSets() const { return mJumpPredecessorSets; }
 	/// getter for time successor sets
 	const Flowpipe<State>& getFlowpipe() const { return mFlowpipe; }
+	/// clear state, i.e., results obtained from computation.
+	void clear();
 
   private:
 	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
