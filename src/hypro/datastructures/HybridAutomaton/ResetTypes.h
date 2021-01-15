@@ -44,6 +44,18 @@ struct AffineTransformation {
 		return false;
 	}
 
+	bool isSingular() const {
+		for ( Eigen::Index rowIndex = 0; rowIndex < mTransformation.matrix().rows(); ++rowIndex ) {
+			matrix_t<Number> expected0 = matrix_t<Number>::Zero( 1, mTransformation.matrix().rows() );
+			matrix_t<Number> expected1 = matrix_t<Number>::Zero( 1, mTransformation.matrix().rows() );
+			expected1( 0, rowIndex ) = Number( 1.0 );
+			if ( mTransformation.matrix().row( rowIndex ) != expected0 && mTransformation.matrix().row( rowIndex ) != expected1 ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	friend std::ostream& operator<<( std::ostream& out, const AffineTransformation<Number>& in ) {
 		out << in.mTransformation;
 		return out;
@@ -65,6 +77,13 @@ struct IntervalAssignment {
 	IntervalAssignment& operator=( const IntervalAssignment<Number>& rhs ) = default;
 	IntervalAssignment& operator=( IntervalAssignment<Number>&& rhs ) = default;
 	~IntervalAssignment() {}
+
+	const std::vector<carl::Interval<Number>>& getIntervals() { return mIntervals; }
+	void setIntervals( const std::vector<carl::Interval<Number>>& intervals ) { mIntervals = intervals; }
+	void setInterval( const carl::Interval<Number>& interval, std::size_t i ) {
+		assert( i < size() );
+		mIntervals[i] = interval;
+	}
 
 	static ResetType type() { return ResetType::interval; }
 
