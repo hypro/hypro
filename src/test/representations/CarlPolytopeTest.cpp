@@ -260,3 +260,27 @@ TYPED_TEST( CarlPolytopeTest, RedundantConstraints ) {
 				 hspVector.end() );
 	EXPECT_EQ( std::size_t( 2 ), c1.dimension() );
 }
+
+TYPED_TEST( CarlPolytopeTest, PointContainment ) {
+	using Intv = carl::Interval<TypeParam>;
+
+	// initial constraints
+	Intv i1 = Intv{ 1, 2 };
+	Intv i2 = Intv{ 1, 2 };
+	std::vector<Intv> intervals;
+	intervals.push_back( i1 );
+	intervals.push_back( i2 );
+	// create initial set represented as a carlPolytope
+	hypro::CarlPolytope<TypeParam> c1{ intervals };
+
+	EXPECT_TRUE( c1.contains( hypro::Point<TypeParam>{ 1, 1 } ) );
+	EXPECT_TRUE( c1.contains( hypro::Point<TypeParam>{ 1, 2 } ) );
+	EXPECT_TRUE( c1.contains( hypro::Point<TypeParam>{ 2, 1 } ) );
+	EXPECT_TRUE( c1.contains( hypro::Point<TypeParam>{ 2, 2 } ) );
+	EXPECT_TRUE( c1.contains( hypro::Point<TypeParam>{ 1.5, 1.5 } ) );
+
+	EXPECT_FALSE( c1.contains( hypro::Point<TypeParam>{ 0, 0 } ) );
+	EXPECT_FALSE( c1.contains( hypro::Point<TypeParam>{ 0, 1 } ) );
+	EXPECT_FALSE( c1.contains( hypro::Point<TypeParam>{ 1, 0 } ) );
+	EXPECT_FALSE( c1.contains( hypro::Point<TypeParam>{ 2.1, 2 } ) );
+}
