@@ -19,6 +19,7 @@ class Condition {
   private:
 	std::vector<ConstraintSetT<Number>> mConstraints;  ///< holds the constraints specifying the condition
 	mutable std::vector<TRIBOOL> mConditionIsBox;	   ///< cache to check whether constraints are axis-aligned
+	mutable std::vector<SETSTATE> mConditionSetState;  ///< cache to hold whether the set defined is empty or universal
 	mutable std::size_t mHash = 0;					   ///< cache for the hash value
   public:
 	/// default constructor
@@ -27,6 +28,7 @@ class Condition {
 	Condition( const matrix_t<Number>& mat, const vector_t<Number>& vec )
 		: mConstraints()
 		, mConditionIsBox( { TRIBOOL::NSET } )
+		, mConditionSetState( { SETSTATE::UNKNOWN } )
 		, mHash( 0 ) {
 		mConstraints.emplace_back( mat, vec );
 	}
@@ -34,6 +36,7 @@ class Condition {
 	explicit Condition( const ConstraintSetT<Number>& constraints )
 		: mConstraints( { constraints } )
 		, mConditionIsBox( { TRIBOOL::NSET } )
+		, mConditionSetState( { SETSTATE::UNKNOWN } )
 		, mHash( 0 ) {}
 	/// constructor from a set of constraint sets.
 	explicit Condition( const std::vector<std::variant<ConstraintSetT<Number>>>& sets );
@@ -52,6 +55,18 @@ class Condition {
 	std::size_t size() const { return mConstraints.size(); }
 	/// checks for emptiness
 	bool empty() const { return mConstraints.empty(); }
+	/// checks, whether the condition is unbounded
+	bool isTrue() const {
+		assert( cacheIsSane() );
+		updateSetState();
+		return std::all_of( mConditionSetState.begin(), mConditionSetState.end(), []( const auto s ) { return s == SETSTATE::UNIVERSAL; } );
+	}
+	/// checks, whether the condition is unsatisfiable by its own
+	bool isFalse() const {
+		assert( cacheIsSane() );
+		updateSetState();
+		return std::any_of( mConditionSetState.begin(), mConditionSetState.end(), []( const auto s ) { return s == SETSTATE::EMPTY; } );
+	}
 	/// returns state space dimension
 	std::size_t dimension() const {
 		return std::accumulate( mConstraints.begin(), mConstraints.end(), 0, []( std::size_t cur, const auto& cSet ) { return cur + cSet.dimension(); } );
@@ -115,6 +130,10 @@ class Condition {
 
   private:
 	void checkAxisAligned( std::size_t i ) const;
+	void updateSetState() const;
+#ifndef NDEBUG
+	bool cacheIsSane() const;
+#endif
 };
 
 template <typename Number>
