@@ -8,37 +8,39 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::run() {
 	if ( mAnalysisSettings.strategy().front().reachability_analysis_method == REACH_SETTING::FORWARD ) {
 		// forward analysis
 		safetyResult = forwardRun();
-	} else {
-		// backward analysis
-		safetyResult = backwardRun();
 	}
+	//else {
+	//	// backward analysis
+	//	safetyResult = backwardRun();
+	//}
 
 	return safetyResult;
 }
 
 template <typename State>
 REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
-	// initialize queue
-	for ( auto& [location, condition] : mHybridAutomaton.getInitialStates() ) {
-		// create initial state
-		State initialState{ location };
-		initialState.setSet( typename State::template nth_representation<0>{ condition.getMatrix(), condition.getVector() } );
-		initialState.setTimestamp( carl::Interval<tNumber>( 0 ) );
-
-		// create node from state
-		auto initialNode{ std::make_unique<ReachTreeNode<State>>( location, initialState, carl::Interval<SegmentInd>( 0 ) ) };
-		// add to reachTree
-		mReachTree.emplace_back( std::move( initialNode ) );
-		// add to queue
-		mWorkQueue.push( mReachTree.back().get() );
+	DEBUG( "hypro.reachability.rectangular", "Start forward analysis" );
+	// create reachTree if not already present
+	if ( mReachTree.empty() ) {
+		mReachTree = makeRoots<State>( mHybridAutomaton );
 	}
 
+	// initialize queue
+	for ( auto& rtNode : mReachTree ) {
+		mWorkQueue.push( &rtNode );
+	}
+	DEBUG( "hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue" );
+
+	RectangularWorker<State> worker{ mHybridAutomaton, mAnalysisSettings };
 	while ( !mWorkQueue.empty() ) {
-		RectangularWorker<State> worker{ mHybridAutomaton, mAnalysisSettings };
 		ReachTreeNode<State>* currentNode = mWorkQueue.front();
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
+		TRACE( "hypro.reachability.rectangular", "Analyze node at depth " << currentNode->getDepth() );
 
+		// reset worker state
+		worker.clear();
+		// in case the jump depth is reached, only compute time successors
 		if ( currentNode->getDepth() < mAnalysisSettings.fixedParameters().jumpDepth ) {
 			safetyResult = worker.computeForwardReachability( *currentNode );
 		} else {
@@ -58,15 +60,7 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 				// update reachTree
 				// time is not considered in rectangular analysis so we store a dummy
 				auto& childNode = currentNode->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
-				/*
-				auto* childNode = new ReachTreeNode<State>{ jmpSucc };
-				childNode->setParent( currentNode );
-				currentNode->addChild( childNode );
-
-				// update path (global time)
-				childNode->addTimeStepToPath( carl::Interval<tNumber>( worker.getFlowpipe().begin()->getTimestamp().lower(), jmpSucc.getTimestamp().upper() ) );
-				childNode->addTransitionToPath( transitionStatesPair.first, jmpSucc.getTimestamp() );
-				*/
+				assert( childNode.getDepth() == currentNode->getDepth() + 1 );
 
 				// create Task
 				mWorkQueue.push( &childNode );
@@ -77,37 +71,34 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 	return REACHABILITY_RESULT::SAFE;
 }
 
+/*
 template <typename State>
 REACHABILITY_RESULT RectangularAnalyzer<State>::backwardRun() {
 	// initialize queue
 	for ( auto& [location, condition] : mHybridAutomaton.getLocalBadStates() ) {
 		// create local bad state
-		State badState{ location };
-		badState.setSet( typename State::template nth_representation<0>{ condition.getMatrix(), condition.getVector() } );
-		badState.setTimestamp( carl::Interval<tNumber>( 0 ) );
+		State badState{ condition.getMatrix(), condition.getVector() };
 
 		// create node from state
-		auto badNode{ std::make_unique<ReachTreeNode<State>>( location, badState, carl::Interval<SegmentInd>( 0 ) ) };
+		auto badNode{ ReachTreeNode<State>( location, badState, carl::Interval<SegmentInd>( 0 ) ) };
 		// add to reachTree
 		mReachTree.emplace_back( std::move( badNode ) );
 		// add to queue
-		mWorkQueue.push( mReachTree.back().get() );
+		mWorkQueue.push( &mReachTree.back() );
 	}
 
 	for ( auto& condition : mHybridAutomaton.getGlobalBadStates() ) {
 		if ( condition.getMatrix().rows() != 0 ) {
 			for ( auto& location : mHybridAutomaton.getLocations() ) {
 				// create global bad state
-				State badState{ location };
-				badState.setSet( typename State::template nth_representation<0>{ condition.getMatrix(), condition.getVector() } );
-				badState.setTimestamp( carl::Interval<tNumber>( 0 ) );
+				State badState{ condition.getMatrix(), condition.getVector() };
 
 				// create node from state
-				auto badNode{ std::make_unique<ReachTreeNode<State>>( location, badState, carl::Interval<SegmentInd>( 0 ) ) };
+				auto badNode{ ReachTreeNode<State>( location, badState, carl::Interval<SegmentInd>( 0 ) ) };
 				// add to reachTree
 				mReachTree.emplace_back( std::move( badNode ) );
 				// add to queue
-				mWorkQueue.push( mReachTree.back().get() );
+				mWorkQueue.push( &mReachTree.back() );
 			}
 		}
 	}
@@ -136,26 +127,27 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::backwardRun() {
 			for ( const auto jmpPre : transitionStatesPair.second ) {
 				// update reachTree
 
-				/*
-				auto* parentNode = new ReachTreeNode<State>{ jmpPre };
-				parentNode->addChild( currentNode );
-				currentNode->setParent( parentNode );
 
-				// update path (global time)
-				currentNode->addTimeStepToPath( carl::Interval<tNumber>( jmpPre.getTimestamp().lower(), worker.getFlowpipe().begin()->getTimestamp().upper() ) );
-				currentNode->addTransitionToPath( transitionStatesPair.first, worker.getFlowpipe().begin()->getTimestamp() );
-				*/
+			//	auto* parentNode = new ReachTreeNode<State>{ jmpPre };
+			//	parentNode->addChild( currentNode );
+			//	currentNode->setParent( parentNode );
+//
+			//	// update path (global time)
+			//	currentNode->addTimeStepToPath( carl::Interval<tNumber>( jmpPre.getTimestamp().lower(), worker.//getFlowpipe().begin()->getTimestamp().upper() ) );
+			//	currentNode->addTransitionToPath( transitionStatesPair.first, worker.getFlowpipe().begin()->getTimestamp//() );
 
-				// Stefan: We have changed the code such that the tree grows from the bad states down instead of growing at the root upwards.
-				auto& childNode = currentNode->addChild( jmpPre, carl::Interval<SegmentInd>( 0 ), transitionStatesPair.first );
 
-				// create Task
-				mWorkQueue.push( &childNode );
-			}
-		}
-	}
+// Stefan: We have changed the code such that the tree grows from the bad states down instead of growing at the root upwards.
+auto& childNode = currentNode -> addChild( jmpPre, carl::Interval<SegmentInd>( 0 ), transitionStatesPair.first );
 
-	return REACHABILITY_RESULT::SAFE;
+// create Task
+mWorkQueue.push( &childNode );
+}  // namespace hypro
 }
+}
+
+return REACHABILITY_RESULT::SAFE;
+}
+*/
 
 }  // namespace hypro

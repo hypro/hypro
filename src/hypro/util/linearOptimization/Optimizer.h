@@ -75,8 +75,7 @@ class Optimizer {
 	mutable std::mutex mContextLock;
 #ifdef HYPRO_USE_GLPK
 	// Glpk as a presolver
-	mutable glpk_context mGlpkContext;
-	//mutable std::map<std::thread::id, glpk_context> mGlpkContexts;
+	mutable std::map<std::thread::id, glpk_context> mGlpkContexts;
 #endif
 #ifdef HYPRO_USE_CLP
 	// CLP as a solver
@@ -154,9 +153,9 @@ class Optimizer {
 	inline bool getConsistencyChecked() const { return mConsistencyChecked; }
 #endif
 #ifdef HYPRO_USE_GLPK
-	//inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
-	//	return mGlpkContexts;
-	//}
+	inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
+		return mGlpkContexts;
+	}
 #endif
 #ifdef HYPRO_USE_CLP
 	inline const std::map<std::thread::id, clp_context>& getCLPContexts() const {
@@ -170,7 +169,7 @@ class Optimizer {
 		std::swap( lhs.mConsistencyChecked, rhs.mConsistencyChecked );
 		std::swap( lhs.mRelationSymbols, rhs.mRelationSymbols );
 #ifdef HYPRO_USE_GLPK
-		//std::swap( lhs.mGlpkContexts, rhs.mGlpkContexts );
+		std::swap( lhs.mGlpkContexts, rhs.mGlpkContexts );
 #endif
 #ifdef HYPRO_USE_CLP
 		std::swap( lhs.mClpContexts, rhs.mClpContexts );

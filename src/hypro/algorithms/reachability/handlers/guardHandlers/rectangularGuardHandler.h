@@ -1,15 +1,16 @@
 #pragma once
 
 namespace hypro {
-template <typename State>
+
+template <typename Representation>
 class rectangularGuardHandler {
-	using Number = typename State::NumberType;
+	using Number = typename Representation::NumberType;
 	using TransitionContainmentMap = std::map<const Transition<Number>*, CONTAINMENT>;
 
   public:
-	using TransitionStatesMap = std::map<Transition<Number>*, std::vector<State>>;
+	using TransitionStatesMap = std::map<Transition<Number>*, std::vector<Representation> >;
 
-	void operator()( const State& stateSet );
+	void operator()( const Representation& stateSet, const Location<Number>* loc );
 
 	const TransitionStatesMap& getGuardSatisfyingStateSets() const { return mGuardSatisfyingStates; }
 	const TransitionContainmentMap& getGuardContainment() const { return mGuardContainment; }
@@ -18,6 +19,7 @@ class rectangularGuardHandler {
 	TransitionStatesMap mGuardSatisfyingStates;
 	TransitionContainmentMap mGuardContainment;
 };
+
 }  // namespace hypro
 
 #include "rectangularGuardHandler.tpp"

@@ -12,7 +12,7 @@ StateSet singularApplyTimeEvolution( const StateSet& initialSet, const std::vect
 	auto combinedRays = initSetPolytope.rays();
 	// add rays from flow set
 	combinedRays.insert( flowSetPolytope.rays().begin(), flowSetPolytope.rays().end() );
-	// add rays originating from vertices of the flow set
+	// add rays originating to vertices of the flow set
 	std::for_each( flowSetPolytope.vertices().begin(), flowSetPolytope.vertices().end(), [&]( const auto& point ) {
 		combinedRays.insert( point.rawCoordinates() );
 	} );

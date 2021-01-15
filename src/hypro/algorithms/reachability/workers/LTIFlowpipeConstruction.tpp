@@ -89,7 +89,7 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 	if ( boundingBoxA.empty() ) return {};
 
 	//Augment box by a dimension for constants
-	boundingBoxA.insert( { 1, 1 } );
+	boundingBoxA.insert( carl::Interval<Number>{ 1, 1 } );
 
 	boundingBoxA = boundingBoxA.makeSymmetric();
 	assert( boundingBoxA.isSymmetric() );
@@ -104,7 +104,7 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 	Box<Number> boundingBoxB = Converter<Number>::template toBox<BoxLinearOptimizationOn>( transformedInitialSetB );
 
 	//Augment box by a dimension for constants
-	boundingBoxB.insert( { 1, 1 } );
+	boundingBoxB.insert( carl::Interval<Number>{ 1, 1 } );
 
 	boundingBoxB = boundingBoxB.makeSymmetric();
 	assert( boundingBoxB.isSymmetric() );

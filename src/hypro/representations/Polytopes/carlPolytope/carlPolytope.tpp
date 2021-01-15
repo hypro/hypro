@@ -121,9 +121,8 @@ std::pair<CONTAINMENT, CarlPolytopeT<Number, Converter, Setting>> CarlPolytopeT<
 }
 
 template <typename Number, typename Converter, typename Setting>
-bool CarlPolytopeT<Number, Converter, Setting>::contains( const Point<Number>& /*point*/ ) const {
-	assert( false && "NOT IMPLEMENTED" );
-	return false;
+bool CarlPolytopeT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
+	return std::all_of( getHalfspaces().begin(), getHalfspaces().end(), [&point]( const auto& hsp ) { return hsp.contains( point ); } );
 }
 
 template <typename Number, typename Converter, typename Setting>

@@ -12,6 +12,7 @@
 
 #pragma once
 #include "../../datastructures/reachability/ReachTreev2.h"
+#include "../../datastructures/reachability/Settings.h"
 #include "analyzer/LTIAnalyzer.h"
 #include "analyzer/ReturnTypes.h"
 #include "analyzer/SingularAnalyzer.h"
@@ -83,6 +84,34 @@ class ReachSingular {
 	 */
 	REACHABILITY_RESULT computeForwardReachability() {
 		return mAnalyzer.run().result();
+	}
+};
+
+template <class Representation, class Method>
+class ReachBase {
+  public:
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;  ///< return type
+
+  protected:
+	Method mAnalyzer;  ///< Analyzer instance
+
+  public:
+	/**
+	 * @brief Constructor for a basic reachability analysis method.
+	 *
+	 * @param _automaton The analyzed automaton.
+	 * @param _settings The reachability analysis settings.
+	 */
+	ReachBase( const HybridAutomaton<typename Representation::NumberType>& automaton, const Settings& parameters, std::vector<ReachTreeNode<Representation>>& roots )
+		: mAnalyzer( automaton, parameters, roots ) {}
+
+	/**
+	 * @brief Computes the forward reachability of the given automaton.
+	 * @details
+	 * @return The flowpipe as a result of this computation.
+	 */
+	REACHABILITY_RESULT computeForwardReachability() {
+		return mAnalyzer.run();
 	}
 };
 
