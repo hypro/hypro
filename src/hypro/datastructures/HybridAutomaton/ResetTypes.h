@@ -78,7 +78,7 @@ struct IntervalAssignment {
 	IntervalAssignment& operator=( IntervalAssignment<Number>&& rhs ) = default;
 	~IntervalAssignment() {}
 
-	const std::vector<carl::Interval<Number>>& getIntervals() { return mIntervals; }
+	const std::vector<carl::Interval<Number>>& getIntervals() const { return mIntervals; }
 	void setIntervals( const std::vector<carl::Interval<Number>>& intervals ) { mIntervals = intervals; }
 	void setInterval( const carl::Interval<Number>& interval, std::size_t i ) {
 		assert( i < size() );

@@ -38,6 +38,11 @@ Representation applyTimeEvolution( Representation const& valuationSet, matrix_t<
 
 template <class Representation, class Number>
 Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset ) {
+    if ( std::any_of( reset.getIntervalReset().getIntervals().begin(), reset.getIntervalReset().getIntervals().end(),
+            []( const auto& interval ){ return !interval.isEmpty(); } ) ) {
+        assert( false && "lti analyzer does not currently support interval assignments on reset" );
+        WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
+    }
 	return valuationSet.affineTransformation( reset.getMatrix(), reset.getVector() );
 }
 
