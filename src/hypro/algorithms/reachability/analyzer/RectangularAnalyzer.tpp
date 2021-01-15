@@ -19,6 +19,7 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::run() {
 
 template <typename State>
 REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
+	DEBUG( "hypro.reachability.rectangular", "Start forward analysis" );
 	// create reachTree if not already present
 	if ( mReachTree.empty() ) {
 		mReachTree = makeRoots<State>( mHybridAutomaton );
@@ -28,12 +29,14 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 	for ( auto& rtNode : mReachTree ) {
 		mWorkQueue.push( &rtNode );
 	}
+	DEBUG( "hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue" );
 
 	RectangularWorker<State> worker{ mHybridAutomaton, mAnalysisSettings };
 	while ( !mWorkQueue.empty() ) {
 		ReachTreeNode<State>* currentNode = mWorkQueue.front();
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
+		TRACE( "hypro.reachability.rectangular", "Analyze node at depth " << currentNode->getDepth() );
 
 		if ( currentNode->getDepth() < mAnalysisSettings.fixedParameters().jumpDepth ) {
 			safetyResult = worker.computeForwardReachability( *currentNode );
@@ -54,6 +57,7 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 				// update reachTree
 				// time is not considered in rectangular analysis so we store a dummy
 				auto& childNode = currentNode->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
+				assert( childNode.getDepth() == currentNode->getDepth() + 1 );
 
 				// create Task
 				mWorkQueue.push( &childNode );

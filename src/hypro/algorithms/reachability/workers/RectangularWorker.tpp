@@ -14,9 +14,11 @@ REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( const 
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const ReachTreeNode<State>& task ) {
 	State initialSet = task.getInitialSet();
+	DEBUG( "hypro.reachability.rectangular", "Compute time successors for initial set " << initialSet << " in location " << *task.getLocation() );
 
 	auto [containment, segment] = rectangularIntersectInvariant( initialSet, task.getLocation() );
 	if ( containment == CONTAINMENT::NO ) {
+		DEBUG( "hypro.reachability.rectangular", "Initial set not contained in the invariant" );
 		return REACHABILITY_RESULT::SAFE;
 	}
 
@@ -26,12 +28,17 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const Reach
 	std::tie( containment, segment ) = rectangularIntersectBadStates( segment, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
+		DEBUG( "hypro.reachability.rectangular", "Initial set intersects bad states, abort" );
+		// add state to flowpipe
+		mFlowpipe.addState( segment );
+		task.getFlowpipe().push_back( segment );
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 
 	// compute time successor states
 	State timeSuccessors = rectangularApplyTimeEvolution( segment, task.getLocation()->getRectangularFlow() );
 	auto [invariantContainment, constrainedTimeSuccessors] = rectangularIntersectInvariant( timeSuccessors, task.getLocation() );
+	TRACE( "hypro.reachability.rectangular", "Time successors constrained by invariants: " << constrainedTimeSuccessors );
 	if ( invariantContainment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
@@ -42,6 +49,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( const Reach
 	std::tie( containment, segment ) = rectangularIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
 		// Todo: memorize the intersecting state set and keep state.
+		DEBUG( "hypro.reachability.rectangular", "Time successors intersect bad states, abort" );
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 

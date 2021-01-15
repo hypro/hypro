@@ -144,6 +144,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyTimeEvoluti
 
 template <template <typename, typename, typename> typename PolyhedralRepresentation, typename Number, typename Converter, typename Setting>
 PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTimeEvolution( const PolyhedralRepresentation<Number, Converter, Setting>& initialSet, const rectangularFlow<Number>& flow, tNumber timeBound ) {
+	DEBUG( "hypro.reachability.rectangular", "Compute bounded time successors (polyhedral version)." );
 	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
 	assert( flow.dimension() == initialSet.dimension() );
 
@@ -160,7 +161,8 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTime
 		}
 	}
 	assert( timeElapsePolytope.rays().empty() );
-
+	timeElapsePolytope.removeRedundancy();
+	DEBUG( "hypro.reachability.rectangular", "Computed time successor: " << timeElapsePolytope );
 	// Convert back
 	PolyhedralRepresentation<Number, Converter, Setting> timeElapse;
 	convert( timeElapsePolytope, timeElapse );
