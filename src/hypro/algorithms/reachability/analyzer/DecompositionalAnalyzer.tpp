@@ -68,7 +68,9 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
             } else {
                 // case 2: only singular/rectangular subspaces -> exactly one successor
                 auto childNode = makeChildrenForClockValues( currentNodes, transition.get(), transitionEnabledTime, singularJumpSuccessors );
-                mWorkQueue.push_back( childNode );
+                if ( childNode.size() > 0 ) {
+                    mWorkQueue.push_back( childNode );
+                }
             }
         }
     }
@@ -334,6 +336,9 @@ std::vector<ReachTreeNode<Representation>*> DecompositionalAnalyzer<Representati
 template <typename Representation>
 std::vector<ReachTreeNode<Representation>*> DecompositionalAnalyzer<Representation>::makeChildrenForClockValues(
   NodeVector& currentNodes, const Transition<Number>* transition, const TimeInformation<Number>& timeInterval, JumpSuccessors singularSuccessors ) {
+    if ( timeInterval.localTime.isEmpty() || timeInterval.globalTime.isEmpty() ) {
+        return NodeVector{};
+    }
     NodeVector child( mDecomposition.subspaces.size() );
     for ( auto subspace : mSingularTypeSubspaces ) {
         auto subspaceSuccessor = detail::intersectSegmentWithClock(

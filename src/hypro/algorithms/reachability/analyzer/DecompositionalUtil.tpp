@@ -108,6 +108,9 @@ Representation intersectSegmentWithClock(
     if ( clock.localTime.isUnbounded() && clock.globalTime.isUnbounded() ) {
         return segment;
     }
+    if ( clock.localTime.isEmpty() || clock.globalTime.isEmpty() ) {
+        return Representation::Empty();
+    }
     vector_t<Number> localClockDirection = vector_t<Number>::Zero( segment.dimension() );
     localClockDirection( clockIndexLocal ) = 1;
     Halfspace<Number> localUpper( localClockDirection, clock.localTime.upper() );
@@ -139,6 +142,10 @@ TimeInformation<Number> intersectTimeInformation( const TimeInformation<Number>&
 template <typename Representation>
 Representation resetClock( const Representation& segment, int clockIndex ) {
     using Number = typename Representation::NumberType;
+    if ( segment.empty() ) {
+        return segment;
+    }
+    assert( clockIndex < segment.dimension() && "Clock index too large");
     matrix_t<Number> resetMat = matrix_t<Number>::Identity( segment.dimension(), segment.dimension() );
     resetMat( clockIndex, clockIndex ) = 0;
     return segment.linearTransformation( resetMat );
