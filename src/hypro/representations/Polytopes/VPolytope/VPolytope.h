@@ -41,9 +41,9 @@ class VPolytopeT : private GeometricObjectBase {
 	static constexpr auto type_enum = representation_name::polytope_v;
 
   private:
-	mutable pointVector mVertices;	///< set of generating vertices
-	Rays mRays;						///< set of generating rays
-	bool mReduced = false;			///< caches if the polyhedron is reduced
+	mutable pointVector mVertices = {};	 ///< set of generating vertices
+	Rays mRays = {};					 ///< set of generating rays
+	bool mReduced = false;				 ///< caches if the polyhedron is reduced
 
 	std::vector<std::set<unsigned>> mNeighbors;
 

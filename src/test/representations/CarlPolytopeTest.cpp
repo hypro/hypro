@@ -14,38 +14,38 @@ class CarlPolytopeTest : public ::testing::Test {
 TYPED_TEST( CarlPolytopeTest, Constructor ) {
 	hypro::CarlPolytope<TypeParam> p1{};
 
-	carl::Interval<TypeParam> i1{1, 2};
-	carl::Interval<TypeParam> i2{2, 3};
+	carl::Interval<TypeParam> i1{ 1, 2 };
+	carl::Interval<TypeParam> i2{ 2, 3 };
 	std::vector<carl::Interval<TypeParam>> intervals;
 	intervals.emplace_back( i1 );
 	intervals.emplace_back( i2 );
 
-	hypro::CarlPolytope<TypeParam> p2{intervals};
+	hypro::CarlPolytope<TypeParam> p2{ intervals };
 
 	hypro::matrix_t<TypeParam> constraints = hypro::matrix_t<TypeParam>( 4, 2 );
 	hypro::vector_t<TypeParam> constants = hypro::vector_t<TypeParam>( 4 );
 	constraints << 1, 0, -1, 0, 0, 1, 0, -1;
 	constants << 1, 2, 2, 2;
 
-	hypro::CarlPolytope<TypeParam> p3{constraints, constants};
+	hypro::CarlPolytope<TypeParam> p3{ constraints, constants };
 }
 
 TYPED_TEST( CarlPolytopeTest, Intersection ) {
-	carl::Interval<TypeParam> i1{1, 2};
-	carl::Interval<TypeParam> i2{2, 3};
+	carl::Interval<TypeParam> i1{ 1, 2 };
+	carl::Interval<TypeParam> i2{ 2, 3 };
 	std::vector<carl::Interval<TypeParam>> intervals;
 	intervals.emplace_back( i1 );
 	intervals.emplace_back( i2 );
 
-	hypro::CarlPolytope<TypeParam> p1{intervals};
+	hypro::CarlPolytope<TypeParam> p1{ intervals };
 
-	carl::Interval<TypeParam> i3{1, 1};
-	carl::Interval<TypeParam> i4{2, 5};
+	carl::Interval<TypeParam> i3{ 1, 1 };
+	carl::Interval<TypeParam> i4{ 2, 5 };
 	intervals.clear();
 	intervals.emplace_back( i3 );
 	intervals.emplace_back( i4 );
 
-	hypro::CarlPolytope<TypeParam> p2{intervals};
+	hypro::CarlPolytope<TypeParam> p2{ intervals };
 
 	hypro::CarlPolytope<TypeParam> result = p1.intersect( p2 );
 	hypro::CarlPolytope<TypeParam> result2 = p2.intersect( p1 );
@@ -54,46 +54,46 @@ TYPED_TEST( CarlPolytopeTest, Intersection ) {
 }
 
 TYPED_TEST( CarlPolytopeTest, GetHalfspaces ) {
-	carl::Interval<TypeParam> i1 = carl::Interval<TypeParam>{1, 2};
-	carl::Interval<TypeParam> i2 = carl::Interval<TypeParam>{1, 2};
+	carl::Interval<TypeParam> i1 = carl::Interval<TypeParam>{ 1, 2 };
+	carl::Interval<TypeParam> i2 = carl::Interval<TypeParam>{ 1, 2 };
 	std::vector<carl::Interval<TypeParam>> intervals;
 	intervals.push_back( i1 );
 	intervals.push_back( i2 );
 
-	hypro::CarlPolytope<TypeParam> c1{intervals};
+	hypro::CarlPolytope<TypeParam> c1{ intervals };
 
 	auto hspVector = c1.getHalfspaces();
 
 	EXPECT_EQ( std::size_t( 4 ), hspVector.size() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {1, 0}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 1, 0 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {-1, 0}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { -1, 0 }, -1 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, 1}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, 1 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, -1}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, -1 }, -1 ) ) !=
 				 hspVector.end() );
 }
 
 TYPED_TEST( CarlPolytopeTest, AddConstraint ) {
-	carl::Interval<TypeParam> i1 = carl::Interval<TypeParam>{1, 2};
-	carl::Interval<TypeParam> i2 = carl::Interval<TypeParam>{1, 2};
+	carl::Interval<TypeParam> i1 = carl::Interval<TypeParam>{ 1, 2 };
+	carl::Interval<TypeParam> i2 = carl::Interval<TypeParam>{ 1, 2 };
 	std::vector<carl::Interval<TypeParam>> intervals;
 	intervals.push_back( i1 );
 	intervals.push_back( i2 );
 
-	hypro::CarlPolytope<TypeParam> c1{intervals};
+	hypro::CarlPolytope<TypeParam> c1{ intervals };
 
 	auto hspVector = c1.getHalfspaces();
 
 	EXPECT_EQ( std::size_t( 4 ), hspVector.size() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {1, 0}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 1, 0 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {-1, 0}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { -1, 0 }, -1 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, 1}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, 1 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, -1}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, -1 }, -1 ) ) !=
 				 hspVector.end() );
 	EXPECT_EQ( std::size_t( 2 ), c1.dimension() );
 
@@ -105,37 +105,37 @@ TYPED_TEST( CarlPolytopeTest, AddConstraint ) {
 	hspVector = c1.getHalfspaces();
 
 	EXPECT_EQ( std::size_t( 5 ), hspVector.size() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {1, 0, 0}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 1, 0, 0 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {-1, 0, 0}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { -1, 0, 0 }, -1 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, 1, 0}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, 1, 0 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, -1, 0}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, -1, 0 }, -1 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, 0, -1}, 0 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, 0, -1 }, 0 ) ) !=
 				 hspVector.end() );
 }
 
 TYPED_TEST( CarlPolytopeTest, Substitution ) {
-	carl::Interval<TypeParam> i1 = carl::Interval<TypeParam>{1, 2};
-	carl::Interval<TypeParam> i2 = carl::Interval<TypeParam>{1, 2};
+	carl::Interval<TypeParam> i1 = carl::Interval<TypeParam>{ 1, 2 };
+	carl::Interval<TypeParam> i2 = carl::Interval<TypeParam>{ 1, 2 };
 	std::vector<carl::Interval<TypeParam>> intervals;
 	intervals.push_back( i1 );
 	intervals.push_back( i2 );
 
-	hypro::CarlPolytope<TypeParam> c1{intervals};
+	hypro::CarlPolytope<TypeParam> c1{ intervals };
 
 	auto hspVector = c1.getHalfspaces();
 
 	EXPECT_EQ( std::size_t( 4 ), hspVector.size() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {1, 0}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 1, 0 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {-1, 0}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { -1, 0 }, -1 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, 1}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, 1 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, -1}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, -1 }, -1 ) ) !=
 				 hspVector.end() );
 	EXPECT_EQ( std::size_t( 2 ), c1.dimension() );
 
@@ -148,13 +148,13 @@ TYPED_TEST( CarlPolytopeTest, Substitution ) {
 	hspVector = c1.getHalfspaces();
 
 	EXPECT_EQ( std::size_t( 4 ), hspVector.size() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, 0, 1}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, 0, 1 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, 0, -1}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, 0, -1 }, -1 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, 1, 0}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, 1, 0 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, -1, 0}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, -1, 0 }, -1 ) ) !=
 				 hspVector.end() );
 }
 
@@ -171,13 +171,13 @@ TYPED_TEST( CarlPolytopeTest, TimeElapse ) {
 	Var y = vpool.carlVarByIndex( 1 );
 
 	// initial constraints
-	Intv i1 = Intv{1, 2};
-	Intv i2 = Intv{1, 2};
+	Intv i1 = Intv{ 1, 2 };
+	Intv i2 = Intv{ 1, 2 };
 	std::vector<Intv> intervals;
 	intervals.push_back( i1 );
 	intervals.push_back( i2 );
 	// create initial set represented as a carlPolytope
-	hypro::CarlPolytope<TypeParam> c1{intervals};
+	hypro::CarlPolytope<TypeParam> c1{ intervals };
 
 	// let time pass: substitute original variables by ^pre-versions, add constraints for time being positive, the flow
 	// and the invariants.
@@ -228,13 +228,13 @@ TYPED_TEST( CarlPolytopeTest, RedundantConstraints ) {
 	Var y = vpool.carlVarByIndex( 1 );
 
 	// initial constraints
-	Intv i1 = Intv{1, 2};
-	Intv i2 = Intv{1, 2};
+	Intv i1 = Intv{ 1, 2 };
+	Intv i2 = Intv{ 1, 2 };
 	std::vector<Intv> intervals;
 	intervals.push_back( i1 );
 	intervals.push_back( i2 );
 	// create initial set represented as a carlPolytope
-	hypro::CarlPolytope<TypeParam> c1{intervals};
+	hypro::CarlPolytope<TypeParam> c1{ intervals };
 
 	EXPECT_EQ( std::size_t( 4 ), c1.size() );
 
@@ -250,13 +250,13 @@ TYPED_TEST( CarlPolytopeTest, RedundantConstraints ) {
 	auto hspVector = c1.getHalfspaces();
 
 	EXPECT_EQ( std::size_t( 4 ), hspVector.size() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {1, 0}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 1, 0 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {-1, 0}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { -1, 0 }, -1 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, 1}, 2 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, 1 }, 2 ) ) !=
 				 hspVector.end() );
-	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( {0, -1}, -1 ) ) !=
+	EXPECT_TRUE( std::find( hspVector.begin(), hspVector.end(), hypro::Halfspace<TypeParam>( { 0, -1 }, -1 ) ) !=
 				 hspVector.end() );
 	EXPECT_EQ( std::size_t( 2 ), c1.dimension() );
 }
