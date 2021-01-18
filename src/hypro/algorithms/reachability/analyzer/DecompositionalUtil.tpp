@@ -13,20 +13,41 @@ std::vector<Point<typename State::NumberType>> composeSubspaces( const State& se
     auto [subspace1, index1] = getSubspaceIndexOfDimension( dim1, decomposition );
     auto [subspace2, index2] = getSubspaceIndexOfDimension( dim2, decomposition );
     std::vector<Point<Number>> joinedVertices;
-    auto vertices1 = segment.vertices( subspace1 );
-    auto vertices2 = segment.vertices( subspace2 );
     if ( isClockedSubspace( decomposition.subspaceTypes[ subspace1 ] ) && isClockedSubspace( decomposition.subspaceTypes[ subspace2 ] ) ) {
-        for ( auto& vertex1 : vertices1 ) {
-            for ( auto& vertex2 : vertices2 ) {
-                if ( vertex1.rawCoordinates()[ vertex1.dimension() - 2 ] == vertex2.rawCoordinates()[ vertex2.dimension() - 2 ] &&
-                    vertex1.rawCoordinates()[ vertex1.dimension() - 1 ] == vertex2.rawCoordinates()[ vertex2.dimension() - 1 ] ) {
-                    joinedVertices.push_back( Point<Number>{ vertex1.rawCoordinates()[index1], vertex2.rawCoordinates()[index2] } );
-                }
+        // iterate over both sets of vertices and get the time point of them. Join with all 
+        // vertices in the other dimension intersected with the time point
+        for ( auto& vertex1 : segment.vertices( subspace1 ) ) {
+            Number localTime = vertex1.rawCoordinates()[ vertex1.dimension() - 2 ];
+            Number globalTime = vertex1.rawCoordinates()[ vertex1.dimension() - 1 ];
+            matrix_t<Number> timeConstraints = matrix_t<Number>::Zero( 4, segment.getDimension( subspace2 ) );
+            vector_t<Number> timeConstants = vector_t<Number>::Zero( 4 );
+            timeConstraints( 0, segment.getDimension( subspace2 ) - 2 ) = 1;
+            timeConstraints( 1, segment.getDimension( subspace2 ) - 2 ) = -1;
+            timeConstraints( 2, segment.getDimension( subspace2 ) - 1 ) = 1;
+            timeConstraints( 3, segment.getDimension( subspace2 ) - 1 ) = -1;
+            timeConstants << localTime, -1 * localTime, globalTime, -1 * globalTime;
+            for ( auto& vertex2 : segment.intersectHalfspaces( timeConstraints, timeConstants, subspace2 ).vertices( subspace2 ) ) {
+                joinedVertices.push_back( Point<Number>{ vertex1.rawCoordinates()[ index1 ], vertex2.rawCoordinates()[ index2 ] } );
+            }
+        }
+
+        for ( auto& vertex2 : segment.vertices( subspace2 ) ) {
+            Number localTime = vertex2.rawCoordinates()[ vertex2.dimension() - 2 ];
+            Number globalTime = vertex2.rawCoordinates()[ vertex2.dimension() - 1 ];
+            matrix_t<Number> timeConstraints = matrix_t<Number>::Zero( 4, segment.getDimension( subspace1 ) );
+            vector_t<Number> timeConstants = vector_t<Number>::Zero( 4 );
+            timeConstraints( 0, segment.getDimension( subspace1 ) - 2 ) = 1;
+            timeConstraints( 1, segment.getDimension( subspace1 ) - 2 ) = -1;
+            timeConstraints( 2, segment.getDimension( subspace1 ) - 1 ) = 1;
+            timeConstraints( 3, segment.getDimension( subspace1 ) - 1 ) = -1;
+            timeConstants << localTime, -1 * localTime, globalTime, -1 * globalTime;
+            for ( auto& vertex1 : segment.intersectHalfspaces( timeConstraints, timeConstants, subspace1 ).vertices( subspace1 ) ) {
+                joinedVertices.push_back( Point<Number>{ vertex1.rawCoordinates()[ index1 ], vertex2.rawCoordinates()[ index2 ] } );
             }
         }
     } else {
-        for ( auto& vertex1 : vertices1 ) {
-            for ( auto& vertex2 : vertices2 ) {
+        for ( auto& vertex1 : segment.vertices( subspace1 ) ) {
+            for ( auto& vertex2 : segment.vertices( subspace2 ) ) {
                 joinedVertices.push_back( Point<Number>{ vertex1.rawCoordinates()[index1], vertex2.rawCoordinates()[index2] } );
             }
         }
@@ -140,7 +161,7 @@ TimeInformation<Number> intersectTimeInformation( const TimeInformation<Number>&
 }
 
 template <typename Representation>
-Representation resetClock( const Representation& segment, int clockIndex ) {
+Representation resetClock( const Representation& segment, std::size_t clockIndex ) {
     using Number = typename Representation::NumberType;
     if ( segment.empty() ) {
         return segment;
