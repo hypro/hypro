@@ -192,7 +192,7 @@ endif()
 #                                                 #  to BASE_DIRECTORY, with CMake 3.4+)
 #     NO_DEMANGLE                                 # Don't demangle C++ symbols
 #                                                 #  even if c++filt is found
-# )
+#
 function(setup_target_for_coverage_lcov)
 
     set(options NO_DEMANGLE)
@@ -292,17 +292,21 @@ endfunction() # setup_target_for_coverage_lcov
 #                                            #  (defaults to PROJECT_SOURCE_DIR)
 #     EXCLUDE "src/dir1/*" "src/dir2/*"      # Patterns to exclude (can be relative
 #                                            #  to BASE_DIRECTORY, with CMake 3.4+)
-# )
+#
+
 function(setup_target_for_coverage_gcovr_xml)
 
     set(options NONE)
     set(oneValueArgs BASE_DIRECTORY NAME)
+    set(oneValueArgs OUT_DIRECTORY)
     set(multiValueArgs EXCLUDE EXECUTABLE EXECUTABLE_ARGS DEPENDENCIES)
     cmake_parse_arguments(Coverage "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     if(NOT GCOVR_PATH)
         message(FATAL_ERROR "gcovr not found! Aborting...")
     endif() # NOT GCOVR_PATH
+
+    message(STATUS "Out directory: ${Coverage_OUT_DIRECTORY}")
 
     # Set base directory (as absolute path), or default to PROJECT_SOURCE_DIR
     if(${Coverage_BASE_DIRECTORY})
@@ -328,26 +332,20 @@ function(setup_target_for_coverage_gcovr_xml)
         list(APPEND GCOVR_EXCLUDE_ARGS "${EXCLUDE}")
     endforeach()
 
-    add_custom_target(${Coverage_NAME}
+    add_custom_target(${Coverage_NAME}_coverage_tests
         # Run tests
         ${Coverage_EXECUTABLE} ${Coverage_EXECUTABLE_ARGS}
 
-        # Running gcovr
-        COMMAND ${GCOVR_PATH} --xml
-            -r ${BASEDIR} ${GCOVR_EXCLUDE_ARGS}
-            --object-directory=${PROJECT_BINARY_DIR}
-            -o ${Coverage_NAME}.xml
-        BYPRODUCTS ${Coverage_NAME}.xml
+        COMMAND mkdir ${Coverage_OUT_DIRECTORY}
+        COMMAND find . -type f -regex '.*${Coverage_EXECUTABLE}.*.o' | xargs gcov
+        COMMAND mv *.gcov ${Coverage_OUT_DIRECTORY}
+
+        BYPRODUCTS
+            ${Coverage_OUT_DIRECTORY}
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
         DEPENDS ${Coverage_DEPENDENCIES}
         VERBATIM # Protect arguments to commands
-        COMMENT "Running gcovr to produce Cobertura code coverage report."
-    )
-
-    # Show info where to find the report
-    add_custom_command(TARGET ${Coverage_NAME} POST_BUILD
-        COMMAND ;
-        COMMENT "Cobertura code coverage report saved in ${Coverage_NAME}.xml."
+        COMMENT "Do stuff."
     )
 endfunction() # setup_target_for_coverage_gcovr_xml
 

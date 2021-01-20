@@ -65,7 +65,7 @@ endif()
 if(HYPRO_COVERAGE)
 	include(CodeCoverage)
 	append_coverage_compiler_flags()
-	setup_target_for_coverage_lcov(NAME hypro_coverage EXECUTABLE ctest DEPENDENCIES ${PROJECT_NAME} allTests)
+	setup_target_for_coverage_gcovr_xml(NAME hypro_coverage EXECUTABLE runAlgorithmTests DEPENDENCIES ${PROJECT_NAME} allTests OUT_DIRECTORY coverage)
 endif()
 
 # general compiler and linker settings
