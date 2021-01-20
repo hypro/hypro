@@ -41,10 +41,7 @@ typedef ::testing::Types<
 #ifdef HYPRO_USE_PPL
 	  hypro::Polytope<mpq_class>,
 #endif
-	  hypro::VPolytope<mpq_class>
-	  //, hypro::HPolytope<mpq_class>
-	  ,
-	  hypro::CarlPolytope<mpq_class> >
+	  hypro::VPolytope<mpq_class>, hypro::HPolytope<mpq_class>, hypro::CarlPolytope<mpq_class> >
 	  polyhedralTypes;
 
 // List tests which should be typed
