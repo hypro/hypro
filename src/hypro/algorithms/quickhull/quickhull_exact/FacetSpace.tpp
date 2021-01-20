@@ -91,9 +91,9 @@ void ExactQuickhull<Number, Euclidian>::FacetSpace::computeNormal( Facet& facet 
 #ifdef QUICKHULL_USE_LOW_DIMENSIONAL_IMPROVEMENT
 	assert( ( ( Euclidian && (std::size_t) points[facet.mVertices[0]].size() == dimension ) || ( !Euclidian && (std::size_t) points[facet.mVertices[0]].size() == dimension + 1 ) ) );
 	if ( Euclidian && dimension == 3 ) {
-		point_t v0 = points[facet.mVertices[0]];
-		point_t v1 = points[facet.mVertices[1]];
-		point_t v2 = points[facet.mVertices[2]];
+		const point_t& v0 = points[facet.mVertices[0]];
+		const point_t& v1 = points[facet.mVertices[1]];
+		const point_t& v2 = points[facet.mVertices[2]];
 		point_t p1 = v1 - v0;
 		point_t p2 = v2 - v0;
 		point_t normal = point_t( 3 );
