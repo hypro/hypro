@@ -1,4 +1,5 @@
 #include "../defines.h"
+#include "automata/automataCreation.h"
 #include "gtest/gtest.h"
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
@@ -37,40 +38,6 @@ bool is_reachable_in( const hypro::Point<typename Representation::NumberType>& s
 					  const std::vector<Representation>& flowpipe ) {
 	return std::any_of( flowpipe.begin(), flowpipe.end(),
 						[&]( const auto& segment ) { return is_reachable_in( sample, segment ); } );
-}
-
-template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA() {
-	// One-dimensional HA with one location
-
-	hypro::HybridAutomaton<Number> res;
-
-	// Create location
-	auto loc = res.createLocation();
-
-	// Set flow x' = [1,2]
-	Interval flow{ 1, 2 };
-	typename hypro::rectangularFlow<Number>::flowMap fMap;
-	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flow;
-	loc->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
-
-	// Set invariant x <= 10
-	Matrix invariantConstraints = Matrix::Zero( 1, 1 );
-	invariantConstraints( 0, 0 ) = 1;
-	Vector invariantConstants = Vector::Zero( 1 );
-	invariantConstants( 0 ) = 10;
-	loc->setInvariant( { invariantConstraints, invariantConstants } );
-
-	// Set initial state x = 0, aff = 1
-	Matrix initialConstraints = Matrix::Zero( 2, 1 );
-	Vector initialConstants = Vector::Zero( 2 );
-	initialConstraints << 1, -1;
-	initialConstants << 0, 0;
-
-	// set loc as initial location + add initial valuation
-	res.addInitialState( loc, hypro::Condition<Number>( initialConstraints, initialConstants ) );
-
-	return res;
 }
 
 template <typename Number>
@@ -363,7 +330,8 @@ hypro::HybridAutomaton<Number> createPLTSingularAutomaton() {
 }
 
 TYPED_TEST( RectangularReachabilityTest, WorkerConstruction ) {
-	auto automaton = createRectangularHA<typename TypeParam::NumberType>();
+	auto [automaton, reachable_points, non_reachable_points] =
+		  hypro::testing::createRectangularHA<typename TypeParam::NumberType>();
 
 	hypro::AnalysisParameters analysisParameters;
 	analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
@@ -381,7 +349,7 @@ TYPED_TEST( RectangularReachabilityTest, WorkerConstruction ) {
 TYPED_TEST( RectangularReachabilityTest, ReacherConstruction ) {
 	using Number = typename TypeParam::NumberType;
 
-	auto automaton = createRectangularHA<Number>();
+	auto [automaton, reachable_points, non_reachable_points] = hypro::testing::createRectangularHA<Number>();
 	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
 
 	hypro::AnalysisParameters analysisParameters;
@@ -401,7 +369,7 @@ TYPED_TEST( RectangularReachabilityTest, ReacherConstruction ) {
 TYPED_TEST( RectangularReachabilityTest, ComputeReachability1 ) {
 	using Number = typename TypeParam::NumberType;
 
-	auto automaton = createRectangularHA<Number>();
+	auto [automaton, reachable_points, non_reachable_points] = hypro::testing::createRectangularHA<Number>();
 	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
 	EXPECT_EQ( std::size_t( 1 ), roots.size() );
 
@@ -435,10 +403,13 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachability1 ) {
 
 	// checks
 	EXPECT_EQ( std::size_t( 1 ), flowpipes.size() );
-	EXPECT_TRUE( is_reachable_in( Point{ 0 }, flowpipes ) );  // initial set
-	EXPECT_TRUE( is_reachable_in( Point{ 8 }, flowpipes ) );  // maximal time elapse
-	EXPECT_FALSE( is_reachable_in( Point{ 8.1 }, flowpipes ) );
-	EXPECT_FALSE( is_reachable_in( Point{ -0.1 }, flowpipes ) );
+	for ( const auto& p : reachable_points ) {
+		EXPECT_TRUE( is_reachable_in( p, flowpipes ) );
+	}
+
+	for ( const auto& p : non_reachable_points ) {
+		EXPECT_FALSE( is_reachable_in( p, flowpipes ) );
+	}
 }
 
 TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumps ) {
