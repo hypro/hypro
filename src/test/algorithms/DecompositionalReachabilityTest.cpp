@@ -332,7 +332,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv2 ) {
     EXPECT_TRUE( reachableSet.contains( expectedReachableSet ) );
 }
 
-TEST( DecompositionalAnalysisSingular, JumpsGuard1 ) {
+TEST( DecompositionalAnalysisSingular, JumpSuccessors1 ) {
     using Number = mpq_class;
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
@@ -341,7 +341,7 @@ TEST( DecompositionalAnalysisSingular, JumpsGuard1 ) {
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
-    auto ha = singularGuardHa1<Number>();
+    auto ha = singularJumpSuccessorsHa1<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
@@ -381,6 +381,281 @@ TEST( DecompositionalAnalysisSingular, JumpsGuard1 ) {
     EXPECT_TRUE( expectedReachableSet.contains( reachableSet ) );
     EXPECT_TRUE( reachableSet.contains( expectedReachableSet ) );
 }
+
+TEST( DecompositionalAnalysisSingular, JumpSuccessors2 ) {
+    using Number = mpq_class;
+    using Representation = VPolytope<Number>;
+    using Point = Point<Number>;
+
+    std::size_t jumpDepth = 100;
+    tNumber timeHorizon = 50;
+    tNumber timeStep = 0.1;
+
+    auto ha = singularJumpSuccessorsHa2<Number>();
+    auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
+    for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace, 2 );
+        }
+    }
+    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    auto result = analyzer.run();
+
+    EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
+
+    // one initial set
+    EXPECT_EQ( 1, roots.size() );
+    // two subspaces
+    EXPECT_EQ( 2, roots[0].size() );
+    // one jump
+    EXPECT_EQ( 1, roots[0][0].getChildren().size() );
+    EXPECT_EQ( 1, roots[0][1].getChildren().size() );    
+    // get successor segments
+    auto flowpipeSubspace0 = roots[0][0].getChildren()[0]->getFlowpipe();
+    auto flowpipeSubspace1 = roots[0][1].getChildren()[0]->getFlowpipe();
+    // singular flowpipes have exactly two segments, where the first is the initial set
+    EXPECT_EQ( 2, flowpipeSubspace0.size() );
+    EXPECT_EQ( 2, flowpipeSubspace1.size() );
+    auto segmentSubspace0 = flowpipeSubspace0[ 1 ];
+    auto segmentSubspace1 = flowpipeSubspace1[ 1 ];
+    // transform to vpolytope
+    State<Number, Representation> segment;
+    segment.setSet<Representation>( segmentSubspace0, 0 );
+    segment.setSet<Representation>( segmentSubspace1, 1 );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+
+    VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
+        Point{ 5, 4 }, Point{ 5, 6 }, Point{ 5, 5 },
+        Point{ 9, 10 }, Point{ 11, 10 }, Point{ 10, 9 } } );
+    EXPECT_TRUE( expectedReachableSet.contains( reachableSet ) );
+    EXPECT_TRUE( reachableSet.contains( expectedReachableSet ) );
+}
+
+TEST( DecompositionalAnalysisSingular, JumpSuccessors3 ) {
+    using Number = mpq_class;
+    using Representation = VPolytope<Number>;
+    using Point = Point<Number>;
+
+    std::size_t jumpDepth = 100;
+    tNumber timeHorizon = 50;
+    tNumber timeStep = 0.1;
+
+    auto ha = singularJumpSuccessorsHa3<Number>();
+    auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
+    for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace, 2 );
+        }
+    }
+    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    auto result = analyzer.run();
+
+    EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
+
+    // one initial set
+    EXPECT_EQ( 1, roots.size() );
+    // two subspaces
+    EXPECT_EQ( 2, roots[0].size() );
+    // one jump
+    EXPECT_EQ( 1, roots[0][0].getChildren().size() );
+    EXPECT_EQ( 1, roots[0][1].getChildren().size() );    
+    // get successor segments
+    auto flowpipeSubspace0 = roots[0][0].getChildren()[0]->getFlowpipe();
+    auto flowpipeSubspace1 = roots[0][1].getChildren()[0]->getFlowpipe();
+    // singular flowpipes have exactly two segments, where the first is the initial set
+    EXPECT_EQ( 2, flowpipeSubspace0.size() );
+    EXPECT_EQ( 2, flowpipeSubspace1.size() );
+    auto segmentSubspace0 = flowpipeSubspace0[ 1 ];
+    auto segmentSubspace1 = flowpipeSubspace1[ 1 ];
+    // transform to vpolytope
+    State<Number, Representation> segment;
+    segment.setSet<Representation>( segmentSubspace0, 0 );
+    segment.setSet<Representation>( segmentSubspace1, 1 );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+
+    VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
+        Point{ 0, 0 }, Point{ 0, 1 }, Point{ 1, 0 },
+        Point{ timeHorizon + 1, timeHorizon + 1 }, Point{ timeHorizon, timeHorizon + 1 }, Point{ timeHorizon + 1, timeHorizon } } );
+    EXPECT_TRUE( expectedReachableSet.contains( reachableSet ) );
+    EXPECT_TRUE( reachableSet.contains( expectedReachableSet ) );
+}
+
+TEST( DecompositionalAnalysisSingular, JumpSuccessors4 ) {
+    using Number = mpq_class;
+    using Representation = VPolytope<Number>;
+    using Point = Point<Number>;
+
+    std::size_t jumpDepth = 100;
+    tNumber timeHorizon = 50;
+    tNumber timeStep = 0.1;
+
+    auto ha = singularJumpSuccessorsHa4<Number>();
+    auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
+    for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace, 2 );
+        }
+    }
+    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    auto result = analyzer.run();
+
+    EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
+
+    // one initial set
+    EXPECT_EQ( 1, roots.size() );
+    // two subspaces
+    EXPECT_EQ( 2, roots[0].size() );
+    // one jump
+    EXPECT_EQ( 1, roots[0][0].getChildren().size() );
+    EXPECT_EQ( 1, roots[0][1].getChildren().size() );    
+    // get successor segments
+    auto flowpipeSubspace0 = roots[0][0].getChildren()[0]->getFlowpipe();
+    auto flowpipeSubspace1 = roots[0][1].getChildren()[0]->getFlowpipe();
+    // singular flowpipes have exactly two segments, where the first is the initial set
+    EXPECT_EQ( 2, flowpipeSubspace0.size() );
+    EXPECT_EQ( 2, flowpipeSubspace1.size() );
+    auto segmentSubspace0 = flowpipeSubspace0[ 1 ];
+    auto segmentSubspace1 = flowpipeSubspace1[ 1 ];
+    // transform to vpolytope
+    State<Number, Representation> segment;
+    segment.setSet<Representation>( segmentSubspace0, 0 );
+    segment.setSet<Representation>( segmentSubspace1, 1 );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+
+    VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
+        Point{ 5, 5 } } );
+    EXPECT_TRUE( expectedReachableSet.contains( reachableSet ) );
+    EXPECT_TRUE( reachableSet.contains( expectedReachableSet ) );
+}
+
+TEST( DecompositionalAnalysisSingular, Resets1 ) {
+    using Number = mpq_class;
+    using Representation = VPolytope<Number>;
+    using Point = Point<Number>;
+
+    std::size_t jumpDepth = 100;
+    tNumber timeHorizon = 50;
+    tNumber timeStep = 0.1;
+
+    auto ha = singularResetsHa1<Number>();
+    auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
+    for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace, 2 );
+        }
+    }
+    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    auto result = analyzer.run();
+
+    EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
+
+    // one initial set
+    EXPECT_EQ( 1, roots.size() );
+    // two subspaces
+    EXPECT_EQ( 2, roots[0].size() );
+    // one jump
+    EXPECT_EQ( 1, roots[0][0].getChildren().size() );
+    EXPECT_EQ( 1, roots[0][1].getChildren().size() );    
+    // get successor segments
+    auto flowpipeSubspace0 = roots[0][0].getChildren()[0]->getFlowpipe();
+    auto flowpipeSubspace1 = roots[0][1].getChildren()[0]->getFlowpipe();
+    // singular flowpipes have exactly two segments, where the first is the initial set (jump successors)
+    EXPECT_EQ( 2, flowpipeSubspace0.size() );
+    EXPECT_EQ( 2, flowpipeSubspace1.size() );
+    auto successorsSubspace0 = flowpipeSubspace0[ 0 ];
+    auto successorsSubspace1 = flowpipeSubspace1[ 0 ];
+    auto segmentSubspace0 = flowpipeSubspace0[ 1 ];
+    auto segmentSubspace1 = flowpipeSubspace1[ 1 ];
+    // transform to vpolytopes
+    State<Number, Representation> successors;
+    successors.setSet<Representation>( successorsSubspace0, 0 );
+    successors.setSet<Representation>( successorsSubspace1, 1 );
+    VPolytope<Number> successorSet = VPolytope<Number>( composeSubspaces( successors, 0, 1, decomposition ) );
+
+    State<Number, Representation> segment;
+    segment.setSet<Representation>( segmentSubspace0, 0 );
+    segment.setSet<Representation>( segmentSubspace1, 1 );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+
+    VPolytope<Number> expectedSuccessorSet = VPolytope<Number>( std::vector<Point>{
+        Point{ -1, 4 }, Point{ -1, 10 }, Point{ 0, 4 }, Point{ 0, 10 }
+    } );
+    EXPECT_TRUE( expectedSuccessorSet.contains( successorSet ) );
+    EXPECT_TRUE( successorSet.contains( expectedSuccessorSet ) );
+
+    VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
+        Point{ -1, 4 }, Point{ -1, 10 }, Point{ 0, 4 }, Point{ 0, 10 },
+        Point{ -5, -1 }, Point{ -5, 6 } } );
+    EXPECT_TRUE( expectedReachableSet.contains( reachableSet ) );
+    EXPECT_TRUE( reachableSet.contains( expectedReachableSet ) );
+}
+
+TEST( DecompositionalAnalysisSingular, Resets2 ) {
+    using Number = mpq_class;
+    using Representation = VPolytope<Number>;
+    using Point = Point<Number>;
+
+    std::size_t jumpDepth = 100;
+    tNumber timeHorizon = 50;
+    tNumber timeStep = 0.1;
+
+    auto ha = singularResetsHa2<Number>();
+    auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
+    for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace, 2 );
+        }
+    }
+    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    auto result = analyzer.run();
+
+    EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
+
+    // one initial set
+    EXPECT_EQ( 1, roots.size() );
+    // two subspaces
+    EXPECT_EQ( 2, roots[0].size() );
+    // one jump
+    EXPECT_EQ( 1, roots[0][0].getChildren().size() );
+    EXPECT_EQ( 1, roots[0][1].getChildren().size() );    
+    // get successor segments
+    auto flowpipeSubspace0 = roots[0][0].getChildren()[0]->getFlowpipe();
+    auto flowpipeSubspace1 = roots[0][1].getChildren()[0]->getFlowpipe();
+    // singular flowpipes have exactly two segments, where the first is the initial set (jump successors)
+    EXPECT_EQ( 2, flowpipeSubspace0.size() );
+    EXPECT_EQ( 2, flowpipeSubspace1.size() );
+    auto successorsSubspace0 = flowpipeSubspace0[ 0 ];
+    auto successorsSubspace1 = flowpipeSubspace1[ 0 ];
+    auto segmentSubspace0 = flowpipeSubspace0[ 1 ];
+    auto segmentSubspace1 = flowpipeSubspace1[ 1 ];
+    // transform to vpolytopes
+    State<Number, Representation> successors;
+    successors.setSet<Representation>( successorsSubspace0, 0 );
+    successors.setSet<Representation>( successorsSubspace1, 1 );
+    VPolytope<Number> successorSet = VPolytope<Number>( composeSubspaces( successors, 0, 1, decomposition ) );
+
+    State<Number, Representation> segment;
+    segment.setSet<Representation>( segmentSubspace0, 0 );
+    segment.setSet<Representation>( segmentSubspace1, 1 );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+
+    VPolytope<Number> expectedSuccessorSet = VPolytope<Number>( std::vector<Point>{
+        Point{ 0, 0 },
+    } );
+    EXPECT_TRUE( expectedSuccessorSet.contains( successorSet ) );
+    EXPECT_TRUE( successorSet.contains( expectedSuccessorSet ) );
+
+    VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
+        Point{ 0, 0 }, Point{ -1 * timeHorizon, -1 * timeHorizon } } );
+    EXPECT_TRUE( expectedReachableSet.contains( reachableSet ) );
+    EXPECT_TRUE( reachableSet.contains( expectedReachableSet ) );
+}
+
 
 TEST( DecompositionalAnalysisSingular, SingularJumps ) {
     using Number = mpq_class;
