@@ -17,7 +17,7 @@ Singular
         both reset: singularResetsHa2
         no reset: singularJumpSuccessorsHa1, singularJumpSuccessorsHa2, singularJumpSuccessorsHa3, singularJumpSuccessorsHa4
     jumps
-        2 jumps with non-box shaped successor sets (simple dynamics, no resets)
+        2 jumps with non-box shaped successor sets (simple dynamics, no resets): singularMultipleJumps1
         multiple jumps enabled at the same time
         oscillating behavior (two locations)
     edge cases
@@ -487,6 +487,86 @@ HybridAutomaton<Number> singularResetsHa2() {
     return ha;
 }
 
+/*
+template <typename Number>
+HybridAutomaton<Number> singularMultipleJumps1() {
+    using Matrix = matrix_t<Number>;
+    using Vector = vector_t<Number>;
+
+    HybridAutomaton<Number> ha;
+
+    // Create locations
+    Location<Number> loc0{};
+    Location<Number> loc1{};
+    Location<Number> loc2{};
+    auto uniqueLoc0{ std::make_unique<Location<Number>>( loc0 ) };
+    auto uniqueLoc1{ std::make_unique<Location<Number>>( loc1 ) };
+    auto uniqueLoc2{ std::make_unique<Location<Number>>( loc2 ) };
+    uniqueLoc0->setName( "l0" );
+    uniqueLoc1->setName( "l1" );
+    uniqueLoc2->setName( "l2" );
+
+    // Set flow x' = 1, y' = 1 in loc0
+    Matrix flow0 = Matrix::Zero( 3, 3 );
+    flow0( 0, 2 ) = 1;
+    flow0( 1, 2 ) = 1;
+    uniqueLoc0->setFlow( flow0 );
+
+    // Set invariant x <= 5 in loc0
+    Matrix invariantConstraints = Matrix::Zero( 1, 2 );
+    invariantConstraints( 0, 0 ) = 1;
+    Vector invariantConstants = 5 * Vector::Ones( 1 );
+    uniqueLoc0->setInvariant( { invariantConstraints, invariantConstants } );
+
+    // Set flow x' = 1, y' = 1 in loc1
+    Matrix flow1 = Matrix::Zero( 3, 3 );
+    flow1( 0, 2 ) = 1;
+    flow1( 1, 2 ) = 1;
+    uniqueLoc1->setFlow( flow1 );
+
+    // Set flow x' = -1, y' = -1 in loc2
+    Matrix flow2 = Matrix::Zero( 3, 3 );
+    flow1( 0, 2 ) = -1;
+    flow1( 1, 2 ) = -1;
+    uniqueLoc2->setFlow( flow2 );
+
+    // Construct transitions
+    // l0 -> l1 with guard x >= 4, y >= 5
+    Matrix transConstraint = Matrix::Zero( 2, 2 );
+    Vector transConstants = Vector::Zero( 2 );
+    transConstraint( 0, 0 ) = -1;
+    transConstraint( 1, 1 ) = -1;
+    transConstants << -4, -5;
+    Condition<Number> guard = Condition<Number>( transConstraint, transConstants );
+    Reset<Number> reset = Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
+
+    std::unique_ptr<Transition<Number>> trans0 =
+          std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+
+    // l1 -> l2 with guard 
+
+
+    // Set initial state x = [0,1], y = [0,1]
+    Matrix initialConstraints = Matrix::Zero( 4, 2 );
+    Vector initialConstants = Vector::Zero( 4 );
+    initialConstraints << 1, 0, 
+                        -1, 0, 
+                        0, 1, 
+                        0, -1;
+    initialConstants << 1, 0, 1, 0;
+
+    // Create HA
+    uniqueLoc0->addTransition( std::move( trans0 ) );
+
+    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
+
+    ha.addLocation( std::move( uniqueLoc0 ) );
+    ha.addLocation( std::move( uniqueLoc1 ) );
+
+    return ha;
+}
+*/
+
 template <typename Number>
 HybridAutomaton<Number> singularWithJumpsHa() {
     // Two-dimensional HA with two locations
@@ -682,4 +762,54 @@ HybridAutomaton<Number> mixedDynamicsWithJumpsHa() {
     res.addLocation( std::move( uniqueLoc1 ) );
 
     return res;
+}
+
+template <typename Number> 
+HybridAutomaton<Number> singularSingleJumpHa() {
+    using Matrix = matrix_t<Number>;
+    using Vector = vector_t<Number>;
+
+    HybridAutomaton<Number> ha;
+
+    // Create locations
+    Location<Number> loc0{};
+    Location<Number> loc1{};
+    auto uniqueLoc0{ std::make_unique<Location<Number>>( loc0 ) };
+    auto uniqueLoc1{ std::make_unique<Location<Number>>( loc1 ) };
+    uniqueLoc0->setName( "l0" );
+    uniqueLoc1->setName( "l1" );
+
+    // Set flow x' = 1, y' = 1 in loc0
+    Matrix flow0 = Matrix::Zero( 3, 3 );
+    flow0( 0, 2 ) = 1;
+    flow0( 1, 2 ) = 1;
+    uniqueLoc0->setFlow( flow0 );
+
+    // Set flow x' = 0, y' = 0 in loc1
+    Matrix flow1 = Matrix::Zero( 3, 3 );
+    uniqueLoc1->setFlow( flow1 );
+
+    // Construct transitions
+    // l0 -> l1 with no guards or resets
+    Reset<Number> reset{ { { }, { } } };
+
+    std::unique_ptr<Transition<Number>> trans0 =
+          std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
+
+    // Set initial state x = 0, y = 0
+    Matrix initialConstraints = Matrix::Zero( 4, 2 );
+    Vector initialConstants = Vector::Zero( 4 );
+    initialConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
+    initialConstants << 0, 0, 0, 0;
+
+    // Create HA
+    uniqueLoc0->addTransition( std::move( trans0 ) );
+    //uniqueLoc0->addTransition( std::move( trans1 ) );
+
+    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
+
+    ha.addLocation( std::move( uniqueLoc0 ) );
+    ha.addLocation( std::move( uniqueLoc1 ) );
+
+    return ha;
 }

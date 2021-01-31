@@ -10,7 +10,7 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsNoBadStates ) {
     using Number = mpq_class;
     using Representation = VPolytope<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -18,11 +18,11 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsNoBadStates ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2);
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     analyzer.run();
 }
 
@@ -32,7 +32,7 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsSafe ) {
     using Vector = vector_t<Number>;
     using Representation = VPolytope<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -47,11 +47,11 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsSafe ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2);
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
@@ -62,7 +62,7 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsUnsafe ) {
     using Vector = vector_t<Number>;
     using Representation = VPolytope<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -77,11 +77,11 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsUnsafe ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2);
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
@@ -101,21 +101,22 @@ TEST( DecompositionalAnalysisMixedDynamics, JumpsNoBadStates ) {
     EXPECT_EQ( DynamicType::singular, decomposition.subspaceTypes[ 1 ] );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
 
     analyzer.run();
 }
+
 
 TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariant ) {
     using Number = mpq_class;
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -123,11 +124,11 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariant ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -151,7 +152,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariant ) {
     State<Number, Representation> segment;
     segment.setSet<Representation>( segmentSubspace0, 0 );
     segment.setSet<Representation>( segmentSubspace1, 1 );
-    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth ) );
 
     VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
         Point{ 0, 0 }, Point{ 0, 1 }, Point{ 1, 0 }, Point{ 1, 1 },
@@ -165,9 +166,8 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck1 ) {
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = VPolytope<Number>;
-    using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -183,11 +183,11 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck1 ) {
 
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
@@ -197,9 +197,8 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck2 ) {
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = VPolytope<Number>;
-    using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -215,11 +214,11 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck2 ) {
 
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
@@ -231,7 +230,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv1 ) {
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -245,11 +244,11 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv1 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -273,7 +272,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv1 ) {
     State<Number, Representation> segment;
     segment.setSet<Representation>( segmentSubspace0, 0 );
     segment.setSet<Representation>( segmentSubspace1, 1 );
-    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth ) );
 
     VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
         Point{ 0, 0 }, Point{ 0, 1 }, Point{ 1, 0 }, Point{ 1, 1 },
@@ -282,12 +281,13 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv1 ) {
     EXPECT_TRUE( reachableSet.contains( expectedReachableSet ) );
 }
 
+
 TEST( DecompositionalAnalysisSingular, TimeElapseWithInv2 ) {
     using Number = mpq_class;
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -295,11 +295,11 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv2 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -323,7 +323,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv2 ) {
     State<Number, Representation> segment;
     segment.setSet<Representation>( segmentSubspace0, 0 );
     segment.setSet<Representation>( segmentSubspace1, 1 );
-    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth ) );
 
     VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
         Point{ 0, 0 }, Point{ 0, 1 }, Point{ 1, 0 }, Point{ 1, 1 },
@@ -337,7 +337,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors1 ) {
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -345,11 +345,11 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors1 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -373,7 +373,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors1 ) {
     State<Number, Representation> segment;
     segment.setSet<Representation>( segmentSubspace0, 0 );
     segment.setSet<Representation>( segmentSubspace1, 1 );
-    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth ) );
 
     VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
         Point{ 5, 4 }, Point{ 5, 6 }, Point{ 5, 5 },
@@ -387,7 +387,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors2 ) {
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -395,11 +395,11 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors2 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -423,7 +423,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors2 ) {
     State<Number, Representation> segment;
     segment.setSet<Representation>( segmentSubspace0, 0 );
     segment.setSet<Representation>( segmentSubspace1, 1 );
-    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth ) );
 
     VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
         Point{ 5, 4 }, Point{ 5, 6 }, Point{ 5, 5 },
@@ -437,7 +437,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors3 ) {
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -445,11 +445,11 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors3 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -473,7 +473,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors3 ) {
     State<Number, Representation> segment;
     segment.setSet<Representation>( segmentSubspace0, 0 );
     segment.setSet<Representation>( segmentSubspace1, 1 );
-    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth ) );
 
     VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
         Point{ 0, 0 }, Point{ 0, 1 }, Point{ 1, 0 },
@@ -487,7 +487,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors4 ) {
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -495,11 +495,11 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors4 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -523,7 +523,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors4 ) {
     State<Number, Representation> segment;
     segment.setSet<Representation>( segmentSubspace0, 0 );
     segment.setSet<Representation>( segmentSubspace1, 1 );
-    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth ) );
 
     VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
         Point{ 5, 5 } } );
@@ -536,7 +536,7 @@ TEST( DecompositionalAnalysisSingular, Resets1 ) {
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -544,11 +544,11 @@ TEST( DecompositionalAnalysisSingular, Resets1 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -574,12 +574,12 @@ TEST( DecompositionalAnalysisSingular, Resets1 ) {
     State<Number, Representation> successors;
     successors.setSet<Representation>( successorsSubspace0, 0 );
     successors.setSet<Representation>( successorsSubspace1, 1 );
-    VPolytope<Number> successorSet = VPolytope<Number>( composeSubspaces( successors, 0, 1, decomposition ) );
+    VPolytope<Number> successorSet = VPolytope<Number>( composeSubspaces( successors, 0, 1, decomposition, jumpDepth ) );
 
     State<Number, Representation> segment;
     segment.setSet<Representation>( segmentSubspace0, 0 );
     segment.setSet<Representation>( segmentSubspace1, 1 );
-    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth ) );
 
     VPolytope<Number> expectedSuccessorSet = VPolytope<Number>( std::vector<Point>{
         Point{ -1, 4 }, Point{ -1, 10 }, Point{ 0, 4 }, Point{ 0, 10 }
@@ -599,7 +599,7 @@ TEST( DecompositionalAnalysisSingular, Resets2 ) {
     using Representation = VPolytope<Number>;
     using Point = Point<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -607,11 +607,11 @@ TEST( DecompositionalAnalysisSingular, Resets2 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -637,12 +637,12 @@ TEST( DecompositionalAnalysisSingular, Resets2 ) {
     State<Number, Representation> successors;
     successors.setSet<Representation>( successorsSubspace0, 0 );
     successors.setSet<Representation>( successorsSubspace1, 1 );
-    VPolytope<Number> successorSet = VPolytope<Number>( composeSubspaces( successors, 0, 1, decomposition ) );
+    VPolytope<Number> successorSet = VPolytope<Number>( composeSubspaces( successors, 0, 1, decomposition, jumpDepth ) );
 
     State<Number, Representation> segment;
     segment.setSet<Representation>( segmentSubspace0, 0 );
     segment.setSet<Representation>( segmentSubspace1, 1 );
-    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition ) );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth ) );
 
     VPolytope<Number> expectedSuccessorSet = VPolytope<Number>( std::vector<Point>{
         Point{ 0, 0 },
@@ -663,7 +663,7 @@ TEST( DecompositionalAnalysisSingular, SingularJumps ) {
     using Vector = vector_t<Number>;
     using Representation = VPolytope<Number>;
 
-    std::size_t jumpDepth = 100;
+    std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
 
@@ -677,12 +677,73 @@ TEST( DecompositionalAnalysisSingular, SingularJumps ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
         if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addClockToAutomaton( decomposedHa, subspace, 2 );
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth  );
         }
     }
     std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, FixedAnalysisParameters{4, 50, 0.1}, AnalysisParameters{ 0.1 }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth, FixedAnalysisParameters{4, 50, 0.1}, AnalysisParameters{ 0.1 }, roots );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
+}
+
+TEST( DecompositionalAnalysisSingular, SingularJumps2 ) {
+    using Number = mpq_class;
+    using Representation = VPolytope<Number>;
+    using Point = Point<Number>;
+
+    std::size_t jumpDepth = 1;
+    tNumber timeHorizon = 50;
+    tNumber timeStep = 0.1;
+
+    auto ha = singularSingleJumpHa<Number>();
+    auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
+    for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+            addClockToAutomaton( decomposedHa, subspace, jumpDepth + 1  );
+        }
+    }
+    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, jumpDepth + 1, FixedAnalysisParameters{ jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    auto result = analyzer.run();
+    EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
+
+    // one initial set
+    EXPECT_EQ( 1, roots.size() );
+    // two subspaces
+    EXPECT_EQ( 2, roots[0].size() );
+    // one jump
+    EXPECT_EQ( 1, roots[0][0].getChildren().size() );
+    EXPECT_EQ( 1, roots[0][1].getChildren().size() );    
+    // get successor segments
+    auto flowpipeSubspace0 = roots[0][0].getChildren()[0]->getFlowpipe();
+    auto flowpipeSubspace1 = roots[0][1].getChildren()[0]->getFlowpipe();
+    // singular flowpipes have exactly two segments, where the first is the initial set (jump successors)
+    EXPECT_EQ( 2, flowpipeSubspace0.size() );
+    EXPECT_EQ( 2, flowpipeSubspace1.size() );
+    auto successorsSubspace0 = flowpipeSubspace0[ 0 ];
+    auto successorsSubspace1 = flowpipeSubspace1[ 0 ];
+    auto segmentSubspace0 = flowpipeSubspace0[ 1 ];
+    auto segmentSubspace1 = flowpipeSubspace1[ 1 ];
+    // transform to vpolytopes
+    State<Number, Representation> successors;
+    successors.setSet<Representation>( successorsSubspace0, 0 );
+    successors.setSet<Representation>( successorsSubspace1, 1 );
+    VPolytope<Number> successorSet = VPolytope<Number>( composeSubspaces( successors, 0, 1, decomposition, jumpDepth + 1 ) );
+
+    State<Number, Representation> segment;
+    segment.setSet<Representation>( segmentSubspace0, 0 );
+    segment.setSet<Representation>( segmentSubspace1, 1 );
+    VPolytope<Number> reachableSet = VPolytope<Number>( composeSubspaces( segment, 0, 1, decomposition, jumpDepth + 1 ) );
+
+    VPolytope<Number> expectedSuccessorSet = VPolytope<Number>( std::vector<Point>{
+        Point{ 0, 0 }, Point{ timeHorizon, timeHorizon }
+    } );
+    EXPECT_TRUE( expectedSuccessorSet.contains( successorSet ) );
+    EXPECT_TRUE( successorSet.contains( expectedSuccessorSet ) );
+
+    VPolytope<Number> expectedReachableSet = VPolytope<Number>( std::vector<Point>{ 
+        Point{ 0, 0 }, Point{ timeHorizon, timeHorizon } } );
+    EXPECT_TRUE( expectedReachableSet.contains( reachableSet ) );
+    EXPECT_TRUE( reachableSet.contains( expectedReachableSet ) );
 }
 
