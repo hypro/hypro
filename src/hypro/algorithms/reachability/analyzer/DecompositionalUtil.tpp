@@ -7,7 +7,7 @@ inline bool isClockedSubspace( const DynamicType dynamics ) {
 }
 
 template <typename State>
-std::vector<Point<typename State::NumberType>> composeSubspaces( const State& segment, std::size_t dim1, std::size_t dim2, Decomposition decomposition ) {
+std::vector<Point<typename State::NumberType>> composeSubspaces( const State& segment, std::size_t dim1, std::size_t dim2, Decomposition decomposition, std::size_t clockCount ) {
     using Number = typename State::NumberType;
 
     auto [subspace1, index1] = getSubspaceIndexOfDimension( dim1, decomposition );
@@ -16,31 +16,30 @@ std::vector<Point<typename State::NumberType>> composeSubspaces( const State& se
     if ( isClockedSubspace( decomposition.subspaceTypes[ subspace1 ] ) && isClockedSubspace( decomposition.subspaceTypes[ subspace2 ] ) ) {
         // iterate over both sets of vertices and get the time point of them. Join with all 
         // vertices in the other dimension intersected with the time point
+
         for ( auto& vertex1 : segment.vertices( subspace1 ) ) {
-            Number localTime = vertex1.rawCoordinates()[ vertex1.dimension() - 2 ];
-            Number globalTime = vertex1.rawCoordinates()[ vertex1.dimension() - 1 ];
-            matrix_t<Number> timeConstraints = matrix_t<Number>::Zero( 4, segment.getDimension( subspace2 ) );
-            vector_t<Number> timeConstants = vector_t<Number>::Zero( 4 );
-            timeConstraints( 0, segment.getDimension( subspace2 ) - 2 ) = 1;
-            timeConstraints( 1, segment.getDimension( subspace2 ) - 2 ) = -1;
-            timeConstraints( 2, segment.getDimension( subspace2 ) - 1 ) = 1;
-            timeConstraints( 3, segment.getDimension( subspace2 ) - 1 ) = -1;
-            timeConstants << localTime, -1 * localTime, globalTime, -1 * globalTime;
+            matrix_t<Number> timeConstraints = matrix_t<Number>::Zero( 2 * clockCount, segment.getDimension( subspace2 ) );
+            vector_t<Number> timeConstants = vector_t<Number>::Zero( 2 * clockCount );
+            for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
+                timeConstraints( 2 * clockIndex, segment.getDimension( subspace2 ) - clockCount + clockIndex ) = 1;
+                timeConstraints( 2 * clockIndex + 1, segment.getDimension( subspace2 ) - clockCount + clockIndex ) = -1;
+                timeConstants( 2 * clockIndex ) = vertex1.rawCoordinates()[ vertex1.dimension() - clockCount + clockIndex ];
+                timeConstants( 2 * clockIndex + 1 ) = -1 * vertex1.rawCoordinates()[ vertex1.dimension() - clockCount + clockIndex ];
+            }
             for ( auto& vertex2 : segment.intersectHalfspaces( timeConstraints, timeConstants, subspace2 ).vertices( subspace2 ) ) {
                 joinedVertices.push_back( Point<Number>{ vertex1.rawCoordinates()[ index1 ], vertex2.rawCoordinates()[ index2 ] } );
             }
         }
 
         for ( auto& vertex2 : segment.vertices( subspace2 ) ) {
-            Number localTime = vertex2.rawCoordinates()[ vertex2.dimension() - 2 ];
-            Number globalTime = vertex2.rawCoordinates()[ vertex2.dimension() - 1 ];
-            matrix_t<Number> timeConstraints = matrix_t<Number>::Zero( 4, segment.getDimension( subspace1 ) );
-            vector_t<Number> timeConstants = vector_t<Number>::Zero( 4 );
-            timeConstraints( 0, segment.getDimension( subspace1 ) - 2 ) = 1;
-            timeConstraints( 1, segment.getDimension( subspace1 ) - 2 ) = -1;
-            timeConstraints( 2, segment.getDimension( subspace1 ) - 1 ) = 1;
-            timeConstraints( 3, segment.getDimension( subspace1 ) - 1 ) = -1;
-            timeConstants << localTime, -1 * localTime, globalTime, -1 * globalTime;
+            matrix_t<Number> timeConstraints = matrix_t<Number>::Zero( 2 * clockCount, segment.getDimension( subspace1 ) );
+            vector_t<Number> timeConstants = vector_t<Number>::Zero( 2 * clockCount );
+            for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
+                timeConstraints( 2 * clockIndex, segment.getDimension( subspace1 ) - clockCount + clockIndex ) = 1;
+                timeConstraints( 2 * clockIndex + 1, segment.getDimension( subspace1 ) - clockCount + clockIndex ) = -1;
+                timeConstants( 2 * clockIndex ) = vertex2.rawCoordinates()[ vertex2.dimension() - clockCount + clockIndex ];
+                timeConstants( 2 * clockIndex + 1 ) = -1 * vertex2.rawCoordinates()[ vertex2.dimension() - clockCount + clockIndex ];
+            }
             for ( auto& vertex1 : segment.intersectHalfspaces( timeConstraints, timeConstants, subspace1 ).vertices( subspace1 ) ) {
                 joinedVertices.push_back( Point<Number>{ vertex1.rawCoordinates()[ index1 ], vertex2.rawCoordinates()[ index2 ] } );
             }
@@ -56,7 +55,7 @@ std::vector<Point<typename State::NumberType>> composeSubspaces( const State& se
 }
 
 template <typename Representation>
-std::vector<std::vector<Representation>> composeFlowpipes( const std::vector<ReachTreeNode<Representation>*>& nodes, const Decomposition& decomposition, tNumber timeStep, tNumber fixedTimeStep ) {
+std::vector<std::vector<Representation>> composeFlowpipes( const std::vector<ReachTreeNode<Representation>*>& nodes, const Decomposition& decomposition, FixedAnalysisParameters settings, std::size_t clockCount ) {
     using Number = typename Representation::NumberType;
     assert( nodes.size() == decomposition.subspaces.size() );
     std::vector<std::vector<Representation>> res;
@@ -64,7 +63,7 @@ std::vector<std::vector<Representation>> composeFlowpipes( const std::vector<Rea
     while ( moreSegments ) {
         moreSegments = false;
         std::vector<Representation> segment( decomposition.subspaces.size() );
-        TimeInformation<Number> timing = TimeInformation<Number>{ carl::Interval<Number>::unboundedInterval(), carl::Interval<Number>::unboundedInterval() };
+        TimeInformation<Number> segmentTime( clockCount >= 1 ? clockCount : 1, Number( 0 ), carl::convert<tNumber, Number>( settings.localTimeHorizon * settings.jumpDepth ) );
         for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
             auto& flowpipe = nodes[ subspace ]->getFlowpipe();
             if ( !isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
@@ -74,19 +73,18 @@ std::vector<std::vector<Representation>> composeFlowpipes( const std::vector<Rea
                 }
                 assert( flowpipe.size() > res.size() );
                 segment[ subspace ] = flowpipe[ res.size() ];
-                tNumber segmentSize = ( nodes[ subspace ]->getTimings().upper() - nodes[ subspace ]->getTimings().lower() ) * fixedTimeStep;
-                timing.localTime = carl::Interval<Number>( carl::convert<tNumber, Number>( res.size() * timeStep ),
-                                                           carl::convert<tNumber, Number>( ( res.size() + 1 ) * timeStep + segmentSize ) );
-                timing.globalTime = carl::Interval<Number>( 
-                    carl::convert<tNumber, Number>( nodes[ subspace ]->getTimings().lower() ) * fixedTimeStep + timing.localTime.lower(),
-                    carl::convert<tNumber, Number>( nodes[ subspace ]->getTimings().lower() ) * fixedTimeStep + timing.localTime.upper() );
+                tNumber segmentSize = ( nodes[ subspace ]->getTimings().upper() - nodes[ subspace ]->getTimings().lower() ) * settings.fixedTimeStep;
+                // get global time interval
+                segmentTime.setTimeInterval( 0, carl::Interval<Number>( 
+                    carl::convert<tNumber, Number>( nodes[ subspace ]->getTimings().lower() ) * settings.fixedTimeStep + carl::convert<tNumber, Number>( res.size() * settings.fixedTimeStep ),
+                    carl::convert<tNumber, Number>( nodes[ subspace ]->getTimings().lower() ) * settings.fixedTimeStep + carl::convert<tNumber, Number>( ( res.size() + 1 ) * settings.fixedTimeStep + segmentSize ) ) );
             } else {
                 segment[ subspace ] = flowpipe[ 1 ];
             }
         }
         for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
             if ( isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
-                segment[ subspace] = detail::intersectSegmentWithClock( segment[ subspace ], timing, segment[ subspace ].dimension() - 2, segment[ subspace ].dimension() - 1 );
+                segment[ subspace] = detail::intersectSegmentWithClock( segment[ subspace ], segmentTime, segment[ subspace ].dimension() - 1 );
             }
         }
         res.push_back( segment );
@@ -98,77 +96,58 @@ std::vector<std::vector<Representation>> composeFlowpipes( const std::vector<Rea
 namespace detail {
 
 template <typename Representation>
-TimeInformation<typename Representation::NumberType> getClockValues( const Representation& segment, int clockIndexLocal, int clockIndexGlobal ) {
+TimeInformation<typename Representation::NumberType> getClockValues( const Representation& segment, std::size_t clockCount ) {
     using Number = typename Representation::NumberType;
+    TimeInformation<Number> clockValues( clockCount );
     if ( segment.empty() ) {
-        return TimeInformation<Number>{};
+        return clockValues;
     }
-    vector_t<Number> localClockDirection = vector_t<Number>::Zero( segment.dimension() );
-    localClockDirection( clockIndexLocal ) = 1;
-    Number localUpper = segment.evaluate( localClockDirection ).supportValue;
-    Number localLower = -1 * segment.evaluate( -1 * localClockDirection ).supportValue;
 
-    vector_t<Number> globalClockDirection = vector_t<Number>::Zero( segment.dimension() );
-    globalClockDirection( clockIndexGlobal ) = 1;
-    Number globalUpper = segment.evaluate( globalClockDirection ).supportValue;
-    Number globalLower = -1 * segment.evaluate( -1 * globalClockDirection ).supportValue;
-
-    return TimeInformation<Number> {
-        carl::Interval<Number>( localLower, localUpper ),
-        carl::Interval<Number>( globalLower, globalUpper ) };
-
+    for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
+        vector_t<Number> clockDirection = vector_t<Number>::Zero( segment.dimension() );
+        clockDirection( segment.dimension() - clockCount + clockIndex ) = 1;
+        Number clockUpper = segment.evaluate( clockDirection ).supportValue;
+        Number clockLower = -1 * segment.evaluate( -1 * clockDirection ).supportValue;
+        clockValues.setTimeInterval( clockIndex, carl::Interval<Number>( clockLower, clockUpper ) );
+    }
+    return clockValues;
 }
 
 template <typename Representation>
 Representation intersectSegmentWithClock(
-        const Representation& segment, TimeInformation<typename Representation::NumberType> clock, int clockIndexLocal, int clockIndexGlobal ) {
+        const Representation& segment, TimeInformation<typename Representation::NumberType> clockValues, std::size_t clockCount ) {
     using Number = typename Representation::NumberType;
     if ( segment.empty() ) {
         return segment;
     }
-    if ( clock.localTime.isUnbounded() && clock.globalTime.isUnbounded() ) {
-        return segment;
-    }
-    if ( clock.localTime.isEmpty() || clock.globalTime.isEmpty() ) {
+    if ( clockValues.empty() ) {
         return Representation::Empty();
     }
-    vector_t<Number> localClockDirection = vector_t<Number>::Zero( segment.dimension() );
-    localClockDirection( clockIndexLocal ) = 1;
-    Halfspace<Number> localUpper( localClockDirection, clock.localTime.upper() );
-    Halfspace<Number> localLower( -1 * localClockDirection, clock.localTime.lower() );
-
-    vector_t<Number> globalClockDirection = vector_t<Number>::Zero( segment.dimension() );
-    globalClockDirection( clockIndexGlobal ) = 1;
-    Halfspace<Number> globalUpper( globalClockDirection, clock.globalTime.upper() );
-    Halfspace<Number> globalLower( -1 * globalClockDirection, -1 * clock.globalTime.lower() );
-
-    HPolytope<Number> segmentAsHpol;
+    HPolytope<Number> segmentHpoly;
+    convert( segment, segmentHpoly );
+    for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
+        vector_t<Number> clockDirection = vector_t<Number>::Zero( segment.dimension() );
+        clockDirection( segment.dimension() - clockCount + clockIndex ) = 1;
+        Halfspace<Number> upperBound( clockDirection, clockValues.getTimeInterval( clockIndex ).upper() );
+        Halfspace<Number> lowerBound( -1 * clockDirection, -1 * clockValues.getTimeInterval( clockIndex ).lower() );
+        segmentHpoly.insert( upperBound );
+        segmentHpoly.insert( lowerBound );
+    }
     Representation constrainedSegment;
-    convert( segment, segmentAsHpol );
-    segmentAsHpol.insert( globalUpper );
-    segmentAsHpol.insert( globalLower );
-    segmentAsHpol.insert( localUpper );
-    segmentAsHpol.insert( localLower );
-    convert( segmentAsHpol, constrainedSegment );
+    convert( segmentHpoly, constrainedSegment );
     return constrainedSegment;
 }
 
-template <typename Number>
-TimeInformation<Number> intersectTimeInformation( const TimeInformation<Number>& clock1, const TimeInformation<Number>& clock2 ) {
-    return TimeInformation<Number> {
-        carl::set_intersection( clock1.localTime, clock2.localTime ),
-        carl::set_intersection( clock1.globalTime, clock2.globalTime ) };
-}
-
 template <typename Representation>
-Representation resetClock( const Representation& segment, std::size_t clockIndex ) {
+Representation resetClocks( const Representation& segment, std::size_t clockCount, std::size_t jumpDepth ) {
     using Number = typename Representation::NumberType;
     if ( segment.empty() ) {
         return segment;
     }
-    assert( clockIndex < segment.dimension() && "Clock index too large");
     matrix_t<Number> resetMat = matrix_t<Number>::Identity( segment.dimension(), segment.dimension() );
-    resetMat( clockIndex, clockIndex ) = 0;
+    for ( std::size_t clockIndex = segment.dimension() - clockCount + jumpDepth; clockIndex < segment.dimension(); ++clockIndex ) {
+        resetMat( clockIndex, clockIndex ) = 0;
+    }
     return segment.linearTransformation( resetMat );
 }
 

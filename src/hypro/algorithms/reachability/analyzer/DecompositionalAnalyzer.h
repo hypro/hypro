@@ -46,9 +46,10 @@ template <typename Representation>
 struct computeTimeSuccessorVisitor {
   using Number = typename Representation::NumberType;
   ReachTreeNode<Representation>* task;
-  tNumber fixedTimeStep;
   tNumber timeStep;
-    // return time interval covered by the time successors
+  Number maxTime;         // upper bound for enabled time interval
+  std::size_t clockCount; // number of clocks
+  std::size_t clockIndex; // currently used local clock
     TimeInformation<Number> operator()( SingularWorker<Representation>& worker ) {
         worker.computeTimeSuccessors( *task, false );
         auto& flowpipe = task->getFlowpipe();
@@ -56,23 +57,19 @@ struct computeTimeSuccessorVisitor {
         // the second segment covers the entire time interval
         if ( flowpipe.size() == 0 ) {
             // invariant is initially violated
-            return TimeInformation<Number>{};
+            return TimeInformation<Number>( clockCount );
         }
         assert( flowpipe.size() == 2 );
-        // last variables are local/global clocks
-        return detail::getClockValues( flowpipe[1], flowpipe[1].dimension() - 2, flowpipe[1].dimension() - 1 );
+        // last variables are clocks
+        return detail::getClockValues( flowpipe[1], clockCount );
     }
     TimeInformation<Number> operator()( LTIWorker<Representation>& worker ) {
         worker.computeTimeSuccessors( task->getInitialSet(), task->getLocation(), std::back_inserter( task->getFlowpipe() ), false );
         auto& flowpipe = task->getFlowpipe();
         assert( flowpipe.size() > 0 );
-        // get global time interval
-        Number localTimeLower = Number( 0 );
-        Number localTimeupper = carl::convert<tNumber, Number>( flowpipe.size()*timeStep );
-        Number globalTimeLower = carl::convert<tNumber, Number>( task->getTimings().lower()*fixedTimeStep );
-        Number globalTimeUpper = carl::convert<tNumber, Number>( task->getTimings().upper()*fixedTimeStep + flowpipe.size()*timeStep );
-        return TimeInformation<Number>{ carl::Interval<Number>( localTimeLower, localTimeupper ),
-                                        carl::Interval<Number>( globalTimeLower, globalTimeUpper ) };
+        TimeInformation<Number> res( clockCount, 0, maxTime );
+        res.setTimeInterval( clockIndex, carl::Interval<Number>( 0, carl::convert<tNumber, Number>( flowpipe.size()*timeStep ) ) );
+        return res;
     }
     TimeInformation<Number> operator()( RectangularWorker<Representation>& ) {
         // Todo: rectangular worker. Should be very similar to singular case
@@ -200,13 +197,16 @@ class DecompositionalAnalyzer {
      */
     DecompositionalAnalyzer( HybridAutomaton<Number> const& ha,
                  Decomposition const& decomposition,
+                 std::size_t clockCount,
                  FixedAnalysisParameters const& fixedParameters,
                  AnalysisParameters const& parameters,
                  std::vector<std::vector<ReachTreeNode<Representation>>>& roots )
         : mHybridAutomaton( &ha )
         , mDecomposition( decomposition )
+        , mClockCount( clockCount )
         , mFixedParameters( fixedParameters )
-        , mParameters( parameters ) {
+        , mParameters( parameters )
+        , mCurrentDepth( 0 ) {
         for ( auto& subspaceRoots : roots ) {
             NodeVector root;
             for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
@@ -266,7 +266,7 @@ class DecompositionalAnalyzer {
      */
     void intersectSubspacesWithClock(
         NodeVector& currentNodes,
-        const TimeInformation<Number>& clock );
+        TimeInformation<Number>& clock );
 
     /**
      * @brief       Check if intersection with a bad state is empty.
@@ -278,7 +278,7 @@ class DecompositionalAnalyzer {
     bool isSafe(
         const NodeVector& currentNodes,
         const Condition<Number>& badState,
-        const TimeInformation<Number>& invariantSatisfyingTime );
+        TimeInformation<Number>& invariantSatisfyingTime );
 
     /**
      * @brief       Compute the time interval where all singular subspaces satisfy a condition as subset of maximal time intervals.
@@ -304,7 +304,7 @@ class DecompositionalAnalyzer {
     auto getLtiEnabledSegments(
         const NodeVector& currentNodes,
         const Condition<Number>& condition,
-        const TimeInformation<Number> maxEnabledTime )
+        TimeInformation<Number> maxEnabledTime )
             -> LTIPredecessors;
 
     /**
@@ -361,8 +361,10 @@ class DecompositionalAnalyzer {
         NodeVector& currentNodes,
         const Transition<Number>* transition,
         const carl::Interval<SegmentInd>& segmentInterval,
-        JumpSuccessors singularSuccessors,
-        JumpSuccessors ltiSuccessors )
+        const carl::Interval<SegmentInd>& currentTiming,
+        TimeInformation<Number> clockValues, 
+        const JumpSuccessors& singularSuccessors, 
+        const JumpSuccessors& ltiSuccessors )
             -> std::vector<ReachTreeNode<Representation>*>;
 
     /**
@@ -377,7 +379,7 @@ class DecompositionalAnalyzer {
         NodeVector& currentNodes,
         const Transition<Number>* transition,
         const TimeInformation<Number>& clock,
-        JumpSuccessors singularSuccessors )
+        const JumpSuccessors& singularSuccessors )
             -> std::vector<ReachTreeNode<Representation>*>;
 
 
@@ -387,10 +389,12 @@ class DecompositionalAnalyzer {
     std::deque<NodeVector> mWorkQueue;               // holds the tasks that still need to be computed
     HybridAutomaton<Number> const* mHybridAutomaton; // holds a pointer to the decomposed automaton
     Decomposition mDecomposition;                    // holds decomposition information correpsonding to the automaton
+    std::size_t mClockCount;                         // holds the number of additional clocks in the (singular) subspaces
     FixedAnalysisParameters mFixedParameters;        // holds common analysis parameters for all analyzers
     AnalysisParameters mParameters;                  // holds analyzer specific parameters
     std::vector<std::size_t> mSingularTypeSubspaces; // holds the subspaces that have a clock and compute all time successors at once
     std::vector<std::size_t> mLtiTypeSubspaces;      // holds the subspaces that have no clock and have multiple segments
+    std::size_t mCurrentDepth = 0;                   // holds current jump depth
 
     tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 )*mFixedParameters.localTimeHorizon;
 };

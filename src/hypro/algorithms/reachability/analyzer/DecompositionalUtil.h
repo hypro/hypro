@@ -25,7 +25,7 @@ inline bool isClockedSubspace( const DynamicType dynamics );
  * @return      The vertices of the composed and projected set.
  */
 template <typename State>
-std::vector<Point<typename State::NumberType>> composeSubspaces( const State& segment, std::size_t dim1, std::size_t dim2, Decomposition decomposition );
+std::vector<Point<typename State::NumberType>> composeSubspaces( const State& segment, std::size_t dim1, std::size_t dim2, Decomposition decomposition, std::size_t clockCount );
 
 /**
  * @brief       Join flowpipes of subspaces and return a single flowpipe with vectors representing the composed segments.
@@ -40,7 +40,7 @@ std::vector<Point<typename State::NumberType>> composeSubspaces( const State& se
  * @return      A single flowpipe with vectors as segments representing the subspace-sets.
  */
 template <typename Representation>
-std::vector<std::vector<Representation>> composeFlowpipes( const std::vector<ReachTreeNode<Representation>*>& nodes, const Decomposition& decomposition, tNumber timeStep, tNumber fixedTimeStep );
+std::vector<std::vector<Representation>> composeFlowpipes( const std::vector<ReachTreeNode<Representation>*>& nodes, const Decomposition& decomposition, FixedAnalysisParameters settings, std::size_t clockCount );
 
 namespace detail {
 /**
@@ -52,7 +52,7 @@ namespace detail {
  * @return      The time intervals of the global and local glock covered by the segment.
  */
 template <typename Representation>
-TimeInformation<typename Representation::NumberType> getClockValues( const Representation& segment, int clockIndexLocal, int clockIndexGlobal );
+TimeInformation<typename Representation::NumberType> getClockValues( const Representation& segment, std::size_t clockCount );
 
 /**
  * @brief       Compute the intersection of the segment with the given time intervals.
@@ -65,17 +65,7 @@ TimeInformation<typename Representation::NumberType> getClockValues( const Repre
  */
 template <typename Representation>
 Representation intersectSegmentWithClock(
-        const Representation& segment, TimeInformation<typename Representation::NumberType> clock, int clockIndexLocal, int clockIndexGlobal );
-
-/**
- * @brief       Compute intersection of two clock-values.
- * @tparam      Number          The number type used by the clocks.
- * @param       clock1          The values of the first clock.
- * @param       clock2          The values of the second clock.
- * @return      The intersection of local and global time intervals of clock1 and clock2
- */
-template <typename Number>
-TimeInformation<Number> intersectTimeInformation( const TimeInformation<Number>& clock1, const TimeInformation<Number>& clock2 );
+        const Representation& segment, TimeInformation<typename Representation::NumberType> clockValues, std::size_t clockCount );
 
 /**
  * @brief       Reset clock to 0 in a segment.
@@ -85,7 +75,7 @@ TimeInformation<Number> intersectTimeInformation( const TimeInformation<Number>&
  * @return      The segment with clock reset to 0.
  */
 template <typename Representation>
-Representation resetClock( const Representation& segment, int clockIndex );
+Representation resetClocks( const Representation& segment, std::size_t clockCount );
 
 /**
  * @brief       Get all (local and global) bad states as conditions in a location of an automaton.
