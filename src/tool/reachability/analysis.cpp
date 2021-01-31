@@ -47,7 +47,7 @@ template <typename Representation>
 std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
 	auto roots = makeDecompositionalRoots<Representation>( decomposedHa, decomposition );
-	DecompositionalAnalyzer<Representation> analyzer{ decomposedHa, decomposition,
+	DecompositionalAnalyzer<Representation> analyzer{ decomposedHa, decomposition, setting.fixedParameters().jumpDepth + 1,
 		setting.fixedParameters(), setting.strategy().front(), roots };
 	auto result = analyzer.run();
 	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -77,7 +77,7 @@ std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Numbe
 			nodes[ subspace ] = &( *nodeIterators[ subspace ] );
 			++nodeIterators[ subspace ];
 		}
-		for ( auto& segment : composeFlowpipes( nodes, decomposition, setting.fixedParameters().fixedTimeStep, setting.strategy().front().timeStep ) ) {
+		for ( auto& segment : composeFlowpipes( nodes, decomposition, setting.fixedParameters(), setting.fixedParameters().jumpDepth + 1 ) ) {
 			FullState state{};
 			for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
 				state.setSet( segment[ subspace ], subspace );

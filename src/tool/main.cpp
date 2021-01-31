@@ -56,7 +56,7 @@ int main( int argc, char const* argv[] ) {
 			std::cout << "\r" << segmentCount++ << "/" << result.plotData.size() << "..." << std::flush;
 			if ( options["decompose"].as<bool>() ) {
 				assert( plotSettings.plotDimensions[pic].size() == 2 );
-				plt.addObject( composeSubspaces( segment.sets, plotSettings.plotDimensions[pic][0], plotSettings.plotDimensions[pic][1], preprocessingInformation.decomposition ) );
+				plt.addObject( composeSubspaces( segment.sets, plotSettings.plotDimensions[pic][0], plotSettings.plotDimensions[pic][1], preprocessingInformation.decomposition, reachSettings.jumpDepth + 1 ) );
 			} else {
 				plt.addObject( reduceToDimensions( segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices(), plotSettings.plotDimensions[pic] ) );
 			}
