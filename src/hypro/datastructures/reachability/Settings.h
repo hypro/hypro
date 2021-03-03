@@ -44,6 +44,9 @@ class Settings {
 	std::vector<AnalysisParameters> mStrategy{ 1 };
 
   public:
+	/// default constructor
+	Settings() = default;
+	/// full constructor
 	Settings( PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector<AnalysisParameters> strategy )
 		: mPlotting( plotting )
 		, mFixedParameters( fixedParameters )

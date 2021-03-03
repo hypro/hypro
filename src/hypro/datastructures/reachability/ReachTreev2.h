@@ -90,13 +90,20 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
 };
 
+/**
+ * @brief Convenience function to create roots of a search tree from the initial states of the passed hybrid automaton.
+ * @tparam Representation
+ * @tparam Number
+ * @param ha
+ * @return std::vector<ReachTreeNode<Representation>>
+ */
 template <class Representation, class Number>
 std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> const& ha ) {
 	std::vector<ReachTreeNode<Representation>> roots{};
 
 	std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ), []( auto const& locCond ) {
 		auto const& [location, condition] = locCond;
-		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix(), condition.getVector() }, { 0, 0 } };
+		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix(), condition.getVector() }, carl::Interval<SegmentInd>{ 0, 0 } };
 	} );
 
 	return roots;

@@ -277,13 +277,7 @@ class HybridAutomaton {
 		return hac;
 	}
 
-#ifdef HYPRO_LOGGING
-	friend std::ostream& operator<<( std::ostream& ostr, const HybridAutomaton<Number>& a )
-#else
-	friend std::ostream& operator<<( std::ostream& ostr, const HybridAutomaton<Number>& )
-#endif
-	{
-#ifdef HYPRO_LOGGING
+	friend std::ostream& operator<<( std::ostream& ostr, const HybridAutomaton<Number>& a ) {
 		/*_ostr << "initial states: " << std::endl;
         for ( auto initialIT = a.initialStates().begin(); initialIT != a.initialStates().end(); ++initialIT ) {
             ostr << ( *initialIT ).first->id() << ": " << ( *initialIT ).second.first
@@ -298,15 +292,10 @@ class HybridAutomaton {
 		for ( auto l : a.getLocations() ) {
 			ostr << *l << std::endl;
 		}
-		//ostr << "transitions ("<< a.getTransitions().size() << "): " << std::endl;
-		//for (const auto& transition : a.getTransitions()) {
-		//    ostr << *transition << std::endl;
-		//}
 		ostr << "local bad states (" << a.getLocalBadStates().size() << "): " << std::endl;
 		for ( auto badStateIt = a.getLocalBadStates().begin(); badStateIt != a.getLocalBadStates().end(); ++badStateIt ) {
 			ostr << ( ( *badStateIt ).first )->getName() << ": " << ( *badStateIt ).second << std::endl;
 		}
-#endif
 		return ostr;
 	}
 

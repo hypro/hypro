@@ -215,11 +215,10 @@ class Transition {
      * @return     Reference to the outstream.
      */
 	friend std::ostream& operator<<( std::ostream& ostr, const Transition<Number>& t ) {
-#ifdef HYPRO_LOGGING
 		ostr << "transition(" << std::endl
 			 << "\t hash = " << t.hash() << std::endl
-			 << "\t Source = " << t.getSource()->hash() << std::endl
-			 << "\t Target = " << t.getTarget()->hash() << std::endl
+			 << "\t Source = " << t.getSource()->getName() << "(" << t.getSource()->hash() << ")" << std::endl
+			 << "\t Target = " << t.getTarget()->getName() << "(" << t.getTarget()->hash() << ")" << std::endl
 			 << "\t urgent = " << t.isUrgent() << std::endl
 			 << "\t Labels = ";
 		for ( const auto& label : t.getLabels() ) ostr << label;
@@ -227,7 +226,6 @@ class Transition {
 		ostr << "\t Guard = " << t.getGuard() << std::endl
 			 << "\t Reset = " << t.getReset() << std::endl
 			 << ")";
-#endif
 		return ostr;
 	}
 

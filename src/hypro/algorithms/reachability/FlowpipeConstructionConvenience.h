@@ -7,6 +7,15 @@
 
 namespace hypro {
 
+/**
+ * @brief Intersects a state set with a condition and returns the result
+ *
+ * @tparam Representation The type of state set representation
+ * @tparam Number The used number type
+ * @param valuationSet The state set
+ * @param condition The condition
+ * @return std::pair<CONTAINMENT, Representation>
+ */
 template <class Representation, class Number>
 std::pair<CONTAINMENT, Representation> intersect( Representation const& valuationSet, Condition<Number> const& condition ) {
 	if ( condition.empty() ) {
