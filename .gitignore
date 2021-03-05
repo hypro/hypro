@@ -19,8 +19,8 @@ src/resources/glpk-4.45/
 .travis/sonar-project.properties
 .vscode
 **build**
-.plt
-.png
-.log
-.csv
-.idx
+*.plt
+*.png
+*.log
+*.csv
+*.idx
