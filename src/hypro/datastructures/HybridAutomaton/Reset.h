@@ -81,21 +81,13 @@ class Reset {
     */
 	void decompose( const Decomposition& decomposition );
 
-#ifdef HYPRO_LOGGING
-	friend std::ostream& operator<<( std::ostream& ostr, const Reset<Number>& a )
-#else
-	friend std::ostream& operator<<( std::ostream& ostr, const Reset<Number>& )
-#endif
-	{
-#ifdef HYPRO_LOGGING
-		ostr << "Resets: " << std::endl;
+	friend std::ostream& operator<<( std::ostream& ostr, const Reset<Number>& a ) {
 		for ( std::size_t i = 0; i < a.size(); ++i ) {
 			ostr << a.getMatrix( i ) << ", " << a.getVector( i ) << ", intervals: ";
 			for ( const auto& i : a.getIntervals( i ) ) {
 				ostr << i << ", ";
 			}
 		}
-#endif
 		return ostr;
 	}
 

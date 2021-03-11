@@ -257,7 +257,7 @@ class Location {
 	inline bool operator!=( const Location<Number>& rhs ) const { return !( *this == rhs ); }
 	/// outstream operator
 	friend std::ostream& operator<<( std::ostream& ostr, const Location<Number>& l ) {
-		ostr << "location ptr " << &l << " (id: " << l.hash() << ")" << std::endl
+		ostr << "location " << l.getName() << " (@ " << &l << " id: " << l.hash() << ")" << std::endl
 			 << "\t Flow: " << std::endl;
 		for ( size_t i = 0; i < l.getNumberSubspaces(); i++ ) {
 			switch ( l.getFlowTypes()[i] ) {
@@ -279,7 +279,6 @@ class Location {
 		for ( const auto& transitionPtr : l.getTransitions() ) {
 			ostr << *( transitionPtr.get() ) << std::endl;
 		}
-		ostr << "and transitions.size() is: " << l.getTransitions().size() << std::endl;
 		ostr << std::endl
 			 << ")";
 		return ostr;

@@ -1,4 +1,5 @@
 #pragma once
+#include "../../FlowpipeConstructionConvenience.h"
 #include "../IHandler.h"
 
 namespace hypro {
