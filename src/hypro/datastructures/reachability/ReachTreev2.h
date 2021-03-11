@@ -68,6 +68,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      */
 	std::vector<Representation>& getFlowpipe() { return mFlowpipe; }
 	std::vector<Representation> const& getFlowpipe() const { return mFlowpipe; }
+	void setFlowpipe( std::vector<Representation>&& fp ) { mFlowpipe = std::move( fp ); }
+	void setFlowpipe( const std::vector<Representation>& fp ) { mFlowpipe = fp; }
 
 	/**
 	 * @brief Get the initial set
