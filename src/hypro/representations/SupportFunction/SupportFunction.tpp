@@ -21,7 +21,8 @@ SupportFunctionT<Number, Converter, Setting>::SupportFunctionT( const std::share
 
 //-------PUBLIC---------
 template <typename Number, typename Converter, typename Setting>
-SupportFunctionT<Number, Converter, Setting>::SupportFunctionT() {
+SupportFunctionT<Number, Converter, Setting>::SupportFunctionT()
+	: GeometricObjectBase( SETSTATE::EMPTY ) {
 	//handled by initializer list
 }
 
@@ -542,6 +543,7 @@ void SupportFunctionT<Number, Converter, Setting>::print() const {
 template <typename Number, typename Converter, typename Setting>
 void SupportFunctionT<Number, Converter, Setting>::swap( SupportFunctionT<Number, Converter, Setting>& first, SupportFunctionT<Number, Converter, Setting>& second ) {
 	first.content.swap( second.content );
+	this->setEmptyState( SETSTATE::UNKNOWN );
 }
 
 template <typename Number, typename Converter, typename Setting>

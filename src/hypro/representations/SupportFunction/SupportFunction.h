@@ -53,6 +53,12 @@ class SupportFunctionT : private GeometricObjectBase {
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true ) const;
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact = true ) const;
 
+	static SupportFunctionT Empty() {
+		auto res = SupportFunctionT();
+		res.setEmptyState( SETSTATE::EMPTY );
+		return res;
+	}
+
 	std::size_t dimension() const;
 	std::size_t size() const { return 0; }	// TODO: Better implementation?
 	static representation_name type() { return representation_name::support_function; }
