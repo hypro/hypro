@@ -142,19 +142,13 @@ class HybridAutomataTest : public ::testing::Test {
   public:
 	bool find( const Location<Number>* loc, const std::vector<Location<Number>*>& locSet ) const {
 		if ( loc == nullptr || locSet.empty() ) {
-			// std::cout << "loc was nullptr or locSet was empty\n";
 			return false;
 		}
-		// std::cout << "locSet size: " << locSet.size() << std::endl;
-		// std::cout << "loc has hash: " << loc->hash() << std::endl;
 		for ( auto& ptrToALoc : locSet ) {
-			// std::cout << "ptrToALoc loc hash is: " << ptrToALoc->hash() << std::endl;
 			if ( *ptrToALoc == *( loc ) ) {
-				// std::cout << "found a match!\n";
 				return true;
 			}
 		}
-		// std::cout << "found no match.\n";
 		return false;
 	}
 
@@ -227,13 +221,13 @@ TYPED_TEST( HybridAutomataTest, LocationTest ) {
 /// Flow-types test
 TYPED_TEST( HybridAutomataTest, FlowTest ) {
 	using Interval = carl::Interval<TypeParam>;
-	
+
 	typename rectangularFlow<TypeParam>::flowMap fmap;
-	fmap[VariablePool::getInstance().carlVarByIndex(0)] = Interval(0,1);
+	fmap[VariablePool::getInstance().carlVarByIndex( 0 )] = Interval( 0, 1 );
 	rectangularFlow<TypeParam> rectFlow{ fmap };
-	EXPECT_EQ(rectFlow.type(), DynamicType::rectangular);
-	EXPECT_EQ(rectFlow.size(), 1);
-	EXPECT_EQ(rectFlow.dimension(), 1);
+	EXPECT_EQ( rectFlow.type(), DynamicType::rectangular );
+	EXPECT_EQ( rectFlow.size(), std::size_t( 1 ) );
+	EXPECT_EQ( rectFlow.dimension(), std::size_t( 1 ) );
 }
 
 /*
@@ -364,34 +358,26 @@ TYPED_TEST( HybridAutomataTest, HybridAutomatonTest ) {
 	h1.addInitialState( this->loc1.get(), Condition<TypeParam>( matr, vec ) );
 
 	// Copy constructor;
-	/*
-	std::cout << "Expect copy constructor\n";
-	HybridAutomaton<TypeParam> h0(h1);
-	EXPECT_EQ(h0, h1);
-	*/
+	std::cout << "##################### COPY TEST BEGIN" << std::endl;
+	HybridAutomaton<TypeParam> h0( h1 );
+	EXPECT_EQ( h0, h1 );
+	std::cout << "##################### COPY TEST END" << std::endl;
+
 	// copy assignment operator
-	std::cout << "====== Expect copy assignment\n";
 	HybridAutomaton<TypeParam> h2 = h1;
 	EXPECT_NE( h1, h2 );
 	EXPECT_EQ( h1.getLocations().front()->getName(), h2.getLocations().front()->getName() );
-	// std::cout << "=== h1 at after:" << h1 << std::endl;
-	// std::cout << "=== h2 at after:" << h2 << std::endl;
 
 	// somehow check move assignment
-	std::cout << "====== Expect move assignment\n";
 	HybridAutomaton<TypeParam> h3 = std::move( h1 );
-	// EXPECT_TRUE(h1.getTransitions().size() == 0);
 	EXPECT_EQ( h2, h3 );
 
-	std::cout << "====== Expect move constructor\n";
 	HybridAutomaton<TypeParam> h4( std::move( h2 ) );
 	EXPECT_EQ( h3, h4 );
 
-	std::cout << "====== Expect copy assignment\n";
 	HybridAutomaton<TypeParam> h5 = this->dummyCopy( h3 );
 	EXPECT_EQ( h4, h5 );
 
-	std::cout << "====== Expect move assignment\n";
 	HybridAutomaton<TypeParam> h6 = this->dummyMove( std::move( h3 ) );
 	EXPECT_EQ( h4, h6 );
 }

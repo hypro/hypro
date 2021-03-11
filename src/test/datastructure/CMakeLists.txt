@@ -12,6 +12,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		VertexTest.cpp
 		VertexContainerTest.cpp
 		RangeTest.cpp
+		ReachTreeTest.cpp
 		StateTest.cpp
 		StateVisitorTest.cpp
 		TreeTest.cpp
