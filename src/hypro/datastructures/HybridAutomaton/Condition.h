@@ -116,10 +116,15 @@ class Condition {
 	}
 	/// outstream operator
 	friend std::ostream& operator<<( std::ostream& out, const Condition& in ) {
-		std::size_t i = 0;
-		for ( const auto& pair : in.constraints() ) {
-			out << "Constraint " << i << ": " << pair.matrix() << " constants: " << pair.vector() << std::endl;
-			++i;
+		if ( in.constraints().size() == 1 ) {
+			out << in.constraints().front();
+		} else {
+			std::size_t i = 0;
+			for ( const auto& pair : in.constraints() ) {
+				out << "ConstraintSet " << i << ": \n"
+					<< pair;
+				++i;
+			}
 		}
 		return out;
 	}

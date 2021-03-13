@@ -6,6 +6,8 @@
 #include "../helperMethods/isBox.h"
 #include "../types.h"
 
+#include <Eigen/src/Core/util/Meta.h>
+
 namespace hypro {
 
 /**
@@ -177,7 +179,22 @@ class ConstraintSetT {
 	 * @param b A constraintSet.
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const ConstraintSetT<Number, S>& b ) {
-		ostr << "Matrix: " << b.matrix() << ", Vector: " << b.vector();
+		for ( Eigen::Index row = 0; row < b.matrix().rows(); ++row ) {
+			bool first = true;
+			for ( Eigen::Index col = 0; col < b.matrix().cols(); ++col ) {
+				if ( b.matrix()( row, col ) > 0 ) {
+					if ( first ) {
+						ostr << b.matrix()( row, col ) << " * x" << col;
+						first = false;
+					} else {
+						ostr << " + " << -b.matrix()( row, col ) << " * x" << col;
+					}
+				} else if ( b.matrix()( row, col ) < 0 ) {
+					ostr << " - " << -b.matrix()( row, col ) << " * x" << col;
+				}
+			}
+			ostr << " <= " << b.vector()( row ) << "\n";
+		}
 		return ostr;
 	}
 

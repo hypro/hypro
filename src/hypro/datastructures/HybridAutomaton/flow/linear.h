@@ -1,6 +1,7 @@
 #pragma once
 #include "../../../types.h"
 
+#include <Eigen/src/Core/util/Meta.h>
 #include <iosfwd>
 
 namespace hypro {
@@ -132,9 +133,43 @@ class linearFlow {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const linearFlow<Number>& in ) {
-		return out << in.mFlowMatrix;
+		bool firstRow = true;
+		const matrix_t<Number>& fMat{ in.mFlowMatrix };
+		if ( fMat.rows() > 0 ) {
+			for ( Eigen::Index row = 0; row < fMat.rows(); ++row ) {
+				if ( !firstRow ) {
+					out << "\n";
+				} else {
+					firstRow = false;
+				}
+				out << "x" << row << "' = ";
+				bool first = true;
+				for ( Eigen::Index col = 0; col < fMat.cols() - 1; ++col ) {
+					if ( fMat( row, col ) > 0 ) {
+						if ( !first ) {
+							out << " + ";
+						} else {
+							first = false;
+						}
+						out << fMat( row, col ) << " * x" << col;
+					} else if ( fMat( row, col ) < 0 ) {
+						out << " - " << -fMat( row, col ) << " * x" << col;
+					}
+				}
+				if ( fMat( row, fMat.cols() - 1 ) > 0 ) {
+					if ( !first ) {
+						out << " + ";
+					}
+					out << fMat( row, fMat.cols() - 1 );
+				} else if ( fMat( row, fMat.cols() - 1 ) < 0 ) {
+					out << " - " << -fMat( row, fMat.cols() - 1 );
+				}
+			}
+		}
+		return out;
 	}
-};
+
+};	// namespace hypro
 
 }  // namespace hypro
 

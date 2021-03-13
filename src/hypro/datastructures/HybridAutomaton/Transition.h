@@ -215,17 +215,32 @@ class Transition {
      * @return     Reference to the outstream.
      */
 	friend std::ostream& operator<<( std::ostream& ostr, const Transition<Number>& t ) {
-		ostr << "transition(" << std::endl
-			 << "\t hash = " << t.hash() << std::endl
-			 << "\t Source = " << t.getSource()->getName() << "(" << t.getSource()->hash() << ")" << std::endl
-			 << "\t Target = " << t.getTarget()->getName() << "(" << t.getTarget()->hash() << ")" << std::endl
-			 << "\t urgent = " << t.isUrgent() << std::endl
-			 << "\t Labels = ";
-		for ( const auto& label : t.getLabels() ) ostr << label;
-		ostr << std::endl;
-		ostr << "\t Guard = " << t.getGuard() << std::endl
-			 << "\t Reset = " << t.getReset() << std::endl
-			 << ")";
+		ostr << "{ "
+			 << t.getSource()->getName() << " -";
+		if ( !t.getLabels().empty() ) {
+			bool first = true;
+			ostr << " ";
+			for ( const auto& label : t.getLabels() ) {
+				if ( first ) {
+					ostr << label;
+					first = false;
+				} else {
+					ostr << ", " << label;
+				}
+			}
+			ostr << " ";
+		}
+		ostr << "->";
+		if ( t.isUrgent() ) {
+			ostr << "*";
+		} else {
+			ostr << " ";
+		}
+		ostr << t.getTarget()->getName() << "\n";
+		ostr << "Guard:\n"
+			 << t.getGuard() << "\n"
+			 << "Reset:\n " << t.getReset() << "\n"
+			 << " }";
 		return ostr;
 	}
 
@@ -236,10 +251,6 @@ class Transition {
      * @return     True if both transitions are equal, false otherwise.
      */
 	friend bool operator==( const Transition<Number>& lhs, const Transition<Number>& rhs ) {
-		if ( lhs.hash() != rhs.hash() ) {
-			return false;
-		}
-
 		if ( ( *lhs.mSource != *rhs.mSource ) ||
 			 ( *lhs.mTarget != *rhs.mTarget ) ||
 			 ( lhs.mUrgent != rhs.mUrgent ) ||
@@ -305,16 +316,17 @@ template <typename Number>
 struct hash<hypro::Transition<Number>> {
 	size_t operator()( const hypro::Transition<Number>& trans ) {
 		size_t seed = 0;
-		carl::hash_add( seed, trans.getSource()->hash() );
-		carl::hash_add( seed, trans.getTarget()->hash() );
+		carl::hash_add( seed, trans.getSource() );
+		carl::hash_add( seed, trans.getTarget() );
 		carl::hash_add( seed, trans.getGuard().hash() );
 		carl::hash_add( seed, trans.getReset().hash() );
-		//carl::hash_add(seed,std::hash<hypro::Aggregation>(mAggregationSetting));
-		//carl::hash_add(seed,std::hash<bool>(trans.isUrgent()));
-		//carl::hash_add(seed,std::hash<Number>(mTriggerTime));
-		//for(const auto& l : mLabels) {
-		//	carl::hash_add(seed,std::hash<Label>(l));
-		//}
+		carl::hash_add( seed, trans.getAggregation() );
+		carl::hash_add( seed, trans.getClusterBound() );
+		carl::hash_add( seed, trans.isUrgent() );
+		carl::hash_add( seed, trans.getTriggerTime() );
+		for ( const auto& l : trans.getLabels() ) {
+			carl::hash_add( seed, std::hash<hypro::Label>{}( l ) );
+		}
 		return seed;
 	}
 };

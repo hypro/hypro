@@ -1,5 +1,6 @@
 #pragma once
 #include "../../types.h"
+#include "../../util/adaptions_eigen/adaptions_eigen.h"
 
 #include <carl/interval/Interval.h>
 #include <vector>
@@ -45,7 +46,43 @@ struct AffineTransformation {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const AffineTransformation<Number>& in ) {
-		out << in.mTransformation;
+		bool firstrow = true;
+		for ( Eigen::Index row = 0; row < in.mTransformation.matrix().rows(); ++row ) {
+			if ( !firstrow ) {
+				out << "\n";
+			} else {
+				firstrow = false;
+			}
+			out << "x" << row << " := ";
+			bool first = true;
+			for ( Eigen::Index col = 0; col < in.mTransformation.matrix().cols(); ++col ) {
+				if ( in.mTransformation.matrix()( row, col ) > 0 ) {
+					if ( first ) {
+						out << in.mTransformation.matrix()( row, col );
+						first = false;
+					} else {
+						out << " + " << in.mTransformation.matrix()( row, col );
+					}
+					out << " * x" << col;
+				} else if ( in.mTransformation.matrix()( row, col ) < 0 ) {
+					out << " - " << -in.mTransformation.matrix()( row, col );
+					out << " * x" << col;
+				}
+			}
+			if ( first ) {
+				out << in.mTransformation.vector()( row );
+			} else {
+				if ( in.mTransformation.vector()( row ) > 0 ) {
+					if ( first ) {
+						out << in.mTransformation.vector()( row );
+					} else {
+						out << " + " << in.mTransformation.vector()( row );
+					}
+				} else if ( in.mTransformation.vector()( row ) < 0 ) {
+					out << " - " << -in.mTransformation.vector()( row );
+				}
+			}
+		}
 		return out;
 	}
 

@@ -38,8 +38,6 @@ Location<Number>::Location( const Location<Number>& _loc )
 		mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
 		mTransitions.back()->setSource( this );
 	}
-
-	assert( this->hash() == _loc.hash() );
 }
 
 template <typename Number>
@@ -79,20 +77,16 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 		mName = in.getName();
 		mExternalInput = in.getExternalInput();
 		mHash = 0;
-		// update copied transitions
+		// update copied transitions (sources only)
 		mTransitions.clear();
 		for ( const auto& t : in.getTransitions() ) {
 			mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
 			mTransitions.back()->setSource( this );
 		}
-
 		mFlows.clear();
 		mFlowTypes.clear();
 		mFlows.insert( mFlows.begin(), in.getFlows().begin(), in.getFlows().end() );
 		mFlowTypes.insert( mFlowTypes.begin(), in.getFlowTypes().begin(), in.getFlowTypes().end() );
-
-		//TRACE( "hypro.datastructures", "Comparing hashes after assignment of " << in.getName() << " to this." );
-		assert( this->hash() == in.hash() );
 	}
 	return *this;
 }
