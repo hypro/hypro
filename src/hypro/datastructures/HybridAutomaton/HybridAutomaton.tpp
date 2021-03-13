@@ -1,45 +1,48 @@
 #include "HybridAutomaton.h"
 
+#include <algorithm>
+
 namespace hypro {
 
 //Copy constructor
 template <typename Number>
 HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid )
 	: mLocations()
+	, mInitialStates()
+	, mLocalBadStates()
 	, mGlobalBadStates( hybrid.getGlobalBadStates() )
 	, mVariables( hybrid.getVariables() ) {
 	// mappings to update nested datastructures (transitions sets of locations and source/target locations of transitions).
-	std::map<const Location<Number>*, std::size_t> locationMapping;	 // maps to position in new vector.
-	std::map<Transition<Number>*, std::size_t> transitionMapping;	 // maps to position in new vector.
+	std::map<const Location<Number>*, std::size_t> locationMapping;	 // maps old locations to position in new vector.
 
 	// create real copies of the locations
 	for ( const auto l : hybrid.getLocations() ) {
 		Location<Number> tmp = Location<Number>( *l );
 		mLocations.emplace_back( std::make_unique<Location<Number>>( tmp ) );
 		locationMapping[l] = mLocations.size() - 1;
-		assert( tmp.hash() == l->hash() );
+		assert( mLocations.back().get()->getTransitions().size() == l->getTransitions().size() );
+		assert( std::all_of( mLocations.back().get()->getTransitions().begin(), mLocations.back().get()->getTransitions().end(), [this]( const auto& t ) { return t.get()->getSource() == mLocations.back().get(); } ) );
 	}
 
 	//update locations of transitions and transitions of locations
 	for ( auto& l : mLocations ) {
 		for ( auto& t : l->rGetTransitions() ) {
 			// verify that the source of the location already corresponds to the new location.
-			assert( t->getSource() == l.get() );
-
+			assert( t.get()->getSource() == l.get() );
 			// the target is updated to the new location.
-			for ( auto& target : mLocations ) {
-				if ( target->hash() == t->getTarget()->hash() ) {
-					t->setTarget( target.get() );
-				}
-			}
+			t.get()->setTarget( mLocations[locationMapping[t->getTarget()]].get() );
 		}
 	}
+	assert( std::all_of( locationMapping.begin(), locationMapping.end(), [this]( const auto& p ) {
+		return mLocations[p.second].get()->getTransitions().size() == p.first->getTransitions().size();
+	} ) );
+	assert( equals( this->getLocations(), hybrid.getLocations() ) );
 
 	// get correct location pointer for initial states.
 	for ( auto& otherInitial : hybrid.getInitialStates() ) {
 		auto copy = otherInitial.second;
 		// update location
-		this->addInitialState( mLocations[locationMapping[otherInitial.first]].get(), copy );
+		mInitialStates[this->getLocations()[locationMapping[otherInitial.first]]] = copy;
 	}
 
 	for ( auto& otherBad : hybrid.getLocalBadStates() ) {
@@ -47,80 +50,8 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 		// update location
 		this->addLocalBadState( mLocations[locationMapping[otherBad.first]].get(), copy );
 	}
-
-#ifdef HYPRO_LOGGING
-	DEBUG( "hypro.datastructures", "Hybrid automaton initial states after COPY construction." );
-	for ( const auto& iPair : mInitialStates ) {
-		DEBUG( "hypro.datastructures", "Initial state in loc " << iPair.first->getName() );
-	}
-#endif
+	assert( *this == hybrid );
 }
-
-/*
-//Move constructor
-template<typename Number>
-HybridAutomaton<Number>::HybridAutomaton(HybridAutomaton<Number>&& hybrid)
-	:
-	mLocations(),
-	mTransitions(),
-	mGlobalBadStates(hybrid.getGlobalBadStates()),
-	mVariables(hybrid.getVariables())
- {
-	 std::cout << "Move construct hybrid automaton" << std::endl;
-// mappings to update nested datastructures (transitions sets of locations and source/target locations of transitions).
-	std::map<const Location<Number>*, std::size_t> locationMapping; // maps to position in new vector.
-	std::map<Transition<Number>*, std::size_t> transitionMapping; // maps to position in new vector.
-
-	// create real copies of the locations
-	for(auto l : hybrid.getLocations()){
-		Location<Number> tmp = Location<Number>(*l);
-		tmp.setTransitions(std::vector<Transition<Number>*>());
-    	mLocations.emplace_back(std::make_unique<Location<Number>>(tmp));
-		locationMapping[l] = mLocations.size() - 1;
-		assert(tmp.hash() == l->hash());
-   	}
-	// create copies of transitions
-	for(auto& t : hybrid.getTransitions()){
-		mTransitions.emplace_back(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
-		transitionMapping[t] = mTransitions.size() - 1;
-	}
-
-	//update locations of transitions and transitions of locations
-	for(auto l : hybrid.getLocations()) {
-		// only update transitions which are assigned to locations.
-		for(auto t : l->getTransitions()) {
-
-			// update transitions inside location
-			mLocations[locationMapping[l]]->addTransition(mTransitions[transitionMapping[t]].get());
-
-			// update source location.
-			assert(t->getSource() == l);
-			mTransitions[transitionMapping[t]]->setSource(mLocations[locationMapping[l]].get());
-
-			// update correct target.
-			mTransitions[transitionMapping[t]]->setTarget(mLocations[locationMapping[t->getTarget()]].get());
-		}
-	}
-
-	// get correct location pointer for initial states.
-	for(auto& otherInitial : hybrid.getInitialStates()) {
-		auto copy = otherInitial.second;
-		// update location
-		this->addInitialState(mLocations[locationMapping[otherInitial.first]].get(), copy);
-	}
-
-	for(auto& otherBad : hybrid.getLocalBadStates()) {
-		auto copy = otherBad.second;
-		// update location
-		this->addLocalBadState(mLocations[locationMapping[otherBad.first]].get(), copy);
-	}
-
-	DEBUG("hypro.datastructures","Hybrid automaton initial states after MOVE construction.");
-	for(const auto& iPair : mInitialStates) {
-		DEBUG("hypro.datastructures","Initial state in loc " << iPair.first->getName());
-	}
-}
-*/
 
 //Copy assignment
 template <typename Number>
@@ -129,6 +60,7 @@ HybridAutomaton<Number>& HybridAutomaton<Number>::operator=( const HybridAutomat
 		auto copy{ rhs };
 		*this = std::move( copy );
 	}
+	assert( *this == rhs );
 	return *this;
 }
 

@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include <algorithm>
 #define INCL_FROM_HAHEADER true
 
 #include "../../types.h"
@@ -32,7 +33,6 @@ namespace hypro {
  			   can only be added as unique pointers. If another class/object requests a location/transition,
  			   then only normal pointers are returned.
  */
-//template <typename Number, typename State = State_t<Number>>
 template <typename Number>
 class HybridAutomaton {
   public:
@@ -56,18 +56,10 @@ class HybridAutomaton {
 
 	/**
      * @brief      	Copy constructor.
-     *
      * @param[in]  	hybrid  The original hybrid automaton.
      * @details 	This operation is costly as it performs deep copies
      */
 	HybridAutomaton( const HybridAutomaton<Number>& hybrid );
-
-	/**
-     * @brief      	Move constructor.
-     *
-     * @param[in]  	hybrid  The original hybrid automaton.
-     */
-	//HybridAutomaton(HybridAutomaton<Number>&& hybrid);
 
 	/**
      * @brief 		Constructor from locations, transitions and initial states
@@ -76,7 +68,7 @@ class HybridAutomaton {
      * @param[in] 	initialStates 	Map of initial states
      */
 	//HybridAutomaton(const Locations& locs, const transitionVector& trans, const locationConditionMap& initialStates);
-	//TOOOOOODOOOOOOO: This is missing
+	//TODO This is missing
 	HybridAutomaton( const Locations& locs, const locationConditionMap& initialStates );
 
 	/**
@@ -86,7 +78,6 @@ class HybridAutomaton {
 
 	/**
      * @brief 		Copy Assignment
-     *
      * @param[in]	rhs 	The original hybrid automaton
      * @details 	This operation is costly as it performs deep copies
      */
@@ -94,7 +85,6 @@ class HybridAutomaton {
 
 	/**
      * @brief 		Move Assignment
-     *
      * @param[in]	rhs 	The original hybrid automaton
      */
 	HybridAutomaton& operator=( HybridAutomaton<Number>&& rhs );
@@ -184,12 +174,13 @@ class HybridAutomaton {
 	//which does not compare correctly
 	template <typename T>
 	bool equals( const std::vector<T*>& lhs, const std::vector<T*>& rhs ) const {
-		if ( lhs.size() != rhs.size() ) return false;
+		if ( lhs.size() != rhs.size() ) {
+			return false;
+		}
 		for ( auto lhsIt = lhs.begin(); lhsIt != lhs.end(); ++lhsIt ) {
 			bool found = false;
 			for ( auto rhsIt = rhs.begin(); rhsIt != rhs.end(); ++rhsIt ) {
-				//std::cout << "now comparing " << (*(lhsIt))->hash() << " and " << (*(rhsIt))->hash() << std::endl;
-				if ( ( *lhsIt )->hash() == ( *rhsIt )->hash() ) {
+				if ( *( *lhsIt ) == *( *rhsIt ) ) {
 					found = true;
 					break;
 				}
@@ -198,7 +189,6 @@ class HybridAutomaton {
 				return false;
 			}
 		}
-
 		return true;
 	}
 
@@ -210,40 +200,27 @@ class HybridAutomaton {
      */
 	friend bool operator==( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs ) {
 		if ( !( lhs.equals( lhs.getLocations(), rhs.getLocations() ) ) ) {
-			TRACE( "hypro.datastructures.hybridAutomaton", "no equality of locations." );
 			return false;
 		}
-		//if(!(lhs.equals(lhs.getTransitions(),rhs.getTransitions()))){
-		//    TRACE("hypro.datastructures.hybridAutomaton", "no equality of transitions.");
-		//    return false;
-		//}
 		if ( lhs.getInitialStates().size() != rhs.getInitialStates().size() ) {
-			TRACE( "hypro.datastructures.hybridAutomaton", "initial set sizes were different." );
 			return false;
 		}
 		if ( lhs.getInitialStates() != rhs.getInitialStates() ) {
-			TRACE( "hypro.datastructures.hybridAutomaton", "no equality of initials." );
-
-			TRACE( "hypro.datastructures.hybridAutomaton", "size of lhs initial set: " << lhs.getInitialStates().size() << " size of rhs initial set: " << rhs.getInitialStates().size() );
-			auto rhsIt = rhs.getInitialStates().begin();
 			for ( auto lhsIt = lhs.getInitialStates().begin(); lhsIt != lhs.getInitialStates().end(); ++lhsIt ) {
-				if ( *( ( *lhsIt ).first ) != *( ( *rhsIt ).first ) ) {
-					TRACE( "hypro.datastructures.hybridAutomaton", ( *lhsIt ).first->getName() << " with hash " << ( *lhsIt ).first->hash() << " unequal to " << ( *rhsIt ).first->getName() << " with hash " << ( *rhsIt ).first->hash() );
-					return false;
+				bool found = false;
+				for ( auto rhsIt = rhs.getInitialStates().begin(); rhsIt != rhs.getInitialStates().end(); ++rhsIt ) {
+					if ( *( lhsIt->first ) == *( rhsIt->first ) && lhsIt->second == rhsIt->second ) {
+						found = true;
+						break;
+					}
 				}
-				if ( ( *lhsIt ).second != ( *rhsIt ).second ) {
-					TRACE( "hypro.datastructures.hybridAutomaton", "states were different." );
-					return false;
-				}
-				rhsIt++;
 			}
 		}
+
 		if ( lhs.getLocalBadStates() != rhs.getLocalBadStates() ) {
-			TRACE( "hypro.datastructures.hybridAutomaton", "no equality of local bads." );
 			return false;
 		}
 		if ( lhs.getGlobalBadStates() != rhs.getGlobalBadStates() ) {
-			TRACE( "hypro.datastructures.hybridAutomaton", "no equality of global bads." );
 			return false;
 		}
 
@@ -278,12 +255,6 @@ class HybridAutomaton {
 	}
 
 	friend std::ostream& operator<<( std::ostream& ostr, const HybridAutomaton<Number>& a ) {
-		/*_ostr << "initial states: " << std::endl;
-        for ( auto initialIT = a.initialStates().begin(); initialIT != a.initialStates().end(); ++initialIT ) {
-            ostr << ( *initialIT ).first->id() << ": " << ( *initialIT ).second.first
-                  << " <= " << ( *initialIT ).second.second << std::endl;
-        }*/
-		// TODO
 		ostr << "initial states (" << a.getInitialStates().size() << "): " << std::endl;
 		for ( auto initialIt = a.getInitialStates().begin(); initialIt != a.getInitialStates().end(); ++initialIt ) {
 			ostr << ( ( *initialIt ).first )->getName() << ": " << ( *initialIt ).second << std::endl;

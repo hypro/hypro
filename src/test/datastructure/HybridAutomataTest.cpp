@@ -55,6 +55,10 @@ class HybridAutomataTest : public ::testing::Test {
 		locationMat( 1, 1 ) = 1;
 
 		loc1->setLinearFlow( locationMat );
+		locationMat( 0, 0 ) = 1;
+		locationMat( 0, 1 ) = 1;
+		locationMat( 1, 0 ) = 1;
+		locationMat( 1, 1 ) = 1;
 		loc2->setLinearFlow( locationMat );
 
 		copyOfLoc1 = std::make_unique<Location<Number>>( *loc1 );
@@ -194,12 +198,17 @@ TYPED_TEST( HybridAutomataTest, LocationTest ) {
 	EXPECT_NE( this->loc1->getInvariant().getMatrix(), invariantMat2 );
 
 	// location: matrix
-	EXPECT_EQ( this->loc1->getLinearFlow().getFlowMatrix(), this->locationMat );
+	matrix_t<TypeParam> locationMat( 2, 2 );
+	locationMat( 0, 0 ) = 2;
+	locationMat( 0, 1 ) = 0;
+	locationMat( 1, 0 ) = 0;
+	locationMat( 1, 1 ) = 1;
+	EXPECT_EQ( this->loc1->getLinearFlow().getFlowMatrix(), locationMat );
 
 	matrix_t<TypeParam> locationMat2( 2, 2 );
 	locationMat2( 0, 0 ) = 1;
-	locationMat2( 0, 1 ) = 0;
-	locationMat2( 1, 0 ) = 0;
+	locationMat2( 0, 1 ) = 1;
+	locationMat2( 1, 0 ) = 1;
 	locationMat2( 1, 1 ) = 1;
 	EXPECT_NE( this->loc1->getLinearFlow().getFlowMatrix(), locationMat2 );
 
@@ -359,13 +368,14 @@ TYPED_TEST( HybridAutomataTest, HybridAutomatonTest ) {
 
 	// Copy constructor;
 	std::cout << "##################### COPY TEST BEGIN" << std::endl;
-	HybridAutomaton<TypeParam> h0( h1 );
+	EXPECT_EQ( h1, h1 );
+	HybridAutomaton<TypeParam> h0{ h1 };
 	EXPECT_EQ( h0, h1 );
 	std::cout << "##################### COPY TEST END" << std::endl;
 
 	// copy assignment operator
 	HybridAutomaton<TypeParam> h2 = h1;
-	EXPECT_NE( h1, h2 );
+	EXPECT_EQ( h1, h2 );
 	EXPECT_EQ( h1.getLocations().front()->getName(), h2.getLocations().front()->getName() );
 
 	// somehow check move assignment
