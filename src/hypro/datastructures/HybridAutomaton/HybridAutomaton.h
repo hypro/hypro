@@ -214,6 +214,9 @@ class HybridAutomaton {
 						break;
 					}
 				}
+				if ( !found ) {
+					return false;
+				}
 			}
 		}
 

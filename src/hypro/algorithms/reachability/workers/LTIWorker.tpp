@@ -65,7 +65,7 @@ template <class Representation>
 struct LTIWorker<Representation>::EnabledSegmentsGen {
 	std::vector<Representation> const* flowpipe;
 	Transition<Number> const* transition;
-	size_t current = 0;
+	std::size_t current = 0;
 
 	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<Number> const* transition )
 		: flowpipe( flowpipe )
@@ -81,7 +81,7 @@ struct LTIWorker<Representation>::EnabledSegmentsGen {
 			auto [containment, intersected] = intersect( ( *flowpipe )[current], transition->getGuard() );
 			if ( containment != CONTAINMENT::NO ) {
 				enabledSegments.push_back( intersected );
-				firstEnabled = current;
+				firstEnabled = SegmentInd( current );
 				break;
 			}
 		}
@@ -102,8 +102,8 @@ template <class Representation>
 struct LTIWorker<Representation>::AggregatedGen {
 	size_t segmentsPerBlock{};
 	std::vector<Representation>* enabled{};
-	SegmentInd firstEnabled{};
-	size_t current = 0;
+	std::size_t firstEnabled{};
+	std::size_t current = 0;
 
 	AggregatedGen( size_t segmentsPerBlock, std::vector<Representation>& enabled, SegmentInd firstEnabled )
 		: segmentsPerBlock( segmentsPerBlock )
@@ -116,12 +116,12 @@ struct LTIWorker<Representation>::AggregatedGen {
 	std::optional<std::pair<Representation, carl::Interval<SegmentInd>>> next() {
 		if ( current == enabled->size() ) return std::nullopt;
 		Representation aggregated = ( *enabled )[current];
-		SegmentInd indexFirst = firstEnabled + current;	 // flowpipe ind of first aggregated segment
+		SegmentInd indexFirst = SegmentInd( firstEnabled + current );  // flowpipe ind of first aggregated segment
 		current += 1;
 		for ( size_t inBlock = 1; inBlock < segmentsPerBlock && current < enabled->size(); ++inBlock, ++current ) {
 			aggregated.unite( ( *enabled )[current] );
 		}
-		return std::pair{ aggregated, carl::Interval<int>{ indexFirst, int( firstEnabled + current ) } };
+		return std::pair{ aggregated, carl::Interval<SegmentInd>{ indexFirst, SegmentInd( firstEnabled + current ) } };
 	}
 };
 

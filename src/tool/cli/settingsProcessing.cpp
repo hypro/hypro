@@ -16,7 +16,7 @@ hypro::AnalysisParameters constructSingleNodeStrategy( const hypro::Reachability
 	return parameters;
 }
 
-std::vector<hypro::AnalysisParameters> constructFullStrategy( const hypro::ReachabilitySettings& parsedSettings, const boost::program_options::variables_map& cliOptions ) {
+std::vector<hypro::AnalysisParameters> constructFullStrategy( const hypro::ReachabilitySettings&, const boost::program_options::variables_map& cliOptions ) {
 	std::vector<hypro::AnalysisParameters> parameters{};
 
 	size_t snodeCount = cliOptions["strategy.delta"].as<std::vector<mpq_class>>().size();
