@@ -24,7 +24,7 @@ class WorkQueueT {
 
   protected:
 	std::deque<Workable> mQueue;
-	mutable std::mutex mSpinlock;
+	mutable std::mutex mQueueLock;
 
   public:
 	using Workable_t = Workable;
@@ -78,7 +78,7 @@ class WorkQueueT {
 	bool exists( const Workable& item );
 	bool nonLockingExists( const Workable& item );
 
-	std::mutex& getMutex() { return mSpinlock; }
+	std::mutex& getMutex() { return mQueueLock; }
 
 	friend std::ostream& operator<<( std::ostream& out, const WorkQueueT& queue ) {
 		for ( auto elem : queue.getQueue() ) {
@@ -89,24 +89,6 @@ class WorkQueueT {
 
   private:
 	inline const std::deque<Workable>& getQueue() const { return mQueue; }
-
-	// TODO move NodeOperator struct somewhere and only leave its declaration here. There is no need to instantiate it with every compile.
-	/*
-    struct DataOperator {
-        bool operator()(Workable const& lhs, Workable const& rhs)
-        {
-        	// TODO: Workaround - normally shared_ptr in the queue should not be nullptr (deleted).
-        	if(lhs == nullptr) {
-        		return false;
-        	}
-        	if(rhs == nullptr) {
-        		return true;
-        	}
-        	return lhs > rhs;
-        }
-
-    };
-    */
 };
 
 template <typename Workable>
