@@ -120,6 +120,28 @@ Condition<Number> combine(
 }
 
 template <typename Number>
+Condition<Number> conditionFromIntervals( const std::vector<carl::Interval<Number>>& intervals ) {
+	std::vector<vector_t<Number>> rows;
+	std::vector<Number> constants;
+	std::size_t dim = intervals.size();
+	for ( std::size_t i = 0; i < dim; ++i ) {
+		if ( intervals[i].lowerBoundType() == carl::BoundType::WEAK ) {
+			vector_t<Number> r = vector_t<Number>::Zero( dim );
+			r( i ) = Number( -1 );
+			constants.emplace_back( -intervals[i].lower() );
+			rows.emplace_back( std::move( r ) );
+		}
+		if ( intervals[i].upperBoundType() == carl::BoundType::WEAK ) {
+			vector_t<Number> r = vector_t<Number>::Zero( dim );
+			r( i ) = Number( 1 );
+			constants.emplace_back( intervals[i].upper() );
+			rows.emplace_back( std::move( r ) );
+		}
+	}
+	return Condition<Number>{ createMatrix( rows ), createVector( constants ) };
+}
+
+template <typename Number>
 void Condition<Number>::decompose( const Decomposition& decomposition ) {
 	if ( mConstraints.size() > 1 ) {
 		//already decomposed/empty constraints

@@ -371,7 +371,21 @@ Halfspace<To> convert( const Halfspace<From>& in ) {
  */
 template <typename Number>
 std::ostream& operator<<( std::ostream& _lhs, const Halfspace<Number>& _rhs ) {
-	_lhs << "( " << vector_t<Number>( _rhs.normal().transpose() ) << "; " << Number( _rhs.offset() ) << " )";
+	_lhs << "( ";
+	bool first = true;
+	for ( Eigen::Index i = 0; i < _rhs.normal().rows(); ++i ) {
+		if ( first && _rhs.normal()( i ) != 0 ) {
+			_lhs << _rhs.normal()( i ) << "·x" << i;
+			first = false;
+		} else {
+			if ( _rhs.normal()( i ) < 0 ) {
+				_lhs << " - " << -_rhs.normal()( i ) << "·x" << i;
+			} else if ( _rhs.normal()( i ) > 0 ) {
+				_lhs << " + " << _rhs.normal()( i ) << "·x" << i;
+			}
+		}
+	}
+	_lhs << " ≤ " << Number( _rhs.offset() ) << " )";
 	return _lhs;
 }
 

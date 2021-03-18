@@ -6,6 +6,7 @@
 #include "TreeNodev2.h"
 
 #include <carl/interval/Interval.h>
+#include <ostream>
 #include <vector>
 
 namespace hypro {
@@ -91,6 +92,12 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      */
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
 };
+
+template <typename Representation>
+std::ostream& operator<<( std::ostream& out, const ReachTreeNode<Representation>& node ) {
+	out << "{ " << node.getLocation()->getName() << ", init " << node.getInitialSet() << " }";
+	return out;
+}
 
 /**
  * @brief Convenience function to create roots of a search tree from the initial states of the passed hybrid automaton.

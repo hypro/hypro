@@ -71,7 +71,9 @@ class ConstraintSetT {
 	 */
 	ConstraintSetT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants )
 		: mConstraints( _constraints )
-		, mConstants( _constants ) {}
+		, mConstants( _constants ) {
+		assert( _constraints.rows() == _constants.rows() );
+	}
 
 	/**
 	 * @brief Constructor from a matrix and a vector.
@@ -184,16 +186,16 @@ class ConstraintSetT {
 			for ( Eigen::Index col = 0; col < b.matrix().cols(); ++col ) {
 				if ( b.matrix()( row, col ) > 0 ) {
 					if ( first ) {
-						ostr << b.matrix()( row, col ) << " * x" << col;
+						ostr << b.matrix()( row, col ) << "·x" << col;
 						first = false;
 					} else {
-						ostr << " + " << -b.matrix()( row, col ) << " * x" << col;
+						ostr << " + " << -b.matrix()( row, col ) << "·x" << col;
 					}
 				} else if ( b.matrix()( row, col ) < 0 ) {
-					ostr << " - " << -b.matrix()( row, col ) << " * x" << col;
+					ostr << " - " << -b.matrix()( row, col ) << "·x" << col;
 				}
 			}
-			ostr << " <= " << b.vector()( row ) << "\n";
+			ostr << " ≤ " << b.vector()( row ) << "\n";
 		}
 		return ostr;
 	}
