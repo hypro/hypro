@@ -1,6 +1,12 @@
 #include "../defines.h"
 #include "automata/automataCreation.h"
+#include "hypro/datastructures/HybridAutomaton/Condition.h"
+#include "hypro/datastructures/HybridAutomaton/Location.h"
+#include "hypro/datastructures/HybridAutomaton/Transition.h"
+#include "hypro/types.h"
+#include "hypro/util/VariablePool.h"
 #include "gtest/gtest.h"
+#include <carl/interval/Interval.h>
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
 #include <hypro/algorithms/reachability/workers/SingularWorker.h>
@@ -487,6 +493,157 @@ TEST( SingularRechabilityTest, SimplePLTScenario ) {
 	// variable order: t,s,x,aff
 	std::vector<std::vector<std::size_t>> pltDimensions{ { 0, 1 }, { 0, 2 }, { 1, 2 } };
 	std::vector<std::string> filenames{ "test_t_s", "test_t_x", "test_s_x" };
+	std::size_t pos = 0;
+	auto flowpipes = getFlowpipes( initialNodes.front() );
+	for ( const auto& dimPair : pltDimensions ) {
+		plt.setFilename( filenames[pos] );
+		++pos;
+		for ( const auto& fp : flowpipes ) {
+			for ( const auto& segment : fp ) {
+				plt.addObject( reduceToDimensions( segment.projectOn( dimPair ).vertices(), dimPair ) );
+			}
+		}
+		plt.plot2d();
+		plt.clear();
+	}
+}
+
+TEST( SingularRechabilityTest, ReservoirCaseStudy ) {
+	// Example of a reservoir modelled by a Hybrid Petri net. We analyze the resulting singular automaton with
+	// continuous non-determinism involved.
+	using Number = mpq_class;
+	using M = hypro::matrix_t<Number>;
+	using V = hypro::vector_t<Number>;
+	using HPoly = hypro::HPolytope<Number>;
+	// automaton
+	hypro::HybridAutomaton<Number> automaton;
+	// 5 locations
+	hypro::Location<Number>* l0 = automaton.createLocation();
+	l0->setName( "l0" );
+	hypro::Location<Number>* l1 = automaton.createLocation();
+	l1->setName( "l1" );
+	hypro::Location<Number>* l2 = automaton.createLocation();
+	l2->setName( "l2" );
+	hypro::Location<Number>* l3 = automaton.createLocation();
+	l3->setName( "l3" );
+	hypro::Location<Number>* l4 = automaton.createLocation();
+	l4->setName( "l4" );
+	// variable order: x,c,s
+	const Eigen::Index x = 0;
+	const Eigen::Index c = 1;
+	const Eigen::Index s = 2;
+	// try to allocate variables with correct name
+	hypro::VariablePool::getInstance().carlVarByIndex( x, "x" );
+	hypro::VariablePool::getInstance().carlVarByIndex( c, "c" );
+	hypro::VariablePool::getInstance().carlVarByIndex( s, "s" );
+	// initial configuration
+	std::vector<carl::Interval<Number>> initialValuations{ carl::Interval<Number>( 0 ), carl::Interval<Number>( 0 ),
+														   carl::Interval<Number>( 0 ) };
+	automaton.addInitialState( l0, hypro::conditionFromIntervals<Number>( initialValuations ) );
+	// basic matrix for dynamics, to realize singular dynamics only modify the last column
+	M dynamics = M::Zero( 4, 4 );
+	// invariants are for all locations the same: x in [0,10], all others in [-11,11] (for ploting)
+	std::vector<carl::Interval<Number>> invariantIntervals{
+		  carl::Interval<Number>( 0, 10 ), carl::Interval<Number>( -11, 11 ), carl::Interval<Number>( -11, 11 ) };
+	auto invariants = hypro::conditionFromIntervals( invariantIntervals );
+	DEBUG( "hypro.reachability", "Created invariant condition: " << invariants );
+	l0->setInvariant( invariants );
+	l1->setInvariant( invariants );
+	l2->setInvariant( invariants );
+	l3->setInvariant( invariants );
+	l4->setInvariant( invariants );
+	// set dynamics l0
+	dynamics( x, 3 ) = Number( 1 );
+	dynamics( c, 3 ) = Number( 1 );
+	dynamics( s, 3 ) = Number( 1 );
+	l0->setFlow( dynamics );
+	// set dynamics l1
+	dynamics( x, 3 ) = Number( -1 );
+	dynamics( c, 3 ) = Number( 0 );
+	dynamics( s, 3 ) = Number( 1 );
+	l1->setFlow( dynamics );
+	// set dynamics l2
+	dynamics( x, 3 ) = Number( 2 );
+	dynamics( c, 3 ) = Number( 1 );
+	dynamics( s, 3 ) = Number( 0 );
+	l2->setFlow( dynamics );
+	// set dynamics l3
+	dynamics( x, 3 ) = Number( 0 );
+	dynamics( c, 3 ) = Number( 0 );
+	dynamics( s, 3 ) = Number( 0 );
+	l3->setFlow( dynamics );
+	// set dynamics l4, similar to l3
+	l4->setFlow( dynamics );
+	// transitions
+	// l0 -> l1
+	M guardConstraints = M::Zero( 1, 3 );
+	V guardConstants = V::Zero( 1 );
+	{
+		hypro::Transition<Number>* t = l0->createTransition( l1 );
+		guardConstraints( 0, c ) = Number( -1 );
+		guardConstants( 0 ) = Number( -2 );
+		t->setGuard( { guardConstraints, guardConstants } );
+	}
+	// l2 -> l3
+	{
+		auto* t = l2->createTransition( l3 );
+		t->setGuard( { guardConstraints, guardConstants } );
+	}
+	// l0 -> l2
+	std::vector<carl::Interval<Number>> resets;
+	// identity resets are indicated by empty intervals
+	resets.emplace_back( carl::Interval<Number>::emptyInterval() );
+	resets.emplace_back( carl::Interval<Number>::emptyInterval() );
+	resets.emplace_back( carl::Interval<Number>( Number( 0 ) ) );
+	{
+		auto* t = l0->createTransition( l2 );
+		t->setReset( { resets } );
+	}
+	// l1 -> l3
+	{
+		auto* t = l1->createTransition( l3 );
+		t->setReset( { resets } );
+	}
+	// l0 -> l4
+	guardConstraints = M::Zero( 2, 3 );
+	guardConstants = V::Zero( 2 );
+	guardConstraints( 0, x ) = Number( 1 );
+	guardConstraints( 1, x ) = Number( -1 );
+	guardConstants( 0 ) = Number( 10 );
+	guardConstants( 1 ) = Number( -10 );
+	{
+		auto* t = l0->createTransition( l4 );
+		t->setGuard( { guardConstraints, guardConstants } );
+	}
+	// l2 -> l4
+	{
+		auto* t = l2->createTransition( l4 );
+		t->setGuard( { guardConstraints, guardConstants } );
+	}
+	// l1 -> l4
+	guardConstraints = M::Zero( 1, 3 );
+	guardConstants = V::Zero( 1 );
+	guardConstraints( 0, x ) = Number( 1 );
+	{
+		auto* t = l1->createTransition( l4 );
+		t->setGuard( { guardConstraints, guardConstants } );
+	}
+
+	auto initialNodes = hypro::makeRoots<HPoly, Number>( automaton );
+	EXPECT_TRUE( initialNodes.size() == 1 );
+	auto analyzer = hypro::SingularAnalyzer<HPoly>(
+		  automaton, hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 15 ), hypro::tNumber( 0.01 ) }, initialNodes );
+	auto result = analyzer.run();
+	// trivially safe, as no unsafe states have been defined
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
+
+	// plot flowpipes
+	hypro::Plotter<Number>& plt = hypro::Plotter<Number>::getInstance();
+	plt.rSettings().fill = true;
+	plt.rSettings().cummulative = true;
+	// variable order: x,c,s
+	std::vector<std::vector<std::size_t>> pltDimensions{ { s, x }, { x, c } };
+	std::vector<std::string> filenames{ "reservoir_s_x", "reservoir_x_c" };
 	std::size_t pos = 0;
 	auto flowpipes = getFlowpipes( initialNodes.front() );
 	for ( const auto& dimPair : pltDimensions ) {
