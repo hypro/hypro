@@ -370,23 +370,51 @@ Halfspace<To> convert( const Halfspace<From>& in ) {
  * @return     A reference to the outstream.
  */
 template <typename Number>
-std::ostream& operator<<( std::ostream& _lhs, const Halfspace<Number>& _rhs ) {
-	_lhs << "( ";
+std::ostream& operator<<( std::ostream& ostr, const Halfspace<Number>& _rhs ) {
+	ostr << "( ";
 	bool first = true;
 	for ( Eigen::Index i = 0; i < _rhs.normal().rows(); ++i ) {
-		if ( first && _rhs.normal()( i ) != 0 ) {
-			_lhs << _rhs.normal()( i ) << "·x" << i;
-			first = false;
-		} else {
-			if ( _rhs.normal()( i ) < 0 ) {
-				_lhs << " - " << -_rhs.normal()( i ) << "·x" << i;
-			} else if ( _rhs.normal()( i ) > 0 ) {
-				_lhs << " + " << _rhs.normal()( i ) << "·x" << i;
+		bool notnull = _rhs.normal()( i ) != 0;
+		bool printVal = notnull && abs( _rhs.normal()( i ) != 1 );
+		bool neg = _rhs.normal()( i ) < 0;
+		if ( notnull ) {
+			if ( printVal ) {
+				if ( first ) {
+					first = false;
+					if ( neg ) {
+						ostr << " - " << -_rhs.normal()( i );
+					} else {
+						ostr << _rhs.normal()( i );
+					}
+					ostr << "·x" << i;
+				} else {
+					if ( neg ) {
+						ostr << " - " << -_rhs.normal()( i );
+					} else {
+						ostr << " + " << _rhs.normal()( i );
+					}
+					ostr << "·x" << i;
+				}
+			} else {
+				if ( first ) {
+					first = false;
+					if ( neg ) {
+						ostr << "- ";
+					}
+					ostr << "x" << i;
+				} else {
+					if ( neg ) {
+						ostr << " - ";
+					} else {
+						ostr << " + ";
+					}
+					ostr << "x" << i;
+				}
 			}
 		}
 	}
-	_lhs << " ≤ " << Number( _rhs.offset() ) << " )";
-	return _lhs;
+	ostr << " ≤ " << Number( _rhs.offset() ) << " )";
+	return ostr;
 }
 
 /**

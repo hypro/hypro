@@ -184,15 +184,43 @@ class ConstraintSetT {
 		for ( Eigen::Index row = 0; row < b.matrix().rows(); ++row ) {
 			bool first = true;
 			for ( Eigen::Index col = 0; col < b.matrix().cols(); ++col ) {
-				if ( b.matrix()( row, col ) > 0 ) {
-					if ( first ) {
-						ostr << b.matrix()( row, col ) << "·x" << col;
-						first = false;
+				bool notnull = b.matrix()( row, col ) != 0;
+				bool printVal = notnull && abs( b.matrix()( row, col ) != 1 );
+				bool neg = b.matrix()( row, col ) < 0;
+				if ( notnull ) {
+					if ( printVal ) {
+						if ( first ) {
+							first = false;
+							if ( neg ) {
+								ostr << " - " << -b.matrix()( row, col );
+							} else {
+								ostr << b.matrix()( row, col );
+							}
+							ostr << "·x" << col;
+						} else {
+							if ( neg ) {
+								ostr << " - " << -b.matrix()( row, col );
+							} else {
+								ostr << " + " << b.matrix()( row, col );
+							}
+							ostr << "·x" << col;
+						}
 					} else {
-						ostr << " + " << -b.matrix()( row, col ) << "·x" << col;
+						if ( first ) {
+							first = false;
+							if ( neg ) {
+								ostr << "- ";
+							}
+							ostr << "x" << col;
+						} else {
+							if ( neg ) {
+								ostr << " - ";
+							} else {
+								ostr << " + ";
+							}
+							ostr << "x" << col;
+						}
 					}
-				} else if ( b.matrix()( row, col ) < 0 ) {
-					ostr << " - " << -b.matrix()( row, col ) << "·x" << col;
 				}
 			}
 			ostr << " ≤ " << b.vector()( row ) << "\n";
