@@ -594,7 +594,8 @@ TEST( SingularRechabilityTest, ReservoirCaseStudy ) {
 	// identity resets are indicated by empty intervals
 	resets.emplace_back( carl::Interval<Number>::emptyInterval() );
 	resets.emplace_back( carl::Interval<Number>::emptyInterval() );
-	resets.emplace_back( carl::Interval<Number>( Number( 0 ) ) );
+	// resets.emplace_back( carl::Interval<Number>( Number( 0 ) ) );
+	resets.emplace_back( carl::Interval<Number>::emptyInterval() );
 	{
 		auto* t = l0->createTransition( l2 );
 		t->setReset( { resets } );
