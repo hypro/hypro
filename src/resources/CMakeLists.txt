@@ -3,6 +3,8 @@
 set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 
 add_custom_target(resources)
+set(RESSOURCES_FLAGS "-Wno-error ${CMAKE_CXX_FLAGS} -Wno-error" )
+message("Ressoures flags: ${RESSOURCES_FLAGS}")
 
 # Enable ExternalProject CMake module
 INCLUDE(ExternalProject)
