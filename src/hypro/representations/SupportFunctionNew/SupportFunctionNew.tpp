@@ -889,7 +889,7 @@ void SupportFunctionNewT<Number, Converter, Setting>::evaluateTemplate( std::siz
 	if ( !mTemplateSet || force ) {
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( this->dimension(), directionCount );
 
-		matrix_t<Number> templateDirectionMatrix = combineRows( templateDirections );
+		matrix_t<Number> templateDirectionMatrix = createMatrix( templateDirections );
 
 		//lets the support function evaluate the offset of the halfspaces for each direction
 		std::vector<EvaluationResult<Number>> offsets = this->multiEvaluate( templateDirectionMatrix );

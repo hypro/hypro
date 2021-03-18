@@ -99,14 +99,14 @@ class VariablePool : public carl::Singleton<VariablePool> {
 	}
 #endif
 
-	const carl::Variable& carlVarByIndex( std::size_t _index ) {
+	carl::Variable& carlVarByIndex( std::size_t _index, std::string name = "" ) {
 		assert( mCarlVariables.size() == mPplId );
 #ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
 #endif
 		if ( _index >= mPplId ) {
 			for ( std::size_t curr = mPplId; curr <= _index; ++curr ) {
-				carl::Variable cVar = carl::freshRealVariable();
+				carl::Variable cVar = carl::freshRealVariable( name );
 				mCarlVariables.push_back( cVar );
 #ifdef HYPRO_USE_PPL
 				Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );

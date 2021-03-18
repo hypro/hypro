@@ -4,6 +4,7 @@
 #include "../../types.h"
 #include "decomposition/Decomposition.h"
 
+#include <carl/interval/Interval.h>
 #include <iosfwd>
 #include <numeric>
 #include <variant>
@@ -30,6 +31,7 @@ class Condition {
 		, mConditionIsBox( { TRIBOOL::NSET } )
 		, mConditionSetState( { SETSTATE::UNKNOWN } )
 		, mHash( 0 ) {
+		assert( mat.rows() == vec.rows() );
 		mConstraints.emplace_back( mat, vec );
 	}
 	/// constructor from constraint set (which encapsulates a matrix and a vector)
@@ -141,6 +143,9 @@ template <typename Number>
 Condition<Number> combine(
 	  const Condition<Number>& lhs, const Condition<Number>& rhs,
 	  const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar );
+
+template <typename Number>
+Condition<Number> conditionFromIntervals( const std::vector<carl::Interval<Number>>& intervals );
 
 }  // namespace hypro
 

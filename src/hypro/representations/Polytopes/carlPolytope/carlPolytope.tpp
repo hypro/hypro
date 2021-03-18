@@ -374,7 +374,7 @@ CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setti
 		constants( pos ) = res.supportValue;
 		++pos;
 	}
-	return CarlPolytopeT<Number, Converter, Setting>( combineRows( directions ), constants );
+	return CarlPolytopeT<Number, Converter, Setting>( createMatrix( directions ), constants );
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -399,7 +399,7 @@ void CarlPolytopeT<Number, Converter, Setting>::reduceRepresentation() {
 	}
 	Optimizer<Number> opt = Optimizer<Number>( this->matrix(), this->vector() );
 	auto directions = computeTemplate<Number>( this->dimension(), 4 );
-	matrix_t<Number> constraints = combineRows( directions );
+	matrix_t<Number> constraints = createMatrix( directions );
 	vector_t<Number> constants = vector_t<Number>( constraints.rows() );
 	Eigen::Index row = 0;
 	for ( const auto& d : directions ) {
