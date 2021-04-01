@@ -272,13 +272,13 @@ TEST( SingularRechabilityTest, SingularAnalyzer ) {
 	// Compare flowpipes. Expect one flowpipe with two Polytopes (one for initial state and one for final)
 	auto flowpipes = hypro::getFlowpipes( initialNodes1 );
 	EXPECT_TRUE( flowpipes.size() == 1 );
-	EXPECT_TRUE( flowpipes[0].size() == 2 );
+	EXPECT_TRUE( flowpipes[0].size() == 1 );
 
 	// Initial contains only x = 0, final is the line segment x = [0, 1]
 	VPoly init( { Point{ 0 } } );
 	VPoly final( { Point{ 0 }, Point{ 1 } } );
-	EXPECT_EQ( init, flowpipes[0].begin()[0] );
-	EXPECT_EQ( final, flowpipes[0].begin()[1] );
+	EXPECT_TRUE( flowpipes[0].begin()[0].contains( init ) );
+	EXPECT_EQ( final, flowpipes[0].begin()[0] );
 }
 
 TEST( SingularRechabilityTest, SingularAnalyzer2 ) {
