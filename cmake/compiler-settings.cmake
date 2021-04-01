@@ -105,6 +105,7 @@ if(DEVELOPER)
 
 
 	set(DEV_FLAGS "\
+ -Werror\
  -Wswitch\
  -Wno-deprecated-declarations\
  -Wempty-body\
