@@ -136,6 +136,8 @@ class Location {
 	void addTransition( std::unique_ptr<Transition<Number>>&& trans );
 	/// creates a transition from this location to the target
 	Transition<Number>* createTransition( Location<Number>* target );
+	/// adds a copy of the passed transition with the source being this location
+	Transition<Number>* createTransition( Transition<Number>* target );
 	/// setter for external input/disturbance
 	void setExtInput( const std::vector<carl::Interval<Number>>& b );
 	/// returns hash value of the location
@@ -170,7 +172,7 @@ class Location {
 	}
 	/// equal comparison
 	inline bool operator==( const Location<Number>& rhs ) const {
-		//TRACE( "hypro.datastructures", "Comparison of " << *this << " and " << rhs );
+		TRACE( "hypro.datastructures", "Comparison of " << *this << " and " << rhs );
 		if ( mName != rhs.getName() ) {
 			TRACE( "hypro.datastructures", "Name not equal." );
 			return false;
@@ -220,7 +222,6 @@ class Location {
 
 		if ( mTransitions.size() != rhs.getTransitions().size() ) {
 			TRACE( "hypro.datastructures", "Number of transitions not equal: " << mTransitions.size() << " (lhs) vs. " << rhs.getTransitions().size() << " (rhs)." );
-			std::cout << "Number of transitions not equal: " << mTransitions.size() << " (lhs) vs. " << rhs.getTransitions().size() << " (rhs)." << std::endl;
 			return false;
 		}
 		/*
@@ -238,14 +239,14 @@ class Location {
             }
         }
         */
-		//TRACE("hypro.datastructures","Equal.");
+		TRACE( "hypro.datastructures", "Equal." );
 		return true;
 	}
 	/// not equal comparison
 	inline bool operator!=( const Location<Number>& rhs ) const { return !( *this == rhs ); }
 	/// outstream operator
 	friend std::ostream& operator<<( std::ostream& ostr, const Location<Number>& l ) {
-		ostr << l.getName() << " {\n"
+		ostr << l.getName() << " @" << &l << " {\n"
 			 << "Flow.: "
 			 << "\n";
 		for ( size_t i = 0; i < l.getNumberSubspaces(); i++ ) {

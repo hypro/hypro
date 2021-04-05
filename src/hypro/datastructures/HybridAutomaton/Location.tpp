@@ -35,8 +35,9 @@ Location<Number>::Location( const Location<Number>& _loc )
 	, mHash( 0 ) {
 	// update copied transitions
 	for ( const auto& t : _loc.getTransitions() ) {
-		mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
-		mTransitions.back()->setSource( this );
+		auto transitionCopy = createTransition( t.get() );
+		assert( transitionCopy->getSource() == this );
+		assert( transitionCopy->getTarget() == t.get()->getTarget() );
 	}
 }
 
@@ -79,9 +80,11 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 		mHash = 0;
 		// update copied transitions (sources only)
 		mTransitions.clear();
+
 		for ( const auto& t : in.getTransitions() ) {
-			mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *( t.get() ) ) ) );
-			mTransitions.back()->setSource( this );
+			auto transitionCopy = createTransition( t.get() );
+			assert( transitionCopy->getSource() == this );
+			assert( transitionCopy->getTarget() == t.get()->getTarget() );
 		}
 		mFlows.clear();
 		mFlowTypes.clear();
@@ -181,6 +184,15 @@ template <typename Number>
 Transition<Number>* Location<Number>::createTransition( Location<Number>* target ) {
 	auto& res = mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>{ this, target } ) );
 	mHash = 0;
+	return res.get();
+}
+
+template <typename Number>
+Transition<Number>* Location<Number>::createTransition( Transition<Number>* original ) {
+	auto& res = mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>{ *original } ) );
+	mHash = 0;
+	res->setSource( this );
+	assert( res->getTarget() == original->getTarget() );
 	return res.get();
 }
 

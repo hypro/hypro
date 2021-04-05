@@ -215,8 +215,8 @@ class Transition {
      * @return     Reference to the outstream.
      */
 	friend std::ostream& operator<<( std::ostream& ostr, const Transition<Number>& t ) {
-		ostr << "{ "
-			 << t.getSource()->getName() << " -";
+		ostr << "{ @" << &t << " "
+			 << t.getSource()->getName() << " (@" << t.getSource() << ") -";
 		if ( !t.getLabels().empty() ) {
 			bool first = true;
 			ostr << " ";
@@ -236,7 +236,7 @@ class Transition {
 		} else {
 			ostr << " ";
 		}
-		ostr << t.getTarget()->getName() << "\n";
+		ostr << t.getTarget()->getName() << " (@" << t.getTarget() << ")\n";
 		ostr << "Guard:\n"
 			 << t.getGuard() << "\n"
 			 << "Reset:\n " << t.getReset() << "\n"
@@ -316,6 +316,7 @@ template <typename Number>
 struct hash<hypro::Transition<Number>> {
 	size_t operator()( const hypro::Transition<Number>& trans ) {
 		size_t seed = 0;
+		// TODO hash over Locations instead over location ptrs
 		carl::hash_add( seed, trans.getSource() );
 		carl::hash_add( seed, trans.getTarget() );
 		carl::hash_add( seed, trans.getGuard().hash() );
