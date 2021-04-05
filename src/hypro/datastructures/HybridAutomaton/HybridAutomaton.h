@@ -137,12 +137,18 @@ class HybridAutomaton {
 	const std::unique_ptr<Location<Number>>& addLocation( const Location<Number>& location );
 	const std::unique_ptr<Location<Number>>& addLocation( std::unique_ptr<Location<Number>>&& location );
 	void addTransition( std::unique_ptr<Transition<Number>>&& transition );
-	void addInitialState( const Location<Number>* loc, const Condition<Number>& state ) { mInitialStates.emplace( std::make_pair( loc, state ) ); }
+	void addInitialState( const Location<Number>* loc, const Condition<Number>& state ) {
+		assert( std::find( this->getLocations().begin(), this->getLocations().end(), loc ) != this->getLocations().end() );
+		mInitialStates.emplace( std::make_pair( loc, state ) );
+	}
 	void addLocalBadState( const Location<Number>* loc, const Condition<Number>& condition ) { mLocalBadStates.emplace( std::make_pair( loc, condition ) ); }
 	void addGlobalBadState( const Condition<Number>& state ) { mGlobalBadStates.push_back( state ); }
 	///@}
 
+	/// adds a fresh location to this automaton
 	Location<Number>* createLocation();
+	/// adds a copy of the passed location to this automaton
+	Location<Number>* createLocation( Location<Number>* original );
 
 	/**
      * @brief Decomposes an automaton into the components
@@ -171,28 +177,6 @@ class HybridAutomaton {
 
 	std::string getStatistics() const;
 
-	//TODO: replace this with operator== for sets of pointers to loc (if implemented this way, standard == operator of set is used,
-	//which does not compare correctly
-	template <typename T>
-	bool equals( const std::vector<T*>& lhs, const std::vector<T*>& rhs ) const {
-		if ( lhs.size() != rhs.size() ) {
-			return false;
-		}
-		for ( auto lhsIt = lhs.begin(); lhsIt != lhs.end(); ++lhsIt ) {
-			bool found = false;
-			for ( auto rhsIt = rhs.begin(); rhsIt != rhs.end(); ++rhsIt ) {
-				if ( *( *lhsIt ) == *( *rhsIt ) ) {
-					found = true;
-					break;
-				}
-			}
-			if ( !found ) {
-				return false;
-			}
-		}
-		return true;
-	}
-
 	/**
      * @brief      Comparison for equality operator.
      * @param[in]  lhs   The left hand side.
@@ -200,22 +184,28 @@ class HybridAutomaton {
      * @return     True, if both automata are equal, false otherwise.
      */
 	friend bool operator==( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs ) {
-		if ( !( lhs.equals( lhs.getLocations(), rhs.getLocations() ) ) ) {
+		TRACE( "hypro.datastructures", "Call to operator" );
+		if ( !is_equal( lhs.getLocations(), rhs.getLocations() ) ) {
+			TRACE( "hypro.datstructures", "Location sets are not equal." );
 			return false;
 		}
 		if ( lhs.getInitialStates().size() != rhs.getInitialStates().size() ) {
 			return false;
 		}
+		TRACE( "hypro.datastructures", "Start comparing initial states." )
 		if ( lhs.getInitialStates() != rhs.getInitialStates() ) {
+			TRACE( "hypro.datastructures", "Sequences not equal, check for copy-equivalence" )
 			for ( auto lhsIt = lhs.getInitialStates().begin(); lhsIt != lhs.getInitialStates().end(); ++lhsIt ) {
 				bool found = false;
 				for ( auto rhsIt = rhs.getInitialStates().begin(); rhsIt != rhs.getInitialStates().end(); ++rhsIt ) {
+					TRACE( "hypro.datastructures", "Check locations first, then constraints" )
 					if ( *( lhsIt->first ) == *( rhsIt->first ) && lhsIt->second == rhsIt->second ) {
 						found = true;
 						break;
 					}
 				}
 				if ( !found ) {
+					TRACE( "hypro.datastructures", "Initial states are not equal." )
 					return false;
 				}
 			}
