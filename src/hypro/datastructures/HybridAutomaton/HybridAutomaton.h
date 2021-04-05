@@ -14,6 +14,7 @@
 
 #include "../../types.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
+#include "../../util/sequence_comparison.h"
 #include "Condition.h"
 #include "HybridAutomatonComp.h"
 #include "Label.h"
