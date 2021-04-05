@@ -239,7 +239,8 @@ class Transition {
 		ostr << t.getTarget()->getName() << " (@" << t.getTarget() << ")\n";
 		ostr << "Guard:\n"
 			 << t.getGuard() << "\n"
-			 << "Reset:\n " << t.getReset() << "\n"
+			 << "Reset:\n"
+			 << t.getReset() << "\n"
 			 << " }";
 		return ostr;
 	}

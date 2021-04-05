@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../types.h"
+#include "../../../util/convenienceOperators.h"
 
 #include <Eigen/src/Core/util/Meta.h>
 #include <iosfwd>
@@ -142,28 +143,7 @@ class linearFlow {
 				} else {
 					firstRow = false;
 				}
-				out << "x" << row << "' = ";
-				bool first = true;
-				for ( Eigen::Index col = 0; col < fMat.cols() - 1; ++col ) {
-					if ( fMat( row, col ) > 0 ) {
-						if ( !first ) {
-							out << " + ";
-						} else {
-							first = false;
-						}
-						out << fMat( row, col ) << " * x" << col;
-					} else if ( fMat( row, col ) < 0 ) {
-						out << " - " << -fMat( row, col ) << " * x" << col;
-					}
-				}
-				if ( fMat( row, fMat.cols() - 1 ) > 0 ) {
-					if ( !first ) {
-						out << " + ";
-					}
-					out << fMat( row, fMat.cols() - 1 );
-				} else if ( fMat( row, fMat.cols() - 1 ) < 0 ) {
-					out << " - " << -fMat( row, fMat.cols() - 1 );
-				}
+				out << "x" << row << "' = " << to_string<Number>( fMat.row( row ) );
 			}
 		}
 		return out;

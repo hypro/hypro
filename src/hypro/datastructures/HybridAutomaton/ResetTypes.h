@@ -2,6 +2,7 @@
 #include "../../types.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 
+#include <bits/c++config.h>
 #include <carl/interval/Interval.h>
 #include <vector>
 
@@ -53,35 +54,7 @@ struct AffineTransformation {
 			} else {
 				firstrow = false;
 			}
-			out << "x" << row << " := ";
-			bool first = true;
-			for ( Eigen::Index col = 0; col < in.mTransformation.matrix().cols(); ++col ) {
-				if ( in.mTransformation.matrix()( row, col ) > 0 ) {
-					if ( first ) {
-						out << in.mTransformation.matrix()( row, col );
-						first = false;
-					} else {
-						out << " + " << in.mTransformation.matrix()( row, col );
-					}
-					out << " * x" << col;
-				} else if ( in.mTransformation.matrix()( row, col ) < 0 ) {
-					out << " - " << -in.mTransformation.matrix()( row, col );
-					out << " * x" << col;
-				}
-			}
-			if ( first ) {
-				out << in.mTransformation.vector()( row );
-			} else {
-				if ( in.mTransformation.vector()( row ) > 0 ) {
-					if ( first ) {
-						out << in.mTransformation.vector()( row );
-					} else {
-						out << " + " << in.mTransformation.vector()( row );
-					}
-				} else if ( in.mTransformation.vector()( row ) < 0 ) {
-					out << " - " << -in.mTransformation.vector()( row );
-				}
-			}
+			out << "x" << row << " := " << to_string<Number>( in.mTransformation.matrix().row( row ) );
 		}
 		return out;
 	}
@@ -112,8 +85,19 @@ struct IntervalAssignment {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const IntervalAssignment<Number>& in ) {
+		bool first = true;
+		std::size_t pos = 0;
 		for ( const auto& i : in.mIntervals ) {
-			out << i << ", ";
+			if ( !first ) {
+				out << "\n";
+			} else {
+				first = false;
+			}
+			if ( i.isEmpty() ) {
+				out << "x" << pos << " := x" << pos++;
+			} else {
+				out << "x" << pos << " := " << i;
+			}
 		}
 		return out;
 	}

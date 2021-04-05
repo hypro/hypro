@@ -182,47 +182,7 @@ class ConstraintSetT {
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const ConstraintSetT<Number, S>& b ) {
 		for ( Eigen::Index row = 0; row < b.matrix().rows(); ++row ) {
-			bool first = true;
-			for ( Eigen::Index col = 0; col < b.matrix().cols(); ++col ) {
-				bool notnull = b.matrix()( row, col ) != 0;
-				bool printVal = notnull && abs( b.matrix()( row, col ) != 1 );
-				bool neg = b.matrix()( row, col ) < 0;
-				if ( notnull ) {
-					if ( printVal ) {
-						if ( first ) {
-							first = false;
-							if ( neg ) {
-								ostr << " - " << -b.matrix()( row, col );
-							} else {
-								ostr << b.matrix()( row, col );
-							}
-							ostr << "·x" << col;
-						} else {
-							if ( neg ) {
-								ostr << " - " << -b.matrix()( row, col );
-							} else {
-								ostr << " + " << b.matrix()( row, col );
-							}
-							ostr << "·x" << col;
-						}
-					} else {
-						if ( first ) {
-							first = false;
-							if ( neg ) {
-								ostr << "- ";
-							}
-							ostr << "x" << col;
-						} else {
-							if ( neg ) {
-								ostr << " - ";
-							} else {
-								ostr << " + ";
-							}
-							ostr << "x" << col;
-						}
-					}
-				}
-			}
+			ostr << to_string<Number>( b.matrix().row( row ), false );
 			ostr << " ≤ " << b.vector()( row ) << "\n";
 		}
 		return ostr;

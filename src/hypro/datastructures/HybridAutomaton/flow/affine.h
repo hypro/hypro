@@ -72,7 +72,22 @@ class affineFlow : public linearFlow<Number> {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const affineFlow<Number>& in ) {
-		return out << in.getFlowMatrix() << ", " << in.getTranslation();
+		bool firstRow = true;
+		// assemble flow matrix
+		matrix_t<Number> fMat = matrix_t<Number>( in.mFlowMatrix.rows(), in.mFlowMatrix.cols() + 1 );
+		fMat.block( 0, 0, in.mFlowMatrix.rows(), in.mFlowMatrix.cols() ) = in.mFlowMatrix;
+		fMat.col( fMat.cols() - 1 ) = in.mTranslation;
+		if ( fMat.rows() > 0 ) {
+			for ( Eigen::Index row = 0; row < fMat.rows(); ++row ) {
+				if ( !firstRow ) {
+					out << "\n";
+				} else {
+					firstRow = false;
+				}
+				out << "x" << row << "' = " << to_string<Number>( fMat.row( row ) );
+			}
+		}
+		return out;
 	}
 };
 
