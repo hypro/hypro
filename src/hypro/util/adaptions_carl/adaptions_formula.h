@@ -2,6 +2,8 @@
 #include "../../carlTypes.h"
 #include "../../flags.h"
 
+#include <variant>
+
 namespace hypro {
 
 #ifdef CARL_POLY_MEMBER_SUBSTITUTE
@@ -16,15 +18,14 @@ Polynomial substitute( const Polynomial& poly, const Variable& v, const Substitu
 }
 #endif
 
-#ifdef CARL_VARIABLE_VARIANTS
-template <typename VarType>
-const carl::Variable& getVar( const VarType& packedVar ) {
+template <typename... VarTypes>
+const carl::Variable& getVar( const std::variant<VarTypes...>& packedVar ) {
 	return std::get<carl::Variable>( packedVar );
 }
-#else
+
 template <typename VarType>
 const carl::Variable& getVar( const VarType& nonPackedVar ) {
 	return nonPackedVar;
 }
-#endif
+
 }  // namespace hypro
