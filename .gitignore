@@ -24,3 +24,5 @@ src/resources/glpk-4.45/
 *.log
 *.csv
 *.idx
+*.java
+*.interp

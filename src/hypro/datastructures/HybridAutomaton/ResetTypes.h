@@ -94,7 +94,8 @@ struct IntervalAssignment {
 				first = false;
 			}
 			if ( i.isEmpty() ) {
-				out << "x" << pos << " := x" << pos++;
+				out << "x" << pos << " := x" << pos;
+				++pos;
 			} else {
 				out << "x" << pos << " := " << i;
 			}
