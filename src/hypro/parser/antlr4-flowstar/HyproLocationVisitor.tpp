@@ -101,6 +101,11 @@ namespace hypro {
 			//std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
 			loc->setExtInput(std::get<2>(flowAndExtInput));
 		}
+		// set labels, if any
+		LocationLabels labels = visit(ctx->loc_labels());
+		if(labels.isUrgent) {
+			loc->setUrgent();
+		}
 		return loc;
 	}
 
@@ -191,5 +196,14 @@ namespace hypro {
 
 		return Condition<Number>();
 
+	}
+
+	template<typename Number>
+	antlrcpp::Any HyproLocationVisitor<Number>::visitLoc_labels(HybridAutomatonParser::Loc_labelsContext *ctx){
+		LocationLabels labels;
+		if(ctx->URGENT() != NULL){
+			labels.isUrgent = true;
+		}
+		return labels;
 	}
 }

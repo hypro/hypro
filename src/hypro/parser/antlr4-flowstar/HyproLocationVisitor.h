@@ -39,6 +39,11 @@ class HyproLocationVisitor : public HybridAutomatonBaseVisitor {
 		antlrcpp::Any visitLocation(HybridAutomatonParser::LocationContext *ctx) override;
 		antlrcpp::Any visitActivities(HybridAutomatonParser::ActivitiesContext *ctx) override;
 		antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *ctx) override;
+		antlrcpp::Any visitLoc_labels(HybridAutomatonParser::Loc_labelsContext *ctx) override;
+
+		struct LocationLabels{
+			bool isUrgent = false;
+		};
 
 	public:
 

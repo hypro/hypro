@@ -52,6 +52,7 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 		auto copy = otherInitial.second;
 		// update location
 		TRACE( "hypro.datastructures", "Other initial state with loc @" << otherInitial.first << " is at index " << locationMapping[otherInitial.first] );
+		assert( locationMapping.find( otherInitial.first ) != locationMapping.end() );
 		mInitialStates[locationMapping[otherInitial.first]] = copy;
 	}
 
