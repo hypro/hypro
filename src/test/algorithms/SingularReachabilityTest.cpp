@@ -178,10 +178,11 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 	uniqueLoc0->addTransition( std::move( trans0 ) );
 	uniqueLoc0->addTransition( std::move( trans1 ) );
 
-	res.addInitialState( uniqueLoc0.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
-
 	res.addLocation( std::move( uniqueLoc0 ) );
 	res.addLocation( std::move( uniqueLoc1 ) );
+
+	hypro::Location<Number>* loc0ptr = res.getLocation( "l0" );
+	res.addInitialState( loc0ptr, hypro::Condition<Number>( initialConstraints, initialConstants ) );
 
 	return res;
 }

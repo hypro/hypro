@@ -92,12 +92,10 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 	hypro::HybridAutomaton<Number> res;
 
 	// Create locations
-	hypro::Location<Number> loc0{};
-	hypro::Location<Number> loc1{};
-	auto uniqueLoc0{ std::make_unique<hypro::Location<Number>>( loc0 ) };
-	auto uniqueLoc1{ std::make_unique<hypro::Location<Number>>( loc1 ) };
-	uniqueLoc0->setName( "l0" );
-	uniqueLoc1->setName( "l1" );
+	hypro::Location<Number>* loc0 = res.createLocation();
+	hypro::Location<Number>* loc1 = res.createLocation();
+	loc0->setName( "l0" );
+	loc1->setName( "l1" );
 
 	// Set flow x' = 1, y' = -1 in loc0
 	Interval flowx{ 1, 1 };
@@ -105,21 +103,21 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 	typename hypro::rectangularFlow<Number>::flowMap fMap;
 	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flowx;
 	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 1 )] = flowy;
-	uniqueLoc0->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
+	loc0->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
 
 	// Set flow x' = 0, y' = -1 in loc1
 	flowx = Interval{ 0, 0 };
 	flowy = Interval{ -1, -1 };
 	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flowx;
 	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 1 )] = flowy;
-	uniqueLoc1->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
+	loc1->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
 
 	// Set invariant x <= 3 in loc0 and loc1
 	Matrix invariantConstraints = Matrix::Zero( 1, 2 );
 	invariantConstraints( 0, 0 ) = 1;
 	Vector invariantConstants = 3 * Vector::Ones( 1 );
-	uniqueLoc0->setInvariant( { invariantConstraints, invariantConstants } );
-	uniqueLoc1->setInvariant( { invariantConstraints, invariantConstants } );
+	loc0->setInvariant( { invariantConstraints, invariantConstants } );
+	loc1->setInvariant( { invariantConstraints, invariantConstants } );
 
 	// Construct transitions
 	// l0 -> l0 with guard x >= 1 and reset x := 0, y := 0
@@ -129,8 +127,9 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 	hypro::Condition<Number> guard( transConstraint, transConstants );
 	hypro::Reset<Number> reset{ { carl::Interval<Number>{ 0, 0 }, carl::Interval<Number>{ 0, 0 } } };
 
-	std::unique_ptr<hypro::Transition<Number>> trans0 =
-		  std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
+	hypro::Transition<Number>* trans0 = loc0->createTransition( loc0 );
+	trans0->setGuard( guard );
+	trans0->setReset( reset );
 
 	// l0 -> l1 with guard y <= -2 and no reset
 	transConstraint = Matrix::Zero( 1, 2 );
@@ -139,8 +138,9 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 	guard = hypro::Condition<Number>( transConstraint, transConstants );
 	reset = hypro::Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	std::unique_ptr<hypro::Transition<Number>> trans1 =
-		  std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+	hypro::Transition<Number>* trans1 = loc0->createTransition( loc1 );
+	trans1->setGuard( guard );
+	trans1->setReset( reset );
 
 	// Set initial state x = 0, y = 0, aff = 1
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -148,14 +148,8 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 	initialConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
 	initialConstants << 0, 0, 0, 0;
 
-	// Create HA
-	uniqueLoc0->addTransition( std::move( trans0 ) );
-	uniqueLoc0->addTransition( std::move( trans1 ) );
-
-	res.addInitialState( uniqueLoc0.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
-
-	res.addLocation( std::move( uniqueLoc0 ) );
-	res.addLocation( std::move( uniqueLoc1 ) );
+	// Add initial configuration
+	res.addInitialState( loc0, hypro::Condition<Number>( initialConstraints, initialConstants ) );
 
 	return res;
 }
