@@ -49,6 +49,7 @@ class Location {
 	std::string mName = "";								 ///< Name of the location
 	unsigned mId;										 ///< ID - was used for comparison (deprecated)
 	mutable std::size_t mHash = 0;						 ///< Hash of the location
+	bool mIsUrgent = false;								 ///< Flag indicating that a location is urgent
 
   public:
 	/// default constructor
@@ -106,6 +107,8 @@ class Location {
 	[[deprecated( "use hash() instead" )]] unsigned getId() const { return mId; }
 	/// getter for the name of the location
 	std::string getName() const { return mName; }
+	/// getter for the urgency-flag
+	bool isUrgent() const { return mIsUrgent; }
 	/// getter for the state space dimension
 	std::size_t dimension() const;
 	/// getter for the state space dimension of a specific subspace
@@ -130,6 +133,8 @@ class Location {
 		mInvariant = inv;
 		mHash = 0;
 	}
+	/// allows setting the location to being urgent
+	void setUrgent( bool urgent = true ) { mIsUrgent = urgent; }
 	/// setter for vector of outgoing transitions (move)
 	void setTransitions( transitionVector&& trans );
 	/// adds outgoing transitions
