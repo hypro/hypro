@@ -11,7 +11,6 @@
 
 #include "../defines.h"
 #include "gtest/gtest.h"
-#include <hypro/algorithms/reachability/FirstSegment.h>
 #include <hypro/datastructures/HybridAutomaton/State.h>
 #include <hypro/representations/GeometricObjectBase.h>
 
