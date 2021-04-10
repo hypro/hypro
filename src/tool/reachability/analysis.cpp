@@ -1,6 +1,12 @@
 #include "analysis.h"
 
+#include <hypro/algorithms/reachability/analyzer/CEGARAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
+#include <hypro/datastructures/reachability/Settings.h>
 #include <hypro/datastructures/reachability/TreeTraversal.h>
+#include <hypro/representations/conversion/Converter.h>
+#include <hypro/util/plotting/Plotter.h>
 
 namespace hydra {
 namespace reachability {
