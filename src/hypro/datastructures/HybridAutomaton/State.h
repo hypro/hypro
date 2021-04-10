@@ -381,6 +381,11 @@ class State {
 		return std::visit( [&]( auto r ) { return c( r, std::forward<Args>( args )... ); }, mSets[setIndex] );
 	}
 
+	template <typename Callable, typename... Args>
+	auto visit( std::size_t setIndex, Callable c, Args&&... args ) const {
+		return std::visit( [&]( auto r ) { return c( r, std::forward<Args>( args )... ); }, mSets[setIndex] );
+	}
+
 	/**
      * @brief      Meta-function to aggregate two states.
      * @details    Each contained set is aggregated with its corresponding set in the passed state.
