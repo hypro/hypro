@@ -23,7 +23,7 @@ using DefaultRepresentations =
 			RepresentationCombinations<
 				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>,
 			RepresentationCombinations<
-				  TemplatePolyhedronT, TemplatePolyhedronDefault>>;
+				  TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>>;
 
 using PolytopalRepresentations =
 	  TypeList<

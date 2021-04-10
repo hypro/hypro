@@ -40,6 +40,15 @@ TemplatePolyhedronT<Number, Converter, Setting>::TemplatePolyhedronT( const matr
 	assert( mOptimizer.matrix() == mat );
 	assert( mOptimizer.vector() == vec );
 	assert( vec.rows() == mMatrixPtr->rows() );
+
+	if constexpr ( Setting::TEMPLATE_SHAPE == TEMPLATE_CONTENT::OCTAGON ) {
+		matrix_t<Number> directions( 8, dimension() );
+		auto directionVector = computeTemplate<Number>( dimension(), 8 );
+		for ( Eigen::Index i = 0; i < directions.rows(); ++i ) {
+			directions.row( i ) = directionVector.at( i );
+		}
+		*this = overapproximate( directions );
+	}
 }
 
 //Vector of matrix and vector ctor
