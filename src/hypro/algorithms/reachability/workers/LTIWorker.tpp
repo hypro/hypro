@@ -166,7 +166,35 @@ struct LTIWorker<Representation>::JumpSuccessorGen {
 };
 
 template <typename Representation>
+std::string print( std::vector<EnabledSets<Representation>> const& pipes ) {
+	std::stringstream str{};
+
+	for ( auto& pipe : pipes ) {
+		for ( auto& indSet : pipe.valuationSets ) {
+			str << "[" << indSet.index << "] " << indSet.valuationSet.vertices() << " ";
+		}
+		str << "\n";
+	}
+	str << "\n";
+
+	return str.str();
+}
+
+template <typename Representation>
+std::string print( std::vector<Representation> const& sets ) {
+	std::stringstream str{};
+
+	for ( auto& set : sets ) {
+		str << set.vertices() << " ";
+	}
+	str << "\n";
+	return str.str();
+}
+
+template <typename Representation>
 std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const {
+	TRACE( "hypro", "flowpipe: " << print( flowpipe ) );
+
 	//transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation>> enabledSegments{};
 
@@ -183,6 +211,8 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 			++cnt;
 		}
 	}
+
+	TRACE( "hypro", "enabledSegments: " << print( enabledSegments ) );
 
 	std::vector<JumpSuccessor<Representation>> successors{};
 
@@ -209,13 +239,18 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 	// applyReset
 	for ( auto& [transition, valuationSets] : successors ) {
 		for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
+			TRACE( "hypro", "valSet: " << it->valuationSet.vertices() );
 			it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
+			TRACE( "hypro", "Reset is: " << transition->getReset() );
+			TRACE( "hypro", "Reset: " << it->valuationSet.vertices() );
 			CONTAINMENT containment;
 			std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
+			TRACE( "hypro", "Intersect: " << it->valuationSet.vertices() );
 			if ( containment == CONTAINMENT::NO ) {
 				it = valuationSets.erase( it );
 			} else {
 				it->valuationSet.reduceRepresentation();
+				TRACE( "hypro", "Reduce: " << it->valuationSet.vertices() );
 				++it;
 			}
 		}

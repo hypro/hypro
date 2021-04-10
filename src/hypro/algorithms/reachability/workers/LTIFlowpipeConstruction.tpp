@@ -44,15 +44,15 @@ Representation constructFirstSegment( Representation const& initialSet,
 
 	Representation atDelta = initialSet.affineTransformation( timeTrafoMatrixBlock( rawTransformation ), timeTrafoVectorBlock( rawTransformation ) );
 
-	TRACE( "hypro.worker", "valuation set at delta: " << atDelta );
-
 	Representation firstSegment = atDelta.unite( initialSet );
-
-	TRACE( "hypro.worker", "Union of initial set and set after first step: " << firstSegment );
 
 	//Horrible interface. Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
 	Representation bloatingSet{};
 	convert( Number( Number( 1 ) / Number( 4 ) ) * errorBoxes.DifferenceBox, bloatingSet );
+
+	TRACE("hypro", "atDelta: " << atDelta.vertices());
+	TRACE("hypro", "init: " << initialSet.vertices());
+	TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
 	firstSegment = firstSegment.minkowskiSum( bloatingSet );
 	firstSegment.removeRedundancy();
