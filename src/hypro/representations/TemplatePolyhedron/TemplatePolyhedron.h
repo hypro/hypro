@@ -253,19 +253,14 @@ class TemplatePolyhedronT : private GeometricObjectBase {
 	 * @param b A TemplatePolyhedron.
 	 */
 #ifdef HYPRO_LOGGING
-	friend std::ostream& operator<<( std::ostream& ostr, const TemplatePolyhedronT<Number, Converter, Setting>& b ) {
-		if ( b.rGetMatrixPtr() == nullptr ) {
-			std::cout << "Template matrix address: nullptr, Template vector: " << std::endl
-					  << b.vector() << std::endl;
-		} else {
-			std::cout << "Template matrix address: " << b.rGetMatrixPtr() << std::endl
-					  << b.matrix() << "Template vector: " << std::endl
-					  << b.vector() << std::endl;
-		}
+	friend std::ostream& operator<<( std::ostream& out_stream, const TemplatePolyhedronT<Number, Converter, Setting>& b ) {
+		out_stream << "Mat Addr: " << b.rGetMatrixPtr() << "\n";
+		out_stream << "Mat:\n" << b.matrix();
+		out_stream << "Vec:\n" << b.vector();
 #else
-	friend std::ostream& operator<<( std::ostream& ostr, const TemplatePolyhedronT<Number, Converter, Setting>& ) {
+	friend std::ostream& operator<<( std::ostream& out_stream, const TemplatePolyhedronT<Number, Converter, Setting>& ) {
 #endif
-		return ostr;
+		return out_stream;
 	}
 
 	/***************************************************************************

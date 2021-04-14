@@ -19,7 +19,7 @@ struct AnalysisParameters {
 	int representation_setting = 0;										   ///< used settings for the representation
 	bool uniformBloating = false;
 	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  ///< method of reachability analysis
-	int timeStepFactor = 1;												  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep
+	int timeStepFactor = 1;												  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep. Can be negative.
 };
 
 struct FixedAnalysisParameters {
@@ -44,6 +44,9 @@ class Settings {
 	std::vector<AnalysisParameters> mStrategy{ 1 };
 
   public:
+	/// default constructor
+	Settings() = default;
+	/// full constructor
 	Settings( PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector<AnalysisParameters> strategy )
 		: mPlotting( plotting )
 		, mFixedParameters( fixedParameters )

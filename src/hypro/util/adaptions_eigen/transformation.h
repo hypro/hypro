@@ -130,20 +130,32 @@ static vector_t<Number> combine( const vector_t<Number>& lhs, const vector_t<Num
 
 // interprets all vectors as row-vectors and creates a matrix
 template <typename Number>
-static matrix_t<Number> combineRows( const std::vector<vector_t<Number>>& vectors ) {
-	if ( vectors.empty() ) {
+static matrix_t<Number> createMatrix( const std::vector<vector_t<Number>>& _in ) {
+	if ( _in.empty() ) {
 		return matrix_t<Number>( 0, 0 );
 	}
-	matrix_t<Number> res = matrix_t<Number>( vectors.size(), vectors.begin()->rows() );
+	matrix_t<Number> res = matrix_t<Number>( _in.size(), _in.begin()->rows() );
 
 	Eigen::Index rowCount = 0;
-	for ( const auto& r : vectors ) {
+	for ( const auto& r : _in ) {
 		assert( r.rows() == res.cols() );
 		res.row( rowCount ) = r;
 		++rowCount;
 	}
 
 	return res;
+}
+
+template <typename Number>
+static vector_t<Number> createVector( const std::vector<Number>& _in ) {
+	if ( _in.empty() ) {
+		return vector_t<Number>( 0 );
+	}
+	vector_t<Number> result( _in.size() );
+	for ( unsigned rowId = 0; rowId != _in.size(); ++rowId ) {
+		result( rowId ) = Number( _in[rowId] );
+	}
+	return result;
 }
 
 }  // namespace hypro

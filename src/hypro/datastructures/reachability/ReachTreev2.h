@@ -6,6 +6,7 @@
 #include "TreeNodev2.h"
 
 #include <carl/interval/Interval.h>
+#include <ostream>
 #include <vector>
 
 namespace hypro {
@@ -68,6 +69,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      */
 	std::vector<Representation>& getFlowpipe() { return mFlowpipe; }
 	std::vector<Representation> const& getFlowpipe() const { return mFlowpipe; }
+	void setFlowpipe( std::vector<Representation>&& fp ) { mFlowpipe = std::move( fp ); }
+	void setFlowpipe( const std::vector<Representation>& fp ) { mFlowpipe = fp; }
 
 	/**
 	 * @brief Get the initial set
@@ -90,6 +93,19 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
 };
 
+template <typename Representation>
+std::ostream& operator<<( std::ostream& out, const ReachTreeNode<Representation>& node ) {
+	out << "{ " << node.getLocation()->getName() << ", init " << node.getInitialSet() << " }";
+	return out;
+}
+
+/**
+ * @brief Convenience function to create roots of a search tree from the initial states of the passed hybrid automaton.
+ * @tparam Representation
+ * @tparam Number
+ * @param ha
+ * @return std::vector<ReachTreeNode<Representation>>
+ */
 template <class Representation, class Number>
 std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> const& ha, std::size_t I = 0 ) {
 	std::vector<ReachTreeNode<Representation>> roots{};

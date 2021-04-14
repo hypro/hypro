@@ -60,8 +60,7 @@ State rectangularApplyTimeEvolution( const State& initialSet, const rectangularF
 }
 
 template <typename Number, class... Reps>
-State_t<Number, Reps...> rectangularApplyReverseTimeEvolution( const State_t<Number, Reps...>& badSet, const rectangularFlow<Number>& flow ) {
-	using State = State_t<Number, Reps...>;
+State<Number, Reps...> rectangularApplyReverseTimeEvolution( const State<Number, Reps...>& badSet, const rectangularFlow<Number>& flow ) {
 	auto& vpool = hypro::VariablePool::getInstance();
 	// get bad state
 	CarlPolytope<Number> bad = std::get<CarlPolytope<Number>>( badSet.getSet() );
@@ -85,7 +84,7 @@ State_t<Number, Reps...> rectangularApplyReverseTimeEvolution( const State_t<Num
 			// store var to eliminate later
 			variablesToEliminate.push_back( newV );
 			// add flow conditions for new variables, we use the variable mapping provided by the flow
-			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber, typename State::NumberType>( newV, v, t, flow.getFlowIntervalForDimension( v ) );
+			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber, typename State<Number, Reps...>::NumberType>( newV, v, t, flow.getFlowIntervalForDimension( v ) );
 
 			TRACE( "hydra.worker", "Use flow constraints: " );
 #ifdef HYPRO_LOGGING

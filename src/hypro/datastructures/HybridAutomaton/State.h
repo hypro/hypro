@@ -381,6 +381,11 @@ class State {
 		return std::visit( [&]( auto r ) { return c( r, std::forward<Args>( args )... ); }, mSets[setIndex] );
 	}
 
+	template <typename Callable, typename... Args>
+	auto visit( std::size_t setIndex, Callable c, Args&&... args ) const {
+		return std::visit( [&]( auto r ) { return c( r, std::forward<Args>( args )... ); }, mSets[setIndex] );
+	}
+
 	/**
      * @brief      Meta-function to aggregate two states.
      * @details    Each contained set is aggregated with its corresponding set in the passed state.
@@ -517,10 +522,10 @@ class State {
      * @param[in]  state  The state.
      * @return     A reference to the outstream.
      */
-#ifdef HYPRO_LOGGING
+
 	friend std::ostream& operator<<( std::ostream& out, const State<Number, Representation, Rargs...>& state ) {
 		if ( state.getLocation() != nullptr ) {
-			out << "location: " << state.getLocation()->getName();
+			out << "location @" << state.getLocation();
 		} else {
 			out << "location: NULL";
 		}
@@ -536,9 +541,6 @@ class State {
 			for ( std::size_t i = 1; i < state.getNumberSets(); ++i )
 				out << std::visit( genericToStringVisitor(), state.getSet( i ) ) << std::endl;
 		}
-#else
-	friend std::ostream& operator<<( std::ostream& out, const State<Number, Representation, Rargs...>& ) {
-#endif
 		return out;
 	}
 

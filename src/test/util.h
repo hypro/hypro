@@ -18,28 +18,6 @@ template <typename Number>
 class Point;
 
 template <typename Number>
-static matrix_t<Number> createMatrix( const std::vector<std::vector<Number> >& _in ) {
-	assert( !_in.empty() );
-	matrix_t<Number> result( _in.size(), ( *_in.begin() ).size() );
-	for ( unsigned lineId = 0; lineId != _in.size(); ++lineId ) {
-		for ( unsigned rowId = 0; rowId != _in[lineId].size(); ++rowId ) {
-			result( lineId, rowId ) = Number( _in[lineId][rowId] );
-		}
-	}
-	return result;
-}
-
-template <typename Number>
-static vector_t<Number> createVector( const std::vector<Number>& _in ) {
-	assert( !_in.empty() );
-	vector_t<Number> result( _in.size() );
-	for ( unsigned rowId = 0; rowId != _in.size(); ++rowId ) {
-		result( rowId ) = Number( _in[rowId] );
-	}
-	return result;
-}
-
-template <typename Number>
 static vector_t<Number> createVector( const Point<Number>& _in ) {
 	vector_t<Number> result( _in.dimension() );
 	for ( unsigned rowId = 0; rowId != _in.dimension(); ++rowId ) {

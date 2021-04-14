@@ -19,8 +19,6 @@ hybrid reachability
    {
     x' = 1
    }
-
-   inv { }
   }
  }
 

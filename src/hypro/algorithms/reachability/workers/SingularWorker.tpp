@@ -21,8 +21,6 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const
 	if ( containment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
-	// add state to flowpipe
-	mFlowpipe.addState( segment );
 
 	if ( checkSafety ) {
 		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, task.getLocation(), mHybridAutomaton, mSubspace );

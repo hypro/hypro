@@ -15,11 +15,13 @@ import Formula;
 
 modes			: 'modes' '{' location* '}' ;
 
-location 		: VARIABLE '{' activities invariants* '}' ;
+location 		: VARIABLE '{' activities invariants* loc_labels'}' ;
 
 activities 		: (POLY | LINEAR | NONLINEAR | NONPOLY | LTI) ODE NUMBER* '{' (equation | intervalexpr)* '}' ;
 
 invariants		: 'inv' '{' constrset? '}' ;
+
+loc_labels      : URGENT?;
 
 ////// Lexer Rules
 
@@ -34,4 +36,6 @@ NONPOLY         : 'nonpoly' ;
 LTI             : 'lti' ; 
 
 ODE 			: 'ode' ;
+
+URGENT          : 'urgent';
 

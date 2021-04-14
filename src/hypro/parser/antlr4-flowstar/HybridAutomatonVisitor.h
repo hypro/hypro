@@ -34,6 +34,8 @@ public:
 
     virtual antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *context) = 0;
 
+    virtual antlrcpp::Any visitLoc_labels(HybridAutomatonParser::Loc_labelsContext *context) = 0;
+
     virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *context) = 0;
 
     virtual antlrcpp::Any visitConstantexpr(HybridAutomatonParser::ConstantexprContext *context) = 0;

@@ -54,6 +54,8 @@ target_include_directories(${PROJECT_NAME}-objects
 		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
 	)
 
+	##### SHARED LIBRARY
+
 	add_library(${PROJECT_NAME}-shared SHARED $<TARGET_OBJECTS:${PROJECT_NAME}-objects>)
 	set_target_properties( ${PROJECT_NAME}-shared PROPERTIES
 		VERSION "${PROJECT_VERSION}"
@@ -74,6 +76,7 @@ target_include_directories(${PROJECT_NAME}-objects
 		target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${soplex_LIBRARY})
 	endif()
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC carl-shared)
+	target_include_dirs_from(${PROJECT_NAME}-shared SYSTEM INTERFACE carl-shared)
 	get_target_property(libs carl-shared INTERFACE_LINK_LIBRARIES)
 	foreach(item ${libs})
 		target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${item})

@@ -49,4 +49,21 @@ auto getNumberNodes( RootType&& root ) -> std::vector<std::vector<typename detai
 	return res;
 }
 
+template <typename RootType>
+auto getNumberSegments( RootType&& root ) -> std::size_t {
+	std::size_t res = 0;
+	visitPreorder( std::forward<RootType>( root ), [&res]( auto& node ) { res += node.getFlowpipe().size(); } );
+	return res;
+}
+
+template <typename RootType, typename Representation>
+auto isAlreadyReachable( RootType&& root, Representation set ) -> bool {
+	for ( auto& node : preorder( std::forward<RootType>( root ) ) ) {
+		if ( node.getInitialSet().contains( set ) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
 }  // namespace hypro

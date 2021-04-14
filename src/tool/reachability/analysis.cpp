@@ -1,6 +1,12 @@
 #include "analysis.h"
 
+#include <hypro/algorithms/reachability/analyzer/CEGARAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
+#include <hypro/datastructures/reachability/Settings.h>
 #include <hypro/datastructures/reachability/TreeTraversal.h>
+#include <hypro/representations/conversion/Converter.h>
+#include <hypro/util/plotting/Plotter.h>
 
 namespace hydra {
 namespace reachability {
@@ -147,8 +153,9 @@ std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number>& auto
 
 template <typename State>
 std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+	auto roots = makeRoots<State>( automaton );
 	START_BENCHMARK_OPERATION( "Verification" );
-	RectangularAnalyzer<State> analyzer{ automaton, setting };
+	RectangularAnalyzer<State> analyzer{ automaton, setting, roots };
 	auto result = analyzer.run();
 
 	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
@@ -217,7 +224,8 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 			break;
 		case DynamicType::rectangular: {
 			// no dispatch for rectangular automata, representation and setting are fixed
-			return { rectangular_analyze<hypro::State<Number, CarlPolytope<Number>>>( automaton, setting ) };
+			//return { rectangular_analyze<hypro::State<Number, CarlPolytope<Number>>>( automaton, setting ) };
+			assert( false );
 			[[fallthrough]];
 		}
 		case DynamicType::singular: {

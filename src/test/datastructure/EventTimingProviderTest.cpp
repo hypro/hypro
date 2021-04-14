@@ -228,7 +228,7 @@ TEST_F( EventTimingTest, FindPath4 ) {
 	auto ch2 = tProvider.addChildToNode( initNode, 10 );
 	ch2->rGetTimings().insertInvariant( carl::Interval<T>( 2, 3 ), CONTAINMENT::FULL );
 	ch2->setEntryTransition( tRaw );
-	ch2->setEntryTimestamp( carl::Interval<T>( 2, 2.25 ) );
+	ch2->setEntryTimestamp( carl::Interval<T>( 2, T( 2.25 ) ) );
 	ch2->setLocation( loc );
 	ch2->setLevel( 1 );
 
@@ -287,7 +287,7 @@ TEST_F( EventTimingTest, FindPath5 ) {
 	auto ch2 = tProvider.addChildToNode( initNode, 10 );
 	ch2->rGetTimings().insertInvariant( carl::Interval<T>( 2, 3 ), CONTAINMENT::FULL );
 	ch2->setEntryTransition( tRaw );
-	ch2->setEntryTimestamp( carl::Interval<T>( 2, 2.25 ) );
+	ch2->setEntryTimestamp( carl::Interval<T>( 2, T( 2.25 ) ) );
 	ch2->setLocation( loc );
 	ch2->setLevel( 1 );
 

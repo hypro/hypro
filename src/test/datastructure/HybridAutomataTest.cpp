@@ -26,11 +26,10 @@ class HybridAutomataTest : public ::testing::Test {
 		 * Location Setup
 		 */
 
-		loc1 = std::make_unique<Location<Number>>();
-		loc2 = std::make_unique<Location<Number>>();
+		loc1 = hybrid.createLocation();
+		loc2 = hybrid.createLocation();
 
-		trans = std::make_unique<Transition<Number>>();
-		copyOfTrans = std::make_unique<Transition<Number>>();
+		trans = loc1->createTransition( loc2 );
 
 		invariantVec( 0 ) = 10;
 		invariantVec( 1 ) = 20;
@@ -55,10 +54,14 @@ class HybridAutomataTest : public ::testing::Test {
 		locationMat( 1, 1 ) = 1;
 
 		loc1->setLinearFlow( locationMat );
+		locationMat( 0, 0 ) = 1;
+		locationMat( 0, 1 ) = 1;
+		locationMat( 1, 0 ) = 1;
+		locationMat( 1, 1 ) = 1;
 		loc2->setLinearFlow( locationMat );
 
-		copyOfLoc1 = std::make_unique<Location<Number>>( *loc1 );
-		copyOfLoc2 = std::make_unique<Location<Number>>( *loc2 );
+		copyOfLoc1 = hybrid.createLocation( loc1 );
+		copyOfLoc2 = hybrid.createLocation( loc2 );
 
 		/*
 		 * Transition Setup
@@ -74,20 +77,13 @@ class HybridAutomataTest : public ::testing::Test {
 		trans->setTarget( loc2 );
 		trans->setReset( reset );
 
+		copyOfTrans = copyOfLoc1->createTransition( copyOfLoc2 );
 		copyOfTrans->setGuard( guard );
-		copyOfTrans->setSource( copyOfLoc1.get() );
-		copyOfTrans->setTarget( copyOfLoc2.get() );
 		copyOfTrans->setReset( reset );
-
-		copyOfLoc1->addTransition( std::move( copyOfTrans ) );
 
 		/*
 		 * Hybrid Automaton Setup
 		 */
-
-		initLocSet.push_back( loc1.get() );
-		locSet.emplace_back( std::move( copyOfLoc1 ) );
-		locSet.emplace_back( std::move( copyOfLoc2 ) );
 
 		// Polytope for InitialValuation & Guard Assignment
 		coordinates( 0 ) = 2;
@@ -97,11 +93,7 @@ class HybridAutomataTest : public ::testing::Test {
 		poly = valuation_t<Number>( vecSet );
 		auto hpoly = Converter<Number>::toHPolytope( poly );
 
-		for ( auto loc : initLocSet ) {
-			hybrid.addInitialState( loc, Condition<Number>( hpoly.matrix(), hpoly.vector() ) );
-		}
-
-		hybrid.setLocations( std::move( locSet ) );
+		hybrid.addInitialState( loc1, Condition<Number>( hpoly.matrix(), hpoly.vector() ) );
 	}
 
 	virtual void TearDown() {
@@ -112,12 +104,12 @@ class HybridAutomataTest : public ::testing::Test {
 
 	// Hybrid Automaton Objects: Locations, Transitions, Automaton itself
 
-	std::unique_ptr<Location<Number>> loc1;
-	std::unique_ptr<Location<Number>> loc2;
-	std::unique_ptr<Location<Number>> copyOfLoc1;
-	std::unique_ptr<Location<Number>> copyOfLoc2;
-	std::unique_ptr<Transition<Number>> trans;
-	std::unique_ptr<Transition<Number>> copyOfTrans;
+	Location<Number>* loc1;
+	Location<Number>* loc2;
+	Location<Number>* copyOfLoc1;
+	Location<Number>* copyOfLoc2;
+	Transition<Number>* trans;
+	Transition<Number>* copyOfTrans;
 	HybridAutomaton<Number> hybrid;
 
 	// Other Objects: Vectors, Matrices, Guards...
@@ -142,19 +134,13 @@ class HybridAutomataTest : public ::testing::Test {
   public:
 	bool find( const Location<Number>* loc, const std::vector<Location<Number>*>& locSet ) const {
 		if ( loc == nullptr || locSet.empty() ) {
-			// std::cout << "loc was nullptr or locSet was empty\n";
 			return false;
 		}
-		// std::cout << "locSet size: " << locSet.size() << std::endl;
-		// std::cout << "loc has hash: " << loc->hash() << std::endl;
 		for ( auto& ptrToALoc : locSet ) {
-			// std::cout << "ptrToALoc loc hash is: " << ptrToALoc->hash() << std::endl;
 			if ( *ptrToALoc == *( loc ) ) {
-				// std::cout << "found a match!\n";
 				return true;
 			}
 		}
-		// std::cout << "found no match.\n";
 		return false;
 	}
 
@@ -200,12 +186,17 @@ TYPED_TEST( HybridAutomataTest, LocationTest ) {
 	EXPECT_NE( this->loc1->getInvariant().getMatrix(), invariantMat2 );
 
 	// location: matrix
-	EXPECT_EQ( this->loc1->getLinearFlow().getFlowMatrix(), this->locationMat );
+	matrix_t<TypeParam> locationMat( 2, 2 );
+	locationMat( 0, 0 ) = 2;
+	locationMat( 0, 1 ) = 0;
+	locationMat( 1, 0 ) = 0;
+	locationMat( 1, 1 ) = 1;
+	EXPECT_EQ( this->loc1->getLinearFlow().getFlowMatrix(), locationMat );
 
 	matrix_t<TypeParam> locationMat2( 2, 2 );
 	locationMat2( 0, 0 ) = 1;
-	locationMat2( 0, 1 ) = 0;
-	locationMat2( 1, 0 ) = 0;
+	locationMat2( 0, 1 ) = 1;
+	locationMat2( 1, 0 ) = 1;
 	locationMat2( 1, 1 ) = 1;
 	EXPECT_NE( this->loc1->getLinearFlow().getFlowMatrix(), locationMat2 );
 
@@ -227,13 +218,13 @@ TYPED_TEST( HybridAutomataTest, LocationTest ) {
 /// Flow-types test
 TYPED_TEST( HybridAutomataTest, FlowTest ) {
 	using Interval = carl::Interval<TypeParam>;
-	
+
 	typename rectangularFlow<TypeParam>::flowMap fmap;
-	fmap[VariablePool::getInstance().carlVarByIndex(0)] = Interval(0,1);
+	fmap[VariablePool::getInstance().carlVarByIndex( 0 )] = Interval( 0, 1 );
 	rectangularFlow<TypeParam> rectFlow{ fmap };
-	EXPECT_EQ(rectFlow.type(), DynamicType::rectangular);
-	EXPECT_EQ(rectFlow.size(), 1);
-	EXPECT_EQ(rectFlow.dimension(), 1);
+	EXPECT_EQ( rectFlow.type(), DynamicType::rectangular );
+	EXPECT_EQ( rectFlow.size(), std::size_t( 1 ) );
+	EXPECT_EQ( rectFlow.dimension(), std::size_t( 1 ) );
 }
 
 /*
@@ -287,10 +278,10 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
  */
 TYPED_TEST( HybridAutomataTest, TransitionTest ) {
 	// transition: Start Location
-	EXPECT_EQ( this->trans->getSource(), this->loc1.get() );
+	EXPECT_EQ( this->trans->getSource(), this->loc1 );
 
 	// transition: End Location
-	EXPECT_EQ( this->trans->getTarget(), this->loc2.get() );
+	EXPECT_EQ( this->trans->getTarget(), this->loc2 );
 
 	// transition: Assignment
 	EXPECT_EQ( this->trans->getReset().getVector(), this->reset.getVector() );
@@ -301,9 +292,9 @@ TYPED_TEST( HybridAutomataTest, TransitionTest ) {
 	EXPECT_EQ( this->trans->getGuard().getMatrix(), this->guard.getMatrix() );
 
 	// creation of transitions from source and target
-	std::unique_ptr<Transition<TypeParam>> t( new Transition<TypeParam>( this->loc1.get(), this->loc2.get() ) );
-	EXPECT_EQ( t->getSource(), this->loc1.get() );
-	EXPECT_EQ( t->getTarget(), this->loc2.get() );
+	std::unique_ptr<Transition<TypeParam>> t( new Transition<TypeParam>( this->loc1, this->loc2 ) );
+	EXPECT_EQ( t->getSource(), this->loc1 );
+	EXPECT_EQ( t->getTarget(), this->loc2 );
 	EXPECT_EQ( t->getAggregation(), Aggregation::none );
 	EXPECT_FALSE( t->isTimeTriggered() );
 	t->setAggregation( Aggregation::aggregation );
@@ -325,85 +316,70 @@ TYPED_TEST( HybridAutomataTest, TransitionTest ) {
  */
 TYPED_TEST( HybridAutomataTest, HybridAutomatonTest ) {
 	// construct a new hybrid automaton.
+	TRACE( "hypro.datastructures", "START TEST" );
 	HybridAutomaton<TypeParam> h1;
 
-	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc1 = std::make_unique<Location<TypeParam>>( *this->loc1.get() );
-	std::unique_ptr<Location<TypeParam>> anotherCopyOfLoc2 = std::make_unique<Location<TypeParam>>( *this->loc2.get() );
+	Location<TypeParam>* anotherCopyOfLoc1 = h1.createLocation( this->loc1 );
+	Location<TypeParam>* anotherCopyOfLoc2 = h1.createLocation( this->loc2 );
+	// clear transitions which were also copied
+	anotherCopyOfLoc1->rGetTransitions().clear();
 
-	// Check if trans can be found in h1's transition set after inserting
-	std::unique_ptr<Transition<TypeParam>> aTrans = std::make_unique<Transition<TypeParam>>( *( this->trans ) );
+	// Re-insert correct transition (take guards and resets, update source and target)
+	Transition<TypeParam>* aTrans = anotherCopyOfLoc1->createTransition( this->trans );
+	aTrans->setTarget( anotherCopyOfLoc2 );
 	EXPECT_FALSE( aTrans == nullptr );
-
-	aTrans->setSource( anotherCopyOfLoc1.get() );
-	aTrans->setTarget( anotherCopyOfLoc2.get() );
-	anotherCopyOfLoc1->addTransition( std::move( aTrans ) );
-
-	h1.addLocation( std::move( anotherCopyOfLoc1 ) );
-	h1.addLocation( std::move( anotherCopyOfLoc2 ) );
 
 	EXPECT_EQ( std::size_t( 2 ), h1.getLocations().size() );
 	EXPECT_EQ( this->loc1->getName(), h1.getLocations().front()->getName() );
 	EXPECT_EQ( this->loc1->getLinearFlow(), h1.getLocations().front()->getLinearFlow() );
 	EXPECT_EQ( this->loc1->getInvariant(), h1.getLocations().front()->getInvariant() );
 
-	// EXPECT_TRUE( *( h1.getLocation( "Location1" ) ) == *( this->loc1.get() ) );
-	// EXPECT_TRUE( *( h1.getLocation( this->loc1->hash() ) ) == *( this->loc1.get() ) );
+	EXPECT_TRUE( *( h1.getLocation( "Location1" ) ) == *( anotherCopyOfLoc1 ) );
+	EXPECT_TRUE( *( h1.getLocation( anotherCopyOfLoc1->hash() ) ) == *( anotherCopyOfLoc1 ) );
 	// Comparison for location 2 works, as it does not have any transitions which would be copied and thus invalidate
 	// equality.
-	EXPECT_TRUE( *( h1.getLocation( "Location2" ) ) == *( this->loc2.get() ) );
-	EXPECT_TRUE( *( h1.getLocation( this->loc2->hash() ) ) == *( this->loc2.get() ) );
-
-	// h1.addTransition(std::move(aTrans));
-	EXPECT_TRUE( aTrans == nullptr );
-	// EXPECT_TRUE(this->find(this->trans.get(), h1.getTransitions()));
+	EXPECT_TRUE( *( h1.getLocation( "Location2" ) ) == *( anotherCopyOfLoc2 ) );
+	EXPECT_TRUE( *( h1.getLocation( anotherCopyOfLoc2->hash() ) ) == *( anotherCopyOfLoc2 ) );
 
 	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity( 2, 2 );
 	vector_t<TypeParam> vec = vector_t<TypeParam>( 2 );
 	vec << 1, 2;
 
-	h1.addInitialState( this->loc1.get(), Condition<TypeParam>( matr, vec ) );
+	h1.addInitialState( anotherCopyOfLoc1, Condition<TypeParam>( matr, vec ) );
 
-	// Copy constructor;
-	/*
-	std::cout << "Expect copy constructor\n";
-	HybridAutomaton<TypeParam> h0(h1);
-	EXPECT_EQ(h0, h1);
-	*/
-	// copy assignment operator
-	std::cout << "====== Expect copy assignment\n";
+	// Copy constructor test
+	EXPECT_TRUE( aTrans->getTarget() == anotherCopyOfLoc2 );
+	EXPECT_EQ( h1, h1 );
+	HybridAutomaton<TypeParam> h0{ h1 };
+	EXPECT_EQ( h0, h1 );
+
+	// Copy assignment operator
 	HybridAutomaton<TypeParam> h2 = h1;
-	EXPECT_NE( h1, h2 );
+	EXPECT_EQ( h1, h2 );
 	EXPECT_EQ( h1.getLocations().front()->getName(), h2.getLocations().front()->getName() );
-	// std::cout << "=== h1 at after:" << h1 << std::endl;
-	// std::cout << "=== h2 at after:" << h2 << std::endl;
 
-	// somehow check move assignment
-	std::cout << "====== Expect move assignment\n";
+	// Move assignment operator
 	HybridAutomaton<TypeParam> h3 = std::move( h1 );
-	// EXPECT_TRUE(h1.getTransitions().size() == 0);
 	EXPECT_EQ( h2, h3 );
 
-	std::cout << "====== Expect move constructor\n";
 	HybridAutomaton<TypeParam> h4( std::move( h2 ) );
 	EXPECT_EQ( h3, h4 );
 
-	std::cout << "====== Expect copy assignment\n";
 	HybridAutomaton<TypeParam> h5 = this->dummyCopy( h3 );
 	EXPECT_EQ( h4, h5 );
 
-	std::cout << "====== Expect move assignment\n";
 	HybridAutomaton<TypeParam> h6 = this->dummyMove( std::move( h3 ) );
 	EXPECT_EQ( h4, h6 );
 }
 
 TYPED_TEST( HybridAutomataTest, State ) {
 	// Constructors
-	State_t<TypeParam> s1( this->loc1.get() );
+	State_t<TypeParam> s1( this->loc1 );
 
 	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity( 2, 2 );
 	vector_t<TypeParam> vec = vector_t<TypeParam>( 2 );
 	vec << 1, 2;
-	State_t<TypeParam> s2( this->loc1.get() );
+	State_t<TypeParam> s2( this->loc1 );
 	s2.setSet( ConstraintSet<TypeParam>( matr, vec ) );
 
 	EXPECT_EQ( s1.getLocation()->hash(), this->loc1->hash() );

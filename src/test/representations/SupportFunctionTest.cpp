@@ -9,6 +9,7 @@
 #include "../../hypro/representations/GeometricObjectBase.h"
 #include "../../hypro/util/plotting/Plotter.h"
 #include "../defines.h"
+#include "hypro/representations/conversion/typedefs.h"
 #include "gtest/gtest.h"
 
 using namespace hypro;
@@ -123,6 +124,12 @@ TYPED_TEST( SupportFunctionTest, constructor ) {
 	EXPECT_EQ( box2.evaluate( evalVec ).supportValue, TypeParam( 1 ) );
 	evalVec << -1, 0;
 	EXPECT_EQ( box2.evaluate( evalVec ).errorCode, SOLUTION::INFTY );
+
+	SupportFunction<TypeParam> empty{};
+	EXPECT_TRUE( empty.empty() );
+
+	SupportFunction<TypeParam> empty2 = SupportFunction<TypeParam>::Empty();
+	EXPECT_TRUE( empty2.empty() );
 
 	SUCCEED();
 }

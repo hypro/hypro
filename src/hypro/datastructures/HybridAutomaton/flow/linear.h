@@ -1,6 +1,8 @@
 #pragma once
 #include "../../../types.h"
+#include "../../../util/convenienceOperators.h"
 
+#include <Eigen/src/Core/util/Meta.h>
 #include <iosfwd>
 
 namespace hypro {
@@ -132,9 +134,22 @@ class linearFlow {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const linearFlow<Number>& in ) {
-		return out << in.mFlowMatrix;
+		bool firstRow = true;
+		const matrix_t<Number>& fMat{ in.mFlowMatrix };
+		if ( fMat.rows() > 0 ) {
+			for ( Eigen::Index row = 0; row < fMat.rows(); ++row ) {
+				if ( !firstRow ) {
+					out << "\n";
+				} else {
+					firstRow = false;
+				}
+				out << "x" << row << "' = " << to_string<Number>( fMat.row( row ) );
+			}
+		}
+		return out;
 	}
-};
+
+};	// namespace hypro
 
 }  // namespace hypro
 

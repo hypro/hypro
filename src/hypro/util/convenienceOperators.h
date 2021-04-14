@@ -5,6 +5,7 @@
 #include <iosfwd>
 #include <map>
 #include <set>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -28,10 +29,11 @@ std::ostream& operator<<( std::ostream& out, Enumeration in ) {
 template <typename T>
 std::ostream& operator<<( std::ostream& _out, const std::set<T>& _set ) {
 	if ( !_set.empty() ) {
-		_out << *_set.begin();
+		_out << "{ " << *_set.begin();
 		for ( auto setIt = ++_set.begin(); setIt != _set.end(); ++setIt ) {
 			_out << ", " << *setIt;
 		}
+		_out << " }";
 	}
 
 	return _out;
@@ -41,10 +43,11 @@ std::ostream& operator<<( std::ostream& _out, const std::set<T>& _set ) {
 template <typename T>
 std::ostream& operator<<( std::ostream& _out, const std::vector<T>& _vector ) {
 	if ( !_vector.empty() ) {
-		_out << *_vector.begin();
+		_out << "( " << *_vector.begin();
 		for ( auto vectorIt = ++_vector.begin(); vectorIt != _vector.end(); ++vectorIt ) {
 			_out << ", " << *vectorIt;
 		}
+		_out << " )";
 	}
 
 	return _out;
@@ -69,6 +72,58 @@ std::ostream& operator<<( std::ostream& _out, const std::map<Key, T>& _map ) {
 	}
 
 	return _out;
+}
+
+/// outstream operator for a row of a matrix, passed as a row-vector. Only prints non-zero values.
+template <typename N>
+std::string to_string( const typename matrix_t<N>::ConstRowXpr& row, bool lastIsConst = true ) {
+	std::stringstream _out;
+	bool first = true;
+	for ( Eigen::Index col = 0; col < row.cols() - 1; ++col ) {
+		if ( row( col ) > 0 ) {
+			if ( !first ) {
+				_out << " + ";
+			} else {
+				first = false;
+			}
+			_out << row( col ) << "·x" << col;
+		} else if ( row( col ) < 0 ) {
+			_out << " - " << -row( col ) << "·x" << col;
+		}
+	}
+	if ( lastIsConst ) {
+		if ( row( row.cols() - 1 ) > 0 ) {
+			if ( !first ) {
+				_out << " + ";
+			}
+			_out << row( row.cols() - 1 );
+		} else if ( row( row.cols() - 1 ) < 0 ) {
+			_out << " - " << -row( row.cols() - 1 );
+		}
+	} else {
+		if ( row( row.cols() - 1 ) > 0 ) {
+			if ( !first ) {
+				_out << " + ";
+			}
+			_out << row( row.cols() - 1 ) << "·x" << row.cols() - 1;
+		} else if ( row( row.cols() - 1 ) < 0 ) {
+			_out << " - " << -row( row.cols() - 1 ) << "·x" << row.cols() - 1;
+			;
+		}
+	}
+	return _out.str();
+}
+
+/// outstream operator for matrices which adds variables and only outputs non-zero entries.
+template <typename N>
+std::string to_string( const matrix_t<N>& mat ) {
+	std::stringstream _out;
+	if ( mat.rows() > 0 ) {
+		for ( Eigen::Index row = 0; row < mat.rows(); ++row ) {
+			_out << mat.row( row );
+		}
+	}
+	return _out.str();
 }
 
 /// default case typename to string

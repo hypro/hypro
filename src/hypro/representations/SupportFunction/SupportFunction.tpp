@@ -21,7 +21,8 @@ SupportFunctionT<Number, Converter, Setting>::SupportFunctionT( const std::share
 
 //-------PUBLIC---------
 template <typename Number, typename Converter, typename Setting>
-SupportFunctionT<Number, Converter, Setting>::SupportFunctionT() {
+SupportFunctionT<Number, Converter, Setting>::SupportFunctionT()
+	: GeometricObjectBase( SETSTATE::EMPTY ) {
 	//handled by initializer list
 }
 
@@ -542,6 +543,7 @@ void SupportFunctionT<Number, Converter, Setting>::print() const {
 template <typename Number, typename Converter, typename Setting>
 void SupportFunctionT<Number, Converter, Setting>::swap( SupportFunctionT<Number, Converter, Setting>& first, SupportFunctionT<Number, Converter, Setting>& second ) {
 	first.content.swap( second.content );
+	this->setEmptyState( SETSTATE::UNKNOWN );
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -560,7 +562,7 @@ const SupportFunctionT<Number, Converter, Setting>& SupportFunctionT<Number, Con
 	if ( !mTemplateSet || force ) {
 		std::vector<vector_t<Number>> templateDirections = computeTemplate<Number>( this->dimension(), directionCount );
 
-		matrix_t<Number> templateDirectionMatrix = combineRows( templateDirections );
+		matrix_t<Number> templateDirectionMatrix = createMatrix( templateDirections );
 
 		//lets the support function evaluate the offset of the halfspaces for each direction
 		std::vector<EvaluationResult<Number>> offsets = this->multiEvaluate( templateDirectionMatrix );

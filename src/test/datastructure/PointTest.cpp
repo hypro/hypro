@@ -5,6 +5,8 @@
  */
 
 #include "../defines.h"
+#include "hypro/types.h"
+#include "test/util.h"
 #include "gtest/gtest.h"
 #include <carl/interval/Interval.h>
 #include <hypro/datastructures/Point.h>
@@ -233,8 +235,8 @@ TYPED_TEST( PointTest, BooleanTest ) {
 }
 
 TYPED_TEST( PointTest, AffineTransformation ) {
-	typename hypro::matrix_t<TypeParam> A = createMatrix( std::vector<std::vector<TypeParam>>(
-		  { std::vector<TypeParam>( { 4, 5 } ), std::vector<TypeParam>( { -2, 3 } ) } ) );
+	typename hypro::matrix_t<TypeParam> A = createMatrix( std::vector<hypro::vector_t<TypeParam>>(
+		  { createVector<TypeParam>( { 4, 5 } ), createVector<TypeParam>( { -2, 3 } ) } ) );
 
 	typename hypro::vector_t<TypeParam> v = createVector( std::vector<TypeParam>( { 6, 1 } ) );
 

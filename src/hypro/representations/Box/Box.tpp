@@ -263,7 +263,6 @@ template <typename Number, typename Converter, class Setting>
 std::vector<Point<Number>> BoxT<Number, Converter, Setting>::vertices( const matrix_t<Number>& ) const {
 	std::vector<Point<Number>> result;
 	if ( this->empty() ) {
-		std::cout << "Box is empty. (size: " << mLimits.size() << ")" << std::endl;
 		return result;
 	}
 	std::size_t d = this->dimension();
@@ -379,7 +378,6 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 	}
 
 	if ( this->empty() ) {
-		//std::cout << __func__ << " Box is empty." << std::endl;
 		return std::make_pair( CONTAINMENT::NO, *this );
 	}
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "../../types.h"
+#include "../../util/adaptions_eigen/adaptions_eigen.h"
 
+#include <bits/c++config.h>
 #include <carl/interval/Interval.h>
 #include <vector>
 
@@ -45,7 +47,15 @@ struct AffineTransformation {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const AffineTransformation<Number>& in ) {
-		out << in.mTransformation;
+		bool firstrow = true;
+		for ( Eigen::Index row = 0; row < in.mTransformation.matrix().rows(); ++row ) {
+			if ( !firstrow ) {
+				out << "\n";
+			} else {
+				firstrow = false;
+			}
+			out << "x" << row << " := " << to_string<Number>( in.mTransformation.matrix().row( row ) );
+		}
 		return out;
 	}
 
@@ -75,8 +85,20 @@ struct IntervalAssignment {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const IntervalAssignment<Number>& in ) {
+		bool first = true;
+		std::size_t pos = 0;
 		for ( const auto& i : in.mIntervals ) {
-			out << i << ", ";
+			if ( !first ) {
+				out << "\n";
+			} else {
+				first = false;
+			}
+			if ( i.isEmpty() ) {
+				out << "x" << pos << " := x" << pos;
+				++pos;
+			} else {
+				out << "x" << pos << " := " << i;
+			}
 		}
 		return out;
 	}

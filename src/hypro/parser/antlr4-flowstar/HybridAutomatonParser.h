@@ -21,9 +21,9 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14,
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20,
     T__20 = 21, T__21 = 22, T__22 = 23, POLY = 24, LINEAR = 25, NONLINEAR = 26,
-    NONPOLY = 27, LTI = 28, ODE = 29, IN = 30, TRUE = 31, FALSE = 32, PAR = 33,
-    JUMPS = 34, URGENT = 35, GUARD = 36, RESET = 37, PARALLELOTOPE = 38,
-    BOX = 39, JUMP = 40, DEFINE = 41, COMMENT = 42, EQUALS = 43, BOOLRELATION = 44,
+    NONPOLY = 27, LTI = 28, ODE = 29, URGENT = 30, IN = 31, TRUE = 32, FALSE = 33,
+    PAR = 34, JUMPS = 35, GUARD = 36, RESET = 37, PARALLELOTOPE = 38, BOX = 39,
+    JUMP = 40, DEFINE = 41, COMMENT = 42, EQUALS = 43, BOOLRELATION = 44,
     PLUS = 45, MINUS = 46, TIMES = 47, DIVIDE = 48, SBOPEN = 49, SBCLOSE = 50,
     CBOPEN = 51, CBCLOSE = 52, RBOPEN = 53, RBCLOSE = 54, COMMA = 55, NUMBER = 56,
     CONSTANT = 57, VARIABLE = 58, WS = 59, INTERVALAGG = 60, EXPONENTIAL = 61
@@ -32,16 +32,16 @@ public:
   enum {
     RuleStart = 0, RuleVardeclaration = 1, RuleConstantdeclaration = 2,
     RuleModes = 3, RuleLocation = 4, RuleActivities = 5, RuleInvariants = 6,
-    RuleReplacedexpr = 7, RuleConstantexpr = 8, RuleConnector = 9, RuleTerm = 10,
-    RuleBracketExpression = 11, RulePolynom = 12, RuleExpression = 13, RuleEquation = 14,
-    RuleConstraint = 15, RuleInterval = 16, RuleIntervalexpr = 17, RuleConstrset = 18,
-    RuleInit = 19, RuleInitstate = 20, RuleUnsafeset = 21, RuleLbadstate = 22,
-    RuleGbadstate = 23, RuleJumps = 24, RuleTransition = 25, RuleFromto = 26,
-    RuleUrgent = 27, RuleGuard = 28, RuleLabels = 29, RuleAllocation = 30,
-    RuleResetfct = 31, RuleAggregation = 32, RuleSetting = 33, RuleFixedsteps = 34,
-    RuleTime = 35, RulePlotsetting = 36, RuleFilename = 37, RuleMaxjumps = 38,
-    RulePrint = 39, RuleRemainder = 40, RuleIdentity = 41, RuleQrprecond = 42,
-    RuleFixedorders = 43, RuleAdaptiveorders = 44, RuleCutoff = 45, RulePrecision = 46
+    RuleLoc_labels = 7, RuleReplacedexpr = 8, RuleConstantexpr = 9, RuleConnector = 10,
+    RuleTerm = 11, RuleBracketExpression = 12, RulePolynom = 13, RuleExpression = 14,
+    RuleEquation = 15, RuleConstraint = 16, RuleInterval = 17, RuleIntervalexpr = 18,
+    RuleConstrset = 19, RuleInit = 20, RuleInitstate = 21, RuleUnsafeset = 22,
+    RuleLbadstate = 23, RuleGbadstate = 24, RuleJumps = 25, RuleTransition = 26,
+    RuleFromto = 27, RuleUrgent = 28, RuleGuard = 29, RuleLabels = 30, RuleAllocation = 31,
+    RuleResetfct = 32, RuleAggregation = 33, RuleSetting = 34, RuleFixedsteps = 35,
+    RuleTime = 36, RulePlotsetting = 37, RuleFilename = 38, RuleMaxjumps = 39,
+    RulePrint = 40, RuleRemainder = 41, RuleIdentity = 42, RuleQrprecond = 43,
+    RuleFixedorders = 44, RuleAdaptiveorders = 45, RuleCutoff = 46, RulePrecision = 47
   };
 
   HybridAutomatonParser(antlr4::TokenStream *input);
@@ -64,6 +64,7 @@ public:
   class LocationContext;
   class ActivitiesContext;
   class InvariantsContext;
+  class Loc_labelsContext;
   class ReplacedexprContext;
   class ConstantexprContext;
   class ConnectorContext;
@@ -181,6 +182,7 @@ public:
     antlr4::tree::TerminalNode *VARIABLE();
     antlr4::tree::TerminalNode *CBOPEN();
     ActivitiesContext *activities();
+    Loc_labelsContext *loc_labels();
     antlr4::tree::TerminalNode *CBCLOSE();
     std::vector<InvariantsContext *> invariants();
     InvariantsContext* invariants(size_t i);
@@ -229,6 +231,18 @@ public:
   };
 
   InvariantsContext* invariants();
+
+  class  Loc_labelsContext : public antlr4::ParserRuleContext {
+  public:
+    Loc_labelsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *URGENT();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+
+  };
+
+  Loc_labelsContext* loc_labels();
 
   class  ReplacedexprContext : public antlr4::ParserRuleContext {
   public:

@@ -151,9 +151,9 @@ EvaluationResult<Number> BoxSupportFunction<Number, Setting>::evaluate( const ve
 
 template <typename Number, typename Setting>
 std::vector<EvaluationResult<Number>> BoxSupportFunction<Number, Setting>::multiEvaluate( const matrix_t<Number>& _A, bool, bool ) const {
-	assert( std::size_t( _A.cols() ) == this->dimension() );
-	TRACE( "hypro.representations.supportFunction", "Evaluate in directions " << matrix_t<double>( convert<Number, double>( _A ) ) << std::endl
+	TRACE( "hypro.representations.supportFunction", "Evaluate in directions " << matrix_t<double>( convert<Number, double>( _A ) ) << "\n"
 																			  << "BOX SF IS " << *this );
+	assert( std::size_t( _A.cols() ) == this->dimension() );
 	std::vector<EvaluationResult<Number>> res;
 	for ( Eigen::Index i = 0; i < _A.rows(); ++i ) {
 		res.emplace_back( this->evaluate( vector_t<Number>( _A.row( i ) ), true ) );

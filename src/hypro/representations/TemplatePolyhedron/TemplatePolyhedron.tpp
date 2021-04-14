@@ -21,7 +21,7 @@ TemplatePolyhedronT<Number, Converter, Setting>::TemplatePolyhedronT( const std:
 
 	//compute template matrix and set it as new mMatrixPtr
 	auto templateDirs = computeTemplate<Number>( dimension, noOfSides );
-	mMatrixPtr = std::make_shared<matrix_t<Number>>( combineRows( templateDirs ) );
+	mMatrixPtr = std::make_shared<matrix_t<Number>>( createMatrix( templateDirs ) );
 	if ( vec != vector_t<Number>::Zero( vec.rows() ) ) {
 		mVector = vec;
 	} else {
@@ -40,6 +40,15 @@ TemplatePolyhedronT<Number, Converter, Setting>::TemplatePolyhedronT( const matr
 	assert( mOptimizer.matrix() == mat );
 	assert( mOptimizer.vector() == vec );
 	assert( vec.rows() == mMatrixPtr->rows() );
+
+	if constexpr ( Setting::TEMPLATE_SHAPE == TEMPLATE_CONTENT::OCTAGON ) {
+		matrix_t<Number> directions( 8, dimension() );
+		auto directionVector = computeTemplate<Number>( dimension(), 8 );
+		for ( Eigen::Index i = 0; i < directions.rows(); ++i ) {
+			directions.row( i ) = directionVector.at( i );
+		}
+		*this = overapproximate( directions );
+	}
 }
 
 //Vector of matrix and vector ctor
@@ -531,7 +540,7 @@ TemplatePolyhedronT<Number, Converter, Setting> TemplatePolyhedronT<Number, Conv
 		auto rhsHPoly = typename Converter::HPolytope( rhs.matrix(), rhs.vector() );
 		auto thisHPoly = typename Converter::HPolytope( this->matrix(), this->vector() );
 		auto summed = thisHPoly.minkowskiSum( rhsHPoly );
-		//auto evalInDirs = summed.multiEvaluate(combineRows(computeTemplate<Number>(dimension(), 8)));
+		//auto evalInDirs = summed.multiEvaluate(createMatrix(computeTemplate<Number>(dimension(), 8)));
 		for ( int i = 0; i < mMatrixPtr->rows(); i++ ) {
 			COUNT( "Minkowski Sum Evaluate" );
 		}
