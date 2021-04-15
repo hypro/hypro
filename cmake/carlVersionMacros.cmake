@@ -9,7 +9,7 @@ message(STATUS "Using member substitute function of CArL")
 endif()
 
 file(STRINGS "${carl_INCLUDE_DIR}/carl/formula/Constraint.h" CARL_VARIABLE_VARIANTS REGEX ".*carlVariables mVariables;.*")
-message(STATUS "Have read: ${CARL_VARIABLE_VARIANTS}")
+#message(STATUS "Have read: ${CARL_VARIABLE_VARIANTS}")
 #if(${carl_VERSION} VERSION_LESS_EQUAL "19.10" )
 #	set(CARL_VARIABLE_VARIANTS "True")
 #endif()

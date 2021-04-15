@@ -73,7 +73,7 @@ target_include_directories(${PROJECT_NAME}-objects
 		target_link_libraries(${PROJECT_NAME}-shared PUBLIC clp_SHARED)
 	endif()
 	if(HYPRO_USE_SOPLEX)
-		target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${soplex_LIBRARY})
+		target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${soplex_LIBRARY} -lz)
 	endif()
 	target_link_libraries(${PROJECT_NAME}-shared PUBLIC carl-shared)
 	target_include_dirs_from(${PROJECT_NAME}-shared SYSTEM INTERFACE carl-shared)
