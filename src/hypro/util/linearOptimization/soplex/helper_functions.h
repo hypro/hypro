@@ -1,6 +1,6 @@
 #pragma once
 #ifdef HYPRO_USE_SOPLEX
-#include <soplex.h>
+#include "soplex_hypro.h"
 #include <carl/core/Relation.h>
 
 namespace hypro {
