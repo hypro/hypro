@@ -1078,18 +1078,18 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number>& v
 			}
 		}
 	}
-	// The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
-	return std::all_of( mHPlanes.begin(), mHPlanes.end(), [&vec]( const auto& plane ) { return carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) || plane.normal().dot( vec ) <= plane.offset(); } );
 
-	/*
-	for ( const auto &plane : mHPlanes ) {
+#ifdef HYPRO_LOGGING
+	for ( const auto& plane : mHPlanes ) {
 		// The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
 		if ( !carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) && plane.normal().dot( vec ) > plane.offset() ) {
+			TRACE( "hypro.representations.HPolytope", "Point " << vec << " is not contained in plane " << plane );
 			return false;
 		}
 	}
-	return true;
-	*/
+#endif
+	// The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
+	return std::all_of( mHPlanes.begin(), mHPlanes.end(), [&vec]( const auto& plane ) { return carl::AlmostEqual2sComplement( plane.normal().dot( vec ), plane.offset() ) || plane.normal().dot( vec ) <= plane.offset(); } );
 }
 
 template <typename Number, typename Converter, class Setting>
