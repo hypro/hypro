@@ -459,7 +459,7 @@ class Point {
 			return false;
 		}
 
-		return ( this->rawCoordinates() == _p2.rawCoordinates() );
+		return ( is_approx_equal( this->rawCoordinates(), _p2.rawCoordinates() ) );
 	}
 
 	/**
