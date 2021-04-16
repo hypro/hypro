@@ -2,9 +2,6 @@
 #include "../../../types.h"
 #include "../../../util/convenienceOperators.h"
 
-#include <Eigen/src/Core/util/Meta.h>
-#include <iosfwd>
-
 namespace hypro {
 
 template <typename Number>

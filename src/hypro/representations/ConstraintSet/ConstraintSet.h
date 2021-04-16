@@ -6,8 +6,6 @@
 #include "../helperMethods/isBox.h"
 #include "../types.h"
 
-#include <Eigen/src/Core/util/Meta.h>
-
 namespace hypro {
 
 /**
