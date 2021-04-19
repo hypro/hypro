@@ -4,6 +4,7 @@
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 #include <hypro/util/logging/Filewriter.h>
 #include <iostream>
+#include <string>
 
 using namespace hypro;
 using namespace std::literals;
@@ -207,7 +208,6 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	vars.push_back( st.str() );
 	vars.push_back( "x_t" );  // t is the global clock for plotting
 	res.setVariables( vars );
-	st.str( std::string() );
 	unsigned dim = vars.size();
 
 	// wait
@@ -329,15 +329,20 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	return res;
 }
 
+/**
+ * @brief Create a HA for the model lsyncI.
+ * @tparam Number
+ * @param i
+ * @return HybridAutomaton<Number>
+ */
 template <typename Number>
-HybridAutomaton<Number> createComponent3( unsigned i ) {
+HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	using HA = HybridAutomaton<Number>;
 	using M = matrix_t<Number>;
 	using V = vector_t<Number>;
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
 	using S = State_t<Number>;
-	std::stringstream st;
 
 	// result automaton
 	HA res;
@@ -372,7 +377,9 @@ HybridAutomaton<Number> createComponent3( unsigned i ) {
 	initialState.setSet( ConstraintSet<Number>( initConstraints, initConstants ) );
 	res.addInitialState( initialState );
 
-	M waitInvariant = M::Zero( 2, dim );
+	Number( i - 1 ) / Number( n )
+
+							M waitInvariant = M::Zero( 2, dim );
 	waitInvariant << 1, 0, 0, 0, 1, 0;
 	V waitInvConsts = V::Zero( 2 );
 	waitInvConsts << Number( firingThreshold ), Number( globalTimeHorizon );
