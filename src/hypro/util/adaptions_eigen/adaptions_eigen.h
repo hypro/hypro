@@ -16,7 +16,6 @@
 #include "transformation.h"
 
 #include <carl/numbers/numbers.h>
-#include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Eigenvalues>
 #include <functional>
 #include <iosfwd>
@@ -224,6 +223,42 @@ hypro::matrix_t<Number> abs( const hypro::matrix_t<Number>& in ) {
 }  // namespace Eigen
 
 namespace hypro {
+
+/// approximate comparison
+template <typename Number>
+bool is_approx_equal( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) {
+		return false;
+	}
+
+	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
+		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
+			// compare with 128 ULPs
+			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), 128 ) ) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+template <typename Number>
+bool is_approx_equal( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
+	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) {
+		return false;
+	}
+
+	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
+		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
+			// compare with 128 ULPs
+			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), 128 ) ) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 /// number type conversion for a matrix
 template <typename From, typename To>
 matrix_t<To> convert( const matrix_t<From>& _mat ) {

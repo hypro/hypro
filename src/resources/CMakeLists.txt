@@ -4,7 +4,7 @@ set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 
 add_custom_target(resources)
 set(RESSOURCES_FLAGS "-Wno-error ${CMAKE_CXX_FLAGS} -Wno-error" )
-message("Ressoures flags: ${RESSOURCES_FLAGS}")
+#message("Ressoures flags: ${RESSOURCES_FLAGS}")
 
 # Enable ExternalProject CMake module
 INCLUDE(ExternalProject)
@@ -42,7 +42,7 @@ if(HYPRO_USE_CLP)
 	include(clp.cmake)
 endif()
 
-find_package(UUID QUIET)
+find_package(UUID QUIET REQUIRED)
 if(NOT UUID_FOUND)
 	message(SEND_ERROR "Package uuid-dev required to build antlr.")
 endif()
@@ -87,6 +87,7 @@ endif()
 
 if(HYPRO_USE_SOPLEX)
 	load_library(${PROJECT_NAME} soplex 0)
+
 endif()
 
 if(HYPRO_USE_OPENMP)
