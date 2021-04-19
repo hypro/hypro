@@ -8,6 +8,8 @@
 
 #include "VPolytope.h"
 
+#include <algorithm>
+
 namespace hypro {
 template <typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S>::VPolytopeT()
@@ -340,6 +342,11 @@ bool VPolytopeT<Number, Converter, S>::contains( const vector_t<Number>& vec ) c
 	if ( this->empty() ) {
 		return false;
 	}
+	// quick check for vertices
+	if ( std::any_of( mVertices.begin(), mVertices.end(), [&vec]( const auto& vertex ) { return is_approx_equal( vertex.rawCoordinates(), vec ); } ) ) {
+		return true;
+	}
+	// check for containment on facets or inside the polytope
 	if ( S::useLpForPointContainment ) {
 		// create LP  Ax = b to solve whether vec can be represented as a convex combination of the vertices.
 		// 1 create matrix from vertices.

@@ -2,7 +2,7 @@
 #pragma once
 #include "helper_functions.h"
 
-#include <soplex.h>
+#include "soplex_hypro.h"
 #include <carl/core/Relation.h>
 
 namespace hypro {

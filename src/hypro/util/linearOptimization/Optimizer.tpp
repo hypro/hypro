@@ -62,14 +62,8 @@ Optimizer<Number>::Optimizer( const Optimizer<Number>& orig )
 	, mRelationSymbols( orig.mRelationSymbols ) {
 	TRACE( "hypro.optimizer", "" );
 	assert( isSane() );
-	//mConstraintMatrix = orig.matrix();
-	//mConstraintVector = orig.vector();
-	//mConsistencyChecked = false;
-	////TODO: Instead of cleaning the glp context every time we copy,
-	////clarify how copying the contexts works in glpk and fix that in glpk_context.h
-	////mLastConsistencyAnswer = orig.getLastConsistencyAnswer();
-	//cleanGLPInstance();
-	//mGlpkContext = std::map<std::thread::id, glpk_context>();
+	//TODO: Instead of cleaning the glp context every time we copy,
+	//clarify how copying the contexts works in glpk and fix that in glpk_context.h
 	cleanContexts();
 	assert( isSane() );
 	assert( !mConsistencyChecked );
@@ -151,7 +145,7 @@ void Optimizer<Number>::clear() {
 	//if(lp != nullptr)
 	//	mSmtratSolver.clear();
 	//#endif
-	assert( false );
+	std::lock_guard<std::mutex> lock( mContextLock );
 #ifdef HYPRO_USE_GLPK
 	while ( !mGlpkContexts.empty() ) {
 		mGlpkContexts.erase( mGlpkContexts.begin() );
@@ -410,6 +404,8 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 template <typename Number>
 bool Optimizer<Number>::isSane() const {
 #ifndef NDEBUG
+#ifdef HYPRO_USE_GLPK
+	std::lock_guard<std::mutex> lock( mContextLock );
 	TRACE( "hypro.optimizer", "Have " << mGlpkContexts.size() << " instances to check." );
 	for ( const auto& glpPair : mGlpkContexts ) {
 		if ( glpPair.second.mConstraintsSet && ( !glpPair.second.mInitialized || !glpPair.second.arraysCreated ) )
@@ -419,16 +415,18 @@ bool Optimizer<Number>::isSane() const {
 		TRACE( "hypro.optimizer", "Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane." );
 	}
 #endif
+#endif
 	return true;
 }
 
 template <typename Number>
 void Optimizer<Number>::initialize() const {
 	assert( isSane() );
-	mGlpkContexts[std::this_thread::get_id()].createLPInstance();
-	assert( mGlpkContexts[std::this_thread::get_id()].mInitialized == true );
 
 #if defined( HYPRO_USE_GLPK )
+	std::lock_guard<std::mutex> lock( mContextLock );
+	mGlpkContexts[std::this_thread::get_id()].createLPInstance();
+	assert( mGlpkContexts[std::this_thread::get_id()].mInitialized == true );
 	if ( mGlpkContexts.find( std::this_thread::get_id() ) == mGlpkContexts.end() ) {
 		std::lock_guard<std::mutex> lock( mContextLock );
 		TRACE( "hypro.optimizer", "Actual creation." );
@@ -456,10 +454,16 @@ void Optimizer<Number>::updateConstraints() const {
 	initialize();
 
 #if defined( HYPRO_USE_GLPK )
-	mGlpkContexts[std::this_thread::get_id()].updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+	{
+		std::lock_guard<std::mutex> lock( mContextLock );
+		mGlpkContexts[std::this_thread::get_id()].updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+	}
 #endif
 #if defined( HYPRO_USE_CLP )
-	mClpContexts[std::this_thread::get_id()].updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+	{
+		std::lock_guard<std::mutex> lock( mContextLock );
+		mClpContexts[std::this_thread::get_id()].updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
+	}
 #endif
 
 #ifdef HYPRO_USE_SMTRAT
@@ -499,13 +503,19 @@ void Optimizer<Number>::updateConstraints() const {
 template <typename Number>
 void Optimizer<Number>::clearCache() const {
 #ifdef HYPRO_USE_GLPK
-	for ( auto& idContextPair : mGlpkContexts ) {
-		idContextPair.second.mConstraintsSet = false;
+	{
+		std::lock_guard<std::mutex> lock( mContextLock );
+		for ( auto& idContextPair : mGlpkContexts ) {
+			idContextPair.second.mConstraintsSet = false;
+		}
 	}
 #endif
 #ifdef HYPRO_USE_CLP
-	for ( auto& idContextPair : mClpContexts ) {
-		idContextPair.second.mConstraintsSet = false;
+	{
+		std::lock_guard<std::mutex> lock( mContextLock );
+		for ( auto& idContextPair : mClpContexts ) {
+			idContextPair.second.mConstraintsSet = false;
+		}
 	}
 #endif
 	mConsistencyChecked = false;

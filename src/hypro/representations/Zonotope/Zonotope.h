@@ -23,7 +23,6 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #include <algorithm>
 #include <cmath>
-#include <eigen3/Eigen/Dense>
 #include <valarray>
 #include <vector>
 #ifdef HYPRO_USE_PPL
