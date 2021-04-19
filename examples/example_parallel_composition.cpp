@@ -40,7 +40,6 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	Eigen::Index gt = 1;
 	Eigen::Index z = 2;
 	res.setVariables( vars );
-	st.str( std::string() );
 	unsigned dim = vars.size();
 
 	// wait
@@ -68,9 +67,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 
 	// adapt
 	Lpt adapt = res.createLocation();
-	st.str( std::string() );
-	st << "adapt_" << i;
-	adapt->setName( st.str() );
+	adapt->setName( "adapt_"s + std::to_string( i ) );
 	M adaptFlow = M::Zero( dim + 1, dim + 1 );
 	adaptFlow( gt, dim ) = 1;  // time always advances at rate 1
 	adapt->setFlow( adaptFlow );
@@ -91,7 +88,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 
 	// transitions
 	// to flash
-	Tpt toFlash = wait.createTransition( flash );
+	Tpt toFlash = wait->createTransition( flash );
 	M guardConstraints = M::Zero( 2, dim );
 	guardConstraints( 0, xi ) = 1;
 	guardConstraints( 1, xi ) = -1;
@@ -109,7 +106,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	// toFlash->setUrgent();
 
 	// to execFlash
-	Tpt flashLoop = flash.createTransition( flash );
+	Tpt flashLoop = flash->createTransition( flash );
 	guardConstraints = M::Zero( 2, dim );
 	guardConstraints( 0, z ) = 1;
 	guardConstraints( 1, z ) = -1;
@@ -117,16 +114,16 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	guardConstants << 1, -1;
 	flashLoop->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
 
-	resetMat = M::Identity( dim, dim );
+	M resetMat = M::Identity( dim, dim );
 	resetMat( 2, 2 ) = 0;
-	resetVec = V::Zero( dim );
+	V resetVec = V::Zero( dim );
 	flashLoop->setReset( Reset<Number>( resetMat, resetVec ) );
 	flashLoop->setUrgent();
 	flashLoop->addLabel( Label{ "sync_1" } );
 	flashLoop->setAggregation( Aggregation::aggregation );
 
 	// back to wait
-	Tpt reWait = flash.createTransition( wait );
+	Tpt reWait = flash->createTransition( wait );
 	guardConstraints = M::Zero( 2, dim );
 	guardConstraints( 0, z ) = 1;
 	guardConstraints( 1, z ) = -1;
@@ -140,30 +137,27 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	reWait->setAggregation( Aggregation::aggregation );
 
 	// to adapt
-	Tpt toAdapt = wait.createTransition( adapt );
+	Tpt toAdapt = wait->createTransition( adapt );
 	guardConstraints = M::Zero( 3, dim );
-	guardConstraints( 0, 2 ) = 1;
-	guardConstraints( 1, 2 ) = -1;
-	guardConstraints( 2, 0 ) = 1;
+	guardConstraints( 0, z ) = 1;
+	guardConstraints( 1, z ) = -1;
+	guardConstraints( 2, xi ) = 1;
 	guardConstants = V::Zero( 3 );
 	guardConstants << 1, -1, Number( firingThreshold );
 	toAdapt->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
 	resetMat = M::Identity( dim, dim );
-	resetMat( 0, 0 ) = Number( alpha );
-	resetMat( 2, 2 ) = 0;
+	resetMat( xi, xi ) = Number( alpha );
+	resetMat( z, z ) = 0;  // not 100% sure whether z := 0 should be set here.
 	resetVec = V::Zero( dim );
 	toAdapt->setReset( Reset<Number>( resetMat, resetVec ) );
 	toAdapt->addLabel( { "sync_1" } );
 	toAdapt->setAggregation( Aggregation::aggregation );
 	// toAdapt->setUrgent();
 
-	wait->addTransition( toAdapt );
-	res.addTransition( toAdapt );
-
 	// from adapt, regular
-	Tpt fromAdaptRegular = new Transition<Number>( adapt, wait );
+	Tpt fromAdaptRegular = adapt->createTransition( wait );
 	guardConstraints = M::Zero( 1, dim );
-	guardConstraints( 0, 0 ) = 1;
+	guardConstraints( 0, xi ) = 1;
 	guardConstants = V::Zero( 1 );
 	guardConstants << Number( firingThreshold );
 	fromAdaptRegular->setGuard(
@@ -175,27 +169,20 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	fromAdaptRegular->setAggregation( Aggregation::aggregation );
 	fromAdaptRegular->setUrgent();
 
-	adapt->addTransition( fromAdaptRegular );
-	res.addTransition( fromAdaptRegular );
-
 	// from adapt, scale
-	Tpt fromAdaptScale = new Transition<Number>( adapt, flash );
+	Tpt fromAdaptScale = adapt->createTransition( wait );
 	guardConstraints = M::Zero( 1, dim );
-	guardConstraints( 0, 0 ) = -1;
+	guardConstraints( 0, xi ) = -1;
 	guardConstants = V::Zero( 1 );
 	guardConstants << Number( -firingThreshold );
 	fromAdaptScale->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
-	// fromAdaptScale->addLabel(Label{"flash"});
+	resetMat = M::Identity( dim, dim );
+	resetVec = V::Zero( dim );
+	resetMat( xi, xi ) = 0;
+	fromAdaptRegular->setReset( Reset<Number>( resetMat, resetVec ) );
+	fromAdaptScale->addLabel( Label{ "sync_2" } );
 	fromAdaptScale->setAggregation( Aggregation::aggregation );
 	fromAdaptScale->setUrgent();
-
-	resetMat = M::Identity( dim, dim );
-	resetMat( 0, 0 ) = 0;
-	resetVec = V::Zero( dim );
-	fromAdaptScale->setReset( Reset<Number>( resetMat, resetVec ) );
-
-	adapt->addTransition( fromAdaptScale );
-	res.addTransition( fromAdaptScale );
 
 	return res;
 }
