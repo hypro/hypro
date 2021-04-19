@@ -33,7 +33,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     add_dependencies(runAlgorithmTests resources)
     target_include_directories(runAlgorithmTests PRIVATE ${GTEST_INCLUDE_DIR})
 
-    target_link_libraries(runAlgorithmTests LINK_PUBLIC
+    target_link_libraries(runAlgorithmTests PUBLIC
 			${GTEST_LIBRARIES}
 			${PROJECT_NAME}-shared
 			)
