@@ -26,7 +26,7 @@ file(GLOB_RECURSE BM_SOURCES ${CMAKE_CURRENT_LIST_DIR}/hyproBenchmark/*.cpp)
 add_executable(benchmark
 	${BM_SOURCES}
 )
-target_link_libraries(benchmark
+target_link_libraries(benchmark PUBLIC
 						${PROJECT_NAME}-shared
 )
 cotire(runBenchmark)

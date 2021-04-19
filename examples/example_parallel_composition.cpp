@@ -188,6 +188,13 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	return res;
 }
 
+/**
+ * Construct shd II
+ * @tparam Number
+ * @param i
+ * @param labels
+ * @return
+ */
 template <typename Number>
 HybridAutomaton<Number> createComponent2( unsigned i,
 										  const std::vector<Label>& labels ) {
@@ -197,11 +204,11 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
 	using S = State_t<Number>;
-	std::stringstream st;
 
 	// result automaton
 	HA res;
 
+<<<<<<< HEAD
 	// set up variables
 	typename HybridAutomaton<Number>::variableVector vars;
 	st << "x_" << i;
@@ -209,25 +216,34 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	vars.push_back( "x_t" );  // t is the global clock for plotting
 	res.setVariables( vars );
 	unsigned dim = vars.size();
+||||||| 1329a96cc0
+	// set up variables
+	typename HybridAutomaton<Number>::variableVector vars;
+	st << "x_" << i;
+	vars.push_back( st.str() );
+	vars.push_back( "x_t" );  // t is the global clock for plotting
+	res.setVariables( vars );
+	st.str( std::string() );
+	unsigned dim = vars.size();
+=======
+	res.setVariables( {"x_"s + std::to_string(i), "x_t" } );
+	size_t dimension = 2;
+>>>>>>> baec5b9fa57b177dc991aececb9f61f0f82b36ff
 
 	// wait
-
-	st << "wait_" << i;
-	Location<Number> waitLoc = Location<Number>();
-	Lpt wait = &waitLoc;
-	wait->setName( st.str() );
-	M waitFlow = M::Zero( dim + 1, dim + 1 );  // both variables advance
-	waitFlow( 0, dim ) = 1;
-	waitFlow( 1, dim ) = 1;
+	Lpt wait = res.createLocation();
+	wait->setName( "wait_"s + std::to_string(i) );
+	M waitFlow = M::Zero( dimension + 1, dimension + 1 );  // both variables advance
+	waitFlow( 0, dimension ) = 1;
+	waitFlow( 1, dimension ) = 1;
 	wait->setFlow( waitFlow );
 
-	M waitInvariant = M::Zero( 2, dim );
+	M waitInvariant = M::Zero( 2, dimension );
 	waitInvariant( 0, 0 ) = 1;
 	waitInvariant( 1, 1 ) = 1;
 	V waitInvConsts = V::Zero( 2 );
 	waitInvConsts << Number( firingThreshold ), Number( globalTimeHorizon );
 	wait->setInvariant( Condition<Number>{ waitInvariant, waitInvConsts } );
-	res.addLocation( std::move( std::unique_ptr<Location<Number>>( wait ) ) );
 
 	// initial state
 	M initConstraints = M::Zero( 4, 2 );
@@ -241,76 +257,64 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	res.addInitialState( initialState );
 
 	// adapt
-	Location<Number> adaptLoc;
-	Lpt adapt = &adaptLoc;
-	st.str( std::string() );
-	st << "adapt_" << i;
-	adapt->setName( st.str() );
+	Lpt adapt = res.createLocation();
+	adapt->setName( "adapt_" + std::to_string(i) );
 
-	M adaptFlow = M::Zero( dim + 1, dim + 1 );
-	adaptFlow( 1, dim ) = 1;  // time always advances at rate 1
+	M adaptFlow = M::Zero( dimension + 1, dimension + 1 );
+	adaptFlow( 1, dimension ) = 1;  // time always advances at rate 1
 	adapt->setFlow( adaptFlow );
 
 	res.addLocation( *adapt );
 
 	// transitions
 	// flash self loop
-	auto flash = std::make_unique<Transition<Number>>( wait, wait );
-	M guardConstraints = M::Zero( 2, dim );
+	Tpt flash = wait->createTransition(wait);
+	M guardConstraints = M::Zero( 2, dimension );
 	guardConstraints( 0, 0 ) = 1;
 	guardConstraints( 1, 0 ) = -1;
 	V guardConstants = V::Zero( 2 );
 	guardConstants << Number( firingThreshold ), Number( -firingThreshold );
 	flash->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
 
-	M resetMat = M::Identity( dim, dim );
-	V resetVec = V::Zero( dim );
+	M resetMat = M::Identity( dimension, dimension );
+	V resetVec = V::Zero( dimension );
 	resetMat( 0, 0 ) = 0;
 	flash->addLabel( labels.at( i ) );
 	flash->setReset( Reset<Number>( resetMat, resetVec ) );
 	flash->setAggregation( Aggregation::aggregation );
 
-	wait->addTransition( std::move( flash ) );
-	res.addTransition( *flash );
-
 	// to adapt
 	for ( unsigned j = 0; j < labels.size(); ++j ) {
 		if ( j != i ) {
-			Tpt toAdapt = new Transition<Number>( wait, adapt );
-			resetMat = M::Identity( dim, dim );
+			Tpt toAdapt = wait->createTransition(adapt);
+			resetMat = M::Identity( dimension, dimension );
 			resetMat( 0, 0 ) = Number( alpha );
-			resetVec = V::Zero( dim );
+			resetVec = V::Zero( dimension );
 			toAdapt->setReset( Reset<Number>( resetMat, resetVec ) );
 
 			toAdapt->addLabel( labels.at( j ) );
 
 			toAdapt->setAggregation( Aggregation::aggregation );
-
-			wait->addTransition( toAdapt );
-			res.addTransition( *toAdapt );
 		}
 	}
 
 	// from adapt, regular
-	Tpt fromAdaptRegular = new Transition<Number>( adapt, wait );
-	guardConstraints = M::Zero( 1, dim );
+	Tpt fromAdaptRegular = adapt->createTransition(wait);
+	guardConstraints = M::Zero( 1, dimension );
 	guardConstraints( 0, 0 ) = 1;
 	guardConstants = V::Zero( 1 );
 	guardConstants << Number( firingThreshold );
 	fromAdaptRegular->setGuard(
 		  Condition<Number>{ guardConstraints, guardConstants } );
-	resetMat = M::Identity( dim, dim );
-	resetVec = V::Zero( dim );
+	resetMat = M::Identity( dimension, dimension );
+	resetVec = V::Zero( dimension );
 	fromAdaptRegular->setReset( Reset<Number>( resetMat, resetVec ) );
 	fromAdaptRegular->setAggregation( Aggregation::aggregation );
 	fromAdaptRegular->setUrgent();
 
-	adapt->addTransition( fromAdaptRegular );
-	res.addTransition( *fromAdaptRegular );
-
 	// from adapt, scale
-	Tpt fromAdaptScale = new Transition<Number>( adapt, wait );
-	guardConstraints = M::Zero( 1, dim );
+	Tpt fromAdaptScale = adapt->createTransition(wait);
+	guardConstraints = M::Zero( 1, dimension );
 	guardConstraints( 0, 0 ) = -1;
 	guardConstants = V::Zero( 1 );
 	guardConstants << Number( -firingThreshold );
@@ -318,13 +322,10 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	fromAdaptScale->setAggregation( Aggregation::aggregation );
 	fromAdaptScale->setUrgent();
 
-	resetMat = M::Identity( dim, dim );
+	resetMat = M::Identity( dimension, dimension );
 	resetMat( 0, 0 ) = 0;
-	resetVec = V::Zero( dim );
+	resetVec = V::Zero( dimension );
 	fromAdaptScale->setReset( Reset<Number>( resetMat, resetVec ) );
-
-	adapt->addTransition( fromAdaptScale );
-	res.addTransition( *fromAdaptScale );
 
 	return res;
 }
