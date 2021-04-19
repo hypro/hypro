@@ -142,7 +142,7 @@ Condition<Number> conditionFromIntervals( const std::vector<carl::Interval<Numbe
 }
 
 template <typename Number>
-void Condition<Number>::decompose( const Decomposition& decomposition ) {
+void Condition<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
 	if ( mConstraints.size() > 1 ) {
 		//already decomposed/empty constraints
 		return;
