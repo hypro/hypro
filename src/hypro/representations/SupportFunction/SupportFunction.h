@@ -96,9 +96,6 @@ class SupportFunctionT : private GeometricObjectBase {
 	SupportFunctionT intersect( const SupportFunctionT& _rhs ) const;
 	SupportFunctionT intersectHalfspace( const Halfspace<Number>& hs ) const;
 	SupportFunctionT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	static SupportFunctionT<Number, Converter, Setting> Empty() {
-		return SupportFunctionT<Number, Converter, Setting>();
-	}
 	bool contains( const Point<Number>& _point ) const;
 	bool contains( const vector_t<Number>& _point ) const;
 	bool contains( const SupportFunctionT& rhs ) const;
