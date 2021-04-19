@@ -145,7 +145,7 @@ template <typename Number>
 const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 	std::set<Label> labels;
 	for ( const auto& loc : mLocations ) {
-		for ( auto tra : loc->getTransitions() ) {
+		for ( auto& tra : loc->getTransitions() ) {
 			std::for_each( tra->getLabels().begin(), tra->getLabels().end(), [&labels]( auto l ) { labels.emplace( l ); } );
 		}
 	}
@@ -187,7 +187,7 @@ Location<Number>* HybridAutomaton<Number>::createLocation( Location<Number>* ori
 template <typename Number>
 void HybridAutomaton<Number>::reduce() {
 	// TODO rewrite
-	assert( false && "NOT IMPLEMENTED." );
+//	assert( false && "NOT IMPLEMENTED." );
 }
 
 template <typename Number>
@@ -343,10 +343,10 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	std::set<Label> rhsLabels = rhs.getLabels();
 	for ( const auto& lhsT : lhs.getTransitions() ) {
 		for ( const auto& rhsT : rhs.getTransitions() ) {
-			std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT.get(), rhsT.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+			std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 			if ( t ) {
-				ha.addTransition( std::move( t ) );
-				( t->getSource() )->addTransition( t.get() );
+				//ha.addTransition( std::move( t ) );
+				( t->getSource() )->addTransition( std::move(t) );
 			}
 		}
 	}
@@ -376,10 +376,10 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( lhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT.get(), tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
-					ha.addTransition( std::move( t ) );
-					( t->getSource() )->addTransition( t.get() );
+					//ha.addTransition( std::move( t ) );
+					( t->getSource() )->addTransition( std::move(t) );
 				}
 			}
 		}
@@ -405,10 +405,10 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( rhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( tmp.get(), rhsT.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number>> t = parallelCompose( tmp.get(), rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
-					ha.addTransition( std::move( t ) );
-					( t->getSource() )->addTransition( t.get() );
+					//ha.addTransition( std::move( t ) );
+					( t->getSource() )->addTransition( std::move(t) );
 				}
 			}
 		}
@@ -418,7 +418,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	for ( const auto& initialStateLhs : lhs.getInitialStates() ) {
 		for ( const auto& initialStateRhs : rhs.getInitialStates() ) {
 			FATAL( "hypro", "WARNING: parallel composition of initial states not implemented yet." );
-			assert( false );
+			//assert( false );
 		}
 	}
 

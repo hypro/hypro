@@ -141,8 +141,7 @@ bool Transition<Number>::isComposedOf( const Transition<Number>& rhs, const std:
 	return true;
 }
 
-/*
-template<typename Number, typename State>
+template<typename Number>
 std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lhsT
                                                     , const Transition<Number>* rhsT
                                                     , const std::vector<std::string>& lhsVar
@@ -236,6 +235,5 @@ std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lh
 
     return t;
 }
-*/
 
 }  //namespace hypro

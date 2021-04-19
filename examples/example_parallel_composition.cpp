@@ -327,11 +327,10 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 
 	// set up variables
 	typename HybridAutomaton<Number>::variableVector vars;
-	vars.push_back( st.str() );
+	vars.push_back( "x_"s + std::to_string(i) );
 	vars.push_back( "x_t" );  // t is the global clock for plotting
 	vars.push_back( "z" );	  // z is the shared variable
 	res.setVariables( vars );
-	st.str( std::string() );
 	unsigned dim = vars.size();
 
 	// wait
@@ -695,17 +694,17 @@ int main( int argc, char** argv ) {
 	}
 	composed_sync_label.reduce();
 	settings.fileName = "sync_labels";
-	LockedFileWriter flowstar_label( "sync_labelSync.model" );
-	flowstar_label.clearFile();
-	flowstar_label << toFlowstarFormat( composed_sync_label, settings );
+//	LockedFileWriter flowstar_label( "sync_labelSync.model" );
+//	flowstar_label.clearFile();
+//	flowstar_label << toFlowstarFormat( composed_sync_label, settings );
 	// create dot output.
-	LockedFileWriter label_single( "sync_labelSingle.dot" );
-	label_single.clearFile();
-	label_single << createComponent2<Number>(0, componentCount, std::vector<Label>( { Label( "flash0" ) } ) )
-						  .getDotRepresentation();
-	LockedFileWriter label_res( "sync_labelComposed.dot" );
-	label_res.clearFile();
-	label_res << composed_sync_label.getDotRepresentation();
+//	LockedFileWriter label_single( "sync_labelSingle.dot" );
+//	label_single.clearFile();
+//	label_single << createComponent2<Number>(0, componentCount, std::vector<Label>( { Label( "flash0" ) } ) )
+//						  .getDotRepresentation();
+//	LockedFileWriter label_res( "sync_labelComposed.dot" );
+//	label_res.clearFile();
+//	label_res << composed_sync_label.getDotRepresentation();
 
 	std::cout << "Automaton stats: " << std::endl
 			  << composed_sync_label.getStatistics() << std::endl;
@@ -715,7 +714,8 @@ int main( int argc, char** argv ) {
 			  << " components using  optimized label synchronization."
 			  << std::endl;
 
-	for ( auto t = composed_sync_label.getTransitions().begin();
+	auto transitions = composed_sync_label.getTransitions();
+	for ( auto t = transitions.begin();
 		  t != composed_sync_label.getTransitions().end(); ++t ) {
 		if ( ( *t )->getSource()->getName().find( "adapt" ) != std::string::npos &&
 			 ( *t )->getTarget()->getName().find( "adapt" ) != std::string::npos ) {
@@ -728,13 +728,13 @@ int main( int argc, char** argv ) {
 
 	composed_sync_label.reduce();
 
-	LockedFileWriter flowstar_label2( "sync_labelSyncRed.model" );
-	flowstar_label2.clearFile();
-	flowstar_label2 << toFlowstarFormat( composed_sync_label, settings );
-	// create dot output.
-	LockedFileWriter label_res2( "sync_labelComposed2.dot" );
-	label_res2.clearFile();
-	label_res2 << composed_sync_label.getDotRepresentation();
+//	LockedFileWriter flowstar_label2( "sync_labelSyncRed.model" );
+//	flowstar_label2.clearFile();
+//	flowstar_label2 << toFlowstarFormat( composed_sync_label, settings );
+//	// create dot output.
+//	LockedFileWriter label_res2( "sync_labelComposed2.dot" );
+//	label_res2.clearFile();
+//	label_res2 << composed_sync_label.getDotRepresentation();
 
 	std::cout << "Automaton stats: " << std::endl
 			  << composed_sync_label.getStatistics() << std::endl;
