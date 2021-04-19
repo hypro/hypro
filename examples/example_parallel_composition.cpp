@@ -208,31 +208,12 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	// result automaton
 	HA res;
 
-<<<<<<< HEAD
-	// set up variables
-	typename HybridAutomaton<Number>::variableVector vars;
-	st << "x_" << i;
-	vars.push_back( st.str() );
-	vars.push_back( "x_t" );  // t is the global clock for plotting
-	res.setVariables( vars );
-	unsigned dim = vars.size();
-||||||| 1329a96cc0
-	// set up variables
-	typename HybridAutomaton<Number>::variableVector vars;
-	st << "x_" << i;
-	vars.push_back( st.str() );
-	vars.push_back( "x_t" );  // t is the global clock for plotting
-	res.setVariables( vars );
-	st.str( std::string() );
-	unsigned dim = vars.size();
-=======
-	res.setVariables( {"x_"s + std::to_string(i), "x_t" } );
+	res.setVariables( { "x_"s + std::to_string( i ), "x_t" } );
 	size_t dimension = 2;
->>>>>>> baec5b9fa57b177dc991aececb9f61f0f82b36ff
 
 	// wait
 	Lpt wait = res.createLocation();
-	wait->setName( "wait_"s + std::to_string(i) );
+	wait->setName( "wait_"s + std::to_string( i ) );
 	M waitFlow = M::Zero( dimension + 1, dimension + 1 );  // both variables advance
 	waitFlow( 0, dimension ) = 1;
 	waitFlow( 1, dimension ) = 1;
@@ -258,17 +239,17 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 
 	// adapt
 	Lpt adapt = res.createLocation();
-	adapt->setName( "adapt_" + std::to_string(i) );
+	adapt->setName( "adapt_" + std::to_string( i ) );
 
 	M adaptFlow = M::Zero( dimension + 1, dimension + 1 );
-	adaptFlow( 1, dimension ) = 1;  // time always advances at rate 1
+	adaptFlow( 1, dimension ) = 1;	// time always advances at rate 1
 	adapt->setFlow( adaptFlow );
 
 	res.addLocation( *adapt );
 
 	// transitions
 	// flash self loop
-	Tpt flash = wait->createTransition(wait);
+	Tpt flash = wait->createTransition( wait );
 	M guardConstraints = M::Zero( 2, dimension );
 	guardConstraints( 0, 0 ) = 1;
 	guardConstraints( 1, 0 ) = -1;
@@ -286,7 +267,7 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	// to adapt
 	for ( unsigned j = 0; j < labels.size(); ++j ) {
 		if ( j != i ) {
-			Tpt toAdapt = wait->createTransition(adapt);
+			Tpt toAdapt = wait->createTransition( adapt );
 			resetMat = M::Identity( dimension, dimension );
 			resetMat( 0, 0 ) = Number( alpha );
 			resetVec = V::Zero( dimension );
@@ -299,7 +280,7 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	}
 
 	// from adapt, regular
-	Tpt fromAdaptRegular = adapt->createTransition(wait);
+	Tpt fromAdaptRegular = adapt->createTransition( wait );
 	guardConstraints = M::Zero( 1, dimension );
 	guardConstraints( 0, 0 ) = 1;
 	guardConstants = V::Zero( 1 );
@@ -313,7 +294,7 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	fromAdaptRegular->setUrgent();
 
 	// from adapt, scale
-	Tpt fromAdaptScale = adapt->createTransition(wait);
+	Tpt fromAdaptScale = adapt->createTransition( wait );
 	guardConstraints = M::Zero( 1, dimension );
 	guardConstraints( 0, 0 ) = -1;
 	guardConstants = V::Zero( 1 );
@@ -331,7 +312,7 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 }
 
 /**
- * @brief Create a HA for the model lsyncI.
+ * @brief Create a HA for the model shdII.
  * @tparam Number
  * @param i
  * @return HybridAutomaton<Number>
@@ -350,7 +331,6 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 
 	// set up variables
 	typename HybridAutomaton<Number>::variableVector vars;
-	st << "x_" << i;
 	vars.push_back( st.str() );
 	vars.push_back( "x_t" );  // t is the global clock for plotting
 	vars.push_back( "z" );	  // z is the shared variable
@@ -359,33 +339,24 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	unsigned dim = vars.size();
 
 	// wait
-
-	st << "wait_" << i;
-	Location<Number> wait;
-	wait->setName( st.str() );
+	Lpt wait = res.createLocation();
+	wait->setName( "wait_"s + std::to_string( i ) );
 	M waitFlow = M::Zero( dim + 1, dim + 1 );
 	waitFlow( 0, dim ) = 1;
 	waitFlow( 1, dim ) = 1;	 // time always advances at rate 1
 	wait->setFlow( waitFlow );
 
-	M initConstraints = M::Zero( 6, 3 );
-	initConstraints << 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1, 0, 0, 0, 1, 0, 0, -1;
-	V initConstants = V::Zero( 6 );
-	initConstants << 0, 0, 0, 0, 0, 0;
+	hypro::Condition<Number> initialValuations = hypro::conditionFromIntervals<Number>(
+		  { carl::Interval<Number>{ Number( i - 1 ) / Number( n ) },
+			carl::Interval<Number>{ 0 },
+			carl::Interval<Number>{ 0 } } );
+	res.addInitialState( wait, initialValuations );
 
-	S initialState;
-	initialState.setLocation( wait );
-	initialState.setSet( ConstraintSet<Number>( initConstraints, initConstants ) );
-	res.addInitialState( initialState );
-
-	Number( i - 1 ) / Number( n )
-
-							M waitInvariant = M::Zero( 2, dim );
+	M waitInvariant = M::Zero( 2, dim );
 	waitInvariant << 1, 0, 0, 0, 1, 0;
 	V waitInvConsts = V::Zero( 2 );
 	waitInvConsts << Number( firingThreshold ), Number( globalTimeHorizon );
 	wait->setInvariant( Condition<Number>{ waitInvariant, waitInvConsts } );
-	res.addLocation( wait );
 
 	// adapt
 	// Lpt adapt = manager.create();
@@ -400,11 +371,8 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	// res.addLocation(adapt);
 
 	// flash
-	Location<Number> flash;
-	st.str( std::string() );
-	st << "flash_" << i;
-	flash->setName( st.str() );
-
+	Location<Number> flash = res.createLocation();
+	flash->setName( "adapt_"s + std::to_string( i ) );
 	M flashFlow = M::Zero( dim + 1, dim + 1 );
 	flashFlow( 1, dim ) = 1;  // time always advances at rate 1
 	flash->setFlow( flashFlow );
@@ -414,11 +382,10 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	// flashInvariant(1,0) = -1;
 	// V flashInvConsts = V::Zero(2);
 	// flash->setInvariant(Condition<Number>{flashInvariant, flashInvConsts});
-	res.addLocation( flash );
 
 	// transitions
-	// to flash
-	Tpt toFlash = new Transition<Number>( wait, flash );
+	// to flash, x = firingThreshold
+	Tpt toFlash = wait->createTransition( flash );
 	M guardConstraints = M::Zero( 2, dim );
 	guardConstraints( 0, 0 ) = 1;
 	guardConstraints( 1, 0 ) = -1;
@@ -435,11 +402,8 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	toFlash->setAggregation( Aggregation::aggregation );
 	// toFlash->setUrgent();
 
-	wait->addTransition( toFlash );
-	res.addTransition( toFlash );
-
-	// to execFlash
-	Tpt flashLoop = new Transition<Number>( flash, flash );
+	// to execFlash, z = 1
+	Tpt flashLoop = flash->createTransition( flash );
 	guardConstraints = M::Zero( 2, dim );
 	guardConstraints( 0, 2 ) = 1;
 	guardConstraints( 1, 2 ) = -1;
@@ -452,12 +416,8 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	resetVec = V::Zero( dim );
 	flashLoop->setReset( Reset<Number>( resetMat, resetVec ) );
 	flashLoop->setUrgent();
-	flashLoop->addLabel( Label{ "flash" } );
+	flashLoop->addLabel( Label{ "sync_1" } );
 	flashLoop->setAggregation( Aggregation::aggregation );
-	// flashLoop->setUrgent();
-
-	flash->addTransition( flashLoop );
-	res.addTransition( flashLoop );
 
 	// back to wait
 	/*
@@ -479,7 +439,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
   */
 
 	// to adapt
-	Tpt toAdapt = new Transition<Number>( wait, flash );
+	Tpt toAdapt = wait->createTransition( flash );
 	guardConstraints = M::Zero( 3, dim );
 	guardConstraints( 0, 2 ) = 1;
 	guardConstraints( 1, 2 ) = -1;
@@ -492,15 +452,11 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	resetMat( 2, 2 ) = 0;
 	resetVec = V::Zero( dim );
 	toAdapt->setReset( Reset<Number>( resetMat, resetVec ) );
-	toAdapt->addLabel( { "flash" } );
+	toAdapt->addLabel( { "sync_1" } );
 	toAdapt->setAggregation( Aggregation::aggregation );
-	// toAdapt->setUrgent();
 
-	wait->addTransition( toAdapt );
-	res.addTransition( toAdapt );
-
-	// from adapt, regular
-	Tpt fromAdaptRegular = new Transition<Number>( flash, wait );
+	// from adapt, regular, x < f, z = 0
+	Tpt fromAdaptRegular = flash->createTransition( wait );
 	guardConstraints = M::Zero( 3, dim );
 	guardConstraints( 0, 0 ) = 1;
 	guardConstraints( 1, 2 ) = 1;
@@ -512,15 +468,12 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	resetMat = M::Identity( dim, dim );
 	resetVec = V::Zero( dim );
 	fromAdaptRegular->setReset( Reset<Number>( resetMat, resetVec ) );
-	fromAdaptRegular->addLabel( Label{ "return" } );
+	fromAdaptRegular->addLabel( Label{ "sync_2" } );
 	fromAdaptRegular->setAggregation( Aggregation::aggregation );
 	fromAdaptRegular->setUrgent();
 
-	flash->addTransition( fromAdaptRegular );
-	res.addTransition( fromAdaptRegular );
-
-	// from adapt, scale
-	Tpt fromAdaptScale = new Transition<Number>( flash, wait );
+	// from adapt, scale, x > f, z = 0
+	Tpt fromAdaptScale = flash->createTransition( wait );
 	guardConstraints = M::Zero( 3, dim );
 	guardConstraints( 0, 0 ) = -1;
 	guardConstraints( 1, 2 ) = 1;
@@ -528,7 +481,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	guardConstants = V::Zero( 3 );
 	guardConstants << Number( -firingThreshold ), 0, 0;
 	fromAdaptScale->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
-	fromAdaptScale->addLabel( Label{ "return" } );
+	fromAdaptScale->addLabel( Label{ "sync_2" } );
 	fromAdaptScale->setAggregation( Aggregation::aggregation );
 	fromAdaptScale->setUrgent();
 
@@ -536,9 +489,6 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	resetMat( 0, 0 ) = 0;
 	resetVec = V::Zero( dim );
 	fromAdaptScale->setReset( Reset<Number>( resetMat, resetVec ) );
-
-	flash->addTransition( fromAdaptScale );
-	res.addTransition( fromAdaptScale );
 
 	return res;
 }
