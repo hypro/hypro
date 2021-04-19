@@ -195,7 +195,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
  * @return
  */
 template <typename Number>
-HybridAutomaton<Number> createComponent2( unsigned i,
+HybridAutomaton<Number> createComponent2( unsigned i, size_t n,
 										  const std::vector<Label>& labels ) {
 	using HA = HybridAutomaton<Number>;
 	using M = matrix_t<Number>;
@@ -226,15 +226,11 @@ HybridAutomaton<Number> createComponent2( unsigned i,
 	wait->setInvariant( Condition<Number>{ waitInvariant, waitInvConsts } );
 
 	// initial state
-	M initConstraints = M::Zero( 4, 2 );
-	initConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
-	V initConstants = V::Zero( 4 );
-	initConstants << 0, 0, 0, 0;
-
-	S initialState;
-	initialState.setLocation( wait );
-	initialState.setSet( ConstraintSet<Number>( initConstraints, initConstants ) );
-	res.addInitialState( initialState );
+	hypro::Condition<Number> initialValuations = hypro::conditionFromIntervals<Number>(
+		  { carl::Interval<Number>{ Number( i - 1 ) / Number( n ) },
+			carl::Interval<Number>{ 0 },
+			carl::Interval<Number>{ 0 } } );
+	res.addInitialState(wait, initialValuations);
 
 	// adapt
 	Lpt adapt = res.createLocation();
@@ -709,19 +705,16 @@ int main( int argc, char** argv ) {
 			  << std::endl;
 
 	std::vector<Label> labels;
-	std::stringstream s;
 	for ( int i = 0; i < componentCount; ++i ) {
-		s.str( "" );
-		s << "flash" << i;
-		labels.emplace_back( s.str() );
+		labels.emplace_back( "flash"s + std::to_string(i) );
 	}
 
 	HybridAutomaton<Number> composed_sync_label =
-		  createComponent2<Number>( 0, labels );
+		  createComponent2<Number>( 0, componentCount, labels );
 	for ( int i = 1; i < componentCount; ++i ) {
-		HybridAutomaton<Number> tmp = createComponent2<Number>( i, labels );
+		HybridAutomaton<Number> tmp = createComponent2<Number>( i, componentCount, labels );
 		composed_sync_label = composed_sync_label || tmp;
-		assert( composed_sync_label.isComposedOf( tmp ) );
+		//assert( composed_sync_label.isComposedOf( tmp ) );
 	}
 	composed_sync_label.reduce();
 	settings.fileName = "sync_labels";
@@ -731,8 +724,7 @@ int main( int argc, char** argv ) {
 	// create dot output.
 	LockedFileWriter label_single( "sync_labelSingle.dot" );
 	label_single.clearFile();
-	label_single << createComponent2<Number>(
-						  0, std::vector<Label>( { Label( "flash0" ) } ) )
+	label_single << createComponent2<Number>(0, componentCount, std::vector<Label>( { Label( "flash0" ) } ) )
 						  .getDotRepresentation();
 	LockedFileWriter label_res( "sync_labelComposed.dot" );
 	label_res.clearFile();
