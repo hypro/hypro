@@ -141,99 +141,91 @@ bool Transition<Number>::isComposedOf( const Transition<Number>& rhs, const std:
 	return true;
 }
 
-template<typename Number>
-std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lhsT
-                                                    , const Transition<Number>* rhsT
-                                                    , const std::vector<std::string>& lhsVar
-                                                    , const std::vector<std::string>& rhsVar
-                                                    , const std::vector<std::string>& haVar
-                                                    , const HybridAutomaton<Number>& ha
-                                                    , const std::set<Label> lhsLabels
-                                                    , const std::set<Label> rhsLabels)
-{
-    assert(haVar.size() >= lhsVar.size());
-    assert(haVar.size() >= rhsVar.size());
+template <typename Number>
+std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* lhsT, const Transition<Number>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels ) {
+	assert( haVar.size() >= lhsVar.size() );
+	assert( haVar.size() >= rhsVar.size() );
 
-    //std::cout << "Parallel composition of transitions " << lhsT->getSource()->getName() << " -> " << lhsT->getTarget()->getName() << " and " << rhsT->getSource()->getName() << " -> " << rhsT->getTarget()->getName() << std::endl;
+	TRACE( "hypro.datastructures", "Parallel composition of " << *lhsT << "\n\n and \n\n"
+															  << *rhsT );
 
-    //Transition<Number>* t = new Transition<Number>();
-    //std::unique_ptr<Transition<Number>> t = new Transition<Number>()
-    std::unique_ptr<Transition<Number>> t = std::make_unique<Transition<Number>>();
+	//Transition<Number>* t = new Transition<Number>();
+	//std::unique_ptr<Transition<Number>> t = new Transition<Number>()
+	std::unique_ptr<Transition<Number>> t = std::make_unique<Transition<Number>>();
 
-    //set label
-    if (lhsT->getLabels() == rhsT->getLabels()) {
-        //std::cout << "a" << std::endl;
-        t->setLabels(lhsT->getLabels());
-    } else if(!(lhsT->getLabels().empty()) and rhsLabels.set::count(*(lhsT->getLabels().begin()))==0 and rhsT->getLabels().empty()) {
-        //std::cout << "b" << std::endl;
-        t->setLabels(lhsT->getLabels());
-    } else if(!(rhsT->getLabels().empty()) and lhsLabels.set::count(*(rhsT->getLabels().begin()))==0 and lhsT->getLabels().empty()) {
-        //std::cout << "c" << std::endl;
-        t->setLabels(rhsT->getLabels());
-    } else {
-        //std::cout << "d" << std::endl;
-        //delete t;
-        return nullptr;
-    }
+	//set label
+	if ( lhsT->getLabels() == rhsT->getLabels() ) {
+		//std::cout << "a" << std::endl;
+		t->setLabels( lhsT->getLabels() );
+	} else if ( !( lhsT->getLabels().empty() ) and rhsLabels.set::count( *( lhsT->getLabels().begin() ) ) == 0 and rhsT->getLabels().empty() ) {
+		//std::cout << "b" << std::endl;
+		t->setLabels( lhsT->getLabels() );
+	} else if ( !( rhsT->getLabels().empty() ) and lhsLabels.set::count( *( rhsT->getLabels().begin() ) ) == 0 and lhsT->getLabels().empty() ) {
+		//std::cout << "c" << std::endl;
+		t->setLabels( rhsT->getLabels() );
+	} else {
+		//std::cout << "d" << std::endl;
+		//delete t;
+		return nullptr;
+	}
 
-    // quick test for shared resets - should be equal, otherwise do not parallel compose.
-    // mapping from resultIndex to pair lhsIndex, rhsIndex of the shared variables.
-    std::map<unsigned, std::pair<unsigned,unsigned>> sharedVars;
-    unsigned idx = 0;
-    for(const auto& var : haVar) {
-    	// identify a shared variable dimension.
-    	if(std::find(lhsVar.begin(), lhsVar.end(), var) != lhsVar.end() && std::find(rhsVar.begin(), rhsVar.end(), var) != rhsVar.end()) {
-    		unsigned lhsIdx = 0;
-    		unsigned rhsIdx = 0;
-    		while(lhsVar[lhsIdx] != var) ++ lhsIdx;
-    		while(rhsVar[rhsIdx] != var) ++ rhsIdx;
-    		sharedVars[idx] = std::make_pair(lhsIdx,rhsIdx);
-    		//std::cout << "Shared variable " << var << " at pos " << idx << " with original positions " << lhsIdx << ", " << rhsIdx << std::endl;
-    	}
-    	++idx;
-    }
-    for(const auto& varTuple : sharedVars) {
-    	for(const auto& other : sharedVars) {
-    		assert(lhsT->getReset().size() != 0);
-    		assert(rhsT->getReset().size() != 0);
-    		//std::cout << "Compare resets: " << lhsT->getReset().getMatrix() << " and " << rhsT->getReset().getMatrix() << std::endl;
-    		//std::cout << "Compare resets: " << lhsT->getReset().getVector() << " and " << rhsT->getReset().getVector() << std::endl;
-    		if(lhsT->getReset().getMatrix()(varTuple.second.first,other.second.first) != rhsT->getReset().getMatrix()(varTuple.second.second,other.second.second)
-    			|| lhsT->getReset().getVector()(varTuple.second.first) != rhsT->getReset().getVector()(varTuple.second.second) ) {
-    			//std::cout << "Delete." << std::endl;
-    			//delete t;
-    			return nullptr;
-    		}
-    	}
-    }
+	// quick test for shared resets - should be equal, otherwise do not parallel compose.
+	// mapping from resultIndex to pair lhsIndex, rhsIndex of the shared variables.
+	std::map<unsigned, std::pair<unsigned, unsigned>> sharedVars;
+	unsigned idx = 0;
+	for ( const auto& var : haVar ) {
+		// identify a shared variable dimension.
+		if ( std::find( lhsVar.begin(), lhsVar.end(), var ) != lhsVar.end() && std::find( rhsVar.begin(), rhsVar.end(), var ) != rhsVar.end() ) {
+			unsigned lhsIdx = 0;
+			unsigned rhsIdx = 0;
+			while ( lhsVar[lhsIdx] != var ) ++lhsIdx;
+			while ( rhsVar[rhsIdx] != var ) ++rhsIdx;
+			sharedVars[idx] = std::make_pair( lhsIdx, rhsIdx );
+			//std::cout << "Shared variable " << var << " at pos " << idx << " with original positions " << lhsIdx << ", " << rhsIdx << std::endl;
+		}
+		++idx;
+	}
+	for ( const auto& varTuple : sharedVars ) {
+		for ( const auto& other : sharedVars ) {
+			assert( lhsT->getReset().size() != 0 );
+			assert( rhsT->getReset().size() != 0 );
+			//std::cout << "Compare resets: " << lhsT->getReset().getMatrix() << " and " << rhsT->getReset().getMatrix() << std::endl;
+			//std::cout << "Compare resets: " << lhsT->getReset().getVector() << " and " << rhsT->getReset().getVector() << std::endl;
+			if ( lhsT->getReset().getMatrix()( varTuple.second.first, other.second.first ) != rhsT->getReset().getMatrix()( varTuple.second.second, other.second.second ) || lhsT->getReset().getVector()( varTuple.second.first ) != rhsT->getReset().getVector()( varTuple.second.second ) ) {
+				//std::cout << "Delete." << std::endl;
+				//delete t;
+				return nullptr;
+			}
+		}
+	}
 
-    //set target and source
-    Location<Number>* source = ha.getLocation(lhsT->getSource()->getName()+'_'+rhsT->getSource()->getName());
-    Location<Number>* target = ha.getLocation(lhsT->getTarget()->getName()+'_'+rhsT->getTarget()->getName());
-    assert(source != nullptr);
-    assert(target != nullptr);
-    t->setTarget(target);
-    t->setSource(source);
+	//set target and source
+	Location<Number>* source = ha.getLocation( lhsT->getSource()->getName() + '_' + rhsT->getSource()->getName() );
+	Location<Number>* target = ha.getLocation( lhsT->getTarget()->getName() + '_' + rhsT->getTarget()->getName() );
+	assert( source != nullptr );
+	assert( target != nullptr );
+	t->setTarget( target );
+	t->setSource( source );
 
-    //set urgent
-    // Todo: is it not the case that a composed transition is urgent as soon as one of its participating transitions is urgent?
-    t->setUrgent(lhsT->isUrgent() || rhsT->isUrgent());
+	//set urgent
+	// Todo: is it not the case that a composed transition is urgent as soon as one of its participating transitions is urgent?
+	t->setUrgent( lhsT->isUrgent() || rhsT->isUrgent() );
 
-    //set guard
-    Condition<Number> haGuard = combine(lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar);
-    t->setGuard(haGuard);
+	//set guard
+	Condition<Number> haGuard = combine( lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar );
+	t->setGuard( haGuard );
 
-    //set reset
-    //std::cout << "Reset, combine matrices: " << std::endl;
-    Reset<Number> haReset = combine(lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar);
-    //std::cout << "New reset function: " << haReset << std::endl;
+	//set reset
+	//std::cout << "Reset, combine matrices: " << std::endl;
+	Reset<Number> haReset = combine( lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar );
+	//std::cout << "New reset function: " << haReset << std::endl;
 
-    t->setReset(haReset);
+	t->setReset( haReset );
 
-    //set aggregation
-    t->setAggregation(lhsT->getAggregation());
+	//set aggregation
+	t->setAggregation( lhsT->getAggregation() );
 
-    return t;
+	return t;
 }
 
 }  //namespace hypro

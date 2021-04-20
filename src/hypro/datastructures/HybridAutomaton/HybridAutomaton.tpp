@@ -270,6 +270,8 @@ std::string HybridAutomaton<Number>::getStatistics() const {
 
 template <typename Number>
 HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs ) {
+	TRACE( "hypro.datastructures", "Parallel composition of " << lhs << "\n\n and \n\n"
+															  << rhs );
 	HybridAutomaton<Number> ha;
 	using variableVector = std::vector<std::string>;  /// Vector of variables
 	const variableVector& lhsVar = lhs.getVariables();
@@ -337,6 +339,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	for ( const auto& locLhs : lhs.getLocations() ) {
 		for ( const auto& locRhs : rhs.getLocations() ) {
 			std::unique_ptr<Location<Number>> loc = parallelCompose( locLhs, locRhs, lhsVar, rhsVar, haVar );
+			TRACE( "hypro.datastructures", "Add combined location " << *loc );
 			ha.addLocation( std::move( loc ) );
 		}
 	}
