@@ -46,7 +46,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 
 	// wait
 
-	Lpt* wait = res.createLocation();
+	Lpt wait = res.createLocation();
 	wait->setName( "wait_"s + std::to_string( i ) );
 	M waitFlow = M::Zero( dim + 1, dim + 1 );
 	waitFlow( xi, dim ) = 1;
@@ -54,7 +54,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	wait->setFlow( waitFlow );
 
 	// initial valuations: xi = i-1/n, z = 0, gt = 0
-	hypro::Condition<Number> initialValuations = hypro::conditionFromIntervals<Number>(
+	Condition<Number> initialValuations = hypro::conditionFromIntervals<Number>(
 		  { carl::Interval<Number>{ Number( i - 1 ) / Number( n ) },
 			carl::Interval<Number>{ 0 },
 			carl::Interval<Number>{ 0 } } );
@@ -98,12 +98,12 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	guardConstants << Number( firingThreshold ), Number( -firingThreshold );
 	toFlash->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
 
-	// M resetMat = M::Identity( dim, dim );
-	// V resetVec = V::Zero( dim );
-	// resetMat( 0, 0 ) = 0;
-	// resetMat( 2, 2 ) = 0;
-	// resetVec( 2 ) = 1;
-	// toFlash->setReset( Reset<Number>( resetMat, resetVec ) );
+	M resetMat = M::Identity( dim, dim );
+	V resetVec = V::Zero( dim );
+	resetMat( 0, 0 ) = 0;
+	resetMat( 2, 2 ) = 0;
+	resetVec( 2 ) = 1;
+	toFlash->setReset( Reset<Number>( resetMat, resetVec ) );
 	toFlash->setAggregation( Aggregation::aggregation );
 	// toFlash->setUrgent();
 
@@ -116,9 +116,9 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	guardConstants << 1, -1;
 	flashLoop->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
 
-	M resetMat = M::Identity( dim, dim );
+	resetMat = M::Identity( dim, dim );
 	resetMat( 2, 2 ) = 0;
-	V resetVec = V::Zero( dim );
+	resetVec = V::Zero( dim );
 	flashLoop->setReset( Reset<Number>( resetMat, resetVec ) );
 	flashLoop->setUrgent();
 	flashLoop->addLabel( Label{ "sync_1" } );
@@ -131,10 +131,10 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	guardConstraints( 1, z ) = -1;
 	guardConstants = V::Zero( 2 );
 	reWait->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
-	//resetMat = M::Identity( dim, dim );
-	//resetVec = V::Zero( dim );
-	//reWait->setReset( Reset<Number>( resetMat, resetVec ) );
-	reWait->addLabel( { "sync_2" } );
+	resetMat = M::Identity( dim, dim );
+	resetVec = V::Zero( dim );
+	reWait->setReset( Reset<Number>( resetMat, resetVec ) );
+	reWait->addLabel( Label{ "sync_2" } );
 	reWait->setUrgent();
 	reWait->setAggregation( Aggregation::aggregation );
 
@@ -152,7 +152,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	resetMat( z, z ) = 0;  // not 100% sure whether z := 0 should be set here.
 	resetVec = V::Zero( dim );
 	toAdapt->setReset( Reset<Number>( resetMat, resetVec ) );
-	toAdapt->addLabel( { "sync_1" } );
+	toAdapt->addLabel( Label{ "sync_1" } );
 	toAdapt->setAggregation( Aggregation::aggregation );
 	// toAdapt->setUrgent();
 
@@ -181,7 +181,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	resetMat = M::Identity( dim, dim );
 	resetVec = V::Zero( dim );
 	resetMat( xi, xi ) = 0;
-	fromAdaptRegular->setReset( Reset<Number>( resetMat, resetVec ) );
+	fromAdaptScale->setReset( Reset<Number>( resetMat, resetVec ) );
 	fromAdaptScale->addLabel( Label{ "sync_2" } );
 	fromAdaptScale->setAggregation( Aggregation::aggregation );
 	fromAdaptScale->setUrgent();
@@ -241,8 +241,6 @@ HybridAutomaton<Number> createComponent2( unsigned i, size_t n,
 	M adaptFlow = M::Zero( dimension + 1, dimension + 1 );
 	adaptFlow( 1, dimension ) = 1;	// time always advances at rate 1
 	adapt->setFlow( adaptFlow );
-
-	res.addLocation( *adapt );
 
 	// transitions
 	// flash self loop
@@ -648,35 +646,37 @@ int main( int argc, char** argv ) {
 	// settings.plotDimensions[0].push_back(0);
 	// settings.plotDimensions[0].push_back(componentCount+1);
 
+	std::cout << "Create parallel composition for synchronization benchmark with "
+			  << componentCount << " components using a shared variable." << std::endl;
+
+	HybridAutomaton<Number> composed_sync_sharedVar = createComponent1<Number>( 1, componentCount );
+	for ( int i = 2; i <= componentCount; ++i ) {
+		HybridAutomaton<Number> tmp = createComponent1<Number>( i, componentCount );
+		composed_sync_sharedVar = composed_sync_sharedVar || tmp;
+		//assert( composed_sync_sharedVar.isComposedOf( tmp ) );
+	}
+
+	composed_sync_sharedVar.reduce();
+
+	settings.fileName = "sync_sharedVar";
 	/*
-  std::cout << "Create parallel composition for synchronization benchmark with "
-  << componentCount << " components using a shared variable." << std::endl;
+	LockedFileWriter flowstar_sharedVar( "sync_sharedVar.model" );
+	flowstar_sharedVar.clearFile();
+	flowstar_sharedVar << toFlowstarFormat( composed_sync_sharedVar, settings );
+	// create dot output.
+	LockedFileWriter sharedVar_single( "sync_sharedVarSingle.dot" );
+	sharedVar_single.clearFile();
+	sharedVar_single << createComponent1<Number>( 1, componentCount ).getDotRepresentation();
+	LockedFileWriter sharedVar_res( "sync_sharedVarComposed.dot" );
+	sharedVar_res.clearFile();
+	sharedVar_res << composed_sync_sharedVar.getDotRepresentation();
+	*/
 
-  HybridAutomaton<Number> composed_sync_sharedVar = createComponent1<Number>(1);
-  for(int i = 2; i <= componentCount; ++i) {
-          HybridAutomaton<Number> tmp = createComponent1<Number>(i);
-          composed_sync_sharedVar = composed_sync_sharedVar || tmp;
-          assert(composed_sync_sharedVar.isComposedOf(tmp));
-  }
+	std::cout << "Automaton stats: " << std::endl
+			  << composed_sync_sharedVar.getStatistics() << std::endl;
+	std::cout << "Automaton: " << composed_sync_sharedVar << std::endl;
 
-  composed_sync_sharedVar.reduce();
-
-  settings.fileName = "sync_sharedVar";
-  LockedFileWriter flowstar_sharedVar("sync_sharedVar.model");
-  flowstar_sharedVar.clearFile();
-  flowstar_sharedVar << toFlowstarFormat(composed_sync_sharedVar, settings);
-  // create dot output.
-  LockedFileWriter sharedVar_single("sync_sharedVarSingle.dot");
-  sharedVar_single.clearFile();
-  sharedVar_single << createComponent1<Number>(1).getDotRepresentation();
-  LockedFileWriter sharedVar_res("sync_sharedVarComposed.dot");
-  sharedVar_res.clearFile();
-  sharedVar_res << composed_sync_sharedVar.getDotRepresentation();
-
-  std::cout << "Automaton stats: " << std::endl <<
-  composed_sync_sharedVar.getStatistics() << std::endl;
-  */
-
+	/*
 	std::cout << "Create parallel composition for synchronization benchmark with "
 			  << componentCount << " components using label synchronization."
 			  << std::endl;
@@ -740,6 +740,8 @@ int main( int argc, char** argv ) {
 
 	std::cout << "Automaton stats: " << std::endl
 			  << composed_sync_label.getStatistics() << std::endl;
+	std::cout << "Automaton: " << composed_sync_label << std::endl;
+	*/
 
 	/*
   std::cout << "Create parallel composition for synchronization benchmark with "
