@@ -262,10 +262,15 @@ void HybridAutomaton<Number>::decompose( const Decomposition& decomposition ) {
 
 template <typename Number>
 std::string HybridAutomaton<Number>::getStatistics() const {
-	std::stringstream out;
-	out << "#Locations: " << mLocations.size() << std::endl;
+	using namespace std::literals;
 
-	return out.str();
+	size_t t_count = 0;
+	for(Location<Number>* loc : getLocations()) {
+		t_count += loc->getTransitions().size();
+	}
+
+	return "#Locations: "s + std::to_string(mLocations.size()) + "\n"
+		  +"#Transitions "s + std::to_string(t_count) + "\n";
 }
 
 template <typename Number>

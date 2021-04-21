@@ -8,12 +8,11 @@
 #include <hypro/representations/conversion/Converter.h>
 #include <hypro/util/plotting/Plotter.h>
 
-namespace hydra {
-namespace reachability {
+namespace hydra::reachability {
 
 using namespace hypro;
 
-std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number> const& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
 	CEGARAnalyzerDefault<Number> analyzer{ automaton, setting };
 
@@ -50,7 +49,7 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 }
 
 template <typename State>
-std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number> const& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
 	auto roots = makeRoots<State>( automaton );
 	LTIAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
@@ -78,7 +77,7 @@ std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton
 }
 
 template <typename State>
-std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number> const& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
 	auto roots = makeRoots<State>( automaton );
 	SingularAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), roots };
@@ -138,7 +137,7 @@ std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& a
 
 struct LTIDispatcher {
 	template <typename Rep>
-	auto operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
+	auto operator()( HybridAutomaton<Number> const& automaton, Settings setting ) {
 		return lti_analyze<Rep>( automaton, setting );
 	}
 };
@@ -150,7 +149,7 @@ struct SingularDispatcher {
 	}
 };
 
-AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, PreprocessingInformation information ) {
+AnalysisResult analyze( HybridAutomaton<Number> const& automaton, Settings const& setting, hypro::PreprocessingInformation information ) {
 	switch ( information.dynamic ) {
 		case DynamicType::affine:
 			[[fallthrough]];
@@ -191,5 +190,4 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 	}
 }
 
-}  // namespace reachability
 }  // namespace hydra

@@ -1,3 +1,5 @@
+#include "../src/tool/reachability/analysis.cpp"
+
 #include <algorithm>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/HybridAutomaton/State.h>
@@ -28,7 +30,6 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	using V = vector_t<Number>;
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
-	using S = State_t<Number>;
 
 	// result automaton
 	HA res;
@@ -204,7 +205,6 @@ HybridAutomaton<Number> createComponent2( unsigned i, size_t n,
 	using V = vector_t<Number>;
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
-	using S = State_t<Number>;
 
 	// result automaton
 	HA res;
@@ -319,7 +319,6 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	using V = vector_t<Number>;
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
-	using S = State_t<Number>;
 
 	// result automaton
 	HA res;
@@ -495,7 +494,6 @@ HybridAutomaton<Number> createComponent4( unsigned i,
 	using V = vector_t<Number>;
 	using Lpt = Location<Number>*;
 	using Tpt = Transition<Number>*;
-	using S = State_t<Number>;
 	std::stringstream st;
 
 	// result automaton
@@ -613,24 +611,28 @@ HybridAutomaton<Number> createComponent4( unsigned i,
 	return res;
 }
 
-int main( int argc, char** argv ) {
-	using Number = double;
+template <class Number>
+HybridAutomaton<Number> generateShd2( long componentCount ) {
+	cout << "Create parallel composition for synchronization benchmark with "
+		 << componentCount << " components using a reduced version with a shared variable."
+		 << endl;
 
-	int componentCount = 0;
-	componentCount = atoi( argv[1] );
+	HybridAutomaton<Number> composed_sync_sharedVar_2states = createComponent3<Number>( 1, componentCount );
+	for ( int i = 2; i <= componentCount; ++i ) {
+		HybridAutomaton<Number> tmp = createComponent3<Number>( i, componentCount );
+		composed_sync_sharedVar_2states = composed_sync_sharedVar_2states ||
+										  tmp;
+		//assert( composed_sync_sharedVar_2states.isComposedOf( tmp ) );
+	}
 
-	// settings to be used for flowstar format output
-	ReachabilitySettings settings;
-	settings.jumpDepth = 20;
-	settings.timeBound = 110;
-	settings.timeStep = 0.01;
-	// settings.plotDimensions.push_back(std::vector<std::size_t>());
-	// settings.plotDimensions[0].push_back(0);
-	// settings.plotDimensions[0].push_back(componentCount+1);
+	composed_sync_sharedVar_2states.reduce();
+	return composed_sync_sharedVar_2states;
+}
 
-	/*
-	std::cout << "Create parallel composition for synchronization benchmark with "
-			  << componentCount << " components using a shared variable." << std::endl;
+template <class Number>
+HybridAutomaton<Number> generateShd1( long componentCount ) {
+	cout << "Create parallel composition for synchronization benchmark with "
+		 << componentCount << " components using a shared variable." << endl;
 
 	HybridAutomaton<Number> composed_sync_sharedVar = createComponent1<Number>( 1, componentCount );
 	for ( int i = 2; i <= componentCount; ++i ) {
@@ -640,8 +642,112 @@ int main( int argc, char** argv ) {
 	}
 
 	composed_sync_sharedVar.reduce();
+	return composed_sync_sharedVar;
+}
 
-	settings.fileName = "sync_sharedVar";
+template <class Number>
+HybridAutomaton<Number> generateLsync1( long componentCount ) {
+	cout << "Create parallel composition for synchronization benchmark with "
+		 << componentCount << " components using label synchronization."
+		 << endl;
+
+	vector<Label> labels;
+	for ( int i = 0; i < componentCount; ++i ) {
+		labels.emplace_back( "flash"s + to_string( i ) );
+	}
+
+	HybridAutomaton<Number> composed_sync_label =
+		  createComponent2<Number>( 0, componentCount, labels );
+	for ( int i = 1; i < componentCount; ++i ) {
+		HybridAutomaton<Number> tmp = createComponent2<Number>( i, componentCount, labels );
+		composed_sync_label = composed_sync_label || tmp;
+		//assert( composed_sync_label.isComposedOf( tmp ) );
+	}
+	composed_sync_label.reduce();
+	return composed_sync_label;
+}
+
+template <class Number>
+HybridAutomaton<Number> lsync1_to_lsync2( long componentCount, HybridAutomaton<Number>& composed_sync_label ) {
+	cout << "Automaton stats: " << endl
+		 << composed_sync_label.getStatistics() << endl;
+
+	cout << "Create parallel composition for synchronization benchmark with "
+		 << componentCount
+		 << " components using  optimized label synchronization."
+		 << endl;
+
+	auto transitions = composed_sync_label.getTransitions();
+	vector<Transition<Number>*> toDelete;
+	for ( auto& transition : transitions ) {
+		if ( transition->getSource()->getName().find( "adapt" ) != std::string::npos &&
+			 transition->getTarget()->getName().find( "adapt" ) != std::string::npos ) {
+			cout << "Remove edge " << transition->getSource()->getName() << " -> "
+				 << transition->getTarget()->getName() << endl;
+			toDelete.emplace_back( transition );
+		}
+	}
+	for_each( begin( toDelete ), end( toDelete ), [&composed_sync_label]( const auto transitionPtr ) { composed_sync_label.removeTransition( transitionPtr ); } );
+
+	composed_sync_label.reduce();
+}
+int main( int argc, char** argv ) {
+	using Number = double;
+
+	if ( argc != 3 ) {
+		std::cout << "Wrong number of arguments: " << argc << "\n";
+		return 1;
+	}
+	long int componentCount = std::strtol( argv[1], nullptr, 10 );
+
+	std::string file_name{};
+	HybridAutomaton<Number> const composition = [&] {
+		if ( std::strcmp( argv[2], "lsync1" ) == 0 ) {
+			file_name = "lsync1";
+			return generateLsync1<Number>( componentCount );
+		} else if ( std::strcmp( argv[2], "lsync2" ) == 0 ) {
+			file_name = "lsync2";
+			HybridAutomaton<Number> result = generateLsync1<Number>( componentCount );
+			lsync1_to_lsync2( componentCount, result );
+			return result;
+		} else if ( std::strcmp( argv[2], "shd1" ) == 0 ) {
+			file_name = "shd1";
+			return generateShd1<Number>( componentCount );
+		} else if ( std::strcmp( argv[2], "shd2" ) == 0 ) {
+			file_name = "shd2";
+			return generateShd2<Number>( componentCount );
+		} else {
+			std::cout << "invalid model name\n";
+			throw std::invalid_argument( "invalid model name" );
+		}
+	}();
+
+	PreprocessingInformation preprocessingInformation{};
+	PlottingSettings plottingSettings{
+		  { { 0, 1 } },
+		  { file_name },
+		  PLOTTYPE::pdf };
+	FixedAnalysisParameters fixedParameters{ 20, 10 };
+	AnalysisParameters analysisParameters{
+		  0.01,
+		  AGG_SETTING::AGG,
+		  -1,
+		  representation_name::box,
+		  boxSetting_name::BoxAllOff,
+	};
+
+	START_BENCHMARK_OPERATION( "Verification" );
+	auto result = hydra::reachability::analyze( composition,
+												Settings( plottingSettings, fixedParameters, { analysisParameters } ),
+												preprocessingInformation );
+	EVALUATE_BENCHMARK_RESULT( "Verification" );
+
+	std::cout << "Automaton stats:\n" << composition.getStatistics() << "\n";
+
+	// settings to be used for flowstar format output
+	// settings.plotDimensions.push_back(std::vector<std::size_t>());
+	// settings.plotDimensions[0].push_back(0);
+	// settings.plotDimensions[0].push_back(componentCount+1);
 
 	// LockedFileWriter flowstar_sharedVar( "sync_sharedVar.model" );
 	// flowstar_sharedVar.clearFile();
@@ -654,30 +760,6 @@ int main( int argc, char** argv ) {
 	// sharedVar_res.clearFile();
 	// sharedVar_res << composed_sync_sharedVar.getDotRepresentation();
 
-
-	std::cout << "Automaton stats: " << std::endl
-			  << composed_sync_sharedVar.getStatistics() << std::endl;
-	std::cout << "Automaton: " << composed_sync_sharedVar << std::endl;
-	*/
-	/*
-	std::cout << "Create parallel composition for synchronization benchmark with "
-			  << componentCount << " components using label synchronization."
-			  << std::endl;
-
-	std::vector<Label> labels;
-	for ( int i = 0; i < componentCount; ++i ) {
-		labels.emplace_back( "flash"s + std::to_string( i ) );
-	}
-
-	HybridAutomaton<Number> composed_sync_label =
-		  createComponent2<Number>( 0, componentCount, labels );
-	for ( int i = 1; i < componentCount; ++i ) {
-		HybridAutomaton<Number> tmp = createComponent2<Number>( i, componentCount, labels );
-		composed_sync_label = composed_sync_label || tmp;
-		//assert( composed_sync_label.isComposedOf( tmp ) );
-	}
-	composed_sync_label.reduce();
-	settings.fileName = "sync_labels";
 	//	LockedFileWriter flowstar_label( "sync_labelSync.model" );
 	//	flowstar_label.clearFile();
 	//	flowstar_label << toFlowstarFormat( composed_sync_label, settings );
@@ -690,29 +772,6 @@ int main( int argc, char** argv ) {
 	//	label_res.clearFile();
 	//	label_res << composed_sync_label.getDotRepresentation();
 
-	std::cout << "Automaton stats: " << std::endl
-			  << composed_sync_label.getStatistics() << std::endl;
-
-	std::cout << "Create parallel composition for synchronization benchmark with "
-			  << componentCount
-			  << " components using  optimized label synchronization."
-			  << std::endl;
-
-	auto transitions = composed_sync_label.getTransitions();
-	std::vector<Transition<Number>*> toDelete;
-	for ( auto t = transitions.begin();
-		  t != transitions.end(); ++t ) {
-		if ( ( *t )->getSource()->getName().find( "adapt" ) != std::string::npos &&
-			 ( *t )->getTarget()->getName().find( "adapt" ) != std::string::npos ) {
-			std::cout << "Remove edge " << ( *t )->getSource()->getName() << " -> "
-					  << ( *t )->getTarget()->getName() << std::endl;
-			toDelete.emplace_back( *t );
-		}
-	}
-	std::for_each( std::begin( toDelete ), std::end( toDelete ), [&composed_sync_label]( const auto transitionPtr ) { composed_sync_label.removeTransition( transitionPtr ); } );
-
-	composed_sync_label.reduce();
-
 	//	LockedFileWriter flowstar_label2( "sync_labelSyncRed.model" );
 	//	flowstar_label2.clearFile();
 	//	flowstar_label2 << toFlowstarFormat( composed_sync_label, settings );
@@ -720,11 +779,6 @@ int main( int argc, char** argv ) {
 	//	LockedFileWriter label_res2( "sync_labelComposed2.dot" );
 	//	label_res2.clearFile();
 	//	label_res2 << composed_sync_label.getDotRepresentation();
-
-	std::cout << "Automaton stats: " << std::endl
-			  << composed_sync_label.getStatistics() << std::endl;
-	std::cout << "Automaton: " << composed_sync_label << std::endl;
-	*/
 
 	/*
 	std::cout << "Create parallel composition for synchronization benchmark with "
@@ -760,21 +814,6 @@ int main( int argc, char** argv ) {
 			  << composed_sync_label_opt.getStatistics() << std::endl;
 	std::cout << "Automaton: " << composed_sync_label_opt << std::endl;
 	*/
-
-	std::cout << "Create parallel composition for synchronization benchmark with "
-			  << componentCount << " components using a reduced version with a shared variable."
-			  << std::endl;
-
-	HybridAutomaton<Number> composed_sync_sharedVar_2states = createComponent3<Number>( 1, componentCount );
-	for ( int i = 2; i <= componentCount; ++i ) {
-		HybridAutomaton<Number> tmp = createComponent3<Number>( i, componentCount );
-		composed_sync_sharedVar_2states = composed_sync_sharedVar_2states ||
-										  tmp;
-		//assert( composed_sync_sharedVar_2states.isComposedOf( tmp ) );
-	}
-
-	composed_sync_sharedVar_2states.reduce();
-
 	// settings.fileName = "sync_sharedVar2";
 	// LockedFileWriter flowstar_sharedVarRed( "sync_sharedVar_2_states.model" );
 	// flowstar_sharedVarRed.clearFile();
@@ -787,9 +826,6 @@ int main( int argc, char** argv ) {
 	// sharedVarReduced_res.clearFile();
 	// sharedVarReduced_res << composed_sync_sharedVar_2states.getDotRepresentation();
 
-	std::cout << "Automaton stats: " << std::endl
-			  << composed_sync_sharedVar_2states.getStatistics() << std::endl;
-	std::cout << "Automaton: " << composed_sync_sharedVar_2states << std::endl;
 
 	// for testing
 	// auto haTuple = parseFlowstarFile<double>(std::string("composed.model"));
