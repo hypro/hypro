@@ -1,6 +1,6 @@
 #include "analysis.h"
 
-#include <hypro/algorithms/reachability/analyzer/CEGARAnalyzer.h>
+//#include <hypro/algorithms/reachability/analyzer/CEGARAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
 #include <hypro/datastructures/reachability/Settings.h>
@@ -12,41 +12,41 @@ namespace hydra::reachability {
 
 using namespace hypro;
 
-std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number> const& automaton, Settings setting ) {
-	START_BENCHMARK_OPERATION( "Verification" );
-	CEGARAnalyzerDefault<Number> analyzer{ automaton, setting };
-
-	REACHABILITY_RESULT result = analyzer.run();
-	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
-		std::cout << "Could not verify safety." << std::endl;
-		// Call bad state handling (e.g., return path)
-	} else {
-		std::cout << "The model is safe." << std::endl;
-	}
-	EVALUATE_BENCHMARK_RESULT( "Verification" );
-
-	// create plot data
-	std::vector<PlotData<FullState>> plotData{};
-
-	auto levels = analyzer.getLevels();
-
-	size_t levelIndex = 0;
-	for ( auto levelVar : levels ) {
-		std::visit( [&]( auto* level ) {
-			for ( const auto& node : preorder( level->roots ) ) {
-				std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), [=]( auto& segment ) {
-					FullState state{};
-					state.setSet( segment );
-					return PlotData{ state, levelIndex };
-				} );
-			}
-		},
-					levelVar );
-		levelIndex += 1;
-	}
-
-	return plotData;
-}
+//std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number> const& automaton, Settings setting ) {
+//	START_BENCHMARK_OPERATION( "Verification" );
+//	CEGARAnalyzerDefault<Number> analyzer{ automaton, setting };
+//
+//	REACHABILITY_RESULT result = analyzer.run();
+//	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
+//		std::cout << "Could not verify safety." << std::endl;
+//		// Call bad state handling (e.g., return path)
+//	} else {
+//		std::cout << "The model is safe." << std::endl;
+//	}
+//	EVALUATE_BENCHMARK_RESULT( "Verification" );
+//
+//	// create plot data
+//	std::vector<PlotData<FullState>> plotData{};
+//
+//	auto levels = analyzer.getLevels();
+//
+//	size_t levelIndex = 0;
+//	for ( auto levelVar : levels ) {
+//		std::visit( [&]( auto* level ) {
+//			for ( const auto& node : preorder( level->roots ) ) {
+//				std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), [=]( auto& segment ) {
+//					FullState state{};
+//					state.setSet( segment );
+//					return PlotData{ state, levelIndex };
+//				} );
+//			}
+//		},
+//					levelVar );
+//		levelIndex += 1;
+//	}
+//
+//	return plotData;
+//}
 
 template <typename State>
 std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number> const& automaton, Settings setting ) {
@@ -158,7 +158,7 @@ AnalysisResult analyze( HybridAutomaton<Number> const& automaton, Settings const
 				return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
 																			setting.strategy().front().representation_setting, LTIDispatcher{}, automaton, setting ) };
 			} else {
-				return { cegar_analyze( automaton, setting ) };
+//				return { cegar_analyze( automaton, setting ) };
 			}
 			break;
 		case DynamicType::rectangular: {
@@ -185,8 +185,7 @@ AnalysisResult analyze( HybridAutomaton<Number> const& automaton, Settings const
 		case DynamicType::mixed:
 			assert( false && "specialized analysis not implemented yet." );
 		default:
-			assert( false && "No analyzer selected." );
-			break;
+			throw std::invalid_argument("Invalid automaton type.");
 	}
 }
 

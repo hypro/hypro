@@ -668,18 +668,17 @@ HybridAutomaton<Number> generateLsync1( long componentCount ) {
 }
 
 template <class Number>
-HybridAutomaton<Number> lsync1_to_lsync2( long componentCount, HybridAutomaton<Number>& composed_sync_label ) {
-	cout << "Automaton stats: " << endl
-		 << composed_sync_label.getStatistics() << endl;
+void lsync1_to_lsync2( long componentCount, HybridAutomaton<Number>& composed_sync_label ) {
+	std::string stats = composed_sync_label.getStatistics();
+	std::cout << "Automaton stats:\n" << stats << "\n";
 
-	cout << "Create parallel composition for synchronization benchmark with "
+	std::cout << "Create parallel composition for synchronization benchmark with "
 		 << componentCount
-		 << " components using  optimized label synchronization."
-		 << endl;
+		 << " components using  optimized label synchronization.\n";
 
 	auto transitions = composed_sync_label.getTransitions();
 	vector<Transition<Number>*> toDelete;
-	for ( auto& transition : transitions ) {
+	for ( auto transition : transitions ) {
 		if ( transition->getSource()->getName().find( "adapt" ) != std::string::npos &&
 			 transition->getTarget()->getName().find( "adapt" ) != std::string::npos ) {
 			cout << "Remove edge " << transition->getSource()->getName() << " -> "

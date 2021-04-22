@@ -186,8 +186,29 @@ Location<Number>* HybridAutomaton<Number>::createLocation( Location<Number>* ori
 
 template <typename Number>
 void HybridAutomaton<Number>::reduce() {
-	// TODO rewrite
-	//	assert( false && "NOT IMPLEMENTED." );
+	std::set<Location<Number> const*> locations_found{};
+	std::vector<Location<Number> const*> stack{};
+
+	for ( auto& [loc_ptr, _] : getInitialStates() ) {
+		stack.push_back( loc_ptr );
+		locations_found.insert( loc_ptr );
+	}
+
+	while ( !stack.empty() ) {
+		auto const* current_loc = stack.back();
+		stack.pop_back();
+		for ( auto& transition : current_loc->getTransitions() ) {
+			if(locations_found.count( transition->getTarget() ) == 0){
+				stack.push_back( transition->getTarget() );
+				locations_found.insert( transition->getTarget() );
+			}
+		}
+	}
+
+	mLocations.erase( std::remove_if( mLocations.begin(), mLocations.end(), [&]( auto& loc ) {
+						  return locations_found.count( loc.get() ) == 0;
+					  } ),
+					  mLocations.end() );
 }
 
 template <typename Number>
@@ -265,12 +286,12 @@ std::string HybridAutomaton<Number>::getStatistics() const {
 	using namespace std::literals;
 
 	size_t t_count = 0;
-	for(Location<Number>* loc : getLocations()) {
+	for ( Location<Number>* loc : getLocations() ) {
 		t_count += loc->getTransitions().size();
 	}
 
-	return "#Locations: "s + std::to_string(mLocations.size()) + "\n"
-		  +"#Transitions "s + std::to_string(t_count) + "\n";
+	std::string result = "#Locations: "s + std::to_string( mLocations.size() ) + "\n"s + "#Transitions "s + std::to_string( t_count ) + "\n"s;
+	return result;
 }
 
 template <typename Number>
@@ -429,10 +450,40 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 
 	// set initial states
 	TRACE( "hypro.datastructures", "Combine initial states (not yet implemented)" );
-	for ( const auto& initialStateLhs : lhs.getInitialStates() ) {
-		for ( const auto& initialStateRhs : rhs.getInitialStates() ) {
-			//FATAL( "hypro", "WARNING: parallel composition of initial states not implemented yet." );
-			//assert( false );
+	for ( auto const& [loc_lhs, condition_lhs] : lhs.getInitialStates() ) {
+		for ( auto const& [loc_rhs, condition_rhs] : rhs.getInitialStates() ) {
+
+			// simply put constraints (rows) below each other, but reorder variables (columns) of both lhs and rhs to fit new order
+
+			auto num_constraints_lhs = condition_lhs.getMatrix().rows();
+			auto num_constraints_rhs = condition_rhs.getMatrix().rows();
+
+			auto total_constraints = num_constraints_lhs + num_constraints_rhs;
+			matrix_t<Number> constraints{total_constraints, haVar.size() };
+
+			Eigen::Index col = 0;
+			for ( std::string const& variable : haVar ) {
+				auto index_lhs = std::distance( lhsVar.begin(), std::find( lhsVar.begin(), lhsVar.end(), variable ) );
+				auto index_rhs = std::distance( rhsVar.begin(), std::find( rhsVar.begin(), rhsVar.end(), variable ) );
+
+				// put lhs part of column in at the top
+				if(size_t(index_lhs) < lhsVar.size()) {
+					constraints.col(col).head(num_constraints_lhs) = condition_lhs.getMatrix().col(index_lhs);
+				}
+
+				if(size_t(index_rhs) < rhsVar.size()) {
+					constraints.col(col).tail(num_constraints_rhs) = condition_rhs.getMatrix().col(index_rhs);
+				}
+				col += 1;
+			}
+
+			vector_t<Number> constants{num_constraints_lhs + num_constraints_rhs};
+			constants.head(num_constraints_lhs) = condition_lhs.getVector();
+			constants.tail(num_constraints_rhs) = condition_rhs.getVector();
+
+			std::string loc_name = loc_lhs->getName() + "_" + loc_rhs->getName();
+			Location<Number> const* init_loc = ha.getLocation(loc_name);
+			ha.addInitialState(init_loc, Condition{constraints, constants});
 		}
 	}
 
