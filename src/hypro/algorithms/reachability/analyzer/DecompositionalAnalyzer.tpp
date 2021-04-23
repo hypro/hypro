@@ -53,10 +53,10 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                 mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ clockIndex + 1, dependencies, childNodes } );
             } else {
                 // complexity reduction
-                auto newDependencies = detail::composeSubspaces( singularJumpSuccessors, dependencies, mClockCount );
-                singularJumpSuccessors = detail::decomposeInitial( Representation( newDependencies.getMatrix(), newDependencies.getVector() ), mClockCount );
+                Representation composedSuccessors = detail::composeSubspaces( singularJumpSuccessors, dependencies, mClockCount );
+                std::tie( dependencies, singularJumpSuccessors ) = detail::decompose( composedSuccessors, mClockCount );
                 auto childNodes = makeChildrenForClockValues( currentNodes, transition.get(), transitionEnabledTime, singularJumpSuccessors );
-                mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ 0, newDependencies, childNodes } );
+                mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ 0, dependencies, childNodes } );
             }
 
         }

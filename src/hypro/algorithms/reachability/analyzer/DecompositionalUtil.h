@@ -16,10 +16,10 @@ inline bool isClockedSubspace( const DynamicType dynamics );
 namespace detail {
 
 template <typename Representation>
-Condition<typename Representation::NumberType> composeSubspaces( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, std::size_t clockCount );
+Representation composeSubspaces( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, std::size_t clockCount );
 
 template <typename Representation>
-std::vector<Representation> decomposeInitial( const Representation& initial, std::size_t clockCount );
+std::pair<Condition<typename Representation::NumberType>, std::vector<Representation>> decompose( const Representation& composedSet, std::size_t clockCount );
 
 
 /**

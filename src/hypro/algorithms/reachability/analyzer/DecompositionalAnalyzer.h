@@ -188,7 +188,7 @@ class DecompositionalAnalyzer {
         }
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
             if ( !isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
-                assert( false );
+                assert( false && "Only singular dynamics supported with decompositional analysis" );
                 mLtiTypeSubspaces.push_back( subspace );
             } else {
                 mSingularSubspaces.push_back( subspace );
