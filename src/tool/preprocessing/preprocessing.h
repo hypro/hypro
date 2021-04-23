@@ -12,7 +12,7 @@ namespace hydra {
 namespace preprocessing {
 /// calls the preprocessor on the passed hybrid automaton
 hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::Number>& automaton,
-											const hypro::ReachabilitySettings&,
-                                            bool decompose );
+                                            bool decompose,
+                                            std::size_t clockCount );
 }  // namespace preprocessing
 }  // namespace hydra
