@@ -35,9 +35,9 @@ template <typename Number>
 bool checkDecomposed( const HybridAutomaton<Number> &automaton );
 template <typename Number>
 std::pair<HybridAutomaton<Number>, Decomposition> decomposeAutomaton( const HybridAutomaton<Number> &automaton );
-// Adds a clock to the automaton as the last variable in the given subspace
+// Adds a variable with given flow to the automaton as the last variable in the given subspace
 template <typename Number>
-void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std::size_t clockCount = 1 );
+void addVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, Number flow, std::size_t clockCount = 1 );
 
 namespace detail {
 /// adds edges in the subspace graph for related variables of a linear transformation
@@ -55,12 +55,12 @@ void addEdgesForRectTrafo( const std::vector<carl::Interval<Number>> &intervals,
 /// adds edges in the subspace graph for related variables in an interval assignment
 template <typename Number>
 void addEdgesForRectMap( const std::map<carl::Variable, carl::Interval<Number>> &map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph );
-// adds a clock to the condition as the last variable in the given subspace
+// adds a variable to the condition as the last variable in the given subspace
 template <typename Number>
-Condition<Number> addClockToCondition( Condition<Number> cond, std::size_t subspace );
+Condition<Number> addVarToCondition( Condition<Number> cond, std::size_t subspace );
 // adds clock to the condition and two additional constraints that set the clock to 0
 template <typename Number>
-Condition<Number> addClockToInitial( Condition<Number> cond, std::size_t subspace );
+Condition<Number> addVarToInitial( Condition<Number> cond, std::size_t subspace );
 }  // namespace detail
 
 /// checks whether the automaton is a timed automaton

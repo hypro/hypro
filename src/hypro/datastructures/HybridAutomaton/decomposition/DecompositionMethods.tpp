@@ -372,7 +372,7 @@ void addEdgesForCondition( const Condition<Number> &condition, boost::adjacency_
 }
 
 template <typename Number>
-Condition<Number> addClockToCondition( Condition<Number> cond, std::size_t subspace ) {
+Condition<Number> addVarToCondition( Condition<Number> cond, std::size_t subspace ) {
     if ( cond.empty() ) {
         return cond;
     }
@@ -387,11 +387,11 @@ Condition<Number> addClockToCondition( Condition<Number> cond, std::size_t subsp
 }
 
 template <typename Number>
-Condition<Number> addClockToInitial( Condition<Number> cond, std::size_t subspace ) {
+Condition<Number> addVarToInitial( Condition<Number> cond, std::size_t subspace ) {
 	if ( cond.empty() ) {
 		return cond;
 	}
-	auto initialWithoutClock = addClockToCondition( cond, subspace );
+	auto initialWithoutClock = addVarToCondition( cond, subspace );
 	//std::cout << "With clock: " << initialWithoutClock << "\n";
 	// Initial for clock is 0:
 	auto condMatrix = initialWithoutClock.getMatrix( subspace );
@@ -622,7 +622,7 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 }
 
 template <typename Number>
-void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std::size_t clockCount ) {
+void addVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, Number flow, std::size_t clockCount ) {
     // adds clock to flow as last variable
     for ( std::size_t clockNumber = 0; clockNumber < clockCount; ++clockNumber ) {
 	    for ( auto& loc : ha.getLocations() ) {
@@ -630,7 +630,7 @@ void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std
 	            // rectangular flow
 	            auto clockVariable = VariablePool::getInstance().newCarlVariable();
 	            auto flow = loc->getRectangularFlow( subspace );
-	            flow.setFlowIntervalForDimension( carl::Interval<Number>( 1, 1 ), clockVariable );
+	            //flow.setFlowIntervalForDimension( carl::Interval<Number>( flow ), clockVariable );
 	        } else {
 	            // linear flow types
 	            auto flowMatrix = loc->getLinearFlow( subspace ).getFlowMatrix();
@@ -647,35 +647,35 @@ void addClockToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std
 	            }
 	            // bottom 2 rows for clock + affine
 	            newFlowMatrix.bottomRows( 2 ) = matrix_t<Number>::Zero( 2, dim + 2 );
-	            newFlowMatrix( dim, dim + 1 ) = 1;
+	            newFlowMatrix( dim, dim + 1 ) = flow;
 	            loc->setFlow( newFlowMatrix, subspace );
 	        }
 	        // invariant
-	        loc->setInvariant( detail::addClockToCondition( loc->getInvariant(), subspace ) );
+	        loc->setInvariant( detail::addVarToCondition( loc->getInvariant(), subspace ) );
 
 	    }
 	    // local bad states
 	    std::map<const Location<Number>*, Condition<Number>> newLocalBadStates;
 	    for ( auto& [loc, cond] : ha.getLocalBadStates() ) {
-	        newLocalBadStates[ loc ] = detail::addClockToCondition( cond, subspace );
+	        newLocalBadStates[ loc ] = detail::addVarToCondition( cond, subspace );
 	    }
 	    ha.setLocalBadStates( newLocalBadStates );
 	    // global bad states
 	    std::vector<Condition<Number>> newGlobalBadStates;
 	    for ( auto& badState : ha.getGlobalBadStates() ) {
-	        newGlobalBadStates.push_back( detail::addClockToCondition( badState, subspace ) );
+	        newGlobalBadStates.push_back( detail::addVarToCondition( badState, subspace ) );
 	    }
 	    ha.setGlobalBadStates( newGlobalBadStates );
 	    // initial states
 	    std::map<const Location<Number>*, Condition<Number>> newInitialStates;
 	    for ( auto& [loc, cond] : ha.getInitialStates() ) {
-	        newInitialStates[ loc ] = detail::addClockToInitial( cond, subspace );
+	        newInitialStates[ loc ] = detail::addVarToInitial( cond, subspace );
 	    }
 	    ha.setInitialStates( newInitialStates );
 	    // transitions
 	    for ( auto& trans : ha.getTransitions() ) {
 	        // guards
-	        trans->setGuard( detail::addClockToCondition( trans->getGuard(), subspace ) );
+	        trans->setGuard( detail::addVarToCondition( trans->getGuard(), subspace ) );
 	        // resets
 	        auto reset = trans->getReset();
 	        if ( reset.size() > subspace ) {
