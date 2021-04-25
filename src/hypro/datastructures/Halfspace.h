@@ -375,7 +375,7 @@ std::ostream& operator<<( std::ostream& ostr, const Halfspace<Number>& _rhs ) {
 	bool first = true;
 	for ( Eigen::Index i = 0; i < _rhs.normal().rows(); ++i ) {
 		bool notnull = _rhs.normal()( i ) != 0;
-		bool printVal = notnull && abs( _rhs.normal()( i ) != 1 );
+		bool printVal = notnull && abs( _rhs.normal()( i ) )!= 1 ;
 		bool neg = _rhs.normal()( i ) < 0;
 		if ( notnull ) {
 			if ( printVal ) {

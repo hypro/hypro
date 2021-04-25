@@ -21,7 +21,7 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 		TRACE( "hypro.datastructures", "Add location-Mapping entry " << l << " -> " << tmp );
 		locationMapping[l] = tmp;
 		assert( tmp->getTransitions().size() == l->getTransitions().size() );
-		assert( std::all_of( tmp->getTransitions().begin(), tmp->getTransitions().end(), [this, tmp]( const auto& t ) { return t.get()->getSource() == tmp; } ) );
+		assert( std::all_of( tmp->getTransitions().begin(), tmp->getTransitions().end(), [tmp]( const auto& t ) { return t.get()->getSource() == tmp; } ) );
 		assert( *tmp == *mLocations.back().get() );
 		TRACE( "hypro.datastructures", "Location after copy: " << *tmp << " VS original: " << *l );
 	}
@@ -40,7 +40,7 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 		}
 		TRACE( "hypro.datastructures", "Location after transition update: " << *l.get() );
 	}
-	assert( std::all_of( locationMapping.begin(), locationMapping.end(), [this]( const auto& p ) {
+	assert( std::all_of( locationMapping.begin(), locationMapping.end(), []( const auto& p ) {
 		TRACE( "hypro.datastructures", "Compare " << *p.second << "\nand\n"
 												  << *p.first );
 		return p.second->getTransitions().size() == p.first->getTransitions().size();
