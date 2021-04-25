@@ -187,6 +187,7 @@ AnalysisResult analyze( HybridAutomaton<Number> const& automaton, Settings const
 		default:
 			throw std::invalid_argument("Invalid automaton type.");
 	}
+	throw std::invalid_argument("Invalid automaton type.");
 }
 
 }  // namespace hydra

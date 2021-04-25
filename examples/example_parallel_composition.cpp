@@ -13,7 +13,7 @@ using namespace hypro;
 using namespace std::literals;
 
 static const int firingThreshold = 1;
-static const double alpha = 1.3;
+static const double alpha = 1.1;
 static const double globalTimeHorizon = 300;
 
 /**
@@ -56,7 +56,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 
 	// initial valuations: xi = i-1/n, z = 0, gt = 0
 	Condition<Number> initialValuations = hypro::conditionFromIntervals<Number>(
-		  { carl::Interval<Number>{ Number( i - 1 ) / Number( n ) },
+		  { carl::Interval<Number>{ Number( i ) / Number( n ) },
 			carl::Interval<Number>{ 0 },
 			carl::Interval<Number>{ 0 } } );
 	res.addInitialState( wait, initialValuations );
@@ -229,8 +229,7 @@ HybridAutomaton<Number> createComponent2( unsigned i, size_t n,
 
 	// initial state
 	hypro::Condition<Number> initialValuations = hypro::conditionFromIntervals<Number>(
-		  { carl::Interval<Number>{ Number( i - 1 ) / Number( n ) },
-			carl::Interval<Number>{ 0 },
+		  { carl::Interval<Number>{ Number( i ) / Number( n ) },
 			carl::Interval<Number>{ 0 } } );
 	res.addInitialState( wait, initialValuations );
 
@@ -340,7 +339,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	wait->setFlow( waitFlow );
 
 	hypro::Condition<Number> initialValuations = hypro::conditionFromIntervals<Number>(
-		  { carl::Interval<Number>{ Number( i - 1 ) / Number( n ) },
+		  { carl::Interval<Number>{ Number( i ) / Number( n ) },
 			carl::Interval<Number>{ 0 },
 			carl::Interval<Number>{ 0 } } );
 	res.addInitialState( wait, initialValuations );
@@ -728,7 +727,7 @@ int main( int argc, char** argv ) {
 		  PLOTTYPE::pdf };
 	FixedAnalysisParameters fixedParameters{ 20, 10 };
 	AnalysisParameters analysisParameters{
-		  0.01,
+		  0.001,
 		  AGG_SETTING::AGG,
 		  -1,
 		  representation_name::box,
