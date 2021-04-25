@@ -15,7 +15,7 @@ using namespace hypro;
 
 std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	CEGARAnalyzerDefault<Number> analyzer{ automaton, setting };
+	CEGARAnalyzer<Number> analyzer{ automaton, setting };
 
 	REACHABILITY_RESULT result = analyzer.run();
 	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
