@@ -4,9 +4,8 @@
 
 namespace hypro {
 
-template <typename Number> 
+template <typename Number>
 EvaluationResult<Number> soplexOptimizeLinearPostSolve( const vector_t<Number>& direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, bool maximize, const EvaluationResult<Number>& preSolution ) {
-	
 	soplex::SoPlex solver = detail::initializeSolver( constraints, constants, relations );
 
 	// set objective
@@ -20,21 +19,21 @@ EvaluationResult<Number> soplexOptimizeLinearPostSolve( const vector_t<Number>& 
 
 	// create new constraint row
 	soplex::DSVectorRational directionRational( constraints.cols() );
-    for ( unsigned colIndex = 0; colIndex < constraints.cols(); ++colIndex ) {
-        mpq_t a;
-        mpq_init( a );
-        mpq_set( a, ( carl::convert<Number, mpq_class>( direction( colIndex ) ) ).get_mpq_t() );
-        directionRational.add( colIndex, soplex::Rational( a ) );
-        mpq_clear( a );
-    }
-    mpq_t supportValueRational;
+	for ( unsigned colIndex = 0; colIndex < constraints.cols(); ++colIndex ) {
+		mpq_t a;
+		mpq_init( a );
+		mpq_set( a, ( carl::convert<Number, mpq_class>( direction( colIndex ) ) ).get_mpq_t() );
+		directionRational.add( colIndex, soplex::Rational( a ) );
+		mpq_clear( a );
+	}
+	mpq_t supportValueRational;
 	mpq_init( supportValueRational );
 	mpq_set( supportValueRational, ( carl::convert<Number, mpq_class>( preSolution.supportValue ) ).get_mpq_t() );
 
 	// set new constraint bound
 	if ( maximize ) {
 		solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE );
-		solver.addRowRational( soplex::LPRowRational( soplex::Rational( supportValueRational ) , directionRational, soplex::infinity ) );
+		solver.addRowRational( soplex::LPRowRational( soplex::Rational( supportValueRational ), directionRational, soplex::infinity ) );
 	} else {
 		solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MINIMIZE );
 		solver.addRowRational( soplex::LPRowRational( soplex::Rational( -1 ) * soplex::infinity, directionRational, soplex::Rational( supportValueRational ) ) );
@@ -49,10 +48,8 @@ EvaluationResult<Number> soplexOptimizeLinearPostSolve( const vector_t<Number>& 
 	return postSolution;
 }
 
-
 template <typename Number>
 EvaluationResult<Number> soplexOptimizeLinear( const vector_t<Number>& direction, const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, bool maximize ) {
-	
 	soplex::SoPlex solver = detail::initializeSolver( constraints, constants, relations );
 	if ( maximize ) {
 		solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE );
@@ -73,12 +70,11 @@ EvaluationResult<Number> soplexOptimizeLinear( const vector_t<Number>& direction
 	return res;
 }
 
-
-
 template <typename Number>
 bool soplexCheckConsistency( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations ) {
-
 	soplex::SoPlex solver = detail::initializeSolver( constraints, constants, relations );
+
+	std::cout << "Constraints: " << constraints << ", constants " << constants << std::endl;
 
 	solver.solve();
 	return solver.isPrimalFeasible();
@@ -86,10 +82,9 @@ bool soplexCheckConsistency( const matrix_t<Number>& constraints, const vector_t
 
 template <typename Number>
 bool soplexCheckPoint( const matrix_t<Number>& constraints, const vector_t<Number>& constants, const std::vector<carl::Relation>& relations, const Point<Number>& point ) {
-	
 	// Set column bounds equal to the point and check whether lp is feasible
 	soplex::SoPlex solver = detail::initializeSolver( constraints, constants, relations );
-	for( unsigned varIndex = 0; varIndex < constraints.cols(); ++varIndex ) {
+	for ( unsigned varIndex = 0; varIndex < constraints.cols(); ++varIndex ) {
 		mpq_t a;
 		mpq_init( a );
 		mpq_set( a, ( carl::convert<Number, mpq_class>( point.at( varIndex ) ) ).get_mpq_t() );
@@ -97,7 +92,6 @@ bool soplexCheckPoint( const matrix_t<Number>& constraints, const vector_t<Numbe
 		mpq_clear( a );
 	}
 
-	
 	solver.solve();
 	return solver.isPrimalFeasible();
 }
@@ -109,12 +103,11 @@ std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& con
 	// first call to check satisfiability
 	soplex::SoPlex solver = detail::initializeSolver( constraints, constants, relations );
 	solver.solve();
-	if( !solver.isPrimalFeasible() ) {
+	if ( !solver.isPrimalFeasible() ) {
 		return res;
 	}
 
 	for ( std::size_t constraintIndex = std::size_t( constraints.rows() - 1 );; --constraintIndex ) {
-
 		// Set current row as objective
 		for ( unsigned varIndex = 0; varIndex < constraints.cols(); ++varIndex ) {
 			mpq_t a;
@@ -136,16 +129,16 @@ std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& con
 		soplex::Rational lowerBound = solver.lhsRational( constraintIndex );
 		soplex::Rational upperBound = solver.rhsRational( constraintIndex );
 
-		switch( relations[ constraintIndex ] ) {
+		switch ( relations[constraintIndex] ) {
 			case carl::Relation::LEQ:
 				// test upper bound
 				solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE );
 
 				actualMax = detail::extractSolution<Number>( solver );
-				solver.removeRowRational(constraintIndex);
+				solver.removeRowRational( constraintIndex );
 
 				updatedMax = detail::extractSolution<Number>( solver );
-				if ( actualMax.errorCode != updatedMax.errorCode || actualMax.supportValue != updatedMax.supportValue ){
+				if ( actualMax.errorCode != updatedMax.errorCode || actualMax.supportValue != updatedMax.supportValue ) {
 					redundant = false;
 				}
 				break;
@@ -154,10 +147,10 @@ std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& con
 				solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MINIMIZE );
 
 				actualMin = detail::extractSolution<Number>( solver );
-				solver.removeRowRational(constraintIndex);
+				solver.removeRowRational( constraintIndex );
 
 				updatedMin = detail::extractSolution<Number>( solver );
-				if ( actualMin.errorCode != updatedMin.errorCode || actualMin.supportValue != updatedMin.supportValue ){
+				if ( actualMin.errorCode != updatedMin.errorCode || actualMin.supportValue != updatedMin.supportValue ) {
 					redundant = false;
 				}
 				break;
@@ -166,7 +159,7 @@ std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& con
 				solver.setIntParam( soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE );
 				actualMax = detail::extractSolution<Number>( solver );
 				actualMin = detail::extractSolution<Number>( solver );
-				solver.removeRowRational(constraintIndex);
+				solver.removeRowRational( constraintIndex );
 				if ( actualMin.errorCode != updatedMin.errorCode || actualMin.supportValue != updatedMin.supportValue ||
 					 actualMax.errorCode != updatedMax.errorCode || actualMax.supportValue != updatedMax.supportValue ) {
 					redundant = false;
@@ -176,13 +169,13 @@ std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& con
 				assert( false );
 		}
 
-		if ( redundant ){
+		if ( redundant ) {
 			res.push_back( constraintIndex );
 		} else {
 			// Restore constraint. Note that the row is appended as the last row to the matrix, so the order of constraints is changed
 			solver.addRowRational( currentRow );
 
-			switch( relations[ constraintIndex ] ) {
+			switch ( relations[constraintIndex] ) {
 				case carl::Relation::LEQ:
 					solver.changeRhsRational( solver.numRows() - 1, upperBound );
 					break;
@@ -197,7 +190,7 @@ std::vector<std::size_t> soplexRedundantConstraints( const matrix_t<Number>& con
 			}
 		}
 
-		if ( constraintIndex == 0 ){
+		if ( constraintIndex == 0 ) {
 			break;
 		}
 	}
