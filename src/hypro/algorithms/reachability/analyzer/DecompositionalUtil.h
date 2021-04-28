@@ -57,9 +57,9 @@ TimeInformation<typename Representation::NumberType> getClockValues(
  */
 template <typename Representation>
 Representation intersectSegmentWithClock(
-        const Representation& segment,
-        TimeInformation<typename Representation::NumberType> clockValues,
-        std::size_t clockCount );
+    const Representation& segment,
+    TimeInformation<typename Representation::NumberType> clockValues,
+    std::size_t clockCount );
 
 /**
  * @brief       Get all (local and global) bad states as conditions in a location of an automaton.
