@@ -95,7 +95,7 @@ std::pair<matrix_t<Number>, vector_t<Number>> eliminateCol( const matrix_t<Numbe
 	newConstraints = removeRows( newConstraints, emptyRows );
 	newConstants = removeRows( newConstants, emptyRows );
 
-	auto duplicateRows = getDuplicateRows( newConstraints );
+	auto duplicateRows = getDuplicateRows( newConstraints, newConstants );
 	newConstraints = removeRows( newConstraints, duplicateRows );
 	newConstants = removeRows( newConstants, duplicateRows );
 
