@@ -35,9 +35,15 @@ template <typename Number>
 bool checkDecomposed( const HybridAutomaton<Number> &automaton );
 template <typename Number>
 std::pair<HybridAutomaton<Number>, Decomposition> decomposeAutomaton( const HybridAutomaton<Number> &automaton );
+// adds a number of clocks (initially zero with flow 1) to the subspace
+template <typename Number>
+void addClocksToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std::size_t clockCount );
+// adds a variable to store the initial value of the subspace variable to the subspace
+template <typename Number>
+void addInitialVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace );
 // Adds a variable with given flow to the automaton as the last variable in the given subspace
 template <typename Number>
-void addVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, Number flow, std::size_t clockCount = 1 );
+void addVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, Number flow );
 
 namespace detail {
 /// adds edges in the subspace graph for related variables of a linear transformation

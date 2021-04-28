@@ -12,10 +12,8 @@ hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::
         auto [decomposedHa, decomposition] = hypro::decomposeAutomaton( automaton );
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
             if ( isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
-                // (constant) initial variable
-                hypro::addVarToAutomaton( decomposedHa, subspace, Number( 0 ) );
-                // clocks
-                hypro::addVarToAutomaton( decomposedHa, subspace, Number( 1 ), clockCount );
+                hypro::addInitialVarToAutomaton( decomposedHa, subspace );
+                hypro::addClocksToAutomaton( decomposedHa, subspace, clockCount );
             }
         }
         information.decomposition = decomposition;
