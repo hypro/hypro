@@ -30,11 +30,7 @@ static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, cons
 		const char* varName = ( "x_" + std::to_string( i ) ).c_str();
 		var = c.real_const( varName );
 		variables.push_back( var );
-		//std::cout << "Created z3 Variable " << var << std::endl;
-		//std::cout << "Variables.size() " << variables.size() << std::endl;
 	}
-
-	//std::cout << "Variables.size() " << variables.size() << std::endl;
 
 	for ( unsigned i = 0; i < _constraints.rows(); ++i ) {
 		z3::expr polynomial( c );
@@ -43,16 +39,10 @@ static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, cons
 			z3::expr coeff( c );
 			coeff = c.real_val( ( carl::convert<Number, mpq_class>( _constraints( i, j ) ) ) );
 
-			//std::cout << "Coefficient is " << coeff << std::endl;
-
 			z3::expr term( c );
-
-			//std::cout << "Variable is " << variables[j] << std::endl;
-
 			term = variables[j] * coeff;
 			polynomial = polynomial + term;
 		}
-		//std::cout << "Constant: " << _constants(i) << std::endl;
 		z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _constants( i ) ) );
 		z3::expr constraint( c );
 		switch ( relations[i] ) {
@@ -125,7 +115,6 @@ static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Numbe
 
 template <typename Number>
 static std::pair<z3::expr, z3::expr> createFormula( const matrix_t<Number>& _constraints, const vector_t<Number> _constants, const std::vector<carl::Relation>& relations, const vector_t<Number>& _objective, z3Context& c, std::vector<z3::expr>& variables ) {
-
 	z3::expr formula( c );
 	z3::expr objective( c );
 	objective = c.int_val( 0 );
@@ -154,7 +143,7 @@ static std::pair<z3::expr, z3::expr> createFormula( const matrix_t<Number>& _con
 			}
 		}
 		z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _constants( i ) ) );
-		switch ( relations[i] ){
+		switch ( relations[i] ) {
 			case carl::Relation::LEQ:
 				constraint = constraint <= constant;
 				break;
