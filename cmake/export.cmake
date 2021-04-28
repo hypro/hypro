@@ -74,7 +74,6 @@ if(HYPRO_USE_SMTRAT)
 endif()
 if (HYPRO_USE_Z3)
 	export_target(DEPENDENT_TARGETS z3_SHARED)
-	export_target(DEPENDENT_TARGETS z3_STATIC)
 endif ()
 
 
