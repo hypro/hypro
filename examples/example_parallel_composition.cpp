@@ -1,7 +1,8 @@
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/HybridAutomaton/output/Flowstar.h"
-#include "parser/antlr4-flowstar/ParserWrapper.h"
-#include "util/logging/Filewriter.h"
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/HybridAutomaton/output/Flowstar.h>
+#include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/util/logging/Filewriter.h>
+#include <hypro/datastructures/HybridAutomaton/State.h>
 #include <iostream>
 
 using namespace hypro;
@@ -112,7 +113,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
   resetMat(2, 2) = 0;
   resetVec(2) = 1;
   toFlash->setReset(Reset<Number>(resetMat, resetVec));
-  toFlash->setAggregation(Aggregation::parallelotopeAgg);
+  toFlash->setAggregation(Aggregation::aggregation);
   // toFlash->setUrgent();
 
   wait->addTransition(toFlash);
@@ -133,7 +134,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
   flashLoop->setReset(Reset<Number>(resetMat, resetVec));
   flashLoop->setUrgent();
   flashLoop->addLabel(Label{"flash"});
-  flashLoop->setAggregation(Aggregation::parallelotopeAgg);
+  flashLoop->setAggregation(Aggregation::aggregation);
 
   flash->addTransition(flashLoop);
   res.addTransition(flashLoop);
@@ -150,7 +151,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
   reWait->addLabel({"return"});
   reWait->setReset(Reset<Number>(resetMat, resetVec));
   reWait->setUrgent();
-  reWait->setAggregation(Aggregation::parallelotopeAgg);
+  reWait->setAggregation(Aggregation::aggregation);
 
   flash->addTransition(reWait);
   res.addTransition(reWait);
@@ -170,7 +171,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
   resetVec = V::Zero(dim);
   toAdapt->setReset(Reset<Number>(resetMat, resetVec));
   toAdapt->addLabel({"flash"});
-  toAdapt->setAggregation(Aggregation::parallelotopeAgg);
+  toAdapt->setAggregation(Aggregation::aggregation);
   // toAdapt->setUrgent();
 
   wait->addTransition(toAdapt);
@@ -188,7 +189,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
   resetVec = V::Zero(dim);
   fromAdaptRegular->setReset(Reset<Number>(resetMat, resetVec));
   fromAdaptRegular->addLabel(Label{"return"});
-  fromAdaptRegular->setAggregation(Aggregation::parallelotopeAgg);
+  fromAdaptRegular->setAggregation(Aggregation::aggregation);
   fromAdaptRegular->setUrgent();
 
   adapt->addTransition(fromAdaptRegular);
@@ -202,7 +203,7 @@ HybridAutomaton<Number> createComponent1(unsigned i) {
   guardConstants << Number(-firingThreshold);
   fromAdaptScale->setGuard(Condition<Number>{guardConstraints, guardConstants});
   // fromAdaptScale->addLabel(Label{"flash"});
-  fromAdaptScale->setAggregation(Aggregation::parallelotopeAgg);
+  fromAdaptScale->setAggregation(Aggregation::aggregation);
   fromAdaptScale->setUrgent();
 
   resetMat = M::Identity(dim, dim);
@@ -284,7 +285,7 @@ HybridAutomaton<Number> createComponent2(unsigned i,
 
   // transitions
   // flash self loop
-  Tpt flash = new Transition<Number>(wait, wait);
+  auto flash = std::make_unique<Transition<Number>>(wait, wait);
   M guardConstraints = M::Zero(2, dim);
   guardConstraints(0, 0) = 1;
   guardConstraints(1, 0) = -1;
@@ -297,9 +298,9 @@ HybridAutomaton<Number> createComponent2(unsigned i,
   resetMat(0, 0) = 0;
   flash->addLabel(labels.at(i));
   flash->setReset(Reset<Number>(resetMat, resetVec));
-  flash->setAggregation(Aggregation::parallelotopeAgg);
+  flash->setAggregation(Aggregation::aggregation);
 
-  wait->addTransition(flash);
+  wait->addTransition(std::move(flash));
   res.addTransition(*flash);
 
   // to adapt
@@ -313,7 +314,7 @@ HybridAutomaton<Number> createComponent2(unsigned i,
 
       toAdapt->addLabel(labels.at(j));
 
-      toAdapt->setAggregation(Aggregation::parallelotopeAgg);
+      toAdapt->setAggregation(Aggregation::aggregation);
 
       wait->addTransition(toAdapt);
       res.addTransition(*toAdapt);
@@ -331,7 +332,7 @@ HybridAutomaton<Number> createComponent2(unsigned i,
   resetMat = M::Identity(dim, dim);
   resetVec = V::Zero(dim);
   fromAdaptRegular->setReset(Reset<Number>(resetMat, resetVec));
-  fromAdaptRegular->setAggregation(Aggregation::parallelotopeAgg);
+  fromAdaptRegular->setAggregation(Aggregation::aggregation);
   fromAdaptRegular->setUrgent();
 
   adapt->addTransition(fromAdaptRegular);
@@ -344,7 +345,7 @@ HybridAutomaton<Number> createComponent2(unsigned i,
   guardConstants = V::Zero(1);
   guardConstants << Number(-firingThreshold);
   fromAdaptScale->setGuard(Condition<Number>{guardConstraints, guardConstants});
-  fromAdaptScale->setAggregation(Aggregation::parallelotopeAgg);
+  fromAdaptScale->setAggregation(Aggregation::aggregation);
   fromAdaptScale->setUrgent();
 
   resetMat = M::Identity(dim, dim);
@@ -453,7 +454,7 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
   resetMat(2, 2) = 0;
   resetVec(2) = 1;
   toFlash->setReset(Reset<Number>(resetMat, resetVec));
-  toFlash->setAggregation(Aggregation::parallelotopeAgg);
+  toFlash->setAggregation(Aggregation::aggregation);
   // toFlash->setUrgent();
 
   wait->addTransition(toFlash);
@@ -474,7 +475,7 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
   flashLoop->setReset(Reset<Number>(resetMat, resetVec));
   flashLoop->setUrgent();
   flashLoop->addLabel(Label{"flash"});
-  flashLoop->setAggregation(Aggregation::parallelotopeAgg);
+  flashLoop->setAggregation(Aggregation::aggregation);
   // flashLoop->setUrgent();
 
   flash->addTransition(flashLoop);
@@ -493,7 +494,7 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
   reWait->addLabel({"return"});
   reWait->setReset(Reset<Number>(resetMat,resetVec));
   reWait->setUrgent();
-  reWait->setAggregation(Aggregation::parallelotopeAgg);
+  reWait->setAggregation(Aggregation::aggregation);
 
   flash->addTransition(reWait);
   res.addTransition(reWait);
@@ -514,7 +515,7 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
   resetVec = V::Zero(dim);
   toAdapt->setReset(Reset<Number>(resetMat, resetVec));
   toAdapt->addLabel({"flash"});
-  toAdapt->setAggregation(Aggregation::parallelotopeAgg);
+  toAdapt->setAggregation(Aggregation::aggregation);
   // toAdapt->setUrgent();
 
   wait->addTransition(toAdapt);
@@ -534,7 +535,7 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
   resetVec = V::Zero(dim);
   fromAdaptRegular->setReset(Reset<Number>(resetMat, resetVec));
   fromAdaptRegular->addLabel(Label{"return"});
-  fromAdaptRegular->setAggregation(Aggregation::parallelotopeAgg);
+  fromAdaptRegular->setAggregation(Aggregation::aggregation);
   fromAdaptRegular->setUrgent();
 
   flash->addTransition(fromAdaptRegular);
@@ -550,7 +551,7 @@ HybridAutomaton<Number> createComponent3(unsigned i) {
   guardConstants << Number(-firingThreshold), 0, 0;
   fromAdaptScale->setGuard(Condition<Number>{guardConstraints, guardConstants});
   fromAdaptScale->addLabel(Label{"return"});
-  fromAdaptScale->setAggregation(Aggregation::parallelotopeAgg);
+  fromAdaptScale->setAggregation(Aggregation::aggregation);
   fromAdaptScale->setUrgent();
 
   resetMat = M::Identity(dim, dim);
@@ -643,7 +644,7 @@ HybridAutomaton<Number> createComponent4(unsigned i,
   resetMat(0, 0) = 0;
   flash->addLabel(labels.at(i));
   flash->setReset(Reset<Number>(resetMat, resetVec));
-  flash->setAggregation(Aggregation::parallelotopeAgg);
+  flash->setAggregation(Aggregation::aggregation);
   // flash->setUrgent();
 
   wait->addTransition(flash);
@@ -660,7 +661,7 @@ HybridAutomaton<Number> createComponent4(unsigned i,
 
       toAdapt->addLabel(labels.at(j));
 
-      toAdapt->setAggregation(Aggregation::parallelotopeAgg);
+      toAdapt->setAggregation(Aggregation::aggregation);
       // toAdapt->setUrgent();
 
       wait->addTransition(toAdapt);
@@ -679,7 +680,7 @@ HybridAutomaton<Number> createComponent4(unsigned i,
   resetMat = M::Identity(dim, dim);
   resetVec = V::Zero(dim);
   fromAdaptRegular->setReset(Reset<Number>(resetMat, resetVec));
-  fromAdaptRegular->setAggregation(Aggregation::parallelotopeAgg);
+  fromAdaptRegular->setAggregation(Aggregation::aggregation);
   fromAdaptRegular->setUrgent();
   fromAdaptRegular->addLabel("return");
 
@@ -693,7 +694,7 @@ HybridAutomaton<Number> createComponent4(unsigned i,
   guardConstants = V::Zero(1);
   guardConstants << Number(-firingThreshold);
   fromAdaptScale->setGuard(Condition<Number>{guardConstraints, guardConstants});
-  fromAdaptScale->setAggregation(Aggregation::parallelotopeAgg);
+  fromAdaptScale->setAggregation(Aggregation::aggregation);
   fromAdaptScale->setUrgent();
   fromAdaptScale->addLabel("return");
 

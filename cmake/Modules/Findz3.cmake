@@ -25,9 +25,4 @@ find_package_handle_standard_args(z3  FOUND_VAR z3_FOUND
 set(z3_LIBRARIES ${z3_LIBRARY} )
 set(z3_INCLUDE_DIRS ${z3_INCLUDE_DIR} )
 
-message("FindZ3: LIBRARIES: " ${z3_LIBRARIES})
-message("FindZ3: LIBRARY: " ${z3_LIBRARY})
-message("FindZ3: INCLUDE_DIRS: " ${z3_INCLUDE_DIRS})
-message("FindZ3: INCLUDE_DIR: " ${z3_INCLUDE_DIR})
-
 mark_as_advanced(z3_INCLUDE_DIR z3_LIBRARY )
