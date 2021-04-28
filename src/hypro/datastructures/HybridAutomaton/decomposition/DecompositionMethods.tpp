@@ -602,6 +602,7 @@ void addClocksToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, st
     	// initially zero
     	std::map<const Location<Number>*, Condition<Number>> newInitialStates;
     	for ( auto& [loc, cond] : ha.getInitialStates() ) {
+    		Condition<Number> newCond = cond;
     		auto condMatrix = cond.getMatrix( subspace );
 			auto condVector = cond.getVector( subspace );
 			condMatrix.conservativeResize( condMatrix.rows() + 2, condMatrix.cols() );
@@ -613,8 +614,7 @@ void addClocksToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, st
 			condMatrix( condMatrix.rows() - 2, condMatrix.cols() - 1 ) = 1;
 			condMatrix( condMatrix.rows() - 1, condMatrix.cols() - 1 ) = -1;
 			condVector( condVector.rows() - 2 ) = 0;
-			condVector( condVector.rows() - 1 ) = 0;
-			Condition<Number> newCond;
+			condVector( condVector.rows() - 1 ) = 0;			
 			newCond.setMatrix( condMatrix, subspace );
 			newCond.setVector( condVector, subspace );
 			newInitialStates[ loc ] = newCond;
@@ -629,6 +629,7 @@ void addInitialVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace
    	// initially equal to subspace variable
    	std::map<const Location<Number>*, Condition<Number>> newInitialStates;
    	for ( auto& [loc, cond] : ha.getInitialStates() ) {
+   		Condition<Number> newCond = cond;
    		auto condMatrix = cond.getMatrix( subspace );
 		auto condVector = cond.getVector( subspace );
 		condMatrix.conservativeResize( condMatrix.rows() + 2, condMatrix.cols() );
@@ -643,7 +644,6 @@ void addInitialVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace
 		condMatrix( condMatrix.rows() - 1, 0 ) = 1;
 		condVector( condVector.rows() - 2 ) = 0;
 		condVector( condVector.rows() - 1 ) = 0;
-		Condition<Number> newCond;
 		newCond.setMatrix( condMatrix, subspace );
 		newCond.setVector( condVector, subspace );
 		newInitialStates[ loc ] = newCond;

@@ -136,8 +136,8 @@ bool DecompositionalAnalyzer<Representation>::isSafe(
     RepVector subspaceSets( mDecomposition.subspaces.size() );
     for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
         auto flowpipe = currentNodes[ subspace ]->getFlowpipe();
-        assert( flowpipe.size() == 2 );
-        auto [containment, enabledSet] = intersect( flowpipe[ 1 ], badState, subspace );
+        assert( flowpipe.size() == 1 );
+        auto [containment, enabledSet] = intersect( flowpipe[ 0 ], badState, subspace );
         if ( containment == CONTAINMENT::NO ) {
             return true;
         }

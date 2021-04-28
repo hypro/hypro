@@ -62,9 +62,9 @@ struct computeTimeSuccessorVisitor {
             // invariant is initially violated
             return TimeInformation<Number>( clockCount );
         }
-        assert( flowpipe.size() == 2 );
+        assert( flowpipe.size() == 1 );
         // last variables are clocks
-        return detail::getClockValues( flowpipe[1], clockCount );
+        return detail::getClockValues( flowpipe[0], clockCount );
     }
     TimeInformation<Number> operator()( LTIWorker<Representation>& worker ) {
         assert( false && "Only singular dynamics supported for decompositional analysis" );
