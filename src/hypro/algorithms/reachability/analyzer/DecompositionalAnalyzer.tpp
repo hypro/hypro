@@ -133,8 +133,18 @@ void DecompositionalAnalyzer<Representation>::intersectSubspacesWithClock(
 template <typename Representation>
 bool DecompositionalAnalyzer<Representation>::isSafe(
   const NodeVector& currentNodes, const Condition<Number>& dependencies, const Condition<Number>& badState ) {
-    // todo: implement with simplex
-    return true;
+    RepVector subspaceSets( mDecomposition.subspaces.size() );
+    for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
+        auto flowpipe = currentNodes[ subspace ]->getFlowpipe();
+        assert( flowpipe.size() == 2 );
+        auto [containment, enabledSet] = intersect( flowpipe[ 1 ], badState, subspace );
+        if ( containment == CONTAINMENT::NO ) {
+            return true;
+        }
+        subspaceSets[ subspace ] = enabledSet;
+    }
+    HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( subspaceSets, dependencies, mClockCount );
+    return composedPolytope.empty();
 }
 
 template <typename Representation>

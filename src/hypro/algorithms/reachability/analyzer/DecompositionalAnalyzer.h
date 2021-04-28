@@ -187,12 +187,8 @@ class DecompositionalAnalyzer {
             mWorkQueue.push_front( detail::decompositionalQueueEntry<Representation>{ 0, Condition<Number>(), root } );
         }
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-            if ( !isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
-                assert( false && "Only singular dynamics supported with decompositional analysis" );
-                mLtiTypeSubspaces.push_back( subspace );
-            } else {
-                mSingularSubspaces.push_back( subspace );
-            }
+            assert( isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) && "Only singular dynamics supported with decompositional analysis" );
+            mSingularSubspaces.push_back( subspace );
         }
     }
 
@@ -285,13 +281,11 @@ class DecompositionalAnalyzer {
   protected:
     std::deque<detail::decompositionalQueueEntry<Representation>> mWorkQueue;               // holds the tasks that still need to be computed
     HybridAutomaton<Number> const* mHybridAutomaton; // holds a pointer to the decomposed automaton
-    Decomposition mDecomposition;                    // holds decomposition information correpsonding to the automaton
+    Decomposition mDecomposition;                    // holds decomposition information corresponding to the automaton
     std::size_t mClockCount;                         // holds the number of additional clocks in the (singular) subspaces
     FixedAnalysisParameters mFixedParameters;        // holds common analysis parameters for all analyzers
     AnalysisParameters mParameters;                  // holds analyzer specific parameters
-    std::vector<std::size_t> mSingularSubspaces;     // holds the subspaces that have a clock and compute all time successors at once
-    std::vector<std::size_t> mLtiTypeSubspaces;      // holds the subspaces that have no clock and have multiple segments
-    //std::size_t mCurrentDepth = 0;                   // holds current jump depth
+    std::vector<std::size_t> mSingularSubspaces;     // holds the singular subspace indices
 
     tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 )*mFixedParameters.localTimeHorizon;
 };
