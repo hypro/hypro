@@ -11,68 +11,80 @@ inline bool isClockedSubspace( const DynamicType dynamics ) {
 namespace detail {
 
 template <typename Representation>
-Representation composeSubspaces( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, std::size_t clockCount ) {
+HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, std::size_t clockCount ) {
+
     using Number = typename Representation::NumberType;
     // variable order in subspace sets: (x_i, x_i^init, c_i^1,...,c_i^clockCount)
     // variable order in dependencies: (x_1^init,...,x_n^init)
-    // initialize polytope with dimension (dim(S_1) + .. + dim(S_n))
+    // create composed polytope with dimension (dim(S_1) + .. + dim(S_n))
     // the variables are ordered by concatenating the variables in the subspaces
+    std::size_t subspaceCount = subspaceSets.size();
+    std::size_t compDim = subspaceCount * ( 2 + clockCount );
 
-    std::size_t fullDimension = 0;
-    std::size_t numberRows = 0;
-    // constraints on subspace sets
-    for ( std::size_t i = 0; i < subspaceSets.size(); ++i ) {
-        fullDimension += subspaceSets[ i ].dimension();
-        numberRows += subspaceSets[ i ].matrix().rows();
-    }
-    // constraints in the dependencies
-    numberRows += dependencies.getMatrix().rows();
-    // constraints for clock equality
-    numberRows += 2 * ( clockCount * ( subspaceSets.size() - 1 ) );
-    matrix_t<Number> fullConstraints = matrix_t<Number>::Zero( numberRows, fullDimension );
-    vector_t<Number> fullVector = vector_t<Number>::Zero( numberRows );
-    matrix_t<Number> fullDependencies = matrix_t<Number>::Zero( dependencies.getMatrix().rows(), fullDimension );
+    // number of rows in full poytope
+    std::size_t compRows = 0;
+    compRows += std::accumulate( subspaceSets.begin(), subspaceSets.end(), 0, 
+        []( std::size_t cur, const auto& sSet ) { return cur + sSet.matrix().rows(); } );
+    compRows += dependencies.getMatrix().rows();
+    // 2 inequalities for each equation c_1 = c_i in the subspaces i != 1 (per clock c)
+    compRows += 2 * ( clockCount * ( subspaceCount - 1 ) );
 
-    std::size_t accumulatedDimension = 0;
-    std::size_t accumulatedRows = 0;
-    // holds the indices of the variables x_i
-    std::vector<std::size_t> toProject;
-    for ( std::size_t i = 0; i < subspaceSets.size(); ++i ) {
+    matrix_t<Number> compMat = matrix_t<Number>::Zero( compRows, compDim );
+    vector_t<Number> compVec = vector_t<Number>::Zero( compRows );
+    std::size_t accDim = 0;
+    std::size_t accRows = 0;
+
+    for ( std::size_t i = 0; i < subspaceCount; ++i ) {
         auto subspaceMatrix = subspaceSets[ i ].matrix();
         auto subspaceVector = subspaceSets[ i ].vector();
-        fullConstraints.block( accumulatedRows, accumulatedDimension, subspaceMatrix.rows(), subspaceMatrix.cols() ) = subspaceMatrix;
-        fullVector.segment( accumulatedRows, subspaceVector.rows() ) = subspaceVector;
-        toProject.push_back( accumulatedDimension );
-        fullDependencies.col( accumulatedDimension + 1 ) = dependencies.getMatrix().col( i );
-        accumulatedDimension += subspaceSets[ i ].dimension();
-        accumulatedRows += subspaceMatrix.rows();
+        compMat.block( accRows, accDim, subspaceMatrix.rows(), subspaceMatrix.cols() ) = subspaceMatrix;
+        compVec.segment( accRows, subspaceVector.rows() ) = subspaceVector;
+        accDim += subspaceSets[ i ].dimension();
+        accRows += subspaceMatrix.rows();
     }
 
-    // add constraints of dependencies
-    fullConstraints.block( accumulatedRows, 0, fullDependencies.rows(), fullDependencies.cols() ) = fullDependencies;
-    fullVector.segment( accumulatedRows, dependencies.getVector().rows() ) = dependencies.getVector();
-    accumulatedRows += fullDependencies.rows();
+    // add constraints of dependencies on x_i^init
+    for ( std::size_t i = 0; i < subspaceCount; ++i ) {
+        compMat.block( accRows, i * ( 2 + clockCount ) + 1, dependencies.getMatrix().rows(), 1  ) = dependencies.getMatrix().col( i );
+        compVec.segment( accRows, dependencies.getVector().rows() ) = dependencies.getVector();
+    }
+    accRows += dependencies.getMatrix().rows();
+
     // add constraints for clock equality
     for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
-        for ( std::size_t subspace = 1; subspace < subspaceSets.size(); ++subspace ) {
-            fullConstraints( accumulatedRows, 2 + clockIndex ) = 1;
-            fullConstraints( accumulatedRows, subspace * ( 2 + clockCount ) + clockIndex + 2 ) = -1;
-            fullConstraints( accumulatedRows + 1, 2 + clockIndex ) = -1;
-            fullConstraints( accumulatedRows + 1, subspace * ( 2 + clockCount ) + clockIndex + 2 ) = 1;
-            accumulatedRows += 2;
+        for ( std::size_t subspace = 1; subspace < subspaceCount; ++subspace ) {
+            compMat( accRows, 2 + clockIndex ) = 1;
+            compMat( accRows, subspace * ( 2 + clockCount ) + clockIndex + 2 ) = -1;
+            compMat( accRows + 1, 2 + clockIndex ) = -1;
+            compMat( accRows + 1, subspace * ( 2 + clockCount ) + clockIndex + 2 ) = 1;
+            accRows += 2;
         }
     }
 
+    return HPolytope<Number>( compMat, compVec );
+
+}
+
+
+template <typename Representation>
+Representation composeSubspaces( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, std::size_t clockCount ) {
+    using Number = typename Representation::NumberType;
+
+    auto pol = composeSubspaceConstraints( subspaceSets, dependencies, clockCount );
+    std::vector<std::size_t> toProject;
+    for ( std::size_t i = 0; i < subspaceSets.size(); ++i ) {
+        toProject.push_back( i * ( 2 + clockCount ) );
+    }
     std::vector<std::size_t> projectOut;
-    for ( std::size_t i = fullDimension - 1;; --i ) {
+    for ( std::size_t i = pol.dimension() - 1;; --i ) {
         if ( std::find( toProject.begin(), toProject.end(), i ) == toProject.end() ) {
             projectOut.push_back( i );
         }
         if ( i == 0 ) { break; }
     }
-    HPolytope<Number> hpol = HPolytope<Number>( fullConstraints, fullVector ).projectOut( projectOut );
+    pol = pol.projectOut( projectOut );
     Representation res;
-    convert( hpol, res );
+    convert( pol, res );
     return res;
 }
 

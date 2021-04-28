@@ -16,10 +16,21 @@ inline bool isClockedSubspace( const DynamicType dynamics );
 namespace detail {
 
 template <typename Representation>
-Representation composeSubspaces( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, std::size_t clockCount );
+HPolytope<typename Representation::NumberType> composeSubspaceConstraints(
+    const std::vector<Representation>& subspaceSets,
+    const Condition<typename Representation::NumberType>& dependencies,
+    std::size_t clockCount );
 
 template <typename Representation>
-std::pair<Condition<typename Representation::NumberType>, std::vector<Representation>> decompose( const Representation& composedSet, std::size_t clockCount );
+Representation composeSubspaces(
+    const std::vector<Representation>& subspaceSets,
+    const Condition<typename Representation::NumberType>& dependencies,
+    std::size_t clockCount );
+
+template <typename Representation>
+std::pair<Condition<typename Representation::NumberType>, std::vector<Representation>> decompose(
+    const Representation& composedSet,
+    std::size_t clockCount );
 
 
 /**
@@ -31,7 +42,9 @@ std::pair<Condition<typename Representation::NumberType>, std::vector<Representa
  * @return      The time intervals of the global and local glock covered by the segment.
  */
 template <typename Representation>
-TimeInformation<typename Representation::NumberType> getClockValues( const Representation& segment, std::size_t clockCount );
+TimeInformation<typename Representation::NumberType> getClockValues(
+    const Representation& segment,
+    std::size_t clockCount );
 
 /**
  * @brief       Compute the intersection of the segment with the given time intervals.
@@ -44,7 +57,9 @@ TimeInformation<typename Representation::NumberType> getClockValues( const Repre
  */
 template <typename Representation>
 Representation intersectSegmentWithClock(
-        const Representation& segment, TimeInformation<typename Representation::NumberType> clockValues, std::size_t clockCount );
+        const Representation& segment,
+        TimeInformation<typename Representation::NumberType> clockValues,
+        std::size_t clockCount );
 
 /**
  * @brief       Get all (local and global) bad states as conditions in a location of an automaton.
@@ -54,7 +69,9 @@ Representation intersectSegmentWithClock(
  * @return      Vector of all local and global bad states in the location.
  */
 template <typename Number>
-std::vector<Condition<Number>> collectBadStates( const HybridAutomaton<Number>* ha, const Location<Number>* loc );
+std::vector<Condition<Number>> collectBadStates( 
+    const HybridAutomaton<Number>* ha,
+    const Location<Number>* loc );
 } // namespace detail
 } // namespace hypro
 
