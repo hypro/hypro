@@ -184,7 +184,7 @@ class DecompositionalAnalyzer {
             for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
                 root.push_back( &subspaceRoots[ subspace ] );
             }
-            mWorkQueue.push_front( detail::decompositionalQueueEntry<Representation>{ 0, Condition<Number>(), root } );
+            mWorkQueue.push_front( detail::decompositionalQueueEntry<Representation>{ 0, Condition<Number>( ConstraintSetT<Number>() ), root } );
         }
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
             assert( isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) && "Only singular dynamics supported with decompositional analysis" );
