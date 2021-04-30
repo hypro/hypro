@@ -43,12 +43,15 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
         accRows += subspaceMatrix.rows();
     }
 
-    // add constraints of dependencies on x_i^init
-    for ( std::size_t i = 0; i < subspaceCount; ++i ) {
-        compMat.block( accRows, i * ( 2 + clockCount ) + 1, dependencies.getMatrix().rows(), 1  ) = dependencies.getMatrix().col( i );
-        compVec.segment( accRows, dependencies.getVector().rows() ) = dependencies.getVector();
+    if ( !dependencies.isTrue() ) {
+        assert( dependencies.dimension() == subspaceCount );
+        // add constraints of dependencies on x_i^init
+        for ( std::size_t i = 0; i < subspaceCount; ++i ) {
+            compMat.block( accRows, i * ( 2 + clockCount ) + 1, dependencies.getMatrix().rows(), 1  ) = dependencies.getMatrix().col( i );
+            compVec.segment( accRows, dependencies.getVector().rows() ) = dependencies.getVector();
+        }
+        accRows += dependencies.getMatrix().rows();
     }
-    accRows += dependencies.getMatrix().rows();
 
     // add constraints for clock equality
     for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
@@ -109,18 +112,18 @@ std::pair<Condition<typename Representation::NumberType>, std::vector<Representa
                     allZero = false;
                 }
             }
-            if ( !dependency ) {
-                subspaceIndices[ nonZeroSubspace ].push_back( row );
-            } else {
-                depIndices.push_back( row );
-            }
+        }
+        if ( !dependency ) {
+            subspaceIndices[ nonZeroSubspace ].push_back( row );
+        } else {
+            depIndices.push_back( row );
         }
     }
 
     std::vector<Representation> subspaceSets( composedSet.dimension() );
     // add initial variable and clocks
     for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
-        matrix_t<Number> subspaceMatrix = matrix_t<Number>::Zero( subspaceIndices.size() + 2 * ( clockCount + 1 ), clockCount + 2 );
+        matrix_t<Number> subspaceMatrix = matrix_t<Number>::Zero( subspaceIndices[ subspace ].size() + 2 * ( clockCount + 1 ), clockCount + 2 );
         vector_t<Number> subspaceVector = vector_t<Number>::Zero( subspaceMatrix.rows() );
         std::size_t usedRows = 0;
         for ( auto row : subspaceIndices[ subspace ] ) {
@@ -141,7 +144,7 @@ std::pair<Condition<typename Representation::NumberType>, std::vector<Representa
             subspaceMatrix( usedRows + 1, 2 + clock ) = -1;
             usedRows += 2;
         }
-        subspaceSets.push_back( Representation{ subspaceMatrix, subspaceVector } );
+        subspaceSets[ subspace ] = Representation{ subspaceMatrix, subspaceVector };
     }
 
     matrix_t<Number> depMatrix( depIndices.size(), composedSet.dimension() );
