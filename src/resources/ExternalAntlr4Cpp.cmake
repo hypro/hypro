@@ -104,4 +104,4 @@ add_imported_library(ANTLR4 SHARED ${ANTLR4CPP_SHARED_LIBS} ${ANTLR4CPP_INCLUDE_
 
 add_dependencies(ANTLR4_STATIC antlr4cpp)
 add_dependencies(ANTLR4_SHARED antlr4cpp)
-add_dependencies(resources ANTLR4_STATIC ANTLR4_SHARED)
+add_dependencies(hypro_resources ANTLR4_STATIC ANTLR4_SHARED)

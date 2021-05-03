@@ -20,4 +20,5 @@ set( GLPK_LIBRARIES "${CMAKE_SOURCE_DIR}/src/resources/glpk-${glpk_version}/buil
 add_imported_library(GLPK STATIC "${GLPK_LIBRARIES}" "${GLPK_INCLUDE_DIR}")
 
 add_dependencies(GLPK_STATIC glpk)
-add_dependencies(resources GLPK_STATIC)
+add_dependencies(hypro_resources GLPK_STATIC)
+

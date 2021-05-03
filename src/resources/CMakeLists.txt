@@ -2,7 +2,7 @@
 # initialize lists for include directories and library files
 set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 
-add_custom_target(resources)
+add_custom_target(hypro_resources)
 set(RESSOURCES_FLAGS "-Wno-error ${CMAKE_CXX_FLAGS} -Wno-error" )
 #message("Ressoures flags: ${RESSOURCES_FLAGS}")
 

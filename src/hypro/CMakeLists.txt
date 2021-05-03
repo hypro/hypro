@@ -11,7 +11,7 @@ list(FILTER sources EXCLUDE REGEX MHyPro.cpp|MReach.cpp|CompareMHyProAndCORA/exa
 #message(STATUS "sources after filtering: ${sources}")
 
 add_library(${PROJECT_NAME}-objects OBJECT ${sources})
-add_dependencies(${PROJECT_NAME}-objects resources)
+add_dependencies(${PROJECT_NAME}-objects hypro_resources)
 target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC EIGEN3 COCOA_SHARED Boost_SHARED Boost_program_options_SHARED carl-shared GMP_SHARED GMPXX_SHARED GLPK_STATIC ANTLR4_SHARED clp_STATIC coinUtils_STATIC z3_SHARED)
 target_include_directories(${PROJECT_NAME}-objects
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
@@ -108,7 +108,7 @@ target_include_directories(${PROJECT_NAME}-objects
 	)
 
 	add_custom_target(${PROJECT_NAME} DEPENDS ${PROJECT_NAME}-shared ${PROJECT_NAME}-static)
-	add_dependencies(${PROJECT_NAME} resources)
+	add_dependencies(${PROJECT_NAME} hypro_resources)
 
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
