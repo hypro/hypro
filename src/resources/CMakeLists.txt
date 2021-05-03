@@ -6,10 +6,12 @@ add_custom_target(hypro_resources)
 set(RESSOURCES_FLAGS "-Wno-error ${CMAKE_CXX_FLAGS} -Wno-error" )
 #message("Ressoures flags: ${RESSOURCES_FLAGS}")
 
-# Enable ExternalProject CMake module
+# Load modules
 include(ExternalProject)
-# enable fetch content module, new in cmake 3.11
 include(FetchContent)
+if(DEVELOPER)
+	include(CMakePrintHelpers)
+endif()
 
 # Set default ExternalProject root directory
 set(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources )
