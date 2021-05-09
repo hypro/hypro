@@ -1,5 +1,7 @@
 var NAVTREEINDEX7 =
 {
+"classhypro_1_1_orthogonal_polyhedron.html#aece1b5af9b030fbce792129f6b3a7085":[8,0,2,175,8],
+"classhypro_1_1_orthogonal_polyhedron.html#afb4bef4572296905f6e25c1fa7e08317":[8,0,2,175,22],
 "classhypro_1_1_orthogonal_polyhedron_t.html":[8,0,2,176],
 "classhypro_1_1_orthogonal_polyhedron_t.html#a0336066fca9f8d262cc41cf73d5529c4":[8,0,2,176,1],
 "classhypro_1_1_orthogonal_polyhedron_t.html#a095f75ae0847af3b61e3fd12f261700a":[8,0,2,176,35],
@@ -247,7 +249,5 @@ var NAVTREEINDEX7 =
 "classhypro_1_1_project_op.html#acb7add8d798301dd30ddbe981d76978e":[8,0,2,194,1],
 "classhypro_1_1_project_op.html#ae7ece57d2f1b38823085b3f5222d768e":[8,0,2,194,4],
 "classhypro_1_1_project_op.html#aebc8e09163887a2dc4dcf5f73ea06e9d":[8,0,2,194,10],
-"classhypro_1_1_project_op.html#af1bf41be30b2c41e3552deb20ab19ea3":[8,0,2,194,14],
-"classhypro_1_1_project_op.html#af47c6ddc5d34ec50f7409e88da78cb4c":[8,0,2,194,0],
-"classhypro_1_1_project_op.html#af672a70ac9a0498f9696c93215961f1a":[8,0,2,194,3]
+"classhypro_1_1_project_op.html#af1bf41be30b2c41e3552deb20ab19ea3":[8,0,2,194,14]
 };

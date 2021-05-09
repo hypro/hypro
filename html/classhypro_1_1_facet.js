@@ -31,6 +31,7 @@ var classhypro_1_1_facet =
     [ "isBelow", "classhypro_1_1_facet.html#a7aa390f83b35a03439d5c7927733ef97", null ],
     [ "isNeighbor", "classhypro_1_1_facet.html#abcb0972f70ed0bc042c56629f4b72b4a", null ],
     [ "neighbors", "classhypro_1_1_facet.html#a3322f1b405ef40494c0ac1c8b19a9620", null ],
+    [ "operator=", "classhypro_1_1_facet.html#a2f4a71ed32a910e4d3329a1440b5ec48", null ],
     [ "removeNeighbor", "classhypro_1_1_facet.html#ad7ffd732a3b3ec24745a12e0011eb0b2", null ],
     [ "removePointFromOutsideSet", "classhypro_1_1_facet.html#a9cf545028fe72d7ca0b5630c49f590ee", null ],
     [ "rNeighbors", "classhypro_1_1_facet.html#a93e301d40a6768b3772841b6e28c5503", null ],

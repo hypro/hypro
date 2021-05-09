@@ -257,21 +257,21 @@ Please use a more specific name by including a (larger) part of the path!
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/ScaleOp.h:26: warning: Compound hypro::ScaleData is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/SupportFunctionNew/TrafoOp.h:27: warning: Compound hypro::TrafoData is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:6: warning: documented symbol `hypro::ExactQuickhull::QuickhullAlgorithm' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:19: warning: documented symbol `void hypro::ExactQuickhull::compute' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:70: warning: documented symbol `void hypro::ExactQuickhull::removeDuplicateInputs' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:81: warning: documented symbol `void hypro::ExactQuickhull::makeTrivialHull' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:88: warning: documented symbol `void hypro::ExactQuickhull::buildInitialPolytope' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:144: warning: documented symbol `bool hypro::ExactQuickhull::constructInitialFacet' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:198: warning: documented symbol `std::tuple< bool, size_t > hypro::ExactQuickhull::findFurthestPoint' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:221: warning: documented symbol `void hypro::ExactQuickhull::processPoints' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:237: warning: documented symbol `ExactQuickhull< Number, Euclidian >::facet_ind_t hypro::ExactQuickhull::getFacetToProcess' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:244: warning: documented symbol `void hypro::ExactQuickhull::buildCone' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:280: warning: documented symbol `void hypro::ExactQuickhull::constructLowerDimensional' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:322: warning: documented symbol `void hypro::ExactQuickhull::findConeNeighbors' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:330: warning: documented symbol `void hypro::ExactQuickhull::partitionAllVertices' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:343: warning: documented symbol `void hypro::ExactQuickhull::initialPartition' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:352: warning: documented symbol `ExactQuickhull< Number, Euclidian >::facetVector_t & hypro::ExactQuickhull::getFacets' was not declared or defined.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:357: warning: documented symbol `size_t hypro::ExactQuickhull::pointSize' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:21: warning: documented symbol `void hypro::ExactQuickhull::compute' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:72: warning: documented symbol `void hypro::ExactQuickhull::removeDuplicateInputs' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:83: warning: documented symbol `void hypro::ExactQuickhull::makeTrivialHull' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:90: warning: documented symbol `void hypro::ExactQuickhull::buildInitialPolytope' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:148: warning: documented symbol `bool hypro::ExactQuickhull::constructInitialFacet' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:202: warning: documented symbol `std::tuple< bool, size_t > hypro::ExactQuickhull::findFurthestPoint' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:225: warning: documented symbol `void hypro::ExactQuickhull::processPoints' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:241: warning: documented symbol `ExactQuickhull< Number, Euclidian >::facet_ind_t hypro::ExactQuickhull::getFacetToProcess' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:248: warning: documented symbol `void hypro::ExactQuickhull::buildCone' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:284: warning: documented symbol `void hypro::ExactQuickhull::constructLowerDimensional' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:326: warning: documented symbol `void hypro::ExactQuickhull::findConeNeighbors' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:334: warning: documented symbol `void hypro::ExactQuickhull::partitionAllVertices' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:347: warning: documented symbol `void hypro::ExactQuickhull::initialPartition' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:356: warning: documented symbol `ExactQuickhull< Number, Euclidian >::facetVector_t & hypro::ExactQuickhull::getFacets' was not declared or defined.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/quickhull/quickhull_exact/Quickhull.tpp:361: warning: documented symbol `size_t hypro::ExactQuickhull::pointSize' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/ContextFactory.h:19: warning: documented symbol `Singleton< ContextFactory< State > >' was not declared or defined.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/contexts/RectangularContext.tpp:5: warning: no matching class member found for 
   template < State >
@@ -1095,7 +1095,7 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIFlowpipeConstruction.h:34: warning: Member constructErrorBoxes(Number const &delta, matrix_t< Number > const &flowMatrix, Representation const &initialSet, matrix_t< Number > const &trafoMatrix, Box< Number > const &externalInput) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIFlowpipeConstruction.h:37: warning: Member aggregate(int segmentsPerBlock, std::vector< Representation > &valuationSets) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/reachability/workers/LTIFlowpipeConstruction.tpp:137: warning: Member aggregate(size_t segmentsPerBlock, std::vector< IndexedValuationSet< Representation >> &enabled) (function) of namespace hypro is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:444: warning: Member operator<<(std::ostream &_ostr, const Facet< Number > &_f) (function) of namespace hypro is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:446: warning: Member operator<<(std::ostream &_ostr, const Facet< Number > &_f) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/Condition.tpp:86: warning: Member combine(const Condition< Number > &lhs, const Condition< Number > &rhs, const std::vector< std::string > haVar, const std::vector< std::string > lhsVar, const std::vector< std::string > rhsVar) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/decomposeConstraintSet.h:8: warning: Member decomposeConstraintSet(Rep< Number, Settings > &in, const Decomposition &decomposition, std::vector< Rep< Number, Settings >> &result) (function) of namespace hypro is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/HybridAutomaton/decomposition/DecompositionMethods.h:19: warning: Member getRepresentationForAutomaton(const HybridAutomaton< Number > &ha) (function) of namespace hypro is not documented.
@@ -1762,31 +1762,32 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:35: warning: Member Dictionary(const Dictionary &rhs) (function) of class hypro::Dictionary is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:36: warning: Member Dictionary(const matrix_t< Number > &rhs, std::vector< Eigen::Index > base, std::vector< Eigen::Index > cobase) (function) of class hypro::Dictionary is not documented.
 /home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:37: warning: Member Dictionary(const matrix_t< Number > &rhs, std::vector< Eigen::Index > base, std::vector< Eigen::Index > cobase, ConstrainSet< Number > constrains) (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:49: warning: Member cobasis() const  (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:51: warning: Member constrainSet() const  (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:53: warning: Member tableau() const  (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:65: warning: Member printDictionary() const  (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:105: warning: Member isPrimalFeasible() const  (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:107: warning: Member isDualFeasible() const  (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:109: warning: Member isOptimal() const  (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:115: warning: Member reverse_old(const Eigen::Index i, const Eigen::Index j) (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:117: warning: Member reverseDual(const Eigen::Index i, const Eigen::Index j, const std::vector< Eigen::Index > &availableIndices) (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:118: warning: Member reverseDual_old(const Eigen::Index i, const Eigen::Index j, const std::vector< Eigen::Index > availableIndices) (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:120: warning: Member isLexMin() (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:122: warning: Member toPoint() const  (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:134: warning: Member setZeros(const std::vector< Eigen::Index > &indices) (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:141: warning: Member nonSlackToBase(std::vector< vector_t< Number >> &linealtySpace) (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:153: warning: Member findCones() (function) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:155: warning: Member operator==(const Dictionary< Number > &lhs, const Dictionary< Number > &rhs) (friend) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:179: warning: Member operator!=(const Dictionary< Number > &lhs, const Dictionary< Number > &rhs) (friend) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:183: warning: Member operator<<(std::ostream &_ostr, const Dictionary< Number > &d) (friend) of class hypro::Dictionary is not documented.
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:101: warning: argument 'available' of command @param is not found in the argument list of hypro::Dictionary< Number >::selectDualBlandPivot(Eigen::Index &i, Eigen::Index &j, const std::vector< Eigen::Index > availableIndices)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:103: warning: The following parameters of hypro::Dictionary::selectDualBlandPivot(Eigen::Index &i, Eigen::Index &j, const std::vector< Eigen::Index > availableIndices) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:38: warning: Member operator=(const Dictionary &other)=default (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:50: warning: Member cobasis() const  (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:52: warning: Member constrainSet() const  (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:54: warning: Member tableau() const  (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:66: warning: Member printDictionary() const  (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:106: warning: Member isPrimalFeasible() const  (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:108: warning: Member isDualFeasible() const  (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:110: warning: Member isOptimal() const  (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:116: warning: Member reverse_old(const Eigen::Index i, const Eigen::Index j) (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:118: warning: Member reverseDual(const Eigen::Index i, const Eigen::Index j, const std::vector< Eigen::Index > &availableIndices) (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:119: warning: Member reverseDual_old(const Eigen::Index i, const Eigen::Index j, const std::vector< Eigen::Index > availableIndices) (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:121: warning: Member isLexMin() (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:123: warning: Member toPoint() const  (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:135: warning: Member setZeros(const std::vector< Eigen::Index > &indices) (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:142: warning: Member nonSlackToBase(std::vector< vector_t< Number >> &linealtySpace) (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:154: warning: Member findCones() (function) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:156: warning: Member operator==(const Dictionary< Number > &lhs, const Dictionary< Number > &rhs) (friend) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:180: warning: Member operator!=(const Dictionary< Number > &lhs, const Dictionary< Number > &rhs) (friend) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:184: warning: Member operator<<(std::ostream &_ostr, const Dictionary< Number > &d) (friend) of class hypro::Dictionary is not documented.
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:102: warning: argument 'available' of command @param is not found in the argument list of hypro::Dictionary< Number >::selectDualBlandPivot(Eigen::Index &i, Eigen::Index &j, const std::vector< Eigen::Index > availableIndices)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:104: warning: The following parameters of hypro::Dictionary::selectDualBlandPivot(Eigen::Index &i, Eigen::Index &j, const std::vector< Eigen::Index > availableIndices) are not documented:
   parameter 'i'
   parameter 'j'
   parameter 'availableIndices'
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:130: warning: argument 'indices.' of command @param is not found in the argument list of hypro::Dictionary< Number >::setOnes(const std::vector< Eigen::Index > &indices)
-/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:132: warning: The following parameters of hypro::Dictionary::setOnes(const std::vector< Eigen::Index > &indices) are not documented:
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:131: warning: argument 'indices.' of command @param is not found in the argument list of hypro::Dictionary< Number >::setOnes(const std::vector< Eigen::Index > &indices)
+/home/travis/build/hypro/hypro/src/hypro/algorithms/convexHull/Dictionary.h:133: warning: The following parameters of hypro::Dictionary::setOnes(const std::vector< Eigen::Index > &indices) are not documented:
   parameter 'indices'
 /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:23: warning: Member BOUND_TYPE (enumeration) of class hypro::DifferenceBoundsT is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/DifferenceBounds/DifferenceBounds.h:29: warning: Member Settings (typedef) of class hypro::DifferenceBoundsT is not documented.
@@ -2019,36 +2020,37 @@ Possible candidates:
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:72: warning: Member Facet(std::vector< Point< Number >> r, const Point< Number > &p, const std::vector< Point< Number >> &insidePoints) (function) of class hypro::Facet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:78: warning: Member Facet(std::vector< Point< Number >> r, const Point< Number > &p, const Point< Number > &insidePoint1, const Point< Number > &insidePoint2) (function) of class hypro::Facet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:84: warning: Member Facet(const std::set< vector_t< Number >> &_vertices) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:117: warning: Member rVertices() (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:119: warning: Member vertices() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:121: warning: Member rNeighbors() (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:123: warning: Member neighbors() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:125: warning: Member addNeighbor(const std::shared_ptr< Facet< Number >> &facet) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:134: warning: Member getNormal() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:136: warning: Member getScalar() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:141: warning: Member removeNeighbor(const std::shared_ptr< Facet< Number >> &facet) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:151: warning: Member setPoints(std::vector< Point< Number >> &&points, const Point< Number > &_insidePoint) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:166: warning: Member setPoints(std::vector< Point< Number >> &&points, Point< Number > insidePoint1, Point< Number > insidePoint2) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:189: warning: Member setPoints(std::vector< Point< Number >> &&points, const std::vector< Point< Number >> &insidePoints) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:214: warning: Member setPoints(std::vector< Point< Number >> &&points, const std::vector< Point< Number >> &outsidePoints, const std::vector< Point< Number >> &currentOutside, Point< Number > _insidePoint) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:263: warning: Member addPoint(Point< Number > p) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:279: warning: Member getNormalVector() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:322: warning: Member getScalarVector() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:324: warning: Member halfspace() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:330: warning: Member begin() (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:332: warning: Member begin() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:334: warning: Member end() (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:336: warning: Member end() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:346: warning: Member isBelow(const Point< Number > &p) const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:358: warning: Member isAbove(const Point< Number > &p) const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:363: warning: Member getDist(const Point< Number > &p) const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:368: warning: Member addPointToOutsideSet(Point< Number > point) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:372: warning: Member getOutsideSet() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:377: warning: Member removePointFromOutsideSet(const Point< Number > &_point) (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:391: warning: Member furthest_Point() const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:408: warning: Member isNeighbor(const std::shared_ptr< Facet< Number >> &facet) const  (function) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:419: warning: Member operator==(const Facet< Number > &_f1, const Facet< Number > &_f2) (friend) of class hypro::Facet is not documented.
-/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:440: warning: Member operator!=(const Facet< Number > &_f1, const Facet< Number > &_f2) (friend) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:109: warning: Member operator=(const Facet &other)=default (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:119: warning: Member rVertices() (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:121: warning: Member vertices() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:123: warning: Member rNeighbors() (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:125: warning: Member neighbors() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:127: warning: Member addNeighbor(const std::shared_ptr< Facet< Number >> &facet) (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:136: warning: Member getNormal() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:138: warning: Member getScalar() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:143: warning: Member removeNeighbor(const std::shared_ptr< Facet< Number >> &facet) (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:153: warning: Member setPoints(std::vector< Point< Number >> &&points, const Point< Number > &_insidePoint) (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:168: warning: Member setPoints(std::vector< Point< Number >> &&points, Point< Number > insidePoint1, Point< Number > insidePoint2) (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:191: warning: Member setPoints(std::vector< Point< Number >> &&points, const std::vector< Point< Number >> &insidePoints) (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:216: warning: Member setPoints(std::vector< Point< Number >> &&points, const std::vector< Point< Number >> &outsidePoints, const std::vector< Point< Number >> &currentOutside, Point< Number > _insidePoint) (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:265: warning: Member addPoint(Point< Number > p) (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:281: warning: Member getNormalVector() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:324: warning: Member getScalarVector() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:326: warning: Member halfspace() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:332: warning: Member begin() (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:334: warning: Member begin() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:336: warning: Member end() (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:338: warning: Member end() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:348: warning: Member isBelow(const Point< Number > &p) const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:360: warning: Member isAbove(const Point< Number > &p) const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:365: warning: Member getDist(const Point< Number > &p) const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:370: warning: Member addPointToOutsideSet(Point< Number > point) (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:374: warning: Member getOutsideSet() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:379: warning: Member removePointFromOutsideSet(const Point< Number > &_point) (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:393: warning: Member furthest_Point() const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:410: warning: Member isNeighbor(const std::shared_ptr< Facet< Number >> &facet) const  (function) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:421: warning: Member operator==(const Facet< Number > &_f1, const Facet< Number > &_f2) (friend) of class hypro::Facet is not documented.
+/home/travis/build/hypro/hypro/src/hypro/datastructures/Facet.h:442: warning: Member operator!=(const Facet< Number > &_f1, const Facet< Number > &_f2) (friend) of class hypro::Facet is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Fan.h:20: warning: Member cones (typedef) of class hypro::Fan is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Fan.h:33: warning: Member Fan(const Fan &_orig) (function) of class hypro::Fan is not documented.
 /home/travis/build/hypro/hypro/src/hypro/representations/Polytopes/Fan.h:41: warning: Member get() const  (function) of class hypro::Fan is not documented.

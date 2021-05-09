@@ -18,6 +18,7 @@ var classhypro_1_1_dictionary =
     [ "isPrimalFeasible", "classhypro_1_1_dictionary.html#af5b45608cedaf14db298ff65d2424c4f", null ],
     [ "nonSlackToBase", "classhypro_1_1_dictionary.html#a75e63ae2dfe9f4230904067e12d854bd", null ],
     [ "nonSlackToBase", "classhypro_1_1_dictionary.html#a87ba992f933d9cce499f17ba6154d4f7", null ],
+    [ "operator=", "classhypro_1_1_dictionary.html#a7f031c23fd6b224582ffa3ec6daf21ae", null ],
     [ "pivot", "classhypro_1_1_dictionary.html#aa33d4272de177048425bb86842f1c027", null ],
     [ "pivotDictionary", "classhypro_1_1_dictionary.html#a40f6b112fa5fc8e729f1d78357fb6f8a", null ],
     [ "printDictionary", "classhypro_1_1_dictionary.html#af60c39f6eb9d35e23d1a9925a3ede97d", null ],

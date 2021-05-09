@@ -1,5 +1,7 @@
 var NAVTREEINDEX4 =
 {
+"classhypro_1_1_fan.html#a5c3fe73d15b2329cca7d77c7163c26c0":[8,0,2,65,5],
+"classhypro_1_1_fan.html#a78097a508744e3fe56e75a317f564749":[8,0,2,65,8],
 "classhypro_1_1_fan.html#a7cc84bd7a23c4a7efa62eddb6adce614":[8,0,2,65,2],
 "classhypro_1_1_fan.html#ac331b2b17841ff8b684214377ac5926b":[8,0,2,65,1],
 "classhypro_1_1_fan.html#ac4638205f3962bd94e69ea02d7857a7a":[8,0,2,65,0],
@@ -247,7 +249,5 @@ var NAVTREEINDEX4 =
 "classhypro_1_1_halfspace.html#a0f1b1674a6bc28e92e8402efca56d019":[8,0,2,107,33],
 "classhypro_1_1_halfspace.html#a1157c32e2bb145ebf28dd78deb3b22c8":[8,0,2,107,19],
 "classhypro_1_1_halfspace.html#a11f687c27d17271bf945558e0e42c124":[8,0,2,107,32],
-"classhypro_1_1_halfspace.html#a28a4e3bf79637219a6e636b086bbd9b7":[8,0,2,107,23],
-"classhypro_1_1_halfspace.html#a28a4e3bf79637219a6e636b086bbd9b7":[8,0,2,107,24],
-"classhypro_1_1_halfspace.html#a37412da1ef224814a1bef59a76948d70":[8,0,2,107,34]
+"classhypro_1_1_halfspace.html#a28a4e3bf79637219a6e636b086bbd9b7":[8,0,2,107,23]
 };
