@@ -16,6 +16,7 @@ class UrgencyWorker {
   private:
     using Number = typename Representation::NumberType;
     using Flowpipe = std::vector<IndexedValuationSet<Representation>>;
+    using JumpSuccessors = std::vector<JumpSuccessor<Representation>>;
 
     struct PreviousSegmentGen;
 
@@ -29,7 +30,8 @@ class UrgencyWorker {
 
     REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task ) const;
 
-    std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( const ReachTreeNode<Representation>& task ) const;
+    void computeJumpSuccessors( const ReachTreeNode<Representation>& task ) const;
+    const JumpSuccessors& getJumpSuccessors() const { return mJumpSuccessors; }
 
   private:
     REACHABILITY_RESULT handleSegment(
@@ -43,6 +45,8 @@ class UrgencyWorker {
     tNumber mLocalTimeHorizon;                        ///< local time horizon
     TimeTransformationCache<Number>& mTrafoCache;     ///< cache for matrix exponential
     Flowpipe mFlowpipe;                               ///< Storage of computed time successors
+    JumpSuccessors mJumpSuccessors;                   ///< Storage of computed jump successors
+
 
     size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
 };
