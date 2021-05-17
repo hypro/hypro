@@ -3,82 +3,104 @@
 namespace hypro {
 
 template <typename Representation>
-REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task ) const {
+REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task ) {
     Location<Number>* loc = task.getLocation();
     Representation initialSet = task.getInitialSet();
 
     // initial set should not consider urgent guards, so it is treated separately
-    auto initialInv = intersect( initialSet, loc->getInvariant() ).second;
-    assert( !initialSet.empty() );
-    task.getFlowpipe().push_back( initialInv );
-    task.getTimings().push_back( 0 );
-    if ( ltiIntersectBadStates( initialInv, loc, mHybridAutomaton ).first != CONTAINMENT::NO ) {
+    auto [containmentInitial, constraintedInitial] = intersect( initialSet, loc->getInvariant() );
+    assert( containmentInitial != CONTAINMENT::NO );
+    addSegment( constraintedInitial, 0 );
+    if ( ltiIntersectBadStates( constraintedInitial, loc, mHybridAutomaton ).first != CONTAINMENT::NO ) {
         return REACHABILITY_RESULT::UNKNOWN;
     }
 
-    Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, mSettings.timeStep ), mSettings.timeStep );
+    // first segment
+    Representation firstSegment = constructFirstSegment(
+        initialSet,
+        loc->getLinearFlow(),
+        mTrafoCache.transformationMatrix( loc, mSettings.timeStep ),
+        mSettings.timeStep );
 
-    auto [containment, firstSegmentInv] = intersect( firstSegment, loc->getInvariant() );
-    //If the first segment did not fulfill the invariant of the location, the jump here should not have been made
-    assert( containment != CONTAINMENT::NO );
-
-    // set difference with urgent guards
-    std::vector<Representation> firstSegments = urgentSetDifference( task, firstSegmentInv );
-    
-
-    for ( const auto& segment : firstSegments ) {
-        if ( segment.empty() ) continue;
-        task.getFlowpipe().push_back( segment );
-        task.getTimings().push_back( 0 );
-    }
-
-    if ( std::any_of( firstSegments.begin(), firstSegments.end(), []( const auto& segment ) {
-            return ltiIntersectBadStates( segment, loc, mHybridAutomaton ).first != CONTAINMENT::NO; } ) ) {
+    REACHABILITY_RESULT firstSegmentSafety = handleSegment( task, firstSegment, 0 );
+    if ( firstSegmentSafety != REACHABILITY_RESULT::SAFE ) {
         return REACHABILITY_RESULT::UNKNOWN;
     }
 
-    std::size_t flowpipeIndex = 0;
+    // time elapse
+    PreviousSegmentGen prevGen;
     for ( std::size_t segmentIndex = 1; segmentIndex < mNumSegments; ++segmentIndex ) {
-        // iterate over all previous segments
-        for ( ; task.getTimings()[ flowpipeIndex ] == segmentIndex - 1; ++ flowpipeIndex ) {
-            Representation previousSegment = task.getFlowpipe()[ flowpipeIndex ];
+        for ( auto prevSegment = prevGen.next( segmentIndex ); prevSegment; prevSegment = prevGen.next( segmentIndex ) ) {
             Representation nextSegment = applyTimeEvolution( previousSegment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
-            Representation nextSegmentInv = intersect( firstSegment, loc->getInvariant() ).second;
-            std::vector nextSegments = urgentSetDifference( task, nextSegmentInv );
-            if ( std::any_of( nextSegments.begin(), nextSegments.end(), []( const auto& segment ) {
-                    return ltiIntersectBadStates( segment, loc, mHybridAutomaton ).first != CONTAINMENT::NO; } ) ) {
+            REACHABILITY_RESULT safety = handleSegment( task, nextSegment, segmentIndex );
+            if ( safety != REACHABILITY_RESULT::SAFE ) {
                 return REACHABILITY_RESULT::UNKNOWN;
-            }
-            for ( const auto& segment : nextSegments ) {
-                if ( segment.empty() ) continue;
-                task.getFlowpipe().push_back( segment );
-                task.getTimings().push_back( segmentIndex );
             }
         }
     }
-    return REACHABILITY_RESULT::SAFE;
 
+    return REACHABILITY_RESULT::SAFE;
 }
 
 template <typename Representation>
-std::vector<Representation> UrgencyWorker<Representation>::urgentSetDifference( const ReachTreeNode<Representation>& task, const Representation& segment ) {
-    std::vector<Representation> segments{ segment };
-    for ( const auto& transitionPtr : task.getLocation().getTransitions() ) {
-        std::vector<Representation> setDifferenceSegments;
-        if ( transitionPtr->isUrgent() && std::find( task.getIgnoreUrgent().begin(), task.getIgnoreUrgent().end(), transitionPtr.get() ) == task.getIgnoreUrgent().end() ) {
-            while( !segments.empty() ) {
-                Representation nextSegment = segments.back();
-                segments.pop_back();
-                std::vector<Representation> computedSetDifference = setDifference( nextSegment, transitionPtr->getGuard() );
-                setDifferenceSegments.insert( setDifferenceSegments.end(), computedSetDifference.begin(), computedSetDifference.end() );
-            }
-        }
-        segments = setDifferenceSegments;
+REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
+        const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing ) {
+    Location<Number>* loc = task.getLocation();
+    ltiUrgencyHandler<Representation> urgencyHandler;
+
+    // invariant
+    auto [containment, constrainedSegment] = intersect( segment, loc->getInvariant() );
+    if ( containment == CONTAINMENT::NO ) {
+        return REACHABILITY_RESULT::SAFE;
     }
-    return segments;
+
+    // urgent guards
+    std::vector<Representation> nonUrgentEnabled{ constrainedSegment };
+    for ( auto trans : task.getUrgent() ) {
+        nonUrgentEnabled = urgencyHandler.urgentSetDifference( nonUrgentEnabled, trans );
+    }
+    addSegment( nonUrgentEnabled, timing );
+
+    // safety check
+    if ( std::any_of( nonUrgentEnabled.begin(), nonUrgentEnabled.end(), []( const auto& splitSegment ) {
+            return ltiIntersectBadStates( splitSegment, loc, mHybridAutomaton ).first != CONTAINMENT::NO } ) ) {
+        return REACHABILITY_RESULT::UNKNOWN;
+    }
+    return REACHABILITY_RESULT::SAFE;
 }
 
 template <typename Representation>
 std::vector<JumpSuccessor<Representation>> UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task ) const {
-
 }
+
+template <typename Representation>
+struct UrgencyWorker<Representation>::PreviousSegmentGen {
+    std::size_t current = 1; // index 0 is initial set
+
+    std::optional<Representation> next( SegmentInd nextSegment ) {
+        if ( current < mFlowpipe.size() ) {
+            indexedSegment = mFlowpipe.at( current );
+            if ( indexedSegment.index == nextSegment - 1 ) {
+                current += 1;
+                return indexedSegment.valuationSet;
+            }
+        }
+        return std::nullopt;
+    }
+}
+
+template <typename Representation>
+void UrgencyWorker<Representation>::addSegment( const Representation& segment, SegmentInd timing ) {
+    mFlowpipe.push_back( IndexedValuationSet<Representation>{ segment, timing } );
+}
+
+template <typename Representation>
+void UrgencyWorker<Representation>::addSegment( const std::vector<Representation>& segment, SegmentInd timing ) {
+    for ( auto splitSegment : segment ) {
+        if ( !splitSegment.empty() ) {
+            mFlowpipe.push_back( IndexedValuationSet<Representation>{ splitSegment, timing } );
+        }
+    }
+}
+
+} // namespace hypro
