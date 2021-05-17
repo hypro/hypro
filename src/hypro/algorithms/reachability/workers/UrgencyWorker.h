@@ -11,6 +11,14 @@
 
 namespace hypro {
 
+/**
+ * @brief   Class implementing a worker for automata with urgent transitions.
+ * @details Implements methods for computing time elapse and discrete transitions.
+ *          Repeated calling of these methods allows implementation of reachability analysis.
+ *          The UrgencyWorker considers urgent transitions by computing the set difference
+ *          of the reachable set and urgent guards.
+ * @tparam Representation   The used state set representation.
+ */
 template <typename Representation>
 class UrgencyWorker {
   private:
@@ -28,12 +36,38 @@ class UrgencyWorker {
         , mLocalTimeHorizon( localTimeHorizon )
         , mTrafoCache( trafoCache ) {}
 
+    /**
+     * @brief Computes the states reachable by letting time elapse.
+     * @param task Used to access the the location, initial set and urgent transitions.
+     * @return Safety after time elapse.
+     */
     REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task ) const;
+    /**
+     * @brief Getter function for the computed flowpipe.
+     * @details The flowpipe is stored as pairs of valuation set and segment index,
+     *          since set difference computation can split segments.
+     * @return Pairs of flowpipe segments and their timing index.
+     */
+    const Flowpipe& getFlowpipe() const { return mFlowpipe };
 
+    /**
+     * @brief Computes the states reachable by taking a discrete transition.
+     * @details Performs aggregation and applies the reset.
+     * @param task Used to access the location.
+     */
     void computeJumpSuccessors( const ReachTreeNode<Representation>& task ) const;
+    /**
+     * @brief Getter function for the computed jump successors.
+     */
     const JumpSuccessors& getJumpSuccessors() const { return mJumpSuccessors; }
 
   private:
+    /**
+     * @brief Performs operations on the segment obtained by letting time elapse.
+     * @details Applies intersection with the invariant, set difference with urgent guards
+     *          and intersection with bad states.
+     * @return Safety of the segment.
+     */
     REACHABILITY_RESULT handleSegment(
         const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing );
     void addSegment( const Representation& segment, SegmentInd timing );
