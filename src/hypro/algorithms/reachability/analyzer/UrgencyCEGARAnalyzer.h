@@ -54,7 +54,7 @@ class UrgencyCEGARAnalyzer {
     auto refineNode( const RefinePoint& refine )
       -> ReachTreeNode<Representation>*;
 
-    auto createChildNode( const TimedValuationSet<Representation>& jsucc, Transition<Number>* transition, ReachTreeNode<Representation>* parent )
+    auto createChildNode( const TimedValuationSet<Representation>& jsucc, const Transition<Number>* transition, ReachTreeNode<Representation>* parent )
       -> ReachTreeNode<Representation>*;
 };
 

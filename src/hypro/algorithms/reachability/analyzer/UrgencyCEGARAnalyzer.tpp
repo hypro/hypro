@@ -53,7 +53,7 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 
 template <typename Representation>
 ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createChildNode( 
-        const TimedValuationSet<Representation>& jsucc, Transition<Number>* transition, ReachTreeNode<Representation>* parent ) {
+        const TimedValuationSet<Representation>& jsucc, const Transition<Number>* transition, ReachTreeNode<Representation>* parent ) {
     carl::Interval<SegmentInd> const& initialSetDuration = parent->getTimings();
     // add one to upper to convert from segment indices to time points
     // multiply by timeStepFactor to convert from analyzer specific timeStep to fixedTimeStep
@@ -71,6 +71,7 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createChild
 template <typename Representation>
 auto UrgencyCEGARAnalyzer<Representation>::findRefinementNode( const ReachTreeNode<Representation>* node )
     -> RefinePoint {
+    assert( false && "findRefinementNode not implemented yet" );
     return RefinePoint{ nullptr, nullptr };
 }
 
@@ -114,12 +115,12 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path,
               mFixedParameters.localTimeHorizon,
               transformationCache };
 
-        auto safety = urgencyWorker.computeTimeSuccessors( refinedNode );
+        auto safety = urgencyWorker.computeTimeSuccessors( *refinedNode );
         if ( safety != REACHABILITY_RESULT::SAFE ) {
             return std::make_pair( false, findRefinementNode( refinedNode ) );
         }
         // create children
-        urgencyWorker.computeJumpSuccessors( refinedNode );
+        urgencyWorker.computeJumpSuccessors( *refinedNode );
         for ( const auto& [transition, timedValuationSets] : urgencyWorker.getJumpSuccessors() ) {
             for ( const auto jsucc : timedValuationSets ) {
                 createChildNode( jsucc, transition, refinedNode );
@@ -128,7 +129,7 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path,
     }
 
     // refined node is at the end of the path and it is safe
-    if ( refinedNode->getPath() == path ) {
+    if ( refinedNode->getPath().elements == path.elements ) {
         for ( auto childNode : refinedNode->getChildren() ) {
             mWorkQueue.push_front( childNode );
             return std::make_pair( true, refine );
@@ -138,7 +139,7 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path,
     // check that the transition on path can be taken
     bool matched = false;
     for ( auto childNode : refinedNode->getChildren() ) {
-        if ( childNode->getTransition() == path.elements.at( refinedNode->getDepth().second ) ) {
+        if ( childNode->getTransition() == path.elements.at( refinedNode->getDepth() ).second ) {
             matched = true;
             break;
         }
@@ -149,16 +150,16 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path,
     }
 
     // refinementAnalyzer continues computation along the rest of the path, starting from refinedNode
-    auto [pathPrefix, pathPostfix] = path.split( refinedNode.getDepth() );
+    auto [pathPrefix, pathSuffix] = path.split( refinedNode->getDepth() );
     assert( pathPrefix.elements == refinedNode->getPath().elements );
-    assert( pathPostfix.rootLocation == refinedNode->getLocation() );
+    assert( pathSuffix.rootLocation == refinedNode->getLocation() );
 
     auto refinementAnalyzer = RefinementAnalyzer<Representation>{
-        mHybridAutomaton,
+        *mHybridAutomaton,
         mFixedParameters,
         mParameters };
 
-    refinementAnalyzer.setRefinement( refinedNode, pathPostfix );
+    refinementAnalyzer.setRefinement( refinedNode, pathSuffix );
     auto res = refinementAnalyzer.run();
     if ( res.isSuccess() ) {
         // push unexplored node to the global queue

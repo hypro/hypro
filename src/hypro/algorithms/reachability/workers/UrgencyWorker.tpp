@@ -4,7 +4,7 @@ namespace hypro {
 
 template <typename Representation>
 REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task ) {
-    Location<Number>* loc = task.getLocation();
+    const Location<Number>* loc = task.getLocation();
     Representation initialSet = task.getInitialSet();
 
     // initial set should not consider urgent guards, so it is treated separately
@@ -31,7 +31,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
     PreviousSegmentGen prevGen;
     for ( std::size_t segmentIndex = 1; segmentIndex < mNumSegments; ++segmentIndex ) {
         for ( auto prevSegment = prevGen.next( segmentIndex ); prevSegment; prevSegment = prevGen.next( segmentIndex ) ) {
-            Representation nextSegment = applyTimeEvolution( prevSegment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
+            auto nextSegment = applyTimeEvolution( prevSegment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
             REACHABILITY_RESULT safety = handleSegment( task, nextSegment, segmentIndex );
             if ( safety != REACHABILITY_RESULT::SAFE ) {
                 return REACHABILITY_RESULT::UNKNOWN;
@@ -45,7 +45,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
 template <typename Representation>
 REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
         const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing ) {
-    Location<Number>* loc = task.getLocation();
+    const Location<Number>* loc = task.getLocation();
     ltiUrgencyHandler<Representation> urgencyHandler;
 
     // invariant
@@ -88,7 +88,7 @@ struct UrgencyWorker<Representation>::PreviousSegmentGen {
 
 template <typename Representation>
 void UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task ) {
-    Location<Number>* loc = task.getLocation();
+    const Location<Number>* loc = task.getLocation();
 
     //transition x enabled segments, segment ind
     std::vector<EnabledSets<Representation>> enabledSegments{};

@@ -14,15 +14,17 @@ struct Path {
 	Path( size_t numElements )
 		: elements( numElements ) {}
 
-    std::pair<Path<Number>, Path<Number>> split( std::size_t n ) {
+    std::pair<Path<Number>, Path<Number>> split( std::size_t n ) const {
         assert( n < elements.size() );
-        auto pathPrefix = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>>(
+        Path<Number> pathPrefix;
+        Path<Number> pathSuffix;
+        pathPrefix.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>>(
             elements.begin(), elements.begin() + n - 1 );
-        auto pathPostfix = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>>(
+        pathSuffix.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>>(
             elements.begin() + n, elements.end() );
-        return std::make_pair(
-            Path{ rootLocation, pathPrefix },
-            Path{ elements.at( n - 1 ).second->getTarget(), pathPostfix } );
+        pathPrefix.rootLocation = rootLocation;
+        pathSuffix.rootLocation = elements.at( n - 1 ).second->getTarget();
+        return std::make_pair( pathPrefix, pathSuffix );
     }
 };
 
