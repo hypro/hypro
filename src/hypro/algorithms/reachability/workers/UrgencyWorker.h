@@ -41,21 +41,21 @@ class UrgencyWorker {
      * @param task Used to access the the location, initial set and urgent transitions.
      * @return Safety after time elapse.
      */
-    REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task ) const;
+    REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task );
     /**
      * @brief Getter function for the computed flowpipe.
      * @details The flowpipe is stored as pairs of valuation set and segment index,
      *          since set difference computation can split segments.
      * @return Pairs of flowpipe segments and their timing index.
      */
-    const Flowpipe& getFlowpipe() const { return mFlowpipe };
+    const Flowpipe& getFlowpipe() const { return mFlowpipe; }
 
     /**
      * @brief Computes the states reachable by taking a discrete transition.
      * @details Performs aggregation and applies the reset.
      * @param task Used to access the location.
      */
-    void computeJumpSuccessors( const ReachTreeNode<Representation>& task ) const;
+    void computeJumpSuccessors( const ReachTreeNode<Representation>& task );
     /**
      * @brief Getter function for the computed jump successors.
      */

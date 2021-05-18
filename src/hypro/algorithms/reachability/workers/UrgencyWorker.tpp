@@ -31,7 +31,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
     PreviousSegmentGen prevGen;
     for ( std::size_t segmentIndex = 1; segmentIndex < mNumSegments; ++segmentIndex ) {
         for ( auto prevSegment = prevGen.next( segmentIndex ); prevSegment; prevSegment = prevGen.next( segmentIndex ) ) {
-            Representation nextSegment = applyTimeEvolution( previousSegment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
+            Representation nextSegment = applyTimeEvolution( prevSegment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
             REACHABILITY_RESULT safety = handleSegment( task, nextSegment, segmentIndex );
             if ( safety != REACHABILITY_RESULT::SAFE ) {
                 return REACHABILITY_RESULT::UNKNOWN;
@@ -62,8 +62,8 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
     addSegment( nonUrgentEnabled, timing );
 
     // safety check
-    if ( std::any_of( nonUrgentEnabled.begin(), nonUrgentEnabled.end(), []( const auto& splitSegment ) {
-            return ltiIntersectBadStates( splitSegment, loc, mHybridAutomaton ).first != CONTAINMENT::NO } ) ) {
+    if ( std::any_of( nonUrgentEnabled.begin(), nonUrgentEnabled.end(), [ loc, this ]( const auto& splitSegment ) {
+            return ltiIntersectBadStates( splitSegment, loc, mHybridAutomaton ).first != CONTAINMENT::NO; } ) ) {
         return REACHABILITY_RESULT::UNKNOWN;
     }
     return REACHABILITY_RESULT::SAFE;
@@ -75,7 +75,7 @@ struct UrgencyWorker<Representation>::PreviousSegmentGen {
 
     std::optional<Representation> next( SegmentInd nextSegment ) {
         if ( current < mFlowpipe.size() ) {
-            indexedSegment = mFlowpipe.at( current );
+            auto indexedSegment = mFlowpipe.at( current );
             if ( indexedSegment.index == nextSegment - 1 ) {
                 current += 1;
                 return indexedSegment.valuationSet;
@@ -83,7 +83,7 @@ struct UrgencyWorker<Representation>::PreviousSegmentGen {
         }
         return std::nullopt;
     }
-}
+};
 
 
 template <typename Representation>
@@ -96,10 +96,10 @@ void UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
         auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation>{ transition.get() } );
 
         for ( std::size_t i = 0; i < mFlowpipe.size(); ++i ) {
-            auto [containment, intersected] = intersect( flowpipe[ i ].valuationSet, transition->getGuard() );
+            auto [containment, intersected] = intersect( mFlowpipe[ i ].valuationSet, transition->getGuard() );
 
             if ( containment != CONTAINMENT::NO ) {
-                currentSucc.valuationSets.push_back( { intersected, flowpipe[ i ].index } );
+                currentSucc.valuationSets.push_back( { intersected, mFlowpipe[ i ].index } );
             }
         }
     }
