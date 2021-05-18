@@ -4,6 +4,7 @@
 #include "../../../types.h"
 #include "../workers/UrgencyWorker.h"
 #include "./ReturnTypes.h"
+#include "./impl/RefinementAnalyzer.h"
 
 #include <queue>
 
@@ -14,6 +15,11 @@ struct UrgencyCEGARSuccess {};
 template <typename Representation>
 class UrgencyCEGARAnalyzer {
     using Number = typename Representation::NumberType;
+
+    struct RefinePoint {
+        ReachTreeNode<Representation>* node;
+        Transition<Number>* transition;
+    };
 
   public:
     using UrgencyCEGARResult = AnalysisResult<UrgencyCEGARSuccess, Failure<Representation>>;
@@ -39,11 +45,17 @@ class UrgencyCEGARAnalyzer {
     AnalysisParameters mParameters;
 
   private:
-    auto findRefinementNode( ReachTreeNode<Representation>* node )
-      -> std::pair<ReachTreeNode<Representation>*, Transition<Number>*>;
+    auto findRefinementNode( const ReachTreeNode<Representation>* node )
+      -> RefinePoint;
 
-    auto refinePath( Path<Number> path, ReachTreeNode<Representation>* refineNode, Transition<Number>* refineTrans )
-      -> std::tuple<bool, ReachTreeNode<Representation>*, Transition<Number>*>;
+    auto refinePath( const Path<Number>& path, const RefinePoint& refine )
+      -> std::pair<bool, RefinePoint>;
+
+    auto refineNode( const RefinePoint& refine )
+      -> ReachTreeNode<Representation>*;
+
+    auto createChildNode( const TimedValuationSet<Representation>& jsucc, Transition<Number>* transition, ReachTreeNode<Representation>* parent )
+      -> ReachTreeNode<Representation>*;
 };
 
 }  // namespace hypro
