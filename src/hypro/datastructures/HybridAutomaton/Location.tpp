@@ -35,7 +35,7 @@ Location<Number>::Location( const Location<Number>& _loc )
 	, mHash( 0 ) {
 	// update copied transitions
 	for ( const auto& t : _loc.getTransitions() ) {
-		createTransition( t.get() );
+        [[maybe_unused]] auto* transitionCopy = createTransition( t.get() );
 		assert( transitionCopy->getSource() == this );
 		assert( transitionCopy->getTarget() == t.get()->getTarget() );
 	}
@@ -82,7 +82,7 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 		mTransitions.clear();
 
 		for ( const auto& t : in.getTransitions() ) {
-			createTransition( t.get() );
+            [[maybe_unused]] auto* transitionCopy = createTransition( t.get() );
 			assert( transitionCopy->getSource() == this );
 			assert( transitionCopy->getTarget() == t.get()->getTarget() );
 		}
