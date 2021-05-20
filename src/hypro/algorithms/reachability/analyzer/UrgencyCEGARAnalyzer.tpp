@@ -48,7 +48,7 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
         }
 
     }
-
+    return { UrgencyCEGARSuccess{} };
 }
 
 template <typename Representation>
@@ -84,7 +84,7 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::refineNode(
     // check if refined node already exists
     for ( auto sibling : parent->getChildren() ) {
         if ( refine.node->getTransition() == sibling->getTransition() &&
-             refine.node->getTimings() == sibling->getTransition() &&
+             refine.node->getTimings() == sibling->getTimings() &&
              sibling->getUrgent() == urgentTransitions &&
              refine.node->getInitialSet() == sibling->getInitialSet() ) {
             assert( sibling->getFlowpipe().size() > 0 );
@@ -92,12 +92,12 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::refineNode(
         }
     }
     // refined node does not exist, so it is created
-    auto refinedNode = parent->addChild(
+    ReachTreeNode<Representation>& refinedNode = parent->addChild(
         refine.node->getInitialSet(),
         refine.node->getTimings(),
         refine.node->getTransition() );
-    refinedNode->setUrgent( urgentTransitions );
-    return refinedNode;
+    refinedNode.setUrgent( urgentTransitions );
+    return &refinedNode;
 }
 
 template <typename Representation>
@@ -167,8 +167,7 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path,
             mWorkQueue.push_front( successor );
             return std::make_pair ( true, refine );
         }
-    } else {
-        return std::make_pair( false, findRefinementNode( res.failure().conflictNode ) );
     }
+    return std::make_pair( false, findRefinementNode( res.failure().conflictNode ) );
 }
 } // namespace hypro

@@ -28,14 +28,20 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
     }
 
     // time elapse
-    PreviousSegmentGen prevGen;
+    std::size_t flowpipeIndex = 1; // iterate over flowpipe to get previous segment. index 0 is initial set
     for ( std::size_t segmentIndex = 1; segmentIndex < mNumSegments; ++segmentIndex ) {
-        for ( auto prevSegment = prevGen.next( segmentIndex ); prevSegment; prevSegment = prevGen.next( segmentIndex ) ) {
-            auto nextSegment = applyTimeEvolution( prevSegment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
+        if ( flowpipeIndex >= mFlowpipe.size() ) {
+            break;
+        }
+        auto nextTimedSegment = mFlowpipe.at( flowpipeIndex );
+        while ( nextTimedSegment.index == (int) segmentIndex - 1 ) {
+            auto nextSegment = applyTimeEvolution(
+                nextTimedSegment.valuationSet, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
             REACHABILITY_RESULT safety = handleSegment( task, nextSegment, segmentIndex );
             if ( safety != REACHABILITY_RESULT::SAFE ) {
                 return REACHABILITY_RESULT::UNKNOWN;
             }
+            flowpipeIndex += 1;
         }
     }
 
@@ -68,23 +74,6 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
     }
     return REACHABILITY_RESULT::SAFE;
 }
-
-template <typename Representation>
-struct UrgencyWorker<Representation>::PreviousSegmentGen {
-    std::size_t current = 1; // index 0 is initial set
-
-    std::optional<Representation> next( SegmentInd nextSegment ) {
-        if ( current < mFlowpipe.size() ) {
-            auto indexedSegment = mFlowpipe.at( current );
-            if ( indexedSegment.index == nextSegment - 1 ) {
-                current += 1;
-                return indexedSegment.valuationSet;
-            }
-        }
-        return std::nullopt;
-    }
-};
-
 
 template <typename Representation>
 void UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task ) {
