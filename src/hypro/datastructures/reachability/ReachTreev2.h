@@ -64,6 +64,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 
 	Transition<Number> const* getTransition() const { return mTransition; }
 
+    ReachTreeNode<Representation>* getParent() const { return this->mParent; }
+
 	/**
      * @brief Get access to the flowpipe
      * @return std::vector<Representation>*
