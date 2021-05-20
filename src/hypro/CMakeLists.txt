@@ -47,6 +47,9 @@ target_include_directories(${PROJECT_NAME}-objects
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC Boost_program_options_STATIC)
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC ANTLR4_STATIC)
 	target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
+	if(HYPRO_USE_MIMALLOC)
+  		target_link_libraries(${PROJECT_NAME}-static PUBLIC mimalloc_STATIC)
+	endif()
 	target_include_directories(${PROJECT_NAME}-static
 		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
 		PUBLIC
@@ -90,6 +93,9 @@ target_include_directories(${PROJECT_NAME}-objects
 	endif()
 	if(HYPRO_USE_Z3)
 		target_link_libraries(${PROJECT_NAME}-shared PUBLIC z3_SHARED)
+	endif()
+	if(HYPRO_USE_MIMALLOC)
+  		target_link_libraries(${PROJECT_NAME}-shared PUBLIC mimalloc_SHARED)
 	endif()
 
 	target_include_directories(${PROJECT_NAME}-shared

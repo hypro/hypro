@@ -50,7 +50,7 @@ class ClockRepository {
 
 	/// getter for a specific counter
 	Clock& get( std::string name ) {
-		ScopedLock<std::mutex>( this->mtx );
+		ScopedLock<std::mutex> lock( this->mtx );
 		auto counterIt = timerMap.find( name );
 		if ( counterIt == timerMap.end() ) {
 			counterIt = timerMap.insert( std::make_pair( name, new Clock() ) ).first;

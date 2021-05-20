@@ -35,7 +35,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	add_dependencies(runRepresentationTests resources)
 	target_include_directories(runRepresentationTests PRIVATE ${GTEST_INCLUDE_DIR})
 
-	target_link_libraries(runRepresentationTests LINK_PUBLIC
+	target_link_libraries(runRepresentationTests PUBLIC
 		${GTEST_LIBRARIES}
 		${PROJECT_NAME}-shared
 	)
