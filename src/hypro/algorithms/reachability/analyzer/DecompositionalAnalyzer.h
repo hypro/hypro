@@ -225,10 +225,11 @@ class DecompositionalAnalyzer {
 
     /**
      * @brief       Reset unused clocks to zero.
-     * @param       currentNodes    The current reachtree-nodes with the computed flowpipes.
+     * @param       segments        The computed segments.
      * @param       clockIndex      The current clockIndex. All clocks with higher index are reset.
      */
-    void resetClocks( NodeVector& currentNodes, std::size_t clockIndex );
+    std::vector<Representation> resetClocks( const RepVector& segments, std::size_t clockIndex );
+
 
     /**
      * @brief       Intersect computed segments with clock values and update flowpipes.

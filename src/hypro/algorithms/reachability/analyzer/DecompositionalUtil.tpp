@@ -95,11 +95,14 @@ template <typename Representation>
 std::pair<Condition<typename Representation::NumberType>, std::vector<Representation>> decompose( const Representation& composedSet, std::size_t clockCount ) {
     using Number = typename Representation::NumberType;
 
+    if ( composedSet.empty() ) {
+        assert( false && "Decompose called with empty set" );
+    }
     // distribute rows among subspaces. If a row has multiple nonzero entries, it is a dependency between subspaces
     std::vector<Eigen::Index> depIndices;
     std::vector<std::vector<Eigen::Index>> subspaceIndices( composedSet.dimension() );
     for ( Eigen::Index row = 0; row < composedSet.matrix().rows(); ++row ) {
-        Eigen::Index nonZeroSubspace;
+        Eigen::Index nonZeroSubspace = -1;
         bool allZero = true;
         bool dependency = false;
         for ( std::size_t col = 0; col < composedSet.matrix().cols(); ++col ) {
@@ -114,6 +117,7 @@ std::pair<Condition<typename Representation::NumberType>, std::vector<Representa
             }
         }
         if ( !dependency ) {
+            assert( nonZeroSubspace >= 0 );
             subspaceIndices[ nonZeroSubspace ].push_back( row );
         } else {
             depIndices.push_back( row );
@@ -121,23 +125,25 @@ std::pair<Condition<typename Representation::NumberType>, std::vector<Representa
     }
 
     std::vector<Representation> subspaceSets( composedSet.dimension() );
-    // add initial variable and clocks
     for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
-        matrix_t<Number> subspaceMatrix = matrix_t<Number>::Zero( subspaceIndices[ subspace ].size() + 2 * ( clockCount + 1 ), clockCount + 2 );
-        vector_t<Number> subspaceVector = vector_t<Number>::Zero( subspaceMatrix.rows() );
-        std::size_t usedRows = 0;
-        for ( auto row : subspaceIndices[ subspace ] ) {
-            subspaceMatrix( usedRows, 0 ) = composedSet.matrix()( row, subspace );
-            subspaceVector( usedRows ) = composedSet.vector()( row );
-            usedRows++;
-        }
-        // initial constraint
-        subspaceMatrix( usedRows, 0 ) = 1;
-        subspaceMatrix( usedRows, 1 ) = -1;
-        subspaceMatrix( usedRows + 1, 0 ) = -1;
-        subspaceMatrix( usedRows + 1, 1 ) = 1;
-        usedRows += 2;
+        vector_t<Number> subspaceDirection = vector_t<Number>::Zero( composedSet.dimension() );
+        subspaceDirection( subspace ) = 1;
+        Number subspaceUpper = composedSet.evaluate( subspaceDirection ).supportValue;
+        Number subspaceLower = -1 * composedSet.evaluate( -1 * subspaceDirection ).supportValue;
 
+        matrix_t<Number> subspaceMatrix = matrix_t<Number>::Zero( 2 * clockCount + 4, clockCount + 2 );
+        vector_t<Number> subspaceVector = vector_t<Number>::Zero( subspaceMatrix.rows() );
+        subspaceMatrix( 0, 0 ) = 1;
+        subspaceMatrix( 1, 0 ) = -1;
+        subspaceVector( 0 ) = subspaceUpper;
+        subspaceVector( 1 ) = -subspaceLower;
+
+        subspaceMatrix( 2, 0 ) = 1;
+        subspaceMatrix( 2, 1 ) = -1;
+        subspaceMatrix( 3, 0 ) = -1;
+        subspaceMatrix( 3, 1 ) = 1;
+
+        std::size_t usedRows = 4;
         // clocks to zero
         for ( std::size_t clock = 0; clock < clockCount; ++clock ) {
             subspaceMatrix( usedRows, 2 + clock ) = 1;

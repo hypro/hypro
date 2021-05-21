@@ -14,13 +14,17 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         std::size_t clockIndex = nextInQueue.clockIndex;
         const Location<Number>* currentLoc = currentNodes[ 0 ]->getLocation();
 
+        if ( !checkConsistency( currentNodes ) ) {
+            // empty initial set
+            continue;
+        }
+
         std::for_each( workers.begin(), workers.end(), []( WorkerVariant& worker ) {
             std::visit( detail::resetWorkerVisitor<Representation>{}, worker );
         } );
 
         // Time successors
         TimeInformation<Number> invariantSatisfyingTime = computeTimeSuccessorsGetEnabledTime( currentNodes, workers );
-        resetClocks( currentNodes, clockIndex );
         intersectSubspacesWithClock( currentNodes, invariantSatisfyingTime );
 
         // Check safety
@@ -43,7 +47,8 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         for ( const auto& transition : currentLoc->getTransitions() ) {
             // get jump successors
             auto [transitionEnabledTime, singularJumpSuccessors] = getSingularJumpSuccessors( workers, transition.get() );
-            if ( singularJumpSuccessors.empty() && mSingularSubspaces.size() > 0 ) {
+            singularJumpSuccessors = resetClocks( singularJumpSuccessors, clockIndex );
+            if ( ( transitionEnabledTime.empty() || singularJumpSuccessors.empty() ) && mSingularSubspaces.size() > 0 ) {
                 continue;
             }
 
@@ -54,6 +59,9 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
             } else {
                 // complexity reduction
                 Representation composedSuccessors = detail::composeSubspaces( singularJumpSuccessors, dependencies, mClockCount );
+                if ( composedSuccessors.empty() ) {
+                    continue;
+                }
                 std::tie( dependencies, singularJumpSuccessors ) = detail::decompose( composedSuccessors, mClockCount );
                 auto childNodes = makeChildrenForClockValues( currentNodes, transition.get(), transitionEnabledTime, singularJumpSuccessors );
                 mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ 0, dependencies, childNodes } );
@@ -107,16 +115,16 @@ auto DecompositionalAnalyzer<Representation>::computeTimeSuccessorsGetEnabledTim
 }
 
 template <typename Representation>
-void DecompositionalAnalyzer<Representation>::resetClocks( NodeVector& currentNodes, std::size_t clockIndex ) {
-    for ( auto subspace : mSingularSubspaces ) {
-        for ( auto& segment : currentNodes[ subspace ]->getFlowpipe() ) {
-            std::vector<std::size_t> nonZeroDimensions( segment.dimension() - mClockCount + clockIndex + 1 );
-            for ( std::size_t i = 0; i < nonZeroDimensions.size(); ++i ) {
-                nonZeroDimensions[ i ] = i;
-            }
-            segment = segment.projectOn( nonZeroDimensions );
+std::vector<Representation> DecompositionalAnalyzer<Representation>::resetClocks( const RepVector& segments, std::size_t clockIndex ) {
+    RepVector resetSegments( segments.size() );
+    for ( std::size_t subspace = 0; subspace < segments.size(); ++subspace ) {
+        std::vector<std::size_t> nonZeroDimensions( segments[ subspace ].dimension() - mClockCount + clockIndex + 1 );
+        for ( std::size_t i = 0; i < nonZeroDimensions.size(); ++i ) {
+            nonZeroDimensions[ i ] = i;
         }
+        resetSegments[ subspace ] = segments[ subspace ].projectOn( nonZeroDimensions );
     }
+    return resetSegments;
 }
 
 template <typename Representation>
@@ -171,7 +179,7 @@ std::vector<ReachTreeNode<Representation>*> DecompositionalAnalyzer<Representati
     for ( auto subspace : mSingularSubspaces ) {
         auto subspaceSuccessor = detail::intersectSegmentWithClock(
             singularSuccessors[ subspace ], clockValues, mClockCount );
-        auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSuccessor, carl::Interval<SegmentInd>( 0, 0 ), transition );
+        auto& subspaceChild = currentNodes[ subspace ]->addChild( singularSuccessors[ subspace ], carl::Interval<SegmentInd>( 0, 0 ), transition );
         child[ subspace ] = &subspaceChild;
     }
     return child;
