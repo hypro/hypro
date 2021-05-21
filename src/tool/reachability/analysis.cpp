@@ -50,10 +50,10 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 }
 
 template <typename Representation>
-std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting ) {
+std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting, std::size_t clockCount ) {
 	START_BENCHMARK_OPERATION( "Verification" );
 	auto roots = makeDecompositionalRoots<Representation>( decomposedHa, decomposition );
-	DecompositionalAnalyzer<Representation> analyzer{ decomposedHa, decomposition, setting.fixedParameters().jumpDepth + 1,
+	DecompositionalAnalyzer<Representation> analyzer{ decomposedHa, decomposition, clockCount,
 		setting.fixedParameters(), setting.strategy().front(), roots };
 	auto result = analyzer.run();
 	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -157,8 +157,8 @@ std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& a
 
 struct DecompositionalDispatcher {
 	template <typename Rep>
-	auto operator()( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting ) {
-		return decompositional_analyze<Rep>( decomposedHa, decomposition, setting );
+	auto operator()( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting, std::size_t clockCount ) {
+		return decompositional_analyze<Rep>( decomposedHa, decomposition, setting, clockCount );
 	}
 };
 
@@ -181,7 +181,7 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 		// decompositional analysis
 		return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
 																	setting.strategy().front().representation_setting, DecompositionalDispatcher{},
-																	information.decomposedHa, information.decomposition, setting ) };
+																	information.decomposedHa, information.decomposition, setting, information.clockCount ) };
 	}
 
 	switch ( information.dynamic ) {

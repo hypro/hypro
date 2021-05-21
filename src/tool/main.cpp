@@ -25,7 +25,7 @@ int main( int argc, char const* argv[] ) {
 	auto preprocessingInformation = hydra::preprocessing::preprocess( automaton,
 																	  options["decompose"].as<bool>(),
 																	  //todo: clockCount as cli argument or heuristic?
-																	  2 );
+																	  options["clockCount"].as<std::size_t>() );
 
 	// combine parsed settings and cli flags
 	auto settings = hydra::processSettings( reachSettings, options );

@@ -18,6 +18,7 @@ hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::
         }
         information.decomposition = decomposition;
         information.decomposedHa = decomposedHa;
+        information.clockCount = clockCount;
     }
 	return information;
 }
