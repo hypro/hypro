@@ -94,6 +94,7 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	const Location<Number>* getLocation() const { return mLocation; }
 
 	const carl::Interval<SegmentInd>& getTimings() const { return mTimings; }
+    const std::vector<SegmentInd>& getFpTimings() const { assert( false && "Not implemented yet" ); return {}; }
 
 	/**
      * @brief Get the time intervals the passed transition was enabled

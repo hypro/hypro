@@ -44,9 +44,15 @@ class UrgencyCEGARAnalyzer {
     FixedAnalysisParameters mFixedParameters;
     AnalysisParameters mParameters;
 
+    size_t const mMaxSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.localTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::max() ) ) );
+
   private:
-    auto findRefinementNode( const ReachTreeNode<Representation>* node )
+    auto findRefinementNode( ReachTreeNode<Representation>* const node )
       -> RefinePoint;
+
+    auto checkGuard(
+        ReachTreeNode<Representation>* const node, Transition<Number>* trans, const Path<Number>& path )
+      -> REACHABILITY_RESULT;
 
     auto refinePath( const Path<Number>& path, const RefinePoint& refine )
       -> std::pair<bool, RefinePoint>;

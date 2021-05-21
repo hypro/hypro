@@ -69,16 +69,94 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createChild
 }
 
 template <typename Representation>
-auto UrgencyCEGARAnalyzer<Representation>::findRefinementNode( const ReachTreeNode<Representation>* node )
+auto UrgencyCEGARAnalyzer<Representation>::findRefinementNode( ReachTreeNode<Representation>* const node )
     -> RefinePoint {
-    assert( false && "findRefinementNode not implemented yet" );
+    
+    std::vector<ReachTreeNode<Representation>*> nodePath{ node };
+    for ( auto currentNode = node; currentNode != nullptr; currentNode = currentNode->getParent() ) {
+        nodePath.push_back( currentNode );
+    }
+
+    auto path = node->getPath();
+    for ( auto it = nodePath.rbegin(); it != nodePath.rend(); ++it ) {
+        for ( auto trans : mHybridAutomaton->getTransitions() ) {
+            if ( trans->getSource() != ( *it )->getLocation() ) {
+                continue;
+            }
+            // check if transition is urgent
+            if ( !trans->isUrgent() ) {
+                continue;
+            }
+            // check if transition is unrefined
+            auto refined = ( *it )->getUrgent();
+            if ( std::find( refined.begin(), refined.end(), trans ) != refined.end() ) {
+                continue;
+            }
+            // check if guard intersection is unsafe on path to node
+            if ( checkGuard( *it, trans, path ) == REACHABILITY_RESULT::UNKNOWN ) {
+                return RefinePoint{ *it, trans };
+            }
+        }       
+    }
     return RefinePoint{ nullptr, nullptr };
 }
 
+template <typename Representation>
+REACHABILITY_RESULT UrgencyCEGARAnalyzer<Representation>::checkGuard(
+        ReachTreeNode<Representation>* const node, Transition<Number>* trans, const Path<Number>& path ) {
+    // path is from node to unsafe
+    // check if flowpipe is fragmented, because in that case need to check timing of segments
+    bool split = !node->getUrgent().empty();
+    assert( ( !split || node->getFlowpipe().size() == node->getFpTimings().size() ) );
+    
+    // todo: use lti or urgency worker? reuse workers
+    TimeTransformationCache<Number> transformationCache;
+    LTIWorker<Representation> worker{
+          *mHybridAutomaton,
+          mParameters,
+          mFixedParameters.localTimeHorizon,
+          transformationCache };
+    auto refinementAnalyzer = RefinementAnalyzer<Representation>{
+        *mHybridAutomaton,
+        mFixedParameters,
+        mParameters };
+    // iterate over segments
+    for ( std::size_t fpIndex = 0; fpIndex < node->getFlowpipe().size(); ++fpIndex ) {
+        std::size_t segmentCount;
+        std::size_t segmentIndex = split ? node->getFpTimings()[ fpIndex ] : fpIndex;
+        assert( segmentIndex <= path.elements[ 0 ].first.lower() );
+        segmentCount = mMaxSegments - segmentIndex;
+        auto [containment, initialSet] = intersect( node->getFlowpipe()[ fpIndex ], trans->getGuard() );
+        if ( containment == CONTAINMENT::NO ) {
+            continue;
+        } else if ( containment == CONTAINMENT::FULL ) {
+            // segment is contained in guard. Since segment is unsafe on path, so is the guard.
+            return REACHABILITY_RESULT::UNKNOWN;
+        } else {
+            ReachTreeNode<Representation> guardNode( node->getLocation(), initialSet, carl::Interval<SegmentInd>( 0 ) );
+            // todo: bound time
+            auto safetyResult = worker.computeTimeSuccessors(
+                guardNode.getInitialSet(),
+                guardNode.getLocation(),
+                std::back_inserter( guardNode.getFlowpipe() ) );
+            if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
+                return REACHABILITY_RESULT::UNKNOWN;
+            }
+            Path guardPath = path;
+            guardPath.elements[ 0 ].first -= carl::Interval<SegmentInd>( segmentIndex );
+            refinementAnalyzer.setRefinement( &guardNode, guardPath );
+            if ( !refinementAnalyzer.run().isSuccess() ) {
+                return REACHABILITY_RESULT::UNKNOWN;
+            }
+        }
+    }
+    return REACHABILITY_RESULT::SAFE;
+}
 
 template <typename Representation>
 ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::refineNode( const RefinePoint& refine ) {
     auto parent = refine.node->getParent();
+    assert( parent != nullptr && "Parent of refine node is null" ); // todo: what if parent is null?
     std::vector<Transition<Number>*> urgentTransitions = refine.node->getUrgent();
     urgentTransitions.push_back( refine.transition );
     // check if refined node already exists
