@@ -183,10 +183,13 @@ HybridAutomaton<Number> singularJumpSuccessorsHa1() {
     // Create HA
     uniqueLoc0->addTransition( std::move( trans0 ) );
 
-    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
-
+    auto locPointer0 = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+
+    ha.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
+
+    
 
     return ha;
 }
@@ -242,10 +245,11 @@ HybridAutomaton<Number> singularJumpSuccessorsHa2() {
     // Create HA
     uniqueLoc0->addTransition( std::move( trans0 ) );
 
-    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
-
+    auto locPointer0 = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+
+    ha.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
 
     return ha;
 }
@@ -295,10 +299,11 @@ HybridAutomaton<Number> singularJumpSuccessorsHa3() {
     // Create HA
     uniqueLoc0->addTransition( std::move( trans0 ) );
 
-    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
-
+    auto locPointer0 = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+
+    ha.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
 
     return ha;
 }
@@ -356,10 +361,11 @@ HybridAutomaton<Number> singularJumpSuccessorsHa4() {
     // Create HA
     uniqueLoc0->addTransition( std::move( trans0 ) );
 
-    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
-
+    auto locPointer0 = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+
+    ha.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
 
     return ha;
 }
@@ -424,10 +430,11 @@ HybridAutomaton<Number> singularResetsHa1() {
     // Create HA
     uniqueLoc0->addTransition( std::move( trans0 ) );
 
-    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
-
+    auto locPointer0 = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+
+    ha.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
 
     return ha;
 }
@@ -479,10 +486,11 @@ HybridAutomaton<Number> singularResetsHa2() {
     // Create HA
     uniqueLoc0->addTransition( std::move( trans0 ) );
 
-    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
-
+    auto locPointer0 = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+
+    ha.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
 
     return ha;
 }
@@ -632,10 +640,11 @@ HybridAutomaton<Number> singularWithJumpsHa() {
     uniqueLoc0->addTransition( std::move( trans0 ) );
     //uniqueLoc0->addTransition( std::move( trans1 ) );
 
-    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
-
+    auto locPointer0 = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+
+    ha.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
 
     return ha;
 }
@@ -756,10 +765,11 @@ HybridAutomaton<Number> mixedDynamicsWithJumpsHa() {
     uniqueLoc0->addTransition( std::move( trans0 ) );
     uniqueLoc0->addTransition( std::move( trans1 ) );
 
-    res.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
-
+    auto locPointer0 = uniqueLoc0.get();
     res.addLocation( std::move( uniqueLoc0 ) );
     res.addLocation( std::move( uniqueLoc1 ) );
+
+    res.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
 
     return res;
 }
@@ -806,10 +816,66 @@ HybridAutomaton<Number> singularSingleJumpHa() {
     uniqueLoc0->addTransition( std::move( trans0 ) );
     //uniqueLoc0->addTransition( std::move( trans1 ) );
 
-    ha.addInitialState( uniqueLoc0.get(), Condition<Number>( initialConstraints, initialConstants ) );
-
+    auto locPointer0 = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+
+    ha.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
+
+    return ha;
+}
+
+
+
+template <typename Number> 
+HybridAutomaton<Number> singularSingleJumpHa2() {
+    using Matrix = matrix_t<Number>;
+    using Vector = vector_t<Number>;
+
+    HybridAutomaton<Number> ha;
+
+    // Create locations
+    Location<Number> loc0{};
+    Location<Number> loc1{};
+    auto uniqueLoc0{ std::make_unique<Location<Number>>( loc0 ) };
+    auto uniqueLoc1{ std::make_unique<Location<Number>>( loc1 ) };
+    uniqueLoc0->setName( "l0" );
+    uniqueLoc1->setName( "l1" );
+
+    // Set flow x' = 1, y' = 1 in loc0
+    Matrix flow0 = Matrix::Zero( 3, 3 );
+    flow0( 0, 2 ) = 1;
+    flow0( 1, 2 ) = 1;
+    uniqueLoc0->setFlow( flow0 );
+
+    // Set flow x' = 1, y' = -1 in loc1
+    Matrix flow1 = Matrix::Zero( 3, 3 );
+    flow1( 0, 2 ) = 1;
+    flow1( 1, 2 ) = -1;
+    uniqueLoc1->setFlow( flow1 );
+
+    // Construct transitions
+    // l0 -> l1 with no guards or resets
+    Reset<Number> reset{ { { }, { } } };
+
+    std::unique_ptr<Transition<Number>> trans0 =
+          std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
+
+    // Set initial state x = 0, y = 0
+    Matrix initialConstraints = Matrix::Zero( 4, 2 );
+    Vector initialConstants = Vector::Zero( 4 );
+    initialConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
+    initialConstants << 0, 0, 0, 0;
+
+    // Create HA
+    uniqueLoc0->addTransition( std::move( trans0 ) );
+    //uniqueLoc0->addTransition( std::move( trans1 ) );
+
+    auto locPointer0 = uniqueLoc0.get();
+    ha.addLocation( std::move( uniqueLoc0 ) );
+    ha.addLocation( std::move( uniqueLoc1 ) );
+
+    ha.addInitialState( locPointer0, Condition<Number>( initialConstraints, initialConstants ) );
 
     return ha;
 }
