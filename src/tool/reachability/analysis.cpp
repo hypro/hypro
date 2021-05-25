@@ -3,6 +3,7 @@
 #include <hypro/algorithms/reachability/analyzer/CEGARAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/UrgencyCEGARAnalyzer.h>
 #include <hypro/datastructures/reachability/Settings.h>
 #include <hypro/datastructures/reachability/TreeTraversal.h>
 #include <hypro/representations/conversion/Converter.h>
@@ -46,6 +47,34 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 		levelIndex += 1;
 	}
 
+	return plotData;
+}
+
+template <typename State>
+std::vector<PlotData<FullState>> urgency_cegar_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
+	START_BENCHMARK_OPERATION( "Verification" );
+	auto roots = makeRoots<State>( automaton );
+	UrgencyCEGARAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
+	auto result = analyzer.run();
+
+	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
+		std::cout << "Could not verify safety." << std::endl;
+		// Call bad state handling (e.g., return path)
+	} else {
+		std::cout << "The model is safe." << std::endl;
+	}
+	EVALUATE_BENCHMARK_RESULT( "Verification" );
+
+	// create plot data
+	std::vector<PlotData<FullState>> plotData{};
+
+	for ( const auto& node : preorder( roots ) ) {
+		std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
+			FullState state{};
+			state.setSet( segment );
+			return PlotData{ state, 0, 0 };
+		} );
+	}
 	return plotData;
 }
 
@@ -140,6 +169,13 @@ struct LTIDispatcher {
 	template <typename Rep>
 	auto operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
 		return lti_analyze<Rep>( automaton, setting );
+	}
+};
+
+struct UrgencyCEGARDispatcher {
+	template <typename Rep>
+	auto operator()( HybridAutomaton<Number>& automaton, Settings setting ) {
+		return urgency_cegar_analyze<Rep>( automaton, setting );
 	}
 };
 
