@@ -29,19 +29,20 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
 
     // time elapse
     std::size_t flowpipeIndex = 1; // iterate over flowpipe to get previous segment. index 0 is initial set
-    for ( std::size_t segmentIndex = 1; segmentIndex < mNumSegments; ++segmentIndex ) {
-        if ( flowpipeIndex >= mFlowpipe.size() ) {
-            break;
-        }
-        auto nextTimedSegment = mFlowpipe.at( flowpipeIndex );
-        while ( nextTimedSegment.index == (int) segmentIndex - 1 ) {
+    for ( std::size_t segmentIndex = 1; segmentIndex < mNumSegments && flowpipeIndex < mFlowpipe.size(); ++segmentIndex ) {
+        auto previousSegment = mFlowpipe.at( flowpipeIndex );
+        while ( previousSegment.index == (int) segmentIndex - 1 ) {
             auto nextSegment = applyTimeEvolution(
-                nextTimedSegment.valuationSet, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
+                previousSegment.valuationSet, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
             REACHABILITY_RESULT safety = handleSegment( task, nextSegment, segmentIndex );
             if ( safety != REACHABILITY_RESULT::SAFE ) {
                 return REACHABILITY_RESULT::UNKNOWN;
             }
             flowpipeIndex += 1;
+            if ( flowpipeIndex >= mFlowpipe.size() ) {
+                break;
+            }
+            previousSegment = mFlowpipe.at( flowpipeIndex );
         }
     }
 
@@ -93,7 +94,6 @@ void UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
         }
     }
 
-    std::vector<JumpSuccessor<Representation>> successors{};
 
     // aggregation
     // for each transition
@@ -116,12 +116,15 @@ void UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
     }
 
     // applyReset
-    for ( auto& [transition, valuationSets] : successors ) {
+    for ( auto& [transition, valuationSets] : mJumpSuccessors ) {
         for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
             TRACE( "hypro", "valSet: " << it->valuationSet.vertices() );
+            std::cout << "valSet: " << it->valuationSet.vertices() << "\n";
             it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
             TRACE( "hypro", "Reset is: " << transition->getReset() );
+            std::cout << "Reset is: " << transition->getReset() << "\n";
             TRACE( "hypro", "Reset: " << it->valuationSet.vertices() );
+            std::cout << "Reset: " << it->valuationSet.vertices() << "\n";
             CONTAINMENT containment;
             std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
             TRACE( "hypro", "Intersect: " << it->valuationSet.vertices() );

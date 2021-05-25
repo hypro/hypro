@@ -59,6 +59,11 @@ class UrgencyWorker {
      */
     const JumpSuccessors& getJumpSuccessors() const { return mJumpSuccessors; }
 
+    void reset() {
+        mJumpSuccessors.clear();
+        mFlowpipe.clear();
+    }
+
   private:
     /**
      * @brief Performs operations on the segment obtained by letting time elapse.
