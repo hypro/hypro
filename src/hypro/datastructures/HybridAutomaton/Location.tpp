@@ -35,7 +35,7 @@ Location<Number>::Location( const Location<Number>& _loc )
 	, mHash( 0 ) {
 	// update copied transitions
 	for ( const auto& t : _loc.getTransitions() ) {
-		auto transitionCopy = createTransition( t.get() );
+        [[maybe_unused]] auto* transitionCopy = createTransition( t.get() );
 		assert( transitionCopy->getSource() == this );
 		assert( transitionCopy->getTarget() == t.get()->getTarget() );
 	}
@@ -82,7 +82,7 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 		mTransitions.clear();
 
 		for ( const auto& t : in.getTransitions() ) {
-			auto transitionCopy = createTransition( t.get() );
+            [[maybe_unused]] auto* transitionCopy = createTransition( t.get() );
 			assert( transitionCopy->getSource() == this );
 			assert( transitionCopy->getTarget() == t.get()->getTarget() );
 		}
@@ -388,7 +388,6 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
 }
 */
 
-/*
 template<typename Number>
 //std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
 //                                , const std::unique_ptr<Location<Number>>& rhs
@@ -420,7 +419,7 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 				//std::cout << "lhsIC: " << lhsIC << std::endl;
 				//std::cout << "rhsIC: " << rhsIC << std::endl;
 				if(lhsVar[lhsIC] == haVar[colI]) {
-					haFlow(rowI,colI) = lhs->getFlow()(lhsIR,lhsIC);
+					haFlow(rowI,colI) = lhs->getLinearFlow().getFlowMatrix()(lhsIR,lhsIC);
 					++lhsIC;
 					if(lhsIC == lhsVar.size()) {
 						break;
@@ -441,7 +440,7 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 				//std::cout << "rhsIC: " << rhsIC << std::endl;
 				if(rhsVar[rhsIC] == haVar[colI]) {
 					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.
-					if(haFlow(rowI,colI) != 0 && rhs->getFlow()(rhsIR,rhsIC) != haFlow(rowI,colI)) {
+					if(haFlow(rowI,colI) != 0 && rhs->getLinearFlow().getFlowMatrix()(rhsIR,rhsIC) != haFlow(rowI,colI)) {
 						admissible = false;
 						break;
 					}
@@ -453,7 +452,7 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 					//assert(colI < haFlow.cols());
 					//assert(rhsIR <= rhs->getFlow().rows());
 					//assert(rhsIC <= rhs->getFlow().cols());
-					haFlow(rowI,colI) = rhs->getFlow()(rhsIR,rhsIC);
+					haFlow(rowI,colI) = rhs->getLinearFlow().getFlowMatrix()(rhsIR,rhsIC);
 					++rhsIC;
 					if(rhsIC == rhsVar.size()) {
 						break;
@@ -494,20 +493,20 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 		if(leftFound) {
 			// if is shared variable
 			if(rightFound) {
-				if(lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1) != rhs->getFlow()(rhsPos, rhs->getFlow().cols()-1)) {
+				if(lhs->getLinearFlow().getFlowMatrix()(lhsPos, lhs->getLinearFlow().getFlowMatrix().cols()-1) != rhs->getLinearFlow().getFlowMatrix()(rhsPos, rhs->getLinearFlow().getFlowMatrix().cols()-1)) {
 					admissible = false;
 					break;
 				} else {
-					haFlow(rowI,haFlow.cols()-1) = lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1);
+					haFlow(rowI,haFlow.cols()-1) = lhs->getLinearFlow().getFlowMatrix()(lhsPos, lhs->getLinearFlow().getFlowMatrix().cols()-1);
 					//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
 				}
 			} else {
-				haFlow(rowI,haFlow.cols()-1) = lhs->getFlow()(lhsPos, lhs->getFlow().cols()-1);
+				haFlow(rowI,haFlow.cols()-1) = lhs->getLinearFlow().getFlowMatrix()(lhsPos, lhs->getLinearFlow().getFlowMatrix().cols()-1);
 				//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
 			}
 		} else {
 			if(rightFound) {
-				haFlow(rowI,haFlow.cols()-1) = rhs->getFlow()(rhsPos, rhs->getFlow().cols()-1);
+				haFlow(rowI,haFlow.cols()-1) = rhs->getLinearFlow().getFlowMatrix()(rhsPos, rhs->getLinearFlow().getFlowMatrix().cols()-1);
 				//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
 			} else {
 				//std::cout << "Variable is neither part of lhs or rhs!" << std::endl;
@@ -545,7 +544,6 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
 	//return std::unique_ptr<Location<Number>>(res);
 	return res;
 }
-*/
 
 template <typename Number>
 void Location<Number>::decompose( const Decomposition& decomposition ) {

@@ -139,6 +139,11 @@ class Location {
 	void setTransitions( transitionVector&& trans );
 	/// adds outgoing transitions
 	void addTransition( std::unique_ptr<Transition<Number>>&& trans );
+	void removeTransition( Transition<Number>* transitionPtr ) {
+	    mTransitions.erase(std::find_if(std::begin(mTransitions), std::end(mTransitions), [&](auto& uPtr){
+			  return uPtr.get() == transitionPtr;
+		  }));
+	}
 	/// creates a transition from this location to the target
 	Transition<Number>* createTransition( Location<Number>* target );
 	/// adds a copy of the passed transition with the source being this location
@@ -294,7 +299,6 @@ struct locPtrComp {
 	bool operator()( const std::unique_ptr<Location<Number>>& lhs, const std::unique_ptr<Location<Number>>& rhs ) const { return ( *lhs < *rhs ); }
 };
 
-/*
 template<typename Number>
 //std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
 //                                , const std::unique_ptr<Location<Number>>& rhs
@@ -303,7 +307,6 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
                                                 , const std::vector<std::string>& lhsVar
                                                 , const std::vector<std::string>& rhsVar
                                                 , const std::vector<std::string>& haVar);
-*/
 
 }  // namespace hypro
 

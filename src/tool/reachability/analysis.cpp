@@ -15,7 +15,7 @@ using namespace hypro;
 
 std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	CEGARAnalyzerDefault<Number> analyzer{ automaton, setting };
+	CEGARAnalyzer<Number> analyzer{ automaton, setting };
 
 	REACHABILITY_RESULT result = analyzer.run();
 	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
@@ -189,6 +189,7 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 			assert( false && "No analyzer selected." );
 			break;
 	}
+	throw std::invalid_argument("Invalid automaton type.");
 }
 
 }  // namespace reachability

@@ -9,7 +9,7 @@
 # Credit: Sebastian Junges, Gereon Kremer
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
 # # # # # # # # # # # # # # # # # # # # # #
 # A. Project properties
@@ -38,6 +38,7 @@ include( hypromacros )
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
+option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" ON)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
 option(HYPRO_BUILD_OFFLINE "Do not attempt to update ressources (work offline)." OFF)
 option(HYPRO_LOGGING "Allow logging." OFF)

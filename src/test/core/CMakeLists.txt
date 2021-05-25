@@ -24,11 +24,10 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	add_dependencies(runCoreTests resources)
 	target_include_directories(runCoreTests PRIVATE ${GTEST_INCLUDE_DIR})
 
-	target_link_libraries(runCoreTests
+	target_link_libraries(runCoreTests PUBLIC
 							${PROJECT_NAME}-shared
 							${GTEST_LIBRARIES}
 							)
-
 	cotire(runCoreTests)
 
 	add_test( NAME core COMMAND runCoreTests )

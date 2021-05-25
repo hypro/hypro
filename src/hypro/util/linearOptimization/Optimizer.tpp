@@ -405,7 +405,7 @@ template <typename Number>
 bool Optimizer<Number>::isSane() const {
 #ifndef NDEBUG
 #ifdef HYPRO_USE_GLPK
-	std::lock_guard<std::mutex> lock( mContextLock );
+	//std::lock_guard<std::mutex> lock( mContextLock );
 	TRACE( "hypro.optimizer", "Have " << mGlpkContexts.size() << " instances to check." );
 	for ( const auto& glpPair : mGlpkContexts ) {
 		if ( glpPair.second.mConstraintsSet && ( !glpPair.second.mInitialized || !glpPair.second.arraysCreated ) )
