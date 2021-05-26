@@ -22,7 +22,7 @@ The latest stable version can be obtained from the *master*-branch. The *alpha*-
 To be able to compile HyPro, the following dependencies must be met:
 * cmake
 * a c++-compiler (g++/clang++)
-* [CArL](github.com/smtrat/carl)  
+* [CArL](https://github.com/smtrat/carl)  
 * a Java runtime environment (e.g. openjdk-re)
 * uuid-dev
 
