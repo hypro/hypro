@@ -11,6 +11,12 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
           mParameters,
           mFixedParameters.localTimeHorizon,
           transformationCache };
+    UrgencyWorker<Representation> urgencyWorker{
+          *mHybridAutomaton,
+          mParameters,
+          mFixedParameters.localTimeHorizon,
+          transformationCache };
+    mRefinementWorker = &urgencyWorker;
 
     while ( !mWorkQueue.empty() ) {
         auto currentNode = mWorkQueue.back();
@@ -108,18 +114,7 @@ REACHABILITY_RESULT UrgencyCEGARAnalyzer<Representation>::checkGuard(
     // check if flowpipe is fragmented, because in that case need to check timing of segments
     bool split = !node->getUrgent().empty();
     assert( ( !split || node->getFlowpipe().size() == node->getFpTimings().size() ) );
-    
-    // todo: use lti or urgency worker? reuse workers
-    TimeTransformationCache<Number> transformationCache;
-    LTIWorker<Representation> worker{
-          *mHybridAutomaton,
-          mParameters,
-          mFixedParameters.localTimeHorizon,
-          transformationCache };
-    auto refinementAnalyzer = RefinementAnalyzer<Representation>{
-        *mHybridAutomaton,
-        mFixedParameters,
-        mParameters };
+
     // iterate over segments
     for ( std::size_t fpIndex = 0; fpIndex < node->getFlowpipe().size(); ++fpIndex ) {
         std::size_t segmentCount;
@@ -135,17 +130,15 @@ REACHABILITY_RESULT UrgencyCEGARAnalyzer<Representation>::checkGuard(
         } else {
             ReachTreeNode<Representation> guardNode( node->getLocation(), initialSet, carl::Interval<SegmentInd>( 0 ) );
             // todo: bound time
-            auto safetyResult = worker.computeTimeSuccessors(
-                guardNode.getInitialSet(),
-                guardNode.getLocation(),
-                std::back_inserter( guardNode.getFlowpipe() ) );
+            mRefinementWorker->reset();
+            auto safetyResult = mRefinementWorker->computeTimeSuccessors( guardNode );
             if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
                 return REACHABILITY_RESULT::UNKNOWN;
             }
             Path guardPath = path;
             guardPath.elements[ 0 ].first -= carl::Interval<SegmentInd>( segmentIndex );
-            refinementAnalyzer.setRefinement( &guardNode, guardPath );
-            if ( !refinementAnalyzer.run().isSuccess() ) {
+            mRefinementAnalyzer.setRefinement( &guardNode, guardPath );
+            if ( !mRefinementAnalyzer.run().isSuccess() ) {
                 return REACHABILITY_RESULT::UNKNOWN;
             }
         }
@@ -185,21 +178,14 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path,
     auto refinedNode = refineNode( refine );
     if ( refinedNode->getFlowpipe().empty() ) {
         // compute successors
-        // todo: reuse cache and worker
-        TimeTransformationCache<Number> transformationCache;
-        UrgencyWorker<Representation> urgencyWorker{
-              *mHybridAutomaton,
-              mParameters,
-              mFixedParameters.localTimeHorizon,
-              transformationCache };
-
-        auto safety = urgencyWorker.computeTimeSuccessors( *refinedNode );
+        mRefinementWorker->reset();
+        auto safety = mRefinementWorker->computeTimeSuccessors( *refinedNode );
         if ( safety != REACHABILITY_RESULT::SAFE ) {
             return std::make_pair( false, findRefinementNode( refinedNode ) );
         }
         // create children
-        urgencyWorker.computeJumpSuccessors( *refinedNode );
-        for ( const auto& [transition, timedValuationSets] : urgencyWorker.getJumpSuccessors() ) {
+        mRefinementWorker->computeJumpSuccessors( *refinedNode );
+        for ( const auto& [transition, timedValuationSets] : mRefinementWorker->getJumpSuccessors() ) {
             for ( const auto jsucc : timedValuationSets ) {
                 createChildNode( jsucc, transition, refinedNode );
             }
@@ -232,13 +218,8 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path,
     assert( pathPrefix.elements == refinedNode->getPath().elements );
     assert( pathSuffix.rootLocation == refinedNode->getLocation() );
 
-    auto refinementAnalyzer = RefinementAnalyzer<Representation>{
-        *mHybridAutomaton,
-        mFixedParameters,
-        mParameters };
-
-    refinementAnalyzer.setRefinement( refinedNode, pathSuffix );
-    auto res = refinementAnalyzer.run();
+    mRefinementAnalyzer.setRefinement( refinedNode, pathSuffix );
+    auto res = mRefinementAnalyzer.run();
     if ( res.isSuccess() ) {
         // push unexplored node to the global queue
         for ( auto successor : res.success().pathSuccessors ) {
