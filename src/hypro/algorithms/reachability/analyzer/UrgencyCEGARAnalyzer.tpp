@@ -129,9 +129,8 @@ REACHABILITY_RESULT UrgencyCEGARAnalyzer<Representation>::checkGuard(
             return REACHABILITY_RESULT::UNKNOWN;
         } else {
             ReachTreeNode<Representation> guardNode( node->getLocation(), initialSet, carl::Interval<SegmentInd>( 0 ) );
-            // todo: bound time
             mRefinementWorker->reset();
-            auto safetyResult = mRefinementWorker->computeTimeSuccessors( guardNode );
+            auto safetyResult = mRefinementWorker->computeTimeSuccessors( guardNode, segmentCount );
             if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
                 return REACHABILITY_RESULT::UNKNOWN;
             }

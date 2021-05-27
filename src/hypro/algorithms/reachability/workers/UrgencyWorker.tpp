@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Representation>
-REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task ) {
+REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon ) {
     const Location<Number>* loc = task.getLocation();
     Representation initialSet = task.getInitialSet();
 
@@ -29,7 +29,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
 
     // time elapse
     std::size_t flowpipeIndex = 1; // iterate over flowpipe to get previous segment. index 0 is initial set
-    for ( std::size_t segmentIndex = 1; segmentIndex < mNumSegments && flowpipeIndex < mFlowpipe.size(); ++segmentIndex ) {
+    for ( std::size_t segmentIndex = 1; segmentIndex < timeHorizon && flowpipeIndex < mFlowpipe.size(); ++segmentIndex ) {
         auto previousSegment = mFlowpipe.at( flowpipeIndex );
         while ( previousSegment.index == (int) segmentIndex - 1 ) {
             auto nextSegment = applyTimeEvolution(

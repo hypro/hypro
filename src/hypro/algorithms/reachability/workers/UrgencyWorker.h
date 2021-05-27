@@ -39,7 +39,9 @@ class UrgencyWorker {
      * @param task Used to access the the location, initial set and urgent transitions.
      * @return Safety after time elapse.
      */
-    REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task );
+    REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon );
+    REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task ) {
+        return computeTimeSuccessors( task, mNumSegments ); }
     /**
      * @brief Getter function for the computed flowpipe.
      * @details The flowpipe is stored as pairs of valuation set and segment index,
