@@ -119,12 +119,9 @@ void UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
     for ( auto& [transition, valuationSets] : mJumpSuccessors ) {
         for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
             TRACE( "hypro", "valSet: " << it->valuationSet.vertices() );
-            std::cout << "valSet: " << it->valuationSet.vertices() << "\n";
             it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
             TRACE( "hypro", "Reset is: " << transition->getReset() );
-            std::cout << "Reset is: " << transition->getReset() << "\n";
             TRACE( "hypro", "Reset: " << it->valuationSet.vertices() );
-            std::cout << "Reset: " << it->valuationSet.vertices() << "\n";
             CONTAINMENT containment;
             std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
             TRACE( "hypro", "Intersect: " << it->valuationSet.vertices() );

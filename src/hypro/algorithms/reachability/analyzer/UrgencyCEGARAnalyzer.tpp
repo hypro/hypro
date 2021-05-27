@@ -157,8 +157,8 @@ template <typename Representation>
 ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::refineNode( const RefinePoint& refine ) {
     auto parent = refine.node->getParent();
     assert( parent != nullptr && "Parent of refine node is null" ); // todo: what if parent is null?
-    std::vector<Transition<Number>*> urgentTransitions = refine.node->getUrgent();
-    urgentTransitions.push_back( refine.transition );
+    std::set<Transition<Number>*> urgentTransitions = refine.node->getUrgent();
+    urgentTransitions.insert( refine.transition );
     // check if refined node already exists
     for ( auto sibling : parent->getChildren() ) {
         if ( refine.node->getTransition() == sibling->getTransition() &&

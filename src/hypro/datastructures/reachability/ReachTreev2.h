@@ -22,7 +22,7 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	std::vector<Representation> mFlowpipe{};    ///< contains computed flowpipe
 	Representation mInitialSet;				    ///< contains initial set for the flowpipe
 	carl::Interval<SegmentInd> mTimings{};	    ///< global time covered by inital set (used as offset)
-    std::vector<Transition<Number>*> mUrgent{}; ///< list of urgent transitions (CEGAR)
+    std::set<Transition<Number>*> mUrgent{};    ///< set of urgent transitions (CEGAR)
 
   public:
 	//Exposition types
@@ -79,9 +79,9 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      * @brief Get access to the urgent Transitions
      * @return List of urgent transitions
      */
-    std::vector<Transition<Number>*> const& getUrgent() const { return mUrgent; }
-    void setUrgent( std::vector<Transition<Number>*>&& urgent ) { mUrgent = std::move( urgent ); }
-    void setUrgent( const std::vector<Transition<Number>*>& urgent ) { mUrgent = urgent; }
+    std::set<Transition<Number>*> const& getUrgent() const { return mUrgent; }
+    void setUrgent( std::set<Transition<Number>*>&& urgent ) { mUrgent = std::move( urgent ); }
+    void setUrgent( const std::set<Transition<Number>*>& urgent ) { mUrgent = urgent; }
 
 	/**
 	 * @brief Get the initial set
