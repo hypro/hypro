@@ -185,12 +185,15 @@ struct SingularDispatcher {
 	}
 };
 
-AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, PreprocessingInformation information ) {
+AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, PreprocessingInformation information, bool urgency_cegar ) {
 	switch ( information.dynamic ) {
 		case DynamicType::affine:
 			[[fallthrough]];
 		case DynamicType::linear:
-			if ( setting.strategy().size() == 1 ) {
+			if ( urgency_cegar ) {
+				return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
+																			setting.strategy().front().representation_setting, UrgencyCEGARDispatcher{}, automaton, setting ) };
+			} else if ( setting.strategy().size() == 1 ) {
 				return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
 																			setting.strategy().front().representation_setting, LTIDispatcher{}, automaton, setting ) };
 			} else {

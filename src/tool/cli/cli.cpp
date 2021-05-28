@@ -17,7 +17,8 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 			( "help,h", "Shows this help message" )
 			( "model,m", po::value<std::string>()->required(), "<path> to model file." )
 			( "timehorizon,t", po::value<mpq_class>(), "choose *local* timehorizon (rational, i.e., 1/100). Overrides settings in the input file." )
-			( "strategy_file", po::value<std::string>(), "Specify a file to load options from. Command line overwrites them." );
+			( "strategy_file", po::value<std::string>(), "Specify a file to load options from. Command line overwrites them." )
+			( "urgency_cegar", po::bool_switch(), "Use CEGAR analysis for urgent transitions" );
 
 	po::options_description strategy ( "The options of a strategy. Specifying lists results in multiple strategy nodes." );
 	strategy.add_options()

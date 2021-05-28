@@ -32,7 +32,7 @@ int main( int argc, char const* argv[] ) {
 
 	// run reachability analysis
 	START_BENCHMARK_OPERATION( "Verification" );
-	auto result = hydra::reachability::analyze( automaton, settings, preprocessingInformation );
+	auto result = hydra::reachability::analyze( automaton, settings, preprocessingInformation, options["urgency_cegar"].as<bool>() );
 
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
