@@ -18,6 +18,6 @@ struct AnalysisResult {
 	std::vector<hypro::PlotData<FullState>> plotData{};
 };
 
-AnalysisResult analyze( HybridAutomaton<Number> const& automaton, const Settings& setting, hypro::PreprocessingInformation information );
+AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, hypro::PreprocessingInformation information );
 
 }  // namespace hydra::reachability

@@ -143,7 +143,7 @@ bool Halfspace<Number>::intersection( Number& _result, const Point<Number>& _vec
 }
 
 template <typename Number>
-Halfspace<Number> Halfspace<Number>::projectOn( const std::vector<unsigned>& dimensions ) const {
+Halfspace<Number> Halfspace<Number>::projectOn( const std::vector<size_t>& dimensions ) const {
 	if ( dimensions.empty() ) {
 		return Halfspace<Number>();
 	}

@@ -460,7 +460,7 @@ const Number& Point<Number>::operator[]( std::size_t _i ) const {
 
 template <typename Number>
 Number& Point<Number>::at( const carl::Variable& _i ) {
-	if ( hypro::VariablePool::getInstance().id( _i ) >= mCoordinates.rows() ) {
+	if ( hypro::VariablePool::getInstance().id( _i ) >= static_cast<size_t>( mCoordinates.rows() ) ) {
 		throw std::out_of_range( "Variable dimension larger than state space of vector" );
 	}
 	return mCoordinates( hypro::VariablePool::getInstance().id( _i ) );
@@ -476,7 +476,7 @@ Number& Point<Number>::at( std::size_t _index ) {
 
 template <typename Number>
 const Number& Point<Number>::at( const carl::Variable& _i ) const {
-	if ( hypro::VariablePool::getInstance().id( _i ) >= mCoordinates.rows() ) {
+	if ( hypro::VariablePool::getInstance().id( _i ) >= static_cast<size_t>( mCoordinates.rows() ) ) {
 		throw std::out_of_range( "Variable dimension larger than state space of vector" );
 	}
 	return mCoordinates( hypro::VariablePool::getInstance().id( _i ) );
