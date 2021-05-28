@@ -23,6 +23,7 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	Representation mInitialSet;				    ///< contains initial set for the flowpipe
 	carl::Interval<SegmentInd> mTimings{};	    ///< global time covered by inital set (used as offset)
     std::set<Transition<Number>*> mUrgent{};    ///< set of urgent transitions (CEGAR)
+    std::vector<SegmentInd> mFpTimings{};       ///< timing information for simultaneous segments (urgency)
 
   public:
 	//Exposition types
@@ -94,7 +95,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	const Location<Number>* getLocation() const { return mLocation; }
 
 	const carl::Interval<SegmentInd>& getTimings() const { return mTimings; }
-    const std::vector<SegmentInd>& getFpTimings() const { assert( false && "Not implemented yet" ); return {}; }
+    std::vector<SegmentInd>& getFpTimings() { return mFpTimings; }
+    const std::vector<SegmentInd>& getFpTimings() const { return mFpTimings; }
 
 	/**
      * @brief Get the time intervals the passed transition was enabled

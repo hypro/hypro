@@ -128,9 +128,13 @@ REACHABILITY_RESULT UrgencyCEGARAnalyzer<Representation>::checkGuard(
             // segment is contained in guard. Since segment is unsafe on path, so is the guard.
             return REACHABILITY_RESULT::UNKNOWN;
         } else {
+            // todo: set urgency?
             ReachTreeNode<Representation> guardNode( node->getLocation(), initialSet, carl::Interval<SegmentInd>( 0 ) );
             mRefinementWorker->reset();
             auto safetyResult = mRefinementWorker->computeTimeSuccessors( guardNode, segmentCount );
+            for ( auto& segment : mRefinementWorker->getFlowpipe() ) {
+                guardNode.getFlowpipe().push_back( segment.valuationSet );
+            }
             if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
                 return REACHABILITY_RESULT::UNKNOWN;
             }
@@ -198,6 +202,10 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path,
         // compute successors
         mRefinementWorker->reset();
         auto safety = mRefinementWorker->computeTimeSuccessors( *refinedNode );
+        for ( auto& timedSegment : mRefinementWorker->getFlowpipe() ) {
+            refinedNode->getFlowpipe().push_back( timedSegment.valuationSet );
+            refinedNode->getFpTimings().push_back( timedSegment.index );
+        }
         if ( safety != REACHABILITY_RESULT::SAFE ) {
             return std::make_pair( false, findRefinementNode( refinedNode ) );
         }
