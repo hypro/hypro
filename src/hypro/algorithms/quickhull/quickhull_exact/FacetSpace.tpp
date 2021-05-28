@@ -88,6 +88,35 @@ template <typename Number, bool Euclidian>
 void ExactQuickhull<Number, Euclidian>::FacetSpace::computeNormal( Facet& facet ) {
 	///TODO Allocate space for matrix once and reuse it
 	///TODO Could also use __restrict__ to get memcpy here (probably).
+#ifdef QUICKHULL_USE_LOW_DIMENSIONAL_IMPROVEMENT
+	assert( ( ( Euclidian && (std::size_t) points[facet.mVertices[0]].size() == dimension ) || ( !Euclidian && (std::size_t) points[facet.mVertices[0]].size() == dimension + 1 ) ) );
+	if ( Euclidian && dimension == 3 ) {
+		const point_t& v0 = points[facet.mVertices[0]];
+		const point_t& v1 = points[facet.mVertices[1]];
+		const point_t& v2 = points[facet.mVertices[2]];
+		point_t p1 = v1 - v0;
+		point_t p2 = v2 - v0;
+		point_t normal = point_t( 3 );
+		normal[ 0 ] = p1[1]*p2[2] - p1[2]*p2[1];
+		normal[ 1 ] = p1[2]*p2[0] - p1[0]*p2[2];
+		normal[ 2 ] = p1[0]*p2[1] - p1[1]*p2[0];
+		Number offset = normal[0]*v0[0] + normal[1]*v0[1] + normal[2]*v0[2];
+		facet.mNormal = normal;
+		facet.mOffset = offset;
+		return;
+	} else if ( Euclidian && dimension == 2 ) {
+		point_t v0 = points[facet.mVertices[0]];
+		point_t v1 = points[facet.mVertices[1]];
+		point_t normal = point_t( 2 );
+		normal[ 0 ] = v1[1] - v0[1];
+		normal[ 1 ] = -1 * ( v1[0] - v0[0] );
+		Number offset = v0[0]*v1[1] - v0[1]*v1[0];
+		facet.mNormal = normal;
+		facet.mOffset = offset;
+		return;
+	}
+#endif
+
 	matrix_t<Number> matrix( dimension, dimension + 1 );
 
 	if constexpr ( Euclidian ) {
