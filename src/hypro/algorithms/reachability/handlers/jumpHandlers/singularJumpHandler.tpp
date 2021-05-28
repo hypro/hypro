@@ -44,9 +44,24 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 	// Note: applyResetFM is the one that definitely works.
 	// Todo: Decide for one implementation and remove other 2
 	if ( !transitionPtr->getReset().empty() ) {
-		assert( transitionPtr->getReset().getAffineReset().isIdentity() && "Singular automata do not support linear/affine resets." );
+		Reset<Number> reset = transitionPtr->getReset();
+		assert( reset.getAffineReset().isSingular() && "Singular automata do not support linear/affine resets." );
+
 		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset();
-		TRACE( "hypro.reachability", "Apply reset " << intervalReset << " on the state set " << stateSet );
+		// if affine reset is singular and not identity, get constant resets
+		if ( !reset.getAffineReset().isIdentity() ) {
+			WARN( "hypro.reachability", "Singular reset handler with affine constant assignments. Converting to interval reset." )
+			vector_t<Number> zeroRow = vector_t<Number>::Zero( reset.size() );
+			for ( std::size_t rowIndex = 0; rowIndex < reset.size(); ++rowIndex ) {
+				if ( reset.getMatrix().row( rowIndex ) == zeroRow ) {
+					// add interval for constant reset
+					Number constant = reset.getVector()( rowIndex );
+					assert( intervalReset.getIntervals()[rowIndex].isEmpty() && "Reset has both affine and interval assignment" );
+					intervalReset.setInterval( carl::Interval<Number>( constant, constant ), rowIndex );
+				}
+			}
+		}
+
 		if ( !intervalReset.isIdentity() ) {
 			auto transformedSet1 = applyResetFM( stateSet, intervalReset );
 #ifndef NDEBUG
