@@ -26,18 +26,19 @@ class UrgencyCEGARAnalyzer {
 
     UrgencyCEGARAnalyzer( HybridAutomaton<Number> const& ha,
                  FixedAnalysisParameters const& fixedParameters,
-                 AnalysisParameters const& parameters,
-                 std::vector<ReachTreeNode<Representation>>& roots )
+                 AnalysisParameters const& parameters )
         : mHybridAutomaton( &ha )
         , mFixedParameters( fixedParameters )
         , mParameters( parameters )
-        , mRefinementAnalyzer( *mHybridAutomaton, mFixedParameters, mParameters ) {
-        for ( auto& root : roots ) {
+        , mRefinementAnalyzer( *mHybridAutomaton, mFixedParameters, mParameters )
+        , mRoots( makeRoots<Representation>( ha ) ) {
+        for ( auto& root : mRoots ) {
             mWorkQueue.push_front( &root );
         }
     }
 
     UrgencyCEGARResult run();
+    std::vector<ReachTreeNode<Representation>>& getRoots() { return mRoots; }
 
   protected:
     std::deque<ReachTreeNode<Representation>*> mWorkQueue;
@@ -46,6 +47,7 @@ class UrgencyCEGARAnalyzer {
     AnalysisParameters mParameters;
     RefinementAnalyzer<Representation> mRefinementAnalyzer;
     UrgencyWorker<Representation>* mRefinementWorker;
+    std::vector<ReachTreeNode<Representation>> mRoots;
 
     size_t const mMaxSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.localTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::max() ) ) );
 

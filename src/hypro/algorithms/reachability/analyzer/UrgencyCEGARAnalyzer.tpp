@@ -148,20 +148,39 @@ REACHABILITY_RESULT UrgencyCEGARAnalyzer<Representation>::checkGuard(
 template <typename Representation>
 ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::refineNode( const RefinePoint& refine ) {
     auto parent = refine.node->getParent();
-    assert( parent != nullptr && "Parent of refine node is null" ); // todo: what if parent is null?
     std::set<Transition<Number>*> urgentTransitions = refine.node->getUrgent();
     urgentTransitions.insert( refine.transition );
     // check if refined node already exists
-    for ( auto sibling : parent->getChildren() ) {
-        if ( refine.node->getTransition() == sibling->getTransition() &&
-             refine.node->getTimings() == sibling->getTimings() &&
-             sibling->getUrgent() == urgentTransitions &&
-             refine.node->getInitialSet() == sibling->getInitialSet() ) {
-            assert( sibling->getFlowpipe().size() > 0 );
-            return sibling;
+    if ( parent == nullptr ) {
+        for ( auto& sibling : mRoots ) {
+            if ( refine.node->getTimings() == sibling.getTimings() &&
+                    urgentTransitions == sibling.getUrgent() &&
+                    refine.node->getInitialSet() == sibling.getInitialSet() ) {
+                return &sibling;
+            }
+        }
+    } else {
+        for ( auto sibling : parent->getChildren() ) {
+            if ( refine.node->getTransition() == sibling->getTransition() &&
+                    refine.node->getTimings() == sibling->getTimings() &&
+                    urgentTransitions == sibling->getUrgent() &&
+                    refine.node->getInitialSet() == sibling->getInitialSet() ) {
+                    assert( sibling->getFlowpipe().size() > 0 );
+                return sibling;
+            }
         }
     }
+
     // refined node does not exist, so it is created
+    if ( parent == nullptr ) {
+        ReachTreeNode<Representation> refinedNode(
+            refine.node->getLocation(),
+            refine.node->getInitialSet(),
+            refine.node->getTimings() );
+        refinedNode.setUrgent( urgentTransitions );
+        mRoots.push_back( std::move( refinedNode ) );
+        return &mRoots.back();
+    }
     ReachTreeNode<Representation>& refinedNode = parent->addChild(
         refine.node->getInitialSet(),
         refine.node->getTimings(),

@@ -53,8 +53,7 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 template <typename State>
 std::vector<PlotData<FullState>> urgency_cegar_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	auto roots = makeRoots<State>( automaton );
-	UrgencyCEGARAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
+	UrgencyCEGARAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front() };
 	auto result = analyzer.run();
 
 	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -68,7 +67,7 @@ std::vector<PlotData<FullState>> urgency_cegar_analyze( HybridAutomaton<Number>&
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};
 
-	for ( const auto& node : preorder( roots ) ) {
+	for ( const auto& node : preorder( analyzer.getRoots() ) ) {
 		std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
 			FullState state{};
 			state.setSet( segment );
