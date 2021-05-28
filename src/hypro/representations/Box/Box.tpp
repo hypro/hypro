@@ -115,14 +115,15 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 			// evaluate in box directions.
 			Optimizer<Number> opt( _constraints, _constants );
 			std::vector<EvaluationResult<Number>> results;
-			for ( Eigen::Index rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
-				results.emplace_back( opt.evaluate( tpl[rowIndex], false ) );
+			for(vector_t<Number> const& direction : tpl ) {
+				results.emplace_back(opt.evaluate(direction, false));
 				if ( results.back().errorCode == SOLUTION::INFEAS ) {
 					opt.cleanContexts();
 					*this = BoxT<Number, Converter, Setting>::Empty();
 					return;
 				}
 			}
+
 			opt.cleanContexts();
 			assert( Eigen::Index( results.size() ) == Eigen::Index( tpl.size() ) );
 

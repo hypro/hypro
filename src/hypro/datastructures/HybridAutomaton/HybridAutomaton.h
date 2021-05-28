@@ -144,6 +144,9 @@ class HybridAutomaton {
 	void addLocalBadState( const Location<Number>* loc, const Condition<Number>& condition ) { mLocalBadStates.emplace( std::make_pair( loc, condition ) ); }
 	void addGlobalBadState( const Condition<Number>& state ) { mGlobalBadStates.push_back( state ); }
 	///@}
+	void removeTransition(Transition<Number>* transitionPtr) {
+		transitionPtr->getSource()->removeTransition(transitionPtr);
+	}
 
 	/// adds a fresh location to this automaton
 	Location<Number>* createLocation();

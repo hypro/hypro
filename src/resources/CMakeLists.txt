@@ -7,11 +7,13 @@ set(RESSOURCES_FLAGS "-Wno-error ${CMAKE_CXX_FLAGS} -Wno-error" )
 #message("Ressoures flags: ${RESSOURCES_FLAGS}")
 
 # Enable ExternalProject CMake module
-INCLUDE(ExternalProject)
+include(ExternalProject)
+# enable fetch content module, new in cmake 3.11
+include(FetchContent)
 
 # Set default ExternalProject root directory
-SET(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources )
-SET_DIRECTORY_PROPERTIES(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR} )
+set(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources )
+set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR} )
 
 if(carl_FOUND)
 	message(STATUS "Use system version of CArL version ${carl_VERSION}")
@@ -36,6 +38,10 @@ else()
 endif()
 
 include(glpk.cmake)
+
+if(HYPRO_USE_MIMALLOC)
+	include(mimalloc.cmake)
+endif()
 
 if(HYPRO_USE_CLP)
 	message(STATUS "Use clp")

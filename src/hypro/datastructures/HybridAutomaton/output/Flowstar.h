@@ -140,7 +140,7 @@ std::string toFlowstarFormat( const Location<Number>* loc,
 		// flow
 		out << prefix << "\tpoly ode 1";
 		out << prefix << "\t{";
-		out << toFlowstarFormat<Number>( loc->getFlow(), varNameMap, prefix );
+		out << toFlowstarFormat<Number>( loc->getLinearFlow().getFlowMatrix(), varNameMap, prefix );
 		out << prefix << "\t}";
 		// invariant
 		out << prefix << "\tinv";

@@ -11,8 +11,8 @@ int initializeLogging( int& i ) {
 	( "hypro.reachability", carl::logging::LogLevel::LVL_INFO )
 	( "hypro.representations", carl::logging::LogLevel::LVL_INFO )
 	( "hypro.representations.supportFunction", carl::logging::LogLevel::LVL_INFO )
-	( "hypro.representations.HPolytope", carl::logging::LogLevel::LVL_TRACE )
-	( "hypro.datastructures", carl::logging::LogLevel::LVL_INFO )
+	( "hypro.representations.HPolytope", carl::logging::LogLevel::LVL_INFO )
+	( "hypro.datastructures", carl::logging::LogLevel::LVL_TRACE )
 	( "hypro.reacher", carl::logging::LogLevel::LVL_INFO )
 	( "hypro.reacher.preprocessing", carl::logging::LogLevel::LVL_INFO );
 

@@ -295,11 +295,8 @@ class Transition {
 	}
 };
 
-/*
-template<typename Number>
-//std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transition<Number>>& lhsT
-//                                , const std::unique_ptr<Transition<Number>>& rhsT
 
+template<typename Number>
 std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lhsT
                                                     , const Transition<Number>* rhsT
                                                     , const std::vector<std::string>& lhsVar
@@ -308,7 +305,6 @@ std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lh
                                                     , const HybridAutomaton<Number>& ha
                                                     , const std::set<Label> lhsLabels
                                                     , const std::set<Label> rhsLabels);
-*/
 }  // namespace hypro
 
 namespace std {

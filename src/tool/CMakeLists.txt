@@ -12,5 +12,5 @@ find_package(${PROJECT_NAME} REQUIRED)
 # add dependency to ensure hypro is built before
 add_dependencies(hydra ${PROJECT_NAME}-shared)
 
-target_link_libraries(hydra ${PROJECT_NAME}-shared)
+target_link_libraries(hydra PUBLIC ${PROJECT_NAME}-shared)
 target_include_directories(hydra PUBLIC ${${PROJECT_NAME}_INCLUDE_DIR})
