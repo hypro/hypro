@@ -38,11 +38,16 @@ auto stochasticRectangularJumpHandler<State>::applyJump( const TransitionStateMa
 		for ( const auto& state : statesVec ) {
 			// copy state - as there is no aggregation, the containing set and timestamp is already valid
 			// TODO: Why copy?
+
+			// std::cout<<"before apply: " << &state <<", " << state.getLocation() << std::endl;
 			assert( !state.getTimestamp().isEmpty() );
 			State newState( state );
+			// std::cout << "new state set: " << newState << std::endl;
 
 			// apply reset function
 			applyReset( newState, transitionPtr );
+			newState.removeRedundancy();
+			// std::cout << "new state set after reset: " << newState << std::endl;
 
 			// set target location in state set
 			newState.setLocation( transitionPtr->getTarget() );
@@ -65,6 +70,14 @@ auto stochasticRectangularJumpHandler<State>::applyJump( const TransitionStateMa
 				processedStates[transitionPtr] = std::vector<State>();
 			}
 			processedStates[transitionPtr].emplace_back( stateSet );
+			// std::cout<<"after apply: " <<&stateSet <<", " << stateSet.getLocation() << std::endl;
+
+			// std::cout << "new state set add to processed: " << stateSet << std::endl;
+
+			mPredecessor.emplace_back( std::make_pair( stateSet, state ) );
+			// if (state == stateSet) {
+			// 	std::cout << "operator == is true!" <<std::endl;
+			// }
 		}
 	}
 	return processedStates;
@@ -75,7 +88,8 @@ void stochasticRectangularJumpHandler<State>::applyReset( State& state, Stochast
 	if ( !transitionPtr->getReset().empty() ) {
 		if ( transitionPtr->getReset().getMatrix().size() > 0 ) {
 			state = State{ CarlPolytope<typename State::NumberType>{ transitionPtr->getReset().getMatrix(), transitionPtr->getReset().getVector() } };
-		} else {
+		} else if( !transitionPtr->getReset().getIntervalResets().empty() ){
+			std::cout << "interval reset not empty" << std::endl;
 			for ( size_t i = 0; i < state.getNumberSets(); i++ ) {
 				IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset( i );
 				state = state.partialIntervalAssignment( intervalReset.mIntervals, i );

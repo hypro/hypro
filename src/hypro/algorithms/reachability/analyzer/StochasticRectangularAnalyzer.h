@@ -16,7 +16,10 @@ template <typename State>
 class StochasticRectangularAnalyzer {
 	using Number = typename State::NumberType;
 	using ProbMapping = std::map<State*,Number>;
+	using ProbNodeMapping = std::map<ReachTreeNode<State>*,Number>;
 	using NodeTransitionPair = std::map<ReachTreeNode<State>*, StochasticTransition<Number>*>;
+	using StatePair = std::vector<std::pair<Number,State>>;
+	using NodeStatePair = std::map<ReachTreeNode<State>*, State>;
 
   public:
 	/// default constructor (deleted)
@@ -28,9 +31,11 @@ class StochasticRectangularAnalyzer {
 		, mReachTree() {
 	}
 	/// main method for reachability analysis
-	void run();
+	void forAndBackwardRun();
+	void onlyBackwardRun();
 	void forwardRun();
 	void backwardRun();
+	void backwardAnalysisRun();
 	/// getter for computed flowpipes
 	const std::vector<Flowpipe<State>>& getFlowpipes() const { return mFlowpipes; }
 	const std::vector<ReachTreeNode<State>*>& getUnsafeNodes() const { return mUnsafeNodes; }
@@ -43,7 +48,9 @@ class StochasticRectangularAnalyzer {
 	std::vector<std::unique_ptr<ReachTreeNode<State>>> mReachTree;	///< Forest of ReachTrees computed
 	std::vector<ReachTreeNode<State>*> mUnsafeNodes;                 ///< Storage of unsafe states
 	ProbMapping mStateProbs;										///< Storage of state probability
-	NodeTransitionPair mNodeTrans;									///
+	ProbNodeMapping mNodeProbs;
+	NodeTransitionPair mNodeTrans;									///< Storage of node and transition pair
+	NodeStatePair mNodePreState;									///< Storage of predecessor state
 };
 
 }  // namespace hypro

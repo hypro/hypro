@@ -10,6 +10,7 @@ template <typename State>
 class stochasticRectangularJumpHandler {
 	using Number = typename State::NumberType;
 	using TransitionStateMap = typename std::map<StochasticTransition<Number>*, std::vector<State>>;
+	using StatePair = std::vector<std::pair<State, State>>;
 
   public:
 	TransitionStateMap applyJump( const TransitionStateMap& states, StochasticTransition<Number>* transition, const AnalysisParameters& strategy );
@@ -24,7 +25,12 @@ class stochasticRectangularJumpHandler {
 
 	void applyGuard( State& state, StochasticTransition<Number>* transitionPtr ) const;
 
+	const StatePair& getPrdecessor() const { return mPredecessor; }
+
 	// typename ReachTreeNode<State>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent );
+
+  protected:
+	StatePair mPredecessor;
 };
 
 }  // namespace hypro
