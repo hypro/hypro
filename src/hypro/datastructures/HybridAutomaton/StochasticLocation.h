@@ -23,6 +23,10 @@ class StochasticLocation : public Location<Number> {
   private:
 	// Number mProbability = 1;
 	matrix_t<Number> mLocationDistribution;
+	DistributionType mDistributionType;
+	Number mExpLambda;
+    Number mNormalSigma;
+    Number mNormalMu;
 
   public:
 	StochasticLocation()
@@ -36,6 +40,7 @@ class StochasticLocation : public Location<Number> {
 	StochasticLocation( const StochasticLocation& _loc )
 		: Location<Number>( _loc )
 		, mLocationDistribution( _loc.getLocationDistribution() ) {
+			mExpLambda = _loc.getExpLambda();
 	}
 
 	explicit StochasticLocation( const matrix_t<Number>& _mat )
@@ -51,8 +56,37 @@ class StochasticLocation : public Location<Number> {
 	void setLocationDistribution( const matrix_t<Number> locationDistribution ) {
 		mLocationDistribution = locationDistribution;
 	}
+
 	const matrix_t<Number>& getLocationDistribution() const {
 		return mLocationDistribution;
+	}
+
+	void setLocationDistributionType( DistributionType distributionType ) {
+		mDistributionType = distributionType;
+	}
+	DistributionType getLocationDistributionType() const {
+		return mDistributionType;
+	}
+
+	void setExpLambda( Number lambda ) {
+		mExpLambda = lambda;
+	}
+	const Number getExpLambda() const {
+		return mExpLambda;
+	}
+
+	void setNormalSigma( Number sigma ) {
+		mNormalSigma = sigma;
+	}
+	Number getNormalSigma() {
+		return mNormalSigma;
+	}
+
+	void setNormalMu( Number mu ) {
+		mNormalMu = mu;
+	}
+	Number getNormalMu() {
+		return mNormalMu;
 	}
 };
 

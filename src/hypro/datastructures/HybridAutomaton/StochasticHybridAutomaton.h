@@ -15,7 +15,7 @@ namespace hypro {
 template <typename Number>
 class StochasticHybridAutomaton : public HybridAutomaton<Number> {
   public:
-	using stochasticInitialMap = std::map<const StochasticLocation<Number>*, std::pair< Condition<Number>, Number>>;
+	using stochasticInitialMap = std::map< const StochasticLocation<Number>*, std::pair< Condition<Number>, Number > >;
 
 	StochasticHybridAutomaton() 
 		: HybridAutomaton<Number>()
