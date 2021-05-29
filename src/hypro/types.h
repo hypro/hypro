@@ -119,8 +119,18 @@ BETTER_ENUM( AGG_SETTING, int,
 			 AGG,
 			 NO_AGG )
 
+/**
+ * @brief classifies the type of reachability analysis.
+ */
 enum class REACH_SETTING { FORWARD,
 						   BACKWARD };
+
+/**
+ * @brief classifies the type of probability distribution.
+ */
+enum class DistributionType { UNIFORMED,
+						   	  EXPONENTIAL,
+							  NORMAL };
 
 }  // namespace hypro
 
