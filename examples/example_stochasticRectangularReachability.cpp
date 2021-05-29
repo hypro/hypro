@@ -36,13 +36,15 @@ int main() {
     hypro::matrix_t<Number> probDistribution = hypro::matrix_t<Number>( 1, 2 );
     probDistribution << 0, 0.1;
     loc1.setLocationDistribution( probDistribution );
+	loc1.setLocationDistributionType( hypro::DistributionType::UNIFORMED );
 
 	hypro::StochasticLocation<Number> loc2;
 	hypro::rectangularFlow<Number> flow2( dynamics2 );
 	loc2.setRectangularFlow( flow2 );
     hypro::matrix_t<Number> probDistribution2 = hypro::matrix_t<Number>( 1, 2 );
     probDistribution2 << 0, 0.2;
-    loc1.setLocationDistribution( probDistribution2 );
+    loc2.setLocationDistribution( probDistribution2 );
+	loc2.setLocationDistributionType( hypro::DistributionType::UNIFORMED );
 
 	// create transitions
 	std::unique_ptr<hypro::StochasticTransition<Number>> trans =
@@ -54,9 +56,9 @@ int main() {
 	// hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>( 4 );
 	// guardConstants << 10, -4, 0, 0;
 	// hypro::Condition<Number> guard(guardConstraints,guardConstants);
-	hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>( 4, 1 );
+	hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>( 2, 1 );
 	guardConstraints << 1, -1;
-	hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>( 4 );
+	hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>( 2 );
 	guardConstants << 10, -4;
 	hypro::Condition<Number> guard(guardConstraints,guardConstants);
 
@@ -82,7 +84,7 @@ int main() {
 	hypro::Reset<Number> reset(resetConstraints,resetConstants);
 
     // weight
-    Number weight = 2;
+    Number weight = 1;
 
 	// setup transition
 	trans->setGuard(guard);
@@ -116,6 +118,32 @@ int main() {
 	// add defined transition to location
 	loc1.addTransition(std::move(trans));
 	loc1.addTransition(std::move(trans2));
+	loc1.setExpLambda(2);
+
+	std::unique_ptr<hypro::StochasticTransition<Number>> trans3 =
+    	std::make_unique<hypro::StochasticTransition<Number>>();
+	
+	hypro::matrix_t<Number> guardConstraints3 = hypro::matrix_t<Number>( 2, 1 );
+	guardConstraints2 << 1, -1;
+	hypro::vector_t<Number> guardConstants3 = hypro::vector_t<Number>( 2 );
+	guardConstants2 << 20, -1;
+	hypro::Condition<Number> guard3(guardConstraints3,guardConstants3);
+
+	// reset function
+	hypro::Reset<Number> reset3(resetConstraints,resetConstants);
+
+    // weight
+    Number weight3 = 1;
+
+	// setup transition
+	trans3->setGuard(guard3);
+	trans3->setSource(&loc2);
+	trans3->setTarget(&loc1);
+	trans3->setReset(reset3);
+    trans3->setTransitionWeight(weight3);
+
+	// add defined transition to location
+	loc2.addTransition(std::move(trans3));
 
 	// add location
 	std::map<const hypro::StochasticLocation<Number>*, std::size_t> locationMapping;
@@ -152,8 +180,8 @@ int main() {
 	hypro::matrix_t<Number> localBadConstraints = hypro::matrix_t<Number>( 2, 1 );
 	localBadConstraints << 1, -1;
 	hypro::vector_t<Number> localBadConstants = hypro::vector_t<Number>( 2 );
-	localBadConstants << 6, -4;
-	ha.addLocalBadState( ha.getLocations()[locationMapping[&loc1]], hypro::Condition<Number>( localBadConstraints, localBadConstants ) );
+	localBadConstants << 8, -6;
+	ha.addLocalBadState( ha.getLocations()[locationMapping[&loc2]], hypro::Condition<Number>( localBadConstraints, localBadConstants ) );
 
 	// setup global bad state
 	hypro::matrix_t<Number> globalBadConstraints = hypro::matrix_t<Number>( 4, 2 );
@@ -172,7 +200,7 @@ int main() {
 
 	// call to analysis core
 	hypro::StochasticRectangularAnalyzer<State> analyzer{ ha, settings };
-	analyzer.run();
+	analyzer.forAndBackwardRun();
 
 	// if ( result == hypro::REACHABILITY_RESULT::UNKNOWN ) {
 	// 	std::cout << "Could not verify safety." << std::endl;
@@ -181,6 +209,7 @@ int main() {
 	// }
 
 	// output computed sets
+	std::cout<<"final results"<<std::endl;
 	for ( const auto& fp : analyzer.getFlowpipes() ) {
 		for ( const auto& segment : fp ) {
 			std::cout << segment << std::endl;
