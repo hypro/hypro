@@ -14,17 +14,38 @@ struct Path {
 	Path( size_t numElements )
 		: elements( numElements ) {}
 
-    std::pair<Path<Number>, Path<Number>> split( std::size_t n ) const {
-        assert( n < elements.size() );
-        Path<Number> pathPrefix;
-        Path<Number> pathSuffix;
-        pathPrefix.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>>(
-            elements.begin(), elements.begin() + n - 1 );
-        pathSuffix.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>>(
-            elements.begin() + n, elements.end() );
-        pathPrefix.rootLocation = rootLocation;
-        pathSuffix.rootLocation = elements.at( n - 1 ).second->getTarget();
-        return std::make_pair( pathPrefix, pathSuffix );
+    Path<Number> head( std::size_t n ) const {
+        assert( n <= elements.size() );
+        Path<Number> res;
+        if ( n == elements.size() ) {
+            res.elements = elements;
+            res.rootLocation = rootLocation;
+        } else if ( n == 0 ) {
+            res.elements = {};
+            res.rootLocation = elements.at( elements.size() - 1 ).second->getTarget();
+        } else {
+            res.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>>(
+                elements.begin(), elements.begin() + n );
+            res.rootLocation = rootLocation;
+        }
+        return res;
+    }
+
+    Path<Number> tail( std::size_t n ) const {
+        assert( n <= elements.size() );
+        Path<Number> res;
+        if ( n == elements.size() ) {
+            res.elements = elements;
+            res.rootLocation = rootLocation;
+        } else if ( n == 0 ) {
+            res.elements = {};
+            res.rootLocation = elements.at( elements.size() - 1 ).second->getTarget();
+        } else {
+            res.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>>(
+                elements.end() - n, elements.end() );
+            res.rootLocation = elements.at( elements.size() - ( n + 1 ) ).second->getTarget();
+        }
+        return res;
     }
 };
 
