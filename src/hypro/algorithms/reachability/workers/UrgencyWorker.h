@@ -35,6 +35,16 @@ class UrgencyWorker {
         , mTrafoCache( trafoCache ) {}
 
     /**
+     * @brief Computes successors from a time step and a discrete jump.
+     * @param task Used to access the location, initial set and urgent transitions.
+     * @return Safety after letting time elapse
+     */
+    REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<Representation>& task, std::size_t timeHorizon );
+    REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<Representation>& task ) {
+        return computeForwardReachability( task, mNumSegments );
+    }
+
+    /**
      * @brief Computes the states reachable by letting time elapse.
      * @param task Used to access the the location, initial set and urgent transitions.
      * @return Safety after time elapse.

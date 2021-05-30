@@ -3,6 +3,16 @@
 namespace hypro {
 
 template <typename Representation>
+REACHABILITY_RESULT UrgencyWorker<Representation>::computeForwardReachability( const ReachTreeNode<Representation>& task, std::size_t timeHorizon ) {
+    reset();
+    if ( computeTimeSuccessors( task, timeHorizon ) == REACHABILITY_RESULT::UNKNOWN ) {
+        return REACHABILITY_RESULT::UNKNOWN;
+    }
+    computeJumpSuccessors( task );
+    return REACHABILITY_RESULT::SAFE;
+}
+
+template <typename Representation>
 REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon ) {
     const Location<Number>* loc = task.getLocation();
     Representation initialSet = task.getInitialSet();
