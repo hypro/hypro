@@ -28,18 +28,26 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
             std::back_inserter( currentNode->getFlowpipe() ) );
 
         if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
-            RefinePoint refine = findRefinementNode( currentNode );
-            if ( refine.node == nullptr ) {
-                return { Failure{ currentNode } };
-            }
             Path<Number> currentPath = currentNode->getPath();
-            bool verified;
-            do {
-                std::tie( verified, refine ) = refinePath( currentPath, refine );
+            auto failureNode = currentNode;
+            while( true ) {
+                RefinePoint refine = findRefinementNode( failureNode );
                 if ( refine.node == nullptr ) {
                     return { Failure{ currentNode } };
+                } else {
+                    auto refinedNode = createRefinedNode( refine );
+                    auto refineResult = refinePath( refinedNode, currentPath, mMaxSegments );
+                    if ( refineResult.isSuccess() ) {
+                        // push unexplored node to the global queue
+                        for ( auto successor : refineResult.success().pathSuccessors ) {
+                            mWorkQueue.push_front( successor );
+                        }
+                        break;
+                    } else {
+                        failureNode = refineResult.failure().conflictNode;
+                    }
                 }
-            } while ( !verified );
+            }
         } else {
             //Do not perform discrete jump if jump depth was reached
             if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) continue;
@@ -75,32 +83,36 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createChild
 }
 
 template <typename Representation>
-auto UrgencyCEGARAnalyzer<Representation>::findRefinementNode( ReachTreeNode<Representation>* const node )
+auto UrgencyCEGARAnalyzer<Representation>::findRefinementNode( ReachTreeNode<Representation>* const unsafeNode )
     -> RefinePoint {
-    
-    std::vector<ReachTreeNode<Representation>*> nodePath{ node };
-    for ( auto currentNode = node; currentNode != nullptr; currentNode = currentNode->getParent() ) {
-        nodePath.push_back( currentNode );
+
+    // collect nodes on path
+    std::vector<ReachTreeNode<Representation>*> nodePath( unsafeNode->getDepth() + 1 );
+    auto n = unsafeNode;
+    for ( int depth = unsafeNode->getDepth(); depth >= 0; --depth ) {
+        assert( n != nullptr );
+        nodePath[ depth ] = n;
+        n = n->getParent();
     }
 
-    auto path = node->getPath();
-    for ( auto it = nodePath.rbegin(); it != nodePath.rend(); ++it ) {
+    auto path = unsafeNode->getPath();
+    for ( auto it = nodePath.begin(); it != nodePath.end(); ++it ) {
         for ( auto trans : mHybridAutomaton->getTransitions() ) {
-            if ( trans->getSource() != ( *it )->getLocation() ) {
+            // check all urgent, outgoing and unrefined transitions
+            auto candidate = *it;
+            if ( trans->getSource() != candidate->getLocation() ) {
                 continue;
             }
-            // check if transition is urgent
             if ( !trans->isUrgent() ) {
                 continue;
             }
-            // check if transition is unrefined
-            auto refined = ( *it )->getUrgent();
-            if ( std::find( refined.begin(), refined.end(), trans ) != refined.end() ) {
+            auto urgent = candidate->getUrgent();
+            if ( std::find( urgent.begin(), urgent.end(), trans ) != urgent.end() ) {
                 continue;
             }
             // check if guard intersection is unsafe on path to node
-            if ( checkGuard( *it, trans, path ) == REACHABILITY_RESULT::UNKNOWN ) {
-                return RefinePoint{ *it, trans };
+            if ( guardUnsafe( candidate, path.tail( unsafeNode->getDepth() - candidate->getDepth() ), trans ) ) {
+                return RefinePoint{ candidate, trans };
             }
         }       
     }
@@ -108,49 +120,43 @@ auto UrgencyCEGARAnalyzer<Representation>::findRefinementNode( ReachTreeNode<Rep
 }
 
 template <typename Representation>
-REACHABILITY_RESULT UrgencyCEGARAnalyzer<Representation>::checkGuard(
-        ReachTreeNode<Representation>* const node, Transition<Number>* trans, const Path<Number>& path ) {
-    // path is from node to unsafe
-    // check if flowpipe is fragmented, because in that case need to check timing of segments
-    bool split = !node->getUrgent().empty();
-    assert( ( !split || node->getFlowpipe().size() == node->getFpTimings().size() ) );
+bool UrgencyCEGARAnalyzer<Representation>::guardUnsafe(
+        ReachTreeNode<Representation>* const start, const Path<Number>& pathToUnsafe, Transition<Number>* refineJump ) {
+    // flowpipe can be fragmented from earlier refinement (multiple simultaneous segments)
+    bool splitFp = !start->getUrgent().empty();
+    assert( ( !splitFp || start->getFlowpipe().size() == start->getFpTimings().size() ) );
 
-    // iterate over segments
-    for ( std::size_t fpIndex = 0; fpIndex < node->getFlowpipe().size(); ++fpIndex ) {
-        std::size_t segmentCount;
-        std::size_t segmentIndex = split ? node->getFpTimings()[ fpIndex ] : fpIndex;
-        assert( segmentIndex <= path.elements[ 0 ].first.lower() );
-        segmentCount = mMaxSegments - segmentIndex;
-        auto [containment, initialSet] = intersect( node->getFlowpipe()[ fpIndex ], trans->getGuard() );
+    // collect intersection of segments with guard and number of timesteps to compute for each segment
+    std::vector<ReachTreeNode<Representation>> tasks;
+    for ( std::size_t fpIndex = 0; fpIndex < start->getFlowpipe().size(); ++fpIndex ) {
+        // todo: intersect with preimage of invariant in new location
+        auto [containment, initial] = intersect( start->getFlowpipe()[ fpIndex ], refineJump->getGuard() );
         if ( containment == CONTAINMENT::NO ) {
             continue;
         } else if ( containment == CONTAINMENT::FULL ) {
-            // segment is contained in guard. Since segment is unsafe on path, so is the guard.
-            return REACHABILITY_RESULT::UNKNOWN;
+            return true;
         } else {
+            // timing offset
+            auto segmentIndex = splitFp ? start->getFpTimings()[ fpIndex ] : fpIndex;
+            carl::Interval<SegmentInd> segmentOffset(
+                start->getTimings().lower() + segmentIndex, start->getTimings().upper() + segmentIndex );
             // todo: set urgency?
-            ReachTreeNode<Representation> guardNode( node->getLocation(), initialSet, carl::Interval<SegmentInd>( 0 ) );
-            mRefinementWorker->reset();
-            auto safetyResult = mRefinementWorker->computeTimeSuccessors( guardNode, segmentCount );
-            for ( auto& segment : mRefinementWorker->getFlowpipe() ) {
-                guardNode.getFlowpipe().push_back( segment.valuationSet );
-            }
-            if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
-                return REACHABILITY_RESULT::UNKNOWN;
-            }
-            Path guardPath = path;
-            guardPath.elements[ 0 ].first -= carl::Interval<SegmentInd>( segmentIndex );
-            mRefinementAnalyzer.setRefinement( &guardNode, guardPath );
-            if ( !mRefinementAnalyzer.run().isSuccess() ) {
-                return REACHABILITY_RESULT::UNKNOWN;
-            }
+            ReachTreeNode<Representation> task( start->getLocation(), initial, segmentOffset );
+            tasks.push_back( std::move( task ) );
         }
     }
-    return REACHABILITY_RESULT::SAFE;
+
+    for ( auto& task : tasks ) {
+        auto timeHorizon = mMaxSegments - ( task.getTimings().lower() - start->getTimings().lower() );
+        if ( !refinePath( &task, pathToUnsafe, timeHorizon ).isSuccess() ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 template <typename Representation>
-ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::refineNode( const RefinePoint& refine ) {
+ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createRefinedNode( const RefinePoint& refine ) {
     auto parent = refine.node->getParent();
     std::set<Transition<Number>*> urgentTransitions = refine.node->getUrgent();
     urgentTransitions.insert( refine.transition );
@@ -194,36 +200,36 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::refineNode(
 }
 
 template <typename Representation>
-auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path, const RefinePoint& refine )
-  -> std::pair<bool, RefinePoint> {
+auto UrgencyCEGARAnalyzer<Representation>::refinePath(
+        ReachTreeNode<Representation>* refinedNode, const Path<Number>& path, std::size_t initialTimeHorizon )
+        -> RefinementResult {
 
-    auto refinedNode = refineNode( refine );
     if ( refinedNode->getFlowpipe().empty() ) {
-        // compute successors
-        mRefinementWorker->reset();
-        auto safety = mRefinementWorker->computeTimeSuccessors( *refinedNode );
+        auto safety = mRefinementWorker->computeForwardReachability( *refinedNode, initialTimeHorizon );
+        std::vector<Representation>& flowpipe = refinedNode->getFlowpipe();
+        auto& timings = refinedNode->getFpTimings();
         for ( auto& timedSegment : mRefinementWorker->getFlowpipe() ) {
-            refinedNode->getFlowpipe().push_back( timedSegment.valuationSet );
-            refinedNode->getFpTimings().push_back( timedSegment.index );
+            flowpipe.push_back( timedSegment.valuationSet );
+            timings.push_back( timedSegment.index );
         }
-        if ( safety != REACHABILITY_RESULT::SAFE ) {
-            return std::make_pair( false, findRefinementNode( refinedNode ) );
-        }
-        // create children
-        mRefinementWorker->computeJumpSuccessors( *refinedNode );
-        for ( const auto& [transition, timedValuationSets] : mRefinementWorker->getJumpSuccessors() ) {
-            for ( const auto jsucc : timedValuationSets ) {
-                createChildNode( jsucc, transition, refinedNode );
+        if ( safety == REACHABILITY_RESULT::UNKNOWN ) {
+            return { Failure<Representation>{ refinedNode } };
+        } else {
+            for ( const auto& [transition, timedValuationSets] : mRefinementWorker->getJumpSuccessors() ) {
+                for ( const auto jsucc : timedValuationSets ) {
+                    createChildNode( jsucc, transition, refinedNode );
+                }
             }
         }
     }
 
     // refined node is at the end of the path and it is safe
     if ( refinedNode->getPath().elements == path.elements ) {
-        for ( auto childNode : refinedNode->getChildren() ) {
-            mWorkQueue.push_front( childNode );
-            return std::make_pair( true, refine );
+        std::vector<ReachTreeNode<Representation>*> successors;
+        for ( auto succ : refinedNode->getChildren() ) {
+            successors.push_back( succ );
         }
+        return { RefinementSuccess{ successors } };
     }
 
     // check that the transition on path can be taken
@@ -236,23 +242,13 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath( const Path<Number>& path,
     }
     if ( !matched ) {
         // path is not reachable
-        return std::make_pair( true, refine );
+        return { RefinementSuccess<Representation>{} };
     }
 
     // refinementAnalyzer continues computation along the rest of the path, starting from refinedNode
-    auto [pathPrefix, pathSuffix] = path.split( refinedNode->getDepth() );
-    assert( pathPrefix.elements == refinedNode->getPath().elements );
-    assert( pathSuffix.rootLocation == refinedNode->getLocation() );
+    auto pathTail = path.tail( path.elements.size() - refinedNode->getDepth() );
 
-    mRefinementAnalyzer.setRefinement( refinedNode, pathSuffix );
-    auto res = mRefinementAnalyzer.run();
-    if ( res.isSuccess() ) {
-        // push unexplored node to the global queue
-        for ( auto successor : res.success().pathSuccessors ) {
-            mWorkQueue.push_front( successor );
-            return std::make_pair ( true, refine );
-        }
-    }
-    return std::make_pair( false, findRefinementNode( res.failure().conflictNode ) );
+    mRefinementAnalyzer.setRefinement( refinedNode, pathTail );
+    return mRefinementAnalyzer.run();
 }
 } // namespace hypro

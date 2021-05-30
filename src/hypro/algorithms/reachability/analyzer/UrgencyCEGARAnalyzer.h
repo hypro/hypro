@@ -15,6 +15,7 @@ struct UrgencyCEGARSuccess {};
 template <typename Representation>
 class UrgencyCEGARAnalyzer {
     using Number = typename Representation::NumberType;
+    using RefinementResult = typename RefinementAnalyzer<Representation>::RefinementResult;
 
     struct RefinePoint {
         ReachTreeNode<Representation>* node;
@@ -55,14 +56,13 @@ class UrgencyCEGARAnalyzer {
     auto findRefinementNode( ReachTreeNode<Representation>* const node )
       -> RefinePoint;
 
-    auto checkGuard(
-        ReachTreeNode<Representation>* const node, Transition<Number>* trans, const Path<Number>& path )
-      -> REACHABILITY_RESULT;
+    auto guardUnsafe( ReachTreeNode<Representation>* const start, const Path<Number>& pathToUnsafe, Transition<Number>* refineJump )
+      -> bool;
 
-    auto refinePath( const Path<Number>& path, const RefinePoint& refine )
-      -> std::pair<bool, RefinePoint>;
+    auto refinePath( ReachTreeNode<Representation>* refinedNode, const Path<Number>& path, std::size_t initialTimeHorizon )
+      -> RefinementResult;
 
-    auto refineNode( const RefinePoint& refine )
+    auto createRefinedNode( const RefinePoint& refine )
       -> ReachTreeNode<Representation>*;
 
     auto createChildNode( const TimedValuationSet<Representation>& jsucc, const Transition<Number>* transition, ReachTreeNode<Representation>* parent )
