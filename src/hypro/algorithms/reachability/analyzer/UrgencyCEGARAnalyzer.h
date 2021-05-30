@@ -31,7 +31,6 @@ class UrgencyCEGARAnalyzer {
         : mHybridAutomaton( &ha )
         , mFixedParameters( fixedParameters )
         , mParameters( parameters )
-        , mRefinementAnalyzer( *mHybridAutomaton, mFixedParameters, mParameters )
         , mRoots( makeRoots<Representation>( ha ) ) {
         for ( auto& root : mRoots ) {
             mWorkQueue.push_front( &root );
@@ -46,7 +45,6 @@ class UrgencyCEGARAnalyzer {
     HybridAutomaton<Number> const* mHybridAutomaton;
     FixedAnalysisParameters mFixedParameters;
     AnalysisParameters mParameters;
-    RefinementAnalyzer<Representation> mRefinementAnalyzer;
     UrgencyWorker<Representation>* mRefinementWorker;
     std::vector<ReachTreeNode<Representation>> mRoots;
 

@@ -248,7 +248,8 @@ auto UrgencyCEGARAnalyzer<Representation>::refinePath(
     // refinementAnalyzer continues computation along the rest of the path, starting from refinedNode
     auto pathTail = path.tail( path.elements.size() - refinedNode->getDepth() );
 
-    mRefinementAnalyzer.setRefinement( refinedNode, pathTail );
-    return mRefinementAnalyzer.run();
+    RefinementAnalyzer<Representation> refinementAnalyzer( *mHybridAutomaton, mFixedParameters, mParameters );
+    refinementAnalyzer.setRefinement( refinedNode, pathTail );
+    return refinementAnalyzer.run();
 }
 } // namespace hypro
