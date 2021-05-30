@@ -120,42 +120,6 @@ auto UrgencyCEGARAnalyzer<Representation>::findRefinementNode( ReachTreeNode<Rep
 }
 
 template <typename Representation>
-bool UrgencyCEGARAnalyzer<Representation>::guardUnsafe(
-        ReachTreeNode<Representation>* const start, const Path<Number>& pathToUnsafe, Transition<Number>* refineJump ) {
-    // flowpipe can be fragmented from earlier refinement (multiple simultaneous segments)
-    bool splitFp = !start->getUrgent().empty();
-    assert( ( !splitFp || start->getFlowpipe().size() == start->getFpTimings().size() ) );
-
-    // collect intersection of segments with guard and number of timesteps to compute for each segment
-    std::vector<ReachTreeNode<Representation>> tasks;
-    for ( std::size_t fpIndex = 0; fpIndex < start->getFlowpipe().size(); ++fpIndex ) {
-        // todo: intersect with preimage of invariant in new location
-        auto [containment, initial] = intersect( start->getFlowpipe()[ fpIndex ], refineJump->getGuard() );
-        if ( containment == CONTAINMENT::NO ) {
-            continue;
-        } else if ( containment == CONTAINMENT::FULL ) {
-            return true;
-        } else {
-            // timing offset
-            auto segmentIndex = splitFp ? start->getFpTimings()[ fpIndex ] : fpIndex;
-            carl::Interval<SegmentInd> segmentOffset(
-                start->getTimings().lower() + segmentIndex, start->getTimings().upper() + segmentIndex );
-            // todo: set urgency?
-            ReachTreeNode<Representation> task( start->getLocation(), initial, segmentOffset );
-            tasks.push_back( std::move( task ) );
-        }
-    }
-
-    for ( auto& task : tasks ) {
-        auto timeHorizon = mMaxSegments - ( task.getTimings().lower() - start->getTimings().lower() );
-        if ( !refinePath( &task, pathToUnsafe, timeHorizon ).isSuccess() ) {
-            return true;
-        }
-    }
-    return false;
-}
-
-template <typename Representation>
 ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createRefinedNode( const RefinePoint& refine ) {
     auto parent = refine.node->getParent();
     std::set<Transition<Number>*> urgentTransitions = refine.node->getUrgent();
@@ -197,6 +161,42 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createRefin
         refine.node->getTransition() );
     refinedNode.setUrgent( urgentTransitions );
     return &refinedNode;
+}
+
+template <typename Representation>
+bool UrgencyCEGARAnalyzer<Representation>::guardUnsafe(
+        ReachTreeNode<Representation>* const start, const Path<Number>& pathToUnsafe, Transition<Number>* refineJump ) {
+    // flowpipe can be fragmented from earlier refinement (multiple simultaneous segments)
+    bool splitFp = !start->getUrgent().empty();
+    assert( ( !splitFp || start->getFlowpipe().size() == start->getFpTimings().size() ) );
+
+    // collect intersection of segments with guard and number of timesteps to compute for each segment
+    std::vector<ReachTreeNode<Representation>> tasks;
+    for ( std::size_t fpIndex = 0; fpIndex < start->getFlowpipe().size(); ++fpIndex ) {
+        // todo: intersect with preimage of invariant in new location
+        auto [containment, initial] = intersect( start->getFlowpipe()[ fpIndex ], refineJump->getGuard() );
+        if ( containment == CONTAINMENT::NO ) {
+            continue;
+        } else if ( containment == CONTAINMENT::FULL ) {
+            return true;
+        } else {
+            // timing offset
+            auto segmentIndex = splitFp ? start->getFpTimings()[ fpIndex ] : fpIndex;
+            carl::Interval<SegmentInd> segmentOffset(
+                start->getTimings().lower() + segmentIndex, start->getTimings().upper() + segmentIndex );
+            // todo: set urgency?
+            ReachTreeNode<Representation> task( start->getLocation(), initial, segmentOffset );
+            tasks.push_back( std::move( task ) );
+        }
+    }
+
+    for ( auto& task : tasks ) {
+        auto timeHorizon = mMaxSegments - ( task.getTimings().lower() - start->getTimings().lower() );
+        if ( !refinePath( &task, pathToUnsafe, timeHorizon ).isSuccess() ) {
+            return true;
+        }
+    }
+    return false;
 }
 
 template <typename Representation>
