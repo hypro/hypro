@@ -59,3 +59,10 @@ add_imported_library(clp SHARED "${CMAKE_BINARY_DIR}/resources/lib/${CMAKE_FIND_
 
 add_dependencies(clp_STATIC clp_SHARED clp)
 add_dependencies(resources clp_STATIC clp_SHARED)
+
+if(HYPRO_USE_CLP)
+    target_link_libraries(${PROJECT_NAME}-shared PUBLIC coinUtils_SHARED)
+    target_link_libraries(${PROJECT_NAME}-shared PUBLIC clp_SHARED)
+    target_link_libraries(${PROJECT_NAME}-static PUBLIC coinUtils_STATIC)
+    target_link_libraries(${PROJECT_NAME}-static PUBLIC clp_STATIC)
+endif()

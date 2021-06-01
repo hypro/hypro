@@ -22,3 +22,5 @@ add_imported_library(GLPK STATIC "${GLPK_LIBRARIES}" "${GLPK_INCLUDE_DIR}")
 add_dependencies(GLPK_STATIC glpk)
 add_dependencies(hypro_resources GLPK_STATIC)
 
+target_link_libraries(${PROJECT_NAME}-shared PUBLIC GLPK_STATIC)
+target_link_libraries(${PROJECT_NAME}-static PUBLIC GLPK_STATIC)
