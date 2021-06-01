@@ -3,9 +3,7 @@
 # Create object library first
 file(GLOB_RECURSE sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 # filter out matlab-bindings
-#message(STATUS "sources before filtering: ${sources}")
 list(FILTER sources EXCLUDE REGEX MHyPro.cpp|MReach.cpp|CompareMHyProAndCORA/example_box.cpp|CompareMHyProAndCORA/example_zonotope.cpp)
-#message(STATUS "sources after filtering: ${sources}")
 
 add_library(${PROJECT_NAME}-objects OBJECT ${sources})
 add_dependencies(${PROJECT_NAME}-objects hypro_resources)
@@ -20,50 +18,54 @@ target_include_directories(${PROJECT_NAME}-objects
 ########################################################################################
 # Create static and shared libraries
 
-	add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}-objects>)
-	set_target_properties( ${PROJECT_NAME}-static PROPERTIES
-		VERSION "${PROJECT_VERSION}"
-		SOVERSION "${PROJECT_VERSION}"
-		OUTPUT_NAME ${PROJECT_NAME}
-		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		LINKER_LANGUAGE CXX
-	)
+add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}-objects>)
+set_target_properties( ${PROJECT_NAME}-static PROPERTIES
+	VERSION "${PROJECT_VERSION}"
+	SOVERSION "${PROJECT_VERSION}"
+	OUTPUT_NAME ${PROJECT_NAME}
+	LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+	ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+	LINKER_LANGUAGE CXX
+)
 
-	target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
-	target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
-	if(HYPRO_USE_MIMALLOC)
-  		target_link_libraries(${PROJECT_NAME}-static PUBLIC mimalloc_STATIC)
-	endif()
+target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
+target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
 
-	##### SHARED LIBRARY
+target_include_directories(${PROJECT_NAME}-static
+	PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
+	PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+	$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+	INTERFACE
+	$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
+)
 
-	add_library(${PROJECT_NAME}-shared SHARED $<TARGET_OBJECTS:${PROJECT_NAME}-objects>)
-	set_target_properties( ${PROJECT_NAME}-shared PROPERTIES
-		VERSION "${PROJECT_VERSION}"
-		SOVERSION "${PROJECT_VERSION}"
-		OUTPUT_NAME ${PROJECT_NAME}
-		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-		LINKER_LANGUAGE CXX
-	)
+##### SHARED LIBRARY
 
-	target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
-	target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread)
-	if(HYPRO_USE_MIMALLOC)
-  		target_link_libraries(${PROJECT_NAME}-shared PUBLIC mimalloc_STATIC)
-	endif()
+add_library(${PROJECT_NAME}-shared SHARED $<TARGET_OBJECTS:${PROJECT_NAME}-objects>)
+set_target_properties( ${PROJECT_NAME}-shared PROPERTIES
+	VERSION "${PROJECT_VERSION}"
+	SOVERSION "${PROJECT_VERSION}"
+	OUTPUT_NAME ${PROJECT_NAME}
+	LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+	ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+	LINKER_LANGUAGE CXX
+)
 
-	target_include_directories(${PROJECT_NAME}-shared
-		PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
-		PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
-		$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
-		INTERFACE
-		$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
-	)
+target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
+target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread)
 
-	add_custom_target(${PROJECT_NAME} DEPENDS ${PROJECT_NAME}-shared ${PROJECT_NAME}-static)
+target_include_directories(${PROJECT_NAME}-shared
+	PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
+	PUBLIC
+	$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/src>
+	$<INSTALL_INTERFACE:include/${PROJECT_NAME}>
+	INTERFACE
+	$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
+)
+
+# Meta-target which combines static and shared library
+add_custom_target(${PROJECT_NAME} DEPENDS ${PROJECT_NAME}-shared ${PROJECT_NAME}-static)
 
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

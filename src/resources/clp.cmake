@@ -17,9 +17,6 @@ ExternalProject_Add(
 ExternalProject_Get_Property(coinUtils source_dir)
 ExternalProject_Get_Property(coinUtils binary_dir)
 
-message(STATUS "CoinUtils source dir: ${source_dir}")
-message(STATUS "CoinUtils binary dir: ${binary_dir}")
-
 set( coinUtils_INCLUDE_DIR "${CMAKE_BINARY_DIR}/resources/include/coin-or" )
 
 add_imported_library(coinUtils STATIC "${CMAKE_BINARY_DIR}/resources/lib/${CMAKE_FIND_LIBRARY_PREFIXES}CoinUtils${CMAKE_STATIC_LIBRARY_SUFFIX}" "${coinUtils_INCLUDE_DIR}")
@@ -48,9 +45,6 @@ ExternalProject_Add(
 
 ExternalProject_Get_Property(clp source_dir)
 ExternalProject_Get_Property(clp binary_dir)
-
-message(STATUS "Clp source dir: ${source_dir}")
-message(STATUS "Clp binary dir: ${binary_dir}")
 
 set( clp_INCLUDE_DIR "${CMAKE_BINARY_DIR}/resources/include/clp" )
 
