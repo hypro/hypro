@@ -9,7 +9,7 @@
 # Credit: Sebastian Junges, Gereon Kremer
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
 # # # # # # # # # # # # # # # # # # # # # #
 # A. Project properties
@@ -115,12 +115,6 @@ include(compiler-settings)
 
 load_library(${PROJECT_NAME} GTest 0)
 
-#load_library(${PROJECT_NAME} carl 19.01)
-load_library(${PROJECT_NAME} carl 0)
-include(carlVersionMacros)
-
-add_subdirectory(src/resources)
-
 # # # # # # # # # # # # # # # # # # # # # #
 # C.3. Development and debug libraries.
 # # # # # # # # # # # # # # # # # # # # # #
@@ -150,9 +144,14 @@ enable_testing()
 # # # # # # # # # # # # # # # # # # # # # #
 
 add_subdirectory(src)
+
+add_subdirectory(src/resources)
+
+# Create config.h by adding cmake defines dependend on option switches
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/src/hypro/flags.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/hypro/flags.h @ONLY)
+
 add_subdirectory(src/test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
-
 
 ##############################################################################
 #### EXPORT SETTINGS

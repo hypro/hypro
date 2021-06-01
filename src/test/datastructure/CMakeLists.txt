@@ -33,7 +33,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		${datastructure_test_sources}
 	)
 
-	add_dependencies(runDatastructureTests resources)
+	add_dependencies(runDatastructureTests hypro_resources)
 	target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runDatastructureTests PUBLIC

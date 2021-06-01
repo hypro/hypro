@@ -17,9 +17,6 @@ ExternalProject_Add(
 ExternalProject_Get_Property(coinUtils source_dir)
 ExternalProject_Get_Property(coinUtils binary_dir)
 
-message(STATUS "CoinUtils source dir: ${source_dir}")
-message(STATUS "CoinUtils binary dir: ${binary_dir}")
-
 set( coinUtils_INCLUDE_DIR "${CMAKE_BINARY_DIR}/resources/include/coin-or" )
 
 add_imported_library(coinUtils STATIC "${CMAKE_BINARY_DIR}/resources/lib/${CMAKE_FIND_LIBRARY_PREFIXES}CoinUtils${CMAKE_STATIC_LIBRARY_SUFFIX}" "${coinUtils_INCLUDE_DIR}")
@@ -49,9 +46,6 @@ ExternalProject_Add(
 ExternalProject_Get_Property(clp source_dir)
 ExternalProject_Get_Property(clp binary_dir)
 
-message(STATUS "Clp source dir: ${source_dir}")
-message(STATUS "Clp binary dir: ${binary_dir}")
-
 set( clp_INCLUDE_DIR "${CMAKE_BINARY_DIR}/resources/include/clp" )
 
 add_imported_library(clp STATIC "${CMAKE_BINARY_DIR}/resources/lib/${CMAKE_FIND_LIBRARY_PREFIXES}Clp${CMAKE_STATIC_LIBRARY_SUFFIX}" ${clp_INCLUDE_DIR})
@@ -59,3 +53,10 @@ add_imported_library(clp SHARED "${CMAKE_BINARY_DIR}/resources/lib/${CMAKE_FIND_
 
 add_dependencies(clp_STATIC clp_SHARED clp)
 add_dependencies(resources clp_STATIC clp_SHARED)
+
+if(HYPRO_USE_CLP)
+    target_link_libraries(${PROJECT_NAME}-shared PUBLIC coinUtils_SHARED)
+    target_link_libraries(${PROJECT_NAME}-shared PUBLIC clp_SHARED)
+    target_link_libraries(${PROJECT_NAME}-static PUBLIC coinUtils_STATIC)
+    target_link_libraries(${PROJECT_NAME}-static PUBLIC clp_STATIC)
+endif()

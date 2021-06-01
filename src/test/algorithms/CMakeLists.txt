@@ -30,7 +30,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     		${algorithm_test_sources}
     )
 
-    add_dependencies(runAlgorithmTests resources)
+    add_dependencies(runAlgorithmTests hypro_resources)
     target_include_directories(runAlgorithmTests PRIVATE ${GTEST_INCLUDE_DIR})
 
     target_link_libraries(runAlgorithmTests PUBLIC
