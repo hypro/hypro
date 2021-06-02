@@ -29,7 +29,7 @@ jobs:
       - name: Download Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        run: git clone --depth 1 --branch master https://github.com/smtrat/carl carl && sudo apt install libeigen3-dev libboost-chrono1.73-dev libboost-system1.73-dev libboost-program-options1.73-dev libboost-test1.73-dev libboost-timer1.73-dev libboost-serialization1.73-dev uuid-dev
+        run: git clone --depth 1 --branch master https://github.com/smtrat/carl carl && sudo apt install libeigen3-dev libboost-chrono1.71-dev libboost-system1.71-dev libboost-program-options1.71-dev libboost-test1.71-dev libboost-timer1.71-dev libboost-serialization1.71-dev uuid-dev
 
       - name: Create Build Environment for Dependencies
         shell: bash
