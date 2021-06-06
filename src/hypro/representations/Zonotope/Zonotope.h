@@ -23,7 +23,6 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #include <algorithm>
 #include <cmath>
-#include <eigen3/Eigen/Dense>
 #include <valarray>
 #include <vector>
 #ifdef HYPRO_USE_PPL
@@ -208,7 +207,7 @@ class ZonotopeT : private GeometricObjectBase {
 	*****************************************************************************/
 
 	ZonotopeT minkowskiSum( const ZonotopeT& rhs ) const;
-	ZonotopeT project( const std::vector<std::size_t>& dimensions ) const;
+	ZonotopeT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	ZonotopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;
@@ -255,8 +254,8 @@ class ZonotopeT : private GeometricObjectBase {
 	 */
 	ZonotopeT intersect( const Halfspace<Number>& rhs, int method );
 
-	ZonotopeT<Number, Converter, Setting> intersect( const ZonotopeT<Number, Converter, Setting>& /*rhs*/) const {
-		assert(false && "NOT IMPLEMENTED YET");
+	ZonotopeT<Number, Converter, Setting> intersect( const ZonotopeT<Number, Converter, Setting>& /*rhs*/ ) const {
+		assert( false && "NOT IMPLEMENTED YET" );
 		return *this;
 	}
 

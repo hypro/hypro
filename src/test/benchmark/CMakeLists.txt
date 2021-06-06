@@ -8,7 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		AllBenchmarkTest.cpp
 	)
 
-	add_dependencies(runBenchmark resources)
+	add_dependencies(runBenchmark hypro_resources)
 	target_include_directories(runBenchmark PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runBenchmark
@@ -26,7 +26,7 @@ file(GLOB_RECURSE BM_SOURCES ${CMAKE_CURRENT_LIST_DIR}/hyproBenchmark/*.cpp)
 add_executable(benchmark
 	${BM_SOURCES}
 )
-target_link_libraries(benchmark
+target_link_libraries(benchmark PUBLIC
 						${PROJECT_NAME}-shared
 )
 cotire(runBenchmark)

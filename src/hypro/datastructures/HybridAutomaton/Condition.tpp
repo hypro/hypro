@@ -8,6 +8,7 @@ Condition<Number>::Condition( const std::vector<std::variant<ConstraintSetT<Numb
 		mConstraints.push_back( std::get<ConstraintSetT<Number>>( item ) );
 	}
 	mConditionIsBox = std::vector<TRIBOOL>{ mConstraints.size(), TRIBOOL::NSET };
+	mConditionSetState = std::vector<SETSTATE>{ mConstraints.size(), SETSTATE::UNKNOWN };
 	mHash = 0;
 }
 
@@ -38,6 +39,7 @@ void Condition<Number>::setMatrix( const matrix_t<Number>& m, std::size_t I ) {
 	mConstraints[I].rMatrix() = m;
 	DEBUG( "hypro.datastructures", "Set matrix at pos " << I << ", mConstraints.size() = " << mConstraints.size() );
 	mConditionIsBox = std::vector<TRIBOOL>{ mConstraints.size(), TRIBOOL::NSET };
+	mConditionSetState = std::vector<SETSTATE>{ mConstraints.size(), SETSTATE::UNKNOWN };
 	mHash = 0;
 }
 
@@ -49,6 +51,7 @@ void Condition<Number>::setVector( const vector_t<Number>& v, std::size_t I ) {
 	mConstraints[I].rVector() = v;
 	DEBUG( "hypro.datastructures", "Set vector at pos " << I << ", mConstraints.size() = " << mConstraints.size() );
 	mConditionIsBox = std::vector<TRIBOOL>{ mConstraints.size(), TRIBOOL::NSET };
+	mConditionSetState = std::vector<SETSTATE>{ mConstraints.size(), SETSTATE::UNKNOWN };
 	mHash = 0;
 }
 
@@ -114,6 +117,28 @@ Condition<Number> combine(
 	newVec.tail(rhsInv.getVector().size()) = rhsInv.getVector();*/
 
 	return Condition<Number>( newMat, newVec );
+}
+
+template <typename Number>
+Condition<Number> conditionFromIntervals( const std::vector<carl::Interval<Number>>& intervals ) {
+	std::vector<vector_t<Number>> rows;
+	std::vector<Number> constants;
+	std::size_t dim = intervals.size();
+	for ( std::size_t i = 0; i < dim; ++i ) {
+		if ( intervals[i].lowerBoundType() == carl::BoundType::WEAK ) {
+			vector_t<Number> r = vector_t<Number>::Zero( dim );
+			r( i ) = Number( -1 );
+			constants.emplace_back( -intervals[i].lower() );
+			rows.emplace_back( std::move( r ) );
+		}
+		if ( intervals[i].upperBoundType() == carl::BoundType::WEAK ) {
+			vector_t<Number> r = vector_t<Number>::Zero( dim );
+			r( i ) = Number( 1 );
+			constants.emplace_back( intervals[i].upper() );
+			rows.emplace_back( std::move( r ) );
+		}
+	}
+	return Condition<Number>{ createMatrix( rows ), createVector( constants ) };
 }
 
 template <typename Number>
@@ -190,6 +215,7 @@ void Condition<Number>::decompose( const Decomposition& decomposition ) {
 
 	mConstraints = newCset;
 	mConditionIsBox = std::vector<TRIBOOL>{ mConstraints.size(), TRIBOOL::NSET };
+	mConditionSetState = std::vector<SETSTATE>{ mConstraints.size(), SETSTATE::UNKNOWN };
 	mHash = 0;
 	DEBUG( "hypro.datastructures", "Decomposed Condition, created " << mConstraints.size() << " new constraint sets." );
 }
@@ -200,6 +226,28 @@ void Condition<Number>::checkAxisAligned( std::size_t i ) const {
 		mConditionIsBox[i] = mConstraints[i].isAxisAligned() == true ? TRIBOOL::TRUE : TRIBOOL::FALSE;
 	}
 }
+
+template <typename Number>
+void Condition<Number>::updateSetState() const {
+	for ( std::size_t i = 0; i < mConstraints.size(); ++i ) {
+		if ( mConditionSetState[i] == SETSTATE::UNKNOWN ) {
+			if ( mConstraints[i].size() == 0 ) {
+				mConditionSetState[i] = SETSTATE::UNIVERSAL;
+			} else if ( mConstraints[i].empty() ) {
+				mConditionSetState[i] = SETSTATE::EMPTY;
+			} else {
+				mConditionSetState[i] = SETSTATE::NONEMPTY;
+			}
+		}
+	}
+}
+
+#ifndef NDEBUG
+template <typename Number>
+bool Condition<Number>::cacheIsSane() const {
+	return mConstraints.size() == mConditionSetState.size() && mConstraints.size() == mConditionIsBox.size();
+}
+#endif
 
 //template<typename Number>
 //template<typename Representation, typename ...Rargs>

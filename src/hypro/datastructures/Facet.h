@@ -365,8 +365,8 @@ class Facet {
 		return Number( temp - mScalar );
 	}
 
-	void addPointToOutsideSet( const Point<Number>& point ) {
-		mOutsideSet.emplace_back( point );  // check double entries?
+	void addPointToOutsideSet( Point<Number> point ) {
+		mOutsideSet.push_back( point );	 // check double entries?
 	}
 
 	std::vector<Point<Number>> getOutsideSet() const {
@@ -393,7 +393,7 @@ class Facet {
 			return Point<Number>();
 		} else {
 			Point<Number> result = mOutsideSet[0];
-			Number max = Number( mNormal.dot( mOutsideSet[0].rawCoordinates() ) );  // mHalfspace.signedDistance(result);
+			Number max = Number( mNormal.dot( mOutsideSet[0].rawCoordinates() ) );	// mHalfspace.signedDistance(result);
 			for ( unsigned i = 1; i < mOutsideSet.size(); i++ ) {
 				Number temp = Number( mNormal.dot( mOutsideSet[i].rawCoordinates() ) );
 				if ( temp > max ) {

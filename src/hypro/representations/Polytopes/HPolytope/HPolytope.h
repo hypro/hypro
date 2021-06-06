@@ -9,10 +9,12 @@
 static_assert( false, "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
+#include "../../../algorithms/quantifierElimination/qe.h"
 #include "../../../algorithms/quickhull/Quickhull.h"
-#include "../../../util/Permutator.h"
+#include "../../../types.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
+#include "../../../util/sequenceGeneration/SequenceGenerator.h"
 #include "../../../util/templateDirections.h"
 #include "../../../util/typetraits.h"
 #include "HPolytopeSetting.h"
@@ -74,6 +76,13 @@ class HPolytopeT : private GeometricObjectBase {
 	//HPolytopeT( const HPolytopeT& orig ) = default;
 	HPolytopeT( const HPolytopeT& orig );
 
+	template <typename M, typename C, typename S, carl::DisableIf<std::is_same<M, Number>> = carl::dummy>
+	HPolytopeT( const HPolytopeT<M, C, S>& in ) {
+		HalfspaceVector convertedSpaces;
+		std::transform( in.constraints().begin(), in.constraints().end(), std::back_inserter( convertedSpaces ), [&]( const auto& constraint ) { return Halfspace<Number>( convert<M, Number>( constraint.normal() ), carl::convert<M, Number>( constraint.offset() ) ); } );
+		*this = HPolytopeT( convertedSpaces );
+	}
+
 	/**
 	 * @brief Constructor from a vector of halfspaces.
 	 * @details The resulting object is the intersection of the given halfspaces, i.e. the conjunction of the linear
@@ -100,6 +109,12 @@ class HPolytopeT : private GeometricObjectBase {
 	 * @param A A matrix.
 	 */
 	HPolytopeT( const matrix_t<Number>& A );
+
+	/**
+	 * @brief Construct a new HPolytopeT object from a single point
+	 * @param point
+	 */
+	HPolytopeT( const Point<Number>& point );
 
 	/**
 	 * @brief Constructor from a vector of points.
@@ -250,7 +265,9 @@ class HPolytopeT : private GeometricObjectBase {
 
 	std::pair<CONTAINMENT, HPolytopeT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, HPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
-	HPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
+	HPolytopeT projectOut( const std::vector<std::size_t>& dimensions, bool viaLinearTransformation = false ) const;
+	HPolytopeT projectOutConservative( const std::vector<std::size_t>& dimensions, bool viaLinearTransformation = false ) const;
+	HPolytopeT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	HPolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;

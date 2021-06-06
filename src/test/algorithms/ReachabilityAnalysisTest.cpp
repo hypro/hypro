@@ -1,8 +1,9 @@
 #include "../defines.h"
-#include "algorithms/reachability/Reach.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "gtest/gtest.h"
 #include <cassert>
+#include <hypro/algorithms/reachability/Reach.h>
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/reachability/TreeUtil.h>
 
 class ReachabilityAnalysisTest : public ::testing::Test {
   protected:
@@ -81,30 +82,54 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 };
 
 TEST_F( ReachabilityAnalysisTest, ReacherConstruction ) {
-	hypro::reachability::Reach<Number, hypro::reachability::ReachQuiet, hypro::State_t<Number>> reacher =
-		  hypro::reachability::Reach<Number, hypro::reachability::ReachQuiet, hypro::State_t<Number>>( this->bball_ha,
-																									   this->settings );
+	using tNumber = hypro::tNumber;
+	std::vector<hypro::ReachTreeNode<hypro::HPolytope<Number>>> roots{};
+	hypro::FixedAnalysisParameters fixedParameters;
+	fixedParameters.jumpDepth = 3;
+	fixedParameters.localTimeHorizon = 5;
+	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
+
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_h;
+
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
+
+	auto reacher = hypro::reachability::Reach<hypro::HPolytope<Number>>( this->bball_ha, settings.fixedParameters(),
+																		 settings.strategy().front(), roots );
 	SUCCEED();
 }
 
 TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
-	hypro::reachability::Reach<Number, hypro::reachability::ReachQuiet, hypro::State_t<Number>> reacher =
-		  hypro::reachability::Reach<Number, hypro::reachability::ReachQuiet, hypro::State_t<Number>>( this->bball_ha,
-																									   this->settings );
-
 	// create initial states - chose a state set representation, here: boxes
-	for ( const auto& locSetPair : this->bball_ha.getInitialStates() ) {
-		assert( locSetPair.second.constraints().size() == 1 );
-		auto box = hypro::Converter<Number>::toBox( locSetPair.second.constraints().front() );
-		auto state = hypro::State_t<Number>( locSetPair.first );
-		state.setSet( box );
-		reacher.addInitialState( std::move( state ) );
-	}
+	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
+		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+
+	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
+
+	using tNumber = hypro::tNumber;
+	hypro::FixedAnalysisParameters fixedParameters;
+	fixedParameters.jumpDepth = 3;
+	fixedParameters.localTimeHorizon = 5;
+	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
+
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_h;
+
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
+
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
+																   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
-	auto flowpipes = reacher.computeForwardReachability();
+	auto reachabilityResult = reacher.computeForwardReachability();
 
-	EXPECT_EQ( std::size_t( 3 ), flowpipes.size() );
+	// EXPECT_EQ( std::size_t( 3 ), flowpipes.size() );
 	// the first jump happens somewhat around 1.45
-	EXPECT_TRUE( flowpipes.begin()->second.back().getTimestamp().contains( hypro::tNumber( 1.45 ) ) );
+	EXPECT_TRUE( roots.front().getFlowpipe().size() == 145 );
+	EXPECT_EQ( std::size_t( 4 ), hypro::getNumberNodes( roots.front() ) );
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
 }

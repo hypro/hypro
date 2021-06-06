@@ -4,7 +4,9 @@
 #include "../../types.h"
 #include "decomposition/Decomposition.h"
 
+#include <carl/interval/Interval.h>
 #include <iosfwd>
+#include <numeric>
 #include <variant>
 
 namespace hypro {
@@ -18,19 +20,25 @@ class Condition {
   private:
 	std::vector<ConstraintSetT<Number>> mConstraints;  ///< holds the constraints specifying the condition
 	mutable std::vector<TRIBOOL> mConditionIsBox;	   ///< cache to check whether constraints are axis-aligned
+	mutable std::vector<SETSTATE> mConditionSetState;  ///< cache to hold whether the set defined is empty or universal
 	mutable std::size_t mHash = 0;					   ///< cache for the hash value
   public:
 	/// default constructor
 	Condition() = default;
 	/// constructor from matrix and vector. Creates constraints describing Ax = b.
 	Condition( const matrix_t<Number>& mat, const vector_t<Number>& vec )
-		: mConstraints( { ConstraintSetT<Number>( mat, vec ) } )
+		: mConstraints()
 		, mConditionIsBox( { TRIBOOL::NSET } )
-		, mHash( 0 ) {}
+		, mConditionSetState( { SETSTATE::UNKNOWN } )
+		, mHash( 0 ) {
+		assert( mat.rows() == vec.rows() );
+		mConstraints.emplace_back( mat, vec );
+	}
 	/// constructor from constraint set (which encapsulates a matrix and a vector)
 	explicit Condition( const ConstraintSetT<Number>& constraints )
 		: mConstraints( { constraints } )
 		, mConditionIsBox( { TRIBOOL::NSET } )
+		, mConditionSetState( { SETSTATE::UNKNOWN } )
 		, mHash( 0 ) {}
 	/// constructor from a set of constraint sets.
 	explicit Condition( const std::vector<std::variant<ConstraintSetT<Number>>>& sets );
@@ -49,6 +57,22 @@ class Condition {
 	std::size_t size() const { return mConstraints.size(); }
 	/// checks for emptiness
 	bool empty() const { return mConstraints.empty(); }
+	/// checks, whether the condition is unbounded
+	bool isTrue() const {
+		assert( cacheIsSane() );
+		updateSetState();
+		return std::all_of( mConditionSetState.begin(), mConditionSetState.end(), []( const auto s ) { return s == SETSTATE::UNIVERSAL; } );
+	}
+	/// checks, whether the condition is unsatisfiable by its own
+	bool isFalse() const {
+		assert( cacheIsSane() );
+		updateSetState();
+		return std::any_of( mConditionSetState.begin(), mConditionSetState.end(), []( const auto s ) { return s == SETSTATE::EMPTY; } );
+	}
+	/// returns state space dimension
+	std::size_t dimension() const {
+		return std::accumulate( mConstraints.begin(), mConstraints.end(), 0, []( std::size_t cur, const auto& cSet ) { return cur + cSet.dimension(); } );
+	}
 	/// returns matrix representing constraints for a subspace (default 0)
 	const matrix_t<Number>& getMatrix( std::size_t I = 0 ) const {
 		assert( mConstraints.size() > I );
@@ -93,27 +117,35 @@ class Condition {
 		return !( lhs == rhs );
 	}
 	/// outstream operator
-#ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& out, const Condition& in ) {
-		std::size_t i = 0;
-		for ( const auto& pair : in.constraints() ) {
-			out << "Constraint " << i << ": " << pair.matrix() << " constants: " << pair.vector() << std::endl;
-			++i;
+		if ( in.constraints().size() == 1 ) {
+			out << in.constraints().front();
+		} else {
+			std::size_t i = 0;
+			for ( const auto& pair : in.constraints() ) {
+				out << "ConstraintSet " << i << ": \n"
+					<< pair;
+				++i;
+			}
 		}
-#else
-	friend std::ostream& operator<<( std::ostream& out, const Condition& ) {
-#endif
 		return out;
 	}
 
   private:
 	void checkAxisAligned( std::size_t i ) const;
+	void updateSetState() const;
+#ifndef NDEBUG
+	bool cacheIsSane() const;
+#endif
 };
 
 template <typename Number>
 Condition<Number> combine(
 	  const Condition<Number>& lhs, const Condition<Number>& rhs,
 	  const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar );
+
+template <typename Number>
+Condition<Number> conditionFromIntervals( const std::vector<carl::Interval<Number>>& intervals );
 
 }  // namespace hypro
 

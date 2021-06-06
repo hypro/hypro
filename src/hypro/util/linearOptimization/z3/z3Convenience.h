@@ -5,10 +5,10 @@
 //
 
 #pragma once
-#include "datastructures/Point.h"
-#include "flags.h"
-#include "types.h"
-#include "util/linearOptimization/EvaluationResult.h"
+#include "../../../datastructures/Point.h"
+#include "../../../flags.h"
+#include "../../../types.h"
+#include "../EvaluationResult.h"
 #ifdef HYPRO_USE_Z3
 #include "z3Context.h"
 
@@ -19,9 +19,7 @@
 namespace hypro {
 
 template <typename Number>
-static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, const vector_t<Number> _constants, z3Context& c, carl::Relation = carl::Relation::LEQ ) {
-	// TODO: Relation is ignored here.
-
+static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, const vector_t<Number> _constants, const std::vector<carl::Relation>& relations, z3Context& c ) {
 	//std::cout << __func__ << _constraints << " \n\n " << _constants << std::endl;
 
 	z3::expr_vector constraints( c );
@@ -32,11 +30,7 @@ static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, cons
 		const char* varName = ( "x_" + std::to_string( i ) ).c_str();
 		var = c.real_const( varName );
 		variables.push_back( var );
-		//std::cout << "Created z3 Variable " << var << std::endl;
-		//std::cout << "Variables.size() " << variables.size() << std::endl;
 	}
-
-	//std::cout << "Variables.size() " << variables.size() << std::endl;
 
 	for ( unsigned i = 0; i < _constraints.rows(); ++i ) {
 		z3::expr polynomial( c );
@@ -45,18 +39,25 @@ static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, cons
 			z3::expr coeff( c );
 			coeff = c.real_val( ( carl::convert<Number, mpq_class>( _constraints( i, j ) ) ) );
 
-			//std::cout << "Coefficient is " << coeff << std::endl;
-
 			z3::expr term( c );
-
-			//std::cout << "Variable is " << variables[j] << std::endl;
-
 			term = variables[j] * coeff;
 			polynomial = polynomial + term;
 		}
-		//std::cout << "Constant: " << _constants(i) << std::endl;
 		z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _constants( i ) ) );
-		z3::expr constraint( polynomial <= constant );
+		z3::expr constraint( c );
+		switch ( relations[i] ) {
+			case carl::Relation::LEQ:
+				constraint = polynomial <= constant;
+				break;
+			case carl::Relation::GEQ:
+				constraint = polynomial >= constant;
+				break;
+			case carl::Relation::EQ:
+				constraint = polynomial == constant;
+				break;
+			default:
+				assert( false );
+		}
 		constraints.push_back( constraint );
 	}
 
@@ -64,7 +65,7 @@ static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, cons
 }
 
 template <typename Number>
-static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Number>& _constraints, const vector_t<Number> _constants, z3Context& c ) {
+static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Number>& _constraints, const vector_t<Number> _constants, const std::vector<carl::Relation>& relations, z3Context& c ) {
 	z3::expr formula( c );
 	formula = c.bool_val( true );
 	z3::expr pointConstraint( c );
@@ -93,7 +94,19 @@ static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Numbe
 			}
 		}
 		z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _constants( i ) ) );
-		constraint = constraint <= constant;
+		switch ( relations[i] ) {
+			case carl::Relation::LEQ:
+				constraint = constraint <= constant;
+				break;
+			case carl::Relation::GEQ:
+				constraint = constraint >= constant;
+				break;
+			case carl::Relation::EQ:
+				constraint = constraint == constant;
+				break;
+			default:
+				assert( false );
+		}
 		formula = formula && constraint;
 	}
 
@@ -101,9 +114,7 @@ static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Numbe
 }
 
 template <typename Number>
-static std::pair<z3::expr, z3::expr> createFormula( const matrix_t<Number>& _constraints, const vector_t<Number> _constants, const vector_t<Number>& _objective, z3Context& c, std::vector<z3::expr>& variables, carl::Relation = carl::Relation::LEQ ) {
-	// TODO: Relation is ignored here.
-
+static std::pair<z3::expr, z3::expr> createFormula( const matrix_t<Number>& _constraints, const vector_t<Number> _constants, const std::vector<carl::Relation>& relations, const vector_t<Number>& _objective, z3Context& c, std::vector<z3::expr>& variables ) {
 	z3::expr formula( c );
 	z3::expr objective( c );
 	objective = c.int_val( 0 );
@@ -132,11 +143,42 @@ static std::pair<z3::expr, z3::expr> createFormula( const matrix_t<Number>& _con
 			}
 		}
 		z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _constants( i ) ) );
-		constraint = constraint <= constant;
+		switch ( relations[i] ) {
+			case carl::Relation::LEQ:
+				constraint = constraint <= constant;
+				break;
+			case carl::Relation::GEQ:
+				constraint = constraint >= constant;
+				break;
+			case carl::Relation::EQ:
+				constraint = constraint == constant;
+				break;
+			default:
+				assert( false );
+				break;
+		}
 		formula = formula && constraint;
 	}
 
 	return std::make_pair( formula, objective );
+}
+
+template <typename Number>
+Number z3ResToNumber( z3::context& c, z3::ast& resZ3 ) {
+	int* p = new int;
+	unsigned* q = new unsigned;
+	mpq_t resRational;
+
+	Z3_get_numeral_int( c, Z3_get_numerator( c, resZ3 ), p );
+	Z3_get_numeral_uint( c, Z3_get_denominator( c, resZ3 ), q );
+
+	mpq_init( resRational );
+	mpq_set_si( resRational, *p, *q );
+	Number resNumber = carl::convert<mpq_class, Number>( mpq_class( resRational ) );
+	mpq_clear( resRational );
+	delete p;
+	delete q;
+	return resNumber;
 }
 
 }  // namespace hypro

@@ -1,6 +1,8 @@
 #pragma once
 #include "../../types.h"
+#include "../../util/adaptions_eigen/adaptions_eigen.h"
 
+#include <bits/c++config.h>
 #include <carl/interval/Interval.h>
 #include <vector>
 
@@ -44,8 +46,28 @@ struct AffineTransformation {
 		return false;
 	}
 
+	bool isSingular() const {
+		for ( Eigen::Index rowIndex = 0; rowIndex < mTransformation.matrix().rows(); ++rowIndex ) {
+			matrix_t<Number> expected0 = matrix_t<Number>::Zero( 1, mTransformation.matrix().rows() );
+			matrix_t<Number> expected1 = matrix_t<Number>::Zero( 1, mTransformation.matrix().rows() );
+			expected1( 0, rowIndex ) = Number( 1.0 );
+			if ( mTransformation.matrix().row( rowIndex ) != expected0 && mTransformation.matrix().row( rowIndex ) != expected1 ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	friend std::ostream& operator<<( std::ostream& out, const AffineTransformation<Number>& in ) {
-		out << in.mTransformation;
+		bool firstrow = true;
+		for ( Eigen::Index row = 0; row < in.mTransformation.matrix().rows(); ++row ) {
+			if ( !firstrow ) {
+				out << "\n";
+			} else {
+				firstrow = false;
+			}
+			out << "x" << row << " := " << to_string<Number>( in.mTransformation.matrix().row( row ) );
+		}
 		return out;
 	}
 
@@ -66,17 +88,36 @@ struct IntervalAssignment {
 	IntervalAssignment& operator=( IntervalAssignment<Number>&& rhs ) = default;
 	~IntervalAssignment() {}
 
+	const std::vector<carl::Interval<Number>>& getIntervals() const { return mIntervals; }
+	void setIntervals( const std::vector<carl::Interval<Number>>& intervals ) { mIntervals = intervals; }
+	void setInterval( const carl::Interval<Number>& interval, std::size_t i ) {
+		assert( i < size() );
+		mIntervals[i] = interval;
+	}
+
 	static ResetType type() { return ResetType::interval; }
 
-	std::size_t size() { return mIntervals.size(); }
+	std::size_t size() const { return mIntervals.size(); }
 
 	bool isIdentity() const {
 		return std::all_of( mIntervals.begin(), mIntervals.end(), []( const auto& i ) { return i.isEmpty(); } );
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const IntervalAssignment<Number>& in ) {
+		bool first = true;
+		std::size_t pos = 0;
 		for ( const auto& i : in.mIntervals ) {
-			out << i << ", ";
+			if ( !first ) {
+				out << "\n";
+			} else {
+				first = false;
+			}
+			if ( i.isEmpty() ) {
+				out << "x" << pos << " := x" << pos;
+				++pos;
+			} else {
+				out << "x" << pos << " := " << i;
+			}
 		}
 		return out;
 	}

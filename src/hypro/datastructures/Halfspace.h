@@ -13,6 +13,7 @@
 #include "../util/VariablePool.h"
 #include "../util/adaptions_eigen/adaptions_eigen.h"
 #include "../util/linearOptimization/EvaluationResult.h"
+#include "../util/logging/Logger.h"
 #include "../util/typetraits.h"
 #include "Point.h"
 
@@ -50,7 +51,7 @@ class Halfspace {
 	 */
 	template <
 		  typename Normal, typename Offset, enable_if<convertible<Normal, vector_t<Number>> && convertible<Offset, Number>> = 0>
-	Halfspace( Normal&& normal, Offset&& offset );      
+	Halfspace( Normal&& normal, Offset&& offset );
 
 	/**
 	 * @brief      Constructor from an offset vector and a set of points lying in the plane.
@@ -202,7 +203,7 @@ class Halfspace {
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The projected halfspace.
 	 */
-	Halfspace<Number> project( const std::vector<unsigned>& dimensions ) const;
+	Halfspace<Number> projectOn( const std::vector<size_t>& dimensions ) const;
 
 	/**
 	 * @brief      Computes the linear transformation of the plane.
@@ -369,9 +370,51 @@ Halfspace<To> convert( const Halfspace<From>& in ) {
  * @return     A reference to the outstream.
  */
 template <typename Number>
-std::ostream& operator<<( std::ostream& _lhs, const Halfspace<Number>& _rhs ) {
-	_lhs << "( " << vector_t<Number>( _rhs.normal().transpose() ) << "; " << Number( _rhs.offset() ) << " )";
-	return _lhs;
+std::ostream& operator<<( std::ostream& ostr, const Halfspace<Number>& _rhs ) {
+	ostr << "( ";
+	bool first = true;
+	for ( Eigen::Index i = 0; i < _rhs.normal().rows(); ++i ) {
+		bool notnull = _rhs.normal()( i ) != 0;
+		bool printVal = notnull && abs( _rhs.normal()( i ) )!= 1 ;
+		bool neg = _rhs.normal()( i ) < 0;
+		if ( notnull ) {
+			if ( printVal ) {
+				if ( first ) {
+					first = false;
+					if ( neg ) {
+						ostr << " - " << -_rhs.normal()( i );
+					} else {
+						ostr << _rhs.normal()( i );
+					}
+					ostr << "·x" << i;
+				} else {
+					if ( neg ) {
+						ostr << " - " << -_rhs.normal()( i );
+					} else {
+						ostr << " + " << _rhs.normal()( i );
+					}
+					ostr << "·x" << i;
+				}
+			} else {
+				if ( first ) {
+					first = false;
+					if ( neg ) {
+						ostr << "- ";
+					}
+					ostr << "x" << i;
+				} else {
+					if ( neg ) {
+						ostr << " - ";
+					} else {
+						ostr << " + ";
+					}
+					ostr << "x" << i;
+				}
+			}
+		}
+	}
+	ostr << " ≤ " << Number( _rhs.offset() ) << " )";
+	return ostr;
 }
 
 /**
@@ -416,12 +459,7 @@ Halfspace<Number> operator-( const Halfspace<Number>& _in ) {
 
 #ifdef EXTERNALIZE_CLASSES
 extern template class Halfspace<double>;
-
-#ifdef USE_MPFR_FLOAT
-extern template class Halfspace<carl::FLOAT_T<mpfr_t>>;
-#endif
-
-extern template class Halfspace<carl::FLOAT_T<double>>;
+extern template class Halfspace<mpq_class>;
 #endif
 }  // namespace hypro
 

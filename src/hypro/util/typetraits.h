@@ -1,4 +1,5 @@
 #pragma once
+#include <carl/numbers/numbers.h>
 #include <memory>
 #include <type_traits>
 
@@ -38,7 +39,7 @@ struct analyzer_rep_i<Analyzer<Rep, Ts...>> {
 	using type = Rep;
 };
 
-template<class Analyzer>
+template <class Analyzer>
 using analyzer_rep = typename analyzer_rep_i<std::remove_pointer_t<std::remove_reference_t<std::remove_cv_t<Analyzer>>>>::type;
 
 // short hands

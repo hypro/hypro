@@ -13,23 +13,19 @@
 //#define PLOT_FLOWPIPE
 
 template <typename Number, typename Representation>
-static void computeReachableStates( const std::string &filename,
-									const hypro::representation_name &type ) {
+static void computeReachableStates( const std::string& filename,
+									const hypro::representation_name& type ) {
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = std::move( hypro::parseFlowstarFile<Number>( filename ) );
-
-	//#ifdef HYPRO_LOGGING
-	// std::cout << "Parsed HybridAutomaton:\n" << ha.first << "Parsed
-	// ReachabilitySettings:\n" << ha.second << std::endl; #endif
+	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = hypro::parseFlowstarFile<Number>( filename );
 
 	hypro::reachability::Reach<Number, hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher( ha.first, ha.second );
 	reacher.setRepresentationType( type );
 	// reacher.initQueue();
 	std::vector<hypro::State_t<Number>> initialStates;
-	for ( const auto &locConditionPair : ha.first.getInitialStates() ) {
+	for ( const auto& locConditionPair : ha.first.getInitialStates() ) {
 		hypro::State_t<Number> initState =
 			  hypro::State_t<Number>( locConditionPair.first );
 		initState.setSet( Representation( locConditionPair.second.getMatrix(),
@@ -51,7 +47,7 @@ static void computeReachableStates( const std::string &filename,
 	if ( ha.second.plotDimensions.size() > 0 ) {
 		clock::time_point startPlotting = clock::now();
 
-		hypro::Plotter<Number> &plotter = hypro::Plotter<Number>::getInstance();
+		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 		std::string extendedFilename = ha.second.fileName;
 		switch ( Representation::type() ) {
 			case hypro::representation_name::polytope_t: {
@@ -104,7 +100,7 @@ static void computeReachableStates( const std::string &filename,
 		// bad states plotting
 		typename hypro::HybridAutomaton<Number>::locationConditionMap
 			  badStateMapping = ha.first.getLocalBadStates();
-		for ( const auto &state : badStateMapping ) {
+		for ( const auto& state : badStateMapping ) {
 			unsigned bs = plotter.addObject(
 				  Representation( state.second.getMatrix( 0 ), state.second.getVector( 0 ) )
 						.vertices() );
@@ -112,17 +108,17 @@ static void computeReachableStates( const std::string &filename,
 		}
 
 		// segments plotting
-		for ( const auto &flowpipePair : flowpipes ) {
+		for ( const auto& flowpipePair : flowpipes ) {
 			std::cout << "Plot flowpipe " << flowpipePair.first << std::endl;
 			unsigned cnt = 0;
-			for ( const auto &segment : flowpipePair.second ) {
+			for ( const auto& segment : flowpipePair.second ) {
 				std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size()
 						  << std::endl;
 				Representation seg = std::get<Representation>( segment.getSet( 0 ) );
 				switch ( type ) {
 					case hypro::representation_name::SFN: {
 						unsigned tmp =
-							  plotter.addObject( seg.project( plottingDimensions ).vertices() );
+							  plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
 						plotter.setObjectColor(
 							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
 														   ( sizeof( hypro::plotting::colors ) /
@@ -131,7 +127,7 @@ static void computeReachableStates( const std::string &filename,
 					}
 					case hypro::representation_name::support_function: {
 						unsigned tmp =
-							  plotter.addObject( seg.project( plottingDimensions ).vertices() );
+							  plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
 						plotter.setObjectColor(
 							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
 														   ( sizeof( hypro::plotting::colors ) /
@@ -140,7 +136,7 @@ static void computeReachableStates( const std::string &filename,
 					}
 					case hypro::representation_name::zonotope: {
 						unsigned tmp =
-							  plotter.addObject( seg.project( plottingDimensions ).vertices() );
+							  plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
 						plotter.setObjectColor(
 							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
 														   ( sizeof( hypro::plotting::colors ) /
@@ -151,7 +147,7 @@ static void computeReachableStates( const std::string &filename,
 					}
 					case hypro::representation_name::box: {
 						unsigned tmp =
-							  plotter.addObject( seg.project( plottingDimensions ).vertices() );
+							  plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
 						plotter.setObjectColor(
 							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
 														   ( sizeof( hypro::plotting::colors ) /
@@ -161,7 +157,7 @@ static void computeReachableStates( const std::string &filename,
 						break;
 					}
 					default:
-						unsigned tmp = plotter.addObject( seg.project( plottingDimensions ).vertices() );
+						unsigned tmp = plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
 						plotter.setObjectColor(
 							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
 														   ( sizeof( hypro::plotting::colors ) /
@@ -189,11 +185,11 @@ static void computeReachableStates( const std::string &filename,
 	}
 }
 
-int main( int argc, char **argv ) {
+int main( int argc, char** argv ) {
 	int rep = 0;
 	std::string filename = argv[1];
 	if ( argc > 2 ) {
-		char *p;
+		char* p;
 		rep = strtol( argv[2], &p, 10 );
 	}
 

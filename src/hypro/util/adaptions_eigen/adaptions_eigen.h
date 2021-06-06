@@ -12,10 +12,10 @@
 
 #include "../../config.h"
 #include "../../types.h"
+#include "queries.h"
 #include "transformation.h"
 
 #include <carl/numbers/numbers.h>
-#include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Eigenvalues>
 #include <functional>
 #include <iosfwd>
@@ -110,12 +110,9 @@ inline bool operator==( const hypro::vector_t<Number>& lhs, const hypro::vector_
 	if ( lhs.rows() != rhs.rows() ) {
 		return false;
 	}
-	if ( VectorHashValue( lhs ) != VectorHashValue( rhs ) ) {
-		return false;
-	}
 
-	for ( unsigned dim = 0; dim < lhs.rows(); ++dim ) {
-		if ( lhs( dim ) != rhs( dim ) ) {
+	for ( std::size_t i = 0, size = lhs.size(); i < size; ++i ) {
+		if ( ( *( lhs.data() + i ) ) != ( *( rhs.data() + i ) ) ) {
 			return false;
 		}
 	}
@@ -132,15 +129,10 @@ inline bool operator==( const hypro::matrix_t<Number>& lhs, const hypro::matrix_
 	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) {
 		return false;
 	}
-	if ( MatrixHashValue( lhs ) != MatrixHashValue( rhs ) ) {
-		return false;
-	}
-	// TODO iterate over data assuming similar storage orientation?
-	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
-		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
-			if ( lhs( rowIndex, colIndex ) != rhs( rowIndex, colIndex ) ) {
-				return false;
-			}
+
+	for ( std::size_t i = 0, size = lhs.size(); i < size; ++i ) {
+		if ( ( *( lhs.data() + i ) ) != ( *( rhs.data() + i ) ) ) {
+			return false;
 		}
 	}
 	return true;
@@ -231,6 +223,42 @@ hypro::matrix_t<Number> abs( const hypro::matrix_t<Number>& in ) {
 }  // namespace Eigen
 
 namespace hypro {
+
+/// approximate comparison
+template <typename Number>
+bool is_approx_equal( const hypro::vector_t<Number>& lhs, const hypro::vector_t<Number>& rhs ) {
+	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) {
+		return false;
+	}
+
+	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
+		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
+			// compare with 128 ULPs
+			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), 128 ) ) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+template <typename Number>
+bool is_approx_equal( const hypro::matrix_t<Number>& lhs, const hypro::matrix_t<Number>& rhs ) {
+	if ( lhs.rows() != rhs.rows() || lhs.cols() != rhs.cols() ) {
+		return false;
+	}
+
+	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
+		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
+			// compare with 128 ULPs
+			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), 128 ) ) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 /// number type conversion for a matrix
 template <typename From, typename To>
 matrix_t<To> convert( const matrix_t<From>& _mat ) {
@@ -262,7 +290,7 @@ vector_t<Number> normalize( const vector_t<Number>& in ) {
 }
 /// projection of a vector on a subspace
 template <typename Number>
-vector_t<Number> project( const vector_t<Number>& in, const std::vector<std::size_t>& dimensions ) {
+vector_t<Number> projectOn( const vector_t<Number>& in, const std::vector<std::size_t>& dimensions ) {
 	if ( dimensions.empty() ) {
 		return vector_t<Number>::Zero( 0 );
 	}
@@ -286,7 +314,7 @@ vector_t<Number> scalarProjection( const vector_t<Number>& source, const vector_
 template <typename Number>
 int effectiveDimension( const std::vector<vector_t<Number>>& vertices ) {
 	if ( !vertices.empty() ) {
-		if ( vertices.size() == 1 ) {
+		if ( ( vertices.size() == 1 ) || ( vertices.begin()->rows() == 0 ) ) {
 			return 0;
 		}
 		long maxDim = vertices.begin()->rows();

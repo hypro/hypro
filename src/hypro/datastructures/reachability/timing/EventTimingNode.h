@@ -49,7 +49,7 @@ class EventTimingNode : public DAGNode<EventTimingNode<Number>> {
 		return out;
 	}
 
-	std::size_t getDotRepresentation( int id, std::string& nodes, std::string& transitions ) const;
+	std::size_t getDotRepresentation( std::size_t id, std::string& nodes, std::string& transitions ) const;
 };
 
 }  // namespace hypro

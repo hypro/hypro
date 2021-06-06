@@ -140,7 +140,7 @@ class PolytopeT : private GeometricObjectBase {
 	std::size_t dimension() const;
 	PolytopeT linearTransformation( const matrix_t<Number>& A ) const;
 	PolytopeT affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
-	PolytopeT project( const std::vector<std::size_t>& dimensions ) const;
+	PolytopeT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	PolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;

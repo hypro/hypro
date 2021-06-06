@@ -33,10 +33,10 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 
 				// convert local time to global time
 
-				carl::Interval<TimePoint> const& initialSetDuration = currentNode->getTimings();
+				carl::Interval<SegmentInd> const& initialSetDuration = currentNode->getTimings();
 				// add one to upper to convert from segment indices to time points
 				// multiply by timeStepFactor to convert from analyzer specific timeStep to fixedTimeStep
-				carl::Interval<TimePoint> enabledDuration{ segmentsInterval.lower() * mParameters.timeStepFactor, ( segmentsInterval.upper() + 1 ) * mParameters.timeStepFactor };
+				carl::Interval<SegmentInd> enabledDuration{ segmentsInterval.lower() * mParameters.timeStepFactor, ( segmentsInterval.upper() + 1 ) * mParameters.timeStepFactor };
 				carl::Interval<TimePoint> globalDuration{ initialSetDuration.lower() + enabledDuration.lower(), initialSetDuration.upper() + enabledDuration.upper() };
 
 				ReachTreeNode<State>& childNode = currentNode->addChild( valuationSet, globalDuration, transition );

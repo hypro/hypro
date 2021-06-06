@@ -3,16 +3,16 @@
  * context handlers.
  */
 
-#include <algorithms/reachability/analyzer/RectangularAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
+#include <hypro/representations/GeometricObjectBase.h>
 #include <iostream>
-#include <representations/GeometricObjectBase.h>
 
 int main() {
 	// typedefs
 	using Number = double;
 	using State = hypro::State<Number, hypro::CarlPolytope<Number>>;
- 	// using Matrix = hypro::matrix_t<Number>;
-  	// using Vector = hypro::vector_t<Number>;
+	using Matrix = hypro::matrix_t<Number>;
+	using Vector = hypro::vector_t<Number>;
 
 	// variables
 	carl::Variable x = hypro::VariablePool::getInstance().carlVarByIndex( 0 );
@@ -38,17 +38,16 @@ int main() {
 
 	// create transitions
 	std::unique_ptr<hypro::Transition<Number>> trans =
-    	std::make_unique<hypro::Transition<Number>>();
-	
+		  std::make_unique<hypro::Transition<Number>>();
 	// guard
 	hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>( 4, 2 );
 	guardConstraints << 1, 0, -1, 0, 0, 0, 0, 0;
 	hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>( 4 );
 	guardConstants << 10, -4, 0, 0;
-	hypro::Condition<Number> guard(guardConstraints,guardConstants);
+	hypro::Condition<Number> guard( guardConstraints, guardConstants );
 
 	// reset function
-	
+
 	// interval representation
 	// std::vector<carl::Interval<Number>> intervalReset;
 	// intervalReset.emplace_back( carl::Interval<Number>( -2, 2 ) );
@@ -61,16 +60,16 @@ int main() {
 	resetConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
 	hypro::vector_t<Number> resetConstants = hypro::vector_t<Number>( 4 );
 	resetConstants << 2, 2, 3, 3;
-	hypro::Reset<Number> reset(resetConstraints,resetConstants);
+	hypro::Reset<Number> reset( resetConstraints, resetConstants );
 
 	// setup transition
-	trans->setGuard(guard);
-	trans->setSource(&loc1);
-	trans->setTarget(&loc2);
-	trans->setReset(reset);
+	trans->setGuard( guard );
+	trans->setSource( &loc1 );
+	trans->setTarget( &loc2 );
+	trans->setReset( reset );
 
 	// add defined transition to location
-	loc1.addTransition(std::move(trans));
+	loc1.addTransition( std::move( trans ) );
 
 	// add location
 	std::map<const hypro::Location<Number>*, std::size_t> locationMapping;

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../HybridAutomaton/Location.h"
+#include "../../util/typetraits.h"
+#include "../HybridAutomaton/HybridAutomaton.h"
 #include "../HybridAutomaton/Pathv2.h"
-#include "../HybridAutomaton/Transition.h"
 #include "TreeNodev2.h"
-#include "util/typetraits.h"
 
 #include <carl/interval/Interval.h>
+#include <ostream>
 #include <vector>
 
 namespace hypro {
@@ -71,6 +71,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      */
 	std::vector<Representation>& getFlowpipe() { return mFlowpipe; }
 	std::vector<Representation> const& getFlowpipe() const { return mFlowpipe; }
+	void setFlowpipe( std::vector<Representation>&& fp ) { mFlowpipe = std::move( fp ); }
+	void setFlowpipe( const std::vector<Representation>& fp ) { mFlowpipe = fp; }
 
 	/**
 	 * @brief Get the initial set
@@ -88,17 +90,31 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      * @brief Get the time intervals the passed transition was enabled
      * @param transition
      * @return std::vector<carl::Interval<SegmentInd>>
+	 * TODO Implement
      */
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
 };
 
+template <typename Representation>
+std::ostream& operator<<( std::ostream& out, const ReachTreeNode<Representation>& node ) {
+	out << "{ " << node.getLocation()->getName() << ", init " << node.getInitialSet() << " }";
+	return out;
+}
+
+/**
+ * @brief Convenience function to create roots of a search tree from the initial states of the passed hybrid automaton.
+ * @tparam Representation
+ * @tparam Number
+ * @param ha
+ * @return std::vector<ReachTreeNode<Representation>>
+ */
 template <class Representation, class Number>
 std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> const& ha ) {
 	std::vector<ReachTreeNode<Representation>> roots{};
 
 	std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ), []( auto const& locCond ) {
 		auto const& [location, condition] = locCond;
-		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix(), condition.getVector() }, { 0, 0 } };
+		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix(), condition.getVector() }, carl::Interval<SegmentInd>{ 0, 0 } };
 	} );
 
 	return roots;

@@ -2,25 +2,27 @@
 sonar.projectKey=hypro
 # this is the name and version displayed in the SonarQube UI. Was mandatory prior to SonarQube 6.1.
 sonar.projectName=${PROJECT_FULLNAME}
-sonar.organiztion=hypro-github
+sonar.organization=hypro-github
 sonar.projectVersion=${hypro_VERSION}
+sonar.host.url=https://sonarcloud.io
 
 # Path is relative to the sonar-project.properties file. Replace "\" by "/" on Windows.
 # This property is optional if sonar.modules is set.
 sonar.language=cpp
-sonar.sources=src
-sonar.exclusions=src/resources/**/*, src/hypro/parser/**/*, src/test, src/tmlib_tmp, src/hypro/util/linearOptimization/clp/*, src/hypro/util/matlab/**/*
+sonar.sources=src/hypro, src/tool
+sonar.exclusions= src/hypro/parser/**/*, src/hypro/util/linearOptimization/clp/*, src/hypro/util/matlab/**/*, .git/**/*, examples/**/*
 sonar.cpp.file.suffixes=.h,.tpp,.cpp
 sonar.c.file.suffixes=.c
 
-# caching and multithreading settings (required to be set, here we disable the new features for now)
+# caching and multithreading settings (required to be set)
 sonar.cfamily.cache.enabled=false
-sonar.cfamily.threads=1
+sonar.cfamily.threads=2
 
 # Encoding of the source code. Default is default system encoding
-#sonar.sourceEncoding=UTF-8"
+sonar.sourceEncoding=UTF-8
 
-sonar.cfamily.build-wrapper-output=build/bw-outputs
-#sonar.cfamily.gcov.reportsPath=hypro_coverage.info
-sonar.cfamily.llvm-cov.reportPath=build/hypro_coverage.info
+sonar.cfamily.build-wrapper-output=bw-output
+#sonar.cfamily.gcov.reportsPath=${relBinaryDir}/hypro_coverage.info
+#sonar.cfamily.llvm-cov.reportPath=${PROJECTrelBinaryDir_BINARY_DIR}/hypro_coverage.info
+#sonar.cfamily.llvm-cov.reportPath=hypro_coverage.info
 

@@ -44,15 +44,15 @@ Representation constructFirstSegment( Representation const& initialSet,
 
 	Representation atDelta = initialSet.affineTransformation( timeTrafoMatrixBlock( rawTransformation ), timeTrafoVectorBlock( rawTransformation ) );
 
-	TRACE( "hypro.worker", "valuation set at delta: " << atDelta );
-
 	Representation firstSegment = atDelta.unite( initialSet );
-
-	TRACE( "hypro.worker", "Union of initial set and set after first step: " << firstSegment );
 
 	//Horrible interface. Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
 	Representation bloatingSet{};
 	convert( Number( Number( 1 ) / Number( 4 ) ) * errorBoxes.DifferenceBox, bloatingSet );
+
+	TRACE("hypro", "atDelta: " << atDelta.vertices());
+	TRACE("hypro", "init: " << initialSet.vertices());
+	TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
 	firstSegment = firstSegment.minkowskiSum( bloatingSet );
 	firstSegment.removeRedundancy();
@@ -89,7 +89,7 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 	if ( boundingBoxA.empty() ) return {};
 
 	//Augment box by a dimension for constants
-	boundingBoxA.insert( { 1, 1 } );
+	boundingBoxA.insert( carl::Interval<Number>{ 1, 1 } );
 
 	boundingBoxA = boundingBoxA.makeSymmetric();
 	assert( boundingBoxA.isSymmetric() );
@@ -104,7 +104,7 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 	Box<Number> boundingBoxB = Converter<Number>::template toBox<BoxLinearOptimizationOn>( transformedInitialSetB );
 
 	//Augment box by a dimension for constants
-	boundingBoxB.insert( { 1, 1 } );
+	boundingBoxB.insert( carl::Interval<Number>{ 1, 1 } );
 
 	boundingBoxB = boundingBoxB.makeSymmetric();
 	assert( boundingBoxB.isSymmetric() );
@@ -117,7 +117,7 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 	//Remove augmentation via projection
 	std::vector<size_t> dims( errorBoxX0.dimension() - 1 );
 	std::iota( dims.begin(), dims.end(), 0 );  //fill with 0,1,...
-	errorBoxX0 = errorBoxX0.project( dims );
+	errorBoxX0 = errorBoxX0.projectOn( dims );
 
 	Box<Number> errorBoxExternalInput = externalInput.linearTransformation( flowMatrix.block( 0, 0, dimension - 1, dimension - 1 ) );
 

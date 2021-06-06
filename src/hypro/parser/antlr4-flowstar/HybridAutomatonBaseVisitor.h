@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.8
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -50,6 +50,10 @@ public:
   }
 
   virtual antlrcpp::Any visitProbdistribution(HybridAutomatonParser::ProbdistributionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitLoc_labels(HybridAutomatonParser::Loc_labelsContext *ctx) override {
     return visitChildren(ctx);
   }
 

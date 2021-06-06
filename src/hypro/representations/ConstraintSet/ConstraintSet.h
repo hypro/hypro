@@ -33,9 +33,9 @@ class ConstraintSetT {
 	typedef Number NumberType;
 
   private:
-	matrix_t<Number> mConstraints;			/*!< Matrix describing the linear constraints.*/
-	vector_t<Number> mConstants;			/*!< Vector describing the constant parts for the respective constraints.*/
-	mutable TRIBOOL mIsBox = TRIBOOL::NSET; /*<  Cache to store whether the constraints are axis-aligned. */
+	matrix_t<Number> mConstraints = matrix_t<Number>::Zero( 0, 0 ); /*!< Matrix describing the linear constraints.*/
+	vector_t<Number> mConstants = vector_t<Number>::Zero( 0 );		/*!< Vector describing the constant parts for the respective constraints.*/
+	mutable TRIBOOL mIsBox = TRIBOOL::NSET;							/*<  Cache to store whether the constraints are axis-aligned. */
 
   public:
 	/***************************************************************************
@@ -46,9 +46,7 @@ class ConstraintSetT {
 	 * @brief      Creates an empty constraintSet.
 	 * @details   The empty constraintSet is represented by a zero-dimensional point pair.
 	 */
-	ConstraintSetT()
-		: mConstraints( matrix_t<Number>::Zero( 0, 0 ) )
-		, mConstants( vector_t<Number>::Zero( 0 ) ) {}
+	ConstraintSetT() {}
 
 	/**
 	 * @brief      Copy constructor.
@@ -71,7 +69,9 @@ class ConstraintSetT {
 	 */
 	ConstraintSetT( const matrix_t<Number>& _constraints, const vector_t<Number>& _constants )
 		: mConstraints( _constraints )
-		, mConstants( _constants ) {}
+		, mConstants( _constants ) {
+		assert( _constraints.rows() == _constants.rows() );
+	}
 
 	/**
 	 * @brief Constructor from a matrix and a vector.
@@ -179,7 +179,10 @@ class ConstraintSetT {
 	 * @param b A constraintSet.
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const ConstraintSetT<Number, S>& b ) {
-		ostr << "Matrix: " << b.matrix() << ", Vector: " << b.vector();
+		for ( Eigen::Index row = 0; row < b.matrix().rows(); ++row ) {
+			ostr << to_string<Number>( b.matrix().row( row ), false );
+			ostr << " ≤ " << b.vector()( row ) << "\n";
+		}
 		return ostr;
 	}
 
@@ -200,10 +203,10 @@ class ConstraintSetT {
 	}
 
 	/**
-	 * @brief      Storage size determination.
-	 * @return     Size of the required memory.
+	 * @brief      Returns number of constraints.
+	 * @return     The number of constraints.
 	 */
-	std::size_t size() const { return 1; }
+	std::size_t size() const { return mConstraints.rows(); }
 
 	static representation_name type() { return representation_name::constraint_set; }
 
@@ -219,7 +222,7 @@ class ConstraintSetT {
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspace( const Halfspace<Number>& ) const { return std::make_pair( CONTAINMENT::NO, *this ); }
 	std::pair<CONTAINMENT, ConstraintSetT> satisfiesHalfspaces( const matrix_t<Number>&, const vector_t<Number>& ) const { return std::make_pair( CONTAINMENT::NO, *this ); }
 
-	ConstraintSetT project( const std::vector<std::size_t>& ) const { return *this; }
+	ConstraintSetT projectOn( const std::vector<std::size_t>& ) const { return *this; }
 	ConstraintSetT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const { return *this; }
 
 	ConstraintSetT linearTransformation( const matrix_t<Number>& ) const { return *this; }

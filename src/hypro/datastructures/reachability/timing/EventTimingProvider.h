@@ -39,6 +39,10 @@ class EventTimingProvider : public carl::Singleton<EventTimingProvider<Number>> 
 		mRoot = new EventTimingNode<Number>();
 	}
 
+	~EventTimingProvider() {
+		delete mRoot;
+	}
+
 	/**
 	 * @brief	Find the best suitable node in the timing tree which matches the passed path.
 	 */

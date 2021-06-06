@@ -90,14 +90,14 @@ namespace hypro {
 			}
 
 			//put into place according to place of variable in vars
-			unsigned dest = 0;
+			Eigen::Index dest = 0;
 			if(mTerm->VARIABLE().size() == 0){
 				dest = coeffVec.rows()-1;
 			} else if(mTerm->VARIABLE().size() == 1){
 				auto tmpVar = mTerm->VARIABLE()[0]->getText();
-				for(unsigned i=0; i < vars.size(); i++){
+				for(std::size_t i=0; i < vars.size(); i++){
 					if(vars[i] == tmpVar){
-						dest = i;
+						dest = Eigen::Index(i);
 						break;
 					}
 				}
@@ -362,11 +362,11 @@ namespace hypro {
 		} else {
 
 			//1.Iteratively call visit(ctx->constraint()) to get vector of pairs of constraint vectors and constant Numbers
-			unsigned size = ctx->constraint().size() + ctx->intervalexpr().size();
+			Eigen::Index size = Eigen::Index(ctx->constraint().size() + ctx->intervalexpr().size());
 			matrix_t<Number> tmpMatrix = matrix_t<Number>::Zero(size, vars.size());
 			vector_t<Number> tmpVector = vector_t<Number>::Zero(size);
 			unsigned i = 0;
-			int rowToFill = 0;
+			Eigen::Index rowToFill = 0;
 			std::vector<std::pair<vector_t<Number>,Number>> values;
 			HyproFormulaVisitor<Number> visitor(vars);
 			while(i < size){
@@ -375,7 +375,7 @@ namespace hypro {
 				if(i < ctx->constraint().size()){
 					values = (visitor.visit(ctx->constraint().at(i))).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
 				} else {
-					unsigned posInIntervalExpr = i - ctx->constraint().size();
+					std::size_t posInIntervalExpr = i - ctx->constraint().size();
 					if(posInIntervalExpr < ctx->intervalexpr().size()){
 						values = visitor.visit(ctx->intervalexpr().at(posInIntervalExpr)).template as<std::vector<std::pair<vector_t<Number>,Number>>>();
 					} else {
@@ -393,7 +393,7 @@ namespace hypro {
 				//Resize tmpMatrix and tmpVector and initialise them with 0, then write values inside
 				tmpMatrix.conservativeResize(tmpMatrix.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
 				tmpVector.conservativeResize(tmpVector.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
-				for(int k=rowToFill; k < tmpMatrix.rows(); k++){
+				for(Eigen::Index k=rowToFill; k < tmpMatrix.rows(); k++){
 					tmpMatrix.row(k) = vector_t<Number>::Zero(tmpMatrix.cols());
 					tmpVector(k) = Number(0);
 				}
@@ -403,7 +403,7 @@ namespace hypro {
 				}
 
 				//Increment rowToFill by our added size
-				rowToFill += values.size();
+				rowToFill += Eigen::Index(values.size());
 				i++;
 			}
 

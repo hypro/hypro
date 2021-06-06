@@ -70,7 +70,7 @@ void EventTimingNode<Number>::setEntryTransition( const Transition<Number>* tran
 }
 
 template <typename Number>
-std::size_t EventTimingNode<Number>::getDotRepresentation( int id, std::string& nodes, std::string& transitions ) const {
+std::size_t EventTimingNode<Number>::getDotRepresentation( std::size_t id, std::string& nodes, std::string& transitions ) const {
 	std::stringstream s;
 	s << "node" << id << " [label=<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">";
 

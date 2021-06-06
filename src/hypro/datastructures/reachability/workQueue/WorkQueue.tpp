@@ -9,8 +9,7 @@ template <class Workable, class Setting>
 void WorkQueueT<Workable, Setting>::pushFront( const Workable& item ) {
 	assert( item != nullptr );
 	TRACE( "hypro.datastructures", "Locked push front." );
-	std::unique_lock<std::mutex> lock( mSpinlock );
-
+	std::unique_lock<std::mutex> lock( mQueueLock );
 	this->nonLockingPushFront( item );
 }
 
@@ -31,8 +30,7 @@ template <class Workable, class Setting>
 void WorkQueueT<Workable, Setting>::enqueue( Workable&& item ) {
 	assert( item != nullptr );
 	TRACE( "hypro.datastructures", "Locked enqueue." );
-	std::unique_lock<std::mutex> lock( mSpinlock );
-
+	std::unique_lock<std::mutex> lock( mQueueLock );
 	this->nonLockingEnqueue( std::move( item ) );
 }
 
@@ -52,8 +50,7 @@ void WorkQueueT<Workable, Setting>::nonLockingEnqueue( Workable&& item ) {
 template <class Workable, class Setting>
 bool WorkQueueT<Workable, Setting>::exists( const Workable& item ) {
 	TRACE( "hypro.datastructures", "Locked exists." );
-	std::unique_lock<std::mutex> lock( mSpinlock );
-
+	std::unique_lock<std::mutex> lock( mQueueLock );
 	return nonLockingExists( item );
 }
 
@@ -72,8 +69,7 @@ bool WorkQueueT<Workable, Setting>::nonLockingExists( const Workable& item ) {
 template <class Workable, class Setting>
 Workable WorkQueueT<Workable, Setting>::dequeueFront() {
 	TRACE( "hypro.datastructures", "Locked dequeue front." );
-	std::unique_lock<std::mutex> lock( mSpinlock );
-
+	std::unique_lock<std::mutex> lock( mQueueLock );
 	return nonLockingDequeueFront();
 }
 
@@ -83,7 +79,7 @@ Workable WorkQueueT<Workable, Setting>::nonLockingDequeueFront() {
 	if ( this->nonLockingIsEmpty() ) {
 		return nullptr;
 	}
-	Workable item{std::move( mQueue.front() )};
+	Workable item{ std::move( mQueue.front() ) };
 	mQueue.pop_front();
 	assert( item != nullptr );
 	return item;
@@ -92,8 +88,7 @@ Workable WorkQueueT<Workable, Setting>::nonLockingDequeueFront() {
 template <class Workable, class Setting>
 Workable WorkQueueT<Workable, Setting>::dequeueBack() {
 	TRACE( "hypro.datastructures", "Locked dequeue back." );
-	std::unique_lock<std::mutex> lock( mSpinlock );
-
+	std::unique_lock<std::mutex> lock( mQueueLock );
 	return nonLockingDequeueBack();
 }
 
@@ -112,8 +107,7 @@ Workable WorkQueueT<Workable, Setting>::nonLockingDequeueBack() {
 template <class Workable, class Setting>
 bool WorkQueueT<Workable, Setting>::isEmpty() const {
 	TRACE( "hypro.datastructures", "Locked is empty." );
-	std::unique_lock<std::mutex> lock( mSpinlock );
-
+	std::unique_lock<std::mutex> lock( mQueueLock );
 	return nonLockingIsEmpty();
 }
 
@@ -132,8 +126,7 @@ std::size_t WorkQueueT<Workable, Setting>::nonLockingSize() const {
 template <class Workable, class Setting>
 std::size_t WorkQueueT<Workable, Setting>::size() const {
 	TRACE( "hypro.datastructures", "Locked size. (@" << this << ")" );
-	std::unique_lock<std::mutex> lock( mSpinlock );
-
+	std::unique_lock<std::mutex> lock( mQueueLock );
 	return nonLockingSize();
 }
 }  // namespace hypro

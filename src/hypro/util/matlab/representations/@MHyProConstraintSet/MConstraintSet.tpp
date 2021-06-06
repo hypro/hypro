@@ -182,7 +182,7 @@ void MConstraintSet::process( int nlhs, mxArray* plhs[], int nrhs, const mxArray
 		return;
 	}
 	if ( cmd == 16 ) {
-		project( nlhs, plhs, nrhs, prhs );
+		projectOn( nlhs, plhs, nrhs, prhs );
 		return;
 	}
 	if ( cmd == 17 ) {

@@ -7,7 +7,12 @@ Reset<Number>::Reset( const matrix_t<Number>& mat, const vector_t<Number>& vec )
 	assert( mat.rows() == mat.cols() );
 	mAffineResets.emplace_back( mat, vec );
 	mIntervalResets.emplace_back( std::vector<carl::Interval<Number>>( mat.rows(), carl::Interval<Number>::emptyInterval() ) );
-	mHash = 0;
+}
+
+template <typename Number>
+Reset<Number>::Reset( const std::vector<carl::Interval<Number>>& intervals ) {
+	mAffineResets.emplace_back( matrix_t<Number>::Identity( intervals.size(), intervals.size() ), vector_t<Number>::Zero( intervals.size() ) );
+	mIntervalResets.emplace_back( intervals );
 }
 
 template <typename Number>
@@ -78,14 +83,18 @@ void Reset<Number>::setIntervals( const std::vector<carl::Interval<Number>>& int
 }
 
 template <typename Number>
+bool Reset<Number>::isAffineIdentity() const {
+	return mAffineResets.empty() || std::all_of( mAffineResets.begin(), mAffineResets.end(), []( const auto& affineReset ) { return affineReset.isIdentity(); } );
+}
+
+template <typename Number>
+bool Reset<Number>::isIntervalIdentity() const {
+	return mIntervalResets.empty() || std::all_of( mIntervalResets.begin(), mIntervalResets.end(), []( const auto& intervals ) { return intervals.isIdentity(); } );
+}
+
+template <typename Number>
 bool Reset<Number>::isIdentity() const {
-	for ( const auto& cset : mAffineResets ) {
-		bool tmp = cset.isIdentity();
-		if ( !tmp ) {
-			return false;
-		}
-	}
-	return true;
+	return isAffineIdentity() && isIntervalIdentity();
 }
 
 template <typename Number>

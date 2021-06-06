@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.8
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -17,8 +17,8 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, POLY = 25, LINEAR = 26, 
-    NONLINEAR = 27, NONPOLY = 28, LTI = 29, ODE = 30, IN = 31, TRUE = 32, 
-    FALSE = 33, PAR = 34, JUMPS = 35, URGENT = 36, GUARD = 37, RESET = 38, 
+    NONLINEAR = 27, NONPOLY = 28, LTI = 29, ODE = 30, URGENT = 31, IN = 32, 
+    TRUE = 33, FALSE = 34, PAR = 35, JUMPS = 36, GUARD = 37, RESET = 38, 
     PARALLELOTOPE = 39, BOX = 40, JUMP = 41, DEFINE = 42, COMMENT = 43, 
     EQUALS = 44, BOOLRELATION = 45, PLUS = 46, MINUS = 47, TIMES = 48, DIVIDE = 49, 
     SBOPEN = 50, SBCLOSE = 51, CBOPEN = 52, CBCLOSE = 53, RBOPEN = 54, RBCLOSE = 55, 

@@ -1,49 +1,40 @@
 #pragma once
 
+#include "util/type_handling/better_enums/enum_default_ctor.h"
+
+#include <boost/operators.hpp>
 #include <carl/numbers/numbers.h>
 #include <carl/util/hash.h>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
-#include <util/type_handling/better_enums/enum_default_ctor.h>
+#include <eigen3/Eigen/StdVector>
 #include <iosfwd>
 #include <set>
 
 // global typedefs
 namespace hypro {
 
-/**
- * @brief Number type used for timings and time intervals.
- */
+/// Number type used for timings and time intervals.
 using tNumber = mpq_class;
 
-/**
- * @brief Used to designate the index of a segment in a flowpipe
- */
+/// Used to designate the index of a segment in a flowpipe
 using SegmentInd = int;
 
-/**
- * @brief Used to designate time points as multiples of some delta, usually given as a value of type tNumber
- */
+/// Used to designate time points as multiples of some delta, usually given as a value of type tNumber
 using TimePoint = int;
 
-/**
- * typedef wrapping an Eigen::Matrix type with only one column.
- */
+/// Wrapper for an Eigen::Matrix type with only one column.
 template <typename Number>
 using vector_t = Eigen::Matrix<Number, Eigen::Dynamic, 1>;
 
-/**
- * typedef wrapping an Eigen::Matrix type.
- */
+/// Wrapper for an Eigen::Matrix type.
 template <typename Number>
 using matrix_t = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>;
 
 template <typename Number>
 using vectorSet = std::set<vector_t<Number>>;
 
-/**
- * @brief      Enum implementing a tribool.
- */
+/// Enum implementing a tribool.
 enum class TRIBOOL { TRUE,
 					 FALSE,
 					 NSET };
@@ -62,17 +53,13 @@ BETTER_ENUM( PLOTTYPE, int,
 			 tex,
 			 nset )
 
-/**
- * @brief Enum to represent set states such as empty and universal.
- */
+/// Enum to represent set states such as empty and universal.
 enum class SETSTATE { UNKNOWN,
 					  NONEMPTY,
 					  EMPTY,
 					  UNIVERSAL };
 
-/**
- * @brief      Enum of possible solution types for linear optimization.
- */
+/// Enum of possible solution types for linear optimization.
 enum class SOLUTION { FEAS = 0,
 					  INFEAS,
 					  INFTY,
@@ -88,27 +75,22 @@ enum class CONTAINMENT { NO = -1,
 						 FULL = 2,
 						 YES = 3 };
 
-/**
- * @brief classifies the type of subspace in case subspace decomposition is used.
- */
+/// Classifies the type of subspace in case subspace decomposition is used.
 enum class SUBSPACETYPE { LTI = 0,
 						  TIMED = 1,
 						  DISCRETE = 2,
 						  RECTANGULAR = 3 };
 
-/**
- * @brief classifies the type of location, which reflects the dynamics in case we dynamically detect subspaces.
- */
+/// Classifies the type of location, which reflects the dynamics in case we dynamically detect subspaces.
 enum class LOCATIONTYPE { LTILOC = 0,
 						  TIMEDLOC = 1,
 						  RECTANGULARLOC = 2 };
 
-/**
- * @brief classifies the type of dynamics of a flow for a location.
- */
+/// Classifies the type of dynamics of a flow for a location.
 enum class DynamicType { linear = 0,
 						 affine,
 						 rectangular,
+						 singular,
 						 timed,
 						 discrete,
 						 mixed,
@@ -165,9 +147,11 @@ struct NumTraits<mpq_class> : GenericNumTraits<mpq_class> {
 	typedef mpq_class Real;
 	typedef mpq_class NonInteger;
 	typedef mpq_class Nested;
+
 	static inline Real epsilon() { return 0; }
 	static inline Real dummy_precision() { return 0; }
-	static inline Real digits10() { return 0; }
+	static inline int digits10() { return 0; }
+
 	enum {
 		IsInteger = 0,
 		IsSigned = 1,
@@ -179,32 +163,32 @@ struct NumTraits<mpq_class> : GenericNumTraits<mpq_class> {
 	};
 };
 
-/*
 namespace internal {
-template<> struct scalar_score_coeff_op<mpq_class> {
+
+template <>
+struct scalar_score_coeff_op<mpq_class> {
 	struct result_type : boost::totally_ordered1<result_type> {
 		std::size_t len;
-		result_type(int i = 0) : len(i) {} // Eigen uses Score(0) and Score()
-		result_type(mpq_class const& q) :
-		  len(mpz_size(q.get_num_mpz_t())+
-			  mpz_size(q.get_den_mpz_t())-1) {}
-		friend bool operator<(result_type x, result_type y) {
+		result_type( int i = 0 )
+			: len( i ) {}  // Eigen uses Score(0) and Score()
+		result_type( mpq_class const& q )
+			: len( mpz_size( q.get_num_mpz_t() ) +
+				   mpz_size( q.get_den_mpz_t() ) - 1 ) {}
+		friend bool operator<( result_type x, result_type y ) {
 			// 0 is the worst possible pivot
-			if (x.len == 0) return y.len > 0;
-			if (y.len == 0) return false;
+			if ( x.len == 0 ) return y.len > 0;
+			if ( y.len == 0 ) return false;
 			// Prefer a pivot with a small representation
 			return x.len > y.len;
 		}
-		friend bool operator==(result_type x, result_type y) {
+		friend bool operator==( result_type x, result_type y ) {
 			// Only used to test if the score is 0
 			return x.len == y.len;
 		}
 	};
-  result_type operator()(mpq_class const& x) const { return x; }
+	result_type operator()( mpq_class const& x ) const { return x; }
 };
-} // namespace internal
-*/
-
+}  // namespace internal
 }  // namespace Eigen
 
 namespace std {
@@ -268,5 +252,6 @@ inline std::ostream& operator<<( std::ostream& _out, const hypro::CONTAINMENT& _
 }
 }  // namespace std
 
+#include "util/adaptions_carl/adaptions_carl.h"
 #include "util/adaptions_eigen/adaptions_eigen.h"
 #include "util/conversion.h"

@@ -7,6 +7,10 @@
 
 #pragma once
 
+#ifndef INCL_FROM_HAHEADER
+static_assert( false, "This file may only be included indirectly by HybridAutomaton.h" );
+#endif
+
 #include "../../types.h"
 #include "Condition.h"
 #include "decomposition/Decomposition.h"
@@ -37,10 +41,9 @@ template <typename Number>
 class Location {
   public:
 	using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
-	using flowVariant = std::variant<linearFlow<Number>, rectangularFlow<Number>>;
 
   private:
-	std::vector<flowVariant> mFlows;					 ///< Dynamics
+	std::vector<flowVariant<Number>> mFlows;			 ///< Dynamics
 	std::vector<DynamicType> mFlowTypes;				 ///< Types of dynamics
 	std::vector<carl::Interval<Number>> mExternalInput;	 ///< External input/disturbance
 	bool mHasExternalInput = false;						 ///< Cache-flag
@@ -49,6 +52,7 @@ class Location {
 	std::string mName = "";								 ///< Name of the location
 	unsigned mId;										 ///< ID - was used for comparison (deprecated)
 	mutable std::size_t mHash = 0;						 ///< Hash of the location
+	bool mIsUrgent = false;								 ///< Flag indicating that a location is urgent
 
   public:
 	/// default constructor
@@ -82,7 +86,7 @@ class Location {
 		return std::get<rectangularFlow<Number>>( mFlows[I] );
 	}
 	/// getter for vector of flow-variants
-	const std::vector<flowVariant>& getFlows() const {
+	const std::vector<flowVariant<Number>>& getFlows() const {
 		assert( isConsistent() );
 		return mFlows;
 	}
@@ -106,6 +110,8 @@ class Location {
 	[[deprecated( "use hash() instead" )]] unsigned getId() const { return mId; }
 	/// getter for the name of the location
 	std::string getName() const { return mName; }
+	/// getter for the urgency-flag
+	bool isUrgent() const { return mIsUrgent; }
 	/// getter for the state space dimension
 	std::size_t dimension() const;
 	/// getter for the state space dimension of a specific subspace
@@ -130,10 +136,21 @@ class Location {
 		mInvariant = inv;
 		mHash = 0;
 	}
+	/// allows setting the location to being urgent
+	void setUrgent( bool urgent = true ) { mIsUrgent = urgent; }
 	/// setter for vector of outgoing transitions (move)
 	void setTransitions( transitionVector&& trans );
 	/// adds outgoing transitions
 	void addTransition( std::unique_ptr<Transition<Number>>&& trans );
+	void removeTransition( Transition<Number>* transitionPtr ) {
+	    mTransitions.erase(std::find_if(std::begin(mTransitions), std::end(mTransitions), [&](auto& uPtr){
+			  return uPtr.get() == transitionPtr;
+		  }));
+	}
+	/// creates a transition from this location to the target
+	Transition<Number>* createTransition( Location<Number>* target );
+	/// adds a copy of the passed transition with the source being this location
+	Transition<Number>* createTransition( Transition<Number>* target );
 	/// setter for external input/disturbance
 	void setExtInput( const std::vector<carl::Interval<Number>>& b );
 	/// returns hash value of the location
@@ -168,25 +185,21 @@ class Location {
 	}
 	/// equal comparison
 	inline bool operator==( const Location<Number>& rhs ) const {
-		//TRACE("hypro.datastructures","Comparison of " << *this << " and " << rhs);
-		if ( this->hash() != rhs.hash() ) {
-			//TRACE("hypro.datastructures","Hash " << this->hash() << " and " << rhs.hash() << " not equal.");
-			return false;
-		}
+		TRACE( "hypro.datastructures", "Comparison of " << *this << " and " << rhs );
 		if ( mName != rhs.getName() ) {
-			//TRACE("hypro.datastructures","Name not equal.");
+			TRACE( "hypro.datastructures", "Name not equal." );
 			return false;
 		}
 		if ( mInvariant != rhs.getInvariant() ) {
-			//TRACE("hypro.datastructures","Invariants not equal.");
+			TRACE( "hypro.datastructures", "Invariants not equal." );
 			return false;
 		}
 		if ( mFlows.size() != rhs.getFlows().size() ) {
-			//TRACE("hypro.datastructures","Number of flows not equal.");
+			TRACE( "hypro.datastructures", "Number of flows not equal." );
 			return false;
 		}
 		if ( mFlowTypes.size() != rhs.getFlowTypes().size() ) {
-			//TRACE("hypro.datastructures","Number of flows not equal.");
+			TRACE( "hypro.datastructures", "Number of flows not equal." );
 			return false;
 		}
 		for ( std::size_t i = 0; i < mFlows.size(); ++i ) {
@@ -196,11 +209,13 @@ class Location {
 			switch ( mFlowTypes[i] ) {
 				case DynamicType::linear:
 					if ( std::get<linearFlow<Number>>( mFlows[i] ) != std::get<linearFlow<Number>>( rhs.getFlows()[i] ) ) {
+						TRACE( "hypro.datastructures", "Dynamics not equal" );
 						return false;
 					}
 					break;
 				case DynamicType::rectangular:
 					if ( std::get<rectangularFlow<Number>>( mFlows[i] ) != std::get<rectangularFlow<Number>>( rhs.getFlows()[i] ) ) {
+						TRACE( "hypro.datastructures", "Dynamics not equal" );
 						return false;
 					}
 					break;
@@ -210,15 +225,19 @@ class Location {
 					break;
 			}
 		}
+		/*
 		if ( mExternalInput != rhs.getExternalInput() ) {
 			//TRACE("hypro.datastructures","External input not equal.");
+			std::cout << "ExtIn not equal" << std::endl;
+			return false;
+		}
+		*/
+
+		if ( mTransitions.size() != rhs.getTransitions().size() ) {
+			TRACE( "hypro.datastructures", "Number of transitions not equal: " << mTransitions.size() << " (lhs) vs. " << rhs.getTransitions().size() << " (rhs)." );
 			return false;
 		}
 		/*
-        if(mTransitions.size() != rhs.getTransitions().size()) {
-            TRACE("hypro.datastructures","Number of transitions not equal.");
-            return false;
-        }
         for(auto lhsIt = mTransitions.begin(); lhsIt != mTransitions.end(); ++lhsIt) {
             bool found = false;
             for(auto rhsIt = rhs.getTransitions().begin(); rhsIt != rhs.getTransitions().end(); ++rhsIt) {
@@ -233,16 +252,16 @@ class Location {
             }
         }
         */
-		//TRACE("hypro.datastructures","Equal.");
+		TRACE( "hypro.datastructures", "Equal." );
 		return true;
 	}
 	/// not equal comparison
 	inline bool operator!=( const Location<Number>& rhs ) const { return !( *this == rhs ); }
 	/// outstream operator
 	friend std::ostream& operator<<( std::ostream& ostr, const Location<Number>& l ) {
-#ifdef HYPRO_LOGGING
-		ostr << "location " << l.getName() << " ptr " << &l << " (id: " << l.hash() << ")" << std::endl
-			 << "\t Flow: " << std::endl;
+		ostr << l.getName() << " @" << &l << " {\n"
+			 << "Flow.: "
+			 << "\n";
 		for ( size_t i = 0; i < l.getNumberSubspaces(); i++ ) {
 			switch ( l.getFlowTypes()[i] ) {
 				case DynamicType::linear:
@@ -255,7 +274,7 @@ class Location {
 					break;
 			}
 		}
-		ostr << "\t Inv: " << std::endl
+		ostr << "Inv.:\n"
 			 << l.getInvariant();
 		//ostr << l.getInvariant().getDiscreteCondition() << std::endl;
 		//ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
@@ -263,15 +282,14 @@ class Location {
 		for ( const auto& transitionPtr : l.getTransitions() ) {
 			ostr << *( transitionPtr.get() ) << std::endl;
 		}
-		ostr << "and transitions.size() is: " << l.getTransitions().size() << std::endl;
-		ostr << std::endl
-			 << ")";
-#endif
+		ostr << "\n}";
 		return ostr;
 	}
 
   private:
-	bool isConsistent() const { return mFlows.size() == mFlowTypes.size(); }
+	bool isConsistent() const {
+		return mFlows.size() == mFlowTypes.size();
+	}
 };
 
 /**
@@ -284,7 +302,6 @@ struct locPtrComp {
 	bool operator()( const std::unique_ptr<Location<Number>>& lhs, const std::unique_ptr<Location<Number>>& rhs ) const { return ( *lhs < *rhs ); }
 };
 
-/*
 template<typename Number>
 //std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
 //                                , const std::unique_ptr<Location<Number>>& rhs
@@ -293,7 +310,6 @@ std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
                                                 , const std::vector<std::string>& lhsVar
                                                 , const std::vector<std::string>& rhsVar
                                                 , const std::vector<std::string>& haVar);
-*/
 
 }  // namespace hypro
 
@@ -306,37 +322,28 @@ namespace std {
 template <typename Number>
 struct hash<hypro::Location<Number>> {
 	std::size_t operator()( const hypro::Location<Number>& loc ) const {
-		//TRACE( "hypro.datastructures", "Hash for location " << loc.getName() );
 		//Flows
 		std::size_t seed = 0;
 		for ( const auto& f : loc.getFlows() ) {
-			//TRACE( "hypro.datastructures", "Add flow hash " << std::hash<hypro::linearFlow<Number>>()( f ) );
 			carl::hash_add( seed, std::visit( hypro::flowHashVisitor{}, f ) );
 		}
-
 		//Name
-		//TRACE( "hypro.datastructures", "Add name hash " << std::hash<std::string>()( loc.getName() ) );
 		carl::hash_add( seed, std::hash<std::string>()( loc.getName() ) );
-
-		////Transitions
-		//std::size_t transitionHash = 0;
-		//for(auto& t : mTransitions){
-		//  seed += std::hash<Transition<Number>*>()(t);
-		//}
-		////Extinput
-		//if(mHasExternalInput){
-		//  seed += std::hash<Box<Number>>()(mExternalInput);
-		//}
-
+		//Transitions
+		for ( const auto& t : loc.getTransitions() ) {
+			seed += std::hash<hypro::Transition<Number>*>()( t.get() );
+		}
 		// Invariant
-		//TRACE( "hypro.datastructures", "Add invariant hash " << loc.getInvariant().hash() );
 		carl::hash_add( seed, loc.getInvariant().hash() );
-
-		//TRACE( "hypro.datastructures", "Resulting hash " << seed );
 		return seed;
 	}
 };
 
 }  // namespace std
 
+// clang-format off
+#define INCL_FROM_LOCHEADER true
+
+#include "Transition.h"
 #include "Location.tpp"
+// clang-format on

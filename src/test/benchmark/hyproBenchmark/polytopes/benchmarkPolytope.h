@@ -11,10 +11,10 @@
 #include "../Results.h"
 #include "../Settings.h"
 #include "../types.h"
-#include <flags.h>
+#include <hypro/flags.h>
 #include <iostream>
 #include <random>
-#include <representations/GeometricObjectBase.h>
+#include <hypro/representations/GeometricObjectBase.h>
 #ifdef HYPRO_USE_PPL
 #include "../box/pplStructs.h"
 #include <ppl.hh>
@@ -27,6 +27,7 @@ Results<std::size_t> affineTransformation( const Settings& settings );
 Results<std::size_t> unite( const Settings& settings );
 Results<std::size_t> intersect( const Settings& settings );
 Results<std::size_t> hPolyContainment( const Settings& settings );
+Results<std::size_t> hPolyConstruction( const Settings& settings );
 Results<std::size_t> run( const Settings& settings );
 
 }  // namespace polytope

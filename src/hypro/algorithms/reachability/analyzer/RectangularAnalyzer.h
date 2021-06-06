@@ -18,25 +18,25 @@ class RectangularAnalyzer {
   public:
 	/// default constructor (deleted)
 	RectangularAnalyzer() = delete;
-	/// constructor from automaton and settings
-	RectangularAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting )
+	/// constructor from automaton and settings with additional reachTree
+	RectangularAnalyzer( const HybridAutomaton<Number>& ha, const Settings& setting, std::vector<ReachTreeNode<State>>& roots )
 		: mHybridAutomaton( ha )
 		, mAnalysisSettings( setting )
-		, mReachTree() {
+		, mReachTree( roots ) {
 	}
 	/// main method for reachability analysis
 	REACHABILITY_RESULT run();
 	REACHABILITY_RESULT forwardRun();
-	REACHABILITY_RESULT backwardRun();
+	//REACHABILITY_RESULT backwardRun();
 	/// getter for computed flowpipes
 	const std::vector<Flowpipe<State>>& getFlowpipes() const { return mFlowpipes; }
 
   protected:
-	std::queue<ReachTreeNode<State>*> mWorkQueue;					///< Queue holds all nodes that require processing
-	std::vector<Flowpipe<State>> mFlowpipes;						///< Storage for already computed flowpipes
-	HybridAutomaton<Number> mHybridAutomaton;						///< Automaton which is analyzed
-	Settings mAnalysisSettings;										///< Settings used for analysis
-	std::vector<std::unique_ptr<ReachTreeNode<State>>> mReachTree;	///< Forest of ReachTrees computed
+	std::queue<ReachTreeNode<State>*> mWorkQueue;	///< Queue holds all nodes that require processing
+	std::vector<Flowpipe<State>> mFlowpipes;		///< Storage for already computed flowpipes
+	HybridAutomaton<Number> mHybridAutomaton;		///< Automaton which is analyzed
+	Settings mAnalysisSettings;						///< Settings used for analysis
+	std::vector<ReachTreeNode<State>>& mReachTree;	///< Forest of ReachTrees computed
 };
 
 }  // namespace hypro

@@ -37,9 +37,6 @@ struct sumContent {
 	sumContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _lhs, const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _rhs )
 		: lhs( _lhs )
 		, rhs( _rhs ) {}
-	sumContent( const sumContent<Number, Setting>& _origin )
-		: lhs( _origin.lhs )
-		, rhs( _origin.rhs ) {}
 
 	std::size_t originCount() const { return 2; }
 };
@@ -48,15 +45,14 @@ template <typename Number, class Setting>
 struct trafoContent {
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> origin;
 	std::shared_ptr<const lintrafoParameters<Number>> parameters;
-	unsigned currentExponent;
+	unsigned currentExponent = 1;
 	std::size_t successiveTransformations;
 	// 2^power defines the max. number of successive lin.trans before reducing the SF
 
 	trafoContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b )
 		: origin( _origin )
-		, currentExponent( 1 ) {
+		, parameters( std::make_shared<const lintrafoParameters<Number>>( A, b ) ) {
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
-		parameters = std::make_shared<const lintrafoParameters<Number>>( A, b );
 		// in case this transformation has already been performed, parameters will be updated.
 		auto trafoInDepth = _origin->hasTrafo( parameters, A, b, 0 );  // returns a pair of bool and depth in which the node was found -> this saves some comparisons later, as we know if the second value is 1, we can reduce.
 		assert( trafoInDepth.second != 1 || ( ( origin->type() == SF_TYPE::LINTRAFO ) && ( *origin->linearTrafoParameters()->parameters == *parameters ) && trafoInDepth.first ) );
@@ -79,8 +75,6 @@ struct trafoContent {
 					for ( std::size_t i = 0; i < unsigned( carl::pow( 2, parameters->power ) - 1 ); i++ ) {
 						origin = origin->linearTrafoParameters()->origin;
 					}
-					// Note: The following assertion does not hold in combination with the current reduction techniques.
-					//assert(origin->type() != SF_TYPE::LINTRAFO || (origin->linearTrafoParameters()->parameters == this->parameters && origin->linearTrafoParameters()->currentExponent >= currentExponent) );
 
 					// update information whether another trafo follows/is the origin.
 					// TODO: If the next operation is not a linTrafo we can directly quit.
@@ -93,12 +87,6 @@ struct trafoContent {
 			assert( origin->checkTreeValidity() );
 		}
 	}
-
-	trafoContent( const trafoContent<Number, Setting>& _origin )
-		: origin( _origin.origin )
-		, parameters( _origin.parameters )
-		, currentExponent( _origin.currentExponent )
-		, successiveTransformations( _origin.successiveTransformations ) {}
 
 	std::size_t originCount() const { return 1; }
 
@@ -125,9 +113,6 @@ struct scaleContent {
 	scaleContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _origin, Number _factor )
 		: origin( _origin )
 		, factor( _factor ) {}
-	scaleContent( const scaleContent<Number, Setting>& _origin )
-		: origin( _origin.origin )
-		, factor( _origin.factor ) {}
 
 	std::size_t originCount() const { return 1; }
 };
@@ -142,7 +127,7 @@ struct unionContent {
 		assert( items.size() == 2 );
 	}
 
-	unionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number, Setting>>>& sfVector )
+	explicit unionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number, Setting>>>& sfVector )
 		: items( sfVector ) {}
 	unionContent( const unionContent<Number, Setting>& _origin ) = default;
 
@@ -168,9 +153,6 @@ struct projectionContent {
 	projectionContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _origin, const std::vector<std::size_t>& _dimensions )
 		: origin( _origin )
 		, dimensions( _dimensions ) {}
-	projectionContent( const projectionContent<Number, Setting>& _original )
-		: origin( _original.origin )
-		, dimensions( _original.dimensions ) {}
 
 	std::size_t originCount() const { return 1; }
 };
@@ -186,7 +168,6 @@ class SupportFunctionContent {
 	friend class SupportFunctionT;
 	friend trafoContent<Number, Setting>;
 
-  private:
 	SF_TYPE mType = SF_TYPE::NONE;
 	unsigned mDepth;
 	unsigned mOperationCount;
@@ -350,7 +331,7 @@ class SupportFunctionContent {
 	BallSupportFunction<Number>* ball() const;
 	EllipsoidSupportFunction<Number>* ellipsoid() const;
 
-	std::shared_ptr<SupportFunctionContent<Number, Setting>> project( const std::vector<std::size_t>& dimensions ) const;
+	std::shared_ptr<SupportFunctionContent<Number, Setting>> projectOn( const std::vector<std::size_t>& dimensions ) const;
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const;
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> minkowskiSum( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _rhs ) const;
 	std::shared_ptr<SupportFunctionContent<Number, Setting>> intersect( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _rhs ) const;
@@ -369,7 +350,6 @@ class SupportFunctionContent {
 	void print() const;
 	friend std::ostream& operator<<( std::ostream& lhs, const std::shared_ptr<SupportFunctionContent<Number, Setting>>& rhs ) {
 		unsigned level = 0;
-		//std::cout << "Depth: " << rhs->mDepth << std::endl;
 		while ( true ) {
 			std::string tmp = rhs->printLevel( level, "   " );
 			if ( !tmp.empty() ) {
@@ -387,7 +367,7 @@ class SupportFunctionContent {
 		using Node = std::shared_ptr<SupportFunctionContent<Number, Setting>>;
 		using Res = bool;
 		std::vector<Node> callStack;
-		std::vector<std::pair<int, std::vector<Res>>> resultStack;  // The first value is an iterator to the calling frame
+		std::vector<std::pair<int, std::vector<Res>>> resultStack;	// The first value is an iterator to the calling frame
 
 		callStack.push_back( getThis() );
 		resultStack.push_back( std::make_pair( -1, std::vector<Res>() ) );
@@ -542,41 +522,30 @@ class SupportFunctionContent {
 		std::size_t colspan = 1;
 		s << "<TR><TD COLSPAN=\"" << colspan << "\">@" << this << "<BR/>" << this->mType << "</TD></TR>";
 		switch ( mType ) {
-			case SF_TYPE::BOX: {
+			case SF_TYPE::BOX:
+				[[fallthrough]];
+			case SF_TYPE::ELLIPSOID:
+				[[fallthrough]];
+			case SF_TYPE::INFTY_BALL:
+				[[fallthrough]];
+			case SF_TYPE::TWO_BALL:
+				[[fallthrough]];
+			case SF_TYPE::PROJECTION:
+				[[fallthrough]];
+			case SF_TYPE::SCALE:
+				[[fallthrough]];
+			case SF_TYPE::SUM:
+				[[fallthrough]];
+			case SF_TYPE::UNITE:
+				[[fallthrough]];
+			case SF_TYPE::INTERSECT:
+				[[fallthrough]];
+			case SF_TYPE::ZONOTOPE:
+				[[fallthrough]];
+			case SF_TYPE::LINTRAFO:
 				break;
-			}
-			case SF_TYPE::ELLIPSOID: {
-				break;
-			}
-			case SF_TYPE::INFTY_BALL: {
-				break;
-			}
-			case SF_TYPE::TWO_BALL: {
-				break;
-			}
-			case SF_TYPE::LINTRAFO: {
-				break;
-			}
 			case SF_TYPE::POLY: {
 				s << polytope()->getDotRepresentation();
-				break;
-			}
-			case SF_TYPE::PROJECTION: {
-				break;
-			}
-			case SF_TYPE::SCALE: {
-				break;
-			}
-			case SF_TYPE::SUM: {
-				break;
-			}
-			case SF_TYPE::UNITE: {
-				break;
-			}
-			case SF_TYPE::INTERSECT: {
-				break;
-			}
-			case SF_TYPE::ZONOTOPE: {
 				break;
 			}
 			default:
@@ -586,27 +555,24 @@ class SupportFunctionContent {
 		nodes += s.str();
 		std::size_t offset = ++startIndex;
 		switch ( mType ) {
-			case SF_TYPE::BOX: {
+			case SF_TYPE::BOX:
+				[[fallthrough]];
+			case SF_TYPE::ELLIPSOID:
+				[[fallthrough]];
+			case SF_TYPE::POLY:
+				[[fallthrough]];
+			case SF_TYPE::ZONOTOPE:
+				[[fallthrough]];
+			case SF_TYPE::INFTY_BALL:
+				[[fallthrough]];
+			case SF_TYPE::TWO_BALL:
 				break;
-			}
-			case SF_TYPE::ELLIPSOID: {
-				break;
-			}
-			case SF_TYPE::INFTY_BALL: {
-				break;
-			}
-			case SF_TYPE::TWO_BALL: {
-				break;
-			}
 			case SF_TYPE::LINTRAFO: {
 				std::stringstream t;
 				t << "node" << ( startIndex - 1 ) << " -> node" << offset << std::endl;
 				transitions += t.str();
 				;
 				offset = linearTrafoParameters()->origin->getDotRepresentation( offset, nodes, transitions );
-				break;
-			}
-			case SF_TYPE::POLY: {
 				break;
 			}
 			case SF_TYPE::PROJECTION: {
@@ -656,9 +622,6 @@ class SupportFunctionContent {
 				;
 				break;
 			}
-			case SF_TYPE::ZONOTOPE: {
-				break;
-			}
 			default:
 				break;
 		}
@@ -668,32 +631,30 @@ class SupportFunctionContent {
   private:
 	std::size_t originCount() const {
 		switch ( mType ) {
-			case SF_TYPE::SUM: {
+			case SF_TYPE::SUM:
 				return summands()->originCount();
-			}
-			case SF_TYPE::INTERSECT: {
+			case SF_TYPE::INTERSECT:
 				return intersectionParameters()->originCount();
-			}
-			case SF_TYPE::LINTRAFO: {
+			case SF_TYPE::LINTRAFO:
 				return linearTrafoParameters()->originCount();
-			}
-			case SF_TYPE::SCALE: {
+			case SF_TYPE::SCALE:
 				return scaleParameters()->originCount();
-			}
-			case SF_TYPE::UNITE: {
+			case SF_TYPE::UNITE:
 				return unionParameters()->originCount();
-			}
 			case SF_TYPE::POLY:
+				[[fallthrough]];
 			case SF_TYPE::INFTY_BALL:
+				[[fallthrough]];
 			case SF_TYPE::TWO_BALL:
+				[[fallthrough]];
 			case SF_TYPE::ELLIPSOID:
+				[[fallthrough]];
 			case SF_TYPE::BOX:
-			case SF_TYPE::ZONOTOPE: {
+				[[fallthrough]];
+			case SF_TYPE::ZONOTOPE:
 				return 0;
-			}
-			case SF_TYPE::PROJECTION: {
+			case SF_TYPE::PROJECTION:
 				return projectionParameters()->originCount();
-			}
 			case SF_TYPE::NONE:
 			default:
 				assert( false );
@@ -724,9 +685,9 @@ class SupportFunctionContent {
 				}
 				return linearTrafoParameters()->origin->hasTrafo( resNode, A, b, depth + 1 );
 			}
-			case SF_TYPE::SCALE: {
+			case SF_TYPE::SCALE:
 				return scaleParameters()->origin->hasTrafo( resNode, A, b, depth + 1 );
-			}
+
 			case SF_TYPE::UNITE: {
 				for ( const auto& item : unionParameters()->items ) {
 					auto tmp = item->hasTrafo( resNode, A, b, depth + 1 );
@@ -737,17 +698,19 @@ class SupportFunctionContent {
 				return std::make_pair( false, 0 );
 			}
 			case SF_TYPE::POLY:
+				[[fallthrough]];
 			case SF_TYPE::INFTY_BALL:
+				[[fallthrough]];
 			case SF_TYPE::TWO_BALL:
+				[[fallthrough]];
 			case SF_TYPE::ELLIPSOID:
+				[[fallthrough]];
 			case SF_TYPE::BOX:
-			case SF_TYPE::ZONOTOPE: {
+				[[fallthrough]];
+			case SF_TYPE::ZONOTOPE:
 				return std::make_pair( false, 0 );
-			}
-			case SF_TYPE::PROJECTION: {
+			case SF_TYPE::PROJECTION:
 				return projectionParameters()->origin->hasTrafo( resNode, A, b, depth + 1 );
-				break;
-			}
 			case SF_TYPE::NONE:
 			default:
 				assert( false );
@@ -756,37 +719,31 @@ class SupportFunctionContent {
 	}
 
 	std::vector<SF_TYPE> collectLevelEntries( unsigned level ) const {
-		//std::cout << __func__ << ": level: " << level << std::endl;
 		std::vector<SF_TYPE> items;
 		if ( level == 0 ) {
 			items.push_back( this->mType );
-			//std::cout << "items push " << this->mType << std::endl;
-			//std::cout << "items size: " << items.size() << std::endl;
+
 			return items;
 		}
 
 		// Note that at this point we can omit terminal cases, as the level is larger than the depht of this subtree.
 		switch ( mType ) {
 			case SF_TYPE::LINTRAFO: {
-				//std::cout << "Current: lintrafor" << std::endl;
 				std::vector<SF_TYPE> tmpItems = linearTrafoParameters()->origin->collectLevelEntries( level - 1 );
 				items.insert( items.end(), tmpItems.begin(), tmpItems.end() );
 				return items;
 			}
 			case SF_TYPE::SCALE: {
-				//std::cout << "Current: scale" << std::endl;
 				std::vector<SF_TYPE> tmpItems = scaleParameters()->origin->collectLevelEntries( level - 1 );
 				items.insert( items.end(), tmpItems.begin(), tmpItems.end() );
 				return items;
 			}
 			case SF_TYPE::PROJECTION: {
-				//std::cout << "Current: projection" << std::endl;
 				std::vector<SF_TYPE> tmpItems = projectionParameters()->origin->collectLevelEntries( level - 1 );
 				items.insert( items.end(), tmpItems.begin(), tmpItems.end() );
 				return items;
 			}
 			case SF_TYPE::SUM: {
-				//std::cout << "Current: sum" << std::endl;
 				std::vector<SF_TYPE> lhsItems = summands()->lhs->collectLevelEntries( level - 1 );
 				std::vector<SF_TYPE> rhsItems = summands()->rhs->collectLevelEntries( level - 1 );
 				items.insert( items.end(), lhsItems.begin(), lhsItems.end() );
@@ -794,7 +751,6 @@ class SupportFunctionContent {
 				return items;
 			}
 			case SF_TYPE::UNITE: {
-				//std::cout << "Current: union" << std::endl;
 				std::vector<SF_TYPE> res;
 				for ( const auto& item : unionParameters()->items ) {
 					std::vector<SF_TYPE> tmp = item->collectLevelEntries( level - 1 );
@@ -803,7 +759,6 @@ class SupportFunctionContent {
 				return res;
 			}
 			case SF_TYPE::INTERSECT: {
-				//std::cout << "Current: intersect" << std::endl;
 				std::vector<SF_TYPE> lhsItems = intersectionParameters()->lhs->collectLevelEntries( level - 1 );
 				std::vector<SF_TYPE> rhsItems = intersectionParameters()->rhs->collectLevelEntries( level - 1 );
 				items.insert( items.end(), lhsItems.begin(), lhsItems.end() );
@@ -816,15 +771,13 @@ class SupportFunctionContent {
 	}
 
 	std::string printLevel( unsigned l, std::string separator = "\t" ) const {
-		//std::cout << "Print level" << std::endl;
 		std::string level;
 		std::vector<SF_TYPE> items = this->collectLevelEntries( l );
 		if ( items.empty() )
 			return level;
 
-		//std::cout << "With " << items.size() << " entries." << std::endl;
 		std::string unaryLevelTransition = "  |  ";							 // 1
-		std::string binaryLevelTransition = "  |  " + separator + "\\    ";  // 2
+		std::string binaryLevelTransition = "  |  " + separator + "\\    ";	 // 2
 		std::string emptyLevelTransition = "     ";							 // 0
 		std::vector<unsigned> transitionType;
 

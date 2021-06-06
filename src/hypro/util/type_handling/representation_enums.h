@@ -1,6 +1,6 @@
 #pragma once
 
-#include <util/type_handling/better_enums/enum_default_ctor.h>
+#include "better_enums/enum_default_ctor.h"
 
 namespace hypro {
 /**

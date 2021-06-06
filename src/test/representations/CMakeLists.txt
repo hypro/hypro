@@ -1,7 +1,7 @@
 if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	# reduce compiler optimization for tests
-	set(representation_test_sources 
+	set(representation_test_sources
 		BoxTest.cpp
 		CarlPolytopeTest.cpp
 		ConverterTest.cpp
@@ -32,10 +32,10 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	add_executable(runRepresentationTests ${representation_test_sources})
 
-	add_dependencies(runRepresentationTests resources)
+	add_dependencies(runRepresentationTests hypro_resources)
 	target_include_directories(runRepresentationTests PRIVATE ${GTEST_INCLUDE_DIR})
 
-	target_link_libraries(runRepresentationTests LINK_PUBLIC
+	target_link_libraries(runRepresentationTests PUBLIC
 		${GTEST_LIBRARIES}
 		${PROJECT_NAME}-shared
 	)
@@ -43,6 +43,12 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 	cotire(runRepresentationTests)
 
 	add_test( NAME representations COMMAND runRepresentationTests )
+
+	if(DEVELOPER)
+	set_property(TEST representations PROPERTY
+		   ENVIRONMENT LD_PRELOAD=${asanLocation}
+		   )
+	endif()
 
 	add_dependencies(allTests runRepresentationTests)
 endif()

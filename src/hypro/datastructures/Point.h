@@ -235,7 +235,14 @@ class Point {
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The projected point.
 	 */
-	Point<Number> project( const std::vector<std::size_t>& dimensions ) const;
+	Point<Number> projectOn( const std::vector<std::size_t>& dimensions ) const;
+
+	/**
+	 * @brief      Projects out the given dimensions from the point.
+	 * @param[in]  dimensions  The dimensions.
+	 * @return     The projected point.
+	 */
+	Point<Number> projectOut( const std::vector<std::size_t>& dimensions ) const;
 
 	/**
 	 * @brief      Applies an affine transformation on the current point.
@@ -298,7 +305,7 @@ class Point {
 		Number res = 0;
 		vector_t<Number> coord = _p.rawCoordinates();
 		for ( unsigned i = 0; i < _p.dimension(); ++i ) {
-			Number absolute = coord( i ) < 0 ? Number( -1 ) * coord( i ) : coord( i );  // workaround for abs
+			Number absolute = coord( i ) < 0 ? Number( -1 ) * coord( i ) : coord( i );	// workaround for abs
 			res = res > absolute ? res : absolute;
 		}
 		return res;
@@ -452,7 +459,7 @@ class Point {
 			return false;
 		}
 
-		return ( this->rawCoordinates() == _p2.rawCoordinates() );
+		return ( is_approx_equal( this->rawCoordinates(), _p2.rawCoordinates() ) );
 	}
 
 	/**
@@ -672,6 +679,13 @@ template <typename From, typename To>
 Point<To> convert( const Point<From>& in ) {
 	return Point<To>( convert<From, To>( in.rawCoordinates() ) );
 }
+
+
+#ifdef EXTERNALIZE_CLASSES
+extern template class Point<double>;
+extern template class Point<mpq_class>;
+#endif
+
 
 }  // namespace hypro
 

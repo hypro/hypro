@@ -7,6 +7,7 @@
  */
 
 #pragma once
+#include <functional>
 #include <iosfwd>
 #include <string>
 
@@ -55,3 +56,17 @@ class Label {
 };
 
 }  // namespace hypro
+
+namespace std {
+/**
+ * @brief Specialization of std::hash for labels
+ * @tparam
+ */
+template <>
+struct hash<hypro::Label> {
+	/// Functor for std::hash
+	std::size_t operator()( const hypro::Label& l ) const {
+		return std::hash<std::string>{}( l.getName() );
+	}
+};
+}  // namespace std

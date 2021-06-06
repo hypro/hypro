@@ -4,16 +4,18 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     set(algorithm_test_sources
       #FacetEnumerationTest.cpp
       #ForwardReachabilityTest.cpp
-			#HyReachTest.cpp
       #MinkowskiSumTest.cpp
       #SumPerformanceTest.cpp
       # rahsTwoTankTest.cpp
       ReachabilityAnalysisTest.cpp
       FourierMotzkinQETest.cpp
-      VertexEnumerationTest.cpp
+      #VertexEnumerationTest.cpp
       UtilityTest.cpp
       QuickhullTest.cpp
       QuickIntersectionTest.cpp
+      RectangularReachabilityTest.cpp
+      SingularReachabilityTest.cpp
+      TimeEvolutionTest.cpp
       #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
       #FirstSegmentHandlersTest.cpp #BROKEN
     )
@@ -28,10 +30,10 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
     		${algorithm_test_sources}
     )
 
-    add_dependencies(runAlgorithmTests resources)
+    add_dependencies(runAlgorithmTests hypro_resources)
     target_include_directories(runAlgorithmTests PRIVATE ${GTEST_INCLUDE_DIR})
 
-    target_link_libraries(runAlgorithmTests LINK_PUBLIC
+    target_link_libraries(runAlgorithmTests PUBLIC
 			${GTEST_LIBRARIES}
 			${PROJECT_NAME}-shared
 			)

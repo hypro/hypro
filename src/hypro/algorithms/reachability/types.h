@@ -3,6 +3,9 @@
 
 namespace hypro {
 
+template <typename Number>
+class Transition;
+
 template <typename Representation>
 struct IndexedValuationSet {
 	Representation valuationSet{};

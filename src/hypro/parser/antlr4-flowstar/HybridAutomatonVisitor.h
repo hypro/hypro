@@ -1,5 +1,5 @@
 
-// Generated from HybridAutomaton.g4 by ANTLR 4.8
+// Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 #pragma once
 
@@ -37,6 +37,8 @@ public:
     virtual antlrcpp::Any visitStochasticlocation(HybridAutomatonParser::StochasticlocationContext *context) = 0;
 
     virtual antlrcpp::Any visitProbdistribution(HybridAutomatonParser::ProbdistributionContext *context) = 0;
+
+    virtual antlrcpp::Any visitLoc_labels(HybridAutomatonParser::Loc_labelsContext *context) = 0;
 
     virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *context) = 0;
 

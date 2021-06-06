@@ -50,7 +50,7 @@ void DifferenceBoundsT<Number, Converter, Setting>::setTimeHorizon( Number horiz
 
 template <typename Number, typename Converter, class Setting>
 carl::Interval<tNumber> DifferenceBoundsT<Number, Converter, Setting>::getCoveredTimeInterval() const {
-	carl::Interval<tNumber> res{0, 0};
+	carl::Interval<tNumber> res{ 0, 0 };
 	auto box = Converter::toBox( *this );
 	auto intervals = box.getIntervals();
 	for ( const auto& i : intervals ) {
@@ -98,14 +98,14 @@ bool DifferenceBoundsT<Number, Converter, Setting>::empty() const {
 		for ( int j = 0; j < i; j++ ) {
 			// if straight upper bound
 			if ( j == 0 ) {
-				if ( m_dbm( i, j ) < DBMEntry( -m_dbm( j, i ).first, m_dbm( j, i ).second ) ) {  // Note: I've changed to -m_dbm(j,i).
+				if ( m_dbm( i, j ) < DBMEntry( -m_dbm( j, i ).first, m_dbm( j, i ).second ) ) {	 // Note: I've changed to -m_dbm(j,i).
 																								 //std::cout << i << ", "<< j << ": 0-Clock entry." << std::endl;
 					m_dbm( 0, 0 ).first = -1.0;
 					return true;
 				}
 			} else {
 				//diagonal bound
-				if ( m_dbm( i, j ) < DBMEntry( -m_dbm( j, i ).first, m_dbm( j, i ).second ) ) {  // Note: I've changed to -m_dbm(j,i).
+				if ( m_dbm( i, j ) < DBMEntry( -m_dbm( j, i ).first, m_dbm( j, i ).second ) ) {	 // Note: I've changed to -m_dbm(j,i).
 																								 //std::cout << i << ", "<< j << ": regular entry." << std::endl;
 					m_dbm( 0, 0 ).first = -1.0;
 					return true;
@@ -136,17 +136,17 @@ std::vector<Point<Number>> DifferenceBoundsT<Number, Converter, Setting>::vertic
 	// A time Horizon can be defined that avoids plotting of potentially infinite polytopes
 	if ( getTimeHorizon() != 0.0 ) {
 		// we need 2 additional timeHorizon constraint for each clock (except 0 clock)
-		int numclocks = getDBM().cols() - 1;
+		Eigen::Index numclocks = getDBM().cols() - 1;
 		//constraints of the polytope
 		hypro::matrix_t<Number> HPolyConstraints = poly.matrix();
 		hypro::vector_t<Number> HPolyConstants = poly.vector();
-		int numconstraints = HPolyConstraints.rows();
+		Eigen::Index numconstraints = HPolyConstraints.rows();
 		HPolyConstraints.conservativeResize( numconstraints + 2 * numclocks, HPolyConstraints.cols() );
 		//HPolyConstants.conservativeResize(numconstraints+2*numclocks, HPolyConstraints.cols());
 		HPolyConstants.conservativeResize( numconstraints + 2 * numclocks );
 
-		int counter = numconstraints;  //start at next row
-		for ( int i = 0; i < numclocks; i++ ) {
+		Eigen::Index counter = numconstraints;	//start at next row
+		for ( Eigen::Index i = 0; i < numclocks; i++ ) {
 			// for each clock add a timehorizon so the polytope to plot is finite in plus direction
 			matrix_t<Number> constraintVars = matrix_t<Number>::Zero( 1, numclocks );
 			constraintVars( 0, i ) = 1.0;
@@ -167,7 +167,7 @@ std::vector<Point<Number>> DifferenceBoundsT<Number, Converter, Setting>::vertic
 
 		//auto polyNew( HPolyConstraints, HPolyConstants );
 		//return polyNew.vertices();
-		return poly.vertices();  // TODO: this is to avoid warnings.
+		return poly.vertices();	 // TODO: this is to avoid warnings.
 	}
 	return poly.vertices();
 }
@@ -187,7 +187,7 @@ std::pair<CONTAINMENT, DifferenceBoundsT<Number, Converter, Setting>> Difference
 }
 
 template <typename Number, typename Converter, class Setting>
-DifferenceBoundsT<Number, Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::project( const std::vector<std::size_t>& dimensions ) const {
+DifferenceBoundsT<Number, Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
 	if ( (unsigned)dimensions.size() + 1 == m_dbm.rows() ) {
 		// if the dimensions to plot to are as large as our dbm, we are already done
 		return hypro::DifferenceBoundsT<Number, Converter, Setting>( *this );
@@ -195,7 +195,7 @@ DifferenceBoundsT<Number, Converter, Setting> DifferenceBoundsT<Number, Converte
 	// TODO can this be done better? especially for higher dimensions?
 	// YES! Read the values from the DBM directly!!!
 	auto tmp = Converter::toHPolytope( *this );
-	auto projected = tmp.project( dimensions );
+	auto projected = tmp.projectOn( dimensions );
 	hypro::DifferenceBoundsT<Number, Converter, Setting> res = Converter::toDifferenceBounds( projected );
 	return res;
 }
@@ -339,7 +339,7 @@ template <typename Number, typename Converter, class Setting>
 DifferenceBoundsT<Number, Converter, Setting> DifferenceBoundsT<Number, Converter, Setting>::reset( int x, Number value ) const {
 	hypro::matrix_t<DBMEntry> mat = hypro::matrix_t<DBMEntry>( m_dbm );
 	for ( int i = 0; i < m_dbm.rows(); i++ ) {
-		if ( i != x ) {  //don't touch diagonals
+		if ( i != x ) {	 //don't touch diagonals
 			// d_xi = (value,<=)+d_0i
 			mat( x, i ) = DBMEntry( value, BOUND_TYPE::SMALLER_EQ ) + m_dbm( 0, i );
 

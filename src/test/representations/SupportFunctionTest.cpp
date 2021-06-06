@@ -9,6 +9,7 @@
 #include "../../hypro/representations/GeometricObjectBase.h"
 #include "../../hypro/util/plotting/Plotter.h"
 #include "../defines.h"
+#include "hypro/representations/conversion/typedefs.h"
 #include "gtest/gtest.h"
 
 using namespace hypro;
@@ -123,6 +124,12 @@ TYPED_TEST( SupportFunctionTest, constructor ) {
 	EXPECT_EQ( box2.evaluate( evalVec ).supportValue, TypeParam( 1 ) );
 	evalVec << -1, 0;
 	EXPECT_EQ( box2.evaluate( evalVec ).errorCode, SOLUTION::INFTY );
+
+	SupportFunction<TypeParam> empty{};
+	EXPECT_TRUE( empty.empty() );
+
+	SupportFunction<TypeParam> empty2 = SupportFunction<TypeParam>::Empty();
+	EXPECT_TRUE( empty2.empty() );
 
 	SUCCEED();
 }
@@ -641,7 +648,7 @@ TYPED_TEST( SupportFunctionTest, projection ) {
 	std::vector<std::size_t> dims;
 	dims.push_back( 0 );
 
-	psf1 = psf1.project( dims );
+	psf1 = psf1.projectOn( dims );
 
 	vector_t<TypeParam> dir1 = vector_t<TypeParam>::Zero( 2 );
 	dir1( 0 ) = this->constraints( 0, 0 );
@@ -659,7 +666,7 @@ TYPED_TEST( SupportFunctionTest, projection ) {
 
 	EXPECT_EQ( psf1.collectProjections().size(), dims.size() );
 
-	SupportFunction<TypeParam> projected = this->sfChainComplete.project( dims );
+	SupportFunction<TypeParam> projected = this->sfChainComplete.projectOn( dims );
 
 	dir1 << 1, 0;
 	dir2 << -1, 0;
@@ -679,7 +686,7 @@ TYPED_TEST( SupportFunctionTest, plotting ) {
 	projectionDimensions.push_back( 0 );
 	projectionDimensions.push_back( 1 );
 
-	Plotter<TypeParam>::getInstance().addObject( this->sfChainComplete.project( projectionDimensions ).vertices() );
+	Plotter<TypeParam>::getInstance().addObject( this->sfChainComplete.projectOn( projectionDimensions ).vertices() );
 }
 
 TYPED_TEST( SupportFunctionTest, dotRep ) {

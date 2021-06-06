@@ -1,6 +1,4 @@
 #include "../../hypro/datastructures/HybridAutomaton/State.h"
-#include "../../hypro/algorithms/reachability/FirstSegment.h"
-#include "../../hypro/datastructures/HybridAutomaton/Location.h"
 #include "../../hypro/representations/GeometricObjectBase.h"
 #include "../../hypro/util/tuple_expansion/nth_element.h"
 #include "../defines.h"
@@ -51,6 +49,8 @@ TEST( StateTest, CleanUp ) {
 	std::thread* t = new std::thread( run, st );
 
 	t->join();
+
+	delete t;
 }
 
 TEST( StateTest, Conversion ) {
@@ -94,11 +94,11 @@ TEST( StateTest, letTimePassZeroFlow ) {
 	using State = State<N, Box<N>>;
 
 	std::vector<carl::Interval<N>> intervals;
-	intervals.emplace_back( carl::Interval<N>{1, 2} );
-	intervals.emplace_back( carl::Interval<N>{0, 1} );
-	Box<N> b{intervals};
+	intervals.emplace_back( carl::Interval<N>{ 1, 2 } );
+	intervals.emplace_back( carl::Interval<N>{ 0, 1 } );
+	Box<N> b{ intervals };
 
-	State s0{b};
+	State s0{ b };
 
 	matrix_t<N> dynamics = matrix_t<N>::Zero( 2, 2 );
 
@@ -112,11 +112,11 @@ TEST( StateTest, letTimePassLinearFlow ) {
 	using State = State<N, Box<N>>;
 
 	std::vector<carl::Interval<N>> intervals;
-	intervals.emplace_back( carl::Interval<N>{1, 2} );
-	intervals.emplace_back( carl::Interval<N>{0, 1} );
-	Box<N> b{intervals};
+	intervals.emplace_back( carl::Interval<N>{ 1, 2 } );
+	intervals.emplace_back( carl::Interval<N>{ 0, 1 } );
+	Box<N> b{ intervals };
 
-	State s0{b};
+	State s0{ b };
 
 	matrix_t<N> dynamics = matrix_t<N>::Zero( 2, 2 );
 	dynamics << 1, 0, 0, 1;
@@ -131,26 +131,4 @@ TEST( StateTest, letTimePassLinearFlow ) {
 	EXPECT_EQ( resultIntervals.at( 0 ).upper(), N( 6121026514868073 ) / N( 1125899906842624 ) );
 	EXPECT_EQ( resultIntervals.at( 1 ).lower(), N( 0 ) );
 	EXPECT_EQ( resultIntervals.at( 1 ).upper(), N( 6121026514868073 ) / N( 2251799813685248 ) );
-}
-
-TEST( StateTest, bloatBoxVisitor ) {
-	using N = mpq_class;
-	using State = State_t<N>;
-
-	std::vector<carl::Interval<N>> intervals;
-	intervals.emplace_back( carl::Interval<N>{1, 2} );
-	intervals.emplace_back( carl::Interval<N>{0, 1} );
-	Box<N> b{intervals};
-
-	std::vector<carl::Interval<N>> intervals2;
-	intervals2.emplace_back( carl::Interval<N>{1, 2} );
-	intervals2.emplace_back( carl::Interval<N>{0, 1} );
-	Box<N> b2{intervals2};
-
-	State s;
-	s.setSet( b2 );
-	s.setSet( std::visit( hypro::reachability::detail::bloatBoxVisitor<typename State::repVariant, N>( b ),
-						  s.getSet( 0 ) ) );
-
-	EXPECT_EQ( b.minkowskiSum( b2 ), std::get<Box<N>>( s.getSet() ) );
 }

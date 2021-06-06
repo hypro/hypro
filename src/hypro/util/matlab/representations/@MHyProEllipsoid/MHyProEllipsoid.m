@@ -1,11 +1,11 @@
 classdef MHyProEllipsoid < MHyProGeometricObject
 
     methods (Access = public)
-        
+
         % Create a HyPro Ellipsoid
-        function obj = MHyProEllipsoid(varargin) 
+        function obj = MHyProEllipsoid(varargin)
             obj.Type = 1;
-            
+
             if nargin == 1
                 if isa(varargin{1}, 'uint64')
                     % This constructor is needed in case HyPro returns
@@ -31,7 +31,7 @@ classdef MHyProEllipsoid < MHyProGeometricObject
                 error('MHyProEllipsoid - Constructor: Wrong arguments.');
             end
         end
-        
+
         function out = linearTransformation(obj, mat)
             if ismatrix(mat)
                 ptr = MHyPro(1, 18, obj.ObjectHandle, mat);
@@ -40,16 +40,16 @@ classdef MHyProEllipsoid < MHyProGeometricObject
                 error('MHyProEllipsoid - linearTransformation: Wrong type of input argument.');
             end
         end
-        
+
         function out = affineTransformation(obj, mat, vec)
             if ismatrix(mat) && isvector(vec) && size(mat,2) == size(vec,1)
                 ptr = MHyPro(1, 19, obj.ObjectHandle, mat, vec);
                 out = MHyProEllipsoid(ptr);
             else
                 error('MHyProEllipsoid - affineTransformation: Wrong type of input argument.');
-            end 
+            end
         end
-        
+
         function out = plus(obj, rhs)
             if isa(rhs, 'MHyProEllipsoid')
                 ptr = MHyPro(1, 20, obj.ObjectHandle, rhs.ObjectHandle);
@@ -58,7 +58,7 @@ classdef MHyProEllipsoid < MHyProGeometricObject
                 error('MHyProEllipsoid - minkowskiSum: Wrong type of input argument.');
             end
         end
-                 
+
         function plot(obj, dims)
             error('MHyProEllipsoid - plot: NOT IMPLEMENTED');
         end
@@ -70,15 +70,15 @@ classdef MHyProEllipsoid < MHyProGeometricObject
                 error('MHyProEllipsoid - approxEllipsoidMatrix: Wrong type of argument.');
            end
         end
-        
-        function out = project(obj)
+
+        function out = projectOn(obj)
             error('MHyProEllipsoid - project: Not implemented');
         end
-        
+
         function out = satisfiesHalfspaces(obj)
             error('MHyProEllipsoid - satisfiesHalfspaces: Not implemented.');
         end
-        
+
         function out = satisfiesHalfspace(obj)
             error('MHyProEllipsoid - satisfiesHalfsapce: Not implemented');
         end

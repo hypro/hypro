@@ -40,7 +40,7 @@ set2 = MHyProConstraintSet(set1);
 equal = (set1 == set2);
 assert(equal == 1);
 equal = (set == copied_set);
-assert(equal == 0); 
+assert(equal == 0);
 
 % Check for inequality
 nequal = (set ~= mat_vec_set);
@@ -75,7 +75,7 @@ assert(emt == 0);
 
 % Project a certain dimension
 set1 = MHyProConstraintSet([1 1 0; 0 0 1; 1 0 1], [1;2;1]);
-projected = set1.project([1 3]);
+projected = set1.projectOn([1 3]);
 
 % Perform linear transformation
 set1 = MHyProConstraintSet([1 2 0 3; 0 0 1 2; 1 0 1 5; 1 1 1 -7], [3;2;4;1]);

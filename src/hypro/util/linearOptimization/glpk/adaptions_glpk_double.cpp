@@ -55,20 +55,20 @@ bool glpkCheckPoint( glpk_context& context, const matrix_t<double>& constraints,
 	assert( constraints.cols() == point.rawCoordinates().rows() );
 	for ( int i = 0; i < constraints.cols(); ++i ) {
 		glp_set_col_bnds( context.lp, i + 1, GLP_FX, point.rawCoordinates()( i ), 0.0 );
-		glp_set_obj_coef( context.lp, i + 1, 1.0 );  // not needed?
+		glp_set_obj_coef( context.lp, i + 1, 1.0 );	 // not needed?
 	}
 	glp_simplex( context.lp, &context.parm );
 	return ( glp_get_status( context.lp ) != GLP_NOFEAS );
 }
 
 template <>
-std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix_t<double> constraints, vector_t<double> constants ) {
+std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix_t<double> constraints, vector_t<double> constants, std::vector<carl::Relation>& relations ) {
 	std::vector<std::size_t> res;
 
 	// TODO: ATTENTION: This relies upon that glpk maintains the order of the constraints!
 	for ( int i = 0; i < constraints.cols(); ++i ) {
 		glp_set_col_bnds( context.lp, i + 1, GLP_FR, 0.0, 0.0 );
-		glp_set_obj_coef( context.lp, i + 1, 1.0 );  // not needed?
+		glp_set_obj_coef( context.lp, i + 1, 1.0 );	 // not needed?
 	}
 
 	// first call to check satisfiability
@@ -82,30 +82,82 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 			break;
 	}
 
-	for ( int constraintIndex = int( constraints.rows() - 1 ); constraintIndex >= 0; --constraintIndex ) {
-		// evaluate in current constraint direction
-		EvaluationResult<double> actualRes = glpkOptimizeLinear( context, vector_t<double>( constraints.row( constraintIndex ) ), constraints, constants, false );
-		//std::cout << "Actual res support Value: " << actualRes.supportValue << std::endl;
-		// Necessary to cope with glpk inexactness.
-		if ( actualRes.supportValue > constants( constraintIndex ) ) {
-			actualRes.supportValue = constants( constraintIndex );
+	for ( std::size_t constraintIndex = std::size_t( constraints.rows() - 1 );; --constraintIndex ) {
+		bool redundant = true;
+		carl::Relation relation = relations[constraintIndex];
+		EvaluationResult<double> actualRes;
+		EvaluationResult<double> updatedRes;
+		if ( relation == carl::Relation::LEQ || relation == carl::Relation::EQ ) {
+			// test if upper bound is redundant
+			glp_set_obj_dir( context.lp, GLP_MAX );
+			actualRes = glpkOptimizeLinear( context, vector_t<double>( constraints.row( constraintIndex ) ), constraints, constants, true );
+			glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_FR, 0.0, 0.0 );
+			updatedRes = glpkOptimizeLinear( context, vector_t<double>( constraints.row( constraintIndex ) ), constraints, constants, true );
+			// actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
+			if ( actualRes.errorCode != updatedRes.errorCode || actualRes.supportValue != updatedRes.supportValue ) {
+				redundant = false;
+			}
+		}
+		if ( relation == carl::Relation::GEQ || relation == carl::Relation::EQ ) {
+			// test if lower bound is redundant
+			glp_set_obj_dir( context.lp, GLP_MIN );
+			actualRes = glpkOptimizeLinear( context, vector_t<double>( constraints.row( constraintIndex ) ), constraints, constants, true );
+			glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_FR, 0.0, 0.0 );
+			updatedRes = glpkOptimizeLinear( context, vector_t<double>( constraints.row( constraintIndex ) ), constraints, constants, true );
+			// actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
+			if ( actualRes.errorCode != updatedRes.errorCode && actualRes.supportValue != updatedRes.supportValue ) {
+				redundant = false;
+			}
 		}
 
-		// remove constraint by removing the boundaries
-		glp_set_row_bnds( context.lp, constraintIndex + 1, GLP_FR, 0.0, 0.0 );
-		EvaluationResult<double> updatedRes = glpkOptimizeLinear( context, vector_t<double>( constraints.row( constraintIndex ) ), constraints, constants, false );
-		//std::cout << "Updated res support Value: " << updatedRes.supportValue << std::endl;
-
-		if ( updatedRes.supportValue == actualRes.supportValue && updatedRes.errorCode == actualRes.errorCode ) {
+		if ( redundant ) {
 			res.push_back( constraintIndex );
 		} else {
-			glp_set_row_bnds( context.lp, constraintIndex + 1, GLP_UP, 0.0, constants( constraintIndex ) );
+			// restore bound
+			switch ( relation ) {
+				case carl::Relation::LEQ:
+					// set upper bounds, lb-values (here 0.0) are ignored.
+					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_UP, 0.0, carl::toDouble( constants( constraintIndex ) ) );
+					break;
+				case carl::Relation::GEQ:
+					// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
+					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_LO, carl::toDouble( constants( constraintIndex ) ), 0.0 );
+					break;
+				case carl::Relation::EQ:
+					// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
+					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_FX, carl::toDouble( constants( constraintIndex ) ), 0.0 );
+					break;
+				default:
+					// glpk cannot handle strict inequalities.
+					assert( false );
+					std::cout << "This should not happen." << std::endl;
+			}
+		}
+
+		if ( constraintIndex == 0 ) {
+			break;
 		}
 	}
-
 	// restore original problem
-	for ( const auto item : res ) {
-		glp_set_row_bnds( context.lp, int( item ) + 1, GLP_UP, 0.0, constants( item ) );
+	for ( const auto idx : res ) {
+		switch ( relations[idx] ) {
+			case carl::Relation::LEQ:
+				// set upper bounds, lb-values (here 0.0) are ignored.
+				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_UP, 0.0, carl::toDouble( constants( idx ) ) );
+				break;
+			case carl::Relation::GEQ:
+				// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
+				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_LO, carl::toDouble( constants( idx ) ), 0.0 );
+				break;
+			case carl::Relation::EQ:
+				// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
+				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_FX, carl::toDouble( constants( idx ) ), 0.0 );
+				break;
+			default:
+				// glpk cannot handle strict inequalities.
+				assert( false );
+				std::cout << "This should not happen." << std::endl;
+		}
 	}
 
 	return res;

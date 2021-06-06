@@ -11,13 +11,11 @@ namespace hypro {
 template <typename Number, typename Setting>
 BoxSupportFunction<Number, Setting>::BoxSupportFunction( const std::vector<carl::Interval<Number>>& intervals )
 	: mBox( intervals ) {
-	TRACE( "hypro.representations.supportFunction", "" );
 }
 
 template <typename Number, typename Setting>
 BoxSupportFunction<Number, Setting>::BoxSupportFunction( const std::vector<Point<Number>>& _points )
 	: mBox() {
-	TRACE( "hypro.representations.supportFunction", "" );
 	auto pIt = _points.begin();
 	for ( int d = 0; d < _points.begin()->dimension(); ++d ) {
 		mBox.emplace_back( carl::Interval<Number>( _points.begin()->rawCoordinates()( d ) ) );
@@ -33,17 +31,14 @@ BoxSupportFunction<Number, Setting>::BoxSupportFunction( const std::vector<Point
 template <typename Number, typename Setting>
 BoxSupportFunction<Number, Setting>::BoxSupportFunction( const BoxSupportFunction<Number, Setting>& _origin )
 	: mBox( _origin.getBox() ) {
-	TRACE( "hypro.representations.supportFunction", "" );
 }
 
 template <typename Number, typename Setting>
 BoxSupportFunction<Number, Setting>::~BoxSupportFunction() {
-	TRACE( "hypro.representations.supportFunction", "" );
 }
 
 template <typename Number, typename Setting>
 BoxSupportFunction<Number, Setting>& BoxSupportFunction<Number, Setting>::operator=( const BoxSupportFunction<Number, Setting>& _orig ) {
-	TRACE( "hypro.representations.supportFunction", "" );
 	this->mBox = _orig.mBox;
 }
 
@@ -130,7 +125,7 @@ EvaluationResult<Number> BoxSupportFunction<Number, Setting>::evaluate( const ve
 	COUNT( "Box evaluate." );
 	assert( std::size_t( l.rows() ) == this->dimension() );
 	if ( this->empty() || this->dimension() == 0 ) {
-		return EvaluationResult<Number>();  // defaults to infeasible, i.e. empty.
+		return EvaluationResult<Number>();	// defaults to infeasible, i.e. empty.
 	}
 
 	// find the point, which represents the maximum towards the direction - compare signs.
@@ -156,8 +151,9 @@ EvaluationResult<Number> BoxSupportFunction<Number, Setting>::evaluate( const ve
 
 template <typename Number, typename Setting>
 std::vector<EvaluationResult<Number>> BoxSupportFunction<Number, Setting>::multiEvaluate( const matrix_t<Number>& _A, bool, bool ) const {
+	TRACE( "hypro.representations.supportFunction", "Evaluate in directions " << matrix_t<double>( convert<Number, double>( _A ) ) << "\n"
+																			  << "BOX SF IS " << *this );
 	assert( std::size_t( _A.cols() ) == this->dimension() );
-	//TRACE("hypro.representations.supportFunction", "Evaluate in directions " << matrix_t<double>(convert<Number,double>(_A)) << std::endl << "BOX SF IS " << *this);
 	std::vector<EvaluationResult<Number>> res;
 	for ( Eigen::Index i = 0; i < _A.rows(); ++i ) {
 		res.emplace_back( this->evaluate( vector_t<Number>( _A.row( i ) ), true ) );
@@ -190,7 +186,6 @@ bool BoxSupportFunction<Number, Setting>::contains( const vector_t<Number>& _poi
 
 template <typename Number, typename Setting>
 bool BoxSupportFunction<Number, Setting>::empty() const {
-	TRACE( "hypro.representations.supportFunction", "" );
 	for ( Eigen::Index i = 0; i < Eigen::Index( this->dimension() ); ++i ) {
 		if ( mBox[i].isEmpty() ) {
 			TRACE( "hypro.representations.supportFunction", "is empty." );

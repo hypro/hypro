@@ -1,6 +1,6 @@
 #pragma once
 
-#include "util/typetraits.h"
+#include "../../util/typetraits.h"
 
 namespace hypro {
 /**

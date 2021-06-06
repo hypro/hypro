@@ -21,14 +21,13 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		${core_test_sources}
 	)
 
-	add_dependencies(runCoreTests resources)
+	add_dependencies(runCoreTests hypro_resources)
 	target_include_directories(runCoreTests PRIVATE ${GTEST_INCLUDE_DIR})
 
-	target_link_libraries(runCoreTests
+	target_link_libraries(runCoreTests PUBLIC
 							${PROJECT_NAME}-shared
 							${GTEST_LIBRARIES}
 							)
-
 	cotire(runCoreTests)
 
 	add_test( NAME core COMMAND runCoreTests )
@@ -44,7 +43,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		ParserTest.cpp
 		#AntlrParserCIFTest.cpp
 	)
-	add_dependencies(runParserTests resources antlr4cpp)
+	add_dependencies(runParserTests hypro_resources antlr4cpp)
 	target_include_directories(runParserTests PRIVATE ${GTEST_INCLUDE_DIR})
 	target_link_libraries(runParserTests ${PROJECT_NAME}-shared ${GTEST_LIBRARIES})
 	#message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})

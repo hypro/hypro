@@ -11,52 +11,19 @@
  */
 
 #pragma once
-#include "../../config.h"
-#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "../../datastructures/HybridAutomaton/State.h"
-#include "../../datastructures/reachability/ReachTree.h"
+#include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../datastructures/reachability/Settings.h"
-#include "../../datastructures/reachability/workQueue/WorkQueue.h"
-#include "../../representations/Ellipsoids/Ellipsoid.h"
-#include "../../representations/GeometricObjectBase.h"
-#include "../../util/plotting/Plotter.h"
-#include "FirstSegment.h"
-#include "boost/tuple/tuple.hpp"
-#include "handlers/jumpHandlers/util.h"
-
-#include <algorithm>
-
-CLANG_WARNING_DISABLE( "-Wdeprecated-register" )
-#include <eigen3/unsupported/Eigen/src/MatrixFunctions/MatrixExponential.h>
-CLANG_WARNING_RESET
-
-// Debug Flag, TODO: Add more debug levels.
-#define REACH_DEBUG
-#define USE_REDUCTION
-//#define USE_SYSTEM_SEPARATION
-// Needs system separation to affect the computation
-//#define USE_ELLIPSOIDS
-
-#define USE_SMART_AGGREGATION
-#define ALWAYS_USE_AGGREGATION
-//#define USE_FORCE_REDUCTION
+#include "analyzer/LTIAnalyzer.h"
+#include "analyzer/ReturnTypes.h"
+#include "analyzer/SingularAnalyzer.h"
 
 namespace hypro {
 /**
  * \namespace reachability
  * \brief Namespace for all reachabiltiy analysis algorithm related code.
  */
+
 namespace reachability {
-
-#include "util.h"
-
-struct ReachSettings {
-	static constexpr bool printStatus = true;
-};
-
-struct ReachQuiet : public ReachSettings {
-	static constexpr bool printStatus = false;
-};
 
 /**
  * @brief      Class implementing a basic reachbility analysis algorithm for linear hybrid automata.
@@ -64,27 +31,13 @@ struct ReachQuiet : public ReachSettings {
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Number, typename ReacherSettings, typename State>
+template <typename Representation>
 class Reach {
   public:
-	using NodePtr = ReachTreeNode<State>*;
-	using TaskType = std::pair<unsigned, NodePtr>;
-	using TaskTypePtr = std::unique_ptr<TaskType>;
-	using flowpipe_t = std::vector<State>;
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
 
-  private:
-	HybridAutomaton<Number> mAutomaton;
-	ReachabilitySettings mSettings;
-	std::size_t mCurrentLevel = 0;
-	Number mBloatingFactor = 0;
-	std::map<NodePtr, flowpipe_t> mReachableStates;
-	WorkQueue<TaskTypePtr> mWorkingQueue;
-	Plotter<Number>& plotter = Plotter<Number>::getInstance();
-	representation_name mType = representation_name::UNDEF;
-	bool mInitialStatesSet = false;
-	std::unique_ptr<ReachTree<State>> mReachabilityTree;
-
-	mutable bool mIntersectedBadStates;
+  protected:
+	LTIAnalyzer<Representation> mAnalyzer;
 
   public:
 	/**
@@ -93,79 +46,78 @@ class Reach {
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<Number>& _automaton, const ReachabilitySettings& _settings = ReachabilitySettings() );
+	Reach( const HybridAutomaton<typename Representation::NumberType>& automaton, const FixedAnalysisParameters& fixedParameters, const AnalysisParameters& parameters, std::vector<ReachTreeNode<Representation>>& roots )
+		: mAnalyzer( automaton, fixedParameters, parameters, roots ) {}
 
 	/**
 	 * @brief Computes the forward reachability of the given automaton.
 	 * @details
 	 * @return The flowpipe as a result of this computation.
 	 */
-	const std::map<NodePtr, flowpipe_t>& computeForwardReachability();
-
-	void setInitialStates( std::vector<State>&& initialStates );
-	void addInitialState( State&& initialState );
-
-	WorkQueue<TaskTypePtr>& rGetQueue() { return mWorkingQueue; }
-
-	/**
-	 * @brief Computes forward time closure in the passed tree node.
-	 *
-	 * @param currentTreeNode
-	 * @return flowpipe_t
-	 */
-	flowpipe_t computeForwardTimeClosure( ReachTreeNode<State>* currentTreeNode );
-
-	/**
-	 * @brief Returns whether the bad states were reachable so far.
-	 * @details [long description]
-	 * @return true, if the bad states were reachable.
-	 */
-	bool reachedBadStates() const { return mIntersectedBadStates; }
-
-	/**
-	 * @brief Computes one time step and one discrete step, i.e. increases the depth of the search by one.
-	 * @details [long description]
-	 *
-	 * @param _init The initial valuations.
-	 * @return The resulting flowpipes.
-	 */
-	void processDiscreteBehaviour( const std::vector<std::tuple<Transition<Number>*, State>>& _newInitialSets, NodePtr currentNode );
-
-	/**
-	 * @brief Checks, whether the passed transition is enabled by the passed valuation. Sets the result to be the intersection of the guard and the valuation.
-	 * @details [long description]
-	 *
-	 * @param _trans The transition, which is to be enabled.
-	 * @param _val The valuation possibly enabling the passed transition.
-	 * @param result At the end of the method this holds the result of the intersection of the guard and the valuation.
-	 * @return True, if the transition is enabled, false otherwise.
-	 */
-	bool intersectGuard( Transition<Number>* _trans, const State& _segment, State& result ) const;
-
-	bool checkTransitions( const State& _state, const carl::Interval<tNumber>& currentTime, std::vector<std::tuple<Transition<Number>*, State>>& nextInitialSets ) const;
-
-	const ReachabilitySettings& settings() const { return mSettings; }
-	void setSettings( const ReachabilitySettings& settings ) {
-		mSettings = settings;
-		assert( mSettings.timeBound >= 0 );
+	REACHABILITY_RESULT computeForwardReachability() {
+		return mAnalyzer.run().result();
 	}
+};
 
-	representation_name getRepresentationType() const { return mType; }
-	void setRepresentationType( const representation_name& type ) { mType = type; }
+template <typename Representation>
+class ReachSingular {
+  public:
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
 
-	ReachTree<State>* getReachabilityTree() const { return mReachabilityTree.get(); }
+  protected:
+	SingularAnalyzer<Representation> mAnalyzer;
 
-	const flowpipe_t& getFlowpipeForNode( ReachTreeNode<State>* node ) { return mReachableStates.at( node ); }
+  public:
+	/**
+	 * @brief Constructor for a basic reachability analysis algorithm for linear hybrid automata.
+	 *
+	 * @param _automaton The analyzed automaton.
+	 * @param _settings The reachability analysis settings.
+	 */
+	ReachSingular( const HybridAutomaton<typename Representation::NumberType>& automaton, const FixedAnalysisParameters& fixedParameters, std::vector<ReachTreeNode<Representation>>& roots )
+		: mAnalyzer( automaton, fixedParameters, roots ) {}
 
-  private:
-	matrix_t<Number> computeTrafoMatrix( const Location<Number>* _loc ) const;
-	//std::tuple<bool, State, matrix_t<Number>, vector_t<Number>> computeFirstSegment( const State& _state ) const;
-	bool intersectBadStates( const State& _state ) const;
+	/**
+	 * @brief Computes the forward reachability of the given automaton.
+	 * @details
+	 * @return The flowpipe as a result of this computation.
+	 */
+	REACHABILITY_RESULT computeForwardReachability() {
+		return mAnalyzer.run().result();
+	}
+};
+
+template <class Representation, class Method>
+class ReachBase {
+  public:
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;  ///< return type
+
+  protected:
+	Method mAnalyzer;  ///< Analyzer instance
+
+  public:
+	/**
+	 * @brief Constructor for a basic reachability analysis method.
+	 *
+	 * @param _automaton The analyzed automaton.
+	 * @param _settings The reachability analysis settings.
+	 */
+	ReachBase( const HybridAutomaton<typename Representation::NumberType>& automaton, const Settings& parameters, std::vector<ReachTreeNode<Representation>>& roots )
+		: mAnalyzer( automaton, parameters, roots ) {}
+
+	/**
+	 * @brief Computes the forward reachability of the given automaton.
+	 * @details
+	 * @return The flowpipe as a result of this computation.
+	 */
+	REACHABILITY_RESULT computeForwardReachability() {
+		return mAnalyzer.run();
+	}
 };
 
 }  // namespace reachability
 }  // namespace hypro
 
-#include "Reach.tpp"
-#include "discreteHandling.tpp"
-#include "terminationHandling.tpp"
+// #include "Reach.tpp"
+// #include "discreteHandling.tpp"
+// #include "terminationHandling.tpp"

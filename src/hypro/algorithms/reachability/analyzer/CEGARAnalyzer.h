@@ -1,12 +1,14 @@
-#pragma once
+#ifndef CEGARANALYZER_H
+#define CEGARANALYZER_H
+
 #include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../datastructures/reachability/ReachTreev2.h"
 #include "../../../datastructures/reachability/Strategy.h"
 #include "../../../types.h"
-#include "./impl/RefinementAnalyzer.h"
-#include "algorithms/reachability/analyzer/LTIAnalyzer.h"
-#include "util/plotting/Plotter.h"
-#include "util/type_handling/dispatch.h"
+#include "../../../util/plotting/Plotter.h"
+#include "../../../util/type_handling/dispatch.h"
+#include "LTIAnalyzer.h"
+#include "impl/RefinementAnalyzer.h"
 
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/counting_range.hpp>
@@ -16,8 +18,20 @@
 
 namespace hypro {
 
+namespace detail {
+
+/**
+ * @brief impl that takes a TypeList, can be aliased to take conventional type pack
+ * @tparam T the type list
+ */
+template<class T>
+class CEGARAnalyzer_impl;
+
+/**
+ * specialization to unpack the TypeList
+ */
 template <class Number, class... Representations>
-class CEGARAnalyzer {
+class CEGARAnalyzer_impl<TypeList<Number, Representations...>> {
 	using TreeNodePtrVariant = std::variant<ReachTreeNode<Representations>*...>;
 
 	template <class Representation>
@@ -69,32 +83,22 @@ class CEGARAnalyzer {
 						std::variant<Failure<Representations>...> targetFailure,
 						TargetLevel& targetLevel );
 
-	template<class Representation>
+	template <class Representation>
 	void handleFailure( ReachTreeNode<Representation>* conflictNode, size_t targetIndex );
 
-	/**
-	 * @brief Gets the level at index. Helps with the offset of mLevels.
-	 */
-//	RefinementLevel& getRefinementLevel( size_t index ) {
-//		assert( index >= 1 );
-//		assert( index <= mLevels.size() );
-//
-//		return mLevels[index - 1];
-//	}
-
   public:
-	CEGARAnalyzer() = delete;
+	CEGARAnalyzer_impl() = delete;
 
 	/**
-	 * @brief Construct a new CEGARAnalyzer object.
+	 * @brief Construct a new CEGARAnalyzer_impl object.
 	 * @param ha The hybrid automaton to analyze
 	 * @param setting The settings to use
 	 */
-	CEGARAnalyzer( const HybridAutomaton<Number>& ha, const Settings& settings )
+	CEGARAnalyzer_impl( const HybridAutomaton<Number>& ha, const Settings& settings )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
-		, mBaseLevel( createBaseLevel( mHybridAutomaton, settings ) ) {} // have to use mHybridAutomaton rather than ha, because mHybridAutomaton is a copy,
-																		 // thus location and transition pointers are different between them.
+		, mBaseLevel( createBaseLevel( mHybridAutomaton, settings ) ) {}  // have to use mHybridAutomaton rather than ha, because mHybridAutomaton is a copy,
+																		  // thus location and transition pointers are different between them.
 
 	REACHABILITY_RESULT run();
 
@@ -119,9 +123,20 @@ class CEGARAnalyzer {
 	std::vector<RefinementLevel> mLevels{};
 };
 
+template<class Number, class... Representations>
+using CEGARAnalyzer_apply = CEGARAnalyzer_impl<TypeList<Number, Representations...>>;
+}
+
+extern template class detail::CEGARAnalyzer_impl<concat<TypeList<double>, RepresentationsList<double, Converter<double>>>>;
+extern template class detail::CEGARAnalyzer_impl<concat<TypeList<mpq_class>, RepresentationsList<mpq_class, Converter<mpq_class>>>>;
+
 template <class Number>
-using CEGARAnalyzerDefault = apply<CEGARAnalyzer, concat<TypeList<Number>, RepresentationsList<Number, Converter<Number>>>>;
+using CEGARAnalyzer = detail::CEGARAnalyzer_impl<concat<TypeList<Number>, RepresentationsList<Number, Converter<Number>>>>;
+
+
 
 }  // namespace hypro
 
-#include "CEGARAnalyzer.tpp"
+//#include "CEGARAnalyzer.tpp"
+
+#endif

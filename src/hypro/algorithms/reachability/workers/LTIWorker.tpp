@@ -5,8 +5,7 @@ namespace hypro {
 template <typename Representation>
 template <typename OutputIt>
 REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const {
-	auto timeStep = mSettings.timeStep;
-	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, timeStep ), timeStep );
+	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, mSettings.timeStep ), mSettings.timeStep );
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant() );
 	//If the first segment did not fulfill the invariant of the location, the jump here should not have been made
@@ -25,7 +24,7 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 
 	// while not done
 	for ( size_t segmentCount = 1; segmentCount < mNumSegments; ++segmentCount ) {
-		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, timeStep ) );
+		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
 		std::tie( containment, segment ) = intersect( segment, loc->getInvariant() );
 		if ( containment == CONTAINMENT::NO ) {
 			return REACHABILITY_RESULT::SAFE;
@@ -66,7 +65,7 @@ template <class Representation>
 struct LTIWorker<Representation>::EnabledSegmentsGen {
 	std::vector<Representation> const* flowpipe;
 	Transition<Number> const* transition;
-	size_t current = 0;
+	std::size_t current = 0;
 
 	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<Number> const* transition )
 		: flowpipe( flowpipe )
@@ -82,7 +81,7 @@ struct LTIWorker<Representation>::EnabledSegmentsGen {
 			auto [containment, intersected] = intersect( ( *flowpipe )[current], transition->getGuard() );
 			if ( containment != CONTAINMENT::NO ) {
 				enabledSegments.push_back( intersected );
-				firstEnabled = current;
+				firstEnabled = SegmentInd( current );
 				break;
 			}
 		}
@@ -103,8 +102,8 @@ template <class Representation>
 struct LTIWorker<Representation>::AggregatedGen {
 	size_t segmentsPerBlock{};
 	std::vector<Representation>* enabled{};
-	SegmentInd firstEnabled{};
-	size_t current = 0;
+	std::size_t firstEnabled{};
+	std::size_t current = 0;
 
 	AggregatedGen( size_t segmentsPerBlock, std::vector<Representation>& enabled, SegmentInd firstEnabled )
 		: segmentsPerBlock( segmentsPerBlock )
@@ -117,12 +116,12 @@ struct LTIWorker<Representation>::AggregatedGen {
 	std::optional<std::pair<Representation, carl::Interval<SegmentInd>>> next() {
 		if ( current == enabled->size() ) return std::nullopt;
 		Representation aggregated = ( *enabled )[current];
-		SegmentInd indexFirst = firstEnabled + current;	 // flowpipe ind of first aggregated segment
+		SegmentInd indexFirst = SegmentInd( firstEnabled + current );  // flowpipe ind of first aggregated segment
 		current += 1;
 		for ( size_t inBlock = 1; inBlock < segmentsPerBlock && current < enabled->size(); ++inBlock, ++current ) {
 			aggregated.unite( ( *enabled )[current] );
 		}
-		return std::pair{ aggregated, carl::Interval<int>{ indexFirst, firstEnabled + current } };
+		return std::pair{ aggregated, carl::Interval<SegmentInd>{ indexFirst, SegmentInd( firstEnabled + current ) } };
 	}
 };
 
@@ -167,7 +166,35 @@ struct LTIWorker<Representation>::JumpSuccessorGen {
 };
 
 template <typename Representation>
+std::string print( std::vector<EnabledSets<Representation>> const& pipes ) {
+	std::stringstream str{};
+
+	for ( auto& pipe : pipes ) {
+		for ( auto& indSet : pipe.valuationSets ) {
+			str << "[" << indSet.index << "] " << indSet.valuationSet.vertices() << " ";
+		}
+		str << "\n";
+	}
+	str << "\n";
+
+	return str.str();
+}
+
+template <typename Representation>
+std::string print( std::vector<Representation> const& sets ) {
+	std::stringstream str{};
+
+	for ( auto& set : sets ) {
+		str << set.vertices() << " ";
+	}
+	str << "\n";
+	return str.str();
+}
+
+template <typename Representation>
 std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const {
+	TRACE( "hypro", "flowpipe: " << print( flowpipe ) );
+
 	//transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation>> enabledSegments{};
 
@@ -184,6 +211,8 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 			++cnt;
 		}
 	}
+
+	TRACE( "hypro", "enabledSegments: " << print( enabledSegments ) );
 
 	std::vector<JumpSuccessor<Representation>> successors{};
 
@@ -210,13 +239,18 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 	// applyReset
 	for ( auto& [transition, valuationSets] : successors ) {
 		for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
+			TRACE( "hypro", "valSet: " << it->valuationSet.vertices() );
 			it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
+			TRACE( "hypro", "Reset is: " << transition->getReset() );
+			TRACE( "hypro", "Reset: " << it->valuationSet.vertices() );
 			CONTAINMENT containment;
 			std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
+			TRACE( "hypro", "Intersect: " << it->valuationSet.vertices() );
 			if ( containment == CONTAINMENT::NO ) {
 				it = valuationSets.erase( it );
 			} else {
 				it->valuationSet.reduceRepresentation();
+				TRACE( "hypro", "Reduce: " << it->valuationSet.vertices() );
 				++it;
 			}
 		}

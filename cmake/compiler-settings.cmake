@@ -54,6 +54,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	endif()
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mstackrealign") # forces re-alignment to 16 bit when using gcc (some Eigen-related stuff)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O1")
 	set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--no-as-needed")
@@ -71,35 +72,52 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-attributes -pedantic -fPIC -ftemplate-backtrace-limit=0")
 if(STATICLIB_SWITCH)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
-	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 	set(BUILD_SHARED_LIBRARIES OFF)
 else()
-	set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.dylib")
 	set(BUILD_SHARED_LIBRARIES ON)
 endif()
 
-# enable eigen3 vectorization
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
 # flags related to development
 if(DEVELOPER)
+
+#GCC_ASAN_PRELOAD=$(gcc -print-file-name=libasan.so)
+#CLANG_ASAN_PRELOAD=$(clang -print-file-name=libclang_rt.asan-x86_64.so)
+
+	#detect asan location
+	if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+		execute_process (
+    		COMMAND bash -c "gcc -print-file-name=libasan.so"
+    		OUTPUT_VARIABLE asanLocation
+		)
+	endif()
+	if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+		execute_process (
+			COMMAND bash -c "clang -print-file-name=libclang_rt.asan-x86_64.so"
+			OUTPUT_VARIABLE asanLocation
+		)
+	endif()
+	message(STATUS "asan runtime location for preloading: ${asanLocation}")
+
+
 	set(DEV_FLAGS "\
-# -Wswitch\
-# -Wno-deprecated-declarations\
-# -Wempty-body\
-# -Wconversion\
-# -Wreturn-type\
-# -Wparentheses\
-# -Wno-format\
-# -Wuninitialized\
-# -Wunreachable-code\
-# -Wunused-function\
-# -Wunused-value\
-# -Wunused-variable\
- -fsanitize=undefined,address\
-# -fstack-protector-strong\
+ -Werror\
+ -Wswitch\
+ -Wno-deprecated-declarations\
+ -Wempty-body\
+ -Wconversion\
+ -Wreturn-type\
+ -Wparentheses\
+ -Wno-format\
+ -Wuninitialized\
+ -Wunreachable-code\
+ -Wunused-function\
+ -Wunused-value\
+ -Wunused-variable\
+ -fsanitize=address \
+ -fstack-protector-strong\
  -g" CACHE INTERNAL "")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${DEV_FLAGS}")
 endif()
 
-message(STATUS "Current cmake flags: ${CMAKE_CXX_FLAGS}")
+#message(STATUS "Current cmake flags: ${CMAKE_CXX_FLAGS}")

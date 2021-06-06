@@ -14,8 +14,6 @@ class rectangularJumpHandler {
   public:
 	TransitionStateMap applyJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy );
 
-	void aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const AnalysisParameters& strategy ) const;
-
 	void applyReset( State& state, Transition<Number>* transitionPtr ) const;
 
 	void applyReduction( State& state ) const;

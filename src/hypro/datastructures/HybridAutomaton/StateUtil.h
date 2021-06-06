@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Reset.h"
 
 namespace hypro {
@@ -21,6 +23,15 @@ State<Number, Representation, Rargs...> applyReset( const State<Number, Represen
 	}
 
 	return res;
+}
+
+template <class Number, class R, class... Rs>
+std::string printSet( State<Number, R, Rs...> const& state, size_t index = 0 ) {
+	std::stringstream s_stream{};
+	state.visit(index, [&](auto&& set) {
+		s_stream << set;
+	});
+	return s_stream.str();
 }
 
 }  // namespace hypro

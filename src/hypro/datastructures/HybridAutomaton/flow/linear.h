@@ -1,7 +1,6 @@
 #pragma once
 #include "../../../types.h"
-
-#include <iosfwd>
+#include "../../../util/convenienceOperators.h"
 
 namespace hypro {
 
@@ -16,7 +15,7 @@ class linearFlow {
   public:
 	linearFlow() = default;
 	linearFlow( const linearFlow& in ) = default;
-	linearFlow( const matrix_t<Number> A )
+	linearFlow( const matrix_t<Number>& A )
 		: mFlowMatrix( A ) {}
 	virtual ~linearFlow() {}
 
@@ -77,12 +76,24 @@ class linearFlow {
 		return mNoFlow == TRIBOOL::TRUE;
 	}
 
+	bool hasNoFlow( std::size_t varIndex ) const {
+		assert( Eigen::Index( varIndex ) < mFlowMatrix.rows() );
+		return mFlowMatrix.row( varIndex ).isZero();
+	}
+
+	bool hasFlow( std::size_t varIndex ) const {
+		return !hasNoFlow( varIndex );
+	}
+
 	DynamicType getDynamicsType() const {
 		if ( isTimed() ) {
 			return DynamicType::timed;
 		}
 		if ( isDiscrete() ) {
 			return DynamicType::discrete;
+		}
+		if ( isSingular() ) {
+			return DynamicType::singular;
 		}
 		return DynamicType::linear;
 	}
@@ -94,6 +105,15 @@ class linearFlow {
 			if ( mFlowMatrix.block( 0, rows - 1, rows - 1, 1 ) == vector_t<Number>::Ones( rows - 1 ) ) {
 				return true;
 			}
+		}
+		return false;
+	}
+
+	bool isSingular() const {
+		TRACE( "hypro.decisionEntity", "Flowmatrix: " << mFlowMatrix );
+		Eigen::Index rows = mFlowMatrix.rows();
+		if ( mFlowMatrix.block( 0, 0, rows - 1, rows - 1 ) == matrix_t<Number>::Zero( rows - 1, rows - 1 ) ) {
+			return true;
 		}
 		return false;
 	}
@@ -111,9 +131,22 @@ class linearFlow {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const linearFlow<Number>& in ) {
-		return out << in.mFlowMatrix;
+		bool firstRow = true;
+		const matrix_t<Number>& fMat{ in.mFlowMatrix };
+		if ( fMat.rows() > 0 ) {
+			for ( Eigen::Index row = 0; row < fMat.rows(); ++row ) {
+				if ( !firstRow ) {
+					out << "\n";
+				} else {
+					firstRow = false;
+				}
+				out << "x" << row << "' = " << to_string<Number>( fMat.row( row ) );
+			}
+		}
+		return out;
 	}
-};
+
+};	// namespace hypro
 
 }  // namespace hypro
 

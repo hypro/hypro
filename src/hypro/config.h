@@ -2,7 +2,6 @@
 
 #include "flags.h"
 #include "util/convenienceOperators.h"
-#include "util/logging/Logger.h"
 
 #ifdef COMPARE_CDD
 #ifdef __cplusplus
@@ -39,6 +38,8 @@ extern "C" {
  * @{
  */
 
+namespace hypro {
+
 constexpr double PI_UP = 3.1415926535897932384626433832795028841972;
 constexpr double PI_DN = 3.1415926535897932384626433832795028841971;
 /// Do we eliminate dimensions according to a dynamic heuristic.
@@ -64,5 +65,7 @@ constexpr unsigned SF_CACHE_SIZE = 200;	 //!< @brief
 
 /** Enables debug output for Fukudas Minkowski-Sum algorithm. */
 //#define fukuda_DEBUG
+
+}  // namespace hypro
 
 /** @} */

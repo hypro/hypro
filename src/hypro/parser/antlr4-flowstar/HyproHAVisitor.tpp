@@ -105,6 +105,7 @@ namespace hypro {
 		}
 
 #ifdef HYPRO_LOGGING
+/*
 		COUT("================================\n");
 		COUT("From the parser\n");
 		COUT("================================\n");
@@ -130,7 +131,7 @@ namespace hypro {
 		for(const auto& g : gBadStates){
 			COUT("Global Bad condition: " << g);
 		}
-
+*/
 #endif
 		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number> ha;

@@ -419,7 +419,7 @@ class SupportFunctionNewT : private GeometricObjectBase {
 	 * @param[in]  dimensions  The dimensions to project onto, all other dimensions will be ignored
 	 * @return 	   The projected SupportFunction
 	 */
-	SupportFunctionNewT<Number, Converter, Setting> project( const std::vector<std::size_t>& dimensions ) const;
+	SupportFunctionNewT<Number, Converter, Setting> projectOn( const std::vector<std::size_t>& dimensions ) const;
 
 	SupportFunctionNewT<Number, Converter, Setting> assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );

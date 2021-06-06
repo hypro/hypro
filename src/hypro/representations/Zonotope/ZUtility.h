@@ -13,7 +13,6 @@
 #include "../../config.h"
 
 #include <cmath>
-#include <eigen3/Eigen/Dense>
 
 namespace hypro {
 namespace ZUtility {

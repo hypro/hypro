@@ -11,20 +11,37 @@ namespace hypro {
 using DefaultRepresentations =
 	  TypeList<
 			RepresentationCombinations<
-				  BoxT, BoxLinearOptimizationOn, BoxLinearOptimizationOff, BoxIntervalArithmeticOff, BoxAllOff>,
+				  BoxT, /*BoxLinearOptimizationOn, BoxLinearOptimizationOff, BoxIntervalArithmeticOff,*/ BoxAllOff>
 			//RepresentationCombinations<
 			//	  CarlPolytopeT, CarlPolytopeSetting>,
-			RepresentationCombinations<
+			/*RepresentationCombinations<
 				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
+			RepresentationCombinations<
+				  VPolytopeT, VPolytopeSetting>,
 			RepresentationCombinations<
 				  SupportFunctionT, SupportFunctionSetting, NoBoxReduction, NoBoxDetection, NoTrafoReduction, NoReduction, PolytopeSupportFunctionSetting>,
 			RepresentationCombinations<
 				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>,
 			RepresentationCombinations<
-				  TemplatePolyhedronT, TemplatePolyhedronDefault>>;
+				  TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>*/>;
+
+using PolytopalRepresentations =
+	  TypeList<
+			//RepresentationCombinations<
+			//	  CarlPolytopeT, CarlPolytopeSetting>,
+			RepresentationCombinations<
+				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
+			RepresentationCombinations<
+				  VPolytopeT, VPolytopeSetting>
+			//RepresentationCombinations<
+			//	  TemplatePolyhedronT, TemplatePolyhedronDefault>
+			>;
 
 template <class Number, class Converter>
 using RepresentationsList = flattenRepresentations<Number, Converter, DefaultRepresentations>;
+
+template <class Number, class Converter>
+using PolytopeTypesList = flattenRepresentations<Number, Converter, PolytopalRepresentations>;
 
 template <class Number, class Converter>
 using DefaultDispatcher = Dispatcher<RepresentationsList<Number, Converter>>;

@@ -36,11 +36,11 @@ namespace hypro {
 
 					//Extend inMapCondition.matrix with badStateInfo.matrix
 					matrix_t<Number> newMat = it->second.getMatrix();
-					std::size_t newMatRowsBefore = newMat.rows();
+					Eigen::Index newMatRowsBefore = newMat.rows();
 					matrix_t<Number> currbStateMat = badStateInfo.second.getMatrix();
 					assert(newMat.cols() == currbStateMat.cols());
 					newMat.conservativeResize((newMat.rows()+currbStateMat.rows()),newMat.cols());
-					for(int i = newMat.rows()-currbStateMat.rows(); i < newMat.rows(); i++){
+					for(Eigen::Index i = newMat.rows()-currbStateMat.rows(); i < newMat.rows(); i++){
 						newMat.row(i) = currbStateMat.row(i-newMatRowsBefore);
 					}
 
@@ -48,7 +48,7 @@ namespace hypro {
 					vector_t<Number> newVec = it->second.getVector();
 					vector_t<Number> currbStateVec = badStateInfo.second.getVector();
 					newVec.conservativeResize(newVec.rows()+currbStateVec.rows());
-					for(int i = newVec.rows()-currbStateVec.rows(); i < newVec.rows(); i++){
+					for(Eigen::Index i = newVec.rows()-currbStateVec.rows(); i < newVec.rows(); i++){
 						newVec(i) = currbStateVec(i-newMatRowsBefore);
 					}
 

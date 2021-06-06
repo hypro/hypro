@@ -13,6 +13,10 @@
 #include "../flags.h"
 #include "types.h"
 
+#ifdef HYPRO_STATISTICS
+#include "../util/statistics/statistics.h"
+#endif
+
 namespace hypro {
 
 template <typename Number>

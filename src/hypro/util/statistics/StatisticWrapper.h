@@ -69,8 +69,8 @@ class StatisticWrapper : private GeometricObjectBase {
  * @param[in]  dimensions  The dimensions.
  * @return     The resulting set.
  */
-	StatisticWrapper<Representation> project( const std::vector<std::size_t>& dimensions ) const {
-		return mObject.project( dimensions );
+	StatisticWrapper<Representation> projectOn( const std::vector<std::size_t>& dimensions ) const {
+		return mObject.projectOn( dimensions );
 	}
 
 	/**

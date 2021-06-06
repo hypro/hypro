@@ -14,17 +14,18 @@
 #include "../../config.h"
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
-#include "../../util/Permutator.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "../../util/convexHull.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/sequenceGeneration/SequenceGenerator.h"
 #include "../../util/statistics/statistics.h"
 #include "SupportFunctionSetting.h"
 #include "util.h"
 
 #include <map>
 #include <queue>
+
 
 //#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY

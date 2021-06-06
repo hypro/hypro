@@ -51,15 +51,15 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Elli
 template <typename Number>
 template <typename BoxSetting, typename inSetting>
 BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const SupportFunctionT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
-	std::size_t dim = _source.dimension();  //gets dimension from the source object
+	std::size_t dim = _source.dimension();	//gets dimension from the source object
 
 	matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );  //initialize normal matrix as zero matrix with 2*dim rows and dim columns
 	for ( std::size_t i = 0; i < dim; ++i ) {							   //for every dimension
 		directions( 2 * i, i ) = -1;
-		directions( 2 * i + 1, i ) = 1;  //write fixed entries (because of box) into the normal matrix (2 each column)
+		directions( 2 * i + 1, i ) = 1;	 //write fixed entries (because of box) into the normal matrix (2 each column)
 	}
 
-	std::vector<EvaluationResult<Number>> distances = _source.multiEvaluate( directions );  //evaluate the source support function into these 2*dim directions (to get the interval end points)
+	std::vector<EvaluationResult<Number>> distances = _source.multiEvaluate( directions );	//evaluate the source support function into these 2*dim directions (to get the interval end points)
 
 	std::vector<carl::Interval<Number>> intervals;
 	for ( std::size_t i = 0; i < dim; ++i ) {  //for every dimension
@@ -71,7 +71,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Supp
 		//if no bound is found in that direction (infinity) set interval end point to infinity
 		if ( distances[2 * i + 1].errorCode == SOLUTION::INFTY )
 			upperBound = carl::BoundType::INFTY;
-		intervals.push_back( carl::Interval<Number>( -distances[2 * i].supportValue, lowerBound, distances[2 * i + 1].supportValue, upperBound ) );  //create one interval with the corresponding left and right end points (inverted lower interval end points)
+		intervals.push_back( carl::Interval<Number>( -distances[2 * i].supportValue, lowerBound, distances[2 * i + 1].supportValue, upperBound ) );	 //create one interval with the corresponding left and right end points (inverted lower interval end points)
 	}
 
 	// if (mode == EXACT){                                                                                      //checks if conversion was exact
@@ -94,20 +94,20 @@ template <typename BoxSetting, typename inSetting>
 BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const VPolytopeT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
 	typename VPolytopeT<Number, Converter<Number>, inSetting>::pointVector vertices = _source.vertices();  //gets vertices as a vector from the source object
 	if ( !vertices.empty() ) {
-		vector_t<Number> minima = vertices[0].rawCoordinates();  //creates a vector_t with the first vertex of the source object
-		vector_t<Number> maxima = vertices[0].rawCoordinates();  //creates another vector_t with the first vertex of the source object
+		vector_t<Number> minima = vertices[0].rawCoordinates();	 //creates a vector_t with the first vertex of the source object
+		vector_t<Number> maxima = vertices[0].rawCoordinates();	 //creates another vector_t with the first vertex of the source object
 
 		for ( const auto& vertex : vertices ) {												//for each vertex of the source object
 			for ( unsigned d = 0; d < _source.dimension(); ++d ) {							//for every dimension
-				minima( d ) = vertex.at( d ) < minima( d ) ? vertex.at( d ) : minima( d );  //if the value at position d in the vector is smaller than the minimum value to this point, it becomes the new minimum value.
-				maxima( d ) = vertex.at( d ) > maxima( d ) ? vertex.at( d ) : maxima( d );  //if the value at position d in the vector is greater than the maximum value to this point, it becomes the new maximum value.
+				minima( d ) = vertex.at( d ) < minima( d ) ? vertex.at( d ) : minima( d );	//if the value at position d in the vector is smaller than the minimum value to this point, it becomes the new minimum value.
+				maxima( d ) = vertex.at( d ) > maxima( d ) ? vertex.at( d ) : maxima( d );	//if the value at position d in the vector is greater than the maximum value to this point, it becomes the new maximum value.
 				assert( minima( d ) <= maxima( d ) );										//only continue if the maximum value is not smaller than the minimum value
 			}
 		}
 
 		std::vector<carl::Interval<Number>> intervals;
 		for ( unsigned i = 0; i < _source.dimension(); ++i ) {							//for every dimension
-			intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );  //create one interval per dimension with the corresponding minimal and maximal values
+			intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );	//create one interval per dimension with the corresponding minimal and maximal values
 		}
 
 		// if(mode == EXACT){                                                                               //checks if conversion was exact
@@ -136,40 +136,38 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const HPol
 	if ( mode == OVER ) {
 		std::vector<Point<Number>> vertices = _source.vertices();  //gets vertices as a vector from the source object (is actually a conversion from H-Polytope to V-Polytope)
 		if ( !vertices.empty() ) {
-			vector_t<Number> minima = vertices[0].rawCoordinates();  //creates a vector_t with the first vertex of the source object
-			vector_t<Number> maxima = vertices[0].rawCoordinates();  //creates another vector_t with the first vertex of the source object
+			vector_t<Number> minima = vertices[0].rawCoordinates();	 //creates a vector_t with the first vertex of the source object
+			vector_t<Number> maxima = vertices[0].rawCoordinates();	 //creates another vector_t with the first vertex of the source object
 
 			for ( const auto& vertex : vertices ) {												//for each vertex of the source object
 				for ( unsigned d = 0; d < _source.dimension(); ++d ) {							//for every dimension
-					minima( d ) = vertex.at( d ) < minima( d ) ? vertex.at( d ) : minima( d );  //if the value at position d in the vector is smaller than the minimum value to this point, it becomes the new minimum value.
-					maxima( d ) = vertex.at( d ) > maxima( d ) ? vertex.at( d ) : maxima( d );  //if the value at position d in the vector is greater than the maximum value to this point, it becomes the new maximum value.
+					minima( d ) = vertex.at( d ) < minima( d ) ? vertex.at( d ) : minima( d );	//if the value at position d in the vector is smaller than the minimum value to this point, it becomes the new minimum value.
+					maxima( d ) = vertex.at( d ) > maxima( d ) ? vertex.at( d ) : maxima( d );	//if the value at position d in the vector is greater than the maximum value to this point, it becomes the new maximum value.
 					assert( minima( d ) <= maxima( d ) );										//only continue if the maximum value is not smaller than the minimum value
 				}
 			}
 
 			std::vector<carl::Interval<Number>> intervals;
 			for ( std::size_t i = 0; i < _source.dimension(); ++i ) {						//for every dimension
-				intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );  //create one interval per dimension with the corresponding minimal and maximal values
+				intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );	//create one interval per dimension with the corresponding minimal and maximal values
 			}
 
-			result = BoxT<Number, Converter, BoxSetting>( intervals );  //creates a box with the computed intervals
+			result = BoxT<Number, Converter, BoxSetting>( intervals );	//creates a box with the computed intervals
 		}
 	}
 
 	if ( mode == ALTERNATIVE ) {
-		std::size_t dim = _source.dimension();  //gets dimension from the source object
+		std::size_t dim = _source.dimension();	//gets dimension from the source object
 
-		matrix_t<Number> directions = matrix_t<Number>::Zero( 2 * dim, dim );  //initialize normal matrix as zero matrix with 2*dim rows and dim columns
-		for ( std::size_t i = 0; i < dim; ++i ) {							   //for every dimension
-			directions( 2 * i, i ) = -1;
-			directions( 2 * i + 1, i ) = 1;  //write fixed entries (because of box) into the normal matrix (2 each column)
+		std::vector<EvaluationResult<Number>> distances;
+		for ( std::size_t i = 0; i < dim; ++i ) {  //for every dimension
+			vector_t<Number> direction = vector_t<Number>::Zero( dim );
+			direction( i ) = -1;
+			distances.emplace_back( _source.evaluate( direction ) );
+			direction( i ) = 1;
+			distances.emplace_back( _source.evaluate( direction ) );
 		}
-		//evaluate the source support function into these 2*dim directions (to get the interval end points)
-		std::vector<EvaluationResult<Number>> distances = std::vector<EvaluationResult<Number>>( 2 * dim );
-		for ( std::size_t i = 0; i < dim; ++i ) {
-			distances[2 * i] = _source.evaluate( directions.row( 2 * i ) );
-			distances[2 * i + 1] = _source.evaluate( directions.row( 2 * i + 1 ) );
-		}
+		assert( distances.size() == std::size_t( 2 * dim ) );
 
 		std::vector<carl::Interval<Number>> intervals;
 		for ( std::size_t i = 0; i < dim; ++i ) {  //for every dimension
@@ -183,7 +181,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const HPol
 			if ( distances[2 * i + 1].errorCode == SOLUTION::INFTY ) {
 				upperBound = carl::BoundType::INFTY;
 			}
-			intervals.push_back( carl::Interval<Number>( -distances[2 * i].supportValue, lowerBound, distances[2 * i + 1].supportValue, upperBound ) );  //create one interval with the corresponding left and right end points (inverted lower interval end points)
+			intervals.push_back( carl::Interval<Number>( -distances[2 * i].supportValue, lowerBound, distances[2 * i + 1].supportValue, upperBound ) );	 //create one interval with the corresponding left and right end points (inverted lower interval end points)
 		}
 		result = BoxT<Number, Converter, BoxSetting>( intervals );
 	}
@@ -215,13 +213,13 @@ template <typename Number>
 template <typename BoxSetting, typename inSetting>
 BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const ZonotopeT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE mode ) {
 	if ( mode != CONV_MODE::ALTERNATIVE ) {
-		typename std::vector<Point<Number>> vertices = _source.vertices();  //computes vertices from source object
+		typename std::vector<Point<Number>> vertices = _source.vertices();	//computes vertices from source object
 		if ( vertices.empty() ) {
 			return BoxT<Number, Converter, BoxSetting>();
 		}
 		assert( !vertices.empty() );		 //only continue if any actual vertices were received at all
-		Point<Number> minima = vertices[0];  //creates a vector_t with the first vertex of the source object
-		Point<Number> maxima = vertices[0];  //creates another vector_t with the first vertex of the source object
+		Point<Number> minima = vertices[0];	 //creates a vector_t with the first vertex of the source object
+		Point<Number> maxima = vertices[0];	 //creates another vector_t with the first vertex of the source object
 
 		for ( std::size_t i = 0; i < vertices.size(); ++i ) {											  //for each vertex of the source object
 			for ( std::size_t d = 0; d < _source.dimension(); ++d ) {									  //for every dimension
@@ -247,7 +245,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Zono
 		//     }
 		// }
 
-		return BoxT<Number, Converter, BoxSetting>( std::make_pair( minima, maxima ) );  //creates a box with the computed intervals
+		return BoxT<Number, Converter, BoxSetting>( std::make_pair( minima, maxima ) );	 //creates a box with the computed intervals
 
 	} else {
 		//Alternative: By only adding the coefficients of one dimension together, and this for each dimension,
@@ -370,16 +368,16 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Carl
 	return BoxT<Number, Converter, BoxSetting>( source.matrix(), source.vector() );
 }
 
-template<typename Number>
-template<typename BoxSetting, typename inSetting>
-BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE) {
-	if(source.empty()) return BoxT<Number,Converter<Number>,BoxSetting>();
-	auto isSourceBox = isBox(source.matrix(), source.vector());
-	if(std::get<0>(isSourceBox)){
-		return BoxT<Number,Converter,BoxSetting>(std::get<1>(isSourceBox));
+template <typename Number>
+template <typename BoxSetting, typename inSetting>
+BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE ) {
+	if ( source.empty() ) return BoxT<Number, Converter<Number>, BoxSetting>();
+	auto isSourceBox = isBox( source.matrix(), source.vector() );
+	if ( std::get<0>( isSourceBox ) ) {
+		return BoxT<Number, Converter, BoxSetting>( std::get<1>( isSourceBox ) );
 	} else {
-		auto tmp = typename Converter::HPolytope(source.matrix(), source.vector());
-		return toBox(tmp);
+		auto tmp = typename Converter::HPolytope( source.matrix(), source.vector() );
+		return toBox( tmp );
 	}
 }
 
@@ -389,10 +387,9 @@ BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox(const Templat
 //	return BoxT<Number,Converter<Number>,BoxSetting>();
 //}
 
-template<typename Number>
-template<typename BoxSetting, typename inSetting>
-BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const SupportFunctionNewT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ) {
-	
+template <typename Number>
+template <typename BoxSetting, typename inSetting>
+BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const SupportFunctionNewT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE ) {
 	//gets dimension from the source object
 	std::size_t dim = _source.dimension();
 

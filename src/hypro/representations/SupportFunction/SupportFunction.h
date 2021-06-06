@@ -53,6 +53,12 @@ class SupportFunctionT : private GeometricObjectBase {
 	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true ) const;
 	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _directions, bool useExact = true ) const;
 
+	static SupportFunctionT Empty() {
+		auto res = SupportFunctionT();
+		res.setEmptyState( SETSTATE::EMPTY );
+		return res;
+	}
+
 	std::size_t dimension() const;
 	std::size_t size() const { return 0; }	// TODO: Better implementation?
 	static representation_name type() { return representation_name::support_function; }
@@ -74,12 +80,12 @@ class SupportFunctionT : private GeometricObjectBase {
 	matrix_t<Number> matrix() const;
 	vector_t<Number> vector() const;
 
-	void removeRedundancy();
-	void reduceNumberRepresentation() {}
+	void removeRedundancy() const;
+	void reduceNumberRepresentation() const {}
 	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
 	std::vector<Point<Number>> vertices( const std::vector<vector_t<Number>>& additionalDirections ) const;
 	Number supremum() const;
-	SupportFunctionT project( const std::vector<std::size_t>& dimensions ) const;
+	SupportFunctionT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	SupportFunctionT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;

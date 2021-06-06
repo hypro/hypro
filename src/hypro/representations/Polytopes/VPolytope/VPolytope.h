@@ -5,17 +5,18 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #endif
 
 #include "../../../algorithms/convexHull/ConvexHull.h"
+#include "../../../algorithms/quickhull/Quickhull.h"
 #include "../../../datastructures/Facet.h"
-#include "../../../util/Permutator.h"
+#include "../../../util/adaptions_eigen/adaptions_eigen.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
 #include "../../../util/pca.h"
+#include "../../../util/sequenceGeneration/SequenceGenerator.h"
 #include "../../../util/statistics/statistics.h"
+#include "../../../util/typetraits.h"
 #include "../Cone.h"
-#include "../hypro/algorithms/quickhull/Quickhull.h"
 #include "VPolytopeSetting.h"
 #include "util.h"
-#include "util/typetraits.h"
 
 #include <cassert>
 #include <set>
@@ -34,13 +35,16 @@ template <typename Number, typename Converter, typename S>
 class VPolytopeT : private GeometricObjectBase {
   public:
 	using pointVector = std::vector<Point<Number>>;
+	using Rays = std::set<vector_t<Number>>;
 	typedef S Settings;
 	typedef Number NumberType;
 
+	static constexpr auto type_enum = representation_name::polytope_v;
+
   private:
-	mutable pointVector mVertices;
-	Cone<Number> mCone;
-	bool mReduced = false;
+	mutable pointVector mVertices = {};	 ///< set of generating vertices
+	Rays mRays = {};					 ///< set of generating rays
+	bool mReduced = false;				 ///< caches if the polyhedron is reduced
 
 	std::vector<std::set<unsigned>> mNeighbors;
 
@@ -96,7 +100,7 @@ class VPolytopeT : private GeometricObjectBase {
 	/***************************************************************************
 	* General interface
 	**************************************************************************/
-	
+
 	matrix_t<Number> matrix() const {
 		assert( false && "NOT IMPLEMENTED YET" );
 		return matrix_t<Number>::Zero( 1, 1 );
@@ -106,7 +110,14 @@ class VPolytopeT : private GeometricObjectBase {
 		return vector_t<Number>::Zero( 1 );
 	}
 
-	VPolytopeT project( const std::vector<std::size_t>& dimensions ) const;
+	/**
+	 * @brief Computes a projection where the passed dimensions are projected out.
+	 * @details Note that this effectively reduces the state space dimension of the object in contrast to other representations.
+	 * @param dimensions
+	 * @return VPolytopeT
+	 */
+	VPolytopeT projectOut( const std::vector<std::size_t>& dimensions ) const;
+	VPolytopeT projectOn( const std::vector<std::size_t>& dimensions ) const;
 	VPolytopeT assignIntervals( const std::map<std::size_t, carl::Interval<Number>>& ) const {
 		WARN( "hypro", "Not implemented." );
 		return *this;
@@ -212,17 +223,11 @@ class VPolytopeT : private GeometricObjectBase {
 	 */
 	Number supremum() const;
 
-	/**
-	 * @brief      Returns the cone of this.
-	 * @return     The cone.
-	 */
-	const Cone<Number>& cone() const { return mCone; }
+	/// getter for generating rays
+	const Rays& rays() const { return mRays; }
 
-	/**
-	 * @brief      Explicitly sets the cone.
-	 * @param[in]  _cone  The cone.
-	 */
-	void setCone( const Cone<Number>& _cone ) { mCone = _cone; }
+	/// setter for generating rays
+	void setRays( const Rays& rays ) { mRays = rays; }
 
 	void setNeighbors( const Point<Number>& _point, const std::set<Point<Number>>& _neighbors ) {
 		unsigned pos = 0;
@@ -251,7 +256,7 @@ class VPolytopeT : private GeometricObjectBase {
 		if ( mVertices[pos] == _point ) {
 			for ( unsigned nPos : mNeighbors[pos] ) result.emplace_back( mVertices[nPos] );
 		}
-		return std::move( result );
+		return result;
 	}
 
 	typename pointVector::iterator insert( const Point<Number>& i ) {
@@ -285,7 +290,13 @@ class VPolytopeT : private GeometricObjectBase {
 		return mVertices.insert( mVertices.end(), begin, end );
 	}
 
-	std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const { return mVertices; };
+	/// getter to the vertices defining this object
+	const std::vector<Point<Number>>& vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const { return mVertices; };
+
+	/// getter for a non-const reference to the vertices. Use only if you know what you are doing.
+	std::vector<Point<Number>>& rVertices() {
+		return mVertices;
+	}
 
 	bool hasVertex( const Point<Number>& vertex ) const {
 		for ( const auto point : mVertices ) {

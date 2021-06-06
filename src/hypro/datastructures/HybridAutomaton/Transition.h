@@ -8,6 +8,10 @@
 
 #pragma once
 
+#ifndef INCL_FROM_LOCHEADER
+static_assert( false, "This file may only be included indirectly by Location.h" );
+#endif
+
 #include "Condition.h"
 #include "HybridAutomaton.h"
 #include "Label.h"
@@ -211,19 +215,33 @@ class Transition {
      * @return     Reference to the outstream.
      */
 	friend std::ostream& operator<<( std::ostream& ostr, const Transition<Number>& t ) {
-#ifdef HYPRO_LOGGING
-		ostr << "transition(" << std::endl
-			 << "\t hash = " << t.hash() << std::endl
-			 << "\t Source = " << t.getSource()->hash() << std::endl
-			 << "\t Target = " << t.getTarget()->hash() << std::endl
-			 << "\t urgent = " << t.isUrgent() << std::endl
-			 << "\t Labels = ";
-		for ( const auto& label : t.getLabels() ) ostr << label;
-		ostr << std::endl;
-		ostr << "\t Guard = " << t.getGuard() << std::endl
-			 << "\t Reset = " << t.getReset() << std::endl
-			 << ")";
-#endif
+		ostr << "{ @" << &t << " "
+			 << t.getSource()->getName() << " (@" << t.getSource() << ") -";
+		if ( !t.getLabels().empty() ) {
+			bool first = true;
+			ostr << " ";
+			for ( const auto& label : t.getLabels() ) {
+				if ( first ) {
+					ostr << label;
+					first = false;
+				} else {
+					ostr << ", " << label;
+				}
+			}
+			ostr << " ";
+		}
+		ostr << "->";
+		if ( t.isUrgent() ) {
+			ostr << "*";
+		} else {
+			ostr << " ";
+		}
+		ostr << t.getTarget()->getName() << " (@" << t.getTarget() << ")\n";
+		ostr << "Guard:\n"
+			 << t.getGuard() << "\n"
+			 << "Reset:\n"
+			 << t.getReset() << "\n"
+			 << " }";
 		return ostr;
 	}
 
@@ -234,10 +252,6 @@ class Transition {
      * @return     True if both transitions are equal, false otherwise.
      */
 	friend bool operator==( const Transition<Number>& lhs, const Transition<Number>& rhs ) {
-		if ( lhs.hash() != rhs.hash() ) {
-			return false;
-		}
-
 		if ( ( *lhs.mSource != *rhs.mSource ) ||
 			 ( *lhs.mTarget != *rhs.mTarget ) ||
 			 ( lhs.mUrgent != rhs.mUrgent ) ||
@@ -281,11 +295,8 @@ class Transition {
 	}
 };
 
-/*
-template<typename Number>
-//std::unique_ptr<Transition<Number>> parallelCompose(const std::unique_ptr<Transition<Number>>& lhsT
-//                                , const std::unique_ptr<Transition<Number>>& rhsT
 
+template<typename Number>
 std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lhsT
                                                     , const Transition<Number>* rhsT
                                                     , const std::vector<std::string>& lhsVar
@@ -294,7 +305,6 @@ std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lh
                                                     , const HybridAutomaton<Number>& ha
                                                     , const std::set<Label> lhsLabels
                                                     , const std::set<Label> rhsLabels);
-*/
 }  // namespace hypro
 
 namespace std {
@@ -303,16 +313,18 @@ template <typename Number>
 struct hash<hypro::Transition<Number>> {
 	size_t operator()( const hypro::Transition<Number>& trans ) {
 		size_t seed = 0;
-		carl::hash_add( seed, trans.getSource()->hash() );
-		carl::hash_add( seed, trans.getTarget()->hash() );
+		// TODO hash over Locations instead over location ptrs
+		carl::hash_add( seed, trans.getSource() );
+		carl::hash_add( seed, trans.getTarget() );
 		carl::hash_add( seed, trans.getGuard().hash() );
 		carl::hash_add( seed, trans.getReset().hash() );
-		//carl::hash_add(seed,std::hash<hypro::Aggregation>(mAggregationSetting));
-		//carl::hash_add(seed,std::hash<bool>(trans.isUrgent()));
-		//carl::hash_add(seed,std::hash<Number>(mTriggerTime));
-		//for(const auto& l : mLabels) {
-		//	carl::hash_add(seed,std::hash<Label>(l));
-		//}
+		carl::hash_add( seed, trans.getAggregation() );
+		carl::hash_add( seed, trans.getClusterBound() );
+		carl::hash_add( seed, trans.isUrgent() );
+		carl::hash_add( seed, trans.getTriggerTime() );
+		for ( const auto& l : trans.getLabels() ) {
+			carl::hash_add( seed, std::hash<hypro::Label>{}( l ) );
+		}
 		return seed;
 	}
 };

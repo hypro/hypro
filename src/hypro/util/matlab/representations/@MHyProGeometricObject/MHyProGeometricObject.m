@@ -3,46 +3,46 @@ classdef MHyProGeometricObject < handle
     % and constraint sets. Every object has the following three properties:
     % ObjectHandle: Unique identifier of a object
     % Type: Character vector containing the type of the object
-     
+
     properties (SetAccess = public, GetAccess = public)
         ObjectHandle
         Type
     end
-    
+
      methods (Access = private)
-         
+
         function delete(obj)
             MHyPro(obj.Type, 1, obj.ObjectHandle);
         end
-        
+
      end
 
     methods (Access = public)
-        
+
         function out = dimension(obj)
             out = MHyPro(obj.Type, 2, obj.ObjectHandle);
         end
-        
+
         function out = vertices(obj)
             if obj.isempty() == 0
                 out = MHyPro(obj.Type, 3, obj.ObjectHandle);
             else
                 out = [];
-            end          
+            end
         end
-        
+
         function reduceRepresentation(obj)
             MHyPro(obj.Type, 4, obj.ObjectHandle);
         end
-        
+
         function out = ostream(obj)
             out = MHyPro(obj.Type, 5, obj.ObjectHandle);
         end
-        
+
         function out = size(obj)
             out = MHyPro(obj.Type, 6, obj.ObjectHandle);
         end
-        
+
         function out = eq(obj, rhs)
             if rhs.Type == obj.Type
                 out = MHyPro(obj.Type, 7, obj.ObjectHandle, rhs.ObjectHandle);
@@ -50,7 +50,7 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - equal: Not allowed for this type of HyProObject or wrong type of argument.');
             end
         end
-        
+
         function out = ne(obj, rhs)
             if obj.Type ~= 3 && rhs.Type == obj.Type
                 out = MHyPro(obj.Type, 8, obj.ObjectHandle, rhs.ObjectHandle);
@@ -58,11 +58,11 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - unequal: Not allowed for this type of HyProObject or wrong type of argument.');
             end
         end
-        
+
         function out = matrix(obj)
             out = MHyPro(obj.Type, 9, obj.ObjectHandle);
         end
-        
+
         function out = vector(obj)
             if obj.Type ~= 1
                 out = MHyPro(obj.Type, 10, obj.ObjectHandle);
@@ -70,15 +70,15 @@ classdef MHyProGeometricObject < handle
                 error('HyProGeometricObjectInterface - vector: Not allowed for this type of HyProObject');
             end
         end
-        
+
         function out = isempty(obj)
             out = MHyPro(obj.Type, 11, obj.ObjectHandle);
         end
-        
+
         function removeRedundancy(obj)
             MHyPro(obj.Type, 12, obj.ObjectHandle);
         end
-        
+
         function out = type(obj)
             out = MHyPro(obj.Type, 13, obj.ObjectHandle);
         end
@@ -96,7 +96,7 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - satisfiesHalfspace: Wrong type of input argument.');
             end
         end
-                
+
         function [containment, out] = satisfiesHalfspaces(obj, mat, vec)
             if isvector(vec)
                 vec = conv2HyProVector(vec);
@@ -110,8 +110,8 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - satisfiesHalfspaces: Wrong type of input argument.');
             end
         end
-        
-        function out = project(obj, dim)
+
+        function out = projectOn(obj, dim)
             if isvector(dim)
                 dim = conv2HyProVector(dim);
             else
@@ -128,7 +128,7 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject  - project: Wrong type of input argument.');
             end
         end
-        
+
          function out = linearTransformation(obj, mat)
             if ismatrix(mat)
                 ptr = MHyPro(obj.Type, 17, obj.ObjectHandle, mat);
@@ -137,22 +137,22 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject  - linearTransformation: Wrong type of input argument.');
             end
         end
-        
+
         function out = affineTransformation(obj, mat, vec)
             if isvector(vec)
                 vec = conv2HyProVector(vec);
             else
                 error('MHyProGeometricObject  - affineTransformation: Wrong type of input argument.');
             end
-   
+
             if ismatrix(mat) && size(mat,2) == size(vec,1)
                 ptr = MHyPro(obj.Type, 18, obj.ObjectHandle, mat, vec);
                 out = ptr2Object(obj.Type, ptr);
             else
                 error('MHyProGeometricObject - affineTransformation: Wrong type of input argument.');
-            end 
+            end
         end
-        
+
         function out = plus(obj, rhs)
             if rhs.Type == obj.Type
                 ptr = MHyPro(obj.Type, 19, obj.ObjectHandle, rhs.ObjectHandle);
@@ -161,7 +161,7 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - minkowskiSum: Wrong type of input argument.');
             end
         end
-        
+
         function out = intersectHalfspace(obj, nor, off)
             if isvector(nor)
                 nor = conv2HyProVector(nor);
@@ -176,14 +176,14 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - intersectHalfspace: Wrong type of input argument.');
             end
         end
-        
+
         function out = intersectHalfspaces(obj, mat, vec)
             if isvector(vec)
                 vec = conv2HyProVector(vec);
             else
                 error('MHyProGeometricObject - intersectHalfspaces: Wrong type of input argument.');
             end
-            
+
             if ismatrix(mat) && size(mat,2) == size(vec,1)
                 ptr = MHyPro(obj.Type, 21, obj.ObjectHandle, mat, vec);
                 out = ptr2Object(obj.Type, ptr);
@@ -201,7 +201,7 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - contains: Wrong type of input argument.');
             end
         end
- 
+
         function out = reduceNumberRepresentation(obj)
             ptr = MHyPro(obj.Type, 24, obj.ObjectHandle);
             out = ptr2Object(obj.Type, ptr);
@@ -215,7 +215,7 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - intersect: Wrong type of argument.');
             end
         end
- 
+
         function out = unite(obj, rhs)
             if isRepresentation(rhs) && obj.Type == rhs.Type
                 ptr = MHyPro(obj.Type, 26, obj.ObjectHandle, rhs.ObjectHandle);
@@ -224,15 +224,15 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - unite: Wrong type of input argument.');
             end
         end
-           
+
         % Functions that do not use HyPro
-     
+
         function plotObj(obj, dims)
             isempty = MHyPro(obj.Type, 11, obj.ObjectHandle);
             if isempty
                 warning('MHyProGeometricObject - plot: It is not possible to plot an empty object.');
             else
-           
+
                 %Compute projection
                 v = obj.vertices();
                 temp = v(dims(1):dims(2),:);
@@ -247,16 +247,16 @@ classdef MHyProGeometricObject < handle
                 ver_y = ver_y(order);
 
                 pgon = polyshape(ver_x, ver_y);
-                plot(pgon);           
+                plot(pgon);
             end
         end
-        
+
         function plotVertices(obj, vertices, dims)
             isempty = MHyPro(obj.Type, 11, obj.ObjectHandle);
             if isempty
                 warning('MHyProGeometricObject - plot: It is not possible to plot an empty object.');
             else
-           
+
                 %Compute projection
                 temp = vertices(dims(1):dims(2),:);
                 ver = unique(temp.','rows').';
@@ -271,10 +271,10 @@ classdef MHyProGeometricObject < handle
 
                 pgon = polyshape(ver_x, ver_y);
                 plot(pgon, 'green');
-            end  
+            end
         end
     end
-    
+
     methods (Static)
 
         function out = uniteMultiple(objects)
@@ -289,6 +289,6 @@ classdef MHyProGeometricObject < handle
                 error('MHyProGeometricObject - uniteMultiple: Wrong type of input argument.');
             end
         end
-        
+
     end
 end

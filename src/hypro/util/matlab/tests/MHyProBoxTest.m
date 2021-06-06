@@ -38,7 +38,7 @@ assert(isequal(intervals, zeros(7,2)));
 box = MHyProBox('intervals', [0 1; 0 1; 0 1]);
 ver = box.vertices();
 assert(isequal(ver, [0 1 0 1 0 1 0 1; 0 0 1 1 0 0 1 1; 0 0 0 0 1 1 1 1]));
- 
+
 % Copy a box
 points_box = MHyProBox('points',points);
 copied_box = MHyProBox(points_box);
@@ -168,7 +168,7 @@ assert(containment == "PARTIAL");
 % Project a box on a certain dimension
 box = MHyProBox('intervals', [3 5; 2 4; 1 2]);
 disp('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-projbox = box.project([1;2]);
+projbox = box.projectOn([1;2]);
 inter = projbox.intervals();
 assert(isequal(inter, [3 5; 2 4]))
 

@@ -32,6 +32,8 @@ class Flowpipe {
 		return selectFirstConsecutiveRange( mStates, [&]( const Representation& in ) -> bool { auto tmp = in.satisfiesHalfspaces(cond.getMatrix(), cond.getVector()).first; return tmp != CONTAINMENT::NO && tmp != CONTAINMENT::BOT; } );
 	}
 
+	void clear() { mStates.clear(); }
+
 	typename std::vector<Representation>::iterator begin() { return mStates.begin(); }
 	typename std::vector<Representation>::iterator end() { return mStates.end(); }
 	typename std::vector<Representation>::const_iterator begin() const { return mStates.begin(); }

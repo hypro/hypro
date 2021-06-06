@@ -19,8 +19,8 @@ template <typename Number, typename IdxType>
 matrix_t<Number> removeRows( const matrix_t<Number>& original, const std::vector<IdxType>& rowIndices ) {
 	// compute all rows that need to remain, select those.
 	std::vector<IdxType> remainingRows;
-	for ( IdxType i = 0; i < original.rows(); ++i ) {
-		if ( std::find( rowIndices.begin(), rowIndices.end(), i ) == rowIndices.end() ) {
+	for ( Eigen::Index i = 0; i < original.rows(); ++i ) {
+		if ( std::find( rowIndices.begin(), rowIndices.end(), IdxType( i ) ) == rowIndices.end() ) {
 			remainingRows.emplace_back( i );
 		}
 	}
@@ -54,6 +54,20 @@ vector_t<Number> selectRows( const vector_t<Number>& original, const std::vector
 template <typename Number, typename IdxType>
 vector_t<Number> removeRows( const vector_t<Number>& original, const std::vector<IdxType>& rowIndices ) {
 	return vector_t<Number>( removeRows( matrix_t<Number>( original ), rowIndices ) );
+}
+
+template <typename Number, typename IdxType>
+matrix_t<Number> removeCol( const matrix_t<Number>& original, IdxType colIndex ) {
+	if ( colIndex == 0 ) {
+		return original.block( 0, 1, original.rows(), original.cols() - 1 );
+	}
+	if ( Eigen::Index( colIndex ) == original.cols() - 1 ) {
+		return original.block( 0, 0, original.rows(), original.cols() - 1 );
+	}
+	matrix_t<Number> res = matrix_t<Number>( original.rows(), original.cols() - 1 );
+	res.block( 0, 0, original.rows(), colIndex ) = original.leftCols( colIndex );
+	res.block( 0, colIndex, original.rows(), original.cols() - ( colIndex + 1 ) ) = original.rightCols( original.cols() - ( colIndex + 1 ) );
+	return res;
 }
 
 template <typename Number, typename IdxType>
@@ -116,20 +130,32 @@ static vector_t<Number> combine( const vector_t<Number>& lhs, const vector_t<Num
 
 // interprets all vectors as row-vectors and creates a matrix
 template <typename Number>
-static matrix_t<Number> combineRows( const std::vector<vector_t<Number>>& vectors ) {
-	if ( vectors.empty() ) {
+static matrix_t<Number> createMatrix( const std::vector<vector_t<Number>>& _in ) {
+	if ( _in.empty() ) {
 		return matrix_t<Number>( 0, 0 );
 	}
-	matrix_t<Number> res = matrix_t<Number>( vectors.size(), vectors.begin()->rows() );
+	matrix_t<Number> res = matrix_t<Number>( _in.size(), _in.begin()->rows() );
 
 	Eigen::Index rowCount = 0;
-	for ( const auto& r : vectors ) {
+	for ( const auto& r : _in ) {
 		assert( r.rows() == res.cols() );
 		res.row( rowCount ) = r;
 		++rowCount;
 	}
 
 	return res;
+}
+
+template <typename Number>
+static vector_t<Number> createVector( const std::vector<Number>& _in ) {
+	if ( _in.empty() ) {
+		return vector_t<Number>( 0 );
+	}
+	vector_t<Number> result( _in.size() );
+	for ( unsigned rowId = 0; rowId != _in.size(); ++rowId ) {
+		result( rowId ) = Number( _in[rowId] );
+	}
+	return result;
 }
 
 }  // namespace hypro

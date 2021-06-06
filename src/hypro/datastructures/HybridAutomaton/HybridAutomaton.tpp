@@ -1,139 +1,79 @@
 #include "HybridAutomaton.h"
 
+#include <algorithm>
+
 namespace hypro {
 
 //Copy constructor
 template <typename Number>
 HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid )
 	: mLocations()
+	, mInitialStates()
+	, mLocalBadStates()
 	, mGlobalBadStates( hybrid.getGlobalBadStates() )
 	, mVariables( hybrid.getVariables() ) {
 	// mappings to update nested datastructures (transitions sets of locations and source/target locations of transitions).
-	std::map<const Location<Number>*, std::size_t> locationMapping;  // maps to position in new vector.
-	std::map<Transition<Number>*, std::size_t> transitionMapping;	// maps to position in new vector.
+	std::map<const Location<Number>*, Location<Number>*> locationMapping;  // maps old locations to position in new vector.
 
 	// create real copies of the locations
-	for ( const auto l : hybrid.getLocations() ) {
-		Location<Number> tmp = Location<Number>( *l );
-		StochasticLocation<Number>* stoLoc = dynamic_cast<StochasticLocation<Number>*>( l );
-		if ( !stoLoc ) {
-			mLocations.emplace_back( std::make_unique<Location<Number>>( tmp ) );
-		} else {
-			mLocations.emplace_back( std::make_unique<StochasticLocation<Number>>( StochasticLocation<Number>( *( stoLoc ) ) ) );
-		}
-		locationMapping[l] = mLocations.size() - 1;
-		assert( tmp.hash() == l->hash() );
+	for ( Location<Number>* l : hybrid.getLocations() ) {
+		Location<Number>* tmp = this->createLocation( l );
+		locationMapping[l] = tmp;
+		assert( tmp->getTransitions().size() == l->getTransitions().size() );
+		assert( std::all_of( tmp->getTransitions().begin(), tmp->getTransitions().end(), [tmp]( const auto& t ) { return t.get()->getSource() == tmp; } ) );
+		assert( *tmp == *mLocations.back().get() );
+		TRACE( "hypro.datastructures", "Location after copy: " << *tmp << " VS original: " << *l );
 	}
 
 	//update locations of transitions and transitions of locations
 	for ( auto& l : mLocations ) {
-		for ( auto& t : l->rGetTransitions() ) {
+		for ( auto& t : l.get()->rGetTransitions() ) {
 			// verify that the source of the location already corresponds to the new location.
-			assert( t->getSource() == l.get() );
-
+			assert( t.get()->getSource() == l.get() );
 			// the target is updated to the new location.
-			for ( auto& target : mLocations ) {
-				if ( target->hash() == t->getTarget()->hash() ) {
-					t->setTarget( target.get() );
-				}
-			}
+			assert( t.get()->getTarget() != nullptr );
+			TRACE( "hypro.datastructures", "Check if target @" << t.get()->getTarget() << ", which is \n"
+															   << *t.get()->getTarget() << "\ncan be found in location mapping." );
+			assert( locationMapping.find( t.get()->getTarget() ) != locationMapping.end() );
+			t.get()->setTarget( locationMapping[t.get()->getTarget()] );
 		}
+		TRACE( "hypro.datastructures", "Location after transition update: " << *l.get() );
 	}
+	assert( std::all_of( locationMapping.begin(), locationMapping.end(), []( const auto& p ) {
+		TRACE( "hypro.datastructures", "Compare " << *p.second << "\nand\n"
+												  << *p.first );
+		return p.second->getTransitions().size() == p.first->getTransitions().size();
+	} ) );
+	assert( is_equal( this->getLocations(), hybrid.getLocations() ) );
 
 	// get correct location pointer for initial states.
 	for ( auto& otherInitial : hybrid.getInitialStates() ) {
 		auto copy = otherInitial.second;
 		// update location
-		this->addInitialState( mLocations[locationMapping[otherInitial.first]].get(), copy );
+		TRACE( "hypro.datastructures", "Other initial state with loc @" << otherInitial.first << " is at index " << locationMapping[otherInitial.first] );
+		assert( locationMapping.find( otherInitial.first ) != locationMapping.end() );
+		mInitialStates[locationMapping[otherInitial.first]] = copy;
 	}
 
 	for ( auto& otherBad : hybrid.getLocalBadStates() ) {
 		auto copy = otherBad.second;
 		// update location
-		this->addLocalBadState( mLocations[locationMapping[otherBad.first]].get(), copy );
+		this->addLocalBadState( locationMapping[otherBad.first], copy );
 	}
-
-#ifdef HYPRO_LOGGING
-	DEBUG( "hypro.datastructures", "Hybrid automaton initial states after COPY construction." );
-	for ( const auto& iPair : mInitialStates ) {
-		DEBUG( "hypro.datastructures", "Initial state in loc " << iPair.first->getName() );
-	}
-#endif
+	TRACE( "hypro.datastructures", "After copy, original: \n"
+										 << hybrid << "\n copy: \n"
+										 << *this );
+	assert( *this == hybrid );
 }
-
-/*
-//Move constructor
-template<typename Number>
-HybridAutomaton<Number>::HybridAutomaton(HybridAutomaton<Number>&& hybrid)
-	:
-	mLocations(),
-	mTransitions(),
-	mGlobalBadStates(hybrid.getGlobalBadStates()),
-	mVariables(hybrid.getVariables())
- {
-	 std::cout << "Move construct hybrid automaton" << std::endl;
-// mappings to update nested datastructures (transitions sets of locations and source/target locations of transitions).
-	std::map<const Location<Number>*, std::size_t> locationMapping; // maps to position in new vector.
-	std::map<Transition<Number>*, std::size_t> transitionMapping; // maps to position in new vector.
-
-	// create real copies of the locations
-	for(auto l : hybrid.getLocations()){
-		Location<Number> tmp = Location<Number>(*l);
-		tmp.setTransitions(std::vector<Transition<Number>*>());
-    	mLocations.emplace_back(std::make_unique<Location<Number>>(tmp));
-		locationMapping[l] = mLocations.size() - 1;
-		assert(tmp.hash() == l->hash());
-   	}
-	// create copies of transitions
-	for(auto& t : hybrid.getTransitions()){
-		mTransitions.emplace_back(std::make_unique<Transition<Number>>(Transition<Number>(*t)));
-		transitionMapping[t] = mTransitions.size() - 1;
-	}
-
-	//update locations of transitions and transitions of locations
-	for(auto l : hybrid.getLocations()) {
-		// only update transitions which are assigned to locations.
-		for(auto t : l->getTransitions()) {
-
-			// update transitions inside location
-			mLocations[locationMapping[l]]->addTransition(mTransitions[transitionMapping[t]].get());
-
-			// update source location.
-			assert(t->getSource() == l);
-			mTransitions[transitionMapping[t]]->setSource(mLocations[locationMapping[l]].get());
-
-			// update correct target.
-			mTransitions[transitionMapping[t]]->setTarget(mLocations[locationMapping[t->getTarget()]].get());
-		}
-	}
-
-	// get correct location pointer for initial states.
-	for(auto& otherInitial : hybrid.getInitialStates()) {
-		auto copy = otherInitial.second;
-		// update location
-		this->addInitialState(mLocations[locationMapping[otherInitial.first]].get(), copy);
-	}
-
-	for(auto& otherBad : hybrid.getLocalBadStates()) {
-		auto copy = otherBad.second;
-		// update location
-		this->addLocalBadState(mLocations[locationMapping[otherBad.first]].get(), copy);
-	}
-
-	DEBUG("hypro.datastructures","Hybrid automaton initial states after MOVE construction.");
-	for(const auto& iPair : mInitialStates) {
-		DEBUG("hypro.datastructures","Initial state in loc " << iPair.first->getName());
-	}
-}
-*/
 
 //Copy assignment
 template <typename Number>
 HybridAutomaton<Number>& HybridAutomaton<Number>::operator=( const HybridAutomaton<Number>& rhs ) {
 	if ( this != &rhs ) {
-		auto copy{rhs};
+		auto copy{ rhs };
 		*this = std::move( copy );
 	}
+	assert( *this == rhs );
 	return *this;
 }
 
@@ -204,7 +144,7 @@ template <typename Number>
 const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 	std::set<Label> labels;
 	for ( const auto& loc : mLocations ) {
-		for ( auto tra : loc->getTransitions() ) {
+		for ( auto& tra : loc->getTransitions() ) {
 			std::for_each( tra->getLabels().begin(), tra->getLabels().end(), [&labels]( auto l ) { labels.emplace( l ); } );
 		}
 	}
@@ -213,11 +153,11 @@ const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 
 template <typename Number>
 const std::unique_ptr<Location<Number>>& HybridAutomaton<Number>::addLocation( const Location<Number>& location ) {
-	try{
+	try {
 		auto stoLoc = dynamic_cast<const StochasticLocation<Number>&>( location );
 		return this->addLocation( std::move( std::make_unique<StochasticLocation<Number>>( stoLoc ) ) );
-	}catch(const std::bad_cast& re){
-		std::cout<<"wrong with message: " << re.what()<<std::endl;
+	} catch ( const std::bad_cast& re ) {
+		std::cout << "wrong with message: " << re.what() << std::endl;
 		return this->addLocation( std::move( std::make_unique<Location<Number>>( location ) ) );
 	}
 	// if ( stoLoc != std::bad_cast ) {
@@ -245,9 +185,45 @@ void HybridAutomaton<Number>::addTransition( std::unique_ptr<Transition<Number>>
 }
 
 template <typename Number>
+Location<Number>* HybridAutomaton<Number>::createLocation() {
+	return mLocations.emplace_back( std::make_unique<Location<Number>>( Location<Number>{} ) ).get();
+}
+
+template <typename Number>
+Location<Number>* HybridAutomaton<Number>::createLocation( Location<Number>* original ) {
+	StochasticLocation<Number>* stoLoc = dynamic_cast<StochasticLocation<Number>*>( original );
+	if ( !stoLoc ) {
+		return mLocations.emplace_back( std::make_unique<Location<Number>>( Location<Number>{ *original } ) ).get();
+	} else {
+		return mLocations.emplace_back( std::make_unique<StochasticLocation<Number>>( StochasticLocation<Number>( *( stoLoc ) ) ) ).get();
+	}
+}
+
+template <typename Number>
 void HybridAutomaton<Number>::reduce() {
-	// TODO rewrite
-	assert( false && "NOT IMPLEMENTED." );
+	std::set<Location<Number> const*> locations_found{};
+	std::vector<Location<Number> const*> stack{};
+
+	for ( auto& [loc_ptr, _] : getInitialStates() ) {
+		stack.push_back( loc_ptr );
+		locations_found.insert( loc_ptr );
+	}
+
+	while ( !stack.empty() ) {
+		auto const* current_loc = stack.back();
+		stack.pop_back();
+		for ( auto& transition : current_loc->getTransitions() ) {
+			if ( locations_found.count( transition->getTarget() ) == 0 ) {
+				stack.push_back( transition->getTarget() );
+				locations_found.insert( transition->getTarget() );
+			}
+		}
+	}
+
+	mLocations.erase( std::remove_if( mLocations.begin(), mLocations.end(), [&]( auto& loc ) {
+						  return locations_found.count( loc.get() ) == 0;
+					  } ),
+					  mLocations.end() );
 }
 
 template <typename Number>
@@ -322,14 +298,21 @@ void HybridAutomaton<Number>::decompose( const Decomposition& decomposition ) {
 
 template <typename Number>
 std::string HybridAutomaton<Number>::getStatistics() const {
-	std::stringstream out;
-	out << "#Locations: " << mLocations.size() << std::endl;
+	using namespace std::literals;
 
-	return out.str();
+	size_t t_count = 0;
+	for ( Location<Number>* loc : getLocations() ) {
+		t_count += loc->getTransitions().size();
+	}
+
+	std::string result = "#Locations: "s + std::to_string( mLocations.size() ) + "\n"s + "#Transitions "s + std::to_string( t_count ) + "\n"s;
+	return result;
 }
 
 template <typename Number>
 HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs ) {
+	TRACE( "hypro.datastructures", "Parallel composition of " << lhs << "\n\n and \n\n"
+															  << rhs );
 	HybridAutomaton<Number> ha;
 	using variableVector = std::vector<std::string>;  /// Vector of variables
 	const variableVector& lhsVar = lhs.getVariables();
@@ -339,6 +322,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	variableVector haVar;
 	variableVector::size_type i = 0;
 	variableVector::size_type j = 0;
+	TRACE( "hypro.datastructures", "Combine variable sets" );
 	while ( i < lhsVar.size() && j < rhsVar.size() ) {
 		if ( lhsVar.at( i ) == rhsVar.at( j ) ) {
 			haVar.push_back( lhsVar[i] );
@@ -366,6 +350,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	ha.setVariables( haVar );
 
 	// find shared variables
+	TRACE( "hypro.datastructures", "Find shared variables" );
 	for ( std::size_t i = 0; i != haVar.size(); ++i ) {
 		bool left = false;
 		bool right = false;
@@ -391,28 +376,31 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 		}
 	}
 
+	TRACE( "hypro.datastructures", "Combine locations" );
 	for ( const auto& locLhs : lhs.getLocations() ) {
 		for ( const auto& locRhs : rhs.getLocations() ) {
 			std::unique_ptr<Location<Number>> loc = parallelCompose( locLhs, locRhs, lhsVar, rhsVar, haVar );
+			TRACE( "hypro.datastructures", "Add combined location " << *loc );
 			ha.addLocation( std::move( loc ) );
 		}
 	}
 
-	//build transisitons
+	TRACE( "hypro.datastructures", "Combine synchronized transitions" );
 	std::set<Label> lhsLabels = lhs.getLabels();
 	std::set<Label> rhsLabels = rhs.getLabels();
 	for ( const auto& lhsT : lhs.getTransitions() ) {
 		for ( const auto& rhsT : rhs.getTransitions() ) {
-			std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT.get(), rhsT.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+			std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 			if ( t ) {
-				ha.addTransition( std::move( t ) );
-				( t->getSource() )->addTransition( t.get() );
+				//ha.addTransition( std::move( t ) );
+				( t->getSource() )->addTransition( std::move( t ) );
 			}
 		}
 	}
 
 	// non-synchronizing transitions in each component
 	// fix rhs first
+	TRACE( "hypro.datastructures", "Build non-synchronizing transitions for lhs, fix rhs" );
 	for ( const auto& lhsT : lhs.getTransitions() ) {
 		if ( lhsT->getLabels().empty() ) {
 			for ( const auto& loc : rhs.getLocations() ) {
@@ -436,15 +424,16 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( lhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT.get(), tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
-					ha.addTransition( std::move( t ) );
-					( t->getSource() )->addTransition( t.get() );
+					//ha.addTransition( std::move( t ) );
+					( t->getSource() )->addTransition( std::move( t ) );
 				}
 			}
 		}
 	}
 	// fix lhs
+	TRACE( "hypro.datastructures", "Build non-synchronizing transitions for rhs, fix lhs" );
 	for ( const auto& rhsT : rhs.getTransitions() ) {
 		if ( rhsT->getLabels().empty() ) {
 			for ( const auto& loc : lhs.getLocations() ) {
@@ -465,20 +454,50 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( rhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( tmp.get(), rhsT.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number>> t = parallelCompose( tmp.get(), rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
-					ha.addTransition( std::move( t ) );
-					( t->getSource() )->addTransition( t.get() );
+					//ha.addTransition( std::move( t ) );
+					( t->getSource() )->addTransition( std::move( t ) );
 				}
 			}
 		}
 	}
 
 	// set initial states
-	for ( const auto& initialStateLhs : lhs.getInitialStates() ) {
-		for ( const auto& initialStateRhs : rhs.getInitialStates() ) {
-			FATAL( "hypro", "WARNING: parallel composition of initial states not implemented yet." );
-			assert( false );
+	TRACE( "hypro.datastructures", "Combine initial states (not yet implemented)" );
+	for ( auto const& [loc_lhs, condition_lhs] : lhs.getInitialStates() ) {
+		for ( auto const& [loc_rhs, condition_rhs] : rhs.getInitialStates() ) {
+			// simply put constraints (rows) below each other, but reorder variables (columns) of both lhs and rhs to fit new order
+
+			auto num_constraints_lhs = condition_lhs.getMatrix().rows();
+			auto num_constraints_rhs = condition_rhs.getMatrix().rows();
+
+			auto total_constraints = num_constraints_lhs + num_constraints_rhs;
+			matrix_t<Number> constraints{ total_constraints, haVar.size() };
+
+			Eigen::Index col = 0;
+			for ( std::string const& variable : haVar ) {
+				auto index_lhs = std::distance( lhsVar.begin(), std::find( lhsVar.begin(), lhsVar.end(), variable ) );
+				auto index_rhs = std::distance( rhsVar.begin(), std::find( rhsVar.begin(), rhsVar.end(), variable ) );
+
+				// put lhs part of column in at the top
+				if ( size_t( index_lhs ) < lhsVar.size() ) {
+					constraints.col( col ).head( num_constraints_lhs ) = condition_lhs.getMatrix().col( index_lhs );
+				}
+
+				if ( size_t( index_rhs ) < rhsVar.size() ) {
+					constraints.col( col ).tail( num_constraints_rhs ) = condition_rhs.getMatrix().col( index_rhs );
+				}
+				col += 1;
+			}
+
+			vector_t<Number> constants{ num_constraints_lhs + num_constraints_rhs };
+			constants.head( num_constraints_lhs ) = condition_lhs.getVector();
+			constants.tail( num_constraints_rhs ) = condition_rhs.getVector();
+
+			std::string loc_name = loc_lhs->getName() + "_" + loc_rhs->getName();
+			Location<Number> const* init_loc = ha.getLocation( loc_name );
+			ha.addInitialState( init_loc, Condition{ constraints, constants } );
 		}
 	}
 

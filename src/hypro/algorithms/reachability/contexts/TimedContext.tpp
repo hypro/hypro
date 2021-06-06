@@ -209,7 +209,7 @@ carl::Interval<tNumber> TimedContext<State>::computeShortestElapsedTimeIntervalF
 			// for each clock project the DBM to its axis
 			std::vector<size_t> v;
 			v.push_back( i );
-			hypro::DifferenceBounds<Number> projectedDBM = dbm.project( v );
+			hypro::DifferenceBounds<Number> projectedDBM = dbm.projectOn( v );
 			// compute vertices ie endpoints of interval
 			std::vector<hypro::Point<Number>> vert = projectedDBM.vertices();
 			// if less than 2, this is a point interval and therefore minimal (diameter 0)
