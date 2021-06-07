@@ -24,3 +24,4 @@ add_dependencies(hypro_resources GLPK_STATIC)
 
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC GLPK_STATIC)
 target_link_libraries(${PROJECT_NAME}-static PUBLIC GLPK_STATIC)
+list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${GLPK_INCLUDE_DIR})
