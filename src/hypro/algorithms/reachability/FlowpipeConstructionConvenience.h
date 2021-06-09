@@ -55,4 +55,10 @@ Representation applyReset( Representation const& valuationSet, Reset<Number> con
 	return valuationSet.affineTransformation( reset.getMatrix(), reset.getVector() );
 }
 
+template <class Representation, class Number>
+std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
+    assert( false && "Set difference not implemented yet" );
+    return { valuationSet };
+}
+
 }  // namespace hypro
