@@ -737,6 +737,71 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 }
 
 template <typename Number, typename Converter, class Setting>
+std::vector<BoxT<Number,Converter, Setting>> BoxT<Number,Converter, Setting>::setMinus(const BoxT<Number,Converter, Setting>& minusbox) const {
+  std::vector<hypro::BoxT<Number,Converter,Setting>> result;
+  if (this->dimension() != minusbox.dimension() ) {
+		return result;
+  }else{
+    std::pair<hypro::Point<Number>, hypro::Point<Number>> originalpoints= this->limits();
+    std::pair<hypro::Point<Number>, hypro::Point<Number>> minuspoints= minusbox.limits();
+    for ( unsigned i = 0; i < this->dimension(); ++i ) {
+      //lower
+      std::pair<hypro::Point<Number>, hypro::Point<Number>> points= originalpoints;
+      
+      //points.first[i]=points.first[i] remains the same
+      points.second[i]=minuspoints.first[i];
+      BoxT<Number,Converter,Setting> tmp(points);
+      if(tmp.limits().first[i]<tmp.limits().second[i]){
+        result.push_back(tmp);
+        originalpoints.first[i]=minuspoints.first[i];
+      }
+      //upper
+      points= originalpoints;   
+      //std::pair<Point<Number>, Point<Number>> minuspoints= minus.limits(); already known
+      points.first[i]=minuspoints.second[i];
+      //points.second[i]=points.second[i]; remains the same
+      hypro::BoxT<Number,Converter,Setting> tmp2(points);
+      if(tmp2.limits().first[i]<tmp2.limits().second[i]){//!(tmp2.empty())
+        result.push_back(tmp2);
+        originalpoints.second[i]=minuspoints.second[i];
+      }
+    }
+	return result;
+  }
+  //return result;
+}
+template <typename Number, typename Converter, class Setting>
+std::vector<BoxT<Number,Converter, Setting>> BoxT<Number,Converter, Setting>::setMinus2(const BoxT<Number,Converter, Setting>& minusbox) const {
+  std::vector<hypro::BoxT<Number,Converter,Setting>> result;
+  if (this->dimension() != minusbox.dimension() ) {
+    return result;
+  }else{
+    std::vector<carl::Interval<Number>> box=this->intervals();
+    std::vector<carl::Interval<Number>> minus=minusbox.intervals();
+
+	for (long unsigned int i = 0; i < minus.size(); i++){
+		std::vector<carl::Interval<Number>> box2=box;//lower
+		std::vector<carl::Interval<Number>> box3=box;//upper
+		bool b=set_difference(box.at(i), minus.at(i), box2.at(i), box3.at(i));
+		BoxT<Number, Converter, Setting> workbox(box2);
+		if (!workbox.empty()){
+			result.push_back(workbox);
+			carl::Interval<Number> tmp(box2.at(i).upperBound(),box.at(i).upperBound());
+			box.at(i)=tmp;
+		}
+		BoxT<Number, Converter, Setting> workbox2(box3);
+		if (!workbox2.empty()){
+			result.push_back(workbox2);
+			carl::Interval<Number> tmp2(box.at(i).lowerBound(),box3.at(i).lowerBound());
+			box.at(i)=tmp2;
+		}   
+    }
+	return result;
+  }
+  //return result;
+}
+
+template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	assert( _mat.rows() == _vec.rows() );
 	assert( _mat.cols() == Eigen::Index( this->dimension() ) );
@@ -881,5 +946,6 @@ template <typename Number, typename Converter, class Setting>
 void BoxT<Number, Converter, Setting>::print() const {
 	//std::cout << *this << std::endl;
 }
+
 
 }  // namespace hypro

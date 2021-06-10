@@ -411,6 +411,8 @@ class HPolytopeT : private GeometricObjectBase {
 		//#endif
 	}
 
+	std::vector<HPolytopeT<Number, Converter, Setting>> setMinus( const HPolytopeT<Number, Converter, Setting>& minus) const;
+
 	template <typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
 	void reduceNumberRepresentation( const std::vector<Point<double>>& = std::vector<Point<double>>(), unsigned = fReach_DENOMINATOR ) const {}
 

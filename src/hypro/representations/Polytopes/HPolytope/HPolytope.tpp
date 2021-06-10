@@ -1331,4 +1331,32 @@ void HPolytopeT<Number, Converter, Setting>::setOptimizer( const matrix_t<Number
 	}
 }
 
+template <typename Number, typename Converter, class Setting>
+std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus(const HPolytopeT<Number, Converter, Setting>& minus) const {
+  HPolytopeT<Number, Converter, Setting> minuspoly(minus.matrix(), minus.vector());
+  minuspoly=minuspoly.removeRedundancy();
+  hypro::matrix_t<Number> matrix2 = minuspoly.matrix();
+  hypro::vector_t<Number> constants2= minuspoly.vector();
+
+  std::vector<HPolytopeT<Number, Converter, Setting>> result;
+  hypro::HPolytopeT<Number, Converter, Setting> copy(this->matrix(), this->vector());
+
+  for (int i = 0; i < constants2.size(); i++){
+      hypro::Point<Number> p =hypro::Point<Number>(matrix2.row(i));
+      hypro::Point<Number> q =hypro::Point<Number>(constants2(i));
+      hypro::Halfspace<Number> h=hypro::Halfspace<Number>{p, q.at(0)};
+      //std::vector<hypro::Point<Number>> vertices=copy.vertices();
+      HPolytopeT<Number, Converter, Setting> workpoly=copy;
+      workpoly.insert(h.invert());
+      if (!workpoly.empty()){
+          result.push_back(workpoly);
+          copy.insert(h.invert());
+      }else{
+          //result.push_back(workpoly);
+          std::cout << "empty" << std::endl;
+      }
+    }
+	return result;
+}
+
 }  // namespace hypro
