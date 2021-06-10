@@ -170,11 +170,16 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTime
 	return timeElapse;
 }
 
+/*
 template <template <typename, typename, typename> typename PolyhedralRepresentation, typename Number, typename Converter, typename Setting>
 PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTimeEvolution( const PolyhedralRepresentation<Number, Converter, Setting>& badSet, const rectangularFlow<Number>& flow ) {
-	assert( false );
-	return badSet;
+	auto convertedSet = Converter::toCarlPolytope( badSet );
+	auto convertedResult = rectangularApplyReverseTimeEvolution( convertedSet, flow );
+	PolyhedralRepresentation<Number, Converter, Setting> res;
+	convert( convertedResult, res );
+	return res;
 }
+*/
 
 template <typename Number>
 CarlPolytope<Number> rectangularApplyTimeEvolution( const CarlPolytope<Number>& initialSet, const rectangularFlow<Number>& flow ) {

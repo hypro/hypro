@@ -57,12 +57,8 @@ std::pair<CONTAINMENT, State> rectangularBadIntersectInitialStates( const State&
 	if ( initialState != automaton.getInitialStates().end() ) {
 		TRACE( "hydra.worker.continuous", "Checking initial state: " << initialState->second );
 
-		// create constraints for initial state set
-		// create carlPolytope, as intersection is defined for those
-		State initialConstraints{ initialState->second.getMatrix(), initialState->second.getVector() };
-
-		// intersect
-		auto resultingSet = stateSet.intersect( initialConstraints );
+		// intersect with initial state set
+		auto resultingSet = stateSet.intersect( State{ initialState->second.getMatrix(), initialState->second.getVector() } );
 
 		// reduction
 		resultingSet.removeRedundancy();

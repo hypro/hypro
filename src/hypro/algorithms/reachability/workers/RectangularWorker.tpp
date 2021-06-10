@@ -96,7 +96,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( Reach
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTreeNode<State>& task ) {
 	State badSet = task.getInitialSet();
-	auto [containment, segment] = rectangularIntersectInvariant( badSet );
+	auto [containment, segment] = rectangularIntersectInvariant( badSet, task.getLocation() );
 	if ( containment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
@@ -111,8 +111,8 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTree
 	}
 
 	// compute time predecessors states
-	State timePredecessors = rectangularApplyReverseTimeEvolution( segment, badSet.getLocation()->getRectangularFlow() );
-	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors );
+	State timePredecessors = rectangularApplyReverseTimeEvolution( segment, task.getLocation()->getRectangularFlow() );
+	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors, task.getLocation() );
 	if ( invariantContainment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
