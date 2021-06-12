@@ -101,12 +101,10 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTree
 		return REACHABILITY_RESULT::SAFE;
 	}
 
-	// add state to flowpipe
-	mFlowpipe.addState( segment );
-
 	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( segment, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
+		mFlowpipe.addState( segment );
+		task.getFlowpipe().push_back( segment );
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 
@@ -119,10 +117,12 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTree
 
 	// add state to flowpipe
 	mFlowpipe.addState( constrainedTimePredecessors );
+	task.getFlowpipe().push_back( constrainedTimePredecessors );
 
 	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( constrainedTimePredecessors, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
+		mFlowpipe.addState( segment );
+		task.getFlowpipe().push_back( segment );
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 

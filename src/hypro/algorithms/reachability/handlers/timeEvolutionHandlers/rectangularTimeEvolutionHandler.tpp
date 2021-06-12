@@ -245,34 +245,36 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	std::vector<carl::Variable> variablesToEliminate;
 	// add variable for time elapse
 	carl::Variable t = vpool.newCarlVariable( "t" );
-	// add constraint t >= 0
-	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
+	// add constraint t <= 0
+	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::LEQ ) );
 
 	// introduce post variables and substitute
 	for ( const auto& v : bad.getVariables() ) {
 		if ( v != t ) {
-			// create post var
+			// create pre var
 			std::stringstream ss;
-			ss << v.name() << "_post";
+			ss << v.name() << "_pre";
 			std::string s = ss.str();
 			auto newV = vpool.newCarlVariable( s );
-			// substitute to create postcondition
+			// substitute to create precondition
 			bad.substituteVariable( v, newV );
 			// store var to eliminate later
 			variablesToEliminate.push_back( newV );
 			// add flow conditions for new variables, we use the variable mapping provided by the flow
-			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber, Number>( newV, v, t, flow.getFlowIntervalForDimension( v ) );
+			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createReverseFlowConstraints<hypro::tNumber, Number>( v, newV, t, flow.getFlowIntervalForDimension( v ) );
 
-			TRACE( "hydra.worker", "Use flow constraints: " );
 #ifdef HYPRO_LOGGING
+			TRACE( "hypro.worker", "Use flow constraints: " );
 			for ( const auto& c : flowConstraints ) {
-				TRACE( "hydra.worker", c );
+				TRACE( "hypro.worker", c );
 			}
 #endif
 
 			bad.addConstraints( flowConstraints );
 		}
 	}
+	TRACE( "hypro.worker", "Full constraint set describing the dynamic behavior: \n"
+								 << bad );
 
 	// add t to eliminate at latest
 	variablesToEliminate.push_back( t );
@@ -286,7 +288,7 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	// eliminate vars
 	bad.eliminateVariables( quOrder );
 
-	DEBUG( "hydra.worker", "State set after time elapse: " << bad );
+	DEBUG( "hydra.worker", "State set after reverse time elapse: " << bad );
 
 	return bad;
 }
