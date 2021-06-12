@@ -4,6 +4,17 @@
 
 namespace hypro {
 
+/**
+ * @brief Creates a set of constraints which describe forward time evolution for the passed variable.
+ * @details The primed variable serves as the initialization, the original variable will be the variable for which the result is described. The variable t is the used clock/time variable, the passed interval describes the flow. The method creates constraints in the assumption that t >= 0 holds.
+ * @tparam N Number type (rational)
+ * @tparam D Number type (float) used to describe the flow
+ * @param original The original variable (the result is described in this var)
+ * @param primed The initial valuation of the original variable
+ * @param t The variable which reflects time
+ * @param flow The interval describing the dynamics
+ * @return std::vector<ConstraintT<N>> A set of constraints which describe all possible time successors
+ */
 template <typename N, typename D>
 std::vector<ConstraintT<N>> createFlowConstraints( carl::Variable original, carl::Variable primed, carl::Variable t, const carl::Interval<D>& flow ) {
 	std::vector<ConstraintT<N>> res;
