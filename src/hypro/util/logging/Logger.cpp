@@ -12,8 +12,9 @@ int initializeLogging( int& i ) {
 	( "hypro.representations", carl::logging::LogLevel::LVL_INFO )
 	( "hypro.representations.supportFunction", carl::logging::LogLevel::LVL_INFO )
 	( "hypro.representations.HPolytope", carl::logging::LogLevel::LVL_INFO )
-	( "hypro.datastructures", carl::logging::LogLevel::LVL_TRACE )
+	( "hypro.datastructures", carl::logging::LogLevel::LVL_INFO )
 	( "hypro.reacher", carl::logging::LogLevel::LVL_INFO )
+	( "hypro.worker", carl::logging::LogLevel::LVL_TRACE )
 	( "hypro.reacher.preprocessing", carl::logging::LogLevel::LVL_INFO );
 
 	carl::logging::logger().configure( "logfile_quickhull", "quickhull.log" );
