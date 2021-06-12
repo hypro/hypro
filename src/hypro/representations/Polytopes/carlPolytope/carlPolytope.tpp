@@ -106,7 +106,7 @@ std::pair<CONTAINMENT, CarlPolytopeT<Number, Converter, Setting>> CarlPolytopeT<
 	DEBUG( "hypro.representations.carlPolytope", "Hsps " << _mat << std::endl
 														 << _vec << " and this " << *this );
 	auto resPoly = this->intersect( CarlPolytopeT<Number, Converter, Setting>( _mat, _vec ) );
-	//resPoly.removeRedundancy();
+	resPoly.removeRedundancy();
 
 	TRACE( "hypro.representations.carlPolytope", "Resulting polytope " << resPoly );
 
@@ -123,6 +123,13 @@ std::pair<CONTAINMENT, CarlPolytopeT<Number, Converter, Setting>> CarlPolytopeT<
 template <typename Number, typename Converter, typename Setting>
 bool CarlPolytopeT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
 	return std::all_of( getHalfspaces().begin(), getHalfspaces().end(), [&point]( const auto& hsp ) { return hsp.contains( point ); } );
+}
+
+template <typename Number, typename Converter, typename Setting>
+bool CarlPolytopeT<Number, Converter, Setting>::contains( const CarlPolytopeT& rhs ) const {
+	auto lhs_converted = HPolytopeT<Number, Converter, HPolytopeSetting>{ this->matrix(), this->vector() };
+	auto rhs_converted = HPolytopeT<Number, Converter, HPolytopeSetting>{ rhs.matrix(), rhs.vector() };
+	return lhs_converted.contains( rhs_converted );
 }
 
 template <typename Number, typename Converter, typename Setting>
