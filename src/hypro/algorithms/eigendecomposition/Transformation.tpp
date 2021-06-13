@@ -199,7 +199,7 @@ Transformation<Number>::Transformation( const HybridAutomaton<Number>& _hybrid )
 			badStateNEW.setVector( badState.getVector( i ), i );
 		}
 		TRACE( "hypro.eigendecomposition", "transformed localBadState: " << badStateNEW );
-		mTransformedHA.addLocalBadState( NewLocPtr, badStateNEW );
+		mTransformedHA.addLocalBadStates( NewLocPtr, badStateNEW );
 	}
 	//for (const auto & locBadState : mTransformedHA.getLocalBadStates() ) {
 	//    TRACE("hypro.eigendecomposition","in location: " << locBadState.first)
@@ -255,7 +255,7 @@ void Transformation<Number>::addGlobalBadStates( const HybridAutomaton<Number>& 
 					badStateNEW.setMatrix( it->getMatrix( i ) * V, i );
 					badStateNEW.setVector( it->getVector( i ), i );
 				}
-				mTransformedHA.addLocalBadState( locMapIt->second, badStateNEW );
+				mTransformedHA.addLocalBadStates( locMapIt->second, badStateNEW );
 			}
 		}
 		globalBadStatesTransformed = true;
@@ -272,7 +272,7 @@ void Transformation<Number>::addGlobalBadStates( const HybridAutomaton<Number>& 
 					globalbadStateNEW.setMatrix( it->getMatrix( i ), i );
 					globalbadStateNEW.setVector( it->getVector( i ), i );
 				}
-				mTransformedHA.addGlobalBadState( globalbadStateNEW );
+				mTransformedHA.addGlobalBadStates( globalbadStateNEW );
 			}
 		}
 	}

@@ -85,15 +85,21 @@ class HybridAutomataTest : public ::testing::Test {
 		 * Hybrid Automaton Setup
 		 */
 
-		// Polytope for InitialValuation & Guard Assignment
+		// Polytope for InitialValuation
 		coordinates( 0 ) = 2;
 		coordinates( 1 ) = 3;
 		std::vector<vector_t<Number>> vecSet;
 		vecSet.push_back( coordinates );
 		poly = valuation_t<Number>( vecSet );
 		auto hpoly = Converter<Number>::toHPolytope( poly );
-
 		hybrid.addInitialState( loc1, Condition<Number>( hpoly.matrix(), hpoly.vector() ) );
+
+		// Local bad states: x0 >= 10 in location location2
+		matrix_t<Number> constraints = matrix_t<Number>( 1, 2 );
+		vector_t<Number> constants = vector_t<Number>( 1 );
+		constraints << -1, 0;
+		constants << -10;
+		hybrid.addLocalBadStates( loc2, { constraints, constants } );
 	}
 
 	virtual void TearDown() {

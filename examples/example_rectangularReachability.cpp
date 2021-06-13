@@ -97,14 +97,14 @@ int main() {
 	localBadConstraints << 1, 0, 0, 0, 0, 0, 0, 0;
 	hypro::vector_t<Number> localBadConstants = hypro::vector_t<Number>( 4 );
 	localBadConstants << -10, 0, 0, 0;
-	ha.addLocalBadState( ha.getLocations()[locationMapping[&loc2]], hypro::Condition<Number>( localBadConstraints, localBadConstants ) );
+	ha.addLocalBadStates( ha.getLocations()[locationMapping[&loc2]], hypro::Condition<Number>( localBadConstraints, localBadConstants ) );
 
 	// setup global bad state
 	hypro::matrix_t<Number> globalBadConstraints = hypro::matrix_t<Number>( 4, 2 );
 	globalBadConstraints << 0, 0, -1, 0, 0, 0, 0, 0;
 	hypro::vector_t<Number> globalBadConstants = hypro::vector_t<Number>( 4 );
 	globalBadConstants << 0, -10, 0, 0;
-	// ha.addGlobalBadState( hypro::Condition<Number>( globalBadConstraints, globalBadConstants ) );
+	// ha.addGlobalBadStates( hypro::Condition<Number>( globalBadConstraints, globalBadConstants ) );
 
 	// std::cout << "HA is: " << ha << std::endl;
 
