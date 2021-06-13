@@ -24,7 +24,7 @@ namespace detail {
  * @brief impl that takes a TypeList, can be aliased to take conventional type pack
  * @tparam T the type list
  */
-template<class T>
+template <class T>
 class CEGARAnalyzer_impl;
 
 /**

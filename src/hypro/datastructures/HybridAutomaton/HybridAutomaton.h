@@ -66,16 +66,6 @@ class HybridAutomaton {
 	HybridAutomaton( const HybridAutomaton<Number>& hybrid );
 
 	/**
-     * @brief 		Constructor from locations, transitions and initial states
-     * @param[in]	locs 			Set of locations
-     * @param[in]	trans 			Set of transitions
-     * @param[in] 	initialStates 	Map of initial states
-     */
-	//HybridAutomaton(const Locations& locs, const transitionVector& trans, const locationConditionMap& initialStates);
-	//TODO This is missing
-	//HybridAutomaton( const Locations& locs, const locationConditionMap& initialStates );
-
-	/**
      * @brief 		Destructor
      */
 	virtual ~HybridAutomaton() {}
@@ -144,14 +134,14 @@ class HybridAutomaton {
 		assert( std::find( this->getLocations().begin(), this->getLocations().end(), loc ) != this->getLocations().end() );
 		mInitialStates.emplace( std::make_pair( loc, state ) );
 	}
-	void addLocalBadState( const Location<Number>* loc, const Condition<Number>& condition ) {
+	void addLocalBadStates( const Location<Number>* loc, const Condition<Number>& condition ) {
 #ifndef NDEBUG
 		auto locs = getLocations();
 		assert( std::find( std::begin( locs ), std::end( locs ), loc ) != locs.end() );
 #endif
 		mLocalBadStates.emplace( std::make_pair( loc, condition ) );
 	}
-	void addGlobalBadState( const Condition<Number>& state ) { mGlobalBadStates.push_back( state ); }
+	void addGlobalBadStates( const Condition<Number>& state ) { mGlobalBadStates.push_back( state ); }
 	///@}
 	void removeTransition( Transition<Number>* transitionPtr ) {
 		transitionPtr->getSource()->removeTransition( transitionPtr );
