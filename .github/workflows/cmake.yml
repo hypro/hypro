@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - alpha
+      - fix/cmakeSetup
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
