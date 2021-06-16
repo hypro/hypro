@@ -11,8 +11,9 @@ run_benchmark() {
     $TOOL_PATH $1 > mypipe &
     while IFS= read -r line
     do
-        [[ $line =~ 'Verification took '([0-9]*\.[0-9]*)'s' ]] && runningTime=${BASH_REMATCH[1]}
-        [[ $line =~ 'The model is safe' ]] && safe=${BASH_REMATCH[0]}
+        [[ $line =~ 'Verification: '([0-9]*\.[0-9]*)'s' ]] && runningTime=${BASH_REMATCH[1]}
+        [[ $line =~ 'The model is safe.' ]] && safe=${BASH_REMATCH[0]}
+        #echo $line
     done < mypipe
     echo "Done."
     if [[ $safe ]]
@@ -38,6 +39,9 @@ echo $result >> results_hydra.csv
 
 run_benchmark '-m aff/PLAD01_BND30.model -d 1/4 -r support_function --setting NoBoxReduction --plotoutputformat eps' 'PLAD01' 'BND30'
 echo $result >> results_hydra.csv
+
+#run_benchmark '-m aff/PLAN01_BND50.model -d 1/4 -r support_function --setting NoBoxReduction --plotoutputformat eps' 'PLAN01' 'BND50'
+#echo $result >> results_hydra.csv
 
 run_benchmark '-m aff/heat_5.model -d 1/35 -t 40 -r SFN --setting SupportFunctionNewDefault --plotoutputformat eps' 'HEAT3D' 'HEAT01'
 echo $result >> results_hydra.csv
