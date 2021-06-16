@@ -197,7 +197,7 @@ vector_t<Number> HPolytopeT<Number, Converter, Setting>::computeNormal( std::vec
    * @return Point<Number> vertex for the vector
    */
 template <typename Number, typename Converter, class Setting>
-Point<Number> HPolytopeT<Number, Converter, Setting>::getVertexForVector( vector_t<Number> vector, std::vector<Point<Number>> vertices ) const {
+Point<Number> HPolytopeT<Number, Converter, Setting>::getVertexForVector( const vector_t<Number>& vector, const std::vector<Point<Number>>& vertices ) const {
 	assert( !vertices.empty() );
 	if ( vertices.size() == 1 )
 		return *vertices.begin();

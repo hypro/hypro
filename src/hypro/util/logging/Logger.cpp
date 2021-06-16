@@ -17,9 +17,6 @@ int initializeLogging( int& i ) {
 	( "hypro.worker", carl::logging::LogLevel::LVL_TRACE )
 	( "hypro.reacher.preprocessing", carl::logging::LogLevel::LVL_INFO );
 
-	carl::logging::logger().configure( "logfile_quickhull", "quickhull.log" );
-	carl::logging::logger().filter( "logfile_quickhull" )( "quickhull", carl::logging::LogLevel::LVL_TRACE);
-
 	carl::logging::logger().configure( "stdout", std::cout );
 	carl::logging::logger().filter( "stdout" )
 	( "hypro", carl::logging::LogLevel::LVL_OFF )

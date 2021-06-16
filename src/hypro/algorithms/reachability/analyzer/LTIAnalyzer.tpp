@@ -1,5 +1,8 @@
 #include "LTIAnalyzer.h"
 
+#include <algorithm>
+#include <vector>
+
 namespace hypro {
 
 template <typename State>
@@ -32,22 +35,61 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 				// update reachTree
 
 				// convert local time to global time
-
 				carl::Interval<SegmentInd> const& initialSetDuration = currentNode->getTimings();
 				// add one to upper to convert from segment indices to time points
 				// multiply by timeStepFactor to convert from analyzer specific timeStep to fixedTimeStep
 				carl::Interval<SegmentInd> enabledDuration{ segmentsInterval.lower() * mParameters.timeStepFactor, ( segmentsInterval.upper() + 1 ) * mParameters.timeStepFactor };
 				carl::Interval<TimePoint> globalDuration{ initialSetDuration.lower() + enabledDuration.lower(), initialSetDuration.upper() + enabledDuration.upper() };
 
+				// if desired, try to detect fixed-point
+				bool fixedPointReached = mFixedParameters.detectFixedPoints;
+				auto boundingBox = std::vector<carl::Interval<Number>>{};
+				if ( mFixedParameters.detectFixedPoints ) {
+					boundingBox = Converter<Number>::toBox( valuationSet ).intervals();
+					fixedPointReached = detectFixedPoint( valuationSet, transition->getTarget() );
+				}
+				// in any case add node to the search tree
 				ReachTreeNode<State>& childNode = currentNode->addChild( valuationSet, globalDuration, transition );
-
-				// create Task
-				mWorkQueue.push_front( &childNode );
+				// set bounding box to speed up search in case the option is enabled
+				if ( mFixedParameters.detectFixedPoints ) {
+					childNode.setBoundingBox( boundingBox );
+				}
+				// create Task, push only to queue, in case no fixed-point has been detected or detection is disabled
+				if ( !fixedPointReached ) {
+					mWorkQueue.push_front( &childNode );
+				}
 			}
 		}
 	}
 
 	return { LTISuccess{} };
+}
+
+template <typename State>
+bool LTIAnalyzer<State>::detectFixedPoint( const State& valuationSet, const Location<Number>* loc ) {
+	using Number = typename State::NumberType;
+#ifdef HYPRO_STATISTICS
+	START_BENCHMARK_OPERATION( "Fixed-point detection" );
+#endif
+	std::vector<carl::Interval<Number>> boundingBox = Converter<Number>::toBox( valuationSet ).intervals();
+	for ( auto& root : mRoots ) {
+		for ( auto& node : preorder( root ) ) {
+			const auto& nodeInitialBoundingBox = node.getInitialBoundingBox();
+			// if the location matches and the bounding boxes contain each other, then also perform the (possibly expensive) full containment test.
+			if ( nodeInitialBoundingBox && node.getLocation() == loc && std::equal( std::begin( boundingBox ), std::end( boundingBox ), std::begin( nodeInitialBoundingBox.value() ), std::end( nodeInitialBoundingBox.value() ), []( const auto& setBoxIntv, const auto& initBoxIntv ) { return initBoxIntv.contains( setBoxIntv ); } ) && node.getInitialSet().contains( valuationSet ) ) {
+				TRACE( "hypro.reachability", "Fixed-point detected." );
+				std::cout << "Fixed point detected." << std::endl;
+#ifdef HYPRO_STATISTICS
+				STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
+#endif
+				return true;
+			}
+		}
+	}
+#ifdef HYPRO_STATISTICS
+	STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
+#endif
+	return false;
 }
 
 }  // namespace hypro
