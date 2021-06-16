@@ -19,18 +19,30 @@ template <typename Representation>
 HPolytope<typename Representation::NumberType> composeSubspaceConstraints(
     const std::vector<Representation>& subspaceSets,
     const Condition<typename Representation::NumberType>& dependencies,
+    const Decomposition& decomposition,
     std::size_t clockCount );
 
 template <typename Representation>
 Representation composeSubspaces(
     const std::vector<Representation>& subspaceSets,
     const Condition<typename Representation::NumberType>& dependencies,
+     const Decomposition& decomposition,
     std::size_t clockCount );
 
 template <typename Representation>
-std::pair<Condition<typename Representation::NumberType>, std::vector<Representation>> decompose(
-    const Representation& composedSet,
-    std::size_t clockCount );
+Condition<typename Representation::NumberType> getDependencies( const Representation& composedSet, const Decomposition& decomposition );
+
+template <typename Representation>
+Representation projectOnDimensions( const Representation& composedSet, const std::vector<std::size_t>& dimensions );
+
+template <typename Representation>
+Representation addClocksAndInitial( const Representation& set, std::size_t clockCount );
+
+template <typename Representation>
+bool isDependency( const std::vector<Eigen::Index>& dimensions, const Decomposition& decomposition );
+
+template <typename Representation>
+std::vector<Representation> decompose( const Representation& composedSet, const Decomposition& decomposition, std::size_t clockCount );
 
 
 /**

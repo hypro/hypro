@@ -48,6 +48,9 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
             // get jump successors
             auto [transitionEnabledTime, singularJumpSuccessors] = getSingularJumpSuccessors( workers, transition.get() );
             singularJumpSuccessors = resetClocks( singularJumpSuccessors, clockIndex );
+            for ( std::size_t c = clockIndex + 1; c < mClockCount; ++c ) {
+                transitionEnabledTime.setTimeInterval( c, carl::Interval<Number>( 0, mGlobalTimeHorizon ) );
+            }
             if ( ( transitionEnabledTime.empty() || singularJumpSuccessors.empty() ) && mSingularSubspaces.size() > 0 ) {
                 continue;
             }
@@ -58,12 +61,14 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                 mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ clockIndex + 1, dependencies, childNodes } );
             } else {
                 // complexity reduction
-                Representation composedSuccessors = detail::composeSubspaces( singularJumpSuccessors, dependencies, mClockCount );
+                Representation composedSuccessors = detail::composeSubspaces( singularJumpSuccessors, dependencies, mDecomposition, mClockCount );
                 if ( composedSuccessors.empty() ) {
                     continue;
                 }
-                std::tie( dependencies, singularJumpSuccessors ) = detail::decompose( composedSuccessors, mClockCount );
-                auto childNodes = makeChildrenForClockValues( currentNodes, transition.get(), transitionEnabledTime, singularJumpSuccessors );
+                dependencies = detail::getDependencies( composedSuccessors, mDecomposition );
+                singularJumpSuccessors = detail::decompose( composedSuccessors, mDecomposition, mClockCount );
+
+                auto childNodes = makeChildrenForClockValues( currentNodes, transition.get(), TimeInformation<Number>( mClockCount, Number( 0 ), Number( mGlobalTimeHorizon ) ), singularJumpSuccessors );
                 mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ 0, dependencies, childNodes } );
             }
 
@@ -151,7 +156,7 @@ bool DecompositionalAnalyzer<Representation>::isSafe(
         }
         subspaceSets[ subspace ] = enabledSet;
     }
-    HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( subspaceSets, dependencies, mClockCount );
+    HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( subspaceSets, dependencies, mDecomposition, mClockCount );
     return composedPolytope.empty();
 }
 
@@ -179,7 +184,7 @@ std::vector<ReachTreeNode<Representation>*> DecompositionalAnalyzer<Representati
     for ( auto subspace : mSingularSubspaces ) {
         auto subspaceSuccessor = detail::intersectSegmentWithClock(
             singularSuccessors[ subspace ], clockValues, mClockCount );
-        auto& subspaceChild = currentNodes[ subspace ]->addChild( singularSuccessors[ subspace ], carl::Interval<SegmentInd>( 0, 0 ), transition );
+        auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSuccessor, carl::Interval<SegmentInd>( 0, 0 ), transition );
         child[ subspace ] = &subspaceChild;
     }
     return child;

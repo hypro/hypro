@@ -11,15 +11,16 @@ inline bool isClockedSubspace( const DynamicType dynamics ) {
 namespace detail {
 
 template <typename Representation>
-HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, std::size_t clockCount ) {
+HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, const Decomposition& decomposition, std::size_t clockCount ) {
 
     using Number = typename Representation::NumberType;
-    // variable order in subspace sets: (x_i, x_i^init, c_i^1,...,c_i^clockCount)
-    // variable order in dependencies: (x_1^init,...,x_n^init)
-    // create composed polytope with dimension (dim(S_1) + .. + dim(S_n))
-    // the variables are ordered by concatenating the variables in the subspaces
-    std::size_t subspaceCount = subspaceSets.size();
-    std::size_t compDim = subspaceCount * ( 2 + clockCount );
+    // variable order in subspace sets: x_i1, x_i2,...,x_ik,x_i1^0,...,x_ik^0,c_i^1,...,c_i^clockCount
+    // variable order in dependencies: (x_1^0,...,x_n^init)
+    // create composed polytope with dimension dim(S_1) + ... + dim(S_n)
+    // variable order in composed set: x_1,...,x_n,x_1^0,...,x_n^0,c_1^1,...,c_1^clockCount,c_2^1,..,c_n^clockCount
+
+    std::size_t varCount = std::accumulate( decomposition.subspaces.begin(), decomposition.subspaces.end(), 0,
+        []( std::size_t cur, const auto& subspace ) { return cur + subspace.size(); } );
 
     // number of rows in full poytope
     std::size_t compRows = 0;
@@ -27,140 +28,189 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
         []( std::size_t cur, const auto& sSet ) { return cur + sSet.matrix().rows(); } );
     compRows += dependencies.getMatrix().rows();
     // 2 inequalities for each equation c_1 = c_i in the subspaces i != 1 (per clock c)
-    compRows += 2 * ( clockCount * ( subspaceCount - 1 ) );
+    compRows += 2 * ( clockCount * ( subspaceSets.size() - 1 ) );
+    // number of columns in full polytope
+    std::size_t compDim = std::accumulate( subspaceSets.begin(), subspaceSets.end(), 0,
+        []( std::size_t cur, const auto& segment ) { return cur + segment.dimension(); } );
 
     matrix_t<Number> compMat = matrix_t<Number>::Zero( compRows, compDim );
     vector_t<Number> compVec = vector_t<Number>::Zero( compRows );
-    std::size_t accDim = 0;
-    std::size_t accRows = 0;
 
-    for ( std::size_t i = 0; i < subspaceCount; ++i ) {
+    std::size_t initVarOffset = varCount;
+    std::size_t clockOffset = 2 * varCount;
+    
+
+    std::size_t accRows = 0;
+    for ( std::size_t i = 0; i < subspaceSets.size(); ++i ) {
         auto subspaceMatrix = subspaceSets[ i ].matrix();
         auto subspaceVector = subspaceSets[ i ].vector();
-        compMat.block( accRows, accDim, subspaceMatrix.rows(), subspaceMatrix.cols() ) = subspaceMatrix;
+        auto subspaceVars = decomposition.subspaces[ i ];
         compVec.segment( accRows, subspaceVector.rows() ) = subspaceVector;
-        accDim += subspaceSets[ i ].dimension();
-        accRows += subspaceMatrix.rows();
+        for ( std::size_t row = 0; row < subspaceMatrix.rows(); ++row ) {
+            for ( std::size_t varIndex = 0; varIndex < subspaceVars.size(); ++varIndex ) {
+                compMat( accRows, subspaceVars[ varIndex ] ) = subspaceMatrix( row, varIndex );
+                compMat( accRows, initVarOffset + subspaceVars[ varIndex ] ) = subspaceMatrix( row, subspaceVars.size() + varIndex );
+            }
+            for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
+                compMat( accRows, clockOffset + i*clockCount + clockIndex ) = subspaceMatrix( row, 2 * subspaceVars.size() + clockIndex );
+            }
+            accRows += 1;
+        }
     }
 
     if ( !dependencies.isTrue() ) {
-        assert( dependencies.dimension() == subspaceCount );
+        assert( dependencies.dimension() == varCount );
         // add constraints of dependencies on x_i^init
-        for ( std::size_t i = 0; i < subspaceCount; ++i ) {
-            compMat.block( accRows, i * ( 2 + clockCount ) + 1, dependencies.getMatrix().rows(), 1  ) = dependencies.getMatrix().col( i );
-            compVec.segment( accRows, dependencies.getVector().rows() ) = dependencies.getVector();
-        }
+        compMat.block( accRows, initVarOffset, dependencies.getMatrix().rows(), dependencies.getMatrix().cols() ) = dependencies.getMatrix();
+        compVec.segment( accRows, dependencies.getVector().rows() ) = dependencies.getVector();
         accRows += dependencies.getMatrix().rows();
     }
 
     // add constraints for clock equality
     for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
-        for ( std::size_t subspace = 1; subspace < subspaceCount; ++subspace ) {
-            compMat( accRows, 2 + clockIndex ) = 1;
-            compMat( accRows, subspace * ( 2 + clockCount ) + clockIndex + 2 ) = -1;
-            compMat( accRows + 1, 2 + clockIndex ) = -1;
-            compMat( accRows + 1, subspace * ( 2 + clockCount ) + clockIndex + 2 ) = 1;
+        for ( std::size_t subspace = 1; subspace < decomposition.subspaces.size(); ++subspace ) {
+            compMat( accRows, clockOffset + clockIndex ) = 1;
+            compMat( accRows, clockOffset + subspace * ( clockCount ) + clockIndex ) = -1;
+            compMat( accRows + 1, clockOffset + clockIndex ) = -1;
+            compMat( accRows + 1, clockOffset + subspace * ( clockCount ) + clockIndex ) = 1;
             accRows += 2;
         }
     }
-
     return HPolytope<Number>( compMat, compVec );
 
 }
 
 
 template <typename Representation>
-Representation composeSubspaces( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, std::size_t clockCount ) {
+Representation composeSubspaces( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, const Decomposition& decomposition, std::size_t clockCount ) {
     using Number = typename Representation::NumberType;
 
-    auto pol = composeSubspaceConstraints( subspaceSets, dependencies, clockCount );
-    std::vector<std::size_t> toProject;
-    for ( std::size_t i = 0; i < subspaceSets.size(); ++i ) {
-        toProject.push_back( i * ( 2 + clockCount ) );
+    auto pol = composeSubspaceConstraints( subspaceSets, dependencies, decomposition, clockCount );
+    std::size_t varCount = std::accumulate( decomposition.subspaces.begin(), decomposition.subspaces.end(), 0,
+        []( std::size_t cur, const auto& subspace ) { return cur + subspace.size(); } );
+    std::vector<std::size_t> varIndices( varCount );
+    for ( std::size_t i = 0; i < varIndices.size(); ++i ) {
+        varIndices[ i ] = i;
     }
-    std::vector<std::size_t> projectOut;
-    for ( std::size_t i = pol.dimension() - 1;; --i ) {
-        if ( std::find( toProject.begin(), toProject.end(), i ) == toProject.end() ) {
-            projectOut.push_back( i );
-        }
-        if ( i == 0 ) { break; }
-    }
-    pol = pol.projectOut( projectOut );
-    Representation res;
-    convert( pol, res );
-    return res;
+    Representation comp;
+    convert( pol, comp );
+    return projectOnDimensions( comp, varIndices );
 }
 
 template <typename Representation>
-std::pair<Condition<typename Representation::NumberType>, std::vector<Representation>> decompose( const Representation& composedSet, std::size_t clockCount ) {
+Condition<typename Representation::NumberType> getDependencies( const Representation& composedSet, const Decomposition& decomposition ) {
     using Number = typename Representation::NumberType;
-
     if ( composedSet.empty() ) {
         assert( false && "Decompose called with empty set" );
     }
-    // distribute rows among subspaces. If a row has multiple nonzero entries, it is a dependency between subspaces
+
     std::vector<Eigen::Index> depIndices;
-    std::vector<std::vector<Eigen::Index>> subspaceIndices( composedSet.dimension() );
-    for ( Eigen::Index row = 0; row < composedSet.matrix().rows(); ++row ) {
-        Eigen::Index nonZeroSubspace = -1;
-        bool allZero = true;
-        bool dependency = false;
-        for ( std::size_t col = 0; col < composedSet.matrix().cols(); ++col ) {
-            if ( composedSet.matrix()( row, col ) != 0 ) {
-                if ( !allZero ) {
-                    dependency = true;
-                    break;
-                } else {
-                    nonZeroSubspace = col;
-                    allZero = false;
-                }
+    auto composedMatrix = composedSet.matrix();
+    for( Eigen::Index row = 0; row < composedMatrix.rows(); ++row ) {
+        std::vector<Eigen::Index> nonZeroCols;
+        for ( Eigen::Index col = 0; col < composedMatrix.cols(); ++col ) {
+            if ( composedMatrix( row, col ) != 0 ) {
+                nonZeroCols.push_back( col );
             }
         }
-        if ( !dependency ) {
-            assert( nonZeroSubspace >= 0 );
-            subspaceIndices[ nonZeroSubspace ].push_back( row );
-        } else {
+        if ( isDependency<Representation>( nonZeroCols, decomposition ) ) {
             depIndices.push_back( row );
         }
-    }
-
-    std::vector<Representation> subspaceSets( composedSet.dimension() );
-    for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
-        vector_t<Number> subspaceDirection = vector_t<Number>::Zero( composedSet.dimension() );
-        subspaceDirection( subspace ) = 1;
-        Number subspaceUpper = composedSet.evaluate( subspaceDirection ).supportValue;
-        Number subspaceLower = -1 * composedSet.evaluate( -1 * subspaceDirection ).supportValue;
-
-        matrix_t<Number> subspaceMatrix = matrix_t<Number>::Zero( 2 * clockCount + 4, clockCount + 2 );
-        vector_t<Number> subspaceVector = vector_t<Number>::Zero( subspaceMatrix.rows() );
-        subspaceMatrix( 0, 0 ) = 1;
-        subspaceMatrix( 1, 0 ) = -1;
-        subspaceVector( 0 ) = subspaceUpper;
-        subspaceVector( 1 ) = -subspaceLower;
-
-        subspaceMatrix( 2, 0 ) = 1;
-        subspaceMatrix( 2, 1 ) = -1;
-        subspaceMatrix( 3, 0 ) = -1;
-        subspaceMatrix( 3, 1 ) = 1;
-
-        std::size_t usedRows = 4;
-        // clocks to zero
-        for ( std::size_t clock = 0; clock < clockCount; ++clock ) {
-            subspaceMatrix( usedRows, 2 + clock ) = 1;
-            subspaceMatrix( usedRows + 1, 2 + clock ) = -1;
-            usedRows += 2;
-        }
-        subspaceSets[ subspace ] = Representation{ subspaceMatrix, subspaceVector };
     }
 
     matrix_t<Number> depMatrix( depIndices.size(), composedSet.dimension() );
     vector_t<Number> depVector( depIndices.size() );
     for ( std::size_t row = 0; row < depIndices.size(); ++row ) {
-        depMatrix.row( row ) = composedSet.matrix().row( depIndices[ row ] );
+        depMatrix.row( row ) = composedMatrix.row( depIndices[ row ] );
         depVector( row ) = composedSet.vector()( depIndices[ row ] );
     }
     Condition<Number> dependencies( depMatrix, depVector );
-    return std::make_pair( dependencies, subspaceSets );
+    return dependencies;
+
+}
+
+template <typename Representation>
+bool isDependency( const std::vector<Eigen::Index>& dimensions, const Decomposition& decomposition ) {
+    if ( dimensions.size() == 0 ) {
+        return false;
+    }
+    std::vector<std::vector<std::size_t>> subspaces = decomposition.subspaces;
+    std::set<std::size_t> involvedSubspaces;
+    for ( auto dim : dimensions ) {
+        for ( std::size_t subspace = 0; subspace < subspaces.size(); ++subspace ) {
+            if ( std::find( subspaces[ subspace ].begin(), subspaces[ subspace ].end(), dim ) != subspaces[ subspace ].end() ) {
+                involvedSubspaces.insert( subspace );
+            }
+        }
+    }
+    return involvedSubspaces.size() > 1;
+}
+
+
+template <typename Representation>
+std::vector<Representation> decompose( const Representation& composedSet, const Decomposition& decomposition, std::size_t clockCount ) {
+
+    if ( composedSet.empty() ) {
+        assert( false && "Decompose called with empty set" );
+    }
+
+    std::vector<Representation> subspaceSets( decomposition.subspaces.size() );
+    for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
+        auto projectedSet = projectOnDimensions( composedSet, decomposition.subspaces[ subspace ] );
+        subspaceSets[ subspace ] = addClocksAndInitial( projectedSet, clockCount );
+    }
+    return subspaceSets;
+}
+
+template <typename Representation>
+Representation projectOnDimensions( const Representation& composedSet, const std::vector<std::size_t>& dimensions ) {
+    using Number = typename Representation::NumberType;
+
+    std::vector<std::size_t> toProjectOut( composedSet.dimension() - dimensions.size() );
+    std::size_t i = 0;
+    for ( std::size_t dim = 0; dim < composedSet.dimension(); ++dim ) {
+        if ( std::find( dimensions.begin(), dimensions.end(), dim ) == dimensions.end() ) {
+            toProjectOut[ toProjectOut.size() - ( i + 1 ) ] = dim;
+            ++i;
+        }
+    }
+
+    HPolytope<Number> composedPolytope;
+    convert( composedSet, composedPolytope );
+    composedPolytope = composedPolytope.projectOut( toProjectOut );
+    Representation res;
+    convert( composedPolytope, res );
+    return res;
+}
+
+template <typename Representation>
+Representation addClocksAndInitial( const Representation& set, std::size_t clockCount ) {
+    using Number = typename Representation::NumberType;
+
+    matrix_t<Number> newMat = matrix_t<Number>::Zero( set.matrix().rows() + 2 * set.dimension() + 2 * clockCount, 2 * set.dimension() + clockCount );
+    vector_t<Number> newVec = vector_t<Number>::Zero( set.matrix().rows() + 2 * set.dimension() + 2 * clockCount );
+
+    newMat.topLeftCorner( set.matrix().rows(), set.matrix().cols() ) = set.matrix();
+    newVec.head( set.vector().rows() ) = set.vector();
+
+    std::size_t nextRow = set.matrix().rows();
+    for ( std::size_t varIndex = 0; varIndex < set.dimension(); ++varIndex ) {
+        newMat( nextRow, varIndex ) = 1;
+        newMat( nextRow, set.dimension() + varIndex ) = -1;
+        newMat( nextRow + 1, varIndex ) = -1;
+        newMat( nextRow + 1, set.dimension() + varIndex ) = 1;
+        nextRow += 2;
+    }
+    for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
+        newMat( nextRow, 2 * set.dimension() + clockIndex ) = 1;
+        newMat( nextRow + 1, 2 * set.dimension() + clockIndex ) = -1;
+        nextRow += 2;
+    }
+
+    HPolytope<Number> resPolytope( newMat, newVec );
+    Representation res;
+    convert( resPolytope, res );
+    return res;
 }
 
 template <typename Representation>
