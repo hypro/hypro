@@ -17,11 +17,12 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation>>;
 
-	Location<Number> const* mLocation;		  ///< location in which the flowpipe was computed
-	Transition<Number> const* mTransition{};  ///< the transition which lead here. nullptr for roots
-	std::vector<Representation> mFlowpipe{};  ///< contains computed flowpipe
-	Representation mInitialSet;				  ///< contains initial set for the flowpipe
-	carl::Interval<SegmentInd> mTimings{};	  ///< global time covered by inital set (used as offset)
+	Location<Number> const* mLocation;										   ///< location in which the flowpipe was computed
+	Transition<Number> const* mTransition{};								   ///< the transition which lead here. nullptr for roots
+	std::vector<Representation> mFlowpipe{};								   ///< contains computed flowpipe
+	Representation mInitialSet;												   ///< contains initial set for the flowpipe
+	carl::Interval<SegmentInd> mTimings{};									   ///< global time covered by inital set (used as offset)
+	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
 
   public:
 	//Exposition types
@@ -93,6 +94,9 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	 * TODO Implement
      */
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
+
+	void setBoundingBox( const std::vector<carl::Interval<Number>>& intervals ) { mInitialBoundingBox = intervals; }
+	const std::optional<std::vector<carl::Interval<Number>>>& getInitialBoundingBox() const { return mInitialBoundingBox; };
 };
 
 template <typename Representation>

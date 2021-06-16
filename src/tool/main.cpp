@@ -3,10 +3,10 @@
 #include "preprocessing/preprocessing.h"
 #include "reachability/analysis.h"
 
+#include <hypro/datastructures/HybridAutomaton/StateUtil.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 #include <hypro/util/logging/Logger.h>
 #include <hypro/util/plotting/Plotter.h>
-#include <hypro/datastructures/HybridAutomaton/StateUtil.h>
 
 using namespace hydra;
 using namespace hypro;
