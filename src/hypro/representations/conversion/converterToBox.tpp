@@ -432,3 +432,11 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Supp
 }
 
 }  // namespace hypro
+/*
+template<typename Number>
+template<typename BoxSetting, typename inSetting>
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return BoxT<Number,Converter<Number>,BoxSetting>();
+}
+*/
+

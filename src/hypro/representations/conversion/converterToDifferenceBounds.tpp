@@ -151,3 +151,10 @@ DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting> Converter<Nu
 //}
 
 } // namespace hypro
+/*
+template<typename Number>
+template<typename DifferenceBoundsSetting, typename inSetting>
+DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting> Converter<Number>::toDifferenceBounds( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting>();
+}
+*/

@@ -73,6 +73,8 @@ TYPED_TEST_CASE( VertexTest, allTypes );
 TYPED_TEST_CASE( HybridAutomataParallelCompositionTest, allTypes );
 
 // Representations
+TYPED_TEST_CASE( StarsetTest, allTypes );
+
 TYPED_TEST_CASE( BoxTest, allTypes );
 TYPED_TEST_CASE( CarlPolytopeTest, rationalTypes );
 TYPED_TEST_CASE( ConverterTest, allTypes );

@@ -654,3 +654,11 @@ ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonot
 //}
 
 }  // namespace hypro
+/*
+template<typename Number>
+template<typename ZonotopeSetting, typename inSetting>
+ZonotopeT<Number,Converter<Number>,ZonotopeSetting> Converter<Number>::toZonotope( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return ZonotopeT<Number,Converter<Number>,ZonotopeSetting>();
+}
+
+*/

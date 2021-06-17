@@ -65,3 +65,10 @@ void convert( const In& in, PolytopeT<Number, Converter<Number>, OutSettings>& o
 #endif
 
 }  // namespace hypro
+/*
+template<typename Number, typename OutSettings, typename In>
+void convert(const In& in, StarsetT<Number,Converter<Number>,OutSettings>& out) {
+	out = Converter<Number>::template toStarset<OutSettings>(in); 
+}
+*/
+//} // hypro

@@ -49,4 +49,11 @@ using TemplatePolyhedron = typename Converter<Number>::TemplatePolyhedron;
 //template<typename Number>
 //using Orthoplex = typename Converter<Number>::Orthoplex;
 
+
+/**
+ * Typedef for StarsetT
+ */
+template<typename Number>
+using Starset = typename Converter<Number>::Starset;
+
 } // namespace hypro

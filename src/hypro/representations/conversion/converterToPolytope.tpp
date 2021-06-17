@@ -108,3 +108,10 @@ PolytopeT<Number,Converter,PolytopeSetting> Converter<Number>::toPolytope(const 
 }
 
 }  // namespace hypro
+/*
+template<typename Number>
+template<typename PolytopeSetting, typename inSetting>
+PolytopeT<Number,Converter<Number>,PolytopeSetting> Converter<Number>::toPolytope( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return PolytopeT<Number,Converter<Number>,PolytopeSetting>();
+}
+*/

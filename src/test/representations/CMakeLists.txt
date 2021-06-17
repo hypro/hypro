@@ -13,6 +13,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		PolytopeSupportFunctionTest.cpp
 		SupportFunctionTest.cpp
 		#TaylorModelTest.cpp
+        StarsetTest.cpp
 		VPolytopeTest.cpp
 		ZonotopeTest.cpp
 		SupportFunctionNewTest.cpp
