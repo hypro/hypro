@@ -2,7 +2,8 @@ set(hypro_VERSION @hypro_VERSION@)
 
 get_filename_component(@TARGET@_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-@DEPENDENT_TARGETS@
+include(CMakeFindDependencyMacro)
+find_dependency(carl)
 
 # Our library dependencies (contains definitions for IMPORTED targets)
 if(NOT TARGET @TARGET@ AND NOT @TARGET@_BINARY_DIR)
