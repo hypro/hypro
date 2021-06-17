@@ -10,6 +10,7 @@ on:
       - master
       - alpha
       - hypro-sonarcloud
+      - fix/coverage
 
 jobs:
   sonarcloud:
@@ -29,7 +30,6 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
         run: git clone --depth 1 --branch 19.10 https://github.com/smtrat/carl carl && sudo apt install libeigen3-dev uuid-dev
-
 
       - name: Download & Unzip Build-wrapper & scanner
         shell: bash
@@ -59,7 +59,7 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies/carl/build
         #  if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: cmake --build . --config $BUILD_TYPE -j 3 --target carl
+        run: cmake --build . -j 3 --target carl
 
       - name: Configure Project
         working-directory: ${{runner.workspace}}/hypro
@@ -83,4 +83,3 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: ${{runner.workspace}}/hypro
         run: ${{runner.workspace}}/dependencies/sonar-scanner-4.5.0.2216-linux/bin/sonar-scanner -X
-
