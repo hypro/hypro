@@ -95,10 +95,16 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::proje
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::linearTransformation( const matrix_t<Number>& A ) const {
+    matrix_t<Number> newGenerator = matrix_t<Number>(mGenerator.rows(),mGenerator.cols());
+    newGenerator=A*mGenerator;
+    return StarsetT<Number, Converter, Setting>(mCenter,mShapeMatrix,mLimits,newGenerator);
 }
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+    vector_t<Number> newCenter=mCenter + b;
+    matrix_t<Number> newGenerator=A*mGenerator;
+    return StarsetT<Number, Converter, Setting>(newCenter,mShapeMatrix,mLimits,newGenerator);
 }
 
 template <typename Number, typename Converter, typename Setting>
