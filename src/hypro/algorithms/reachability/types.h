@@ -68,7 +68,7 @@ class TimeInformation {
   		} );
   	}
   	TimeInformation<Number> intersect( const TimeInformation<Number>& rhs ) const {
-  		assert( rhs.clockCount() == this->clockCount() && "can't intersect timings with different clock count" );
+  		assert( rhs.clockCount() == this->clockCount() && "cannot intersect timings with different clock count" );
   		TimeIntervals intersectedTimes( rhs.clockCount() );
   		for ( std::size_t clockIndex = 0; clockIndex < rhs.clockCount(); ++clockIndex ) {
   			carl::Interval<Number> rhsInterval = rhs.getTimeInterval( clockIndex );
@@ -77,6 +77,17 @@ class TimeInformation {
   		}
   		return TimeInformation<Number>( intersectedTimes );
   	}
+
+    TimeInformation<Number> unite( const TimeInformation<Number>& rhs ) const {
+      assert( rhs.clockCount() == this->clockCount() && "cannot compute union of timings with different clock count" );
+      TimeIntervals unionTimes( rhs.clockCount() );
+      for ( std::size_t clockIndex = 0; clockIndex < rhs.clockCount(); ++clockIndex ) {
+        carl::Interval<Number> rhsInterval = rhs.getTimeInterval( clockIndex );
+        carl::Interval<Number> lhsInterval = this->getTimeInterval( clockIndex );
+        unionTimes[ clockIndex ] = carl::Interval<Number>( std::min( rhsInterval.lower(), lhsInterval.lower() ), std::max( rhsInterval.upper(), lhsInterval.upper() ) );
+      }
+      return TimeInformation<Number>( unionTimes );
+    }
 
   protected:
 	TimeIntervals mTimeIntervals;
