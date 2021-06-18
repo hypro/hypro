@@ -4,7 +4,8 @@ namespace hypro {
 
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
-    auto workers = initializeWorkers();
+    std::vector<TimeTransformationCache<Number>> cache( mDecomposition.subspaces.size(), TimeTransformationCache<Number>() );
+    auto workers = initializeWorkers( cache );
 
     while ( !mWorkQueue.empty() ) {
         auto nextInQueue = mWorkQueue.front();
@@ -49,7 +50,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
             auto [transitionEnabledTime, singularJumpSuccessors] = getSingularJumpSuccessors( workers, transition.get() );
             singularJumpSuccessors = resetClocks( singularJumpSuccessors, clockIndex );
             for ( std::size_t c = clockIndex + 1; c < mClockCount; ++c ) {
-                transitionEnabledTime.setTimeInterval( c, carl::Interval<Number>( 0, mGlobalTimeHorizon ) );
+                transitionEnabledTime.setTimeInterval( c, carl::Interval<Number>( Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) ) );
             }
             if ( ( transitionEnabledTime.empty() || singularJumpSuccessors.empty() ) && mSingularSubspaces.size() > 0 ) {
                 continue;
@@ -68,7 +69,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                 dependencies = detail::getDependencies( composedSuccessors, mDecomposition );
                 singularJumpSuccessors = detail::decompose( composedSuccessors, mDecomposition, mClockCount );
 
-                auto childNodes = makeChildrenForClockValues( currentNodes, transition.get(), TimeInformation<Number>( mClockCount, Number( 0 ), Number( mGlobalTimeHorizon ) ), singularJumpSuccessors );
+                auto childNodes = makeChildrenForClockValues( currentNodes, transition.get(), mGlobalTimeInterval, singularJumpSuccessors );
                 mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ 0, dependencies, childNodes } );
             }
 
@@ -79,7 +80,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
 
 
 template <typename Representation>
-auto DecompositionalAnalyzer<Representation>::initializeWorkers() -> std::vector<WorkerVariant> {
+auto DecompositionalAnalyzer<Representation>::initializeWorkers( std::vector<TimeTransformationCache<Number>>& cache ) -> std::vector<WorkerVariant> {
     std::vector<WorkerVariant> workers;
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
         switch( mDecomposition.subspaceTypes[ subspace ] ) {
@@ -91,8 +92,11 @@ auto DecompositionalAnalyzer<Representation>::initializeWorkers() -> std::vector
                                                                     subspace } );
                 break;
             default:
-                assert( false && "Only singular decompositional analysis supported" );
-                break;
+                workers.push_back( LTIWorker<Representation>{ 
+                    *mHybridAutomaton,
+                    mParameters,
+                    mFixedParameters.localTimeHorizon,
+                    cache[ subspace ] } );
         }
     }
     return workers;
@@ -110,7 +114,7 @@ bool DecompositionalAnalyzer<Representation>::checkConsistency( NodeVector& curr
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::computeTimeSuccessorsGetEnabledTime(
   NodeVector& currentNodes, std::vector<WorkerVariant>& workers ) -> TimeInformation<Number> {
-    TimeInformation<Number> invariantSatTime( mClockCount, Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );
+    TimeInformation<Number> invariantSatTime = mGlobalTimeInterval;
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
         TimeInformation<Number> invariantSatTimeSubspace = std::visit( detail::computeTimeSuccessorVisitor<Representation>{
             currentNodes[ subspace ], mClockCount }, workers[ subspace ] );
@@ -146,24 +150,49 @@ void DecompositionalAnalyzer<Representation>::intersectSubspacesWithClock(
 template <typename Representation>
 bool DecompositionalAnalyzer<Representation>::isSafe(
   const NodeVector& currentNodes, const Condition<Number>& dependencies, const Condition<Number>& badState ) {
-    RepVector subspaceSets( mDecomposition.subspaces.size() );
-    for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
-        auto flowpipe = currentNodes[ subspace ]->getFlowpipe();
-        assert( flowpipe.size() == 1 );
-        auto [containment, enabledSet] = intersect( flowpipe[ 0 ], badState, subspace );
-        if ( containment == CONTAINMENT::NO ) {
-            return true;
+
+    std::size_t segmentIndex = 0;
+    while ( true ) {
+        RepVector subspaceSets( mDecomposition.subspaces.size() );
+        Representation segment;
+        bool empty = false;
+        bool moreSegments = false;
+        for ( std::size_t subspace = 0; subspace < currentNodes.size(); ++subspace ) {
+            auto flowpipe = currentNodes[ subspace ]->getFlowpipe();
+            if ( isClockedSubspace( mDecomposition.subspaceTypes[ subspace ] ) ) {
+                segment = flowpipe[ 0 ];
+            } else {
+                moreSegments = true;
+                if ( segmentIndex >= flowpipe.size() ) {
+                    return true;
+                }
+                segment = flowpipe[ segmentIndex ];
+            }
+            auto [ containment, enabledSet ] = intersect( segment, badState, subspace );
+            if ( containment == CONTAINMENT::NO ) {
+                empty = true;
+                break;
+            }
+            subspaceSets[ subspace ] = enabledSet;
         }
-        subspaceSets[ subspace ] = enabledSet;
+        if ( !empty ) {
+            HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( subspaceSets, dependencies, mDecomposition, mClockCount );
+            if ( !composedPolytope.empty() ) {
+                return false;
+            }
+        }
+        if ( !moreSegments ) {
+            break;
+        }
+        segmentIndex++;
     }
-    HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( subspaceSets, dependencies, mDecomposition, mClockCount );
-    return composedPolytope.empty();
+    return true;
 }
 
 template <typename Representation>
 auto DecompositionalAnalyzer<Representation>::getSingularJumpSuccessors(
   std::vector<WorkerVariant>& workers, Transition<Number>* transition ) -> std::pair<TimeInformation<Number>, RepVector> {
-    TimeInformation<Number> enabledTime( mClockCount, Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );
+    TimeInformation<Number> enabledTime = mGlobalTimeInterval;
     RepVector singularSuccessors( mSingularSubspaces.size() );
     for ( auto subspace : mSingularSubspaces ) {
         auto subspaceSuccessorSet = std::visit( detail::getSingularJumpSuccessorVisitor<Representation>{ transition }, workers[ subspace ] );

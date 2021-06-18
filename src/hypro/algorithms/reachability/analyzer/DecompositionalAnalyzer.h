@@ -57,7 +57,7 @@ struct computeTimeSuccessorVisitor {
         worker.computeTimeSuccessors( *task, false );
         auto& flowpipe = task->getFlowpipe();
         flowpipe.insert( flowpipe.begin(), worker.getFlowpipe().begin(), worker.getFlowpipe().end() );
-        // the second segment covers the entire time interval
+        // the first segment covers the entire time interval
         if ( flowpipe.size() == 0 ) {
             // invariant is initially violated
             return TimeInformation<Number>( clockCount );
@@ -67,8 +67,12 @@ struct computeTimeSuccessorVisitor {
         return detail::getClockValues( flowpipe[0], clockCount );
     }
     TimeInformation<Number> operator()( LTIWorker<Representation>& worker ) {
-        assert( false && "Only singular dynamics supported for decompositional analysis" );
-        return TimeInformation<Number>{};
+        worker.computeTimeSuccessors( task->getInitialSet(), task->getLocation(), std::back_inserter( task->getFlowpipe() ), false );
+        if ( task->getFlowpipe().size() == 0 ) {
+            return TimeInformation<Number>( clockCount );
+        }
+        return detail::getClockValues( task->getFlowpipe()[ 0 ], clockCount ).unite( 
+               detail::getClockValues( task->getFlowpipe()[ task->getFlowpipe().size() - 1 ], clockCount ) );
     }
     TimeInformation<Number> operator()( RectangularWorker<Representation>& ) {
         // Todo: rectangular worker. Should be very similar to singular case
@@ -203,7 +207,7 @@ class DecompositionalAnalyzer {
      * @brief       Initialize workers for the subspaces.
      * @return      The initizalized workers as vector of variants.
      */
-    auto initializeWorkers() -> std::vector<WorkerVariant>;
+    auto initializeWorkers( std::vector<TimeTransformationCache<Number>>& cache ) -> std::vector<WorkerVariant>;
 
     /**
      * @brief       Pre-computational check that nodes are consistent (e.g. no initial set is empty).
@@ -289,6 +293,7 @@ class DecompositionalAnalyzer {
     std::vector<std::size_t> mSingularSubspaces;     // holds the singular subspace indices
 
     tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 )*mFixedParameters.localTimeHorizon;
+    TimeInformation<Number> const mGlobalTimeInterval = TimeInformation<Number>( mClockCount, Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );
 };
 
 }  // namespace hypro
