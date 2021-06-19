@@ -67,6 +67,7 @@ std::vector<EvaluationResult<Number>> StarsetT<Number, Converter, Setting>::mult
 
 template <typename Number, typename Converter, typename Setting>
 std::size_t StarsetT<Number, Converter, Setting>::dimension() const {
+    return mGenerator.rows();
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -117,6 +118,17 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
+    matrix_t<Number> newmShapeMatrix=matrix_t<Number>(mShapeMatrix.rows()+1,mShapeMatrix.cols()); //rows+1 to add the halfspace constraint
+    vector_t<Number> newmLimits=vector_t<Number>(mLimits.rows()+1);
+    newmShapeMatrix.block(0,0,mShapeMatrix.rows(),mShapeMatrix.cols())=mShapeMatrix;
+    newmLimits.head(mLimits.rows())=mLimits;
+    newmShapeMatrix.block(newmShapeMatrix.rows()-1,0, 1,mShapeMatrix.cols())=(hspace.normal().transpose()*mGenerator);
+    //added the right side here
+    matrix_t<Number> temp=matrix_t<Number>(1,1);
+    temp(0,0)=hspace.offset();
+    newmLimits(newmLimits.rows()-1)=(temp-(hspace.normal().transpose())*(mCenter))(0,0);
+    
+    return StarsetT<Number, Converter, Setting>(mCenter,newmShapeMatrix,newmLimits,mGenerator);
 }
 
 template <typename Number, typename Converter, typename Setting>

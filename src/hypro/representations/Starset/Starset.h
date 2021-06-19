@@ -31,6 +31,7 @@ class StarsetT : private GeometricObjectBase {
 	/***************************************************************************
    * Members
    **************************************************************************/
+    //A*alpha<=d
     vector_t<Number> mCenter;
     //center of the star domain
     matrix_t<Number> mGenerator;

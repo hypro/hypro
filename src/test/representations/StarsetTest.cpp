@@ -38,7 +38,7 @@ TYPED_TEST(StarsetTest, Constructor){
     EXPECT_NE(myStar.limits(),myStar2.limits() );
 }
 
-TYPED_TEST(StarsetTest, Linear){
+TYPED_TEST(StarsetTest, LinearandDimension){
     hypro::vector_t<TypeParam> center=hypro::vector_t<TypeParam>(2);
     hypro::vector_t<TypeParam> Limits=hypro::vector_t<TypeParam>(4);
     hypro::matrix_t<TypeParam> Generator=hypro::matrix_t<TypeParam>(2,2);
@@ -57,7 +57,8 @@ TYPED_TEST(StarsetTest, Linear){
     
     hypro::matrix_t<TypeParam> transformedgen=hypro::matrix_t<TypeParam>(2,2);
     transformedgen<<1,2,1,2;
-    EXPECT_EQ(myStar2.generator(),transformedgen);    
+    EXPECT_EQ(myStar2.generator(),transformedgen);
+    EXPECT_EQ(myStar2.dimension(),2);
 }
 
 TYPED_TEST(StarsetTest, Affine){
@@ -77,9 +78,27 @@ TYPED_TEST(StarsetTest, Affine){
     hypro::vector_t<TypeParam> offset=hypro::vector_t<TypeParam>(2);
     offset<<1,1;
     hypro::Starset<TypeParam> myStar2=myStar1.affineTransformation(transmat, offset);
-    
     hypro::matrix_t<TypeParam> transformedgen=hypro::matrix_t<TypeParam>(2,2);
     transformedgen<<1,2,1,2;
     EXPECT_EQ(myStar2.generator(),transformedgen);
     EXPECT_EQ(myStar2.center(),offset+center);
+}
+TYPED_TEST(StarsetTest, HalfspaceIntersection){
+    hypro::Halfspace<TypeParam> halff= hypro::Halfspace<TypeParam>({1,1},3);     hypro::vector_t<TypeParam> center=hypro::vector_t<TypeParam>(2);
+    hypro::vector_t<TypeParam> Limits=hypro::vector_t<TypeParam>(4);
+    hypro::matrix_t<TypeParam> Generator=hypro::matrix_t<TypeParam>(2,2);
+    hypro::matrix_t<TypeParam> ShapeMatrix=hypro::matrix_t<TypeParam>(4,2);
+    // hypro::Starset<TypeParam>(center,ShapeMatrix,Limits,Generator);
+    center<<3,3;
+    Limits<<1,1,1,1;
+    Generator<<1,0,0,1;
+    ShapeMatrix<<1,0,-1,0,0,1,0,-1;
+    hypro::Starset<TypeParam> myStar1= hypro::Starset<TypeParam>(center,ShapeMatrix,Limits,Generator);
+    hypro::Starset<TypeParam> myStar2=myStar1.intersectHalfspace(halff);
+    hypro::matrix_t<TypeParam> shapecheck=hypro::matrix_t<TypeParam>(5,2);
+    hypro::vector_t<TypeParam> limitcheck=hypro::matrix_t<TypeParam>(5,2);
+    shapecheck<<1,0,-1,0,0,1,0,-1,1,1;
+    limitcheck<<1,1,1,1,-3;
+    EXPECT_EQ(myStar2.shape(),shapecheck);
+    EXPECT_EQ(myStar2.limits(),limitcheck);
 }
