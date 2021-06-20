@@ -133,10 +133,19 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+    StarsetT<Number, Converter, Setting> star= StarsetT<Number, Converter, Setting>(mCenter,mShapeMatrix,mLimits,mGenerator);
+    for(int i=0;i<_mat.rows();i++){
+        star=star.intersectHalfspace(Halfspace<Number>(_mat.row(i),_vec(i)));
+    }
+    return star;
 }
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
+    vector_t temp=point.rawCoordinates();
+    if(mShapeMatrix*()<=mLimits)
+        return true;
+    else false;
 }
 
 template <typename Number, typename Converter, typename Setting>

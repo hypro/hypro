@@ -83,8 +83,9 @@ TYPED_TEST(StarsetTest, Affine){
     EXPECT_EQ(myStar2.generator(),transformedgen);
     EXPECT_EQ(myStar2.center(),offset+center);
 }
-TYPED_TEST(StarsetTest, HalfspaceIntersection){
-    hypro::Halfspace<TypeParam> halff= hypro::Halfspace<TypeParam>({1,1},3);     hypro::vector_t<TypeParam> center=hypro::vector_t<TypeParam>(2);
+TYPED_TEST(StarsetTest, HalfspaceIntersection_s){
+    hypro::Halfspace<TypeParam> halff= hypro::Halfspace<TypeParam>({1,1},3);    
+    hypro::vector_t<TypeParam> center=hypro::vector_t<TypeParam>(2);
     hypro::vector_t<TypeParam> Limits=hypro::vector_t<TypeParam>(4);
     hypro::matrix_t<TypeParam> Generator=hypro::matrix_t<TypeParam>(2,2);
     hypro::matrix_t<TypeParam> ShapeMatrix=hypro::matrix_t<TypeParam>(4,2);
@@ -101,4 +102,11 @@ TYPED_TEST(StarsetTest, HalfspaceIntersection){
     limitcheck<<1,1,1,1,-3;
     EXPECT_EQ(myStar2.shape(),shapecheck);
     EXPECT_EQ(myStar2.limits(),limitcheck);
+    hypro::Starset<TypeParam> myStar3=myStar2.intersectHalfspace(halff);
+    hypro::matrix_t<TypeParam> matt=hypro::matrix_t<TypeParam>(2,2);
+    matt<<1,1,1,1;
+    hypro::vector_t<TypeParam> vecc=hypro::vector_t<TypeParam>(4);
+    vecc<<3,3;
+    hypro::Starset<TypeParam> myStar4=myStar1.intersectHalfspaces(matt,vecc);
+    EXPECT_EQ(myStar3.shape(),myStar4.shape());
 }
