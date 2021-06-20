@@ -110,6 +110,22 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affin
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minkowskiSum( const StarsetT<Number, Converter, Setting>& rhs ) const {
+     //assuming same dimension
+    matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(mGenerator.rows()+rhs.generator().rows(),mGenerator.cols()); 
+    matrix_t<Number> newmShapeMatrix=matrix_t<Number>::Zero(mShapeMatrix.rows()+rhs.shape().rows(),mShapeMatrix.cols()+rhs.shape().cols());
+    vector_t<Number> newmLimits=vector_t<Number>::Zero(mLimits.rows()+rhs.limits().rows());
+    //setting new generator matrix
+    newmGenerator.block(0,0,mGenerator.rows(),mGenerator.cols())=mGenerator;
+    newmGenerator.block(mGenerator.rows(), 0 , rhs.generator().rows() , rhs.generator().cols())=rhs.generator();;
+    //setting new shape Matrix matrix
+    newmShapeMatrix.topLeftCorner(mShapeMatrix.rows(),mShapeMatrix.cols())=mShapeMatrix;
+    newmShapeMatrix.bottomRightCorner(rhs.shape().rows(),rhs.shape().cols())=rhs.shape();
+    //setting new limits vector
+    newmLimits.head(mLimits.rows())=mLimits;
+    newmLimits.tail(rhs.limits().rows())=rhs.limits();
+    //setting new center 
+    vector_t<Number> newmCenter=mCenter+rhs.center();
+    return StarsetT<Number, Converter, Setting>(newmCenter,newmShapeMatrix,newmLimits,newmGenerator);
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -142,10 +158,6 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
-    vector_t temp=point.rawCoordinates();
-    if(mShapeMatrix*()<=mLimits)
-        return true;
-    else false;
 }
 
 template <typename Number, typename Converter, typename Setting>
