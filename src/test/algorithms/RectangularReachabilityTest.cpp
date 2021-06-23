@@ -584,3 +584,92 @@ TYPED_TEST( RectangularReachabilityTest, BackwardsTimeComputation ) {
 	EXPECT_FALSE( segment.contains( Point{ -3.4, -10 } ) );
 	EXPECT_FALSE( segment.contains( Point{ -10, -7.9 } ) );
 }
+
+TYPED_TEST( RectangularReachabilityTest, UnderapproximativeBackwardsTimeComputation ) {
+	using Number = typename TypeParam::NumberType;
+	using Matrix = typename hypro::matrix_t<Number>;
+	using Vector = typename hypro::vector_t<Number>;
+	using Point = typename hypro::Point<Number>;
+	auto ha = createRectangularHA3<Number>();
+
+	// the automaton returned is actually a singular automaton. Update the flow for loc1 to a truly rectangular dynamics
+	auto l1ptr = ha.getLocation( "l1" );
+	EXPECT_TRUE( l1ptr != nullptr );
+	std::map<carl::Variable, carl::Interval<Number>> fmap;
+	carl::Interval<Number> flowx = carl::Interval<Number>{ 1, 1 };
+	carl::Interval<Number> flowy = carl::Interval<Number>{ 1, 2 };
+	fmap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flowx;
+	fmap[hypro::VariablePool::getInstance().carlVarByIndex( 1 )] = flowy;
+	l1ptr->setFlow( { hypro::rectangularFlow<Number>{ fmap } } );
+
+	// to make results observable, also make the invariant a unit box scaled by 10
+	Matrix inv_constraints = Matrix::Zero( 4, 2 );
+	inv_constraints( 0, 0 ) = 1;
+	inv_constraints( 1, 0 ) = -1;
+	inv_constraints( 2, 1 ) = 1;
+	inv_constraints( 3, 1 ) = -1;
+	Vector inv_constants = Vector( 4 );
+	inv_constants << 10, 10, 10, 10;
+	l1ptr->setInvariant( { inv_constraints, inv_constants } );
+
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_h;
+
+	hypro::Settings settings{ {},
+							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
+							  { analysisParameters } };
+
+	auto worker = hypro::RectangularWorker<TypeParam>( ha, settings );
+
+	// Create initial set (unit box)
+	Matrix constraints = Matrix::Zero( 4, 2 );
+	constraints( 0, 0 ) = 1;
+	constraints( 1, 0 ) = -1;
+	constraints( 2, 1 ) = 1;
+	constraints( 3, 1 ) = -1;
+	Vector constants = Vector( 4 );
+	constants << 1, 1, 1, 1;
+	TypeParam initialSet{ constraints, constants };
+	// Create timings (dummy)
+	auto timings = carl::Interval<hypro::SegmentInd>{ 0, 2 };
+
+	// Create artificial task for backwards analysis
+	hypro::ReachTreeNode<TypeParam> taskNode{ l1ptr, initialSet, timings };
+
+	auto result = worker.underapproximateTimePredecessors( taskNode );
+	EXPECT_TRUE( result == hypro::REACHABILITY_RESULT::SAFE );
+	EXPECT_TRUE( worker.getFlowpipe().size() >= std::size_t( 1 ) );
+	const auto& segment{ worker.getFlowpipe().front() };
+	std::cout << "Computed segment: " << segment << std::endl;
+	auto& plt = hypro::Plotter<Number>::getInstance();
+	plt.addObject( segment.vertices() );
+	plt.setFilename( "underapproximative_backwards_computation" );
+	plt.plot2d( hypro::PLOTTYPE::png );
+	plt.clear();
+	EXPECT_TRUE( segment.contains( initialSet ) );
+	// check containment of expected vertices in the flowpipe. The initial set is the unit box, the flow is -1 in x and
+	// [1,2] in y. The invariant is the scaled unit box by factor 10. The resulting vertices will be tested.
+	// vertices of the initial set:
+	EXPECT_TRUE( segment.contains( Point{ 1, 1 } ) );
+	EXPECT_TRUE( segment.contains( Point{ -1, 1 } ) );
+	EXPECT_TRUE( segment.contains( Point{ 1, -1 } ) );
+	EXPECT_TRUE( segment.contains( Point{ -1, -1 } ) );
+	// additional vertices of the time successors
+	EXPECT_TRUE( segment.contains( Point{ -6, -7 } ) );
+	// some point truly inside
+	EXPECT_TRUE( segment.contains( Point{ -5, -5.5 } ) );
+	// some point on the boundary
+	EXPECT_TRUE( segment.contains( Point{ -5, -6 } ) );
+	EXPECT_TRUE( segment.contains( Point{ -5, -4 } ) );
+	// check some points close to the set which should not be contained
+	EXPECT_FALSE( segment.contains( Point{ -1, 1.1 } ) );
+	EXPECT_FALSE( segment.contains( Point{ 1, 1.1 } ) );
+	EXPECT_FALSE( segment.contains( Point{ 1.1, 1 } ) );
+	EXPECT_FALSE( segment.contains( Point{ 1.1, -1 } ) );
+	EXPECT_FALSE( segment.contains( Point{ -6, -6.9 } ) );
+	EXPECT_FALSE( segment.contains( Point{ -6, -7.1 } ) );
+	EXPECT_FALSE( segment.contains( Point{ -6.1, -7 } ) );
+	EXPECT_FALSE( segment.contains( Point{ -5.9, -7 } ) );
+}

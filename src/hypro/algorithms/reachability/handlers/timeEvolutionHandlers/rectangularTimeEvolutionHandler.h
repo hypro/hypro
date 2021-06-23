@@ -27,10 +27,22 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTime
 template <typename Number>
 CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number>& badSet, const rectangularFlow<Number>& flow );
 
+template <typename Number>
+CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution( const CarlPolytope<Number>& badSet, const rectangularFlow<Number>& flow );
+
 template <template <typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
 PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTimeEvolution( const PolyhedralRepresentation<Number, Converter, Setting>& badSet, const rectangularFlow<Number>& flow ) {
 	auto convertedSet = Converter::toCarlPolytope( badSet );
 	auto convertedResult = rectangularApplyReverseTimeEvolution( convertedSet, flow );
+	PolyhedralRepresentation<Number, Converter, Setting> res;
+	convert( convertedResult, res );
+	return res;
+}
+
+template <template <typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
+PolyhedralRepresentation<Number, Converter, Setting> rectangularUnderapproximateReverseTimeEvolution( const PolyhedralRepresentation<Number, Converter, Setting>& badSet, const rectangularFlow<Number>& flow ) {
+	auto convertedSet = Converter::toCarlPolytope( badSet );
+	auto convertedResult = rectangularUnderapproximateReverseTimeEvolution( convertedSet, flow );
 	PolyhedralRepresentation<Number, Converter, Setting> res;
 	convert( convertedResult, res );
 	return res;
