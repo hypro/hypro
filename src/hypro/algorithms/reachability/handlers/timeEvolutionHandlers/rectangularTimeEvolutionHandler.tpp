@@ -302,10 +302,10 @@ CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution( const Carl
 	std::vector<carl::Variable> variablesToEliminate;
 	// add variable for time elapse
 	carl::Variable t = vpool.newCarlVariable( "t" );
-	// add constraint t <= 0
-	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::LEQ ) );
+	// add constraint t >= 0
+	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
 
-	TRACE( "hypro.worker", "Added negative time constraint: " << bad );
+	TRACE( "hypro.worker", "Added time constraint: " << bad );
 
 	// introduce post variables and substitute
 	for ( const auto& v : bad.getVariables() ) {
