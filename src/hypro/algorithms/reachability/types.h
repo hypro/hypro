@@ -32,6 +32,12 @@ struct JumpSuccessor {
 	std::vector<TimedValuationSet<Representation>> valuationSets{};
 };
 
+template <typename Representation>
+struct SubspaceJumpSuccessors {
+  carl::Interval<SegmentInd> time{};
+  std::map<std::size_t, Representation> subspaceSets{};
+};
+
 template <typename Number>
 class TimeInformation {
   	using TimeIntervals = std::vector<carl::Interval<Number>>;
