@@ -585,6 +585,7 @@ TYPED_TEST( RectangularReachabilityTest, BackwardsTimeComputation ) {
 	EXPECT_FALSE( segment.contains( Point{ -10, -7.9 } ) );
 }
 
+/*
 TYPED_TEST( RectangularReachabilityTest, UnderapproximativeBackwardsTimeComputation ) {
 	using Number = typename TypeParam::NumberType;
 	using Matrix = typename hypro::matrix_t<Number>;
@@ -673,3 +674,4 @@ TYPED_TEST( RectangularReachabilityTest, UnderapproximativeBackwardsTimeComputat
 	EXPECT_FALSE( segment.contains( Point{ -6.1, -7 } ) );
 	EXPECT_FALSE( segment.contains( Point{ -5.9, -7 } ) );
 }
+*/
