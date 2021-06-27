@@ -43,6 +43,8 @@ class RectangularWorker {
 	REACHABILITY_RESULT computeBackwardReachability( ReachTreeNode<State>& task );
 	REACHABILITY_RESULT computeTimePredecessors( ReachTreeNode<State>& task );
 	REACHABILITY_RESULT underapproximateTimePredecessors( ReachTreeNode<State>& task );
+
+	std::pair<Location<Number>*,State> refineJumpPredecessors( ReachTreeNode<State>& task );
 	void computeJumpPredecessors();
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
 	const JumpSuccessors& getJumpPredecessorSets() const { return mJumpPredecessorSets; }
