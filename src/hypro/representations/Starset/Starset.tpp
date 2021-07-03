@@ -89,7 +89,7 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 }
-
+    
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
 }
@@ -103,7 +103,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::linea
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
-    vector_t<Number> newCenter=mCenter + b;
+    vector_t<Number> newCenter=A*mCenter + b;
     matrix_t<Number> newGenerator=A*mGenerator;
     return StarsetT<Number, Converter, Setting>(newCenter,mShapeMatrix,mLimits,newGenerator);
 }
@@ -111,12 +111,12 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affin
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minkowskiSum( const StarsetT<Number, Converter, Setting>& rhs ) const {
      //assuming same dimension
-    matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(mGenerator.rows()+rhs.generator().rows(),mGenerator.cols()); 
+     matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(mGenerator.rows(),mGenerator.cols()+rhs.generator().cols()); 
     matrix_t<Number> newmShapeMatrix=matrix_t<Number>::Zero(mShapeMatrix.rows()+rhs.shape().rows(),mShapeMatrix.cols()+rhs.shape().cols());
     vector_t<Number> newmLimits=vector_t<Number>::Zero(mLimits.rows()+rhs.limits().rows());
     //setting new generator matrix
     newmGenerator.block(0,0,mGenerator.rows(),mGenerator.cols())=mGenerator;
-    newmGenerator.block(mGenerator.rows(), 0 , rhs.generator().rows() , rhs.generator().cols())=rhs.generator();;
+    newmGenerator.block(0, mGenerator.cols(), rhs.generator().rows() , rhs.generator().cols())=rhs.generator();
     //setting new shape Matrix matrix
     newmShapeMatrix.topLeftCorner(mShapeMatrix.rows(),mShapeMatrix.cols())=mShapeMatrix;
     newmShapeMatrix.bottomRightCorner(rhs.shape().rows(),rhs.shape().cols())=rhs.shape();
