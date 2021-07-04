@@ -110,3 +110,35 @@ TYPED_TEST(StarsetTest, HalfspaceIntersection_s){
     hypro::Starset<TypeParam> myStar4=myStar1.intersectHalfspaces(matt,vecc);
     EXPECT_EQ(myStar3.shape(),myStar4.shape());
 }
+TYPED_TEST(StarsetTest, MinkowskiSum){
+    hypro::vector_t<TypeParam> center=hypro::vector_t<TypeParam>(2);
+    hypro::vector_t<TypeParam> Limits=hypro::vector_t<TypeParam>(4);
+    hypro::matrix_t<TypeParam> Generator=hypro::matrix_t<TypeParam>(2,2);
+    hypro::matrix_t<TypeParam> ShapeMatrix=hypro::matrix_t<TypeParam>(4,2);
+    center<<3,3;
+    Limits<<1,1,1,1;
+    Generator<<1,0,0,1;
+    ShapeMatrix<<1,0,-1,0,0,1,0,-1;
+    hypro::Starset<TypeParam> myStar1= hypro::Starset<TypeParam>(center,ShapeMatrix,Limits,Generator);
+    
+    hypro::vector_t<TypeParam> ncenter=hypro::vector_t<TypeParam>(2);
+    hypro::vector_t<TypeParam> nLimits=hypro::vector_t<TypeParam>(4);
+    hypro::matrix_t<TypeParam> nGenerator=hypro::matrix_t<TypeParam>(2,2);
+    hypro::matrix_t<TypeParam> nShapeMatrix=hypro::matrix_t<TypeParam>(4,2);
+    ncenter<<2,2;
+    nLimits<<1,1,1,1;
+    nGenerator<<1,1,0,-1;
+    nShapeMatrix<<1,1,-1,1,1,1,1,-1;
+    hypro::Starset<TypeParam> myStar2= hypro::Starset<TypeParam>(ncenter,nShapeMatrix,nLimits,nGenerator);
+    
+    hypro::Starset<TypeParam> myStar3=myStar1.minkowskiSum(myStar2);
+    std::cout<<"Generator" <<myStar3.generator()<<std::endl;
+
+    std::cout<<"center" <<myStar3.center()<<std::endl;
+
+    std::cout<<"limits" <<myStar3.limits()<<std::endl;
+
+    std::cout<<"Shape" <<myStar3.shape()<<std::endl;
+    //EXPECT_EQ(myStar2.shape(),shapecheck);
+    //EXPECT_EQ(myStar2.limits(),limitcheck);
+}
