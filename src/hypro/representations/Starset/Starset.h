@@ -9,6 +9,9 @@ static_assert(
 
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
+#include "../types.h"
+#include "../../util/typetraits.h"
+
 #include "StarsetSetting.h"
 
 namespace hypro {

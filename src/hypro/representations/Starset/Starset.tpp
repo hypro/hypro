@@ -158,6 +158,8 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
+    auto intermediate=Converter::toHPolytope(*this );
+    return intermediate.contains(point);
 }
 
 template <typename Number, typename Converter, typename Setting>
