@@ -43,7 +43,9 @@ StarsetT<Number,Converter<Number>,StarsetSetting> Converter<Number>::toStarset( 
 template<typename Number>
 template<typename StarsetSetting, typename inSetting>
 StarsetT<Number,Converter<Number>,StarsetSetting> Converter<Number>::toStarset( const HPolytopeT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
-	return StarsetT<Number,Converter<Number>,StarsetSetting>();
+    matrix_t<Number> newmGenerator=matrix_t<Number>::Identity(_source.matrix().cols(),_source.matrix().cols()); 
+    vector_t<Number> newmCenter=vector_t<Number>::Zero(_source.matrix().cols());
+    return StarsetT<Number,Converter<Number>,StarsetSetting>(newmCenter,_source.matrix(),_source.vector(),newmGenerator);
 }
 
 

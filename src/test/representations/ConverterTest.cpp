@@ -131,7 +131,19 @@ class ConverterTest : public ::testing::Test {
 		planes2.push_back( hp7 );
 
 		hpolytope2 = HPolytope<Number>( this->planes2 );
+        
+        // star set
+        vector_t<Number> center4=vector_t<Number>(2);
+        vector_t<Number> Limits=vector_t<Number>(4);
+        matrix_t<Number> Generator=matrix_t<Number>(2,2);
+        matrix_t<Number> ShapeMatrix=matrix_t<Number>(4,2);
+        center4<<4,4;
+        Limits<<1,1,1,1;
+        Generator<<1,0,0,1;
+        ShapeMatrix<<1,0,-1,0,0,1,0,-1;
+        myStar1= Starset<Number>(center4,ShapeMatrix,Limits,Generator);
 
+        
 #ifdef HYPRO_USE_PPL
 		// A ppl polytope (box)
 		pplpolytope = Polytope<Number>( points );
@@ -171,6 +183,7 @@ class ConverterTest : public ::testing::Test {
 	typename HPolytope<Number>::HalfspaceVector planes2;
 	HPolytope<Number> hpolytope;
 	HPolytope<Number> hpolytope2;
+    Starset<Number> myStar1;
 
 #ifdef HYPRO_USE_PPL
 	// A ppl polytope (box)
@@ -231,6 +244,8 @@ TYPED_TEST( ConverterTest, toHPolytope ) {
 		auto result13 = Converter<TypeParam>::toHPolytope( this->sfn2 );
 		auto result14 = Converter<TypeParam>::toHPolytope( this->tpoly );
 		auto result15 = Converter<TypeParam>::toHPolytope( this->tpoly2 );
+        auto result16 = Converter<TypeParam>::toHPolytope( this->myStar1);
+
 	} catch ( std::runtime_error& e ) {
 		std::cout << e.what() << std::endl;
 		FAIL();
@@ -395,6 +410,17 @@ TYPED_TEST( ConverterTest, toTemplatePolyhedron ) {
 #endif
 		auto result12 = Converter<TypeParam>::toSupportFunctionNew( this->sfn1 );
 		auto result13 = Converter<TypeParam>::toSupportFunctionNew( this->sfn2 );
+	} catch ( std::runtime_error& e ) {
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+	SUCCEED();
+}
+TYPED_TEST( ConverterTest, toStarset ) {
+	try {
+		auto result  = Converter<TypeParam>::toStarset( this->hpolytope );
+        auto result2 = Converter<TypeParam>::toHPolytope(this->myStar1);
+        auto result3 = Converter<TypeParam>::toStarset( result2 );
 	} catch ( std::runtime_error& e ) {
 		std::cout << e.what() << std::endl;
 		FAIL();

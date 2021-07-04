@@ -436,11 +436,11 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 	}
 }
 
-}  // namespace hypro
-/*
 template<typename Number>
 template<typename HPolytopeSetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPolytope( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return HPolytopeT<Number,Converter<Number>,HPolytopeSetting>();
+	HPolytopeT<Number,Converter<Number>,HPolytopeSetting> temp=HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(source.shape(),source.limits());
+    return temp.affineTransformation(source.generator(),source.center());
 }
-*/
+}  // namespace hypro
+
