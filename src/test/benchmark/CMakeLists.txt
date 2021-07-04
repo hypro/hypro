@@ -8,7 +8,7 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		AllBenchmarkTest.cpp
 	)
 
-	add_dependencies(runBenchmark resources)
+	add_dependencies(runBenchmark hypro_resources)
 	target_include_directories(runBenchmark PRIVATE ${GTEST_INCLUDE_DIR})
 
 	target_link_libraries(runBenchmark

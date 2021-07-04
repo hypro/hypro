@@ -13,6 +13,8 @@ import Formula;
 
 //////// Parser Rules
 
-init 	 		: 'init' '{' initstate+ '}' ;	
+init 	 		: 'init' '{' (initstate | probinitstate)+ '}' ;	
 
 initstate 		: VARIABLE '{' constrset '}' ;
+
+probinitstate   : NUMBER  JUMP VARIABLE '{' constrset '}' ;

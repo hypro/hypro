@@ -22,4 +22,4 @@ add_imported_library(mimalloc STATIC "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXE
 set( MIMALLOC_INCLUDE_DIR "${source_dir}/include" PARENT_SCOPE)
 set( MIMALLOC_LIBRARIES "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}mimalloc${CMAKE_SHARED_LIBRARY_SUFFIX}" PARENT_SCOPE)
 
-add_dependencies(resources mimalloc)
+add_dependencies(hypro_resources mimalloc)

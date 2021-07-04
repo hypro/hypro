@@ -17,13 +17,14 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation>>;
 
-	Location<Number> const* mLocation;		    ///< location in which the flowpipe was computed
-	Transition<Number> const* mTransition{};    ///< the transition which lead here. nullptr for roots
-	std::vector<Representation> mFlowpipe{};    ///< contains computed flowpipe
-	Representation mInitialSet;				    ///< contains initial set for the flowpipe
-	carl::Interval<SegmentInd> mTimings{};	    ///< global time covered by inital set (used as offset)
-    std::set<Transition<Number>*> mUrgent{};    ///< set of urgent transitions (CEGAR)
-    std::vector<SegmentInd> mFpTimings{};       ///< timing information for simultaneous segments (urgency)
+	Location<Number> const* mLocation;										   ///< location in which the flowpipe was computed
+	Transition<Number> const* mTransition{};								   ///< the transition which lead here. nullptr for roots
+	std::vector<Representation> mFlowpipe{};								   ///< contains computed flowpipe
+	Representation mInitialSet;												   ///< contains initial set for the flowpipe
+	carl::Interval<SegmentInd> mTimings{};									   ///< global time covered by inital set (used as offset)
+	std::set<Transition<Number>*> mUrgent{};    ///< set of urgent transitions (CEGAR)
+  std::vector<SegmentInd> mFpTimings{};       ///< timing information for simultaneous segments (urgency)
+	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
 
   public:
 	//Exposition types
@@ -63,9 +64,9 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
      */
 	Path<Number> getPath() const;
 
-	Transition<Number> const* getTransition() const { return mTransition; }
+	auto getParent() const { return this->mParent; }
 
-    ReachTreeNode<Representation>* getParent() const { return this->mParent; }
+	Transition<Number> const* getTransition() const { return mTransition; }
 
 	/**
      * @brief Get access to the flowpipe
@@ -76,13 +77,13 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	void setFlowpipe( std::vector<Representation>&& fp ) { mFlowpipe = std::move( fp ); }
 	void setFlowpipe( const std::vector<Representation>& fp ) { mFlowpipe = fp; }
 
-    /**
-     * @brief Get access to the urgent Transitions
-     * @return List of urgent transitions
-     */
-    std::set<Transition<Number>*> const& getUrgent() const { return mUrgent; }
-    void setUrgent( std::set<Transition<Number>*>&& urgent ) { mUrgent = std::move( urgent ); }
-    void setUrgent( const std::set<Transition<Number>*>& urgent ) { mUrgent = urgent; }
+  /**
+   * @brief Get access to the urgent Transitions
+   * @return List of urgent transitions
+   */
+  std::set<Transition<Number>*> const& getUrgent() const { return mUrgent; }
+  void setUrgent( std::set<Transition<Number>*>&& urgent ) { mUrgent = std::move( urgent ); }
+  void setUrgent( const std::set<Transition<Number>*>& urgent ) { mUrgent = urgent; }
 
 	/**
 	 * @brief Get the initial set
@@ -95,8 +96,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	const Location<Number>* getLocation() const { return mLocation; }
 
 	const carl::Interval<SegmentInd>& getTimings() const { return mTimings; }
-    std::vector<SegmentInd>& getFpTimings() { return mFpTimings; }
-    const std::vector<SegmentInd>& getFpTimings() const { return mFpTimings; }
+  std::vector<SegmentInd>& getFpTimings() { return mFpTimings; }
+  const std::vector<SegmentInd>& getFpTimings() const { return mFpTimings; }
 
 	/**
      * @brief Get the time intervals the passed transition was enabled
@@ -105,6 +106,9 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	 * TODO Implement
      */
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
+
+	void setBoundingBox( const std::vector<carl::Interval<Number>>& intervals ) { mInitialBoundingBox = intervals; }
+	const std::optional<std::vector<carl::Interval<Number>>>& getInitialBoundingBox() const { return mInitialBoundingBox; };
 };
 
 template <typename Representation>

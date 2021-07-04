@@ -365,3 +365,48 @@ std::endl; FAIL();
 	}
 }
 */
+
+// TYPED_TEST(AntlrParserTest, VarNamesPrefixesOfEachOther){ } 	//x, x1, x10, x101 ...
+// TYPED_TEST(AntlrParserTest, SettingsTest){}					//smth like maxjumps 0, maxjumps 1e-10...
+// TYPED_TEST(AntlrParserTest, LocationsTest){}					//lots of locations, flows, extInputs, invariants
+// TYPED_TEST(AntlrParserTest, TransitionsTest){}				//lots of transitions, weird guards, resets, ...
+// TYPED_TEST(AntlrParserTest, InitialStatesTest){}
+// TYPED_TEST(AntlrParserTest, LocalBadStatesTest){}
+// TYPED_TEST(AntlrParserTest, GlobalBadStatesTest){}
+// Tests to see if smth throws an exception
+
+// TYPED_TEST(AntlrParserTest, OnlyStart){
+//
+//	std::string path("../../../../src/test/core/examples/test_only_start.txt");
+//	//std::string path("../../src/test/core/examples/test_only_start.txt");
+//	try{
+//		std::tuple<HybridAutomaton<TypeParam,State_t<TypeParam>>, ReachabilitySettings> h =
+// parseFlowstarFile<TypeParam>(path); 		FAIL(); 	} catch(const std::runtime_error& e){ 		std::cout <<
+// e.what()
+// << std::endl; 		SUCCEED();
+//	}
+//
+//}
+
+TYPED_TEST( AntlrParserTest, StochasticParsing ) {
+	std::string path( "../src/test/core/examples/test_stochastic_parsing.txt" );
+	// std::string path( "../../../../src/test/core/examples/test_stochastic_parsing.txt" );
+
+	try {
+		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
+
+		auto loc = *automaton.getLocation( "l1" );
+
+		auto transition = std::find_if( loc.getTransitions().begin(), loc.getTransitions().end(),
+										[]( auto& transPtr ) { return transPtr->getTarget()->getName() == "l2"; } );
+
+		ASSERT_TRUE( transition != loc.getTransitions().end() );
+
+		EXPECT_EQ( "sync_1", ( *transition )->getLabels().front().getName() );
+
+		SUCCEED();
+	} catch ( const std::runtime_error& e ) {
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+}

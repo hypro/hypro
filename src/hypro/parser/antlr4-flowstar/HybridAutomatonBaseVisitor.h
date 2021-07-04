@@ -45,6 +45,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitStochasticlocation(HybridAutomatonParser::StochasticlocationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitProbdistribution(HybridAutomatonParser::ProbdistributionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitLoc_labels(HybridAutomatonParser::Loc_labelsContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -105,6 +113,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitProbinitstate(HybridAutomatonParser::ProbinitstateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitUnsafeset(HybridAutomatonParser::UnsafesetContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -150,6 +162,22 @@ public:
   }
 
   virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitStochastictransition(HybridAutomatonParser::StochastictransitionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitProbtransition(HybridAutomatonParser::ProbtransitionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitProbfrom(HybridAutomatonParser::ProbfromContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitProbto(HybridAutomatonParser::ProbtoContext *ctx) override {
     return visitChildren(ctx);
   }
 

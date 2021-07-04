@@ -20,6 +20,9 @@
 #include "Label.h"
 #include "Location.h"
 #include "Reset.h"
+#include "StochasticLocation.h"
+#include "StochasticTransition.h"
+#include "Transition.h"
 #include "decomposition/Decomposition.h"
 #include "decomposition/decomposeConstraintSet.h"
 
@@ -61,16 +64,6 @@ class HybridAutomaton {
      * @details 	This operation is costly as it performs deep copies
      */
 	HybridAutomaton( const HybridAutomaton<Number>& hybrid );
-
-	/**
-     * @brief 		Constructor from locations, transitions and initial states
-     * @param[in]	locs 			Set of locations
-     * @param[in]	trans 			Set of transitions
-     * @param[in] 	initialStates 	Map of initial states
-     */
-	//HybridAutomaton(const Locations& locs, const transitionVector& trans, const locationConditionMap& initialStates);
-	//TODO This is missing
-	HybridAutomaton( const Locations& locs, const locationConditionMap& initialStates );
 
 	/**
      * @brief 		Destructor
@@ -141,11 +134,17 @@ class HybridAutomaton {
 		assert( std::find( this->getLocations().begin(), this->getLocations().end(), loc ) != this->getLocations().end() );
 		mInitialStates.emplace( std::make_pair( loc, state ) );
 	}
-	void addLocalBadState( const Location<Number>* loc, const Condition<Number>& condition ) { mLocalBadStates.emplace( std::make_pair( loc, condition ) ); }
-	void addGlobalBadState( const Condition<Number>& state ) { mGlobalBadStates.push_back( state ); }
+	void addLocalBadStates( const Location<Number>* loc, const Condition<Number>& condition ) {
+#ifndef NDEBUG
+		auto locs = getLocations();
+		assert( std::find( std::begin( locs ), std::end( locs ), loc ) != locs.end() );
+#endif
+		mLocalBadStates.emplace( std::make_pair( loc, condition ) );
+	}
+	void addGlobalBadStates( const Condition<Number>& state ) { mGlobalBadStates.push_back( state ); }
 	///@}
-	void removeTransition(Transition<Number>* transitionPtr) {
-		transitionPtr->getSource()->removeTransition(transitionPtr);
+	void removeTransition( Transition<Number>* transitionPtr ) {
+		transitionPtr->getSource()->removeTransition( transitionPtr );
 	}
 
 	/// adds a fresh location to this automaton
@@ -214,13 +213,45 @@ class HybridAutomaton {
 			}
 		}
 
-		if ( lhs.getLocalBadStates() != rhs.getLocalBadStates() ) {
+		// compare local bad states.
+		if ( lhs.getLocalBadStates().size() != rhs.getLocalBadStates().size() ) {
+			TRACE( "hypro.datastructures", "Number of local bad states is not equal." )
 			return false;
+		} else {
+			// check all lhs local bad states
+			for ( auto lhsIt = std::begin( lhs.getLocalBadStates() ); lhsIt != std::end( lhs.getLocalBadStates() ); ++lhsIt ) {
+				bool found = false;
+				for ( auto rhsIt = std::begin( rhs.getLocalBadStates() ); rhsIt != std::end( rhs.getLocalBadStates() ); ++rhsIt ) {
+					if ( *( lhsIt->first ) == *( rhsIt->first ) && lhsIt->second == rhsIt->second ) {
+						found = true;
+						break;
+					}
+				}
+				if ( !found ) {
+					TRACE( "hypro.datastructures", "Local bad states are not equal." )
+				}
+			}
+			// check all rhs local bad states
+			for ( auto rhsIt = std::begin( rhs.getLocalBadStates() ); rhsIt != std::end( rhs.getLocalBadStates() ); ++rhsIt ) {
+				bool found = false;
+				for ( auto lhsIt = std::begin( lhs.getLocalBadStates() ); lhsIt != std::end( lhs.getLocalBadStates() ); ++lhsIt ) {
+					if ( *( rhsIt->first ) == *( lhsIt->first ) && rhsIt->second == lhsIt->second ) {
+						found = true;
+						break;
+					}
+				}
+				if ( !found ) {
+					TRACE( "hypro.datastructures", "Local bad states are not equal." )
+				}
+			}
 		}
+
 		if ( lhs.getGlobalBadStates() != rhs.getGlobalBadStates() ) {
+			TRACE( "hypro.datastructures", "Global bad states are not equal." )
 			return false;
 		}
 
+		TRACE( "hypro.datastructures", "Automata are equal." )
 		return true;
 	}
 

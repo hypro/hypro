@@ -1,9 +1,8 @@
 /*
  * Location.g4
- *
- * @author Phillip Tse
- * @date 20.6.2017
- *
+ * 
+ * @author Phillip Tse @date 20.6.2017
+ * 
  * A grammar for AnTLR to generate a parser for the location of a hybrid automaton.
  */
 
@@ -13,29 +12,38 @@ import Formula;
 
 ////// Parser Rules
 
-modes			: 'modes' '{' location* '}' ;
+modes: 'modes' '{' (location | stochasticlocation)* '}';
 
-location 		: VARIABLE '{' activities invariants* loc_labels'}' ;
+location: VARIABLE '{' activities invariants* loc_labels '}';
 
-activities 		: (POLY | LINEAR | NONLINEAR | NONPOLY | LTI) ODE NUMBER* '{' (equation | intervalexpr)* '}' ;
+activities: (POLY | LINEAR | NONLINEAR | NONPOLY | LTI) ODE NUMBER* '{' (
+		equation
+		| intervalexpr
+	)* '}';
 
-invariants		: 'inv' '{' constrset? '}' ;
+invariants: 'inv' '{' constrset? '}';
 
-loc_labels      : URGENT?;
+// start of grammer rules exclusively for Stochastic Hybrid Automata
+stochasticlocation:
+	VARIABLE '{' activities invariants* probdistribution '}';
+
+probdistribution: 'probdist' '{' equation* '}';
+
+loc_labels: URGENT?;
 
 ////// Lexer Rules
 
-POLY  			: 'poly' ;
+POLY: 'poly';
 
-LINEAR 			: 'linear' ;
+LINEAR: 'linear';
 
-NONLINEAR       : 'nonlinear' ;
+NONLINEAR: 'nonlinear';
 
-NONPOLY         : 'nonpoly' ;
+NONPOLY: 'nonpoly';
 
-LTI             : 'lti' ; 
+LTI: 'lti';
 
-ODE 			: 'ode' ;
+ODE: 'ode';
 
-URGENT          : 'urgent';
+URGENT: 'urgent';
 

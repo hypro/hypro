@@ -64,7 +64,7 @@ class Transformation {
 	using transitionVector = std::vector<Transition<Number>*>;
 	using locationStateMap = typename HybridAutomaton<Number>::locationStateMap;
 	using locationConditionMap = std::map<Location<Number>*, Condition<Number>, locPtrComp<Number>>;
-	using conditionVector = std::vector<Condition<Number>>;  /// Vector of conditions.
+	using conditionVector = std::vector<Condition<Number>>;	 /// Vector of conditions.
 	using setVector = std::vector<std::pair<matrix_t<Number>, vector_t<Number>>>;
 	//Map from old location to new location transformed into the Eigenspace
 	using locationPtrMap = std::map<const Location<Number>*, Location<Number>*, locPtrComp<Number>>;

@@ -63,7 +63,6 @@ template <typename State>
 void rectangularJumpHandler<State>::applyReset( State& state, Transition<Number>* transitionPtr ) const {
 	if ( !transitionPtr->getReset().empty() ) {
 		if ( transitionPtr->getReset().getMatrix().size() > 0 ) {
-			std::cout << "affine is  " << std::endl;
 			state = State{ CarlPolytope<typename State::NumberType>{ transitionPtr->getReset().getMatrix(), transitionPtr->getReset().getVector() } };
 		} else {
 			for ( size_t i = 0; i < state.getNumberSets(); i++ ) {
@@ -115,6 +114,9 @@ auto rectangularJumpHandler<State>::applyReverseJump( const TransitionStateMap& 
 			targetVec.insert( targetVec.end(), statesVec.begin(), statesVec.end() );
 		}
 	}
+
+	// aggregate all sets marked for aggregation
+	// aggregate( toProcess, toAggregate, strategy );
 
 	DEBUG( "hydra.worker", "Apply jump on " << toProcess.size() << " transitions." );
 

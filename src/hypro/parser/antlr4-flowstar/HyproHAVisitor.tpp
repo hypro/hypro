@@ -28,8 +28,15 @@ namespace hypro {
 
 		//4.2.Make a set of unique ptrs to Locations
 		std::vector<std::unique_ptr<Location<Number>>> uniquePtrLocSet;
+		bool stochasticlocation = false;
 		for(auto& l : locSet){
-			uniquePtrLocSet.emplace_back(std::unique_ptr<Location<Number>>(std::move(l)));
+			StochasticLocation<Number>* stoLoc = dynamic_cast<StochasticLocation<Number>*>( l );
+			if ( !stoLoc ){
+				uniquePtrLocSet.emplace_back(std::unique_ptr<Location<Number>>(std::move(l)));
+			} else {
+				uniquePtrLocSet.emplace_back(std::unique_ptr<Location<Number>>(std::move(stoLoc)));
+				stochasticlocation = true;
+			}
 		}
 		locSet.clear();
 		for(auto& l : uniquePtrLocSet){
@@ -50,7 +57,13 @@ namespace hypro {
 				//std::cout << "Location raw: " << l.get() <<  "(" << l->getName() << ")" << std::endl;
 				assert(t != nullptr);
 				if(t->getSource() == l.get()) {
-					l->addTransition(std::move(std::make_unique<Transition<Number>>(*t)));
+					// l->addTransition(std::move(std::make_unique<Transition<Number>>(*t)));
+					StochasticTransition<Number>* stoTrans = dynamic_cast<StochasticTransition<Number>*>( t );
+					if ( !stoTrans ) {
+						l->addTransition(std::move(std::make_unique<Transition<Number>>(*t)));
+					} else {
+						l->addTransition(std::move(std::make_unique<StochasticTransition<Number>>(*( stoTrans ))));
+					}
 					//std::cout << "Added." << std::endl;
 					break;
 				}
@@ -59,13 +72,26 @@ namespace hypro {
 
 		//5.Calls visit to get all initial states
 		typename HybridAutomaton<Number>::locationConditionMap initSet;
-		//HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
-		HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, locSet);
-		for(auto& initState : ctx->init()){
-			typename HybridAutomaton<Number>::locationConditionMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number>::locationConditionMap>();
-			//initSet.insert(oneInitialState.begin(), oneInitialState.end());
-			for(auto& is : oneInitialState){
-				initSet.emplace(is);
+		if (!stochasticlocation ){
+			//HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
+			HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, locSet);
+			for(auto& initState : ctx->init()){
+				typename HybridAutomaton<Number>::locationConditionMap oneInitialState = initVisitor.visit(initState).template as<typename HybridAutomaton<Number>::locationConditionMap>();
+				//initSet.insert(oneInitialState.begin(), oneInitialState.end());
+				for(auto& is : oneInitialState){
+					initSet.emplace(is);
+				}
+			}
+		} else {
+			// typename StochasticHybridAutomaton<Number>::stochasticInitialMap initSet;
+			//HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, rLocSet);
+			HyproInitialSetVisitor<Number> initVisitor = HyproInitialSetVisitor<Number>(varVec, locSet);
+			for(auto& initState : ctx->init()){
+				typename StochasticHybridAutomaton<Number>::stochasticInitialMap oneInitialState = initVisitor.visit(initState).template as<typename StochasticHybridAutomaton<Number>::stochasticInitialMap>();
+				//initSet.insert(oneInitialState.begin(), oneInitialState.end());
+				for(auto& is : oneInitialState){
+					initSet.emplace(std::make_pair(is.first,is.second.first));
+				}
 			}
 		}
 

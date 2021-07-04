@@ -1,0 +1,292 @@
+# Created by Hyst v1.5
+# Hybrid Automaton in Flow*
+# Converted from file: GRBX01-MES01.xml
+# Command Line arguments: -t flowstar "" -i GRBX01-MES01.xml
+#
+# NOTE: max jumps set down from 999999999 to 5
+# NOTE: All terms in brackets are multiplied out
+# NOTE: All numbers are rounded to the 8th till 10th place
+# NOTE: clock_variation added as new variable since urgent_clock' = 0.0 + [0.0, 0.0001] not parsable
+# NOTE: urgent clock guards do not make sense, we removed them (commented).
+
+
+hybrid reachability
+{
+    # Vars
+    state var t, vx, vy, px, py, I, urgent_clock, clock_variation
+
+    setting
+    {
+        fixed steps 0.0001
+        time 1
+        remainder estimation 1e-4
+        identity precondition
+        gnuplot octagon px,py
+        #adaptive orders { min 3, max 8 }
+        cutoff 1e-15
+        precision 53
+        output GRBX01_MES01
+        #max jumps 999999999
+        max jumps 5
+        print on
+    }
+
+    modes
+    {
+        loc01_move_free
+        {
+            linear ode
+            {
+                t' = 1.0
+                vx' = 21.875
+                #vy' = -0.1142857142857143
+                vy' = -0.1142857
+                px' = vx
+                py' = vy
+                I' = 0.0
+                urgent_clock' = 0.0
+                clock_variation' = 0.0
+            }
+            inv
+            {
+                # Original invariant: t <= 1.0 & px <= -0.003 & py <= -px * 0.726542528005361 & py >= px * 0.726542528005361
+
+                #t <= 1.0   px <= -0.003   py - (-px * 0.726542528005361) <= 0   py - (px * 0.726542528005361) >= 0
+                #t <= 1.0   px <= -0.003   py + px * 0.726542528005361 <= 0   py - px * 0.726542528005361 >= 0
+                t <= 1.0   px <= -0.003   py + px * 0.726542528 <= 0   py - px * 0.726542528 >= 0
+            }
+        }
+
+        loc01_meshed
+        {
+            linear ode
+            {
+                t' = 0.0
+                vx' = 0.0
+                vy' = 0.0
+                px' = 0.0
+                py' = 0.0
+                I' = 0.0
+                urgent_clock' = 1.0
+                clock_variation' = 0.0
+            }
+            inv
+            {
+                # Original invariant: t <= 1.0 & urgent_clock <= 0.0001
+
+                t <= 1.0   urgent_clock <= 0.0001
+            }
+        }
+
+        error
+        {
+            linear ode
+            {
+                t' = 0.0
+                vx' = 0.0
+                vy' = 0.0
+                px' = 0.0
+                py' = 0.0
+                I' = 0.0
+                urgent_clock' = 0.0
+                clock_variation' = 0.0
+            }
+            inv
+            {
+            }
+        }
+    }
+
+    jumps
+    {
+        loc01_move_free -> loc01_move_free
+        guard
+        {
+            # Original guard: py >= -px * 0.726542528005361 & -vx * 0.587785252292473 - vy * 0.809016994374947 <= 0.0
+
+            #py - (-px * 0.726542528005361) >= 0   -vx * 0.587785252292473 - vy * 0.809016994374947 <= 0.0
+            #py + px * 0.726542528005361 >= 0   -vx * 0.587785252292473 - vy * 0.809016994374947 <= 0.0
+            py + px * 0.726542528 >= 0   -vx * 0.58778525 - vy * 0.80901699 <= 0.0
+        }
+        reset
+        {
+            # Original resets
+            #vx' := (vx * -3.5336293898161393 + vy * -16.353416797695154) / 8.347823391906637
+            #vy' := (vx * -2.891211809537265 + vy * 4.368411729006802) / 8.347823391906637
+            #I' := I + (vx * 0.587785252292473 + vy * 0.809016994374947) * 1.9 * 3.2 * 18.1 / 8.347823391906637
+
+            # Resets after multiplying out
+            #vx' := vx * -0.42329949064831147907751 + vy * -1.95900368634416510918540
+            #vy' := vx * -0.346343193165819270310641 + vy * 0.52329949064831135928580966
+            #I' := I + vx * 7.7486775183810103877 + vy * 10.665139643861058924588
+
+            vx' := vx * -0.42329949 + vy * -1.959003686
+            vy' := vx * -0.346343193 + vy * 0.52329949
+            I' := I + vx * 7.7486775 + vy * 10.6651396
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_move_free
+        guard
+        {
+            # Original guard: py <= px * 0.726542528005361 & -vx * 0.587785252292473 + vy * 0.809016994374947 <= 0.0
+
+            #py - (px * 0.726542528005361) <= 0   -vx * 0.587785252292473 + vy * 0.809016994374947 <= 0.0
+            #py - px * 0.726542528005361 <= 0   -vx * 0.587785252292473 + vy * 0.809016994374947 <= 0.0
+            py - px * 0.726542528 <= 0   -vx * 0.58778525 + vy * 0.80901699 <= 0.0
+        }
+        reset
+        {
+            # Original resets
+            #vx' := (vx * -3.5336293898161393 + vy * 16.353416797695154) / 8.347823391906637
+            #vy' := (vx * 2.891211809537265 + vy * 4.368411729006802) / 8.347823391906637
+            #I' := I + (vx * 0.587785252292473 - vy * 0.809016994374947) * 1.9 * 3.2 * 18.1 / 8.347823391906637
+
+            # Resets after multiplying out
+            #vx' := vx * -0.42329949064831147907751 + vy * 1.95900368634416510918540
+            #vy' := vx * 0.346343193165819270310641 + vy * 0.52329949064831135928580966
+            #I' := I + vx * 7.7486775183810103877 - vy * 10.665139643861058924588
+
+            vx' := vx * -0.42329949 + vy * 1.959003686
+            vy' := vx * 0.346343193 + vy * 0.52329949
+            I' := I + vx * 7.7486775 - vy * 10.6651396
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_meshed
+        guard
+        {
+            # Original guard: urgent_clock <= 0.0001
+
+            #urgent_clock <= 0.0001
+        }
+        reset
+        {
+            vx' := 0.0
+            vy' := 0.0
+            I' := I + 3.2 * vx + 3.2 * vy
+            urgent_clock' := 0.0 + clock_variation
+            #urgent_clock' := 0.0 + [0.0, 0.0001]
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_meshed
+        guard
+        {
+            # Original guard: urgent_clock <= 0.0001
+
+            #urgent_clock <= 0.0001
+        }
+        reset
+        {
+            vx' := 0.0
+            vy' := 0.0
+            I' := I + 3.2 * vx - 3.2 * vy
+            urgent_clock' := 0.0 + clock_variation
+            #urgent_clock' := 0.0 + [0.0, 0.0001]
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_meshed
+        guard
+        {
+            # Original guard: urgent_clock <= 0.0001
+
+            #urgent_clock <= 0.0001
+        }
+        reset
+        {
+            vx' := 0.0
+            vy' := 0.0
+            I' := I - 3.2 * vx + 3.2 * vy
+            urgent_clock' := 0.0 + clock_variation
+            #urgent_clock' := 0.0 + [0.0, 0.0001]
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_meshed
+        guard
+        {
+            # Original guard: urgent_clock <= 0.0001
+
+            #urgent_clock <= 0.0001
+        }
+        reset
+        {
+            vx' := 0.0
+            vy' := 0.0
+            I' := I - 3.2 * vx - 3.2 * vy
+            urgent_clock' := 0.0 + clock_variation
+            #urgent_clock' := 0.0 + [0.0, 0.0001]
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> error
+        guard
+        {
+            # Original guard: t >= 0.2
+
+            t >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> error
+        guard
+        {
+            # Original guard: I >= 20.0
+
+            I >= 20.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        loc01_meshed -> error
+        guard
+        {
+            # Original guard: I >= 20.0
+
+            I >= 20.0
+        }
+        reset
+        {
+            urgent_clock' := 0.0
+        }
+        parallelotope aggregation {}
+    }
+
+    init
+    {
+        loc01_move_free
+        {
+            vx in [0, 0]
+            vy in [0, 0]
+            t in [0, 0]
+            urgent_clock in [0, 0.0001]
+            px in [-0.0168, -0.0166]
+            I in [0, 0]
+            py in [0.0029, 0.0031]
+            clock_variation in [0.0, 0.0001]
+        }
+        #loc01_meshed
+        #{
+        #    vx in [0, 0]
+        #    vy in [0, 0]
+        #    t in [0, 0]
+        #    urgent_clock in [0, 0.0001]
+        #    px in [-0.0168, -0.0166]
+        #    I in [0, 0]
+        #    py in [0.0029, 0.0031]
+        #    clock_variation in [0.0, 0.0001]
+        #}
+    }
+}
+
+unsafe set
+{
+    error { }
+}

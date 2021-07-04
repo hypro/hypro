@@ -1,0 +1,220 @@
+# Created by Hyst v1.5
+# Hybrid Automaton in Flow*
+# Converted from file: GRBX01-MES01.xml
+# Command Line arguments: -t flowstar "" -i GRBX01-MES01.xml
+#
+# NOTE: max jumps set down from 999999999 to 5
+# NOTE: All terms in brackets are multiplied out
+# NOTE: All numbers are rounded to the 8th till 10th place
+
+
+hybrid reachability
+{
+    # Vars
+    state var t, vx, vy, px, py, I
+
+    setting
+    {
+        fixed steps 0.0001
+        time 1
+        remainder estimation 1e-4
+        identity precondition
+        gnuplot octagon px,py
+        cutoff 1e-15
+        precision 53
+        output GRBX01_MES01
+        max jumps 999
+        print on
+    }
+
+    modes
+    {
+        loc01_move_free
+        {
+            linear ode
+            {
+                t' = 1.0
+                vx' = 21.875
+                vy' = -0.1142857
+                px' = vx
+                py' = vy
+                I' = 0.0
+            }
+            inv
+            {
+                t <= 1.0   px <= -0.003   py + px * 0.726542528 <= 0   py - px * 0.726542528 >= 0
+            }
+        }
+
+        loc01_meshed
+        {
+            linear ode
+            {
+                t' = 0.0
+                vx' = 0.0
+                vy' = 0.0
+                px' = 0.0
+                py' = 0.0
+                I' = 0.0
+            }
+            inv
+            {
+                t <= 1.0   
+            }
+        }
+
+        error
+        {
+            linear ode
+            {
+                t' = 0.0
+                vx' = 0.0
+                vy' = 0.0
+                px' = 0.0
+                py' = 0.0
+                I' = 0.0
+            }
+            inv
+            {
+            }
+        }
+    }
+
+    jumps
+    {
+        loc01_move_free -> loc01_move_free
+        guard
+        {
+            py - px * 0.726542528 >= 0   -vx * 0.58778525 - vy * 0.80901699 <= 0.0
+        }
+        reset
+        {
+            vx' := vx * -0.42329949 + vy * -1.959003686
+            vy' := vx * -0.346343193 + vy * 0.52329949
+            I' := I + vx * 7.7486775 + vy * 10.6651396
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_move_free
+        guard
+        {
+            py - px * 0.726542528 <= 0   -vx * 0.58778525 + vy * 0.80901699 <= 0.0
+        }
+        reset
+        {
+            vx' := vx * -0.42329949 + vy * 1.959003686
+            vy' := vx * 0.346343193 + vy * 0.52329949
+            I' := I + vx * 7.7486775 - vy * 10.6651396
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_meshed
+        guard
+        {
+            px >= -0.003  vx >= 0.0  vy >= 0.0
+        }
+        reset
+        {
+            vx' := 0.0
+            vy' := 0.0
+            I' := I + 3.2 * vx + 3.2 * vy
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_meshed
+        guard
+        {
+            px >= -0.003  vx >= 0.0  vy <= 0.0
+        }
+        reset
+        {
+            vx' := 0.0
+            vy' := 0.0
+            I' := I + 3.2 * vx - 3.2 * vy
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_meshed
+        guard
+        {
+            px >= -0.003  vx <= 0.0  vy >= 0.0
+        }
+        reset
+        {
+            vx' := 0.0
+            vy' := 0.0
+            I' := I - 3.2 * vx + 3.2 * vy
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> loc01_meshed
+        guard
+        {
+            px >= -0.003  vx <= 0.0  vy <= 0.0   
+        }
+        reset
+        {
+            vx' := 0.0
+            vy' := 0.0
+            I' := I - 3.2 * vx - 3.2 * vy    
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> error
+        guard
+        {
+            t >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        loc01_move_free -> error
+        guard
+        {
+            I >= 20.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        loc01_meshed -> error
+        guard
+        {
+            I >= 20.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+    }
+
+    init
+    {
+        loc01_move_free
+        {
+            vx in [0, 0]
+            vy in [0, 0]
+            t in [0, 0]
+            px in [-0.0168, -0.0166]
+            I in [0, 0]
+            py in [0.0029, 0.0031]
+        }
+	loc01_meshed
+        {
+            vx in [0, 0]
+            vy in [0, 0]
+            t in [0, 0]
+            px in [-0.0168, -0.0166]
+            I in [0, 0]
+            py in [0.0029, 0.0031]
+        }
+    }
+}
+
+unsafe set
+{
+    error { }
+}

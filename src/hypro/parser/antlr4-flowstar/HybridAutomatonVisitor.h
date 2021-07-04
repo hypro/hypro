@@ -34,6 +34,10 @@ public:
 
     virtual antlrcpp::Any visitInvariants(HybridAutomatonParser::InvariantsContext *context) = 0;
 
+    virtual antlrcpp::Any visitStochasticlocation(HybridAutomatonParser::StochasticlocationContext *context) = 0;
+
+    virtual antlrcpp::Any visitProbdistribution(HybridAutomatonParser::ProbdistributionContext *context) = 0;
+
     virtual antlrcpp::Any visitLoc_labels(HybridAutomatonParser::Loc_labelsContext *context) = 0;
 
     virtual antlrcpp::Any visitReplacedexpr(HybridAutomatonParser::ReplacedexprContext *context) = 0;
@@ -64,6 +68,8 @@ public:
 
     virtual antlrcpp::Any visitInitstate(HybridAutomatonParser::InitstateContext *context) = 0;
 
+    virtual antlrcpp::Any visitProbinitstate(HybridAutomatonParser::ProbinitstateContext *context) = 0;
+
     virtual antlrcpp::Any visitUnsafeset(HybridAutomatonParser::UnsafesetContext *context) = 0;
 
     virtual antlrcpp::Any visitLbadstate(HybridAutomatonParser::LbadstateContext *context) = 0;
@@ -87,6 +93,14 @@ public:
     virtual antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *context) = 0;
 
     virtual antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *context) = 0;
+
+    virtual antlrcpp::Any visitStochastictransition(HybridAutomatonParser::StochastictransitionContext *context) = 0;
+
+    virtual antlrcpp::Any visitProbtransition(HybridAutomatonParser::ProbtransitionContext *context) = 0;
+
+    virtual antlrcpp::Any visitProbfrom(HybridAutomatonParser::ProbfromContext *context) = 0;
+
+    virtual antlrcpp::Any visitProbto(HybridAutomatonParser::ProbtoContext *context) = 0;
 
     virtual antlrcpp::Any visitSetting(HybridAutomatonParser::SettingContext *context) = 0;
 
