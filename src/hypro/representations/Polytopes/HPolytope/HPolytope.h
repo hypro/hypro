@@ -434,7 +434,7 @@ class HPolytopeT : private GeometricObjectBase {
 
 	vector_t<Number> computeNormal( std::vector<vector_t<Number>> vertices, vector_t<Number> check ) const;
 
-	Point<Number> getVertexForVector( vector_t<Number> vector, std::vector<Point<Number>> vertices ) const;
+	Point<Number> getVertexForVector( const vector_t<Number>& vector, const std::vector<Point<Number>>& vertices ) const;
 
 	/**
 	 * @brief      Extends the constraint to a higher dimension. This effectively unbounds the polytope in that direction. The passed set of

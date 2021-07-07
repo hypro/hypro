@@ -1,0 +1,6 @@
+-m BLDC01-BDS01.model -d 1/250 -r support_function --setting SupportFunctionSetting --plotoutputformat eps
+-m BLDC01-BDS01.model -d 1/250 -t 1 -r support_function --setting SupportFunctionSetting --plotoutputformat eps --plotoutput BLDC01_BDS01_1sek
+-m PLAD01_BND42.model -d 1/4 -r support_function --setting SupportFunctionSetting --plotoutputformat eps
+-m PLAD01_BND30.model -d 1/4 -r support_function --setting NoBoxReduction --plotoutputformat eps
+-m heat_5.model -d 1/35 -t 40 -r SFN --setting SupportFunctionNewDefault --plotoutputformat eps
+-m heat_10.model -d 1/75 -t 40 -r SFN --setting SupportFunctionNewDefault --plotoutputformat eps

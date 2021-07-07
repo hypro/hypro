@@ -58,7 +58,7 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 	for ( auto& otherBad : hybrid.getLocalBadStates() ) {
 		auto copy = otherBad.second;
 		// update location
-		this->addLocalBadState( locationMapping[otherBad.first], copy );
+		this->addLocalBadStates( locationMapping[otherBad.first], copy );
 	}
 	TRACE( "hypro.datastructures", "After copy, original: \n"
 										 << hybrid << "\n copy: \n"

@@ -1,0 +1,123 @@
+hybrid reachability
+{
+  # Vars
+  state var break_pattern, e1, v1, a1, e2, v2, a2, e3, v3, a3, aL, t
+
+  setting
+  {
+    fixed steps 0.1
+    time 20
+    remainder estimation 1e-4
+    identity precondition
+    gnuplot octagon t,e1
+    #adaptive orders { min 3, max 8 }
+    cutoff 1e-15
+    precision 53
+    output PLAD01_DBND30
+    max jumps 1000
+    print on
+  }
+
+  modes
+  {
+    communication_communication_loc1
+    {
+      linear ode
+      {
+        break_pattern' = 1.0
+        e1' = v1
+        v1' = -a1 + aL
+        a1' = 1.605 * e1 + 4.868 * v1 - 3.5754 * a1 - 0.8198 * e2 + 0.427 * v2 - 0.045 * a2 - 0.1942 * e3 + 0.3626 * v3 - 0.0946 * a3
+        e2' = v2
+        v2' = a1 - a2
+        a2' = 0.8718 * e1 + 3.814 * v1 - 0.0754 * a1 + 1.1936 * e2 + 3.6258 * v2 - 3.2396 * a2 - 0.595 * e3 + 0.1294 * v3 - 0.0796 * a3
+        e3' = v3
+        v3' = a2 - a3
+        a3' = 0.7132 * e1 + 3.573 * v1 - 0.0964 * a1 + 0.8472 * e2 + 3.2568 * v2 - 0.0876 * a2 + 1.2726 * e3 + 3.072 * v3 - 3.1356 * a3
+        t' = 1.0
+        aL' = 0
+      }
+      inv
+      {
+        break_pattern <= 5.0
+        #aL >= -9
+        #aL <= 1.0
+        t <= 20.0
+      }
+    }
+
+    no_communication_no_communication_loc1
+    {
+      linear ode
+      {
+        break_pattern' = 1.0
+        e1' = v1
+        v1' = -a1 + aL
+        a1' = 1.605 * e1 + 4.868 * v1 - 3.5754 * a1
+        e2' = v2
+        v2' = a1 - a2
+        a2' = 1.1936 * e2 + 3.6258 * v2 - 3.2396 * a2
+        e3' = v3
+        v3' = a2 - a3
+        a3' = 0.7132 * e1 + 3.573 * v1 - 0.0964 * a1 + 0.8472 * e2 + 3.2568 * v2 - 0.0876 * a2 + 1.2726 * e3 + 3.072 * v3 - 3.1356 * a3
+        t' = 1.0
+        aL' = 0
+      }
+      inv
+      {
+        break_pattern <= 5.0
+        #aL >= -9
+        #aL <= 1.0
+        t <= 20.0
+      }
+    }
+  }
+
+  jumps
+  {
+    communication_communication_loc1 -> no_communication_no_communication_loc1
+    guard { break_pattern >= 5.0 }
+    reset { break_pattern' := 0.0  }
+    parallelotope aggregation {}
+
+    no_communication_no_communication_loc1 -> communication_communication_loc1
+    guard { break_pattern >= 5.0 }
+    reset { break_pattern' := 0.0  }
+    parallelotope aggregation {}
+  }
+
+  init
+  {
+    communication_communication_loc1
+    {
+      a1 in [0, 0]
+      a2 in [0, 0]
+      a3 in [0, 0]
+      aL in [-9, 1]
+      break_pattern in [0, 0]
+      e1 in [0, 0]
+      e2 in [0, 0]
+      e3 in [0, 0]
+      t in [0, 0]
+      v1 in [0, 0]
+      v2 in [0, 0]
+      v3 in [0, 0]
+    }
+  }
+}
+
+unsafe set
+{
+	communication_communication_loc1
+	{
+		#e1 <= -42
+		e1 <= -30
+	}
+
+	no_communication_no_communication_loc1
+	{
+		#e1 <= -42
+		e1 <= -30
+	}
+
+}

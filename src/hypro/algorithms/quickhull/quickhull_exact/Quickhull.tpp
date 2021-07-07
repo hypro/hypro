@@ -17,7 +17,7 @@ ExactQuickhull<Number, Euclidian>::QuickhullAlgorithm( pointVector_t& points, di
 
 template <typename Number, bool Euclidian>
 void ExactQuickhull<Number, Euclidian>::compute() {
-	TRACE( "quickhull", points );
+	TRACE( "hypro.quickhull", points );
 	removeDuplicateInputs();
 
 	//There's only a single point, so we fix it from both sides.
@@ -29,36 +29,36 @@ void ExactQuickhull<Number, Euclidian>::compute() {
 	buildInitialPolytope();
 #ifdef HYPRO_LOGGING
 	for ( Facet& facet : fSpace.facets ) {
-		TRACE( "quickhull", "furthest " << facet.furthestPoint << std::endl
-										<< " distance " << facet.furthestPointDistance );
+		TRACE( "hypro.quickhull", "furthest " << facet.furthestPoint << std::endl
+											  << " distance " << facet.furthestPointDistance );
 	}
 #endif
 
 	processPoints();
 #ifndef NDEBUG
-	TRACE( "quickhull", "ALL facets:" << std::endl
-									  << fSpace.printAll() );
+	TRACE( "hypro.quickhull", "ALL facets:" << std::endl
+											<< fSpace.printAll() );
 #endif
 
 	fSpace.compressVector();
 	fSpace.removeCoplanarFacets();
 
 #ifndef NDEBUG
-	TRACE( "quickhull", "ALL facets:" << std::endl
-									  << fSpace.printAll() );
+	TRACE( "hypro.quickhull", "ALL facets:" << std::endl
+											<< fSpace.printAll() );
 
 	for ( facet_ind_t facet_i = 0; facet_i < fSpace.facets.size(); ++facet_i ) {
 		Facet& facet = fSpace.facets[facet_i];
 		for ( point_ind_t point_i = 0; point_i < points.size(); ++point_i ) {
 			point_t point = points[point_i];
 			if ( facet.visible( point ) ) {
-				TRACE( "quickhull", "NON CONTAINMENT" << std::endl
-													  << point << std::endl
-													  << "Facet:" << std::endl
-													  << fSpace.printFacet( facet ) );
-				TRACE( "quickhull", "facet_i: " << facet_i );
-				TRACE( "quickhull", "distance" << std::endl
-											   << facet.distance( point ) );
+				TRACE( "hypro.quickhull", "NON CONTAINMENT" << std::endl
+															<< point << std::endl
+															<< "Facet:" << std::endl
+															<< fSpace.printFacet( facet ) );
+				TRACE( "hypro.quickhull", "facet_i: " << facet_i );
+				TRACE( "hypro.quickhull", "distance" << std::endl
+													 << facet.distance( point ) );
 				assert( false );
 			}
 		}
@@ -91,7 +91,7 @@ void ExactQuickhull<Number, Euclidian>::buildInitialPolytope() {
 	//Find furthest away point
 	auto [onPlane, furthestPoint_i] = findFurthestPoint( fSpace.facets.back() );
 
-	TRACE( "quickhull", "onPlane " << onPlane << " furthestPoint_i " << furthestPoint_i );
+	TRACE( "hypro.quickhull", "onPlane " << onPlane << " furthestPoint_i " << furthestPoint_i );
 
 	//Since the number type is exact, check if the furthest away point is on the inital facet.
 	if ( onPlane ) {
@@ -280,7 +280,7 @@ template <typename Number, bool Euclidian>
 void ExactQuickhull<Number, Euclidian>::constructLowerDimensional() {
 	if constexpr ( !Euclidian ) return;
 
-	TRACE( "quickhull", "dropping from d=" << dimension << " to d=" << dimension - 1 );
+	TRACE( "hypro.quickhull", "dropping from d=" << dimension << " to d=" << dimension - 1 );
 
 	//Copy first facet
 	fSpace.facets.push_back( fSpace.facets.front() );
