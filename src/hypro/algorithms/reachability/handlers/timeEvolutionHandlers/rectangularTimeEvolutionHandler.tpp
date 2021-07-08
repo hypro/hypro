@@ -152,9 +152,11 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTime
 	// set rays
 	auto combinedRays = initSetPolytope.rays();
 	// add rays originating from vertices of the flow set
-	std::for_each( flowSetPolytope.vertices().begin(), flowSetPolytope.vertices().end(), [&]( const auto& point ) {
+	auto flowVertices = flowSetPolytope.vertices();
+	std::for_each( std::begin(flowVertices), std::end(flowVertices), [&]( const auto& point ) {
 		combinedRays.insert( point.rawCoordinates() );
 	} );
+	TRACE("hypro.reachability.rectangular", "Flow cone is " << combinedRays );
 	// compute vertices from bounded rays
 	for ( const auto& vertex : initSetPolytope.vertices() ) {
 		for ( const auto& ray : combinedRays ) {
