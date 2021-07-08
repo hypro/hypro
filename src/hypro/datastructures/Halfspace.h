@@ -371,12 +371,14 @@ Halfspace<To> convert( const Halfspace<From>& in ) {
  */
 template <typename Number>
 std::ostream& operator<<( std::ostream& ostr, const Halfspace<Number>& _rhs ) {
+	auto& pool = VariablePool::getInstance();
 	ostr << "( ";
 	bool first = true;
 	for ( Eigen::Index i = 0; i < _rhs.normal().rows(); ++i ) {
 		bool notnull = _rhs.normal()( i ) != 0;
 		bool printVal = notnull && abs( _rhs.normal()( i ) )!= 1 ;
 		bool neg = _rhs.normal()( i ) < 0;
+		std::string varname = pool.carlVarByIndex(i).name().empty() ? pool.carlVarByIndex(i).name() : "x" + std::to_string(i);
 		if ( notnull ) {
 			if ( printVal ) {
 				if ( first ) {
@@ -386,14 +388,14 @@ std::ostream& operator<<( std::ostream& ostr, const Halfspace<Number>& _rhs ) {
 					} else {
 						ostr << _rhs.normal()( i );
 					}
-					ostr << "·x" << i;
+					ostr << "·" << varname;
 				} else {
 					if ( neg ) {
 						ostr << " - " << -_rhs.normal()( i );
 					} else {
 						ostr << " + " << _rhs.normal()( i );
 					}
-					ostr << "·x" << i;
+					ostr << "·" << varname;
 				}
 			} else {
 				if ( first ) {
@@ -401,14 +403,14 @@ std::ostream& operator<<( std::ostream& ostr, const Halfspace<Number>& _rhs ) {
 					if ( neg ) {
 						ostr << "- ";
 					}
-					ostr << "x" << i;
+					ostr << varname;
 				} else {
 					if ( neg ) {
 						ostr << " - ";
 					} else {
 						ostr << " + ";
 					}
-					ostr << "x" << i;
+					ostr << varname;
 				}
 			}
 		}
