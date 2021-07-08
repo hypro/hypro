@@ -772,13 +772,45 @@ std::vector<BoxT<Number,Converter, Setting>> BoxT<Number,Converter, Setting>::se
 }
 template <typename Number, typename Converter, class Setting>
 std::vector<BoxT<Number,Converter, Setting>> BoxT<Number,Converter, Setting>::setMinus2(const BoxT<Number,Converter, Setting>& minusbox) const {
-  std::vector<hypro::BoxT<Number,Converter,Setting>> result;
-  if (this->dimension() != minusbox.dimension() ) {
-    return result;
-  }else{
+  	std::vector<hypro::BoxT<Number,Converter,Setting>> result;
+  	if (this->dimension() != minusbox.dimension() ) {
+    	return result;
+  	}else{
     std::vector<carl::Interval<Number>> box=this->intervals();
     std::vector<carl::Interval<Number>> minus=minusbox.intervals();
 
+
+	//------------- check whether the difference is unchanged or empty -----------
+	bool empty=true;
+	bool unchanged=false;
+	for (long unsigned int i = 0; i < this->dimension(); i++){
+		if (minus.at(i).lower()<=box.at(i).lower()){
+			if (minus.at(i).upper()<=box.at(i).lower()){
+				unchanged=true;
+			}
+			if (minus.at(i).upper()<box.at(i).upper()){
+				empty=false;
+			}	
+		}
+		if (minus.at(i).lower()>=box.at(i).upper()){
+			unchanged=true;
+		}
+	}
+	if (unchanged){
+		std::cout << "unchanged detected" << std::endl;
+		//result.push_back(this);
+		BoxT<Number, Converter, Setting> workbox(box);
+		result.push_back(workbox);
+		return result;
+	}
+	if (empty){
+		std::cout << "empty detected" << std::endl;
+		BoxT<Number, Converter, Setting> workbox= BoxT();
+		result.push_back(workbox);
+		return result;
+	}
+	
+	//------------- calculate difference -------------
 	for (long unsigned int i = 0; i < minus.size(); i++){
 		std::vector<carl::Interval<Number>> box2=box;//lower
 		std::vector<carl::Interval<Number>> box3=box;//upper

@@ -1,5 +1,7 @@
 //#include "datastructures/Halfspace.h"
 #include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/algorithms/quickhull/Quickhull.h>
+#include <hypro/algorithms/convexHull/ConvexHull.h>
 //#include <hypro/representations/Box.h>
 //#include <hypro/util/plotting/Plotter.h>
 //#include <hypro/representations/GeometricObjectBase.h>
@@ -16,16 +18,46 @@ int main() {
   hypro::Box<Number> minusbox(std::make_pair(hypro::Point<Number>({2, 2}),
                                             hypro::Point<Number>({3, 3})));
 
-  std::vector<hypro::Box<Number>> test1= testbox.setMinus(minusbox); 
+  hypro::Box<Number> testbox2(std::make_pair(hypro::Point<Number>({1, 1}),
+                                            hypro::Point<Number>({4, 4})));
+  
+  hypro::Box<Number> minusbox2(std::make_pair(hypro::Point<Number>({-1, 2}),
+                                            hypro::Point<Number>({0, 3})));
+
+  /*std::vector<hypro::Box<Number>> test1= testbox.setMinus(minusbox); 
   for (long unsigned int i = 0; i < test1.size(); i++){
       std::cout << test1.at(i) << std::endl;
-  }
+  }*/
 
-  std::vector<hypro::Box<Number>> test2= testbox.setMinus2(minusbox); 
+  std::vector<hypro::Box<Number>> test2= testbox2.setMinus2(minusbox2); 
+  bool empty=false;
   for (long unsigned int i = 0; i < test2.size(); i++){
       std::cout << test2.at(i) << std::endl;
+      if (test2.at(i).empty()){
+        empty=true;
+      }
+      
   }
 
+  //------------union test, only if result is not empty------------
+  if (empty){
+    std::cout << "result empty, no union test" << std::endl;
+  }else{
+    hypro::Box<Number> test(test2.at(0));
+    test=test.unite(test2);
+    //std::cout << test.vertices() << std::endl;
+    bool b=(test.vertices()==testbox.vertices());
+    if (b){
+      std::cout << "Union test successfull" << std::endl;
+    }else{
+      std::cout << "Union test failed" << std::endl;
+    }
+  }
+  
+  
+  /*for (long unsigned int i = 0; i < test2.size(); i++){
+      test.unite(test2.at(i));
+  }*/
 
   /*std::vector<carl::Interval<Number>> box=testbox.intervals();
   std::vector<carl::Interval<Number>> minus=minusbox.intervals();

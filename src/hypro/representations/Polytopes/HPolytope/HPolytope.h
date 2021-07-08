@@ -411,6 +411,10 @@ class HPolytopeT : private GeometricObjectBase {
 		//#endif
 	}
 
+    /**
+	 * calculates the set difference of two polytopes
+	 */
+	std::vector<HPolytopeT<Number, Converter, Setting>> setMinus2( const HPolytopeT<Number, Converter, Setting>& minus) const;
 	std::vector<HPolytopeT<Number, Converter, Setting>> setMinus( const HPolytopeT<Number, Converter, Setting>& minus) const;
 
 	template <typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>

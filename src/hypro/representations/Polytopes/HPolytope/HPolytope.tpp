@@ -1333,12 +1333,16 @@ void HPolytopeT<Number, Converter, Setting>::setOptimizer( const matrix_t<Number
 
 template <typename Number, typename Converter, class Setting>
 std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus(const HPolytopeT<Number, Converter, Setting>& minus) const {
+  std::vector<HPolytopeT<Number, Converter, Setting>> result;
+  if (this->dimension() != minus.dimension() ) {
+    return result;
+  }
   HPolytopeT<Number, Converter, Setting> minuspoly(minus.matrix(), minus.vector());
   minuspoly=minuspoly.removeRedundancy();
   hypro::matrix_t<Number> matrix2 = minuspoly.matrix();
   hypro::vector_t<Number> constants2= minuspoly.vector();
+  std::vector<hypro::Point<Number>> minusvertices=minuspoly.vertices();
 
-  std::vector<HPolytopeT<Number, Converter, Setting>> result;
   hypro::HPolytopeT<Number, Converter, Setting> copy(this->matrix(), this->vector());
 
   for (int i = 0; i < constants2.size(); i++){
@@ -1349,8 +1353,24 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
       HPolytopeT<Number, Converter, Setting> workpoly=copy;
       workpoly.insert(h.invert());
       if (!workpoly.empty()){
-          result.push_back(workpoly);
-          copy.insert(h.invert());
+          bool b=false;
+          std::vector<hypro::Point<Number>> workvertices=workpoly.vertices();
+          for (long unsigned int j = 0; j < workvertices.size(); j++){
+            if (minuspoly.contains(workvertices.at(j))){
+                b=true;
+            }
+          }
+		  for (long unsigned int j = 0; j < minusvertices.size(); j++){
+            if (workpoly.contains(minusvertices.at(j))){
+                b=true;
+            }
+          }
+          if(b){
+            result.push_back(workpoly);
+            copy.insert(h.invert());
+          }else{
+              std::cout << "not helpful" << std::endl;
+          }
       }else{
           //result.push_back(workpoly);
           std::cout << "empty" << std::endl;
@@ -1358,5 +1378,69 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
     }
 	return result;
 }
+
+template <typename Number, typename Converter, class Setting>
+std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus2(const HPolytopeT<Number, Converter, Setting>& minus) const {
+  HPolytopeT<Number, Converter, Setting> minuspoly(minus.matrix(), minus.vector());
+  minuspoly=minuspoly.removeRedundancy();
+  hypro::matrix_t<Number> matrix = this->matrix();
+  hypro::vector_t<Number> constants= this->vector();
+  hypro::matrix_t<Number> matrix2 = minuspoly.matrix();
+  hypro::vector_t<Number> constants2= minuspoly.vector();
+
+  std::vector<HPolytopeT<Number, Converter, Setting>> result;
+  hypro::HPolytopeT<Number, Converter, Setting> copy(this->matrix(), this->vector());
+
+  std::vector<hypro::Halfspace<Number>> minusconstraints= minuspoly.constraints();
+  //std::vector<hypro::Halfspace<Number>> hpolyconstraints= copy.constraints();
+
+  for (long unsigned int i = 0; i < minusconstraints.size(); i++){
+	hypro::Halfspace<Number> h=minusconstraints.at(i);
+	//h2 not necessary, but more obvious
+    hypro::Halfspace<Number> h2=h; 
+    h2.invert();
+    //x: number of constraints
+    int x= matrix2.rows()+matrix.rows()+1;
+    hypro::matrix_t<Number> checkmatrix=hypro::matrix_t<Number>(x, 2);
+    hypro::vector_t<Number> checkvector = hypro::vector_t<Number>(x);
+    //create constraints als matrix and vector
+    for (long int t = 0; t < matrix2.rows(); t++){
+    	for (long int v = 0; v<matrix2.cols(); v++){
+        	checkmatrix(t,v)=matrix2.row(t)(v);
+        }
+        checkvector(t)=constants2(t);
+    }
+    for (long int t = 0; t < matrix.rows(); t++){
+    	for (long int v = 0; v<matrix.cols(); v++){
+          checkmatrix(t+ matrix2.rows(),v)=matrix.row(t)(v);
+        }
+        checkvector(t+ matrix2.rows())=constants(t);
+    }
+    for (long int v = 0; v<matrix2.cols(); v++){
+        checkmatrix(x-1,v)=h2.normal()(v);
+    }
+    checkvector(x-1)=h2.offset();
+    //use optimizer to solve LP
+    hypro::Optimizer<Number> opt;
+	opt.setMatrix(checkmatrix);
+	opt.setVector(checkvector);
+    //default relation is LEQ, set LESS for original polytop
+    for (long int t = 0; t < matrix.rows(); t++){
+    	opt.setRelation(carl::Relation::LESS,t+ matrix2.rows());
+    }
+    bool check= opt.checkConsistency();
+    //create polytope and add to result vector
+    if (check){
+    	hypro::HPolytopeT<Number,Converter,Setting> workpoly=copy;
+        workpoly.insert(h2);
+        result.push_back(workpoly);
+        copy.insert(h);
+    }else{
+        std::cout << "not helpful" << std::endl;
+    }
+  }
+  return result;
+}
+
 
 }  // namespace hypro
