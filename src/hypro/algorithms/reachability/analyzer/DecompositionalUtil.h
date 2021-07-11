@@ -6,12 +6,11 @@
 
 namespace hypro {
 /**
- * @brief       Return whether the analysis subspace uses one segment for each time-elapse or uses time-steps to construct
- *              multiple segments.
+ * @brief       Return whether the analysis subspace uses multiple segments for each time-elapse.
  * @param       dynamics    The dynamic type of the subspace.
- * @return      True if the subspace needs a clock for analysis and false otherwise.
+ * @return      True if multiple segments are constructed during analysis and false otherwise.
  */
-inline bool isClockedSubspace( const DynamicType dynamics );
+inline bool isSegmentedSubspace( const DynamicType dynamics );
 
 namespace detail {
 

@@ -46,7 +46,7 @@ struct resetWorkerVisitor {
  * @tparam      Representation      The used state set representation type.
  * @param       task                The current task.
  * @param       clockCount          Number of used clocks
- * @return      The time interval where the subspace satisfies the invariant.
+ * @return      The time intervals where the subspace satisfies the invariant.
  */
 template <typename Representation>
 struct computeTimeSuccessorVisitor {
@@ -189,10 +189,10 @@ class DecompositionalAnalyzer {
             mWorkQueue.push_front( detail::decompositionalQueueEntry<Representation>{ 0, Condition<Number>( ConstraintSetT<Number>() ), root } );
         }
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-            if( isClockedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
-                mSingularSubspaces.push_back( subspace );
-            } else {
+            if( isSegmentedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
                 mSegmentedSubspaces.push_back( subspace );
+            } else {
+                mSingularSubspaces.push_back( subspace );
             }
         }
     }
@@ -233,7 +233,7 @@ class DecompositionalAnalyzer {
 
     /**
      * @brief       Reset unused clocks to zero.
-     * @param       segments        The computed segments.
+     * @param       segment         The computed segment.
      * @param       clockIndex      The current clockIndex. All clocks with higher index are reset.
      */
     void resetClock( Representation& segment, std::size_t clockIndex );
@@ -242,7 +242,7 @@ class DecompositionalAnalyzer {
     /**
      * @brief       Intersect computed segments with clock values and update flowpipes.
      * @param       currentNodes    The current reachtree-nodes where the flowpipes are stored.
-     * @param       clock           The local/global time intervals to intersect with.
+     * @param       clock           The time intervals to intersect with.
      */
     void intersectSubspacesWithClock(
         NodeVector& currentNodes,
@@ -251,8 +251,8 @@ class DecompositionalAnalyzer {
     /**
      * @brief       Check if intersection with a bad state is empty.
      * @param       currentNodes            The current reachtree-nodes where the flowpipes are stored.
-     * @param       badState                The bad state condition to check.
      * @param       dependencies            The dependencies on the initial variables.
+     * @param       badState                The bad state condition to check.
      * @return      `true` if the bad state is not reachable and `false` otherwise.
      */
     bool isSafe(
@@ -261,17 +261,50 @@ class DecompositionalAnalyzer {
         const Condition<Number>& badState );
 
     /**
-     * @brief       Get the singular jump successors for a transition and the clock values where all successors satisfy the invariant.
+     * @brief       Compute jump successors and reset unused clocks to zero.
+     * @param       nodes           Current nodes
      * @param       workers         The vector of worker variants to use for computation.
      * @param       transition      The transition to get successors for.
-     * @return      Pair of clock values where the jump can be taken in all subspaces and the unconstrained successors
-                    for each subspace.
+     * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
+     * @return      Vector of jump successors as map { subspace (index) : reset jump successor (representation) }
      */
-    auto getSingularJumpSuccessors( const NodeVector& nodes, std::vector<WorkerVariant>& workers, Transition<Number>* trans, std::size_t clockIndex ) -> std::pair<TimeInformation<Number>, SubspaceSets>;
+    auto getJumpSuccessors(
+        const NodeVector& nodes,
+        std::vector<WorkerVariant> workers,
+        Transition<Number>* trans,
+        std::size_t clockIndex )
+            -> std::vector<SubspaceJumpSuccessors<Representation>>;
 
-    auto getJumpSuccessors( const NodeVector& nodes, std::vector<WorkerVariant> workers, Transition<Number>* trans, std::size_t clockIndex ) -> std::vector<SubspaceJumpSuccessors<Representation>>;
+    /**
+     * @brief       Get the singular jump successors for a transition and the clock values where all successors satisfy the invariant.
+     * @param       nodes           Current nodes
+     * @param       workers         The vector of worker variants to use for computation.
+     * @param       transition      The transition to get successors for.
+     * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
+     * @return      Pair of clock values where the jump is enabled and the jump successors in the singular subspaces.
+     */
+    auto getSingularJumpSuccessors(
+        const NodeVector& nodes,
+        std::vector<WorkerVariant>& workers,
+        Transition<Number>* trans,
+        std::size_t clockIndex )
+            -> std::pair<TimeInformation<Number>, SubspaceSets>;
 
-    auto getSegmentedJumpSuccessors( const NodeVector& nodes, std::vector<WorkerVariant>& workers, Transition<Number>* trans, std::size_t clockIndex ) -> std::vector<SubspaceJumpSuccessors<Representation>>;
+    
+    /**
+     * @brief       Get the jump successors in the segmented subspaces for a transition.
+     * @param       nodes           Current nodes
+     * @param       workers         The vector of worker variants to use for computation.
+     * @param       transition      The transition to get successors for.
+     * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
+     * @return      Vector of jump successors as map { subspace (index) : reset jump successor (representation) }
+     */
+    auto getSegmentedJumpSuccessors(
+        const NodeVector& nodes,
+        std::vector<WorkerVariant>& workers,
+        Transition<Number>* trans,
+        std::size_t clockIndex )
+            -> std::vector<SubspaceJumpSuccessors<Representation>>;
 
   protected:
     std::deque<detail::decompositionalQueueEntry<Representation>> mWorkQueue;               // holds the tasks that still need to be computed
@@ -281,7 +314,7 @@ class DecompositionalAnalyzer {
     FixedAnalysisParameters mFixedParameters;        // holds common analysis parameters for all analyzers
     AnalysisParameters mParameters;                  // holds analyzer specific parameters
     std::vector<std::size_t> mSingularSubspaces;     // holds the singular subspace indices
-    std::vector<std::size_t> mSegmentedSubspaces;
+    std::vector<std::size_t> mSegmentedSubspaces;    // holds the subspaces which have more than one segment as time successors (e.g. non-singular)
 
     tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 )*mFixedParameters.localTimeHorizon;
     TimeInformation<Number> const mGlobalTimeInterval = TimeInformation<Number>( mClockCount, Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );

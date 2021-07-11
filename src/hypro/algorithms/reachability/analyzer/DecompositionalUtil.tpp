@@ -2,8 +2,8 @@
 
 namespace hypro {
 
-inline bool isClockedSubspace( const DynamicType dynamics ) {
-    return ( dynamics != DynamicType::affine && dynamics != DynamicType::linear && dynamics != DynamicType::discrete );
+inline bool isSegmentedSubspace( const DynamicType dynamics ) {
+    return ( dynamics == DynamicType::affine || dynamics == DynamicType::linear || dynamics == DynamicType::discrete );
 }
 
 
