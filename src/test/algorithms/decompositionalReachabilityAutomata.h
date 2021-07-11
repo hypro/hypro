@@ -703,19 +703,19 @@ HybridAutomaton<Number> mixedDynamicsWithJumpsHa() {
     uniqueLoc0->setName( "l0" );
     uniqueLoc1->setName( "l1" );
 
-    // Set flow x' = y, y' = -x, z' = 2 in loc0
+    // Set flow x' = y, y' = -x, z' = 1 in loc0
     Matrix flow0 = Matrix::Zero( 4, 4 );
     flow0( 0, 1 ) = 1;
     flow0( 1, 0 ) = -1;
-    flow0( 2, 3 ) = 2;
+    flow0( 2, 3 ) = 1;
     uniqueLoc0->setFlow( flow0 );
 
-    // Set flow x' = 1, y' = x + 2, z' = -1 in loc1
+    // Set flow x' = 1, y' = x + 2, z' = 1 in loc1
     Matrix flow1 = Matrix::Zero( 4, 4 );
-    flow1( 0, 1 ) = 1;
+    flow1( 0, 3 ) = 1;
     flow1( 1, 1 ) = 1;
     flow1( 1, 3 ) = 2;
-    flow1( 2, 3 ) = -1;
+    flow1( 2, 3 ) = 1;
     uniqueLoc1->setFlow( flow1 );
 
     // Set invariant x <= 3 in loc0 and loc1
@@ -740,17 +740,19 @@ HybridAutomaton<Number> mixedDynamicsWithJumpsHa() {
     std::unique_ptr<Transition<Number>> trans0 =
           std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
 
-    // l0 -> l1 with guard y <= -2 and no reset
-    transConstraint = Matrix::Zero( 1, 3 );
-    transConstants = -2 * Vector::Ones( 1 );
+    // l0 -> l1 with guard y <= 0.1 and z <= 0.4 and no reset
+    transConstraint = Matrix::Zero( 2, 3 );
+    transConstants = Vector::Zero( 2 );
     transConstraint( 0, 1 ) = 1;
+    transConstraint( 1, 2 ) = 1;
+    transConstants << 0.1, 0.4;
     guard = Condition<Number>( transConstraint, transConstants );
     reset = Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>(), carl::Interval<Number>() } );
 
     std::unique_ptr<Transition<Number>> trans1 =
           std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
-    // Set initial state x = 0, y = 0, z = 1
+    // Set initial state x = 0.7, y = 1, z = 0
     Matrix initialConstraints = Matrix::Zero( 6, 3 );
     Vector initialConstants = Vector::Zero( 6 );
     initialConstraints << 1, 0, 0,
@@ -759,7 +761,7 @@ HybridAutomaton<Number> mixedDynamicsWithJumpsHa() {
                           0, -1, 0,
                           0, 0, 1,
                           0, 0, -1;
-    initialConstants << 0, 0, 0, 0, 1, -1;
+    initialConstants << 0.7, -0.7, 1, -1, 0, 0;
 
     // Create HA
     uniqueLoc0->addTransition( std::move( trans0 ) );
