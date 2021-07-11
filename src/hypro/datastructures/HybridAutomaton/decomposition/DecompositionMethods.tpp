@@ -624,31 +624,32 @@ void addClocksToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, st
 }
 
 template <typename Number>
-void addInitialVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace ) {
-   	addVarToAutomaton( ha, subspace, Number( 0 ) );
-   	// initially equal to subspace variable
-   	std::map<const Location<Number>*, Condition<Number>> newInitialStates;
-   	for ( auto& [loc, cond] : ha.getInitialStates() ) {
-   		Condition<Number> newCond = cond;
-   		auto condMatrix = cond.getMatrix( subspace );
-		auto condVector = cond.getVector( subspace );
-		condMatrix.conservativeResize( condMatrix.rows() + 2, condMatrix.cols() );
-		condVector.conservativeResize( condVector.rows() + 2 );
-		for( Eigen::Index i = 0; i < condMatrix.cols() - 1; ++i ) {
-			condMatrix( condMatrix.rows() - 2, i ) = 0;
-			condMatrix( condMatrix.rows() - 1, i ) = 0;
+void addInitialVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std::size_t count ) {
+	for ( std::size_t varIndex = 0; varIndex < count; ++varIndex ) {
+		addVarToAutomaton( ha, subspace, Number( 0 ) );
+		// initial state doesn't matter because there are no dependencies before first clock reset,
+		// so the variables are set to 0
+		std::map<const Location<Number>*, Condition<Number>> newInitialStates;
+		for ( auto& [loc, cond] : ha.getInitialStates() ) {
+			Condition<Number> newCond = cond;
+			auto condMatrix = cond.getMatrix( subspace );
+			auto condVector = cond.getVector( subspace );
+			condMatrix.conservativeResize( condMatrix.rows() + 2, condMatrix.cols() );
+			condVector.conservativeResize( condVector.rows() + 2 );
+			for( Eigen::Index i = 0; i < condMatrix.cols() - 1; ++i ) {
+				condMatrix( condMatrix.rows() - 2, i ) = 0;
+				condMatrix( condMatrix.rows() - 1, i ) = 0;
+			}
+			condMatrix( condMatrix.rows() - 2, condMatrix.cols() - 1 ) = 1;
+			condMatrix( condMatrix.rows() - 1, condMatrix.cols() - 1 ) = -1;
+			condVector( condVector.rows() - 2 ) = 0;
+			condVector( condVector.rows() - 1 ) = 0;
+			newCond.setMatrix( condMatrix, subspace );
+			newCond.setVector( condVector, subspace );
+			newInitialStates[ loc ] = newCond;
 		}
-		condMatrix( condMatrix.rows() - 2, condMatrix.cols() - 1 ) = 1;
-		condMatrix( condMatrix.rows() - 2, 0 ) = -1;
-		condMatrix( condMatrix.rows() - 1, condMatrix.cols() - 1 ) = -1;
-		condMatrix( condMatrix.rows() - 1, 0 ) = 1;
-		condVector( condVector.rows() - 2 ) = 0;
-		condVector( condVector.rows() - 1 ) = 0;
-		newCond.setMatrix( condMatrix, subspace );
-		newCond.setVector( condVector, subspace );
-		newInitialStates[ loc ] = newCond;
+		ha.setInitialStates( newInitialStates );
    	}
-   	ha.setInitialStates( newInitialStates );
 }
 
 template <typename Number>

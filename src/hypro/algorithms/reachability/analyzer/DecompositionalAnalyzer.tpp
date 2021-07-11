@@ -326,6 +326,7 @@ struct DecompositionalAnalyzer<Representation>::LtiJumpSuccessorGen {
                     return next();
                 }
             }
+            firstIndex += 1;
             return SubspaceJumpSuccessors<Representation>{ nextInterval, res };
         }
 

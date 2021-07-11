@@ -40,7 +40,7 @@ template <typename Number>
 void addClocksToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std::size_t clockCount );
 // adds a variable to store the initial value of the subspace variable to the subspace
 template <typename Number>
-void addInitialVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace );
+void addInitialVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std::size_t count = 1 );
 // Adds a variable with given flow to the automaton as the last variable in the given subspace
 template <typename Number>
 void addVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, Number flow );
