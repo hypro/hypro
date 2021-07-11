@@ -46,7 +46,7 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
         auto subspaceVector = subspaceSets[ i ].vector();
         auto subspaceVars = decomposition.subspaces[ i ];
         compVec.segment( accRows, subspaceVector.rows() ) = subspaceVector;
-        for ( std::size_t row = 0; row < subspaceMatrix.rows(); ++row ) {
+        for ( std::size_t row = 0; row < (std::size_t) subspaceMatrix.rows(); ++row ) {
             for ( std::size_t varIndex = 0; varIndex < subspaceVars.size(); ++varIndex ) {
                 compMat( accRows, subspaceVars[ varIndex ] ) = subspaceMatrix( row, varIndex );
                 compMat( accRows, initVarOffset + subspaceVars[ varIndex ] ) = subspaceMatrix( row, subspaceVars.size() + varIndex );
@@ -83,8 +83,6 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
 
 template <typename Representation>
 Representation composeSubspaces( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, const Decomposition& decomposition, std::size_t clockCount ) {
-    using Number = typename Representation::NumberType;
-
     auto pol = composeSubspaceConstraints( subspaceSets, dependencies, decomposition, clockCount );
     std::size_t varCount = std::accumulate( decomposition.subspaces.begin(), decomposition.subspaces.end(), 0,
         []( std::size_t cur, const auto& subspace ) { return cur + subspace.size(); } );

@@ -658,8 +658,8 @@ void addVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, Numbe
         if ( loc->getFlowTypes()[ subspace ] == DynamicType::rectangular ) {
             // rectangular flow
             auto clockVariable = VariablePool::getInstance().newCarlVariable();
-            auto flow = loc->getRectangularFlow( subspace );
-            //flow.setFlowIntervalForDimension( carl::Interval<Number>( flow ), clockVariable );
+            auto locFlow = loc->getRectangularFlow( subspace );
+            locFlow.setFlowIntervalForDimension( carl::Interval<Number>( flow ), clockVariable );
         } else {
             // linear flow types
             auto flowMatrix = loc->getLinearFlow( subspace ).getFlowMatrix();

@@ -261,8 +261,8 @@ struct DecompositionalAnalyzer<Representation>::LtiSegmentGen {
     NodeVector const nodes;
     SegmentInd segmentIndex = 0;
     Decomposition decomposition;
-    std::vector<std::size_t> subspaces;
     Condition<Number> cond = Condition<Number>( ConstraintSetT<Number>() );
+    std::vector<std::size_t> subspaces;
     
     LtiSegmentGen( NodeVector const& nodes, Decomposition const& decomposition, const std::vector<std::size_t>& subspaces )
         : nodes( nodes )
@@ -276,14 +276,14 @@ struct DecompositionalAnalyzer<Representation>::LtiSegmentGen {
     std::pair<SegmentInd, SubspaceSets> next() {
         // check if more segments are available
         for ( auto subspace : subspaces ) {
-            if ( segmentIndex >= nodes[ subspace ]->getFlowpipe().size() ) {
+            if ( segmentIndex >= (SegmentInd) nodes[ subspace ]->getFlowpipe().size() ) {
                 return {};
             }
         }
         SubspaceSets res;
         for ( auto subspace : subspaces ) {
             auto& flowpipe = nodes[ subspace ]->getFlowpipe();
-            assert( flowpipe.size() > segmentIndex );
+            assert( (SegmentInd) flowpipe.size() > segmentIndex );
             auto [containment, set] = intersect( flowpipe[ segmentIndex ], cond, subspace );
             if ( containment == CONTAINMENT::NO ) {
                 segmentIndex += 1;
