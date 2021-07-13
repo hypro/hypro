@@ -61,18 +61,25 @@ class UrgencyWorker {
     const Flowpipe& getFlowpipe() const { return mFlowpipe; }
 
     /**
-     * @brief Computes the states reachable by taking a discrete transition.
+     * @brief Computes the states reachable by taking some discrete transition in a time interval.
      * @details Performs aggregation and applies the reset.
      * @param task Used to access the location.
+     * @param transition The transition to take.
+     * @param timeOfJump Only jumps taken in this time interval will be considered.
      */
-    void computeJumpSuccessors( const ReachTreeNode<Representation>& task );
+    JumpSuccessor<Representation> computeJumpSuccessors(
+        const ReachTreeNode<Representation>& task,
+        const Transition<Number>* transition,
+        const carl::Interval<SegmentInd>& timeOfJump = carl::Interval<SegmentInd>::unboundedInterval() );
+
     /**
-     * @brief Getter function for the computed jump successors.
+     * @brief Computes the states reachable by taking any discrete transition.
+     * @details Iterates over all transitions, performs aggregation and applies the reset.
+     * @param task Used to access the location.
      */
-    const JumpSuccessors& getJumpSuccessors() const { return mJumpSuccessors; }
+    JumpSuccessors computeJumpSuccessors( const ReachTreeNode<Representation>& task );
 
     void reset() {
-        mJumpSuccessors.clear();
         mFlowpipe.clear();
     }
 
@@ -94,7 +101,6 @@ class UrgencyWorker {
     tNumber mLocalTimeHorizon;                        ///< local time horizon
     TimeTransformationCache<Number>& mTrafoCache;     ///< cache for matrix exponential
     Flowpipe mFlowpipe;                               ///< Storage of computed time successors
-    JumpSuccessors mJumpSuccessors;                   ///< Storage of computed jump successors
 
 
     size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
