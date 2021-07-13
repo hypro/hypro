@@ -22,7 +22,7 @@ struct Path {
             res.rootLocation = rootLocation;
         } else if ( n == 0 ) {
             res.elements = {};
-            res.rootLocation = elements.at( elements.size() - 1 ).second->getTarget();
+            res.rootLocation = rootLocation;
         } else {
             res.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>>(
                 elements.begin(), elements.begin() + n );
