@@ -48,6 +48,9 @@ matrix_t<Number> StarsetT<Number, Converter, Setting>::generator() const {
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::empty() const {
     //to polytope without basis for more efficiency then check if empty
+    auto intermediate=Converter::toHPolytope(*this );
+    return intermediate.empty();
+
 }
 
 template <typename Number, typename Converter, typename Setting>

@@ -96,3 +96,13 @@ TYPED_TEST(StarsetTest, Containspoint){
     hypro::Point<TypeParam> p1( { 3, 3 } );
     EXPECT_EQ(this->myStar1.contains(p1),true);
 }
+
+TYPED_TEST(StarsetTest, Vertices){
+    std::cout<<this->myStar1.vertices()<<std::endl;
+}
+
+TYPED_TEST(StarsetTest, Empty){
+    std::cout<<this->myStar1.empty()<<std::endl;
+    EXPECT_EQ(this->myStar1.empty(),false);
+}
+
