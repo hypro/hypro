@@ -47,14 +47,18 @@ matrix_t<Number> StarsetT<Number, Converter, Setting>::generator() const {
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::empty() const {
+    //to polytope without basis for more efficiency then check if empty
 }
 
 template <typename Number, typename Converter, typename Setting>
 Number StarsetT<Number, Converter, Setting>::supremum() const {
+    
 }
 
 template <typename Number, typename Converter, typename Setting>
 std::vector<Point<Number>> StarsetT<Number, Converter, Setting>::vertices( const matrix_t<Number>& m ) const {
+    auto intermediate=Converter::toHPolytope(*this );
+    return intermediate.vertices();
 }
 
 template <typename Number, typename Converter, typename Setting>
