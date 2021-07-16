@@ -26,6 +26,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
 
         // Time successors
         TimeInformation<Number> invariantSatisfyingTime = computeTimeSuccessorsGetEnabledTime( currentNodes, workers );
+        removeRedundantSegments( currentNodes );
         intersectSubspacesWithClock( currentNodes, invariantSatisfyingTime );
 
         // Check safety
@@ -42,7 +43,6 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
 
         for ( const auto& transition : currentLoc->getTransitions() ) {
             std::vector<SubspaceJumpSuccessors<Representation>> jumpSuccessors = getJumpSuccessors( currentNodes, workers, transition.get(), clockIndex );
-
             for ( auto& timedSuccessor : jumpSuccessors ) {
                 std::size_t nextIndex = clockIndex + 1;
                 // todo: return as vector, not as map
@@ -50,15 +50,17 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                 for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
                     subspaceSets[ subspace ] = std::move( timedSuccessor.subspaceSets[ subspace ] );
                 }
-                if ( clockIndex >= mClockCount - 1 ) {
+                if ( clockIndex + 1 >= mClockCount ) {
                     nextIndex = 0;
                     // complexity reduction
-                    Representation composedSuccessors = detail::composeSubspaces( subspaceSets, dependencies, mDecomposition, mClockCount );
-                    if ( composedSuccessors.empty() ) {
-                        continue;
+                    if ( mClockCount > 0 ) {
+                        Representation composedSuccessors = detail::composeSubspaces( subspaceSets, dependencies, mDecomposition, mClockCount );
+                        if ( composedSuccessors.empty() ) {
+                            continue;
+                        }
+                        dependencies = detail::getDependencies( composedSuccessors, mDecomposition );
+                        subspaceSets = detail::decompose( composedSuccessors, mDecomposition, mClockCount );
                     }
-                    dependencies = detail::getDependencies( composedSuccessors, mDecomposition );
-                    subspaceSets = detail::decompose( composedSuccessors, mDecomposition, mClockCount );
                 }
 
                 // create child nodes and push to queue
@@ -137,6 +139,20 @@ void DecompositionalAnalyzer<Representation>::intersectSubspacesWithClock(
 }
 
 template <typename Representation>
+void DecompositionalAnalyzer<Representation>::removeRedundantSegments( NodeVector& currentNodes ) {
+    std::vector<std::size_t> segmentCount( mSegmentedSubspaces );
+    std::size_t i = 0;
+    for ( auto subspace : mSegmentedSubspaces ) {
+        segmentCount[ i ] = currentNodes[ subspace ]->getFlowpipe().size();
+        ++i;
+    }
+    std::size_t minSegments = *( std::min_element( segmentCount.begin(), segmentCount.end() ) );
+    for ( auto subspace : mSegmentedSubspaces ) {
+        currentNodes[ subspace ]->getFlowpipe().resize( minSegments );
+    }
+}
+
+template <typename Representation>
 bool DecompositionalAnalyzer<Representation>::isSafe(
   const NodeVector& nodes, const Condition<Number>& dependencies, const Condition<Number>& badState ) {
 
@@ -151,12 +167,19 @@ bool DecompositionalAnalyzer<Representation>::isSafe(
         }
     }
     if ( mSegmentedSubspaces.size() == 0 ) {
+        if ( mClockCount == 0 ) {
+            // all subspaces unsafe at some point. without synchronization we cannot tell if they are unsafe at the same time or not.
+            return false;
+        }
         HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( subspaceSets, dependencies, mDecomposition, mClockCount );
         if ( !composedPolytope.empty() ) {
             return false;
         }
     }
     for ( auto badSegment = segments.next().second; badSegment.size() > 0; badSegment = segments.next().second ) {
+        if ( mClockCount == 0 ) {
+            return false;
+        }
         for ( auto subspace : mSegmentedSubspaces ) {
             subspaceSets[ subspace ] = badSegment[ subspace ];
         }
@@ -170,6 +193,8 @@ bool DecompositionalAnalyzer<Representation>::isSafe(
 
 template <typename Representation>
 void DecompositionalAnalyzer<Representation>::resetClock( Representation& segment, std::size_t clockIndex ) {
+    if ( mClockCount == 0 ) { return; }
+    assert( mClockCount > clockIndex );
     std::vector<std::size_t> nonZeroDimensions( segment.dimension() - mClockCount + clockIndex + 1 );
     for ( std::size_t i = 0; i < nonZeroDimensions.size(); ++i ) {
         nonZeroDimensions[ i ] = i;

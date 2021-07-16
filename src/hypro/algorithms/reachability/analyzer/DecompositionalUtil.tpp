@@ -32,7 +32,7 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
     // number of columns in full polytope
     std::size_t compDim = std::accumulate( subspaceSets.begin(), subspaceSets.end(), 0,
         []( std::size_t cur, const auto& segment ) { return cur + segment.dimension(); } );
-
+    assert( clockCount > 0 || varCount == compDim );
     matrix_t<Number> compMat = matrix_t<Number>::Zero( compRows, compDim );
     vector_t<Number> compVec = vector_t<Number>::Zero( compRows );
 
@@ -49,7 +49,9 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
         for ( std::size_t row = 0; row < (std::size_t) subspaceMatrix.rows(); ++row ) {
             for ( std::size_t varIndex = 0; varIndex < subspaceVars.size(); ++varIndex ) {
                 compMat( accRows, subspaceVars[ varIndex ] ) = subspaceMatrix( row, varIndex );
-                compMat( accRows, initVarOffset + subspaceVars[ varIndex ] ) = subspaceMatrix( row, subspaceVars.size() + varIndex );
+                if ( clockCount > 0 ) {
+                    compMat( accRows, initVarOffset + subspaceVars[ varIndex ] ) = subspaceMatrix( row, subspaceVars.size() + varIndex );
+                }
             }
             for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
                 compMat( accRows, clockOffset + i*clockCount + clockIndex ) = subspaceMatrix( row, 2 * subspaceVars.size() + clockIndex );
@@ -60,6 +62,7 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
 
     if ( !dependencies.isTrue() ) {
         assert( dependencies.dimension() == varCount );
+        assert( clockCount > 0 );
         // add constraints of dependencies on x_i^init
         compMat.block( accRows, initVarOffset, dependencies.getMatrix().rows(), dependencies.getMatrix().cols() ) = dependencies.getMatrix();
         compVec.segment( accRows, dependencies.getVector().rows() ) = dependencies.getVector();
@@ -90,6 +93,7 @@ Representation composeSubspaces( const std::vector<Representation>& subspaceSets
     for ( std::size_t i = 0; i < varIndices.size(); ++i ) {
         varIndices[ i ] = i;
     }
+    // todo: keep as polytopes for projection, convert after
     Representation comp;
     convert( pol, comp );
     return projectOnDimensions( comp, varIndices );
@@ -184,6 +188,9 @@ Representation projectOnDimensions( const Representation& composedSet, const std
 template <typename Representation>
 Representation addClocksAndInitial( const Representation& set, std::size_t clockCount ) {
     using Number = typename Representation::NumberType;
+    if ( clockCount == 0 ) {
+        return set;
+    }
 
     matrix_t<Number> newMat = matrix_t<Number>::Zero( set.matrix().rows() + 2 * set.dimension() + 2 * clockCount, 2 * set.dimension() + clockCount );
     vector_t<Number> newVec = vector_t<Number>::Zero( set.matrix().rows() + 2 * set.dimension() + 2 * clockCount );
@@ -238,6 +245,9 @@ Representation intersectSegmentWithClock(
     }
     if ( clockValues.empty() ) {
         return Representation::Empty();
+    }
+    if ( clockCount == 0 ) {
+        return segment;
     }
     HPolytope<Number> segmentHpoly;
     convert( segment, segmentHpoly );

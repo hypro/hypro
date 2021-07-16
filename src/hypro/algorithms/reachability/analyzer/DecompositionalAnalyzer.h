@@ -249,6 +249,15 @@ class DecompositionalAnalyzer {
         TimeInformation<Number>& clock );
 
     /**
+     * @brief       Remove segments that are beyond a time horizon reachable in all subspaces.
+     * @details     Get the minimum number of segments that every flowpipe has and in every
+     *              subspace delete segments with a higher index (e.g. if some subspace has
+     *              3 segments then segments 4,5... will be removed in all subspaces.)
+     * @param       currentNodes    Nodes that hold the flowpipe segments
+     */
+    void removeRedundantSegments( NodeVector& currentNodes );
+
+    /**
      * @brief       Check if intersection with a bad state is empty.
      * @param       currentNodes            The current reachtree-nodes where the flowpipes are stored.
      * @param       dependencies            The dependencies on the initial variables.
