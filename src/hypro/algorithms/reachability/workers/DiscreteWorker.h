@@ -31,10 +31,9 @@ class DiscreteWorker {
     template <typename OutputIt>
     REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out, bool checkSafety = true ) const;
 
-    std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const;
-    JumpSuccessorGen getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number> const* transition ) const;
+    std::map<Transition<Number>*, Representation> computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const;
     // Compute jump successors for guard enabling sets
-    std::vector<TimedValuationSet<Representation>> computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<Number> const* trans ) const;
+    std::pair<CONTAINMENT, Representation> computeJumpSuccessorsForGuardEnabled( const Representation& enabledSet, Transition<Number> const* trans ) const;
 
   protected:
     const HybridAutomaton<Number>& mHybridAutomaton;  ///< hybrid automaton to analyze

@@ -26,57 +26,28 @@ REACHABILITY_RESULT DiscreteWorker<Representation>::computeTimeSuccessors( const
 }
 
 template <typename Representation>
-std::vector<JumpSuccessor<Representation>> DiscreteWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const {
-    TRACE( "hypro", "flowpipe: " << print( flowpipe ) );
+auto DiscreteWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const
+        -> std::map<Transition<Number>*, Representation>  {
+    std::map<Transition<Number>*, Representation> enabledSegments;
 
-    //transition x enabled segments, segment ind
-    std::vector<EnabledSets<Representation>> enabledSegments{};
-
-    // todo: do not add empty enabled sets
+    assert( flowpipe.size() <= 1 );
+    if ( flowpipe.size() == 0 ) {
+        return {};
+    }
+    // intersect with guard
     for ( const auto& transition : loc->getTransitions() ) {
-        auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation>{ transition.get() } );
-
-        SegmentInd cnt = 0;
-        for ( auto const& valuationSet : flowpipe ) {
-            auto [containment, intersected] = intersect( valuationSet, transition->getGuard() );
-
-            if ( containment != CONTAINMENT::NO ) {
-                currentSucc.valuationSets.push_back( { intersected, cnt } );
-            }
-            ++cnt;
+        auto [containment, intersected] = intersect( flowpipe[ 0 ], transition->getGuard(), mSubspace );
+        if ( containment != CONTAINMENT::NO ) {
+            enabledSegments[ transition ] = intersected;
         }
     }
 
-    TRACE( "hypro", "enabledSegments: " << print( enabledSegments ) );
-
-    std::vector<JumpSuccessor<Representation>> successors{};
-
-    // for each transition
-    for ( auto& [transition, valuationSets] : enabledSegments ) {
-        assert( valuationSets.size() <= 1 );
-        if ( valuationSets.size() == 1 ) {
-            successors.emplace_back( JumpSuccessor<Representation>{ transition, { { valuationSets[ 0 ].valuationSet, carl::Interval<SegmentInd>( 0 ) } } } );
-        }
-    }
-
-    // applyReset
-    for ( auto& [transition, valuationSets] : successors ) {
-        // todo: skip inner loop (valuationSets[0])
-        for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
-            TRACE( "hypro", "valSet: " << it->valuationSet.vertices() );
-            it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
-            TRACE( "hypro", "Reset is: " << transition->getReset() );
-            TRACE( "hypro", "Reset: " << it->valuationSet.vertices() );
-            CONTAINMENT containment;
-            std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
-            TRACE( "hypro", "Intersect: " << it->valuationSet.vertices() );
-            if ( containment == CONTAINMENT::NO ) {
-                it = valuationSets.erase( it );
-            } else {
-                it->valuationSet.reduceRepresentation();
-                TRACE( "hypro", "Reduce: " << it->valuationSet.vertices() );
-                ++it;
-            }
+    // apply reset and intersect with target invariant
+    std::map<Transition<Number>*, Representation> successors;
+    for ( const auto& enabled : enabledSegments ) {
+        auto [containment, successor] = computeJumpSuccessorsForGuardEnabled( enabled.second, enabled.first );
+        if ( containment != CONTAINMENT::NO ) {
+            successors[ enabled.first ] = successor;
         }
     }
 
@@ -84,23 +55,10 @@ std::vector<JumpSuccessor<Representation>> DiscreteWorker<Representation>::compu
 }
 
 template<typename Representation>
-std::vector<TimedValuationSet<Representation>> DiscreteWorker<Representation>::computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<Number> const* transition ) const {
+std::pair<CONTAINMENT, Representation> DiscreteWorker<Representation>::computeJumpSuccessorsForGuardEnabled( const Representation& enabledSet, Transition<Number> const* transition ) const {
 
-    assert( predecessors.size() == 1 );
-    std::vector<TimedValuationSet<Representation>> valuationSets{ TimedValuationSet<Representation>{ predecessors[ 0 ].valuationSet, predecessors[ 0 ].index } };
-    for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
-        it->valuationSet = applyReset( it->valuationSet, transition->getReset(), mSubspace );
-        CONTAINMENT containment;
-        std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant(), mSubspace );
-        if ( containment == CONTAINMENT::NO ) {
-            it = valuationSets.erase( it );
-        } else {
-            it->valuationSet.reduceRepresentation();
-            ++it;
-        }
-    }
-
-    return valuationSets;
+    auto successor = applyReset( enabledSet, transition->getReset(), mSubspace );
+    return intersect( successor, transition->getTarget()->getInvariant(), mSubspace );
 }
 
 
