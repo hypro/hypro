@@ -128,7 +128,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affin
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minkowskiSum( const StarsetT<Number, Converter, Setting>& rhs ) const {
      //assuming same dimension
-     matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(mGenerator.rows(),mGenerator.cols()+rhs.generator().cols()); 
+    matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(mGenerator.rows(),mGenerator.cols()+rhs.generator().cols()); 
     matrix_t<Number> newmShapeMatrix=matrix_t<Number>::Zero(mShapeMatrix.rows()+rhs.shape().rows(),mShapeMatrix.cols()+rhs.shape().cols());
     vector_t<Number> newmLimits=vector_t<Number>::Zero(mLimits.rows()+rhs.limits().rows());
     //setting new generator matrix
@@ -186,9 +186,31 @@ bool StarsetT<Number, Converter, Setting>::contains( const StarsetT<Number, Conv
     auto rhs=Converter::toHPolytope(Starset);
     return intermediate.contains(rhs);
 }
-//bu kaldi
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite( const StarsetT<Number, Converter, Setting>& rhs ) const {
+    /*The method implemented here is similat to the method proposed by
+     * Prof. Girard for Zonotope.
+     * Reachability of Uncertain Linear Systems Using
+     *      Zonotopes, Antoin Girard, HSCC2005 
+     * Output is an overapproximation of convex hull of two star sets
+     * Explanation for this method is written in Bachelor thesis*/
+     
+     //Assuming same dimension
+     matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(mGenerator.rows(),mGenerator.cols()+rhs.generator().cols()); 
+     matrix_t<Number> newmShapeMatrix=matrix_t<Number>::Zero(mShapeMatrix.rows()+rhs.shape().rows(),mShapeMatrix.cols()+rhs.shape().cols());
+     vector_t<Number> newmLimits=vector_t<Number>::Zero(mLimits.rows()+rhs.limits().rows());
+    
+     vector_t<Number> newmCenter=mCenter-rhs.center();
+     newmGenerator.block(0,0,mGenerator.rows(),mGenerator.cols())=mGenerator;
+     newmGenerator.block(0, mGenerator.cols(), rhs.generator().rows() , rhs.generator().cols())=-rhs.generator();
+     
+     newmShapeMatrix.topLeftCorner(mShapeMatrix.rows(),mShapeMatrix.cols())=mShapeMatrix;
+     newmShapeMatrix.bottomRightCorner(rhs.shape().rows(),rhs.shape().cols())=rhs.shape();
+     
+     newmLimits.head(mLimits.rows())=mLimits;
+     newmLimits.tail(rhs.limits().rows())=rhs.limits();
+     
+     return this->minkowskiSum( StarsetT<Number, Converter, Setting>(newmCenter,newmShapeMatrix,newmLimits,newmGenerator) );
 }
 
 template <typename Number, typename Converter, typename Setting>
