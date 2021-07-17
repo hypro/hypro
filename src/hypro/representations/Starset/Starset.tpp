@@ -91,6 +91,16 @@ const StarsetT<Number, Converter, Setting>& StarsetT<Number, Converter, Setting>
 
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
+    StarsetT<Number, Converter, Setting> tmp =this->intersectHalfspace(rhs);
+    if(!tmp->empty()){
+        if(tmp->contains(this)){
+            return std::make_pair( CONTAINMENT::FULL, std::move( tmp ) );
+        }
+        return std::make_pair( CONTAINMENT::PARTIAL, std::move( tmp ) );
+    }
+    else{
+        return std::make_pair( CONTAINMENT::NO, std::move( tmp ) );
+    }
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -137,6 +147,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minko
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersect( const StarsetT<Number, Converter, Setting>& rhs ) const {
+    
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -171,8 +182,11 @@ bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point 
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const StarsetT<Number, Converter, Setting>& Starset ) const {
+    auto intermediate=Converter::toHPolytope(*this );
+    auto rhs=Converter::toHPolytope(Starset);
+    return intermediate.contains(rhs);
 }
-
+//bu kaldi
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite( const StarsetT<Number, Converter, Setting>& rhs ) const {
 }
