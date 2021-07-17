@@ -105,6 +105,16 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
 
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+    StarsetT<Number, Converter, Setting> star=this->intersectHalfspaces(_mat ,_vec);
+    if(!star->empty()){
+        if(star->contains(this)){
+            return std::make_pair( CONTAINMENT::FULL, std::move( star ) );
+        }
+        return std::make_pair( CONTAINMENT::PARTIAL, std::move( star ) );
+    }
+    else{
+        return std::make_pair( CONTAINMENT::NO, std::move( star ) );
+    }
 }
     
 template <typename Number, typename Converter, typename Setting>
@@ -167,7 +177,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-    StarsetT<Number, Converter, Setting> star= StarsetT<Number, Converter, Setting>(mCenter,mShapeMatrix,mLimits,mGenerator);
+    StarsetT<Number, Converter, Setting> star= this;
     for(int i=0;i<_mat.rows();i++){
         star=star.intersectHalfspace(Halfspace<Number>(_mat.row(i),_vec(i)));
     }
