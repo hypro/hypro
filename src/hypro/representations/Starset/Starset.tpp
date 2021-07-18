@@ -157,7 +157,9 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minko
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersect( const StarsetT<Number, Converter, Setting>& rhs ) const {
-    
+    auto intermediate  = Converter::toHPolytope(*this );
+    auto intermediate2 = Converter::toHPolytope(rhs );
+    return Converter::toStarset(intermediate.intersect(intermediate2));
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -225,11 +227,11 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite( const std::vector<StarsetT<Number, Converter, Setting>>& Starsets ) {
-   /* StarsetT<Number, Converter, Setting> star= this;
-    for(int i=0;i<Starsets.rows();i++){
+    StarsetT<Number, Converter, Setting> star= StarsetT<Number, Converter, Setting>(Starsets[0].center(),Starsets[0].shape(),Starsets[0].limits(),Starsets[0].generator());
+    for(int i=1;i<Starsets.size();i++){
         star=star.unite(Starsets[i]);
     }
-    return star;*/
+    return star;
 }
 
 template <typename Number, typename Converter, typename Setting>
