@@ -177,7 +177,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-    StarsetT<Number, Converter, Setting> star= this;
+    StarsetT<Number, Converter, Setting> star= StarsetT<Number, Converter, Setting>(mCenter,mShapeMatrix,mLimits,mGenerator);
     for(int i=0;i<_mat.rows();i++){
         star=star.intersectHalfspace(Halfspace<Number>(_mat.row(i),_vec(i)));
     }
@@ -203,7 +203,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
      * Reachability of Uncertain Linear Systems Using
      *      Zonotopes, Antoin Girard, HSCC2005 
      * Output is an overapproximation of convex hull of two star sets
-     * Explanation for this method is written in Bachelor thesis*/
+     * Explanation for this method is written in Bachelor thesis of Dogu Tamgac*/
      
      //Assuming same dimension
      matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(mGenerator.rows(),mGenerator.cols()+rhs.generator().cols()); 
@@ -224,7 +224,12 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 }
 
 template <typename Number, typename Converter, typename Setting>
-StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite( const std::vector<StarsetT<Number, Converter, Setting>>& Starsetes ) {
+StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite( const std::vector<StarsetT<Number, Converter, Setting>>& Starsets ) {
+   /* StarsetT<Number, Converter, Setting> star= this;
+    for(int i=0;i<Starsets.rows();i++){
+        star=star.unite(Starsets[i]);
+    }
+    return star;*/
 }
 
 template <typename Number, typename Converter, typename Setting>
