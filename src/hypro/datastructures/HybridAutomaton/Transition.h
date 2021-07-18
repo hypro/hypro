@@ -209,6 +209,14 @@ class Transition {
 	}
 
 	/**
+	 * @brief			Computes the set from which transition can be taken.
+	 * @detail 		The jump enabling set is the intersection of the guard and the
+	 * 						preimage of the target invariant under the reset function.
+	 * @return 		A condition that is satisfied iff the transition can be taken.
+	 */
+	Condition<Number> getJumpEnablingSet() const;
+
+	/**
      * @brief      Outstream operator.
      * @param      ostr  The outstream.
      * @param[in]  t     The transition.
