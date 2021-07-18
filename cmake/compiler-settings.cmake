@@ -90,18 +90,21 @@ if(DEVELOPER)
     		COMMAND bash -c "gcc -print-file-name=libasan.so"
     		OUTPUT_VARIABLE asanLocation
 		)
+		# enables profiling on compilation
+		set(DEV_FLAGS "-ftime-report")
 	endif()
 	if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 		execute_process (
 			COMMAND bash -c "clang -print-file-name=libclang_rt.asan-x86_64.so"
 			OUTPUT_VARIABLE asanLocation
 		)
+		# profiling compilation process
+		set(DEV_FLAGS "-ftime-trace")
 	endif()
 	message(STATUS "asan runtime location for preloading: ${asanLocation}")
 
 
-	set(DEV_FLAGS "\
- -Werror\
+	set(DEV_FLAGS "${DEV_FLAGS} \
  -Wswitch\
  -Wno-deprecated-declarations\
  -Wempty-body\
