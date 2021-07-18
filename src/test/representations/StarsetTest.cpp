@@ -28,7 +28,7 @@ class StarsetTest : public ::testing::Test {
     center1<<4,4;
     Limits1<<2,1,2,1;
     Generator1<<1,1,0,1;
-    ShapeMatrix1<<2,0,0-1,0,0,1,0,-1;
+    ShapeMatrix1<<2,0,0,-1,0,1,0,-1;
     myStar2= hypro::Starset<Number>(center1,ShapeMatrix1,Limits1,Generator1);
     myStar=hypro::Starset<Number>();
 	}
@@ -89,7 +89,8 @@ TYPED_TEST(StarsetTest, HalfspaceIntersection_s){
 }
 TYPED_TEST(StarsetTest, MinkowskiSum){
     hypro::Starset<TypeParam> myStar3=this->myStar1.minkowskiSum(this->myStar2);
-   
+    std::cout<<myStar3.shape()<<std::endl;
+
 }
 
 TYPED_TEST(StarsetTest, Containspoint){
@@ -106,3 +107,16 @@ TYPED_TEST(StarsetTest, Empty){
     EXPECT_EQ(this->myStar1.empty(),false);
 }
 
+
+TYPED_TEST(StarsetTest, ContainsStar){
+    std::cout<<this->myStar1.contains(this->myStar2)<<std::endl;
+
+}
+
+
+TYPED_TEST(StarsetTest, Union){
+    hypro::Starset<TypeParam> myStar3=this->myStar1.unite(this->myStar2);
+    std::cout<<"Generator: "<<myStar3.generator()<<std::endl;
+    std::cout<<"Shape: "<<myStar3.shape()<<std::endl;
+
+}
