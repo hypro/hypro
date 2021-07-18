@@ -25,7 +25,8 @@ class UrgencyCEGARAnalyzer {
                  AnalysisParameters const& parameters )
         : mHybridAutomaton( &ha )
         , mFixedParameters( fixedParameters )
-        , mParameters( parameters ){
+        , mParameters( parameters )
+        , mRoots( makeRoots<Representation>( ha ) ) {
         for ( auto& root : mRoots ) {
             mWorkQueue.push_front( &root );
         }
