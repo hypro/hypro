@@ -94,7 +94,7 @@ Box<typename Representation::NumberType> computeBoundingBox( const Representatio
     return hypro::Converter<typename Representation::NumberType>::toBox( set );
 }
 
-emplate <class Representation, class Number>
+template <class Representation, class Number>
 std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
     assert( false && "Set difference not implemented yet" );
     return { valuationSet };
