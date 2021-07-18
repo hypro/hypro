@@ -88,17 +88,17 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
 
 template <typename Representation>
 auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task, const Transition<Number>* transition, const carl::Interval<SegmentInd>& timeOfJump )
-        -> JumpSuccessor<Representation> {
-    assert( transition->getSource() == task.getLocation(); );
-    assert( task->getFlowpipe().size() == task->getFpTimings().size() );
+        -> std::vector<TimedValuationSet<Representation>> {
+    assert( transition->getSource() == task.getLocation() );
+    assert( task.getFlowpipe().size() == task.getFpTimings().size() );
 
     std::vector<IndexedValuationSet<Representation>> enabledSegments;
-    for ( std::size_t i = 0; i < task->getFlowpipe().size(); ++i ) {
+    for ( std::size_t i = 0; i < task.getFlowpipe().size(); ++i ) {
         if ( timeOfJump.isUnbounded() ||
-            ( task->getTimings().lower() + task->getFpTimings()[ i ] <= timeOfJump.upper() && task->getTimings().upper() + task->getFpTimings()[ i ] >= timeOfJump.lower() ) ) {
-            auto [containment, intersected] = intersect( task->getFlowpipe()[ i ], transition->getGuard() );
+            ( task.getTimings().lower() + task.getFpTimings()[ i ] <= timeOfJump.upper() && task.getTimings().upper() + task.getFpTimings()[ i ] >= timeOfJump.lower() ) ) {
+            auto [containment, intersected] = intersect( task.getFlowpipe()[ i ], transition->getGuard() );
             if ( containment != CONTAINMENT::NO ) {
-                enabledSegments.push_back( { intersected, task->getFpTimings()[ i ] } );
+                enabledSegments.push_back( { intersected, task.getFpTimings()[ i ] } );
             }
         }
     }
@@ -107,9 +107,9 @@ auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
     std::size_t blockSize = 1;
     if ( mSettings.aggregation == AGG_SETTING::AGG ) {
         if ( mSettings.clustering > 0 ) {
-            blockSize = ( enabledSegments.valuationSets.size() + mSettings.clustering ) / mSettings.clustering;  //division rounding up
+            blockSize = ( enabledSegments.size() + mSettings.clustering ) / mSettings.clustering;  //division rounding up
         } else {
-            blockSize = enabledSegments.valuationSets.size();
+            blockSize = enabledSegments.size();
         }
 
     } else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
@@ -118,9 +118,9 @@ auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
         }
     }
 
-    JumpSuccessor<Representation> successors{ transition, aggregate( blockSize, enabledSegments.valuationSets ) };
+    std::vector<TimedValuationSet<Representation>> successors = aggregate( blockSize, enabledSegments );
 
-    for ( auto it = successors.valuationSets.begin(); it != successors.valuationSets.end(); ) {
+    for ( auto it = successors.begin(); it != successors.end(); ) {
         TRACE( "hypro", "valSet: " << it->valuationSet.vertices() );
         it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
         TRACE( "hypro", "Reset is: " << transition->getReset() );
@@ -129,7 +129,7 @@ auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
         std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
         TRACE( "hypro", "Intersect: " << it->valuationSet.vertices() );
         if ( containment == CONTAINMENT::NO ) {
-            it = successors.valuationSets.erase( it );
+            it = successors.erase( it );
         } else {
             it->valuationSet.reduceRepresentation();
             TRACE( "hypro", "Reduce: " << it->valuationSet.vertices() );
@@ -141,11 +141,11 @@ auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
 
 template <typename Representation>
 auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task )
-        -> JumpSuccessors {
+        -> std::vector<JumpSuccessor<Representation>> {
     const Location<Number>* loc = task.getLocation();
     std::vector<JumpSuccessor<Representation>> successors{};
     for ( const auto& transition : loc->getTransitions() ) {
-        successors.push_back( computeJumpSuccessors( task, transition ) );
+        successors.push_back( { transition.get(), computeJumpSuccessors( task, transition.get() ) } );
     }
     return successors;
 }
@@ -161,6 +161,14 @@ void UrgencyWorker<Representation>::addSegment( const std::vector<Representation
         if ( !splitSegment.empty() ) {
             mFlowpipe.push_back( IndexedValuationSet<Representation>{ splitSegment, timing } );
         }
+    }
+}
+
+template <typename Representation>
+void UrgencyWorker<Representation>::insertFlowpipe( ReachTreeNode<Representation>& node ) const {
+    for ( auto [segment, index] : mFlowpipe ) {
+        node.getFlowpipe().push_back( segment );
+        node.getFpTimings().push_back( index );
     }
 }
 

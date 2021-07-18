@@ -24,7 +24,6 @@ class UrgencyWorker {
   private:
     using Number = typename Representation::NumberType;
     using Flowpipe = std::vector<IndexedValuationSet<Representation>>;
-    using JumpSuccessors = std::vector<JumpSuccessor<Representation>>;
 
   public:
 
@@ -59,6 +58,7 @@ class UrgencyWorker {
      * @return Pairs of flowpipe segments and their timing index.
      */
     const Flowpipe& getFlowpipe() const { return mFlowpipe; }
+    void insertFlowpipe( ReachTreeNode<Representation>& node ) const;
 
     /**
      * @brief Computes the states reachable by taking some discrete transition in a time interval.
@@ -67,7 +67,7 @@ class UrgencyWorker {
      * @param transition The transition to take.
      * @param timeOfJump Only jumps taken in this time interval will be considered.
      */
-    JumpSuccessor<Representation> computeJumpSuccessors(
+    std::vector<TimedValuationSet<Representation>> computeJumpSuccessors(
         const ReachTreeNode<Representation>& task,
         const Transition<Number>* transition,
         const carl::Interval<SegmentInd>& timeOfJump = carl::Interval<SegmentInd>::unboundedInterval() );
@@ -77,7 +77,7 @@ class UrgencyWorker {
      * @details Iterates over all transitions, performs aggregation and applies the reset.
      * @param task Used to access the location.
      */
-    JumpSuccessors computeJumpSuccessors( const ReachTreeNode<Representation>& task );
+    std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( const ReachTreeNode<Representation>& task );
 
     void reset() {
         mFlowpipe.clear();

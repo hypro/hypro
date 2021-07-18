@@ -23,7 +23,7 @@ UrgencyRefinementSuccess( std::vector<ReachTreeNode<Representation>*> ) -> Urgen
 template <typename Representation>
 class UrgencyRefinementAnalyzer {
   public:
-    using Number = rep_number<Representation>;
+    using Number = typename Representation::NumberType;
     using RefinementResult = AnalysisResult<UrgencyRefinementSuccess<Representation>, Failure<Representation>>;
 
     struct RefinePoint {
@@ -31,14 +31,14 @@ class UrgencyRefinementAnalyzer {
         Transition<Number>* transition;
     };
 
-    UrgencyRefinementAnalyzer( HybridAutomaton<Number> const& ha,
+    UrgencyRefinementAnalyzer( HybridAutomaton<Number> const* ha,
                                FixedAnalysisParameters const& fixedParameters,
                                AnalysisParameters const& parameters,
                                std::vector<ReachTreeNode<Representation>>& roots )
         : mHybridAutomaton( ha )
         , mFixedParameters( fixedParameters )
         , mParameters( parameters )
-        , mRoots( roots ) {}
+        , mRoots( &roots ) {}
 
     /**
      * @brief Refinement on a specific path
@@ -62,7 +62,7 @@ class UrgencyRefinementAnalyzer {
      * @param unsafeNode Node with reachable bad states.
      * @return Pair of node and transition to refine.
      */
-    auto findRefinementNode( ReachTreeNode<Representation>* const unsafeNode )
+    auto findRefinementNode( ReachTreeNode<Representation>* unsafeNode )
       -> RefinePoint;
 
     /**
@@ -70,27 +70,22 @@ class UrgencyRefinementAnalyzer {
      * @param refine Pair of node and transition to refine.
      * @return The node with the new urgent transitions. The node is a sibling of the unrefined node and the flowpipe may or may not already be computed.
      */
-    auto createRefinedNode( const RefinePoint& refine )
+    auto refineNode( const RefinePoint& refine )
       -> ReachTreeNode<Representation>*;
 
-    /**
-     * @brief Computes successors of the guard of the given transition on the given path starting with the given node and returns the safety result.
-     * @param start Candidate node for refinement.
-     * @param pathToUnsafe path starting from start which is unsafe without refinement.
-     * @param refineJump Candidate transition for refinement.
-     * @return `true` if successors of the guard is unsafe and `false` otherwise.
-     */
-    auto guardUnsafe( ReachTreeNode<Representation>* const start, const Path<Number>& pathToUnsafe, Transition<Number>* refineJump )
-      -> bool;
+    bool suitableForRefinement( const RefinePoint& candidate, ReachTreeNode<Representation>* unsafeNode );
+
+    bool pathUnsafe( ReachTreeNode<Representation>* initialNode, Path<Number> path, std::size_t initialTimeHorizon );
 
   protected:
     std::deque<ReachTreeNode<Representation>*> mWorkQueue;  ///< Queue for nodes in the tree which require processing
-    const HybridAutomaton<Number>& mHybridAutomaton;        ///< Hybrid automaton
+    HybridAutomaton<Number> const* mHybridAutomaton;        ///< Hybrid automaton
     FixedAnalysisParameters mFixedParameters;
     AnalysisParameters mParameters;  ///< Used analysis settings
     Path<Number> mPath{};
     ReachTreeNode<Representation>* mFailureNode;
-    std::vector<ReachTreeNode<Representation>> mRoots;
+    std::vector<ReachTreeNode<Representation>>* mRoots;
+    size_t const mMaxSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.localTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::max() ) ) );
 };
 
 }  // namespace hypro
