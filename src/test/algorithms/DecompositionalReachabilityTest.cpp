@@ -51,6 +51,59 @@ TEST( DecompositionalUtil, ComposeSubspaces ) {
     EXPECT_TRUE( composed.contains( expected ) );
 }
 
+TEST( DecompositionalUtil, ComposeSubspacesDiscrete ) {
+    using Number = mpq_class;
+    using HPol = HPolytope<Number>;
+
+    using Matrix = matrix_t<Number>;
+    using Vector = vector_t<Number>;
+
+    Matrix mat1 = Matrix::Zero( 6, 3 );
+    Vector vec1 = Vector::Zero( 6 );
+    // x_0 = [0,1]
+    mat1( 0, 1 ) = -1;
+    mat1( 1, 1 ) = 1;
+    vec1( 1 ) = 1;
+    // c = [0,1]
+    mat1( 2, 2 ) = -1;
+    mat1( 3, 2 ) = 1;
+    vec1( 3 ) = 1;
+    // x = x_0 + c
+    mat1( 4, 0 ) = 1;
+    mat1( 4, 1 ) = -1;
+    mat1( 4, 2 ) = -1;
+    mat1( 5, 0 ) = -1;
+    mat1( 5, 1 ) = 1;
+    mat1( 5, 2 ) = 1;
+
+    Matrix mat2 = Matrix::Zero( 2, 1 );
+    mat2 << 1, -1;
+    Vector vec2 = Vector::Zero( 2 );
+    vec2 << 1, 0;
+
+    HPol subspace1( mat1, vec1 );
+    HPol subspace2( mat1, vec1 );
+    HPol subspace3( mat2, vec2 );
+    // dependency: x_0 = y_0
+    Matrix depMat = Matrix::Zero( 2, 3 );
+    Vector depVec = Vector::Zero( 2 );
+    depMat << 1, -1, 0, -1, 1, 0;
+    auto composed = detail::composeSubspaces( std::vector<HPol>{ subspace1, subspace2, subspace3 }, Condition( depMat, depVec ), Decomposition{ { { 0 }, { 1 }, { 2 } }, { DynamicType::timed, DynamicType::timed, DynamicType::discrete } }, 1 );
+
+    Matrix expectedMat = Matrix::Zero( 6, 3 );
+    Vector expectedVec = Vector::Zero( 6 );
+    expectedMat << 1, 0, 0,
+        -1, 0, 0,
+        1, -1, 0,
+        -1, 1, 0,
+        0, 0, 1,
+        0, 0, -1;
+    expectedVec << 2, 0, 0, 0, 1, 0;
+    HPol expected = HPol( expectedMat, expectedVec );
+    EXPECT_TRUE( expected.contains( composed ) );
+    EXPECT_TRUE( composed.contains( expected ) );
+}
+
 
 
 TEST( DecompositionalAnalysisMixedDynamics, NoJumpsNoBadStates ) {
