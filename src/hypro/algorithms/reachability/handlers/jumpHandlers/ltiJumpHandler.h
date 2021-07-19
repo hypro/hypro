@@ -24,8 +24,6 @@ class ltiJumpHandler {
 
 	void applyReset( State& state, Transition<Number>* transitionPtr ) const;
 
-	void applyReduction( State& state ) const;
-
 	// typename ReachTreeNode<State>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent );
 };
 

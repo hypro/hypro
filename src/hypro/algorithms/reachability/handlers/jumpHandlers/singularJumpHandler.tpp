@@ -257,7 +257,7 @@ auto singularJumpHandler<Representation>::applyReverseJump( const TransitionStat
 			}
 
 			// reduce if possible (Currently only for support functions)
-			applyReduction( stateSet );
+			stateSet.reduceRepresentation();
 
 			DEBUG( "hydra.worker.discrete", "Representation after reduction: " << stateSet );
 

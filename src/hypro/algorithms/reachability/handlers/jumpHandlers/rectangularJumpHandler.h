@@ -16,8 +16,6 @@ class rectangularJumpHandler {
 
 	void applyReset( State& state, Transition<Number>* transitionPtr ) const;
 
-	void applyReduction( State& state ) const;
-
 	TransitionStateMap applyReverseJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy );
 
 	void applyGuard( State& state, Transition<Number>* transitionPtr ) const;
