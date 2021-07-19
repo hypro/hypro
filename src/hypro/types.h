@@ -250,6 +250,29 @@ inline std::ostream& operator<<( std::ostream& _out, const hypro::CONTAINMENT& _
 	}
 	return _out;
 }
+
+/**
+ * @brief      Outstream operator for the CONTAINMENT enum.
+ * @param      _out  The outstream reference.
+ * @param[in]  _in   The enum type.
+ * @return     A reference to the outstream.
+ */
+inline std::ostream& operator<<( std::ostream& _out, const hypro::REACHABILITY_RESULT& _in ) {
+	switch ( _in ) {
+		case hypro::REACHABILITY_RESULT::SAFE:
+			_out << "safe";
+			break;
+		case hypro::REACHABILITY_RESULT::UNSAFE:
+			_out << "unsafe";
+			break;
+		case hypro::REACHABILITY_RESULT::UNKNOWN:
+			_out << "unknown";
+			break;
+		default:;
+	}
+	return _out;
+}
+
 }  // namespace std
 
 #include "util/adaptions_carl/adaptions_carl.h"
