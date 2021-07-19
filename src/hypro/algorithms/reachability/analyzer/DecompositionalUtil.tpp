@@ -3,7 +3,7 @@
 namespace hypro {
 
 inline bool isSegmentedSubspace( const DynamicType dynamics ) {
-    return ( dynamics == DynamicType::affine || dynamics == DynamicType::linear || dynamics == DynamicType::discrete );
+    return ( dynamics == DynamicType::affine || dynamics == DynamicType::linear );
 }
 
 
@@ -14,7 +14,7 @@ template <typename Representation>
 HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, const Decomposition& decomposition, std::size_t clockCount ) {
 
     using Number = typename Representation::NumberType;
-    // variable order in subspace sets: x_i1, x_i2,...,x_ik,x_i1^0,...,x_ik^0,c_i^1,...,c_i^clockCount
+    // variable order in subspace sets with clocks: x_i1, x_i2,...,x_ik,x_i1^0,...,x_ik^0,c_i^1,...,c_i^clockCount
     // variable order in dependencies: (x_1^0,...,x_n^init)
     // create composed polytope with dimension dim(S_1) + ... + dim(S_n)
     // variable order in composed set: x_1,...,x_n,x_1^0,...,x_n^0,c_1^1,...,c_1^clockCount,c_2^1,..,c_n^clockCount
@@ -22,16 +22,20 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
     std::size_t varCount = std::accumulate( decomposition.subspaces.begin(), decomposition.subspaces.end(), 0,
         []( std::size_t cur, const auto& subspace ) { return cur + subspace.size(); } );
 
+    std::size_t clockedSubspaceCount = std::accumulate( decomposition.subspaceTypes.begin(), decomposition.subspaceTypes.end(), 0,
+        []( std::size_t cur, const auto& dynamic ){ return dynamic == DynamicType::discrete ? cur : cur + 1; } );
+
     // number of rows in full poytope
     std::size_t compRows = 0;
     compRows += std::accumulate( subspaceSets.begin(), subspaceSets.end(), 0, 
         []( std::size_t cur, const auto& sSet ) { return cur + sSet.matrix().rows(); } );
     compRows += dependencies.getMatrix().rows();
     // 2 inequalities for each equation c_1 = c_i in the subspaces i != 1 (per clock c)
-    compRows += 2 * ( clockCount * ( subspaceSets.size() - 1 ) );
+    compRows += 2 * ( clockCount * ( clockedSubspaceCount - 1 ) );
     // number of columns in full polytope
-    std::size_t compDim = std::accumulate( subspaceSets.begin(), subspaceSets.end(), 0,
-        []( std::size_t cur, const auto& segment ) { return cur + segment.dimension(); } );
+    std::size_t compDim = clockCount > 0 ? 2 * varCount + clockCount * clockedSubspaceCount : varCount;
+    //std::size_t compDim = std::accumulate( subspaceSets.begin(), subspaceSets.end(), 0,
+    //    []( std::size_t cur, const auto& segment ) { return cur + segment.dimension(); } );
     assert( clockCount > 0 || varCount == compDim );
     matrix_t<Number> compMat = matrix_t<Number>::Zero( compRows, compDim );
     vector_t<Number> compVec = vector_t<Number>::Zero( compRows );
@@ -49,12 +53,14 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
         for ( std::size_t row = 0; row < (std::size_t) subspaceMatrix.rows(); ++row ) {
             for ( std::size_t varIndex = 0; varIndex < subspaceVars.size(); ++varIndex ) {
                 compMat( accRows, subspaceVars[ varIndex ] ) = subspaceMatrix( row, varIndex );
-                if ( clockCount > 0 ) {
+                if ( clockCount > 0 && decomposition.subspaceTypes[ i ] != DynamicType::discrete ) {
                     compMat( accRows, initVarOffset + subspaceVars[ varIndex ] ) = subspaceMatrix( row, subspaceVars.size() + varIndex );
                 }
             }
             for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
-                compMat( accRows, clockOffset + i*clockCount + clockIndex ) = subspaceMatrix( row, 2 * subspaceVars.size() + clockIndex );
+                if ( decomposition.subspaceTypes[ i ] != DynamicType::discrete ) {
+                    compMat( accRows, clockOffset + i*clockCount + clockIndex ) = subspaceMatrix( row, 2 * subspaceVars.size() + clockIndex );
+                }
             }
             accRows += 1;
         }
@@ -69,15 +75,27 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
         accRows += dependencies.getMatrix().rows();
     }
 
+
+    // if all subspaces are discrete, we are done. Else: find first subspace that is not discrete
+    std::size_t clockedSubspace = 0;
+    while ( clockedSubspace < decomposition.subspaces.size() && decomposition.subspaceTypes[ clockedSubspace ] == DynamicType::discrete ) {
+        clockedSubspace += 1;
+    }
     // add constraints for clock equality
     for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
-        for ( std::size_t subspace = 1; subspace < decomposition.subspaces.size(); ++subspace ) {
+        // counts how many clocked subspaces are synchronized. 1 because first subspace is always synchronized with itself
+        std::size_t synchronizedSubspaces = 1;
+        for ( std::size_t subspace = clockedSubspace + 1; subspace < decomposition.subspaces.size(); ++subspace ) {
+            if ( decomposition.subspaceTypes[ subspace ] == DynamicType::discrete ) continue;
+            // clockedSubspace has the first clock, because all lower subspaces are discrete
             compMat( accRows, clockOffset + clockIndex ) = 1;
-            compMat( accRows, clockOffset + subspace * ( clockCount ) + clockIndex ) = -1;
+            compMat( accRows, clockOffset + clockCount * synchronizedSubspaces + clockIndex ) = -1;
             compMat( accRows + 1, clockOffset + clockIndex ) = -1;
-            compMat( accRows + 1, clockOffset + subspace * ( clockCount ) + clockIndex ) = 1;
+            compMat( accRows + 1, clockOffset + clockCount * synchronizedSubspaces + clockIndex ) = 1;
             accRows += 2;
+            synchronizedSubspaces += 1;
         }
+
     }
     return HPolytope<Number>( compMat, compVec );
 
@@ -86,6 +104,9 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
 
 template <typename Representation>
 Representation composeSubspaces( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, const Decomposition& decomposition, std::size_t clockCount ) {
+    if ( std::any_of( subspaceSets.begin(), subspaceSets.end(), []( const auto& set ) { return set.empty(); } ) ) {
+        return Representation::Empty();
+    }
     auto pol = composeSubspaceConstraints( subspaceSets, dependencies, decomposition, clockCount );
     std::size_t varCount = std::accumulate( decomposition.subspaces.begin(), decomposition.subspaces.end(), 0,
         []( std::size_t cur, const auto& subspace ) { return cur + subspace.size(); } );
@@ -103,7 +124,7 @@ template <typename Representation>
 Condition<typename Representation::NumberType> getDependencies( const Representation& composedSet, const Decomposition& decomposition ) {
     using Number = typename Representation::NumberType;
     if ( composedSet.empty() ) {
-        assert( false && "Decompose called with empty set" );
+        assert( false && "getDependencies called with empty set" );
     }
 
     std::vector<Eigen::Index> depIndices;
@@ -159,7 +180,9 @@ std::vector<Representation> decompose( const Representation& composedSet, const 
     std::vector<Representation> subspaceSets( decomposition.subspaces.size() );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
         auto projectedSet = projectOnDimensions( composedSet, decomposition.subspaces[ subspace ] );
-        subspaceSets[ subspace ] = addClocksAndInitial( projectedSet, clockCount );
+        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::discrete ) {
+            subspaceSets[ subspace ] = addClocksAndInitial( projectedSet, clockCount );
+        }
     }
     return subspaceSets;
 }
