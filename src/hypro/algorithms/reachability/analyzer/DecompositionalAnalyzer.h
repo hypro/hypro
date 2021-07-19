@@ -7,6 +7,7 @@
 #include <hypro/algorithms/reachability/workers/SingularWorker.h>
 #include <hypro/algorithms/reachability/workers/LTIWorker.h>
 #include <hypro/algorithms/reachability/workers/RectangularWorker.h>
+#include <hypro/algorithms/reachability/workers/DiscreteWorker.h>
 #include <hypro/algorithms/reachability/analyzer/ReturnTypes.h>
 #include <hypro/algorithms/reachability/analyzer/DecompositionalUtil.h>
 #include <carl/numbers/numbers.h>
@@ -37,6 +38,9 @@ struct resetWorkerVisitor {
         // worker.reset();
     }
     void operator()( LTIWorker<Representation>& ) {
+        return;
+    }
+    void operator()( DiscreteWorker<Representation>& ) {
         return;
     }
 };
@@ -74,6 +78,13 @@ struct computeTimeSuccessorVisitor {
         return detail::getClockValues( task->getFlowpipe()[ 0 ], clockCount ).unite( 
                detail::getClockValues( task->getFlowpipe()[ task->getFlowpipe().size() - 1 ], clockCount ) );
     }
+    TimeInformation<Number> operator()( DiscreteWorker<Representation>& worker ) {
+        worker.computeTimeSuccessors( task->getInitialSet(), task->getLocation(), std::back_inserter( task->getFlowpipe() ), false );
+        if ( task->getFlowpipe().size() == 0 ) {
+            return TimeInformation<Number>( clockCount );
+        }
+        return TimeInformation<Number>( clockCount );
+    }
     TimeInformation<Number> operator()( RectangularWorker<Representation>& ) {
         // Todo: rectangular worker. Should be very similar to singular case
         assert( false && "Only singular dynamics supported for decompositional analysis" );
@@ -97,6 +108,9 @@ struct computeSingularJumpSuccessorVisitor {
         return;
     }
     void operator()( LTIWorker<Representation>& ) {
+        assert( false && "Singular jump successor computation called for non-singular subspace." );
+    }
+    void operator()( DiscreteWorker<Representation>& ) {
         assert( false && "Singular jump successor computation called for non-singular subspace." );
     }
 };
@@ -131,6 +145,11 @@ struct getJumpSuccessorVisitor {
     std::vector<TimedValuationSet<Representation>> operator()( LTIWorker<Representation>& worker ) {
         return worker.computeJumpSuccessorsForGuardEnabled( predecessors, transition );
     }
+    std::vector<TimedValuationSet<Representation>> operator()( DiscreteWorker<Representation>& worker ) {
+        auto [containment, successor] = worker.computeJumpSuccessorsForGuardEnabled( predecessors[ 0 ].valuationSet, transition );
+        if ( containment == CONTAINMENT::NO ) return { { Representation::Empty(), carl::Interval<SegmentInd>( 0 ) } };
+        return { { successor, carl::Interval<SegmentInd>( 0 ) } };
+    }
 };
 
 } // namespace detail
@@ -154,7 +173,8 @@ class DecompositionalAnalyzer {
     using DecompositionalResult = AnalysisResult<DecompositionalSuccess, Failure<Representation>>;
     using WorkerVariant = std::variant<LTIWorker<Representation>,
                                        SingularWorker<Representation>,
-                                       RectangularWorker<Representation>>;
+                                       RectangularWorker<Representation>,
+                                       DiscreteWorker<Representation>>;
 
     /**
      * @brief       Construct a new DecompositionalAnalyzer object.
@@ -191,6 +211,8 @@ class DecompositionalAnalyzer {
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
             if( isSegmentedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
                 mSegmentedSubspaces.push_back( subspace );
+            } else if ( decomposition.subspaceTypes[ subspace ] == DynamicType::discrete ) {
+                mDiscreteSubspaces.push_back( subspace );
             } else {
                 mSingularSubspaces.push_back( subspace );
             }
@@ -300,6 +322,13 @@ class DecompositionalAnalyzer {
             -> std::pair<TimeInformation<Number>, SubspaceSets>;
 
     
+    auto getDiscreteJumpSuccessors(
+        const NodeVector& nodes,
+        std::vector<WorkerVariant>& workers,
+        Transition<Number>* trans )
+            -> SubspaceSets;
+
+
     /**
      * @brief       Get the jump successors in the segmented subspaces for a transition.
      * @param       nodes           Current nodes
@@ -324,6 +353,7 @@ class DecompositionalAnalyzer {
     AnalysisParameters mParameters;                  // holds analyzer specific parameters
     std::vector<std::size_t> mSingularSubspaces;     // holds the singular subspace indices
     std::vector<std::size_t> mSegmentedSubspaces;    // holds the subspaces which have more than one segment as time successors (e.g. non-singular)
+    std::vector<std::size_t> mDiscreteSubspaces;     // holds subspaces with discrete dynamics
 
     tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 )*mFixedParameters.localTimeHorizon;
     TimeInformation<Number> const mGlobalTimeInterval = TimeInformation<Number>( mClockCount, Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );

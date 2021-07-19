@@ -50,7 +50,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                 for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
                     subspaceSets[ subspace ] = std::move( timedSuccessor.subspaceSets[ subspace ] );
                 }
-                if ( clockIndex + 1 >= mClockCount ) {
+                if ( nextIndex >= mClockCount ) {
                     nextIndex = 0;
                     // complexity reduction
                     if ( mClockCount > 0 ) {
@@ -66,7 +66,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                 // create child nodes and push to queue
                 NodeVector childNodes( mDecomposition.subspaces.size() );
                 for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
-                    auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSets[ subspace ], timedSuccessor.time, transition.get() );
+                    auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSets[ subspace ], timedSuccessor.time, transition.get(), dependencies );
                     childNodes[ subspace ] = &subspaceChild;
                 }
                 mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ nextIndex, dependencies, childNodes } );
@@ -81,6 +81,11 @@ auto DecompositionalAnalyzer<Representation>::initializeWorkers( std::vector<Tim
     std::vector<WorkerVariant> workers;
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
         switch( mDecomposition.subspaceTypes[ subspace ] ) {
+            case DynamicType::discrete:
+                workers.push_back( DiscreteWorker<Representation>{*mHybridAutomaton,
+                                                                mParameters,
+                                                                subspace } );
+                break;
             case DynamicType::timed:
                 [[fallthrough]];
             case DynamicType::singular:
@@ -117,7 +122,10 @@ auto DecompositionalAnalyzer<Representation>::computeTimeSuccessorsGetEnabledTim
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
         TimeInformation<Number> invariantSatTimeSubspace = std::visit( detail::computeTimeSuccessorVisitor<Representation>{
             currentNodes[ subspace ], mClockCount }, workers[ subspace ] );
-        invariantSatTime = invariantSatTime.intersect( invariantSatTimeSubspace );
+        // discrete subspaces have no clocks
+        if( mDecomposition.subspaceTypes[ subspace ] != DynamicType::discrete ) {
+            invariantSatTime = invariantSatTime.intersect( invariantSatTimeSubspace );
+        }
     }
     return invariantSatTime;
 }
@@ -126,6 +134,8 @@ template <typename Representation>
 void DecompositionalAnalyzer<Representation>::intersectSubspacesWithClock(
   NodeVector& currentNodes, TimeInformation<Number>& clock ) {
     for ( std::size_t subspace = 0; subspace < currentNodes.size(); ++subspace ) {
+        // discrete subspaces have no clocks
+        if ( mDecomposition.subspaceTypes[ subspace ] == DynamicType::discrete ) continue;
         // intersect each segment with the valid time interval
         auto& flowpipe = currentNodes[ subspace ]->getFlowpipe();
         for ( std::size_t segmentIndex = 0; segmentIndex < flowpipe.size(); ++segmentIndex ) {
@@ -167,6 +177,15 @@ bool DecompositionalAnalyzer<Representation>::isSafe(
     RepVector subspaceSets( mDecomposition.subspaces.size() );
     // each segment is paired with the single segment from each singular subspace
     for ( auto subspace : mSingularSubspaces ) {
+        auto [containment, set] = intersect( nodes[ subspace ]->getFlowpipe()[ 0 ], badState, subspace );
+        if ( containment == CONTAINMENT::NO ) {
+            // no bad state intersection in some subspace
+            return true;
+        } else {
+            subspaceSets[ subspace ] = set;
+        }
+    }
+    for ( auto subspace : mDiscreteSubspaces ) {
         auto [containment, set] = intersect( nodes[ subspace ]->getFlowpipe()[ 0 ], badState, subspace );
         if ( containment == CONTAINMENT::NO ) {
             // no bad state intersection in some subspace
@@ -221,15 +240,19 @@ auto DecompositionalAnalyzer<Representation>::getJumpSuccessors(
         Transition<Number>* trans,
         std::size_t clockIndex )
             -> std::vector<SubspaceJumpSuccessors<Representation>> {
-    // Collect single successor set (per subspace) for singular subspaces and synchronize them
-    auto [ singularEnabledTime, singularSuccessors ] = getSingularJumpSuccessors( nodes, workers, trans, clockIndex );
-    if ( mSegmentedSubspaces.size() == 0 ) {
-        // no segmented subspace, so the segment indexes are ignored -> set them to 0
-        return { { carl::Interval<SegmentInd>( 0 ), singularSuccessors } };
-    }
-
     // res holds all synchronized jump successors
     std::vector<SubspaceJumpSuccessors<Representation>> res;
+    // Collect single successor set (per subspace) for singular subspaces and synchronize them
+    auto [ singularEnabledTime, singularSuccessors ] = getSingularJumpSuccessors( nodes, workers, trans, clockIndex );
+    auto discreteSuccessors = getDiscreteJumpSuccessors( nodes, workers, trans );
+    if ( mSegmentedSubspaces.size() == 0 ) {
+        // no segmented subspace, so the segment indexes are ignored -> set them to 0
+        SubspaceJumpSuccessors<Representation> succ{ carl::Interval<SegmentInd>( 0 ), singularSuccessors };
+        for ( auto subspace : mDiscreteSubspaces ) {
+            succ.subspaceSets[ subspace ] = discreteSuccessors[ subspace ];
+        }
+        return { succ };
+    }
     // collect synchronized successors for segmented subspaces
     std::vector<SubspaceJumpSuccessors<Representation>> segmentedSuccessors = getSegmentedJumpSuccessors( nodes, workers, trans, clockIndex );
 
@@ -246,6 +269,9 @@ auto DecompositionalAnalyzer<Representation>::getJumpSuccessors(
         }
         for ( auto subspace : mSingularSubspaces ) {
             nextRes.subspaceSets[ subspace ] = detail::intersectSegmentWithClock( singularSuccessors[ subspace ], enabledTime, mClockCount );
+        }
+        for ( auto subspace : mDiscreteSubspaces ) {
+            nextRes.subspaceSets[ subspace ] = discreteSuccessors[ subspace ];
         }
         // get time interval of jump
         nextRes.time = timedSucc.time;
@@ -279,6 +305,27 @@ auto DecompositionalAnalyzer<Representation>::getSingularJumpSuccessors(
         singularSuccessors[ subspace ] = detail::intersectSegmentWithClock( singularSuccessors[ subspace ], enabledTime, mClockCount );
     }
     return std::make_pair( enabledTime, singularSuccessors );
+}
+
+template <typename Representation>
+auto DecompositionalAnalyzer<Representation>::getDiscreteJumpSuccessors(
+  const NodeVector& nodes, std::vector<WorkerVariant>& workers, Transition<Number>* trans ) -> SubspaceSets {
+    SubspaceSets succ;
+    bool empty = false;
+    for ( auto subspace : mDiscreteSubspaces ) {
+        if ( empty ) {
+            succ[ subspace ] = Representation::Empty();
+            continue;
+        }
+        auto [containment, predecessor] = intersect( nodes[ subspace ]->getFlowpipe()[ 0 ], trans->getGuard(), subspace );
+        if ( containment == CONTAINMENT::NO ) {
+            empty = true;
+            succ[ subspace ] = Representation::Empty();
+        } else {
+            succ[ subspace ] = std::visit( detail::getJumpSuccessorVisitor<Representation>{ trans, { { predecessor, 0 } } }, workers[ subspace ] )[ 0 ].valuationSet;
+        }
+    }
+    return succ;
 }
 
 template <typename Representation>
