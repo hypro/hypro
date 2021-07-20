@@ -19,8 +19,6 @@ class stochasticRectangularJumpHandler {
 
 	void applyReset( State& state, StochasticTransition<Number>* transitionPtr ) const;
 
-	void applyReduction( State& state ) const;
-
 	State applyReverseJump( State& state, StochasticTransition<Number>* transition, const AnalysisParameters& strategy );
 
 	void applyGuard( State& state, StochasticTransition<Number>* transitionPtr ) const;

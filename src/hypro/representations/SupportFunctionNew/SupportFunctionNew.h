@@ -51,7 +51,7 @@ struct Parameters {
 	Parameters( Rargs... r )
 		: args( std::make_tuple( r... ) ) {}
 	Parameters( const std::tuple<Rargs...>& r )
-		: args( r ) { std::cout << "Param copy!" << std::endl; }
+		: args( r ) {}
 	//~Parameters(){}
 
 	std::size_t size() const {

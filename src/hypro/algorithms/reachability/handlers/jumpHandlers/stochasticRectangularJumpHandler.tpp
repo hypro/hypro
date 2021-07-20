@@ -59,7 +59,7 @@ auto stochasticRectangularJumpHandler<State>::applyJump( const TransitionStateMa
 			}
 
 			// reduce if possible (Currently only for support functions)
-			applyReduction( stateSet );
+			stateSet.reduceRepresentation();
 
 			DEBUG( "hydra.worker.discrete", "State after reduction: " << stateSet );
 
@@ -93,34 +93,6 @@ void stochasticRectangularJumpHandler<State>::applyReset( State& state, Stochast
 			for ( size_t i = 0; i < state.getNumberSets(); i++ ) {
 				IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset( i );
 				state = state.partialIntervalAssignment( intervalReset.mIntervals, i );
-			}
-		}
-	}
-}
-
-template <typename State>
-void stochasticRectangularJumpHandler<State>::applyReduction( State& state ) const {
-	for ( size_t i = 0; i < state.getNumberSets(); i++ ) {
-		if ( state.getSetType( i ) == representation_name::support_function ) {
-			state.partiallyReduceRepresentation( i );
-		}
-		if ( state.getSetType( i ) == representation_name::SFN ) {
-			//Cut off the subtrees from the root of the supportfunction by overapproximating the representation with a hpolytope (or possibly a box)
-			//and set it as the leaf of a new tree
-			auto tmpSFN = std::visit( genericConvertAndGetVisitor<SupportFunctionNew<typename State::NumberType>>(), state.getSet( i ) );
-			if ( tmpSFN.getSettings().DETECT_BOX ) {
-				//if(!tmpSFN.empty()){
-				tmpSFN.reduceRepresentation();
-				auto isHPolyBox = isBox( tmpSFN.matrix(), tmpSFN.vector() );
-				if ( std::get<0>( isHPolyBox ) ) {
-					Box<Number> tmpBox( std::get<1>( isHPolyBox ) );
-					tmpSFN = SupportFunctionNew<Number>( tmpBox );
-				} else {
-					HPolytopeT<Number, hypro::Converter<Number>, HPolytopeOptimizerCaching> tmpHPoly( tmpSFN.matrix(), tmpSFN.vector() );
-					tmpSFN = SupportFunctionNew<Number>( tmpHPoly );
-				}
-				state.setSet( std::visit( genericInternalConversionVisitor<typename State::repVariant, SupportFunctionNew<Number>>( tmpSFN ), state.getSet( i ) ), i );
-				//}
 			}
 		}
 	}
@@ -234,10 +206,10 @@ State stochasticRectangularJumpHandler<State>::applyReverseJump( State& state, S
 	// }
 
 	// reduce if possible (Currently only for support functions)
-	applyReduction( stateSet );
+	stateSet.reduceRepresentation();
 
 	DEBUG( "hydra.worker.discrete", "State after reduction: " << stateSet );
-	
+
 	return stateSet;
 }
 
