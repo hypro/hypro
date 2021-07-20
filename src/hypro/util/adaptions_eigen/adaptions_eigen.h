@@ -232,13 +232,11 @@ bool is_approx_equal( const hypro::vector_t<Number>& lhs, const hypro::vector_t<
 	}
 
 	for ( unsigned rowIndex = 0; rowIndex < lhs.rows(); ++rowIndex ) {
-		for ( unsigned colIndex = 0; colIndex < lhs.cols(); ++colIndex ) {
-			// compare with 128 ULPs
-			if ( !carl::AlmostEqual2sComplement( lhs( rowIndex, colIndex ), rhs( rowIndex, colIndex ), 128 ) ) {
-				return false;
-			}
+		if ( !carl::AlmostEqual2sComplement( lhs( rowIndex ), rhs( rowIndex ), 128 ) ) {
+			return false;
 		}
 	}
+
 	return true;
 }
 
