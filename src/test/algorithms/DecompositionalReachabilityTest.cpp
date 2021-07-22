@@ -121,8 +121,7 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsNoBadStates ) {
         addInitialVarToAutomaton( decomposedHa, subspace );
         addClocksToAutomaton( decomposedHa, subspace, clocks );
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
@@ -151,8 +150,7 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsSafe ) {
         addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
         addClocksToAutomaton( decomposedHa, subspace, clocks );
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
@@ -181,8 +179,7 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsUnsafe ) {
         addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
         addClocksToAutomaton( decomposedHa, subspace, clocks );
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
@@ -215,8 +212,7 @@ TEST( DecompositionalAnalysisMixedDynamics, JumpsSafe ) {
         addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
         addClocksToAutomaton( decomposedHa, subspace, clocks );
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
@@ -248,8 +244,7 @@ TEST( DecompositionalAnalysisMixedDynamics, JumpsUnsafe ) {
         addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
         addClocksToAutomaton( decomposedHa, subspace, clocks );
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
@@ -276,8 +271,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariant ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -337,8 +331,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck1 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
@@ -370,8 +363,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck2 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
@@ -402,8 +394,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv1 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -455,8 +446,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv2 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -507,8 +497,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors1 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -559,8 +548,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors2 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -611,8 +599,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors3 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -663,8 +650,7 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors4 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -714,8 +700,7 @@ TEST( DecompositionalAnalysisSingular, Resets1 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -779,8 +764,7 @@ TEST( DecompositionalAnalysisSingular, Resets2 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -850,8 +834,7 @@ TEST( DecompositionalAnalysisSingular, SingularJumps ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
@@ -874,8 +857,7 @@ TEST( DecompositionalAnalysisSingular, SingularJumps2 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 
@@ -937,8 +919,7 @@ TEST( DecompositionalAnalysisSingular, SingularJumps3 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
@@ -970,8 +951,7 @@ TEST( DecompositionalAnalysisSingular, SingularJumps4 ) {
             addClocksToAutomaton( decomposedHa, subspace, clocks );
         }
     }
-    std::vector<std::vector<ReachTreeNode<Representation>>> roots = makeDecompositionalRoots<Representation, Number>( decomposedHa, decomposition );
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep }, roots );
+    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );

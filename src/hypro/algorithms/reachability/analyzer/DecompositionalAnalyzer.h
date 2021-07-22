@@ -194,14 +194,14 @@ class DecompositionalAnalyzer {
                  Decomposition const& decomposition,
                  std::size_t clockCount,
                  FixedAnalysisParameters const& fixedParameters,
-                 AnalysisParameters const& parameters,
-                 std::vector<std::vector<ReachTreeNode<Representation>>>& roots )
+                 AnalysisParameters const& parameters )
         : mHybridAutomaton( &ha )
         , mDecomposition( decomposition )
         , mClockCount( clockCount )
         , mFixedParameters( fixedParameters )
         , mParameters( parameters ) {
-        for ( auto& subspaceRoots : roots ) {
+        mRoots = makeDecompositionalRoots<Representation>( ha, decomposition );
+        for ( auto& subspaceRoots : mRoots ) {
             NodeVector root;
             for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
                 root.push_back( &subspaceRoots[ subspace ] );
@@ -356,6 +356,7 @@ class DecompositionalAnalyzer {
     std::vector<std::size_t> mSingularSubspaces;     // holds the singular subspace indices
     std::vector<std::size_t> mSegmentedSubspaces;    // holds the subspaces which have more than one segment as time successors (e.g. non-singular)
     std::vector<std::size_t> mDiscreteSubspaces;     // holds subspaces with discrete dynamics
+    std::vector<std::vector<ReachTreeNode<Representation>>> mRoots;
     std::vector<ReachTreeNode<Condition<Number>>> mDependencyRoots;   // holds roots of reach tree that contains dependency information
 
     tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 )*mFixedParameters.localTimeHorizon;
