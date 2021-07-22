@@ -11,7 +11,8 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         auto nextInQueue = mWorkQueue.front();
         mWorkQueue.pop_front();
         NodeVector currentNodes = nextInQueue.nodes;
-        Condition<Number> dependencies = nextInQueue.dependencies;
+        ReachTreeNode<Condition<Number>>* depNode = nextInQueue.dependencyNode;
+        Condition<Number> dependencies = depNode->getInitialSet();
         std::size_t clockIndex = nextInQueue.clockIndex;
         const Location<Number>* currentLoc = currentNodes[ 0 ]->getLocation();
 
@@ -66,10 +67,10 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                 // create child nodes and push to queue
                 NodeVector childNodes( mDecomposition.subspaces.size() );
                 for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
-                    auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSets[ subspace ], timedSuccessor.time, transition.get(), dependencies );
+                    auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSets[ subspace ], timedSuccessor.time, transition.get() );
                     childNodes[ subspace ] = &subspaceChild;
                 }
-                mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ nextIndex, dependencies, childNodes } );
+                mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ nextIndex, childNodes, &( depNode->addChild( dependencies, timedSuccessor.time, transition.get() ) ) } );
             }
         }
     }

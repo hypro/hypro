@@ -21,8 +21,8 @@ namespace detail {
 template <typename Representation>
 struct decompositionalQueueEntry {
   std::size_t clockIndex;
-  Condition<typename Representation::NumberType> dependencies;
   std::vector<ReachTreeNode<Representation>*> nodes;
+  ReachTreeNode<Condition<typename Representation::NumberType>>* dependencyNode;
 };
 
 /**
@@ -206,7 +206,9 @@ class DecompositionalAnalyzer {
             for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
                 root.push_back( &subspaceRoots[ subspace ] );
             }
-            mWorkQueue.push_front( detail::decompositionalQueueEntry<Representation>{ 0, Condition<Number>( ConstraintSetT<Number>() ), root } );
+            ReachTreeNode<Condition<Number>> dependencyNode{ subspaceRoots[ 0 ].getLocation(), Condition<Number>( ConstraintSetT<Number>() ), { 0, 0 } };
+            auto& dep = mDependencyRoots.emplace_back( std::move( dependencyNode ) );
+            mWorkQueue.push_front( detail::decompositionalQueueEntry<Representation>{ 0, root, &dep } );
         }
         for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
             if( isSegmentedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
@@ -354,6 +356,7 @@ class DecompositionalAnalyzer {
     std::vector<std::size_t> mSingularSubspaces;     // holds the singular subspace indices
     std::vector<std::size_t> mSegmentedSubspaces;    // holds the subspaces which have more than one segment as time successors (e.g. non-singular)
     std::vector<std::size_t> mDiscreteSubspaces;     // holds subspaces with discrete dynamics
+    std::vector<ReachTreeNode<Condition<Number>>> mDependencyRoots;   // holds roots of reach tree that contains dependency information
 
     tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 )*mFixedParameters.localTimeHorizon;
     TimeInformation<Number> const mGlobalTimeInterval = TimeInformation<Number>( mClockCount, Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );
