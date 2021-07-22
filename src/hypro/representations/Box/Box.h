@@ -430,6 +430,8 @@ class BoxT : private GeometricObjectBase {
 		return ostr;
 	}
 
+
+
 	/**
 	 * @brief Access operator (const).
 	 * @param i Dimension to access.
@@ -533,9 +535,21 @@ class BoxT : private GeometricObjectBase {
 	 * @param hspace
 	 * @return BoxT<Number,Converter,Setting>
 	 */
+
 	BoxT intersectHalfspace( const Halfspace<Number>& hspace ) const;
 	BoxT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
+
+	/**
+	 * @brief Allows to compute the set-difference of a box with another box and returns the resulting vector of boxes.
+	 * @details follow soon
+	 *
+	 * @param minusbox
+	 * @return std::vector<BoxT<Number,Converter,Setting>>
+	 */
+    std::vector<BoxT<Number,Converter, Setting>> setMinus(const BoxT<Number,Converter, Setting>& minusbox) const;
+	std::vector<BoxT<Number,Converter, Setting>> setMinus2(const BoxT<Number,Converter, Setting>& minusbox) const;
+
 
 	/**
 	 * @brief      Containment check for a box.
