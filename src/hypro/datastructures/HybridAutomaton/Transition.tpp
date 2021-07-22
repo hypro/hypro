@@ -142,6 +142,53 @@ bool Transition<Number>::isComposedOf( const Transition<Number>& rhs, const std:
 }
 
 template <typename Number>
+Condition<Number> Transition<Number>::getJumpEnablingSet() const {
+	const auto& guard = this->getGuard();
+	const auto& targetInvariant = this->getTarget()->getInvariant();
+	if ( guard.isFalse() ) {
+		return guard;
+	} else if ( targetInvariant.isFalse() ) {
+		return targetInvariant;
+	}
+
+	if ( guard.isTrue() && targetInvariant.isTrue() ) {
+		return guard;
+	}
+
+	matrix_t<Number> guardMatrix;
+	vector_t<Number> guardVector;
+	if ( !guard.isTrue() ) {
+		guardMatrix = guard.getMatrix();
+		guardVector = guard.getVector();
+	}
+	matrix_t<Number> invMatrix;
+	vector_t<Number> invVector;
+	if ( !targetInvariant.isTrue() ) {
+		if ( this->getReset().isIdentity() ) {
+			invMatrix = targetInvariant.getMatrix();
+			invVector = targetInvariant.getVector();
+		} else {
+			invMatrix = targetInvariant.getMatrix() * this->getReset().getMatrix();
+			invVector = targetInvariant.getVector() - targetInvariant.getMatrix() * this->getReset().getVector();
+		}
+	}
+
+	if ( guard.isTrue() && !targetInvariant.isTrue() ) {
+		return Condition<Number>( invMatrix, invVector );
+	} else if ( !guard.isTrue() && targetInvariant.isTrue() ) {
+		return Condition<Number>( guardMatrix, guardVector );
+	}
+	assert( guardMatrix.cols() == invMatrix.cols() );
+	matrix_t<Number> resMatrix( guardMatrix.rows() + invMatrix.rows(), guardMatrix.cols() );
+	vector_t<Number> resVector( guardMatrix.rows() + invMatrix.rows() );
+	resMatrix.topRows( guardMatrix.rows() ) = guardMatrix;
+	resMatrix.bottomRows( invMatrix.rows() ) = invMatrix;
+	resVector.head( guardVector.rows() ) = guardVector;
+	resVector.tail( invVector.rows() ) = invVector;
+	return Condition<Number>( resMatrix, resVector );
+}
+
+template <typename Number>
 std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* lhsT, const Transition<Number>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels ) {
 	assert( haVar.size() >= lhsVar.size() );
 	assert( haVar.size() >= rhsVar.size() );

@@ -22,6 +22,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	std::vector<Representation> mFlowpipe{};								   ///< contains computed flowpipe
 	Representation mInitialSet;												   ///< contains initial set for the flowpipe
 	carl::Interval<SegmentInd> mTimings{};									   ///< global time covered by inital set (used as offset)
+	std::set<Transition<Number>*> mUrgent{};    ///< set of urgent transitions (CEGAR)
+  std::vector<SegmentInd> mFpTimings{};       ///< timing information for simultaneous segments (urgency)
 	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
 
   public:
@@ -75,6 +77,14 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	void setFlowpipe( std::vector<Representation>&& fp ) { mFlowpipe = std::move( fp ); }
 	void setFlowpipe( const std::vector<Representation>& fp ) { mFlowpipe = fp; }
 
+  /**
+   * @brief Get access to the urgent Transitions
+   * @return List of urgent transitions
+   */
+  std::set<Transition<Number>*> const& getUrgent() const { return mUrgent; }
+  void setUrgent( std::set<Transition<Number>*>&& urgent ) { mUrgent = std::move( urgent ); }
+  void setUrgent( const std::set<Transition<Number>*>& urgent ) { mUrgent = urgent; }
+
 	/**
 	 * @brief Get the initial set
 	 * @return const Representation&
@@ -86,6 +96,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	const Location<Number>* getLocation() const { return mLocation; }
 
 	const carl::Interval<SegmentInd>& getTimings() const { return mTimings; }
+  std::vector<SegmentInd>& getFpTimings() { return mFpTimings; }
+  const std::vector<SegmentInd>& getFpTimings() const { return mFpTimings; }
 
 	/**
      * @brief Get the time intervals the passed transition was enabled

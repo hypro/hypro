@@ -31,7 +31,7 @@ int main( int argc, char const* argv[] ) {
 	EVALUATE_BENCHMARK_RESULT( "Parsing" );
 
 	// run reachability analysis
-	auto result = hydra::reachability::analyze( automaton, settings, preprocessingInformation );
+	auto result = hydra::reachability::analyze( automaton, settings, preprocessingInformation, options["urgency_cegar"].as<bool>() );
 
 	// call to plotting.
 	START_BENCHMARK_OPERATION( "Plotting" );

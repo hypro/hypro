@@ -91,7 +91,13 @@ Representation applyReset( Representation const& valuationSet, Reset<Number> con
  */
 template <class Representation>
 Box<typename Representation::NumberType> computeBoundingBox( const Representation& set ) {
-	return hypro::Converter<typename Representation::NumberType>::toBox( set );
+    return hypro::Converter<typename Representation::NumberType>::toBox( set );
+}
+
+template <class Representation, class Number>
+std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
+    assert( false && "Set difference not implemented yet" );
+    return { valuationSet };
 }
 
 }  // namespace hypro
