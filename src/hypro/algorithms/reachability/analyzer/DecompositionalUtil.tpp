@@ -6,8 +6,6 @@ inline bool isSegmentedSubspace( const DynamicType dynamics ) {
     return ( dynamics == DynamicType::affine || dynamics == DynamicType::linear );
 }
 
-
-
 namespace detail {
 
 template <typename Representation>
@@ -42,7 +40,7 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
 
     std::size_t initVarOffset = varCount;
     std::size_t clockOffset = 2 * varCount;
-    
+
 
     std::size_t accRows = 0;
     for ( std::size_t i = 0; i < subspaceSets.size(); ++i ) {
@@ -299,4 +297,91 @@ std::vector<Condition<Number>> collectBadStates( const HybridAutomaton<Number>* 
 
 
 } // namespace detail
+
+template <typename Representation>
+struct DecompositionalSegmentGen {
+    using Number = typename Representation::NumberType;
+    std::vector<typename boost::iterator_range<TreeIterator<ReachTreeNode<Representation>>>::iterator> nodeIterators;
+    std::vector<typename boost::iterator_range<TreeIterator<ReachTreeNode<Representation>>>::iterator> nodeIteratorEndings;
+    typename boost::iterator_range<TreeIterator<ReachTreeNode<Condition<Number>>>>::iterator dependencyIterator;
+    typename boost::iterator_range<TreeIterator<ReachTreeNode<Condition<Number>>>>::iterator dependencyIteratorEnd;
+
+    std::size_t segmentIndex = 0;
+    Decomposition decomposition;
+    std::size_t clockCount;
+
+
+    DecompositionalSegmentGen( std::vector<std::vector<ReachTreeNode<Representation>>>& roots, std::vector<ReachTreeNode<Condition<Number>>>& depRoots, Decomposition decomp, std::size_t clocks )
+        : decomposition( decomp )
+        , clockCount( clocks ) {
+        // initialize iterators for subspace trees
+        nodeIterators.resize( decomposition.subspaces.size() );
+        nodeIteratorEndings.resize( decomposition.subspaces.size() );
+        for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
+            std::vector<ReachTreeNode<Representation>*> subspaceRoots;
+            for ( auto& root : roots ) {
+                    subspaceRoots.push_back( &root[ subspace ] );
+            }
+            auto orderedRoots = preorder( subspaceRoots );
+            nodeIterators[subspace] = orderedRoots.begin();
+            nodeIteratorEndings[subspace] = orderedRoots.end();
+        }
+        // initialize iterator for dependency tree
+        auto orderedDep = preorder( depRoots );
+        dependencyIterator = orderedDep.begin();
+        dependencyIteratorEnd = orderedDep.end();
+    }
+
+    void incrementNodes() {
+        // reset index to 0 for next nodes in trees and increment all iterators
+        segmentIndex = 0;
+        for ( std::size_t subspace = 0; subspace < nodeIterators.size(); ++subspace ) {
+            ++nodeIterators[ subspace ];
+        }
+        ++dependencyIterator;
+    }
+
+    // generate next segment if it exists
+    std::optional<Representation> next() {
+        // reached end of tree nodes. All trees have the exact same structure, so it
+        // suffices to only compare the first node iterator.
+        if ( nodeIterators[ 0 ] == nodeIteratorEndings[ 0 ] ) {
+            return std::nullopt;
+        }
+        assert( dependencyIterator != dependencyIteratorEnd );
+        // collect next subspace sets to compose segment
+        std::vector<Representation> subspaceSets( decomposition.subspaces.size() );
+        for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
+            assert( nodeIterators[ subspace ] != nodeIteratorEndings[ subspace ] );
+            // if segmented, get next segment via segmentIndex. Otherwise always take first segment in flowpipe.
+            if ( isSegmentedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
+                if ( segmentIndex >= nodeIterators[ subspace ]->getFlowpipe().size() ) {
+                    // reached end of node in some subspace
+                    incrementNodes();
+                    return next();
+                }
+                subspaceSets[ subspace ] = nodeIterators[ subspace ]->getFlowpipe()[ segmentIndex ];
+            } else {
+                // this shouldn't happen (flowpipe computation was skipped, so initial set was empty), but check just in case.
+                if ( nodeIterators[ subspace ]->getFlowpipe().size() == 0 ) {
+                    incrementNodes();
+                    return next();
+                }
+                subspaceSets[ subspace ] = nodeIterators[ subspace ]->getFlowpipe()[ 0 ];
+            }
+        }
+        // if no subspace is segmented (linear or affine) then one segment per node is always enough. Otherwise, increase segmentIndex
+        if ( !std::any_of( decomposition.subspaceTypes.begin(), decomposition.subspaceTypes.end(),
+                []( const auto& dynamic ) { return isSegmentedSubspace( dynamic ); } ) ) {
+            incrementNodes();
+        } else {
+            ++segmentIndex;
+        }
+        // compose with dependency
+        return detail::composeSubspaces( subspaceSets, dependencyIterator->getInitialSet(), decomposition, clockCount );
+    }
+};
+
+
+
 } // namespace hypro

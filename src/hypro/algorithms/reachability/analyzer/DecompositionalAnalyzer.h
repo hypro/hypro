@@ -227,6 +227,9 @@ class DecompositionalAnalyzer {
      */
     DecompositionalResult run();
 
+    std::vector<std::vector<ReachTreeNode<Representation>>>& getRoots() { return mRoots; }
+    std::vector<ReachTreeNode<Condition<Number>>>& getDepRoots() { return mDependencyRoots; }
+
   private:
     struct LtiJumpSuccessorGen;
     struct LtiSegmentGen;

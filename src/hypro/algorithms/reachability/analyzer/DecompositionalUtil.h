@@ -3,6 +3,7 @@
 #include <hypro/algorithms/reachability/types.h>
 #include <hypro/datastructures/HybridAutomaton/decomposition/DecompositionMethods.h>
 #include <hypro/datastructures/reachability/ReachTreev2.h>
+#include <hypro/datastructures/reachability/TreeTraversal.h>
 
 namespace hypro {
 /**
@@ -84,6 +85,16 @@ std::vector<Condition<Number>> collectBadStates(
     const HybridAutomaton<Number>* ha,
     const Location<Number>* loc );
 } // namespace detail
+
+/**
+ * @brief       Generator for composed segments after analysis.
+ * @detail      Used for plotting. After analysis, generate composed segments by
+ *              iterating over all subspace-reach-trees and the dependency simultaneously.
+ */
+template <typename Representation>
+struct DecompositionalSegmentGen;
+
+
 } // namespace hypro
 
 #include "DecompositionalUtil.tpp"

@@ -52,9 +52,8 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 template <typename Representation>
 std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting, std::size_t clockCount ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	auto roots = makeDecompositionalRoots<Representation>( decomposedHa, decomposition );
 	DecompositionalAnalyzer<Representation> analyzer{ decomposedHa, decomposition, clockCount,
-		setting.fixedParameters(), setting.strategy().front(), roots };
+		setting.fixedParameters(), setting.strategy().front() };
 	auto result = analyzer.run();
 	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
 		std::cout << "Could not verify safety." << std::endl;
@@ -62,9 +61,13 @@ std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Numbe
 		std::cout << "The model is safe." << std::endl;
 	}
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
-
-	// todo: plotting?
 	std::vector<PlotData<FullState>> plotData{};
+	DecompositionalSegmentGen<Representation> segments( analyzer.getRoots(), analyzer.getDepRoots(), decomposition, clockCount );
+    for ( auto segment = segments.next(); segment; segment = segments.next() ) {
+        FullState state{};
+        state.setSet( segment.value() );
+        plotData.push_back( PlotData{ state, 0, 0 } );
+    }
 	return plotData;
 }
 
@@ -176,7 +179,7 @@ struct SingularDispatcher {
 	}
 };
 
-AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, PreprocessingInformation information ) {
+AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, PreprocessingInformation information ) {
 	if ( information.decomposition.subspaces.size() > 1 ) {
 		// decompositional analysis
 		return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
