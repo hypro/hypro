@@ -8,6 +8,8 @@ class ltiUrgencyHandler {
 
   public:
     std::vector<Representation> urgentSetDifference( const std::vector<Representation>& segment, Transition<Number>* trans );
+    Representation cutoff( Representation const& segment, Condition<Number> const& condition );
+
 };
 
 

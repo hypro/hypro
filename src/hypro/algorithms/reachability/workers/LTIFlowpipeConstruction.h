@@ -37,10 +37,6 @@ template <class Representation>
 std::vector<Representation> aggregate( int segmentsPerBlock, std::vector<Representation>& valuationSets );
 
 
-template <class Representation>
-Representation cutoff( Representation const& set, Condition<typename Representation::NumberType> const& condition );
-
-
 }  // namespace hypro
 
 #include "LTIFlowpipeConstruction.tpp"
