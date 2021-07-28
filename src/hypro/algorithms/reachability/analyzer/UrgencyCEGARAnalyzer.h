@@ -33,7 +33,7 @@ class UrgencyCEGARAnalyzer {
     }
 
     UrgencyCEGARResult run();
-    std::vector<ReachTreeNode<Representation>>& getRoots() const { return mRoots; }
+    std::vector<ReachTreeNode<Representation>>& getRoots() { return mRoots; }
 
   protected:
     std::deque<ReachTreeNode<Representation>*> mWorkQueue;
