@@ -18,6 +18,7 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
         mWorkQueue.pop_back();
 
         auto safetyResult = worker.computeTimeSuccessors( *currentNode );
+        worker.insertFlowpipe( *currentNode );
 
         if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
             refinementAnalyzer.setRefinement( currentNode );
@@ -27,7 +28,6 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
                     mWorkQueue.push_front( successor );
                 }
             } else {
-                worker.insertFlowpipe( *currentNode );
                 return { Failure{ refineResult.failure().conflictNode } };
             }
         } else {

@@ -54,6 +54,7 @@ class UrgencyRefinementAnalyzer {
     RefinementResult run();
 
   private:
+    struct ChildNodeGen;
     bool matchesPathTiming( ReachTreeNode<Representation>* node );
     bool matchesPathTransition( ReachTreeNode<Representation>* node );
 

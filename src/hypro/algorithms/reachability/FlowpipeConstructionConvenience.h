@@ -96,8 +96,14 @@ Box<typename Representation::NumberType> computeBoundingBox( const Representatio
 
 template <class Representation, class Number>
 std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
-    assert( false && "Set difference not implemented yet" );
-    return { valuationSet };
+    if ( condition.isTrue() ) {
+        return { Representation::Empty() };
+    }
+    if ( condition.isFalse() ) {
+        return { valuationSet };
+    }
+    auto res = valuationSet.setMinus( Representation( condition.getMatrix(), condition.getVector() ) );
+    return res;
 }
 
 }  // namespace hypro

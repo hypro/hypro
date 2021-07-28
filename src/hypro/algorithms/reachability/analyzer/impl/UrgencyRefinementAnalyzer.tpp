@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Representation>
-struct ChildNodeGen {
+struct UrgencyRefinementAnalyzer<Representation>::ChildNodeGen {
     std::vector<TimedValuationSet<Representation>> successors;
     ReachTreeNode<Representation>* parentNode;
     const Transition<typename Representation::NumberType>* transition;
@@ -71,31 +71,30 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
             continue;
         }
 
-        REACHABILITY_RESULT safetyResult;
+        REACHABILITY_RESULT safetyResult = REACHABILITY_RESULT::SAFE;
 
-        // compute flowpipe
+        // compute flowpipe. if node was previously unsafe, flowpipe would not be empty
         if ( currentNode->getFlowpipe().empty() ) {
             safetyResult = worker.computeTimeSuccessors( *currentNode );
+            worker.insertFlowpipe( *currentNode );
         }
 
         if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
             refine = findRefinementNode( currentNode );
             if ( refine.node == nullptr ) {
-                worker.insertFlowpipe( *currentNode );
                 return { Failure{ currentNode } };
             }
             mWorkQueue.push_front( refineNode( refine ) );
             refinedNodes.push_back( currentNode );
             continue;
         }
-        worker.insertFlowpipe( *currentNode );
         // do not perform discrete jump if jump depth was reached
         if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) continue;
 
         // currentNode is last node in path, create and collect all children
         if ( currentNode->getDepth() == mPath.elements.size() ) {
             for ( const auto& successor : worker.computeJumpSuccessors( *currentNode ) ) {
-                ChildNodeGen<Representation> childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor };
+                ChildNodeGen childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor };
                 while ( auto* child = childGen.next() ) {
                     endOfPath.push_back( child );
                 }
@@ -117,7 +116,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 
             if ( !matchedOne ) {
                 for ( const auto& successor : worker.computeJumpSuccessors( *currentNode ) ) {
-                    ChildNodeGen<Representation> childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor };
+                    ChildNodeGen childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor };
                     while ( auto* child = childGen.next() ) {
                         endOfPath.push_back( child );
                     }
@@ -296,7 +295,7 @@ bool UrgencyRefinementAnalyzer<Representation>::pathUnsafe( ReachTreeNode<Repres
         if ( node->getDepth() < path.elements.size() ) {
             auto nextTransition = path.elements[ node->getDepth() ].second;
             auto successor = worker.computeJumpSuccessors( *node, nextTransition, path.elements[ node->getDepth() ].first );
-            ChildNodeGen<Representation> childGen{ successor, node, nextTransition, mParameters.timeStepFactor };
+            ChildNodeGen childGen{ successor, node, nextTransition, mParameters.timeStepFactor };
             while ( auto* child = childGen.next() ) {
                 queue.push_front( child );
             }
