@@ -193,6 +193,38 @@ hypro::HybridAutomaton<Number> ha3() {
     return res;
 }
 
+TEST( UrgencyCutoff, Box ) {
+    Vector p1( 2 ), p2( 2 ), p3( 2 ), p4( 2 );
+    p1 << 0, 0;
+    p2 << 0, 1;
+    p3 << 1, 0;
+    p4 << 1, 1;
+    VPoly cube( std::vector<Point>{ Point( p1 ), Point( p2 ), Point( p3 ), Point( p4 ) } );
+    Matrix mat1 = Matrix::Zero( 1, 2 );
+    mat1 << -1, -1;
+    Vector vec1 = -1.5 * Vector::Ones( 1 );
+    hypro::Condition<Number> cond1( mat1, vec1 );
+    hypro::ltiUrgencyHandler<VPoly> urgencyHandler;
+    auto res1 = urgencyHandler.cutoff( cube, cond1 );
+
+    Vector p5( 2 ), p6( 2 );
+    p5 << 0.5, 1;
+    p6 << 1, 0.5;
+    VPoly expectedRes1( std::vector<Point>{ Point( p1 ), Point( p2 ), Point( p3 ), Point( p5 ), Point( p6 ) } );
+    EXPECT_TRUE( expectedRes1.contains( res1 ) );
+    EXPECT_TRUE( res1.contains( expectedRes1 ) );
+
+    Matrix mat2 = Matrix::Zero( 1, 2 );
+    mat2 << 1, 1;
+    Vector vec2 = 1.5 * Vector::Ones( 1 );
+    hypro::Condition<Number> cond2( mat2, vec2 );
+    auto res2 = urgencyHandler.cutoff( cube, cond2 );
+
+    VPoly expectedRes2( std::vector<Point>{ Point( p4 ), Point( p5 ), Point( p6 ) } );
+    EXPECT_TRUE( expectedRes2.contains( res2 ) );
+    EXPECT_TRUE( res2.contains( expectedRes2 ) );
+}
+
 
 TEST( UrgencyReachabilityTest, WorkerConstruction ) {
     auto automaton = ha1<Number>();
