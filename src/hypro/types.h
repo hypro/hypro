@@ -114,6 +114,11 @@ enum class DistributionType { UNIFORMED,
 						   	  EXPONENTIAL,
 							  NORMAL };
 
+BETTER_ENUM( UrgencyRefinementLevel, int,
+			 FULL,
+			 CUTOFF,
+			 SETDIFF )
+
 }  // namespace hypro
 
 namespace Eigen {
