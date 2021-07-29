@@ -38,6 +38,9 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
     }
 
     // time elapse
+    // note: if some segment is empty after handling, it will not be written in the flowpipe.
+    // since time elapse only looks at segments with previous segment index, flowpipe computation will
+    // stop once some segment is empty.
     std::size_t flowpipeIndex = 1; // iterate over flowpipe to get previous segment. index 0 is initial set
     for ( std::size_t segmentIndex = 1; segmentIndex < timeHorizon && flowpipeIndex < mFlowpipe.size(); ++segmentIndex ) {
         auto previousSegment = mFlowpipe.at( flowpipeIndex );
@@ -71,10 +74,18 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
         return REACHABILITY_RESULT::SAFE;
     }
 
+    for ( const auto& transRefinement : task.getUrgent() ) {
+        if ( transRefinement.second == UrgencyRefinementLevel::CUTOFF ) {
+            constrainedSegment = urgencyHandler.cutoff( constrainedSegment, transRefinement.first->getJumpEnablingSet() );
+        }
+    }
+
     // urgent guards
     std::vector<Representation> nonUrgentEnabled{ constrainedSegment };
-    for ( auto trans : task.getUrgent() ) {
-        nonUrgentEnabled = urgencyHandler.urgentSetDifference( nonUrgentEnabled, trans );
+    for ( const auto& transRefinement : task.getUrgent() ) {
+        if ( transRefinement.second == UrgencyRefinementLevel::SETDIFF ) {
+            nonUrgentEnabled = urgencyHandler.urgentSetDifference( nonUrgentEnabled, transRefinement.first );
+        }
     }
     addSegment( nonUrgentEnabled, timing );
 

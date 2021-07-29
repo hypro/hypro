@@ -27,17 +27,20 @@ class UrgencyRefinementAnalyzer {
     using RefinementResult = AnalysisResult<UrgencyRefinementSuccess<Representation>, Failure<Representation>>;
 
     struct RefinePoint {
-        ReachTreeNode<Representation>* node;
-        Transition<Number>* transition;
+        ReachTreeNode<Representation>* node = nullptr;
+        Transition<Number>* transition = nullptr;
+        UrgencyRefinementLevel level = UrgencyRefinementLevel::SETDIFF;
     };
 
     UrgencyRefinementAnalyzer( HybridAutomaton<Number> const* ha,
                                FixedAnalysisParameters const& fixedParameters,
                                AnalysisParameters const& parameters,
+                               UrgencyCEGARSettings const& refinementSettings,
                                std::vector<ReachTreeNode<Representation>>& roots )
         : mHybridAutomaton( ha )
         , mFixedParameters( fixedParameters )
         , mParameters( parameters )
+        , mRefinementSettings( refinementSettings )
         , mRoots( &roots ) {}
 
     /**
@@ -57,6 +60,8 @@ class UrgencyRefinementAnalyzer {
     struct ChildNodeGen;
     bool matchesPathTiming( ReachTreeNode<Representation>* node );
     bool matchesPathTransition( ReachTreeNode<Representation>* node );
+
+    UrgencyRefinementLevel getNextLevel( const UrgencyRefinementLevel& level ) const;
 
     /**
      * @brief Finds a node and transition to refine on the path from root to the given unsafe node.
@@ -83,6 +88,7 @@ class UrgencyRefinementAnalyzer {
     HybridAutomaton<Number> const* mHybridAutomaton;        ///< Hybrid automaton
     FixedAnalysisParameters mFixedParameters;
     AnalysisParameters mParameters;  ///< Used analysis settings
+    UrgencyCEGARSettings mRefinementSettings;
     Path<Number> mPath{};
     ReachTreeNode<Representation>* mFailureNode;
     std::vector<ReachTreeNode<Representation>>* mRoots;

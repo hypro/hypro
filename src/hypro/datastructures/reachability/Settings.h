@@ -39,6 +39,36 @@ struct PlottingSettings {
 	PLOTTYPE plottingFileType = PLOTTYPE::nset;
 };
 
+struct UrgencyCEGARSettings {
+	std::vector<UrgencyRefinementLevel> refinementLevels{ UrgencyRefinementLevel::FULL,
+														  UrgencyRefinementLevel::CUTOFF,
+														  UrgencyRefinementLevel::SETDIFF};
+	bool refineHalfspaces = true;
+
+  public:
+	UrgencyRefinementLevel minRefinementLevel() const {
+		assert( refinementLevels.size() > 0 );
+		if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::FULL ) != refinementLevels.end() ) {
+			return UrgencyRefinementLevel::FULL;
+		} else if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::CUTOFF ) != refinementLevels.end() ) {
+			return UrgencyRefinementLevel::CUTOFF;
+		} else {
+			return UrgencyRefinementLevel::SETDIFF;
+		}
+	}
+
+	UrgencyRefinementLevel maxRefinementLevel() const {
+		assert( refinementLevels.size() > 0 );
+		if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::SETDIFF ) != refinementLevels.end() ) {
+			return UrgencyRefinementLevel::SETDIFF;
+		} else if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::CUTOFF ) != refinementLevels.end() ) {
+			return UrgencyRefinementLevel::CUTOFF;
+		} else {
+			return UrgencyRefinementLevel::FULL;
+		}
+	}
+};
+
 class Settings {
 	PlottingSettings mPlotting{};
 	FixedAnalysisParameters mFixedParameters{};

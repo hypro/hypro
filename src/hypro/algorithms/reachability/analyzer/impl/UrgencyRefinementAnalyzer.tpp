@@ -8,6 +8,7 @@ struct UrgencyRefinementAnalyzer<Representation>::ChildNodeGen {
     ReachTreeNode<Representation>* parentNode;
     const Transition<typename Representation::NumberType>* transition;
     int timeStepFactor;
+    UrgencyCEGARSettings refinementSettings;
     std::size_t successorIndex = 0;
 
     ReachTreeNode<Representation>* next() {
@@ -24,7 +25,25 @@ struct UrgencyRefinementAnalyzer<Representation>::ChildNodeGen {
         carl::Interval<TimePoint> enabledDuration{ segmentsInterval.lower() * timeStepFactor, ( segmentsInterval.upper() + 1 ) * timeStepFactor };
         carl::Interval<TimePoint> globalDuration{ initialSetDuration.lower() + enabledDuration.lower(), initialSetDuration.upper() + enabledDuration.upper() };
 
-        return &parentNode->addChild( valuationSet, globalDuration, transition );
+        auto& child = parentNode->addChild( valuationSet, globalDuration, transition );
+        // set minimal refinement level
+        for ( auto const& trans : child.getLocation()->getTransitions() ) {
+            if ( trans->isUrgent() ) {
+                child.getUrgent()[ trans.get() ] = refinementSettings.minRefinementLevel();
+            }
+        }
+
+        // refine urgent halfspaces fully
+        if ( refinementSettings.refineHalfspaces ) {
+            if ( refinementSettings.maxRefinementLevel() != refinementSettings.minRefinementLevel() ) {
+                for ( auto const& trans : child.getLocation()->getTransitions() ) {
+                    if ( trans->isUrgent() && trans->getJumpEnablingSet().getMatrix().size() == 1 ) {
+                        child.getUrgent()[ trans.get() ] = refinementSettings.maxRefinementLevel();
+                    }
+                }
+            }
+        }
+        return &child;
     }
 };
 
@@ -93,7 +112,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
         // currentNode is last node in path, create and collect all children
         if ( currentNode->getDepth() == mPath.elements.size() ) {
             for ( const auto& successor : worker.computeJumpSuccessors( *currentNode ) ) {
-                ChildNodeGen childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor };
+                ChildNodeGen childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor, mRefinementSettings };
                 while ( auto* child = childGen.next() ) {
                     endOfPath.push_back( child );
                 }
@@ -104,7 +123,9 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
             // check if children already exist
             bool matchedOne = false;
             for ( auto* child : currentNode->getChildren() ) {
-                if ( matchesPathTransition( child ) && child->getUrgent().size() == 0 ) {
+                if ( matchesPathTransition( child ) &&
+                        std::all_of( child->getUrgent().begin(), child->getUrgent().end(), [this]( const auto& u ) {
+                            return u.second == mRefinementSettings.minRefinementLevel(); } ) ) {
                     matchedOne = true;
                     // check against path
                     if ( matchesPathTiming( child ) ) {
@@ -115,7 +136,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 
             if ( !matchedOne ) {
                 for ( const auto& successor : worker.computeJumpSuccessors( *currentNode ) ) {
-                    ChildNodeGen childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor };
+                    ChildNodeGen childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor, mRefinementSettings };
                     while ( auto* child = childGen.next() ) {
                         endOfPath.push_back( child );
                     }
@@ -153,28 +174,60 @@ auto UrgencyRefinementAnalyzer<Representation>::findRefinementNode( ReachTreeNod
         nodePath[ n->getDepth() ] = n;
     }
 
-    //auto path = unsafeNode->getPath();
+    // for each node on the path, refine every transition to the next level (up to max level)
+    // until the max level is reached or a suitable transition is found
     for ( auto nodeIt = nodePath.begin(); nodeIt != nodePath.end(); ++nodeIt ) {
-        for ( auto candidateTrans : mHybridAutomaton->getTransitions() ) {
-            if ( candidateTrans->getSource() == ( *nodeIt )->getLocation() &&
-                 candidateTrans->isUrgent() &&
-                 std::find( ( *nodeIt )->getUrgent().begin(), ( *nodeIt )->getUrgent().end(), candidateTrans ) == ( *nodeIt )->getUrgent().end() ) {
-                    RefinePoint candidate{ *nodeIt, candidateTrans };
+        UrgencyRefinementLevel nextLevel = mRefinementSettings.maxRefinementLevel();
+        do {
+            // find next refinement level
+            for ( auto const& trans : ( *nodeIt )->getLocation()->getTransitions() ) {
+                if ( !trans->isUrgent() || ( *nodeIt )->getUrgent()[ trans.get() ] == mRefinementSettings.maxRefinementLevel() ) continue;
+                auto nextLevelTrans = getNextLevel( ( *nodeIt )->getUrgent()[ trans.get() ] );
+                nextLevel = nextLevelTrans < nextLevel ? nextLevelTrans : nextLevel;
+            }
+            // refine all transitions to next level
+            for ( auto candidateTrans : mHybridAutomaton->getTransitions() ) {
+                if ( candidateTrans->getSource() == ( *nodeIt )->getLocation() &&
+                     candidateTrans->isUrgent() &&
+                     ( *nodeIt )->getUrgent()[ candidateTrans ] < nextLevel ) {
+                        RefinePoint candidate{ *nodeIt, candidateTrans, nextLevel };
 
-                if ( suitableForRefinement( candidate, unsafeNode ) ) {
-                    return candidate;
+                    if ( suitableForRefinement( candidate, unsafeNode ) ) {
+                        return candidate;
+                    }
                 }
             }
-        }
+        // at this point, all transitions are refined to nextLevel, so we stop when maxLevel is reached
+        } while ( nextLevel != mRefinementSettings.maxRefinementLevel() );
     }
-    return RefinePoint{ nullptr, nullptr };
+    return RefinePoint{};
+}
+
+template <typename Representation>
+UrgencyRefinementLevel UrgencyRefinementAnalyzer<Representation>::getNextLevel( const UrgencyRefinementLevel& level ) const {
+    auto enabledLevels = mRefinementSettings.refinementLevels;
+    switch ( level ) {
+        case UrgencyRefinementLevel::FULL:
+            if ( std::find( enabledLevels.begin(), enabledLevels.end(), UrgencyRefinementLevel::CUTOFF ) != enabledLevels.end() ) {
+                return UrgencyRefinementLevel::CUTOFF;
+            }
+            [[fallthrough]];
+        case UrgencyRefinementLevel::CUTOFF:
+            if ( std::find( enabledLevels.begin(), enabledLevels.end(), UrgencyRefinementLevel::SETDIFF ) != enabledLevels.end() ) {
+                return UrgencyRefinementLevel::SETDIFF;
+            }
+            [[fallthrough]];
+        default:
+            assert( false && "No next level for maximal refinement level" );
+            return level;
+    }
 }
 
 template <typename Representation>
 ReachTreeNode<Representation>* UrgencyRefinementAnalyzer<Representation>::refineNode( const RefinePoint& refine ) {
     auto parent = refine.node->getParent();
-    std::set<Transition<Number>*> urgentTransitions = refine.node->getUrgent();
-    urgentTransitions.insert( refine.transition );
+    auto urgentTransitions = refine.node->getUrgent();
+    urgentTransitions[ refine.transition ] = refine.level;
     // check if refined node already exists
     if ( parent == nullptr ) {
         for ( auto& sibling : *mRoots ) {
@@ -202,7 +255,7 @@ ReachTreeNode<Representation>* UrgencyRefinementAnalyzer<Representation>::refine
             refine.node->getLocation(),
             refine.node->getInitialSet(),
             refine.node->getTimings() );
-        refinedNode.setUrgent( urgentTransitions );
+        refinedNode.getUrgent() = urgentTransitions;
         mRoots->push_back( std::move( refinedNode ) );
         return &( mRoots->back() );
     }
@@ -210,7 +263,7 @@ ReachTreeNode<Representation>* UrgencyRefinementAnalyzer<Representation>::refine
         refine.node->getInitialSet(),
         refine.node->getTimings(),
         refine.node->getTransition() );
-    refinedNode.setUrgent( urgentTransitions );
+    refinedNode.getUrgent() = urgentTransitions;
     return &refinedNode;
 }
 
@@ -294,7 +347,7 @@ bool UrgencyRefinementAnalyzer<Representation>::pathUnsafe( ReachTreeNode<Repres
         if ( node->getDepth() < path.elements.size() ) {
             auto nextTransition = path.elements[ node->getDepth() ].second;
             auto successor = worker.computeJumpSuccessors( *node, nextTransition, path.elements[ node->getDepth() ].first );
-            ChildNodeGen childGen{ successor, node, nextTransition, mParameters.timeStepFactor };
+            ChildNodeGen childGen{ successor, node, nextTransition, mParameters.timeStepFactor, mRefinementSettings };
             while ( auto* child = childGen.next() ) {
                 queue.push_front( child );
             }

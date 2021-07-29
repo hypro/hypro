@@ -22,7 +22,7 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	std::vector<Representation> mFlowpipe{};								   ///< contains computed flowpipe
 	Representation mInitialSet;												   ///< contains initial set for the flowpipe
 	carl::Interval<SegmentInd> mTimings{};									   ///< global time covered by inital set (used as offset)
-	std::set<Transition<Number>*> mUrgent{};    ///< set of urgent transitions (CEGAR)
+	std::map<Transition<Number>*, UrgencyRefinementLevel>	mUrgent{};	///< refinement level for outgoing urgent transitions
   std::vector<SegmentInd> mFpTimings{};       ///< timing information for simultaneous segments (urgency)
 	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
 	REACHABILITY_RESULT mSafetyResult;
@@ -83,11 +83,10 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 
   /**
    * @brief Get access to the urgent Transitions
-   * @return List of urgent transitions
+   * @return Map of urgent transitions to refinement level
    */
-  std::set<Transition<Number>*> const& getUrgent() const { return mUrgent; }
-  void setUrgent( std::set<Transition<Number>*>&& urgent ) { mUrgent = std::move( urgent ); }
-  void setUrgent( const std::set<Transition<Number>*>& urgent ) { mUrgent = urgent; }
+  std::map<Transition<Number>*, UrgencyRefinementLevel>& getUrgent() { return mUrgent; }
+  std::map<Transition<Number>*, UrgencyRefinementLevel> const& getUrgent() const { return mUrgent; }
 
 	/**
 	 * @brief Get the initial set
