@@ -53,11 +53,18 @@ hypro::Settings processSettings( const hypro::ReachabilitySettings& parsedSettin
 		plotting.plottingFileType = cliOptions.count( "plotoutputformat" ) ? cliOptions["plotoutputformat"].as<hypro::PLOTTYPE>() : +hypro::PLOTTYPE::nset;
 	}
 
+	// urgency settings
+	hypro::UrgencyCEGARSettings urgencySettings{};
+	if ( cliOptions["urgency_cegar"].as<bool>() ) {
+		urgencySettings.refinementLevels = cliOptions["refinementLevels"].as<std::vector<hypro::UrgencyRefinementLevel>>();
+		urgencySettings.refineHalfspaces = cliOptions["refineHalfspaces"].as<bool>();
+	}
+
 	// strategy
 	if ( cliOptions.count( "strategy_file" ) ) {
-		return hypro::Settings{ plotting, fixedParameters, constructFullStrategy( parsedSettings, cliOptions ) };
+		return hypro::Settings{ plotting, fixedParameters, constructFullStrategy( parsedSettings, cliOptions ), urgencySettings };
 	} else {
-		return hypro::Settings{ plotting, fixedParameters, { constructSingleNodeStrategy( parsedSettings, cliOptions ) } };
+		return hypro::Settings{ plotting, fixedParameters, { constructSingleNodeStrategy( parsedSettings, cliOptions ) }, urgencySettings };
 	}
 }
 

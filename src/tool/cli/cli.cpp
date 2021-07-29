@@ -34,7 +34,9 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 			( "aggregation,a", po::value<hypro::AGG_SETTING>(), "the aggregation setting to use. MODEL, AGG or NO_AGG." )
 			( "clustering,c", po::value<int>(), "Select clustering option, -1=off, 0=all, i=max. number of clustered segments. Overrides settings in the input file." )
 			( "representation,r", po::value<hypro::representation_name>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
-			( "setting,s", po::value<std::string>(), "the setting to use for the representation");
+			( "setting,s", po::value<std::string>(), "the setting to use for the representation")
+			( "refinementLevels", po::value<std::vector<hypro::UrgencyRefinementLevel>>()->multitoken()->required(), "the refinement levels for urgency cegar")
+			( "refineHalfspaces", po::bool_switch(), "always refine urgent halfspaces");
 
 	po::options_description plotting( "Plotting options." );
 	plotting.add_options()

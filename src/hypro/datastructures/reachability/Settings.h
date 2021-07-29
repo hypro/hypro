@@ -73,15 +73,17 @@ class Settings {
 	PlottingSettings mPlotting{};
 	FixedAnalysisParameters mFixedParameters{};
 	std::vector<AnalysisParameters> mStrategy{ 1 };
+	UrgencyCEGARSettings mUrgencySettings{};
 
   public:
 	/// default constructor
 	Settings() = default;
 	/// full constructor
-	Settings( PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector<AnalysisParameters> strategy )
+	Settings( PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector<AnalysisParameters> strategy, UrgencyCEGARSettings urgencySettings )
 		: mPlotting( plotting )
 		, mFixedParameters( fixedParameters )
-		, mStrategy( strategy ) {
+		, mStrategy( strategy )
+		, mUrgencySettings( urgencySettings ) {
 		if ( strategy.empty() ) return;
 		// calculate gcd of the strategies timesteps
 		mpz_class numerator_gcd = mStrategy.front().timeStep.get_num();
@@ -112,6 +114,10 @@ class Settings {
 
 	std::vector<AnalysisParameters> const& strategy() const {
 		return mStrategy;
+	}
+
+	UrgencyCEGARSettings const& urgencySettings() const {
+		return mUrgencySettings;
 	}
 
 	void setStrategy( const std::vector<AnalysisParameters> strategy ) { mStrategy = strategy; }

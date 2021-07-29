@@ -4,6 +4,7 @@
 #include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/UrgencyCEGARAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/UrgencyAnalyzer.h>
 #include <hypro/datastructures/reachability/Settings.h>
 #include <hypro/datastructures/reachability/TreeTraversal.h>
 #include <hypro/representations/conversion/Converter.h>
@@ -53,7 +54,7 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 template <typename State>
 std::vector<PlotData<FullState>> urgency_cegar_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	UrgencyCEGARAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front() };
+	UrgencyCEGARAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), setting.urgencySettings() };
 	auto result = analyzer.run();
 
 	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -68,6 +69,7 @@ std::vector<PlotData<FullState>> urgency_cegar_analyze( HybridAutomaton<Number>&
 	std::vector<PlotData<FullState>> plotData{};
 
 	for ( const auto& node : preorder( analyzer.getRoots() ) ) {
+		if ( result.result() == REACHABILITY_RESULT::SAFE && node.getSafety() == REACHABILITY_RESULT::UNKNOWN ) continue;
 		std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
 			FullState state{};
 			state.setSet( segment );
