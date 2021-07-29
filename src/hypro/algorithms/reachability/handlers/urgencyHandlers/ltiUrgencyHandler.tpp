@@ -75,7 +75,6 @@ Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& 
             }
             vertexOptimizer.setMatrix( mat );
             const auto res = vertexOptimizer.evaluate( lambda, false );
-            std::cout << "Evaluation result: " << res.supportValue << "\n";
             assert( res.errorCode == SOLUTION::FEAS );
             assert( res.supportValue >= 0 && res.supportValue <= 1 );
             if ( res.supportValue == 0 ) {

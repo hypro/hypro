@@ -91,6 +91,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
 
     // safety check
     if ( std::any_of( nonUrgentEnabled.begin(), nonUrgentEnabled.end(), [ loc, this ]( const auto& splitSegment ) {
+            if ( splitSegment.empty() ) return false;
             return ltiIntersectBadStates( splitSegment, loc, mHybridAutomaton ).first != CONTAINMENT::NO; } ) ) {
         return REACHABILITY_RESULT::UNKNOWN;
     }
