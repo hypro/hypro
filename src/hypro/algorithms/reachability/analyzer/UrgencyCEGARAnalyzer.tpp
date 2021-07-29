@@ -20,6 +20,7 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
         auto safetyResult = worker.computeTimeSuccessors( *currentNode );
         worker.insertFlowpipe( *currentNode );
         currentNode->setSafety( safetyResult );
+        worker.reset();
 
         if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
             refinementAnalyzer.setRefinement( currentNode );
@@ -79,7 +80,7 @@ void UrgencyCEGARAnalyzer<Representation>::setMinimalRefinementLevel( ReachTreeN
     if ( mRefinementSettings.refineHalfspaces ) {
         if ( mRefinementSettings.maxRefinementLevel() != mRefinementSettings.minRefinementLevel() ) {
             for ( auto const& trans : node.getLocation()->getTransitions() ) {
-                if ( trans->isUrgent() && trans->getJumpEnablingSet().getMatrix().size() == 1 ) {
+                if ( trans->isUrgent() && ( trans->getJumpEnablingSet().getMatrix().size() == 1 || trans->getJumpEnablingSet().isTrue() ) ) {
                     node.getUrgent()[ trans.get() ] = mRefinementSettings.maxRefinementLevel();
                 }
             }

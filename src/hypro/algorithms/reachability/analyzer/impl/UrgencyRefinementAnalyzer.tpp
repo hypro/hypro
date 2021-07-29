@@ -95,6 +95,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
             REACHABILITY_RESULT safetyResult = worker.computeTimeSuccessors( *currentNode );
             worker.insertFlowpipe( *currentNode );
             currentNode->setSafety( safetyResult );
+            worker.reset();
         }
 
         if ( currentNode->getSafety() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -344,6 +345,7 @@ bool UrgencyRefinementAnalyzer<Representation>::pathUnsafe( ReachTreeNode<Repres
             }
         }
         worker.insertFlowpipe( *node );
+        worker.reset();
         if ( node->getDepth() < path.elements.size() ) {
             auto nextTransition = path.elements[ node->getDepth() ].second;
             auto successor = worker.computeJumpSuccessors( *node, nextTransition, path.elements[ node->getDepth() ].first );

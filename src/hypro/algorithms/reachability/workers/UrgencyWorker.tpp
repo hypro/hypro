@@ -14,6 +14,8 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeForwardReachability( c
 
 template <typename Representation>
 REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon ) {
+    assert( mFlowpipe.size() == 0 );
+    reset();
     const Location<Number>* loc = task.getLocation();
     Representation initialSet = task.getInitialSet();
 
