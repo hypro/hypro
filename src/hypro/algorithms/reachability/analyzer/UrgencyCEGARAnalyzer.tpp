@@ -19,6 +19,7 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 
         auto safetyResult = worker.computeTimeSuccessors( *currentNode );
         worker.insertFlowpipe( *currentNode );
+        currentNode->setSafety( safetyResult );
 
         if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
             refinementAnalyzer.setRefinement( currentNode );
@@ -31,7 +32,6 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
                 return { Failure{ refineResult.failure().conflictNode } };
             }
         } else {
-            worker.insertFlowpipe( *currentNode );
             //Do not perform discrete jump if jump depth was reached
             if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) continue;
             // create jump successor tasks

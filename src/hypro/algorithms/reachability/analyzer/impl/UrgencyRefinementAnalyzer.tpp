@@ -71,15 +71,14 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
             continue;
         }
 
-        REACHABILITY_RESULT safetyResult = REACHABILITY_RESULT::SAFE;
-
         // compute flowpipe. if node was previously unsafe, flowpipe would not be empty
         if ( currentNode->getFlowpipe().empty() ) {
-            safetyResult = worker.computeTimeSuccessors( *currentNode );
+            REACHABILITY_RESULT safetyResult = worker.computeTimeSuccessors( *currentNode );
             worker.insertFlowpipe( *currentNode );
+            currentNode->setSafety( safetyResult );
         }
 
-        if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
+        if ( currentNode->getSafety() == REACHABILITY_RESULT::UNKNOWN ) {
             refine = findRefinementNode( currentNode );
             if ( refine.node == nullptr ) {
                 return { Failure{ currentNode } };

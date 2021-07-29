@@ -25,6 +25,7 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	std::set<Transition<Number>*> mUrgent{};    ///< set of urgent transitions (CEGAR)
   std::vector<SegmentInd> mFpTimings{};       ///< timing information for simultaneous segments (urgency)
 	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
+	REACHABILITY_RESULT mSafetyResult;
 
   public:
 	//Exposition types
@@ -76,6 +77,9 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	std::vector<Representation> const& getFlowpipe() const { return mFlowpipe; }
 	void setFlowpipe( std::vector<Representation>&& fp ) { mFlowpipe = std::move( fp ); }
 	void setFlowpipe( const std::vector<Representation>& fp ) { mFlowpipe = fp; }
+
+	const REACHABILITY_RESULT& getSafety() const { return mSafetyResult; }
+	void setSafety( REACHABILITY_RESULT result ) { mSafetyResult = result; }
 
   /**
    * @brief Get access to the urgent Transitions
