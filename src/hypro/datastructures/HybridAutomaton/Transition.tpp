@@ -193,7 +193,7 @@ Condition<Number> Transition<Number>::getJumpEnablingSet() {
 	Optimizer<Number> opt( resMatrix, resVector );
 	auto redundantRows = opt.redundantConstraints();
 	resMatrix = removeRows( resMatrix, redundantRows );
-	resVector = removeRows( resMatrix, redundantRows );
+	resVector = removeRows( resVector, redundantRows );
 	Condition<Number> res( resMatrix, resVector );
 	mJumpEnablingSet = res;
 	return res;
