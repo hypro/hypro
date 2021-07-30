@@ -198,15 +198,26 @@ auto UrgencyRefinementAnalyzer<Representation>::findRefinementNode( ReachTreeNod
                 auto nextLevelTrans = getNextLevel( ( *nodeIt )->getUrgent()[ trans.get() ] );
                 nextLevel = nextLevelTrans < nextLevel ? nextLevelTrans : nextLevel;
             }
-            // refine all transitions to next level
-            for ( auto const& candidateTrans : ( *nodeIt )->getLocation()->getTransitions() ) {
-                if ( candidateTrans->isUrgent() &&
-                     ( *nodeIt )->getUrgent()[ candidateTrans.get() ] < nextLevel ) {
-                        RefinePoint candidate{ *nodeIt, candidateTrans.get(), nextLevel };
 
-                    if ( suitableForRefinement( candidate, unsafeNode ) ) {
-                        return candidate;
-                    }
+            // collect urgent outgoing transitions with refinementLevel < nextLevel
+            std::vector<Transition<Number>*> candidateTransitions;
+            for ( auto const& trans : ( *nodeIt )->getLocation()->getTransitions() ) {
+                if ( trans->isUrgent() && ( *nodeIt )->getUrgent()[ trans.get() ] < nextLevel ) {
+                    candidateTransitions.push_back( trans.get() );
+                }
+            }
+            // sort by used heuristic
+            std::sort( candidateTransitions.begin(), candidateTransitions.end(), [this, nodeIt]( auto t1, auto t2 ){
+                return mRefinementSettings.heuristic == UrgencyRefinementHeuristic::CONSTRAINT_COUNT ?
+                    computeHeuristic( t1, *nodeIt ) < computeHeuristic( t2, *nodeIt ) :
+                    computeHeuristic( t1, *nodeIt ) > computeHeuristic( t2, *nodeIt ); } );
+
+            // refine all transitions to next level
+            for ( auto candidateTrans : candidateTransitions ) {
+                RefinePoint candidate{ *nodeIt, candidateTrans, nextLevel };
+                if ( suitableForRefinement( candidate, unsafeNode ) ) {
+                    updateHeuristics( candidateTrans );
+                    return candidate;
                 }
             }
         // at this point, all transitions are refined to nextLevel, so we stop when maxLevel is reached
@@ -367,6 +378,49 @@ bool UrgencyRefinementAnalyzer<Representation>::pathUnsafe( ReachTreeNode<Repres
         }
     }
     return false;
+}
+
+template <typename Representation>
+std::size_t UrgencyRefinementAnalyzer<Representation>::computeHeuristic( Transition<Number>* t, ReachTreeNode<Representation>* node ) {
+    if ( mRefinementCache.find( t ) == mRefinementCache.end() ) {
+        switch ( mRefinementSettings.heuristic ) {
+            case UrgencyRefinementHeuristic::CONSTRAINT_COUNT: {
+                mRefinementCache[ t ] = t->getJumpEnablingSet().getMatrix().rows();
+                break;
+            } case UrgencyRefinementHeuristic::VOLUME: {
+                // todo: differentiate between representations where it is easier to compute intersection -> intersect each segment;
+                // or union -> aggregate all segments and compute volume once
+                std::size_t vol = 0;
+                for ( auto segment : node->getFlowpipe() ) {
+                    auto [containment, intersected] = intersect( segment, t->getJumpEnablingSet() );
+                    if ( containment == CONTAINMENT::NO ) continue;
+                    auto box = computeBoundingBox( intersected );
+                    std::size_t boxVol = 1;
+                    for ( const auto& interval : box.intervals() ) {
+                        vol *= size_t( std::ceil( carl::convert<Number, double>( interval.upper() - interval.lower() ) ) );
+                    }
+                    vol += boxVol;
+                }
+                mRefinementCache[ t ] = vol;
+                break;
+            } case UrgencyRefinementHeuristic::COUNT: {
+                mRefinementCache[ t ] = 0;
+                break;
+            } default:
+                // no heuristic matched, return default value
+                return 0;
+        }
+    }
+    return mRefinementCache[ t ];
+}
+
+template <typename Representation>
+void UrgencyRefinementAnalyzer<Representation>::updateHeuristics( Transition<Number>* t ) {
+    if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::COUNT ) {
+        mRefinementCache[ t ] += 1;
+    } else if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::VOLUME ) {
+        mRefinementCache.clear();
+    }
 }
 
 } // namespace hypro

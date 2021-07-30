@@ -83,6 +83,10 @@ class UrgencyRefinementAnalyzer {
 
     bool pathUnsafe( ReachTreeNode<Representation>* initialNode, Path<Number> path, std::size_t initialTimeHorizon );
 
+    std::size_t computeHeuristic( Transition<Number>* t, ReachTreeNode<Representation>* node );
+
+    void updateHeuristics( Transition<Number>* t );
+
   protected:
     std::deque<ReachTreeNode<Representation>*> mWorkQueue;  ///< Queue for nodes in the tree which require processing
     HybridAutomaton<Number> const* mHybridAutomaton;        ///< Hybrid automaton
@@ -93,6 +97,7 @@ class UrgencyRefinementAnalyzer {
     ReachTreeNode<Representation>* mFailureNode;
     std::vector<ReachTreeNode<Representation>>* mRoots;
     size_t const mMaxSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.localTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::max() ) ) );
+    std::map<Transition<Number>*, std::size_t> mRefinementCache;
 };
 
 }  // namespace hypro

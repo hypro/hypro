@@ -44,6 +44,7 @@ struct UrgencyCEGARSettings {
 														  UrgencyRefinementLevel::CUTOFF,
 														  UrgencyRefinementLevel::SETDIFF};
 	bool refineHalfspaces = true;
+	UrgencyRefinementHeuristic heuristic = UrgencyRefinementHeuristic::NONE;
 
   public:
 	UrgencyRefinementLevel minRefinementLevel() const {

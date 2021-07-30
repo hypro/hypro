@@ -119,6 +119,12 @@ BETTER_ENUM( UrgencyRefinementLevel, int,
 			 CUTOFF,
 			 SETDIFF )
 
+BETTER_ENUM( UrgencyRefinementHeuristic, int,
+			 NONE,
+			 CONSTRAINT_COUNT,
+			 VOLUME,
+			 COUNT )
+
 }  // namespace hypro
 
 namespace Eigen {
