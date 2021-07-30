@@ -45,6 +45,7 @@ class Transition {
 	bool mUrgent = false;								  /// Flag if transition is urgent.
 	Number mTriggerTime = Number( -1 );					  /// Trigger-time: if positive acts as an additional guard.
 	std::vector<Label> mLabels = std::vector<Label>();
+	std::optional<Condition<Number>> mJumpEnablingSet; /// possibly cached jump set
 	mutable std::size_t mHash = 0;
 
   public:
@@ -214,7 +215,7 @@ class Transition {
 	 * 						preimage of the target invariant under the reset function.
 	 * @return 		A condition that is satisfied iff the transition can be taken.
 	 */
-	Condition<Number> getJumpEnablingSet() const;
+	Condition<Number> getJumpEnablingSet();
 
 	/**
      * @brief      Outstream operator.

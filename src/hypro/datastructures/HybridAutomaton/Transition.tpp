@@ -142,7 +142,10 @@ bool Transition<Number>::isComposedOf( const Transition<Number>& rhs, const std:
 }
 
 template <typename Number>
-Condition<Number> Transition<Number>::getJumpEnablingSet() const {
+Condition<Number> Transition<Number>::getJumpEnablingSet() {
+	if ( mJumpEnablingSet ) {
+		return mJumpEnablingSet.value();
+	}
 	const auto& guard = this->getGuard();
 	const auto& targetInvariant = this->getTarget()->getInvariant();
 	if ( guard.isFalse() ) {
@@ -185,7 +188,15 @@ Condition<Number> Transition<Number>::getJumpEnablingSet() const {
 	resMatrix.bottomRows( invMatrix.rows() ) = invMatrix;
 	resVector.head( guardVector.rows() ) = guardVector;
 	resVector.tail( invVector.rows() ) = invVector;
-	return Condition<Number>( resMatrix, resVector );
+
+	// remove redundancy
+	Optimizer<Number> opt( resMatrix, resVector );
+	auto redundantRows = opt.redundantConstraints();
+	resMatrix = removeRows( resMatrix, redundantRows );
+	resVector = removeRows( resMatrix, redundantRows );
+	Condition<Number> res( resMatrix, resVector );
+	mJumpEnablingSet = res;
+	return res;
 }
 
 template <typename Number>
