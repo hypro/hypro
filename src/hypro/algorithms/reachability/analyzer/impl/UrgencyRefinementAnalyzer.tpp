@@ -84,6 +84,18 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
         ReachTreeNode<Representation>* currentNode = mWorkQueue.back();
         mWorkQueue.pop_back();
 
+        // skip descendants of refined nodes
+        auto node = currentNode;
+        bool ancestorRefined = false;
+        while ( node != nullptr ) {
+            if ( std::find( refinedNodes.begin(), refinedNodes.end(), node ) != refinedNodes.end() ) {
+                ancestorRefined = true;
+                break;
+            }
+            node = node->getParent();
+        }
+        if ( ancestorRefined ) continue;
+
         // if node is child of last node in path, collect it in return value
         if ( currentNode->getDepth() == mPath.elements.size() + 1 ) {
             endOfPath.push_back( currentNode );
@@ -187,11 +199,10 @@ auto UrgencyRefinementAnalyzer<Representation>::findRefinementNode( ReachTreeNod
                 nextLevel = nextLevelTrans < nextLevel ? nextLevelTrans : nextLevel;
             }
             // refine all transitions to next level
-            for ( auto candidateTrans : mHybridAutomaton->getTransitions() ) {
-                if ( candidateTrans->getSource() == ( *nodeIt )->getLocation() &&
-                     candidateTrans->isUrgent() &&
-                     ( *nodeIt )->getUrgent()[ candidateTrans ] < nextLevel ) {
-                        RefinePoint candidate{ *nodeIt, candidateTrans, nextLevel };
+            for ( auto const& candidateTrans : ( *nodeIt )->getLocation()->getTransitions() ) {
+                if ( candidateTrans->isUrgent() &&
+                     ( *nodeIt )->getUrgent()[ candidateTrans.get() ] < nextLevel ) {
+                        RefinePoint candidate{ *nodeIt, candidateTrans.get(), nextLevel };
 
                     if ( suitableForRefinement( candidate, unsafeNode ) ) {
                         return candidate;
