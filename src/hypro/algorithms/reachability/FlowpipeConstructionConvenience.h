@@ -96,13 +96,14 @@ Box<typename Representation::NumberType> computeBoundingBox( const Representatio
 
 template <class Representation, class Number>
 std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
-    if ( condition.isTrue() ) {
+    // intersect with (bounded) valuationSet first:
+    auto [containment, intersectedMinus] = intersect( valuationSet, condition );
+    if ( containment == CONTAINMENT::NO ) {
+        return { valuationSet };
+    } else if ( containment == CONTAINMENT::FULL ) {
         return { Representation::Empty() };
     }
-    if ( condition.isFalse() ) {
-        return { valuationSet };
-    }
-    auto res = valuationSet.setMinus( Representation( condition.getMatrix(), condition.getVector() ) );
+    auto res = valuationSet.setMinus2( intersectedMinus );
     return res;
 }
 
