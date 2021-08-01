@@ -45,29 +45,6 @@ struct UrgencyCEGARSettings {
 														  UrgencyRefinementLevel::SETDIFF};
 	bool refineHalfspaces = true;
 	UrgencyRefinementHeuristic heuristic = UrgencyRefinementHeuristic::NONE;
-
-  public:
-	UrgencyRefinementLevel minRefinementLevel() const {
-		assert( refinementLevels.size() > 0 );
-		if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::FULL ) != refinementLevels.end() ) {
-			return UrgencyRefinementLevel::FULL;
-		} else if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::CUTOFF ) != refinementLevels.end() ) {
-			return UrgencyRefinementLevel::CUTOFF;
-		} else {
-			return UrgencyRefinementLevel::SETDIFF;
-		}
-	}
-
-	UrgencyRefinementLevel maxRefinementLevel() const {
-		assert( refinementLevels.size() > 0 );
-		if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::SETDIFF ) != refinementLevels.end() ) {
-			return UrgencyRefinementLevel::SETDIFF;
-		} else if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::CUTOFF ) != refinementLevels.end() ) {
-			return UrgencyRefinementLevel::CUTOFF;
-		} else {
-			return UrgencyRefinementLevel::FULL;
-		}
-	}
 };
 
 class Settings {

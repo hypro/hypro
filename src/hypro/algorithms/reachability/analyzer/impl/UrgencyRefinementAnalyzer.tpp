@@ -5,15 +5,57 @@ namespace detail {
 
 
 template <typename Number>
-UrgencyRefinementLevel getInitialRefinementLevel( Transition<Number>* transition, UrgencyCEGARSettings refinementSettings ) {
+UrgencyRefinementLevel getInitialRefinementLevel( Transition<Number>* transition, const UrgencyCEGARSettings& refinementSettings ) {
     assert( transition->isUrgent() );
-    if ( refinementSettings.refineHalfspaces && refinementSettings.minRefinementLevel() == refinementSettings.maxRefinementLevel() &&
+    if ( refinementSettings.refineHalfspaces && getMinRefinementLevel( refinementSettings ) == getMaxRefinementLevel( refinementSettings ) &&
         ( transition->getJumpEnablingSet().isTrue() || transition->getJumpEnablingSet().isFalse() || transition->getJumpEnablingSet().getMatrix().size() == 1 ) ) {
-        return refinementSettings.maxRefinementLevel();
+        return getMaxRefinementLevel( refinementSettings );
     }
-    return refinementSettings.minRefinementLevel();
+    return getMinRefinementLevel( refinementSettings );
 }
 
+inline UrgencyRefinementLevel getNextRefinementLevel( const UrgencyRefinementLevel& level, const UrgencyCEGARSettings& refinementSettings ) {
+    auto enabledLevels = refinementSettings.refinementLevels;
+    switch ( level ) {
+        case UrgencyRefinementLevel::FULL:
+            if ( std::find( enabledLevels.begin(), enabledLevels.end(), UrgencyRefinementLevel::CUTOFF ) != enabledLevels.end() ) {
+                return UrgencyRefinementLevel::CUTOFF;
+            }
+            [[fallthrough]];
+        case UrgencyRefinementLevel::CUTOFF:
+            if ( std::find( enabledLevels.begin(), enabledLevels.end(), UrgencyRefinementLevel::SETDIFF ) != enabledLevels.end() ) {
+                return UrgencyRefinementLevel::SETDIFF;
+            }
+            [[fallthrough]];
+        default:
+            assert( false && "No next level for maximal refinement level" );
+            return level;
+    }
+}
+
+inline UrgencyRefinementLevel getMinRefinementLevel( const UrgencyCEGARSettings& refinementSettings ) {
+    auto refinementLevels = refinementSettings.refinementLevels;
+    assert( refinementLevels.size() > 0 );
+    if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::FULL ) != refinementLevels.end() ) {
+        return UrgencyRefinementLevel::FULL;
+    } else if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::CUTOFF ) != refinementLevels.end() ) {
+        return UrgencyRefinementLevel::CUTOFF;
+    } else {
+        return UrgencyRefinementLevel::SETDIFF;
+    }
+}
+
+inline UrgencyRefinementLevel getMaxRefinementLevel( const UrgencyCEGARSettings& refinementSettings ) {
+    auto refinementLevels = refinementSettings.refinementLevels;
+    assert( refinementLevels.size() > 0 );
+    if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::SETDIFF ) != refinementLevels.end() ) {
+        return UrgencyRefinementLevel::SETDIFF;
+    } else if ( std::find( refinementLevels.begin(), refinementLevels.end(), UrgencyRefinementLevel::CUTOFF ) != refinementLevels.end() ) {
+        return UrgencyRefinementLevel::CUTOFF;
+    } else {
+        return UrgencyRefinementLevel::FULL;
+    }
+}
 } // namespace detail
 
 template <typename Representation>
@@ -83,8 +125,8 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 
     while ( !mWorkQueue.empty() ) {
         // pop node
-        ReachTreeNode<Representation>* currentNode = mWorkQueue.back();
-        mWorkQueue.pop_back();
+        ReachTreeNode<Representation>* currentNode = mWorkQueue.front();
+        mWorkQueue.pop_front();
 
         // skip descendants of refined nodes
         auto node = currentNode;
@@ -136,24 +178,20 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
             // continue along path
 
             // check if children already exist
-            bool matchedOne = false;
-            for ( auto* child : currentNode->getChildren() ) {
-                if ( matchesPathTransition( child ) &&
+            if ( !currentNode->getChildren().empty() ) {
+                for ( auto* child : currentNode->getChildren() ) {
+                    if ( matchesPathTransition( child ) && matchesPathTiming( child ) &&
                         std::all_of( child->getUrgent().begin(), child->getUrgent().end(), [this]( const auto& u ) {
                             return u.second == detail::getInitialRefinementLevel( u.first, mRefinementSettings ); } ) ) {
-                    matchedOne = true;
-                    // check against path
-                    if ( matchesPathTiming( child ) ) {
-                        mWorkQueue.push_front( child );
+                            mWorkQueue.push_front( child );
                     }
                 }
             }
-
-            if ( !matchedOne ) {
+            else {
                 for ( const auto& successor : worker.computeJumpSuccessors( *currentNode ) ) {
                     ChildNodeGen childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor, mRefinementSettings };
                     while ( auto* child = childGen.next() ) {
-                        if ( matchesPathTiming( child ) ) {
+                        if ( matchesPathTransition( child ) && matchesPathTiming( child ) ) {
                             mWorkQueue.push_front( child );
                         }
                     }
@@ -194,12 +232,12 @@ auto UrgencyRefinementAnalyzer<Representation>::findRefinementNode( ReachTreeNod
     // for each node on the path, refine every transition to the next level (up to max level)
     // until the max level is reached or a suitable transition is found
     for ( auto nodeIt = nodePath.begin(); nodeIt != nodePath.end(); ++nodeIt ) {
-        UrgencyRefinementLevel nextLevel = mRefinementSettings.maxRefinementLevel();
+        UrgencyRefinementLevel nextLevel = detail::getMaxRefinementLevel( mRefinementSettings );
         do {
             // find next refinement level
             for ( auto const& trans : ( *nodeIt )->getLocation()->getTransitions() ) {
-                if ( !trans->isUrgent() || ( *nodeIt )->getUrgent()[ trans.get() ] == mRefinementSettings.maxRefinementLevel() ) continue;
-                auto nextLevelTrans = getNextLevel( ( *nodeIt )->getUrgent()[ trans.get() ] );
+                if ( !trans->isUrgent() || ( *nodeIt )->getUrgent()[ trans.get() ] == detail::getMaxRefinementLevel( mRefinementSettings ) ) continue;
+                auto nextLevelTrans = detail::getNextRefinementLevel( ( *nodeIt )->getUrgent()[ trans.get() ], mRefinementSettings );
                 nextLevel = nextLevelTrans < nextLevel ? nextLevelTrans : nextLevel;
             }
 
@@ -225,29 +263,9 @@ auto UrgencyRefinementAnalyzer<Representation>::findRefinementNode( ReachTreeNod
                 }
             }
         // at this point, all transitions are refined to nextLevel, so we stop when maxLevel is reached
-        } while ( nextLevel != mRefinementSettings.maxRefinementLevel() );
+        } while ( nextLevel != detail::getMaxRefinementLevel( mRefinementSettings ) );
     }
     return RefinePoint{};
-}
-
-template <typename Representation>
-UrgencyRefinementLevel UrgencyRefinementAnalyzer<Representation>::getNextLevel( const UrgencyRefinementLevel& level ) const {
-    auto enabledLevels = mRefinementSettings.refinementLevels;
-    switch ( level ) {
-        case UrgencyRefinementLevel::FULL:
-            if ( std::find( enabledLevels.begin(), enabledLevels.end(), UrgencyRefinementLevel::CUTOFF ) != enabledLevels.end() ) {
-                return UrgencyRefinementLevel::CUTOFF;
-            }
-            [[fallthrough]];
-        case UrgencyRefinementLevel::CUTOFF:
-            if ( std::find( enabledLevels.begin(), enabledLevels.end(), UrgencyRefinementLevel::SETDIFF ) != enabledLevels.end() ) {
-                return UrgencyRefinementLevel::SETDIFF;
-            }
-            [[fallthrough]];
-        default:
-            assert( false && "No next level for maximal refinement level" );
-            return level;
-    }
 }
 
 template <typename Representation>

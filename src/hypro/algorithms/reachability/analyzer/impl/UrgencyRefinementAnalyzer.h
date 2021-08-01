@@ -13,6 +13,11 @@ namespace detail {
 template <typename Number>
 UrgencyRefinementLevel getInitialRefinementLevel( const Transition<Number>* transition, UrgencyCEGARSettings refinementSettings );
 
+UrgencyRefinementLevel getNextRefinementLevel( const UrgencyRefinementLevel& level );
+
+UrgencyRefinementLevel getMinRefinementLevel( const UrgencyCEGARSettings& refinementSettings );
+UrgencyRefinementLevel getMaxRefinementLevel( const UrgencyCEGARSettings& refinementSettings );
+
 
 }  // namespace detail
 
@@ -68,7 +73,6 @@ class UrgencyRefinementAnalyzer {
     bool matchesPathTiming( ReachTreeNode<Representation>* node );
     bool matchesPathTransition( ReachTreeNode<Representation>* node );
 
-    UrgencyRefinementLevel getNextLevel( const UrgencyRefinementLevel& level ) const;
 
     /**
      * @brief Finds a node and transition to refine on the path from root to the given unsafe node.
