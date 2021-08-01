@@ -64,27 +64,12 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createChild
 
     ReachTreeNode<Representation>& childNode = parent->addChild( jsucc.valuationSet, globalDuration, transition );
 
-    setMinimalRefinementLevel( childNode );
+    for ( auto const& trans : childNode.getLocation()->getTransitions() ) {
+        if ( trans->isUrgent() ) {
+            childNode.getUrgent()[ trans.get() ] = detail::getInitialRefinementLevel( trans.get(), mRefinementSettings );
+        }
+    }
     return &childNode;
 }
 
-template <typename Representation>
-void UrgencyCEGARAnalyzer<Representation>::setMinimalRefinementLevel( ReachTreeNode<Representation>& node ) {
-    for ( auto const& trans : node.getLocation()->getTransitions() ) {
-        if ( trans->isUrgent() ) {
-            node.getUrgent()[ trans.get() ] = mRefinementSettings.minRefinementLevel();
-        }
-    }
-
-    // refine urgent halfspaces fully
-    if ( mRefinementSettings.refineHalfspaces ) {
-        if ( mRefinementSettings.maxRefinementLevel() != mRefinementSettings.minRefinementLevel() ) {
-            for ( auto const& trans : node.getLocation()->getTransitions() ) {
-                if ( trans->isUrgent() && ( trans->getJumpEnablingSet().getMatrix().size() == 1 || trans->getJumpEnablingSet().isTrue() ) ) {
-                    node.getUrgent()[ trans.get() ] = mRefinementSettings.maxRefinementLevel();
-                }
-            }
-        }
-    }
-}
 } // namespace hypro

@@ -1,6 +1,20 @@
 #include "UrgencyRefinementAnalyzer.h"
 
 namespace hypro {
+namespace detail {
+
+
+template <typename Number>
+UrgencyRefinementLevel getInitialRefinementLevel( Transition<Number>* transition, UrgencyCEGARSettings refinementSettings ) {
+    assert( transition->isUrgent() );
+    if ( refinementSettings.refineHalfspaces && refinementSettings.minRefinementLevel() == refinementSettings.maxRefinementLevel() &&
+        ( transition->getJumpEnablingSet().isTrue() || transition->getJumpEnablingSet().isFalse() || transition->getJumpEnablingSet().getMatrix().size() == 1 ) ) {
+        return refinementSettings.maxRefinementLevel();
+    }
+    return refinementSettings.minRefinementLevel();
+}
+
+} // namespace detail
 
 template <typename Representation>
 struct UrgencyRefinementAnalyzer<Representation>::ChildNodeGen {
@@ -26,21 +40,9 @@ struct UrgencyRefinementAnalyzer<Representation>::ChildNodeGen {
         carl::Interval<TimePoint> globalDuration{ initialSetDuration.lower() + enabledDuration.lower(), initialSetDuration.upper() + enabledDuration.upper() };
 
         auto& child = parentNode->addChild( valuationSet, globalDuration, transition );
-        // set minimal refinement level
         for ( auto const& trans : child.getLocation()->getTransitions() ) {
             if ( trans->isUrgent() ) {
-                child.getUrgent()[ trans.get() ] = refinementSettings.minRefinementLevel();
-            }
-        }
-
-        // refine urgent halfspaces fully
-        if ( refinementSettings.refineHalfspaces ) {
-            if ( refinementSettings.maxRefinementLevel() != refinementSettings.minRefinementLevel() ) {
-                for ( auto const& trans : child.getLocation()->getTransitions() ) {
-                    if ( trans->isUrgent() && trans->getJumpEnablingSet().getMatrix().size() == 1 ) {
-                        child.getUrgent()[ trans.get() ] = refinementSettings.maxRefinementLevel();
-                    }
-                }
+                child.getUrgent()[ trans.get() ] = detail::getInitialRefinementLevel( trans.get(), refinementSettings );
             }
         }
         return &child;
@@ -138,7 +140,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
             for ( auto* child : currentNode->getChildren() ) {
                 if ( matchesPathTransition( child ) &&
                         std::all_of( child->getUrgent().begin(), child->getUrgent().end(), [this]( const auto& u ) {
-                            return u.second == mRefinementSettings.minRefinementLevel(); } ) ) {
+                            return u.second == detail::getInitialRefinementLevel( u.first, mRefinementSettings ); } ) ) {
                     matchedOne = true;
                     // check against path
                     if ( matchesPathTiming( child ) ) {
@@ -151,7 +153,9 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
                 for ( const auto& successor : worker.computeJumpSuccessors( *currentNode ) ) {
                     ChildNodeGen childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor, mRefinementSettings };
                     while ( auto* child = childGen.next() ) {
-                        endOfPath.push_back( child );
+                        if ( matchesPathTiming( child ) ) {
+                            mWorkQueue.push_front( child );
+                        }
                     }
                 }
             }

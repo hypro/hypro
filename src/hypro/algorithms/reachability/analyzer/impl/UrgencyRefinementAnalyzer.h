@@ -8,6 +8,13 @@
 #include <deque>
 
 namespace hypro {
+namespace detail {
+
+template <typename Number>
+UrgencyRefinementLevel getInitialRefinementLevel( const Transition<Number>* transition, UrgencyCEGARSettings refinementSettings );
+
+
+}  // namespace detail
 
 template <class Representation>
 struct UrgencyRefinementSuccess {
@@ -36,7 +43,7 @@ class UrgencyRefinementAnalyzer {
                                FixedAnalysisParameters const& fixedParameters,
                                AnalysisParameters const& parameters,
                                UrgencyCEGARSettings const& refinementSettings,
-                               std::vector<ReachTreeNode<Representation>>& roots )
+                               std::list<ReachTreeNode<Representation>>& roots )
         : mHybridAutomaton( ha )
         , mFixedParameters( fixedParameters )
         , mParameters( parameters )
@@ -95,7 +102,7 @@ class UrgencyRefinementAnalyzer {
     UrgencyCEGARSettings mRefinementSettings;
     Path<Number> mPath{};
     ReachTreeNode<Representation>* mFailureNode;
-    std::vector<ReachTreeNode<Representation>>* mRoots;
+    std::list<ReachTreeNode<Representation>>* mRoots;
     size_t const mMaxSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.localTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::max() ) ) );
     std::map<Transition<Number>*, std::size_t> mRefinementCache;
 };
