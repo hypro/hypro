@@ -112,6 +112,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
           mParameters,
           mFixedParameters.localTimeHorizon,
           transformationCache };
+    COUNT("UrgencyCegar: Refinement iteration");
 
     std::vector<ReachTreeNode<Representation>*> endOfPath{};
     std::vector<ReachTreeNode<Representation>*> refinedNodes{};
@@ -134,6 +135,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
         while ( node != nullptr ) {
             if ( std::find( refinedNodes.begin(), refinedNodes.end(), node ) != refinedNodes.end() ) {
                 ancestorRefined = true;
+                COUNT("UrgencyCegar: Skipped descendant of refined");
                 break;
             }
             node = node->getParent();
@@ -159,6 +161,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
             if ( refine.node == nullptr ) {
                 return { Failure{ currentNode } };
             }
+            COUNT("UrgencyCegar: Nested refinement");
             mWorkQueue.push_front( refineNode( refine ) );
             refinedNodes.push_back( currentNode );
             continue;
@@ -179,6 +182,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 
             // check if children already exist
             if ( !currentNode->getChildren().empty() ) {
+                COUNT("UrgencyCegar: Reuse children");
                 for ( auto* child : currentNode->getChildren() ) {
                     if ( matchesPathTransition( child ) && matchesPathTiming( child ) &&
                         std::all_of( child->getUrgent().begin(), child->getUrgent().end(), [this]( const auto& u ) {
@@ -188,6 +192,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
                 }
             }
             else {
+                COUNT("UrgencyCegar: Compute children");
                 for ( const auto& successor : worker.computeJumpSuccessors( *currentNode ) ) {
                     ChildNodeGen childGen{ successor.valuationSets, currentNode, successor.transition, mParameters.timeStepFactor, mRefinementSettings };
                     while ( auto* child = childGen.next() ) {
@@ -207,6 +212,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
         while ( node != nullptr ) {
             if ( std::find( refinedNodes.begin(), refinedNodes.end(), node ) != refinedNodes.end() ) {
                 ancestorRefined = true;
+                COUNT("UrgencyCegar: Skipped descendant of refined as path successor");
                 break;
             }
             node = node->getParent();
@@ -258,9 +264,11 @@ auto UrgencyRefinementAnalyzer<Representation>::findRefinementNode( ReachTreeNod
             for ( auto candidateTrans : candidateTransitions ) {
                 RefinePoint candidate{ *nodeIt, candidateTrans, nextLevel };
                 if ( suitableForRefinement( candidate, unsafeNode ) ) {
+                    COUNT("UrgencyCegar: Refinement transition found");
                     updateHeuristics( candidateTrans );
                     return candidate;
                 }
+                COUNT("UrgencyCegar: Transition is not suitable for refinement");
             }
         // at this point, all transitions are refined to nextLevel, so we stop when maxLevel is reached
         } while ( nextLevel != detail::getMaxRefinementLevel( mRefinementSettings ) );
@@ -315,6 +323,7 @@ ReachTreeNode<Representation>* UrgencyRefinementAnalyzer<Representation>::refine
 template <typename Representation>
 bool UrgencyRefinementAnalyzer<Representation>::suitableForRefinement(
         const RefinePoint& candidate, ReachTreeNode<Representation>* unsafeNode ) {
+    START_BENCHMARK_OPERATION("UrgencyCegar: Check transition");
 
     /*
         + iterate over all segments of the candidate node
@@ -345,6 +354,7 @@ bool UrgencyRefinementAnalyzer<Representation>::suitableForRefinement(
         } else if ( containment == CONTAINMENT::FULL && path.elements.size() > 0 && 
                     candidateFpTimings[ fpIndex ] + candidateTimings.upper() < path.elements[0].first.lower() ) {
             // segment before jump is fully contained in jump enabling set
+            STOP_BENCHMARK_OPERATION("UrgencyCegar: Check transition");
             return true;
         } else {
             // get time horizon for first task
@@ -358,9 +368,11 @@ bool UrgencyRefinementAnalyzer<Representation>::suitableForRefinement(
 
     for ( auto& [timeHorizon, task] : tasks ) {
         if ( pathUnsafe( &task, path, timeHorizon ) ) {
+            STOP_BENCHMARK_OPERATION("UrgencyCegar: Check transition");
             return true;
         }
     }
+    STOP_BENCHMARK_OPERATION("UrgencyCegar: Check transition");
     return false;
 }
 
@@ -404,7 +416,7 @@ bool UrgencyRefinementAnalyzer<Representation>::pathUnsafe( ReachTreeNode<Repres
 
 template <typename Representation>
 std::size_t UrgencyRefinementAnalyzer<Representation>::computeHeuristic( Transition<Number>* t, ReachTreeNode<Representation>* node ) {
-    if ( mRefinementCache.find( t ) == mRefinementCache.end() ) {
+    if ( mRefinementCache.count( t ) == 0 ) {
         switch ( mRefinementSettings.heuristic ) {
             case UrgencyRefinementHeuristic::CONSTRAINT_COUNT: {
                 mRefinementCache[ t ] = t->getJumpEnablingSet().getMatrix().rows();
