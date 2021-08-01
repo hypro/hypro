@@ -217,6 +217,15 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 }
 
 template <typename Number, typename Representation, typename... Rargs>
+EvaluationResult<Number> State<Number, Representation, Rargs...>::evaluate( const vector_t<Number>& _direction, std::size_t I ) const {
+	assert( checkConsistency() );
+	assert( mSets.size() > I );
+	auto res = std::visit( genericEvaluateVisitor<Number>( _direction ), mSets.at( I ) );
+	return res;
+}
+
+
+template <typename Number, typename Representation, typename... Rargs>
 State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::applyTimeStep( const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const {
 	State<Number, Representation, Rargs...> res( *this );
 	TRACE( "hypro.datastructures", "Apply timestep of size " << timeStepSize );
@@ -575,6 +584,7 @@ bool State<Number, Representation, Rargs...>::checkConsistency() const {
 
 template <typename Number, typename Representation, typename... Rargs>
 bool State<Number, Representation, Rargs...>::isEmpty() const {
+	if ( mSets.size() == 0 ) { return true; }
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
 		// TODO: do not ignore cache!
 		bool localEmpty = std::visit( genericEmptyVisitor(), mSets.at( i ) );

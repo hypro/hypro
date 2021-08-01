@@ -199,6 +199,12 @@ class State {
 	//		assert( checkConsistency() );
 	//	}
 
+	static State Empty() {
+		auto tmp = State();
+		assert( tmp.empty() );
+		return tmp;
+	}
+
 	/**
      * @brief      Gets the location.
      * @return     The location.
@@ -271,6 +277,10 @@ class State {
      * @return     True if empty, False otherwise.
      */
 	bool isEmpty() const;
+	/**
+	 * @brief Alias for isEmpty to be consistent with other representations.
+	 */
+	bool empty() const { return isEmpty(); }
 
 	/**
      * @brief      Returns empty-flag values.
@@ -411,6 +421,8 @@ class State {
 	std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> satisfies( const Condition<Number>& in ) const;
 	std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> satisfiesHalfspaces( const matrix_t<Number>& constraints, const vector_t<Number>& constants ) const;
 
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, std::size_t I = 0 ) const;
+
 	/**
      * @brief      Meta-function to verify the i-th set of a state against the i-th component of a condition.
      * @param[in]  in    The passed condition.
@@ -500,6 +512,7 @@ class State {
 
 	std::size_t getDimension( std::size_t I = 0 ) const;
 	std::size_t getDimensionOffset( std::size_t I ) const;
+	std::size_t dimension( std::size_t I = 0 ) const { return getDimension( I ); }
 
 	Number getSupremum( std::size_t I ) const;
 

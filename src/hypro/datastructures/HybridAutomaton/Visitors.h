@@ -202,6 +202,22 @@ class genericSatisfiesHalfspacesVisitor {
 	}
 };
 
+template <typename Number>
+class genericEvaluateVisitor {
+	protected:
+  const vector_t<Number>& direction;
+
+	public:
+  genericEvaluateVisitor() = delete;
+	genericEvaluateVisitor( const vector_t<Number>& _direction )
+		: direction( _direction ) {}
+
+	template <typename T>
+	inline EvaluationResult<Number> operator()( const T& set ) const {
+		return set.evaluate( direction );
+	}
+};
+
 /**
  * @brief Equality comparison for std::variant of geometric object types
  */
