@@ -264,25 +264,19 @@ Representation intersectSegmentWithClock(
     if ( segment.empty() ) {
         return segment;
     }
-    if ( clockValues.empty() ) {
-        return Representation::Empty();
-    }
     if ( clockCount == 0 ) {
         return segment;
     }
-    HPolytope<Number> segmentHpoly;
-    convert( segment, segmentHpoly );
+    matrix_t<Number> clockConstraint = matrix_t<Number>::Zero( 2 * clockCount, segment.dimension() );
+    vector_t<Number> clockConstant( 2 * clockCount );
     for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
-        vector_t<Number> clockDirection = vector_t<Number>::Zero( segment.dimension() );
-        clockDirection( segment.dimension() - clockCount + clockIndex ) = 1;
-        Halfspace<Number> upperBound( clockDirection, clockValues.getTimeInterval( clockIndex ).upper() );
-        Halfspace<Number> lowerBound( -1 * clockDirection, -1 * clockValues.getTimeInterval( clockIndex ).lower() );
-        segmentHpoly.insert( upperBound );
-        segmentHpoly.insert( lowerBound );
+        
+        clockConstraint( 2*clockIndex, segment.dimension() - clockCount + clockIndex ) = 1;
+        clockConstraint( 2*clockIndex + 1, segment.dimension() - clockCount + clockIndex ) = -1;
+        clockConstant( 2*clockIndex ) = clockValues.getTimeInterval( clockIndex ).upper();
+        clockConstant( 2*clockIndex + 1 ) = -1 * clockValues.getTimeInterval( clockIndex ).lower();
     }
-    Representation constrainedSegment;
-    convert( segmentHpoly, constrainedSegment );
-    return constrainedSegment;
+    return segment.intersectHalfspaces( clockConstraint, clockConstant );
 }
 
 template <typename Number>

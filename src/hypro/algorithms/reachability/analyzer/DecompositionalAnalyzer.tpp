@@ -2,8 +2,9 @@
 
 namespace hypro {
 
-template <typename Representation>
-auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+auto DecompositionalAnalyzer<LTIRep,SingularRep,DiscreteRep,RectangularRep>::run() -> DecompositionalResult {
+
     std::vector<TimeTransformationCache<Number>> cache( mDecomposition.subspaces.size(), TimeTransformationCache<Number>() );
     auto workers = initializeWorkers( cache );
 
@@ -22,12 +23,13 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         }
 
         std::for_each( workers.begin(), workers.end(), []( WorkerVariant& worker ) {
-            std::visit( detail::resetWorkerVisitor<Representation>{}, worker );
+            std::visit( resetWorkerVisitor{}, worker );
         } );
 
         // Time successors
         TimeInformation<Number> invariantSatisfyingTime = computeTimeSuccessorsGetEnabledTime( currentNodes, workers );
         removeRedundantSegments( currentNodes );
+        HPolytope<Number> segmentHpoly = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), currentNodes[0]->getInitialSet().getSet() );
         intersectSubspacesWithClock( currentNodes, invariantSatisfyingTime );
 
         // Check safety
@@ -43,7 +45,7 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
         }
 
         for ( const auto& transition : currentLoc->getTransitions() ) {
-            std::vector<SubspaceJumpSuccessors<Representation>> jumpSuccessors = getJumpSuccessors( currentNodes, workers, transition.get(), clockIndex );
+            std::vector<SubspaceJumpSuccessors<Rep>> jumpSuccessors = getJumpSuccessors( currentNodes, workers, transition.get(), clockIndex );
             for ( auto& timedSuccessor : jumpSuccessors ) {
                 std::size_t nextIndex = clockIndex + 1;
                 // todo: return as vector, not as map
@@ -55,12 +57,36 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                     nextIndex = 0;
                     // complexity reduction
                     if ( mClockCount > 0 ) {
-                        Representation composedSuccessors = detail::composeSubspaces( subspaceSets, dependencies, mDecomposition, mClockCount );
+                        std::vector<HPolytope<Number>> subspacePolytopes;
+                        std::transform( subspaceSets.begin(), subspaceSets.end(), std::back_inserter( subspacePolytopes ), [=]( auto& segment ) {
+                            return std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), segment.getSet() );
+                        } );
+                        HPolytope<Number> composedSuccessors = detail::composeSubspaces( subspacePolytopes, dependencies, mDecomposition, mClockCount );
                         if ( composedSuccessors.empty() ) {
                             continue;
                         }
                         dependencies = detail::getDependencies( composedSuccessors, mDecomposition );
-                        subspaceSets = detail::decompose( composedSuccessors, mDecomposition, mClockCount );
+                        subspacePolytopes = detail::decompose( composedSuccessors, mDecomposition, mClockCount );
+                        for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
+                            auto pol = subspacePolytopes[ subspace ];
+                            Rep segment;
+                            switch ( mDecomposition.subspaceTypes[ subspace ] ) {
+                                case DynamicType::timed:
+                                    [[fallthrough]];
+                                case DynamicType::singular:
+                                    segment.setSet( SingularRep{ pol.matrix(), pol.vector() } );
+                                    break;
+                                case DynamicType::discrete:
+                                    segment.setSet( DiscreteRep{ pol.matrix(), pol.vector() } );
+                                    break;
+                                case DynamicType::rectangular:
+                                    segment.setSet( RectangularRep{ pol.matrix(), pol.vector() } );
+                                    break;
+                                default:
+                                    segment.setSet( LTIRep{ pol.matrix(), pol.vector() } );
+                            }
+                            subspaceSets[ subspace ] = segment;
+                        }
                     }
                 }
 
@@ -70,32 +96,32 @@ auto DecompositionalAnalyzer<Representation>::run() -> DecompositionalResult {
                     auto& subspaceChild = currentNodes[ subspace ]->addChild( subspaceSets[ subspace ], timedSuccessor.time, transition.get() );
                     childNodes[ subspace ] = &subspaceChild;
                 }
-                mWorkQueue.push_back( detail::decompositionalQueueEntry<Representation>{ nextIndex, childNodes, &( depNode->addChild( dependencies, timedSuccessor.time, transition.get() ) ) } );
+                mWorkQueue.push_back( detail::decompositionalQueueEntry<Rep>{ nextIndex, childNodes, &( depNode->addChild( dependencies, timedSuccessor.time, transition.get() ) ) } );
             }
         }
     }
     return { DecompositionalSuccess{} };
 }
 
-template <typename Representation>
-auto DecompositionalAnalyzer<Representation>::initializeWorkers( std::vector<TimeTransformationCache<Number>>& cache ) -> std::vector<WorkerVariant> {
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::initializeWorkers( std::vector<TimeTransformationCache<Number>>& cache ) -> std::vector<WorkerVariant> {
     std::vector<WorkerVariant> workers;
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
         switch( mDecomposition.subspaceTypes[ subspace ] ) {
             case DynamicType::discrete:
-                workers.push_back( DiscreteWorker<Representation>{*mHybridAutomaton,
+                workers.push_back( DiscreteWorker<DiscreteRep>{*mHybridAutomaton,
                                                                 mParameters,
                                                                 subspace } );
                 break;
             case DynamicType::timed:
                 [[fallthrough]];
             case DynamicType::singular:
-                workers.push_back( SingularWorker<Representation>{ *mHybridAutomaton,
+                workers.push_back( SingularWorker<SingularRep>{ *mHybridAutomaton,
                                                                     mFixedParameters,
                                                                     subspace } );
                 break;
             default:
-                workers.push_back( LTIWorker<Representation>{ 
+                workers.push_back( LTIWorker<LTIRep>{ 
                     *mHybridAutomaton,
                     mParameters,
                     mFixedParameters.localTimeHorizon,
@@ -106,22 +132,22 @@ auto DecompositionalAnalyzer<Representation>::initializeWorkers( std::vector<Tim
     return workers;
 }
 
-template <typename Representation>
-bool DecompositionalAnalyzer<Representation>::checkConsistency( NodeVector& currentNodes ) {
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::checkConsistency( NodeVector& currentNodes ) {
     if ( std::any_of( currentNodes.begin(), currentNodes.end(), []( const auto& node ) {
-                return node->getInitialSet().empty(); } ) ) {
+                return node->getInitialSet().isEmpty(); } ) ) {
         return false;
     }
     return true;
 }
 
-template <typename Representation>
-auto DecompositionalAnalyzer<Representation>::computeTimeSuccessorsGetEnabledTime(
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::computeTimeSuccessorsGetEnabledTime(
   NodeVector& currentNodes, std::vector<WorkerVariant>& workers ) -> TimeInformation<Number> {
     // start with maximal time interval and shrink it after each subspace computation
     TimeInformation<Number> invariantSatTime = mGlobalTimeInterval;
     for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
-        TimeInformation<Number> invariantSatTimeSubspace = std::visit( detail::computeTimeSuccessorVisitor<Representation>{
+        TimeInformation<Number> invariantSatTimeSubspace = std::visit( computeTimeSuccessorVisitor{
             currentNodes[ subspace ], mClockCount }, workers[ subspace ] );
         // discrete subspaces have no clocks
         if( mDecomposition.subspaceTypes[ subspace ] != DynamicType::discrete ) {
@@ -131,8 +157,8 @@ auto DecompositionalAnalyzer<Representation>::computeTimeSuccessorsGetEnabledTim
     return invariantSatTime;
 }
 
-template <typename Representation>
-void DecompositionalAnalyzer<Representation>::intersectSubspacesWithClock(
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+void DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::intersectSubspacesWithClock(
   NodeVector& currentNodes, TimeInformation<Number>& clock ) {
     for ( std::size_t subspace = 0; subspace < currentNodes.size(); ++subspace ) {
         // discrete subspaces have no clocks
@@ -151,8 +177,8 @@ void DecompositionalAnalyzer<Representation>::intersectSubspacesWithClock(
     }
 }
 
-template <typename Representation>
-void DecompositionalAnalyzer<Representation>::removeRedundantSegments( NodeVector& currentNodes ) {
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+void DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::removeRedundantSegments( NodeVector& currentNodes ) {
     if ( mSegmentedSubspaces.size() == 0 ) { return; }
     // get minimum number of segments that a subspace has
     std::vector<std::size_t> segmentCount( mSegmentedSubspaces );
@@ -168,8 +194,8 @@ void DecompositionalAnalyzer<Representation>::removeRedundantSegments( NodeVecto
     }
 }
 
-template <typename Representation>
-bool DecompositionalAnalyzer<Representation>::isSafe(
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::isSafe(
   const NodeVector& nodes, const Condition<Number>& dependencies, const Condition<Number>& badState ) {
 
     // Synchronize segmented subspaces and intersect them with the bad state
@@ -201,7 +227,12 @@ bool DecompositionalAnalyzer<Representation>::isSafe(
             return false;
         }
         // compose subspaces and check if synchronized set is non empty
-        HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( subspaceSets, dependencies, mDecomposition, mClockCount );
+        std::vector<HPolytope<Number>> hpols;
+        std::transform( subspaceSets.begin(), subspaceSets.end(), std::back_inserter( hpols ), [=]( auto& state ){
+            return std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), state.getSet() );
+        } );
+
+        HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( hpols, dependencies, mDecomposition, mClockCount );
         if ( !composedPolytope.empty() ) {
             return false;
         }
@@ -215,7 +246,11 @@ bool DecompositionalAnalyzer<Representation>::isSafe(
         for ( auto subspace : mSegmentedSubspaces ) {
             subspaceSets[ subspace ] = badSegment[ subspace ];
         }
-        HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( subspaceSets, dependencies, mDecomposition, mClockCount );
+        std::vector<HPolytope<Number>> hpols;
+        std::transform( subspaceSets.begin(), subspaceSets.end(), std::back_inserter( hpols ), [=]( auto& state ){
+            return std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), state.getSet() );
+        } );
+        HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( hpols, dependencies, mDecomposition, mClockCount );
         if ( !composedPolytope.empty() ) {
             return false;
         }
@@ -223,8 +258,8 @@ bool DecompositionalAnalyzer<Representation>::isSafe(
     return true;
 }
 
-template <typename Representation>
-void DecompositionalAnalyzer<Representation>::resetClock( Representation& segment, std::size_t clockIndex ) {
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+void DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::resetClock( Rep& segment, std::size_t clockIndex ) {
     if ( mClockCount == 0 ) { return; }
     assert( mClockCount > clockIndex );
     // reset clocks with higher index than clockIndex to 0
@@ -235,31 +270,31 @@ void DecompositionalAnalyzer<Representation>::resetClock( Representation& segmen
     segment.projectOn( nonZeroDimensions );
 }
 
-template <typename Representation>
-auto DecompositionalAnalyzer<Representation>::getJumpSuccessors(
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::getJumpSuccessors(
         const NodeVector& nodes, std::vector<WorkerVariant> workers,
         Transition<Number>* trans,
         std::size_t clockIndex )
-            -> std::vector<SubspaceJumpSuccessors<Representation>> {
+            -> std::vector<SubspaceJumpSuccessors<Rep>> {
     // res holds all synchronized jump successors
-    std::vector<SubspaceJumpSuccessors<Representation>> res;
+    std::vector<SubspaceJumpSuccessors<Rep>> res;
     // Collect single successor set (per subspace) for singular subspaces and synchronize them
     auto [ singularEnabledTime, singularSuccessors ] = getSingularJumpSuccessors( nodes, workers, trans, clockIndex );
     auto discreteSuccessors = getDiscreteJumpSuccessors( nodes, workers, trans );
     if ( mSegmentedSubspaces.size() == 0 ) {
         // no segmented subspace, so the segment indexes are ignored -> set them to 0
-        SubspaceJumpSuccessors<Representation> succ{ carl::Interval<SegmentInd>( 0 ), singularSuccessors };
+        SubspaceJumpSuccessors<Rep> succ{ carl::Interval<SegmentInd>( 0 ), singularSuccessors };
         for ( auto subspace : mDiscreteSubspaces ) {
             succ.subspaceSets[ subspace ] = discreteSuccessors[ subspace ];
         }
         return { succ };
     }
     // collect synchronized successors for segmented subspaces
-    std::vector<SubspaceJumpSuccessors<Representation>> segmentedSuccessors = getSegmentedJumpSuccessors( nodes, workers, trans, clockIndex );
+    std::vector<SubspaceJumpSuccessors<Rep>> segmentedSuccessors = getSegmentedJumpSuccessors( nodes, workers, trans, clockIndex );
 
     // synchronize segmented subspaces with singular
     for ( auto timedSucc : segmentedSuccessors ) {
-        SubspaceJumpSuccessors<Representation> nextRes;
+        SubspaceJumpSuccessors<Rep> nextRes;
         auto enabledTime = singularEnabledTime;
         for ( auto subspace : mSegmentedSubspaces ) {
             enabledTime = enabledTime.intersect( detail::getClockValues( timedSucc.subspaceSets[ subspace ], mClockCount ) );
@@ -278,22 +313,21 @@ auto DecompositionalAnalyzer<Representation>::getJumpSuccessors(
         nextRes.time = timedSucc.time;
         res.push_back( nextRes );
     }
-    
     return res;
 }
 
-template <typename Representation>
-auto DecompositionalAnalyzer<Representation>::getSingularJumpSuccessors(
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::getSingularJumpSuccessors(
   const NodeVector& nodes, std::vector<WorkerVariant>& workers, Transition<Number>* trans, std::size_t clockIndex ) -> std::pair<TimeInformation<Number>, SubspaceSets> {
     // compute jump successors independently
     for ( auto subspace : mSingularSubspaces ) {
-        std::visit( detail::computeSingularJumpSuccessorVisitor<Representation>{ nodes[ subspace ] }, workers[ subspace ] );
+        std::visit( computeSingularJumpSuccessorVisitor{ nodes[ subspace ] }, workers[ subspace ] );
     }
     // synchronize by getting the time interval where the jump is enabled across subspaces
     TimeInformation<Number> enabledTime = mGlobalTimeInterval;
     SubspaceSets singularSuccessors;
     for ( auto subspace : mSingularSubspaces ) {
-        auto timedSucc = std::visit( detail::getJumpSuccessorVisitor<Representation>{ trans }, workers[ subspace ] );
+        auto timedSucc = std::visit( getJumpSuccessorVisitor{ trans }, workers[ subspace ] );
         // we should always get a set, which may be empty
         assert( timedSucc.size() == 1 );
         auto subspaceSuccessorSet = timedSucc[ 0 ].valuationSet;
@@ -308,36 +342,36 @@ auto DecompositionalAnalyzer<Representation>::getSingularJumpSuccessors(
     return std::make_pair( enabledTime, singularSuccessors );
 }
 
-template <typename Representation>
-auto DecompositionalAnalyzer<Representation>::getDiscreteJumpSuccessors(
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::getDiscreteJumpSuccessors(
   const NodeVector& nodes, std::vector<WorkerVariant>& workers, Transition<Number>* trans ) -> SubspaceSets {
     SubspaceSets succ;
     bool empty = false;
     for ( auto subspace : mDiscreteSubspaces ) {
         if ( empty ) {
-            succ[ subspace ] = Representation::Empty();
+            succ[ subspace ] = Rep::Empty();
             continue;
         }
         auto [containment, predecessor] = intersect( nodes[ subspace ]->getFlowpipe()[ 0 ], trans->getGuard(), subspace );
         if ( containment == CONTAINMENT::NO ) {
             empty = true;
-            succ[ subspace ] = Representation::Empty();
+            succ[ subspace ] = Rep::Empty();
         } else {
-            succ[ subspace ] = std::visit( detail::getJumpSuccessorVisitor<Representation>{ trans, { { predecessor, 0 } } }, workers[ subspace ] )[ 0 ].valuationSet;
+            succ[ subspace ] = std::visit( getJumpSuccessorVisitor{ trans, { { predecessor, 0 } } }, workers[ subspace ] )[ 0 ].valuationSet;
         }
     }
     return succ;
 }
 
-template <typename Representation>
-auto DecompositionalAnalyzer<Representation>::getSegmentedJumpSuccessors(
-        const NodeVector& nodes, std::vector<WorkerVariant>& workers, Transition<Number>* trans, std::size_t clockIndex) -> std::vector<SubspaceJumpSuccessors<Representation>> {
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::getSegmentedJumpSuccessors(
+        const NodeVector& nodes, std::vector<WorkerVariant>& workers, Transition<Number>* trans, std::size_t clockIndex) -> std::vector<SubspaceJumpSuccessors<Rep>> {
     // generator synchronized segments by index and intersects with the guard
     LtiSegmentGen segments{ nodes, mDecomposition, trans->getGuard(), mSegmentedSubspaces };
     // get predecessors by intersecting with guard
-    std::map<std::size_t, std::vector<IndexedValuationSet<Representation>>> predecessors;
+    std::map<std::size_t, std::vector<IndexedValuationSet<Rep>>> predecessors;
     for ( auto subspace : mSegmentedSubspaces ) {
-        predecessors[ subspace ] = std::vector<IndexedValuationSet<Representation>>();
+        predecessors[ subspace ] = std::vector<IndexedValuationSet<Rep>>();
     }
     for ( auto indexedSegments = segments.next(); indexedSegments.second.size() > 0; indexedSegments = segments.next() ) {
         for ( auto subspace : mSegmentedSubspaces ) {
@@ -346,22 +380,22 @@ auto DecompositionalAnalyzer<Representation>::getSegmentedJumpSuccessors(
             predecessors[ subspace ].push_back( { indexedSegments.second[ subspace ], indexedSegments.first } );
         }
     }
-    std::map<std::size_t, std::vector<TimedValuationSet<Representation>>> subspaceSuccessors;
+    std::map<std::size_t, std::vector<TimedValuationSet<Rep>>> subspaceSuccessors;
     for ( auto subspace : mSegmentedSubspaces ) {
-        subspaceSuccessors[ subspace ] = std::visit( detail::getJumpSuccessorVisitor<Representation>{ trans, predecessors[ subspace ] }, workers[ subspace ] );
+        subspaceSuccessors[ subspace ] = std::visit( getJumpSuccessorVisitor{ trans, predecessors[ subspace ] }, workers[ subspace ] );
     }
     // synchronize via the time interval of the jump
     // note: every subspace has the same enabled segments and same aggregation settings, so the time intervals are the same
     LtiJumpSuccessorGen synchronizedSuccessors{ subspaceSuccessors, mSegmentedSubspaces };
-    std::vector<SubspaceJumpSuccessors<Representation>> res;
+    std::vector<SubspaceJumpSuccessors<Rep>> res;
     for ( auto succ = synchronizedSuccessors.next(); succ.subspaceSets.size() > 0; succ = synchronizedSuccessors.next() ) {
         res.push_back( succ );
     }
     return res;
 }
 
-template <typename Representation>
-struct DecompositionalAnalyzer<Representation>::LtiSegmentGen {
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+struct DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::LtiSegmentGen {
     NodeVector const nodes;
     SegmentInd segmentIndex = 0;
     Decomposition decomposition;
@@ -400,16 +434,16 @@ struct DecompositionalAnalyzer<Representation>::LtiSegmentGen {
     }
 };
 
-template <typename Representation>
-struct DecompositionalAnalyzer<Representation>::LtiJumpSuccessorGen {
-    const std::map<std::size_t, std::vector<TimedValuationSet<Representation>>> subspaceSuccessors;
+template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
+struct DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::LtiJumpSuccessorGen {
+    const std::map<std::size_t, std::vector<TimedValuationSet<Rep>>> subspaceSuccessors;
     std::vector<std::size_t> subspaces;
 
     std::size_t firstIndex = 0;
-    LtiJumpSuccessorGen( const std::map<std::size_t, std::vector<TimedValuationSet<Representation>>>& subspaceSuccessors, const std::vector<std::size_t>& subspaces )
+    LtiJumpSuccessorGen( const std::map<std::size_t, std::vector<TimedValuationSet<Rep>>>& subspaceSuccessors, const std::vector<std::size_t>& subspaces )
         : subspaceSuccessors( subspaceSuccessors )
         , subspaces( subspaces ) {}
-    SubspaceJumpSuccessors<Representation> next() {
+    SubspaceJumpSuccessors<Rep> next() {
         if ( subspaces.size() == 0 ) {
             return {};
         } else if ( firstIndex >= subspaceSuccessors.at( 0 ).size() ) {
@@ -431,7 +465,7 @@ struct DecompositionalAnalyzer<Representation>::LtiJumpSuccessorGen {
                 }
             }
             firstIndex += 1;
-            return SubspaceJumpSuccessors<Representation>{ nextInterval, res };
+            return SubspaceJumpSuccessors<Rep>{ nextInterval, res };
         }
 
     }
