@@ -35,12 +35,17 @@ class StarsetT : private GeometricObjectBase {
    * Members
    **************************************************************************/
     //A*alpha<=d
-    vector_t<Number> mCenter;
     //center of the star domain
-    matrix_t<Number> mGenerator;
+    vector_t<Number> mCenter;
+    
     // A in the given equation above
+    matrix_t<Number> mShapeMatrix;
+
     vector_t<Number> mLimits; /*!< the right side of the condition A*alpha<=d . */
-	matrix_t<Number> mShapeMatrix;
+
+    matrix_t<Number> mGenerator;
+	
+    
   public:
 	/***************************************************************************
    * Constructors
@@ -55,6 +60,10 @@ class StarsetT : private GeometricObjectBase {
      * @brief   Creates a star set with generator, intervall and center  
      */
     StarsetT(const vector_t<Number>& center,const matrix_t<Number>& shapematrix,const vector_t<Number>& limits,const matrix_t<Number>& generator);
+    /*
+     * Starset with assuming standard basis and center as the origin
+     * */
+    StarsetT(const matrix_t<Number>& shapematrix,const vector_t<Number>& limits);
 
 	/**
    * @brief      Copy constructor.
@@ -66,8 +75,7 @@ class StarsetT : private GeometricObjectBase {
    * @brief      Settings conversion constructor.
    * @param[in]  orig  The original.
    */
-	template <typename SettingRhs,
-			  carl::DisableIf<std::is_same<Setting, SettingRhs>> = carl::dummy>
+	template <typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>> = carl::dummy>
 	StarsetT( const StarsetT<Number, Converter, SettingRhs>& orig ) {}
 
 	/**
@@ -291,7 +299,13 @@ class StarsetT : private GeometricObjectBase {
 	void clear();
 };
 /** @} */
-
+    /*
+     * Conversion for different Data types
+     */
+    template <typename From, typename To, typename Converter, class Setting>
+    StarsetT<To, Converter, Setting> convert( const StarsetT<From, Converter, Setting>& in ) {
+        return StarsetT<To, Converter, Setting>( convert<From, To>( in.center() ), convert<From, To>( in.shape() ), convert<From, To>( in.limits() ),convert<From, To>( in.generator() ) );
+}
 }  // namespace hypro
 
 #include "Starset.tpp"

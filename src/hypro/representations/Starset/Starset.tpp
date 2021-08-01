@@ -5,22 +5,36 @@ namespace hypro {
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT() 
-:mCenter(0), mLimits(0), mGenerator(0,0), mShapeMatrix(0,0){
+:mCenter(0), mShapeMatrix(0,0) ,mLimits(0) ,mGenerator(0,0){
 }
 
 //regular Starset constructor
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT(const vector_t<Number>& center,const matrix_t<Number>& shapematrix,const vector_t<Number>& limits,const matrix_t<Number>& generator)
-:mCenter(center),mShapeMatrix(shapematrix),mGenerator(generator),mLimits(limits)
+:mCenter(center),mShapeMatrix(shapematrix),mLimits(limits),mGenerator(generator)
 {
     //checking if the dimensions match
-    assert(limits.rows() == shapematrix.rows() && "ShapeMatrix and mLimits have to have same dimensionality.");
-    assert(generator.rows()==center.rows() && "ShapeMatrix and mLimits have to have same dimensionality.");
-    assert(center.rows()==shapematrix.cols());
+    assert(mLimits.rows() == mShapeMatrix.rows() && "ShapeMatrix and mLimits have to have same dimensionality.");
+    assert(mGenerator.rows()==mCenter.rows() && "ShapeMatrix and mLimits have to have same dimensionality.");
+    assert(mCenter.rows()==mShapeMatrix.cols());
+}
+//only with
+template <typename Number, typename Converter, typename Setting>
+StarsetT<Number, Converter, Setting>::StarsetT(const matrix_t<Number>& shapematrix,const vector_t<Number>& limits)
+:mCenter(vector_t<Number>::Zero(shapematrix.cols())),mShapeMatrix(shapematrix),mLimits(limits),mGenerator(matrix_t<Number>::Identity(shapematrix.cols(),shapematrix.cols()))
+{
+    //checking if the dimensions match
+    assert(mLimits.rows() == mShapeMatrix.rows() && "ShapeMatrix and mLimits have to have same dimensionality.");
+    assert(mGenerator.rows()==mCenter.rows() && "ShapeMatrix and mLimits have to have same dimensionality.");
+    assert(mCenter.rows()==mShapeMatrix.cols());
 }
 
 template <typename Number, typename Converter, typename Setting>
-StarsetT<Number, Converter, Setting>::StarsetT( const StarsetT<Number, Converter, Setting>& orig ) {
+StarsetT<Number, Converter, Setting>::StarsetT( const StarsetT<Number, Converter, Setting>& orig ) 
+    :GeometricObjectBase(orig),
+    mCenter(orig.center()),mShapeMatrix(orig.shape()),mLimits(orig.limits()),mGenerator(orig.generator())
+{
+
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -83,6 +97,7 @@ void StarsetT<Number, Converter, Setting>::removeRedundancy() {
 
 template <typename Number, typename Converter, typename Setting>
 std::size_t StarsetT<Number, Converter, Setting>::size() const {
+    return 1;
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -106,8 +121,8 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
     StarsetT<Number, Converter, Setting> star=this->intersectHalfspaces(_mat ,_vec);
-    if(!star->empty()){
-        if(star->contains(this)){
+    if(!star.empty()){
+        if(star.contains(*this)){
             return std::make_pair( CONTAINMENT::FULL, std::move( star ) );
         }
         return std::make_pair( CONTAINMENT::PARTIAL, std::move( star ) );
@@ -200,7 +215,7 @@ bool StarsetT<Number, Converter, Setting>::contains( const StarsetT<Number, Conv
 }
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite( const StarsetT<Number, Converter, Setting>& rhs ) const {
-    /*The method implemented here is similat to the method proposed by
+    /*The method implemented here is similar to the method proposed by
      * Prof. Girard for Zonotope.
      * Reachability of Uncertain Linear Systems Using
      *      Zonotopes, Antoin Girard, HSCC2005 
