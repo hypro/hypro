@@ -139,11 +139,11 @@ struct ReachabilitySettings {
 	}
 
 	/**
-     * @brief      Outstream operator.
-     * @param      ostr  The outstream.
-     * @param[in]  rhs   The right hand side.
-     * @return     Reference to the outstream.
-     */
+	 * @brief      Outstream operator.
+	 * @param      ostr  The outstream.
+	 * @param[in]  rhs   The right hand side.
+	 * @return     Reference to the outstream.
+	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const ReachabilitySettings& rhs ) {
 		ostr << "Local time-horizon: " << carl::toDouble( rhs.timeBound ) << std::endl;
 		ostr << "Time-step size: " << carl::toDouble( rhs.timeStep ) << std::endl;
@@ -152,5 +152,12 @@ struct ReachabilitySettings {
 		return ostr;
 	}
 };
+
+/**
+ * Converts the old ReachabilitySettings type to the new Settings-type
+ * @param r_settings old settings type
+ * @return new settings type
+ */
+Settings convert( const ReachabilitySettings& r_settings );
 
 }  // namespace hypro
