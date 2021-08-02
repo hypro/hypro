@@ -45,6 +45,7 @@ option(HYPRO_BUILD_OFFLINE "Do not attempt to update ressources (work offline)."
 option(HYPRO_LOGGING "Allow logging." OFF)
 option(HYPRO_MATLAB_BINDINGS "Create Matlab bindings." OFF)
 option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF)
+option(HYPRO_BENCHMARK "Enable usage of the google-benchmark library and the targets in test/case_studies." OFF)
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF )
 option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
@@ -54,6 +55,7 @@ option(EXPORT_TO_CMAKE "Export the project to CMake for easy inclusion" ON)
 option(RESET_REFINEMENT "Return to Level 0 after successful backtracking" ON)
 option(QUICKHULL_USE_LOW_DIMENSIONAL_IMPROVEMENT "Use cheap method for computing normal vectors in 2 and 3 dimensions" ON)
 mark_as_advanced(HYPRO_COVERAGE)
+mark_as_advanced(HYPRO_BENCHMARK)
 mark_as_advanced(HYPRO_BUILD_OFFLINE)
 mark_as_advanced(HYPRO_STATISTICS)
 mark_as_advanced(HYPRO_MATLAB_BINDINGS)
@@ -149,7 +151,7 @@ add_subdirectory(src)
 
 add_subdirectory(src/resources)
 
-# Create config.h by adding cmake defines dependend on option switches
+# Create config.h by adding cmake defines dependent on option switches
 configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/src/hypro/flags.h.in ${CMAKE_CURRENT_SOURCE_DIR}/src/hypro/flags.h @ONLY)
 
 add_subdirectory(src/test)

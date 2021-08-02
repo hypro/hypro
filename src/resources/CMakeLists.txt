@@ -95,6 +95,12 @@ else()
 	include(gtest.cmake)
 endif()
 
+if (HYPRO_BENCHMARK)
+    message(STATUS "Download version of GBenchmark")
+    set(GOOGLETEST_PATH)
+    include(gbenchmark.cmake)
+endif ()
+
 include(glpk.cmake)
 
 if(HYPRO_USE_MIMALLOC)
