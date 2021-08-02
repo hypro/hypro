@@ -17,7 +17,7 @@ struct UrgencyCEGARSuccess {};
 
 /**
  * @brief Analyzer for automata with LTI dynamics and urgent transitions.
- * @detail Uses a CEGAR approach where urgent transitions are treated differently
+ * Uses a CEGAR approach where urgent transitions are treated differently
  * depending on their refinement level. The coarsest level ignores urgency and the finest
  * level involves computing the set difference with jump enabling sets which may cause
  * splitting in the reach tree. Refinement uses the UrgencyRefinementAnalyzer

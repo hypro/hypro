@@ -52,7 +52,7 @@ UrgencyRefinementSuccess( std::vector<ReachTreeNode<Representation>*> ) -> Urgen
 
 /**
  * @brief Internal analyzer for refinement of urgent transitions.
- * @detail Given an initial unsafe node, the analyzer attempts to refine urgent transitions on the path
+ * Given an initial unsafe node, the analyzer attempts to refine urgent transitions on the path
  * and verify safety on the refined path. If additional unsafe nodes are encountered, more transitions are refined
  * iteratively. If no more nodes can be refined and there are still non-refuted counterexample nodes, the
  * analyzer indicates that refinement was unsuccessful. If refinement was successful, the successors of the path
