@@ -10,8 +10,19 @@
 
 namespace hypro {
 
+/**
+ * @brief Structure to indicate that analysis was successful, i.e. safety could be verified.
+ */
 struct UrgencyCEGARSuccess {};
 
+/**
+ * @brief Analyzer for automata with LTI dynamics and urgent transitions.
+ * @detail Uses a CEGAR approach where urgent transitions are treated differently
+ * depending on their refinement level. The coarsest level ignores urgency and the finest
+ * level involves computing the set difference with jump enabling sets which may cause
+ * splitting in the reach tree. Refinement uses the UrgencyRefinementAnalyzer
+ * which is called whenever an unsafe node is encountered.
+ */
 template <typename Representation>
 class UrgencyCEGARAnalyzer {
 	using Number = typename Representation::NumberType;
@@ -41,7 +52,15 @@ class UrgencyCEGARAnalyzer {
 		}
 	}
 
+	/**
+	 * @brief Main method to start analysis.
+	 * @return Indicate either success if safety can be verified or failure otherwise.
+	 */
 	UrgencyCEGARResult run();
+	/**
+	 * @brief Get the roots of the computed reach tree.
+	 * @return A vector containing pointers to the roots.
+	 */
 	std::vector<ReachTreeNode<Representation>*> getRoots() {
 		std::vector<ReachTreeNode<Representation>*> res;
 		std::transform( mRoots.begin(), mRoots.end(), std::back_inserter( res ), []( auto& root ) {
@@ -51,14 +70,14 @@ class UrgencyCEGARAnalyzer {
 	}
 
   protected:
-	std::deque<ReachTreeNode<Representation>*> mWorkQueue;
-	HybridAutomaton<Number> const* mHybridAutomaton;
-	FixedAnalysisParameters mFixedParameters;
-	AnalysisParameters mParameters;
-	UrgencyCEGARSettings mRefinementSettings;
+	std::deque<ReachTreeNode<Representation>*> mWorkQueue;	///< Holds unprocessed reach tree nodes.
+	HybridAutomaton<Number> const* mHybridAutomaton;		///< Hybrid automaton.
+	FixedAnalysisParameters mFixedParameters;				///< Analysis paramteters.
+	AnalysisParameters mParameters;							///< Analysis paramteters.
+	UrgencyCEGARSettings mRefinementSettings;				///< Settings that contain information about refinement.
 	// use list instead of vector because pointers to the roots (stored in children as mParent)
 	// must not be invalidated when pushing new (refined) roots later on.
-	std::list<ReachTreeNode<Representation>> mRoots;
+	std::list<ReachTreeNode<Representation>> mRoots;  ///< Contains the roots of the computed reach tree.
 
   private:
 	/**

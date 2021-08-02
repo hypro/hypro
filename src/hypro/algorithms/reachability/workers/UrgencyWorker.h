@@ -15,8 +15,10 @@ namespace hypro {
  * @brief   Class implementing a worker for automata with urgent transitions.
  * @details Implements methods for computing time elapse and discrete transitions.
  *          Repeated calling of these methods allows implementation of reachability analysis.
- *          The UrgencyWorker considers urgent transitions by computing the set difference
- *          of the reachable set and urgent guards.
+ *          The worker can optionally deal with urgent transitions by either computing a convex overapproximation
+ * 					of the set difference with the jump enabling set or by computing the set difference, which can lead
+ * 					to multiple segments for a single point in time. The refinement level for each transition is set
+ * 					in the given task.
  * @tparam Representation   The used state set representation.
  */
 template <typename Representation>
@@ -33,21 +35,16 @@ class UrgencyWorker {
 		, mTrafoCache( trafoCache ) {}
 
 	/**
-     * @brief Computes successors from a time step and a discrete jump.
-     * @param task Used to access the location, initial set and urgent transitions.
-     * @return Safety after letting time elapse
-     */
-	REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<Representation>& task, std::size_t timeHorizon );
-	REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<Representation>& task ) {
-		return computeForwardReachability( task, mNumSegments );
-	}
-
-	/**
-     * @brief Computes the states reachable by letting time elapse.
-     * @param task Used to access the the location, initial set and urgent transitions.
+     * @brief Computes the states reachable by letting time elapse up to the given time horizon.
+     * @param task Used to access the the location, initial set and refinement levels of urgent transitions.
      * @return Safety after time elapse.
      */
 	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon );
+	/**
+     * @brief Computes the states reachable by letting time elapse. Time horizon is given by the settings.
+     * @param task Used to access the the location, initial set and refinement levels of urgent transitions.
+     * @return Safety after time elapse.
+     */
 	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task ) {
 		return computeTimeSuccessors( task, mNumSegments );
 	}
@@ -58,6 +55,11 @@ class UrgencyWorker {
      * @return Pairs of flowpipe segments and their timing index.
      */
 	const Flowpipe& getFlowpipe() const { return mFlowpipe; }
+	/**
+	 * @brief Writes the computed flowpipe in a reach tree node.
+	 * @details The segments are written to the flowpipe field of the node and the time offsets in the timing field.
+	 * @param node The tree node to write the flowpipe to.
+	 */
 	void insertFlowpipe( ReachTreeNode<Representation>& node ) const;
 
 	/**
@@ -79,6 +81,9 @@ class UrgencyWorker {
      */
 	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( const ReachTreeNode<Representation>& task );
 
+	/**
+	 * @brief Clears the flowpipe so the worker can be reused for another task
+	 */
 	void reset() {
 		mFlowpipe.clear();
 	}
@@ -87,12 +92,25 @@ class UrgencyWorker {
 	/**
      * @brief Performs operations on the segment obtained by letting time elapse.
      * @details Applies intersection with the invariant, set difference with urgent guards
-     *          and intersection with bad states.
+     *          and intersection with bad states and adds the result to the flowpipe.
+     * @param task The current task, used to access the location.
+     * @param segment The current segment computed by letting time elapse.
+     * @param timing The time offset of the segment.
      * @return Safety of the segment.
      */
 	REACHABILITY_RESULT handleSegment(
 		  const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing );
+	/**
+	 * @brief Adds a single segment to the flowpipe object
+	 * @param The computed segment.
+	 * @param timing The time offset of the segment.
+	 */
 	void addSegment( const Representation& segment, SegmentInd timing );
+	/**
+	 * @brief Adds a list of segments with the same time offset to the flowpipe object.
+	 * @param segment Vector of computed segments.
+	 * @param timing The time offset of the segments.
+	 */
 	void addSegment( const std::vector<Representation>& segment, SegmentInd timing );
 
   protected:
