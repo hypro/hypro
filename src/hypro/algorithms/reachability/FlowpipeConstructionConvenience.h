@@ -23,7 +23,7 @@ std::pair<CONTAINMENT, Representation> intersect( Representation const& valuatio
 		return std::make_pair( CONTAINMENT::FULL, valuationSet );
 	}
 	// shortcut false condition
-	if ( condition.isFalse() ) {
+	if ( condition.isFalse() || valuationSet.empty() ) {
 		return std::make_pair( CONTAINMENT::NO, Representation::Empty() );
 	}
 	assert( valuationSet.dimension() == condition.dimension() );
@@ -91,20 +91,20 @@ Representation applyReset( Representation const& valuationSet, Reset<Number> con
  */
 template <class Representation>
 Box<typename Representation::NumberType> computeBoundingBox( const Representation& set ) {
-    return hypro::Converter<typename Representation::NumberType>::toBox( set );
+	return hypro::Converter<typename Representation::NumberType>::toBox( set );
 }
 
 template <class Representation, class Number>
 std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
-    // intersect with (bounded) valuationSet first:
-    auto [containment, intersectedMinus] = intersect( valuationSet, condition );
-    if ( containment == CONTAINMENT::NO ) {
-        return { valuationSet };
-    } else if ( containment == CONTAINMENT::FULL ) {
-        return { Representation::Empty() };
-    }
-    auto res = valuationSet.setMinus2( intersectedMinus );
-    return res;
+	// intersect with (bounded) valuationSet first:
+	auto [containment, intersectedMinus] = intersect( valuationSet, condition );
+	if ( containment == CONTAINMENT::NO ) {
+		return { valuationSet };
+	} else if ( containment == CONTAINMENT::FULL ) {
+		return { Representation::Empty() };
+	}
+	auto res = valuationSet.setMinus2( intersectedMinus );
+	return res;
 }
 
 }  // namespace hypro

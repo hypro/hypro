@@ -229,7 +229,7 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 			assert( false && "No analyzer selected." );
 			break;
 	}
-	throw std::invalid_argument("Invalid automaton type.");
+	throw std::invalid_argument( "Invalid automaton type." );
 }
 
 }  // namespace reachability

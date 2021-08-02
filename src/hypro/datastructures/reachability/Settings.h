@@ -42,7 +42,7 @@ struct PlottingSettings {
 struct UrgencyCEGARSettings {
 	std::vector<UrgencyRefinementLevel> refinementLevels{ UrgencyRefinementLevel::FULL,
 														  UrgencyRefinementLevel::CUTOFF,
-														  UrgencyRefinementLevel::SETDIFF};
+														  UrgencyRefinementLevel::SETDIFF };
 	bool refineHalfspaces = true;
 	UrgencyRefinementHeuristic heuristic = UrgencyRefinementHeuristic::NONE;
 };
