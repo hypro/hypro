@@ -12,7 +12,7 @@ class rectangularJumpHandler {
 	using TransitionStateMap = typename std::map<Transition<Number>*, std::vector<State>>;
 
   public:
-	TransitionStateMap applyJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy );
+	TransitionStateMap applyJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy, bool reverse = false );
 
 	void applyReset( State& state, Transition<Number>* transitionPtr ) const;
 
@@ -21,6 +21,8 @@ class rectangularJumpHandler {
 	void applyGuard( State& state, Transition<Number>* transitionPtr ) const;
 
 	// typename ReachTreeNode<State>::NodeList_t createNodesFromStates( Transition<Number>* transition, const std::vector<State>& states, std::size_t targetLevel, carl::Interval<tNumber>& coveredTimeInterval, typename ReachTreeNode<State>::Node_t parent );
+  private:
+	auto filter( const TransitionStateMap& states, Transition<Number>* transition ) const -> TransitionStateMap;
 };
 
 }  // namespace hypro
