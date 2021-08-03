@@ -2,6 +2,7 @@
 #include "../../../../datastructures/reachability/ReachTreev2.h"
 #include "../../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../../../../flags.h"
+#include "ltiJumpHandler.h"
 #include "util.h"
 
 namespace hypro {
@@ -15,7 +16,9 @@ class stochasticRectangularJumpHandler {
   public:
 	TransitionStateMap applyJump( const TransitionStateMap& states, StochasticTransition<Number>* transition, const AnalysisParameters& strategy );
 
-	void aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const AnalysisParameters& strategy ) const;
+	void aggregate( TransitionStateMap& processedStates, const TransitionStateMap& toAggregate, const AnalysisParameters& strategy ) const {
+		ltiJumpHandler<State>::aggregate( processedStates, toAggregate, strategy );
+	}
 
 	void applyReset( State& state, StochasticTransition<Number>* transitionPtr ) const;
 
