@@ -11,13 +11,9 @@
 #include "../defines.h"
 
 using namespace hypro;
-using Number = mpq_class;
-using Matrix = matrix_t<Number>;
-using Vector = vector_t<Number>;
 
 template <typename Number>
-HybridAutomaton<Number> ha3() {
-	// One-dimensional HA with two locations
+HybridAutomaton<Number> createHa() {
 	using Matrix = matrix_t<Number>;
 	using Vector = vector_t<Number>;
 
@@ -31,64 +27,70 @@ HybridAutomaton<Number> ha3() {
 	uniqueLoc0->setName( "l0" );
 	uniqueLoc1->setName( "l1" );
 
-	// Set flow x' = 1 in loc0
-	Matrix flow0 = Matrix::Zero( 2, 2 );
-	flow0( 0, 1 ) = 1;
+	// Set flow x' = 1, y' = 0 in loc0
+	Matrix flow0 = Matrix::Zero( 3, 3 );
+	flow0( 0, 2 ) = 1;
 	uniqueLoc0->setFlow( flow0 );
 
-	// Set flow x' = 0 in loc1
-	Matrix flow1 = Matrix::Zero( 2, 2 );
+	Matrix flow1 = Matrix::Zero( 3, 3 );
 	uniqueLoc1->setFlow( flow1 );
 
-	// Set invariant x <= 3 in loc0
-	Matrix invariantConstraints = Matrix::Zero( 1, 1 );
-	invariantConstraints( 0, 0 ) = 1;
-	Vector invariantConstants = 3 * Vector::Ones( 1 );
-	uniqueLoc0->setInvariant( { invariantConstraints, invariantConstants } );
-
 	// Construct transitions
-	// l0 -> l1 urgent with guard x >= 10
-	Matrix transConstraint1 = Matrix::Zero( 1, 1 );
-	Vector transConstants1 = -10 * Vector::Ones( 1 );
-	transConstraint1( 0, 0 ) = -1;
-	Condition<Number> guard1( transConstraint1, transConstants1 );
-	Reset<Number> reset1{ Matrix::Ones( 1, 1 ), Vector::Zero( 1 ) };
+	// l0 -> l1 urgent with guard x <= 0.5 and y >= 0.5
+	Matrix A1( 2, 2 );
+	Vector b1( 2 );
+	A1 << 1, 0, 0, -1;
+	b1 << Number( 0.5 ), Number( -0.5 );
 
-	std::unique_ptr<Transition<Number>> trans1 =
-		  std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard1, reset1 );
-	trans1->setUrgent();
+	Condition<Number> g1( A1, b1 );
+	Reset<Number> r1{ Matrix::Identity( 2, 2 ), Vector::Zero( 2 ) };
 
-	// l0 -> l1 urgent with guard x >= 1
-	Matrix transConstraint2 = Matrix::Zero( 1, 1 );
-	Vector transConstants2 = -1 * Vector::Ones( 1 );
-	transConstraint2( 0, 0 ) = -1;
-	Condition<Number> guard2( transConstraint2, transConstants2 );
-	Reset<Number> reset2{ Matrix::Ones( 1, 1 ), Vector::Zero( 1 ) };
+	std::unique_ptr<Transition<Number>> t0 =
+		  std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), g1, r1 );
+	t0->setUrgent();
+	t0->addLabel( Label( "t0" ) );
+	uniqueLoc0->addTransition( std::move( t0 ) );
 
-	std::unique_ptr<Transition<Number>> trans2 =
-		  std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard2, reset2 );
-	trans2->setUrgent();
+	// l0 -> l1 urgent with guard x <= 2, x >= 1.5 and y >= 0.5
+	Matrix A2 = Matrix( 3, 2 );
+	Vector b2 = Vector( 3 );
+	A2 << 1, 0, -1, 0, 0, -1;
+	b2 << 2, -1.5, -0.5;
+	Condition<Number> g2( A2, b2 );
+	Reset<Number> r2{ Matrix::Identity( 2, 2 ), Vector::Zero( 2 ) };
 
-	// Set initial state x = 0, aff = 1 in loc0
-	Matrix initialConstraints = Matrix::Zero( 2, 1 );
-	Vector initialConstants = Vector::Zero( 2 );
-	initialConstraints << 1, -1;
-	initialConstants << 0, 0;
+	std::unique_ptr<Transition<Number>> t1 =
+		  std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), g2, r2 );
+	t1->setUrgent();
+	t1->addLabel( Label( "t1" ) );
+	uniqueLoc0->addTransition( std::move( t1 ) );
+
+	// Set initial state [0,1] x [0,1] in loc0
+	Matrix initialConstraints = Matrix( 4, 2 );
+	Vector initialConstants = Vector( 4 );
+	initialConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
+	initialConstants << 1, 0, 1, 0;
 
 	// Create HA
-	uniqueLoc0->addTransition( std::move( trans1 ) );
-	uniqueLoc0->addTransition( std::move( trans2 ) );
-
 	res.addLocation( std::move( uniqueLoc0 ) );
 	res.addLocation( std::move( uniqueLoc1 ) );
-
-	Location<Number>* loc0ptr = res.getLocation( "l0" );
-	res.addInitialState( loc0ptr, Condition<Number>( initialConstraints, initialConstants ) );
+	res.addInitialState( res.getLocation( "l0" ), Condition<Number>( initialConstraints, initialConstants ) );
 
 	return res;
 }
 
+template <typename Representation>
+class UrgencyCEGARReachabilityTest : public ::testing::Test {
+  protected:
+	virtual void setUp() {}
+	virtual void tearDown() {}
+};
+
 TEST( UrgencyHandling, Cutoff ) {
+	using Number = mpq_class;
+	using Matrix = matrix_t<Number>;
+	using Vector = vector_t<Number>;
+
 	ltiUrgencyHandler<VPolytope<Number>> urgencyHandler;
 	Vector p1( 2 ), p2( 2 ), p3( 2 ), p4( 2 );
 	p1 << 0, 0;
@@ -163,27 +165,81 @@ TEST( UrgencyHandling, Cutoff ) {
 	EXPECT_TRUE( res.contains( expectedRes ) );
 }
 
-// TEST( UrgencyReachabilityTest, Analysis ) {
-//	auto automaton = ha4<Number>();
-//	// Matrix badStateMat = -1 * Matrix::Ones( 1, 1 );
-//	// Vector badStateVec = -2 * Vector::Ones( 1 );
-//
-//	// auto l1 = automaton.getLocation( "l1" );
-//
-//	// std::map<const Location<Number>*, Condition<Number>> localBadStates;
-//	// Condition<Number> badState( badStateMat, badStateVec );
-//	// localBadStates[l1] = badState;
-//	// automaton.setLocalBadStates( localBadStates );
-//
-//	AnalysisParameters analysisParameters;
-//	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 10 );
-//	analysisParameters.aggregation = AGG_SETTING::NO_AGG;
-//	analysisParameters.representation_type = representation_name::box;
-//	FixedAnalysisParameters fixedParams{ 5, tNumber( 3 ), tNumber( 0.1 ) };
-//	UrgencyCEGARSettings us{};
-//	us.refinementLevels = { UrgencyRefinementLevel::CUTOFF };
-//	us.refineHalfspaces = true;
-//	UrgencyCEGARAnalyzer<Box<Number>> analyzer( automaton, fixedParams,
-// analysisParameters, us ); 	auto result = analyzer.run(); 	EXPECT_EQ(
-// REACHABILITY_RESULT::SAFE, result.result() ); 	SUCCEED();
-//}
+TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
+	using Representation = TypeParam;
+	using Number = typename Representation::NumberType;
+	using Vector = vector_t<Number>;
+	auto automaton = createHa<Number>();
+
+	auto l0 = automaton.getLocation( "l0" );
+	Transition<Number>*t0, *t1;
+	for ( auto const& t : l0->getTransitions() ) {
+		if ( t->getLabels()[0].getName() == "t0" ) t0 = t.get();
+		if ( t->getLabels()[0].getName() == "t1" ) t1 = t.get();
+	}
+
+	Representation initialSet( automaton.getInitialStates().at( l0 ).getMatrix(),
+							   automaton.getInitialStates().at( l0 ).getVector() );
+
+	AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 10 );
+	analysisParameters.representation_type = Representation::type();
+
+	TimeTransformationCache<Number> cache{};
+	UrgencyWorker<Representation> worker( automaton, analysisParameters, 10, cache );
+	ReachTreeNode<Representation> node( l0, initialSet, carl::Interval<SegmentInd>( 0 ) );
+
+	node.getUrgent()[t0] = UrgencyRefinementLevel::SETDIFF;
+	worker.computeTimeSuccessors( node );
+
+	auto flowpipe = worker.getFlowpipe();
+	// first set is initial set
+	EXPECT_TRUE( initialSet == flowpipe[0].valuationSet );
+	// first segment should be split
+	EXPECT_TRUE( std::count_if( flowpipe.begin(), flowpipe.end(),
+								[]( auto indexedSegment ) { return indexedSegment.index == 0; } ) > 2 );
+
+	// test points
+	Vector c1( 2 ), c2( 2 ), c3( 2 );
+	Vector n1( 2 ), n2( 2 ), n3( 2 );
+	c1 << 0.25, 0.25;
+	c2 << 0.75, 0.25;
+	c3 << 0.75, 0.75;
+	n1 << 0.25, 0.75;
+	n2 << 0, 0.75;
+	n3 << 0.25, 1;
+	bool found1 = false, found2 = false, found3 = false;
+	// first segment is initial set without set difference, so it is skipped
+	for ( std::size_t i = 1; i < flowpipe.size(); ++i ) {
+		if ( flowpipe[i].index > 0 ) break;
+		if ( flowpipe[i].valuationSet.contains( Point<Number>( c1 ) ) ) found1 = true;
+		if ( flowpipe[i].valuationSet.contains( Point<Number>( c2 ) ) ) found2 = true;
+		if ( flowpipe[i].valuationSet.contains( Point<Number>( c3 ) ) ) found3 = true;
+	}
+	EXPECT_TRUE( found1 );
+	EXPECT_TRUE( found2 );
+	EXPECT_TRUE( found3 );
+
+	Vector c4( 2 );
+	c4 << 1.75, 0.75;
+	bool found4 = false;
+	// first segment is initial set without set difference, so it is skipped
+	for ( std::size_t i = 1; i < flowpipe.size(); ++i ) {
+		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>( n1 ) ) );
+		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>( n2 ) ) );
+		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>( n3 ) ) );
+		if ( flowpipe[i].valuationSet.contains( Point<Number>( c4 ) ) ) found4 = true;
+	}
+	EXPECT_TRUE( found4 );
+
+	node.getUrgent()[t1] = UrgencyRefinementLevel::SETDIFF;
+	worker.reset();
+	worker.computeTimeSuccessors( node );
+	flowpipe = worker.getFlowpipe();
+	for ( std::size_t i = 1; i < flowpipe.size(); ++i ) {
+		if ( flowpipe[i].valuationSet.contains( Point<Number>( c4 ) ) ) {
+			std::cout << i << ": " << flowpipe[i].valuationSet << "\n";
+		}
+		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>( c4 ) ) );
+	}
+}
