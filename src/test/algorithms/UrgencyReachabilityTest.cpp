@@ -168,6 +168,7 @@ TEST( UrgencyHandling, Cutoff ) {
 TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
 	using Representation = TypeParam;
 	using Number = typename Representation::NumberType;
+	using Matrix = matrix_t<Number>;
 	using Vector = vector_t<Number>;
 	auto automaton = createHa<Number>();
 
@@ -199,47 +200,136 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
 	EXPECT_TRUE( std::count_if( flowpipe.begin(), flowpipe.end(),
 								[]( auto indexedSegment ) { return indexedSegment.index == 0; } ) > 2 );
 
-	// test points
-	Vector c1( 2 ), c2( 2 ), c3( 2 );
-	Vector n1( 2 ), n2( 2 ), n3( 2 );
-	c1 << 0.25, 0.25;
-	c2 << 0.75, 0.25;
-	c3 << 0.75, 0.75;
-	n1 << 0.25, 0.75;
-	n2 << 0, 0.75;
-	n3 << 0.25, 1;
-	bool found1 = false, found2 = false, found3 = false;
-	// first segment is initial set without set difference, so it is skipped
+	// test containment of sample points
+	bool found1 = false, found2 = false, found3 = false, found4 = false;
+	// check points in first split segment
+	// first set is initial set without set difference, so it is skipped
 	for ( std::size_t i = 1; i < flowpipe.size(); ++i ) {
 		if ( flowpipe[i].index > 0 ) break;
-		if ( flowpipe[i].valuationSet.contains( Point<Number>( c1 ) ) ) found1 = true;
-		if ( flowpipe[i].valuationSet.contains( Point<Number>( c2 ) ) ) found2 = true;
-		if ( flowpipe[i].valuationSet.contains( Point<Number>( c3 ) ) ) found3 = true;
+		if ( flowpipe[i].valuationSet.contains( Point<Number>{ 0.25, 0.25 } ) ) found1 = true;
+		if ( flowpipe[i].valuationSet.contains( Point<Number>{ 0.75, 0.25 } ) ) found2 = true;
+		if ( flowpipe[i].valuationSet.contains( Point<Number>{ 0.75, 0.75 } ) ) found3 = true;
+	}
+
+	for ( std::size_t i = 1; i < flowpipe.size(); ++i ) {
+		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>{ 0.25, 0.75 } ) );
+		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>{ 0, 0.75 } ) );
+		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>{ 0.25, 1 } ) );
+		if ( flowpipe[i].valuationSet.contains( Point<Number>{ 1.75, 0.75 } ) ) found4 = true;
 	}
 	EXPECT_TRUE( found1 );
 	EXPECT_TRUE( found2 );
 	EXPECT_TRUE( found3 );
-
-	Vector c4( 2 );
-	c4 << 1.75, 0.75;
-	bool found4 = false;
-	// first segment is initial set without set difference, so it is skipped
-	for ( std::size_t i = 1; i < flowpipe.size(); ++i ) {
-		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>( n1 ) ) );
-		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>( n2 ) ) );
-		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>( n3 ) ) );
-		if ( flowpipe[i].valuationSet.contains( Point<Number>( c4 ) ) ) found4 = true;
-	}
 	EXPECT_TRUE( found4 );
 
 	node.getUrgent()[t1] = UrgencyRefinementLevel::SETDIFF;
 	worker.reset();
 	worker.computeTimeSuccessors( node );
 	flowpipe = worker.getFlowpipe();
+
+	// check that boundary of guard (jump set) is reachable
+	bool found5 = false;
 	for ( std::size_t i = 1; i < flowpipe.size(); ++i ) {
-		if ( flowpipe[i].valuationSet.contains( Point<Number>( c4 ) ) ) {
-			std::cout << i << ": " << flowpipe[i].valuationSet << "\n";
-		}
-		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>( c4 ) ) );
+		EXPECT_FALSE( flowpipe[i].valuationSet.contains( Point<Number>{ 1.75, 0.75 } ) );
+		if ( flowpipe[i].valuationSet.contains( Point<Number>{ 1.75, 0.5 } ) ) found5 = true;
 	}
+	EXPECT_TRUE( found5 );
+
+	// test shadow of urgent guard
+	Matrix mat( 2, 2 );
+	Vector vec( 2 );
+	mat << -1, 0, 0, -1;
+	vec << -2, -0.6;
+	for ( std::size_t i = 1; i < flowpipe.size(); ++i ) {
+		EXPECT_TRUE( intersect( flowpipe[i].valuationSet, Condition<Number>( mat, vec ) ).first == CONTAINMENT::NO );
+	}
+}
+
+TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
+	using Representation = TypeParam;
+	using Number = typename Representation::NumberType;
+	using Matrix = matrix_t<Number>;
+	using Vector = vector_t<Number>;
+
+	auto automaton = createHa<Number>();
+
+	auto l0 = automaton.getLocation( "l0" );
+	Transition<Number>*t0, *t1;
+	for ( auto const& t : l0->getTransitions() ) {
+		if ( t->getLabels()[0].getName() == "t0" ) t0 = t.get();
+		if ( t->getLabels()[0].getName() == "t1" ) t1 = t.get();
+	}
+	AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 10 );
+	analysisParameters.representation_type = Representation::type();
+
+	FixedAnalysisParameters fixedParameters;
+	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 10 );
+	fixedParameters.localTimeHorizon = tNumber( 10 );
+	fixedParameters.jumpDepth = 0;
+
+	UrgencyCEGARSettings refinementSettings;
+	refinementSettings.refinementLevels = { UrgencyRefinementLevel::FULL, UrgencyRefinementLevel::SETDIFF };
+	UrgencyCEGARAnalyzer<Representation> analyzerNoBadStates( automaton, fixedParameters, analysisParameters,
+															  refinementSettings );
+	auto analysisResult = analyzerNoBadStates.run();
+	auto roots = analyzerNoBadStates.getRoots();
+
+	EXPECT_TRUE( analysisResult.isSuccess() );
+	EXPECT_EQ( (std::size_t)1, roots.size() );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t1] );
+
+	Matrix badStateMat( 2, 2 );
+	Vector badStateVec( 2 );
+	badStateMat << 1, 0, 0, -1;
+	badStateVec << 0.25, -0.75;
+	automaton.setGlobalBadStates( { Condition<Number>( badStateMat, badStateVec ) } );
+	UrgencyCEGARAnalyzer<Representation> analyzerBadReachable( automaton, fixedParameters, analysisParameters,
+															   refinementSettings );
+	analysisResult = analyzerBadReachable.run();
+	roots = analyzerBadReachable.getRoots();
+
+	// Bad states are reachable in the initial set, so the result should be unsafety.
+	// However they are also reachable from the jump enabling set, so we expect t0 to be refined once.
+	EXPECT_FALSE( analysisResult.isSuccess() );
+	ASSERT_EQ( (std::size_t)2, roots.size() );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[1]->getUrgent()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[1]->getUrgent()[t1] );
+
+	// bad states are in shadow of urgent guard
+	badStateMat << -1, 0, 0, -1;
+	badStateVec << -4, -0.6;
+	automaton.setGlobalBadStates( { Condition<Number>( badStateMat, badStateVec ) } );
+	refinementSettings.heuristic = UrgencyRefinementHeuristic::CONSTRAINT_COUNT;
+	UrgencyCEGARAnalyzer<Representation> analyzerRefine1( automaton, fixedParameters, analysisParameters,
+														  refinementSettings );
+	analysisResult = analyzerRefine1.run();
+	roots = analyzerRefine1.getRoots();
+
+	// Because of the heuristic, t0 should be refined first, which is unsuccessful.
+	// Additional refinement of t1 should verify safety.
+	EXPECT_TRUE( analysisResult.isSuccess() );
+	ASSERT_EQ( (std::size_t)3, roots.size() );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[1]->getUrgent()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[1]->getUrgent()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[2]->getUrgent()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[2]->getUrgent()[t1] );
+
+	refinementSettings.heuristic = UrgencyRefinementHeuristic::VOLUME;
+	UrgencyCEGARAnalyzer<Representation> analyzerRefine2( automaton, fixedParameters, analysisParameters,
+														  refinementSettings );
+	analysisResult = analyzerRefine2.run();
+	roots = analyzerRefine2.getRoots();
+	// t1 has the larger volume so it should be refined first, which verifies safety.
+	EXPECT_TRUE( analysisResult.isSuccess() );
+	ASSERT_EQ( (std::size_t)2, roots.size() );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[1]->getUrgent()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[1]->getUrgent()[t1] );
 }
