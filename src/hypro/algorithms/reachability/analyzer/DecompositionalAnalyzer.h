@@ -1,36 +1,33 @@
 #pragma once
+#include <boost/function_output_iterator.hpp>
+#include <carl/numbers/numbers.h>
+#include <hypro/algorithms/reachability/analyzer/DecompositionalUtil.h>
+#include <hypro/algorithms/reachability/analyzer/ReturnTypes.h>
+#include <hypro/algorithms/reachability/types.h>
+#include <hypro/algorithms/reachability/workers/DiscreteWorker.h>
+#include <hypro/algorithms/reachability/workers/LTIWorker.h>
+#include <hypro/algorithms/reachability/workers/RectangularWorker.h>
+#include <hypro/algorithms/reachability/workers/SingularWorker.h>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/Flowpipe.h>
 #include <hypro/datastructures/reachability/ReachTreev2.h>
 #include <hypro/types.h>
-#include <hypro/algorithms/reachability/types.h>
-#include <hypro/algorithms/reachability/workers/SingularWorker.h>
-#include <hypro/algorithms/reachability/workers/LTIWorker.h>
-#include <hypro/algorithms/reachability/workers/RectangularWorker.h>
-#include <hypro/algorithms/reachability/workers/DiscreteWorker.h>
-#include <hypro/algorithms/reachability/analyzer/ReturnTypes.h>
-#include <hypro/algorithms/reachability/analyzer/DecompositionalUtil.h>
-#include <carl/numbers/numbers.h>
-
 #include <queue>
-#include <boost/function_output_iterator.hpp>
-
 
 namespace hypro {
 namespace detail {
 
 template <typename Representation>
 struct decompositionalQueueEntry {
-  std::size_t clockIndex;
-  std::vector<ReachTreeNode<Representation>*> nodes;
-  ReachTreeNode<Condition<typename Representation::NumberType>>* dependencyNode;
+	std::size_t clockIndex;
+	std::vector<ReachTreeNode<Representation>*> nodes;
+	ReachTreeNode<Condition<typename Representation::NumberType>>* dependencyNode;
 };
 
-} // namespace detail
+}  // namespace detail
 
 // indicates that the analysis succeeded, i.e. no intersection with bad states
 struct DecompositionalSuccess {};
-
 
 /**
  * @brief      Class implementing a reachability analysis algorithm for decomposed hybrid automata.
@@ -38,25 +35,25 @@ struct DecompositionalSuccess {};
  */
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
 class DecompositionalAnalyzer {
-    using Number = typename LTIRep::NumberType;
-    using Rep = apply<State, UniqueTypeList<Number, LTIRep, SingularRep, DiscreteRep, RectangularRep>>;
-    //using NodeVariant = std::variant<ReachTreeNode<LTIRep>*,
-    //                                ReachTreeNode<SingularRep>*,
-    //                                ReachTreeNode<RectangularRep>*,
-    //                                ReachTreeNode<DiscreteRep>*>;
-    //using NodeVector = std::vector<NodeVariant>;
-    using NodeVector = std::vector<ReachTreeNode<Rep>*>;
-    using RepVector = std::vector<Rep>;
-    using SubspaceSets = std::map<std::size_t, Rep>;
+	using Number = typename LTIRep::NumberType;
+	using Rep = apply<State, UniqueTypeList<Number, LTIRep, SingularRep, DiscreteRep, RectangularRep>>;
+	//using NodeVariant = std::variant<ReachTreeNode<LTIRep>*,
+	//                                ReachTreeNode<SingularRep>*,
+	//                                ReachTreeNode<RectangularRep>*,
+	//                                ReachTreeNode<DiscreteRep>*>;
+	//using NodeVector = std::vector<NodeVariant>;
+	using NodeVector = std::vector<ReachTreeNode<Rep>*>;
+	using RepVector = std::vector<Rep>;
+	using SubspaceSets = std::map<std::size_t, Rep>;
 
   public:
-    using DecompositionalResult = AnalysisResult<DecompositionalSuccess, Failure<Rep>>;
-    using WorkerVariant = std::variant<LTIWorker<LTIRep>,
-                                       SingularWorker<SingularRep>,
-                                       RectangularWorker<RectangularRep>,
-                                       DiscreteWorker<DiscreteRep>>;
+	using DecompositionalResult = AnalysisResult<DecompositionalSuccess, Failure<Rep>>;
+	using WorkerVariant = std::variant<LTIWorker<LTIRep>,
+									   SingularWorker<SingularRep>,
+									   RectangularWorker<RectangularRep>,
+									   DiscreteWorker<DiscreteRep>>;
 
-    /**
+	/**
      * @brief       Construct a new DecompositionalAnalyzer object.
      * @details     The given automaton is expected to be decomposed into independent subspaces
      *              given by the decomposition argument. The initial sets are assumed to have clocks which
@@ -70,318 +67,309 @@ class DecompositionalAnalyzer {
      * @param       parameters          The analyzer specific parameters (for using multiple analyzers).
      * @param       roots               The roots for the analysis tree (one root for each subspace).
      */
-    DecompositionalAnalyzer( HybridAutomaton<Number> const& ha,
-                 Decomposition const& decomposition,
-                 std::size_t clockCount,
-                 FixedAnalysisParameters const& fixedParameters,
-                 AnalysisParameters const& parameters )
-        : mHybridAutomaton( &ha )
-        , mDecomposition( decomposition )
-        , mClockCount( clockCount )
-        , mFixedParameters( fixedParameters )
-        , mParameters( parameters ) {
-        mRoots = makeDecompositionalRoots( ha, decomposition );
+	DecompositionalAnalyzer( HybridAutomaton<Number> const& ha,
+							 Decomposition const& decomposition,
+							 std::size_t clockCount,
+							 FixedAnalysisParameters const& fixedParameters,
+							 AnalysisParameters const& parameters )
+		: mHybridAutomaton( &ha )
+		, mDecomposition( decomposition )
+		, mClockCount( clockCount )
+		, mFixedParameters( fixedParameters )
+		, mParameters( parameters ) {
+		mRoots = makeDecompositionalRoots( ha, decomposition );
 
-        for ( auto& subspaceRoots : mRoots ) {
-            NodeVector root;
-            for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
-                root.push_back( &subspaceRoots[ subspace ] );
-            }
-            ReachTreeNode<Condition<Number>> dependencyNode{ subspaceRoots[ 0 ].getLocation(), Condition<Number>( ConstraintSetT<Number>() ), { 0, 0 } };
-            auto& dep = mDependencyRoots.emplace_back( std::move( dependencyNode ) );
-            mWorkQueue.push_front( detail::decompositionalQueueEntry<Rep>{ 0, root, &dep } );
-        }
-        for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-            if( isSegmentedSubspace( decomposition.subspaceTypes[ subspace ] ) ) {
-                mSegmentedSubspaces.push_back( subspace );
-            } else if ( decomposition.subspaceTypes[ subspace ] == DynamicType::discrete ) {
-                mDiscreteSubspaces.push_back( subspace );
-            } else {
-                mSingularSubspaces.push_back( subspace );
-            }
-        }
-    }
+		for ( auto& subspaceRoots : mRoots ) {
+			NodeVector root;
+			for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
+				root.push_back( &subspaceRoots[subspace] );
+			}
+			ReachTreeNode<Condition<Number>> dependencyNode{ subspaceRoots[0].getLocation(), Condition<Number>( ConstraintSetT<Number>() ), { 0, 0 } };
+			auto& dep = mDependencyRoots.emplace_back( std::move( dependencyNode ) );
+			mWorkQueue.push_front( detail::decompositionalQueueEntry<Rep>{ 0, root, &dep } );
+		}
+		for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+			if ( isSegmentedSubspace( decomposition.subspaceTypes[subspace] ) ) {
+				mSegmentedSubspaces.push_back( subspace );
+			} else if ( decomposition.subspaceTypes[subspace] == DynamicType::discrete ) {
+				mDiscreteSubspaces.push_back( subspace );
+			} else {
+				mSingularSubspaces.push_back( subspace );
+			}
+		}
+	}
 
-    /**
+	/**
      * @brief       Perform safety analysis.
      * @return      A result object indicating either success (safety) or failure (bad states reachable).
      */
-    DecompositionalResult run();
+	DecompositionalResult run();
 
-/*
+	/*
     std::vector<std::vector<ReachTreeNode<Representation>>>& getRoots() { return mRoots; }
     std::vector<ReachTreeNode<Condition<Number>>>& getDepRoots() { return mDependencyRoots; }
 */
   private:
-
-
-    /**
+	/**
      * @brief       Worker-visitor to reset workers for new task.
      * @tparam      Representation      The used state set representation type.
      */
-    struct resetWorkerVisitor {
-        void operator()( SingularWorker<SingularRep>& worker ) {
-            worker.reset();
-        }
-        void operator()( RectangularWorker<RectangularRep>& ) {
-            // worker.reset();
-        }
-        void operator()( LTIWorker<LTIRep>& ) {
-            return;
-        }
-        void operator()( DiscreteWorker<DiscreteRep>& ) {
-            return;
-        }
-    };
+	struct resetWorkerVisitor {
+		void operator()( SingularWorker<SingularRep>& worker ) {
+			worker.reset();
+		}
+		void operator()( RectangularWorker<RectangularRep>& ) {
+			// worker.reset();
+		}
+		void operator()( LTIWorker<LTIRep>& ) {
+			return;
+		}
+		void operator()( DiscreteWorker<DiscreteRep>& ) {
+			return;
+		}
+	};
 
-    /**
+	/**
      * @brief       Worker-visitor to compute the time successors for the given task.
      * @tparam      Representation      The used state set representation type.
      * @param       task                The current task.
      * @param       clockCount          Number of used clocks
      * @return      The time intervals where the subspace satisfies the invariant.
      */
-    struct computeTimeSuccessorVisitor {
-      ReachTreeNode<Rep>* task;
-      std::size_t clockCount; // number of clocks
-        TimeInformation<Number> operator()( SingularWorker<SingularRep>& worker ) {
-            ReachTreeNode<SingularRep> singularTask( task->getLocation(), std::visit(
-                genericConvertAndGetVisitor<SingularRep>(), task->getInitialSet().getSet() ), task->getTimings() );
-            worker.computeTimeSuccessors( singularTask, false );
-            auto& flowpipe = task->getFlowpipe();
-            std::transform( worker.getFlowpipe().begin(), worker.getFlowpipe().end(), std::back_inserter( flowpipe ), [=]( auto& segment ) {
-                    Rep state{};
-                    state.setSet( segment );
-                    return state;
-                } );
-            // the first segment covers the entire time interval
-            if ( flowpipe.size() == 0 ) {
-                // invariant is initially violated
-                return TimeInformation<Number>( clockCount );
-            }
-            assert( flowpipe.size() == 1 );
-            // last variables are clocks
-            return detail::getClockValues( flowpipe[0], clockCount );
-        }
-        TimeInformation<Number> operator()( LTIWorker<LTIRep>& worker ) {
-            auto& flowpipe = task->getFlowpipe();
-            worker.computeTimeSuccessors(
-                std::visit( genericConvertAndGetVisitor<LTIRep>(), task->getInitialSet().getSet() ),
-                task->getLocation(),
-                boost::make_function_output_iterator( [ &flowpipe ]( LTIRep segment ){
+	struct computeTimeSuccessorVisitor {
+		ReachTreeNode<Rep>* task;
+		std::size_t clockCount;	 // number of clocks
+		TimeInformation<Number> operator()( SingularWorker<SingularRep>& worker ) {
+			ReachTreeNode<SingularRep> singularTask( task->getLocation(), std::visit( genericConvertAndGetVisitor<SingularRep>(), task->getInitialSet().getSet() ), task->getTimings() );
+			worker.computeTimeSuccessors( singularTask, false );
+			auto& flowpipe = task->getFlowpipe();
+			std::transform( worker.getFlowpipe().begin(), worker.getFlowpipe().end(), std::back_inserter( flowpipe ), [=]( auto& segment ) {
+				Rep state{};
+				state.setSet( segment );
+				return state;
+			} );
+			// the first segment covers the entire time interval
+			if ( flowpipe.size() == 0 ) {
+				// invariant is initially violated
+				return TimeInformation<Number>( clockCount );
+			}
+			assert( flowpipe.size() == 1 );
+			// last variables are clocks
+			return detail::getClockValues( flowpipe[0], clockCount );
+		}
+		TimeInformation<Number> operator()( LTIWorker<LTIRep>& worker ) {
+			auto& flowpipe = task->getFlowpipe();
+			worker.computeTimeSuccessors(
+				  std::visit( genericConvertAndGetVisitor<LTIRep>(), task->getInitialSet().getSet() ),
+				  task->getLocation(),
+				  boost::make_function_output_iterator( [&flowpipe]( LTIRep segment ) {
                     Rep state;
                     state.setSet( segment );
                     flowpipe.push_back( state ); } ),
-                false );
-            //worker.computeTimeSuccessors( task->getInitialSet(), task->getLocation(), std::back_inserter( task->getFlowpipe() ), false );
-            if ( task->getFlowpipe().size() == 0 ) {
-                return TimeInformation<Number>( clockCount );
-            }
-            return detail::getClockValues( task->getFlowpipe()[ 0 ], clockCount ).unite(
-                   detail::getClockValues( task->getFlowpipe()[ task->getFlowpipe().size() - 1 ], clockCount ) );
-        }
-        TimeInformation<Number> operator()( DiscreteWorker<DiscreteRep>& worker ) {
-            auto& flowpipe = task->getFlowpipe();
-            worker.computeTimeSuccessors(
-                std::visit( genericConvertAndGetVisitor<DiscreteRep>(), task->getInitialSet().getSet() ),
-                task->getLocation(),
-                boost::make_function_output_iterator( [ &flowpipe ]( DiscreteRep segment ){
+				  false );
+			//worker.computeTimeSuccessors( task->getInitialSet(), task->getLocation(), std::back_inserter( task->getFlowpipe() ), false );
+			if ( task->getFlowpipe().size() == 0 ) {
+				return TimeInformation<Number>( clockCount );
+			}
+			return detail::getClockValues( task->getFlowpipe()[0], clockCount ).unite( detail::getClockValues( task->getFlowpipe()[task->getFlowpipe().size() - 1], clockCount ) );
+		}
+		TimeInformation<Number> operator()( DiscreteWorker<DiscreteRep>& worker ) {
+			auto& flowpipe = task->getFlowpipe();
+			worker.computeTimeSuccessors(
+				  std::visit( genericConvertAndGetVisitor<DiscreteRep>(), task->getInitialSet().getSet() ),
+				  task->getLocation(),
+				  boost::make_function_output_iterator( [&flowpipe]( DiscreteRep segment ) {
                     Rep state;
                     state.setSet( segment );
                     flowpipe.push_back( state ); } ),
-                false );
-            //worker.computeTimeSuccessors( task->getInitialSet(), task->getLocation(), std::back_inserter( task->getFlowpipe() ), false );
-            if ( task->getFlowpipe().size() == 0 ) {
-                return TimeInformation<Number>( clockCount );
-            }
-            return TimeInformation<Number>( clockCount );
-        }
-        TimeInformation<Number> operator()( RectangularWorker<RectangularRep>& ) {
-            // Todo: rectangular worker. Should be very similar to singular case
-            assert( false && "Rectangular dynamics not supported for decompositional analysis" );
-            return TimeInformation<Number>{};
-        }
-    };
+				  false );
+			//worker.computeTimeSuccessors( task->getInitialSet(), task->getLocation(), std::back_inserter( task->getFlowpipe() ), false );
+			if ( task->getFlowpipe().size() == 0 ) {
+				return TimeInformation<Number>( clockCount );
+			}
+			return TimeInformation<Number>( clockCount );
+		}
+		TimeInformation<Number> operator()( RectangularWorker<RectangularRep>& ) {
+			// Todo: rectangular worker. Should be very similar to singular case
+			assert( false && "Rectangular dynamics not supported for decompositional analysis" );
+			return TimeInformation<Number>{};
+		}
+	};
 
-    /**
+	/**
      * @brief       Worker-visitor to compute the jump successors for the given task.
      * @tparam      Representation      The used state set representation type.
      * @param       task                The current task.
      */
-    struct computeSingularJumpSuccessorVisitor {
-      ReachTreeNode<Rep>* task;
-        void operator()( SingularWorker<SingularRep>& worker ) {
-            ReachTreeNode<SingularRep> singularTask( task->getLocation(), std::visit(
-                genericConvertAndGetVisitor<SingularRep>(), task->getInitialSet().getSet() ), task->getTimings() );
-            worker.computeJumpSuccessors( singularTask );
-        }
-        void operator()( RectangularWorker<RectangularRep>& ) {
-            // todo
-            return;
-        }
-        void operator()( LTIWorker<LTIRep>& ) {
-            assert( false && "Singular jump successor computation called for non-singular subspace." );
-        }
-        void operator()( DiscreteWorker<DiscreteRep>& ) {
-            assert( false && "Singular jump successor computation called for non-singular subspace." );
-        }
-    };
+	struct computeSingularJumpSuccessorVisitor {
+		ReachTreeNode<Rep>* task;
+		void operator()( SingularWorker<SingularRep>& worker ) {
+			ReachTreeNode<SingularRep> singularTask( task->getLocation(), std::visit( genericConvertAndGetVisitor<SingularRep>(), task->getInitialSet().getSet() ), task->getTimings() );
+			worker.computeJumpSuccessors( singularTask );
+		}
+		void operator()( RectangularWorker<RectangularRep>& ) {
+			// todo
+			return;
+		}
+		void operator()( LTIWorker<LTIRep>& ) {
+			assert( false && "Singular jump successor computation called for non-singular subspace." );
+		}
+		void operator()( DiscreteWorker<DiscreteRep>& ) {
+			assert( false && "Singular jump successor computation called for non-singular subspace." );
+		}
+	};
 
-
-    /**
+	/**
      * @brief       Worker-visitor to get the jump successors for the given transition in singular subspaces.
      * @tparam      Representation      The used state set representation type.
      * @param       transition          The transition for which to get successors.
      * @return      The jump successor as Representation set.
      */
-    struct getJumpSuccessorVisitor {
-      Transition<Number>* transition;
-      std::vector<IndexedValuationSet<Rep>> predecessors{};
-        std::vector<TimedValuationSet<Rep>> operator()( SingularWorker<SingularRep>& worker ) {
-            auto it = worker.getJumpSuccessorSets().find( transition );
-            if ( it != worker.getJumpSuccessorSets().end() ) {
-                auto successorList = it->second;
-                assert( successorList.size() == 1 );
-                Rep succ;
-                succ.setSet( successorList[ 0 ] );
-                return { { succ, carl::Interval<SegmentInd>( 0 ) } };
-            }
-            else {
-                return  { { Rep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
-            }
-        }
-        std::vector<TimedValuationSet<Rep>> operator()( RectangularWorker<RectangularRep>& ) {
-            //todo
-            return { { Rep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
-        }
-        std::vector<TimedValuationSet<Rep>> operator()( LTIWorker<LTIRep>& worker ) {
-            std::vector<IndexedValuationSet<LTIRep>> ltiPredecessors;
-            std::transform( predecessors.begin(), predecessors.end(), std::back_inserter( ltiPredecessors ), [=]( auto& indexedSegment ) {
-                return IndexedValuationSet<LTIRep>{ std::visit(
-                    genericConvertAndGetVisitor<LTIRep>(), indexedSegment.valuationSet.getSet() ), indexedSegment.index };
-            } );
-            auto workerRes = worker.computeJumpSuccessorsForGuardEnabled( ltiPredecessors, transition );
-            std::vector<TimedValuationSet<Rep>> res;
-            std::transform( workerRes.begin(), workerRes.end(), std::back_inserter( res ), [=]( auto& timedSegment ) {
-                Rep succ;
-                succ.setSet( timedSegment.valuationSet );
-                return TimedValuationSet<Rep>{ succ, timedSegment.time };
-            } );
-            return res;
-        }
-        std::vector<TimedValuationSet<Rep>> operator()( DiscreteWorker<DiscreteRep>& worker ) {
-            auto [containment, successor] = worker.computeJumpSuccessorsForGuardEnabled(
-                std::visit( genericConvertAndGetVisitor<DiscreteRep>(), predecessors[ 0 ].valuationSet.getSet() ), transition );
-            if ( containment == CONTAINMENT::NO ) return { { Rep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
-            Rep succ;
-            succ.setSet( successor );
-            return { { succ, carl::Interval<SegmentInd>( 0 ) } };
-        }
-    };
+	struct getJumpSuccessorVisitor {
+		Transition<Number>* transition;
+		std::vector<IndexedValuationSet<Rep>> predecessors{};
+		std::vector<TimedValuationSet<Rep>> operator()( SingularWorker<SingularRep>& worker ) {
+			auto it = worker.getJumpSuccessorSets().find( transition );
+			if ( it != worker.getJumpSuccessorSets().end() ) {
+				auto successorList = it->second;
+				assert( successorList.size() == 1 );
+				Rep succ;
+				succ.setSet( successorList[0] );
+				return { { succ, carl::Interval<SegmentInd>( 0 ) } };
+			} else {
+				return { { Rep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
+			}
+		}
+		std::vector<TimedValuationSet<Rep>> operator()( RectangularWorker<RectangularRep>& ) {
+			//todo
+			return { { Rep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
+		}
+		std::vector<TimedValuationSet<Rep>> operator()( LTIWorker<LTIRep>& worker ) {
+			std::vector<IndexedValuationSet<LTIRep>> ltiPredecessors;
+			std::transform( predecessors.begin(), predecessors.end(), std::back_inserter( ltiPredecessors ), [=]( auto& indexedSegment ) {
+				return IndexedValuationSet<LTIRep>{ std::visit(
+														  genericConvertAndGetVisitor<LTIRep>(), indexedSegment.valuationSet.getSet() ),
+													indexedSegment.index };
+			} );
+			auto workerRes = worker.computeJumpSuccessorsForGuardEnabled( ltiPredecessors, transition );
+			std::vector<TimedValuationSet<Rep>> res;
+			std::transform( workerRes.begin(), workerRes.end(), std::back_inserter( res ), [=]( auto& timedSegment ) {
+				Rep succ;
+				succ.setSet( timedSegment.valuationSet );
+				return TimedValuationSet<Rep>{ succ, timedSegment.time };
+			} );
+			return res;
+		}
+		std::vector<TimedValuationSet<Rep>> operator()( DiscreteWorker<DiscreteRep>& worker ) {
+			auto [containment, successor] = worker.computeJumpSuccessorsForGuardEnabled(
+				  std::visit( genericConvertAndGetVisitor<DiscreteRep>(), predecessors[0].valuationSet.getSet() ), transition );
+			if ( containment == CONTAINMENT::NO ) return { { Rep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
+			Rep succ;
+			succ.setSet( successor );
+			return { { succ, carl::Interval<SegmentInd>( 0 ) } };
+		}
+	};
 
-    struct LtiJumpSuccessorGen;
-    struct LtiSegmentGen;
+	struct LtiJumpSuccessorGen;
+	struct LtiSegmentGen;
 
+	std::vector<std::vector<ReachTreeNode<Rep>>> makeDecompositionalRoots( HybridAutomaton<Number> const& ha, Decomposition decomposition ) {
+		std::vector<std::vector<ReachTreeNode<Rep>>> roots{};
+		// for each initial set, create one vector (of size #subspaces) of nodes
+		for ( auto const& [location, condition] : ha.getInitialStates() ) {
+			std::vector<ReachTreeNode<Rep>> nodeVector;
+			for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
+				Rep initialSet{};
+				switch ( decomposition.subspaceTypes[subspace] ) {
+					case DynamicType::discrete:
+						initialSet.setSet( DiscreteRep{ condition.getMatrix( subspace ), condition.getVector( subspace ) } );
+						break;
+					case DynamicType::affine:
+						[[fallthrough]];
+					case DynamicType::linear:
+						initialSet.setSet( LTIRep{ condition.getMatrix( subspace ), condition.getVector( subspace ) } );
+						break;
+					case DynamicType::timed:
+						[[fallthrough]];
+					case DynamicType::singular:
+						initialSet.setSet( SingularRep{ condition.getMatrix( subspace ), condition.getVector( subspace ) } );
+						break;
+					case DynamicType::rectangular:
+						initialSet.setSet( RectangularRep{ condition.getMatrix( subspace ), condition.getVector( subspace ) } );
+						break;
+					default:
+						assert( false );
+				}
+				ReachTreeNode<Rep> node{ location, initialSet, { 0, 0 } };
+				nodeVector.push_back( std::move( node ) );
+			}
+			roots.push_back( std::move( nodeVector ) );
+		}
+		return roots;
+	}
 
-    std::vector<std::vector<ReachTreeNode<Rep>>> makeDecompositionalRoots( HybridAutomaton<Number> const& ha, Decomposition decomposition ) {
-        std::vector<std::vector<ReachTreeNode<Rep>>> roots{};
-        // for each initial set, create one vector (of size #subspaces) of nodes
-        for ( auto const& [location, condition] : ha.getInitialStates() ) {
-            std::vector<ReachTreeNode<Rep>> nodeVector;
-            for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
-                Rep initialSet{};
-                switch ( decomposition.subspaceTypes[ subspace ] ) {
-                    case DynamicType::discrete:
-                        initialSet.setSet( DiscreteRep{ condition.getMatrix( subspace ), condition.getVector( subspace ) } );
-                        break;
-                    case DynamicType::affine:
-                        [[fallthrough]];
-                    case DynamicType::linear:
-                        initialSet.setSet( LTIRep{ condition.getMatrix( subspace ), condition.getVector( subspace ) } );
-                        break;
-                    case DynamicType::timed:
-                        [[fallthrough]];
-                    case DynamicType::singular:
-                        initialSet.setSet( SingularRep{ condition.getMatrix( subspace ), condition.getVector( subspace ) } );
-                        break;
-                    case DynamicType::rectangular:
-                        initialSet.setSet( RectangularRep{ condition.getMatrix( subspace ), condition.getVector( subspace ) } );
-                        break;
-                    default:
-                        assert( false );
-                }
-                ReachTreeNode<Rep> node{ location, initialSet, { 0, 0 } };
-                nodeVector.push_back( std::move( node ) );
-            }
-            roots.push_back( std::move( nodeVector ) );
-        }
-        return roots;
-    }
-
-
-    /**
+	/**
      * @brief       Initialize workers for the subspaces.
      * @return      The initizalized workers as vector of variants.
      */
-    auto initializeWorkers( std::vector<TimeTransformationCache<Number>>& cache ) -> std::vector<WorkerVariant>;
+	auto initializeWorkers( std::vector<TimeTransformationCache<Number>>& cache ) -> std::vector<WorkerVariant>;
 
-    /**
+	/**
      * @brief       Pre-computational check that nodes are consistent (e.g. no initial set is empty).
      * @param       currentNodes    The current reachtree-nodes to analyze.
      * @return      `true` if all checks pass, `false` otherwise.
      */
-    bool checkConsistency( NodeVector& currentNodes );
+	bool checkConsistency( NodeVector& currentNodes );
 
-    /**
+	/**
      * @brief       Compute time successors in all subspaces.
      * @param       currentNodes    The current reachtree-nodes to store the successor sets.
      * @param       workers         The vector of worker variants to use for computation.
      * @return      The clock intervals where all subspaces satisfy their respective invariants.
      */
-    auto computeTimeSuccessorsGetEnabledTime(
-        NodeVector& currentNodes,
-        std::vector<WorkerVariant>& workers )
-            -> TimeInformation<Number>;
+	auto computeTimeSuccessorsGetEnabledTime(
+		  NodeVector& currentNodes,
+		  std::vector<WorkerVariant>& workers )
+		  -> TimeInformation<Number>;
 
-    /**
+	/**
      * @brief       Reset unused clocks to zero.
      * @param       segment         The computed segment.
      * @param       clockIndex      The current clockIndex. All clocks with higher index are reset.
      */
-    void resetClock( Rep& segment, std::size_t clockIndex );
+	void resetClock( Rep& segment, std::size_t clockIndex );
 
-
-    /**
+	/**
      * @brief       Intersect computed segments with clock values and update flowpipes.
      * @param       currentNodes    The current reachtree-nodes where the flowpipes are stored.
      * @param       clock           The time intervals to intersect with.
      */
-    void intersectSubspacesWithClock(
-        NodeVector& currentNodes,
-        TimeInformation<Number>& clock );
+	void intersectSubspacesWithClock(
+		  NodeVector& currentNodes,
+		  TimeInformation<Number>& clock );
 
-    /**
+	/**
      * @brief       Remove segments that are beyond a time horizon reachable in all subspaces.
      * @details     Get the minimum number of segments that every flowpipe has and in every
      *              subspace delete segments with a higher index (e.g. if some subspace has
      *              3 segments then segments 4,5... will be removed in all subspaces.)
      * @param       currentNodes    Nodes that hold the flowpipe segments
      */
-    void removeRedundantSegments( NodeVector& currentNodes );
+	void removeRedundantSegments( NodeVector& currentNodes );
 
-    /**
+	/**
      * @brief       Check if intersection with a bad state is empty.
      * @param       currentNodes            The current reachtree-nodes where the flowpipes are stored.
      * @param       dependencies            The dependencies on the initial variables.
      * @param       badState                The bad state condition to check.
      * @return      `true` if the bad state is not reachable and `false` otherwise.
      */
-    bool isSafe(
-        const NodeVector& currentNodes,
-        const Condition<Number>& dependencies,
-        const Condition<Number>& badState );
+	bool isSafe(
+		  const NodeVector& currentNodes,
+		  const Condition<Number>& dependencies,
+		  const Condition<Number>& badState );
 
-    /**
+	/**
      * @brief       Compute jump successors and reset unused clocks to zero.
      * @param       nodes           Current nodes
      * @param       workers         The vector of worker variants to use for computation.
@@ -389,14 +377,14 @@ class DecompositionalAnalyzer {
      * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
      * @return      Vector of jump successors as map { subspace (index) : reset jump successor (representation) }
      */
-    auto getJumpSuccessors(
-        const NodeVector& nodes,
-        std::vector<WorkerVariant> workers,
-        Transition<Number>* trans,
-        std::size_t clockIndex )
-            -> std::vector<SubspaceJumpSuccessors<Rep>>;
+	auto getJumpSuccessors(
+		  const NodeVector& nodes,
+		  std::vector<WorkerVariant> workers,
+		  Transition<Number>* trans,
+		  std::size_t clockIndex )
+		  -> std::vector<SubspaceJumpSuccessors<Rep>>;
 
-    /**
+	/**
      * @brief       Get the singular jump successors for a transition and the clock values where all successors satisfy the invariant.
      * @param       nodes           Current nodes
      * @param       workers         The vector of worker variants to use for computation.
@@ -404,22 +392,20 @@ class DecompositionalAnalyzer {
      * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
      * @return      Pair of clock values where the jump is enabled and the jump successors in the singular subspaces.
      */
-    auto getSingularJumpSuccessors(
-        const NodeVector& nodes,
-        std::vector<WorkerVariant>& workers,
-        Transition<Number>* trans,
-        std::size_t clockIndex )
-            -> std::pair<TimeInformation<Number>, SubspaceSets>;
+	auto getSingularJumpSuccessors(
+		  const NodeVector& nodes,
+		  std::vector<WorkerVariant>& workers,
+		  Transition<Number>* trans,
+		  std::size_t clockIndex )
+		  -> std::pair<TimeInformation<Number>, SubspaceSets>;
 
-    
-    auto getDiscreteJumpSuccessors(
-        const NodeVector& nodes,
-        std::vector<WorkerVariant>& workers,
-        Transition<Number>* trans )
-            -> SubspaceSets;
+	auto getDiscreteJumpSuccessors(
+		  const NodeVector& nodes,
+		  std::vector<WorkerVariant>& workers,
+		  Transition<Number>* trans )
+		  -> SubspaceSets;
 
-
-    /**
+	/**
      * @brief       Get the jump successors in the segmented subspaces for a transition.
      * @param       nodes           Current nodes
      * @param       workers         The vector of worker variants to use for computation.
@@ -427,28 +413,30 @@ class DecompositionalAnalyzer {
      * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
      * @return      Vector of jump successors as map { subspace (index) : reset jump successor (representation) }
      */
-    auto getSegmentedJumpSuccessors(
-        const NodeVector& nodes,
-        std::vector<WorkerVariant>& workers,
-        Transition<Number>* trans,
-        std::size_t clockIndex )
-            -> std::vector<SubspaceJumpSuccessors<Rep>>;
+	auto getSegmentedJumpSuccessors(
+		  const NodeVector& nodes,
+		  std::vector<WorkerVariant>& workers,
+		  Transition<Number>* trans,
+		  std::size_t clockIndex )
+		  -> std::vector<SubspaceJumpSuccessors<Rep>>;
+
+	auto complexityReduction( const RepVector& sets, const Condition<Number>& dependencies ) -> std::pair<Condition<Number>, RepVector>;
 
   protected:
-    std::deque<detail::decompositionalQueueEntry<Rep>> mWorkQueue;               // holds the tasks that still need to be computed
-    HybridAutomaton<Number> const* mHybridAutomaton; // holds a pointer to the decomposed automaton
-    Decomposition mDecomposition;                    // holds decomposition information corresponding to the automaton
-    std::size_t mClockCount;                         // holds the number of additional clocks in the (singular) subspaces
-    FixedAnalysisParameters mFixedParameters;        // holds common analysis parameters for all analyzers
-    AnalysisParameters mParameters;                  // holds analyzer specific parameters
-    std::vector<std::size_t> mSingularSubspaces;     // holds the singular subspace indices
-    std::vector<std::size_t> mSegmentedSubspaces;    // holds the subspaces which have more than one segment as time successors (e.g. non-singular)
-    std::vector<std::size_t> mDiscreteSubspaces;     // holds subspaces with discrete dynamics
-    std::vector<std::vector<ReachTreeNode<Rep>>> mRoots;
-    std::vector<ReachTreeNode<Condition<Number>>> mDependencyRoots;   // holds roots of reach tree that contains dependency information
+	std::deque<detail::decompositionalQueueEntry<Rep>> mWorkQueue;	// holds the tasks that still need to be computed
+	HybridAutomaton<Number> const* mHybridAutomaton;				// holds a pointer to the decomposed automaton
+	Decomposition mDecomposition;									// holds decomposition information corresponding to the automaton
+	std::size_t mClockCount;										// holds the number of additional clocks in the (singular) subspaces
+	FixedAnalysisParameters mFixedParameters;						// holds common analysis parameters for all analyzers
+	AnalysisParameters mParameters;									// holds analyzer specific parameters
+	std::vector<std::size_t> mSingularSubspaces;					// holds the singular subspace indices
+	std::vector<std::size_t> mSegmentedSubspaces;					// holds the subspaces which have more than one segment as time successors (e.g. non-singular)
+	std::vector<std::size_t> mDiscreteSubspaces;					// holds subspaces with discrete dynamics
+	std::vector<std::vector<ReachTreeNode<Rep>>> mRoots;
+	std::vector<ReachTreeNode<Condition<Number>>> mDependencyRoots;	 // holds roots of reach tree that contains dependency information
 
-    tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 )*mFixedParameters.localTimeHorizon;
-    TimeInformation<Number> const mGlobalTimeInterval = TimeInformation<Number>( mClockCount, Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );
+	tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 ) * mFixedParameters.localTimeHorizon;
+	TimeInformation<Number> const mGlobalTimeInterval = TimeInformation<Number>( mClockCount, Number( 0 ), carl::convert<tNumber, Number>( mGlobalTimeHorizon ) );
 };
 
 }  // namespace hypro

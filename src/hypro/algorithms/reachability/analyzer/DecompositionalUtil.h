@@ -1,9 +1,10 @@
 #pragma once
-#include <hypro/types.h>
 #include <hypro/algorithms/reachability/types.h>
 #include <hypro/datastructures/HybridAutomaton/decomposition/DecompositionMethods.h>
 #include <hypro/datastructures/reachability/ReachTreev2.h>
 #include <hypro/datastructures/reachability/TreeTraversal.h>
+#include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/types.h>
 
 namespace hypro {
 /**
@@ -17,17 +18,17 @@ namespace detail {
 
 template <typename Representation>
 HPolytope<typename Representation::NumberType> composeSubspaceConstraints(
-    const std::vector<Representation>& subspaceSets,
-    const Condition<typename Representation::NumberType>& dependencies,
-    const Decomposition& decomposition,
-    std::size_t clockCount );
+	  const std::vector<Representation>& subspaceSets,
+	  const Condition<typename Representation::NumberType>& dependencies,
+	  const Decomposition& decomposition,
+	  std::size_t clockCount );
 
 template <typename Representation>
 Representation composeSubspaces(
-    const std::vector<Representation>& subspaceSets,
-    const Condition<typename Representation::NumberType>& dependencies,
-     const Decomposition& decomposition,
-    std::size_t clockCount );
+	  const std::vector<Representation>& subspaceSets,
+	  const Condition<typename Representation::NumberType>& dependencies,
+	  const Decomposition& decomposition,
+	  std::size_t clockCount );
 
 template <typename Representation>
 Condition<typename Representation::NumberType> getDependencies( const Representation& composedSet, const Decomposition& decomposition );
@@ -44,7 +45,6 @@ bool isDependency( const std::vector<Eigen::Index>& dimensions, const Decomposit
 template <typename Representation>
 std::vector<Representation> decompose( const Representation& composedSet, const Decomposition& decomposition, std::size_t clockCount );
 
-
 /**
  * @brief       Get the clock values covered by the given segment.
  * @tparam      Representation      The state-set representation of the segment.
@@ -55,8 +55,8 @@ std::vector<Representation> decompose( const Representation& composedSet, const 
  */
 template <typename Representation>
 TimeInformation<typename Representation::NumberType> getClockValues(
-    const Representation& segment,
-    std::size_t clockCount );
+	  const Representation& segment,
+	  std::size_t clockCount );
 
 /**
  * @brief       Compute the intersection of the segment with the given time intervals.
@@ -69,9 +69,9 @@ TimeInformation<typename Representation::NumberType> getClockValues(
  */
 template <typename Representation>
 Representation intersectSegmentWithClock(
-    const Representation& segment,
-    TimeInformation<typename Representation::NumberType> clockValues,
-    std::size_t clockCount );
+	  const Representation& segment,
+	  TimeInformation<typename Representation::NumberType> clockValues,
+	  std::size_t clockCount );
 
 /**
  * @brief       Get all (local and global) bad states as conditions in a location of an automaton.
@@ -81,10 +81,10 @@ Representation intersectSegmentWithClock(
  * @return      Vector of all local and global bad states in the location.
  */
 template <typename Number>
-std::vector<Condition<Number>> collectBadStates( 
-    const HybridAutomaton<Number>* ha,
-    const Location<Number>* loc );
-} // namespace detail
+std::vector<Condition<Number>> collectBadStates(
+	  const HybridAutomaton<Number>* ha,
+	  const Location<Number>* loc );
+}  // namespace detail
 
 /**
  * @brief       Generator for composed segments after analysis.
@@ -94,7 +94,6 @@ std::vector<Condition<Number>> collectBadStates(
 template <typename Representation>
 struct DecompositionalSegmentGen;
 
-
-} // namespace hypro
+}  // namespace hypro
 
 #include "DecompositionalUtil.tpp"
