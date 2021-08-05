@@ -13,10 +13,11 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 	UrgencyRefinementAnalyzer<Representation> refinementAnalyzer( mHybridAutomaton, mFixedParameters, mParameters, mRefinementSettings, mRoots );
 
 	while ( !mWorkQueue.empty() ) {
+		COUNT("Nodes processed");
 		auto currentNode = mWorkQueue.back();
 		mWorkQueue.pop_back();
 
-		auto safetyResult = worker.computeTimeSuccessors( *currentNode );
+		auto safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.refineHalfspaces );
 		worker.insertFlowpipe( *currentNode );
 		currentNode->setSafety( safetyResult );
 		worker.reset();

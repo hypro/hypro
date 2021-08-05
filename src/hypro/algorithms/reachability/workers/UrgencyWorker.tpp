@@ -3,17 +3,7 @@
 namespace hypro {
 
 template <typename Representation>
-REACHABILITY_RESULT UrgencyWorker<Representation>::computeForwardReachability( const ReachTreeNode<Representation>& task, std::size_t timeHorizon ) {
-	reset();
-	if ( computeTimeSuccessors( task, timeHorizon ) == REACHABILITY_RESULT::UNKNOWN ) {
-		return REACHABILITY_RESULT::UNKNOWN;
-	}
-	computeJumpSuccessors( task );
-	return REACHABILITY_RESULT::SAFE;
-}
-
-template <typename Representation>
-REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon ) {
+REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon, bool pruneUrgentSegments ) {
 	assert( mFlowpipe.size() == 0 );
 	reset();
 	const Location<Number>* loc = task.getLocation();
@@ -34,7 +24,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
 		  mTrafoCache.transformationMatrix( loc, mSettings.timeStep ),
 		  mSettings.timeStep );
 
-	REACHABILITY_RESULT firstSegmentSafety = handleSegment( task, firstSegment, 0 );
+	REACHABILITY_RESULT firstSegmentSafety = handleSegment( task, firstSegment, 0, pruneUrgentSegments );
 	if ( firstSegmentSafety != REACHABILITY_RESULT::SAFE ) {
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
@@ -49,7 +39,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
 		while ( previousSegment.index == (int)segmentIndex - 1 ) {
 			auto nextSegment = applyTimeEvolution(
 				  previousSegment.valuationSet, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
-			REACHABILITY_RESULT safety = handleSegment( task, nextSegment, segmentIndex );
+			REACHABILITY_RESULT safety = handleSegment( task, nextSegment, segmentIndex, pruneUrgentSegments );
 			if ( safety != REACHABILITY_RESULT::SAFE ) {
 				return REACHABILITY_RESULT::UNKNOWN;
 			}
@@ -66,7 +56,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
 
 template <typename Representation>
 REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
-	  const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing ) {
+	  const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing, bool pruneUrgentSegments ) {
 	const Location<Number>* loc = task.getLocation();
 	ltiUrgencyHandler<Representation> urgencyHandler;
 
@@ -74,6 +64,15 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
 	auto [containment, constrainedSegment] = intersect( segment, loc->getInvariant() );
 	if ( containment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
+	}
+
+	if ( pruneUrgentSegments ) {
+		for ( const auto& uTrans : task.getLocation()->getTransitions() ) {
+			if ( uTrans->isUrgent() && intersect( constrainedSegment, uTrans->getJumpEnablingSet() ).first == CONTAINMENT::FULL ) {
+				COUNT( "Pruned urgent segment" );
+				return REACHABILITY_RESULT::SAFE;
+			}
+		}
 	}
 
 	for ( const auto& transRefinement : task.getUrgent() ) {

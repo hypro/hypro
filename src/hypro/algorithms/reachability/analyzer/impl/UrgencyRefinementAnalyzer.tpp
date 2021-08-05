@@ -149,7 +149,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 
 		// compute flowpipe. if node was previously unsafe, flowpipe would not be empty
 		if ( currentNode->getFlowpipe().empty() ) {
-			REACHABILITY_RESULT safetyResult = worker.computeTimeSuccessors( *currentNode );
+			REACHABILITY_RESULT safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.refineHalfspaces );
 			worker.insertFlowpipe( *currentNode );
 			currentNode->setSafety( safetyResult );
 			worker.reset();
@@ -385,11 +385,11 @@ bool UrgencyRefinementAnalyzer<Representation>::pathUnsafe( ReachTreeNode<Repres
 		auto node = queue.back();
 		queue.pop_back();
 		if ( node->getDepth() == 0 ) {
-			if ( worker.computeTimeSuccessors( *node, initialTimeHorizon ) == REACHABILITY_RESULT::UNKNOWN ) {
+			if ( worker.computeTimeSuccessors( *node, initialTimeHorizon, false ) == REACHABILITY_RESULT::UNKNOWN ) {
 				return true;
 			}
 		} else {
-			if ( worker.computeTimeSuccessors( *node ) == REACHABILITY_RESULT::UNKNOWN ) {
+			if ( worker.computeTimeSuccessors( *node, false ) == REACHABILITY_RESULT::UNKNOWN ) {
 				return true;
 			}
 		}

@@ -37,16 +37,21 @@ class UrgencyWorker {
 	/**
      * @brief Computes the states reachable by letting time elapse up to the given time horizon.
      * @param task Used to access the the location, initial set and refinement levels of urgent transitions.
+     * @param timeHorizion Number of segments to compute.
+     * @param pruneUrgentSegments If true, ignore segments that are contained in urgent jump enabling sets,
+     * regardless of their refinement level.
      * @return Safety after time elapse.
      */
-	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon );
+	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon, bool pruneUrgentSegments = true );
 	/**
      * @brief Computes the states reachable by letting time elapse. Time horizon is given by the settings.
      * @param task Used to access the the location, initial set and refinement levels of urgent transitions.
+     * @param pruneUrgentSegments If true, ignore segments that are contained in urgent jump enabling sets,
+     * regardless of their refinement level.
      * @return Safety after time elapse.
      */
-	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task ) {
-		return computeTimeSuccessors( task, mNumSegments );
+	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, bool pruneUrgentSegments = true ) {
+		return computeTimeSuccessors( task, mNumSegments, pruneUrgentSegments );
 	}
 	/**
      * @brief Getter function for the computed flowpipe.
@@ -96,10 +101,12 @@ class UrgencyWorker {
      * @param task The current task, used to access the location.
      * @param segment The current segment computed by letting time elapse.
      * @param timing The time offset of the segment.
+     * @param pruneUrgentSegments If true, ignore segments that are contained in urgent jump enabling sets,
+     * regardless of their refinement level.
      * @return Safety of the segment.
      */
 	REACHABILITY_RESULT handleSegment(
-		  const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing );
+		  const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing, bool pruneUrgentSegments );
 	/**
 	 * @brief Adds a single segment to the flowpipe object
 	 * @param The computed segment.
