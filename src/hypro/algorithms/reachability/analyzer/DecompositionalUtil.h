@@ -1,5 +1,6 @@
 #pragma once
 #include <hypro/algorithms/reachability/types.h>
+#include <hypro/datastructures/HybridAutomaton/State.h>
 #include <hypro/datastructures/HybridAutomaton/decomposition/DecompositionMethods.h>
 #include <hypro/datastructures/reachability/ReachTreev2.h>
 #include <hypro/datastructures/reachability/TreeTraversal.h>

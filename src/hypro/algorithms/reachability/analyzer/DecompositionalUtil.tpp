@@ -324,7 +324,7 @@ struct DecompositionalSegmentGen {
 	}
 
 	// generate next segment if it exists
-	std::optional<Representation> next() {
+	std::optional<HPolytope<Number>> next() {
 		// reached end of tree nodes. All trees have the exact same structure, so it
 		// suffices to only compare the first node iterator.
 		if ( nodeIterators[0] == nodeIteratorEndings[0] ) {
@@ -332,7 +332,7 @@ struct DecompositionalSegmentGen {
 		}
 		assert( dependencyIterator != dependencyIteratorEnd );
 		// collect next subspace sets to compose segment
-		std::vector<Representation> subspaceSets( decomposition.subspaces.size() );
+		std::vector<HPolytope<Number>> subspaceSets( decomposition.subspaces.size() );
 		for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
 			assert( nodeIterators[subspace] != nodeIteratorEndings[subspace] );
 			// if segmented, get next segment via segmentIndex. Otherwise always take first segment in flowpipe.
@@ -342,14 +342,14 @@ struct DecompositionalSegmentGen {
 					incrementNodes();
 					return next();
 				}
-				subspaceSets[subspace] = nodeIterators[subspace]->getFlowpipe()[segmentIndex];
+				subspaceSets[subspace] = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[subspace]->getFlowpipe()[segmentIndex].getSet() );
 			} else {
 				// this shouldn't happen (flowpipe computation was skipped, so initial set was empty), but check just in case.
 				if ( nodeIterators[subspace]->getFlowpipe().size() == 0 ) {
 					incrementNodes();
 					return next();
 				}
-				subspaceSets[subspace] = nodeIterators[subspace]->getFlowpipe()[0];
+				subspaceSets[subspace] = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[subspace]->getFlowpipe()[0].getSet() );
 			}
 		}
 		// if no subspace is segmented (linear or affine) then one segment per node is always enough. Otherwise, increase segmentIndex

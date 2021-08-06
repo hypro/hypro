@@ -37,11 +37,6 @@ template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename 
 class DecompositionalAnalyzer {
 	using Number = typename LTIRep::NumberType;
 	using Rep = apply<State, UniqueTypeList<Number, LTIRep, SingularRep, DiscreteRep, RectangularRep>>;
-	//using NodeVariant = std::variant<ReachTreeNode<LTIRep>*,
-	//                                ReachTreeNode<SingularRep>*,
-	//                                ReachTreeNode<RectangularRep>*,
-	//                                ReachTreeNode<DiscreteRep>*>;
-	//using NodeVector = std::vector<NodeVariant>;
 	using NodeVector = std::vector<ReachTreeNode<Rep>*>;
 	using RepVector = std::vector<Rep>;
 	using SubspaceSets = std::map<std::size_t, Rep>;
@@ -105,10 +100,9 @@ class DecompositionalAnalyzer {
      */
 	DecompositionalResult run();
 
-	/*
-    std::vector<std::vector<ReachTreeNode<Representation>>>& getRoots() { return mRoots; }
-    std::vector<ReachTreeNode<Condition<Number>>>& getDepRoots() { return mDependencyRoots; }
-*/
+	std::vector<std::vector<ReachTreeNode<Rep>>>& getRoots() { return mRoots; }
+	std::vector<ReachTreeNode<Condition<Number>>>& getDepRoots() { return mDependencyRoots; }
+
   private:
 	/**
      * @brief       Worker-visitor to reset workers for new task.
@@ -204,6 +198,7 @@ class DecompositionalAnalyzer {
 	struct computeSingularJumpSuccessorVisitor {
 		ReachTreeNode<Rep>* task;
 		void operator()( SingularWorker<SingularRep>& worker ) {
+			// todo: don't need the initial set here. Worker only uses location to compute jump successors.
 			ReachTreeNode<SingularRep> singularTask( task->getLocation(), std::visit( genericConvertAndGetVisitor<SingularRep>(), task->getInitialSet().getSet() ), task->getTimings() );
 			worker.computeJumpSuccessors( singularTask );
 		}
@@ -420,7 +415,10 @@ class DecompositionalAnalyzer {
 		  std::size_t clockIndex )
 		  -> std::vector<SubspaceJumpSuccessors<Rep>>;
 
-	auto complexityReduction( const RepVector& sets, const Condition<Number>& dependencies ) -> std::pair<Condition<Number>, RepVector>;
+	auto complexityReduction(
+		  const RepVector& sets,
+		  const Condition<Number>& dependencies )
+		  -> std::pair<Condition<Number>, RepVector>;
 
   protected:
 	std::deque<detail::decompositionalQueueEntry<Rep>> mWorkQueue;	// holds the tasks that still need to be computed

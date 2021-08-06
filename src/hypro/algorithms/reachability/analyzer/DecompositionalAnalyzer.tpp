@@ -52,6 +52,9 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 				for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
 					subspaceSets[subspace] = std::move( timedSuccessor.subspaceSets[subspace] );
 				}
+				if ( std::any_of( subspaceSets.begin(), subspaceSets.end(), [](auto const& state){ return state.empty();})) {
+					continue;
+				}
 				if ( mClockCount > 0 && nextIndex >= mClockCount ) {
 					nextIndex = 0;
 					std::tie( dependencies, subspaceSets ) = complexityReduction( subspaceSets, dependencies );
@@ -354,9 +357,11 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	std::map<std::size_t, std::vector<TimedValuationSet<Rep>>> subspaceSuccessors;
 	for ( auto subspace : mSegmentedSubspaces ) {
 		subspaceSuccessors[subspace] = std::visit( getJumpSuccessorVisitor{ trans, predecessors[subspace] }, workers[subspace] );
+		if ( subspaceSuccessors[subspace].size() == 0 ) return {};
 	}
 	// synchronize via the time interval of the jump
 	// note: every subspace has the same enabled segments and same aggregation settings, so the time intervals are the same
+	if ( std::any_of( subspaceSuccessors.begin(), subspaceSuccessors.end(), []( const auto& s ){ return s.second.empty();})) return {};
 	LtiJumpSuccessorGen synchronizedSuccessors{ subspaceSuccessors, mSegmentedSubspaces };
 	std::vector<SubspaceJumpSuccessors<Rep>> res;
 	for ( auto succ = synchronizedSuccessors.next(); succ.subspaceSets.size() > 0; succ = synchronizedSuccessors.next() ) {
@@ -417,10 +422,10 @@ struct DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>
 	SubspaceJumpSuccessors<Rep> next() {
 		if ( subspaces.size() == 0 ) {
 			return {};
-		} else if ( firstIndex >= subspaceSuccessors.at( 0 ).size() ) {
+		} else if ( firstIndex >= subspaceSuccessors.at( subspaces[ 0 ] ).size() ) {
 			return {};
 		} else {
-			const auto nextInterval = subspaceSuccessors.at( 0 )[firstIndex].time;
+			const auto nextInterval = subspaceSuccessors.at( subspaces[ 0 ] )[firstIndex].time;
 			SubspaceSets res;
 			for ( auto subspace : subspaces ) {
 				bool found = false;
