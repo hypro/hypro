@@ -52,11 +52,11 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 		// if affine reset is singular and not identity, get constant resets
 		if ( !reset.getAffineReset( subspace ).isIdentity() ) {
 			WARN( "hypro.reachability", "Singular reset handler with affine constant assignments. Converting to interval reset." )
-			vector_t<Number> zeroRow = vector_t<Number>::Zero( reset.size() );
-			for ( std::size_t rowIndex = 0; rowIndex < reset.size(); ++rowIndex ) {
-				if ( reset.getMatrix().row( rowIndex ) == zeroRow ) {
+			matrix_t<Number> zeroRow = matrix_t<Number>::Zero( 1, reset.getMatrix( subspace ).cols() );
+			for ( Eigen::Index rowIndex = 0; rowIndex < reset.getMatrix( subspace ).rows(); ++rowIndex ) {
+				if ( reset.getMatrix( subspace ).row( rowIndex ) == zeroRow ) {
 					// add interval for constant reset
-					Number constant = reset.getVector()( rowIndex );
+					Number constant = reset.getVector( subspace )( rowIndex );
 					assert( intervalReset.getIntervals()[rowIndex].isEmpty() && "Reset has both affine and interval assignment" );
 					intervalReset.setInterval( carl::Interval<Number>( constant, constant ), rowIndex );
 				}
@@ -100,7 +100,7 @@ HPolytope<Number> applyResetFM( Representation& stateSet, IntervalAssignment<Num
 	projectedSet = projectedSet.projectOutConservative( projectOutDimensions );
 	projectedSet.insert( newConstraints.begin(), newConstraints.end() );
 
-	return projectedSet;
+	return projectedSet.removeRedundancy();
 }
 
 template <typename Representation, typename Number>
