@@ -37,6 +37,7 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 			( "setting,s", po::value<std::string>(), "the setting to use for the representation")
 			( "refinementLevels", po::value<std::vector<hypro::UrgencyRefinementLevel>>()->multitoken()->required(), "the refinement levels for urgency cegar")
 			( "refineHalfspaces", po::bool_switch(), "always refine urgent halfspaces")
+			( "aggregatedRefine", po::bool_switch(), "aggregate initial segments for path computation when finding refinement transitions")
 			( "heuristic", po::value<hypro::UrgencyRefinementHeuristic>(), "used heuristic for choosing refinement transition. NONE, VOLUME, CONSTRAINT_COUNT or COUNT");
 
 	po::options_description plotting( "Plotting options." );

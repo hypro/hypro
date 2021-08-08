@@ -185,6 +185,7 @@ class UrgencyRefinementAnalyzer {
 	std::list<ReachTreeNode<Representation>>* mRoots;		///< The roots of the reach tree
 	size_t const mMaxSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.localTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::max() ) ) );
 	std::map<Transition<Number>*, std::size_t> mRefinementCache;  ///< Cache for heuristic values
+	Transition<Number>* mLastRefine;
 };
 
 }  // namespace hypro

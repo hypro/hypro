@@ -45,6 +45,7 @@ struct UrgencyCEGARSettings {
 														  UrgencyRefinementLevel::SETDIFF };
 	bool refineHalfspaces = true;
 	UrgencyRefinementHeuristic heuristic = UrgencyRefinementHeuristic::NONE;
+	bool aggregatedRefine = true;
 };
 
 class Settings {

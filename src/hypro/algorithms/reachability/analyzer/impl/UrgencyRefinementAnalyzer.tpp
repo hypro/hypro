@@ -183,8 +183,12 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 			if ( !currentNode->getChildren().empty() ) {
 				COUNT( "UrgencyCegar: Reuse children" );
 				for ( auto* child : currentNode->getChildren() ) {
-					if ( matchesPathTransition( child ) && matchesPathTiming( child ) &&
-						 std::all_of( child->getUrgent().begin(), child->getUrgent().end(), [this]( const auto& u ) { return u.second == detail::getInitialRefinementLevel( u.first, mRefinementSettings ); } ) ) {
+					if ( matchesPathTransition( child ) &&
+						 matchesPathTiming( child ) &&
+						 std::all_of(
+							   child->getUrgent().begin(),
+							   child->getUrgent().end(),
+							   [this]( const auto& u ) { return u.second == detail::getInitialRefinementLevel( u.first, mRefinementSettings ); } ) ) {
 						mWorkQueue.push_front( child );
 					}
 				}
@@ -202,6 +206,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 		}
 	}
 
+	if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::SUCCESSCOUNT ) mRefinementCache[mLastRefine] += 1;
 	std::vector<ReachTreeNode<Representation>*> pathSuccessors{};
 	for ( auto succ : endOfPath ) {
 		bool ancestorRefined = false;
@@ -251,7 +256,13 @@ auto UrgencyRefinementAnalyzer<Representation>::findRefinementNode( ReachTreeNod
 				}
 			}
 			// sort by used heuristic
-			std::sort( candidateTransitions.begin(), candidateTransitions.end(), [this, nodeIt]( auto t1, auto t2 ) { return mRefinementSettings.heuristic == UrgencyRefinementHeuristic::CONSTRAINT_COUNT ? computeHeuristic( t1, *nodeIt ) < computeHeuristic( t2, *nodeIt ) : computeHeuristic( t1, *nodeIt ) > computeHeuristic( t2, *nodeIt ); } );
+			std::sort( candidateTransitions.begin(),
+					   candidateTransitions.end(),
+					   [this, nodeIt]( auto t1, auto t2 ) {
+					   	if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::CONSTRAINT_COUNT ) {
+					   		return computeHeuristic( t1, *nodeIt ) < computeHeuristic( t2, *nodeIt );
+					   	} else {
+					   		return computeHeuristic( t1, *nodeIt ) > computeHeuristic( t2, *nodeIt ); } } );
 
 			// refine all transitions to next level
 			for ( auto candidateTrans : candidateTransitions ) {
@@ -327,6 +338,10 @@ bool UrgencyRefinementAnalyzer<Representation>::suitableForRefinement(
         + if containment is partial, compute the path starting from the intersection
     */
 
+	// used for aggregation of initial set if demanded
+	TimedValuationSet<Representation> aggregatedInitial{ Representation::Empty(), carl::Interval<SegmentInd>::emptyInterval() };
+	//if ( !mRefinementSettings.aggregatedRefine ) {
+
 	// path from candidate node to unsafe node
 	auto path = unsafeNode->getPath().tail( unsafeNode->getDepth() - candidate.node->getDepth() );
 
@@ -335,6 +350,7 @@ bool UrgencyRefinementAnalyzer<Representation>::suitableForRefinement(
 	auto& candidateFlowpipe = candidate.node->getFlowpipe();
 	// initial time horizon and initial tree node
 	std::vector<std::pair<SegmentInd, ReachTreeNode<Representation>>> tasks;
+
 	for ( std::size_t fpIndex = 0; fpIndex < candidateFlowpipe.size(); ++fpIndex ) {
 		// moved beyond first jump:
 		if ( path.elements.size() > 0 && candidateFpTimings[fpIndex] + candidateTimings.lower() > path.elements[0].first.upper() ) {
@@ -350,15 +366,30 @@ bool UrgencyRefinementAnalyzer<Representation>::suitableForRefinement(
 			STOP_BENCHMARK_OPERATION( "UrgencyCegar: Check transition" );
 			return true;
 		} else {
-			// get time horizon for first task
-			auto timeHorizon = mMaxSegments - candidateFpTimings[fpIndex];
-			// create task node, todo: urgency?
-			carl::Interval<SegmentInd> segmentOffset = candidateTimings.add( carl::Interval<SegmentInd>( candidateFpTimings[fpIndex] ) );
-			ReachTreeNode<Representation> task( candidate.node->getLocation(), initial, segmentOffset );
-			tasks.push_back( std::make_pair( timeHorizon, std::move( task ) ) );
+			if ( mRefinementSettings.aggregatedRefine ) {
+				aggregatedInitial.valuationSet = aggregatedInitial.valuationSet.unite( initial );
+				if ( aggregatedInitial.time.isEmpty() ) {
+					aggregatedInitial.time = carl::Interval<SegmentInd>( candidateFpTimings[fpIndex] );
+				} else {
+					aggregatedInitial.time.setUpper( candidateFpTimings[fpIndex] );
+				}
+			} else {
+				// get time horizon for first task
+				auto timeHorizon = mMaxSegments - candidateFpTimings[fpIndex];
+				// create task node, todo: urgency?
+				carl::Interval<SegmentInd> segmentOffset = candidateTimings.add( carl::Interval<SegmentInd>( candidateFpTimings[fpIndex] ) );
+				ReachTreeNode<Representation> task( candidate.node->getLocation(), initial, segmentOffset );
+				tasks.push_back( std::make_pair( timeHorizon, std::move( task ) ) );
+			}
 		}
 	}
 
+	if ( mRefinementSettings.aggregatedRefine ) {
+		if ( !aggregatedInitial.valuationSet.empty() ) {
+			ReachTreeNode<Representation> node( candidate.node->getLocation(), aggregatedInitial.valuationSet, candidateTimings + aggregatedInitial.time );
+			tasks.push_back( std::make_pair( mMaxSegments, std::move( node ) ) );
+		}
+	}
 	for ( auto& [timeHorizon, task] : tasks ) {
 		if ( pathUnsafe( &task, path, timeHorizon ) ) {
 			STOP_BENCHMARK_OPERATION( "UrgencyCegar: Check transition" );
@@ -432,6 +463,8 @@ std::size_t UrgencyRefinementAnalyzer<Representation>::computeHeuristic( Transit
 				mRefinementCache[t] = vol;
 				break;
 			}
+			case UrgencyRefinementHeuristic::SUCCESSCOUNT:
+				[[fallthrough]];
 			case UrgencyRefinementHeuristic::COUNT: {
 				mRefinementCache[t] = 0;
 				break;
@@ -450,6 +483,8 @@ void UrgencyRefinementAnalyzer<Representation>::updateHeuristics( Transition<Num
 		mRefinementCache[t] += 1;
 	} else if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::VOLUME ) {
 		mRefinementCache.clear();
+	} else if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::SUCCESSCOUNT ) {
+		mLastRefine = t;
 	}
 }
 
