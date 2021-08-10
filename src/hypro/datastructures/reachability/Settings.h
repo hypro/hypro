@@ -58,7 +58,7 @@ class Settings {
 	/// default constructor
 	Settings() = default;
 	/// full constructor
-	Settings( PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector<AnalysisParameters> strategy, UrgencyCEGARSettings urgencySettings )
+	Settings( PlottingSettings plotting, FixedAnalysisParameters fixedParameters, std::vector<AnalysisParameters> strategy, UrgencyCEGARSettings urgencySettings = UrgencyCEGARSettings{} )
 		: mPlotting( plotting )
 		, mFixedParameters( fixedParameters )
 		, mStrategy( strategy )
