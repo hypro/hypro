@@ -57,6 +57,7 @@ hypro::Settings processSettings( const hypro::ReachabilitySettings& parsedSettin
 	hypro::UrgencyCEGARSettings urgencySettings{};
 	if ( cliOptions["urgency_cegar"].as<bool>() ) {
 		urgencySettings.refinementLevels = cliOptions["refinementLevels"].as<std::vector<hypro::UrgencyRefinementLevel>>();
+		urgencySettings.refinementLevels = urgencySettings.refinementLevels.empty() ? std::vector<hypro::UrgencyRefinementLevel>{ hypro::UrgencyRefinementLevel::SETDIFF } : urgencySettings.refinementLevels;
 		urgencySettings.refineHalfspaces = cliOptions["refineHalfspaces"].as<bool>();
 		urgencySettings.aggregatedRefine = cliOptions["aggregatedRefine"].as<bool>();
 		if ( cliOptions.count( "heuristic" ) ) {

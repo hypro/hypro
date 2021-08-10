@@ -35,7 +35,7 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 			( "clustering,c", po::value<int>(), "Select clustering option, -1=off, 0=all, i=max. number of clustered segments. Overrides settings in the input file." )
 			( "representation,r", po::value<hypro::representation_name>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
 			( "setting,s", po::value<std::string>(), "the setting to use for the representation")
-			( "refinementLevels", po::value<std::vector<hypro::UrgencyRefinementLevel>>()->multitoken()->required(), "the refinement levels for urgency cegar")
+			( "refinementLevels", po::value<std::vector<hypro::UrgencyRefinementLevel>>()->multitoken()->default_value({}), "the refinement levels for urgency cegar (selction of FULL, CUTOFF and SETDIFF)")
 			( "refineHalfspaces", po::bool_switch(), "always refine urgent halfspaces")
 			( "aggregatedRefine", po::bool_switch(), "aggregate initial segments for path computation when finding refinement transitions")
 			( "heuristic", po::value<hypro::UrgencyRefinementHeuristic>(), "used heuristic for choosing refinement transition. NONE, VOLUME, CONSTRAINT_COUNT or COUNT");
