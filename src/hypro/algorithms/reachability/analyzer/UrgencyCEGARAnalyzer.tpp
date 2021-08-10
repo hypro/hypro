@@ -5,7 +5,7 @@ namespace hypro {
 template <typename Representation>
 auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 	TimeTransformationCache<Number> transformationCache;
-	UrgencyWorker<Representation> worker{
+	UrgencyCEGARWorker<Representation> worker{
 		  *mHybridAutomaton,
 		  mParameters,
 		  mFixedParameters.localTimeHorizon,

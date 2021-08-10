@@ -106,7 +106,7 @@ template <typename Representation>
 auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 	//Setup settings for flowpipe construction in worker
 	TimeTransformationCache<Number> transformationCache;
-	UrgencyWorker<Representation> worker{
+	UrgencyCEGARWorker<Representation> worker{
 		  *mHybridAutomaton,
 		  mParameters,
 		  mFixedParameters.localTimeHorizon,
@@ -407,7 +407,7 @@ template <typename Representation>
 bool UrgencyRefinementAnalyzer<Representation>::pathUnsafe( ReachTreeNode<Representation>* initialNode, Path<Number> path, std::size_t initialTimeHorizon ) {
 	// todo: reuse worker or at least transformationCache
 	TimeTransformationCache<Number> transformationCache;
-	UrgencyWorker<Representation> worker{
+	UrgencyCEGARWorker<Representation> worker{
 		  *mHybridAutomaton,
 		  mParameters,
 		  mFixedParameters.localTimeHorizon,

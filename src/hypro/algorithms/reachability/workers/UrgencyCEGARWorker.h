@@ -22,13 +22,13 @@ namespace hypro {
  * @tparam Representation   The used state set representation.
  */
 template <typename Representation>
-class UrgencyWorker {
+class UrgencyCEGARWorker {
   private:
 	using Number = typename Representation::NumberType;
 	using Flowpipe = std::vector<IndexedValuationSet<Representation>>;
 
   public:
-	UrgencyWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
+	UrgencyCEGARWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
 		, mLocalTimeHorizon( localTimeHorizon )
@@ -132,4 +132,4 @@ class UrgencyWorker {
 
 }  // namespace hypro
 
-#include "UrgencyWorker.tpp"
+#include "UrgencyCEGARWorker.tpp"

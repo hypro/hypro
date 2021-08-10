@@ -1,9 +1,9 @@
-#include "UrgencyWorker.h"
+#include "UrgencyCEGARWorker.h"
 
 namespace hypro {
 
 template <typename Representation>
-REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon, bool pruneUrgentSegments ) {
+REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon, bool pruneUrgentSegments ) {
 	assert( mFlowpipe.size() == 0 );
 	reset();
 	const Location<Number>* loc = task.getLocation();
@@ -55,7 +55,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::computeTimeSuccessors( const 
 }
 
 template <typename Representation>
-REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
+REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::handleSegment(
 	  const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing, bool pruneUrgentSegments ) {
 	const Location<Number>* loc = task.getLocation();
 	ltiUrgencyHandler<Representation> urgencyHandler;
@@ -103,7 +103,7 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
 }
 
 template <typename Representation>
-auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task, const Transition<Number>* transition, const carl::Interval<SegmentInd>& timeOfJump )
+auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task, const Transition<Number>* transition, const carl::Interval<SegmentInd>& timeOfJump )
 	  -> std::vector<TimedValuationSet<Representation>> {
 	assert( transition->getSource() == task.getLocation() );
 	assert( task.getFlowpipe().size() == task.getFpTimings().size() );
@@ -156,7 +156,7 @@ auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
 }
 
 template <typename Representation>
-auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task )
+auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task )
 	  -> std::vector<JumpSuccessor<Representation>> {
 	const Location<Number>* loc = task.getLocation();
 	std::vector<JumpSuccessor<Representation>> successors{};
@@ -167,12 +167,12 @@ auto UrgencyWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<R
 }
 
 template <typename Representation>
-void UrgencyWorker<Representation>::addSegment( const Representation& segment, SegmentInd timing ) {
+void UrgencyCEGARWorker<Representation>::addSegment( const Representation& segment, SegmentInd timing ) {
 	mFlowpipe.push_back( IndexedValuationSet<Representation>{ segment, timing } );
 }
 
 template <typename Representation>
-void UrgencyWorker<Representation>::addSegment( const std::vector<Representation>& segment, SegmentInd timing ) {
+void UrgencyCEGARWorker<Representation>::addSegment( const std::vector<Representation>& segment, SegmentInd timing ) {
 	for ( auto splitSegment : segment ) {
 		if ( !splitSegment.empty() ) {
 			mFlowpipe.push_back( IndexedValuationSet<Representation>{ splitSegment, timing } );
@@ -181,7 +181,7 @@ void UrgencyWorker<Representation>::addSegment( const std::vector<Representation
 }
 
 template <typename Representation>
-void UrgencyWorker<Representation>::insertFlowpipe( ReachTreeNode<Representation>& node ) const {
+void UrgencyCEGARWorker<Representation>::insertFlowpipe( ReachTreeNode<Representation>& node ) const {
 	for ( auto [segment, index] : mFlowpipe ) {
 		node.getFlowpipe().push_back( segment );
 		node.getFpTimings().push_back( index );

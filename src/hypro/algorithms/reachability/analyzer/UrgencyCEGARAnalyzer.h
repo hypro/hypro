@@ -2,7 +2,7 @@
 #include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../datastructures/reachability/ReachTreev2.h"
 #include "../../../types.h"
-#include "../workers/UrgencyWorker.h"
+#include "../workers/UrgencyCEGARWorker.h"
 #include "./ReturnTypes.h"
 #include "./impl/UrgencyRefinementAnalyzer.h"
 
