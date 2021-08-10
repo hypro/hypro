@@ -96,15 +96,35 @@ Box<typename Representation::NumberType> computeBoundingBox( const Representatio
 
 template <class Representation, class Number>
 std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
-	// intersect with (bounded) valuationSet first:
-	auto [containment, intersectedMinus] = intersect( valuationSet, condition );
-	if ( containment == CONTAINMENT::NO ) {
-		return { valuationSet };
-	} else if ( containment == CONTAINMENT::FULL ) {
-		return { Representation::Empty() };
+	// if the guard is not box shaped then set difference is not guaranteed overapproximative for boxes.
+	// therefore the set difference is computed with polytopes and the result is converted back to boxes.
+	if ( Representation::type_enum == representation_name::box && !std::get<0>( isBox( condition.getMatrix(), condition.getVector() ) ) ) {
+		std::cout << "Converting to polytope for set difference\n";
+		HPolytope<Number> valuationSetPolytope( valuationSet.matrix(), valuationSet.vector() );
+		auto [containment, intersectedMinus] = intersect( valuationSetPolytope, condition );
+		if ( containment == CONTAINMENT::NO ) {
+			return { valuationSet };
+		} else if ( containment == CONTAINMENT::FULL ) {
+			return { Representation::Empty() };
+		} else {
+			std::vector<HPolytope<Number>> resPol = valuationSetPolytope.setMinus2( intersectedMinus );
+			std::vector<Representation> res;
+			std::transform( resPol.begin(), resPol.end(), std::back_inserter( res ), []( auto const& pol ) {
+				return Representation( pol.matrix(), pol.vector() );
+			} );
+			return res;
+		}
+	} else {
+		// intersect with (bounded) valuationSet first:
+		auto [containment, intersectedMinus] = intersect( valuationSet, condition );
+		if ( containment == CONTAINMENT::NO ) {
+			return { valuationSet };
+		} else if ( containment == CONTAINMENT::FULL ) {
+			return { Representation::Empty() };
+		}
+		auto res = valuationSet.setMinus2( intersectedMinus );
+		return res;
 	}
-	auto res = valuationSet.setMinus2( intersectedMinus );
-	return res;
 }
 
 }  // namespace hypro
