@@ -68,7 +68,10 @@ REACHABILITY_RESULT UrgencyWorker<Representation>::handleSegment(
 
 	if ( pruneUrgentSegments ) {
 		for ( const auto& uTrans : task.getLocation()->getTransitions() ) {
-			if ( uTrans->isUrgent() && intersect( constrainedSegment, uTrans->getJumpEnablingSet() ).first == CONTAINMENT::FULL ) {
+			if ( uTrans->isUrgent() &&
+				 task.getUrgent().at( uTrans.get() ) == UrgencyRefinementLevel::FULL &&
+				 // todo: reuse for jump successor computation
+				 intersect( constrainedSegment, uTrans->getJumpEnablingSet() ).first == CONTAINMENT::FULL ) {
 				COUNT( "Pruned urgent segment" );
 				return REACHABILITY_RESULT::SAFE;
 			}

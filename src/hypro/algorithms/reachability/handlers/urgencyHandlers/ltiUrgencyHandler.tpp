@@ -75,7 +75,10 @@ Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& 
 			vertexOptimizer.setMatrix( mat );
 			const auto res = vertexOptimizer.evaluate( lambda, false );
 			assert( res.errorCode == SOLUTION::FEAS );
-			assert( res.supportValue >= 0 && res.supportValue <= 1 );
+			assert( res.supportValue >= 0 ||
+					res.supportValue <= 1 ||
+					carl::AlmostEqual2sComplement( res.supportValue, Number( 0 ) ) ||
+					carl::AlmostEqual2sComplement( res.supportValue, Number( 1 ) ) );
 			if ( res.supportValue == 0 ) {
 				replacement = { vertex };
 				break;

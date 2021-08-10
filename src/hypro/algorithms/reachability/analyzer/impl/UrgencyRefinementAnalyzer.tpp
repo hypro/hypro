@@ -149,10 +149,13 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 
 		// compute flowpipe. if node was previously unsafe, flowpipe would not be empty
 		if ( currentNode->getFlowpipe().empty() ) {
+			COUNT( "Nodes processed" );
 			REACHABILITY_RESULT safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.refineHalfspaces );
 			worker.insertFlowpipe( *currentNode );
 			currentNode->setSafety( safetyResult );
 			worker.reset();
+		} else {
+			COUNT( "Reuse previous flowpipe" );
 		}
 
 		if ( currentNode->getSafety() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -283,7 +286,7 @@ auto UrgencyRefinementAnalyzer<Representation>::findRefinementNode( ReachTreeNod
 template <typename Representation>
 ReachTreeNode<Representation>* UrgencyRefinementAnalyzer<Representation>::refineNode( const RefinePoint& refine ) {
 	auto parent = refine.node->getParent();
-	auto urgentTransitions = refine.node->getUrgent();
+	std::map<Transition<Number>*, UrgencyRefinementLevel> urgentTransitions( refine.node->getUrgent() );
 	urgentTransitions[refine.transition] = refine.level;
 	// check if refined node already exists
 	if ( parent == nullptr ) {

@@ -123,7 +123,8 @@ BETTER_ENUM( UrgencyRefinementHeuristic, int,
 			 NONE,
 			 CONSTRAINT_COUNT,
 			 VOLUME,
-			 COUNT )
+			 COUNT,
+			 SUCCESSCOUNT )
 
 }  // namespace hypro
 
