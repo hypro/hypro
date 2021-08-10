@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include <hypro/algorithms/reachability/Reach.h>
-#include <hypro/algorithms/reachability/analyzer/UrgencyAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/UrgencyCEGARAnalyzer.h>
 #include <hypro/algorithms/reachability/handlers/urgencyHandlers/ltiUrgencyHandler.h>
 #include <hypro/algorithms/reachability/workers/UrgencyWorker.h>
@@ -191,6 +190,7 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
 	ReachTreeNode<Representation> node( l0, initialSet, carl::Interval<SegmentInd>( 0 ) );
 
 	node.getUrgent()[t0] = UrgencyRefinementLevel::SETDIFF;
+	node.getUrgent()[t1] = UrgencyRefinementLevel::FULL;
 	worker.computeTimeSuccessors( node );
 
 	auto flowpipe = worker.getFlowpipe();
