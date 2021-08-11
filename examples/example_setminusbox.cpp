@@ -21,8 +21,15 @@ int main() {
   hypro::Box<Number> testbox2(std::make_pair(hypro::Point<Number>({1, 1}),
                                             hypro::Point<Number>({4, 4})));
   
-  hypro::Box<Number> minusbox2(std::make_pair(hypro::Point<Number>({-1, 2}),
-                                            hypro::Point<Number>({0, 3})));
+  hypro::Box<Number> minusbox2(std::make_pair(hypro::Point<Number>({2, 0}),
+                                            hypro::Point<Number>({5, 2})));
+
+  carl::Interval<Number> val;
+  val.setLower(0);
+  val.setUpper(2);
+  hypro::Box<Number> eindimensionalbox(val);  
+  hypro::Box<Number> eindimensionalminus(std::make_pair(hypro::Point<Number>({1}),
+                                            hypro::Point<Number>({2})));                                       
 
   /*std::vector<hypro::Box<Number>> test1= testbox.setMinus(minusbox); 
   for (long unsigned int i = 0; i < test1.size(); i++){
