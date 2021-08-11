@@ -30,6 +30,7 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
 	// 2 inequalities for each equation c_1 = c_i in the subspaces i != 1 (per clock c)
 	compRows += 2 * ( clockCount * ( clockedSubspaceCount - 1 ) );
 	// number of columns in full polytope
+	// additional dimensions for discrete initial variables
 	std::size_t compDim = clockCount > 0 ? 2 * varCount + clockCount * clockedSubspaceCount : varCount;
 	//std::size_t compDim = std::accumulate( subspaceSets.begin(), subspaceSets.end(), 0,
 	//    []( std::size_t cur, const auto& segment ) { return cur + segment.dimension(); } );
@@ -41,6 +42,7 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
 	std::size_t clockOffset = 2 * varCount;
 
 	std::size_t accRows = 0;
+	std::size_t clockedSubspaceCounter = 0;
 	for ( std::size_t i = 0; i < subspaceSets.size(); ++i ) {
 		auto subspaceMatrix = subspaceSets[i].matrix();
 		auto subspaceVector = subspaceSets[i].vector();
@@ -55,10 +57,13 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
 			}
 			for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
 				if ( decomposition.subspaceTypes[i] != DynamicType::discrete ) {
-					compMat( accRows, clockOffset + i * clockCount + clockIndex ) = subspaceMatrix( row, 2 * subspaceVars.size() + clockIndex );
+					compMat( accRows, clockOffset + clockedSubspaceCounter * clockCount + clockIndex ) = subspaceMatrix( row, 2 * subspaceVars.size() + clockIndex );
 				}
 			}
 			accRows += 1;
+		}
+		if ( decomposition.subspaceTypes[i] != DynamicType::discrete ) {
+			clockedSubspaceCounter += 1;
 		}
 	}
 
@@ -171,6 +176,8 @@ std::vector<Representation> decompose( const Representation& composedSet, const 
 		auto projectedSet = projectOnDimensions( composedSet, decomposition.subspaces[subspace] );
 		if ( decomposition.subspaceTypes[subspace] != DynamicType::discrete ) {
 			subspaceSets[subspace] = addClocksAndInitial( projectedSet, clockCount );
+		} else {
+			subspaceSets[subspace] = projectedSet;
 		}
 	}
 	return subspaceSets;
