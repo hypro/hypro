@@ -1,12 +1,12 @@
-#include "Decomposition.h"
+#include "hypro/datastructures/HybridAutomaton/decomposition/Decomposition.h"
 
 namespace hypro {
 
 std::ostream& operator<<( std::ostream& out, const Decomposition& decomposition ) {
 	int i = 0;
-	for ( auto bucket : decomposition.subspaces ) {
+	for ( const auto& bucket : decomposition.subspaces ) {
 		out << "Decomposition " << i << ": " << std::endl;
-		for ( auto var : bucket ) {
+		for ( const auto& var : bucket ) {
 			out << "Var " << var << std::endl;
 		}
 		++i;

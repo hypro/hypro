@@ -3,7 +3,7 @@ CMakeFiles
 CMakeCache.txt
 nbproject
 .project
-build
+Makefile
 *.Po
 *.o
 *.lo
@@ -13,16 +13,12 @@ build
 *.png
 *.csv
 src/hypro/flags.h
-src/resources/glpk-4.45/
+resources/glpk-4.45/
 *.sublime-*
 *.tokens
 .travis/sonar-project.properties
 .vscode
 **build**
-*.plt
-*.png
-*.log
-*.csv
 *.idx
 *.java
 *.interp

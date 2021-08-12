@@ -1,4 +1,4 @@
-#include "Logger.h"
+#include "hypro/util/logging/Logger.h"
 
 #ifdef HYPRO_LOGGING
 namespace hypro {

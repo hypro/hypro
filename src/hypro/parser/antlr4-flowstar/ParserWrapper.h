@@ -1,6 +1,6 @@
 #pragma once
-#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "../../datastructures/reachability/Settings.h"
+#include "hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "hypro/datastructures/reachability/Settings.h"
 #include <utility>
 
 namespace hypro {

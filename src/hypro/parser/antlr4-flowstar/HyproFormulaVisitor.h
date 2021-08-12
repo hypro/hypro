@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "../../types.h"
+#include "hypro/types.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"

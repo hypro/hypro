@@ -11,7 +11,7 @@
  * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 02.08.21.
  */
 
-#include "Settings.h"
+#include "hypro/datastructures/reachability/Settings.h"
 
 namespace hypro {
 
