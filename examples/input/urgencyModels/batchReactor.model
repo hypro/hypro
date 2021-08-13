@@ -1,0 +1,2468 @@
+# Created by Hyst v1.6
+# Hybrid Automaton in Flow*
+# Converted from file: BatchReactor_safe.xml
+# Command Line arguments: -tool flowstar "" -output batchReactor.model -input BatchReactor_safe.xml BatchReactor.cfg
+
+
+# variation of the case study in "Non-convex invariants and urgency conditions on linear hybrid automata" by Stefano Minopoli and Goran Frehse
+# the following changes have been made:
+#   replace strict inequalities by weak inequalities
+#   rectangular flows x' = [l,u] are replaced by x' = (l+u)/2, because lti analysis cannot handle rectangular flows.
+# Since the original model is very complex due to the large number of jumps, some additional simplifications:
+#   the initial set can be varied to adjust difficulty of model
+#   jump depth should be decreased so that the model can be verified by some settings
+
+hybrid reachability
+{
+    # Vars
+    state var x1, x2, x3
+
+    setting
+    {
+        fixed steps 0.1
+        time 5
+        remainder estimation 1e-4
+        QR precondition
+        gnuplot octagon x2,x3
+        adaptive orders { min 3, max 8 } 
+        cutoff 1e-15
+        precision 53
+        output batchReactor
+        max jumps 10 # should be ulimitied (999999999), but that takes forever
+        print on
+    }
+
+    modes
+    {
+        filling_draining_draining_start_producing
+        {
+            lti ode
+            {
+                x1' = 10.5
+                x2' = -2.75
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 >= 0.0
+            }
+        }
+
+        filling_draining_draining_producing
+        {
+            lti ode
+            {
+                x1' = 10.5
+                x2' = -2.75
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 >= 0.0 & x1 <= 100.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 >= 0.0   x1 <= 100.0
+            }
+        }
+
+        filling_draining_draining_empty_start_producing
+        {
+            lti ode
+            {
+                x1' = 10.5
+                x2' = -2.75
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 = 0.0
+            }
+        }
+
+        filling_draining_draining_empty_producing
+        {
+            lti ode
+            {
+                x1' = 10.5
+                x2' = -2.75
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 = 0.0 & x1 <= 100.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 = 0.0   x1 <= 100.0
+            }
+        }
+
+        filling_draining_empty_draining_start_producing
+        {
+            lti ode
+            {
+                x1' = 10.5
+                x2' = 0.0
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 >= 0.0
+            }
+        }
+
+        filling_draining_empty_draining_producing
+        {
+            lti ode
+            {
+                x1' = 10.5
+                x2' = 0.0
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 >= 0.0 & x1 <= 100.0
+
+                x1 >= 0.0   x2 = 0.0   x3 >= 0.0   x1 <= 100.0
+            }
+        }
+
+        filling_draining_empty_draining_empty_start_producing
+        {
+            lti ode
+            {
+                x1' = 10.5
+                x2' = 0.0
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 = 0.0
+            }
+        }
+
+        filling_draining_empty_draining_empty_producing
+        {
+            lti ode
+            {
+                x1' = 10.5
+                x2' = 0.0
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 = 0.0 & x1 <= 100.0
+
+                x1 >= 0.0   x2 = 0.0   x3 = 0.0   x1 <= 100.0
+            }
+        }
+
+        constant_draining_draining_start_producing
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = -2.75
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 >= 0.0
+            }
+        }
+
+        constant_draining_draining_waiting
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = -2.75
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 >= 0.0
+            }
+        }
+
+        constant_draining_draining_empty_start_producing
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = -2.75
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 = 0.0
+            }
+        }
+
+        constant_draining_draining_empty_waiting
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = -2.75
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 = 0.0
+            }
+        }
+
+        constant_draining_empty_draining_start_producing
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 >= 0.0
+            }
+        }
+
+        constant_draining_empty_draining_waiting
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 >= 0.0
+            }
+        }
+
+        constant_draining_empty_draining_empty_start_producing
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 = 0.0
+            }
+        }
+
+        constant_draining_empty_draining_empty_waiting
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 = 0.0
+            }
+        }
+
+        draining1_filling_draining_filling2
+        {
+            lti ode
+            {
+                x1' = -10.5
+                x2' = 7.75 # -2.75 - (-10.5)
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 >= 0.0
+            }
+        }
+
+        draining1_filling_draining_empty_filling2
+        {
+            lti ode
+            {
+                x1' = -10.5
+                x2' = 7.75 # -2.75 - (-10.5)
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 = 0.0
+            }
+        }
+
+        draining1_filling_empty_draining_filling2
+        {
+            lti ode
+            {
+                x1' = -10.5
+                x2' = 10.5
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 >= 0.0
+            }
+        }
+
+        draining1_filling_empty_draining_empty_filling2
+        {
+            lti ode
+            {
+                x1' = -10.5
+                x2' = 10.5
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 = 0.0
+            }
+        }
+
+        draining1_empty_filling_draining_filling2
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = -2.75 # -2.75 - 0
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 = 0.0 & x2 >= 0.0 & x3 >= 0.0
+
+                x1 = 0.0   x2 >= 0.0   x3 >= 0.0
+            }
+        }
+
+        draining1_empty_filling_draining_empty_filling2
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = -2.75 # -2.75 - 0
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 = 0.0 & x2 >= 0.0 & x3 = 0.0
+
+                x1 = 0.0   x2 >= 0.0   x3 = 0.0
+            }
+        }
+
+        draining1_empty_filling_empty_draining_filling2
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = -1.75
+            }
+            inv
+            {
+                # Original invariant: x1 = 0.0 & x2 = 0.0 & x3 >= 0.0
+
+                x1 = 0.0   x2 = 0.0   x3 >= 0.0
+            }
+        }
+
+        draining1_empty_filling_empty_draining_empty_filling2
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 = 0.0 & x2 = 0.0 & x3 = 0.0
+
+                x1 = 0.0   x2 = 0.0   x3 = 0.0
+            }
+        }
+
+        draining2_empty_draining_filling_filling3
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = -2.75
+                x3' = -1.75 # -1.75 -0
+            }
+            inv
+            {
+                # Original invariant: x1 = 0.0 & x2 >= 0.0 & x3 >= 0.0
+
+                x1 = 0.0   x2 >= 0.0   x3 >= 0.0
+            }
+        }
+
+        draining2_empty_draining_filling_empty_filling3
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = -2.75
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 = 0.0 & x2 >= 0.0 & x3 = 0.0
+
+                x1 = 0.0   x2 >= 0.0   x3 = 0.0
+            }
+        }
+
+        draining2_empty_draining_empty_filling_filling3
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = -1.75 # -1.75 -0
+            }
+            inv
+            {
+                # Original invariant: x1 = 0.0 & x2 = 0.0 & x3 >= 0.0
+
+                x1 = 0.0   x2 = 0.0   x3 >= 0.0
+            }
+        }
+
+        draining2_empty_draining_empty_filling_empty_filling3
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = 0.0
+            }
+            inv
+            {
+                # Original invariant: x1 = 0.0 & x2 = 0.0 & x3 = 0.0
+
+                x1 = 0.0   x2 = 0.0   x3 = 0.0
+            }
+        }
+
+        draining2_draining_filling_filling3
+        {
+            lti ode
+            {
+                x1' = -10.5
+                x2' = -2.75
+                x3' = 8.75 # -1.75 - (-10.5)
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 >= 0.0
+            }
+        }
+
+        draining2_draining_filling_empty_filling3
+        {
+            lti ode
+            {
+                x1' = -10.5
+                x2' = -2.75
+                x3' = 10.5
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 >= 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 >= 0.0   x3 = 0.0
+            }
+        }
+
+        draining2_draining_empty_filling_filling3
+        {
+            lti ode
+            {
+                x1' = -10.5
+                x2' = 0.0
+                x3' = 8.75 # -1.75 - (-10.5)
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 >= 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 >= 0.0
+            }
+        }
+
+        draining2_draining_empty_filling_empty_filling3
+        {
+            lti ode
+            {
+                x1' = -10.5
+                x2' = 0.0
+                x3' = 10.5
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.0 & x2 = 0.0 & x3 = 0.0
+
+                x1 >= 0.0   x2 = 0.0   x3 = 0.0
+            }
+        }
+    }
+
+    jumps
+    {
+        draining1_filling_draining_filling2 -> draining1_empty_filling_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_empty_filling2 -> draining1_empty_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_empty_filling2 -> draining1_empty_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_filling2 -> draining1_empty_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> draining1_empty_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> draining1_empty_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_filling2 -> draining1_empty_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> draining1_empty_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> draining1_empty_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_filling2 -> draining1_filling_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_empty_filling2 -> draining1_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_empty_filling2 -> draining1_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_filling2 -> draining1_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> draining1_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> draining1_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_filling2 -> draining1_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> draining1_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> draining1_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_filling3 -> draining2_draining_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_empty_filling3 -> draining2_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_empty_filling3 -> draining2_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_filling3 -> draining2_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_empty_filling3 -> draining2_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_empty_filling3 -> draining2_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_filling3 -> draining2_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_empty_filling3 -> draining2_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_empty_filling3 -> draining2_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_filling3 -> draining2_empty_draining_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_empty_filling3 -> draining2_empty_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_empty_filling3 -> draining2_empty_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_filling3 -> draining2_empty_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_empty_filling3 -> draining2_empty_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_empty_filling3 -> draining2_empty_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_filling3 -> draining2_empty_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_empty_filling3 -> draining2_empty_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_empty_filling3 -> draining2_empty_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_filling2 -> draining1_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_empty_filling2 -> draining1_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_empty_filling2 -> draining1_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_filling2 -> draining1_empty_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_empty_filling2 -> draining1_empty_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_empty_filling2 -> draining1_empty_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_filling2 -> draining1_filling_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_empty_filling2 -> draining1_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_empty_filling2 -> draining1_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_filling2 -> draining1_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> draining1_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> draining1_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_filling2 -> draining1_empty_filling_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_empty_filling2 -> draining1_empty_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_empty_filling2 -> draining1_empty_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_filling2 -> draining1_empty_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> draining1_empty_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> draining1_empty_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_start_producing -> filling_draining_empty_draining_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_producing -> filling_draining_empty_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_empty_start_producing -> filling_draining_empty_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_empty_producing -> filling_draining_empty_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_empty_start_producing -> filling_draining_empty_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_empty_producing -> filling_draining_empty_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_start_producing -> constant_draining_empty_draining_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_waiting -> constant_draining_empty_draining_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_start_producing -> constant_draining_empty_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_waiting -> constant_draining_empty_draining_empty_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_start_producing -> constant_draining_empty_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_waiting -> constant_draining_empty_draining_empty_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_filling3 -> draining2_empty_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_empty_filling3 -> draining2_empty_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_empty_filling3 -> draining2_empty_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_filling3 -> draining2_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_empty_filling3 -> draining2_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_empty_filling3 -> draining2_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_start_producing -> filling_draining_draining_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_producing -> filling_draining_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_start_producing -> filling_draining_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_producing -> filling_draining_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_start_producing -> filling_draining_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_producing -> filling_draining_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_start_producing -> constant_draining_draining_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_waiting -> constant_draining_draining_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_start_producing -> constant_draining_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_waiting -> constant_draining_draining_empty_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_start_producing -> constant_draining_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_waiting -> constant_draining_draining_empty_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_filling3 -> draining2_empty_draining_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_empty_filling3 -> draining2_empty_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_empty_filling3 -> draining2_empty_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_filling3 -> draining2_draining_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_empty_filling3 -> draining2_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_empty_filling3 -> draining2_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_filling2 -> draining1_filling_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> draining1_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> draining1_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_filling2 -> draining1_empty_filling_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> draining1_empty_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> draining1_empty_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_filling3 -> draining2_empty_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_filling3 -> draining2_empty_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_filling3 -> draining2_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_filling3 -> draining2_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_filling3 -> draining2_empty_draining_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_empty_filling3 -> draining2_empty_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_filling3 -> draining2_empty_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_empty_filling3 -> draining2_empty_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_filling3 -> draining2_draining_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_empty_filling3 -> draining2_draining_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_filling3 -> draining2_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_empty_filling3 -> draining2_draining_empty_filling_empty_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_start_producing -> filling_draining_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_producing -> filling_draining_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_start_producing -> filling_draining_empty_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_producing -> filling_draining_empty_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_start_producing -> constant_draining_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_waiting -> constant_draining_draining_empty_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_start_producing -> constant_draining_empty_draining_empty_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_waiting -> constant_draining_empty_draining_empty_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_filling2 -> draining1_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_filling2 -> draining1_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_filling2 -> draining1_empty_filling_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_filling2 -> draining1_empty_filling_empty_draining_empty_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_empty_start_producing -> filling_draining_draining_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_empty_producing -> filling_draining_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_start_producing -> filling_draining_empty_draining_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_producing -> filling_draining_empty_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_start_producing -> constant_draining_draining_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_waiting -> constant_draining_draining_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_start_producing -> constant_draining_empty_draining_start_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_waiting -> constant_draining_empty_draining_waiting
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_empty_filling2 -> draining1_filling_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> draining1_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_empty_filling2 -> draining1_empty_filling_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> draining1_empty_filling_empty_draining_filling2
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_empty_filling3 -> draining2_empty_draining_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_empty_filling3 -> draining2_empty_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_empty_filling3 -> draining2_draining_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_empty_filling3 -> draining2_draining_empty_filling_filling3
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_producing -> constant_draining_draining_waiting
+        guard
+        {
+            # Original guard: x1 >= 90.0
+
+            x1 >= 90.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_empty_producing -> constant_draining_draining_empty_waiting
+        guard
+        {
+            # Original guard: x1 >= 90.0
+
+            x1 >= 90.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_producing -> constant_draining_empty_draining_waiting
+        guard
+        {
+            # Original guard: x1 >= 90.0
+
+            x1 >= 90.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_producing -> constant_draining_empty_draining_empty_waiting
+        guard
+        {
+            # Original guard: x1 >= 90.0
+
+            x1 >= 90.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_producing -> constant_draining_empty_draining_waiting
+        guard
+        {
+            # Original guard: x1 >= 90.0
+
+            x1 >= 90.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_producing -> constant_draining_empty_draining_empty_waiting
+        guard
+        {
+            # Original guard: x1 >= 90.0
+
+            x1 >= 90.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_start_producing -> filling_draining_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_draining_empty_start_producing -> filling_draining_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_start_producing -> filling_draining_empty_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_start_producing -> filling_draining_empty_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_start_producing -> filling_draining_empty_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        filling_draining_empty_draining_empty_start_producing -> filling_draining_empty_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_start_producing -> filling_draining_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_start_producing -> filling_draining_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_start_producing -> filling_draining_empty_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_start_producing -> filling_draining_empty_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_start_producing -> filling_draining_empty_draining_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_start_producing -> filling_draining_empty_draining_empty_producing
+        guard
+        {
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_waiting -> draining1_filling_draining_filling2
+        urgent
+        guard
+        {
+            # Original guard: x2 <= 70.0
+
+            x2 <= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_waiting -> draining1_filling_draining_filling2
+        urgent
+        guard
+        {
+            # Original guard: x3 >= 70.0 & x2 <= 300.0 & x2 <= x3
+
+            x3 >= 70.0   x2 <= 300.0   x2 - (x3) <= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_waiting -> draining1_filling_draining_empty_filling2
+        urgent
+        guard
+        {
+            # Original guard: x2 <= 70.0
+
+            x2 <= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_waiting -> draining1_filling_draining_empty_filling2
+        urgent
+        guard
+        {
+            # Original guard: x3 >= 70.0 & x2 <= 300.0 & x2 <= x3
+
+            x3 >= 70.0   x2 <= 300.0   x2 - (x3) <= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_waiting -> draining1_filling_empty_draining_filling2
+        urgent
+        guard
+        {
+            # Original guard: x2 <= 70.0
+
+            x2 <= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_waiting -> draining1_filling_empty_draining_filling2
+        urgent
+        guard
+        {
+            # Original guard: x3 >= 70.0 & x2 <= 300.0 & x2 <= x3
+
+            x3 >= 70.0   x2 <= 300.0   x2 - (x3) <= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_waiting -> draining1_filling_empty_draining_empty_filling2
+        urgent
+        guard
+        {
+            # Original guard: x2 <= 70.0
+
+            x2 <= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_waiting -> draining1_filling_empty_draining_empty_filling2
+        urgent
+        guard
+        {
+            # Original guard: x3 >= 70.0 & x2 <= 300.0 & x2 <= x3
+
+            x3 >= 70.0   x2 <= 300.0   x2 - (x3) <= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_waiting -> draining1_filling_draining_filling2
+        urgent
+        guard
+        {
+            # Original guard: x2 <= 70.0
+
+            x2 <= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_waiting -> draining1_filling_draining_filling2
+        urgent
+        guard
+        {
+            # Original guard: x3 >= 70.0 & x2 <= 300.0 & x2 <= x3
+
+            x3 >= 70.0   x2 <= 300.0   x2 - (x3) <= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_waiting -> draining1_filling_draining_empty_filling2
+        urgent
+        guard
+        {
+            # Original guard: x2 <= 70.0
+
+            x2 <= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_waiting -> draining1_filling_draining_empty_filling2
+        urgent
+        guard
+        {
+            # Original guard: x3 >= 70.0 & x2 <= 300.0 & x2 <= x3
+
+            x3 >= 70.0   x2 <= 300.0   x2 - (x3) <= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_filling2 -> constant_draining_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_draining_empty_filling2 -> constant_draining_draining_empty_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_filling2 -> constant_draining_empty_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> constant_draining_empty_draining_empty_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_filling2 -> constant_draining_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_filling_empty_draining_empty_filling2 -> constant_draining_draining_empty_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_filling2 -> constant_draining_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_draining_empty_filling2 -> constant_draining_draining_empty_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_filling2 -> constant_draining_empty_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> constant_draining_empty_draining_empty_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_filling2 -> constant_draining_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining1_empty_filling_empty_draining_empty_filling2 -> constant_draining_draining_empty_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_waiting -> draining2_draining_filling_filling3
+        urgent
+        guard
+        {
+            # Original guard: x3 <= 70.0 & x2 >= 70.0
+
+            x3 <= 70.0   x2 >= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_waiting -> draining2_draining_filling_filling3
+        urgent
+        guard
+        {
+            # Original guard: x2 >= 70.0 & x3 <= 300.0 & x2 >= x3
+
+            x2 >= 70.0   x3 <= 300.0   x2 - (x3) >= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_waiting -> draining2_draining_filling_filling3
+        urgent
+        guard
+        {
+            # Original guard: x3 <= 70.0 & x2 >= 70.0
+
+            x3 <= 70.0   x2 >= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_draining_empty_waiting -> draining2_draining_filling_filling3
+        urgent
+        guard
+        {
+            # Original guard: x2 >= 70.0 & x3 <= 300.0 & x2 >= x3
+
+            x2 >= 70.0   x3 <= 300.0   x2 - (x3) >= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_waiting -> draining2_draining_empty_filling_filling3
+        urgent
+        guard
+        {
+            # Original guard: x3 <= 70.0 & x2 >= 70.0
+
+            x3 <= 70.0   x2 >= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_waiting -> draining2_draining_empty_filling_filling3
+        urgent
+        guard
+        {
+            # Original guard: x2 >= 70.0 & x3 <= 300.0 & x2 >= x3
+
+            x2 >= 70.0   x3 <= 300.0   x2 - (x3) >= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_waiting -> draining2_draining_empty_filling_filling3
+        urgent
+        guard
+        {
+            # Original guard: x3 <= 70.0 & x2 >= 70.0
+
+            x3 <= 70.0   x2 >= 70.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        constant_draining_empty_draining_empty_waiting -> draining2_draining_empty_filling_filling3
+        urgent
+        guard
+        {
+            # Original guard: x2 >= 70.0 & x3 <= 300.0 & x2 >= x3
+
+            x2 >= 70.0   x3 <= 300.0   x2 - (x3) >= 0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_filling3 -> constant_draining_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_filling_empty_filling3 -> constant_draining_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_filling3 -> constant_draining_empty_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_empty_draining_empty_filling_empty_filling3 -> constant_draining_empty_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_filling3 -> constant_draining_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_filling_empty_filling3 -> constant_draining_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_filling3 -> constant_draining_empty_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        draining2_draining_empty_filling_empty_filling3 -> constant_draining_empty_draining_start_producing
+        guard
+        {
+            # Original guard: x1 = 0.0
+
+            x1 = 0.0
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+    }
+
+    init
+    {
+        filling_draining_draining_start_producing
+        {
+            x1 in [0, 0]
+            x2 in [130, 150] # this can be varied to adjust difficulty. Reasonable values are in [100, 290]
+            x3 in [130, 150] # this can be varied to adjust difficulty. Reasonable values are in [100, 290]
+        }
+    }
+}
+
+# todo: set unsafe set x2 <= 0 || x3 <= 0
