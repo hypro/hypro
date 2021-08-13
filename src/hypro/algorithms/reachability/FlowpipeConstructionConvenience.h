@@ -94,36 +94,47 @@ Box<typename Representation::NumberType> computeBoundingBox( const Representatio
 	return hypro::Converter<typename Representation::NumberType>::toBox( set );
 }
 
+
+/**
+ * @brief Computes the set difference of a state set with a condition.
+ * @tparam Representation The type of state set representation
+ * @tparam Number The used number type
+ * @param valuationSet The state set
+ * @param condition The condition
+ * @return Vector of non empty state sets, whose union represents the set difference.
+ */
 template <class Representation, class Number>
 std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
-	// if the guard is not box shaped then set difference is not guaranteed overapproximative for boxes.
-	// therefore the set difference is computed with polytopes and the result is converted back to boxes.
-	if ( Representation::type_enum == representation_name::box && !std::get<0>( isBox( condition.getMatrix(), condition.getVector() ) ) ) {
-		std::cout << "Converting to polytope for set difference\n";
-		HPolytope<Number> valuationSetPolytope( valuationSet.matrix(), valuationSet.vector() );
-		auto [containment, intersectedMinus] = intersect( valuationSetPolytope, condition );
-		if ( containment == CONTAINMENT::NO ) {
-			return { valuationSet };
-		} else if ( containment == CONTAINMENT::FULL ) {
-			return { Representation::Empty() };
+	auto [containment, intersectedMinus] = intersect( valuationSet, condition );
+	if ( containment == CONTAINMENT::NO ) {
+		return valuationSet.empty() ? std::vector<Representation>{ } : std::vector<Representation>{ valuationSet };
+	} else if ( containment == CONTAINMENT::FULL ) {
+		return { };
+	}
+	// case distinction because box constructor only works for bounded sets
+	if ( Representation::type_enum == representation_name::box ) {
+		if ( std::get<0>( isBox( condition.getMatrix(), condition.getVector() ) ) ) {
+			return valuationSet.setMinus2( intersectedMinus );
 		} else {
-			std::vector<HPolytope<Number>> resPol = valuationSetPolytope.setMinus2( intersectedMinus );
-			std::vector<Representation> res;
-			std::transform( resPol.begin(), resPol.end(), std::back_inserter( res ), []( auto const& pol ) {
-				return Representation( pol.matrix(), pol.vector() );
-			} );
-			return res;
+			// if the guard is not box shaped then set difference is not guaranteed overapproximative for boxes.
+			// therefore the set difference is computed with polytopes and the result is converted back to boxes.
+			HPolytope<Number> valuationSetPolytope( valuationSet.matrix(), valuationSet.vector() );
+			HPolytope<Number> minusPolytope( condition.getMatrix(), condition.getVector() );
+			std::vector<HPolytope<Number>> resAsPolytopes = valuationSetPolytope.setMinus2( minusPolytope );
+			std::vector<Representation> resAsBoxes;
+			for ( auto const& pol : resAsPolytopes ) {
+				if ( pol.empty() ) {
+					continue;
+				} else {
+					resAsBoxes.push_back( Representation( pol.matrix(), pol.vector() ) );
+					// if polytope was bounded and not empty, the resulting box should be non empty
+					assert( !resAsBoxes.back().empty() && "Polytope computed by set difference was not bounded" );
+				}
+			}
+			return resAsBoxes;
 		}
 	} else {
-		// intersect with (bounded) valuationSet first:
-		auto [containment, intersectedMinus] = intersect( valuationSet, condition );
-		if ( containment == CONTAINMENT::NO ) {
-			return { valuationSet };
-		} else if ( containment == CONTAINMENT::FULL ) {
-			return { Representation::Empty() };
-		}
-		auto res = valuationSet.setMinus2( intersectedMinus );
-		return res;
+		return valuationSet.setMinus2( Representation( condition.getMatrix(), condition.getVector() ) );
 	}
 }
 
