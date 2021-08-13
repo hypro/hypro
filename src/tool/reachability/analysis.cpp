@@ -1,6 +1,7 @@
 #include "analysis.h"
 
 #include <hypro/algorithms/reachability/analyzer/CEGARAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/DecompositionalAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
 #include <hypro/datastructures/reachability/Settings.h>
@@ -49,10 +50,17 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 	return plotData;
 }
 
-template <typename Representation>
+
+
+template <typename LTIRep>
 std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting, std::size_t clockCount ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	DecompositionalAnalyzer<Representation> analyzer{ decomposedHa, decomposition, clockCount,
+	using Number = typename LTIRep::NumberType;
+	using SingularRep = hypro::VPolytope<Number>;
+	using DiscreteRep = hypro::Box<Number>;
+	using RectangularRep = hypro::Box<Number>;
+	using ComposedRep = hypro::apply<hypro::State, UniqueTypeList<Number, LTIRep, SingularRep, DiscreteRep, RectangularRep>>;
+	DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep> analyzer{ decomposedHa, decomposition, clockCount,
 		setting.fixedParameters(), setting.strategy().front() };
 	auto result = analyzer.run();
 	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -61,13 +69,17 @@ std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Numbe
 		std::cout << "The model is safe." << std::endl;
 	}
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
+	PRINT_STATS();
+	START_BENCHMARK_OPERATION( "Composition" );
 	std::vector<PlotData<FullState>> plotData{};
-	DecompositionalSegmentGen<Representation> segments( analyzer.getRoots(), analyzer.getDepRoots(), decomposition, clockCount );
+	DecompositionalSegmentGen<ComposedRep> segments( analyzer.getRoots(), analyzer.getDepRoots(), decomposition, clockCount );
+    // todo: skip this if --skipplot is enabled, because composition of all segments can take ages
     for ( auto segment = segments.next(); segment; segment = segments.next() ) {
         FullState state{};
         state.setSet( segment.value() );
         plotData.push_back( PlotData{ state, 0, 0 } );
     }
+    EVALUATE_BENCHMARK_RESULT( "Composition" );
 	return plotData;
 }
 

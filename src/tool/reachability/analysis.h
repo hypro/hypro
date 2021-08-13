@@ -1,7 +1,6 @@
 #pragma once
 #include "../typedefs.h"
 
-#include <hypro/algorithms/reachability/analyzer/DecompositionalAnalyzer.h>
 #include <hypro/algorithms/reachability/analyzer/LTIAnalyzer.h>
 #include <hypro/datastructures/HybridAutomaton/State.h>
 #include <hypro/datastructures/reachability/PreprocessingInformation.h>
