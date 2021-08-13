@@ -91,14 +91,18 @@ std::pair<matrix_t<Number>, vector_t<Number>> eliminateCol( const matrix_t<Numbe
 	if ( !conservative ) {
 		newConstraints = removeCol( newConstraints, col );
 	}
-
+/*
 	newConstraints = removeRows( newConstraints, emptyRows );
 	newConstants = removeRows( newConstants, emptyRows );
 
 	auto duplicateRows = getDuplicateRows( newConstraints, newConstants );
 	newConstraints = removeRows( newConstraints, duplicateRows );
 	newConstants = removeRows( newConstants, duplicateRows );
-
+*/
+	Optimizer<Number> opt( newConstraints, newConstants );
+	auto red = opt.redundantConstraints();
+	newConstraints = removeRows( newConstraints, red );
+	newConstants = removeRows( newConstants, red);
 	return std::make_pair( newConstraints, newConstants );
 }
 
