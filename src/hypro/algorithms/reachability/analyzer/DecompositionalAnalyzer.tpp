@@ -8,6 +8,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	auto workers = initializeWorkers( cache );
 
 	while ( !mWorkQueue.empty() ) {
+		COUNT( "Nodes" );
 		auto nextInQueue = mWorkQueue.front();
 		mWorkQueue.pop_front();
 		NodeVector currentNodes = nextInQueue.nodes;
@@ -52,7 +53,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 				for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
 					subspaceSets[subspace] = std::move( timedSuccessor.subspaceSets[subspace] );
 				}
-				if ( std::any_of( subspaceSets.begin(), subspaceSets.end(), [](auto const& state){ return state.empty();})) {
+				if ( std::any_of( subspaceSets.begin(), subspaceSets.end(), []( auto const& state ) { return state.empty(); } ) ) {
 					continue;
 				}
 				if ( mClockCount > 0 && nextIndex >= mClockCount ) {
@@ -64,10 +65,13 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 				// create child nodes and push to queue
 				NodeVector childNodes( mDecomposition.subspaces.size() );
 				for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
-					auto& subspaceChild = currentNodes[subspace]->addChild( subspaceSets[subspace], timedSuccessor.time, transition.get() );
+					auto& subspaceChild = currentNodes[subspace]->addChild( subspaceSets[subspace], currentNodes[subspace]->getTimings() + timedSuccessor.time, transition.get() );
 					childNodes[subspace] = &subspaceChild;
 				}
-				mWorkQueue.push_back( detail::decompositionalQueueEntry<Rep>{ nextIndex, childNodes, &( depNode->addChild( dependencies, timedSuccessor.time, transition.get() ) ) } );
+				mWorkQueue.push_back( detail::decompositionalQueueEntry<Rep>{
+					  nextIndex,
+					  childNodes,
+					  &( depNode->addChild( dependencies, depNode->getTimings() + timedSuccessor.time, transition.get() ) ) } );
 			}
 		}
 	}
@@ -361,7 +365,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	}
 	// synchronize via the time interval of the jump
 	// note: every subspace has the same enabled segments and same aggregation settings, so the time intervals are the same
-	if ( std::any_of( subspaceSuccessors.begin(), subspaceSuccessors.end(), []( const auto& s ){ return s.second.empty();})) return {};
+	if ( std::any_of( subspaceSuccessors.begin(), subspaceSuccessors.end(), []( const auto& s ) { return s.second.empty(); } ) ) return {};
 	LtiJumpSuccessorGen synchronizedSuccessors{ subspaceSuccessors, mSegmentedSubspaces };
 	std::vector<SubspaceJumpSuccessors<Rep>> res;
 	for ( auto succ = synchronizedSuccessors.next(); succ.subspaceSets.size() > 0; succ = synchronizedSuccessors.next() ) {
@@ -422,10 +426,10 @@ struct DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>
 	SubspaceJumpSuccessors<Rep> next() {
 		if ( subspaces.size() == 0 ) {
 			return {};
-		} else if ( firstIndex >= subspaceSuccessors.at( subspaces[ 0 ] ).size() ) {
+		} else if ( firstIndex >= subspaceSuccessors.at( subspaces[0] ).size() ) {
 			return {};
 		} else {
-			const auto nextInterval = subspaceSuccessors.at( subspaces[ 0 ] )[firstIndex].time;
+			const auto nextInterval = subspaceSuccessors.at( subspaces[0] )[firstIndex].time;
 			SubspaceSets res;
 			for ( auto subspace : subspaces ) {
 				bool found = false;
