@@ -32,6 +32,7 @@ int stringToSetting( const std::string& name ) {
 		  supportFunctionSetting_name,
 		  sfnSetting_name,
 		  hPolytopeSetting_name,
+		  vPolytopeSetting_name,
 		  carlPolytopeSetting_name,
 		  tpolySetting_name>::toSetting( name );
 }
