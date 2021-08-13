@@ -55,8 +55,8 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
 					compMat( accRows, initVarOffset + subspaceVars[varIndex] ) = subspaceMatrix( row, subspaceVars.size() + varIndex );
 				}
 			}
-			for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
-				if ( decomposition.subspaceTypes[i] != DynamicType::discrete ) {
+			if ( decomposition.subspaceTypes[i] != DynamicType::discrete ) {
+				for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
 					compMat( accRows, clockOffset + clockedSubspaceCounter * clockCount + clockIndex ) = subspaceMatrix( row, 2 * subspaceVars.size() + clockIndex );
 				}
 			}

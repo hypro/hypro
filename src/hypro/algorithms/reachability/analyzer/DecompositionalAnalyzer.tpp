@@ -27,7 +27,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 		} );
 
 		// Time successors
-		TimeInformation<Number> invariantSatisfyingTime = computeTimeSuccessorsGetEnabledTime( currentNodes, workers );
+		TimeInformation<Number> invariantSatisfyingTime = computeTimeSuccessorsGetEnabledTime( currentNodes, workers, clockIndex );
 		removeRedundantSegments( currentNodes );
 		HPolytope<Number> segmentHpoly = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), currentNodes[0]->getInitialSet().getSet() );
 		intersectSubspacesWithClock( currentNodes, invariantSatisfyingTime );
@@ -117,17 +117,28 @@ bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
 auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::computeTimeSuccessorsGetEnabledTime(
-	  NodeVector& currentNodes, std::vector<WorkerVariant>& workers ) -> TimeInformation<Number> {
+	  NodeVector& currentNodes, std::vector<WorkerVariant>& workers, std::size_t clockIndex ) -> TimeInformation<Number> {
 	// start with maximal time interval and shrink it after each subspace computation
 	TimeInformation<Number> invariantSatTime = mGlobalTimeInterval;
-	for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
+	// start with discrete and singular subspaces to get a bound on the time horizon for lit analysis
+	for ( auto subspace : mDiscreteSubspaces ) {
+		std::visit( computeTimeSuccessorVisitor{
+						  currentNodes[subspace], mClockCount },
+					workers[subspace] );
+	}
+	for ( auto subspace : mSingularSubspaces ) {
 		TimeInformation<Number> invariantSatTimeSubspace = std::visit( computeTimeSuccessorVisitor{
 																			 currentNodes[subspace], mClockCount },
 																	   workers[subspace] );
-		// discrete subspaces have no clocks
-		if ( mDecomposition.subspaceTypes[subspace] != DynamicType::discrete ) {
-			invariantSatTime = invariantSatTime.intersect( invariantSatTimeSubspace );
-		}
+		invariantSatTime = invariantSatTime.intersect( invariantSatTimeSubspace );
+	}
+	for ( auto subspace : mSegmentedSubspaces ) {
+		carl::Interval<Number> currentTimeInterval = mClockCount > 0 ? invariantSatTime.getTimeInterval( clockIndex ) : carl::Interval<Number>::unboundedInterval();
+		int timeHorizon = currentTimeInterval.isUnbounded() ? -1 : std::ceil( carl::convert<Number, double>( currentTimeInterval.upper()  / mParameters.timeStep ) );
+		TimeInformation<Number> invariantSatTimeSubspace = std::visit( computeTimeSuccessorVisitor{
+																			 currentNodes[subspace], mClockCount, timeHorizon },
+																	   workers[subspace] );
+		invariantSatTime = invariantSatTime.intersect( invariantSatTimeSubspace );
 	}
 	return invariantSatTime;
 }

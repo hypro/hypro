@@ -4,7 +4,10 @@ namespace hypro {
 
 template <typename Representation>
 template <typename OutputIt>
-REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out, bool checkSafety ) const {
+REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out, int segmentsToCompute, bool checkSafety ) const {
+	if ( segmentsToCompute < 0 ) {
+		segmentsToCompute = mNumSegments;
+	}
 	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow( mSubspace ), mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ), mSettings.timeStep );
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant(), mSubspace );
@@ -25,7 +28,7 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	}
 
 	// while not done
-	for ( size_t segmentCount = 1; segmentCount < mNumSegments; ++segmentCount ) {
+	for ( size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount ) {
 		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ) );
 		std::tie( containment, segment ) = intersect( segment, loc->getInvariant(), mSubspace );
 		if ( containment == CONTAINMENT::NO ) {

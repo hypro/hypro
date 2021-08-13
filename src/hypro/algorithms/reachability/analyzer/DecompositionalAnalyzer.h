@@ -133,6 +133,7 @@ class DecompositionalAnalyzer {
 	struct computeTimeSuccessorVisitor {
 		ReachTreeNode<Rep>* task;
 		std::size_t clockCount;	 // number of clocks
+		int segmentCount = -1; // number of segments to compute in lti worker. if negative, use worker settings to get number of segments
 		TimeInformation<Number> operator()( SingularWorker<SingularRep>& worker ) {
 			ReachTreeNode<SingularRep> singularTask( task->getLocation(), std::visit( genericConvertAndGetVisitor<SingularRep>(), task->getInitialSet().getSet() ), task->getTimings() );
 			worker.computeTimeSuccessors( singularTask, false );
@@ -160,6 +161,7 @@ class DecompositionalAnalyzer {
                     Rep state;
                     state.setSet( segment );
                     flowpipe.push_back( state ); } ),
+				  segmentCount,
 				  false );
 			//worker.computeTimeSuccessors( task->getInitialSet(), task->getLocation(), std::back_inserter( task->getFlowpipe() ), false );
 			if ( task->getFlowpipe().size() == 0 ) {
@@ -324,7 +326,8 @@ class DecompositionalAnalyzer {
      */
 	auto computeTimeSuccessorsGetEnabledTime(
 		  NodeVector& currentNodes,
-		  std::vector<WorkerVariant>& workers )
+		  std::vector<WorkerVariant>& workers,
+		  std::size_t clockIndex )
 		  -> TimeInformation<Number>;
 
 	/**

@@ -33,7 +33,12 @@ class LTIWorker {
 		, mSubspace( subspace ) {}
 
 	template <typename OutputIt>
-	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out, bool checkSafety = true ) const;
+	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out, int segmentsToCompute, bool checkSafety = true ) const;
+
+	template <typename OutputIt>
+	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out, bool checkSafety = true ) const {
+		return computeTimeSuccessors( initialSet, loc, out, mNumSegments, checkSafety );
+	}
 
 	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const;
 	JumpSuccessorGen getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number> const* transition ) const;
