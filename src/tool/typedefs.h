@@ -4,7 +4,7 @@
 
 namespace hydra {
 
-using Number = double;
+using Number = mpq_class;
 using tNumber = hypro::tNumber;
 
 using SFType = hypro::SupportFunctionT<Number, hypro::Converter<Number>,

@@ -4,6 +4,7 @@ namespace hydra {
 namespace preprocessing {
 hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::Number>& automaton,
 											bool decompose,
+											bool useSingular,
 											std::size_t clockCount ) {
 	auto dynamicsType = hypro::getDynamicType( automaton );
 	hypro::PreprocessingInformation information{ dynamicsType };
@@ -20,16 +21,20 @@ hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::
 				}
 			} else {
 				newDecomposition.subspaces.push_back( decomposition.subspaces[i] );
-				newDecomposition.subspaceTypes.push_back( decomposition.subspaceTypes[i] );
+				if ( !useSingular && ( decomposition.subspaceTypes[i] == hypro::DynamicType::singular || decomposition.subspaceTypes[i] == hypro::DynamicType::timed ) ) {
+					newDecomposition.subspaceTypes.push_back( hypro::DynamicType::linear );
+				} else {
+					newDecomposition.subspaceTypes.push_back( decomposition.subspaceTypes[i] );
+				}
 			}
 		}
 		if ( discreteVars.size() > 0 ) {
-            // composition assumes for simplicity that subspace variables are ordered
+			// composition assumes for simplicity that subspace variables are ordered
 			std::sort( discreteVars.begin(), discreteVars.end() );
 			newDecomposition.subspaces.push_back( discreteVars );
 			newDecomposition.subspaceTypes.push_back( hypro::DynamicType::discrete );
 		}
-        // decompse with merged discrete subspaces
+		// decompse with merged discrete subspaces
 		auto automatonCopy = automaton;
 		automatonCopy.decompose( newDecomposition.subspaces );
 		decomposedHa = automatonCopy;

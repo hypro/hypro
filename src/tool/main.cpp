@@ -22,10 +22,13 @@ int main( int argc, char const* argv[] ) {
 		  options["model"].as<std::string>() );
 
 	// perform preprocessing
+	START_BENCHMARK_OPERATION("Preprocess");
 	auto preprocessingInformation = hydra::preprocessing::preprocess( automaton,
 																	  options["decompose"].as<bool>(),
-																	  //todo: clockCount as cli argument or heuristic?
+																	  // only use singular analysis if a clock is used and no boxes are used.
+																	  options["clockCount"].as<std::size_t>() != 0 && options["representation"].as<hypro::representation_name>() != hypro::representation_name::box,
 																	  options["clockCount"].as<std::size_t>() );
+	STOP_BENCHMARK_OPERATION("Preprocess");
 
 	// combine parsed settings and cli flags
 	auto settings = hydra::processSettings( reachSettings, options );
@@ -52,7 +55,8 @@ int main( int argc, char const* argv[] ) {
 		for ( auto& segment : result.plotData ) {
 			if ( segmentCount % 100 == 0 ) std::cout << "\r" << segmentCount << "/" << result.plotData.size() << "..." << std::flush;
 			segmentCount += 1;
-			auto vertices = segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices();
+			auto vertices = reduceToDimensions<Number>( segment.sets.vertices() , plotSettings.plotDimensions[ pic ] );
+			//auto vertices = segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices();
 			if ( vertices.front().dimension() != 2 ) {
 				INFO( "hypro.plotter", "broken vertices:\n" << vertices )
 				INFO("hypro.plotter", "from:\n" << printSet(segment.sets));
