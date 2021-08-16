@@ -26,18 +26,21 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 			std::visit( resetWorkerVisitor{}, worker );
 		} );
 
+		START_BENCHMARK_OPERATION("TimeSuccessors");
 		// Time successors
 		TimeInformation<Number> invariantSatisfyingTime = computeTimeSuccessorsGetEnabledTime( currentNodes, workers, clockIndex );
 		removeRedundantSegments( currentNodes );
-		HPolytope<Number> segmentHpoly = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), currentNodes[0]->getInitialSet().getSet() );
 		intersectSubspacesWithClock( currentNodes, invariantSatisfyingTime );
+		STOP_BENCHMARK_OPERATION("TimeSuccessors");
 
+		START_BENCHMARK_OPERATION("SafetyCheck");
 		// Check safety
 		for ( auto badState : detail::collectBadStates( mHybridAutomaton, currentLoc ) ) {
 			if ( !isSafe( currentNodes, dependencies, badState ) ) {
 				return { Failure{ currentNodes[0] } };
 			}
 		}
+		STOP_BENCHMARK_OPERATION("SafetyCheck");
 
 		// Check jump depth
 		if ( currentNodes[0]->getDepth() == mFixedParameters.jumpDepth ) {
@@ -45,7 +48,9 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 		}
 
 		for ( const auto& transition : currentLoc->getTransitions() ) {
+			START_BENCHMARK_OPERATION("JumpSuccessors");
 			std::vector<SubspaceJumpSuccessors<Rep>> jumpSuccessors = getJumpSuccessors( currentNodes, workers, transition.get(), clockIndex );
+			STOP_BENCHMARK_OPERATION("JumpSuccessors");
 			for ( auto& timedSuccessor : jumpSuccessors ) {
 				std::size_t nextIndex = clockIndex + 1;
 				// todo: return as vector, not as map
@@ -57,8 +62,11 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 					continue;
 				}
 				if ( mClockCount > 0 && nextIndex >= mClockCount ) {
+					COUNT("ComplexityReductionSteps");
+					START_BENCHMARK_OPERATION("ComplexityReduction");
 					nextIndex = 0;
 					std::tie( dependencies, subspaceSets ) = complexityReduction( subspaceSets, dependencies );
+					STOP_BENCHMARK_OPERATION("ComplexityReduction");
 					if ( subspaceSets.size() == 0 ) continue;
 				}
 
@@ -268,7 +276,10 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	// res holds all synchronized jump successors
 	std::vector<SubspaceJumpSuccessors<Rep>> res;
 	// Collect single successor set (per subspace) for singular subspaces and synchronize them
+	START_BENCHMARK_OPERATION("JumpSuccessorsSingular");
 	auto [singularEnabledTime, singularSuccessors] = getSingularJumpSuccessors( nodes, workers, trans, clockIndex );
+	STOP_BENCHMARK_OPERATION("JumpSuccessorsSingular");
+	START_BENCHMARK_OPERATION("JumpSuccessorsDiscrete");
 	auto discreteSuccessors = getDiscreteJumpSuccessors( nodes, workers, trans );
 	if ( mSegmentedSubspaces.size() == 0 ) {
 		// no segmented subspace, so the segment indexes are ignored -> set them to 0
@@ -278,9 +289,13 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 		}
 		return { succ };
 	}
+	STOP_BENCHMARK_OPERATION("JumpSuccessorsDiscrete");
+	START_BENCHMARK_OPERATION("JumpSuccessorsLTI");
 	// collect synchronized successors for segmented subspaces
 	std::vector<SubspaceJumpSuccessors<Rep>> segmentedSuccessors = getSegmentedJumpSuccessors( nodes, workers, trans, clockIndex );
+	STOP_BENCHMARK_OPERATION("JumpSuccessorsLTI");
 
+	START_BENCHMARK_OPERATION("JumpSuccessorsSynchronization");
 	// synchronize segmented subspaces with singular
 	for ( auto timedSucc : segmentedSuccessors ) {
 		SubspaceJumpSuccessors<Rep> nextRes;
@@ -302,6 +317,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 		nextRes.time = timedSucc.time;
 		res.push_back( nextRes );
 	}
+	STOP_BENCHMARK_OPERATION("JumpSuccessorsSynchronization");
 	return res;
 }
 
@@ -468,12 +484,16 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	std::transform( sets.begin(), sets.end(), std::back_inserter( subspacePolytopes ), [=]( auto& segment ) {
 		return std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), segment.getSet() );
 	} );
+	START_BENCHMARK_OPERATION("ComplexityReductionCompose");
 	HPolytope<Number> composedSuccessors = detail::composeSubspaces( subspacePolytopes, dependencies, mDecomposition, mClockCount );
+	STOP_BENCHMARK_OPERATION("ComplexityReductionCompose");
 	if ( composedSuccessors.empty() ) {
 		return std::make_pair( Condition<Number>(), res );
 	}
 	auto newDependencies = detail::getDependencies( composedSuccessors, mDecomposition );
+	START_BENCHMARK_OPERATION("ComplexityReductionDecompose");
 	subspacePolytopes = detail::decompose( composedSuccessors, mDecomposition, mClockCount );
+	STOP_BENCHMARK_OPERATION("ComplexityReductionDecompose");
 	for ( std::size_t subspace = 0; subspace < sets.size(); ++subspace ) {
 		auto pol = subspacePolytopes[subspace];
 		Rep segment;
