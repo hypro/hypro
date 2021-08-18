@@ -2,7 +2,7 @@
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/algorithms/reachability/analyzer/UrgencyCEGARAnalyzer.h>
 #include <hypro/algorithms/reachability/handlers/urgencyHandlers/ltiUrgencyHandler.h>
-#include <hypro/algorithms/reachability/workers/UrgencyWorker.h>
+#include <hypro/algorithms/reachability/workers/UrgencyCEGARWorker.h>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/Settings.h>
 #include <hypro/representations/GeometricObjectBase.h>
@@ -186,7 +186,7 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
 	analysisParameters.representation_type = Representation::type();
 
 	TimeTransformationCache<Number> cache{};
-	UrgencyWorker<Representation> worker( automaton, analysisParameters, 10, cache );
+	UrgencyCEGARWorker<Representation> worker( automaton, analysisParameters, 10, cache );
 	ReachTreeNode<Representation> node( l0, initialSet, carl::Interval<SegmentInd>( 0 ) );
 
 	node.getUrgent()[t0] = UrgencyRefinementLevel::SETDIFF;
