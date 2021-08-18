@@ -15,7 +15,6 @@ REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( ReachT
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( ReachTreeNode<State>& task ) {
 	State initialSet = task.getInitialSet();
-	DEBUG( "hypro.reachability.rectangular", "Compute time successors for initial set " << initialSet << " in location " << *task.getLocation() );
 
 	auto [containment, segment] = rectangularIntersectInvariant( initialSet, task.getLocation() );
 	if ( containment == CONTAINMENT::NO ) {
@@ -87,7 +86,6 @@ void RectangularWorker<State>::postProcessJumpSuccessors( const JumpSuccessors& 
 
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( ReachTreeNode<State>& task ) {
-	std::cout << "backward automata is " << mHybridAutomaton << std::endl;
 	if ( computeTimePredecessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
@@ -98,8 +96,7 @@ REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( Reach
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTreeNode<State>& task ) {
 	State badSet = task.getInitialSet();
-
-	auto [containment, segment] = rectangularIntersectInvariant( badSet, task.getLocation() );
+	auto [containment, segment] = rectangularIntersectInvariant( badSet );
 	if ( containment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
@@ -114,9 +111,8 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTree
 	}
 
 	// compute time predecessors states
-	State timePredecessors = rectangularApplyReverseTimeEvolution( segment, task.getLocation()->getRectangularFlow() );
-	std::cout << "time" << std::endl;
-	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors, task.getLocation() );
+	State timePredecessors = rectangularApplyReverseTimeEvolution( segment, badSet.getLocation()->getRectangularFlow() );
+	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors );
 	if ( invariantContainment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
@@ -138,7 +134,6 @@ void RectangularWorker<State>::computeJumpPredecessors() {
 	// for each state: find possible transitions and intersect the set with reset of the transitions
 	rectangularResetHandler<State> resetHandler;
 	for ( auto& state : mFlowpipe ) {
-		std::cout << "reset check" << std::endl;
 		resetHandler.rectangularIntersectReset( state, mHybridAutomaton );
 	}
 

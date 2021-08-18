@@ -1,0 +1,113 @@
+hybrid reachability
+{
+ state var x,v,t,p
+
+setting
+ {
+  fixed steps 0.01
+  time 3
+  remainder estimation 1e-5
+  identity precondition
+  QR precondition
+  gnuplot octagon v,x
+  fixed orders 5
+  adaptive orders { min 3, max 12}
+  cutoff 1e-15
+  precision 128
+  output bouncing_ball
+  max jumps 1
+  print on
+ }
+
+ modes
+ {
+  l1
+  {
+   poly ode 1
+   {
+    v' = -1*t + -2.5
+    x' = 0
+    t' = 1
+   }
+
+   inv
+   {
+    v in [15,40]
+    t in [0,2.5]
+   }
+
+   probdist
+   {
+    p' = 0.1
+   }
+  }
+
+  l2
+  {
+   poly ode 1
+   {
+    v' = -5
+    x' = 0
+    t' = 0
+   }
+
+   inv
+   {
+    v in [15,40]
+   }
+
+   probdist
+   {
+    p' = 0.1
+   }
+  }
+
+  l3
+  {
+   poly ode 1
+   {
+    v' = -2.5
+    x' = 0
+    t' = 0
+   }
+
+   inv
+   {
+    v in [5,20]
+   }
+
+   probdist
+   {
+    p' = 0.1
+   }
+  }
+ }
+
+ jumps
+ {
+  l1 --
+  guard { t = 2.5 }
+  label { sync_1 }
+  {
+    2 -> l2
+    reset { }
+    parallelotope aggregation {}
+
+    3 -> l3
+    reset { t' := 0 }
+  }
+ }
+
+ init
+ {
+  1 -> l1
+  {
+   x in [10,10.2]
+   v in [0,1]
+   t in [0,0]
+   p in [0,0]
+  }
+ }
+}
+
+

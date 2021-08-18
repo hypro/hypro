@@ -16,6 +16,7 @@
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "../../datastructures/HybridAutomaton/StochasticHybridAutomaton.h"
 #include <map>
 
 using namespace antlr4;
@@ -40,6 +41,7 @@ class HyproInitialSetVisitor : HybridAutomatonBaseVisitor {
 
 		//Inherited
 		antlrcpp::Any visitInitstate(HybridAutomatonParser::InitstateContext *ctx) override;
+		antlrcpp::Any visitProbinitstate(HybridAutomatonParser::ProbinitstateContext *ctx) override;
 
 	public:
 

@@ -680,6 +680,13 @@ Point<To> convert( const Point<From>& in ) {
 	return Point<To>( convert<From, To>( in.rawCoordinates() ) );
 }
 
+
+#ifdef EXTERNALIZE_CLASSES
+extern template class Point<double>;
+extern template class Point<mpq_class>;
+#endif
+
+
 }  // namespace hypro
 
 namespace std {

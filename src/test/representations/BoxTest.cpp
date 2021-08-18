@@ -512,6 +512,49 @@ TYPED_TEST( BoxTest, SatisfiesHalfspace ) {
 	EXPECT_EQ( box.satisfiesHalfspaces( mat, vec ).second, box );
 }
 
+TYPED_TEST( BoxTest, SatisfiesHalfspaceOpenBox ) {
+	carl::Interval<TypeParam> xInterval( TypeParam( 1 ), TypeParam( 2 ) );
+	carl::Interval<TypeParam> yInterval( TypeParam( 0 ), TypeParam( 1 ) );
+	yInterval.setLowerBoundType( carl::BoundType::STRICT );
+
+	hypro::Box<TypeParam> box;
+	box.insert( xInterval );
+	box.insert( yInterval );
+
+	hypro::Halfspace<TypeParam> hsp1( { 1, 0 }, 3 );
+	hypro::Halfspace<TypeParam> hsp2( { 1, 0 }, 0 );
+	hypro::Halfspace<TypeParam> hsp3( { 1, 0 }, 1 );
+
+	EXPECT_EQ( hypro::CONTAINMENT::FULL, box.satisfiesHalfspace( hsp1 ).first );
+	EXPECT_EQ( hypro::CONTAINMENT::NO, box.satisfiesHalfspace( hsp2 ).first );
+	EXPECT_EQ( hypro::CONTAINMENT::PARTIAL, box.satisfiesHalfspace( hsp3 ).first );
+
+	EXPECT_TRUE( box.satisfiesHalfspaces( hypro::matrix_t<TypeParam>(), hypro::vector_t<TypeParam>() ).first !=
+				 hypro::CONTAINMENT::NO );
+	hypro::matrix_t<TypeParam> mat = hypro::matrix_t<TypeParam>( 2, 2 );
+	mat << 1, 0, -1, 0;
+	hypro::vector_t<TypeParam> vec = hypro::vector_t<TypeParam>( 2 );
+	vec << 2, -2;
+
+	EXPECT_EQ( hypro::CONTAINMENT::PARTIAL, box.satisfiesHalfspaces( mat, vec ).first );
+	EXPECT_EQ( hypro::Box<TypeParam>( std::vector<carl::Interval<TypeParam>>{
+					 carl::Interval( TypeParam( 2 ), TypeParam( 2 ) ), yInterval } ),
+			   box.satisfiesHalfspaces( mat, vec ).second );
+	vec << 3, -4;
+	EXPECT_EQ( hypro::CONTAINMENT::NO, box.satisfiesHalfspaces( mat, vec ).first );
+	EXPECT_TRUE( box.satisfiesHalfspaces( mat, vec ).second.empty() );
+	vec << 3, 1;
+	EXPECT_EQ( hypro::CONTAINMENT::FULL, box.satisfiesHalfspaces( mat, vec ).first );
+	EXPECT_EQ( box, box.satisfiesHalfspaces( mat, vec ).second );
+
+	// test that y == 0 is not contained in the box
+	mat << 0, 1, 0, -1;
+	vec << 0, 0;
+	EXPECT_EQ( hypro::CONTAINMENT::NO, box.satisfiesHalfspaces( mat, vec ).first );
+	vec << 1, -1;
+	EXPECT_EQ( hypro::CONTAINMENT::PARTIAL, box.satisfiesHalfspaces( mat, vec ).first );
+}
+
 TYPED_TEST( BoxTest, Projection ) {
 	carl::Interval<TypeParam> xInterval( TypeParam( 1 ), TypeParam( 2 ) );
 	carl::Interval<TypeParam> yInterval( carl::rationalize<TypeParam>( -1.02 ), carl::rationalize<TypeParam>( -1.01 ) );

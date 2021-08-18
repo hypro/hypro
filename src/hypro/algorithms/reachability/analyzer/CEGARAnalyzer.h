@@ -24,7 +24,7 @@ namespace detail {
  * @brief impl that takes a TypeList, can be aliased to take conventional type pack
  * @tparam T the type list
  */
-template<class T>
+template <class T>
 class CEGARAnalyzer_impl;
 
 /**
@@ -123,20 +123,18 @@ class CEGARAnalyzer_impl<TypeList<Number, Representations...>> {
 	std::vector<RefinementLevel> mLevels{};
 };
 
-template<class Number, class... Representations>
+template <class Number, class... Representations>
 using CEGARAnalyzer_apply = CEGARAnalyzer_impl<TypeList<Number, Representations...>>;
-}
+}  // namespace detail
 
-extern template class detail::CEGARAnalyzer_impl<concat<TypeList<double>, RepresentationsList<double, Converter<double>>>>;
-extern template class detail::CEGARAnalyzer_impl<concat<TypeList<mpq_class>, RepresentationsList<mpq_class, Converter<mpq_class>>>>;
+//extern template class detail::CEGARAnalyzer_impl<concat<TypeList<double>, RepresentationsList<double, Converter<double>>>>;
+//extern template class detail::CEGARAnalyzer_impl<concat<TypeList<mpq_class>, RepresentationsList<mpq_class, Converter<mpq_class>>>>;
 
 template <class Number>
 using CEGARAnalyzer = detail::CEGARAnalyzer_impl<concat<TypeList<Number>, RepresentationsList<Number, Converter<Number>>>>;
 
-
-
 }  // namespace hypro
 
-//#include "CEGARAnalyzer.tpp"
+#include "CEGARAnalyzer.tpp"
 
 #endif

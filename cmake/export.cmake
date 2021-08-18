@@ -1,3 +1,6 @@
+# the following is inspired by https://gitlab.kitware.com/cmake/community/-/wikis/doc/tutorials/How-to-create-a-ProjectConfig.cmake-file
+# some of the parts still need adjustment
+
 
 # Add all targets to the build-tree export set
 export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake")
@@ -6,31 +9,11 @@ export(TARGETS ${HYPRO_TARGETS} FILE "${PROJECT_BINARY_DIR}/hyproTargets.cmake")
 # (this registers the build-tree with a global CMake-registry)
 if(EXPORT_TO_CMAKE)
 	message(STATUS "Exporting to cmake")
+	set(CMAKE_EXPORT_PACKAGE_REGISTRY True)
 	export(PACKAGE ${PROJECT_NAME})
 else()
 	message(STATUS "Not exporting to cmake")
 endif()
-
-export_target(DEPENDENT_TARGETS carl-shared)
-export_target(DEPENDENT_TARGETS carl-static)
-if(CARL_LOGGING_POST_1910)
-	message(STATUS "Export carl-logging")
-	export_target(DEPENDENT_TARGETS carl-logging-shared)
-	export_target(DEPENDENT_TARGETS carl-logging-static)
-endif()
-
-get_target_property(libs carl-shared INTERFACE_LINK_LIBRARIES)
-# filter only non-system libs (post-fixed with "SHARED")
-list(FILTER libs INCLUDE REGEX ".*_SHARED")
-foreach(item ${libs})
-	export_target(DEPENDENT_TARGETS ${item})
-endforeach()
-get_target_property(libs carl-static INTERFACE_LINK_LIBRARIES)
-# filter only non-system libs (post-fixed with "STATIC")
-list(FILTER libs INCLUDE REGEX ".*_STATIC")
-foreach(item ${libs})
-	export_target(DEPENDENT_TARGETS ${item})
-endforeach()
 
 if(STATICLIB_SWITCH)
 	if(HYPRO_MATLAB_BINDINGS)
@@ -42,24 +25,7 @@ else()
 	endif()
 endif()
 
-#export_target(DEPENDENT_TARGETS Boost_SHARED)
-#export_target(DEPENDENT_TARGETS Boost_STATIC)
-#export_target(DEPENDENT_TARGETS COCOA_SHARED)
-#export_target(DEPENDENT_TARGETS COCOA_STATIC)
-export_target(DEPENDENT_TARGETS Boost_program_options_SHARED)
-export_target(DEPENDENT_TARGETS Boost_program_options_STATIC)
-#export_target(DEPENDENT_TARGETS Boost_system_SHARED)
-#export_target(DEPENDENT_TARGETS Boost_system_STATIC)
-export_target(DEPENDENT_TARGETS EIGEN3)
-#export_target(DEPENDENT_TARGETS BLISS_SHARED)
-#export_target(DEPENDENT_TARGETS BLISS_STATIC)
-#export_target(DEPENDENT_TARGETS COCOA_SHARED)
-#export_target(DEPENDENT_TARGETS COCOA_STATIC)
 export_target(DEPENDENT_TARGETS GLPK_STATIC)
-#export_target(DEPENDENT_TARGETS GMP_SHARED)
-#export_target(DEPENDENT_TARGETS GMP_STATIC)
-export_target(DEPENDENT_TARGETS GMPXX_SHARED)
-export_target(DEPENDENT_TARGETS GMPXX_STATIC GMP_STATIC)
 export_target(DEPENDENT_TARGETS ANTLR4_STATIC)
 export_target(DEPENDENT_TARGETS ANTLR4_SHARED)
 if(HYPRO_USE_MIMALLOC)
@@ -79,6 +45,10 @@ endif()
 if (HYPRO_USE_Z3)
 	export_target(DEPENDENT_TARGETS z3_SHARED)
 endif ()
+if(HYPRO_GSL_INTEGRATION)
+	export_target(DEPENDENT_TARGETS GSL_SHARED)
+	export_target(DEPENDENT_TARGETS GSL_STATIC)
+endif()
 
 
 include(CMakePackageConfigHelpers)
@@ -92,13 +62,7 @@ set(TARGET ${PROJECT_NAME})
 # Create the hyproConfig.cmake and hyproConfigVersion files
 # ... for the build tree
 set(CONF_INCLUDES ${INCLUDES})
-
-set(CONF_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/src") # TODO looks not correct, this would be hypro_INCLUDE_DIR
-#if(STATICLIB_SWITCH)
-#	set(CONF_LINKER_LIBS ${hypro_STATIC_LIBRARIES})
-#else ()
-#	set(CONF_LINKER_LIBS ${hypro_DYNAMIC_LIBRARIES})
-#endif()
+set(CONF_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}")
 
 configure_package_config_file(cmake/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
 							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}

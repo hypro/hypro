@@ -11,7 +11,9 @@
 #pragma once
 
 #include "../../datastructures/HybridAutomaton/Location.h"
+#include "../../datastructures/HybridAutomaton/StochasticLocation.h"
 #include "../../datastructures/HybridAutomaton/Transition.h"
+#include "../../datastructures/HybridAutomaton/StochasticTransition.h"
 #include "../../types.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
@@ -44,6 +46,10 @@ class HyproTransitionVisitor : public HybridAutomatonBaseVisitor{
 		antlrcpp::Any visitAllocation(HybridAutomatonParser::AllocationContext *ctx) override;
 		antlrcpp::Any visitResetfct(HybridAutomatonParser::ResetfctContext *ctx) override;
 		antlrcpp::Any visitAggregation(HybridAutomatonParser::AggregationContext *ctx) override;
+		antlrcpp::Any visitStochastictransition(HybridAutomatonParser::StochastictransitionContext *ctx) override;
+		antlrcpp::Any visitProbtransition(HybridAutomatonParser::ProbtransitionContext *ctx) override;
+		antlrcpp::Any visitProbfrom(HybridAutomatonParser::ProbfromContext *ctx) override;
+		antlrcpp::Any visitProbto(HybridAutomatonParser::ProbtoContext *ctx) override;
 
 	public:
 

@@ -24,7 +24,6 @@ void rectangularResetHandler<State>::rectangularIntersectReset( const State& sta
 				State reset(state);
 				if ( !transitionPtr->getReset().empty() ){
 					if ( transitionPtr->getReset().getMatrix().size() > 0 ) {
-						std::cout << "affine is  " << std::endl;
 						reset = State{ CarlPolytope<typename State::NumberType>{ transitionPtr->getReset().getMatrix(), transitionPtr->getReset().getVector() } };
 					} else {
 						for ( size_t i = 0; i < reset.getNumberSets(); i++ ) {
@@ -35,7 +34,6 @@ void rectangularResetHandler<State>::rectangularIntersectReset( const State& sta
 					}
 				}
 
-				std::cout << "reset is " << reset <<std::endl;
 				auto resultingSet = state.intersect( reset );
 
 				// determine full vs. partial containment
@@ -59,8 +57,6 @@ void rectangularResetHandler<State>::rectangularIntersectReset( const State& sta
 					mResetSatisfyingStates[transitionPtr.get()].emplace_back( std::move( resultingSet ) );
 				}
 
-				std::cout << "find transition reset result: " << containmentResult << std::endl;
-				std::cout << resultingSet << std::endl;
 				mResetContainment[transitionPtr.get()] = containmentResult;
 			}
 		}

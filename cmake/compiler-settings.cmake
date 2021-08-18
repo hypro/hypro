@@ -72,15 +72,11 @@ endif()
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-attributes -pedantic -fPIC -ftemplate-backtrace-limit=0")
 if(STATICLIB_SWITCH)
 	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static -pthread -Wl,--whole-archive -lpthread -Wl,--no-whole-archive")
-	#set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 	set(BUILD_SHARED_LIBRARIES OFF)
 else()
-	#set(CMAKE_FIND_LIBRARY_SUFFIXES ".so;.dylib")
 	set(BUILD_SHARED_LIBRARIES ON)
 endif()
 
-# enable eigen3 vectorization
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native -DEIGEN_DONT_VECTORIZE")
 
 # flags related to development
 if(DEVELOPER)
@@ -94,18 +90,21 @@ if(DEVELOPER)
     		COMMAND bash -c "gcc -print-file-name=libasan.so"
     		OUTPUT_VARIABLE asanLocation
 		)
+		# enables profiling on compilation
+		set(DEV_FLAGS "-ftime-report")
 	endif()
 	if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 		execute_process (
 			COMMAND bash -c "clang -print-file-name=libclang_rt.asan-x86_64.so"
 			OUTPUT_VARIABLE asanLocation
 		)
+		# profiling compilation process
+		set(DEV_FLAGS "-ftime-trace")
 	endif()
 	message(STATUS "asan runtime location for preloading: ${asanLocation}")
 
 
-	set(DEV_FLAGS "\
- -Werror\
+	set(DEV_FLAGS "${DEV_FLAGS} \
  -Wswitch\
  -Wno-deprecated-declarations\
  -Wempty-body\

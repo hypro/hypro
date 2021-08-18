@@ -203,7 +203,7 @@ class Halfspace {
 	 * @param[in]  dimensions  The dimensions.
 	 * @return     The projected halfspace.
 	 */
-	Halfspace<Number> projectOn( const std::vector<unsigned>& dimensions ) const;
+	Halfspace<Number> projectOn( const std::vector<size_t>& dimensions ) const;
 
 	/**
 	 * @brief      Computes the linear transformation of the plane.
@@ -459,12 +459,7 @@ Halfspace<Number> operator-( const Halfspace<Number>& _in ) {
 
 #ifdef EXTERNALIZE_CLASSES
 extern template class Halfspace<double>;
-
-#ifdef USE_MPFR_FLOAT
-extern template class Halfspace<carl::FLOAT_T<mpfr_t>>;
-#endif
-
-extern template class Halfspace<carl::FLOAT_T<double>>;
+extern template class Halfspace<mpq_class>;
 #endif
 }  // namespace hypro
 

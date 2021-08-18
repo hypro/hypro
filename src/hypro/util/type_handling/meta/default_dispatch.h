@@ -11,7 +11,7 @@ namespace hypro {
 using DefaultRepresentations =
 	  TypeList<
 			RepresentationCombinations<
-				  BoxT, BoxLinearOptimizationOn, /*BoxLinearOptimizationOff, BoxIntervalArithmeticOff,*/ BoxAllOff>,
+				  BoxT, BoxLinearOptimizationOn, BoxLinearOptimizationOff, BoxIntervalArithmeticOff, BoxAllOff>,
 			//RepresentationCombinations<
 			//	  CarlPolytopeT, CarlPolytopeSetting>,
 			RepresentationCombinations<

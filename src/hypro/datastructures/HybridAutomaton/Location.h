@@ -27,6 +27,9 @@ template <typename Number>
 class Transition;
 
 template <typename Number>
+class StochasticTransition;
+
+template <typename Number>
 using flowVariant = std::variant<linearFlow<Number>, affineFlow<Number>, rectangularFlow<Number>>;
 
 /**
@@ -63,7 +66,7 @@ class Location {
 	/// construction from matrix, vector and invariant condition
 	Location( const matrix_t<Number>& mat, transitionVector&& trans, const Condition<Number>& inv );
 	/// destructor
-	~Location() {}
+	virtual ~Location() {}
 	/// assignment operator
 	Location<Number>& operator=( const Location<Number>& in );
 

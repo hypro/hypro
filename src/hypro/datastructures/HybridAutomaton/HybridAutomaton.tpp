@@ -18,7 +18,6 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 	// create real copies of the locations
 	for ( Location<Number>* l : hybrid.getLocations() ) {
 		Location<Number>* tmp = this->createLocation( l );
-		TRACE( "hypro.datastructures", "Add location-Mapping entry " << l << " -> " << tmp );
 		locationMapping[l] = tmp;
 		assert( tmp->getTransitions().size() == l->getTransitions().size() );
 		assert( std::all_of( tmp->getTransitions().begin(), tmp->getTransitions().end(), [tmp]( const auto& t ) { return t.get()->getSource() == tmp; } ) );
@@ -59,7 +58,7 @@ HybridAutomaton<Number>::HybridAutomaton( const HybridAutomaton<Number>& hybrid 
 	for ( auto& otherBad : hybrid.getLocalBadStates() ) {
 		auto copy = otherBad.second;
 		// update location
-		this->addLocalBadState( locationMapping[otherBad.first], copy );
+		this->addLocalBadStates( locationMapping[otherBad.first], copy );
 	}
 	TRACE( "hypro.datastructures", "After copy, original: \n"
 										 << hybrid << "\n copy: \n"
@@ -154,7 +153,18 @@ const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 
 template <typename Number>
 const std::unique_ptr<Location<Number>>& HybridAutomaton<Number>::addLocation( const Location<Number>& location ) {
-	return this->addLocation( std::move( std::make_unique<Location<Number>>( location ) ) );
+	try {
+		auto stoLoc = dynamic_cast<const StochasticLocation<Number>&>( location );
+		return this->addLocation( std::move( std::make_unique<StochasticLocation<Number>>( stoLoc ) ) );
+	} catch ( const std::bad_cast& re ) {
+		std::cout << "wrong with message: " << re.what() << std::endl;
+		return this->addLocation( std::move( std::make_unique<Location<Number>>( location ) ) );
+	}
+	// if ( stoLoc != std::bad_cast ) {
+	// 	return this->addLocation( std::move( std::make_unique<Location<Number>>( location ) ) );
+	// } else {
+	// 	return this->addLocation( std::move( std::make_unique<StochasticLocation<Number>>( stoLoc ) ) );
+	// }
 }
 
 template <typename Number>
@@ -181,7 +191,12 @@ Location<Number>* HybridAutomaton<Number>::createLocation() {
 
 template <typename Number>
 Location<Number>* HybridAutomaton<Number>::createLocation( Location<Number>* original ) {
-	return mLocations.emplace_back( std::make_unique<Location<Number>>( Location<Number>{ *original } ) ).get();
+	StochasticLocation<Number>* stoLoc = dynamic_cast<StochasticLocation<Number>*>( original );
+	if ( !stoLoc ) {
+		return mLocations.emplace_back( std::make_unique<Location<Number>>( Location<Number>{ *original } ) ).get();
+	} else {
+		return mLocations.emplace_back( std::make_unique<StochasticLocation<Number>>( StochasticLocation<Number>( *( stoLoc ) ) ) ).get();
+	}
 }
 
 template <typename Number>
@@ -198,7 +213,7 @@ void HybridAutomaton<Number>::reduce() {
 		auto const* current_loc = stack.back();
 		stack.pop_back();
 		for ( auto& transition : current_loc->getTransitions() ) {
-			if(locations_found.count( transition->getTarget() ) == 0){
+			if ( locations_found.count( transition->getTarget() ) == 0 ) {
 				stack.push_back( transition->getTarget() );
 				locations_found.insert( transition->getTarget() );
 			}
@@ -452,14 +467,13 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	TRACE( "hypro.datastructures", "Combine initial states (not yet implemented)" );
 	for ( auto const& [loc_lhs, condition_lhs] : lhs.getInitialStates() ) {
 		for ( auto const& [loc_rhs, condition_rhs] : rhs.getInitialStates() ) {
-
 			// simply put constraints (rows) below each other, but reorder variables (columns) of both lhs and rhs to fit new order
 
 			auto num_constraints_lhs = condition_lhs.getMatrix().rows();
 			auto num_constraints_rhs = condition_rhs.getMatrix().rows();
 
 			auto total_constraints = num_constraints_lhs + num_constraints_rhs;
-			matrix_t<Number> constraints{total_constraints, haVar.size() };
+			matrix_t<Number> constraints{ total_constraints, haVar.size() };
 
 			Eigen::Index col = 0;
 			for ( std::string const& variable : haVar ) {
@@ -467,23 +481,23 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 				auto index_rhs = std::distance( rhsVar.begin(), std::find( rhsVar.begin(), rhsVar.end(), variable ) );
 
 				// put lhs part of column in at the top
-				if(size_t(index_lhs) < lhsVar.size()) {
-					constraints.col(col).head(num_constraints_lhs) = condition_lhs.getMatrix().col(index_lhs);
+				if ( size_t( index_lhs ) < lhsVar.size() ) {
+					constraints.col( col ).head( num_constraints_lhs ) = condition_lhs.getMatrix().col( index_lhs );
 				}
 
-				if(size_t(index_rhs) < rhsVar.size()) {
-					constraints.col(col).tail(num_constraints_rhs) = condition_rhs.getMatrix().col(index_rhs);
+				if ( size_t( index_rhs ) < rhsVar.size() ) {
+					constraints.col( col ).tail( num_constraints_rhs ) = condition_rhs.getMatrix().col( index_rhs );
 				}
 				col += 1;
 			}
 
-			vector_t<Number> constants{num_constraints_lhs + num_constraints_rhs};
-			constants.head(num_constraints_lhs) = condition_lhs.getVector();
-			constants.tail(num_constraints_rhs) = condition_rhs.getVector();
+			vector_t<Number> constants{ num_constraints_lhs + num_constraints_rhs };
+			constants.head( num_constraints_lhs ) = condition_lhs.getVector();
+			constants.tail( num_constraints_rhs ) = condition_rhs.getVector();
 
 			std::string loc_name = loc_lhs->getName() + "_" + loc_rhs->getName();
-			Location<Number> const* init_loc = ha.getLocation(loc_name);
-			ha.addInitialState(init_loc, Condition{constraints, constants});
+			Location<Number> const* init_loc = ha.getLocation( loc_name );
+			ha.addInitialState( init_loc, Condition{ constraints, constants } );
 		}
 	}
 

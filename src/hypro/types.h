@@ -41,7 +41,8 @@ enum class TRIBOOL { TRUE,
 
 enum class REACHABILITY_RESULT {
 	SAFE,
-	UNKNOWN
+	UNKNOWN,
+	UNSAFE
 };
 
 BETTER_ENUM( PLOTTYPE, int,
@@ -100,8 +101,18 @@ BETTER_ENUM( AGG_SETTING, int,
 			 AGG,
 			 NO_AGG )
 
+/**
+ * @brief classifies the type of reachability analysis.
+ */
 enum class REACH_SETTING { FORWARD,
 						   BACKWARD };
+
+/**
+ * @brief classifies the type of probability distribution.
+ */
+enum class DistributionType { UNIFORMED,
+						   	  EXPONENTIAL,
+							  NORMAL };
 
 }  // namespace hypro
 
@@ -239,6 +250,29 @@ inline std::ostream& operator<<( std::ostream& _out, const hypro::CONTAINMENT& _
 	}
 	return _out;
 }
+
+/**
+ * @brief      Outstream operator for the CONTAINMENT enum.
+ * @param      _out  The outstream reference.
+ * @param[in]  _in   The enum type.
+ * @return     A reference to the outstream.
+ */
+inline std::ostream& operator<<( std::ostream& _out, const hypro::REACHABILITY_RESULT& _in ) {
+	switch ( _in ) {
+		case hypro::REACHABILITY_RESULT::SAFE:
+			_out << "safe";
+			break;
+		case hypro::REACHABILITY_RESULT::UNSAFE:
+			_out << "unsafe";
+			break;
+		case hypro::REACHABILITY_RESULT::UNKNOWN:
+			_out << "unknown";
+			break;
+		default:;
+	}
+	return _out;
+}
+
 }  // namespace std
 
 #include "util/adaptions_carl/adaptions_carl.h"

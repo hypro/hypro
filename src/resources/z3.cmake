@@ -3,8 +3,6 @@ set(RESOURCE_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/resources)
 file(MAKE_DIRECTORY ${RESOURCE_INSTALL_LOCATION}/include)
 file(MAKE_DIRECTORY ${RESOURCE_INSTALL_LOCATION}/lib)
 
-
-
 ExternalProject_Add(
     z3
     LOG_CONFIGURE 1
@@ -22,4 +20,4 @@ set( z3_INCLUDE_DIR "${RESOURCE_INSTALL_LOCATION}/include" )
 set( z3_LIBRARY "${RESOURCE_INSTALL_LOCATION}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}z3${CMAKE_SHARED_LIBRARY_SUFFIX}")
 
 add_imported_library(z3 SHARED "${z3_LIBRARY}" "${z3_INCLUDE_DIR}")
-add_dependencies(resources z3)
+add_dependencies(hypro_resources z3)
