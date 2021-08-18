@@ -72,7 +72,7 @@ jobs:
 
       - name: Build Project with Build-wrapper
         working-directory: ${{runner.workspace}}/hypro/build
-        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/bw-output make clean all
+        run: ${{runner.workspace}}/dependencies/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir ${{runner.workspace}}/hypro/bw-output make clean all && cat /home/runner/work/hypro/hypro/build/resources/src/antlr4cpp-stamp/antlr4cpp-configure-err.log
 
       - name: SonarCloud Scan
         #uses: SonarSource/sonarcloud-github-action@master
