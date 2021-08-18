@@ -634,7 +634,7 @@ TEST( DecompositionMethodsTest, decomposeAutomaton5 ) {
     Decomposition decomposition;
     std::tie( decomposedHa, decomposition ) = decomposeAutomaton( ha );
 
-    Decomposition expectedDecomposition{ { { 0 }, { 1, 2 }, { 3 } }, { DynamicType::timed, DynamicType::linear, DynamicType::singular } };
+    Decomposition expectedDecomposition{ { { 0 }, { 1, 2 }, { 3 } }, { DynamicType::timed, DynamicType::linear, DynamicType::discrete } };
     Condition<Number> expectedInvariant( { ConstraintSetT<Number>{ }, ConstraintSetT<Number>{ Matrix::Ones( 1, 2 ), Vector::Zero( 1 ) }, ConstraintSetT<Number>{ } } );
     Matrix expectedFlow1 = Matrix::Zero( 2, 2 );
     Matrix expectedFlow2 = Matrix::Zero( 3, 3 );
@@ -705,7 +705,7 @@ TEST( DecompositionMethodsTest, decomposeAutomaton7 ) {
     Decomposition decomposition;
     std::tie( decomposedHa, decomposition ) = decomposeAutomaton( ha );
 
-    Decomposition expectedDecomposition{ { { 0 }, { 1, 2 } }, { DynamicType::singular, DynamicType::discrete } };
+    Decomposition expectedDecomposition{ { { 0 }, { 1, 2 } }, { DynamicType::discrete, DynamicType::discrete } };
     auto loc0 = decomposedHa.getLocations()[ 0 ];
     auto loc1 = decomposedHa.getLocations()[ 1 ];
 
