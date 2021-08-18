@@ -331,9 +331,10 @@ HybridAutomaton<Number> multipleLocationsHa() {
     initialConstants << 0, 0, 0, 0, 0, 0, 0, 0;
 
     // Create HA
-    ha.addInitialState( uniqueLoc0.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
+    auto locPtr = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+    ha.addInitialState( locPtr, hypro::Condition<Number>( initialConstraints, initialConstants ) );
     return ha;
 }
 
@@ -381,9 +382,10 @@ HybridAutomaton<Number> resetHa() {
     initialConstants << 0, 0, 0, 0, 0, 0;
 
     // Create HA
-    ha.addInitialState( uniqueLoc0.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
+    auto locPtr = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+    ha.addInitialState( locPtr, hypro::Condition<Number>( initialConstraints, initialConstants ) );
     return ha;
 }
 
@@ -434,9 +436,10 @@ HybridAutomaton<Number> affineResetHa() {
     initialConstants << 0, 0, 0, 0, 0, 0;
 
     // Create HA
-    ha.addInitialState( uniqueLoc0.get(), hypro::Condition<Number>( initialConstraints, initialConstants ) );
+    auto locPtr = uniqueLoc0.get();
     ha.addLocation( std::move( uniqueLoc0 ) );
     ha.addLocation( std::move( uniqueLoc1 ) );
+    ha.addInitialState( locPtr, hypro::Condition<Number>( initialConstraints, initialConstants ) );
     return ha;
 }
 
