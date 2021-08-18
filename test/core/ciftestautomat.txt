@@ -1,0 +1,17 @@
+automaton test:
+	disc int t = 0;
+	disc int b = 1;
+
+	location eins:
+	initial;
+	equation t' = 1;
+	edge when t>=2 do t:=0 goto zwei;
+
+	location zwei:
+	equation t' = 1;
+	edge when t>=2 do t:=0, d:=1 goto eins;
+
+	location:
+	equation t' = 1;
+	edge when t>=2 do t:=0;
+end
