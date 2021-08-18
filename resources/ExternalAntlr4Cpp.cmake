@@ -83,6 +83,8 @@ ExternalProject_ADD(
         LOG_CONFIGURE ON
         # BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
         LOG_BUILD ON
+        LOG_MERGED_STDOUTERR ON
+        LOG_OUTPUT_ON_FAILURE ON
         # INSTALL_COMMAND    ""
 )
 
