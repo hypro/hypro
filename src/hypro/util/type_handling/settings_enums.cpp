@@ -1,7 +1,8 @@
-#include "settings_enums.h"
+#include "hypro/util/type_handling/settings_enums.h"
 
-#include <assert.h>
-#include <representations/GeometricObjectBase.h>
+#include "hypro/representations/GeometricObjectBase.h"
+
+#include <cassert>
 
 namespace hypro {
 

@@ -6,7 +6,7 @@
  * @version 2014-03-17
  */
 
-#include "NeighborhoodContainer.h"
+#include "hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h"
 
 namespace hypro {
 
