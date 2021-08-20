@@ -5,7 +5,7 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/resources/src/glpk-build/include)
 
 ExternalProject_Add(
         glpk
-        SOURCE_DIR "${CMAKE_SOURCE_DIR}/resources/glpk-${glpk_version}"
+        SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/glpk-${glpk_version}"
         CONFIGURE_COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/glpk-4.45/configure --prefix=${CMAKE_BINARY_DIR}/resources/src/glpk-build --with-gmp --with-pic CPPFLAGS=-fPIC --disable-shared --disable-dl --enable-static
         # build in source is needed here, as configure moves all relevant files to glpk-build and then the make and make install need to know that it is
         # in-source (from this perspective on)
@@ -14,6 +14,8 @@ ExternalProject_Add(
         INSTALL_COMMAND make install
         LOG_CONFIGURE ON
         LOG_BUILD ON
+        LOG_MERGED_STDOUTERR ON
+        LOG_OUTPUT_ON_FAILURE ON
 )
 
 
