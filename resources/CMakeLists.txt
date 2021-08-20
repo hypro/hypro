@@ -4,7 +4,7 @@ set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
 
 add_custom_target(${PROJECT_NAME}_resources)
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_resources)
-set(RESSOURCES_FLAGS "-Wno-error ${CMAKE_CXX_FLAGS} -Wno-error")
+set(RESSOURCES_FLAGS "-std=c++17 -Wno-error ${CMAKE_CXX_FLAGS} -Wno-error")
 #message("Ressoures flags: ${RESSOURCES_FLAGS}")
 
 # Load modules

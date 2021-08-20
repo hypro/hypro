@@ -154,7 +154,6 @@ target_include_directories(${PROJECT_NAME}-objects
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
         )
@@ -179,11 +178,8 @@ target_include_directories(${PROJECT_NAME}-static
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>
-        INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
         )
 
 ##### SHARED LIBRARY
@@ -205,11 +201,8 @@ target_include_directories(${PROJECT_NAME}-shared
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include>
-        INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/resources/include/antlr4-runtime>
         )
 
 target_compile_features(${PROJECT_NAME}-objects PUBLIC cxx_std_17)
@@ -245,8 +238,6 @@ set(HYPRO_TARGETS "${PROJECT_NAME}-shared" "${PROJECT_NAME}-static" CACHE STRING
 # Options for static linking
 if (APPLE)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -mmacosx-version-min=10.7")
-else ()
-    #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 endif ()
 
 ########################################################################################
