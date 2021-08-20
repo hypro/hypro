@@ -1,23 +1,23 @@
 /* prob1.c (problem creating and modifying routines) */
 
 /***********************************************************************
- *  This code is part of GLPK (GNU Linear Programming Kit).
- *  Copyright (C) 2000-2018 Free Software Foundation, Inc.
- *  Written by Andrew Makhorin <mao@gnu.org>.
- *
- *  GLPK is free software: you can redistribute it and/or modify it
- *  under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  GLPK is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- *  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
- ***********************************************************************/
+*  This code is part of GLPK (GNU Linear Programming Kit).
+*  Copyright (C) 2000-2018 Free Software Foundation, Inc.
+*  Written by Andrew Makhorin <mao@gnu.org>.
+*
+*  GLPK is free software: you can redistribute it and/or modify it
+*  under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  GLPK is distributed in the hope that it will be useful, but WITHOUT
+*  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+*  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+*  License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
+***********************************************************************/
 
 #include "env.h"
 #include "ios.h"
@@ -34,31 +34,31 @@
 /* maximal number of constraint coefficients in the problem object */
 
 /***********************************************************************
- *  NAME
- *
- *  glp_create_prob - create problem object
- *
- *  SYNOPSIS
- *
- *  glp_prob *glp_create_prob(void);
- *
- *  DESCRIPTION
- *
- *  The routine glp_create_prob creates a new problem object, which is
- *  initially "empty", i.e. has no rows and columns.
- *
- *  RETURNS
- *
- *  The routine returns a pointer to the object created, which should be
- *  used in any subsequent operations on this object. */
+*  NAME
+*
+*  glp_create_prob - create problem object
+*
+*  SYNOPSIS
+*
+*  glp_prob *glp_create_prob(void);
+*
+*  DESCRIPTION
+*
+*  The routine glp_create_prob creates a new problem object, which is
+*  initially "empty", i.e. has no rows and columns.
+*
+*  RETURNS
+*
+*  The routine returns a pointer to the object created, which should be
+*  used in any subsequent operations on this object. */
 
-static void create_prob( glp_prob* lp )
+static void create_prob(glp_prob *lp)
 #if 0 /* 04/IV-2016 */
 {     lp->magic = GLP_PROB_MAGIC;
 #else
 {
 #endif
-	  lp->pool = dmp_create_pool();
+      lp->pool = dmp_create_pool();
 #if 0 /* 08/III-2014 */
 #if 0 /* 17/XI-2009 */
       lp->cps = xmalloc(sizeof(struct LPXCPS));
@@ -67,7 +67,7 @@ static void create_prob( glp_prob* lp )
       lp->parms = NULL;
 #endif
 #endif
-lp->tree = NULL;
+      lp->tree = NULL;
 #if 0
       lp->lwa = 0;
       lp->cwa = NULL;
@@ -90,7 +90,7 @@ lp->tree = NULL;
 #if 0 /* 08/III-2014 */
       lp->bfcp = NULL;
 #endif
-	  lp->bfd = NULL;
+      lp->bfd = NULL;
       /* basic solution (LP) */
       lp->pbs_stat = lp->dbs_stat = GLP_UNDEF;
       lp->obj_val = 0.0;
@@ -1209,7 +1209,7 @@ void glp_sort_matrix(glp_prob *P)
          xerror("glp_sort_matrix: P = %p; invalid problem object\n",
             P);
 #endif
-	  /* rebuild row linked lists */
+      /* rebuild row linked lists */
       for (i = P->m; i >= 1; i--)
          P->row[i]->ptr = NULL;
       for (j = P->n; j >= 1; j--)
@@ -1531,26 +1531,26 @@ void glp_erase_prob(glp_prob *lp)
 }
 
 /***********************************************************************
- *  NAME
- *
- *  glp_delete_prob - delete problem object
- *
- *  SYNOPSIS
- *
- *  void glp_delete_prob(glp_prob *lp);
- *
- *  DESCRIPTION
- *
- *  The routine glp_delete_prob deletes the specified problem object and
- *  frees all the memory allocated to it. */
+*  NAME
+*
+*  glp_delete_prob - delete problem object
+*
+*  SYNOPSIS
+*
+*  void glp_delete_prob(glp_prob *lp);
+*
+*  DESCRIPTION
+*
+*  The routine glp_delete_prob deletes the specified problem object and
+*  frees all the memory allocated to it. */
 
-static void delete_prob( glp_prob* lp )
+static void delete_prob(glp_prob *lp)
 #if 0 /* 04/IV-2016 */
 {     lp->magic = 0x3F3F3F3F;
 #else
 {
 #endif
-	  dmp_delete_pool( lp->pool );
+      dmp_delete_pool(lp->pool);
 #if 0 /* 08/III-2014 */
 #if 0 /* 17/XI-2009 */
       xfree(lp->cps);
@@ -1558,7 +1558,7 @@ static void delete_prob( glp_prob* lp )
       if (lp->parms != NULL) xfree(lp->parms);
 #endif
 #endif
-xassert( lp->tree == NULL );
+      xassert(lp->tree == NULL);
 #if 0
       if (lp->cwa != NULL) xfree(lp->cwa);
 #endif
@@ -1570,7 +1570,7 @@ xassert( lp->tree == NULL );
 #if 0 /* 08/III-2014 */
       if (lp->bfcp != NULL) xfree(lp->bfcp);
 #endif
-	  if (lp->bfd != NULL) bfd_delete_it(lp->bfd);
+      if (lp->bfd != NULL) bfd_delete_it(lp->bfd);
       return;
 }
 

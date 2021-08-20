@@ -2,7 +2,7 @@
 
 #define __WOE__ 1
 
-#define TLS __declspec( thread )
+#define TLS __declspec(thread)
 /* thread local storage-class specifier for reentrancy */
 
 #define ODBC_DLNAME "odbc32.dll"

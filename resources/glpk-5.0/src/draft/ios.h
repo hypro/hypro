@@ -1,23 +1,23 @@
 /* ios.h (integer optimization suite) */
 
 /***********************************************************************
- *  This code is part of GLPK (GNU Linear Programming Kit).
- *  Copyright (C) 2003-2018 Free Software Foundation, Inc.
- *  Written by Andrew Makhorin <mao@gnu.org>.
- *
- *  GLPK is free software: you can redistribute it and/or modify it
- *  under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  GLPK is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- *  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
- ***********************************************************************/
+*  This code is part of GLPK (GNU Linear Programming Kit).
+*  Copyright (C) 2003-2018 Free Software Foundation, Inc.
+*  Written by Andrew Makhorin <mao@gnu.org>.
+*
+*  GLPK is free software: you can redistribute it and/or modify it
+*  under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  GLPK is distributed in the hope that it will be useful, but WITHOUT
+*  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+*  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+*  License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
+***********************************************************************/
 
 #ifndef IOS_H
 #define IOS_H
@@ -46,12 +46,13 @@ typedef struct IOSPOOL IOSPOOL;
 typedef struct IOSCUT IOSCUT;
 #endif
 
-struct glp_tree { /* branch-and-bound tree */
-	int magic;
-	/* magic value used for debugging */
-	DMP* pool;
-	/* memory pool to store all IOS components */
-	int n;
+struct glp_tree
+{     /* branch-and-bound tree */
+      int magic;
+      /* magic value used for debugging */
+      DMP *pool;
+      /* memory pool to store all IOS components */
+      int n;
       /* number of columns (variables) */
       /*--------------------------------------------------------------*/
       /* problem components corresponding to the original MIP and its
@@ -147,64 +148,64 @@ struct glp_tree { /* branch-and-bound tree */
          pred_max >= pred_m + n */
       unsigned char *pred_type; /* uchar pred_type[1+pred_m+n]; */
       /* types of all variables */
-	  double* pred_lb; /* double pred_lb[1+pred_m+n]; */
-	  /* lower bounds of all variables */
-	  double* pred_ub; /* double pred_ub[1+pred_m+n]; */
-	  /* upper bounds of all variables */
-	  unsigned char* pred_stat; /* uchar pred_stat[1+pred_m+n]; */
-	  /* statuses of all variables */
-	  /****************************************************************/
-	  /* built-in cut generators segment */
-	  IOSPOOL* local;
-	  /* local cut pool */
+      double *pred_lb; /* double pred_lb[1+pred_m+n]; */
+      /* lower bounds of all variables */
+      double *pred_ub; /* double pred_ub[1+pred_m+n]; */
+      /* upper bounds of all variables */
+      unsigned char *pred_stat; /* uchar pred_stat[1+pred_m+n]; */
+      /* statuses of all variables */
+      /****************************************************************/
+      /* built-in cut generators segment */
+      IOSPOOL *local;
+      /* local cut pool */
 #if 1 /* 13/II-2018 */
-	  glp_cov* cov_gen;
-	  /* pointer to working area used by the cover cut generator */
+      glp_cov *cov_gen;
+      /* pointer to working area used by the cover cut generator */
 #endif
-	  glp_mir* mir_gen;
-	  /* pointer to working area used by the MIR cut generator */
-	  glp_cfg* clq_gen;
-	  /* pointer to conflict graph used by the clique cut generator */
-	  /*--------------------------------------------------------------*/
-	  void* pcost;
-	  /* pointer to working area used on pseudocost branching */
-	  int* iwrk; /* int iwrk[1+n]; */
-	  /* working array */
-	  double* dwrk; /* double dwrk[1+n]; */
-	  /* working array */
-	  /*--------------------------------------------------------------*/
-	  /* control parameters and statistics */
-	  const glp_iocp* parm;
-	  /* copy of control parameters passed to the solver */
-	  double tm_beg;
-	  /* starting time of the search, in seconds; the total time of the
-		 search is the difference between xtime() and tm_beg */
-	  double tm_lag;
-	  /* the most recent time, in seconds, at which the progress of the
-		 the search was displayed */
-	  int sol_cnt;
-	  /* number of integer feasible solutions found */
-#if 1		   /* 11/VII-2013 */
-	  void* P; /* glp_prob *P; */
-	  /* problem passed to glp_intopt */
-	  void* npp; /* NPP *npp; */
-	  /* preprocessor workspace or NULL */
-	  const char* save_sol;
-	  /* filename (template) to save every new solution */
-	  int save_cnt;
-	  /* count to generate filename */
+      glp_mir *mir_gen;
+      /* pointer to working area used by the MIR cut generator */
+      glp_cfg *clq_gen;
+      /* pointer to conflict graph used by the clique cut generator */
+      /*--------------------------------------------------------------*/
+      void *pcost;
+      /* pointer to working area used on pseudocost branching */
+      int *iwrk; /* int iwrk[1+n]; */
+      /* working array */
+      double *dwrk; /* double dwrk[1+n]; */
+      /* working array */
+      /*--------------------------------------------------------------*/
+      /* control parameters and statistics */
+      const glp_iocp *parm;
+      /* copy of control parameters passed to the solver */
+      double tm_beg;
+      /* starting time of the search, in seconds; the total time of the
+         search is the difference between xtime() and tm_beg */
+      double tm_lag;
+      /* the most recent time, in seconds, at which the progress of the
+         the search was displayed */
+      int sol_cnt;
+      /* number of integer feasible solutions found */
+#if 1 /* 11/VII-2013 */
+      void *P; /* glp_prob *P; */
+      /* problem passed to glp_intopt */
+      void *npp; /* NPP *npp; */
+      /* preprocessor workspace or NULL */
+      const char *save_sol;
+      /* filename (template) to save every new solution */
+      int save_cnt;
+      /* count to generate filename */
 #endif
-	  /*--------------------------------------------------------------*/
-	  /* advanced solver interface */
-	  int reason;
-	  /* flag indicating the reason why the callback routine is being
-		 called (see glpk.h) */
-	  int stop;
-	  /* flag indicating that the callback routine requires premature
-		 termination of the search */
-	  int next_p;
-	  /* reference number of active subproblem selected to continue
-		 the search; 0 means no subproblem has been selected */
+      /*--------------------------------------------------------------*/
+      /* advanced solver interface */
+      int reason;
+      /* flag indicating the reason why the callback routine is being
+         called (see glpk.h) */
+      int stop;
+      /* flag indicating that the callback routine requires premature
+         termination of the search */
+      int next_p;
+      /* reference number of active subproblem selected to continue
+         the search; 0 means no subproblem has been selected */
       int reopt;
       /* flag indicating that the current LP relaxation needs to be
          re-optimized */
@@ -475,25 +476,25 @@ void ios_del_row(glp_tree *tree, IOSPOOL *pool, int i);
 /* remove row (constraint) from the cut pool */
 
 #define ios_clear_pool _glp_ios_clear_pool
-void ios_clear_pool( glp_tree* tree, IOSPOOL* pool );
+void ios_clear_pool(glp_tree *tree, IOSPOOL *pool);
 /* remove all rows (constraints) from the cut pool */
 
 #define ios_delete_pool _glp_ios_delete_pool
-void ios_delete_pool( glp_tree* tree, IOSPOOL* pool );
+void ios_delete_pool(glp_tree *tree, IOSPOOL *pool);
 /* delete cut pool */
 
 #if 1 /* 11/VII-2013 */
 #define ios_process_sol _glp_ios_process_sol
-void ios_process_sol( glp_tree* T );
+void ios_process_sol(glp_tree *T);
 /* process integer feasible solution just found */
 #endif
 
 #define ios_preprocess_node _glp_ios_preprocess_node
-int ios_preprocess_node( glp_tree* tree, int max_pass );
+int ios_preprocess_node(glp_tree *tree, int max_pass);
 /* preprocess current subproblem */
 
 #define ios_driver _glp_ios_driver
-int ios_driver( glp_tree* tree );
+int ios_driver(glp_tree *tree);
 /* branch-and-bound driver */
 
 #define ios_cov_gen _glp_ios_cov_gen
@@ -513,25 +514,25 @@ void ios_pcost_update(glp_tree *tree);
 /* update history information for pseudocost branching */
 
 #define ios_pcost_free _glp_ios_pcost_free
-void ios_pcost_free( glp_tree* tree );
+void ios_pcost_free(glp_tree *tree);
 /* free working area used on pseudocost branching */
 
 #define ios_feas_pump _glp_ios_feas_pump
-void ios_feas_pump( glp_tree* T );
+void ios_feas_pump(glp_tree *T);
 /* feasibility pump heuristic */
 
 #if 1 /* 25/V-2013 */
 #define ios_proxy_heur _glp_ios_proxy_heur
-void ios_proxy_heur( glp_tree* T );
+void ios_proxy_heur(glp_tree *T);
 /* proximity search heuristic */
 #endif
 
 #define ios_process_cuts _glp_ios_process_cuts
-void ios_process_cuts( glp_tree* T );
+void ios_process_cuts(glp_tree *T);
 /* process cuts stored in the local cut pool */
 
 #define ios_choose_node _glp_ios_choose_node
-int ios_choose_node( glp_tree* T );
+int ios_choose_node(glp_tree *T);
 /* select subproblem to continue the search */
 
 #define ios_choose_var _glp_ios_choose_var

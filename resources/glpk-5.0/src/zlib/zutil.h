@@ -18,8 +18,8 @@
 #include "zlib.h"
 
 #include <stddef.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
 #define local static
 
@@ -29,12 +29,12 @@ typedef unsigned short ush;
 typedef ush ushf;
 typedef unsigned long ulg;
 
-extern const char* const z_errmsg[10];
+extern const char * const z_errmsg[10];
 
-#define ERR_MSG( err ) z_errmsg[Z_NEED_DICT - ( err )]
+#define ERR_MSG(err) z_errmsg[Z_NEED_DICT-(err)]
 
-#define ERR_RETURN( strm, err ) \
-	return ( strm->msg = (char*)ERR_MSG( err ), ( err ) )
+#define ERR_RETURN(strm, err) \
+      return (strm->msg = (char *)ERR_MSG(err), (err))
 
 #define DEF_WBITS MAX_WBITS
 
@@ -46,7 +46,7 @@ extern const char* const z_errmsg[10];
 
 #define STORED_BLOCK 0
 #define STATIC_TREES 1
-#define DYN_TREES 2
+#define DYN_TREES    2
 
 #define MIN_MATCH 3
 #define MAX_MATCH 258
@@ -57,57 +57,36 @@ extern const char* const z_errmsg[10];
 
 #define HAVE_MEMCPY 1
 #define zmemcpy memcpy
-#define zmemzero( dest, len ) memset( dest, 0, len )
+#define zmemzero(dest, len) memset(dest, 0, len)
 
 #ifdef DEBUG
 #include <stdio.h>
 extern int ZLIB_INTERNAL z_verbose;
-extern void ZLIB_INTERNAL z_error OF( ( char* m ) );
-#define Assert( cond, msg )              \
-	{                                    \
-		if ( !( cond ) ) z_error( msg ); \
-	}
-#define Trace( x )                       \
-	{                                    \
-		if ( z_verbose >= 0 ) fprintf x; \
-	}
-#define Tracev( x )                     \
-	{                                   \
-		if ( z_verbose > 0 ) fprintf x; \
-	}
-#define Tracevv( x )                    \
-	{                                   \
-		if ( z_verbose > 1 ) fprintf x; \
-	}
-#define Tracec( c, x )                           \
-	{                                            \
-		if ( z_verbose > 0 && ( c ) ) fprintf x; \
-	}
-#define Tracecv( c, x )                          \
-	{                                            \
-		if ( z_verbose > 1 && ( c ) ) fprintf x; \
-	}
+extern void ZLIB_INTERNAL z_error OF((char *m));
+#define Assert(cond, msg) { if(!(cond)) z_error(msg); }
+#define Trace(x) { if (z_verbose >= 0) fprintf x; }
+#define Tracev(x) { if (z_verbose > 0) fprintf x; }
+#define Tracevv(x) {if (z_verbose > 1) fprintf x; }
+#define Tracec(c, x) {if (z_verbose > 0 && (c)) fprintf x; }
+#define Tracecv(c, x) {if (z_verbose > 1 && (c)) fprintf x; }
 #else
-#define Assert( cond, msg )
-#define Trace( x )
-#define Tracev( x )
-#define Tracevv( x )
-#define Tracec( c, x )
-#define Tracecv( c, x )
+#define Assert(cond, msg)
+#define Trace(x)
+#define Tracev(x)
+#define Tracevv(x)
+#define Tracec(c, x)
+#define Tracecv(c, x)
 #endif
 
-voidpf ZLIB_INTERNAL zcalloc OF( ( voidpf opaque, unsigned items,
-								   unsigned size ) );
-void ZLIB_INTERNAL zcfree OF( ( voidpf opaque, voidpf ptr ) );
+voidpf ZLIB_INTERNAL zcalloc OF((voidpf opaque, unsigned items,
+      unsigned size));
+void ZLIB_INTERNAL zcfree OF((voidpf opaque, voidpf ptr));
 
-#define ZALLOC( strm, items, size ) \
-	( *( ( strm )->zalloc ) )( ( strm )->opaque, ( items ), ( size ) )
-#define ZFREE( strm, addr ) \
-	( *( ( strm )->zfree ) )( ( strm )->opaque, (voidpf)( addr ) )
-#define TRY_FREE( s, p )        \
-	{                           \
-		if ( p ) ZFREE( s, p ); \
-	}
+#define ZALLOC(strm, items, size) \
+      (*((strm)->zalloc))((strm)->opaque, (items), (size))
+#define ZFREE(strm, addr) \
+      (*((strm)->zfree))((strm)->opaque, (voidpf)(addr))
+#define TRY_FREE(s, p) { if (p) ZFREE(s, p); }
 
 #endif
 

@@ -1,23 +1,23 @@
 /* glpssx02.c (simplex method, rational arithmetic) */
 
 /***********************************************************************
- *  This code is part of GLPK (GNU Linear Programming Kit).
- *  Copyright (C) 2003-2013 Free Software Foundation, Inc.
- *  Written by Andrew Makhorin <mao@gnu.org>.
- *
- *  GLPK is free software: you can redistribute it and/or modify it
- *  under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  GLPK is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- *  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
- ***********************************************************************/
+*  This code is part of GLPK (GNU Linear Programming Kit).
+*  Copyright (C) 2003-2013 Free Software Foundation, Inc.
+*  Written by Andrew Makhorin <mao@gnu.org>.
+*
+*  GLPK is free software: you can redistribute it and/or modify it
+*  under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  GLPK is distributed in the hope that it will be useful, but WITHOUT
+*  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+*  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+*  License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
+***********************************************************************/
 
 #include "env.h"
 #include "glpssx.h"
@@ -119,35 +119,37 @@ int ssx_phase_I(SSX *ssx)
                mpq_set_si(coef[k], +1, 1);
                mpq_add(bbar[0], bbar[0], bbar[i]);
                mpq_sub(bbar[0], bbar[0], lb[k]);
-			}
-		 }
-	  }
-	  /* now the initial basic solution should be primal feasible due
-		 to changes of bounds of some basic variables, which turned to
-		 implicit artifical variables */
-	  /* compute simplex multipliers and reduced costs */
-	  ssx_eval_pi( ssx );
-	  ssx_eval_cbar( ssx );
-	  /* display initial progress of the search */
+            }
+         }
+      }
+      /* now the initial basic solution should be primal feasible due
+         to changes of bounds of some basic variables, which turned to
+         implicit artifical variables */
+      /* compute simplex multipliers and reduced costs */
+      ssx_eval_pi(ssx);
+      ssx_eval_cbar(ssx);
+      /* display initial progress of the search */
 #if 1 /* 25/XI-2017 */
-	  if ( ssx->msg_lev >= GLP_MSG_ON )
+      if (ssx->msg_lev >= GLP_MSG_ON)
 #endif
-		  show_progress( ssx, 1 );
-	  /* main loop starts here */
-	  for ( ;; ) { /* display current progress of the search */
-#if 1			   /* 25/XI-2017 */
-		  if ( ssx->msg_lev >= GLP_MSG_ON )
+      show_progress(ssx, 1);
+      /* main loop starts here */
+      for (;;)
+      {  /* display current progress of the search */
+#if 1 /* 25/XI-2017 */
+         if (ssx->msg_lev >= GLP_MSG_ON)
 #endif
 #if 0
          if (utime() - ssx->tm_lag >= ssx->out_frq - 0.001)
 #else
-		  if ( xdifftime( xtime(), ssx->tm_lag ) >= ssx->out_frq - 0.001 )
+         if (xdifftime(xtime(), ssx->tm_lag) >= ssx->out_frq - 0.001)
 #endif
-			  show_progress( ssx, 1 );
-		  /* we do not need to wait until all artificial variables have
-			 left the basis */
-		  if ( mpq_sgn( bbar[0] ) == 0 ) { /* the sum of infeasibilities is zero, therefore the current
-											  solution is primal feasible for the original problem */
+            show_progress(ssx, 1);
+         /* we do not need to wait until all artificial variables have
+            left the basis */
+         if (mpq_sgn(bbar[0]) == 0)
+         {  /* the sum of infeasibilities is zero, therefore the current
+               solution is primal feasible for the original problem */
             ret = 0;
             break;
          }
@@ -234,30 +236,30 @@ int ssx_phase_I(SSX *ssx)
                      mpq_add(cbar[ssx->q], cbar[ssx->q], temp);
                   }
                   mpq_clear(temp);
-			   }
-			}
-		 }
-		 /* jump to the adjacent vertex of the polyhedron */
-		 ssx_change_basis( ssx );
-		 /* one simplex iteration has been performed */
-		 if ( ssx->it_lim > 0 ) ssx->it_lim--;
-		 ssx->it_cnt++;
-	  }
-	  /* display final progress of the search */
+               }
+            }
+         }
+         /* jump to the adjacent vertex of the polyhedron */
+         ssx_change_basis(ssx);
+         /* one simplex iteration has been performed */
+         if (ssx->it_lim > 0) ssx->it_lim--;
+         ssx->it_cnt++;
+      }
+      /* display final progress of the search */
 #if 1 /* 25/XI-2017 */
-	  if ( ssx->msg_lev >= GLP_MSG_ON )
+      if (ssx->msg_lev >= GLP_MSG_ON)
 #endif
-		  show_progress( ssx, 1 );
-	  /* restore components of the original problem, which were changed
-		 by the routine */
-	  for ( k = 1; k <= m + n; k++ ) {
-		  type[k] = orig_type[k];
-		  mpq_set( lb[k], orig_lb[k] );
-		  mpq_clear( orig_lb[k] );
-		  mpq_set( ub[k], orig_ub[k] );
-		  mpq_clear( orig_ub[k] );
-	  }
-	  ssx->dir = orig_dir;
+      show_progress(ssx, 1);
+      /* restore components of the original problem, which were changed
+         by the routine */
+      for (k = 1; k <= m+n; k++)
+      {  type[k] = orig_type[k];
+         mpq_set(lb[k], orig_lb[k]);
+         mpq_clear(orig_lb[k]);
+         mpq_set(ub[k], orig_ub[k]);
+         mpq_clear(orig_ub[k]);
+      }
+      ssx->dir = orig_dir;
       for (k = 0; k <= m+n; k++)
       {  mpq_set(coef[k], orig_coef[k]);
          mpq_clear(orig_coef[k]);
@@ -283,29 +285,30 @@ int ssx_phase_I(SSX *ssx)
 // 3 - time limit exceeded.
 ----------------------------------------------------------------------*/
 
-int ssx_phase_II(SSX *ssx) {
-	int ret;
-	/* display initial progress of the search */
+int ssx_phase_II(SSX *ssx)
+{     int ret;
+      /* display initial progress of the search */
 #if 1 /* 25/XI-2017 */
-	if ( ssx->msg_lev >= GLP_MSG_ON )
+      if (ssx->msg_lev >= GLP_MSG_ON)
 #endif
-		show_progress( ssx, 2 );
-	/* main loop starts here */
-	for ( ;; ) { /* display current progress of the search */
-#if 1			 /* 25/XI-2017 */
-		if ( ssx->msg_lev >= GLP_MSG_ON )
+      show_progress(ssx, 2);
+      /* main loop starts here */
+      for (;;)
+      {  /* display current progress of the search */
+#if 1 /* 25/XI-2017 */
+         if (ssx->msg_lev >= GLP_MSG_ON)
 #endif
 #if 0
          if (utime() - ssx->tm_lag >= ssx->out_frq - 0.001)
 #else
-		if ( xdifftime( xtime(), ssx->tm_lag ) >= ssx->out_frq - 0.001 )
+         if (xdifftime(xtime(), ssx->tm_lag) >= ssx->out_frq - 0.001)
 #endif
-			show_progress( ssx, 2 );
-		/* check if the iterations limit has been exhausted */
-		if ( ssx->it_lim == 0 ) {
-			ret = 2;
-			break;
-		}
+            show_progress(ssx, 2);
+         /* check if the iterations limit has been exhausted */
+         if (ssx->it_lim == 0)
+         {  ret = 2;
+            break;
+         }
          /* check if the time limit has been exhausted */
 #if 0
          if (ssx->tm_lim >= 0.0 && ssx->tm_lim <= utime() - ssx->tm_beg)
@@ -346,22 +349,22 @@ int ssx_phase_II(SSX *ssx) {
             /* update simplex multipliers */
             ssx_update_pi(ssx);
 #endif
-			/* update reduced costs of non-basic variables */
-			ssx_update_cbar( ssx );
-		 }
-		 /* jump to the adjacent vertex of the polyhedron */
-		 ssx_change_basis( ssx );
-		 /* one simplex iteration has been performed */
-		 if ( ssx->it_lim > 0 ) ssx->it_lim--;
-		 ssx->it_cnt++;
-	}
-	/* display final progress of the search */
+            /* update reduced costs of non-basic variables */
+            ssx_update_cbar(ssx);
+         }
+         /* jump to the adjacent vertex of the polyhedron */
+         ssx_change_basis(ssx);
+         /* one simplex iteration has been performed */
+         if (ssx->it_lim > 0) ssx->it_lim--;
+         ssx->it_cnt++;
+      }
+      /* display final progress of the search */
 #if 1 /* 25/XI-2017 */
-	if ( ssx->msg_lev >= GLP_MSG_ON )
+      if (ssx->msg_lev >= GLP_MSG_ON)
 #endif
-		show_progress( ssx, 2 );
-	/* return to the calling program */
-	return ret;
+      show_progress(ssx, 2);
+      /* return to the calling program */
+      return ret;
 }
 
 /*----------------------------------------------------------------------
@@ -392,18 +395,17 @@ int ssx_driver(SSX *ssx)
       int i, k, ret;
       ssx->tm_beg = xtime();
       /* factorize the initial basis matrix */
-	  if ( ssx_factorize( ssx ) )
+      if (ssx_factorize(ssx))
 #if 0 /* 25/XI-2017 */
       {  xprintf("Initial basis matrix is singular\n");
 #else
-	  {
-		  if ( ssx->msg_lev >= GLP_MSG_ERR )
-			  xprintf( "Initial basis matrix is singular\n" );
+      {  if (ssx->msg_lev >= GLP_MSG_ERR)
+            xprintf("Initial basis matrix is singular\n");
 #endif
-		  ret = 7;
-	  goto done;
-}
-/* compute values of basic variables */
+         ret = 7;
+         goto done;
+      }
+      /* compute values of basic variables */
       ssx_eval_bbar(ssx);
       /* check if the initial basic solution is primal feasible */
       for (i = 1; i <= m; i++)
@@ -436,26 +438,26 @@ int ssx_driver(SSX *ssx)
       {  case 0:
             ret = 0;
             break;
-		  case 1:
+         case 1:
 #if 1 /* 25/XI-2017 */
-			  if ( ssx->msg_lev >= GLP_MSG_ALL )
+            if (ssx->msg_lev >= GLP_MSG_ALL)
 #endif
-				  xprintf( "PROBLEM HAS NO FEASIBLE SOLUTION\n" );
-			  ret = 1;
+            xprintf("PROBLEM HAS NO FEASIBLE SOLUTION\n");
+            ret = 1;
             break;
-		  case 2:
+         case 2:
 #if 1 /* 25/XI-2017 */
-			  if ( ssx->msg_lev >= GLP_MSG_ALL )
+            if (ssx->msg_lev >= GLP_MSG_ALL)
 #endif
-				  xprintf( "ITERATIONS LIMIT EXCEEDED; SEARCH TERMINATED\n" );
-			  ret = 3;
+            xprintf("ITERATIONS LIMIT EXCEEDED; SEARCH TERMINATED\n");
+            ret = 3;
             break;
-		  case 3:
+         case 3:
 #if 1 /* 25/XI-2017 */
-			  if ( ssx->msg_lev >= GLP_MSG_ALL )
+            if (ssx->msg_lev >= GLP_MSG_ALL)
 #endif
-				  xprintf( "TIME LIMIT EXCEEDED; SEARCH TERMINATED\n" );
-			  ret = 5;
+            xprintf("TIME LIMIT EXCEEDED; SEARCH TERMINATED\n");
+            ret = 5;
             break;
          default:
             xassert(ret != ret);
@@ -472,34 +474,33 @@ skip: /* compute simplex multipliers */
       /* phase II: find optimal solution */
       ret = ssx_phase_II(ssx);
       switch (ret)
-      {
-		  case 0:
+      {  case 0:
 #if 1 /* 25/XI-2017 */
-			  if ( ssx->msg_lev >= GLP_MSG_ALL )
+            if (ssx->msg_lev >= GLP_MSG_ALL)
 #endif
-				  xprintf( "OPTIMAL SOLUTION FOUND\n" );
-			  ret = 0;
+            xprintf("OPTIMAL SOLUTION FOUND\n");
+            ret = 0;
             break;
-		  case 1:
+         case 1:
 #if 1 /* 25/XI-2017 */
-			  if ( ssx->msg_lev >= GLP_MSG_ALL )
+            if (ssx->msg_lev >= GLP_MSG_ALL)
 #endif
-				  xprintf( "PROBLEM HAS UNBOUNDED SOLUTION\n" );
-			  ret = 2;
+            xprintf("PROBLEM HAS UNBOUNDED SOLUTION\n");
+            ret = 2;
             break;
-		  case 2:
+         case 2:
 #if 1 /* 25/XI-2017 */
-			  if ( ssx->msg_lev >= GLP_MSG_ALL )
+            if (ssx->msg_lev >= GLP_MSG_ALL)
 #endif
-				  xprintf( "ITERATIONS LIMIT EXCEEDED; SEARCH TERMINATED\n" );
-			  ret = 4;
+            xprintf("ITERATIONS LIMIT EXCEEDED; SEARCH TERMINATED\n");
+            ret = 4;
             break;
-		  case 3:
+         case 3:
 #if 1 /* 25/XI-2017 */
-			  if ( ssx->msg_lev >= GLP_MSG_ALL )
+            if (ssx->msg_lev >= GLP_MSG_ALL)
 #endif
-				  xprintf( "TIME LIMIT EXCEEDED; SEARCH TERMINATED\n" );
-			  ret = 6;
+            xprintf("TIME LIMIT EXCEEDED; SEARCH TERMINATED\n");
+            ret = 6;
             break;
          default:
             xassert(ret != ret);

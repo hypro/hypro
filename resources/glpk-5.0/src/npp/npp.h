@@ -1,23 +1,23 @@
 /* npp.h (LP/MIP preprocessor) */
 
 /***********************************************************************
- *  This code is part of GLPK (GNU Linear Programming Kit).
- *  Copyright (C) 2009-2017 Free Software Foundation, Inc.
- *  Written by Andrew Makhorin <mao@gnu.org>.
- *
- *  GLPK is free software: you can redistribute it and/or modify it
- *  under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  GLPK is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- *  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
- ***********************************************************************/
+*  This code is part of GLPK (GNU Linear Programming Kit).
+*  Copyright (C) 2009-2017 Free Software Foundation, Inc.
+*  Written by Andrew Makhorin <mao@gnu.org>.
+*
+*  GLPK is free software: you can redistribute it and/or modify it
+*  under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  GLPK is distributed in the hope that it will be useful, but WITHOUT
+*  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+*  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+*  License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
+***********************************************************************/
 
 #ifndef NPP_H
 #define NPP_H
@@ -40,17 +40,17 @@ struct NPP
 #else
 struct glp_prep
 #endif
-{ /* LP/MIP preprocessor workspace */
-	/*--------------------------------------------------------------*/
-	/* original problem segment */
-	int orig_dir;
-	/* optimization direction flag:
-	   GLP_MIN - minimization
-	   GLP_MAX - maximization */
-	int orig_m;
-	/* number of rows */
-	int orig_n;
-	/* number of columns */
+{     /* LP/MIP preprocessor workspace */
+      /*--------------------------------------------------------------*/
+      /* original problem segment */
+      int orig_dir;
+      /* optimization direction flag:
+         GLP_MIN - minimization
+         GLP_MAX - maximization */
+      int orig_m;
+      /* number of rows */
+      int orig_n;
+      /* number of columns */
       int orig_nnz;
       /* number of non-zero constraint coefficients */
       /*--------------------------------------------------------------*/
@@ -513,126 +513,129 @@ int npp_process_prob(NPP *npp, int hard);
 /* perform basic LP/MIP processing */
 
 #define npp_simplex _glp_npp_simplex
-int npp_simplex( NPP* npp, const glp_smcp* parm );
+int npp_simplex(NPP *npp, const glp_smcp *parm);
 /* process LP prior to applying primal/dual simplex method */
 
 #define npp_integer _glp_npp_integer
-int npp_integer( NPP* npp, const glp_iocp* parm );
+int npp_integer(NPP *npp, const glp_iocp *parm);
 /* process MIP prior to applying branch-and-bound method */
 
 /**********************************************************************/
 
 #define npp_sat_free_row _glp_npp_sat_free_row
-void npp_sat_free_row( NPP* npp, NPPROW* p );
+void npp_sat_free_row(NPP *npp, NPPROW *p);
 /* process free (unbounded) row */
 
 #define npp_sat_fixed_col _glp_npp_sat_fixed_col
-int npp_sat_fixed_col( NPP* npp, NPPCOL* q );
+int npp_sat_fixed_col(NPP *npp, NPPCOL *q);
 /* process fixed column */
 
 #define npp_sat_is_bin_comb _glp_npp_sat_is_bin_comb
-int npp_sat_is_bin_comb( NPP* npp, NPPROW* row );
+int npp_sat_is_bin_comb(NPP *npp, NPPROW *row);
 /* test if row is binary combination */
 
 #define npp_sat_num_pos_coef _glp_npp_sat_num_pos_coef
-int npp_sat_num_pos_coef( NPP* npp, NPPROW* row );
+int npp_sat_num_pos_coef(NPP *npp, NPPROW *row);
 /* determine number of positive coefficients */
 
 #define npp_sat_num_neg_coef _glp_npp_sat_num_neg_coef
-int npp_sat_num_neg_coef( NPP* npp, NPPROW* row );
+int npp_sat_num_neg_coef(NPP *npp, NPPROW *row);
 /* determine number of negative coefficients */
 
 #define npp_sat_is_cover_ineq _glp_npp_sat_is_cover_ineq
-int npp_sat_is_cover_ineq( NPP* npp, NPPROW* row );
+int npp_sat_is_cover_ineq(NPP *npp, NPPROW *row);
 /* test if row is covering inequality */
 
 #define npp_sat_is_pack_ineq _glp_npp_sat_is_pack_ineq
-int npp_sat_is_pack_ineq( NPP* npp, NPPROW* row );
+int npp_sat_is_pack_ineq(NPP *npp, NPPROW *row);
 /* test if row is packing inequality */
 
 #define npp_sat_is_partn_eq _glp_npp_sat_is_partn_eq
-int npp_sat_is_partn_eq( NPP* npp, NPPROW* row );
+int npp_sat_is_partn_eq(NPP *npp, NPPROW *row);
 /* test if row is partitioning equality */
 
 #define npp_sat_reverse_row _glp_npp_sat_reverse_row
-int npp_sat_reverse_row( NPP* npp, NPPROW* row );
+int npp_sat_reverse_row(NPP *npp, NPPROW *row);
 /* multiply both sides of row by -1 */
 
 #define npp_sat_split_pack _glp_npp_sat_split_pack
-NPPROW* npp_sat_split_pack( NPP* npp, NPPROW* row, int nnn );
+NPPROW *npp_sat_split_pack(NPP *npp, NPPROW *row, int nnn);
 /* split packing inequality */
 
 #define npp_sat_encode_pack _glp_npp_sat_encode_pack
-void npp_sat_encode_pack( NPP* npp, NPPROW* row );
+void npp_sat_encode_pack(NPP *npp, NPPROW *row);
 /* encode packing inequality */
 
 typedef struct NPPLIT NPPLIT;
 typedef struct NPPLSE NPPLSE;
 typedef struct NPPSED NPPSED;
 
-struct NPPLIT { /* literal (binary variable or its negation) */
-	NPPCOL* col;
-	/* pointer to binary variable; NULL means constant false */
-	int neg;
-	/* negation flag:
-	   0 - literal is variable (or constant false)
-	   1 - literal is negation of variable (or constant true) */
+struct NPPLIT
+{     /* literal (binary variable or its negation) */
+      NPPCOL *col;
+      /* pointer to binary variable; NULL means constant false */
+      int neg;
+      /* negation flag:
+         0 - literal is variable (or constant false)
+         1 - literal is negation of variable (or constant true) */
 };
 
-struct NPPLSE { /* literal set element */
-	NPPLIT lit;
-	/* literal */
-	NPPLSE* next;
-	/* pointer to another element */
+struct NPPLSE
+{     /* literal set element */
+      NPPLIT lit;
+      /* literal */
+      NPPLSE *next;
+      /* pointer to another element */
 };
 
-struct NPPSED { /* summation encoding descriptor */
-	/* this struct describes the equality
-		  x + y + z = s + 2 * c,
-	   which was encoded as CNF and included into the transformed
-	   problem; here x and y are literals, z is either a literal or
-	   constant zero, s and c are binary variables modeling, resp.,
-	   the low and high (carry) sum bits */
-	NPPLIT x, y, z;
-	/* literals; if z.col = NULL, z is constant zero */
-	NPPCOL *s, *c;
-	/* binary variables modeling the sum bits */
+struct NPPSED
+{     /* summation encoding descriptor */
+      /* this struct describes the equality
+            x + y + z = s + 2 * c,
+         which was encoded as CNF and included into the transformed
+         problem; here x and y are literals, z is either a literal or
+         constant zero, s and c are binary variables modeling, resp.,
+         the low and high (carry) sum bits */
+      NPPLIT x, y, z;
+      /* literals; if z.col = NULL, z is constant zero */
+      NPPCOL *s, *c;
+      /* binary variables modeling the sum bits */
 };
 
 #define npp_sat_encode_sum2 _glp_npp_sat_encode_sum2
-void npp_sat_encode_sum2( NPP* npp, NPPLSE* set, NPPSED* sed );
+void npp_sat_encode_sum2(NPP *npp, NPPLSE *set, NPPSED *sed);
 /* encode 2-bit summation */
 
 #define npp_sat_encode_sum3 _glp_npp_sat_encode_sum3
-void npp_sat_encode_sum3( NPP* npp, NPPLSE* set, NPPSED* sed );
+void npp_sat_encode_sum3(NPP *npp, NPPLSE *set, NPPSED *sed);
 /* encode 3-bit summation */
 
 #define npp_sat_encode_sum_ax _glp_npp_sat_encode_sum_ax
-int npp_sat_encode_sum_ax( NPP* npp, NPPROW* row, NPPLIT y[] );
+int npp_sat_encode_sum_ax(NPP *npp, NPPROW *row, NPPLIT y[]);
 /* encode linear combination of 0-1 variables */
 
 #define npp_sat_normalize_clause _glp_npp_sat_normalize_clause
-int npp_sat_normalize_clause( NPP* npp, int size, NPPLIT lit[] );
+int npp_sat_normalize_clause(NPP *npp, int size, NPPLIT lit[]);
 /* normalize clause */
 
 #define npp_sat_encode_clause _glp_npp_sat_encode_clause
-NPPROW* npp_sat_encode_clause( NPP* npp, int size, NPPLIT lit[] );
+NPPROW *npp_sat_encode_clause(NPP *npp, int size, NPPLIT lit[]);
 /* translate clause to cover inequality */
 
 #define npp_sat_encode_geq _glp_npp_sat_encode_geq
-int npp_sat_encode_geq( NPP* npp, int n, NPPLIT y[], int rhs );
+int npp_sat_encode_geq(NPP *npp, int n, NPPLIT y[], int rhs);
 /* encode "not less than" constraint */
 
 #define npp_sat_encode_leq _glp_npp_sat_encode_leq
-int npp_sat_encode_leq( NPP* npp, int n, NPPLIT y[], int rhs );
+int npp_sat_encode_leq(NPP *npp, int n, NPPLIT y[], int rhs);
 /* encode "not greater than" constraint */
 
 #define npp_sat_encode_row _glp_npp_sat_encode_row
-int npp_sat_encode_row( NPP* npp, NPPROW* row );
+int npp_sat_encode_row(NPP *npp, NPPROW *row);
 /* encode constraint (row) of general type */
 
 #define npp_sat_encode_prob _glp_npp_sat_encode_prob
-int npp_sat_encode_prob( NPP* npp );
+int npp_sat_encode_prob(NPP *npp);
 /* encode 0-1 feasibility problem */
 
 #endif

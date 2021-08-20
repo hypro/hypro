@@ -22,17 +22,17 @@
    of a literal, the base length or distance, or the offset from
    the current table to the next table.  Each entry is four bytes. */
 typedef struct {
-	unsigned char op;	/* operation, extra bits, table bits */
-	unsigned char bits; /* bits in this part of the code */
-	unsigned short val; /* offset in table or code value */
+    unsigned char op;           /* operation, extra bits, table bits */
+    unsigned char bits;         /* bits in this part of the code */
+    unsigned short val;         /* offset in table or code value */
 } code;
 
 /* op values as set by inflate_table():
-	00000000 - literal
-	0000tttt - table link, tttt != 0 is the number of table index bits
-	0001eeee - length or distance, eeee is the number of extra bits
-	01100000 - end of block
-	01000000 - invalid code
+    00000000 - literal
+    0000tttt - table link, tttt != 0 is the number of table index bits
+    0001eeee - length or distance, eeee is the number of extra bits
+    01100000 - end of block
+    01000000 - invalid code
  */
 
 /* Maximum size of the dynamic table.  The maximum number of code structures is
@@ -48,15 +48,15 @@ typedef struct {
    updated. */
 #define ENOUGH_LENS 852
 #define ENOUGH_DISTS 592
-#define ENOUGH ( ENOUGH_LENS + ENOUGH_DISTS )
+#define ENOUGH (ENOUGH_LENS+ENOUGH_DISTS)
 
 /* Type of code to build for inflate_table() */
 typedef enum {
-	CODES,
-	LENS,
-	DISTS
+    CODES,
+    LENS,
+    DISTS
 } codetype;
 
-int ZLIB_INTERNAL inflate_table OF( ( codetype type, unsigned short FAR* lens,
-									  unsigned codes, code FAR* FAR* table,
-									  unsigned FAR* bits, unsigned short FAR* work ) );
+int ZLIB_INTERNAL inflate_table OF((codetype type, unsigned short FAR *lens,
+                             unsigned codes, code FAR * FAR *table,
+                             unsigned FAR *bits, unsigned short FAR *work));

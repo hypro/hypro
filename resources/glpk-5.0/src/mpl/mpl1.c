@@ -1,23 +1,23 @@
 /* mpl1.c */
 
 /***********************************************************************
- *  This code is part of GLPK (GNU Linear Programming Kit).
- *  Copyright (C) 2003-2016 Free Software Foundation, Inc.
- *  Written by Andrew Makhorin <mao@gnu.org>.
- *
- *  GLPK is free software: you can redistribute it and/or modify it
- *  under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  GLPK is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- *  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
- ***********************************************************************/
+*  This code is part of GLPK (GNU Linear Programming Kit).
+*  Copyright (C) 2003-2016 Free Software Foundation, Inc.
+*  Written by Andrew Makhorin <mao@gnu.org>.
+*
+*  GLPK is free software: you can redistribute it and/or modify it
+*  under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  GLPK is distributed in the hope that it will be useful, but WITHOUT
+*  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+*  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+*  License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
+***********************************************************************/
 
 #include "mpl.h"
 
@@ -598,10 +598,10 @@ CODE *make_code(MPL *mpl, int op, OPERANDS *arg, int type, int dim)
          case O_LOG10:
          case O_SQRT:
          case O_SIN:
-		 case O_COS:
-		 case O_TAN:
-		 case O_ATAN:
-		 case O_ROUND:
+         case O_COS:
+         case O_TAN:
+         case O_ATAN:
+         case O_ROUND:
          case O_TRUNC:
          case O_CARD:
          case O_LENGTH:
@@ -1191,21 +1191,21 @@ CODE *function_reference(MPL *mpl)
          op = O_SQRT;
       else if (strcmp(mpl->image, "sin") == 0)
          op = O_SIN;
-      else if ( strcmp( mpl->image, "cos" ) == 0 )
-		  op = O_COS;
-	  else if ( strcmp( mpl->image, "tan" ) == 0 )
-		  op = O_TAN;
-	  else if ( strcmp( mpl->image, "atan" ) == 0 )
-		  op = O_ATAN;
-	  else if ( strcmp( mpl->image, "min" ) == 0 )
-		  op = O_MIN;
-	  else if ( strcmp( mpl->image, "max" ) == 0 )
-		  op = O_MAX;
-	  else if ( strcmp( mpl->image, "round" ) == 0 )
-		  op = O_ROUND;
-	  else if ( strcmp( mpl->image, "trunc" ) == 0 )
-		  op = O_TRUNC;
-	  else if (strcmp(mpl->image, "Irand224") == 0)
+      else if (strcmp(mpl->image, "cos") == 0)
+         op = O_COS;
+      else if (strcmp(mpl->image, "tan") == 0)
+         op = O_TAN;
+      else if (strcmp(mpl->image, "atan") == 0)
+         op = O_ATAN;
+      else if (strcmp(mpl->image, "min") == 0)
+         op = O_MIN;
+      else if (strcmp(mpl->image, "max") == 0)
+         op = O_MAX;
+      else if (strcmp(mpl->image, "round") == 0)
+         op = O_ROUND;
+      else if (strcmp(mpl->image, "trunc") == 0)
+         op = O_TRUNC;
+      else if (strcmp(mpl->image, "Irand224") == 0)
          op = O_IRAND224;
       else if (strcmp(mpl->image, "Uniform01") == 0)
          op = O_UNIFORM01;

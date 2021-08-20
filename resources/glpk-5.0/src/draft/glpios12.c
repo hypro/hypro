@@ -1,47 +1,47 @@
 /* glpios12.c (node selection heuristics) */
 
 /***********************************************************************
- *  This code is part of GLPK (GNU Linear Programming Kit).
- *  Copyright (C) 2003-2018 Free Software Foundation, Inc.
- *  Written by Andrew Makhorin <mao@gnu.org>.
- *
- *  GLPK is free software: you can redistribute it and/or modify it
- *  under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  GLPK is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- *  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
- ***********************************************************************/
+*  This code is part of GLPK (GNU Linear Programming Kit).
+*  Copyright (C) 2003-2018 Free Software Foundation, Inc.
+*  Written by Andrew Makhorin <mao@gnu.org>.
+*
+*  GLPK is free software: you can redistribute it and/or modify it
+*  under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  GLPK is distributed in the hope that it will be useful, but WITHOUT
+*  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+*  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+*  License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
+***********************************************************************/
 
 #include "env.h"
 #include "ios.h"
 
 /***********************************************************************
- *  NAME
- *
- *  ios_choose_node - select subproblem to continue the search
- *
- *  SYNOPSIS
- *
- *  #include "glpios.h"
- *  int ios_choose_node(glp_tree *T);
- *
- *  DESCRIPTION
- *
- *  The routine ios_choose_node selects a subproblem from the active
- *  list to continue the search. The choice depends on the backtracking
- *  technique option.
- *
- *  RETURNS
- *
- *  The routine ios_choose_node return the reference number of the
- *  subproblem selected. */
+*  NAME
+*
+*  ios_choose_node - select subproblem to continue the search
+*
+*  SYNOPSIS
+*
+*  #include "glpios.h"
+*  int ios_choose_node(glp_tree *T);
+*
+*  DESCRIPTION
+*
+*  The routine ios_choose_node selects a subproblem from the active
+*  list to continue the search. The choice depends on the backtracking
+*  technique option.
+*
+*  RETURNS
+*
+*  The routine ios_choose_node return the reference number of the
+*  subproblem selected. */
 
 static int most_feas(glp_tree *T);
 static int best_proj(glp_tree *T);
@@ -132,9 +132,9 @@ static int best_node(glp_tree *T)
             bound = +DBL_MAX;
             for (node = T->head; node != NULL; node = node->next)
                if (bound > node->bound) bound = node->bound;
-			xassert( bound != +DBL_MAX );
-			eps = 1e-10 * ( 1.0 + fabs( bound ) );
-			for (node = T->head; node != NULL; node = node->next)
+            xassert(bound != +DBL_MAX);
+            eps = 1e-10 * (1.0 + fabs(bound));
+            for (node = T->head; node != NULL; node = node->next)
             {  if (node->bound <= bound + eps)
                {  xassert(node->up != NULL);
                   if (best == NULL ||
@@ -150,9 +150,9 @@ static int best_node(glp_tree *T)
             bound = -DBL_MAX;
             for (node = T->head; node != NULL; node = node->next)
                if (bound < node->bound) bound = node->bound;
-			xassert( bound != -DBL_MAX );
-			eps = 1e-10 * ( 1.0 + fabs( bound ) );
-			for (node = T->head; node != NULL; node = node->next)
+            xassert(bound != -DBL_MAX);
+            eps = 1e-10 * (1.0 + fabs(bound));
+            for (node = T->head; node != NULL; node = node->next)
             {  if (node->bound >= bound - eps)
                {  xassert(node->up != NULL);
                   if (best == NULL ||

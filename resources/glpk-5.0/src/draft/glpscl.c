@@ -1,38 +1,38 @@
 /* glpscl.c (problem scaling routines) */
 
 /***********************************************************************
- *  This code is part of GLPK (GNU Linear Programming Kit).
- *  Copyright (C) 2000-2013 Free Software Foundation, Inc.
- *  Written by Andrew Makhorin <mao@gnu.org>.
- *
- *  GLPK is free software: you can redistribute it and/or modify it
- *  under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  GLPK is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- *  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
- ***********************************************************************/
+*  This code is part of GLPK (GNU Linear Programming Kit).
+*  Copyright (C) 2000-2013 Free Software Foundation, Inc.
+*  Written by Andrew Makhorin <mao@gnu.org>.
+*
+*  GLPK is free software: you can redistribute it and/or modify it
+*  under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  GLPK is distributed in the hope that it will be useful, but WITHOUT
+*  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+*  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+*  License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
+***********************************************************************/
 
 #include "env.h"
 #include "misc.h"
 #include "prob.h"
 
 /***********************************************************************
- *  min_row_aij - determine minimal |a[i,j]| in i-th row
- *
- *  This routine returns minimal magnitude of (non-zero) constraint
- *  coefficients in i-th row of the constraint matrix.
- *
- *  If the parameter scaled is zero, the original constraint matrix A is
- *  assumed. Otherwise, the scaled constraint matrix R*A*S is assumed.
- *
- *  If i-th row of the matrix is empty, the routine returns 1. */
+*  min_row_aij - determine minimal |a[i,j]| in i-th row
+*
+*  This routine returns minimal magnitude of (non-zero) constraint
+*  coefficients in i-th row of the constraint matrix.
+*
+*  If the parameter scaled is zero, the original constraint matrix A is
+*  assumed. Otherwise, the scaled constraint matrix R*A*S is assumed.
+*
+*  If i-th row of the matrix is empty, the routine returns 1. */
 
 static double min_row_aij(glp_prob *lp, int i, int scaled)
 {     GLPAIJ *aij;
@@ -170,31 +170,31 @@ static double max_mat_aij(glp_prob *lp, int scaled)
 }
 
 /***********************************************************************
- *  eq_scaling - perform equilibration scaling
- *
- *  This routine performs equilibration scaling of rows and columns of
- *  the constraint matrix.
- *
- *  If the parameter flag is zero, the routine scales rows at first and
- *  then columns. Otherwise, the routine scales columns and then rows.
- *
- *  Rows are scaled as follows:
- *
- *                         n
- *     a'[i,j] = a[i,j] / max |a[i,j]|,  i = 1,...,m.
- *                        j=1
- *
- *  This makes the infinity (maximum) norm of each row of the matrix
- *  equal to 1.
- *
- *  Columns are scaled as follows:
- *
- *                         m
- *     a'[i,j] = a[i,j] / max |a[i,j]|,  j = 1,...,n.
- *                        i=1
- *
- *  This makes the infinity (maximum) norm of each column of the matrix
- *  equal to 1. */
+*  eq_scaling - perform equilibration scaling
+*
+*  This routine performs equilibration scaling of rows and columns of
+*  the constraint matrix.
+*
+*  If the parameter flag is zero, the routine scales rows at first and
+*  then columns. Otherwise, the routine scales columns and then rows.
+*
+*  Rows are scaled as follows:
+*
+*                         n
+*     a'[i,j] = a[i,j] / max |a[i,j]|,  i = 1,...,m.
+*                        j=1
+*
+*  This makes the infinity (maximum) norm of each row of the matrix
+*  equal to 1.
+*
+*  Columns are scaled as follows:
+*
+*                         m
+*     a'[i,j] = a[i,j] / max |a[i,j]|,  j = 1,...,n.
+*                        i=1
+*
+*  This makes the infinity (maximum) norm of each column of the matrix
+*  equal to 1. */
 
 static void eq_scaling(glp_prob *lp, int flag)
 {     int i, j, pass;

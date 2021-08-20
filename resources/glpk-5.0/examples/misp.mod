@@ -1,54 +1,52 @@
 /* MISP, Maximum Independent Set Problem */
 
-        /* Written in GNU MathProg by Andrew Makhorin
-<mao@gnu.org> */
+/* Written in GNU MathProg by Andrew Makhorin <mao@gnu.org> */
 
-        /* Let G = (V,E) be an undirected graph with vertex set V and edge set
-        * E. Vertices u, v in V are non-adjacent if (u,v) not in E. A subset
-        * of the vertices S within V is independent if all vertices in S are
-        * pairwise non-adjacent. The Maximum Independent Set Problem (MISP) is
-        * to find an independent set having the largest cardinality. */
+/* Let G = (V,E) be an undirected graph with vertex set V and edge set
+ * E. Vertices u, v in V are non-adjacent if (u,v) not in E. A subset
+ * of the vertices S within V is independent if all vertices in S are
+ * pairwise non-adjacent. The Maximum Independent Set Problem (MISP) is
+ * to find an independent set having the largest cardinality. */
 
-        param n, integer, > 0;
-        /* number of vertices */
+param n, integer, > 0;
+/* number of vertices */
 
-        set V := 1..n;
-        /* set of vertices */
+set V := 1..n;
+/* set of vertices */
 
-        set E within V cross V;
-        /* set of edges */
+set E within V cross V;
+/* set of edges */
 
 var x{i in V}, binary;
 /* x[i] = 1 means vertex i belongs to independent set */
 
-        s.t. edge{(i,j) in E}: x[i] + x[j]
-<= 1;
-        /* if there is edge (i,j), vertices i and j cannot belong to the same
-        independent set */
+s.t. edge{(i,j) in E}: x[i] + x[j] <= 1;
+/* if there is edge (i,j), vertices i and j cannot belong to the same
+   independent set */
 
-        maximize obj: sum{i in V} x[i];
-        /* the objective is to maximize the cardinality of independent set */
+maximize obj: sum{i in V} x[i];
+/* the objective is to maximize the cardinality of independent set */
 
-        data;
+data;
 
-        /* These data corresponds to the test instance from:
-        *
-        * M.G.C. Resende, T.A.Feo, S.H.Smith, "Algorithm 787 -- FORTRAN
-        * subroutines for approximate solution of the maximum independent set
-        * problem using GRASP," Trans. on Math. Softw., Vol. 24, No. 4,
-        * December 1998, pp. 386-394. */
+/* These data corresponds to the test instance from:
+ *
+ * M.G.C. Resende, T.A.Feo, S.H.Smith, "Algorithm 787 -- FORTRAN
+ * subroutines for approximate solution of the maximum independent set
+ * problem using GRASP," Trans. on Math. Softw., Vol. 24, No. 4,
+ * December 1998, pp. 386-394. */
 
-        /* The optimal solution is 7. */
+/* The optimal solution is 7. */
 
-        param n := 50;
+param n := 50;
 
-        set E :=
-        1 2
-        1 3
-        1 5
-        1 7
-        1 8
-        1 12
+set E :=
+ 1 2
+ 1 3
+ 1 5
+ 1 7
+ 1 8
+ 1 12
  1 15
  1 16
  1 19

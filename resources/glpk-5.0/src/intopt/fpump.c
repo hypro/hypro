@@ -1,65 +1,67 @@
 /* fpump.c (feasibility pump heuristic) */
 
 /***********************************************************************
- *  This code is part of GLPK (GNU Linear Programming Kit).
- *  Copyright (C) 2009-2018 Free Software Foundation, Inc.
- *  Written by Andrew Makhorin <mao@gnu.org>.
- *
- *  GLPK is free software: you can redistribute it and/or modify it
- *  under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  GLPK is distributed in the hope that it will be useful, but WITHOUT
- *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
- *  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
- *  License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
- ***********************************************************************/
+*  This code is part of GLPK (GNU Linear Programming Kit).
+*  Copyright (C) 2009-2018 Free Software Foundation, Inc.
+*  Written by Andrew Makhorin <mao@gnu.org>.
+*
+*  GLPK is free software: you can redistribute it and/or modify it
+*  under the terms of the GNU General Public License as published by
+*  the Free Software Foundation, either version 3 of the License, or
+*  (at your option) any later version.
+*
+*  GLPK is distributed in the hope that it will be useful, but WITHOUT
+*  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+*  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
+*  License for more details.
+*
+*  You should have received a copy of the GNU General Public License
+*  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
+***********************************************************************/
 
 #include "env.h"
 #include "ios.h"
 #include "rng.h"
 
 /***********************************************************************
- *  NAME
- *
- *  ios_feas_pump - feasibility pump heuristic
- *
- *  SYNOPSIS
- *
- *  #include "glpios.h"
- *  void ios_feas_pump(glp_tree *T);
- *
- *  DESCRIPTION
- *
- *  The routine ios_feas_pump is a simple implementation of the Feasi-
- *  bility Pump heuristic.
- *
- *  REFERENCES
- *
- *  M.Fischetti, F.Glover, and A.Lodi. "The feasibility pump." Math.
- *  Program., Ser. A 104, pp. 91-104 (2005). */
+*  NAME
+*
+*  ios_feas_pump - feasibility pump heuristic
+*
+*  SYNOPSIS
+*
+*  #include "glpios.h"
+*  void ios_feas_pump(glp_tree *T);
+*
+*  DESCRIPTION
+*
+*  The routine ios_feas_pump is a simple implementation of the Feasi-
+*  bility Pump heuristic.
+*
+*  REFERENCES
+*
+*  M.Fischetti, F.Glover, and A.Lodi. "The feasibility pump." Math.
+*  Program., Ser. A 104, pp. 91-104 (2005). */
 
-struct VAR { /* binary variable */
-	int j;
-	/* ordinal number */
-	int x;
-	/* value in the rounded solution (0 or 1) */
-	double d;
-	/* sorting key */
+struct VAR
+{     /* binary variable */
+      int j;
+      /* ordinal number */
+      int x;
+      /* value in the rounded solution (0 or 1) */
+      double d;
+      /* sorting key */
 };
 
-static int CDECL fcmp( const void* x, const void* y ) { /* comparison routine */
-	const struct VAR *vx = x, *vy = y;
-	if ( vx->d > vy->d )
-		return -1;
-	else if ( vx->d < vy->d )
-		return +1;
-	else
-		return 0;
+static int CDECL fcmp(const void *x, const void *y)
+{     /* comparison routine */
+      const struct VAR *vx = x, *vy = y;
+      if (vx->d > vy->d)
+         return -1;
+      else if (vx->d < vy->d)
+         return +1;
+      else
+         return 0;
 }
 
 void ios_feas_pump(glp_tree *T)
@@ -281,42 +283,42 @@ skip: /* check if the time limit has been exhausted */
 #if 1 /* modified by xypron <xypron.glpk@gmx.de> */
          /* reset direction and right-hand side of objective */
          lp->c0  = P->c0;
-		 lp->dir = P->dir;
-		 /* fix integer variables */
-		 for ( k = 1; k <= nv; k++ )
-#if 0 /* 18/VI-2013; fixed by mao                                       \
-	   * this bug causes numerical instability, because column statuses \
-	   * are not changed appropriately */
+         lp->dir = P->dir;
+         /* fix integer variables */
+         for (k = 1; k <= nv; k++)
+#if 0 /* 18/VI-2013; fixed by mao
+       * this bug causes numerical instability, because column statuses
+       * are not changed appropriately */
          {  lp->col[var[k].j]->lb   = x[var[k].j];
             lp->col[var[k].j]->ub   = x[var[k].j];
             lp->col[var[k].j]->type = GLP_FX;
          }
 #else
-			 glp_set_col_bnds( lp, var[k].j, GLP_FX, x[var[k].j], 0. );
+            glp_set_col_bnds(lp, var[k].j, GLP_FX, x[var[k].j], 0.);
 #endif
-			 /* copy original objective function */
-			 for ( j = 1; j <= n; j++ )
-				 lp->col[j]->coef = P->col[j]->coef;
-		 /* solve original LP and copy result */
-		 ret = glp_simplex( lp, &parm );
-		 if ( ret != 0 ) {
-			 if ( T->parm->msg_lev >= GLP_MSG_ERR )
-				 xprintf( "Warning: glp_simplex returned %d\n", ret );
+         /* copy original objective function */
+         for (j = 1; j <= n; j++)
+            lp->col[j]->coef = P->col[j]->coef;
+         /* solve original LP and copy result */
+         ret = glp_simplex(lp, &parm);
+         if (ret != 0)
+         {  if (T->parm->msg_lev >= GLP_MSG_ERR)
+               xprintf("Warning: glp_simplex returned %d\n", ret);
 #if 1 /* 17/III-2016: fix memory leak */
-			 xfree( x );
+            xfree(x);
 #endif
-			 goto done;
-		 }
-		 ret = glp_get_status(lp);
-         if (ret != GLP_OPT) {
-			 if ( T->parm->msg_lev >= GLP_MSG_ERR )
-				 xprintf( "Warning: glp_get_status returned %d\n", ret );
+            goto done;
+         }
+         ret = glp_get_status(lp);
+         if (ret != GLP_OPT)
+         {  if (T->parm->msg_lev >= GLP_MSG_ERR)
+               xprintf("Warning: glp_get_status returned %d\n", ret);
 #if 1 /* 17/III-2016: fix memory leak */
-			 xfree( x );
+            xfree(x);
 #endif
-			 goto done;
-		 }
-		 for (j = 1; j <= n; j++)
+            goto done;
+         }
+         for (j = 1; j <= n; j++)
             if (P->col[j]->kind != GLP_IV) x[j] = lp->col[j]->prim;
 #endif
          ret = glp_ios_heur_sol(T, x);

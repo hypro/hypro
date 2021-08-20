@@ -15,18 +15,17 @@
 
 #define ZLIB_INTERNAL
 
-#include "zio.h"
-#include "zlib.h"
-
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "zio.h"
+#include "zlib.h"
 
 #define local static
 
-#define zstrerror() strerror( errno )
+#define zstrerror() strerror(errno)
 
 #define GZBUFSIZE 8192
 
@@ -40,36 +39,35 @@
 #define GZIP 2
 
 typedef struct
-{
-	int mode;
-	int fd;
-	char* path;
-	z_off64_t pos;
-	unsigned size;
-	unsigned want;
-	unsigned char* in;
-	unsigned char* out;
-	unsigned char* next;
-	unsigned have;
-	int eof;
-	z_off64_t start;
-	z_off64_t raw;
-	int how;
-	int direct;
-	int level;
-	int strategy;
-	z_off64_t skip;
-	int seek;
-	int err;
-	char* msg;
-	z_stream strm;
+{     int mode;
+      int fd;
+      char *path;
+      z_off64_t pos;
+      unsigned size;
+      unsigned want;
+      unsigned char *in;
+      unsigned char *out;
+      unsigned char *next;
+      unsigned have;
+      int eof;
+      z_off64_t start;
+      z_off64_t raw;
+      int how;
+      int direct;
+      int level;
+      int strategy;
+      z_off64_t skip;
+      int seek;
+      int err;
+      char *msg;
+      z_stream strm;
 } gz_state;
 
-typedef gz_state* gz_statep;
+typedef gz_state *gz_statep;
 
-void ZLIB_INTERNAL gz_error OF( (gz_statep, int, const char*));
+void ZLIB_INTERNAL gz_error OF((gz_statep, int, const char *));
 
-#define GT_OFF( x ) ( sizeof( int ) == sizeof( z_off64_t ) && ( x ) > INT_MAX )
+#define GT_OFF(x) (sizeof(int) == sizeof(z_off64_t) && (x) > INT_MAX)
 
 #endif
 
