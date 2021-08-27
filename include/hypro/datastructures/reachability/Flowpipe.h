@@ -39,6 +39,9 @@ class Flowpipe {
 	typename std::vector<Representation>::const_iterator begin() const { return mStates.begin(); }
 	typename std::vector<Representation>::const_iterator end() const { return mStates.end(); }
 
+	const Representation& front() const { return *mStates.begin(); }
+	const Representation& back() const { return std::next( mStates.end(), -1 ); }
+
 	std::size_t size() const { return mStates.size(); }
 };
 

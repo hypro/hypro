@@ -487,6 +487,9 @@ TEST( SingularRechabilityTest, SimplePLTScenario ) {
 	auto result = analyzer.run();
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
 
+	// TODO Test some actual properties
+
+	/*
 	// plot flowpipes
 	hypro::Plotter<Number>& plt = hypro::Plotter<Number>::getInstance();
 	plt.rSettings().fill = true;
@@ -507,6 +510,7 @@ TEST( SingularRechabilityTest, SimplePLTScenario ) {
 		plt.plot2d();
 		plt.clear();
 	}
+	*/
 }
 
 TEST( SingularRechabilityTest, ReservoirCaseStudy ) {
@@ -639,6 +643,9 @@ TEST( SingularRechabilityTest, ReservoirCaseStudy ) {
 	// trivially safe, as no unsafe states have been defined
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result.result() );
 
+	// TODO Test some actual properties
+
+	/*
 	// plot flowpipes
 	hypro::Plotter<Number>& plt = hypro::Plotter<Number>::getInstance();
 	plt.rSettings().fill = true;
@@ -659,4 +666,5 @@ TEST( SingularRechabilityTest, ReservoirCaseStudy ) {
 		plt.plot2d();
 		plt.clear();
 	}
+	*/
 }

@@ -88,10 +88,7 @@ class CarlPolytopeT : private GeometricObjectBase {
 
 	bool contains( const Point<Number>& point ) const;
 
-	bool contains( const CarlPolytopeT& ) const {
-		assert( false && "NOT IMPLEMENTED" );
-		return false;
-	}
+	bool contains( const CarlPolytopeT& rhs ) const;
 
 	EvaluationResult<Number> evaluate( const vector_t<Number>& ) const {
 		assert( false && "NOT IMPLEMENTED" );

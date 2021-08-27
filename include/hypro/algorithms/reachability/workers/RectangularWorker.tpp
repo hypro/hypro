@@ -96,33 +96,76 @@ REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( Reach
 template <typename State>
 REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTreeNode<State>& task ) {
 	State badSet = task.getInitialSet();
-	auto [containment, segment] = rectangularIntersectInvariant( badSet );
+	auto [containment, segment] = rectangularIntersectInvariant( badSet, task.getLocation() );
 	if ( containment == CONTAINMENT::NO ) {
+		TRACE( "hypro.worker", "Initial set is not contained in the invariant, return SAFE." );
 		return REACHABILITY_RESULT::SAFE;
 	}
 
-	// add state to flowpipe
-	mFlowpipe.addState( segment );
-
 	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( segment, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
+		TRACE( "hypro.worker", "Initial states are reachable from the bad stated (directly), return UNKNOWN." );
+		mFlowpipe.addState( segment );
+		task.getFlowpipe().push_back( segment );
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 
 	// compute time predecessors states
-	State timePredecessors = rectangularApplyReverseTimeEvolution( segment, badSet.getLocation()->getRectangularFlow() );
-	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors );
-	if ( invariantContainment == CONTAINMENT::NO ) {
+	auto constrainedTimePredecessors = rectangularApplyReverseTimeEvolution( segment, task.getLocation() );
+	if ( constrainedTimePredecessors.empty() ) {
+		TRACE( "hypro.worker", "Time predecessors are not contained in the invariant, return SAFE." );
 		return REACHABILITY_RESULT::SAFE;
 	}
 
 	// add state to flowpipe
 	mFlowpipe.addState( constrainedTimePredecessors );
+	task.getFlowpipe().push_back( constrainedTimePredecessors );
 
 	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( constrainedTimePredecessors, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
+		mFlowpipe.addState( segment );
+		task.getFlowpipe().push_back( segment );
+		TRACE( "hypro.worker", "Initial states are reachable from the bad stated (via time elapse backwards), return UNKNOWN." );
+		return REACHABILITY_RESULT::UNKNOWN;
+	}
+
+	return REACHABILITY_RESULT::SAFE;
+}
+
+template <typename State>
+REACHABILITY_RESULT RectangularWorker<State>::underapproximateTimePredecessors( ReachTreeNode<State>& task ) {
+	State badSet = task.getInitialSet();
+	auto [containment, segment] = rectangularIntersectInvariant( badSet, task.getLocation() );
+	if ( containment == CONTAINMENT::NO ) {
+		TRACE( "hypro.worker", "Initial set is not contained in the invariant, return SAFE." );
+		return REACHABILITY_RESULT::SAFE;
+	}
+
+	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( segment, task.getLocation(), mHybridAutomaton );
+	if ( containment != CONTAINMENT::NO ) {
+		TRACE( "hypro.worker", "Initial states are reachable from the bad stated (directly), return UNKNOWN." );
+		mFlowpipe.addState( segment );
+		task.getFlowpipe().push_back( segment );
+		return REACHABILITY_RESULT::UNKNOWN;
+	}
+
+	// compute time predecessors states
+	State timePredecessors = rectangularUnderapproximateReverseTimeEvolution( segment, task.getLocation()->getRectangularFlow() );
+	auto [invariantContainment, constrainedTimePredecessors] = rectangularIntersectInvariant( timePredecessors, task.getLocation() );
+	if ( invariantContainment == CONTAINMENT::NO ) {
+		TRACE( "hypro.worker", "Time predecessors are not contained in the invariant, return SAFE." );
+		return REACHABILITY_RESULT::SAFE;
+	}
+
+	// add state to flowpipe
+	mFlowpipe.addState( constrainedTimePredecessors );
+	task.getFlowpipe().push_back( constrainedTimePredecessors );
+
+	std::tie( containment, segment ) = rectangularBadIntersectInitialStates( constrainedTimePredecessors, task.getLocation(), mHybridAutomaton );
+	if ( containment != CONTAINMENT::NO ) {
+		mFlowpipe.addState( segment );
+		task.getFlowpipe().push_back( segment );
+		TRACE( "hypro.worker", "Initial states are reachable from the bad stated (via time elapse backwards), return UNKNOWN." );
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 

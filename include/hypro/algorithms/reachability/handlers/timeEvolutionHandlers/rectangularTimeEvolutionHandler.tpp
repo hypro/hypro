@@ -60,7 +60,8 @@ State rectangularApplyTimeEvolution( const State& initialSet, const rectangularF
 }
 
 template <typename Number, class... Reps>
-State<Number, Reps...> rectangularApplyReverseTimeEvolution( const State<Number, Reps...>& badSet, const rectangularFlow<Number>& flow ) {
+State<Number, Reps...> rectangularApplyReverseTimeEvolution( const State<Number, Reps...>& badSet, const Location<Number>* loc ) {
+	auto flow = loc->getRectangularFlow();
 	auto& vpool = hypro::VariablePool::getInstance();
 	// get bad state
 	CarlPolytope<Number> bad = std::get<CarlPolytope<Number>>( badSet.getSet() );
@@ -96,6 +97,10 @@ State<Number, Reps...> rectangularApplyReverseTimeEvolution( const State<Number,
 			bad.addConstraints( flowConstraints );
 		}
 	}
+
+	// add invariant constraints
+	auto invariantConstraints = halfspacesToConstraints( loc->getInvariant().getMatrix(), loc->getInvariant().getVector() );
+	bad.addConstraints( invariantConstraints );
 
 	// add t to eliminate at latest
 	variablesToEliminate.push_back( t );
@@ -152,9 +157,11 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTime
 	// set rays
 	auto combinedRays = initSetPolytope.rays();
 	// add rays originating from vertices of the flow set
-	std::for_each( flowSetPolytope.vertices().begin(), flowSetPolytope.vertices().end(), [&]( const auto& point ) {
+	auto flowVertices = flowSetPolytope.vertices();
+	std::for_each( std::begin( flowVertices ), std::end( flowVertices ), [&]( const auto& point ) {
 		combinedRays.insert( point.rawCoordinates() );
 	} );
+	TRACE( "hypro.reachability.rectangular", "Flow cone is " << combinedRays );
 	// compute vertices from bounded rays
 	for ( const auto& vertex : initSetPolytope.vertices() ) {
 		for ( const auto& ray : combinedRays ) {
@@ -170,11 +177,16 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTime
 	return timeElapse;
 }
 
+/*
 template <template <typename, typename, typename> typename PolyhedralRepresentation, typename Number, typename Converter, typename Setting>
 PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTimeEvolution( const PolyhedralRepresentation<Number, Converter, Setting>& badSet, const rectangularFlow<Number>& flow ) {
-	assert( false );
-	return badSet;
+	auto convertedSet = Converter::toCarlPolytope( badSet );
+	auto convertedResult = rectangularApplyReverseTimeEvolution( convertedSet, flow );
+	PolyhedralRepresentation<Number, Converter, Setting> res;
+	convert( convertedResult, res );
+	return res;
 }
+*/
 
 template <typename Number>
 CarlPolytope<Number> rectangularApplyTimeEvolution( const CarlPolytope<Number>& initialSet, const rectangularFlow<Number>& flow ) {
@@ -232,42 +244,49 @@ CarlPolytope<Number> rectangularApplyTimeEvolution( const CarlPolytope<Number>& 
 }
 
 template <typename Number>
-CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number>& badSet, const rectangularFlow<Number>& flow ) {
+CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number>& badSet, const Location<Number>* loc ) {
 	auto& vpool = hypro::VariablePool::getInstance();
+	auto flow = loc->getRectangularFlow();
 	// get bad state
 	CarlPolytope<Number> bad = badSet;
 	// storage to build elimination query
 	std::vector<carl::Variable> variablesToEliminate;
 	// add variable for time elapse
 	carl::Variable t = vpool.newCarlVariable( "t" );
-	// add constraint t >= 0
-	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
+	// add constraint t <= 0
+	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::LEQ ) );
 
 	// introduce post variables and substitute
 	for ( const auto& v : bad.getVariables() ) {
 		if ( v != t ) {
-			// create post var
+			// create pre var
 			std::stringstream ss;
-			ss << v.name() << "_post";
+			ss << v.name() << "_pre";
 			std::string s = ss.str();
 			auto newV = vpool.newCarlVariable( s );
-			// substitute to create postcondition
+			// substitute to create precondition
 			bad.substituteVariable( v, newV );
 			// store var to eliminate later
 			variablesToEliminate.push_back( newV );
 			// add flow conditions for new variables, we use the variable mapping provided by the flow
-			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber, Number>( newV, v, t, flow.getFlowIntervalForDimension( v ) );
+			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createReverseFlowConstraints<hypro::tNumber, Number>( v, newV, t, flow.getFlowIntervalForDimension( v ) );
 
-			TRACE( "hydra.worker", "Use flow constraints: " );
 #ifdef HYPRO_LOGGING
+			TRACE( "hypro.worker", "Use flow constraints: " );
 			for ( const auto& c : flowConstraints ) {
-				TRACE( "hydra.worker", c );
+				TRACE( "hypro.worker", c );
 			}
 #endif
 
 			bad.addConstraints( flowConstraints );
 		}
 	}
+	// add invariant constraints
+	auto invariantConstraints = halfspacesToConstraints<Number, hypro::tNumber>( loc->getInvariant().getMatrix(), loc->getInvariant().getVector() );
+	bad.addConstraints( invariantConstraints );
+
+	TRACE( "hypro.worker", "Full constraint set describing the dynamic behavior: \n"
+								 << bad );
 
 	// add t to eliminate at latest
 	variablesToEliminate.push_back( t );
@@ -281,7 +300,66 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	// eliminate vars
 	bad.eliminateVariables( quOrder );
 
-	DEBUG( "hydra.worker", "State set after time elapse: " << bad );
+	DEBUG( "hydra.worker", "State set after reverse time elapse: " << bad );
+
+	return bad;
+}
+
+template <typename Number>
+CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution( const CarlPolytope<Number>& badSet, const rectangularFlow<Number>& flow ) {
+	auto& vpool = hypro::VariablePool::getInstance();
+	// get bad state
+	CarlPolytope<Number> bad = badSet;
+	// storage to build elimination query
+	std::vector<carl::Variable> variablesToEliminate;
+	// add variable for time elapse
+	carl::Variable t = vpool.newCarlVariable( "t" );
+	// add constraint t >= 0
+	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
+
+	TRACE( "hypro.worker", "Added time constraint: " << bad );
+
+	// introduce post variables and substitute
+	for ( const auto& v : bad.getVariables() ) {
+		if ( v != t ) {
+			// create pre var
+			std::stringstream ss;
+			ss << v.name() << "_pre";
+			std::string s = ss.str();
+			auto newV = vpool.newCarlVariable( s );
+			// substitute to create precondition
+			bad.substituteVariable( v, newV );
+			// store var to eliminate later
+			variablesToEliminate.push_back( newV );
+			// add flow conditions for new variables, we use the variable mapping provided by the flow
+			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createUnderapproximativeReverseFlowConstraints<hypro::tNumber, Number>( v, newV, t, flow.getFlowIntervalForDimension( v ) );
+
+#ifdef HYPRO_LOGGING
+			TRACE( "hypro.worker", "Use flow constraints: " );
+			for ( const auto& c : flowConstraints ) {
+				TRACE( "hypro.worker", c );
+			}
+#endif
+
+			bad.addConstraints( flowConstraints );
+		}
+	}
+	TRACE( "hypro.worker", "Full constraint set describing the dynamic behavior: \n"
+								 << bad );
+
+	// add t to eliminate at latest
+	variablesToEliminate.push_back( t );
+
+	// create variables to eliminate
+	QEQuery quOrder;
+	quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
+	// allow for some heuristics on how to eliminate
+	bad.choseOrder( quOrder );
+
+	// eliminate vars
+	bad.eliminateVariables( quOrder );
+
+	DEBUG( "hypro.worker", "State set after reverse time elapse: " << bad );
 
 	return bad;
 }

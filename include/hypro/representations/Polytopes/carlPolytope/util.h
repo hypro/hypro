@@ -7,17 +7,32 @@
 namespace hypro {
 
 template <typename N, typename D>
-inline FormulasT<N> halfspacesToConstraints( const matrix_t<D>& constraints, const vector_t<D>& constants ) {
+inline ConstraintT<N> halfspaceToConstraint( const vector_t<D>& normal, const D& offset ) {
+	PolyT<N> p;
+	for ( Eigen::Index col = 0; col < normal.rows(); ++col ) {
+		p += carl::convert<D, N>( normal( col ) ) *
+			 PolyT<N>( VariablePool::getInstance().carlVarByIndex( col ) );
+	}
+	p -= carl::convert<D, N>( offset );
+	return ConstraintT<N>( p, carl::Relation::LEQ );
+}
+
+template <typename N, typename D>
+inline FormulasT<N> halfspacesToFormulas( const matrix_t<D>& constraints, const vector_t<D>& constants ) {
 	FormulasT<N> newConstraints;
 
 	for ( Eigen::Index row = 0; row < constraints.rows(); ++row ) {
-		PolyT<N> p;
-		for ( Eigen::Index col = 0; col < constraints.cols(); ++col ) {
-			p += carl::convert<D, N>( constraints( row, col ) ) *
-				 PolyT<N>( VariablePool::getInstance().carlVarByIndex( col ) );
-		}
-		p -= carl::convert<D, N>( constants( row ) );
-		newConstraints.emplace_back( FormulaT<N>( ConstraintT<N>( p, carl::Relation::LEQ ) ) );
+		newConstraints.emplace_back( FormulaT<N>( halfspaceToConstraint<N, D>( vector_t<D>( constraints.row( row ) ), constants( row ) ) ) );
+	}
+	return newConstraints;
+}
+
+template <typename N, typename D>
+inline ConstraintsT<N> halfspacesToConstraints( const matrix_t<D>& constraints, const vector_t<D>& constants ) {
+	ConstraintsT<N> newConstraints;
+
+	for ( Eigen::Index row = 0; row < constraints.rows(); ++row ) {
+		newConstraints.emplace_back( halfspaceToConstraint<N, D>( constraints.row( row ), constants( row ) ) );
 	}
 	return newConstraints;
 }
