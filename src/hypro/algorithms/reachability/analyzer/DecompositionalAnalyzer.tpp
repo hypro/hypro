@@ -193,17 +193,22 @@ void DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
 bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::isSafe(
 	  const NodeVector& nodes, const Condition<Number>& dependencies, const Condition<Number>& badState ) {
+	// time interval where all subspaces can be bad
+	TimeInformation<Number> badTimeInterval = mGlobalTimeInterval;
 	// Synchronize segmented subspaces and intersect them with the bad state
-	// note: only segments that have non-empty intersection with bad state in all subspaces are returned by generator
-	LtiSegmentGen segments{ nodes, mDecomposition, badState, mSegmentedSubspaces };
 	RepVector subspaceSets( mDecomposition.subspaces.size() );
 	// each segment is paired with the single segment from each singular subspace
 	for ( auto subspace : mSingularSubspaces ) {
+		if ( badTimeInterval.empty() ) {
+			return true;
+		}
 		auto [containment, set] = intersect( nodes[subspace]->getFlowpipe()[0], badState, subspace );
 		if ( containment == CONTAINMENT::NO ) {
 			// no bad state intersection in some subspace
 			return true;
 		} else {
+			set = detail::intersectSegmentWithClock( set, badTimeInterval, mClockCount );
+			badTimeInterval = badTimeInterval.intersect( detail::getClockValues( set, mClockCount ) );
 			subspaceSets[subspace] = set;
 		}
 	}
@@ -232,6 +237,8 @@ bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 			return false;
 		}
 	}
+	// note: only segments that have non-empty intersection with bad state in all subspaces are returned by generator
+	LtiSegmentGen segments{ nodes, mDecomposition, badState, badTimeInterval, mSegmentedSubspaces };
 	// iterate over each synchronized segment and check if composition is non empty
 	for ( auto badSegment = segments.next().second; badSegment.size() > 0; badSegment = segments.next().second ) {
 		if ( mClockCount == 0 ) {
@@ -297,7 +304,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	STOP_BENCHMARK_OPERATION("JumpSuccessorsDiscrete");
 	START_BENCHMARK_OPERATION("JumpSuccessorsLTI");
 	// collect synchronized successors for segmented subspaces
-	std::vector<SubspaceJumpSuccessors<Rep>> segmentedSuccessors = getSegmentedJumpSuccessors( nodes, workers, trans, clockIndex );
+	std::vector<SubspaceJumpSuccessors<Rep>> segmentedSuccessors = getSegmentedJumpSuccessors( nodes, workers, trans, singularEnabledTime, clockIndex );
 	STOP_BENCHMARK_OPERATION("JumpSuccessorsLTI");
 
 	START_BENCHMARK_OPERATION("JumpSuccessorsSynchronization");
@@ -378,9 +385,9 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
 auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::getSegmentedJumpSuccessors(
-	  const NodeVector& nodes, std::vector<WorkerVariant>& workers, Transition<Number>* trans, std::size_t clockIndex ) -> std::vector<SubspaceJumpSuccessors<Rep>> {
+	  const NodeVector& nodes, std::vector<WorkerVariant>& workers, Transition<Number>* trans, const TimeInformation<Number>& enabledTime, std::size_t clockIndex ) -> std::vector<SubspaceJumpSuccessors<Rep>> {
 	// generator synchronized segments by index and intersects with the guard
-	LtiSegmentGen segments{ nodes, mDecomposition, trans->getGuard(), mSegmentedSubspaces };
+	LtiSegmentGen segments{ nodes, mDecomposition, trans->getGuard(), enabledTime, mSegmentedSubspaces };
 	// get predecessors by intersecting with guard
 	std::map<std::size_t, std::vector<IndexedValuationSet<Rep>>> predecessors;
 	for ( auto subspace : mSegmentedSubspaces ) {
@@ -415,16 +422,18 @@ struct DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>
 	SegmentInd segmentIndex = 0;
 	Decomposition decomposition;
 	Condition<Number> cond = Condition<Number>( ConstraintSetT<Number>() );
+	TimeInformation<Number> enabledTime;
 	std::vector<std::size_t> subspaces;
 
 	LtiSegmentGen( NodeVector const& nodes, Decomposition const& decomposition, const std::vector<std::size_t>& subspaces )
 		: nodes( nodes )
 		, decomposition( decomposition )
 		, subspaces( subspaces ) {}
-	LtiSegmentGen( NodeVector const& nodes, Decomposition const& decomposition, Condition<Number> const& cond, const std::vector<std::size_t>& subspaces )
+	LtiSegmentGen( NodeVector const& nodes, Decomposition const& decomposition, Condition<Number> const& cond, const TimeInformation<Number>& enabledTime, const std::vector<std::size_t>& subspaces )
 		: nodes( nodes )
 		, decomposition( decomposition )
 		, cond( cond )
+		, enabledTime( enabledTime )
 		, subspaces( subspaces ) {}
 	std::pair<SegmentInd, SubspaceSets> next() {
 		// check if more segments are available
@@ -438,7 +447,8 @@ struct DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>
 			auto& flowpipe = nodes[subspace]->getFlowpipe();
 			assert( (SegmentInd)flowpipe.size() > segmentIndex );
 			auto [containment, set] = intersect( flowpipe[segmentIndex], cond, subspace );
-			if ( containment == CONTAINMENT::NO ) {
+			set = detail::intersectSegmentWithClock( set, enabledTime, enabledTime.clockCount() );
+			if ( containment == CONTAINMENT::NO || set.empty() ) {
 				segmentIndex += 1;
 				return next();
 			}

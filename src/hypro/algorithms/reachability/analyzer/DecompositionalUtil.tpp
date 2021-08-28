@@ -342,7 +342,6 @@ struct DecompositionalSegmentGen {
 		if ( nodeIterators[0] == nodeIteratorEndings[0] ) {
 			return std::nullopt;
 		}
-		std::cout << "Segment " << segmentIndex	<< "\n";
 		assert( dependencyIterator != dependencyIteratorEnd );
 		// collect next subspace sets to compose segment
 		std::vector<HPolytope<Number>> subspaceSets( decomposition.subspaces.size() );

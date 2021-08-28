@@ -415,6 +415,7 @@ class DecompositionalAnalyzer {
 		  const NodeVector& nodes,
 		  std::vector<WorkerVariant>& workers,
 		  Transition<Number>* trans,
+		  const TimeInformation<Number>& enabledTime,
 		  std::size_t clockIndex )
 		  -> std::vector<SubspaceJumpSuccessors<Rep>>;
 
