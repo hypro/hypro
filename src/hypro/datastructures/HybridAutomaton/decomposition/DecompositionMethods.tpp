@@ -155,7 +155,7 @@ bool isSingularSubspace( const Location<Number> &loc, size_t index ) {
 
 		// Check that all resets are interval based
 		if ( transition->getReset().size() > 0 ) {
-			if ( !transition->getReset().getAffineReset( index ).isIdentity() ) {
+			if ( !transition->getReset().getAffineReset( index ).isSingular() ) {
 				TRACE( "hypro.decisionEntity", "Reset is not interval-based." );
 				return false;
 			}
@@ -499,98 +499,40 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 
 #ifndef NDEBUG
 	// Assume that every location is decomposed in the same number of subspaces, as is done by the decomposeAutomaton function
-	for( auto& loc : automaton.getLocations() ) {
+	for ( auto& loc : automaton.getLocations() ) {
 		assert( loc->getNumberSubspaces() == subspaceTypes.size() );
 	}
 #endif
 	for ( std::size_t subspaceIndex = 0; subspaceIndex < subspaceTypes.size(); ++subspaceIndex ) {
-		for ( auto & loc : automaton.getLocations() ) {
-			switch ( subspaceTypes[ subspaceIndex ] ) {
-				case DynamicType::undefined:
-					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::discrete;
-					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
-					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
-					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::rectangular;
-					} else {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					}
-					break;
-				case DynamicType::discrete:
-					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::discrete;
-					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
-					} else {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					}
-					break;
-				case DynamicType::timed:
-					if ( isTimedSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::timed;
-					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
-					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
-					} else if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					} else {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					}
-					break;
-				case DynamicType::singular:
-					if ( isTimedSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
-					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::singular;
-					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
-					} else if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					} else {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					}
-					break;
-				case DynamicType::rectangular:
-					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
-					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
-					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
-					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::rectangular;
-					} else {
-						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
-					}
-					break;
-				case DynamicType::affine:
-					[[fallthrough]];
-				case DynamicType::linear:
-					if ( isDiscreteSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					} else if ( isTimedSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					} else if ( isSingularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					} else if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
-						subspaceTypes[ subspaceIndex ] = DynamicType::mixed;
-					} else {
-						subspaceTypes[ subspaceIndex ] = DynamicType::linear;
-					}
-					break;
-				case DynamicType::mixed:
-					break;
+		bool discrete = true, singular = true, timed = true, rectangular = true, linear = true;
+		for ( const auto& loc : automaton.getLocations() ) {
+			if ( !isDiscreteSubspace( *loc, subspaceIndex ) ) {
+				discrete = false;
+			}
+			if ( !isSingularSubspace( *loc, subspaceIndex ) ) {
+				singular = false;
+			}
+			if ( !isTimedSubspace( *loc, subspaceIndex ) ) {
+				timed = false;
+			}
+			if ( !isRectangularSubspace( *loc, subspaceIndex ) ) {
+				rectangular = false;
+			}
+			if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
+				linear = false;
 			}
 		}
-		assert( subspaceTypes[ subspaceIndex ] != DynamicType::undefined );
+		if ( discrete ) {
+			subspaceTypes[subspaceIndex] = DynamicType::discrete;
+		} else if ( timed || singular ) {
+			subspaceTypes[subspaceIndex] = DynamicType::singular;
+		} else if ( rectangular ) {
+			subspaceTypes[subspaceIndex] = DynamicType::rectangular;
+		} else if ( linear ) {
+			subspaceTypes[subspaceIndex] = DynamicType::linear;
+		} else {
+			subspaceTypes[subspaceIndex] = DynamicType::mixed;
+		}
 	}
 	return subspaceTypes;
 }
