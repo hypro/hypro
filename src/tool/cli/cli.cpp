@@ -49,7 +49,7 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 	preprocessing.add_options()
 			( "decider", po::bool_switch(), "Use decision entity to decide on future representation/handlers to use based on the current state to allow for optimized computations." )
 			( "decompose", po::bool_switch(), "Decompose automaton into syntactically independent subspaces." )
-			( "clockCount", po::value<std::size_t>(), "Number of clocks to use in decompositional analysis" );
+			( "clockCount", po::value<std::size_t>()->default_value( 0 ), "Number of clocks to use in decompositional analysis. Default is 0." );
 
 	po::options_description allOptions("Allowed options.");
 	allOptions.add(general).add(analysisParameters).add(plotting).add(preprocessing);
