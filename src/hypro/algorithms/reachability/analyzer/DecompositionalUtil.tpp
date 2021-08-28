@@ -26,7 +26,9 @@ HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const
 	std::size_t compRows = 0;
 	compRows += std::accumulate( subspaceSets.begin(), subspaceSets.end(), 0,
 								 []( std::size_t cur, const auto& sSet ) { return cur + sSet.matrix().rows(); } );
-	compRows += dependencies.getMatrix().rows();
+	if ( !dependencies.isTrue() ) {
+		compRows += dependencies.getMatrix().rows();
+	}
 	// 2 inequalities for each equation c_1 = c_i in the subspaces i != 1 (per clock c)
 	compRows += 2 * ( clockCount * ( clockedSubspaceCount - 1 ) );
 	// number of columns in full polytope
@@ -136,6 +138,9 @@ Condition<typename Representation::NumberType> getDependencies( const Representa
 		if ( isDependency<Representation>( nonZeroCols, decomposition ) ) {
 			depIndices.push_back( row );
 		}
+	}
+	if ( depIndices.size() == 0 ) {
+		return Condition<Number>( ConstraintSetT<Number>() );
 	}
 
 	matrix_t<Number> depMatrix( depIndices.size(), composedSet.dimension() );
@@ -337,6 +342,7 @@ struct DecompositionalSegmentGen {
 		if ( nodeIterators[0] == nodeIteratorEndings[0] ) {
 			return std::nullopt;
 		}
+		std::cout << "Segment " << segmentIndex	<< "\n";
 		assert( dependencyIterator != dependencyIteratorEnd );
 		// collect next subspace sets to compose segment
 		std::vector<HPolytope<Number>> subspaceSets( decomposition.subspaces.size() );
@@ -351,14 +357,15 @@ struct DecompositionalSegmentGen {
 				}
 				subspaceSets[subspace] = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[subspace]->getFlowpipe()[segmentIndex].getSet() );
 			} else {
-				// this shouldn't happen (flowpipe computation was skipped, so initial set was empty), but check just in case.
 				if ( nodeIterators[subspace]->getFlowpipe().size() == 0 ) {
+					// this shouldn't happen (flowpipe computation was skipped, so initial set was empty), but check just in case.
 					incrementNodes();
 					return next();
 				}
 				subspaceSets[subspace] = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[subspace]->getFlowpipe()[0].getSet() );
 			}
 		}
+		auto segment = detail::composeSubspaces( subspaceSets, dependencyIterator->getInitialSet(), decomposition, clockCount );
 		// if no subspace is segmented (linear or affine) then one segment per node is always enough. Otherwise, increase segmentIndex
 		if ( !std::any_of( decomposition.subspaceTypes.begin(), decomposition.subspaceTypes.end(),
 						   []( const auto& dynamic ) { return isSegmentedSubspace( dynamic ); } ) ) {
@@ -367,7 +374,7 @@ struct DecompositionalSegmentGen {
 			++segmentIndex;
 		}
 		// compose with dependency
-		return detail::composeSubspaces( subspaceSets, dependencyIterator->getInitialSet(), decomposition, clockCount );
+		return segment;
 	}
 };
 

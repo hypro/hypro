@@ -255,6 +255,7 @@ bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
 void DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::resetClock( Rep& segment, std::size_t clockIndex ) {
+	assert( !segment.empty() && "Clock reset called on empty segment" );
 	if ( mClockCount == 0 ) {
 		return;
 	}
@@ -279,6 +280,9 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	START_BENCHMARK_OPERATION("JumpSuccessorsSingular");
 	auto [singularEnabledTime, singularSuccessors] = getSingularJumpSuccessors( nodes, workers, trans, clockIndex );
 	STOP_BENCHMARK_OPERATION("JumpSuccessorsSingular");
+	if ( singularEnabledTime.empty() ) {
+		return {};
+	}
 	START_BENCHMARK_OPERATION("JumpSuccessorsDiscrete");
 	auto discreteSuccessors = getDiscreteJumpSuccessors( nodes, workers, trans );
 	if ( mSegmentedSubspaces.size() == 0 ) {
@@ -287,6 +291,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 		for ( auto subspace : mDiscreteSubspaces ) {
 			succ.subspaceSets[subspace] = discreteSuccessors[subspace];
 		}
+		STOP_BENCHMARK_OPERATION("JumpSuccessorsDiscrete");
 		return { succ };
 	}
 	STOP_BENCHMARK_OPERATION("JumpSuccessorsDiscrete");
@@ -335,6 +340,9 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 		auto timedSucc = std::visit( getJumpSuccessorVisitor{ trans }, workers[subspace] );
 		// we should always get a set, which may be empty
 		assert( timedSucc.size() == 1 );
+		if ( timedSucc[ 0 ].valuationSet.empty() ) {
+			return std::make_pair( TimeInformation<Number>( mClockCount ), SubspaceSets() );
+		}
 		auto subspaceSuccessorSet = timedSucc[0].valuationSet;
 		resetClock( subspaceSuccessorSet, clockIndex );
 		singularSuccessors[subspace] = subspaceSuccessorSet;
@@ -488,7 +496,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	HPolytope<Number> composedSuccessors = detail::composeSubspaces( subspacePolytopes, dependencies, mDecomposition, mClockCount );
 	STOP_BENCHMARK_OPERATION("ComplexityReductionCompose");
 	if ( composedSuccessors.empty() ) {
-		return std::make_pair( Condition<Number>(), res );
+		return std::make_pair( Condition<Number>( ConstraintSetT<Number>() ), res );
 	}
 	auto newDependencies = detail::getDependencies( composedSuccessors, mDecomposition );
 	START_BENCHMARK_OPERATION("ComplexityReductionDecompose");
