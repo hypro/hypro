@@ -30,6 +30,7 @@ NamespaceIndentation: None
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: false
 PenaltyBreakBeforeFirstCallParameter: 1
+ReflowComments: true
 PenaltyBreakComment: 300
 PenaltyBreakString: 1000
 PenaltyBreakFirstLessLess: 120

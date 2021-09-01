@@ -1,7 +1,7 @@
-#include "plottype_enums.h"
+#include "hypro/util/type_handling/plottype_enums.h"
 
-namespace hypro {
-namespace plotting {
+namespace hypro::plotting {
+
 PLOTTYPE outputFormat( const std::string& in ) {
 	if ( in == "pdf" ) return PLOTTYPE::pdf;
 	if ( in == "png" ) return PLOTTYPE::png;
@@ -19,6 +19,5 @@ std::string to_string( PLOTTYPE in ) {
 	if ( in == PLOTTYPE::tex ) return "tex";
 	return "";
 }
-}  // namespace plotting
 
-}  // namespace hypro
+}  // namespace hypro::plotting

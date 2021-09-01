@@ -1,7 +1,7 @@
 /**
  *
  */
-#include "adaptions_clp.h"
+#include "hypro/util/linearOptimization/clp/adaptions_clp.h"
 #ifdef HYPRO_USE_CLP
 
 namespace hypro {
