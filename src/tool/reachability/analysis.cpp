@@ -59,7 +59,6 @@ std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Numbe
 	using SingularRep = hypro::VPolytope<Number>;
 	using DiscreteRep = hypro::Box<Number>;
 	using RectangularRep = hypro::Box<Number>;
-	using ComposedRep = hypro::apply<hypro::State, UniqueTypeList<Number, LTIRep, SingularRep, DiscreteRep, RectangularRep>>;
 	DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep> analyzer{ decomposedHa, decomposition, clockCount,
 		setting.fixedParameters(), setting.strategy().front() };
 	auto result = analyzer.run();
@@ -72,7 +71,7 @@ std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Numbe
 	PRINT_STATS();
 	START_BENCHMARK_OPERATION( "Composition" );
 	std::vector<PlotData<FullState>> plotData{};
-	DecompositionalSegmentGen<ComposedRep> segments( analyzer.getRoots(), analyzer.getDepRoots(), decomposition, clockCount );
+	DecompositionalSegmentGen segments( analyzer.getRoots(), analyzer.getDepRoots(), decomposition, clockCount );
     // todo: skip this if --skipplot is enabled, because composition of all segments can take ages
     for ( auto segment = segments.next(); segment; segment = segments.next() ) {
         FullState state{};

@@ -36,13 +36,13 @@ struct DecompositionalSuccess {};
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
 class DecompositionalAnalyzer {
 	using Number = typename LTIRep::NumberType;
-	using Rep = apply<State, UniqueTypeList<Number, LTIRep, SingularRep, DiscreteRep, RectangularRep>>;
-	using NodeVector = std::vector<ReachTreeNode<Rep>*>;
-	using RepVector = std::vector<Rep>;
-	using SubspaceSets = std::map<std::size_t, Rep>;
+	using ComposedRep = apply<State, UniqueTypeList<Number, LTIRep, SingularRep, DiscreteRep, RectangularRep>>;
+	using NodeVector = std::vector<ReachTreeNode<ComposedRep>*>;
+	using RepVector = std::vector<ComposedRep>;
+	using SubspaceSets = std::map<std::size_t, ComposedRep>;
 
   public:
-	using DecompositionalResult = AnalysisResult<DecompositionalSuccess, Failure<Rep>>;
+	using DecompositionalResult = AnalysisResult<DecompositionalSuccess, Failure<ComposedRep>>;
 	using WorkerVariant = std::variant<LTIWorker<LTIRep>,
 									   SingularWorker<SingularRep>,
 									   RectangularWorker<RectangularRep>,
@@ -81,7 +81,7 @@ class DecompositionalAnalyzer {
 			}
 			ReachTreeNode<Condition<Number>> dependencyNode{ subspaceRoots[0].getLocation(), Condition<Number>( ConstraintSetT<Number>() ), { 0, 0 } };
 			auto& dep = mDependencyRoots.emplace_back( std::move( dependencyNode ) );
-			mWorkQueue.push_front( detail::decompositionalQueueEntry<Rep>{ 0, root, &dep } );
+			mWorkQueue.push_front( detail::decompositionalQueueEntry<ComposedRep>{ 0, root, &dep } );
 		}
 		for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
 			if ( isSegmentedSubspace( decomposition.subspaceTypes[subspace] ) ) {
@@ -100,7 +100,7 @@ class DecompositionalAnalyzer {
      */
 	DecompositionalResult run();
 
-	std::vector<std::vector<ReachTreeNode<Rep>>>& getRoots() { return mRoots; }
+	std::vector<std::vector<ReachTreeNode<ComposedRep>>>& getRoots() { return mRoots; }
 	std::vector<ReachTreeNode<Condition<Number>>>& getDepRoots() { return mDependencyRoots; }
 
   private:
@@ -131,7 +131,7 @@ class DecompositionalAnalyzer {
      * @return      The time intervals where the subspace satisfies the invariant.
      */
 	struct computeTimeSuccessorVisitor {
-		ReachTreeNode<Rep>* task;
+		ReachTreeNode<ComposedRep>* task;
 		std::size_t clockCount;	 // number of clocks
 		int segmentCount = -1; // number of segments to compute in lti worker. if negative, use worker settings to get number of segments
 		TimeInformation<Number> operator()( SingularWorker<SingularRep>& worker ) {
@@ -139,7 +139,7 @@ class DecompositionalAnalyzer {
 			worker.computeTimeSuccessors( singularTask, false );
 			auto& flowpipe = task->getFlowpipe();
 			std::transform( worker.getFlowpipe().begin(), worker.getFlowpipe().end(), std::back_inserter( flowpipe ), [=]( auto& segment ) {
-				Rep state{};
+				ComposedRep state{};
 				state.setSet( segment );
 				return state;
 			} );
@@ -158,7 +158,7 @@ class DecompositionalAnalyzer {
 				  std::visit( genericConvertAndGetVisitor<LTIRep>(), task->getInitialSet().getSet() ),
 				  task->getLocation(),
 				  boost::make_function_output_iterator( [&flowpipe]( LTIRep segment ) {
-                    Rep state;
+                    ComposedRep state;
                     state.setSet( segment );
                     flowpipe.push_back( state ); } ),
 				  segmentCount,
@@ -175,7 +175,7 @@ class DecompositionalAnalyzer {
 				  std::visit( genericConvertAndGetVisitor<DiscreteRep>(), task->getInitialSet().getSet() ),
 				  task->getLocation(),
 				  boost::make_function_output_iterator( [&flowpipe]( DiscreteRep segment ) {
-                    Rep state;
+                    ComposedRep state;
                     state.setSet( segment );
                     flowpipe.push_back( state ); } ),
 				  false );
@@ -198,7 +198,7 @@ class DecompositionalAnalyzer {
      * @param       task                The current task.
      */
 	struct computeSingularJumpSuccessorVisitor {
-		ReachTreeNode<Rep>* task;
+		ReachTreeNode<ComposedRep>* task;
 		void operator()( SingularWorker<SingularRep>& worker ) {
 			// todo: don't need the initial set here. Worker only uses location to compute jump successors.
 			ReachTreeNode<SingularRep> singularTask( task->getLocation(), std::visit( genericConvertAndGetVisitor<SingularRep>(), task->getInitialSet().getSet() ), task->getTimings() );
@@ -224,24 +224,24 @@ class DecompositionalAnalyzer {
      */
 	struct getJumpSuccessorVisitor {
 		Transition<Number>* transition;
-		std::vector<IndexedValuationSet<Rep>> predecessors{};
-		std::vector<TimedValuationSet<Rep>> operator()( SingularWorker<SingularRep>& worker ) {
+		std::vector<IndexedValuationSet<ComposedRep>> predecessors{};
+		std::vector<TimedValuationSet<ComposedRep>> operator()( SingularWorker<SingularRep>& worker ) {
 			auto it = worker.getJumpSuccessorSets().find( transition );
 			if ( it != worker.getJumpSuccessorSets().end() ) {
 				auto successorList = it->second;
 				assert( successorList.size() == 1 );
-				Rep succ;
+				ComposedRep succ;
 				succ.setSet( successorList[0] );
 				return { { succ, carl::Interval<SegmentInd>( 0 ) } };
 			} else {
-				return { { Rep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
+				return { { ComposedRep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
 			}
 		}
-		std::vector<TimedValuationSet<Rep>> operator()( RectangularWorker<RectangularRep>& ) {
+		std::vector<TimedValuationSet<ComposedRep>> operator()( RectangularWorker<RectangularRep>& ) {
 			//todo
-			return { { Rep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
+			return { { ComposedRep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
 		}
-		std::vector<TimedValuationSet<Rep>> operator()( LTIWorker<LTIRep>& worker ) {
+		std::vector<TimedValuationSet<ComposedRep>> operator()( LTIWorker<LTIRep>& worker ) {
 			std::vector<IndexedValuationSet<LTIRep>> ltiPredecessors;
 			std::transform( predecessors.begin(), predecessors.end(), std::back_inserter( ltiPredecessors ), [=]( auto& indexedSegment ) {
 				return IndexedValuationSet<LTIRep>{ std::visit(
@@ -249,19 +249,19 @@ class DecompositionalAnalyzer {
 													indexedSegment.index };
 			} );
 			auto workerRes = worker.computeJumpSuccessorsForGuardEnabled( ltiPredecessors, transition );
-			std::vector<TimedValuationSet<Rep>> res;
+			std::vector<TimedValuationSet<ComposedRep>> res;
 			std::transform( workerRes.begin(), workerRes.end(), std::back_inserter( res ), [=]( auto& timedSegment ) {
-				Rep succ;
+				ComposedRep succ;
 				succ.setSet( timedSegment.valuationSet );
-				return TimedValuationSet<Rep>{ succ, timedSegment.time };
+				return TimedValuationSet<ComposedRep>{ succ, timedSegment.time };
 			} );
 			return res;
 		}
-		std::vector<TimedValuationSet<Rep>> operator()( DiscreteWorker<DiscreteRep>& worker ) {
+		std::vector<TimedValuationSet<ComposedRep>> operator()( DiscreteWorker<DiscreteRep>& worker ) {
 			auto [containment, successor] = worker.computeJumpSuccessorsForGuardEnabled(
 				  std::visit( genericConvertAndGetVisitor<DiscreteRep>(), predecessors[0].valuationSet.getSet() ), transition );
-			if ( containment == CONTAINMENT::NO ) return { { Rep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
-			Rep succ;
+			if ( containment == CONTAINMENT::NO ) return { { ComposedRep::Empty(), carl::Interval<SegmentInd>( 0 ) } };
+			ComposedRep succ;
 			succ.setSet( successor );
 			return { { succ, carl::Interval<SegmentInd>( 0 ) } };
 		}
@@ -270,13 +270,13 @@ class DecompositionalAnalyzer {
 	struct LtiJumpSuccessorGen;
 	struct LtiSegmentGen;
 
-	std::vector<std::vector<ReachTreeNode<Rep>>> makeDecompositionalRoots( HybridAutomaton<Number> const& ha, Decomposition decomposition ) {
-		std::vector<std::vector<ReachTreeNode<Rep>>> roots{};
+	std::vector<std::vector<ReachTreeNode<ComposedRep>>> makeDecompositionalRoots( HybridAutomaton<Number> const& ha, Decomposition decomposition ) {
+		std::vector<std::vector<ReachTreeNode<ComposedRep>>> roots{};
 		// for each initial set, create one vector (of size #subspaces) of nodes
 		for ( auto const& [location, condition] : ha.getInitialStates() ) {
-			std::vector<ReachTreeNode<Rep>> nodeVector;
+			std::vector<ReachTreeNode<ComposedRep>> nodeVector;
 			for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
-				Rep initialSet{};
+				ComposedRep initialSet{};
 				switch ( decomposition.subspaceTypes[subspace] ) {
 					case DynamicType::discrete:
 						initialSet.setSet( DiscreteRep{ condition.getMatrix( subspace ), condition.getVector( subspace ) } );
@@ -297,7 +297,7 @@ class DecompositionalAnalyzer {
 					default:
 						assert( false );
 				}
-				ReachTreeNode<Rep> node{ location, initialSet, { 0, 0 } };
+				ReachTreeNode<ComposedRep> node{ location, initialSet, { 0, 0 } };
 				nodeVector.push_back( std::move( node ) );
 			}
 			roots.push_back( std::move( nodeVector ) );
@@ -335,7 +335,7 @@ class DecompositionalAnalyzer {
      * @param       segment         The computed segment.
      * @param       clockIndex      The current clockIndex. All clocks with higher index are reset.
      */
-	void resetClock( Rep& segment, std::size_t clockIndex );
+	void resetClock( ComposedRep& segment, std::size_t clockIndex );
 
 	/**
      * @brief       Intersect computed segments with clock values and update flowpipes.
@@ -380,7 +380,7 @@ class DecompositionalAnalyzer {
 		  std::vector<WorkerVariant> workers,
 		  Transition<Number>* trans,
 		  std::size_t clockIndex )
-		  -> std::vector<SubspaceJumpSuccessors<Rep>>;
+		  -> std::vector<SubspaceJumpSuccessors<ComposedRep>>;
 
 	/**
      * @brief       Get the singular jump successors for a transition and the clock values where all successors satisfy the invariant.
@@ -417,7 +417,7 @@ class DecompositionalAnalyzer {
 		  Transition<Number>* trans,
 		  const TimeInformation<Number>& enabledTime,
 		  std::size_t clockIndex )
-		  -> std::vector<SubspaceJumpSuccessors<Rep>>;
+		  -> std::vector<SubspaceJumpSuccessors<ComposedRep>>;
 
 	auto complexityReduction(
 		  const RepVector& sets,
@@ -425,7 +425,7 @@ class DecompositionalAnalyzer {
 		  -> std::pair<Condition<Number>, RepVector>;
 
   protected:
-	std::deque<detail::decompositionalQueueEntry<Rep>> mWorkQueue;	// holds the tasks that still need to be computed
+	std::deque<detail::decompositionalQueueEntry<ComposedRep>> mWorkQueue;	// holds the tasks that still need to be computed
 	HybridAutomaton<Number> const* mHybridAutomaton;				// holds a pointer to the decomposed automaton
 	Decomposition mDecomposition;									// holds decomposition information corresponding to the automaton
 	std::size_t mClockCount;										// holds the number of additional clocks in the (singular) subspaces
@@ -434,7 +434,7 @@ class DecompositionalAnalyzer {
 	std::vector<std::size_t> mSingularSubspaces;					// holds the singular subspace indices
 	std::vector<std::size_t> mSegmentedSubspaces;					// holds the subspaces which have more than one segment as time successors (e.g. non-singular)
 	std::vector<std::size_t> mDiscreteSubspaces;					// holds subspaces with discrete dynamics
-	std::vector<std::vector<ReachTreeNode<Rep>>> mRoots;
+	std::vector<std::vector<ReachTreeNode<ComposedRep>>> mRoots;
 	std::vector<ReachTreeNode<Condition<Number>>> mDependencyRoots;	 // holds roots of reach tree that contains dependency information
 
 	tNumber const mGlobalTimeHorizon = ( mFixedParameters.jumpDepth + 1 ) * mFixedParameters.localTimeHorizon;
