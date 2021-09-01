@@ -5,11 +5,14 @@
 
 
 using namespace hypro;
+using Number = mpq_class;
+// fixed representations for subspaces
+using SingularRep = VPolytope<Number>;
+using DiscreteRep = Box<Number>;
+using RectangularRep = VPolytope<Number>;
 
 TEST( DecompositionalUtil, ComposeSubspaces ) {
-    using Number = mpq_class;
     using HPol = HPolytope<Number>;
-
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
 
@@ -52,9 +55,7 @@ TEST( DecompositionalUtil, ComposeSubspaces ) {
 }
 
 TEST( DecompositionalUtil, ComposeSubspacesDiscrete ) {
-    using Number = mpq_class;
     using HPol = HPolytope<Number>;
-
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
 
@@ -104,30 +105,30 @@ TEST( DecompositionalUtil, ComposeSubspacesDiscrete ) {
     EXPECT_TRUE( composed.contains( expected ) );
 }
 
-
-
 TEST( DecompositionalAnalysisMixedDynamics, NoJumpsNoBadStates ) {
-    using Number = double;
-    using Representation = HPolytope<Number>;
+	using Representation = HPolytope<Number>;
 
-    std::size_t jumpDepth = 4;
-    tNumber timeHorizon = 5;
-    tNumber timeStep = 0.1;
-    std::size_t clocks = 2;
+	std::size_t jumpDepth = 4;
+	tNumber timeHorizon = 5;
+	tNumber timeStep = 0.5;
+	std::size_t clockCount = 1;
 
-    auto ha = mixedDynamicsNoJumpsHa<Number>();
-    auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
-    for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-        addClocksToAutomaton( decomposedHa, subspace, clocks );
-    }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
-    auto result = analyzer.run();
-    EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
+	auto ha = mixedDynamicsNoJumpsHa<Number>();
+	auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
+	for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+		if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
+			addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[subspace].size() );
+			addClocksToAutomaton( decomposedHa, subspace, clockCount );
+		}
+	}
+	DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer(
+		  decomposedHa, decomposition, clockCount, FixedAnalysisParameters{ jumpDepth, timeHorizon, timeStep },
+		  AnalysisParameters{ timeStep } );
+	auto result = analyzer.run();
+	EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
 
 TEST( DecompositionalAnalysisMixedDynamics, NoJumpsSafe ) {
-    using Number = double;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = HPolytope<Number>;
@@ -135,7 +136,7 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsSafe ) {
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 5;
     tNumber timeStep = 0.5;
-    std::size_t clocks = 2;
+    std::size_t clockCount = 1;
 
     auto ha = mixedDynamicsNoJumpsHa<Number>();
     // bad state: x <= 0 && z <= 4 (safe)
@@ -147,27 +148,28 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsSafe ) {
     ha.setGlobalBadStates( { Condition<Number>( badStateMat, badStateVec ) } );
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
         addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-        addClocksToAutomaton( decomposedHa, subspace, clocks );
+        addClocksToAutomaton( decomposedHa, subspace, clockCount );
+        }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
 
 TEST( DecompositionalAnalysisMixedDynamics, NoJumpsUnsafe ) {
-    using Number = double;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = HPolytope<Number>;
 
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 5;
-    tNumber timeStep = 0.1;
-    std::size_t clocks = 2;
+    tNumber timeStep = 0.5;
+    std::size_t clockCount = 1;
 
     auto ha = mixedDynamicsNoJumpsHa<Number>();
-    // bad state: x <= 0 && z <= 20 (safe)
+    // bad state: x <= 0 && z <= 20 (unsafe)
     Matrix badStateMat = Matrix::Zero( 2, 3 );
     badStateMat( 0, 0 ) = 1;
     badStateMat( 1, 2 ) = 1;
@@ -176,24 +178,25 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsUnsafe ) {
     ha.setGlobalBadStates( { Condition<Number>( badStateMat, badStateVec ) } );
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
         addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-        addClocksToAutomaton( decomposedHa, subspace, clocks );
+        addClocksToAutomaton( decomposedHa, subspace, clockCount );
+        }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
 
 TEST( DecompositionalAnalysisMixedDynamics, JumpsSafe ) {
-    using Number = double;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = HPolytope<Number>;
 
     std::size_t jumpDepth = 3;
     tNumber timeHorizon = 5;
-    tNumber timeStep = 0.2;
-    std::size_t clocks = 1;
+    tNumber timeStep = 0.5;
+    std::size_t clockCount = 1;
 
     auto ha = mixedDynamicsWithJumpsHa<Number>();
     // bad state: x >= 3 and z in [1,2] in l1 (safe)
@@ -203,30 +206,31 @@ TEST( DecompositionalAnalysisMixedDynamics, JumpsSafe ) {
     badStateMat( 2, 2 ) = -1;
     Vector badStateVec = Vector::Zero( 3 );
     badStateVec << -3, 2, -1;
-    ha.addLocalBadState( ha.getLocation( "l1" ), Condition<Number>( badStateMat, badStateVec ) );
+    ha.addLocalBadStates( ha.getLocation( "l1" ), Condition<Number>( badStateMat, badStateVec ) );
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     ASSERT_EQ( (std::size_t) 2, decomposition.subspaces.size() );
     EXPECT_EQ( DynamicType::linear, decomposition.subspaceTypes[ 0 ] );
     EXPECT_EQ( DynamicType::timed, decomposition.subspaceTypes[ 1 ] );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
         addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-        addClocksToAutomaton( decomposedHa, subspace, clocks );
+        addClocksToAutomaton( decomposedHa, subspace, clockCount );
+        }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep, AGG_SETTING::AGG, 0 } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
 
 TEST( DecompositionalAnalysisMixedDynamics, JumpsUnsafe ) {
-    using Number = double;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = HPolytope<Number>;
 
     std::size_t jumpDepth = 3;
     tNumber timeHorizon = 5;
-    tNumber timeStep = 0.2;
-    std::size_t clocks = 1;
+    tNumber timeStep = 0.5;
+    std::size_t clockCount = 1;
 
     auto ha = mixedDynamicsWithJumpsHa<Number>();
     // bad state: x >= 3 in l1 (unsafe)
@@ -234,17 +238,19 @@ TEST( DecompositionalAnalysisMixedDynamics, JumpsUnsafe ) {
     badStateMat( 0, 0 ) = -1;
     Vector badStateVec = Vector::Zero( 1 );
     badStateVec << -3;
-    ha.addLocalBadState( ha.getLocation( "l1" ), Condition<Number>( badStateMat, badStateVec ) );
+    ha.addLocalBadStates( ha.getLocation( "l1" ), Condition<Number>( badStateMat, badStateVec ) );
 
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     ASSERT_EQ( (std::size_t) 2, decomposition.subspaces.size() );
     EXPECT_EQ( DynamicType::linear, decomposition.subspaceTypes[ 0 ] );
     EXPECT_EQ( DynamicType::timed, decomposition.subspaceTypes[ 1 ] );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
         addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-        addClocksToAutomaton( decomposedHa, subspace, clocks );
+        addClocksToAutomaton( decomposedHa, subspace, clockCount );
+        }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep, AGG_SETTING::AGG, 0 } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
@@ -254,24 +260,23 @@ TEST( DecompositionalAnalysisMixedDynamics, JumpsUnsafe ) {
 
 
 TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariant ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularNoJumpsNoInvHa<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -305,7 +310,6 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariant ) {
 }
 
 TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck1 ) {
-    using Number = mpq_class;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = HPolytope<Number>;
@@ -313,7 +317,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck1 ) {
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularNoJumpsNoInvHa<Number>();
     // x >= 3, y <= 1 is safe
@@ -326,18 +330,17 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck1 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
 
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
 
 TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck2 ) {
-    using Number = mpq_class;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = HPolytope<Number>;
@@ -345,7 +348,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck2 ) {
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularNoJumpsNoInvHa<Number>();
     // x >= 3, y <= 2 is usafe
@@ -358,18 +361,17 @@ TEST( DecompositionalAnalysisSingular, TimeElapseNoInvariantSafetyCheck2 ) {
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
 
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
 
 TEST( DecompositionalAnalysisSingular, TimeElapseWithInv1 ) {
-    using Number = mpq_class;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = HPolytope<Number>;
@@ -378,7 +380,7 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv1 ) {
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularNoJumpsWithInvHa1<Number>();
     // y >= 7 is safe, but reachable in the subspace computation
@@ -389,12 +391,12 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv1 ) {
     ha.setGlobalBadStates( { Condition<Number>( badStateMat, badStateVec ) } );
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -429,24 +431,23 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv1 ) {
 
 
 TEST( DecompositionalAnalysisSingular, TimeElapseWithInv2 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularNoJumpsWithInvHa2<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -480,24 +481,23 @@ TEST( DecompositionalAnalysisSingular, TimeElapseWithInv2 ) {
 }
 
 TEST( DecompositionalAnalysisSingular, JumpSuccessors1 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularJumpSuccessorsHa1<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -531,24 +531,23 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors1 ) {
 }
 
 TEST( DecompositionalAnalysisSingular, JumpSuccessors2 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularJumpSuccessorsHa2<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
-            addInitialVarToAutomaton( decomposedHa, subspace,  );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
+            addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -582,24 +581,23 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors2 ) {
 }
 
 TEST( DecompositionalAnalysisSingular, JumpSuccessors3 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularJumpSuccessorsHa3<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -633,24 +631,23 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors3 ) {
 }
 
 TEST( DecompositionalAnalysisSingular, JumpSuccessors4 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularJumpSuccessorsHa4<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -683,24 +680,23 @@ TEST( DecompositionalAnalysisSingular, JumpSuccessors4 ) {
 }
 
 TEST( DecompositionalAnalysisSingular, Resets1 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularResetsHa1<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -747,24 +743,23 @@ TEST( DecompositionalAnalysisSingular, Resets1 ) {
 }
 
 TEST( DecompositionalAnalysisSingular, Resets2 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularResetsHa2<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
@@ -811,7 +806,6 @@ TEST( DecompositionalAnalysisSingular, Resets2 ) {
 
 
 TEST( DecompositionalAnalysisSingular, SingularJumps ) {
-    using Number = mpq_class;
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
     using Representation = HPolytope<Number>;
@@ -819,45 +813,44 @@ TEST( DecompositionalAnalysisSingular, SingularJumps ) {
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularWithJumpsHa<Number>();
     // bad state: y <= -12 in l0 (unsafe with jumpDepth >= 3)
     Matrix badStateMat = Matrix::Zero( 1, 2 );
     Vector badStateVec = -12 * Vector::Ones( 1 );
     badStateMat( 0, 1 ) = 1;
-    ha.addLocalBadState( ha.getLocation( "l0" ), Condition<Number>( badStateMat, badStateVec ) );
+    ha.addLocalBadStates( ha.getLocation( "l0" ), Condition<Number>( badStateMat, badStateVec ) );
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
 
 TEST( DecompositionalAnalysisSingular, SingularJumps2 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 1;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 1;
+    std::size_t clockCount = 1;
 
     auto ha = singularSingleJumpHa<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 
@@ -902,30 +895,28 @@ TEST( DecompositionalAnalysisSingular, SingularJumps2 ) {
 }
 
 TEST( DecompositionalAnalysisSingular, SingularJumps3 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
 
     std::size_t jumpDepth = 1;
     tNumber timeHorizon = 50;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 2;
+    std::size_t clockCount = 2;
 
     auto ha = singularSingleJumpHa<Number>();
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
 
 TEST( DecompositionalAnalysisSingular, SingularJumps4 ) {
-    using Number = mpq_class;
     using Representation = HPolytope<Number>;
     //using Point = Point<Number>;
     using Matrix = matrix_t<Number>;
@@ -934,7 +925,7 @@ TEST( DecompositionalAnalysisSingular, SingularJumps4 ) {
     std::size_t jumpDepth = 4;
     tNumber timeHorizon = 2;
     tNumber timeStep = 0.1;
-    std::size_t clocks = 3;
+    std::size_t clockCount = 3;
 
     auto ha = singularSingleJumpHa2<Number>();
     // bad state: y <= -1 x <= 0 in l1
@@ -943,15 +934,15 @@ TEST( DecompositionalAnalysisSingular, SingularJumps4 ) {
     badStateMat( 0, 1 ) = 1;
     badStateMat( 1, 0 ) = 1;
     badStateVec << -1, 0;
-    ha.addLocalBadState( ha.getLocation( "l1" ), Condition<Number>( badStateMat, badStateVec ) );
+    ha.addLocalBadStates( ha.getLocation( "l1" ), Condition<Number>( badStateMat, badStateVec ) );
     auto [decomposedHa, decomposition] = decomposeAutomaton( ha );
     for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
-        if ( decomposition.subspaceTypes[ subspace ] != DynamicType::linear && decomposition.subspaceTypes[ subspace ] != DynamicType::affine ) {
+        if ( clockCount > 0 && decomposition.subspaceTypes[subspace] != hypro::DynamicType::discrete ) {
             addInitialVarToAutomaton( decomposedHa, subspace, decomposition.subspaces[ subspace ].size() );
-            addClocksToAutomaton( decomposedHa, subspace, clocks );
+            addClocksToAutomaton( decomposedHa, subspace, clockCount );
         }
     }
-    DecompositionalAnalyzer<Representation> analyzer( decomposedHa, decomposition, clocks, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
+    DecompositionalAnalyzer<Representation, SingularRep, DiscreteRep, RectangularRep> analyzer( decomposedHa, decomposition, clockCount, FixedAnalysisParameters{jumpDepth, timeHorizon, timeStep}, AnalysisParameters{ timeStep } );
     auto result = analyzer.run();
 
     EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );

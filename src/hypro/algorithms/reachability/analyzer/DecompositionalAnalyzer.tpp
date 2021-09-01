@@ -37,6 +37,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 		// Check safety
 		for ( auto badState : detail::collectBadStates( mHybridAutomaton, currentLoc ) ) {
 			if ( !isSafe( currentNodes, dependencies, badState ) ) {
+				STOP_BENCHMARK_OPERATION("SafetyCheck");
 				return { Failure{ currentNodes[0] } };
 			}
 		}
@@ -142,7 +143,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	}
 	for ( auto subspace : mSegmentedSubspaces ) {
 		carl::Interval<Number> currentTimeInterval = mClockCount > 0 ? invariantSatTime.getTimeInterval( clockIndex ) : carl::Interval<Number>::unboundedInterval();
-		int timeHorizon = currentTimeInterval.isUnbounded() ? -1 : std::ceil( carl::convert<Number, double>( currentTimeInterval.upper()  / mParameters.timeStep ) );
+		int timeHorizon = currentTimeInterval.isUnbounded() ? -1 : std::ceil( carl::convert<tNumber, double>( currentTimeInterval.upper()  / mParameters.timeStep ) );
 		TimeInformation<Number> invariantSatTimeSubspace = std::visit( computeTimeSuccessorVisitor{
 																			 currentNodes[subspace], mClockCount, timeHorizon },
 																	   workers[subspace] );
@@ -199,9 +200,6 @@ bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	RepVector subspaceSets( mDecomposition.subspaces.size() );
 	// each segment is paired with the single segment from each singular subspace
 	for ( auto subspace : mSingularSubspaces ) {
-		if ( badTimeInterval.empty() ) {
-			return true;
-		}
 		auto [containment, set] = intersect( nodes[subspace]->getFlowpipe()[0], badState, subspace );
 		if ( containment == CONTAINMENT::NO ) {
 			// no bad state intersection in some subspace
@@ -209,6 +207,9 @@ bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 		} else {
 			set = detail::intersectSegmentWithClock( set, badTimeInterval, mClockCount );
 			badTimeInterval = badTimeInterval.intersect( detail::getClockValues( set, mClockCount ) );
+			if ( badTimeInterval.empty() ) {
+				return true;
+			}
 			subspaceSets[subspace] = set;
 		}
 	}

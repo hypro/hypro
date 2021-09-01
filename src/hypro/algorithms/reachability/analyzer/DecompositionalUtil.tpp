@@ -11,6 +11,9 @@ namespace detail {
 template <typename Representation>
 HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, const Decomposition& decomposition, std::size_t clockCount ) {
 	using Number = typename Representation::NumberType;
+	if ( std::any_of( subspaceSets.begin(), subspaceSets.end(), []( const auto& set ){ return set.empty(); } ) ) {
+		return HPolytope<Number>::Empty();
+	}
 	// variable order in subspace sets with clocks: x_i1, x_i2,...,x_ik,x_i1^0,...,x_ik^0,c_i^1,...,c_i^clockCount
 	// variable order in dependencies: (x_1^0,...,x_n^init)
 	// create composed polytope with dimension dim(S_1) + ... + dim(S_n)
@@ -172,9 +175,7 @@ bool isDependency( const std::vector<Eigen::Index>& dimensions, const Decomposit
 
 template <typename Representation>
 std::vector<Representation> decompose( const Representation& composedSet, const Decomposition& decomposition, std::size_t clockCount ) {
-	if ( composedSet.empty() ) {
-		assert( false && "Decompose called with empty set" );
-	}
+	assert( !composedSet.empty() && "Decompose called with empty set" );
 
 	std::vector<Representation> subspaceSets( decomposition.subspaces.size() );
 	for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
@@ -192,6 +193,7 @@ template <typename Representation>
 Representation projectOnDimensions( const Representation& composedSet, const std::vector<std::size_t>& dimensions ) {
 	using Number = typename Representation::NumberType;
 
+	assert( !composedSet.empty() && "Projection called with empty set" );
 	std::vector<std::size_t> toProjectOut( composedSet.dimension() - dimensions.size() );
 	std::size_t i = 0;
 	for ( std::size_t dim = 0; dim < composedSet.dimension(); ++dim ) {
