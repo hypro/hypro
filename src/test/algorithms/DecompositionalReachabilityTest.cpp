@@ -105,6 +105,7 @@ TEST( DecompositionalUtil, ComposeSubspacesDiscrete ) {
     EXPECT_TRUE( composed.contains( expected ) );
 }
 
+/*
 TEST( DecompositionalAnalysisMixedDynamics, NoJumpsNoBadStates ) {
 	using Representation = HPolytope<Number>;
 
@@ -127,6 +128,7 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsNoBadStates ) {
 	auto result = analyzer.run();
 	EXPECT_EQ( REACHABILITY_RESULT::SAFE, result.result() );
 }
+*/
 
 TEST( DecompositionalAnalysisMixedDynamics, NoJumpsSafe ) {
     using Matrix = matrix_t<Number>;
@@ -188,6 +190,7 @@ TEST( DecompositionalAnalysisMixedDynamics, NoJumpsUnsafe ) {
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
 
+/*
 TEST( DecompositionalAnalysisMixedDynamics, JumpsSafe ) {
     using Matrix = matrix_t<Number>;
     using Vector = vector_t<Number>;
@@ -254,7 +257,7 @@ TEST( DecompositionalAnalysisMixedDynamics, JumpsUnsafe ) {
     auto result = analyzer.run();
     EXPECT_EQ( REACHABILITY_RESULT::UNKNOWN, result.result() );
 }
-
+*/
 
 
 
