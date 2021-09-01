@@ -524,7 +524,9 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 		}
 		if ( discrete ) {
 			subspaceTypes[subspaceIndex] = DynamicType::discrete;
-		} else if ( timed || singular ) {
+		} else if ( timed ) {
+			subspaceTypes[subspaceIndex] = DynamicType::timed;
+		} else if ( singular ) {
 			subspaceTypes[subspaceIndex] = DynamicType::singular;
 		} else if ( rectangular ) {
 			subspaceTypes[subspaceIndex] = DynamicType::rectangular;
