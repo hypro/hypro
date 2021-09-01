@@ -4,7 +4,6 @@ namespace hydra {
 namespace preprocessing {
 hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::Number>& automaton,
 											bool decompose,
-											bool useSingular,
 											std::size_t clockCount ) {
 	auto dynamicsType = hypro::getDynamicType( automaton );
 	hypro::PreprocessingInformation information{ dynamicsType };
@@ -21,7 +20,9 @@ hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::
 				}
 			} else {
 				newDecomposition.subspaces.push_back( decomposition.subspaces[i] );
-				if ( !useSingular && ( decomposition.subspaceTypes[i] == hypro::DynamicType::singular || decomposition.subspaceTypes[i] == hypro::DynamicType::timed ) ) {
+				// don't use singular analysis when no clocks are used,
+				// because it synchronization is extremely imprecise in that case.
+				if ( clockCount == 0 && ( decomposition.subspaceTypes[i] == hypro::DynamicType::singular || decomposition.subspaceTypes[i] == hypro::DynamicType::timed ) ) {
 					newDecomposition.subspaceTypes.push_back( hypro::DynamicType::linear );
 				} else {
 					newDecomposition.subspaceTypes.push_back( decomposition.subspaceTypes[i] );

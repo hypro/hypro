@@ -506,19 +506,19 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 	for ( std::size_t subspaceIndex = 0; subspaceIndex < subspaceTypes.size(); ++subspaceIndex ) {
 		bool discrete = true, singular = true, timed = true, rectangular = true, linear = true;
 		for ( const auto& loc : automaton.getLocations() ) {
-			if ( !isDiscreteSubspace( *loc, subspaceIndex ) ) {
+			if ( discrete && !isDiscreteSubspace( *loc, subspaceIndex ) ) {
 				discrete = false;
 			}
-			if ( !isSingularSubspace( *loc, subspaceIndex ) ) {
+			if ( singular && !isSingularSubspace( *loc, subspaceIndex ) ) {
 				singular = false;
 			}
-			if ( !isTimedSubspace( *loc, subspaceIndex ) ) {
+			if ( timed && !isTimedSubspace( *loc, subspaceIndex ) ) {
 				timed = false;
 			}
-			if ( !isRectangularSubspace( *loc, subspaceIndex ) ) {
+			if ( rectangular && !isRectangularSubspace( *loc, subspaceIndex ) ) {
 				rectangular = false;
 			}
-			if ( isRectangularSubspace( *loc, subspaceIndex ) ) {
+			if ( linear && isRectangularSubspace( *loc, subspaceIndex ) ) {
 				linear = false;
 			}
 		}
