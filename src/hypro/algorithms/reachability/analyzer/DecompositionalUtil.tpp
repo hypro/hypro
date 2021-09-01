@@ -364,7 +364,8 @@ struct DecompositionalSegmentGen {
 				subspaceSets[subspace] = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[subspace]->getFlowpipe()[0].getSet() );
 			}
 		}
-		auto segment = detail::composeSubspaces( subspaceSets, dependencyIterator->getInitialSet(), decomposition, clockCount );
+		// compose with dependency
+		auto segment = detail::composeSubspaceConstraints( subspaceSets, dependencyIterator->getInitialSet(), decomposition, clockCount );
 		// if no subspace is segmented (linear or affine) then one segment per node is always enough. Otherwise, increase segmentIndex
 		if ( !std::any_of( decomposition.subspaceTypes.begin(), decomposition.subspaceTypes.end(),
 						   []( const auto& dynamic ) { return isSegmentedSubspace( dynamic ); } ) ) {
@@ -372,7 +373,6 @@ struct DecompositionalSegmentGen {
 		} else {
 			++segmentIndex;
 		}
-		// compose with dependency
 		return segment;
 	}
 };

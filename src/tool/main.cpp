@@ -51,8 +51,18 @@ int main( int argc, char const* argv[] ) {
 		for ( auto& segment : result.plotData ) {
 			if ( segmentCount % 100 == 0 ) std::cout << "\r" << segmentCount << "/" << result.plotData.size() << "..." << std::flush;
 			segmentCount += 1;
-			auto vertices = reduceToDimensions<Number>( segment.sets.vertices(), plotSettings.plotDimensions[pic] );
-			//auto vertices = segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices();
+			std::vector<hypro::Point<Number>> vertices;
+			// project composed set if decompositional analysis was used
+			// todo: maybe add a postprocess function to do this
+			if ( options["decompose"].as<bool>() ) {
+				vertices = detail::projectOnDimensions( std::visit( hypro::genericConvertAndGetVisitor<HPolytope<Number>>(), segment.sets.getSet() ), plotSettings.plotDimensions[pic] ).vertices();
+				// switch dimensions if necessary
+				if ( plotSettings.plotDimensions[pic][0] > plotSettings.plotDimensions[pic][1] ) {
+					vertices = reduceToDimensions<Number>( vertices, { 1, 0 } );
+				}
+			} else {
+				vertices = reduceToDimensions<Number>( segment.sets.vertices(), plotSettings.plotDimensions[pic] );
+			}
 			if ( vertices.front().dimension() != 2 ) {
 				INFO( "hypro.plotter", "broken vertices:\n"
 											 << vertices )
