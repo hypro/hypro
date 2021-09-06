@@ -5,6 +5,7 @@
 #include <benchmark/benchmark.h>
 #include <filesystem>
 #include <hypro/algorithms/reachability/Reach.h>
+#include <hypro/datastructures/HybridAutomaton/PathUtil.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 #include <hypro/util/plotting/Plotter.h>
 #include <string>
@@ -49,6 +50,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		auto unfinished_leaves = std::size_t( 0 );
 		auto leaves = std::size_t( 0 );
 		auto nodes = std::size_t( 0 );
+		auto cyclic_path_count = std::size_t( 0 );
 
 		for ( const auto& node : hypro::preorder( roots ) ) {
 			COUNT( "nodes/flowpipes" );
@@ -61,6 +63,11 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 					COUNT( "Unfinished leaves" );
 					++unfinished_leaves;
 					last_paths.push_back( node.getPath() );
+					if ( has_discrete_cycle( node.getPath() ) ) {
+						++cyclic_path_count;
+					} else {
+						std::cout << "Path " << node.getPath() << " is truly unfinished." << std::endl;
+					}
 				}
 				++leaves;
 				COUNT( "leaves" );
@@ -84,6 +91,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		state.counters["leaves"] = leaves;
 		state.counters["jumps"] = maxJumps;
 		state.counters["nodes"] = nodes;
+		state.counters["cycles"] = cyclic_path_count;
 
 		plt.plot2d( hypro::PLOTTYPE::png );
 	}
@@ -104,7 +112,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 1, 40, 1 )
+	  ->DenseRange( 1, 80, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
