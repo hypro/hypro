@@ -281,9 +281,15 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 			bad.addConstraints( flowConstraints );
 		}
 	}
-	// add invariant constraints
-	auto invariantConstraints = halfspacesToConstraints<Number, hypro::tNumber>( loc->getInvariant().getMatrix(), loc->getInvariant().getVector() );
-	bad.addConstraints( invariantConstraints );
+	// add invariant constraints, if the invariant is specified and does not represent the empty set
+	if ( !loc->getInvariant().isTrue() ) {
+		if ( loc->getInvariant().isFalse() ) {
+			return CarlPolytope<Number>::Empty();
+		} else {
+			auto invariantConstraints = halfspacesToConstraints<Number, hypro::tNumber>( loc->getInvariant().getMatrix(), loc->getInvariant().getVector() );
+			bad.addConstraints( invariantConstraints );
+		}
+	}
 
 	TRACE( "hypro.worker", "Full constraint set describing the dynamic behavior: \n"
 								 << bad );
