@@ -10,11 +10,11 @@
 
 #pragma once
 
-#include "../../datastructures/HybridAutomaton/Location.h"
-#include "../../datastructures/HybridAutomaton/StochasticLocation.h"
-#include "../../datastructures/HybridAutomaton/Transition.h"
-#include "../../datastructures/HybridAutomaton/StochasticTransition.h"
-#include "../../types.h"
+#include "hypro/datastructures/HybridAutomaton/Location.h"
+#include "hypro/datastructures/HybridAutomaton/StochasticLocation.h"
+#include "hypro/datastructures/HybridAutomaton/Transition.h"
+#include "hypro/datastructures/HybridAutomaton/StochasticTransition.h"
+#include "hypro/types.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
 

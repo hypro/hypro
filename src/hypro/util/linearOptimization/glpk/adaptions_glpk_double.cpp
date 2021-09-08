@@ -1,4 +1,4 @@
-#include "adaptions_glpk.h"
+#include "hypro/util/linearOptimization/glpk/adaptions_glpk.h"
 
 namespace hypro {
 
@@ -33,7 +33,7 @@ EvaluationResult<double> glpkOptimizeLinear( glpk_context& context, const vector
 				glpkModel( i - 1 ) = glp_get_col_prim( context.lp, i );
 			}
 
-			return EvaluationResult<double>( glp_get_obj_val( context.lp ), glpkModel, SOLUTION::FEAS );
+			return { glp_get_obj_val( context.lp ), glpkModel, SOLUTION::FEAS };
 			break;
 		}
 		case GLP_UNBND: {
@@ -41,11 +41,11 @@ EvaluationResult<double> glpkOptimizeLinear( glpk_context& context, const vector
 			for ( int i = 1; i <= constraints.cols(); ++i ) {
 				glpkModel( i - 1 ) = glp_get_col_prim( context.lp, i );
 			}
-			return EvaluationResult<double>( 1, glpkModel, SOLUTION::INFTY );
+			return { 1, glpkModel, SOLUTION::INFTY };
 			break;
 		}
 		default:
-			return EvaluationResult<double>( 0, vector_t<double>::Zero( 1 ), SOLUTION::INFEAS );
+			return { 0, vector_t<double>::Zero( 1 ), SOLUTION::INFEAS };
 	}
 }
 
@@ -82,7 +82,7 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 			break;
 	}
 
-	for ( std::size_t constraintIndex = std::size_t( constraints.rows() - 1 );; --constraintIndex ) {
+	for ( Eigen::Index constraintIndex = constraints.rows() - 1;; --constraintIndex ) {
 		bool redundant = true;
 		carl::Relation relation = relations[constraintIndex];
 		EvaluationResult<double> actualRes;
