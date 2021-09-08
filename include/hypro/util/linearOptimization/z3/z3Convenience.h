@@ -55,6 +55,9 @@ static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, cons
 			case carl::Relation::EQ:
 				constraint = polynomial == constant;
 				break;
+			case carl::Relation::LESS:
+				constraint = polynomial < constant;
+				break;
 			default:
 				assert( false );
 		}

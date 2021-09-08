@@ -547,6 +547,16 @@ class BoxT : private GeometricObjectBase {
 	bool contains( const Point<Number>& point ) const;
 
 	/**
+	 * @brief Allows to compute the set-difference of a box with another box and returns the resulting vector of boxes.
+	 * @details follow soon
+	 *
+	 * @param minusbox
+	 * @return std::vector<BoxT<Number,Converter,Setting>>
+	 */
+	std::vector<BoxT<Number, Converter, Setting>> setMinus( const BoxT<Number, Converter, Setting>& minusbox ) const;
+	std::vector<BoxT<Number, Converter, Setting>> setMinus2( const BoxT<Number, Converter, Setting>& minusbox ) const;
+
+	/**
 	 * @brief      Containment check for a box.
 	 * @param[in]  box   The box.
 	 * @return     True, if the given box is contained in the current box, false otherwise.
