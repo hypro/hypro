@@ -520,7 +520,11 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::linearTransfo
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+	//std::cout << "in box::affinetransformation: " << this->limits() << std::endl;
+	//std::cout << A << std::endl;
+	//std::cout << b << std::endl;
 	if ( this->empty() ) {
+		//std::cout << "box empty" << std::endl;
 		return *this;
 	}
 	//TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
@@ -528,10 +532,13 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransfo
 	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>( this->dimension() );
 	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
 		newIntervals[i] = carl::Interval<Number>{ b( i ) };
+		//std::cout << "initialize interval" << newIntervals[i] << std::endl;
 		for ( std::size_t j = 0; j < this->dimension(); ++j ) {
 			newIntervals[i] = newIntervals[i] + A( i, j ) * this->intervals()[j];
+			//std::cout << "update to: " << newIntervals[i] << " using: A(i,j): " << A(i,j) << ", interval: " << this->intervals()[j] << std::endl;
 		}
 	}
+	//std::cout << "in box::affinetransformation: " << BoxT<Number, Converter, Setting>{ newIntervals } << std::endl;
 	return BoxT<Number, Converter, Setting>{ newIntervals };
 }
 
@@ -791,7 +798,6 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 					empty = false;
 				}
 			}else{
-				//std::cout << "minuslower ist kleiner boxlower" << std::endl;
 				empty=false;
 				if ( minus.at( i ).lower() >= box.at( i ).upper() && minus.at(i).upper()>= minus.at(i).lower()) {
 					unchanged = true;
@@ -813,23 +819,29 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 		}
 
 		//------------- calculate difference -------------
-		for ( long unsigned int i = 0; i < minus.size(); i++ ) {
+		long unsigned int i = minus.size();
+		while (i>0) {
+			i--;
 			std::vector<carl::Interval<Number>> box2 = box;	 //lower
 			std::vector<carl::Interval<Number>> box3 = box;	 //upper
 			box2.at(i).setUpper(minus.at(i).lower());
 			box3.at(i).setLower(minus.at(i).upper());
 			if (box2.at(i).lower()<box2.at(i).upper()){
 				BoxT<Number, Converter, Setting> workbox( box2 );
-				//std::cout << "untere box nicht leer" << std::endl;
+				std::cout << "untere box nicht leer" << std::endl;
 				result.push_back( workbox );
-				carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
+				//carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
+				carl::Interval<Number> tmp( box2.at( i ).upper(), box.at( i ).upper() );
+				std::cout << tmp << std::endl;
 				box.at( i ) = tmp;
 			}
 			if (box3.at(i).lower()<box3.at(i).upper()){
 				BoxT<Number, Converter, Setting> workbox2( box3 );
-				//std::cout << "obere box nicht leer" << std::endl;
+				std::cout << "obere box nicht leer" << std::endl;
 				result.push_back( workbox2 );
-				carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
+				//carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
+				carl::Interval<Number> tmp2( box.at( i ).lower(), box3.at( i ).lower() );
+				std::cout << tmp2 << std::endl;
 				box.at( i ) = tmp2;
 			}
 		}
