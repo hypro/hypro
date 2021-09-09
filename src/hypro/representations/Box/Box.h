@@ -424,7 +424,10 @@ class BoxT : private GeometricObjectBase {
 	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number, Converter, Setting>& b ) {
 		ostr << "{ ";
 		if ( !b.empty() ) {
-			ostr << b.min() << "; " << b.max() << std::endl;
+			//ostr << b.min() << "; " << b.max() << std::endl;
+			for (const auto &i : b.intervals()){
+				ostr << i << " ";
+			}			
 		}
 		ostr << " }";
 		return ostr;
@@ -548,6 +551,14 @@ class BoxT : private GeometricObjectBase {
 	 * @return std::vector<BoxT<Number,Converter,Setting>>
 	 */
     std::vector<BoxT<Number,Converter, Setting>> setMinus(const BoxT<Number,Converter, Setting>& minusbox) const;
+	
+	/**
+	 * @brief Allows to compute the set-difference of a box with another box and returns the resulting vector of boxes.
+
+	 * 
+	 * @param minusbox 
+	 * @return std::vector<BoxT<Number,Converter, Setting>> 
+	 */
 	std::vector<BoxT<Number,Converter, Setting>> setMinus2(const BoxT<Number,Converter, Setting>& minusbox) const;
 
 
