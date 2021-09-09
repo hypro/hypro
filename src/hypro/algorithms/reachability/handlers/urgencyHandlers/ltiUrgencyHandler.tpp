@@ -8,6 +8,9 @@ std::vector<Representation> ltiUrgencyHandler<Representation>::urgentSetDifferen
 	std::vector<Representation> splitSegment;
 	for ( const Representation& s : segment ) {
 		std::vector<Representation> sDiff = setDifference( s, trans->getJumpEnablingSet() );
+		if ( sDiff.size() > 1 ) {
+			COUNT( "Set difference split" );
+		}
 		splitSegment.insert( splitSegment.end(), sDiff.begin(), sDiff.end() );
 	}
 	return splitSegment;

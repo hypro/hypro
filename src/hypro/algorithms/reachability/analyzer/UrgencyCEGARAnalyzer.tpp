@@ -13,18 +13,22 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 	UrgencyRefinementAnalyzer<Representation> refinementAnalyzer( mHybridAutomaton, mFixedParameters, mParameters, mRefinementSettings, mRoots );
 
 	while ( !mWorkQueue.empty() ) {
-		COUNT("Nodes processed");
+		COUNT( "Nodes processed" );
 		auto currentNode = mWorkQueue.back();
 		mWorkQueue.pop_back();
 
+		START_BENCHMARK_OPERATION( "Unrefined time successors" );
 		auto safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.refineHalfspaces );
 		worker.insertFlowpipe( *currentNode );
 		currentNode->setSafety( safetyResult );
 		worker.reset();
+		STOP_BENCHMARK_OPERATION( "Unrefined time successors" );
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
 			refinementAnalyzer.setRefinement( currentNode );
+			START_BENCHMARK_OPERATION( "Refinement" );
 			auto refineResult = refinementAnalyzer.run();
+			STOP_BENCHMARK_OPERATION( "Refinement" );
 			if ( refineResult.isSuccess() ) {
 				for ( auto successor : refineResult.success().pathSuccessors ) {
 					mWorkQueue.push_front( successor );
