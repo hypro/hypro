@@ -62,7 +62,7 @@ set(TARGET ${PROJECT_NAME})
 # Create the hyproConfig.cmake and hyproConfigVersion files
 # ... for the build tree
 set(CONF_INCLUDES ${INCLUDES})
-set(CONF_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}")
+set(CONF_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 configure_package_config_file(cmake/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/hyproConfig.cmake
 							  INSTALL_DESTINATION ${PROJECT_BINARY_DIR}

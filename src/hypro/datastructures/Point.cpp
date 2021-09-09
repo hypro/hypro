@@ -1,4 +1,4 @@
-#include "Point.h"
+#include "hypro/datastructures/Point.h"
 
 namespace hypro {
 #ifdef EXTERNALIZE_CLASSES

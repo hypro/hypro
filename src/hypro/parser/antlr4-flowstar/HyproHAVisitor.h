@@ -20,11 +20,11 @@
 #include "HyproInitialSetVisitor.h"
 #include "HyproSettingVisitor.h"
 #include "HyproBadStatesVisitor.h"
-#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "../../datastructures/HybridAutomaton/StochasticHybridAutomaton.h"
-#include "../../datastructures/reachability/Settings.h"
-#include "../../util/logging/Logger.h"
-#include "../../util/VariablePool.h"
+#include "hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "hypro/datastructures/HybridAutomaton/StochasticHybridAutomaton.h"
+#include "hypro/datastructures/reachability/Settings.h"
+#include "hypro/util/logging/Logger.h"
+#include "hypro/util/VariablePool.h"
 
 using namespace antlr4;
 

@@ -1,4 +1,4 @@
-#include "PlotterUtil.h"
+#include "hypro/util/plotting/PlotterUtil.h"
 
 namespace hypro {
 
@@ -81,10 +81,10 @@ std::vector<std::size_t> HSVtoRGB( const std::vector<double>& color ) {
 		// achromatic (grey)
 		// r,g,b in [0,1] -> scale
 		r = g = b = v;
-		std::size_t resR = std::size_t( r * 255.0 );
-		std::size_t resG = std::size_t( g * 255.0 );
-		std::size_t resB = std::size_t( b * 255.0 );
-		return std::vector<std::size_t>( {resR, resG, resB} );
+		auto resR = std::size_t( r * 255.0 );
+		auto resG = std::size_t( g * 255.0 );
+		auto resB = std::size_t( b * 255.0 );
+		return std::vector<std::size_t>( { resR, resG, resB } );
 	}
 	h /= 60.0;  // sector 0 to 5
 	i = int( std::floor( h ) );
@@ -125,10 +125,10 @@ std::vector<std::size_t> HSVtoRGB( const std::vector<double>& color ) {
 			break;
 	}
 	// r,g,b in [0,1] -> scale
-	std::size_t resR = std::size_t( r * 255.0 );
-	std::size_t resG = std::size_t( g * 255.0 );
-	std::size_t resB = std::size_t( b * 255.0 );
-	return std::vector<std::size_t>( {resR, resG, resB} );
+	auto resR = std::size_t( r * 255.0 );
+	auto resG = std::size_t( g * 255.0 );
+	auto resB = std::size_t( b * 255.0 );
+	return std::vector<std::size_t>( { resR, resG, resB } );
 }
 
 std::vector<std::size_t> adjustSaturation( const std::vector<std::size_t>& rgbColor, double factor ) {

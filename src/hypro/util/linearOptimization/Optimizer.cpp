@@ -1,6 +1,6 @@
-#include "Optimizer.h"
+#include "hypro/util/linearOptimization/Optimizer.h"
 
-#include "flags.h"
+#include <hypro/flags.h>
 #ifdef USE_CLN_NUMBERS
 #include <cln/cln.h>
 #endif

@@ -5,163 +5,156 @@
  * using H-polytopes as a state set representation.
  */
 
-#include "algorithms/reachability/Reach.h"
-#include "config.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "datastructures/Point.h"
-#include "representations/GeometricObjectBase.h"
-#include "util/plotting/Plotter.h"
+#include <hypro/algorithms/reachability/Reach.h>
+#include <hypro/config.h>
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/Point.h>
+#include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/util/plotting/Plotter.h>
 
 int main() {
-  using namespace hypro;
+	using namespace hypro;
 
-  // typedefs for simplification.
-  typedef mpq_class Number;
-  typedef hypro::HPolytope<Number> Representation;
+	// typedefs for simplification.
+	using Number = mpq_class;
+	using Representation = hypro::HPolytope<Number>;
 
-  // create the discrete structure of the automaton and the automaton itself.
-  std::unique_ptr<Location<Number>> loc1 = std::make_unique<Location<Number>>();
-  std::unique_ptr<Transition<Number>> trans =
-      std::make_unique<Transition<Number>>();
-  HybridAutomaton<Number> bBallAutomaton = HybridAutomaton<Number>();
+	// create the discrete structure of the automaton and the automaton itself.
+	HybridAutomaton<Number> bBallAutomaton = HybridAutomaton<Number>();
+	Location<Number>* loc1 = bBallAutomaton.createLocation();
+	Transition<Number>* trans = loc1->createTransition(loc1);
 
-  // matrix defining the flow (note: 3rd dimension for constant parts).
-  matrix_t<Number> flowMatrix = matrix_t<Number>(3, 3);
+	// matrix defining the flow (note: 3rd dimension for constant parts).
+	matrix_t<Number> flowMatrix = matrix_t<Number>( 3, 3 );
 
-  // location parameter setting.
-  // creation of the invariant.
-  matrix_t<Number> invariantMat = matrix_t<Number>(1, 2);
-  vector_t<Number> invariantVec = vector_t<Number>(1);
+	// location parameter setting.
+	// creation of the invariant.
+	matrix_t<Number> invariantMat = matrix_t<Number>( 1, 2 );
+	vector_t<Number> invariantVec = vector_t<Number>( 1 );
 
-  invariantVec(0) = Number(0);
+	invariantVec( 0 ) = Number( 0 );
 
-  invariantMat(0, 0) = Number(-1);
-  invariantMat(0, 1) = Number(0);
+	invariantMat( 0, 0 ) = Number( -1 );
+	invariantMat( 0, 1 ) = Number( 0 );
 
-  Condition<Number> inv(invariantMat, invariantVec);
+	Condition<Number> inv( invariantMat, invariantVec );
 
-  loc1->setInvariant(inv);
+	loc1->setInvariant( inv );
 
-  // setup flow matrix (3x3, we add an artificial dimension to cope with
-  // constants).
-  flowMatrix(0, 0) = Number(0);
-  flowMatrix(0, 1) = Number(1);
-  flowMatrix(0, 2) = Number(0);
-  flowMatrix(1, 0) = Number(0);
-  flowMatrix(1, 1) = Number(0);
-  flowMatrix(1, 2) = Number(carl::rationalize<Number>(-9.81));
-  flowMatrix(2, 0) = Number(0);
-  flowMatrix(2, 1) = Number(0);
-  flowMatrix(2, 2) = Number(0);
+	// setup flow matrix (3x3, we add an artificial dimension to cope with
+	// constants).
+	flowMatrix( 0, 0 ) = Number( 0 );
+	flowMatrix( 0, 1 ) = Number( 1 );
+	flowMatrix( 0, 2 ) = Number( 0 );
+	flowMatrix( 1, 0 ) = Number( 0 );
+	flowMatrix( 1, 1 ) = Number( 0 );
+	flowMatrix( 1, 2 ) = Number( carl::rationalize<Number>( -9.81 ) );
+	flowMatrix( 2, 0 ) = Number( 0 );
+	flowMatrix( 2, 1 ) = Number( 0 );
+	flowMatrix( 2, 2 ) = Number( 0 );
 
-  loc1->setFlow(flowMatrix);
+	loc1->setFlow( flowMatrix );
 
-  // setup of the transition.
-  // guard
-  Condition<Number> guard;
-  matrix_t<Number> guardMat = matrix_t<Number>(3, 2);
-  vector_t<Number> guardVec = vector_t<Number>(3);
+	// setup of the transition.
+	// guard
+	Condition<Number> guard;
+	matrix_t<Number> guardMat = matrix_t<Number>( 3, 2 );
+	vector_t<Number> guardVec = vector_t<Number>( 3 );
 
-  guardVec(0) = Number(0);
-  guardVec(1) = Number(0);
-  guardVec(2) = Number(0);
+	guardVec( 0 ) = Number( 0 );
+	guardVec( 1 ) = Number( 0 );
+	guardVec( 2 ) = Number( 0 );
 
-  guardMat(0, 0) = Number(1);
-  guardMat(0, 1) = Number(0);
-  guardMat(1, 0) = Number(-1);
-  guardMat(1, 1) = Number(0);
-  guardMat(2, 0) = Number(0);
-  guardMat(2, 1) = Number(1);
+	guardMat( 0, 0 ) = Number( 1 );
+	guardMat( 0, 1 ) = Number( 0 );
+	guardMat( 1, 0 ) = Number( -1 );
+	guardMat( 1, 1 ) = Number( 0 );
+	guardMat( 2, 0 ) = Number( 0 );
+	guardMat( 2, 1 ) = Number( 1 );
 
-  guard.setMatrix(guardMat);
-  guard.setVector(guardVec);
+	guard.setMatrix( guardMat );
+	guard.setVector( guardVec );
 
-  // reset function
-  Reset<Number> reset;
-  vector_t<Number> constantReset = vector_t<Number>(2, 1);
-  matrix_t<Number> linearReset = matrix_t<Number>(2, 2);
+	// reset function
+	Reset<Number> reset;
+	vector_t<Number> constantReset = vector_t<Number>( 2, 1 );
+	matrix_t<Number> linearReset = matrix_t<Number>( 2, 2 );
 
-  constantReset(0) = Number(0);
-  constantReset(1) = Number(0);
+	constantReset( 0 ) = Number( 0 );
+	constantReset( 1 ) = Number( 0 );
 
-  linearReset(0, 0) = Number(1);
-  linearReset(0, 1) = Number(0);
-  linearReset(1, 0) = Number(0);
-  linearReset(1, 1) = Number(carl::rationalize<Number>(-0.9));
+	linearReset( 0, 0 ) = Number( 1 );
+	linearReset( 0, 1 ) = Number( 0 );
+	linearReset( 1, 0 ) = Number( 0 );
+	linearReset( 1, 1 ) = Number( carl::rationalize<Number>( -0.9 ) );
 
-  reset.setVector(constantReset);
-  reset.setMatrix(linearReset);
+	reset.setVector( constantReset );
+	reset.setMatrix( linearReset );
 
-  // setup transition
-  trans->setAggregation(Aggregation::parallelotopeAgg);
-  trans->setGuard(guard);
-  trans->setSource(loc1);
-  trans->setTarget(loc1);
-  trans->setReset(reset);
+	// setup transition
+	trans->setAggregation( Aggregation::aggregation );
+	trans->setGuard( guard );
+	trans->setSource( loc1 );
+	trans->setTarget( loc1 );
+	trans->setReset( reset );
 
-  // add defined location and transition to the automaton.
-  loc1->addTransition(std::move(trans));
+	// create Box holding the initial set.
+	matrix_t<Number> boxMat = matrix_t<Number>( 4, 2 );
+	vector_t<Number> boxVec = vector_t<Number>( 4 );
 
-  // create Box holding the initial set.
-  matrix_t<Number> boxMat = matrix_t<Number>(4, 2);
-  vector_t<Number> boxVec = vector_t<Number>(4);
+	boxVec( 0 ) = Number( carl::rationalize<Number>( 10.2 ) );
+	boxVec( 1 ) = Number( -10 );
+	boxVec( 2 ) = Number( 0 );
+	boxVec( 3 ) = Number( 0 );
 
-  boxVec(0) = Number(carl::rationalize<Number>(10.2));
-  boxVec(1) = Number(-10);
-  boxVec(2) = Number(0);
-  boxVec(3) = Number(0);
+	boxMat( 0, 0 ) = Number( 1 );
+	boxMat( 0, 1 ) = Number( 0 );
+	boxMat( 1, 0 ) = Number( -1 );
+	boxMat( 1, 1 ) = Number( 0 );
+	boxMat( 2, 0 ) = Number( 0 );
+	boxMat( 2, 1 ) = Number( 1 );
+	boxMat( 3, 0 ) = Number( 0 );
+	boxMat( 3, 1 ) = Number( -1 );
 
-  boxMat(0, 0) = Number(1);
-  boxMat(0, 1) = Number(0);
-  boxMat(1, 0) = Number(-1);
-  boxMat(1, 1) = Number(0);
-  boxMat(2, 0) = Number(0);
-  boxMat(2, 1) = Number(1);
-  boxMat(3, 0) = Number(0);
-  boxMat(3, 1) = Number(-1);
+	// create initial state.
+	bBallAutomaton.addInitialState( loc1, Condition<Number>( boxMat, boxVec ) );
 
-  // create initial state.
-  bBallAutomaton.addInitialState(loc1.get(), Condition<Number>(boxMat, boxVec));
+	// set settings
+	hypro::FixedAnalysisParameters fixedParameters;
+	fixedParameters.jumpDepth = 3;
+	fixedParameters.localTimeHorizon = 5;
+	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
 
-  bBallAutomaton.addLocation(std::move(loc1));
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_h;
 
-  // vector of sets to collect flowpipes (which are again a vector of sets).
-  std::vector<std::vector<Representation>> flowpipes;
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-  // instanciate reachability analysis algorithm.
-  hypro::reachability::Reach<Number, hypro::reachability::ReachSettings,
-                             hypro::State_t<Number>>
-      reacher(bBallAutomaton);
-  hypro::ReachabilitySettings settings = reacher.settings();
-  settings.timeStep = carl::convert<double, Number>(0.01);
-  settings.timeBound = Number(3);
-  settings.jumpDepth = 3;
-  reacher.setSettings(settings);
-  reacher.setRepresentationType(Representation::type());
+	// initialize reachability tree
+	auto roots = makeRoots<Representation,Number>( bBallAutomaton );
 
-  // perform reachability analysis.
-  auto flowpipeIndices = reacher.computeForwardReachability();
+	// instanciate reachability analysis class
+	hypro::reachability::Reach<Representation> reacher{ bBallAutomaton, fixedParameters, analysisParameters, roots };
 
-  // plot flowpipes.
-  Plotter<Number> &plotter = Plotter<Number>::getInstance();
-  plotter.setFilename("bouncingBall");
-  for (auto &indexPair : flowpipeIndices) {
-    std::vector<hypro::State_t<Number>> flowpipe = indexPair.second;
-    // Plot single flowpipe
-    for (auto &set : flowpipe) {
-      std::vector<Point<Number>> points = set.vertices();
-      if (!points.empty() && points.size() > 2) {
-        for (auto &point : points) {
-          point.reduceDimension(2);
-        }
-        plotter.addObject(points);
-        points.clear();
-      }
-    }
-  }
+	// perform reachability analysis.
+	REACHABILITY_RESULT res = reacher.computeForwardReachability();
+	std::cout << "Reachability result: " << res << std::endl;
 
-  // write output.
-  plotter.plot2d();
+	// plot flowpipes.
+	std::cout << "Start plotting ... ";
+	Plotter<Number>& plotter = Plotter<Number>::getInstance();
+	plotter.setFilename( "bouncingBall" );
+	for(const auto& node : preorder(roots)) {
+		for(const auto& state_set : node.getFlowpipe()) {
+			plotter.addObject(state_set.projectOn({0,1}).vertices());
+		}
+	}
+	std::cout << "done." << std::endl;
 
-  return 0;
+	// write output.
+	plotter.plot2d(PLOTTYPE::png);
+
+	return 0;
 }

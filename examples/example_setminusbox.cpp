@@ -13,7 +13,7 @@ int main() {
 
   // create a box out of two given limit points.
   hypro::Box<Number> testbox(std::make_pair(hypro::Point<Number>({1, 1}),
-                                            hypro::Point<Number>({4, 4})));
+                                            hypro::Point<Number>({5, 5})));
   
   hypro::Box<Number> minusbox(std::make_pair(hypro::Point<Number>({2, 2}),
                                             hypro::Point<Number>({3, 3})));

@@ -1,11 +1,10 @@
-#include "util.h"
+#include "hypro/algorithms/reachability/handlers/jumpHandlers/util.h"
 
 #include <algorithm>
 #include <cassert>
 #include <numeric>
 
-namespace hypro {
-namespace reachability {
+namespace hypro::reachability {
 
 std::vector<std::size_t> clusterDistribution( std::size_t numberClusters, std::size_t numberStateSets ) {
 	if ( numberClusters >= numberStateSets ) {
@@ -28,5 +27,4 @@ std::vector<std::size_t> clusterDistribution( std::size_t numberClusters, std::s
 	return clusterDistribution;
 }
 
-}  // namespace reachability
-}  // namespace hypro
+}  // namespace hypro::reachability

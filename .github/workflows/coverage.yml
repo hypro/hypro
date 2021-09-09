@@ -11,6 +11,7 @@ on:
       - alpha
       - hypro-sonarcloud
       - fix/coverage
+      - fix/codeCleanup
 
 jobs:
   sonarcloud:

@@ -10,13 +10,13 @@
 
 #pragma once
 
-#include "../../types.h"
+#include "hypro/types.h"
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
 #include "HybridAutomatonBaseVisitor.h"
 #include "HyproFormulaVisitor.h"
-#include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "../../datastructures/HybridAutomaton/StochasticHybridAutomaton.h"
+#include "hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "hypro/datastructures/HybridAutomaton/StochasticHybridAutomaton.h"
 #include <map>
 
 using namespace antlr4;
