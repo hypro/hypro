@@ -48,7 +48,7 @@ int main( int argc, char const* argv[] ) {
 		for ( auto& segment : result.plotData ) {
 			if ( segmentCount % 100 == 0 ) std::cout << "\r" << segmentCount << "/" << result.plotData.size() << "..." << std::flush;
 			segmentCount += 1;
-			auto vertices = segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices();
+			auto vertices = reduceToDimensions( segment.sets.vertices(), plotSettings.plotDimensions[ pic ] );
 			if ( vertices.front().dimension() != 2 ) {
 				INFO( "hypro.plotter", "broken vertices:\n"
 											 << vertices )
