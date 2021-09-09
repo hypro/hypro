@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021.
+ * Copyright (c) 2021.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -433,7 +433,10 @@ class BoxT : private GeometricObjectBase {
 	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number, Converter, Setting>& b ) {
 		ostr << "{ ";
 		if ( !b.empty() ) {
-			ostr << b.min() << "; " << b.max() << std::endl;
+			// ostr << b.min() << "; " << b.max() << std::endl;
+			for ( const auto& i : b.intervals() ) {
+				ostr << i << " ";
+			}
 		}
 		ostr << " }";
 		return ostr;
@@ -542,6 +545,7 @@ class BoxT : private GeometricObjectBase {
 	 * @param hspace
 	 * @return BoxT<Number,Converter,Setting>
 	 */
+
 	BoxT intersectHalfspace( const Halfspace<Number>& hspace ) const;
 	BoxT intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
@@ -554,6 +558,14 @@ class BoxT : private GeometricObjectBase {
 	 * @return std::vector<BoxT<Number,Converter,Setting>>
 	 */
 	std::vector<BoxT<Number, Converter, Setting>> setMinus( const BoxT<Number, Converter, Setting>& minusbox ) const;
+
+	/**
+	 * @brief Allows to compute the set-difference of a box with another box and returns the resulting vector of boxes.
+
+	 *
+	 * @param minusbox
+	 * @return std::vector<BoxT<Number,Converter, Setting>>
+	 */
 	std::vector<BoxT<Number, Converter, Setting>> setMinus2( const BoxT<Number, Converter, Setting>& minusbox ) const;
 
 	/**

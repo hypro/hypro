@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * Implementation of the box.
  *
@@ -520,7 +529,11 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::linearTransfo
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+	// std::cout << "in box::affinetransformation: " << this->limits() << std::endl;
+	// std::cout << A << std::endl;
+	// std::cout << b << std::endl;
 	if ( this->empty() ) {
+		// std::cout << "box empty" << std::endl;
 		return *this;
 	}
 	// TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
@@ -528,10 +541,13 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransfo
 	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>( this->dimension() );
 	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
 		newIntervals[i] = carl::Interval<Number>{ b( i ) };
+		// std::cout << "initialize interval" << newIntervals[i] << std::endl;
 		for ( std::size_t j = 0; j < this->dimension(); ++j ) {
 			newIntervals[i] = newIntervals[i] + A( i, j ) * this->intervals()[j];
+			// std::cout << "update to: " << newIntervals[i] << " using: A(i,j): " << A(i,j) << ", interval: " << this->intervals()[j] << std::endl;
 		}
 	}
+	// std::cout << "in box::affinetransformation: " << BoxT<Number, Converter, Setting>{ newIntervals } << std::endl;
 	return BoxT<Number, Converter, Setting>{ newIntervals };
 }
 
