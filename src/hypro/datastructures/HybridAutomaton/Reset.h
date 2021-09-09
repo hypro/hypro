@@ -52,7 +52,8 @@ class Reset {
 	Reset( const std::vector<carl::Interval<Number>>& intervals );
 	~Reset() {}
 
-	bool empty() const { return mAffineResets.empty(); }
+	//bool empty() const { return mAffineResets.empty(); }
+	bool empty() const { return mAffineResets.empty() && mIntervalResets.empty(); }
 	std::size_t size() const { return mAffineResets.size(); }
 
 	const vector_t<Number>& getVector( std::size_t I = 0 ) const;

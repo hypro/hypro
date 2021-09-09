@@ -559,3 +559,23 @@ TYPED_TEST( BoxTest, Evaluation ) {
 	EXPECT_EQ( allRes.at( 2 ).supportValue, 2 );
 	EXPECT_EQ( allRes.at( 2 ).errorCode, hypro::SOLUTION::FEAS );
 }
+
+TYPED_TEST( BoxTest, SetMinus ) {
+	std::vector<hypro::Box<TypeParam>> result;
+	result = this->box1.setMinus2( this->box2 );
+	EXPECT_EQ( result.size(), (unsigned)1 );
+	//EXPECT_TRUE( result.empty() );
+	EXPECT_EQ( result.at(0), this->box1 );
+
+	//result = this->box2.setMinus2( this->box1 );
+	//EXPECT_EQ( result.at(0), this->box2 );
+
+	result = this->box2.setMinus2( this->box2 );
+	EXPECT_TRUE( result.at(0).empty() );
+	
+	result = this->b1.setMinus2( this->b2 );
+	EXPECT_EQ( result.size(), (unsigned)2 );
+
+
+	//this->b1.projectOn(dimensions);*/
+}

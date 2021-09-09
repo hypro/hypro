@@ -85,6 +85,11 @@ TYPED_TEST( HPolytopeTest, Access ) {
 	auto [constraints, constants] = hpt1.inequalities();
 	EXPECT_EQ( constraints, hpt1.matrix() );
 	EXPECT_EQ( constants, hpt1.vector() );
+
+	//------war nur um die polytope einmal graphisch darzustellen-----
+    //HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>( this->planes2 );
+	//std::cout << hpt1.vertices() << std::endl;
+	//std::cout << hpt2.vertices() << std::endl;
 }
 
 TYPED_TEST( HPolytopeTest, Swap ) {
@@ -487,4 +492,19 @@ TYPED_TEST( HPolytopeTest, OptimizerCaching ) {
 	EXPECT_TRUE( hspaces.getOptimizer()->getCLPContexts().find( std::this_thread::get_id() ) !=
 				 hspaces.getOptimizer()->getCLPContexts().end() );
 #endif
+}
+
+TYPED_TEST( HPolytopeTest, SetMinus ) {
+	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
+	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>( this->planes2 );
+
+	std::vector<HPolytope<TypeParam>> result1 = hpt1.setMinus2( hpt2 );
+
+	EXPECT_EQ(result1.size(),(unsigned)3);
+
+	std::vector<HPolytope<TypeParam>> result2 = hpt2.setMinus2( hpt1 );
+
+	EXPECT_TRUE(result2.empty());
+
+
 }

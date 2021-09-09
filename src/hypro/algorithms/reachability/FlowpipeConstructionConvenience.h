@@ -73,7 +73,7 @@ Representation applyTimeEvolution( Representation const& valuationSet, matrix_t<
  * @param reset The object describing the reset function
  * @return Representation The set after applying the reset function
  */
-template <class Representation, class Number>
+/*template <class Representation, class Number>
 Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset ) {
 	if ( std::any_of( reset.getIntervalReset().getIntervals().begin(), reset.getIntervalReset().getIntervals().end(),
 					  []( const auto& interval ) { return !interval.isEmpty(); } ) ) {
@@ -81,7 +81,19 @@ Representation applyReset( Representation const& valuationSet, Reset<Number> con
 		WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
 	}
 	return valuationSet.affineTransformation( reset.getMatrix(), reset.getVector() );
+}*/
+template <class Representation, class Number>
+Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset ) {
+	if ( !reset.isIntervalIdentity() ) {
+		assert( false && "lti analyzer does not currently support interval assignments on reset" );
+		WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
+	}
+    if ( reset.isAffineIdentity() ) {
+        return valuationSet;
+    }
+	return valuationSet.affineTransformation( reset.getMatrix(), reset.getVector() );
 }
+
 
 /**
  * @brief Computes the bounding box of the passed set via conversion. *
