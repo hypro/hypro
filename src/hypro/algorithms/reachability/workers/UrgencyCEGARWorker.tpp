@@ -68,19 +68,27 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::handleSegment(
 
 	if ( pruneUrgentSegments ) {
 		for ( const auto& uTrans : task.getLocation()->getTransitions() ) {
-			if ( uTrans->isUrgent() &&
-				 task.getUrgent().at( uTrans.get() ) == UrgencyRefinementLevel::FULL &&
-				 // todo: reuse for jump successor computation
-				 intersect( constrainedSegment, uTrans->getJumpEnablingSet() ).first == CONTAINMENT::FULL ) {
-				COUNT( "Pruned urgent segment" );
-				return REACHABILITY_RESULT::SAFE;
+			if ( uTrans->isUrgent() && task.getUrgent().at( uTrans.get() ) == UrgencyRefinementLevel::FULL ) {
+				START_BENCHMARK_OPERATION( "Prune segment" );
+				// todo: reuse for jump successor computation
+				auto c = intersect( constrainedSegment, uTrans->getJumpEnablingSet() ).first;
+				STOP_BENCHMARK_OPERATION( "Prune segment" );
+				if ( c == CONTAINMENT::FULL ) {
+					COUNT( "Pruned urgent segment" );
+					return REACHABILITY_RESULT::SAFE;
+				} else {
+					COUNT( "Intersection for non-pruned segment" );
+				}
 			}
 		}
 	}
 
 	for ( const auto& transRefinement : task.getUrgent() ) {
 		if ( transRefinement.second == UrgencyRefinementLevel::CUTOFF ) {
+			COUNT( "Cutoff" );
+			START_BENCHMARK_OPERATION( "Cutoff computation" );
 			constrainedSegment = urgencyHandler.cutoff( constrainedSegment, transRefinement.first->getJumpEnablingSet() );
+			STOP_BENCHMARK_OPERATION( "Cutoff computation" );
 		}
 	}
 
@@ -88,7 +96,10 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::handleSegment(
 	std::vector<Representation> nonUrgentEnabled{ constrainedSegment };
 	for ( const auto& transRefinement : task.getUrgent() ) {
 		if ( transRefinement.second == UrgencyRefinementLevel::SETDIFF ) {
+			COUNT( "Set difference" );
+			START_BENCHMARK_OPERATION( "Set difference computation" );
 			nonUrgentEnabled = urgencyHandler.urgentSetDifference( nonUrgentEnabled, transRefinement.first );
+			STOP_BENCHMARK_OPERATION( "Set difference computation" );
 		}
 	}
 	addSegment( nonUrgentEnabled, timing );
@@ -105,6 +116,7 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::handleSegment(
 template <typename Representation>
 auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task, const Transition<Number>* transition, const carl::Interval<SegmentInd>& timeOfJump )
 	  -> std::vector<TimedValuationSet<Representation>> {
+	START_BENCHMARK_OPERATION( "Jump successor computation" );
 	assert( transition->getSource() == task.getLocation() );
 	assert( task.getFlowpipe().size() == task.getFpTimings().size() );
 
@@ -152,6 +164,7 @@ auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeN
 			++it;
 		}
 	}
+	STOP_BENCHMARK_OPERATION( "Jump successor computation" );
 	return successors;
 }
 
