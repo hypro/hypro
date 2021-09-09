@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include "../../datastructures/HybridAutomaton/Condition.h"
-#include "../../datastructures/HybridAutomaton/Location.h"
-#include "../../datastructures/HybridAutomaton/StochasticLocation.h"
-#include "../../types.h"
-#include "../../util/VariablePool.h"
+#include "hypro/datastructures/HybridAutomaton/Condition.h"
+#include "hypro/datastructures/HybridAutomaton/Location.h"
+#include "hypro/datastructures/HybridAutomaton/StochasticLocation.h"
+#include "hypro/types.h"
+#include "hypro/util/VariablePool.h"
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
 #include "HyproFormulaVisitor.h"

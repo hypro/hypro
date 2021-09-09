@@ -1,4 +1,4 @@
-#include "Halfspace.h"
+#include "hypro/datastructures/Halfspace.h"
 
 namespace hypro {
 #ifdef EXTERNALIZE_CLASSES
