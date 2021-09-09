@@ -2459,10 +2459,141 @@ hybrid reachability
         filling_draining_draining_start_producing
         {
             x1 in [0, 0]
-            x2 in [130, 150] # this can be varied to adjust difficulty. Reasonable values are in [100, 290]
-            x3 in [130, 150] # this can be varied to adjust difficulty. Reasonable values are in [100, 290]
+            x2 in [150, 200] # this can be varied to adjust difficulty. Reasonable values are in [100, 290] # [150,160]
+            x3 in [150, 200] # this can be varied to adjust difficulty. Reasonable values are in [100, 290] # [150,160]
         }
     }
 }
 
-# todo: set unsafe set x2 <= 0 || x3 <= 0
+unsafe set
+{
+    x2 <= 0
+    filling_draining_draining_start_producing
+    {
+        x3 <= 0
+    }
+    filling_draining_draining_producing
+    {
+        x3 <= 0
+    }
+    filling_draining_draining_empty_start_producing
+    {
+        x3 <= 0
+    }
+    filling_draining_draining_empty_producing
+    {
+        x3 <= 0
+    }
+    filling_draining_empty_draining_start_producing
+    {
+        x3 <= 0
+    }
+    filling_draining_empty_draining_producing
+    {
+        x3 <= 0
+    }
+    filling_draining_empty_draining_empty_start_producing
+    {
+        x3 <= 0
+    }
+    filling_draining_empty_draining_empty_producing
+    {
+        x3 <= 0
+    }
+    constant_draining_draining_start_producing
+    {
+        x3 <= 0
+    }
+    constant_draining_draining_waiting
+    {
+        x3 <= 0
+    }
+    constant_draining_draining_empty_start_producing
+    {
+        x3 <= 0
+    }
+    constant_draining_draining_empty_waiting
+    {
+        x3 <= 0
+    }
+    constant_draining_empty_draining_start_producing
+    {
+        x3 <= 0
+    }
+    constant_draining_empty_draining_waiting
+    {
+        x3 <= 0
+    }
+    constant_draining_empty_draining_empty_start_producing
+    {
+        x3 <= 0
+    }
+    constant_draining_empty_draining_empty_waiting
+    {
+        x3 <= 0
+    }
+    draining1_filling_draining_filling2
+    {
+        x3 <= 0
+    }
+    draining1_filling_draining_empty_filling2
+    {
+        x3 <= 0
+    }
+    draining1_filling_empty_draining_filling2
+    {
+        x3 <= 0
+    }
+    draining1_filling_empty_draining_empty_filling2
+    {
+        x3 <= 0
+    }
+    draining1_empty_filling_draining_filling2
+    {
+        x3 <= 0
+    }
+    draining1_empty_filling_draining_empty_filling2
+    {
+        x3 <= 0
+    }
+    draining1_empty_filling_empty_draining_filling2
+    {
+        x3 <= 0
+    }
+    draining1_empty_filling_empty_draining_empty_filling2
+    {
+        x3 <= 0
+    }
+    draining2_empty_draining_filling_filling3
+    {
+        x3 <= 0
+    }
+    draining2_empty_draining_filling_empty_filling3
+    {
+        x3 <= 0
+    }
+    draining2_empty_draining_empty_filling_filling3
+    {
+        x3 <= 0
+    }
+    draining2_empty_draining_empty_filling_empty_filling3
+    {
+        x3 <= 0
+    }
+    draining2_draining_filling_filling3
+    {
+        x3 <= 0
+    }
+    draining2_draining_filling_empty_filling3
+    {
+        x3 <= 0
+    }
+    draining2_draining_empty_filling_filling3
+    {
+        x3 <= 0
+    }
+    draining2_draining_empty_filling_empty_filling3
+    {
+        x3 <= 0
+    }
+}

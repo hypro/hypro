@@ -1,0 +1,120 @@
+# model of a driving vehicle in two dimensions that breaks in specific regions for one second each and drives
+# with constant velocity in x direction otherwise.
+# safety property is that the vehicle does not reach the end (x=15) with maximal velocity, i.e. it must brake at least once.
+hybrid reachability
+{
+ state var x,y,vx,t
+
+ setting
+ {
+  fixed steps 0.2
+  time 100
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,y
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output drive
+  max jumps 100
+  print on
+ }
+
+ modes
+ {
+  driving
+  {
+   poly ode
+   {
+    x' = vx
+    y' = 0
+    vx' = 0
+    t' = 0
+   }
+
+   inv
+   {
+    y >= 0
+    y <= 10
+    x >= 0
+    x <= 15
+   }
+  }
+
+  braking
+  {
+    poly ode
+    {
+      x' = vx
+      y' = 0
+      vx' = -0.05*vx
+      t' = 1
+    }
+    inv
+    {
+      t <= 1
+    }
+  }
+ }
+
+ jumps
+ {
+   driving -> braking
+   guard { x in [2,3] y >= 1 }
+   reset {t' := 0}
+   parallelotope aggregation {}
+   urgent
+
+   driving -> braking
+   guard { x in [5,8] y in [3,4] }
+   reset {t' := 0}
+   parallelotope aggregation {}
+   urgent
+
+   driving -> braking
+   guard { x in [11,12] y <= 2 }
+   reset {t' := 0}
+   parallelotope aggregation {}
+   urgent
+
+   driving -> braking
+   guard { x in [6,7] y in [2,3] }
+   reset {t' := 0}
+   parallelotope aggregation {}
+   urgent
+
+   driving -> braking
+   guard { x in [10,12] y >= 4 }
+   reset {t' := 0}
+   parallelotope aggregation {}
+   urgent
+
+   driving -> braking
+   guard { x in [12,13] y >= 2 }
+   reset {t' := 0}
+   parallelotope aggregation {}
+   urgent
+
+   braking -> driving
+   guard {t >= 1}
+   reset {}
+   parallelotope aggregation {}  
+ }
+
+ init
+ {
+  driving
+  {
+   x in [0,0]
+   y in [0,5]
+   vx in [1,1]
+   t in [0,0]
+  }
+ }
+}
+
+unsafe set
+{
+    x in [15,15]
+    vx in [1,1]
+}
