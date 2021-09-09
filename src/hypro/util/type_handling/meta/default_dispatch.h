@@ -15,7 +15,7 @@ using DefaultRepresentations =
 			//RepresentationCombinations<
 			//	  CarlPolytopeT, CarlPolytopeSetting>,
 			RepresentationCombinations<
-				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
+				  HPolytopeT, HPolytopeSetting>/*,
 			RepresentationCombinations<
 				  VPolytopeT, VPolytopeSetting>,
 			RepresentationCombinations<
@@ -23,7 +23,7 @@ using DefaultRepresentations =
 			RepresentationCombinations<
 				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>,
 			RepresentationCombinations<
-				  TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>>;
+				  TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>*/>;
 
 using PolytopalRepresentations =
 	  TypeList<
