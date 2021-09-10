@@ -26,7 +26,8 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
 
 	auto settings = hypro::convert( reachSettings );
-	settings.rFixedParameters().detectFixedPoints = true;
+	settings.rStrategy().front().detectJumpFixedPoints = true;
+	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
 	// settings.rFixedParameters().localTimeHorizon = 1;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
@@ -112,7 +113,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 1, 80, 1 )
+	  ->DenseRange( 1, 5, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark

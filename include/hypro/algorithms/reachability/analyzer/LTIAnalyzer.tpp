@@ -20,6 +20,11 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 		mWorkQueue.pop_back();
 		REACHABILITY_RESULT safetyResult;
 
+		if ( mParameters.detectJumpFixedPoints && !currentNode->getInitialBoundingBox() ) {
+			currentNode->setBoundingBox( Converter<Number>::toBox( currentNode->getInitialSet() ).intervals() );
+		}
+
+		// bounded time evolution
 		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( currentNode->getFlowpipe() ) );
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
@@ -47,15 +52,15 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 				// in any case add node to the search tree
 				ReachTreeNode<State>& childNode = currentNode->addChild( valuationSet, globalDuration, transition );
 				// if desired, try to detect fixed-point
-				bool fixedPointReached = mFixedParameters.detectFixedPoints;
+				bool fixedPointReached = mParameters.detectJumpFixedPoints;
 				auto boundingBox = std::vector<carl::Interval<Number>>{};
-				if ( mFixedParameters.detectFixedPoints ) {
+				if ( mParameters.detectJumpFixedPoints ) {
 					boundingBox = Converter<Number>::toBox( childNode.getInitialSet() ).intervals();
-					fixedPointReached = detectFixedPoint( childNode );
+					fixedPointReached = detectJumpFixedPoint( childNode, mRoots );
 				}
 
 				// set bounding box to speed up search in case the option is enabled
-				if ( mFixedParameters.detectFixedPoints ) {
+				if ( mParameters.detectJumpFixedPoints ) {
 					childNode.setBoundingBox( boundingBox );
 				}
 				// create Task, push only to queue, in case no fixed-point has been detected or detection is disabled
@@ -66,37 +71,20 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 				}
 			}
 		}
-	}
 
-	return { LTISuccess{} };
-}
-
-template <typename State>
-bool LTIAnalyzer<State>::detectFixedPoint( ReachTreeNode<State>& node ) {
-	using Number = typename State::NumberType;
-#ifdef HYPRO_STATISTICS
-	START_BENCHMARK_OPERATION( "Fixed-point detection" );
-#endif
-	std::vector<carl::Interval<Number>> boundingBox = Converter<Number>::toBox( node.getInitialSet() ).intervals();
-	for ( auto& root : mRoots ) {
-		for ( auto& treeNode : preorder( root ) ) {
-			const auto& nodeInitialBoundingBox = treeNode.getInitialBoundingBox();
-			// if the location matches and the bounding boxes contain each other, then also perform the (possibly expensive) full containment test.
-			if ( nodeInitialBoundingBox && treeNode.getLocation() == node.getLocation() && std::equal( std::begin( boundingBox ), std::end( boundingBox ), std::begin( nodeInitialBoundingBox.value() ), std::end( nodeInitialBoundingBox.value() ), []( const auto& setBoxIntv, const auto& initBoxIntv ) { return initBoxIntv.contains( setBoxIntv ); } ) && treeNode.getInitialSet().contains( node.getInitialSet() ) ) {
-				TRACE( "hypro.reachability", "Fixed-point detected." );
-#ifdef HYPRO_STATISTICS
-				STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
-#endif
-				node.setFixedPoint();
-				return true;
+		// detect fixed points in continuous behavior (locally), only if the node does not have any child nodes. Otherwise, the detected fixed point can be evaded by taking a discrete jump.
+		if ( mParameters.detectContinuousFixedPointsLocally && currentNode->getChildren().empty() ) {
+			for ( auto cur = std::begin( currentNode->getFlowpipe() ); cur != std::end( currentNode->getFlowpipe() ); ++cur ) {
+				for ( auto succ = std::begin( currentNode->getFlowpipe() ); succ != std::end( currentNode->getFlowpipe() ); ++succ ) {
+					if ( succ->contains( *cur ) ) {
+						currentNode->setFixedPoint();
+					}
+				}
 			}
 		}
 	}
-#ifdef HYPRO_STATISTICS
-	STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
-#endif
-	node.setFixedPoint( false );
-	return false;
+
+	return { LTISuccess{} };
 }
 
 }  // namespace hypro
