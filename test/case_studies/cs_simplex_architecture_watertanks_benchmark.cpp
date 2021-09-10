@@ -45,6 +45,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		auto& plt = hypro::Plotter<Number>::getInstance();
 		plt.clear();
 		plt.rSettings().overwriteFiles = true;
+		plt.rSettings().cummulative = true;
 		plt.setFilename( "simplex_watertanks" );
 
 		auto finished_leaves = std::size_t( 0 );
@@ -65,6 +66,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 					++unfinished_leaves;
 					last_paths.push_back( node.getPath() );
 					if ( has_discrete_cycle( node.getPath() ) ) {
+						std::cout << "Path " << node.getPath() << " is cyclic." << std::endl;
 						++cyclic_path_count;
 					} else {
 						std::cout << "Path " << node.getPath() << " is truly unfinished." << std::endl;
