@@ -801,7 +801,7 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 		for ( long unsigned int i = 0; i < this->dimension(); i++ ) {
 			if ( minus.at( i ).lower() <= box.at( i ).lower() ) {
 				if ( minus.at( i ).upper() <= box.at( i ).lower() ) {
-					if (minus.at(i).lower()!=minus.at(i).upper()){
+					if (box.at(i).lower()!=box.at(i).upper()){
 						unchanged = true;
 					}
 				}
