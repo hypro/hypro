@@ -51,6 +51,10 @@ class TreeNode {
 	auto getParent() const -> DerivedNode* {
 		return mParent;
 	}
+
+	void setParent( DerivedNode* parent ) {
+		mParent = parent;
+	}
 };
 
 }  // namespace hypro
