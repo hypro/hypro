@@ -27,8 +27,8 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 
 	auto settings = hypro::convert( reachSettings );
 	settings.rStrategy().front().detectJumpFixedPoints = true;
-	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
-	// settings.rFixedParameters().localTimeHorizon = 1;
+	settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
+	settings.rFixedParameters().localTimeHorizon = 10;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
 	std::vector<hypro::Path<Number>> last_paths{};
@@ -66,7 +66,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 					++unfinished_leaves;
 					last_paths.push_back( node.getPath() );
 					if ( has_discrete_cycle( node.getPath() ) ) {
-						std::cout << "Path " << node.getPath() << " is cyclic." << std::endl;
+						// std::cout << "Path " << node.getPath() << " is cyclic." << std::endl;
 						++cyclic_path_count;
 					} else {
 						std::cout << "Path " << node.getPath() << " is truly unfinished." << std::endl;
@@ -115,7 +115,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 1, 5, 1 )
+	  ->DenseRange( 1, 40, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
