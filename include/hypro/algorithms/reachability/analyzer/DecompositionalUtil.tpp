@@ -11,7 +11,7 @@ namespace detail {
 template <typename Representation>
 HPolytope<typename Representation::NumberType> composeSubspaceConstraints( const std::vector<Representation>& subspaceSets, const Condition<typename Representation::NumberType>& dependencies, const Decomposition& decomposition, std::size_t clockCount ) {
 	using Number = typename Representation::NumberType;
-	if ( std::any_of( subspaceSets.begin(), subspaceSets.end(), []( const auto& set ){ return set.empty(); } ) ) {
+	if ( std::any_of( subspaceSets.begin(), subspaceSets.end(), []( const auto& set ) { return set.empty(); } ) ) {
 		return HPolytope<Number>::Empty();
 	}
 	// variable order in subspace sets with clocks: x_i1, x_i2,...,x_ik,x_i1^0,...,x_ik^0,c_i^1,...,c_i^clockCount
@@ -109,7 +109,9 @@ Representation composeSubspaces( const std::vector<Representation>& subspaceSets
 	if ( std::any_of( subspaceSets.begin(), subspaceSets.end(), []( const auto& set ) { return set.empty(); } ) ) {
 		return Representation::Empty();
 	}
+	START_BENCHMARK_OPERATION( "ComposeConstraints" );
 	auto pol = composeSubspaceConstraints( subspaceSets, dependencies, decomposition, clockCount );
+	STOP_BENCHMARK_OPERATION( "ComposeConstraints" );
 	std::size_t varCount = std::accumulate( decomposition.subspaces.begin(), decomposition.subspaces.end(), 0,
 											[]( std::size_t cur, const auto& subspace ) { return cur + subspace.size(); } );
 	std::vector<std::size_t> varIndices( varCount );
@@ -119,7 +121,10 @@ Representation composeSubspaces( const std::vector<Representation>& subspaceSets
 	// todo: keep as polytopes for projection, convert after
 	Representation comp;
 	convert( pol, comp );
-	return projectOnDimensions( comp, varIndices );
+	START_BENCHMARK_OPERATION( "ProjectComposed" );
+	auto res = projectOnDimensions( comp, varIndices );
+	STOP_BENCHMARK_OPERATION( "ProjectComposed" );
+	return res;
 }
 
 template <typename Representation>
