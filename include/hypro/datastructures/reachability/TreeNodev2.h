@@ -9,7 +9,7 @@ namespace hypro {
 template <class DerivedNode>
 class TreeNode {
   protected:
-	DerivedNode* mParent{};
+	DerivedNode* mParent = nullptr;
 	std::vector<std::unique_ptr<DerivedNode>> mChildren{};
 	size_t mDepth{ 0 };
 
@@ -51,6 +51,8 @@ class TreeNode {
 	auto getParent() const -> DerivedNode* {
 		return mParent;
 	}
+
+	void setParent( DerivedNode* p ) { mParent = p; }
 };
 
 }  // namespace hypro

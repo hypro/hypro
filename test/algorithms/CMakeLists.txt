@@ -15,6 +15,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             QuickIntersectionTest.cpp
             RectangularReachabilityTest.cpp
             SingularReachabilityTest.cpp
+            SetMinusReachabilityAnalysisTest.cpp
             TimeEvolutionTest.cpp
             #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
             #FirstSegmentHandlersTest.cpp #BROKEN

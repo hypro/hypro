@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * @file HPolytope.h
  * \example example_HPolytope.cpp
  */
@@ -336,12 +345,6 @@ class HPolytopeT : private GeometricObjectBase {
 		b.setUpdated( false );
 	}
 
-    /**
-	 * calculates the set difference of two polytopes
-	 */
-	std::vector<HPolytopeT<Number, Converter, Setting>> setMinus2( const HPolytopeT<Number, Converter, Setting>& minus) const;
-	std::vector<HPolytopeT<Number, Converter, Setting>> setMinus( const HPolytopeT<Number, Converter, Setting>& minus) const;
-
 	template <typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
 	void reduceNumberRepresentation( const std::vector<Point<Number>>& _vertices = std::vector<Point<Number>>(), unsigned limit = fReach_DENOMINATOR ) const {
 		//#ifdef REDUCE_NUMBERS
@@ -416,6 +419,12 @@ class HPolytopeT : private GeometricObjectBase {
 		}
 		//#endif
 	}
+
+	/**
+	 * calculates the set difference of two polytopes
+	 */
+	std::vector<HPolytopeT<Number, Converter, Setting>> setMinus2( const HPolytopeT<Number, Converter, Setting>& minus ) const;
+	std::vector<HPolytopeT<Number, Converter, Setting>> setMinus( const HPolytopeT<Number, Converter, Setting>& minus ) const;
 
 	template <typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
 	void reduceNumberRepresentation( const std::vector<Point<double>>& = std::vector<Point<double>>(), unsigned = fReach_DENOMINATOR ) const {}

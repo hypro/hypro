@@ -5,16 +5,17 @@
 
 #pragma once
 
+#include "../../../../../include/hypro/datastructures/HybridAutomaton/Transition.h"
 #include "../../../datastructures/Halfspace.h"
 #include "../../../datastructures/HybridAutomaton/Condition.h"
 #include "../../../datastructures/HybridAutomaton/HybridAutomatonComp.h"
 #include "../../../datastructures/HybridAutomaton/Location.h"
 #include "../../../datastructures/HybridAutomaton/State.h"
-#include "../../../datastructures/HybridAutomaton/Transition.h"
 #include "../../../datastructures/Point.h"
 #include "../../../representations/GeometricObject.h"
 #include "../../../types.h"
 #include "../../linearOptimization/EvaluationResult.h"
+
 #include <carl/core/MultivariatePolynomial.h>
 #include <carl/core/VariablePool.h>
 #include <carl/interval/Interval.h>

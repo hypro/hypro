@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * Class that describes one transition of a hybrid automaton.
  * File:   transition.h
  * Author: stefan & ckugler
@@ -36,10 +45,11 @@ class Location;
 template <typename Number>
 class Transition {
   private:
-	Location<Number>* mSource = nullptr;				  /// Pointer to the source location.
-	Location<Number>* mTarget = nullptr;				  /// Pointer to the target location.
-	Condition<Number> mGuard;							  /// Guard condition enabling the transition if satisfied.
-	Reset<Number> mReset;								  /// Reset function.
+	Location<Number>* mSource = nullptr;  /// Pointer to the source location.
+	Location<Number>* mTarget = nullptr;  /// Pointer to the target location.
+	Condition<Number> mGuard;			  /// Guard condition enabling the transition if satisfied.
+	Reset<Number> mReset = Reset<Number>();
+	// Reset<Number> mReset;								  /// Reset function.
 	Aggregation mAggregationSetting = Aggregation::none;  /// Aggregation settings.
 	std::size_t mClustering = 0;						  /// Clustering: maximal number of discrete successors.
 	bool mUrgent = false;								  /// Flag if transition is urgent.
