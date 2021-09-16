@@ -18,7 +18,7 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 		mWorkQueue.pop_back();
 
 		START_BENCHMARK_OPERATION( "Unrefined time successors" );
-		auto safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.refineHalfspaces );
+		auto safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.pruneUrgentSegments );
 		worker.insertFlowpipe( *currentNode );
 		currentNode->setSafety( safetyResult );
 		worker.reset();

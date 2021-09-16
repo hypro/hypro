@@ -34,9 +34,13 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 			( "aggregation,a", po::value<hypro::AGG_SETTING>(), "the aggregation setting to use. MODEL, AGG or NO_AGG." )
 			( "clustering,c", po::value<int>(), "Select clustering option, -1=off, 0=all, i=max. number of clustered segments. Overrides settings in the input file." )
 			( "representation,r", po::value<hypro::representation_name>(), "representation to be used initially. Valid options are box, support_function, zonotope, polytope_h, polytope_v")
-			( "setting,s", po::value<std::string>(), "the setting to use for the representation")
+			( "setting,s", po::value<std::string>(), "the setting to use for the representation");
+
+	po::options_description urgencyCEGARSettings( "Urgency CEGAR settings." );
+	urgencyCEGARSettings.add_options()
 			( "refinementLevels", po::value<std::vector<hypro::UrgencyRefinementLevel>>()->multitoken()->default_value({}), "the refinement levels for urgency cegar (selction of FULL, CUTOFF and SETDIFF)")
-			( "refineHalfspaces", po::bool_switch(), "always refine urgent halfspaces")
+			( "refineHalfspaces", po::bool_switch(), "always refine urgent halfspaces" )
+			( "pruneUrgentSegments", po::bool_switch(), "remove segments contained in urgent guards")
 			( "aggregatedRefine", po::bool_switch(), "aggregate initial segments for path computation when finding refinement transitions")
 			( "heuristic", po::value<hypro::UrgencyRefinementHeuristic>(), "used heuristic for choosing refinement transition. NONE, VOLUME, CONSTRAINT_COUNT or COUNT");
 
@@ -56,7 +60,7 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 			( "decompose", po::bool_switch(), "Decompose automaton into syntactically independent subspaces." );
 
 	po::options_description allOptions("Allowed options.");
-	allOptions.add(general).add(analysisParameters).add(plotting).add(preprocessing);
+	allOptions.add(general).add(analysisParameters).add(urgencyCEGARSettings).add(plotting).add(preprocessing);
 
 	// clang-format on
 	try {

@@ -156,7 +156,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 		if ( currentNode->getFlowpipe().empty() ) {
 			COUNT( "Computed flowpipes" );
 			START_BENCHMARK_OPERATION( "Refinement time successors" );
-			REACHABILITY_RESULT safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.refineHalfspaces );
+			REACHABILITY_RESULT safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.pruneUrgentSegments );
 			worker.insertFlowpipe( *currentNode );
 			currentNode->setSafety( safetyResult );
 			worker.reset();
