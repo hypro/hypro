@@ -68,7 +68,7 @@ class UrgencyRefinementAnalyzer {
 	 * @brief Structure to hold a refinement candidate, consisting of a node on the unsafe path,
 	 * an urgent transition for refinement and a level to refine the transition to.
 	 */
-	struct RefinePoint {
+	struct RefinementCandidate {
 		ReachTreeNode<Representation>* node = nullptr;
 		Transition<Number>* transition = nullptr;
 		UrgencyRefinementLevel level = UrgencyRefinementLevel::SETDIFF;
@@ -121,20 +121,20 @@ class UrgencyRefinementAnalyzer {
 	/**
      * @brief Finds a node, transition and refinement level for the given unsafe node.
      * @param unsafeNode Node with reachable bad states.
-     * @return A refine point containing a node on the path to the unsafe node, an outgoing urgent transition
+     * @return A refinement candidate containing a node on the path to the unsafe node, an outgoing urgent transition
      * and a refinement level.
      */
-	auto findRefinementNode( ReachTreeNode<Representation>* unsafeNode )
-		  -> RefinePoint;
+	auto findRefinementCandidate( ReachTreeNode<Representation>* unsafeNode )
+		  -> RefinementCandidate;
 
 	/**
      * @brief Checks if the refined node already exists as sibling of the unrefined node and creates it otherwise.
      * @detail If the unrefined node is a root (parent is nullptr), a new refined root is created and pushed to mRoots.
-     * @param refine Pair of node and transition to refine.
+     * @param refine Holds the refinement node, transition and level to create the node.
      * @return The node with the new urgent transitions. The node is a sibling of the unrefined node and
      * the flowpipe may or may not already be computed.
      */
-	auto refineNode( const RefinePoint& refine )
+	auto createRefinedNode( const RefinementCandidate& refine )
 		  -> ReachTreeNode<Representation>*;
 
 	/**
@@ -146,7 +146,7 @@ class UrgencyRefinementAnalyzer {
 	 * @param unsafeNode A node with reachable bad states.
 	 * @return true if refinement can be helpful and false otherwise.
 	 */
-	bool suitableForRefinement( const RefinePoint& candidate, ReachTreeNode<Representation>* unsafeNode );
+	bool isSuitableForRefinement( const RefinementCandidate& candidate, ReachTreeNode<Representation>* unsafeNode );
 
 	/**
 	 * @brief Compute a path from an initial node and check safety. This is to determine whether a candidate is suitable
@@ -156,19 +156,19 @@ class UrgencyRefinementAnalyzer {
 	 * @param initialTimeHorizon A time horizon that is used only to limit the first time elapse.
 	 * @return true if the path is unsafe and false otherwise.
 	 */
-	bool pathUnsafe( ReachTreeNode<Representation>* initialNode, Path<Number> path, std::size_t initialTimeHorizon );
+	bool isPathUnsafe( ReachTreeNode<Representation>* initialNode, Path<Number> path, std::size_t initialTimeHorizon );
 
 	/**
 	 * @brief Evaluate the given heuristic for a transition and a node.
-	 * @detail Heuristics are used to estimate how useful refinement of a candidate may be.
+	 * @detail Heuristics give priorities to refinement candidates based on how useful or easy refinement may be.
 	 * @param t The transition that is a candidate for refinement.
 	 * @param node The candidate node.
 	 * @return A value dependent on the heuristic given in the settings. Can be used to compare transitions.
 	 */
-	std::size_t computeHeuristic( Transition<Number>* t, ReachTreeNode<Representation>* node );
+	std::size_t evaluateHeuristic( Transition<Number>* t, ReachTreeNode<Representation>* node );
 
 	/**
-	 * @brief Called after a transition has been chosen for refinement. Dependent on the heuristic,
+	 * @brief Called after a transition has been chosen for refinement. Depending on the heuristic,
 	 * the function may clear the cache or increase a counter for the given transition.
 	 * @param The transition that was chosen for refinement.
 	 */
@@ -184,8 +184,8 @@ class UrgencyRefinementAnalyzer {
 	ReachTreeNode<Representation>* mFailureNode;			///< The initial failure node
 	std::list<ReachTreeNode<Representation>>* mRoots;		///< The roots of the reach tree
 	size_t const mMaxSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.localTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::max() ) ) );
-	std::map<Transition<Number>*, std::size_t> mRefinementCache;  ///< Cache for heuristic values
-	Transition<Number>* mLastRefine;
+	std::map<Transition<Number>*, std::size_t> mHeuristicCache;	 ///< Cache for heuristic values
+	Transition<Number>* mLastRefine;							 ///< The transition that was most recently refined. Used for heuristic evaluation
 };
 
 }  // namespace hypro

@@ -68,7 +68,7 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::handleSegment(
 
 	if ( pruneUrgentSegments ) {
 		for ( const auto& uTrans : task.getLocation()->getTransitions() ) {
-			if ( uTrans->isUrgent() && task.getUrgent().at( uTrans.get() ) == UrgencyRefinementLevel::FULL ) {
+			if ( uTrans->isUrgent() && task.getUrgencyRefinementLevels().at( uTrans.get() ) == UrgencyRefinementLevel::FULL ) {
 				START_BENCHMARK_OPERATION( "Prune segment" );
 				// todo: reuse for jump successor computation
 				auto c = intersect( constrainedSegment, uTrans->getJumpEnablingSet() ).first;
@@ -83,18 +83,18 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::handleSegment(
 		}
 	}
 
-	for ( const auto& transRefinement : task.getUrgent() ) {
+	for ( const auto& transRefinement : task.getUrgencyRefinementLevels() ) {
 		if ( transRefinement.second == UrgencyRefinementLevel::CUTOFF ) {
 			COUNT( "Cutoff" );
 			START_BENCHMARK_OPERATION( "Cutoff computation" );
-			constrainedSegment = urgencyHandler.cutoff( constrainedSegment, transRefinement.first->getJumpEnablingSet() );
+			constrainedSegment = urgencyHandler.cutoff( constrainedSegment, transRefinement.first );
 			STOP_BENCHMARK_OPERATION( "Cutoff computation" );
 		}
 	}
 
 	// urgent guards
 	std::vector<Representation> nonUrgentEnabled{ constrainedSegment };
-	for ( const auto& transRefinement : task.getUrgent() ) {
+	for ( const auto& transRefinement : task.getUrgencyRefinementLevels() ) {
 		if ( transRefinement.second == UrgencyRefinementLevel::SETDIFF ) {
 			COUNT( "Set difference" );
 			START_BENCHMARK_OPERATION( "Set difference computation" );

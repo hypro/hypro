@@ -90,6 +90,10 @@ TEST( UrgencyHandling, Cutoff ) {
 	using Matrix = matrix_t<Number>;
 	using Vector = vector_t<Number>;
 
+	// create dummy transition to hold guard
+	Location<Number> loc;
+	Transition<Number> trans( &loc, &loc );
+
 	ltiUrgencyHandler<VPolytope<Number>> urgencyHandler;
 	Vector p1( 2 ), p2( 2 ), p3( 2 ), p4( 2 );
 	p1 << 0, 0;
@@ -105,7 +109,8 @@ TEST( UrgencyHandling, Cutoff ) {
 	vec << -1.5;
 
 	Condition<Number> cond( mat, vec );
-	auto res = urgencyHandler.cutoff( square, cond );
+	trans.setGuard( cond );
+	auto res = urgencyHandler.cutoff( square, &trans );
 
 	Vector p5( 2 ), p6( 2 );
 	p5 << 0.5, 1;
@@ -119,7 +124,8 @@ TEST( UrgencyHandling, Cutoff ) {
 	vec << 1.5;
 	cond.setMatrix( mat );
 	cond.setVector( vec );
-	res = urgencyHandler.cutoff( square, cond );
+	trans.setGuard( cond );
+	res = urgencyHandler.cutoff( square, &trans );
 
 	expectedRes = VPolytope<Number>(
 		  std::vector<Point<Number>>{ Point<Number>( p4 ), Point<Number>( p5 ), Point<Number>( p6 ) } );
@@ -144,7 +150,8 @@ TEST( UrgencyHandling, Cutoff ) {
 	vec << -0.5, -0.5;
 	cond.setMatrix( mat );
 	cond.setVector( vec );
-	res = urgencyHandler.cutoff( cube, cond );
+	trans.setGuard( cond );
+	res = urgencyHandler.cutoff( cube, &trans );
 
 	Vector s1( 3 ), s2( 3 ), s3( 3 ), s4( 3 ), s5( 3 ), s6( 3 ), s7( 3 ), s8( 3 ), s9( 3 ), s10( 3 );
 	s1 << 0, 0, 0;
@@ -189,8 +196,8 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
 	UrgencyCEGARWorker<Representation> worker( automaton, analysisParameters, 10, cache );
 	ReachTreeNode<Representation> node( l0, initialSet, carl::Interval<SegmentInd>( 0 ) );
 
-	node.getUrgent()[t0] = UrgencyRefinementLevel::SETDIFF;
-	node.getUrgent()[t1] = UrgencyRefinementLevel::FULL;
+	node.getUrgencyRefinementLevels()[t0] = UrgencyRefinementLevel::SETDIFF;
+	node.getUrgencyRefinementLevels()[t1] = UrgencyRefinementLevel::FULL;
 	worker.computeTimeSuccessors( node );
 
 	auto flowpipe = worker.getFlowpipe();
@@ -222,7 +229,7 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
 	EXPECT_TRUE( found3 );
 	EXPECT_TRUE( found4 );
 
-	node.getUrgent()[t1] = UrgencyRefinementLevel::SETDIFF;
+	node.getUrgencyRefinementLevels()[t1] = UrgencyRefinementLevel::SETDIFF;
 	worker.reset();
 	worker.computeTimeSuccessors( node );
 	flowpipe = worker.getFlowpipe();
@@ -277,8 +284,8 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
 
 	EXPECT_TRUE( analysisResult.isSuccess() );
 	EXPECT_EQ( (std::size_t)1, roots.size() );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t0] );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgencyRefinementLevels()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgencyRefinementLevels()[t1] );
 
 	Matrix badStateMat( 2, 2 );
 	Vector badStateVec( 2 );
@@ -294,10 +301,10 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
 	// However they are also reachable from the jump enabling set, so we expect t0 to be refined once.
 	EXPECT_FALSE( analysisResult.isSuccess() );
 	ASSERT_EQ( (std::size_t)2, roots.size() );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t0] );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t1] );
-	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[1]->getUrgent()[t0] );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[1]->getUrgent()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgencyRefinementLevels()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgencyRefinementLevels()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[1]->getUrgencyRefinementLevels()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[1]->getUrgencyRefinementLevels()[t1] );
 
 	// bad states are in shadow of urgent guard
 	badStateMat << -1, 0, 0, -1;
@@ -313,12 +320,12 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
 	// Additional refinement of t1 should verify safety.
 	EXPECT_TRUE( analysisResult.isSuccess() );
 	ASSERT_EQ( (std::size_t)3, roots.size() );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t0] );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t1] );
-	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[1]->getUrgent()[t0] );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[1]->getUrgent()[t1] );
-	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[2]->getUrgent()[t0] );
-	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[2]->getUrgent()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgencyRefinementLevels()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgencyRefinementLevels()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[1]->getUrgencyRefinementLevels()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[1]->getUrgencyRefinementLevels()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[2]->getUrgencyRefinementLevels()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[2]->getUrgencyRefinementLevels()[t1] );
 
 	refinementSettings.heuristic = UrgencyRefinementHeuristic::VOLUME;
 	UrgencyCEGARAnalyzer<Representation> analyzerRefine2( automaton, fixedParameters, analysisParameters,
@@ -328,8 +335,8 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
 	// t1 has the larger volume so it should be refined first, which verifies safety.
 	EXPECT_TRUE( analysisResult.isSuccess() );
 	ASSERT_EQ( (std::size_t)2, roots.size() );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t0] );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgent()[t1] );
-	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[1]->getUrgent()[t0] );
-	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[1]->getUrgent()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgencyRefinementLevels()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[0]->getUrgencyRefinementLevels()[t1] );
+	EXPECT_EQ( UrgencyRefinementLevel::FULL, roots[1]->getUrgencyRefinementLevels()[t0] );
+	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[1]->getUrgencyRefinementLevels()[t1] );
 }

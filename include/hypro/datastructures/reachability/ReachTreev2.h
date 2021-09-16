@@ -17,16 +17,16 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation>>;
 
-	Location<Number> const* mLocation;										   ///< location in which the flowpipe was computed
-	Transition<Number> const* mTransition{};								   ///< the transition which lead here. nullptr for roots
-	std::vector<Representation> mFlowpipe{};								   ///< contains computed flowpipe
-	Representation mInitialSet;												   ///< contains initial set for the flowpipe
-	carl::Interval<SegmentInd> mTimings{};									   ///< global time covered by inital set (used as offset)
-	std::map<Transition<Number>*, UrgencyRefinementLevel>	mUrgent{};	///< refinement level for outgoing urgent transitions
-  std::vector<SegmentInd> mFpTimings{};       ///< timing information for simultaneous segments (urgency)
-	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
-	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;									   ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
-	REACHABILITY_RESULT mSafetyResult;
+	Location<Number> const* mLocation;											   ///< location in which the flowpipe was computed
+	Transition<Number> const* mTransition{};									   ///< the transition which lead here. nullptr for roots
+	std::vector<Representation> mFlowpipe{};									   ///< contains computed flowpipe
+	Representation mInitialSet;													   ///< contains initial set for the flowpipe
+	carl::Interval<SegmentInd> mTimings{};										   ///< global time covered by inital set (used as offset)
+	std::map<Transition<Number>*, UrgencyRefinementLevel> mUrgRefinementLevels{};  ///< refinement level for outgoing urgent transitions
+	std::vector<SegmentInd> mFpTimings{};										   ///< timing information for simultaneous segments (urgency)
+	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};	   ///< optional bounding box of the initial set
+	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;										   ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
+	REACHABILITY_RESULT mSafetyResult;											   ///< safety of flowpipe segments
 
   public:
 	// Exposition types
@@ -82,12 +82,12 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	const REACHABILITY_RESULT& getSafety() const { return mSafetyResult; }
 	void setSafety( REACHABILITY_RESULT result ) { mSafetyResult = result; }
 
-  /**
+	/**
    * @brief Get access to the urgent Transitions
    * @return Map of urgent transitions to refinement level
    */
-  std::map<Transition<Number>*, UrgencyRefinementLevel>& getUrgent() { return mUrgent; }
-  std::map<Transition<Number>*, UrgencyRefinementLevel> const& getUrgent() const { return mUrgent; }
+	std::map<Transition<Number>*, UrgencyRefinementLevel>& getUrgencyRefinementLevels() { return mUrgRefinementLevels; }
+	std::map<Transition<Number>*, UrgencyRefinementLevel> const& getUrgencyRefinementLevels() const { return mUrgRefinementLevels; }
 
 	/**
 	 * @brief Get the initial set
@@ -100,8 +100,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	const Location<Number>* getLocation() const { return mLocation; }
 
 	const carl::Interval<SegmentInd>& getTimings() const { return mTimings; }
-  std::vector<SegmentInd>& getFpTimings() { return mFpTimings; }
-  const std::vector<SegmentInd>& getFpTimings() const { return mFpTimings; }
+	std::vector<SegmentInd>& getFpTimings() { return mFpTimings; }
+	const std::vector<SegmentInd>& getFpTimings() const { return mFpTimings; }
 
 	/**
 	 * @brief Get the time intervals the passed transition was enabled

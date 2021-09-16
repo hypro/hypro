@@ -13,7 +13,7 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 	UrgencyRefinementAnalyzer<Representation> refinementAnalyzer( mHybridAutomaton, mFixedParameters, mParameters, mRefinementSettings, mRoots );
 
 	while ( !mWorkQueue.empty() ) {
-		COUNT( "Nodes processed" );
+		COUNT( "Computed flowpipes" );
 		auto currentNode = mWorkQueue.back();
 		mWorkQueue.pop_back();
 
@@ -69,7 +69,7 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createChild
 
 	for ( auto const& trans : childNode.getLocation()->getTransitions() ) {
 		if ( trans->isUrgent() ) {
-			childNode.getUrgent()[trans.get()] = detail::getInitialRefinementLevel( trans.get(), mRefinementSettings );
+			childNode.getUrgencyRefinementLevels()[trans.get()] = detail::getInitialRefinementLevel( trans.get(), mRefinementSettings );
 		}
 	}
 	return &childNode;

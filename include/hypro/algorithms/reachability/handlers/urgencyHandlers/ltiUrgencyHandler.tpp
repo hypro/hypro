@@ -17,7 +17,8 @@ std::vector<Representation> ltiUrgencyHandler<Representation>::urgentSetDifferen
 }
 
 template <class Representation>
-Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& set, Condition<Number> const& condition ) {
+Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& set, Transition<Number>* trans ) {
+	auto condition = trans->getJumpEnablingSet();
 	if ( condition.isTrue() || set.empty() ) {
 		return Representation::Empty();
 	} else if ( condition.isFalse() || set.empty() ) {
@@ -27,9 +28,12 @@ Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& 
 	}
 	std::size_t dimension = set.dimension();
 
+	// Used to check whether points satisfy the condition
 	Optimizer<Number> conditionOptimizer( condition.getMatrix(), condition.getVector() );
+	// Used to replace vertices
 	Optimizer<Number> vertexOptimizer;
 
+	// Build matrix and vector for vertex optimizer
 	matrix_t<Number> mat( condition.getMatrix().rows() + 2 * dimension + 4, dimension + 2 );
 	vector_t<Number> vec( mat.rows() );
 	mat.bottomLeftCorner( condition.getMatrix().rows(), condition.getMatrix().cols() ) = condition.getMatrix();
@@ -56,19 +60,23 @@ Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& 
 
 	vertexOptimizer.setVector( vec );
 
+	// Used to maximize in the direction of other vertices
 	vector_t<Number> lambda = vector_t<Number>::Zero( dimension + 2 );
 	lambda( dimension + 1 ) = 1;
 
 	std::vector<Point<Number>> oldVertices = set.vertices();
 	std::vector<Point<Number>> newVertices;
 	for ( const auto& vertex : oldVertices ) {
+		// only replace vertices that satisfy the condition
 		if ( !conditionOptimizer.checkPoint( vertex ) ) {
 			newVertices.push_back( vertex );
 			continue;
 		}
+		// start replacing vertex
 		std::vector<Point<Number>> replacement;
 		for ( const auto& otherVertex : oldVertices ) {
 			if ( conditionOptimizer.checkPoint( otherVertex ) ) continue;
+			// set up LP problem
 			for ( std::size_t i = 0; i < dimension; ++i ) {
 				mat( 2 * i, dimension ) = vertex.at( i );
 				mat( 2 * i + 1, dimension ) = -vertex.at( i );
@@ -76,6 +84,7 @@ Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& 
 				mat( 2 * i + 1, dimension + 1 ) = -otherVertex.at( i );
 			}
 			vertexOptimizer.setMatrix( mat );
+			// solve LP problem and add new vertex for replacement
 			const auto res = vertexOptimizer.evaluate( lambda, false );
 			assert( res.errorCode == SOLUTION::FEAS );
 			assert( res.supportValue >= 0 ||

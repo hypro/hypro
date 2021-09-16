@@ -45,7 +45,7 @@ class UrgencyCEGARAnalyzer {
 		for ( auto& root : mRoots ) {
 			for ( auto const& trans : root.getLocation()->getTransitions() ) {
 				if ( trans->isUrgent() ) {
-					root.getUrgent()[trans.get()] = detail::getInitialRefinementLevel( trans.get(), mRefinementSettings );
+					root.getUrgencyRefinementLevels()[trans.get()] = detail::getInitialRefinementLevel( trans.get(), mRefinementSettings );
 				}
 			}
 			mWorkQueue.push_front( &root );
@@ -72,11 +72,11 @@ class UrgencyCEGARAnalyzer {
   protected:
 	std::deque<ReachTreeNode<Representation>*> mWorkQueue;	///< Holds unprocessed reach tree nodes.
 	HybridAutomaton<Number> const* mHybridAutomaton;		///< Hybrid automaton.
-	FixedAnalysisParameters mFixedParameters;				///< Analysis paramteters.
-	AnalysisParameters mParameters;							///< Analysis paramteters.
+	FixedAnalysisParameters mFixedParameters;				///< Analysis parameters.
+	AnalysisParameters mParameters;							///< Analysis parameters.
 	UrgencyCEGARSettings mRefinementSettings;				///< Settings that contain information about refinement.
 	// use list instead of vector because pointers to the roots (stored in children as mParent)
-	// must not be invalidated when pushing new (refined) roots later on.
+	// must not be invalidated when pushing new (refined) roots later on:
 	std::list<ReachTreeNode<Representation>> mRoots;  ///< Contains the roots of the computed reach tree.
 
   private:
