@@ -10,6 +10,7 @@ static_assert(
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include "../types.h"
+#include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "../../util/typetraits.h"
 
 #include "StarsetSetting.h"
@@ -128,8 +129,7 @@ class StarsetT : private GeometricObjectBase {
    * @brief Getter for a vertex-representation of the current Starset.
    * @return A vector of points.
    */
-	std::vector<Point<Number>>
-	vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const;
+	std::vector<Point<Number>> vertices() const;
 
 	/**
    * @brief      Evaluation function (convex linear optimization).
@@ -212,7 +212,7 @@ class StarsetT : private GeometricObjectBase {
 	/**
    * @brief      Removes redundancy.
    */
-	void removeRedundancy();
+	StarsetT<Number, Converter, Setting> removeRedundancy();
 
 	/**
    * @brief      Storage size determination.
@@ -261,7 +261,13 @@ class StarsetT : private GeometricObjectBase {
 	intersectHalfspaces( const matrix_t<Number>& _mat,
 						 const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
+   //StarsetT<Number, Converter, Setting>
+	//checkifin( const Halfspace<Number>& hspace ) const;
+   
+   Halfspace<Number>	calculateHalfspace( const Halfspace<Number>& hspace ) const;
 
+   std::pair<matrix_t<Number>, vector_t<Number>>
+	calculateHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec  ) const;
 	/**
    * @brief      Containment check for a Starset.
    * @param[in]  Starset   The Starset.
