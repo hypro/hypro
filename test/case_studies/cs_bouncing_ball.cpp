@@ -36,8 +36,6 @@ static void Bouncing_Ball_Parsing( ::benchmark::State& state ) {
 		auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
 	}
 }
-// Register the function as a benchmark
-BENCHMARK( Bouncing_Ball_Parsing );
 
 template <class Representation>
 static void Bouncing_Ball_Reachability( ::benchmark::State& state ) {
@@ -57,6 +55,7 @@ static void Bouncing_Ball_Reachability( ::benchmark::State& state ) {
 	}
 }
 // Register the function as a benchmark
-BENCHMARK_TEMPLATE( Bouncing_Ball_Reachability, hypro::Box<double> );
+BENCHMARK( Bouncing_Ball_Parsing )->Unit( ::benchmark::kMillisecond );
+BENCHMARK_TEMPLATE( Bouncing_Ball_Reachability, hypro::Box<double> )->Unit( ::benchmark::kMillisecond );
 
 }  // namespace hypro::benchmark
