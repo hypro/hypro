@@ -14,7 +14,7 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
 	using Representation = hypro::Box<Number>;
 
 	auto base_path = std::filesystem::current_path().parent_path().parent_path().append( "examples/input/" );
-	std::string filename{ "21_simplex_watertanks.model" };
+	std::string filename{ "21_simplex_watertanks_deterministic_monitor.model" };
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
 
@@ -36,6 +36,6 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
 }
 
 int main() {
-	Simplex_Watertanks_Reachability( 5 );
+	Simplex_Watertanks_Reachability( 10 );
 	return 0;
 }

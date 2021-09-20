@@ -21,14 +21,14 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	// Perform setup here
 	using Number = double;
 	auto base_path = std::filesystem::current_path().parent_path().parent_path().append( "examples/input/" );
-	std::string filename{ "21_simplex_watertanks.model" };
+	std::string filename{ "21_simplex_watertanks_no_monitor.model" };
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
 
 	auto settings = hypro::convert( reachSettings );
 	settings.rStrategy().front().detectJumpFixedPoints = true;
 	settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
-	settings.rFixedParameters().localTimeHorizon = 10;
+	settings.rFixedParameters().localTimeHorizon = 100;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
 	std::vector<hypro::Path<Number>> last_paths{};
@@ -97,6 +97,8 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		state.counters["cycles"] = cyclic_path_count;
 
 		plt.plot2d( hypro::PLOTTYPE::png );
+		plt.plot2d( hypro::PLOTTYPE::pdf );
+		plt.plot2d( hypro::PLOTTYPE::gen );
 	}
 
 	// output unfinished paths
@@ -115,7 +117,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 1, 10, 1 )
+	  ->DenseRange( 6, 8, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
