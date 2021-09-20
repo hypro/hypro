@@ -6,12 +6,39 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+/*
+ * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 09.09.21.
+ */
+#pragma once
+#include "../../datastructures/reachability/Settings.h"
+#include "Plotter.h"
 
-#include "include/hypro/datastructures/Halfspace.h"
+#include <cstdlib>
+#include <iostream>
+#include <string>
 
-namespace hypro {
-#ifdef EXTERNALIZE_CLASSES
-template class Halfspace<double>;
-template class Halfspace<mpq_class>;
-#endif
-}  // namespace hypro
+namespace hypro::plotting {
+
+template <typename Representation>
+class InteractivePlotter {
+  public:
+	InteractivePlotter( std::vector<ReachTreeNode<Representation>>& roots, PlottingSettings settings )
+		: mRoots( roots )
+		, mSettings( std::move( settings ) ) {}
+
+	void run();
+
+  private:
+	void addSegments( ReachTreeNode<Representation>* node );
+	void removeSegments( ReachTreeNode<Representation>* node );
+	void plotCurrent();
+
+	ReachTreeNode<Representation>* mCurrent = nullptr;
+	std::vector<ReachTreeNode<Representation>>& mRoots;
+	PlottingSettings mSettings;
+	std::map<ReachTreeNode<Representation>*, std::vector<std::size_t>> mNodeSegmentMapping{};
+};
+
+}  // namespace hypro::plotting
+
+#include "InteractivePlotter.tpp"

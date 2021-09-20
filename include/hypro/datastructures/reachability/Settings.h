@@ -20,14 +20,14 @@ struct AnalysisParameters {
 	bool uniformBloating = false;
 	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  ///< method of reachability analysis
 	int timeStepFactor = 1;												  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep. Can be negative.
+	bool detectJumpFixedPoints = false;									  ///< true if an analyzer should try to detect a fixed point by analyzing initial sets of other flowpipes
+	bool detectContinuousFixedPointsLocally = false;					  ///< true if an analyzer should try to find fixed points within the current flowpipe (set-containment)
 };
 
 struct FixedAnalysisParameters {
 	size_t jumpDepth{ std::numeric_limits<int>::max() };  ///< bound for maximal number of executed jumps
 	tNumber localTimeHorizon = 0;						  ///< bound for maximal duration of time elapse per flowpipe, use negative value for unbounded time (not always supported)
 	tNumber fixedTimeStep = 0;							  ///< a time step that all timesteps of the analysis parameters are multiples of, i.e. fixedTimeStep * timeStepFactor = timeStep.
-	/// computed on construction of the setting as the (fractional) gcd of the time steps
-	bool detectFixedPoints = false;	 ///< true if an analyzer should try to detect a fixed point
 #if HYPRO_USE_PPL
 	unsigned long pplDenominator{ defaultPPLDenominator };
 #endif
