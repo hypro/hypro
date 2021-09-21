@@ -83,6 +83,8 @@ class DecompositionalAnalyzer {
 			auto& dep = mDependencyRoots.emplace_back( std::move( dependencyNode ) );
 			mWorkQueue.push_front( detail::decompositionalQueueEntry<ComposedRep>{ 0, root, &dep } );
 		}
+		// construct decomposition without discrete subspaces. This is used for composition, since discrete subspace
+		// aren't relevant there
 		for ( std::size_t subspace = 0; subspace < decomposition.subspaceTypes.size(); ++subspace ) {
 			if ( isSegmentedSubspace( decomposition.subspaceTypes[subspace] ) ) {
 				mSegmentedSubspaces.push_back( subspace );
@@ -91,7 +93,19 @@ class DecompositionalAnalyzer {
 			} else {
 				mSingularSubspaces.push_back( subspace );
 			}
+			if ( decomposition.subspaceTypes[subspace] != DynamicType::discrete ) {
+				mDecompositionWithoutDiscrete.subspaceTypes.push_back( decomposition.subspaceTypes[subspace] );
+				mDecompositionWithoutDiscrete.subspaces.push_back( std::vector<std::size_t>() );
+				for ( auto varIndex : decomposition.subspaces[subspace] ) {
+					mDecompositionWithoutDiscrete.subspaces.back().push_back( getVarIndexWithoutDiscrete( varIndex, decomposition ) );
+				}
+			}
 		}
+		std::cout << "Singular: " << mSingularSubspaces << ", discrete: " << mDiscreteSubspaces << ", lti: " << mSegmentedSubspaces << "\n";
+		for ( std::size_t i = 0; i < mDecomposition.subspaces.size(); ++i ) {
+			std::cout << "subspace " << i << ": " << mDecomposition.subspaceTypes[i] << ", " << mDecomposition.subspaces[i] << "\n";
+		}
+		std::cout << "Used representations: lti: " << LTIRep::type() << ", singular: " << SingularRep::type() << ", discrete: " << DiscreteRep::type() << "\n";
 	}
 
 	/**
@@ -133,7 +147,7 @@ class DecompositionalAnalyzer {
 	struct computeTimeSuccessorVisitor {
 		ReachTreeNode<ComposedRep>* task;
 		std::size_t clockCount;	 // number of clocks
-		int segmentCount = -1; // number of segments to compute in lti worker. if negative, use worker settings to get number of segments
+		int segmentCount = -1;	 // number of segments to compute in lti worker. if negative, use worker settings to get number of segments
 		TimeInformation<Number> operator()( SingularWorker<SingularRep>& worker ) {
 			ReachTreeNode<SingularRep> singularTask( task->getLocation(), std::visit( genericConvertAndGetVisitor<SingularRep>(), task->getInitialSet().getSet() ), task->getTimings() );
 			worker.computeTimeSuccessors( singularTask, false );
@@ -426,14 +440,15 @@ class DecompositionalAnalyzer {
 
   protected:
 	std::deque<detail::decompositionalQueueEntry<ComposedRep>> mWorkQueue;	// holds the tasks that still need to be computed
-	HybridAutomaton<Number> const* mHybridAutomaton;				// holds a pointer to the decomposed automaton
-	Decomposition mDecomposition;									// holds decomposition information corresponding to the automaton
-	std::size_t mClockCount;										// holds the number of additional clocks in the (singular) subspaces
-	FixedAnalysisParameters mFixedParameters;						// holds common analysis parameters for all analyzers
-	AnalysisParameters mParameters;									// holds analyzer specific parameters
-	std::vector<std::size_t> mSingularSubspaces;					// holds the singular subspace indices
-	std::vector<std::size_t> mSegmentedSubspaces;					// holds the subspaces which have more than one segment as time successors (e.g. non-singular)
-	std::vector<std::size_t> mDiscreteSubspaces;					// holds subspaces with discrete dynamics
+	HybridAutomaton<Number> const* mHybridAutomaton;						// holds a pointer to the decomposed automaton
+	Decomposition mDecomposition;											// holds decomposition information corresponding to the automaton
+	Decomposition mDecompositionWithoutDiscrete;
+	std::size_t mClockCount;					   // holds the number of additional clocks in the (singular) subspaces
+	FixedAnalysisParameters mFixedParameters;	   // holds common analysis parameters for all analyzers
+	AnalysisParameters mParameters;				   // holds analyzer specific parameters
+	std::vector<std::size_t> mSingularSubspaces;   // holds the singular subspace indices
+	std::vector<std::size_t> mSegmentedSubspaces;  // holds the subspaces which have more than one segment as time successors (e.g. non-singular)
+	std::vector<std::size_t> mDiscreteSubspaces;   // holds subspaces with discrete dynamics
 	std::vector<std::vector<ReachTreeNode<ComposedRep>>> mRoots;
 	std::vector<ReachTreeNode<Condition<Number>>> mDependencyRoots;	 // holds roots of reach tree that contains dependency information
 

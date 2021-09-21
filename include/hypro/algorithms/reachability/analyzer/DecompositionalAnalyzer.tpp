@@ -200,34 +200,45 @@ void DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
 bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::isSafe(
 	  const NodeVector& nodes, const Condition<Number>& dependencies, const Condition<Number>& badState ) {
-	// time interval where all subspaces can be bad
-	TimeInformation<Number> badTimeInterval = mGlobalTimeInterval;
-	// Synchronize segmented subspaces and intersect them with the bad state
-	RepVector subspaceSets( mDecomposition.subspaces.size() );
-	// each segment is paired with the single segment from each singular subspace
-	for ( auto subspace : mSingularSubspaces ) {
-		auto [containment, set] = intersect( nodes[subspace]->getFlowpipe()[0], badState, subspace );
-		if ( containment == CONTAINMENT::NO ) {
-			// no bad state intersection in some subspace
-			return true;
-		} else {
-			set = detail::intersectSegmentWithClock( set, badTimeInterval, mClockCount );
-			badTimeInterval = badTimeInterval.intersect( detail::getClockValues( set, mClockCount ) );
-			if ( badTimeInterval.empty() ) {
-				return true;
-			}
-			subspaceSets[subspace] = set;
-		}
-	}
+	// first check if all discrete subspaces contain bad states. In that case they can be disregarded
+	// for the rest of the synchronization process
 	for ( auto subspace : mDiscreteSubspaces ) {
 		auto [containment, set] = intersect( nodes[subspace]->getFlowpipe()[0], badState, subspace );
 		if ( containment == CONTAINMENT::NO ) {
 			// no bad state intersection in some subspace
 			return true;
-		} else {
-			subspaceSets[subspace] = set;
 		}
 	}
+
+	// time interval where all subspaces can be bad
+	TimeInformation<Number> badTimeInterval = mGlobalTimeInterval;
+	// Synchronize segmented subspaces and intersect them with the bad state
+	// we ignore discrete subspaces, because they are already unsafe
+	std::vector<HPolytope<Number>> subspacePolytopes;
+	RepVector subspaceSets( mDecompositionWithoutDiscrete.subspaces.size() );
+	std::size_t subspaceSetsIndex = 0;
+	// each segment is paired with the single segment from each singular subspace
+	for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
+		if ( std::find( mSingularSubspaces.begin(), mSingularSubspaces.end(), subspace ) != mSingularSubspaces.end() ) {
+			auto [containment, set] = intersect( nodes[subspace]->getFlowpipe()[0], badState, subspace );
+			if ( containment == CONTAINMENT::NO ) {
+				// no bad state intersection in some subspace
+				return true;
+			} else {
+				set = detail::intersectSegmentWithClock( set, badTimeInterval, mClockCount );
+				badTimeInterval = badTimeInterval.intersect( detail::getClockValues( set, mClockCount ) );
+				if ( badTimeInterval.empty() ) {
+					return true;
+				}
+				subspaceSets[subspaceSetsIndex] = set;
+			}
+		}
+		// count non-discrete subspaces
+		if ( mDecomposition.subspaceTypes[subspace] != DynamicType::discrete ) {
+			subspaceSetsIndex += 1;
+		}
+	}
+
 	if ( mSegmentedSubspaces.size() == 0 ) {
 		if ( mClockCount == 0 ) {
 			// all subspaces unsafe at some point. without synchronization we cannot tell if they are unsafe at the same time or not.
@@ -239,7 +250,7 @@ bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 			return std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), state.getSet() );
 		} );
 
-		HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( hpols, dependencies, mDecomposition, mClockCount );
+		HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( hpols, dependencies, mDecompositionWithoutDiscrete, mClockCount );
 		if ( !composedPolytope.empty() ) {
 			return false;
 		}
@@ -248,18 +259,24 @@ bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	LtiSegmentGen segments{ nodes, mDecomposition, badState, badTimeInterval, mSegmentedSubspaces };
 	// iterate over each synchronized segment and check if composition is non empty
 	for ( auto badSegment = segments.next().second; badSegment.size() > 0; badSegment = segments.next().second ) {
+		subspaceSetsIndex = 0;
 		if ( mClockCount == 0 ) {
 			// all subspaces unsafe at some point. without synchronization we cannot tell if they are unsafe at the same time or not.
 			return false;
 		}
-		for ( auto subspace : mSegmentedSubspaces ) {
-			subspaceSets[subspace] = badSegment[subspace];
+		for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
+			if ( std::find( mSegmentedSubspaces.begin(), mSegmentedSubspaces.end(), subspace ) != mSegmentedSubspaces.end() ) {
+				subspaceSets[subspaceSetsIndex] = badSegment[subspace];
+			}
+			if ( mDecomposition.subspaceTypes[subspace] != DynamicType::discrete ) {
+				subspaceSetsIndex += 1;
+			}
 		}
 		std::vector<HPolytope<Number>> hpols;
 		std::transform( subspaceSets.begin(), subspaceSets.end(), std::back_inserter( hpols ), [=]( auto& state ) {
 			return std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), state.getSet() );
 		} );
-		HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( hpols, dependencies, mDecomposition, mClockCount );
+		HPolytope<Number> composedPolytope = detail::composeSubspaceConstraints( hpols, dependencies, mDecompositionWithoutDiscrete, mClockCount );
 		if ( !composedPolytope.empty() ) {
 			return false;
 		}
@@ -504,40 +521,46 @@ struct DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>
 
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
 auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::complexityReduction( const RepVector& sets, const Condition<Number>& dependencies ) -> std::pair<Condition<Number>, RepVector> {
+	assert( std::all_of( sets.begin(), sets.end(), []( auto const& s ) { return !s.empty() } ) );
+	// get sets for non-discrete subspaces
 	RepVector res( sets.size() );
 	std::vector<HPolytope<Number>> subspacePolytopes;
-	std::transform( sets.begin(), sets.end(), std::back_inserter( subspacePolytopes ), [=]( auto& segment ) {
-		return std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), segment.getSet() );
-	} );
+	for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
+		if ( mDecomposition.subspaceTypes[subspace] != DynamicType::discrete ) {
+			subspacePolytopes.push_back( std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), sets[subspace].getSet() ) );
+		}
+	}
 	START_BENCHMARK_OPERATION( "ComplexityReductionCompose" );
-	HPolytope<Number> composedSuccessors = detail::composeSubspaces( subspacePolytopes, dependencies, mDecomposition, mClockCount );
+	HPolytope<Number> composedSuccessors = detail::composeSubspaces( subspacePolytopes, dependencies, mDecompositionWithoutDiscrete, mClockCount );
 	STOP_BENCHMARK_OPERATION( "ComplexityReductionCompose" );
 	if ( composedSuccessors.empty() ) {
 		return std::make_pair( Condition<Number>( ConstraintSetT<Number>() ), res );
 	}
-	auto newDependencies = detail::getDependencies( composedSuccessors, mDecomposition );
+	auto newDependencies = detail::getDependencies( composedSuccessors, mDecompositionWithoutDiscrete );
 	START_BENCHMARK_OPERATION( "ComplexityReductionDecompose" );
-	subspacePolytopes = detail::decompose( composedSuccessors, mDecomposition, mClockCount );
+	subspacePolytopes = detail::decompose( composedSuccessors, mDecompositionWithoutDiscrete, mClockCount );
 	STOP_BENCHMARK_OPERATION( "ComplexityReductionDecompose" );
-	for ( std::size_t subspace = 0; subspace < sets.size(); ++subspace ) {
-		auto pol = subspacePolytopes[subspace];
+	std::size_t newDecompIndex = 0;
+	for ( std::size_t originalDecompIndex = 0; originalDecompIndex < sets.size(); ++originalDecompIndex ) {
+		if ( mDecomposition.subspaceTypes[originalDecompIndex] == DynamicType::discrete ) {
+			res[originalDecompIndex] = sets[originalDecompIndex];
+			continue;
+		}
 		ComposedRep segment;
-		switch ( mDecomposition.subspaceTypes[subspace] ) {
+		switch ( mDecomposition.subspaceTypes[originalDecompIndex] ) {
 			case DynamicType::timed:
 				[[fallthrough]];
 			case DynamicType::singular:
-				segment.setSet( SingularRep{ pol.matrix(), pol.vector() } );
-				break;
-			case DynamicType::discrete:
-				segment.setSet( DiscreteRep{ pol.matrix(), pol.vector() } );
+				segment.setSet( SingularRep{ subspacePolytopes[newDecompIndex].matrix(), subspacePolytopes[newDecompIndex].vector() } );
 				break;
 			case DynamicType::rectangular:
-				segment.setSet( RectangularRep{ pol.matrix(), pol.vector() } );
+				segment.setSet( RectangularRep{ subspacePolytopes[newDecompIndex].matrix(), subspacePolytopes[newDecompIndex].vector() } );
 				break;
 			default:
-				segment.setSet( LTIRep{ pol.matrix(), pol.vector() } );
+				segment.setSet( LTIRep{ subspacePolytopes[newDecompIndex].matrix(), subspacePolytopes[newDecompIndex].vector() } );
 		}
-		res[subspace] = segment;
+		res[originalDecompIndex] = segment;
+		newDecompIndex += 1;
 	}
 	return std::make_pair( newDependencies, res );
 }

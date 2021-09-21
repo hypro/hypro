@@ -6,6 +6,21 @@ inline bool isSegmentedSubspace( const DynamicType dynamics ) {
 	return ( dynamics == DynamicType::affine || dynamics == DynamicType::linear );
 }
 
+inline std::size_t getVarIndexWithoutDiscrete( std::size_t index, const Decomposition& decomposition ) {
+	std::size_t res = 0;
+	for ( std::size_t i = 0; i < index; ++i ) {
+		// get subspace of index i
+		for ( std::size_t s = 0; s < decomposition.subspaces.size(); ++s ) {
+			if ( std::find( decomposition.subspaces[s].begin(), decomposition.subspaces[s].end(), i ) != decomposition.subspaces[s].end() ) {
+				if ( decomposition.subspaceTypes[s] != DynamicType::discrete ) {
+					res += 1;
+				}
+			}
+		}
+	}
+	return res;
+}
+
 namespace detail {
 
 template <typename Representation>
@@ -311,6 +326,10 @@ struct DecompositionalSegmentGen {
 	std::size_t segmentIndex = 0;
 	Decomposition decomposition;
 	std::size_t clockCount;
+	Decomposition noDiscreteDecomp;
+	// contains all non-discrete variables in one subspace and all discrete in the other
+	Decomposition aggregatedDecomp{ { std::vector<std::size_t>(), std::vector<std::size_t>() }, { DynamicType::mixed, DynamicType::discrete } };
+	int discreteSubspace = -1;	// assume a single discrete subspaces (-1 if none)
 
 	DecompositionalSegmentGen( std::vector<std::vector<ReachTreeNode<Representation>>>& roots, std::vector<ReachTreeNode<Condition<Number>>>& depRoots, Decomposition decomp, std::size_t clocks )
 		: decomposition( decomp )
@@ -326,6 +345,18 @@ struct DecompositionalSegmentGen {
 			auto orderedRoots = preorder( subspaceRoots );
 			nodeIterators[subspace] = orderedRoots.begin();
 			nodeIteratorEndings[subspace] = orderedRoots.end();
+			if ( decomposition.subspaceTypes[subspace] != DynamicType::discrete ) {
+				noDiscreteDecomp.subspaceTypes.push_back( decomposition.subspaceTypes[subspace] );
+				noDiscreteDecomp.subspaces.push_back( std::vector<std::size_t>() );
+				for ( auto varIndex : decomposition.subspaces[subspace] ) {
+					noDiscreteDecomp.subspaces.back().push_back( getVarIndexWithoutDiscrete( varIndex, decomposition ) );
+					aggregatedDecomp.subspaces[0].push_back( varIndex );
+				}
+			} else {
+				assert( aggregatedDecomp.subspaces[1].empty() && "Separate discrete subspaces not supported" );
+				aggregatedDecomp.subspaces[1] = decomposition.subspaces[subspace];
+				discreteSubspace = subspace;
+			}
 		}
 		// initialize iterator for dependency tree
 		auto orderedDep = preorder( depRoots );
@@ -350,29 +381,37 @@ struct DecompositionalSegmentGen {
 			return std::nullopt;
 		}
 		assert( dependencyIterator != dependencyIteratorEnd );
-		// collect next subspace sets to compose segment
-		std::vector<HPolytope<Number>> subspaceSets( decomposition.subspaces.size() );
-		for ( std::size_t subspace = 0; subspace < subspaceSets.size(); ++subspace ) {
+		// collect next subspace sets in non-discrete subspaces to compose segment
+		std::vector<HPolytope<Number>> toCompose;
+		for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
 			assert( nodeIterators[subspace] != nodeIteratorEndings[subspace] );
-			// if segmented, get next segment via segmentIndex. Otherwise always take first segment in flowpipe.
-			if ( isSegmentedSubspace( decomposition.subspaceTypes[subspace] ) ) {
-				if ( segmentIndex >= nodeIterators[subspace]->getFlowpipe().size() ) {
-					// reached end of node in some subspace
-					incrementNodes();
-					return next();
+			if ( decomposition.subspaceTypes[subspace] != DynamicType::discrete ) {
+				if ( isSegmentedSubspace( decomposition.subspaceTypes[subspace] ) ) {
+					if ( segmentIndex >= nodeIterators[subspace]->getFlowpipe().size() ) {
+						incrementNodes();
+						return next();
+					}
+					toCompose.push_back( std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[subspace]->getFlowpipe()[segmentIndex].getSet() ) );
+				} else {
+					if ( nodeIterators[subspace]->getFlowpipe().size() == 0 ) {
+						// this shouldn't happen (flowpipe computation was skipped, so initial set was empty), but check just in case.
+						incrementNodes();
+						return next();
+					}
+					toCompose.push_back( std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[subspace]->getFlowpipe()[0].getSet() ) );
 				}
-				subspaceSets[subspace] = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[subspace]->getFlowpipe()[segmentIndex].getSet() );
-			} else {
-				if ( nodeIterators[subspace]->getFlowpipe().size() == 0 ) {
-					// this shouldn't happen (flowpipe computation was skipped, so initial set was empty), but check just in case.
-					incrementNodes();
-					return next();
-				}
-				subspaceSets[subspace] = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[subspace]->getFlowpipe()[0].getSet() );
 			}
 		}
 		// compose with dependency
-		auto segment = detail::composeSubspaceConstraints( subspaceSets, dependencyIterator->getInitialSet(), decomposition, clockCount );
+		HPolytope<Number> composed = detail::composeSubspaces( toCompose, dependencyIterator->getInitialSet(), noDiscreteDecomp, clockCount );
+
+		// finally we need to add the discrete subspaces
+		// use composition function with two subspaces (all non-discrete and all discrete) without clocks (they are already projected out)
+		if ( discreteSubspace >= 0 ) {
+			auto discreteSet = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[discreteSubspace]->getFlowpipe()[0].getSet() );
+			composed = detail::composeSubspaces<HPolytope<Number>>( { composed, discreteSet }, Condition<Number>( ConstraintSetT<Number>() ), aggregatedDecomp, 0 );
+		}
+		// increase segment index
 		// if no subspace is segmented (linear or affine) then one segment per node is always enough. Otherwise, increase segmentIndex
 		if ( !std::any_of( decomposition.subspaceTypes.begin(), decomposition.subspaceTypes.end(),
 						   []( const auto& dynamic ) { return isSegmentedSubspace( dynamic ); } ) ) {
@@ -380,7 +419,7 @@ struct DecompositionalSegmentGen {
 		} else {
 			++segmentIndex;
 		}
-		return segment;
+		return composed;
 	}
 };
 

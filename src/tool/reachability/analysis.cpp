@@ -70,10 +70,8 @@ std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Numbe
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
 	START_BENCHMARK_OPERATION( "Compose flowpipes" );
 	std::vector<PlotData<FullState>> plotData{};
+	// note: should skip this (return empty vector) if --skipplot is enabled, because composition can take a very long time
 	DecompositionalSegmentGen segments( analyzer.getRoots(), analyzer.getDepRoots(), decomposition, clockCount );
-	// note: constructed segments still have clocks, which need to be projected out before plotting.
-	// Projecting is delayed because projecting is slow and should be skipped if plotting is skipped,
-	// or only done for the necessary dimensions (i.e. the plot dimensions)
     for ( auto segment = segments.next(); segment; segment = segments.next() ) {
         FullState state{};
         state.setSet( segment.value() );

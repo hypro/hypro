@@ -15,6 +15,8 @@ namespace hypro {
  */
 inline bool isSegmentedSubspace( const DynamicType dynamics );
 
+inline std::size_t getVarIndexWithoutDiscrete( std::size_t index, const Decomposition& decomposition );
+
 namespace detail {
 
 template <typename Representation>
