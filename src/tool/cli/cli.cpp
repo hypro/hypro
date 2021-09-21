@@ -49,7 +49,8 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 	preprocessing.add_options()
 			( "decider", po::bool_switch(), "Use decision entity to decide on future representation/handlers to use based on the current state to allow for optimized computations." )
 			( "decompose", po::bool_switch(), "Decompose automaton into syntactically independent subspaces." )
-			( "clockCount", po::value<std::size_t>()->default_value( 0 ), "Number of clocks to use in decompositional analysis. Default is 0." );
+			( "clockCount", po::value<std::size_t>()->default_value( 0 ), "Number of clocks to use in decompositional analysis. Default is 0." )
+			( "singularSubspaceSize", po::value<std::size_t>()->default_value( 1 ), "Maximal number of variables in singular subspace. Default is 1, use -1 for unlimited.");
 
 	po::options_description allOptions("Allowed options.");
 	allOptions.add(general).add(analysisParameters).add(plotting).add(preprocessing);

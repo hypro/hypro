@@ -30,6 +30,7 @@ int main( int argc, char const* argv[] ) {
 	START_BENCHMARK_OPERATION( "Preprocess" );
 	auto preprocessingInformation = hydra::preprocessing::preprocess( automaton,
 																	  options["decompose"].as<bool>(),
+																	  options["singularSubspaceSize"].as<std::size_t>(),
 																	  options["clockCount"].as<std::size_t>() );
 	STOP_BENCHMARK_OPERATION( "Preprocess" );
 
