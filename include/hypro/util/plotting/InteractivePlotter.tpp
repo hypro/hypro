@@ -16,12 +16,9 @@ void InteractivePlotter<Representation>::run() {
 	while ( true ) {
 		int option;
 		// print options
+		printCurrentOptions();
+		// process user input
 		if ( mCurrent == nullptr ) {
-			std::cout << "Select root node (-1 to exit):\n";
-			for ( std::size_t i = 0; i < mRoots.size(); ++i ) {
-				std::cout << i << ": " << mRoots[i].getLocation()->getName() << "\n";
-			}
-			std::cout << std::endl;
 			std::cin >> option;
 			if ( option == -1 ) {
 				break;
@@ -34,11 +31,6 @@ void InteractivePlotter<Representation>::run() {
 				plotCurrent();
 			}
 		} else {
-			std::cout << "Select next transition (-1 to exit):\n";
-			for ( std::size_t i = 0; i < mCurrent->getChildren().size(); ++i ) {
-				std::cout << i << ": " << mCurrent->getLocation()->getName() << " -> " << mCurrent->getChildren()[i]->getLocation()->getName() << "\n";
-			}
-			std::cout << mCurrent->getChildren().size() << ": Ascend" << std::endl;
 			std::cin >> option;
 			if ( option == -1 ) {
 				break;
@@ -88,6 +80,27 @@ void InteractivePlotter<Representation>::plotCurrent() {
 	plt.plot2d( PLOTTYPE::pdf );
 
 	std::system( "gnuplot out_pdf.plt" );
+}
+
+template <typename Representation>
+void InteractivePlotter<Representation>::printCurrentOptions() const {
+	if ( mCurrent == nullptr ) {
+		std::cout << "Select root node (-1 to exit):\n";
+		for ( std::size_t i = 0; i < mRoots.size(); ++i ) {
+			std::cout << i << ": " << mRoots[i].getLocation()->getName() << "\n";
+		}
+		std::cout << std::endl;
+	} else {
+		std::cout << "Select next transition (-1 to exit):\n";
+		for ( std::size_t i = 0; i < mCurrent->getChildren().size(); ++i ) {
+			std::cout << i << ": " << mCurrent->getLocation()->getName() << " -> " << mCurrent->getChildren()[i]->getLocation()->getName() << "\n";
+			std::cout << "guard:\n"
+					  << mCurrent->getChildren()[i]->getTransition()->getGuard() << "\n";
+			std::cout << "reset:\n"
+					  << mCurrent->getChildren()[i]->getTransition()->getReset() << "\n";
+		}
+		std::cout << mCurrent->getChildren().size() << ": Ascend" << std::endl;
+	}
 }
 
 }  // namespace hypro::plotting

@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "../../representations/GeometricObjectBase.h"
+//#include "../../representations/GeometricObjectBase.h"
 #include "../../representations/types.h"
 #include "../../util/tuple_expansion/nth_element.h"
 #include "Condition.h"

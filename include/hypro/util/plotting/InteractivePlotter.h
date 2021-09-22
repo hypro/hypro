@@ -32,6 +32,7 @@ class InteractivePlotter {
 	void addSegments( ReachTreeNode<Representation>* node );
 	void removeSegments( ReachTreeNode<Representation>* node );
 	void plotCurrent();
+	void printCurrentOptions() const;
 
 	ReachTreeNode<Representation>* mCurrent = nullptr;
 	std::vector<ReachTreeNode<Representation>>& mRoots;

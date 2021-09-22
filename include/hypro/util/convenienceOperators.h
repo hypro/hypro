@@ -86,9 +86,18 @@ std::string to_string( const typename matrix_t<N>::ConstRowXpr& row, bool lastIs
 			} else {
 				first = false;
 			}
-			_out << row( col ) << "·x" << col;
+			if ( row( col ) != N( 1 ) ) {
+				_out << row( col ) << "·x" << col;
+			} else {
+				_out << "x" << col;
+			}
 		} else if ( row( col ) < 0 ) {
-			_out << " - " << -row( col ) << "·x" << col;
+			_out << " - ";
+			if ( row( col ) != N( -1 ) ) {
+				_out << -row( col ) << "·x" << col;
+			} else {
+				_out << "x" << col;
+			}
 		}
 	}
 	if ( lastIsConst ) {
