@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * @file    BoxTest.cpp
  *
@@ -512,49 +528,6 @@ TYPED_TEST( BoxTest, SatisfiesHalfspace ) {
 	EXPECT_EQ( box.satisfiesHalfspaces( mat, vec ).second, box );
 }
 
-TYPED_TEST( BoxTest, SatisfiesHalfspaceOpenBox ) {
-	carl::Interval<TypeParam> xInterval( TypeParam( 1 ), TypeParam( 2 ) );
-	carl::Interval<TypeParam> yInterval( TypeParam( 0 ), TypeParam( 1 ) );
-	yInterval.setLowerBoundType( carl::BoundType::STRICT );
-
-	hypro::Box<TypeParam> box;
-	box.insert( xInterval );
-	box.insert( yInterval );
-
-	hypro::Halfspace<TypeParam> hsp1( { 1, 0 }, 3 );
-	hypro::Halfspace<TypeParam> hsp2( { 1, 0 }, 0 );
-	hypro::Halfspace<TypeParam> hsp3( { 1, 0 }, 1 );
-
-	EXPECT_EQ( hypro::CONTAINMENT::FULL, box.satisfiesHalfspace( hsp1 ).first );
-	EXPECT_EQ( hypro::CONTAINMENT::NO, box.satisfiesHalfspace( hsp2 ).first );
-	EXPECT_EQ( hypro::CONTAINMENT::PARTIAL, box.satisfiesHalfspace( hsp3 ).first );
-
-	EXPECT_TRUE( box.satisfiesHalfspaces( hypro::matrix_t<TypeParam>(), hypro::vector_t<TypeParam>() ).first !=
-				 hypro::CONTAINMENT::NO );
-	hypro::matrix_t<TypeParam> mat = hypro::matrix_t<TypeParam>( 2, 2 );
-	mat << 1, 0, -1, 0;
-	hypro::vector_t<TypeParam> vec = hypro::vector_t<TypeParam>( 2 );
-	vec << 2, -2;
-
-	EXPECT_EQ( hypro::CONTAINMENT::PARTIAL, box.satisfiesHalfspaces( mat, vec ).first );
-	EXPECT_EQ( hypro::Box<TypeParam>( std::vector<carl::Interval<TypeParam>>{
-					 carl::Interval( TypeParam( 2 ), TypeParam( 2 ) ), yInterval } ),
-			   box.satisfiesHalfspaces( mat, vec ).second );
-	vec << 3, -4;
-	EXPECT_EQ( hypro::CONTAINMENT::NO, box.satisfiesHalfspaces( mat, vec ).first );
-	EXPECT_TRUE( box.satisfiesHalfspaces( mat, vec ).second.empty() );
-	vec << 3, 1;
-	EXPECT_EQ( hypro::CONTAINMENT::FULL, box.satisfiesHalfspaces( mat, vec ).first );
-	EXPECT_EQ( box, box.satisfiesHalfspaces( mat, vec ).second );
-
-	// test that y == 0 is not contained in the box
-	mat << 0, 1, 0, -1;
-	vec << 0, 0;
-	EXPECT_EQ( hypro::CONTAINMENT::NO, box.satisfiesHalfspaces( mat, vec ).first );
-	vec << 1, -1;
-	EXPECT_EQ( hypro::CONTAINMENT::PARTIAL, box.satisfiesHalfspaces( mat, vec ).first );
-}
-
 TYPED_TEST( BoxTest, Projection ) {
 	carl::Interval<TypeParam> xInterval( TypeParam( 1 ), TypeParam( 2 ) );
 	carl::Interval<TypeParam> yInterval( carl::rationalize<TypeParam>( -1.02 ), carl::rationalize<TypeParam>( -1.01 ) );
@@ -601,4 +574,28 @@ TYPED_TEST( BoxTest, Evaluation ) {
 	EXPECT_EQ( allRes.at( 1 ).errorCode, hypro::SOLUTION::FEAS );
 	EXPECT_EQ( allRes.at( 2 ).supportValue, 2 );
 	EXPECT_EQ( allRes.at( 2 ).errorCode, hypro::SOLUTION::FEAS );
+}
+
+TYPED_TEST( BoxTest, SetMinus ) {
+	std::vector<hypro::Box<TypeParam>> result;
+	result = this->box1.setMinus2( this->box2 );
+	EXPECT_EQ( result.size(), (unsigned)1 );
+	EXPECT_EQ( result.at( 0 ), this->box1 );
+
+	result = this->box2.setMinus2( this->box1 );
+	EXPECT_EQ( result.size(), 1 );
+	EXPECT_EQ( result.at( 0 ), this->box2 );
+
+	result = this->box2.setMinus2( this->box2 );
+	EXPECT_EQ( result.size(), 1 );
+	EXPECT_TRUE( result.at( 0 ).empty() );
+
+	result = this->b1.setMinus2( this->b2 );
+	EXPECT_EQ( result.size(), 2 );
+	EXPECT_EQ( hypro::Box<TypeParam>( { carl::Interval<TypeParam>{ -2, 2 }, carl::Interval<TypeParam>{ 2, 4 },
+										carl::Interval<TypeParam>{ -4, -3 } } ),
+			   result.at( 0 ) );
+	EXPECT_EQ( hypro::Box<TypeParam>( { carl::Interval<TypeParam>{ -2, -1 }, carl::Interval<TypeParam>{ 2, 4 },
+										carl::Interval<TypeParam>{ -3, -2 } } ),
+			   result.at( 1 ) );
 }
