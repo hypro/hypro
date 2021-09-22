@@ -13,6 +13,7 @@
 #cmakedefine HYPRO_USE_CLP
 #cmakedefine HYPRO_USE_GLPK
 #cmakedefine HYPRO_GSL_INTEGRATION
+#cmakedefine HYPRO_HAS_GRAPHVIZ
 #cmakedefine HYPRO_USE_PPL
 #cmakedefine HYPRO_USE_OPENMP
 #cmakedefine HYPRO_USE_SMTRAT

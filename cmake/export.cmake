@@ -41,21 +41,25 @@ if(HYPRO_USE_SMTRAT)
 	export_target(DEPENDENT_TARGETS smtrat-module-LRAModule-shared)
 	export_target(DEPENDENT_TARGETS smtrat-solver-static)
 	export_target(DEPENDENT_TARGETS smtrat-module-LRAModule-static)
-endif()
+endif ()
 if (HYPRO_USE_Z3)
 	export_target(DEPENDENT_TARGETS z3_SHARED)
 endif ()
-if(HYPRO_GSL_INTEGRATION)
+if (HYPRO_GSL_INTEGRATION)
 	export_target(DEPENDENT_TARGETS GSL_SHARED)
 	export_target(DEPENDENT_TARGETS GSL_STATIC)
-endif()
+endif ()
+if (HYPRO_HAS_GRAPHVIZ)
+	export_target(DEPENDENT_TARGETS CGRAPH_SHARED)
+	export_target(DEPENDENT_TARGETS GVC_SHARED)
+endif ()
 
 
 include(CMakePackageConfigHelpers)
 
 write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
-					VERSION ${hypro_VERSION}
-					COMPATIBILITY SameMajorVersion )
+		VERSION ${hypro_VERSION}
+		COMPATIBILITY SameMajorVersion)
 
 set(TARGET ${PROJECT_NAME})
 

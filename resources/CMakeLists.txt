@@ -193,4 +193,7 @@ if (HYPRO_GSL_INTEGRATION)
     #endif()
 endif ()
 
+# try finding graphviz - required for ReachTree plotting
+include(graphviz.cmake)
+
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)
