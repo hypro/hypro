@@ -21,6 +21,7 @@ struct AnalysisParameters {
 	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  ///< method of reachability analysis
 	int timeStepFactor = 1;												  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep. Can be negative.
 	bool detectJumpFixedPoints = false;									  ///< true if an analyzer should try to detect a fixed point by analyzing initial sets of other flowpipes
+	bool detectFixedPointsByCoverage = false;							  ///< if true, fixed points are also detected if multiple sets achieve coverage of the current set (more expensive)
 	bool detectContinuousFixedPointsLocally = false;					  ///< true if an analyzer should try to find fixed points within the current flowpipe (set-containment)
 };
 

@@ -26,28 +26,25 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
 
 	auto settings = hypro::convert( reachSettings );
-	settings.rStrategy().front().detectJumpFixedPoints = true;
+	settings.rStrategy().front().detectJumpFixedPoints = false;
+	settings.rStrategy().front().detectFixedPointsByCoverage = false;
 	settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
 	settings.rFixedParameters().localTimeHorizon = 100;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
 	std::vector<hypro::Path<Number>> last_paths{};
 
+	std::vector<ReachTreeNode<Representation>> roots;
+
 	for ( auto _ : state ) {
 		// This code gets timed
 		last_paths = std::vector<hypro::Path<Number>>{};
-		auto roots = hypro::makeRoots<Representation>( automaton );
+		roots = hypro::makeRoots<Representation>( automaton );
 		auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
 																   settings.strategy().front(), roots );
 		reacher.computeForwardReachability();
 
-		// plotting
-		auto& plt = hypro::Plotter<Number>::getInstance();
-		plt.clear();
-		plt.rSettings().overwriteFiles = true;
-		plt.rSettings().cummulative = true;
-		plt.setFilename( "simplex_watertanks" );
-
+		// statistics
 		auto finished_leaves = std::size_t( 0 );
 		auto unfinished_leaves = std::size_t( 0 );
 		auto leaves = std::size_t( 0 );
@@ -75,17 +72,6 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 				++leaves;
 				COUNT( "leaves" );
 			}
-			for ( const auto& segment : node.getFlowpipe() ) {
-				if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
-					plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
-								   hypro::plotting::colors[hypro::plotting::green] );
-				} else if ( node.hasFixedPoint() == TRIBOOL::FALSE ) {
-					plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
-								   hypro::plotting::colors[hypro::plotting::orange] );
-				} else {
-					plt.addObject( segment.projectOn( { 0, 1 } ).vertices() );
-				}
-			}
 		}
 		state.counters["fin.leaves"] = double( double( finished_leaves ) / double( leaves ) );
 		state.counters["nfin.leaves"] = double( double( unfinished_leaves ) / double( leaves ) );
@@ -95,11 +81,36 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		state.counters["jumps"] = maxJumps;
 		state.counters["nodes"] = nodes;
 		state.counters["cycles"] = cyclic_path_count;
-
-		plt.plot2d( hypro::PLOTTYPE::png );
-		plt.plot2d( hypro::PLOTTYPE::pdf );
-		plt.plot2d( hypro::PLOTTYPE::gen );
+#ifdef HYPRO_STATISTICS
+		state.counters["fp-cov"] = hypro::Statistician::getInstance().getCounter( "FP-by-coverage" ).val;
+#endif
 	}
+
+	// only plot the last run
+	// plotting
+	auto& plt = hypro::Plotter<Number>::getInstance();
+	plt.clear();
+	plt.rSettings().overwriteFiles = true;
+	plt.rSettings().cummulative = true;
+	plt.setFilename( "simplex_watertanks" );
+
+	for ( const auto& node : hypro::preorder( roots ) ) {
+		for ( const auto& segment : node.getFlowpipe() ) {
+			if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
+				plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
+							   hypro::plotting::colors[hypro::plotting::green] );
+			} else if ( node.hasFixedPoint() == TRIBOOL::FALSE ) {
+				plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
+							   hypro::plotting::colors[hypro::plotting::orange] );
+			} else {
+				plt.addObject( segment.projectOn( { 0, 1 } ).vertices() );
+			}
+		}
+	}
+
+	plt.plot2d( hypro::PLOTTYPE::png );
+	plt.plot2d( hypro::PLOTTYPE::pdf );
+	plt.plot2d( hypro::PLOTTYPE::gen );
 
 	// output unfinished paths
 	std::string channel =
@@ -117,7 +128,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 6, 8, 1 )
+	  ->DenseRange( 1, 10, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark

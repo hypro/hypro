@@ -56,10 +56,11 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 				auto boundingBox = std::vector<carl::Interval<Number>>{};
 				if ( mParameters.detectJumpFixedPoints ) {
 					boundingBox = Converter<Number>::toBox( childNode.getInitialSet() ).intervals();
-					fixedPointReached = detectJumpFixedPoint( childNode, mRoots );
+					fixedPointReached = detectJumpFixedPoint( childNode, mRoots, mParameters.detectFixedPointsByCoverage );
 				}
 
-				// set bounding box to speed up search in case the option is enabled
+				// set bounding box to speed up search in case the option is enabled.
+				// IMPORTANT: This has to be done *after* fp-detection to ensure that the node does not consider itself during fp-detection
 				if ( mParameters.detectJumpFixedPoints ) {
 					childNode.setBoundingBox( boundingBox );
 				}
