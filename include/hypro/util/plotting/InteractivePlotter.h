@@ -12,6 +12,7 @@
 #pragma once
 #include "../../datastructures/reachability/Settings.h"
 #include "Plotter.h"
+#include "ReachTreePlotter.h"
 
 #include <cstdlib>
 #include <iostream>

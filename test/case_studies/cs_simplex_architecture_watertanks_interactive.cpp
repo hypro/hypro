@@ -14,13 +14,13 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
 	using Representation = hypro::Box<Number>;
 
 	auto base_path = std::filesystem::current_path().parent_path().parent_path().append( "examples/input/" );
-	std::string filename{ "21_simplex_watertanks_deterministic_monitor.model" };
+	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init.model" };
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
 
 	auto settings = hypro::convert( reachSettings );
 	settings.rStrategy().front().detectJumpFixedPoints = true;
-	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
+	settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
 	// settings.rFixedParameters().localTimeHorizon = 1;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = hypro::AGG_SETTING::AGG;
@@ -28,7 +28,8 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
 	auto roots = hypro::makeRoots<Representation>( automaton );
 	auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
 															   settings.strategy().front(), roots );
-	reacher.computeForwardReachability();
+	auto result = reacher.computeForwardReachability();
+	std::cout << "System is safe: " << result << std::endl;
 
 	// invoke interactive plotter
 	hypro::plotting::InteractivePlotter<Representation> ipl{ roots, settings.plotting() };
@@ -36,6 +37,6 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
 }
 
 int main() {
-	Simplex_Watertanks_Reachability( 10 );
+	Simplex_Watertanks_Reachability( 30 );
 	return 0;
 }

@@ -48,19 +48,19 @@ std::vector<ReachTreeNode<Representation>> create_tree() {
 TEST( ReachTreePlotterTest, Construction ) {
 	// empty plotter
 	std::vector<ReachTreeNode<Representation>> roots;
-	auto emptyPlotter = plotting::ReachTreePlotter<Representation>( roots, {} );
+	auto emptyPlotter = plotting::ReachTreePlotter<Representation>( roots );
 
 	// non-empty plotter
 	auto bball_roots = create_tree();
-	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots, {} );
+	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots );
 }
 
 TEST( ReachTreePlotterTest, PlotSimpleTree ) {
 	auto bball_roots = create_tree();
 	EXPECT_EQ( 4, getNumberNodes( bball_roots.front() ) );
-	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots, {} );
+	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots );
 
-	bball_tree_plotter.plot();
+	bball_tree_plotter.plot( { bball_roots.front().getChildren()[0] } );
 
 	std::system( "cat rt_out.dot" );
 }

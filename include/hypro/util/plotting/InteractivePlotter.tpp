@@ -13,6 +13,7 @@ namespace hypro::plotting {
 
 template <typename Representation>
 void InteractivePlotter<Representation>::run() {
+	auto rtPlt = ReachTreePlotter<Representation>( mRoots );
 	while ( true ) {
 		int option;
 		// print options
@@ -29,6 +30,7 @@ void InteractivePlotter<Representation>::run() {
 				mCurrent = &mRoots[option];
 				addSegments( mCurrent );
 				plotCurrent();
+				rtPlt.plot( { mCurrent } );
 			}
 		} else {
 			std::cin >> option;
@@ -39,12 +41,14 @@ void InteractivePlotter<Representation>::run() {
 				removeSegments( mCurrent );
 				mCurrent = mCurrent->getParent();
 				plotCurrent();
+				rtPlt.plot( { mCurrent } );
 			} else if ( option > mCurrent->getChildren().size() || option < 0 ) {
 				std::cout << "Please pick a valid option." << std::endl;
 			} else {
 				mCurrent = mCurrent->getChildren()[option];
 				addSegments( mCurrent );
 				plotCurrent();
+				rtPlt.plot( { mCurrent } );
 			}
 		}
 	}

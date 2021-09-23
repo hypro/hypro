@@ -25,7 +25,8 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 	gvLayout( gvc, graph, "dot" );
 
 	// set default node properties
-	// agattr(graph, AGNODE, std::string("shape").data(), std::string("point").data());
+	agattr( graph, AGNODE, std::string( "fillcolor" ).data(), std::string( "lightgrey" ).data() );
+	agattr( graph, AGNODE, std::string( "style" ).data(), std::string( "filled" ).data() );
 	// agattr(graph, AGNODE, std::string("label").data(), std::string("test").data());
 
 	// insert nodes
@@ -35,11 +36,13 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 			std::string name = "n_" + std::to_string( count++ );
 			auto nptr = agnode( graph, name.data(), 1 );
 			mNodePointers[&node] = nptr;
-			std::cout << "created node " << name.data() << " (" << mNodePointers.size() << ")" << std::endl;
+			// color node, if it needs highlighting
+			if ( std::find( std::begin( highlights ), std::end( highlights ), &node ) != std::end( highlights ) ) {
+				agsafeset( nptr, std::string( "fillcolor" ).data(), std::string( "yellow" ).data(), std::string().data() );
+			}
 			if ( node.getParent() != nullptr ) {
 				assert( mNodePointers.find( node.getParent() ) != mNodePointers.end() );
 				agedge( graph, mNodePointers[node.getParent()], nptr, "", 1 );
-				std::cout << "created edge" << std::endl;
 			}
 		}
 	}
