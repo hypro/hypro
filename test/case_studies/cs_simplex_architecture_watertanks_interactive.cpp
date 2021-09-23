@@ -18,6 +18,8 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
 
+	std::cout << "automaton \n" << automaton << std::endl;
+
 	auto settings = hypro::convert( reachSettings );
 	settings.rStrategy().front().detectJumpFixedPoints = true;
 	settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
@@ -37,6 +39,6 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
 }
 
 int main() {
-	Simplex_Watertanks_Reachability( 30 );
+	Simplex_Watertanks_Reachability( 12 );
 	return 0;
 }

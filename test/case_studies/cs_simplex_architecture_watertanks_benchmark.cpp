@@ -21,7 +21,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	// Perform setup here
 	using Number = double;
 	auto base_path = std::filesystem::current_path().parent_path().parent_path().append( "examples/input/" );
-	std::string filename{ "21_simplex_watertanks_deterministic_monitor.model" };
+	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init.model" };
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
 
@@ -42,7 +42,8 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		roots = hypro::makeRoots<Representation>( automaton );
 		auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
 																   settings.strategy().front(), roots );
-		reacher.computeForwardReachability();
+		auto result = reacher.computeForwardReachability();
+		std::cout << "System is safe: " << result << std::endl;
 
 		// statistics
 		auto finished_leaves = std::size_t( 0 );
@@ -50,10 +51,12 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		auto leaves = std::size_t( 0 );
 		auto nodes = std::size_t( 0 );
 		auto cyclic_path_count = std::size_t( 0 );
+		auto segments = std::size_t( 0 );
 
-		for ( const auto& node : hypro::preorder( roots ) ) {
+		for ( const ReachTreeNode<Representation>& node : hypro::preorder( roots ) ) {
 			COUNT( "nodes/flowpipes" );
 			++nodes;
+			segments += node.getFlowpipe().size();
 			if ( node.getChildren().empty() ) {
 				if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
 					COUNT( "Finished leaves" );
@@ -73,14 +76,15 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 				COUNT( "leaves" );
 			}
 		}
-		state.counters["fin.leaves"] = double( double( finished_leaves ) / double( leaves ) );
-		state.counters["nfin.leaves"] = double( double( unfinished_leaves ) / double( leaves ) );
-		state.counters["#fin.leaves"] = double( finished_leaves );
-		state.counters["#nfin.leaves"] = double( unfinished_leaves );
+		// state.counters["fin.leaves"] = double( double( finished_leaves ) / double( leaves ) );
+		// state.counters["nfin.leaves"] = double( double( unfinished_leaves ) / double( leaves ) );
+		state.counters["#fin.leaves"] = finished_leaves;
+		state.counters["#nfin.leaves"] = unfinished_leaves;
 		state.counters["leaves"] = leaves;
 		state.counters["jumps"] = maxJumps;
 		state.counters["nodes"] = nodes;
 		state.counters["cycles"] = cyclic_path_count;
+		state.counters["segments"] = segments;
 #ifdef HYPRO_STATISTICS
 		state.counters["fp-cov"] = hypro::Statistician::getInstance().getCounter( "FP-by-coverage" ).val;
 #endif
@@ -91,7 +95,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	auto& plt = hypro::Plotter<Number>::getInstance();
 	plt.clear();
 	plt.rSettings().overwriteFiles = true;
-	plt.rSettings().cummulative = true;
+	plt.rSettings().cummulative = false;
 	plt.setFilename( "simplex_watertanks" );
 
 	for ( const auto& node : hypro::preorder( roots ) ) {
@@ -128,7 +132,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 4, 30, 1 )
+	  ->DenseRange( 12, 12, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark

@@ -27,6 +27,49 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 		// bounded time evolution
 		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( currentNode->getFlowpipe() ) );
 
+		// TODO Do not hardcode this!
+		// test containment of the first 10 segments against all other nodes' first 10 segments (with the same location)
+		std::size_t set_index = 0;
+		while ( set_index < 10 && set_index < currentNode->getFlowpipe().size() ) {
+			for ( auto& other_node : preorder( mRoots ) ) {
+				if ( &other_node != currentNode && other_node.getLocation() == currentNode->getLocation() ) {
+					// fill coverer
+					std::vector<State> coverer;
+					for ( std::size_t i = 0; i < 12; ++i ) {
+						if ( other_node.getFlowpipe().size() > i ) {
+							coverer.push_back( other_node.getFlowpipe()[i] );
+						}
+					}
+					if ( is_covered( currentNode->getFlowpipe()[set_index], coverer ) ) {
+						std::cout << "Found fixed point in the first 10 segments of some other node via coverage." << std::endl;
+						currentNode->setFixedPoint();
+						break;
+					}
+
+					std::size_t other_set_index = 0;
+					while ( other_set_index < 10 && other_set_index < other_node.getFlowpipe().size() ) {
+						if ( other_node.getFlowpipe()[other_set_index].contains( currentNode->getFlowpipe()[set_index] ) ) {
+							std::cout << "Found fixed point in the first 10 segments of some other node via containment." << std::endl;
+							currentNode->setFixedPoint();
+							break;
+						}
+						++other_set_index;
+					}
+				}
+				if ( currentNode->hasFixedPoint() == TRIBOOL::TRUE ) {
+					break;
+				}
+			}
+			++set_index;
+			if ( currentNode->hasFixedPoint() == TRIBOOL::TRUE ) {
+				break;
+			}
+		}
+		// TODO temporary, check!
+		if ( currentNode->hasFixedPoint() == TRIBOOL::TRUE ) {
+			continue;
+		}
+
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
 			return { Failure{ currentNode } };
 		}

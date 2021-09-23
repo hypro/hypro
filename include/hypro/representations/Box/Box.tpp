@@ -841,7 +841,7 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 				result.push_back( workbox );
 				// carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
 				carl::Interval<Number> tmp( box2.at( i ).upper(), box.at( i ).upper() );
-				std::cout << tmp << std::endl;
+				// std::cout << tmp << std::endl;
 				box.at( i ) = tmp;
 			}
 			// check if the upper box (box3) is not empty
@@ -850,7 +850,7 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 				result.push_back( workbox2 );
 				// carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
 				carl::Interval<Number> tmp2( box.at( i ).lower(), box3.at( i ).lower() );
-				std::cout << tmp2 << std::endl;
+				// std::cout << tmp2 << std::endl;
 				box.at( i ) = tmp2;
 			}
 		}
