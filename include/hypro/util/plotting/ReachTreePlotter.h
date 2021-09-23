@@ -35,15 +35,15 @@ namespace hypro::plotting {
 template <typename Representation>
 class ReachTreePlotter {
   public:
-	ReachTreePlotter( std::vector<ReachTreeNode<Representation>>& roots, PlottingSettings settings )
+	ReachTreePlotter( const std::vector<ReachTreeNode<Representation>>& roots, PlottingSettings settings )
 		: mRoots( roots )
 		, mSettings( std::move( settings ) ) {}
 
 	void plot( const std::vector<ReachTreeNode<Representation>*>& highlights = {} );
 
   private:
-	std::vector<ReachTreeNode<Representation>>& mRoots;
-	std::map<ReachTreeNode<Representation>*, Agnode_t*> mNodePointers;
+	const std::vector<ReachTreeNode<Representation>>& mRoots;
+	std::map<const ReachTreeNode<Representation>*, Agnode_t*> mNodePointers;
 	PlottingSettings mSettings;
 };
 

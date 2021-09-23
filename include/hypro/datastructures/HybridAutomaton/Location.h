@@ -49,7 +49,7 @@ class Location {
 	bool mHasExternalInput = false;						 ///< Cache-flag
 	transitionVector mTransitions;						 ///< Outgoing transitions
 	Condition<Number> mInvariant;						 ///< Invariant condition
-	std::string mName = "";								 ///< Name of the location
+	std::string mName = std::string();					 ///< Name of the location
 	unsigned mId;										 ///< ID - was used for comparison (deprecated)
 	mutable std::size_t mHash = 0;						 ///< Hash of the location
 	bool mIsUrgent = false;								 ///< Flag indicating that a location is urgent
@@ -109,7 +109,7 @@ class Location {
 	/// getter for the locations' id (deprecated)
 	[[deprecated( "use hash() instead" )]] unsigned getId() const { return mId; }
 	/// getter for the name of the location
-	std::string getName() const { return mName; }
+	const std::string& getName() const { return mName; }
 	/// getter for the urgency-flag
 	bool isUrgent() const { return mIsUrgent; }
 	/// getter for the state space dimension

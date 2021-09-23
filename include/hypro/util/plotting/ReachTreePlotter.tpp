@@ -21,7 +21,7 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 
 	// setup
 	gvc = gvContext();
-	graph = agopen( "out.gv", Agstrictdirected, 0 );
+	graph = agopen( "reachTree", Agstrictdirected, 0 );
 	gvLayout( gvc, graph, "dot" );
 
 	// set default node properties
@@ -30,22 +30,22 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 
 	// insert nodes
 	std::size_t count{ 0 };
-	for ( auto& root : mRoots ) {
-		for ( auto& node : preorder( root ) ) {
-			auto name = "n_" + std::to_string( count++ );
-			char* cstr = new char[name.length() + 1];
-			strcpy( cstr, name.c_str() );
-			mNodePointers[&node] = agnode( graph, cstr, 0 );
-			// agsafeset(mNodePointers[&node], std::string("label").data(), node.getLocation()->getName().data(), std::string().data());
-			std::cout << "created node " << cstr << " (" << mNodePointers.size() << ")" << std::endl;
+	for ( const ReachTreeNode<Representation>& root : mRoots ) {
+		for ( const ReachTreeNode<Representation>& node : preorder( root ) ) {
+			std::string name = "n_" + std::to_string( count++ );
+			auto nptr = agnode( graph, name.data(), 1 );
+			mNodePointers[&node] = nptr;
+			std::cout << "created node " << name.data() << " (" << mNodePointers.size() << ")" << std::endl;
 			if ( node.getParent() != nullptr ) {
-				agedge( graph, mNodePointers[node.getParent()], mNodePointers[&node], "", 0 );
+				assert( mNodePointers.find( node.getParent() ) != mNodePointers.end() );
+				agedge( graph, mNodePointers[node.getParent()], nptr, "", 1 );
 				std::cout << "created edge" << std::endl;
 			}
 		}
 	}
 
 	// drawing
+	gvLayoutJobs( gvc, graph );
 	gvRenderFilename( gvc, graph, "png", "rt_out.png" );
 	gvRenderFilename( gvc, graph, "dot", "rt_out.dot" );
 	gvFreeLayout( gvc, graph );

@@ -17,7 +17,7 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation>>;
 
-	Location<Number> const* mLocation;										   ///< location in which the flowpipe was computed
+	Location<Number> const* mLocation = nullptr;							   ///< location in which the flowpipe was computed
 	Transition<Number> const* mTransition{};								   ///< the transition which lead here. nullptr for roots
 	std::vector<Representation> mFlowpipe{};								   ///< contains computed flowpipe
 	Representation mInitialSet;												   ///< contains initial set for the flowpipe

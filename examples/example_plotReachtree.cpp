@@ -1,4 +1,7 @@
-#include "gtest/gtest.h"
+/*
+ * Created by stefan on 22.09.21.
+ */
+
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 #include <hypro/representations/GeometricObjectBase.h>
@@ -11,7 +14,7 @@ using Representation = Box<double>;
 std::vector<ReachTreeNode<Representation>> create_tree() {
 	std::ofstream file( "/tmp/bball_automaton.model" );
 
-#include "models/bball_automaton.h"
+#include "../test/core/models/bball_automaton.h"
 	file << autString;
 	file.close();
 
@@ -45,22 +48,12 @@ std::vector<ReachTreeNode<Representation>> create_tree() {
 	return roots;
 }
 
-TEST( ReachTreePlotterTest, Construction ) {
-	// empty plotter
-	std::vector<ReachTreeNode<Representation>> roots;
-	auto emptyPlotter = plotting::ReachTreePlotter<Representation>( roots, {} );
-
-	// non-empty plotter
+int main() {
 	auto bball_roots = create_tree();
-	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots, {} );
-}
-
-TEST( ReachTreePlotterTest, PlotSimpleTree ) {
-	auto bball_roots = create_tree();
-	EXPECT_EQ( 4, getNumberNodes( bball_roots.front() ) );
 	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots, {} );
 
 	bball_tree_plotter.plot();
 
 	std::system( "cat rt_out.dot" );
+	return 0;
 }
