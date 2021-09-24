@@ -177,26 +177,27 @@ Condition<Number> Transition<Number>::getJumpEnablingSet() {
 	}
 
 	if ( guard.isTrue() && !targetInvariant.isTrue() ) {
-		return Condition<Number>( invMatrix, invVector );
+		mJumpEnablingSet = Condition<Number>( invMatrix, invVector );
 	} else if ( !guard.isTrue() && targetInvariant.isTrue() ) {
-		return Condition<Number>( guardMatrix, guardVector );
-	}
-	assert( guardMatrix.cols() == invMatrix.cols() );
-	matrix_t<Number> resMatrix( guardMatrix.rows() + invMatrix.rows(), guardMatrix.cols() );
-	vector_t<Number> resVector( guardMatrix.rows() + invMatrix.rows() );
-	resMatrix.topRows( guardMatrix.rows() ) = guardMatrix;
-	resMatrix.bottomRows( invMatrix.rows() ) = invMatrix;
-	resVector.head( guardVector.rows() ) = guardVector;
-	resVector.tail( invVector.rows() ) = invVector;
+		mJumpEnablingSet = Condition<Number>( guardMatrix, guardVector );
+	} else {
+		assert( guardMatrix.cols() == invMatrix.cols() );
+		matrix_t<Number> resMatrix( guardMatrix.rows() + invMatrix.rows(), guardMatrix.cols() );
+		vector_t<Number> resVector( guardMatrix.rows() + invMatrix.rows() );
+		resMatrix.topRows( guardMatrix.rows() ) = guardMatrix;
+		resMatrix.bottomRows( invMatrix.rows() ) = invMatrix;
+		resVector.head( guardVector.rows() ) = guardVector;
+		resVector.tail( invVector.rows() ) = invVector;
 
-	// remove redundancy
-	Optimizer<Number> opt( resMatrix, resVector );
-	auto redundantRows = opt.redundantConstraints();
-	resMatrix = removeRows( resMatrix, redundantRows );
-	resVector = removeRows( resVector, redundantRows );
-	Condition<Number> res( resMatrix, resVector );
-	mJumpEnablingSet = res;
-	return res;
+		// remove redundancy
+		Optimizer<Number> opt( resMatrix, resVector );
+		auto redundantRows = opt.redundantConstraints();
+		resMatrix = removeRows( resMatrix, redundantRows );
+		resVector = removeRows( resVector, redundantRows );
+		Condition<Number> res( resMatrix, resVector );
+		mJumpEnablingSet = res;
+	}
+	return mJumpEnablingSet.value();
 }
 
 template <typename Number>
