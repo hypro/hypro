@@ -139,6 +139,7 @@ template <typename Number, typename Converter, typename Settings>
 bool is_covered( const BoxT<Number, Converter, Settings>& coveree, const std::vector<BoxT<Number, Converter, Settings>>& coverers ) {
 	using Box = BoxT<Number, Converter, Settings>;
 	std::vector<Box> remainders{ coveree };
+	// std::cout << "Trying to cover " << coveree << " by " << coverers << std::endl;
 
 	for ( const auto& cover_box : coverers ) {
 		std::vector<Box> next_remainders{};
@@ -148,12 +149,45 @@ bool is_covered( const BoxT<Number, Converter, Settings>& coveree, const std::ve
 		}
 		remainders = next_remainders;
 	}
+	// std::cout << "Remainders after coverage: " <<  remainders << std::endl;
 	return remainders.empty();
 }
 
 template <typename Set>
 bool is_covered( const Set&, const std::vector<Set>& ) {
 	return false;
+}
+
+/**
+ * Collects pointers to all transitions between a node and its parent that are Zeno
+ * @details The idea is to check, whether the initial set in the child node fully satisfies a guard of a transition to the parent node and whether both transitions do have identity-resets. In this case, the jump back does not provide new information but allows for Zeno-behavior.
+ * @tparam Set The used set representation
+ * @param parent The parent node
+ * @param child The child node
+ * @return A vector of transitions that are Zeno
+ */
+template <typename Set>
+std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( const ReachTreeNode<Set>* parent, const ReachTreeNode<Set>* child ) {
+	using N = typename Set::NumberType;
+	std::vector<const Transition<N>*> result;
+	//// structural check: if child is not a child of parent, exit
+	//// TODO this is a pointer comparison, we need a comparison of reachTreeNodes
+	// if( std::none_of(std::begin(parent->getChildren()), std::end(parent->getChildren()), [child](const auto* childNode){ return childNode == child; }) ) {
+	//	return result;
+	// }
+	//  structural check: if the reset from the parent to the child is non-identity, this cannot be a Zeno transition
+	//  TODO this is a very conservative check - if the overlay of both resets yields identity, this is also a Zeno transition.
+	if ( !child->getTransition()->getReset().isIdentity() ) {
+		return result;
+	}
+	// simple check: if the initial set fully satisfies the guard back to the parent and no variable is reset, we know (since the initial set already fully satisfies the guard from the parent to the child), that this is a Zeno loop.
+	for ( auto& transition : child->getLocation()->getTransitions() ) {
+		if ( transition->getTarget() == parent->getLocation() && transition->getReset().isIdentity() && intersect( child->getInitialSet(), transition->getGuard() ).first == CONTAINMENT::FULL ) {
+			std::cout << "There is a Zeno-transition from " << transition->getSource()->getName() << " to " << transition->getTarget()->getName() << " with set " << child->getInitialSet() << std::endl;
+			result.push_back( transition.get() );
+		}
+	}
+	return result;
 }
 
 }  // namespace hypro

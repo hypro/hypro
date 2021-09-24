@@ -63,6 +63,20 @@ class affineFlow : public linearFlow<Number> {
 		return linearFlow<Number>::hasNoFlow() && !hasTranslation();
 	}
 
+	bool isDiscrete( std::size_t i ) const {
+		return linearFlow<Number>::hasNoFlow( i ) && mTranslation( i ) == 0;
+	}
+
+	std::vector<std::size_t> getNonDiscreteDimensions() const {
+		std::vector<std::size_t> result;
+		for ( std::size_t d = 0; d < this->dimension(); ++d ) {
+			if ( !isDiscrete( d ) ) {
+				result.push_back( d );
+			}
+		}
+		return result;
+	}
+
 	friend bool operator==( const affineFlow<Number>& lhs, const affineFlow<Number>& rhs ) {
 		return ( lhs.getFlowMatrix() == rhs.getFlowMatrix() && lhs.getTranslation() == rhs.getTranslation() );
 	}

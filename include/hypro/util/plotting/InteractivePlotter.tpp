@@ -58,9 +58,15 @@ template <typename Representation>
 void InteractivePlotter<Representation>::addSegments( ReachTreeNode<Representation>* node ) {
 	Plotter<typename Representation::NumberType>& plt = Plotter<typename Representation::NumberType>::getInstance();
 
+	// set/obtain color
+	if ( mLocationColorMapping.find( node->getLocation() ) == std::end( mLocationColorMapping ) ) {
+		mLocationColorMapping[node->getLocation()] = plotting::colors[mLocationColorMapping.size() % 10];
+	}
+	std::size_t color = mLocationColorMapping[node->getLocation()];
+
 	mNodeSegmentMapping[node] = std::vector<std::size_t>{};
 	for ( const auto& segment : node->getFlowpipe() ) {
-		mNodeSegmentMapping[node].push_back( plt.addObject( segment.projectOn( mSettings.plotDimensions.front() ).vertices(), plotting::colors[node->getDepth() % 10] ) );
+		mNodeSegmentMapping[node].push_back( plt.addObject( segment.projectOn( mSettings.plotDimensions.front() ).vertices(), color ) );
 	}
 }
 

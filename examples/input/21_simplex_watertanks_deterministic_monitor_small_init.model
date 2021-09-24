@@ -1931,10 +1931,19 @@ hybrid reachability
         valve_open1_open_init
         {
             u in [0.0002, 0.0002]
+            #u in [0.0, 0.0]
             spec_t1 in [0, 0]
-            x1 in [0.23, 0.3]
-            x2 in [0.23, 0.3]
+            x1 in [0.6, 0.7]
+            x2 in [0.21,0.3]
         }
+
+        #valve_closed_closed_init
+        #{
+        #    u in [0.0002, 0.0002]
+        #    spec_t1 in [0, 0]
+        #    x1 in [0.23, 0.55]
+        #    x2 in [0.23, 0.35]
+        #}
     }
 }
 

@@ -822,8 +822,8 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 			return result;
 		}
 		if ( empty ) {
-			BoxT<Number, Converter, Setting> workbox = BoxT();
-			result.push_back( workbox );
+			// BoxT<Number, Converter, Setting> workbox = BoxT();
+			// result.push_back( workbox );
 			return result;
 		}
 
@@ -838,6 +838,7 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 			// check if the lower box (box2) is not empty
 			if ( box2.at( i ).lower() < box2.at( i ).upper() ) {
 				BoxT<Number, Converter, Setting> workbox( box2 );
+				assert( !workbox.empty() );
 				result.push_back( workbox );
 				// carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
 				carl::Interval<Number> tmp( box2.at( i ).upper(), box.at( i ).upper() );
@@ -847,6 +848,7 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 			// check if the upper box (box3) is not empty
 			if ( box3.at( i ).lower() < box3.at( i ).upper() ) {
 				BoxT<Number, Converter, Setting> workbox2( box3 );
+				assert( !workbox2.empty() );
 				result.push_back( workbox2 );
 				// carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
 				carl::Interval<Number> tmp2( box.at( i ).lower(), box3.at( i ).lower() );

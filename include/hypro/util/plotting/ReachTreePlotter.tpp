@@ -33,9 +33,23 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 	std::size_t count{ 0 };
 	for ( const ReachTreeNode<Representation>& root : mRoots ) {
 		for ( const ReachTreeNode<Representation>& node : preorder( root ) ) {
-			std::string name = "n_" + std::to_string( count++ );
+			std::string name = "n_" + std::to_string( count++ ) + ": ";
+			if ( node.getParent() == nullptr ) {
+				if ( node.getChildren().empty() ) {
+					name += "root";
+				} else {
+					name += node.getChildren()[0].getTransition()->getSource()->getName();
+				}
+			} else {
+				name += node.getTransition()->getTarget()->getName();
+			}
+
 			auto nptr = agnode( graph, name.data(), 1 );
 			mNodePointers[&node] = nptr;
+			// color node green, if it ends in a fixed point
+			if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
+				agsafeset( nptr, std::string( "fillcolor" ).data(), std::string( "green" ).data(), std::string().data() );
+			}
 			// color node, if it needs highlighting
 			if ( std::find( std::begin( highlights ), std::end( highlights ), &node ) != std::end( highlights ) ) {
 				agsafeset( nptr, std::string( "fillcolor" ).data(), std::string( "yellow" ).data(), std::string().data() );

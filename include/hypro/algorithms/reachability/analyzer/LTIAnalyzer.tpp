@@ -33,14 +33,17 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 		while ( set_index < 10 && set_index < currentNode->getFlowpipe().size() ) {
 			for ( auto& other_node : preorder( mRoots ) ) {
 				if ( &other_node != currentNode && other_node.getLocation() == currentNode->getLocation() ) {
+					// determine non-discrete dimensions, only test containment/coverage on those
+					auto nonDiscreteDimensions = currentNode->getLocation()->getLinearFlow().getNonDiscreteDimensions();
+
 					// fill coverer
 					std::vector<State> coverer;
 					for ( std::size_t i = 0; i < 12; ++i ) {
 						if ( other_node.getFlowpipe().size() > i ) {
-							coverer.push_back( other_node.getFlowpipe()[i] );
+							coverer.push_back( other_node.getFlowpipe()[i].projectOn( nonDiscreteDimensions ) );
 						}
 					}
-					if ( is_covered( currentNode->getFlowpipe()[set_index], coverer ) ) {
+					if ( is_covered( currentNode->getFlowpipe()[set_index].projectOn( nonDiscreteDimensions ), coverer ) ) {
 						std::cout << "Found fixed point in the first 10 segments of some other node via coverage." << std::endl;
 						currentNode->setFixedPoint();
 						break;
@@ -48,7 +51,7 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 
 					std::size_t other_set_index = 0;
 					while ( other_set_index < 10 && other_set_index < other_node.getFlowpipe().size() ) {
-						if ( other_node.getFlowpipe()[other_set_index].contains( currentNode->getFlowpipe()[set_index] ) ) {
+						if ( other_node.getFlowpipe()[other_set_index].projectOn( nonDiscreteDimensions ).contains( currentNode->getFlowpipe()[set_index].projectOn( nonDiscreteDimensions ) ) ) {
 							std::cout << "Found fixed point in the first 10 segments of some other node via containment." << std::endl;
 							currentNode->setFixedPoint();
 							break;
@@ -80,8 +83,19 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 			continue;
 		}
 
+		// collect potential Zeno transitions
+		std::vector<const Transition<typename State::NumberType>*> ZenoTransitions{};
+		if ( currentNode->getParent() != nullptr ) {
+			ZenoTransitions = getZenoTransitions( currentNode->getParent(), currentNode );
+		}
+
 		// create jump successor tasks
 		for ( const auto& [transition, timedValuationSets] : worker.computeJumpSuccessors( currentNode->getFlowpipe(), currentNode->getLocation() ) ) {
+			// TODO temporary
+			if ( std::find( std::begin( ZenoTransitions ), std::end( ZenoTransitions ), transition ) != std::end( ZenoTransitions ) ) {
+				continue;
+			}
+
 			for ( const auto [valuationSet, segmentsInterval] : timedValuationSets ) {
 				// update reachTree
 

@@ -81,6 +81,16 @@ class linearFlow {
 		return mFlowMatrix.row( varIndex ).isZero();
 	}
 
+	std::vector<std::size_t> getNonDiscreteDimensions() const {
+		std::vector<std::size_t> result;
+		for ( std::size_t d = 0; d < this->dimension(); ++d ) {
+			if ( !hasNoFlow( d ) ) {
+				result.push_back( d );
+			}
+		}
+		return result;
+	}
+
 	bool hasFlow( std::size_t varIndex ) const {
 		return !hasNoFlow( varIndex );
 	}

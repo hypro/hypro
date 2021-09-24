@@ -39,6 +39,7 @@ class InteractivePlotter {
 	std::vector<ReachTreeNode<Representation>>& mRoots;
 	PlottingSettings mSettings;
 	std::map<ReachTreeNode<Representation>*, std::vector<std::size_t>> mNodeSegmentMapping{};
+	std::map<const Location<typename Representation::NumberType>*, std::size_t> mLocationColorMapping{};
 };
 
 }  // namespace hypro::plotting
