@@ -16,12 +16,13 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 		COUNT( "Computed flowpipes" );
 		auto currentNode = mWorkQueue.back();
 		mWorkQueue.pop_back();
+		//std::cout << "Node at depth " << currentNode->getDepth() << "\n";
 
 		START_BENCHMARK_OPERATION( "Unrefined time successors" );
+		worker.reset(); // delete cached jump predecessors and computed flowpipe
 		auto safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.pruneUrgentSegments );
 		worker.insertFlowpipe( *currentNode );
 		currentNode->setSafety( safetyResult );
-		worker.reset();
 		STOP_BENCHMARK_OPERATION( "Unrefined time successors" );
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {

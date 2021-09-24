@@ -132,6 +132,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 		// pop node
 		ReachTreeNode<Representation>* currentNode = mWorkQueue.front();
 		mWorkQueue.pop_front();
+		//std::cout << "CEGAR Node at depth " << currentNode->getDepth() << "\n";
 
 		// skip descendants of refined nodes
 		auto node = currentNode;
@@ -153,13 +154,13 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 		}
 
 		// compute flowpipe. if node was previously unsafe, flowpipe would not be empty
+		worker.reset();
 		if ( currentNode->getFlowpipe().empty() ) {
-			COUNT( "Computed flowpipes" );
+			COUNT( "Computed refinement flowpipes" );
 			START_BENCHMARK_OPERATION( "Refinement time successors" );
 			REACHABILITY_RESULT safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.pruneUrgentSegments );
 			worker.insertFlowpipe( *currentNode );
 			currentNode->setSafety( safetyResult );
-			worker.reset();
 			STOP_BENCHMARK_OPERATION( "Refinement time successors" );
 		} else {
 			COUNT( "Reuse flowpipe computation" );
@@ -439,6 +440,7 @@ bool UrgencyRefinementAnalyzer<Representation>::isPathUnsafe( ReachTreeNode<Repr
 	while ( !queue.empty() ) {
 		auto node = queue.back();
 		queue.pop_back();
+		worker.reset();
 		if ( node->getDepth() == 0 ) {
 			if ( worker.computeTimeSuccessors( *node, initialTimeHorizon, false ) == REACHABILITY_RESULT::UNKNOWN ) {
 				return true;
@@ -449,7 +451,6 @@ bool UrgencyRefinementAnalyzer<Representation>::isPathUnsafe( ReachTreeNode<Repr
 			}
 		}
 		worker.insertFlowpipe( *node );
-		worker.reset();
 		if ( node->getDepth() < path.elements.size() ) {
 			auto nextTransition = path.elements[node->getDepth()].second;
 			auto successor = worker.computeJumpSuccessors( *node, nextTransition, path.elements[node->getDepth()].first );

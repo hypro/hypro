@@ -4,6 +4,7 @@ namespace hypro {
 
 template <typename Representation>
 REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon, bool pruneUrgentSegments ) {
+	START_BENCHMARK_OPERATION( "Time successor computation" );
 	assert( mFlowpipe.size() == 0 );
 	reset();
 	const Location<Number>* loc = task.getLocation();
@@ -14,6 +15,7 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::computeTimeSuccessors( c
 	assert( containmentInitial != CONTAINMENT::NO );
 	addSegment( constraintedInitial, 0 );
 	if ( ltiIntersectBadStates( constraintedInitial, loc, mHybridAutomaton ).first != CONTAINMENT::NO ) {
+		STOP_BENCHMARK_OPERATION( "Time successor computation" );
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 
@@ -26,6 +28,7 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::computeTimeSuccessors( c
 
 	REACHABILITY_RESULT firstSegmentSafety = handleSegment( task, firstSegment, 0, pruneUrgentSegments );
 	if ( firstSegmentSafety != REACHABILITY_RESULT::SAFE ) {
+		STOP_BENCHMARK_OPERATION( "Time successor computation" );
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
 
@@ -41,6 +44,7 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::computeTimeSuccessors( c
 				  previousSegment.valuationSet, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
 			REACHABILITY_RESULT safety = handleSegment( task, nextSegment, segmentIndex, pruneUrgentSegments );
 			if ( safety != REACHABILITY_RESULT::SAFE ) {
+				STOP_BENCHMARK_OPERATION( "Time successor computation" );
 				return REACHABILITY_RESULT::UNKNOWN;
 			}
 			flowpipeIndex += 1;
@@ -51,6 +55,7 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::computeTimeSuccessors( c
 		}
 	}
 
+	STOP_BENCHMARK_OPERATION( "Time successor computation" );
 	return REACHABILITY_RESULT::SAFE;
 }
 
@@ -70,14 +75,26 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::handleSegment(
 		for ( const auto& uTrans : task.getLocation()->getTransitions() ) {
 			if ( uTrans->isUrgent() && task.getUrgencyRefinementLevels().at( uTrans.get() ) == UrgencyRefinementLevel::FULL ) {
 				START_BENCHMARK_OPERATION( "Prune segment" );
-				// todo: reuse for jump successor computation
-				auto c = intersect( constrainedSegment, uTrans->getJumpEnablingSet() ).first;
+				START_BENCHMARK_OPERATION( "Prune with guard" );
+				auto [jumpPredCon, jumpPredSet] = intersect( constrainedSegment, uTrans->getGuard() );
+				if ( mJumpPredecessors.find( uTrans.get() ) == mJumpPredecessors.end() ) {
+					mJumpPredecessors[uTrans.get()] = std::vector<IndexedValuationSet<Representation>>();
+				}
+				if ( jumpPredCon == CONTAINMENT::PARTIAL ) {
+					mJumpPredecessors[uTrans.get()].push_back( { jumpPredSet, timing } );
+				}
+				STOP_BENCHMARK_OPERATION( "Prune with guard" );
+				CONTAINMENT jesCon = CONTAINMENT::NO;
+				if ( jumpPredCon == CONTAINMENT::FULL ) {
+					jesCon = intersect( jumpPredSet, uTrans->getJumpEnablingSet() ).first;
+				}
 				STOP_BENCHMARK_OPERATION( "Prune segment" );
-				if ( c == CONTAINMENT::FULL ) {
+				if ( jesCon == CONTAINMENT::FULL ) {
 					COUNT( "Pruned urgent segment" );
 					return REACHABILITY_RESULT::SAFE;
 				} else {
-					COUNT( "Intersection for non-pruned segment" );
+					STOP_BENCHMARK_OPERATION( "Intersection non pruned" );
+					COUNT( "Intersection for non pruned segment" );
 				}
 			}
 		}
@@ -120,24 +137,28 @@ auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeN
 	assert( transition->getSource() == task.getLocation() );
 	assert( task.getFlowpipe().size() == task.getFpTimings().size() );
 
-	std::vector<IndexedValuationSet<Representation>> enabledSegments;
-	for ( std::size_t i = 0; i < task.getFlowpipe().size(); ++i ) {
-		if ( timeOfJump.isUnbounded() ||
-			 ( task.getTimings().lower() + task.getFpTimings()[i] <= timeOfJump.upper() && task.getTimings().upper() + task.getFpTimings()[i] >= timeOfJump.lower() ) ) {
-			auto [containment, intersected] = intersect( task.getFlowpipe()[i], transition->getGuard() );
-			if ( containment != CONTAINMENT::NO ) {
-				enabledSegments.push_back( { intersected, task.getFpTimings()[i] } );
+	if ( mJumpPredecessors.find( transition ) == mJumpPredecessors.end() ) {
+		mJumpPredecessors[transition] = std::vector<IndexedValuationSet<Representation>>();
+		for ( std::size_t i = 0; i < task.getFlowpipe().size(); ++i ) {
+			if ( timeOfJump.isUnbounded() ||
+				 ( task.getTimings().lower() + task.getFpTimings()[i] <= timeOfJump.upper() && task.getTimings().upper() + task.getFpTimings()[i] >= timeOfJump.lower() ) ) {
+				auto [containment, intersected] = intersect( task.getFlowpipe()[i], transition->getGuard() );
+				if ( containment != CONTAINMENT::NO ) {
+					mJumpPredecessors[transition].push_back( { intersected, task.getFpTimings()[i] } );
+				}
 			}
 		}
+	} else {
+		COUNT( "Precomputed jump predecessors" );
 	}
 
 	// aggregation
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {
-			blockSize = ( enabledSegments.size() + mSettings.clustering ) / mSettings.clustering;  //division rounding up
+			blockSize = ( mJumpPredecessors[transition].size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
 		} else {
-			blockSize = enabledSegments.size();
+			blockSize = mJumpPredecessors[transition].size();
 		}
 
 	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
@@ -146,7 +167,7 @@ auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeN
 		}
 	}
 
-	std::vector<TimedValuationSet<Representation>> successors = aggregate( blockSize, enabledSegments );
+	std::vector<TimedValuationSet<Representation>> successors = aggregate( blockSize, mJumpPredecessors[transition] );
 
 	for ( auto it = successors.begin(); it != successors.end(); ) {
 		TRACE( "hypro", "valSet: " << it->valuationSet.vertices() );

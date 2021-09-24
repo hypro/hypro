@@ -91,6 +91,7 @@ class UrgencyCEGARWorker {
 	 */
 	void reset() {
 		mFlowpipe.clear();
+		mJumpPredecessors.clear();
 	}
 
   private:
@@ -121,11 +122,12 @@ class UrgencyCEGARWorker {
 	void addSegment( const std::vector<Representation>& segment, SegmentInd timing );
 
   protected:
-	const HybridAutomaton<Number>& mHybridAutomaton;  ///< hybrid automaton to analyze
-	const AnalysisParameters& mSettings;			  ///< analysis settings
-	tNumber mLocalTimeHorizon;						  ///< local time horizon
-	TimeTransformationCache<Number>& mTrafoCache;	  ///< cache for matrix exponential
-	Flowpipe mFlowpipe;								  ///< Storage of computed time successors
+	const HybridAutomaton<Number>& mHybridAutomaton;														  ///< hybrid automaton to analyze
+	const AnalysisParameters& mSettings;																	  ///< analysis settings
+	tNumber mLocalTimeHorizon;																				  ///< local time horizon
+	TimeTransformationCache<Number>& mTrafoCache;															  ///< cache for matrix exponential
+	Flowpipe mFlowpipe;																						  ///< Storage of computed time successors
+	std::map<const Transition<Number>*, std::vector<IndexedValuationSet<Representation>>> mJumpPredecessors;  ///< Cache jump predecessors
 
 	size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
 };
