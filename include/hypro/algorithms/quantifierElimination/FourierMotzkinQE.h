@@ -91,7 +91,7 @@ std::pair<matrix_t<Number>, vector_t<Number>> eliminateCol( const matrix_t<Numbe
 	if ( !conservative ) {
 		newConstraints = removeCol( newConstraints, col );
 	}
-/*
+	/*
 	newConstraints = removeRows( newConstraints, emptyRows );
 	newConstants = removeRows( newConstants, emptyRows );
 
@@ -102,7 +102,7 @@ std::pair<matrix_t<Number>, vector_t<Number>> eliminateCol( const matrix_t<Numbe
 	Optimizer<Number> opt( newConstraints, newConstants );
 	auto red = opt.redundantConstraints();
 	newConstraints = removeRows( newConstraints, red );
-	newConstants = removeRows( newConstants, red);
+	newConstants = removeRows( newConstants, red );
 	return std::make_pair( newConstraints, newConstants );
 }
 
@@ -110,7 +110,9 @@ template <typename Number, typename IdxType>
 std::pair<matrix_t<Number>, vector_t<Number>> eliminateCols( const matrix_t<Number>& constraints, const vector_t<Number> constants, const std::vector<IdxType>& cols, bool conservative = true ) {
 	auto resultConstraints = constraints;
 	auto resultConstants = constants;
-	for ( auto cIndex : cols ) {
+	auto colCopy = cols;
+	std::sort( colCopy.begin(), colCopy.end(), std::greater<IdxType>() );
+	for ( auto cIndex : colCopy ) {
 		std::tie( resultConstraints, resultConstants ) = eliminateCol( resultConstraints, resultConstants, cIndex, conservative );
 	}
 	return std::make_pair( resultConstraints, resultConstants );
