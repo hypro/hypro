@@ -521,7 +521,7 @@ struct DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>
 
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
 auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::complexityReduction( const RepVector& sets, const Condition<Number>& dependencies ) -> std::pair<Condition<Number>, RepVector> {
-	assert( std::all_of( sets.begin(), sets.end(), []( auto const& s ) { return !s.empty() } ) );
+	assert( std::all_of( sets.begin(), sets.end(), []( auto const& s ) { return !s.empty(); } ) );
 	// get sets for non-discrete subspaces
 	RepVector res( sets.size() );
 	std::vector<HPolytope<Number>> subspacePolytopes;

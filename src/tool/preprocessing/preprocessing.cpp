@@ -32,7 +32,6 @@ hypro::PreprocessingInformation preprocess( const hypro::HybridAutomaton<hydra::
 																 []( std::size_t cur, auto const& dynamic ) { return dynamic == hypro::DynamicType::singular || dynamic == hypro::DynamicType::timed ? cur + 1 : cur; } );
 			std::size_t ltiSubspaceCount = std::accumulate( decomposition.subspaceTypes.begin(), decomposition.subspaceTypes.end(), 0,
 															[]( std::size_t cur, auto const& dynamic ) { return dynamic == hypro::DynamicType::linear || dynamic == hypro::DynamicType::affine ? cur + 1 : cur; } );
-			std::cout << "Singular count: " << singularSubspaceCount << ", ltiCount: " << ltiSubspaceCount << "\n";
 			if ( std::ceil( (float)singularSubspaceCount / singularSubspaceSize ) + ltiSubspaceCount > 1 ) {
 				std::replace( decomposition.subspaceTypes.begin(), decomposition.subspaceTypes.end(), hypro::DynamicType::singular, hypro::DynamicType::linear );
 				std::replace( decomposition.subspaceTypes.begin(), decomposition.subspaceTypes.end(), hypro::DynamicType::timed, hypro::DynamicType::linear );

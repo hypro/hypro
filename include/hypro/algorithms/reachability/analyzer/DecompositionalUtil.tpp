@@ -197,13 +197,46 @@ template <typename Representation>
 std::vector<Representation> decompose( const Representation& composedSet, const Decomposition& decomposition, std::size_t clockCount ) {
 	assert( !composedSet.empty() && "Decompose called with empty set" );
 
+	// holds projected sets
 	std::vector<Representation> subspaceSets( decomposition.subspaces.size() );
-	for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
-		auto projectedSet = projectOnDimensions( composedSet, decomposition.subspaces[subspace] );
-		if ( decomposition.subspaceTypes[subspace] != DynamicType::discrete ) {
-			subspaceSets[subspace] = addClocksAndInitial( projectedSet, clockCount );
+
+	// sort subspace indices by size of subspaces in descending order
+	std::vector<std::size_t> subspaceIndices( decomposition.subspaces.size() );
+	for ( std::size_t i = 0; i < subspaceIndices.size(); ++i ) {
+		subspaceIndices[i] = i;
+	}
+	std::sort( subspaceIndices.begin(), subspaceIndices.end(), [=]( auto i, auto j ) {
+		return decomposition.subspaces[i] > decomposition.subspaces[j];
+	} );
+
+	// copy subspaces for index shifting: when variables are eliminated from the workset
+	// the indices of other variables need to be shifted, because the workset now has smaller dimension
+	auto subspaceCopy = decomposition.subspaces;
+	Representation workset = composedSet;
+	for ( auto i : subspaceIndices ) {
+		// get subspace set for subspace i and add clocks
+		auto projectedSet = projectOnDimensions( workset, subspaceCopy[i] );
+		if ( decomposition.subspaceTypes[i] != DynamicType::discrete ) {
+			subspaceSets[i] = addClocksAndInitial( projectedSet, clockCount );
 		} else {
-			subspaceSets[subspace] = projectedSet;
+			subspaceSets[i] = projectedSet;
+		}
+		// no more subspaces after this
+		if ( i == subspaceIndices.back() ) break;
+		// eliminate variables from workset
+		HPolytope<typename Representation::NumberType> worksetPol;
+		convert( workset, worksetPol );
+		worksetPol = worksetPol.projectOut( subspaceCopy[i] );
+		convert( worksetPol, workset );
+		// shift indices
+		for ( auto j : subspaceIndices ) {
+			if ( j == i ) continue;
+			for ( auto& varIndex : subspaceCopy[j] ) {
+				std::size_t shift = std::accumulate( subspaceCopy[i].begin(), subspaceCopy[i].end(), 0, [=]( std::size_t cur, std::size_t eliminatedIndex ) {
+					return eliminatedIndex < varIndex ? cur + 1 : cur;
+				} );
+				varIndex = varIndex - shift;
+			}
 		}
 	}
 	return subspaceSets;
@@ -212,6 +245,9 @@ std::vector<Representation> decompose( const Representation& composedSet, const 
 template <typename Representation>
 Representation projectOnDimensions( const Representation& composedSet, const std::vector<std::size_t>& dimensions ) {
 	using Number = typename Representation::NumberType;
+	if ( composedSet.dimension() == dimensions.size() ) {
+		return composedSet;
+	}
 
 	assert( !composedSet.empty() && "Projection called with empty set" );
 	std::vector<std::size_t> toProjectOut( composedSet.dimension() - dimensions.size() );
@@ -407,7 +443,7 @@ struct DecompositionalSegmentGen {
 
 		// finally we need to add the discrete subspaces
 		// use composition function with two subspaces (all non-discrete and all discrete) without clocks (they are already projected out)
-		if ( discreteSubspace >= 0 ) {
+		if ( false && discreteSubspace >= 0 ) {
 			auto discreteSet = std::visit( genericConvertAndGetVisitor<HPolytope<Number>>(), nodeIterators[discreteSubspace]->getFlowpipe()[0].getSet() );
 			composed = detail::composeSubspaces<HPolytope<Number>>( { composed, discreteSet }, Condition<Number>( ConstraintSetT<Number>() ), aggregatedDecomp, 0 );
 		}
