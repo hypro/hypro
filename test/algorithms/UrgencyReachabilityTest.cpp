@@ -124,6 +124,7 @@ TEST( UrgencyHandling, Cutoff ) {
 	vec << 1.5;
 	cond.setMatrix( mat );
 	cond.setVector( vec );
+	trans = Transition<Number>( &loc, &loc );
 	trans.setGuard( cond );
 	res = urgencyHandler.cutoff( square, &trans );
 
@@ -150,6 +151,7 @@ TEST( UrgencyHandling, Cutoff ) {
 	vec << -0.5, -0.5;
 	cond.setMatrix( mat );
 	cond.setVector( vec );
+	trans = Transition<Number>( &loc, &loc );
 	trans.setGuard( cond );
 	res = urgencyHandler.cutoff( cube, &trans );
 
