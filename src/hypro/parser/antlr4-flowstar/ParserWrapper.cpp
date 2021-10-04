@@ -1,9 +1,9 @@
-#include "ParserWrapper.h"
+#include "include/hypro/parser/antlr4-flowstar/ParserWrapper.h"
 
-#include "ErrorListener.h"
-#include "HybridAutomatonLexer.h"
-#include "HybridAutomatonParser.h"
-#include "HyproHAVisitor.h"
+#include "include/hypro/parser/antlr4-flowstar/ErrorListener.h"
+#include "include/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h"
+#include "include/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h"
+#include "include/hypro/parser/antlr4-flowstar/HyproHAVisitor.h"
 
 
 namespace hypro {

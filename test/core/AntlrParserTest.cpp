@@ -37,7 +37,8 @@ class AntlrParserTest : public ::testing::Test {
 TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 	using Matrix = hypro::matrix_t<TypeParam>;
 	using Vector = hypro::vector_t<TypeParam>;
-	std::string path( "../src/test/core/examples/test_location_parsing.txt" );
+	// std::string path( "../test/core/examples/test_location_parsing.txt" );
+	std::string path( "examples/test_location_parsing.txt" );
 
 	this->cwd();
 	try {
@@ -57,7 +58,7 @@ TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 		flow( 0, 1 ) = TypeParam( -56 );
 		flow( 0, 3 ) = TypeParam( 4 );
 		flow( 1, 1 ) = TypeParam( 782 );
-		flow( 2, 2 ) = TypeParam( 1 );
+		flow( 2, 3 ) = TypeParam( 1 );
 		EXPECT_EQ( flow, loc0->getLinearFlow().getFlowMatrix() );
 		EXPECT_EQ( flow, loc1->getLinearFlow().getFlowMatrix() );
 		// test correct invariants
@@ -86,14 +87,14 @@ TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 TYPED_TEST( AntlrParserTest, JustTesting ) {
 	using Matrix = hypro::matrix_t<TypeParam>;
 	using Vector = hypro::vector_t<TypeParam>;
-	std::string path( "../src/test/core/examples/test_bouncing_ball.txt" );
+	std::string path( "examples/test_bouncing_ball.txt" );
 
 	this->cwd();
 	try {
 		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
 		EXPECT_EQ( automaton.getLocations().size(), std::size_t( 1 ) );
 		hypro::Location<TypeParam>* loc = automaton.getLocations().front();
-		EXPECT_EQ( loc->getTransitions().size(), std::size_t( 1 ) );
+		EXPECT_EQ( loc->getTransitions().size(), std::size_t( 2 ) );
 		EXPECT_FALSE( loc->isUrgent() );
 		// test correct flow
 		Matrix flow = Matrix::Zero( 3, 3 );
@@ -102,7 +103,7 @@ TYPED_TEST( AntlrParserTest, JustTesting ) {
 		EXPECT_EQ( flow, loc->getLinearFlow().getFlowMatrix() );
 		// test correct invariants
 		Matrix constraints = Matrix::Zero( 1, 2 );
-		constraints( 0, 0 ) = TypeParam( 1 );
+		constraints( 0, 0 ) = TypeParam( -1 );
 		Vector constants = Vector::Zero( 1 );
 		hypro::Condition<TypeParam> invariant{ constraints, constants };
 		EXPECT_EQ( invariant, loc->getInvariant() );
@@ -112,8 +113,46 @@ TYPED_TEST( AntlrParserTest, JustTesting ) {
 	}
 }
 
+TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
+	using Matrix = hypro::matrix_t<TypeParam>;
+	using Vector = hypro::vector_t<TypeParam>;
+	std::string path( "examples/test_bad_states.txt" );
+
+	this->cwd();
+	try {
+		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
+		EXPECT_EQ( automaton.getLocations().size(), std::size_t( 1 ) );
+		hypro::Location<TypeParam>* loc = automaton.getLocations().front();
+		EXPECT_EQ( loc->getTransitions().size(), std::size_t( 2 ) );
+		EXPECT_FALSE( loc->isUrgent() );
+		// test correct flow
+		Matrix flow = Matrix::Zero( 3, 3 );
+		flow( 0, 1 ) = TypeParam( 4 );
+		flow( 0, 2 ) = TypeParam( -9.81 );
+		flow( 1, 2 ) = TypeParam( 1 );
+		EXPECT_EQ( flow, loc->getLinearFlow().getFlowMatrix() );
+		// test correct invariants
+		Matrix constraints = Matrix::Zero( 4, 2 );
+		constraints( 0, 0 ) = TypeParam( -1 );
+		constraints( 1, 1 ) = TypeParam( 1 );
+		constraints( 2, 0 ) = TypeParam( -1 );
+		constraints( 3, 1 ) = TypeParam( 1 );
+		Vector constants = Vector::Zero( 4 );
+		constants << TypeParam( 0 ), TypeParam( -8.81 ), TypeParam( -0.5 ), TypeParam( 123 );
+		hypro::Condition<TypeParam> invariant{ constraints, constants };
+		EXPECT_EQ( invariant, loc->getInvariant() );
+		// EXPECT_FALSE( automaton.getLocalBadStates().empty() );
+		// EXPECT_EQ( hypro::Condition<TypeParam>(
+		//				 { carl::Interval<TypeParam>::unboundedInterval(), carl::Interval<TypeParam>( -2.5, 0.0 ) } ),
+		//		   automaton.getLocalBadStates().at( loc ) );
+	} catch ( const std::runtime_error& e ) {
+		std::cout << e.what() << std::endl;
+		FAIL();
+	}
+}
+
 TYPED_TEST( AntlrParserTest, Settings ) {
-	std::string path( "../src/test/core/examples/test_settings.txt" );
+	std::string path( "examples/test_settings.txt" );
 
 	this->cwd();
 	try {
@@ -126,7 +165,7 @@ TYPED_TEST( AntlrParserTest, Settings ) {
 }
 
 TYPED_TEST( AntlrParserTest, PlainRectangular ) {
-	std::string path( "../src/test/core/examples/test_plain_rectangular.txt" );
+	std::string path( "examples/test_plain_rectangular.txt" );
 
 	this->cwd();
 	try {
@@ -139,7 +178,7 @@ TYPED_TEST( AntlrParserTest, PlainRectangular ) {
 }
 
 TYPED_TEST( AntlrParserTest, MixedRectangular ) {
-	std::string path( "../src/test/core/examples/test_mixed_rectangular.txt" );
+	std::string path( "examples/test_mixed_rectangular.txt" );
 
 	this->cwd();
 	try {
@@ -152,7 +191,7 @@ TYPED_TEST( AntlrParserTest, MixedRectangular ) {
 }
 
 TYPED_TEST( AntlrParserTest, EmptyFile ) {
-	std::string path( "../src/test/core/examples/test_empty_file.txt" );
+	std::string path( "examples/test_empty_file.txt" );
 
 	try {
 		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>( path );
@@ -164,7 +203,7 @@ TYPED_TEST( AntlrParserTest, EmptyFile ) {
 }
 
 TYPED_TEST( AntlrParserTest, TransitionParsing2 ) {
-	std::string path( "../src/test/core/examples/test_transition_parsing_2.txt" );
+	std::string path( "examples/test_transition_parsing_2.txt" );
 	try {
 		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
 
@@ -205,7 +244,7 @@ TYPED_TEST( AntlrParserTest, TransitionParsing2 ) {
 }
 
 TYPED_TEST( AntlrParserTest, BracketParsingTest ) {
-	std::string path( "../src/test/core/examples/test_bracket_parsing.txt" );
+	std::string path( "examples/test_bracket_parsing.txt" );
 
 	try {
 		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>( path );
@@ -269,7 +308,7 @@ TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
 	 * - Settings for stepsize, maximum amount of jumps, duration of computation, output name, dimensions to plot
 	 */
 	using Matrix = hypro::matrix_t<TypeParam>;
-	std::string path( "../../../../src/test/core/examples/test_minimal_accepted_file.txt" );
+	std::string path( "examples/test_minimal_accepted_file.txt" );
 	std::tuple<HybridAutomaton<TypeParam>, ReachabilitySettings> h;
 	try {
 		h = parseFlowstarFile<TypeParam>( path );
@@ -389,7 +428,7 @@ std::endl; FAIL();
 //}
 
 TYPED_TEST( AntlrParserTest, StochasticParsing ) {
-	std::string path( "../src/test/core/examples/test_stochastic_parsing.txt" );
+	std::string path( "examples/test_stochastic_parsing.txt" );
 	// std::string path( "../../../../src/test/core/examples/test_stochastic_parsing.txt" );
 
 	try {

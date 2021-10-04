@@ -31,17 +31,24 @@ hybrid reachability {
    {
     #v' = --9.81 + -+-v*42*-3 + [2,5]
     #x' = +++4*-+--v
-    x' = v
-    v' = 3*v + gabunga - 3*c*v
+    x' = 3*v + gabunga + c*v + [-1,4]
+    v' = 1
     #v' = gabunga + c*v
    }
 
    inv
    {
     x >= 0
+    v <= c + gabunga
    }
 
    inv{}
+
+   inv
+   {
+    x >= .5
+    v <= 123
+   }
   }
  }
 
@@ -89,7 +96,6 @@ unsafe set
 {
  location_with_under_scores
  {
-  x in [4,6]
  }
  location_with_under_scores
  {

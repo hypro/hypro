@@ -48,7 +48,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
     target_include_directories(runParserTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
     target_link_libraries(runParserTests ${PROJECT_NAME}-static ${GTEST_LIBRARIES})
     #message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})
-    add_test(NAME parser COMMAND runParserTests)
+    add_test(NAME parser COMMAND runParserTests WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/test/core)
 
     add_dependencies(allTests runParserTests)
 

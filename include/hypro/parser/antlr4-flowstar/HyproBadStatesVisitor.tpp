@@ -94,7 +94,7 @@ namespace hypro {
 			Condition<Number> badStateConditions(badStatePair.first, badStatePair.second);
 			return std::make_pair(badLoc, badStateConditions);
 		} else {
-			return std::make_pair(badLoc, Condition<Number>(matrix_t<Number>::Zero(vars.size(), vars.size()),vector_t<Number>::Zero(vars.size())));
+			return std::make_pair(badLoc, Condition<Number>::True());
 		}
 
 	}

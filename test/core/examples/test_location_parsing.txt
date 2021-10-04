@@ -1,6 +1,14 @@
 hybrid reachability
 {
  state var x,c1,c2
+
+ setting{
+    max jumps 3
+    output test
+    time 4
+    fixed steps 0.001
+ }
+
  modes
  {
   rod1
@@ -37,6 +45,14 @@ hybrid reachability
    }
    urgent
   }
+ }
+ jumps{}
+ init{
+ rod2{
+ x in [0,0]
+ c1 in [0,0]
+ c2 in [0,0]
+ }
  }
 }
 
