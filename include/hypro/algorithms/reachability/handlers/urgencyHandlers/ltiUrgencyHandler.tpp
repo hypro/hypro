@@ -26,6 +26,7 @@ Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& 
 	} else if ( intersect( set, condition ).first == CONTAINMENT::FULL ) {
 		return Representation::Empty();
 	}
+	START_BENCHMARK_OPERATION( "Cutoff setup" );
 	std::size_t dimension = set.dimension();
 
 	// Used to check whether points satisfy the condition
@@ -63,9 +64,13 @@ Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& 
 	// Used to maximize in the direction of other vertices
 	vector_t<Number> lambda = vector_t<Number>::Zero( dimension + 2 );
 	lambda( dimension + 1 ) = 1;
+	STOP_BENCHMARK_OPERATION( "Cutoff setup" );
 
+	START_BENCHMARK_OPERATION( "Cutoff compute vertices" );
 	std::vector<Point<Number>> oldVertices = set.vertices();
+	STOP_BENCHMARK_OPERATION( "Cutoff compute vertices" );
 	std::vector<Point<Number>> newVertices;
+	START_BENCHMARK_OPERATION( "Cutoff replace vertices" );
 	for ( const auto& vertex : oldVertices ) {
 		// only replace vertices that satisfy the condition
 		if ( !conditionOptimizer.checkPoint( vertex ) ) {
@@ -100,9 +105,15 @@ Representation ltiUrgencyHandler<Representation>::cutoff( Representation const& 
 		}
 		newVertices.insert( newVertices.end(), replacement.begin(), replacement.end() );
 	}
+	STOP_BENCHMARK_OPERATION( "Cutoff replace vertices" );
+	if ( newVertices == oldVertices ) {
+		return set;
+	}
+	START_BENCHMARK_OPERATION( "Cutoff convert back" );
 	VPolytope<Number> newPol( newVertices );
 	Representation res;
 	convert( newPol, res );
+	STOP_BENCHMARK_OPERATION( "Cutoff convert back" );
 	return res;
 }
 
