@@ -11,15 +11,29 @@
  * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 24.09.21.
  */
 
-#ifndef HYPRO_HYPEROCTREE_H
-#define HYPRO_HYPEROCTREE_H
+#pragma once
 
 namespace hypro {
 
-template <typename Data>
+enum class HyperOctreeOp { ADD,
+						   DESCEND,
+						   SKIP };
+
+template <template <typename> class Predicate, typename Data>
 class Hyperoctree {
+  public:
+	Hyperoctree( const Predicate<Data>& p )
+		: mDecider( p ) {}
+
+	bool add( Data&& data );
+
+  protected:
+	std::size_t mRemainingDepth = 0;									   ///< indicates how may more splits can be made
+	Predicate<Data> mDecider;											   ///< functor
+	std::vector<std::unique_ptr<Hyperoctree<Predicate, Data>>> mChildren;  ///< collects child-hyperoctrees
+	std::vector<Data> mData;											   ///< collects data suitable for this level
 };
 
 }  // namespace hypro
 
-#endif	// HYPRO_HYPEROCTREE_H
+#include "Hyperoctree.tpp"
