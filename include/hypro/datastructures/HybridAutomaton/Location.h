@@ -23,6 +23,8 @@ static_assert( false, "This file may only be included indirectly by HybridAutoma
 #include <variant>
 
 namespace hypro {
+using namespace std::string_literals;
+
 template <typename Number>
 class Transition;
 
@@ -48,8 +50,8 @@ class Location {
 	std::vector<carl::Interval<Number>> mExternalInput;	 ///< External input/disturbance
 	bool mHasExternalInput = false;						 ///< Cache-flag
 	transitionVector mTransitions;						 ///< Outgoing transitions
-	Condition<Number> mInvariant;						 ///< Invariant condition
-	std::string mName = std::string();					 ///< Name of the location
+	Condition<Number> mInvariant = Condition<Number>();	 ///< Invariant condition
+	std::string mName = ""s;							 ///< Name of the location
 	unsigned mId;										 ///< ID - was used for comparison (deprecated)
 	mutable std::size_t mHash = 0;						 ///< Hash of the location
 	bool mIsUrgent = false;								 ///< Flag indicating that a location is urgent
@@ -58,7 +60,7 @@ class Location {
 	/// default constructor
 	Location();
 	/// construction by name
-	Location( const std::string& name );
+	Location( std::string name );
 	/// copy constructor
 	Location( const Location& loc );
 	/// construction from flow matrix
@@ -109,7 +111,7 @@ class Location {
 	/// getter for the locations' id (deprecated)
 	[[deprecated( "use hash() instead" )]] unsigned getId() const { return mId; }
 	/// getter for the name of the location
-	const std::string& getName() const { return mName; }
+	std::string getName() const { return mName; }
 	/// getter for the urgency-flag
 	bool isUrgent() const { return mIsUrgent; }
 	/// getter for the state space dimension
