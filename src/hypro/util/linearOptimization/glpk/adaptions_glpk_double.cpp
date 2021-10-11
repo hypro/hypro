@@ -88,9 +88,9 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 		EvaluationResult<double> actualRes;
 		EvaluationResult<double> updatedRes;
 
-		if ( relation == carl::Relation::GREATER || relation == carl::Relation::LESS ) {
-			WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
-		}
+		// if ( relation == carl::Relation::GREATER || relation == carl::Relation::LESS ) {
+		//	WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
+		// }
 		if ( relation == carl::Relation::LEQ || relation == carl::Relation::LESS || relation == carl::Relation::EQ ) {
 			// test if upper bound is redundant
 			glp_set_obj_dir( context.lp, GLP_MAX );
@@ -120,13 +120,13 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 			// restore bound
 			switch ( relation ) {
 				case carl::Relation::LESS:
-					WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
+					//( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
 				case carl::Relation::LEQ:
 					// set upper bounds, lb-values (here 0.0) are ignored.
 					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_UP, 0.0, carl::toDouble( constants( constraintIndex ) ) );
 					break;
 				case carl::Relation::GREATER:
-					WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
+					// WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
 				case carl::Relation::GEQ:
 					// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
 					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_LO, carl::toDouble( constants( constraintIndex ) ), 0.0 );
@@ -150,13 +150,13 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 	for ( const auto idx : res ) {
 		switch ( relations[idx] ) {
 			case carl::Relation::LESS:
-				WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
+				// WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
 			case carl::Relation::LEQ:
 				// set upper bounds, lb-values (here 0.0) are ignored.
 				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_UP, 0.0, carl::toDouble( constants( idx ) ) );
 				break;
 			case carl::Relation::GREATER:
-				WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
+				// WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
 			case carl::Relation::GEQ:
 				// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
 				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_LO, carl::toDouble( constants( idx ) ), 0.0 );

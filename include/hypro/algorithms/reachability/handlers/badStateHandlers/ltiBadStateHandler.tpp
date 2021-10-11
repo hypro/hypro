@@ -6,6 +6,11 @@ template <typename Representation, typename Number>
 std::pair<CONTAINMENT, Representation> ltiIntersectBadStates( const Representation& valuationSet, Location<Number> const* location, const HybridAutomaton<Number>& automaton ) {
 	auto localBadState = automaton.getLocalBadStates().find( location );
 	if ( localBadState != automaton.getLocalBadStates().end() ) {
+		if ( localBadState->second.isTrue() ) {
+			return std::make_pair( CONTAINMENT::FULL, valuationSet );
+		} else if ( localBadState->second.isFalse() ) {
+			return std::make_pair( CONTAINMENT::NO, valuationSet );
+		}
 		std::pair<CONTAINMENT, Representation> badStatePair = intersect( valuationSet, localBadState->second );
 		if ( badStatePair.first != hypro::CONTAINMENT::NO ) {
 			DEBUG( "hydra.worker", "Intersection with local bad states. (intersection type " << badStatePair.first << ")" );

@@ -24,6 +24,8 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	carl::Interval<SegmentInd> mTimings{};									   ///< global time covered by inital set (used as offset)
 	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
 	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;									   ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
+	ReachTreeNode<Representation>* mFixedPointReason = nullptr;				   ///< points to the node which is the reason for fixed-point detection
+	bool mIsOnZenoCycle = false;											   ///< true, if the node is the end of a Zeno-Cycle
 
   public:
 	// Exposition types
@@ -103,12 +105,17 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	 * Set the fixed-point state to a Boolean value (once set, cannot be unset), true if the initial set of this node is fully contained in the initial set of another node, false otherwise.
 	 * @param hasFixedPoint
 	 */
-	void setFixedPoint( bool hasFixedPoint = true );
+	void setFixedPoint( bool hasFixedPoint = true, ReachTreeNode<Representation>* reason = nullptr );
 	/**
 	 * Returns whether this node represents a fixed point.
 	 * @return True, if the initial set of this node is fully contained in the initial set of another node of this tree, false otherwise, nset if this property has not been set yet.
 	 */
 	TRIBOOL hasFixedPoint() const { return mHasFixedPoint; }
+
+	ReachTreeNode<Representation>* getFixedPointReason() { return mFixedPointReason; }
+
+	void flagZenoCycle( bool zeno = true ) { mIsOnZenoCycle = zeno; }
+	bool isOnZenoCycle() const { return mIsOnZenoCycle; }
 };
 
 template <typename Representation>

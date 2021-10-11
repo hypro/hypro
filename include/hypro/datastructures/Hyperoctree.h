@@ -19,19 +19,30 @@ enum class HyperOctreeOp { ADD,
 						   DESCEND,
 						   SKIP };
 
+/**
+ * Class to efficiently store data in a tree-like structure. The passed predicate is a functor which needs to implement a call-operator to determine, whether passed data fits the current node, does not fit the current node, or should be stored in a lower level.
+ * @tparam Predicate
+ * @tparam Data
+ */
 template <template <typename> class Predicate, typename Data>
 class Hyperoctree {
+	using childVector = std::vector<std::unique_ptr<Hyperoctree<Predicate, Data>>>;
+
   public:
 	Hyperoctree( const Predicate<Data>& p )
 		: mDecider( p ) {}
 
 	bool add( Data&& data );
 
+	std::size_t getRemainingDepth() const { return mRemainingDepth; }
+	const childVector& getChildren() const { return mChildren; }
+	const std::vector<Data>& getData() const { return mData; }
+
   protected:
-	std::size_t mRemainingDepth = 0;									   ///< indicates how may more splits can be made
-	Predicate<Data> mDecider;											   ///< functor
-	std::vector<std::unique_ptr<Hyperoctree<Predicate, Data>>> mChildren;  ///< collects child-hyperoctrees
-	std::vector<Data> mData;											   ///< collects data suitable for this level
+	std::size_t mRemainingDepth = 0;  ///< indicates how may more splits can be made
+	Predicate<Data> mDecider;		  ///< functor
+	childVector mChildren;			  ///< collects child-hyperoctrees
+	std::vector<Data> mData;		  ///< collects data suitable for this level
 };
 
 }  // namespace hypro
