@@ -50,7 +50,7 @@ std::vector<ReachTreeNode<Representation>> create_tree() {
 
 int main() {
 	auto bball_roots = create_tree();
-	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots, {} );
+	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots );
 
 	bball_tree_plotter.plot();
 

@@ -38,10 +38,15 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 				if ( node.getChildren().empty() ) {
 					name += "root";
 				} else {
-					name += node.getChildren()[0].getTransition()->getSource()->getName();
+					assert( !node.getChildren().empty() );
+					assert( node.getChildren().front().getTransition() != nullptr );
+					assert( node.getChildren().front().getTransition()->getSource() != nullptr );
+					std::string tmp = node.getLocation()->getName();
+					name += node.getChildren().front().getTransition()->getSource()->getName();
 				}
 			} else {
-				name += node.getTransition()->getTarget()->getName();
+				// name += node.getTransition()->getTarget()->getName();
+				name += node.getLocation()->getName();
 			}
 
 			auto nptr = agnode( graph, name.data(), 1 );

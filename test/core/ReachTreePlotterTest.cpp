@@ -62,5 +62,5 @@ TEST( ReachTreePlotterTest, PlotSimpleTree ) {
 
 	bball_tree_plotter.plot( { bball_roots.front().getChildren()[0] } );
 
-	std::system( "cat rt_out.dot" );
+	// std::system( "cat rt_out.dot" );
 }
