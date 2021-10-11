@@ -46,6 +46,6 @@ TEST( ParserTest, ParseAutomaton_2 ) {
 	ReachabilitySettings settings = parseResult.second;
 	HybridAutomaton<mpq_class> automaton = parseResult.first;
 
-	EXPECT_EQ( unsigned( 2 ), automaton.getLocations().size() );
+	EXPECT_EQ( unsigned( 3 ), automaton.getLocations().size() );
 	EXPECT_EQ( unsigned( 3 ), automaton.getTransitions().size() );
 }

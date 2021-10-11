@@ -66,7 +66,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 						STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 						COUNT( "FP-by-coverage" );
 #endif
-						node.setFixedPoint();
+						node.setFixedPoint( true, &treeNode );
 						return true;
 					}
 				} else {
@@ -79,7 +79,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 #ifdef HYPRO_STATISTICS
 						STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif
-						node.setFixedPoint();
+						node.setFixedPoint( true, &treeNode );
 						return true;
 					} else if ( first_segments_to_test > 0 ) {
 						std::size_t set_index = 0;

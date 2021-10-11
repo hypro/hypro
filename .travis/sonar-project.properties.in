@@ -9,7 +9,7 @@ sonar.host.url=https://sonarcloud.io
 # Path is relative to the sonar-project.properties file. Replace "\" by "/" on Windows.
 # This property is optional if sonar.modules is set.
 sonar.language=cpp
-sonar.sources=src/hypro, src/tool
+sonar.sources=src/hypro, src/tool, include/hypro, include/tool
 sonar.exclusions= src/hypro/parser/**/*, src/hypro/util/linearOptimization/clp/*, src/hypro/util/matlab/**/*, .git/**/*, examples/**/*
 sonar.cpp.file.suffixes=.h,.tpp,.cpp
 sonar.c.file.suffixes=.c

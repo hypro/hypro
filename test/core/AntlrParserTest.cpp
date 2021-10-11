@@ -48,10 +48,18 @@ TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 		hypro::Location<TypeParam>* loc1 = automaton.getLocations().back();
 		EXPECT_EQ( std::size_t( 0 ), loc0->getTransitions().size() );
 		EXPECT_EQ( std::size_t( 0 ), loc1->getTransitions().size() );
-		EXPECT_EQ( "rod1", loc0->getName() );
-		EXPECT_EQ( "rod2", loc1->getName() );
-		EXPECT_FALSE( loc0->isUrgent() );
-		EXPECT_TRUE( loc1->isUrgent() );
+		if(loc0->getName() == "rod1") {
+			EXPECT_EQ( "rod2", loc1->getName() );
+			EXPECT_FALSE( loc0->isUrgent() );
+			EXPECT_TRUE( loc1->isUrgent() );
+		} else if (loc0->getName() == "rod2") {
+			EXPECT_EQ( "rod1", loc1->getName() );
+			EXPECT_FALSE( loc1->isUrgent() );
+			EXPECT_TRUE( loc0->isUrgent() );
+		} else {
+			FAIL();
+		}
+
 		// test correct flow
 		Matrix flow = Matrix::Zero( 4, 4 );
 		flow( 0, 0 ) = TypeParam( 2 );

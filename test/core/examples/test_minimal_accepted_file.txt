@@ -7,7 +7,6 @@ hybrid reachability
   fixed steps 0.01
   time 3
   output test_minimal_accepted_file
-  #gnuplot octagon x
   max jumps 1
  }
 
