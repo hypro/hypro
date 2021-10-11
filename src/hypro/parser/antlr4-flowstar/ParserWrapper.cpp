@@ -131,6 +131,7 @@ namespace hypro {
 
 		//Create an ANTLRInputStream
 		ANTLRInputStream input;
+                std::cout << "Parsing file " << filename << std::endl;
 		openFile(filename,input);
 
 		//Create Error Listener

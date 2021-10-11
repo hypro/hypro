@@ -583,15 +583,14 @@ TYPED_TEST( BoxTest, SetMinus ) {
 	EXPECT_EQ( result.at( 0 ), this->box1 );
 
 	result = this->box2.setMinus2( this->box1 );
-	EXPECT_EQ( result.size(), 1 );
+	ASSERT_EQ( result.size(), 1 );
 	EXPECT_EQ( result.at( 0 ), this->box2 );
 
 	result = this->box2.setMinus2( this->box2 );
-	EXPECT_EQ( result.size(), 1 );
-	EXPECT_TRUE( result.at( 0 ).empty() );
+	ASSERT_EQ( result.size(), 0 );
 
 	result = this->b1.setMinus2( this->b2 );
-	EXPECT_EQ( result.size(), 2 );
+	ASSERT_EQ( result.size(), 2 );
 	EXPECT_EQ( hypro::Box<TypeParam>( { carl::Interval<TypeParam>{ -2, 2 }, carl::Interval<TypeParam>{ 2, 4 },
 										carl::Interval<TypeParam>{ -4, -3 } } ),
 			   result.at( 0 ) );

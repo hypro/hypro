@@ -17,6 +17,8 @@ endif ()
 # Set default ExternalProject root directory
 set(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources)
 set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR})
+# disable update if no network is present
+set(EP_UPDATE_DISCONNECTED)
 
 # Set up glpk.
 # ATTENTION: It is important that this happens *before* CArL is loaded to ensure that the linker first links against

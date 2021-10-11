@@ -115,6 +115,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	plt.plot2d( hypro::PLOTTYPE::png );
 	plt.plot2d( hypro::PLOTTYPE::pdf );
 	plt.plot2d( hypro::PLOTTYPE::gen );
+	plt.plot2d( hypro::PLOTTYPE::tex );
 
 	// output unfinished paths
 	std::string channel =
@@ -132,7 +133,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 12, 12, 1 )
+	  ->DenseRange( 0, 0, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
