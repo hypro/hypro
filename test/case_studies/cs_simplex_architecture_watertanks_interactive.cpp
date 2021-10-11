@@ -2,9 +2,9 @@
  * Created by stefan on 04.08.21.
  */
 
-#include <filesystem>
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/paths.h>
 #include <hypro/representations/GeometricObjectBase.h>
 #include <hypro/util/plotting/InteractivePlotter.h>
 #include <string>
@@ -13,10 +13,9 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
 	using Number = double;
 	using Representation = hypro::Box<Number>;
 
-	auto base_path = std::filesystem::current_path().parent_path().parent_path().append( "examples/input/" );
 	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init.model" };
 
-	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
+	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( getCSModelsPath() + filename );
 
 	std::cout << "automaton \n" << automaton << std::endl;
 

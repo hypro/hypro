@@ -3,10 +3,10 @@
  */
 
 #include <benchmark/benchmark.h>
-#include <filesystem>
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/datastructures/HybridAutomaton/PathUtil.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/paths.h>
 #include <hypro/util/plotting/Plotter.h>
 #include <string>
 
@@ -20,10 +20,9 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	RESET_STATS();
 	// Perform setup here
 	using Number = double;
-	auto base_path = std::filesystem::current_path().parent_path().parent_path().append( "examples/input/" );
 	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init.model" };
 
-	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
+	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( getCSModelsPath() + filename );
 
 	auto settings = hypro::convert( reachSettings );
 	settings.rStrategy().front().detectJumpFixedPoints = true;
