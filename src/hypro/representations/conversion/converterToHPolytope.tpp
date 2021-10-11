@@ -439,8 +439,9 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 template<typename Number>
 template<typename HPolytopeSetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPolytope( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	HPolytopeT<Number,Converter<Number>,HPolytopeSetting> temp=HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(source.shape(),source.limits());
-    return temp.affineTransformation(source.generator(),source.center());
+	HPolytopeT<Number,Converter<Number>,HPolytopeSetting> temp=Converter::toHPolytope(source.constraintss());
+
+    return temp.affineTransformation(source.generator().transpose(),source.center());
 }
 }  // namespace hypro
 

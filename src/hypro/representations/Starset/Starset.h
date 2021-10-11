@@ -12,7 +12,8 @@ static_assert(
 #include "../types.h"
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "../../util/typetraits.h"
-
+#include "../Polytopes/HPolytope/HPolytope.h"
+#include "../Polytopes/HPolytope/HPolytopeSetting.h"
 #include "StarsetSetting.h"
 
 namespace hypro {
@@ -24,7 +25,7 @@ namespace hypro {
  * @tparam	   Settings   The used settings.
  * \ingroup geoState @{
  */
-template <typename Number, typename Converter, class Setting>
+template <typename Number, typename Converter, class Setting, class Representation=HPolytopeT<Number,Converter, HPolytopeSetting>>
 class StarsetT : private GeometricObjectBase {
   private:
   public:
@@ -40,12 +41,11 @@ class StarsetT : private GeometricObjectBase {
     vector_t<Number> mCenter;
     
     // A in the given equation above
-    matrix_t<Number> mShapeMatrix;
-
-    vector_t<Number> mLimits; /*!< the right side of the condition A*alpha<=d . */
+ /*!< the right side of the condition A*alpha<=d . */
 
     matrix_t<Number> mGenerator;
-	
+    
+	 Representation constraints;
     
   public:
 	/***************************************************************************
@@ -65,19 +65,22 @@ class StarsetT : private GeometricObjectBase {
      * Starset with assuming standard basis and center as the origin
      * */
     StarsetT(const matrix_t<Number>& shapematrix,const vector_t<Number>& limits);
+    StarsetT(const vector_t<Number>& center,const matrix_t<Number>& generator, const Representation Constraints);
 
+   StarsetT(const Representation Constraints);
 	/**
    * @brief      Copy constructor.
    * @param[in]  orig  The original.
    */
 	StarsetT( const StarsetT& orig );
 
+
 	/**
    * @brief      Settings conversion constructor.
    * @param[in]  orig  The original.
    */
 	template <typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>> = carl::dummy>
-	StarsetT( const StarsetT<Number, Converter, SettingRhs>& orig ) {}
+	StarsetT( const StarsetT<Number, Converter, SettingRhs,Representation>& orig ) {}
 
 	/**
    * @brief      Move constructor.
@@ -99,6 +102,7 @@ class StarsetT : private GeometricObjectBase {
 	vector_t<Number> limits() const;
     matrix_t<Number>  shape() const;
     matrix_t<Number>  generator() const;
+    Representation constraintss() const;
     
 	Setting getSettings() const { return Setting{}; }
 
@@ -108,8 +112,8 @@ class StarsetT : private GeometricObjectBase {
    * @param dimension Required dimension.
    * @return Empty Starset.
    */
-	static StarsetT<Number, Converter, Setting> Empty() {
-		return StarsetT<Number, Converter, Setting>();
+	static StarsetT<Number, Converter, Setting,Representation> Empty() {
+		return StarsetT<Number, Converter, Setting,Representation>();
 	}
 
 	/**
@@ -156,8 +160,8 @@ class StarsetT : private GeometricObjectBase {
    */
 	template <class SettingRhs>
 	friend bool
-	operator==( const StarsetT<Number, Converter, Setting>& b1,
-				const StarsetT<Number, Converter, SettingRhs>& b2 ) {
+	operator==( const StarsetT<Number, Converter, Setting,Representation>& b1,
+				const StarsetT<Number, Converter, SettingRhs,Representation>& b2 ) {
 		return false;
 	}
 
@@ -168,8 +172,8 @@ class StarsetT : private GeometricObjectBase {
    * @return False, if both Starsetes are equal.
    */
 	friend bool
-	operator!=( const StarsetT<Number, Converter, Setting>& b1,
-				const StarsetT<Number, Converter, Setting>& b2 ) {
+	operator!=( const StarsetT<Number, Converter, Setting,Representation>& b1,
+				const StarsetT<Number, Converter, Setting,Representation>& b2 ) {
 		return !( b1 == b2 );
 	}
 
@@ -177,15 +181,15 @@ class StarsetT : private GeometricObjectBase {
    * @brief Assignment operator.
    * @param rhs A Starset.
    */
-	StarsetT<Number, Converter, Setting>&
-	operator=( const StarsetT<Number, Converter, Setting>& rhs ) = default;
+	StarsetT<Number, Converter, Setting,Representation>&
+	operator=( const StarsetT<Number, Converter, Setting,Representation>& rhs ) = default;
 
 	/**
    * @brief Move assignment operator.
    * @param rhs A Starset.
    */
-	StarsetT<Number, Converter, Setting>&
-	operator=( StarsetT<Number, Converter, Setting>&& rhs ) = default;
+	StarsetT<Number, Converter, Setting,Representation>&
+	operator=( StarsetT<Number, Converter, Setting,Representation>&& rhs ) = default;
 
 	/**
    * @brief Outstream operator.
@@ -194,7 +198,7 @@ class StarsetT : private GeometricObjectBase {
    */
 	friend std::ostream&
 	operator<<( std::ostream& ostr,
-				const StarsetT<Number, Converter, Setting>& b ) {
+				const StarsetT<Number, Converter, Setting,Representation>& b ) {
 		// Put outstream operations here.
 		return ostr;
 	}
@@ -212,7 +216,7 @@ class StarsetT : private GeometricObjectBase {
 	/**
    * @brief      Removes redundancy.
    */
-	StarsetT<Number, Converter, Setting> removeRedundancy();
+	StarsetT<Number, Converter, Setting,Representation> removeRedundancy();
 
 	/**
    * @brief      Storage size determination.
@@ -229,7 +233,7 @@ class StarsetT : private GeometricObjectBase {
    * (over-approximate).
    * @param[in]  limit      The limit
    */
-	const StarsetT<Number, Converter, Setting>&
+	const StarsetT<Number, Converter, Setting,Representation>&
 	reduceNumberRepresentation();
 
 	std::pair<CONTAINMENT, StarsetT>
@@ -237,31 +241,31 @@ class StarsetT : private GeometricObjectBase {
 	std::pair<CONTAINMENT, StarsetT>
 	satisfiesHalfspaces( const matrix_t<Number>& _mat,
 						 const vector_t<Number>& _vec ) const;
-	StarsetT<Number, Converter, Setting>
+	StarsetT<Number, Converter, Setting,Representation>
 	projectOn( const std::vector<std::size_t>& dimensions ) const;
-	StarsetT<Number, Converter, Setting>
+	StarsetT<Number, Converter, Setting,Representation>
 	linearTransformation( const matrix_t<Number>& A ) const;
-	StarsetT<Number, Converter, Setting>
+	StarsetT<Number, Converter, Setting,Representation>
 	affineTransformation( const matrix_t<Number>& A,
 						  const vector_t<Number>& b ) const;
-	StarsetT<Number, Converter, Setting>
-	minkowskiSum( const StarsetT<Number, Converter, Setting>& rhs ) const;
+	StarsetT<Number, Converter, Setting,Representation>
+	minkowskiSum( const StarsetT<Number, Converter, Setting,Representation>& rhs ) const;
 
 	/**
    * @brief      Computes the intersection of two Starsetes.
    * @param[in]  rhs   The right hand side Starset.
    * @return     The resulting Starset.
    */
-	StarsetT<Number, Converter, Setting>
-	intersect( const StarsetT<Number, Converter, Setting>& rhs ) const;
+	StarsetT<Number, Converter, Setting,Representation>
+	intersect( const StarsetT<Number, Converter, Setting,Representation>& rhs ) const;
 
-	StarsetT<Number, Converter, Setting>
+	StarsetT<Number, Converter, Setting,Representation>
 	intersectHalfspace( const Halfspace<Number>& hspace ) const;
-	StarsetT<Number, Converter, Setting>
+	StarsetT<Number, Converter, Setting,Representation>
 	intersectHalfspaces( const matrix_t<Number>& _mat,
 						 const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
-   //StarsetT<Number, Converter, Setting>
+   //StarsetT<Number, Converter, Setting,Representation>
 	//checkifin( const Halfspace<Number>& hspace ) const;
    
    Halfspace<Number>	calculateHalfspace( const Halfspace<Number>& hspace ) const;
@@ -275,15 +279,15 @@ class StarsetT : private GeometricObjectBase {
    * Starset, false otherwise.
    */
 	bool contains(
-		  const StarsetT<Number, Converter, Setting>& Starset ) const;
+		  const StarsetT<Number, Converter, Setting,Representation>& Starset ) const;
 
 	/**
    * @brief      Computes the union of two Starsetes.
    * @param[in]  rhs   The right hand side Starset.
    * @return     The resulting Starset.
    */
-	StarsetT<Number, Converter, Setting>
-	unite( const StarsetT<Number, Converter, Setting>& rhs ) const;
+	StarsetT<Number, Converter, Setting,Representation>
+	unite( const StarsetT<Number, Converter, Setting,Representation>& rhs ) const;
 
 	/**
    * @brief      Computes the union of the current Starset with a set of
@@ -291,8 +295,8 @@ class StarsetT : private GeometricObjectBase {
    * @param[in]  Starsetes  The Starsetes.
    * @return     The resulting Starset.
    */
-	static StarsetT<Number, Converter, Setting>
-	unite( const std::vector<StarsetT<Number, Converter, Setting>>& Starsetes );
+	static StarsetT<Number, Converter, Setting,Representation>
+	unite( const std::vector<StarsetT<Number, Converter, Setting,Representation>>& Starsetes );
 
 	/**
    * @brief      Reduces the representation of the current Starset.
