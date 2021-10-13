@@ -254,14 +254,14 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	// add variable for time elapse
 	carl::Variable t = vpool.newCarlVariable( "t" );
 	// add constraint t <= 0
-	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::LEQ ) );
+	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
 
 	// introduce post variables and substitute
 	for ( const auto& v : bad.getVariables() ) {
 		if ( v != t ) {
 			// create pre var
 			std::stringstream ss;
-			ss << v.name() << "_pre";
+			ss << v.name() << "_prime";
 			std::string s = ss.str();
 			auto newV = vpool.newCarlVariable( s );
 			// substitute to create precondition
@@ -281,9 +281,15 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 			bad.addConstraints( flowConstraints );
 		}
 	}
-	// add invariant constraints
-	auto invariantConstraints = halfspacesToConstraints<Number, hypro::tNumber>( loc->getInvariant().getMatrix(), loc->getInvariant().getVector() );
-	bad.addConstraints( invariantConstraints );
+	// add invariant constraints, if the invariant is specified and does not represent the empty set
+	if ( !loc->getInvariant().isTrue() ) {
+		if ( loc->getInvariant().isFalse() ) {
+			return CarlPolytope<Number>::Empty();
+		} else {
+			auto invariantConstraints = halfspacesToConstraints<Number, hypro::tNumber>( loc->getInvariant().getMatrix(), loc->getInvariant().getVector() );
+			bad.addConstraints( invariantConstraints );
+		}
+	}
 
 	TRACE( "hypro.worker", "Full constraint set describing the dynamic behavior: \n"
 								 << bad );

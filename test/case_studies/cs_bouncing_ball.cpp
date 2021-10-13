@@ -18,9 +18,9 @@
  */
 
 #include <benchmark/benchmark.h>
-#include <filesystem>
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/paths.h>
 #include <string>
 
 namespace hypro::benchmark {
@@ -28,12 +28,11 @@ namespace hypro::benchmark {
 static void Bouncing_Ball_Parsing( ::benchmark::State& state ) {
 	// Perform setup here
 	using Number = double;
-	auto base_path = std::filesystem::current_path().parent_path().parent_path().append( "examples/input/" );
 	std::string filename{ "bouncing_ball.model" };
 
 	for ( auto _ : state ) {
 		// This code gets timed
-		auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
+		auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( getCSModelsPath() + filename );
 	}
 }
 

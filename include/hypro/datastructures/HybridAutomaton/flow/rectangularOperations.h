@@ -59,22 +59,28 @@ std::vector<ConstraintT<N>> createReverseFlowConstraints( carl::Variable origina
 
 	// catch equations
 	if ( flow.lowerBoundType() == carl::BoundType::WEAK && flow.upperBoundType() == carl::BoundType::WEAK && flow.lower() == flow.upper() ) {
-		res.emplace_back( PolyT<N>( primed ) + PolyT<N>( carl::convert<D, N>( flow.lower() ) ) * PolyT<N>( t ) - PolyT<N>( original ), carl::Relation::EQ );
+		res.emplace_back( -PolyT<N>( primed ) + PolyT<N>( carl::convert<D, N>( flow.lower() ) ) * PolyT<N>( t ) + PolyT<N>( original ), carl::Relation::EQ );
 		return res;
 	}
 
 	// lower flow bound
 	// x' + lb*t -x >= 0
 	// x <= x' + lb*t, t <= 0
+	// upd 14.09.21
+	// t >= 0 and x' >= x + lb*t
+	// x + lb*t - x' <= 0
 	if ( flow.lowerBoundType() != carl::BoundType::INFTY ) {
-		res.emplace_back( PolyT<N>( primed ) + PolyT<N>( carl::convert<D, N>( flow.lower() ) ) * PolyT<N>( t ) - PolyT<N>( original ), carl::Relation::GEQ );
+		res.emplace_back( -PolyT<N>( primed ) + PolyT<N>( carl::convert<D, N>( flow.lower() ) ) * PolyT<N>( t ) + PolyT<N>( original ), carl::Relation::LEQ );
 	}
 
 	// upper flow bound
 	// x' + ub*t -x <= 0
 	// x >= x' + ub*t, t <= 0
+	// upd 14.09.21
+	// t >= 0 and x' <= x + ub*t
+	// x + ub*t - x' >= 0
 	if ( flow.upperBoundType() != carl::BoundType::INFTY ) {
-		res.emplace_back( PolyT<N>( primed ) + PolyT<N>( carl::convert<D, N>( flow.upper() ) ) * PolyT<N>( t ) - PolyT<N>( original ), carl::Relation::LEQ );
+		res.emplace_back( -PolyT<N>( primed ) + PolyT<N>( carl::convert<D, N>( flow.upper() ) ) * PolyT<N>( t ) + PolyT<N>( original ), carl::Relation::GEQ );
 	}
 
 	return res;

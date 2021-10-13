@@ -7,6 +7,7 @@
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/HybridAutomaton/Location.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/paths.h>
 #include <hypro/representations/conversion/typedefs.h>
 #include <hypro/types.h>
 #include <iostream>
@@ -37,8 +38,7 @@ class AntlrParserTest : public ::testing::Test {
 TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 	using Matrix = hypro::matrix_t<TypeParam>;
 	using Vector = hypro::vector_t<TypeParam>;
-	// std::string path( "../test/core/examples/test_location_parsing.txt" );
-	std::string path( "examples/test_location_parsing.txt" );
+	std::string path( getTestModelsPath() + "parser/test_location_parsing.txt" );
 
 	this->cwd();
 	try {
@@ -95,7 +95,7 @@ TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 TYPED_TEST( AntlrParserTest, JustTesting ) {
 	using Matrix = hypro::matrix_t<TypeParam>;
 	using Vector = hypro::vector_t<TypeParam>;
-	std::string path( "examples/test_bouncing_ball.txt" );
+	std::string path( getTestModelsPath() + "parser/test_bouncing_ball.txt" );
 
 	this->cwd();
 	try {
@@ -124,7 +124,7 @@ TYPED_TEST( AntlrParserTest, JustTesting ) {
 TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
 	using Matrix = hypro::matrix_t<TypeParam>;
 	using Vector = hypro::vector_t<TypeParam>;
-	std::string path( "examples/test_bad_states.txt" );
+	std::string path( getTestModelsPath() + "parser/test_bad_states.txt" );
 
 	this->cwd();
 	try {
@@ -160,7 +160,7 @@ TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
 }
 
 TYPED_TEST( AntlrParserTest, Settings ) {
-	std::string path( "examples/test_settings.txt" );
+	std::string path( getTestModelsPath() + "parser/test_settings.txt" );
 
 	this->cwd();
 	try {
@@ -173,7 +173,7 @@ TYPED_TEST( AntlrParserTest, Settings ) {
 }
 
 TYPED_TEST( AntlrParserTest, PlainRectangular ) {
-	std::string path( "examples/test_plain_rectangular.txt" );
+	std::string path( getTestModelsPath() + "parser/test_plain_rectangular.txt" );
 
 	this->cwd();
 	try {
@@ -186,7 +186,7 @@ TYPED_TEST( AntlrParserTest, PlainRectangular ) {
 }
 
 TYPED_TEST( AntlrParserTest, MixedRectangular ) {
-	std::string path( "examples/test_mixed_rectangular.txt" );
+	std::string path( getTestModelsPath() + "parser/test_mixed_rectangular.txt" );
 
 	this->cwd();
 	try {
@@ -199,7 +199,7 @@ TYPED_TEST( AntlrParserTest, MixedRectangular ) {
 }
 
 TYPED_TEST( AntlrParserTest, EmptyFile ) {
-	std::string path( "examples/test_empty_file.txt" );
+	std::string path( getTestModelsPath() + "parser/test_empty_file.txt" );
 
 	try {
 		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>( path );
@@ -211,7 +211,7 @@ TYPED_TEST( AntlrParserTest, EmptyFile ) {
 }
 
 TYPED_TEST( AntlrParserTest, TransitionParsing2 ) {
-	std::string path( "examples/test_transition_parsing_2.txt" );
+	std::string path( getTestModelsPath() + "parser/test_transition_parsing_2.txt" );
 	try {
 		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
 
@@ -252,7 +252,7 @@ TYPED_TEST( AntlrParserTest, TransitionParsing2 ) {
 }
 
 TYPED_TEST( AntlrParserTest, BracketParsingTest ) {
-	std::string path( "examples/test_bracket_parsing.txt" );
+	std::string path( getTestModelsPath() + "parser/test_bracket_parsing.txt" );
 
 	try {
 		std::pair<HybridAutomaton<TypeParam>, ReachabilitySettings> h = parseFlowstarFile<TypeParam>( path );
@@ -316,7 +316,7 @@ TYPED_TEST( AntlrParserTest, MinimalAcceptedFile ) {
 	 * - Settings for stepsize, maximum amount of jumps, duration of computation, output name, dimensions to plot
 	 */
 	using Matrix = hypro::matrix_t<TypeParam>;
-	std::string path( "examples/test_minimal_accepted_file.txt" );
+	std::string path( getTestModelsPath() + "parser/test_minimal_accepted_file.txt" );
 	std::tuple<HybridAutomaton<TypeParam>, ReachabilitySettings> h;
 	try {
 		h = parseFlowstarFile<TypeParam>( path );
@@ -436,7 +436,7 @@ std::endl; FAIL();
 //}
 
 TYPED_TEST( AntlrParserTest, StochasticParsing ) {
-	std::string path( "examples/test_stochastic_parsing.txt" );
+	std::string path( getTestModelsPath() + "parser/test_stochastic_parsing.txt" );
 	// std::string path( "../../../../src/test/core/examples/test_stochastic_parsing.txt" );
 
 	try {
