@@ -159,6 +159,10 @@ class DifferenceBoundsT : private GeometricObjectBase {
 	std::size_t size() const;
 	static representation_name type() { return representation_name::difference_bounds; }
 	bool empty() const;
+	static DifferenceBoundsT Empty() {
+		assert( DifferenceBoundsT().empty() );
+		return DifferenceBoundsT();
+	}
 	/* TODO: not implemented */
 	EvaluationResult<Number> evaluate( const vector_t<Number>& direction, bool useExact = true ) const;
 	/* TODO: not implemented */

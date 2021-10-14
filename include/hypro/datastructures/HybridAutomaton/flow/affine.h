@@ -59,6 +59,14 @@ class affineFlow : public linearFlow<Number> {
 		return linearFlow<Number>::hasNoFlow() && mTranslation == vector_t<Number>::Ones( mTranslation.rows() );
 	}
 
+	bool isTimed( std::size_t varIndex ) const {
+		if ( linearFlow<Number>::isTimed() ) {
+			// TODO: we need to remove distinguishing of linear and affine flow.
+			return true;
+		}
+		return linearFlow<Number>::hasNoFlow( varIndex ) && mTranslation( varIndex ) == 1;
+	}
+
 	bool isDiscrete() const {
 		return linearFlow<Number>::hasNoFlow() && !hasTranslation();
 	}
