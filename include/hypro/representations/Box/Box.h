@@ -576,6 +576,20 @@ class BoxT : private GeometricObjectBase {
 	bool contains( const BoxT& box ) const;
 
 	/**
+	 * Checks, whether the passed box is contained and returns the part of the passed box that is contained.
+	 * @param other box that is passed
+	 * @return a pair of containment information and the reduction of the other box
+	 */
+	std::pair<CONTAINMENT, BoxT> containmentReduce( const BoxT& other ) const;
+
+	/**
+	 * Checks whether the two boxes have a non-empty intersection
+	 * @param box The other box.
+	 * @return True, if both boxes have a non-empty intersection, false otherwise.
+	 */
+	bool intersects( const BoxT& box ) const;
+
+	/**
 	 * @brief      Computes the union of two boxes.
 	 * @param[in]  rhs   The right hand side box.
 	 * @return     The resulting box.

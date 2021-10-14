@@ -968,6 +968,46 @@ bool BoxT<Number, Converter, Setting>::contains( const BoxT<Number, Converter, S
 }
 
 template <typename Number, typename Converter, class Setting>
+std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::containmentReduce( const BoxT& other ) const {
+	std::size_t minDimension = std::min( this->dimension(), other.dimension() );
+
+	auto resIntervals = other.intervals();
+	auto currentContainment{ CONTAINMENT::FULL };
+	for ( unsigned d = 0; d < minDimension; ++d ) {
+		if ( !set_have_intersection( mLimits[d], other.interval( d ) ) ) {
+			return std::make_pair( CONTAINMENT::NO, BoxT::Empty() );
+		}
+		if ( !carl::set_is_subset( other.interval( d ), mLimits[d] ) ) {
+			currentContainment = CONTAINMENT::PARTIAL;
+			resIntervals[d] = carl::set_intersection( resIntervals[d], mLimits[d] );
+		}
+	}
+	// corner case: if a box is not defined in one dimension we assume it is unbounded in this dimension
+	if ( this->dimension() > other.dimension() ) {
+		for ( std::size_t i = minDimension; i < this->dimension(); ++i ) {
+			resIntervals.push_back( mLimits[i] );
+		}
+		currentContainment = CONTAINMENT::PARTIAL;
+	}
+
+	return std::make_pair( currentContainment, BoxT( resIntervals ) );
+}
+
+template <typename Number, typename Converter, class Setting>
+bool BoxT<Number, Converter, Setting>::intersects( const BoxT& box ) const {
+	if ( this->dimension() != box.dimension() ) {
+		return false;
+	}
+
+	for ( unsigned d = 0; d < this->dimension(); ++d ) {
+		if ( !carl::set_have_intersection( mLimits[d], box.interval( d ) ) ) {
+			return false;
+		}
+	}
+	return true;
+}
+
+template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::unite( const BoxT<Number, Converter, Setting>& rhs ) const {
 	if ( this->empty() ) {
 		return rhs;
