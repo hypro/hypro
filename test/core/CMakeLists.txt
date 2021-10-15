@@ -41,7 +41,6 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runParserTests
             AntlrParserTest.cpp
-            ParserTest.cpp
             #AntlrParserCIFTest.cpp
             )
     add_dependencies(runParserTests hypro_resources antlr4cpp)
