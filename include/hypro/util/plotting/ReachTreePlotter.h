@@ -14,6 +14,10 @@
 #ifndef HYPRO_REACHTREEPLOTTER_H
 #define HYPRO_REACHTREEPLOTTER_H
 
+#include <hypro/flags.h>
+
+#ifdef HYPRO_HAS_GRAPHVIZ
+
 #include <graphviz/cgraph.h>
 #include <graphviz/gvc.h>
 #ifdef TRUE
@@ -26,11 +30,8 @@
 #include "../../datastructures/reachability/ReachTreev2Util.h"
 #include "../../datastructures/reachability/Settings.h"
 
-#include <hypro/flags.h>
 
 namespace hypro::plotting {
-
-#ifdef HYPRO_HAS_GRAPHVIZ
 
 template <typename Representation>
 class ReachTreePlotter {
