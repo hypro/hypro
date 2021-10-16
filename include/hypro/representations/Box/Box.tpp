@@ -444,7 +444,7 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
-	if ( dimensions.empty() ) {
+	if ( dimensions.empty() || this->empty() ) {
 		return Empty();
 	}
 	std::vector<carl::Interval<Number>> newIntervals;
