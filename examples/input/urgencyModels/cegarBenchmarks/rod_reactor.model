@@ -2,7 +2,7 @@
 # One of two cooling rods can be inserted to cool down the core. If the temperature gets too high and no rods can be inserted, the system is unsafe.
 # Rods can only be inserted every 20 seconds.
 
-# Adaptions: Insertions of cooling rods are urgent. Therefore the guards c1 >= 20 and c2 >= 20 can be removed from the jump to cooling locations, which makes
+# Adaptions: Insertions of cooling rods are urgent. Therefore the guards c1 < 20 and c2 < 20 can be removed from the unsafe condition, which makes
 # handling urgency necessary for verifying safety.
 # The initial set has been modified from [510,520]x[20,20]x[20,20] to [510,510]x[20,20]x[20,20]
 # Since hypro does not support strict inequalities, the unsafe condition x >= 550 c1 < 20 c2 < 20 is approximated by x >= 550.1 in location norod
@@ -110,11 +110,6 @@ hybrid reachability
   guard {x = 510 }
   reset { c2' := 0}
   parallelotope aggregation {}
-
-  #norod -> shutdown
-  #guard {x >= 550.1}
-  #reset {}
-  #parallelotope aggregation {}
  }
 
  init

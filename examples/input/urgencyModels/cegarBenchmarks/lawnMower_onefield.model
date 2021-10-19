@@ -185,8 +185,8 @@ hybrid reachability
  {
   north_east
   {
-    x in [10,10]
-    y in [20,20]
+    x in [10,10.5]
+    y in [20,20.5]
   }
  }
 }
@@ -195,18 +195,18 @@ unsafe set
 {
   north_west
   {
-    x >= 80 y >= 112 y <= 118
+    x >= 80 y >= 112 y <= 130
   }
   north_east
   {
-    x >= 80 y >= 112 y <= 118
+    x >= 80 y >= 112 y <= 130
   }
   south_west
   {
-    x >= 80 y >= 112 y <= 118
+    x >= 80 y >= 112 y <= 130
   }
   south_east
   {
-    x >= 80 y >= 112 y <= 118
+    x >= 80 y >= 112 y <= 130
   }
 }

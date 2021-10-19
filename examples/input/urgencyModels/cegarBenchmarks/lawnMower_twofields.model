@@ -16,7 +16,7 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output lawn_two
-  max jumps 3
+  max jumps 6
   print on
  }
  
@@ -239,8 +239,8 @@ hybrid reachability
  {
   north_east
   {
-    x in [10,10]
-    y in [20,20]
+    x in [10,10.5]
+    y in [20,20.5]
   }
  }
 }
