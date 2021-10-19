@@ -66,7 +66,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 					COUNT( "ComplexityReductionSteps" );
 					START_BENCHMARK_OPERATION( "ComplexityReduction" );
 					nextIndex = 0;
-					std::tie( dependencies, subspaceSets ) = complexityReduction( subspaceSets, dependencies );
+					std::tie( dependencies, subspaceSets ) = synchronizeAndResetClocks( subspaceSets, dependencies );
 					STOP_BENCHMARK_OPERATION( "ComplexityReduction" );
 					if ( subspaceSets.size() == 0 ) continue;
 				}
@@ -285,7 +285,7 @@ bool DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 }
 
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
-void DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::resetClock( ComposedRep& segment, std::size_t clockIndex ) {
+void DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::resetUnusedClocks( ComposedRep& segment, std::size_t clockIndex ) {
 	assert( !segment.empty() && "Clock reset called on empty segment" );
 	if ( mClockCount == 0 ) {
 		return;
@@ -375,7 +375,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 			return std::make_pair( TimeInformation<Number>( mClockCount ), SubspaceSets() );
 		}
 		auto subspaceSuccessorSet = timedSucc[0].valuationSet;
-		resetClock( subspaceSuccessorSet, clockIndex );
+		resetUnusedClocks( subspaceSuccessorSet, clockIndex );
 		singularSuccessors[subspace] = subspaceSuccessorSet;
 		enabledTime = enabledTime.intersect( detail::getClockValues( subspaceSuccessorSet, mClockCount ) );
 	}
@@ -420,7 +420,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::
 	for ( auto indexedSegments = segments.next(); indexedSegments.second.size() > 0; indexedSegments = segments.next() ) {
 		for ( auto subspace : mSegmentedSubspaces ) {
 			// reset unused clocks to 0
-			resetClock( indexedSegments.second[subspace], clockIndex );
+			resetUnusedClocks( indexedSegments.second[subspace], clockIndex );
 			predecessors[subspace].push_back( { indexedSegments.second[subspace], indexedSegments.first } );
 		}
 	}
@@ -520,7 +520,7 @@ struct DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>
 };
 
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep>
-auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::complexityReduction( const RepVector& sets, const Condition<Number>& dependencies ) -> std::pair<Condition<Number>, RepVector> {
+auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep>::synchronizeAndResetClocks( const RepVector& sets, const Condition<Number>& dependencies ) -> std::pair<Condition<Number>, RepVector> {
 	assert( std::all_of( sets.begin(), sets.end(), []( auto const& s ) { return !s.empty(); } ) );
 	// get sets for non-discrete subspaces
 	RepVector res( sets.size() );

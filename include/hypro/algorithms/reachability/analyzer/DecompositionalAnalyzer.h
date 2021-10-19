@@ -326,7 +326,7 @@ class DecompositionalAnalyzer {
 	auto initializeWorkers( std::vector<TimeTransformationCache<Number>>& cache ) -> std::vector<WorkerVariant>;
 
 	/**
-     * @brief       Pre-computational check that nodes are consistent (e.g. no initial set is empty).
+     * @brief       Preliminary check that nodes are consistent (e.g. no initial set is empty).
      * @param       currentNodes    The current reachtree-nodes to analyze.
      * @return      `true` if all checks pass, `false` otherwise.
      */
@@ -334,6 +334,7 @@ class DecompositionalAnalyzer {
 
 	/**
      * @brief       Compute time successors in all subspaces.
+     * @detail 		The computed time successors are stored as flowpipes in the nodes.
      * @param       currentNodes    The current reachtree-nodes to store the successor sets.
      * @param       workers         The vector of worker variants to use for computation.
      * @return      The clock intervals where all subspaces satisfy their respective invariants.
@@ -346,13 +347,14 @@ class DecompositionalAnalyzer {
 
 	/**
      * @brief       Reset unused clocks to zero.
-     * @param       segment         The computed segment.
+     * @param       segment         The segment for which to reset clocks.
      * @param       clockIndex      The current clockIndex. All clocks with higher index are reset.
      */
-	void resetClock( ComposedRep& segment, std::size_t clockIndex );
+	void resetUnusedClocks( ComposedRep& segment, std::size_t clockIndex );
 
 	/**
      * @brief       Intersect computed segments with clock values and update flowpipes.
+     * @detail 		The segments are intersected in place.
      * @param       currentNodes    The current reachtree-nodes where the flowpipes are stored.
      * @param       clock           The time intervals to intersect with.
      */
@@ -361,7 +363,7 @@ class DecompositionalAnalyzer {
 		  TimeInformation<Number>& clock );
 
 	/**
-     * @brief       Remove segments that are beyond a time horizon reachable in all subspaces.
+     * @brief       Remove segments that are beyond a time horizon reachable in all subspaces for lightweight synchronization.
      * @details     Get the minimum number of segments that every flowpipe has and in every
      *              subspace delete segments with a higher index (e.g. if some subspace has
      *              3 segments then segments 4,5... will be removed in all subspaces.)
@@ -411,6 +413,14 @@ class DecompositionalAnalyzer {
 		  std::size_t clockIndex )
 		  -> std::pair<TimeInformation<Number>, SubspaceSets>;
 
+
+	/**
+     * @brief       Get the discrete jump successors for a transition.
+     * @param       nodes           Current nodes
+     * @param       workers         The vector of worker variants to use for computation.
+     * @param       transition      The transition to get successors for.
+     * @return      The jump successors in the discrete subspaces after applying the reset.
+     */
 	auto getDiscreteJumpSuccessors(
 		  const NodeVector& nodes,
 		  std::vector<WorkerVariant>& workers,
@@ -433,7 +443,13 @@ class DecompositionalAnalyzer {
 		  std::size_t clockIndex )
 		  -> std::vector<SubspaceJumpSuccessors<ComposedRep>>;
 
-	auto complexityReduction(
+	/**
+	 * @brief 		Reset all clocks to zero and synchronize subspaces by equalizing clocks and using the dependencies.
+	 * @param 		sets 			Unsynchronized jump successor sets in the subspaces before clock reset.
+	 * @param 		dependencies 	Initial dependencies between subspaces.
+	 * @return 		Pair of new dependencies after synchronization and the jump successors with reset clocks.
+	 */
+	auto synchronizeAndResetClocks(
 		  const RepVector& sets,
 		  const Condition<Number>& dependencies )
 		  -> std::pair<Condition<Number>, RepVector>;
@@ -442,7 +458,7 @@ class DecompositionalAnalyzer {
 	std::deque<detail::decompositionalQueueEntry<ComposedRep>> mWorkQueue;	// holds the tasks that still need to be computed
 	HybridAutomaton<Number> const* mHybridAutomaton;						// holds a pointer to the decomposed automaton
 	Decomposition mDecomposition;											// holds decomposition information corresponding to the automaton
-	Decomposition mDecompositionWithoutDiscrete;
+	Decomposition mDecompositionWithoutDiscrete;	// Decomposition with non-discrete subspaces. Used to get indices for synchroniziation without discrete subspaces
 	std::size_t mClockCount;					   // holds the number of additional clocks in the (singular) subspaces
 	FixedAnalysisParameters mFixedParameters;	   // holds common analysis parameters for all analyzers
 	AnalysisParameters mParameters;				   // holds analyzer specific parameters
