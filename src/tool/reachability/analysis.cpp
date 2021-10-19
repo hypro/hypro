@@ -189,7 +189,7 @@ struct SingularDispatcher {
 
 AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, PreprocessingInformation information, bool urgency_cegar ) {
 	if ( urgency_cegar ) {
-		return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
+		return { dispatchUrgency<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
 																			setting.strategy().front().representation_setting, UrgencyCEGARDispatcher{}, automaton, setting ) };
 	}
 	switch ( information.dynamic ) {
@@ -197,7 +197,7 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings setting, Pr
 			[[fallthrough]];
 		case DynamicType::linear:
 			if ( urgency_cegar ) {
-				return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
+				return { dispatchUrgency<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
 																			setting.strategy().front().representation_setting, UrgencyCEGARDispatcher{}, automaton, setting ) };
 			} else if ( setting.strategy().size() == 1 ) {
 				return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,

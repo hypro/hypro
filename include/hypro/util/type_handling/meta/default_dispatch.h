@@ -15,7 +15,7 @@ using DefaultRepresentations =
 			// RepresentationCombinations<
 			//	  CarlPolytopeT, CarlPolytopeSetting>,
 			RepresentationCombinations<
-				  HPolytopeT, HPolytopeSetting>/*,
+				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
 			RepresentationCombinations<
 				  VPolytopeT, VPolytopeSetting>,
 			RepresentationCombinations<
@@ -23,7 +23,7 @@ using DefaultRepresentations =
 			RepresentationCombinations<
 				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>,
 			RepresentationCombinations<
-				  TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>*/>;
+				  TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>>;
 
 using PolytopalRepresentations =
 	  TypeList<
@@ -37,11 +37,25 @@ using PolytopalRepresentations =
 			//	  TemplatePolyhedronT, TemplatePolyhedronDefault>
 			>;
 
+using SetMinusRepresentations =
+	  TypeList<
+			RepresentationCombinations<
+				  BoxT, BoxLinearOptimizationOn, BoxLinearOptimizationOff, BoxIntervalArithmeticOff, BoxAllOff>,
+			RepresentationCombinations<
+				  HPolytopeT, HPolytopeSetting>>;
+
+
 template <class Number, class Converter>
 using RepresentationsList = flattenRepresentations<Number, Converter, DefaultRepresentations>;
 
 template <class Number, class Converter>
 using PolytopeTypesList = flattenRepresentations<Number, Converter, PolytopalRepresentations>;
+
+template <class Number, class Converter>
+using SetMinusTypesList = flattenRepresentations<Number, Converter, SetMinusRepresentations>;
+
+template <class Number, class Converter>
+using SetMinusDispatcher = Dispatcher<SetMinusTypesList<Number, Converter>>;
 
 template <class Number, class Converter>
 using DefaultDispatcher = Dispatcher<RepresentationsList<Number, Converter>>;
