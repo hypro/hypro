@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "test/defines.h"
 #include "gtest/gtest.h"
 #include <bits/c++config.h>
@@ -95,7 +104,7 @@ TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 TYPED_TEST( AntlrParserTest, JustTesting ) {
 	using Matrix = hypro::matrix_t<TypeParam>;
 	using Vector = hypro::vector_t<TypeParam>;
-	std::string path( getTestModelsPath() + "parser/test_bouncing_ball.txt" );
+	std::string path( getTestModelsPath() + "parser/test_bouncing_ball_obscured.txt" );
 
 	this->cwd();
 	try {
@@ -129,8 +138,10 @@ TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
 	this->cwd();
 	try {
 		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
-		EXPECT_EQ( automaton.getLocations().size(), std::size_t( 1 ) );
-		hypro::Location<TypeParam>* loc = automaton.getLocations().front();
+		EXPECT_EQ( automaton.getLocations().size(), std::size_t( 3 ) );
+		hypro::Location<TypeParam>* loc = automaton.getLocation( "location_with_under_scores" );
+		hypro::Location<TypeParam>* loc1 = automaton.getLocation( "minimal_location" );
+		hypro::Location<TypeParam>* loc2 = automaton.getLocation( "minimal_location_2" );
 		EXPECT_EQ( loc->getTransitions().size(), std::size_t( 2 ) );
 		EXPECT_FALSE( loc->isUrgent() );
 		// test correct flow
@@ -149,10 +160,12 @@ TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
 		constants << TypeParam( 0 ), TypeParam( -8.81 ), TypeParam( -0.5 ), TypeParam( 123 );
 		hypro::Condition<TypeParam> invariant{ constraints, constants };
 		EXPECT_EQ( invariant, loc->getInvariant() );
-		// EXPECT_FALSE( automaton.getLocalBadStates().empty() );
-		// EXPECT_EQ( hypro::Condition<TypeParam>(
-		//				 { carl::Interval<TypeParam>::unboundedInterval(), carl::Interval<TypeParam>( -2.5, 0.0 ) } ),
-		//		   automaton.getLocalBadStates().at( loc ) );
+		EXPECT_FALSE( automaton.getLocalBadStates().empty() );
+		EXPECT_EQ( hypro::Condition<TypeParam>(), automaton.getLocalBadStates().at( loc1 ) );
+		EXPECT_EQ( hypro::Condition<TypeParam>(
+						 { carl::Interval<TypeParam>::unboundedInterval(), carl::Interval<TypeParam>( -2.5, 0.0 ) } ),
+				   automaton.getLocalBadStates().at( loc2 ) );
+		EXPECT_TRUE( automaton.getGlobalBadStates().size() > 0 );
 	} catch ( const std::runtime_error& e ) {
 		std::cout << e.what() << std::endl;
 		FAIL();

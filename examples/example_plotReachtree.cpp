@@ -1,9 +1,19 @@
 /*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * Created by stefan on 22.09.21.
  */
 
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/paths.h>
 #include <hypro/representations/GeometricObjectBase.h>
 #include <hypro/types.h>
 #include <hypro/util/plotting/ReachTreePlotter.h>
@@ -11,19 +21,7 @@
 using namespace hypro;
 using Representation = Box<double>;
 
-std::vector<ReachTreeNode<Representation>> create_tree() {
-	std::ofstream file( "/tmp/bball_automaton.model" );
-
-#include "../test/core/models/bball_automaton.h"
-	file << autString;
-	file.close();
-
-	// test content
-
-	std::string filename = "/tmp/bball_automaton.model";
-
-	auto [automaton, _] = parseFlowstarFile<double>( filename );
-
+std::vector<ReachTreeNode<Representation>> create_tree( const HybridAutomaton<double>& automaton ) {
 	// set up reach tree
 	std::vector<ReachTreeNode<Representation>> roots = hypro::makeRoots<Representation>( automaton );
 
@@ -49,9 +47,10 @@ std::vector<ReachTreeNode<Representation>> create_tree() {
 }
 
 int main() {
-	auto bball_roots = create_tree();
-	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots );
+	auto [automaton, _] = parseFlowstarFile<double>( getTestModelsPath() + "parser/bouncing_ball.model" );
+	auto bball_roots = create_tree( automaton );
 
+	auto bball_tree_plotter = plotting::ReachTreePlotter<Representation>( bball_roots );
 	bball_tree_plotter.plot();
 
 	std::system( "cat rt_out.dot" );

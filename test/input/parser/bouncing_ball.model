@@ -1,4 +1,3 @@
-auto autString = R"HYPROAUT(
 hybrid reachability {
 
  state var x,v
@@ -52,5 +51,3 @@ hybrid reachability {
   }
  }
 }
-
-)HYPROAUT";

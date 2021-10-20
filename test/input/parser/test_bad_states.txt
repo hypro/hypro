@@ -50,6 +50,24 @@ hybrid reachability {
     v <= 123
    }
   }
+
+  minimal_location
+    {
+     poly ode 1
+     {
+      x' = 3*v + gabunga + c*v + [-1,4]
+      v' = 1
+     }
+    }
+
+  minimal_location_2
+      {
+       poly ode 1
+       {
+        x' = 3*v + gabunga + c*v + [-1,4]
+        v' = 1
+       }
+      }
  }
 
  jumps
@@ -97,10 +115,22 @@ unsafe set
  location_with_under_scores
  {
  }
+
+ minimal_location
+  {
+  }
+
+
  location_with_under_scores
  {
   v in [-2.5,0]
  }
+
+ minimal_location_2
+  {
+   v in [-2.5,0]
+  }
+
  x >= 15+gabunga
  v+2+c >= -v+23
  v-7+8*x >= 33-12*x

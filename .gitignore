@@ -12,8 +12,7 @@ Makefile
 *.plt
 *.png
 *.csv
-src/hypro/flags.h
-resources/glpk-4.45/
+resources/glpk-5.0/
 *.sublime-*
 *.tokens
 .travis/sonar-project.properties
@@ -22,3 +21,4 @@ resources/glpk-4.45/
 *.idx
 *.java
 *.interp
+doc/docpage/_site/
