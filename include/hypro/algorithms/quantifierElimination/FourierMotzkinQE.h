@@ -108,9 +108,6 @@ std::pair<matrix_t<Number>, vector_t<Number>> eliminateCols( const matrix_t<Numb
 	auto resultConstants = constants;
 	auto dimensionsToEliminate = cols;
 	while ( !dimensionsToEliminate.empty() ) {
-		std::cout << "Eliminate col " << dimensionsToEliminate.front() << " in \n"
-				  << resultConstraints << " <= \n"
-				  << resultConstants << std::endl;
 		std::tie( resultConstraints, resultConstants ) = eliminateCol( resultConstraints, resultConstants, dimensionsToEliminate.front(), conservative );
 		// in case the matrix and vector have changed dimensions, we need to update the indices accordingly
 		if ( !conservative ) {
