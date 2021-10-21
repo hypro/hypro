@@ -162,8 +162,8 @@ TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
 		EXPECT_EQ( invariant, loc->getInvariant() );
 		EXPECT_FALSE( automaton.getLocalBadStates().empty() );
 		EXPECT_EQ( hypro::Condition<TypeParam>(), automaton.getLocalBadStates().at( loc1 ) );
-		EXPECT_EQ( hypro::Condition<TypeParam>(
-						 { carl::Interval<TypeParam>::unboundedInterval(), carl::Interval<TypeParam>( -2.5, 0.0 ) } ),
+		EXPECT_EQ( hypro::Condition<TypeParam>( { carl::Interval<TypeParam>::unboundedInterval(),
+												  carl::Interval<TypeParam>( TypeParam( -2.5 ), TypeParam( 0.0 ) ) } ),
 				   automaton.getLocalBadStates().at( loc2 ) );
 		EXPECT_TRUE( automaton.getGlobalBadStates().size() > 0 );
 	} catch ( const std::runtime_error& e ) {
