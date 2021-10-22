@@ -35,14 +35,17 @@ class Hyperoctree {
 	}
 
 	void add( const Box<Number>& data ) {
+		// if this box is already fully covered, do nothing.
 		if ( mCovered ) {
 			return;
 		}
+		// consider only the part that is contained in this box
 		auto [containment, result] = mContainer.containmentReduce( data );
-		// find first box that does not fully contain data
+		// if the intersection of the data and this container is non-empty
 		if ( containment != CONTAINMENT::NO ) {
-			// the set is at least partially contained, but since we have already cut to the part that is also contained in this container, we can pass to the childen
+			// the set is at least partially contained and we have already cut to the part that is also contained in this container, we can pass to the childen
 			if ( mRemainingDepth == 0 ) {
+				updateCoverage( result );
 				mData.emplace_back( result );
 				return;
 			}
@@ -62,8 +65,9 @@ class Hyperoctree {
 		}
 		if ( tmp.empty() ) {
 			mCovered = true;
-			// the box is fully covered, no need to store stuff
+			// the box is fully covered, no need to store child nodes or data
 			mChildren.erase( std::begin( mChildren ), std::end( mChildren ) );
+			mData.erase( std::begin( mData ), std::end( mData ) );
 		}
 		// update what remains to be covered
 		std::swap( mToBeCovered, tmp );

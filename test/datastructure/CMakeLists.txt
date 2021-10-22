@@ -6,7 +6,7 @@ set(datastructure_test_sources
         FlowpipeTest.cpp
         HalfspaceTest.cpp
         HIVTest.cpp
-        #HyperoctreeTest.cpp
+        HyperoctreeTest.cpp
         PointTest.cpp
         VertexTest.cpp
         VertexContainerTest.cpp
