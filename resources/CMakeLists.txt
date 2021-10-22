@@ -197,6 +197,8 @@ endif ()
 
 # try finding graphviz - required for ReachTree plotting
 include(graphviz.cmake)
-set(HYPRO_HAS_GRAPHVIZ ${HYPRO_HAS_GRAPHVIZ} PARENT_SCOPE)
+if (HYPRO_HAS_GRAPHVIZ)
+    set(HYPRO_HAS_GRAPHVIZ ${HYPRO_HAS_GRAPHVIZ} PARENT_SCOPE)
+endif ()
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)

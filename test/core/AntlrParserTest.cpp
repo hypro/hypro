@@ -138,8 +138,10 @@ TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
 	this->cwd();
 	try {
 		auto [automaton, settings] = parseFlowstarFile<TypeParam>( path );
-		EXPECT_EQ( automaton.getLocations().size(), std::size_t( 1 ) );
-		hypro::Location<TypeParam>* loc = automaton.getLocations().front();
+		EXPECT_EQ( automaton.getLocations().size(), std::size_t( 3 ) );
+		hypro::Location<TypeParam>* loc = automaton.getLocation( "location_with_under_scores" );
+		hypro::Location<TypeParam>* loc1 = automaton.getLocation( "minimal_location" );
+		hypro::Location<TypeParam>* loc2 = automaton.getLocation( "minimal_location_2" );
 		EXPECT_EQ( loc->getTransitions().size(), std::size_t( 2 ) );
 		EXPECT_FALSE( loc->isUrgent() );
 		// test correct flow
@@ -158,10 +160,12 @@ TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
 		constants << TypeParam( 0 ), TypeParam( -8.81 ), TypeParam( -0.5 ), TypeParam( 123 );
 		hypro::Condition<TypeParam> invariant{ constraints, constants };
 		EXPECT_EQ( invariant, loc->getInvariant() );
-		// EXPECT_FALSE( automaton.getLocalBadStates().empty() );
-		// EXPECT_EQ( hypro::Condition<TypeParam>(
-		//				 { carl::Interval<TypeParam>::unboundedInterval(), carl::Interval<TypeParam>( -2.5, 0.0 ) } ),
-		//		   automaton.getLocalBadStates().at( loc ) );
+		EXPECT_FALSE( automaton.getLocalBadStates().empty() );
+		EXPECT_EQ( hypro::Condition<TypeParam>(), automaton.getLocalBadStates().at( loc1 ) );
+		EXPECT_EQ( hypro::Condition<TypeParam>(
+						 { carl::Interval<TypeParam>::unboundedInterval(), carl::Interval<TypeParam>( -2.5, 0.0 ) } ),
+				   automaton.getLocalBadStates().at( loc2 ) );
+		EXPECT_TRUE( automaton.getGlobalBadStates().size() > 0 );
 	} catch ( const std::runtime_error& e ) {
 		std::cout << e.what() << std::endl;
 		FAIL();
