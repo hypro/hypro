@@ -16,9 +16,8 @@
 namespace hypro {
 
 /**
- * Class to efficiently store data in a tree-like structure. The passed predicate is a functor which needs to implement a call-operator to determine, whether passed data fits the current node, does not fit the current node, or should be stored in a lower level.
- * @tparam Predicate
- * @tparam Data
+ * Class to efficiently store data in a tree-like structure.
+ * @tparam Number
  */
 template <typename Number>
 class Hyperoctree {
