@@ -12,39 +12,105 @@
  */
 
 #pragma once
+#include "HyperoctreePredicates.h"
 
 namespace hypro {
-
-enum class HyperOctreeOp { ADD,
-						   DESCEND,
-						   SKIP };
 
 /**
  * Class to efficiently store data in a tree-like structure. The passed predicate is a functor which needs to implement a call-operator to determine, whether passed data fits the current node, does not fit the current node, or should be stored in a lower level.
  * @tparam Predicate
  * @tparam Data
  */
-template <template <typename> class Predicate, typename Data>
+template <typename Number>
 class Hyperoctree {
-	using childVector = std::vector<std::unique_ptr<Hyperoctree<Predicate, Data>>>;
+	using cellVector = std::vector<Box<Number>>;
 
   public:
-	Hyperoctree( const Predicate<Data>& p )
-		: mDecider( p ) {}
+	Hyperoctree( std::size_t splits, std::size_t maxDepth, const Box<Number>& container )
+		: mSplits( splits )
+		, mRemainingDepth( maxDepth )
+		, mContainer( container )
+		, mToBeCovered() {
+		mToBeCovered.push_back( container );
+	}
 
-	bool add( Data&& data );
+	void add( const Box<Number>& data ) {
+		// if this box is already fully covered, do nothing.
+		if ( mCovered ) {
+			return;
+		}
+		// consider only the part that is contained in this box
+		auto [containment, result] = mContainer.containmentReduce( data );
+		// if the intersection of the data and this container is non-empty
+		if ( containment != CONTAINMENT::NO ) {
+			// the set is at least partially contained and we have already cut to the part that is also contained in this container, we can pass to the childen
+			if ( mRemainingDepth == 0 ) {
+				updateCoverage( result );
+				mData.emplace_back( result );
+				return;
+			}
+			// make sure child nodes exist
+			updateChildren();
+			// forward call to children
+			std::for_each( std::begin( mChildren ), std::end( mChildren ), [&result]( const auto& child ) { child->add( result ); } );
+		}
+	}
 
-	std::size_t getRemainingDepth() const { return mRemainingDepth; }
-	const childVector& getChildren() const { return mChildren; }
-	const std::vector<Data>& getData() const { return mData; }
+  private:
+	void updateCoverage( const Box<Number>& newBox ) {
+		std::vector<Box<Number>> tmp;
+		for ( const Box<Number>& box : mToBeCovered ) {
+			auto remainder = box.setMinus2( newBox );
+			tmp.insert( tmp.end(), std::begin( remainder ), std::end( remainder ) );
+		}
+		if ( tmp.empty() ) {
+			mCovered = true;
+			// the box is fully covered, no need to store child nodes or data
+			mChildren.erase( std::begin( mChildren ), std::end( mChildren ) );
+			mData.erase( std::begin( mData ), std::end( mData ) );
+		}
+		// update what remains to be covered
+		std::swap( mToBeCovered, tmp );
+	}
+
+	void updateChildren() {
+		if ( mChildren.empty() && mRemainingDepth != 0 ) {
+			// create splits
+			auto intervals = mContainer.intervals();
+			auto dim = intervals.size();
+			// split all intervals into mSplits many parts
+			std::vector<decltype( intervals )> splitIntervals{ dim, decltype( intervals ){} };
+			for ( std::size_t i = 0; i < dim; ++i ) {
+				splitIntervals[i] = split_homogeneously_weak_bounds( intervals[i], mSplits );
+			}
+
+			// create all boxes by creating all combinations of intervals
+			Combinator boxCombinator{ mSplits, dim };
+			while ( !boxCombinator.end() ) {
+				auto intervalIndices = boxCombinator();
+
+				// assemble new box
+				std::vector<carl::Interval<Number>> newIntervals;
+				for ( std::size_t pos = 0; pos < dim; ++pos ) {
+					newIntervals.push_back( splitIntervals[pos][intervalIndices[pos]] );
+				}
+				mChildren.emplace_back( std::make_unique<Hyperoctree<Number>>( mSplits, mRemainingDepth - 1, Box<Number>( newIntervals ) ) );
+			}
+		}
+	}
+	bool add_recursive( const Box<Number>& data, HyperOctreeOp parentDecision, Hyperoctree<Predicate, Data>& parent );
+	void insertData( const Box<Number>& obj ) { mData.push_back( obj ); }
 
   protected:
+	std::size_t mSplits = 1;
 	std::size_t mRemainingDepth = 0;  ///< indicates how may more splits can be made
-	Predicate<Data> mDecider;		  ///< functor
-	childVector mChildren;			  ///< collects child-hyperoctrees
-	std::vector<Data> mData;		  ///< collects data suitable for this level
+	std::vector<std::unique_ptr<Hyperoctree<Number>>> mChildren;
+	bool mCovered = false;
+	Box<Number> mContainer;
+	std::vector<Box<Number>> mToBeCovered;
+	std::vector<Box<Number>> mData;	 ///< collects data suitable for this level
 };
 
 }  // namespace hypro
 
-#include "Hyperoctree.tpp"
+//#include "Hyperoctree.tpp"

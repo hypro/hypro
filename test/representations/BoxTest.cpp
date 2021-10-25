@@ -132,6 +132,13 @@ TYPED_TEST( BoxTest, Constructor ) {
 	EXPECT_EQ( TypeParam( 4 ), dBox.max().at( 1 ) );
 	EXPECT_EQ( true, dBox.contains( hypro::Point<TypeParam>( { 0, 3 } ) ) );
 
+	hypro::Box<TypeParam> eBox{ std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1, 2 },
+																		carl::Interval<TypeParam>{ 3, 4 } } };
+	EXPECT_EQ( TypeParam( 1 ), eBox.min().at( 0 ) );
+	EXPECT_EQ( TypeParam( 3 ), eBox.min().at( 1 ) );
+	EXPECT_EQ( TypeParam( 2 ), eBox.max().at( 0 ) );
+	EXPECT_EQ( TypeParam( 4 ), eBox.max().at( 1 ) );
+
 	hypro::Box<TypeParam> b = hypro::Box<TypeParam>::Empty();
 	EXPECT_TRUE( b.empty() );
 }

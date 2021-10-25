@@ -15,7 +15,7 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
 
 	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init.model" };
 
-	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( getCSModelsPath() + filename );
+	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( hypro::getCSModelsPath() + filename );
 
 	std::cout << "automaton \n" << automaton << std::endl;
 
