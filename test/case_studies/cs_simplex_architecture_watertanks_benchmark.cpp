@@ -14,12 +14,30 @@
 #include <benchmark/benchmark.h>
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/datastructures/HybridAutomaton/PathUtil.h>
+#include <hypro/datastructures/Hyperoctree.h>
+#include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 #include <hypro/paths.h>
 #include <hypro/util/plotting/Plotter.h>
 #include <string>
 
 namespace hypro::benchmark {
+
+void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<double>& plt ) {
+	if ( octree.isCovered() ) {
+		plt.addObject( octree.getContainer().projectOn( { 0, 1 } ).vertices(),
+					   hypro::plotting::colors[hypro::plotting::green] );
+	} else {
+		if ( !octree.getChildren().empty() ) {
+			for ( const auto& child : octree.getChildren() ) {
+				plotRecursive( *child, plt );
+			}
+		} else {
+			plt.addObject( octree.getContainer().projectOn( { 0, 1 } ).vertices(),
+						   hypro::plotting::colors[hypro::plotting::red] );
+		}
+	}
+}
 
 template <class Representation>
 static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
@@ -106,11 +124,20 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	plt.rSettings().cummulative = false;
 	plt.setFilename( "simplex_watertanks" );
 
+	// add to hyperoctree
+	hypro::Hyperoctree<Number> octree{ 2, 5, computeBoundingBox( roots ).projectOn( { 0, 1 } ) };
+	for ( const auto& r : roots ) {
+		auto segments = getSegments( r );
+		for ( const auto& s : segments ) {
+			octree.add( s.projectOn( { 0, 1 } ) );
+		}
+	}
+
 	for ( const auto& node : hypro::preorder( roots ) ) {
 		for ( const auto& segment : node.getFlowpipe() ) {
 			if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
 				plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
-							   hypro::plotting::colors[hypro::plotting::green] );
+							   hypro::plotting::colors[hypro::plotting::blue] );
 			} else if ( node.hasFixedPoint() == TRIBOOL::FALSE ) {
 				plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
 							   hypro::plotting::colors[hypro::plotting::orange] );
@@ -119,6 +146,9 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 			}
 		}
 	}
+
+	// plot octree
+	plotRecursive( octree, plt );
 
 	plt.plot2d( hypro::PLOTTYPE::png );
 	plt.plot2d( hypro::PLOTTYPE::pdf );
@@ -141,7 +171,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 1, 15, 1 )
+	  ->DenseRange( 15, 15, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
