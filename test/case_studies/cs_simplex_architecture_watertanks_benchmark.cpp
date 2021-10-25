@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * Created by stefan on 04.08.21.
  */
 
@@ -42,7 +51,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
 																   settings.strategy().front(), roots );
 		auto result = reacher.computeForwardReachability();
-		std::cout << "System is safe: " << result << std::endl;
+		INFO( "hypro.casestudies", "System is safe: " << result );
 
 		// statistics
 		auto finished_leaves = std::size_t( 0 );
@@ -53,23 +62,23 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		auto segments = std::size_t( 0 );
 
 		for ( const ReachTreeNode<Representation>& node : hypro::preorder( roots ) ) {
-			COUNT( "nodes/flowpipes" );
 			++nodes;
 			segments += node.getFlowpipe().size();
 			if ( node.getChildren().empty() ) {
 				if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
-					COUNT( "Finished leaves" );
 					++finished_leaves;
 				} else {
-					COUNT( "Unfinished leaves" );
 					++unfinished_leaves;
 					last_paths.push_back( node.getPath() );
 					if ( has_discrete_cycle( node.getPath() ) ) {
-						// std::cout << "Path " << node.getPath() << " is cyclic." << std::endl;
+						INFO( "hypro.casestudies", "Path " << node.getPath() << " is cyclic." );
 						++cyclic_path_count;
-					} else {
-						std::cout << "Path " << node.getPath() << " is truly unfinished." << std::endl;
 					}
+#ifdef HYPRO_LOGGING
+					else {
+						INFO( "hypro.casestudies", "Path " << node.getPath() << " is truly unfinished." );
+					}
+#endif
 				}
 				++leaves;
 				COUNT( "leaves" );
@@ -132,7 +141,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 0, 0, 1 )
+	  ->DenseRange( 1, 15, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
