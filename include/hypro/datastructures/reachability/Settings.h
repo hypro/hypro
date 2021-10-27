@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 #include "../../types.h"
 #include "../../util/type_handling/representation_enums.h"
@@ -20,14 +29,17 @@ struct AnalysisParameters {
 	bool uniformBloating = false;
 	REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  ///< method of reachability analysis
 	int timeStepFactor = 1;												  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep. Can be negative.
+	bool detectJumpFixedPoints = false;									  ///< true if an analyzer should try to detect a fixed point by analyzing initial sets of other flowpipes
+	bool detectFixedPointsByCoverage = false;							  ///< if true, fixed points for jumps are also detected if multiple sets achieve coverage of the current set (more expensive)
+	std::size_t numberSetsForContinuousCoverage = 0;					  ///< number of sets at the beginning of a flowpipe that are used for coverage tests to detect fixed points within other nodes
+	bool detectContinuousFixedPointsLocally = false;					  ///< true if an analyzer should try to find fixed points within the current flowpipe (set-containment)
+	bool detectZenoBehavior = true;										  ///< if true, a lightweight check for Zeno cycles is preformed during analysis
 };
 
 struct FixedAnalysisParameters {
 	size_t jumpDepth{ std::numeric_limits<int>::max() };  ///< bound for maximal number of executed jumps
 	tNumber localTimeHorizon = 0;						  ///< bound for maximal duration of time elapse per flowpipe, use negative value for unbounded time (not always supported)
 	tNumber fixedTimeStep = 0;							  ///< a time step that all timesteps of the analysis parameters are multiples of, i.e. fixedTimeStep * timeStepFactor = timeStep.
-	/// computed on construction of the setting as the (fractional) gcd of the time steps
-	bool detectFixedPoints = false;	 ///< true if an analyzer should try to detect a fixed point
 #if HYPRO_USE_PPL
 	unsigned long pplDenominator{ defaultPPLDenominator };
 #endif

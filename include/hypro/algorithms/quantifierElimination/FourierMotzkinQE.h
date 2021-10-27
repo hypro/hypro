@@ -110,10 +110,21 @@ template <typename Number, typename IdxType>
 std::pair<matrix_t<Number>, vector_t<Number>> eliminateCols( const matrix_t<Number>& constraints, const vector_t<Number> constants, const std::vector<IdxType>& cols, bool conservative = true ) {
 	auto resultConstraints = constraints;
 	auto resultConstants = constants;
-	auto colCopy = cols;
-	std::sort( colCopy.begin(), colCopy.end(), std::greater<IdxType>() );
-	for ( auto cIndex : colCopy ) {
-		std::tie( resultConstraints, resultConstants ) = eliminateCol( resultConstraints, resultConstants, cIndex, conservative );
+	auto dimensionsToEliminate = cols;
+	while ( !dimensionsToEliminate.empty() ) {
+		std::tie( resultConstraints, resultConstants ) = eliminateCol( resultConstraints, resultConstants, dimensionsToEliminate.front(), conservative );
+		// in case the matrix and vector have changed dimensions, we need to update the indices accordingly
+		if ( !conservative ) {
+			// for all dimensions that are still to be eliminated, if their index is larger than the one that was just eliminated,
+			// decrement this index, as one dimension before has been eliminated.
+			// TODO create test case for this
+			for ( auto& idx : dimensionsToEliminate ) {
+				if ( idx > dimensionsToEliminate.front() ) {
+					--idx;
+				}
+			}
+		}
+		dimensionsToEliminate.erase( std::begin( dimensionsToEliminate ) );
 	}
 	return std::make_pair( resultConstraints, resultConstants );
 }

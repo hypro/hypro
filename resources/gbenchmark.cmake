@@ -2,6 +2,8 @@
 ExternalProject_Add(
         google-benchmark
         GIT_REPOSITORY https://github.com/google/benchmark.git
+        GIT_SHALLOW ON
+        GIT_TAG "v1.6.0"
         DOWNLOAD_NO_PROGRESS 1
         CONFIGURE_COMMAND ${CMAKE_COMMAND} ../google-benchmark -DCMAKE_BUILD_TYPE=Release -DBENCHMARK_ENABLE_TESTING=OFF
         -DBENCHMARK_ENABLE_INSTALL=OFF -DBENCHMARK_ENABLE_GTEST_TESTS=OFF

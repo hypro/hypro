@@ -9,11 +9,12 @@ Location<Number>::Location()
 	, mExternalInput()
 	, mTransitions()
 	, mInvariant()
+	, mName()
 	, mId()
 	, mHash( 0 ) {}
 
 template <typename Number>
-Location<Number>::Location( const std::string& name )
+Location<Number>::Location( std::string name )
 	: mFlows()
 	, mFlowTypes()
 	, mExternalInput()
@@ -32,7 +33,8 @@ Location<Number>::Location( const Location<Number>& _loc )
 	, mInvariant( _loc.getInvariant() )
 	, mName( _loc.getName() )
 	, mId()
-	, mHash( 0 ) {
+	, mHash( 0 )
+	, mIsUrgent( _loc.isUrgent() ) {
 	// update copied transitions
 	for ( const auto& t : _loc.getTransitions() ) {
 		[[maybe_unused]] auto* transitionCopy = createTransition( t.get() );
@@ -47,6 +49,8 @@ Location<Number>::Location( const matrix_t<Number>& _mat )
 	, mFlowTypes()
 	, mExternalInput()
 	, mTransitions()
+	, mInvariant()
+	, mName()
 	, mId() {
 	mFlows.emplace_back( linearFlow<Number>( _mat ) );
 	mFlowTypes.emplace_back( DynamicType::linear );
@@ -61,6 +65,7 @@ Location<Number>::Location( const matrix_t<Number>& _mat, typename Location<Numb
 	, mExternalInput()
 	, mTransitions( std::move( _trans ) )
 	, mInvariant( _inv )
+	, mName()
 	, mId() {
 	for ( auto& t : mTransitions ) {
 		t->setSource( this );
@@ -78,6 +83,7 @@ Location<Number>& Location<Number>::operator=( const Location<Number>& in ) {
 		mName = in.getName();
 		mExternalInput = in.getExternalInput();
 		mHash = 0;
+		mIsUrgent = in.isUrgent();
 		// update copied transitions (sources only)
 		mTransitions.clear();
 

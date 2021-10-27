@@ -39,7 +39,7 @@ class Transition {
 	Location<Number>* mSource = nullptr;				  /// Pointer to the source location.
 	Location<Number>* mTarget = nullptr;				  /// Pointer to the target location.
 	Condition<Number> mGuard;							  /// Guard condition enabling the transition if satisfied.
-	Reset<Number> mReset;								  /// Reset function.
+	Reset<Number> mReset = Reset<Number>();				  /// Reset function.
 	Aggregation mAggregationSetting = Aggregation::none;  /// Aggregation settings.
 	std::size_t mClustering = 0;						  /// Clustering: maximal number of discrete successors.
 	bool mUrgent = false;								  /// Flag if transition is urgent.

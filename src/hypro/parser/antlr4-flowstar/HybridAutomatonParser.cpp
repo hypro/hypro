@@ -2,9 +2,9 @@
 // Generated from HybridAutomaton.g4 by ANTLR 4.7.2
 
 
-#include "HybridAutomatonVisitor.h"
+#include "include/hypro/parser/antlr4-flowstar/HybridAutomatonVisitor.h"
 
-#include "HybridAutomatonParser.h"
+#include "include/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h"
 
 
 	#include <map>

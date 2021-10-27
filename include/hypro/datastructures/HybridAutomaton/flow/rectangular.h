@@ -41,6 +41,28 @@ class rectangularFlow {
 	bool empty() const { return mFlowIntervals.empty(); }
 
 	DynamicType getDynamicsType() const {
+		if ( isTimed() ) {
+			return DynamicType::timed;
+		}
+		if ( isDiscrete() ) {
+			return DynamicType::discrete;
+		}
+		if ( isSingular() ) {
+			return DynamicType::singular;
+		}
+		return DynamicType::rectangular;
+	}
+
+	DynamicType getDynamicsType( std::size_t varIndex ) const {
+		if ( isTimed( varIndex ) ) {
+			return DynamicType::timed;
+		}
+		if ( isDiscrete( varIndex ) ) {
+			return DynamicType::discrete;
+		}
+		if ( isSingular( varIndex ) ) {
+			return DynamicType::singular;
+		}
 		return DynamicType::rectangular;
 	}
 
@@ -53,6 +75,10 @@ class rectangularFlow {
 		return true;
 	}
 
+	bool isTimed( std::size_t varIndex ) const {
+		return mFlowIntervals.at( VariablePool::getInstance().carlVarByIndex( varIndex ) ) == carl::Interval<Number>( 1 );
+	}
+
 	bool isDiscrete() const {
 		for ( const auto& keyVal : mFlowIntervals ) {
 			if ( keyVal.second != carl::Interval<Number>( 0 ) ) {
@@ -60,6 +86,23 @@ class rectangularFlow {
 			}
 		}
 		return true;
+	}
+
+	bool isDiscrete( std::size_t varIndex ) const {
+		return mFlowIntervals.at( VariablePool::getInstance().carlVarByIndex( varIndex ) ) == carl::Interval<Number>( 0 );
+	}
+
+	bool isSingular() const {
+		for ( const auto& [_, interval] : mFlowIntervals ) {
+			if ( !interval.isPointInterval() ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	bool isSingular( std::size_t varIndex ) const {
+		return mFlowIntervals.at( VariablePool::getInstance().carlVarByIndex( varIndex ) ).isPointInterval();
 	}
 
 	friend bool operator==( const rectangularFlow<Number>& lhs, const rectangularFlow<Number>& rhs ) {

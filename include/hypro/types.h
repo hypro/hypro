@@ -65,6 +65,11 @@ enum class SOLUTION { FEAS = 0,
 					  INFTY,
 					  UNKNOWN };
 
+/// Enum of return types of the predicate of an hyperoctree. ADD means the set is partially contained, DESCEND means the set is fully contained, SKIP means the object is disjunct
+enum class HyperOctreeOp { ADD,
+						   DESCEND,
+						   SKIP };
+
 /**
  * @brief      Enum for set containment results. If known, we can make a statement
  * about full or partial containment, otherwise fall back to YES/NO. Note: BOT is used for UNKNOWN.

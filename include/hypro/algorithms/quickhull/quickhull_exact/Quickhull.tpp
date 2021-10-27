@@ -31,8 +31,8 @@ void ExactQuickhull<Number, Euclidian>::compute() {
 	buildInitialPolytope();
 #ifdef HYPRO_LOGGING
 	for ( Facet& facet : fSpace.facets ) {
-		TRACE( "hypro.quickhull", "furthest " << facet.furthestPoint << std::endl
-											  << " distance " << facet.furthestPointDistance );
+		TRACE( "hypro.quickhull", ", furthest point " << facet.furthestPoint << std::endl
+													  << ", distance " << facet.furthestPointDistance );
 	}
 #endif
 

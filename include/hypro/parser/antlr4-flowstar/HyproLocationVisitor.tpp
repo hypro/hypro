@@ -33,7 +33,6 @@ namespace hypro {
 
 				Location<Number>* loc = visit(ctx->location().at(i));
 				assert(loc != nullptr);
-				//locSet.insert(loc);
 				locSet.emplace(loc);
 				i++;
 			}
@@ -54,7 +53,6 @@ namespace hypro {
 
 				StochasticLocation<Number>* loc = visit(ctx->stochasticlocation().at(i));
 				assert(loc != nullptr);
-				//locSet.insert(loc);
 				locSet.emplace(loc);
 				i++;
 			}
@@ -70,24 +68,24 @@ namespace hypro {
 
 		//1.Calls visit(ctx->activities()) to get flow (as a variant) and externalInputBox
 		std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
-		//std::cout << "---- Flow matrix is:\n" << flowAndExtInput.first << std::endl;
-		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
 
 		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
 		//By default, if no invariant is given, return a 0xn matrix because we have zero contraints over n variables
-		Condition<Number> inv{ConstraintSetT<Number>{matrix_t<Number>::Zero(0,vars.size()), vector_t<Number>::Zero(0)}};
+		Condition<Number> inv;
 
 		bool firstTime = true;
 		for(auto& currInvCtx : ctx->invariants()){
 			Condition<Number> currInv = visit(currInvCtx);
 			if(currInv != Condition<Number>()){
-				if(firstTime){
+				if(firstTime || inv.isTrue()){
 					inv = currInv;
 					firstTime = false;
 					continue;
 				}
 
 				//Extend inv.matrix with currInv.matrix
+                                assert(!inv.isTrue());
+                                assert(!currInv.isTrue());
 				matrix_t<Number> newMat = inv.getMatrix();
 				matrix_t<Number> currInvMat = currInv.getMatrix();
 				assert(newMat.cols() == currInvMat.cols());
@@ -123,7 +121,6 @@ namespace hypro {
 
 		// only set external input, if it is different from zero
 		if(!std::get<2>(flowAndExtInput).empty()) {
-			//std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
 			loc->setExtInput(std::get<2>(flowAndExtInput));
 		}
 		// set labels, if any
@@ -149,22 +146,17 @@ namespace hypro {
 		std::map<carl::Variable, carl::Interval<Number>> rectangularFlows;
 
 		std::vector<carl::Interval<Number>> extInputVec(vars.size(), carl::Interval<Number>());
-		//std::cout << "extInputVec has been made!\n";
 		HyproFormulaVisitor<Number> equationVisitor(vars);
 		for(unsigned i=0; i < ctx->equation().size(); i++){
-			//std::cout << "Try to parse linear flow." << std::endl;
 			//insert into row according to state var order
 			vector_t<Number> tmpRow = equationVisitor.visit(ctx->equation(i)).template as<vector_t<Number>>();
 			for(unsigned j=0; j < vars.size(); j++){
 				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
-					//std::cout << "Linear flow for variable " << j << ", row: " << tmpRow << std::endl;
 					linearFlows[j] = tmpRow;
 					if(ctx->equation(i)->interval() != NULL){
 						carl::Interval<Number> intervalValues = equationVisitor.visit(ctx->equation(i)->interval());
 						extInputVec[j] = intervalValues;
-						//std::cout << "internalValues are: " << intervalValues << std::endl;
 					}
-					//std::cout << "extInputVec is at pos " << j << "is now:\n" << extInputVec[j] << std::endl;
 					break;
 				}
 			}
@@ -172,13 +164,11 @@ namespace hypro {
 		// check if rectangular-dynamics exists and create flow
 		HyproFormulaVisitor<Number> intervalVisitor(vars);
 		for(unsigned i=0; i < ctx->intervalexpr().size(); i++){
-			//std::cout << "Try to parse rectangular flow." << std::endl;
 			// parse interval
 			carl::Interval<Number> tmpintv = intervalVisitor.visit(ctx->intervalexpr(i)->interval());
 			// find according variable and store in mapping
 			for(unsigned j=0; j < vars.size(); j++){
 				if(ctx->intervalexpr()[i]->VARIABLE()->getText() == (vars[j])){
-					//std::cout << "Rectangular flow for variable " << j <<  ", interval: " << tmpintv << std::endl;
 					rectangularFlows[vpool.carlVarByIndex(j)] = tmpintv;
 					break;
 				}
@@ -228,8 +218,6 @@ namespace hypro {
 
 		//1.Calls visit(ctx->activities()) to get flow (as a variant) and externalInputBox
 		std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
-		//std::cout << "---- Flow matrix is:\n" << flowAndExtInput.first << std::endl;
-		//std::cout << "---- externalInputBox is:\n" << flowAndExtInput.second << std::endl;
 
 		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
 		//By default, if no invariant is given, return a 0xn matrix because we have zero contraints over n variables
@@ -286,7 +274,6 @@ namespace hypro {
 
 		// only set external input, if it is different from zero
 		if(!std::get<2>(flowAndExtInput).empty()) {
-			//std::cout << "Set external input to " << flowAndExtInput.second << " which is not equal to " << Box<Number>(std::make_pair(Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)), Point<Number>(vector_t<Number>::Zero(flowAndExtInput.first.cols()-1)))) << std::endl;
 			loc->setExtInput(std::get<2>(flowAndExtInput));
 		}
 		return loc;
@@ -301,12 +288,10 @@ namespace hypro {
 
 		HyproFormulaVisitor<Number> equationVisitor(vars);
 		for(unsigned i=0; i < ctx->equation().size(); i++){
-			//std::cout << "Try to parse linear flow." << std::endl;
 			//insert into row according to state var order
 			vector_t<Number> tmpRow = equationVisitor.visit(ctx->equation(i)).template as<vector_t<Number>>();
 			for(unsigned j=0; j < vars.size(); j++){
 				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
-					//std::cout << "Linear flow for variable " << j << ", row: " << tmpRow << std::endl;
 					linearExp[j] = tmpRow;
 					break;
 				}

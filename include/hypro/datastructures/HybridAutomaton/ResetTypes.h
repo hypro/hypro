@@ -59,6 +59,10 @@ struct AffineTransformation {
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const AffineTransformation<Number>& in ) {
+		if ( in.isIdentity() ) {
+			out << "Identity";
+			return out;
+		}
 		bool firstrow = true;
 		for ( Eigen::Index row = 0; row < in.mTransformation.matrix().rows(); ++row ) {
 			if ( !firstrow ) {

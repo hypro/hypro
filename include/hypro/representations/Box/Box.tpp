@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * Implementation of the box.
  *
@@ -435,7 +444,7 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
-	if ( dimensions.empty() ) {
+	if ( dimensions.empty() || this->empty() ) {
 		return Empty();
 	}
 	std::vector<carl::Interval<Number>> newIntervals;
@@ -520,7 +529,11 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::linearTransfo
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+	// std::cout << "in box::affinetransformation: " << this->limits() << std::endl;
+	// std::cout << A << std::endl;
+	// std::cout << b << std::endl;
 	if ( this->empty() ) {
+		// std::cout << "box empty" << std::endl;
 		return *this;
 	}
 	// TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
@@ -528,10 +541,13 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransfo
 	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>( this->dimension() );
 	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
 		newIntervals[i] = carl::Interval<Number>{ b( i ) };
+		// std::cout << "initialize interval" << newIntervals[i] << std::endl;
 		for ( std::size_t j = 0; j < this->dimension(); ++j ) {
 			newIntervals[i] = newIntervals[i] + A( i, j ) * this->intervals()[j];
+			// std::cout << "update to: " << newIntervals[i] << " using: A(i,j): " << A(i,j) << ", interval: " << this->intervals()[j] << std::endl;
 		}
 	}
+	// std::cout << "in box::affinetransformation: " << BoxT<Number, Converter, Setting>{ newIntervals } << std::endl;
 	return BoxT<Number, Converter, Setting>{ newIntervals };
 }
 
@@ -737,6 +753,115 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 }
 
 template <typename Number, typename Converter, class Setting>
+std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::setMinus( const BoxT<Number, Converter, Setting>& minusbox ) const {
+	std::vector<hypro::BoxT<Number, Converter, Setting>> result;
+	if ( this->dimension() != minusbox.dimension() ) {
+		return result;
+	} else {
+		std::pair<hypro::Point<Number>, hypro::Point<Number>> originalpoints = this->limits();
+		std::pair<hypro::Point<Number>, hypro::Point<Number>> minuspoints = minusbox.limits();
+		for ( unsigned i = 0; i < this->dimension(); ++i ) {
+			// lower
+			std::pair<hypro::Point<Number>, hypro::Point<Number>> points = originalpoints;
+
+			// points.first[i]=points.first[i] remains the same
+			points.second[i] = minuspoints.first[i];
+			BoxT<Number, Converter, Setting> tmp( points );
+			if ( tmp.limits().first[i] < tmp.limits().second[i] ) {
+				result.push_back( tmp );
+				originalpoints.first[i] = minuspoints.first[i];
+			}
+			// upper
+			points = originalpoints;
+			// std::pair<Point<Number>, Point<Number>> minuspoints= minus.limits(); already known
+			points.first[i] = minuspoints.second[i];
+			// points.second[i]=points.second[i]; remains the same
+			hypro::BoxT<Number, Converter, Setting> tmp2( points );
+			if ( tmp2.limits().first[i] < tmp2.limits().second[i] ) {  //!(tmp2.empty())
+				result.push_back( tmp2 );
+				originalpoints.second[i] = minuspoints.second[i];
+			}
+		}
+		return result;
+	}
+	// return result;
+}
+template <typename Number, typename Converter, class Setting>
+std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::setMinus2( const BoxT<Number, Converter, Setting>& minusbox ) const {
+	std::vector<hypro::BoxT<Number, Converter, Setting>> result;
+	if ( this->dimension() != minusbox.dimension() ) {
+		return result;
+	} else {
+		std::vector<carl::Interval<Number>> box = this->intervals();
+		std::vector<carl::Interval<Number>> minus = minusbox.intervals();
+
+		//------------- check whether the difference is unchanged or empty -----------
+		bool empty = true;
+		bool unchanged = false;
+		for ( long unsigned int i = 0; i < this->dimension(); i++ ) {
+			if ( minus.at( i ).lower() <= box.at( i ).lower() ) {
+				if ( minus.at( i ).upper() <= box.at( i ).lower() ) {
+					if ( box.at( i ).lower() != box.at( i ).upper() ) {
+						unchanged = true;
+					}
+				}
+				if ( minus.at( i ).upper() < box.at( i ).upper() ) {
+					empty = false;
+				}
+			} else {
+				empty = false;
+				if ( minus.at( i ).lower() >= box.at( i ).upper() && minus.at( i ).upper() >= minus.at( i ).lower() ) {
+					unchanged = true;
+				}
+			}
+		}
+		if ( unchanged ) {
+			// result.push_back(this);
+			BoxT<Number, Converter, Setting> workbox( box );
+			result.push_back( workbox );
+			return result;
+		}
+		if ( empty ) {
+			// BoxT<Number, Converter, Setting> workbox = BoxT();
+			// result.push_back( workbox );
+			return result;
+		}
+
+		//------------- calculate difference -------------
+		long unsigned int i = minus.size();
+		while ( i > 0 ) {
+			i--;
+			std::vector<carl::Interval<Number>> box2 = box;	 // lower
+			std::vector<carl::Interval<Number>> box3 = box;	 // upper
+			box2.at( i ).setUpper( minus.at( i ).lower() );
+			box3.at( i ).setLower( minus.at( i ).upper() );
+			// check if the lower box (box2) is not empty
+			if ( box2.at( i ).lower() < box2.at( i ).upper() ) {
+				BoxT<Number, Converter, Setting> workbox( box2 );
+				assert( !workbox.empty() );
+				result.push_back( workbox );
+				// carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
+				carl::Interval<Number> tmp( box2.at( i ).upper(), box.at( i ).upper() );
+				// std::cout << tmp << std::endl;
+				box.at( i ) = tmp;
+			}
+			// check if the upper box (box3) is not empty
+			if ( box3.at( i ).lower() < box3.at( i ).upper() ) {
+				BoxT<Number, Converter, Setting> workbox2( box3 );
+				assert( !workbox2.empty() );
+				result.push_back( workbox2 );
+				// carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
+				carl::Interval<Number> tmp2( box.at( i ).lower(), box3.at( i ).lower() );
+				// std::cout << tmp2 << std::endl;
+				box.at( i ) = tmp2;
+			}
+		}
+		return result;
+	}
+	// return result;
+}
+
+template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	assert( _mat.rows() == _vec.rows() );
 	assert( _mat.cols() == Eigen::Index( this->dimension() ) );
@@ -836,6 +961,46 @@ bool BoxT<Number, Converter, Setting>::contains( const BoxT<Number, Converter, S
 
 	for ( unsigned d = 0; d < this->dimension(); ++d ) {
 		if ( !mLimits[d].contains( box.interval( d ) ) ) {
+			return false;
+		}
+	}
+	return true;
+}
+
+template <typename Number, typename Converter, class Setting>
+std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::containmentReduce( const BoxT& other ) const {
+	std::size_t minDimension = std::min( this->dimension(), other.dimension() );
+
+	auto resIntervals = other.intervals();
+	auto currentContainment{ CONTAINMENT::FULL };
+	for ( unsigned d = 0; d < minDimension; ++d ) {
+		if ( !set_have_intersection( mLimits[d], other.interval( d ) ) ) {
+			return std::make_pair( CONTAINMENT::NO, BoxT::Empty() );
+		}
+		if ( !carl::set_is_subset( other.interval( d ), mLimits[d] ) ) {
+			currentContainment = CONTAINMENT::PARTIAL;
+			resIntervals[d] = carl::set_intersection( resIntervals[d], mLimits[d] );
+		}
+	}
+	// corner case: if a box is not defined in one dimension we assume it is unbounded in this dimension
+	if ( this->dimension() > other.dimension() ) {
+		for ( std::size_t i = minDimension; i < this->dimension(); ++i ) {
+			resIntervals.push_back( mLimits[i] );
+		}
+		currentContainment = CONTAINMENT::PARTIAL;
+	}
+
+	return std::make_pair( currentContainment, BoxT( resIntervals ) );
+}
+
+template <typename Number, typename Converter, class Setting>
+bool BoxT<Number, Converter, Setting>::intersects( const BoxT& box ) const {
+	if ( this->dimension() != box.dimension() ) {
+		return false;
+	}
+
+	for ( unsigned d = 0; d < this->dimension(); ++d ) {
+		if ( !carl::set_have_intersection( mLimits[d], box.interval( d ) ) ) {
 			return false;
 		}
 	}

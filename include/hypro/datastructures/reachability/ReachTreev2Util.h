@@ -43,9 +43,9 @@ auto getMaximalDepth( RootType&& root ) -> std::vector<std::vector<typename deta
 }
 
 template <typename RootType>
-auto getNumberNodes( RootType&& root ) -> std::vector<std::vector<typename detail::UnpackRepresentation<RootType>::Representation>> {
-	std::vector<std::vector<typename detail::UnpackRepresentation<RootType>::Representation>> res;
-	visitPreorder( std::forward<RootType>( root ), [&res]( auto& node ) { res.insert( res.end(), node.getFlowpipe() ); } );
+auto getNumberNodes( RootType&& root ) -> std::size_t {
+	std::size_t res{ 0 };
+	visitPreorder( std::forward<RootType>( root ), [&res]( auto& node ) { ++res; } );
 	return res;
 }
 

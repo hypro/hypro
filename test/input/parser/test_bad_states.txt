@@ -1,0 +1,148 @@
+hybrid reachability {
+
+ state var x,v
+
+ par {
+  gabunga = -9.81
+  c = 1
+  constantWithNoInteger = .234
+ }
+
+ setting
+ {
+  fixed steps 0.01
+  time 3
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon v,x
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output bouncing_ball
+  max jumps 1
+  print on
+ }
+
+ modes
+ {
+  location_with_under_scores
+  {
+   poly ode 1
+   {
+    #v' = --9.81 + -+-v*42*-3 + [2,5]
+    #x' = +++4*-+--v
+    x' = 3*v + gabunga + c*v + [-1,4]
+    v' = 1
+    #v' = gabunga + c*v
+   }
+
+   inv
+   {
+    x >= 0
+    v <= c + gabunga
+   }
+
+   inv{}
+
+   inv
+   {
+    x >= .5
+    v <= 123
+   }
+  }
+
+  minimal_location
+    {
+     poly ode 1
+     {
+      x' = 3*v + gabunga + c*v + [-1,4]
+      v' = 1
+     }
+    }
+
+  minimal_location_2
+      {
+       poly ode 1
+       {
+        x' = 3*v + gabunga + c*v + [-1,4]
+        v' = 1
+       }
+      }
+ }
+
+ jumps
+ {
+  location_with_under_scores -> location_with_under_scores
+  guard { x = 0 v <= 0 }
+  #reset { v' := -0.75*v }
+  reset { v' := gabunga*0.1 }
+  parallelotope aggregation {}
+
+  location_with_under_scores -> location_with_under_scores
+  guard { false }
+  reset { }
+  box aggregation { }
+ }
+
+ init
+ {
+  location_with_under_scores
+  {
+   x in [gabunga,10.2]
+   #x in [10,10.2]
+   v in [0,1]
+  }
+  location_with_under_scores
+  {
+   x in [1,1.2]
+   v in [0,1]
+  }
+ }
+
+ init
+ {
+  location_with_under_scores
+  {
+   x in [3,5]
+   v in [0,0]
+  }
+ }
+
+}
+
+unsafe set
+{
+ location_with_under_scores
+ {
+ }
+
+ minimal_location
+  {
+  }
+
+
+ location_with_under_scores
+ {
+  v in [-2.5,0]
+ }
+
+ minimal_location_2
+  {
+   v in [-2.5,0]
+  }
+
+ x >= 15+gabunga
+ v+2+c >= -v+23
+ v-7+8*x >= 33-12*x
+ #-v+2 >= 23 		#Problem: -v connects to polynom in constraint before, more generally: if connector is first symbol of left side in
+ 			#	in constraint, it will connect to polynom before.
+}
+
+#unsafe set
+#{
+#  l
+#  {
+#   x in [4,6]
+#   v in [-2.5,0]
+#  }
+#}

@@ -4,6 +4,7 @@
 #include "../../../datastructures/reachability/ReachTreev2.h"
 #include "../../../datastructures/reachability/TreeTraversal.h"
 #include "../../../types.h"
+#include "../fixedPointDetection.h"
 #include "../workers/LTIWorker.h"
 #include "./ReturnTypes.h"
 

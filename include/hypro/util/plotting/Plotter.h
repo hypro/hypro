@@ -191,6 +191,12 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	unsigned addObject( const Halfspace<Number>& _plane );
 
 	/**
+	 * @brief Removes an object from the plotter, no-op if the id is not used.
+	 * @param id The id of the object to be removed
+	 */
+	void removeObject( unsigned id );
+
+	/**
 	 * @brief      Adds a point to the plotter.
 	 * @details    The point, in contrast to an object will be plotted as a cross.
 	 * @param[in]  _point  The point.

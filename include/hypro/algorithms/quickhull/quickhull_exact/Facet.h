@@ -26,7 +26,7 @@ struct ExactQuickhull<Number, Euclidian>::Facet {
 	/// Returns index in the neighbor set of the passed facet
 	size_t findNeighborIndex( facet_ind_t facet_i );
 
-	//members
+	// members
 	std::vector<point_ind_t> mVertices;			 ///< Vertex cache
 	std::vector<facet_ind_t> mNeighbors;		 ///< Neighbor cache
 	std::vector<point_ind_t> mOutsideSet;		 ///< Outside vertices cache
@@ -35,6 +35,12 @@ struct ExactQuickhull<Number, Euclidian>::Facet {
 	Number furthestPointDistance = Number( 0 );	 ///< ???
 	Number mOffset = Number( 1000 );			 ///< Offset
 };
+
+template <typename Number, bool Euclidian>
+inline std::ostream& operator<<( std::ostream& out, const typename ExactQuickhull<Number, Euclidian>::Facet& in ) {
+	out << in.mNormal << " <= " << in.mOffset;
+	return out;
+}
 
 }  // namespace hypro
 
