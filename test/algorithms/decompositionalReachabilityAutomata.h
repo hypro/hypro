@@ -614,10 +614,10 @@ HybridAutomaton<Number> singularWithJumpsHa() {
     Matrix transConstraint = Matrix::Zero( 1, 2 );
     Vector transConstants = -1 * Vector::Ones( 1 );
     transConstraint( 0, 0 ) = -1;
-    Condition<Number> guard( transConstraint, transConstants );
-    Reset<Number> reset{ { { 0, 0 }, { } } };
+	Condition<Number> guard( transConstraint, transConstants );
+	Reset<Number> reset{ { carl::Interval<Number>{ 0, 0 }, carl::Interval<Number>{} } };
 
-    std::unique_ptr<Transition<Number>> trans0 =
+	std::unique_ptr<Transition<Number>> trans0 =
           std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
 
     // l0 -> l1 with guard y <= -2 and no reset

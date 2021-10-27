@@ -363,10 +363,11 @@ HybridAutomaton<Number> resetHa() {
     transConstraint( 0, 0 ) = 1;
     transConstraint( 1, 1 ) = 1;
     transConstraint( 1, 2 ) = 1;
-    hypro::Condition<Number> guard( transConstraint, transConstants );
-    hypro::Reset<Number> reset{ { { 0, 2 }, {}, { 0, 0 } } };
+	hypro::Condition<Number> guard( transConstraint, transConstants );
+	hypro::Reset<Number> reset{
+		  { carl::Interval<Number>{ 0, 2 }, carl::Interval<Number>{}, carl::Interval<Number>{ 0, 0 } } };
 
-    std::unique_ptr<hypro::Transition<Number>> trans0 =
+	std::unique_ptr<hypro::Transition<Number>> trans0 =
           std::make_unique<hypro::Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
     uniqueLoc0->addTransition( std::move( trans0 ) );
 
@@ -712,26 +713,26 @@ TEST( DecompositionMethodsTest, decomposeAutomaton7 ) {
     // Construct expected transition
     // l0 -> l1 with guard x <= 0, y + z <= 0 and reset x := [0,2], z := 0
     Matrix transConstraint0 = Matrix::Ones( 1, 1 );
-    Vector transConstants0 = Vector::Zero( 1 );
-    Matrix transConstraint1 = Matrix::Ones( 1, 2 );
-    Vector transConstants1 = Vector::Zero( 1 );
+	Vector transConstants0 = Vector::Zero( 1 );
+	Matrix transConstraint1 = Matrix::Ones( 1, 2 );
+	Vector transConstants1 = Vector::Zero( 1 );
 
-    Condition<Number> expectedGuard( { ConstraintSetT<Number>{ transConstraint0, transConstants0 }, ConstraintSetT<Number>{ transConstraint1, transConstants1 } } );
-    Reset<Number> expectedReset;
-    expectedReset.setMatrix( Matrix::Identity( 1, 1 ), 0 );
-    expectedReset.setVector( Vector::Zero( 1 ), 0 );
-    expectedReset.setMatrix( Matrix::Identity( 2, 2 ), 1);
-    expectedReset.setVector( Vector::Zero( 2 ), 1 );
-    expectedReset.setIntervals( { { 0, 2 } }, 0 );
-    expectedReset.setIntervals( { { }, { 0, 0 } }, 1 );
+	Condition<Number> expectedGuard( { ConstraintSetT<Number>{ transConstraint0, transConstants0 },
+									   ConstraintSetT<Number>{ transConstraint1, transConstants1 } } );
+	Reset<Number> expectedReset;
+	expectedReset.setMatrix( Matrix::Identity( 1, 1 ), 0 );
+	expectedReset.setVector( Vector::Zero( 1 ), 0 );
+	expectedReset.setMatrix( Matrix::Identity( 2, 2 ), 1 );
+	expectedReset.setVector( Vector::Zero( 2 ), 1 );
+	expectedReset.setIntervals( { carl::Interval<Number>{ 0, 2 } }, 0 );
+	expectedReset.setIntervals( { carl::Interval<Number>{}, carl::Interval<Number>{ 0, 0 } }, 1 );
 
-    Transition<Number> expectedTrans( loc0, loc1, expectedGuard, expectedReset );
+	Transition<Number> expectedTrans( loc0, loc1, expectedGuard, expectedReset );
 
-
-    EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
-    EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
-    Transition<Number> trans = *decomposedHa.getLocations()[ 0 ]->getTransitions()[0].get();
-    EXPECT_EQ( expectedTrans, trans );
+	EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
+	EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
+	Transition<Number> trans = *decomposedHa.getLocations()[0]->getTransitions()[0].get();
+	EXPECT_EQ( expectedTrans, trans );
 }
 
 TEST( DecompositionMethodsTest, decomposeAutomaton8 ) {

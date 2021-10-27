@@ -79,7 +79,7 @@ class DecompositionalAnalyzer {
 			for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
 				root.push_back( &subspaceRoots[subspace] );
 			}
-			ReachTreeNode<Condition<Number>> dependencyNode{ subspaceRoots[0].getLocation(), Condition<Number>( ConstraintSetT<Number>() ), { 0, 0 } };
+			ReachTreeNode<Condition<Number>> dependencyNode{ subspaceRoots[0].getLocation(), Condition<Number>( ConstraintSetT<Number>() ), carl::Interval<SegmentInd>{ 0, 0 } };
 			auto& dep = mDependencyRoots.emplace_back( std::move( dependencyNode ) );
 			mWorkQueue.push_front( detail::decompositionalQueueEntry<ComposedRep>{ 0, root, &dep } );
 		}
@@ -311,7 +311,7 @@ class DecompositionalAnalyzer {
 					default:
 						assert( false );
 				}
-				ReachTreeNode<ComposedRep> node{ location, initialSet, { 0, 0 } };
+				ReachTreeNode<ComposedRep> node{ location, initialSet, carl::Interval<SegmentInd>{ 0, 0 } };
 				nodeVector.push_back( std::move( node ) );
 			}
 			roots.push_back( std::move( nodeVector ) );
