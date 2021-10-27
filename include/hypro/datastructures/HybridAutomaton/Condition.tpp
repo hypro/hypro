@@ -254,7 +254,7 @@ void Condition<Number>::updateSetState() const {
 	for ( std::size_t i = 0; i < mConstraints.size(); ++i ) {
 		if ( mConditionSetState[i] == SETSTATE::UNKNOWN ) {
 			// if the constraints are empty or all zero
-			if ( mConstraints[i].empty() || mConstraints[i].size() == 0 || ( mConstraints[i].matrix() == matrix_t<Number>::Zero( mConstraints[i].matrix().rows(), mConstraints[i].matrix().cols() ) && mConstraints[i].vector() == vector_t<Number>::Zero( mConstraints[i].vector().rows() ) ) ) {
+			if ( mConstraints[i].size() == 0 || mConstraints[i].empty() || ( mConstraints[i].matrix() == matrix_t<Number>::Zero( mConstraints[i].matrix().rows(), mConstraints[i].matrix().cols() ) && mConstraints[i].vector() == vector_t<Number>::Zero( mConstraints[i].vector().rows() ) ) ) {
 				mConditionSetState[i] = SETSTATE::UNIVERSAL;
 			} else {
 				auto opt = Optimizer<Number>( mConstraints[i].matrix(), mConstraints[i].vector() );
