@@ -44,7 +44,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 				// use expensive coverage check
 				if ( use_partial_coverage ) {
 					// from all currently held remaining initial boxes subtract the current initial set to check (partial) coverage
-					std::vector<Box<Number>> tmp;
+					std::vector<BoxT<Number, Converter, Settings>> tmp;
 					for ( const auto& box : initialBoxes ) {
 						auto remaining_boxes = box.setMinus2( treeNode.getInitialSet() );
 						tmp.insert( std::end( tmp ), std::begin( remaining_boxes ), std::end( remaining_boxes ) );
