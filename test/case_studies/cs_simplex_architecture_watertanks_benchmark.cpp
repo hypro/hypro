@@ -222,12 +222,28 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		interval = carl::Interval<double>( std::floor( interval.lower() ), std::ceil( interval.upper() ) );
 	}
 
-	hypro::Hyperoctree<Number> octree{ 2, 8, bbox };
+	hypro::Hyperoctree<Number> octree{ 2, 6, bbox };
 	// add to hyperoctree
 	for ( const auto& r : roots ) {
 		auto segments = getSegments( r );
 		for ( const auto& s : segments ) {
 			octree.add( s.projectOn( { 0, 1 } ) );
+		}
+	}
+
+	// test some random points
+	std::mt19937 generator;
+	std::uniform_real_distribution<double> dist = std::uniform_real_distribution<double>( 0, 1 );
+	for ( std::size_t i = 0; i < 100; ++i ) {
+		hypro::vector_t<double> coordinates = hypro::vector_t<double>( 2 );
+		for ( std::size_t d = 0; d < 2; ++d ) {
+			coordinates( d ) = dist( generator );
+		}
+		hypro::Point<double> point{ coordinates };
+		if ( octree.contains( point ) ) {
+			plt.addPoint( point, hypro::plotting::colors[hypro::plotting::green] );
+		} else {
+			plt.addPoint( point, hypro::plotting::colors[hypro::plotting::red] );
 		}
 	}
 
