@@ -57,7 +57,7 @@ struct gnuplotSettings {
 	bool axes = true;													//< plot axes
 	bool grid = true;													//< plot grid
 	bool title = false;													//< plot title
-	double pointSize = 0.6;												//< pointsize
+	double pointSize = 0.2;												//< pointsize
 	double linewidth = 0.1;												//< linewidth
 	bool keepAspectRatio = true;										//< keep aspect ratio for both axes
 	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );	//< dimensions to plot
@@ -89,7 +89,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	mutable std::ofstream mOutfile;
 	mutable std::map<unsigned, plotting::PlotObject<Number>> mObjects;
 	mutable std::multimap<unsigned, std::vector<Halfspace<Number>>> mPlanes;
-	mutable std::multimap<unsigned, Point<Number>> mPoints;
+	mutable std::vector<plotting::PlotObject<Number>> mPoints;
 	mutable std::multimap<unsigned, vector_t<Number>> mVectors;
 	mutable std::pair<int, int> mLastDimensions;
 	mutable std::pair<vector_t<Number>, vector_t<Number>> mLimits;
@@ -200,17 +200,16 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @brief      Adds a point to the plotter.
 	 * @details    The point, in contrast to an object will be plotted as a cross.
 	 * @param[in]  _point  The point.
-	 * @return     An id referencing the point.
+	 * @param[in]  _color Optionally color the point.
 	 */
-	unsigned addPoint( const Point<Number>& _point );
+	void addPoint( const Point<Number>& _point, std::optional<std::size_t> _color = std::nullopt );
 
 	/**
 	 * @brief      Adds points to the plotter.
 	 * @details    The points will be plotted as crosses.
 	 * @param[in]  _points  The points.
-	 * @return     An id referencing the last passed point.
 	 */
-	unsigned addPoints( const std::vector<Point<Number>>& _points );
+	void addPoints( const std::vector<Point<Number>>& _points );
 
 	/**
 	 * @brief      Adds a vector to the plotter.

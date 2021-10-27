@@ -224,7 +224,7 @@ void Plotter<Number>::removeObject( unsigned id ) {
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addPoint( const Point<Number>& _point ) {
+void Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color ) {
 	assert( _point.dimension() == 2 );
 	// initialize limits
 	if ( mObjects.empty() && mPoints.empty() ) {
@@ -237,19 +237,15 @@ unsigned Plotter<Number>::addPoint( const Point<Number>& _point ) {
 		mLimits.second( d ) = mLimits.second( d ) < _point.rawCoordinates()( d ) ? _point.rawCoordinates()( d ) : mLimits.second( d );
 	}
 
-	mPoints.insert( std::make_pair( mId, _point ) );
-	return mId++;
+	mPoints.push_back( plotting::PlotObject<Number>{ { _point }, false, false, _color } );
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
+void Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
 	for ( const auto& p : _points ) {
 		assert( p.dimension() == 2 );
 		addPoint( p );
-		--mId;
 	}
-	mId++;
-	return mId - 1;
 }
 
 template <typename Number>
@@ -436,21 +432,36 @@ void Plotter<Number>::writeGnuplot() const {
 		}
 
 		if ( !mPoints.empty() ) {
+			// collect styles
+			std::map<std::size_t, std::pair<std::string, std::string>> styles_definitions_calls;
+			std::size_t style_index = 1;
+			std::stringstream ss;
+			ss << std::hex << plotting::colors[plotting::blue];
+			styles_definitions_calls[plotting::colors[plotting::blue]] = std::make_pair( std::to_string( style_index ), "set style line " + std::to_string( style_index ) + " lc rgb '#" + ss.str() + "' pt 7" );
+			ss.str( std::string() );
+			++style_index;
+			for ( const plotting::PlotObject<Number>& p : mPoints ) {
+				if ( p.color ) {
+					if ( styles_definitions_calls.find( p.color.value() ) == std::end( styles_definitions_calls ) ) {
+						ss << std::hex << p.color.value();
+						styles_definitions_calls[p.color.value()] = std::make_pair( std::to_string( style_index ), "set style line " + std::to_string( style_index ) + " lc rgb '#" + ss.str() + "' pt 7" );
+						ss.str( std::string() );
+						++style_index;
+					}
+				}
+			}
+
 			mOutfile << "# plotting points\n";
 			mOutfile << "set multiplot\n";
 			mOutfile << "unset key\n";
 			mOutfile << "set pointsize " << mSettings.pointSize << "\n";
-			mOutfile << "set style line 1 lc rgb '#" << std::hex << mSettings.color << "'\n";
-			mOutfile << "plot ";
-			mOutfile << "'-' w p ls 1";
-			for ( unsigned pos = 1; pos < mPoints.size(); ++pos ) {
-				mOutfile << ", '-' w p ls 1";
+			for ( const auto& [_, valuepair] : styles_definitions_calls ) {
+				mOutfile << valuepair.second << "\n";
 			}
-			mOutfile << "\n";
-		}
-		for ( auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ) {
-			mOutfile << carl::toDouble( pointIt->second.at( 0 ) ) << " " << carl::toDouble( pointIt->second.at( 1 ) ) << "\n";
-			mOutfile << "e\n";
+			for ( const auto& pObj : mPoints ) {
+				auto col = pObj.color ? pObj.color.value() : plotting::colors[plotting::blue];
+				mOutfile << "plot '+' us (" << carl::toDouble( pObj.vertices.front().at( 0 ) ) << "):(" << carl::toDouble( pObj.vertices.front().at( 1 ) ) << ") w p ls " << styles_definitions_calls[col].first << "\n";
+			}
 		}
 		mOutfile << "\n";
 
