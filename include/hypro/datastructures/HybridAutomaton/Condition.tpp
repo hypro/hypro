@@ -35,6 +35,24 @@ Condition<Number>::Condition( const std::vector<carl::Interval<Number>>& interva
 }
 
 template <typename Number>
+void Condition<Number>::addConstraints( const Condition<Number>& other ) {
+	for ( std::size_t i = 0; i < mConstraints.size(); ++i ) {
+		if ( i < other.size() ) {
+			auto cMatrix = other.getMatrix( i );
+			auto cVector = other.getVector( i );
+			assert( cMatrix.cols() == mConstraints[i].matrix().cols() );
+			concatenateVertically( mConstraints[i].rMatrix(), cMatrix );
+			concatenateVertically( mConstraints[i].rVector(), cVector );
+		}
+	}
+	if ( other.size() > this->size() ) {
+		for ( std::size_t i = this->size(); i < other.size(); ++i ) {
+			mConstraints.emplace_back( other.constraints()[i] );
+		}
+	}
+}
+
+template <typename Number>
 bool Condition<Number>::isAxisAligned() const {
 	for ( std::size_t i = 0; i < mConstraints.size(); ++i ) {
 		if ( !isAxisAligned( i ) ) {

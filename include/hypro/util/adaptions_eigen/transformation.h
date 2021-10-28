@@ -36,6 +36,23 @@ matrix_t<Number>& appendRow( matrix_t<Number>& original, const vector_t<Number>&
 }
 
 template <typename Number>
+matrix_t<Number>& concatenateVertically( matrix_t<Number>& original, const matrix_t<Number>& other ) {
+	assert( original.cols() == other.cols() );
+	Eigen::Index originalRowCount = original.rows();
+	original.conservativeResize( original.rows() + other.rows(), original.cols() );
+	original.block( originalRowCount, 0, other.rows(), other.cols() ) = other;
+	return original;
+}
+
+template <typename Number>
+vector_t<Number>& concatenateVertically( vector_t<Number>& original, const vector_t<Number>& other ) {
+	Eigen::Index originalRowCount = original.rows();
+	original.conservativeResize( original.rows() + other.rows(), original.cols() );
+	original.block( originalRowCount, 0, other.rows(), other.cols() ) = other;
+	return original;
+}
+
+template <typename Number>
 vector_t<Number>& appendRow( vector_t<Number>& original, Number entry ) {
 	original.conservativeResize( original.rows() + 1 );
 	original( original.rows() - 1 ) = entry;
