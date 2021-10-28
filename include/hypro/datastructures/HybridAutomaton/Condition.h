@@ -76,6 +76,11 @@ class Condition {
 		updateSetState();
 		return std::any_of( mConditionSetState.begin(), mConditionSetState.end(), []( const auto s ) { return s == SETSTATE::EMPTY; } );
 	}
+	/// checks if a point is contained in a subspace
+	bool contains( const Point<Number>& point, std::size_t I = 0 ) const {
+		auto opt = Optimizer<Number>( mConstraints[I].matrix(), mConstraints[I].vector() );
+		return opt.checkPoint( point );
+	}
 	/// returns state space dimension
 	std::size_t dimension() const {
 		return std::accumulate( mConstraints.begin(), mConstraints.end(), 0, []( std::size_t cur, const auto& cSet ) { return cur + cSet.dimension(); } );
