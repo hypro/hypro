@@ -101,7 +101,7 @@ BENCHMARK_F( HyperOctreeFixture, HyperOctree )( ::benchmark::State& st ) {
 			++count;
 		}
 	}
-	st.counters["contained"] = count;
+	st.counters["contained"] = ::benchmark::Counter( count, ::benchmark::Counter::kAvgIterations );
 }
 
 BENCHMARK_F( HyperOctreeFixture, ClassicLookup )( ::benchmark::State& st ) {
@@ -127,7 +127,7 @@ BENCHMARK_F( HyperOctreeFixture, ClassicLookup )( ::benchmark::State& st ) {
 			++count;
 		}
 	}
-	st.counters["contained"] = count;
+	st.counters["contained"] = ::benchmark::Counter( count, ::benchmark::Counter::kAvgIterations );
 }
 
 template <class Representation>
@@ -195,13 +195,14 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		}
 		// state.counters["fin.leaves"] = double( double( finished_leaves ) / double( leaves ) );
 		// state.counters["nfin.leaves"] = double( double( unfinished_leaves ) / double( leaves ) );
-		state.counters["#fin.leaves"] = finished_leaves;
-		state.counters["#nfin.leaves"] = unfinished_leaves;
-		state.counters["leaves"] = leaves;
-		state.counters["jumps"] = maxJumps;
-		state.counters["nodes"] = nodes;
-		state.counters["cycles"] = cyclic_path_count;
-		state.counters["segments"] = segments;
+		state.counters["#fin.leaves"] = ::benchmark::Counter( finished_leaves, ::benchmark::Counter::kAvgIterations );
+		state.counters["#nfin.leaves"] =
+			  ::benchmark::Counter( unfinished_leaves, ::benchmark::Counter::kAvgIterations );
+		state.counters["leaves"] = ::benchmark::Counter( leaves, ::benchmark::Counter::kAvgIterations );
+		state.counters["jumps"] = ::benchmark::Counter( maxJumps, ::benchmark::Counter::kAvgIterations );
+		state.counters["nodes"] = ::benchmark::Counter( nodes, ::benchmark::Counter::kAvgIterations );
+		state.counters["cycles"] = ::benchmark::Counter( cyclic_path_count, ::benchmark::Counter::kAvgIterations );
+		state.counters["segments"] = ::benchmark::Counter( segments, ::benchmark::Counter::kAvgIterations );
 #ifdef HYPRO_STATISTICS
 		state.counters["fp-cov"] = hypro::Statistician::getInstance().getCounter( "FP-by-coverage" ).val;
 #endif
