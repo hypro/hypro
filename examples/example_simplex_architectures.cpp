@@ -12,7 +12,6 @@
  */
 
 #include <hypro/algorithms/reachability/Reach.h>
-#include <hypro/datastructures/HybridAutomaton/PathUtil.h>
 #include <hypro/datastructures/Hyperoctree.h>
 #include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
@@ -27,31 +26,37 @@
  */
 template <typename Number>
 struct ctrl {
-	hypro::Point<Number> operator()( std::size_t dimension ) {
-		hypro::vector_t<double> coordinates = hypro::vector_t<double>( dimension );
-		for ( std::size_t d = 0; d < dimension; ++d ) {
-			// coordinates( d ) = dist( generator );
-			coordinates( d ) = 0.5;
+	hypro::Point<Number> operator()() {
+		hypro::vector_t<double> coordinates = hypro::vector_t<double>::Zero( 4 );
+		for ( std::size_t d = 0; d < 2; ++d ) {
+			coordinates( d ) = dist( generator );
 		}
 		return hypro::Point<Number>{ coordinates };
 	}
 
 	hypro::Location<Number>* operator()( const hypro::HybridAutomaton<Number>& automaton ) {
-		// std::uniform_int_distribution<int> loc_dist{ int(automaton.getLocations().size()) };
-		std::uniform_int_distribution<int> loc_dist{ 2 };
-		return automaton.getLocations()[0];
+		auto val = loc_dist( generator );
+		return automaton.getLocations().at( val );
 	}
 
-	// std::mt19937 generator{};
-	// std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0, 1 );
+	std::mt19937 generator;
+	std::uniform_int_distribution<int> loc_dist{ 0, 23 };
+	std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0, 1 );
 };
 
 template <typename Number>
-hypro::Condition<Number> widenSample( const hypro::Point<Number>& sample, Number targetWidth ) {
+hypro::Condition<Number> widenSample( const hypro::Point<Number>& sample, Number targetWidth, bool ctrl = true ) {
 	std::vector<carl::Interval<Number>> intervals;
 	Number range = targetWidth / 2;
-	for ( std::size_t i = 0; i < sample.dimension(); ++i ) {
+	for ( std::size_t i = 0; i < 2; ++i ) {
 		intervals.emplace_back( sample.at( i ) - range, sample.at( i ) + range );
+	}
+	if ( ctrl ) {
+		intervals.emplace_back( 0.0002, 0.0002 );
+		intervals.emplace_back( 0.0 );
+	} else {
+		intervals.emplace_back( 0.0 );
+		intervals.emplace_back( 0.0 );
 	}
 	return hypro::Condition<Number>{ intervals };
 }
@@ -103,39 +108,34 @@ int main() {
 	auto& plt = hypro::Plotter<Number>::getInstance();
 	plt.clear();
 	plt.rSettings().overwriteFiles = true;
-	plt.rSettings().cummulative = true;
-	plt.setFilename( "simplex_watertanks" );
+	plt.rSettings().cummulative = false;
+	plt.setFilename( "simplex_watertanks_loop" );
 	// main loop which alternatingly invokels the controller and if necessary the analysis (training phase) for a bounded number of iterations
 	std::size_t iterations{ 10 };
 	while ( iterations ) {
 		--iterations;
-		// create new controller point
-		auto valuation = controller( 2 );
+		// create new controller point, ensure it is valid in the location
+		auto valuation = controller();
 		auto* location = controller( automaton );
+		bool invariantSatisfied = location->getInvariant().contains( valuation );
+		while ( !invariantSatisfied ) {
+			valuation = controller();
+			location = controller( automaton );
+			invariantSatisfied = location->getInvariant().contains( valuation );
+		}
 		COUT( "Chose sample " << valuation << " for location " << location->getName() << std::endl );
 		// check containment, if not contained, update set of reachable states
 		// TODO this still uses the projected set, need to figure this out.
 		if ( !octrees.at( location ).contains( valuation.projectOn( { 0, 1 } ) ) ) {
 			COUT( "Valuation not yet contained, run reachability analysis" << std::endl );
 			// update plot
-			plt.addPoint( valuation, hypro::plotting::colors[hypro::plotting::red] );
+			plt.addPoint( valuation.projectOn( { 0, 1 } ), hypro::plotting::colors[hypro::plotting::red] );
 			// new reachability analysis
 			// reachability tree
 			std::vector<hypro::ReachTreeNode<Representation>> roots;
 			// update initial states - set to small box around sample
-			auto initialBox = widenSample( valuation, widening );
-			// TODO: hardcoded
-			hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero( 4, 4 );
-			hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 4 );
-			constraints( 0, 0 ) = 1;
-			constraints( 1, 0 ) = -1;
-			constraints( 2, 1 ) = 1;
-			constraints( 3, 1 ) = -1;
-			constants( 0 ) = 0.0002;
-			constants( 1 ) = -0.0002;
-			constants( 2 ) = 0;
-			constants( 3 ) = 0;
-			initialBox.addConstraints( hypro::Condition<Number>( constraints, constants ) );
+			bool ctrlLoc = location->getName().find( "_open_" ) != std::string::npos;
+			hypro::Condition<Number> initialBox = widenSample( valuation, widening, ctrlLoc );
 			hypro::HybridAutomaton<Number>::locationConditionMap initialStates;
 			initialStates[location] = initialBox;
 			automaton.setInitialStates( initialStates );
@@ -156,17 +156,20 @@ int main() {
 					auto segments = getSegments( r );
 					for ( const auto& s : segments ) {
 						octrees.at( r.getLocation() ).add( s.projectOn( { 0, 1 } ) );
+						plt.addObject( s.projectOn( { 0, 1 } ).vertices() );
 					}
 				}
-				assert( octrees.at( location ).contains( valuation.projectOn( { 0, 1 } ) ) );
-				// update plot of the octree
-				for ( const auto& [_, octree] : octrees ) {
-					plotOctree( octree, plt );
-				}
+				// assert( octrees.at( location ).contains( valuation.projectOn( { 0, 1 } ) ) );
+				//  update plot of the octree
+				// for ( const auto& [_, octree] : octrees ) {
+				//	plotOctree( octree, plt );
+				//}
 			}
 		} else {
-			plt.addPoint( valuation, hypro::plotting::colors[hypro::plotting::green] );
+			plt.addPoint( valuation.projectOn( { 0, 1 } ), hypro::plotting::colors[hypro::plotting::green] );
 		}
+		// plot intermediate
+		plt.plot2d( hypro::PLOTTYPE::pdf );
 	}
 
 	/*
@@ -186,7 +189,6 @@ int main() {
 	 */
 
 	plt.plot2d( hypro::PLOTTYPE::png );
-	plt.plot2d( hypro::PLOTTYPE::pdf );
 	plt.plot2d( hypro::PLOTTYPE::gen );
 	plt.plot2d( hypro::PLOTTYPE::tex );
 	return 0;
