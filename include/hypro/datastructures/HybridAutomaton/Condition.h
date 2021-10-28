@@ -90,6 +90,8 @@ class Condition {
 		assert( mConstraints.size() > I );
 		return mConstraints.at( I ).vector();
 	}
+	/// add further constraints
+	void addConstraints( const Condition<Number>& other );
 	/// true, if all constraints in all subspaces are axis-aligned (box-shaped)
 	bool isAxisAligned() const;
 	/// true, if all constraints in a particular subspaces are axis-aligned (box-shaped)
