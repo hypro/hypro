@@ -166,20 +166,8 @@ void Plotter<Number>::removeObject( unsigned id ) {
 }
 
 template <typename Number>
-void Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color ) {
-	assert( _point.dimension() == 2 );
-	// initialize limits
-	if ( mObjects.empty() && mPoints.empty() ) {
-		mLimits.first = _point.rawCoordinates();
-		mLimits.second = _point.rawCoordinates();
-	}
-	// update limits
-	for ( unsigned d = 0; d < mLimits.first.rows(); ++d ) {
-		mLimits.first( d ) = mLimits.first( d ) > _point.rawCoordinates()( d ) ? _point.rawCoordinates()( d ) : mLimits.first( d );
-		mLimits.second( d ) = mLimits.second( d ) < _point.rawCoordinates()( d ) ? _point.rawCoordinates()( d ) : mLimits.second( d );
-	}
-
-	mPoints.push_back( plotting::PlotObject<Number>{ { _point }, false, false, _color } );
+unsigned Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color ) {
+	return addObject( { _point }, _color );
 }
 
 template <typename Number>
@@ -301,23 +289,33 @@ void Plotter<Number>::writeGnuplot() const {
 				INFO( "hypro.plotter", "Plotting object " << tmpId << "/" << ( mObjects.size() + mPoints.size() + mPlanes.size() ) );
 			}
 			if ( plotObject.vertices.size() > 0 ) {
-				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
-				for ( const auto vertex : plotObject.vertices ) {
-					assert( vertex.dimension() == 2 );
-					if ( vertex.dimension() == 0 ) {
-						continue;
+				if ( plotObject.vertices.size() == 1 ) {
+					mOutfile << "set object " << std::dec << objectCount << " circle at first \\\n";
+					assert( plotObject.vertices[0].dimension() == 2 );
+					mOutfile << "  " << carl::toDouble( plotObject.vertices[0].at( 0 ) );
+					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
+						mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
 					}
-					mOutfile << "  " << carl::toDouble( vertex.at( 0 ) );
-					for ( unsigned d = 1; d < vertex.dimension(); ++d ) {
-						mOutfile << ", " << carl::toDouble( vertex.at( d ) );
+					mOutfile << " radius 0.005";
+				} else {
+					mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
+					for ( const auto vertex : plotObject.vertices ) {
+						assert( vertex.dimension() == 2 );
+						if ( vertex.dimension() == 0 ) {
+							continue;
+						}
+						mOutfile << "  " << carl::toDouble( vertex.at( 0 ) );
+						for ( unsigned d = 1; d < vertex.dimension(); ++d ) {
+							mOutfile << ", " << carl::toDouble( vertex.at( d ) );
+						}
+						mOutfile << " to \\\n";
 					}
-					mOutfile << " to \\\n";
-				}
-				// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
-				// Project to 2d	TODO: REINSERT ASSERTION
-				mOutfile << "  " << carl::toDouble( plotObject.vertices[0].at( 0 ) );
-				for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
-					mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
+					// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
+					// Project to 2d	TODO: REINSERT ASSERTION
+					mOutfile << "  " << carl::toDouble( plotObject.vertices[0].at( 0 ) );
+					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
+						mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
+					}
 				}
 
 				// color lookup

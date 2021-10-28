@@ -202,7 +202,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @param[in]  _point  The point.
 	 * @param[in]  _color Optionally color the point.
 	 */
-	void addPoint( const Point<Number>& _point, std::optional<std::size_t> _color = std::nullopt );
+	unsigned addPoint( const Point<Number>& _point, std::optional<std::size_t> _color = std::nullopt );
 
 	/**
 	 * @brief      Adds points to the plotter.
