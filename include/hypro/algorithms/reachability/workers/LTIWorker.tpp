@@ -11,7 +11,9 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant() );
 	// If the first segment did not fulfill the invariant of the location, the jump here should not have been made
-	assert( containment != CONTAINMENT::NO );
+	if ( containment == CONTAINMENT::NO ) {
+		return REACHABILITY_RESULT::SAFE;
+	}
 
 	// insert segment
 	*out = segment;
