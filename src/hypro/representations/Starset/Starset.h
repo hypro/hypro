@@ -14,7 +14,15 @@ static_assert(
 #include "../../util/typetraits.h"
 #include "../Polytopes/HPolytope/HPolytope.h"
 #include "../Polytopes/HPolytope/HPolytopeSetting.h"
+#include "../Box/Box.h"
+#include "../Box/BoxSetting.h"
+#include "../../util/convexHull.h"
 #include "StarsetSetting.h"
+
+#include <typeinfo>
+#include <string>
+
+
 
 namespace hypro {
 
@@ -25,7 +33,7 @@ namespace hypro {
  * @tparam	   Settings   The used settings.
  * \ingroup geoState @{
  */
-template <typename Number, typename Converter, class Setting, class Representation=HPolytopeT<Number,Converter, HPolytopeSetting>>
+template <typename Number, typename Converter, class Setting, class Representation=BoxT<Number,Converter, BoxLinearOptimizationOn>>//HPolytopeT<Number,Converter, HPolytopeSetting>>
 class StarsetT : private GeometricObjectBase {
   private:
   public:
@@ -272,6 +280,8 @@ class StarsetT : private GeometricObjectBase {
 
    std::pair<matrix_t<Number>, vector_t<Number>>
 	calculateHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec  ) const;
+
+
 	/**
    * @brief      Containment check for a Starset.
    * @param[in]  Starset   The Starset.
