@@ -38,22 +38,23 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};
+	if ( !setting.plotting().plotDimensions.empty() ) {
+		auto levels = analyzer.getLevels();
 
-	auto levels = analyzer.getLevels();
-
-	size_t levelIndex = 0;
-	for ( auto levelVar : levels ) {
-		std::visit( [&]( auto* level ) {
-			for ( const auto& node : preorder( level->roots ) ) {
-				std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), [=]( auto& segment ) {
-					FullState state{};
-					state.setSet( segment );
-					return PlotData{ state, levelIndex };
-				} );
-			}
-		},
-					levelVar );
-		levelIndex += 1;
+		size_t levelIndex = 0;
+		for ( auto levelVar : levels ) {
+			std::visit( [&]( auto* level ) {
+				for ( const auto& node : preorder( level->roots ) ) {
+					std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), [=]( auto& segment ) {
+						FullState state{};
+						state.setSet( segment );
+						return PlotData{ state, levelIndex };
+					} );
+				}
+			},
+						levelVar );
+			levelIndex += 1;
+		}
 	}
 
 	return plotData;
@@ -69,24 +70,28 @@ std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Numbe
 	using DiscreteRep = hypro::Box<Number>;
 	using RectangularRep = hypro::Box<Number>;
 	DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep> analyzer{ decomposedHa, decomposition, clockCount,
-		setting.fixedParameters(), setting.strategy().front() };
+																						setting.fixedParameters(), setting.strategy().front() };
 	auto result = analyzer.run();
-	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
-		std::cout << "Could not verify safety." << std::endl;
-	} else {
-		std::cout << "The model is safe." << std::endl;
+	if ( !setting.fixedParameters().silent ) {
+		if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
+			std::cout << "Could not verify safety." << std::endl;
+		} else {
+			std::cout << "The model is safe." << std::endl;
+		}
 	}
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
 	START_BENCHMARK_OPERATION( "Compose flowpipes" );
 	std::vector<PlotData<FullState>> plotData{};
-	// note: should skip this (return empty vector) if --skipplot is enabled, because composition can take a very long time
-	DecompositionalSegmentGen segments( analyzer.getRoots(), analyzer.getDepRoots(), decomposition, clockCount );
-    for ( auto segment = segments.next(); segment; segment = segments.next() ) {
-        FullState state{};
-        state.setSet( segment.value() );
-        plotData.push_back( PlotData{ state, 0, 0 } );
-    }
-    STOP_BENCHMARK_OPERATION( "Compose flowpipes" );
+	// skip if not plotted, otherwise compose plot data
+	if ( !setting.plotting().plotDimensions.empty() ) {
+		DecompositionalSegmentGen segments( analyzer.getRoots(), analyzer.getDepRoots(), decomposition, clockCount );
+		for ( auto segment = segments.next(); segment; segment = segments.next() ) {
+			FullState state{};
+			state.setSet( segment.value() );
+			plotData.push_back( PlotData{ state, 0, 0 } );
+		}
+	}
+	STOP_BENCHMARK_OPERATION( "Compose flowpipes" );
 	return plotData;
 }
 
@@ -97,23 +102,26 @@ std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton
 	LTIAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
 	auto result = analyzer.run();
 
-	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
-		std::cout << "Could not verify safety." << std::endl;
-		// Call bad state handling (e.g., return path)
-	} else {
-		std::cout << "The model is safe." << std::endl;
+	if ( !setting.fixedParameters().silent ) {
+		if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
+			std::cout << "Could not verify safety." << std::endl;
+		} else {
+			std::cout << "The model is safe." << std::endl;
+		}
 	}
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};
 
-	for ( const auto& node : preorder( roots ) ) {
-		std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
-			FullState state{};
-			state.setSet( segment );
-			return PlotData{ state, 0, 0 };
-		} );
+	if ( !setting.plotting().plotDimensions.empty() ) {
+		for ( const auto& node : preorder( roots ) ) {
+			std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
+				FullState state{};
+				state.setSet( segment );
+				return PlotData{ state, 0, 0 };
+			} );
+		}
 	}
 	return plotData;
 }
@@ -125,23 +133,25 @@ std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number>& auto
 	SingularAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), roots };
 	auto result = analyzer.run();
 
-	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
-		std::cout << "Could not verify safety." << std::endl;
-		// Call bad state handling (e.g., return path)
-	} else {
-		std::cout << "The model is safe." << std::endl;
+	if ( !setting.fixedParameters().silent ) {
+		if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
+			std::cout << "Could not verify safety." << std::endl;
+		} else {
+			std::cout << "The model is safe." << std::endl;
+		}
 	}
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};
-
-	for ( const auto& node : preorder( roots ) ) {
-		std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
-			FullState state{};
-			state.setSet( segment );
-			return PlotData{ state, 0, 0 };
-		} );
+	if ( !setting.plotting().plotDimensions.empty() ) {
+		for ( const auto& node : preorder( roots ) ) {
+			std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
+				FullState state{};
+				state.setSet( segment );
+				return PlotData{ state, 0, 0 };
+			} );
+		}
 	}
 	return plotData;
 }
@@ -153,26 +163,29 @@ std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& a
 	RectangularAnalyzer<State> analyzer{ automaton, setting, roots };
 	auto result = analyzer.run();
 
-	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
-		std::cout << "Could not verify safety." << std::endl;
-		// Call bad state handling (e.g., return path)
-	} else {
-		std::cout << "The model is safe." << std::endl;
+	if ( !setting.fixedParameters().silent ) {
+		if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
+			std::cout << "Could not verify safety." << std::endl;
+		} else {
+			std::cout << "The model is safe." << std::endl;
+		}
 	}
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
 
 	// create plot data
 	std::vector<PlotData<FullState>> plotData{};
 
-	for ( const auto& fp : analyzer.getFlowpipes() ) {
-		std::transform( fp.begin(), fp.end(), std::back_inserter( plotData ), []( auto& segment ) {
-			FullState state{};
-			std::visit( [&]( auto& valuationSet ) {
-				state.setSet( valuationSet );
-			},
-						segment.getSet() );
-			return PlotData{ state, 0, 0 };
-		} );
+	if ( !setting.plotting().plotDimensions.empty() ) {
+		for ( const auto& fp : analyzer.getFlowpipes() ) {
+			std::transform( fp.begin(), fp.end(), std::back_inserter( plotData ), []( auto& segment ) {
+				FullState state{};
+				std::visit( [&]( auto& valuationSet ) {
+					state.setSet( valuationSet );
+				},
+							segment.getSet() );
+				return PlotData{ state, 0, 0 };
+			} );
+		}
 	}
 	return plotData;
 }
