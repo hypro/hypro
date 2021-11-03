@@ -51,7 +51,7 @@ hypro::Settings processSettings( const hypro::ReachabilitySettings& parsedSettin
 	fixedParameters.localTimeHorizon = cliOptions.count( "timehorizon" )
 											 ? cliOptions["timehorizon"].as<mpq_class>()
 											 : parsedSettings.timeBound;
-	fixedParameters.silent = cliOptions.count( "silent" ) ? true : false;
+	fixedParameters.silent = cliOptions.count( "silent" ) and cliOptions["silent"].as<bool>() ? true : false;
 
 	// plotting
 	hypro::PlottingSettings plotting{};

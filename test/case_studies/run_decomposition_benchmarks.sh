@@ -48,6 +48,7 @@ run() {
     starttime=`date +%s.%N`
     while IFS= read -r line
     do
+        echo $line
         if [[ $line == 'Timeout' ]]; then
             result="timeout"
         fi

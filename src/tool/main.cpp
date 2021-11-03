@@ -23,11 +23,13 @@ using namespace hypro;
 int main( int argc, char const* argv[] ) {
 	// parse command line arguments
 	START_BENCHMARK_OPERATION( "Parsing" );
-	std::cout << "Argc: " << argc << std::endl;
 	auto options = hydra::handleCMDArguments( argc, argv );
 
 	// parse model file
-	COUT( "Passed model file: " << options["model"].as<std::string>() << std::endl );
+	if ( !options.count( "silent" ) or !options["silent"].as<bool>() ) {
+		COUT( "Passed model file: " << options["model"].as<std::string>() << std::endl );
+	}
+
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<hydra::Number>(
 		  options["model"].as<std::string>() );
 
