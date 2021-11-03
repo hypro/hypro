@@ -1,6 +1,15 @@
-#include "cli.h"
+/*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-#include "../typedefs.h"
+#include "cli/cli.h"
+
+#include "typedefs.h"
 
 #include <hypro/types.h>
 #include <hypro/util/logging/Logger.h>
@@ -9,6 +18,7 @@
 namespace hydra {
 
 boost::program_options::variables_map handleCMDArguments( int argc, const char** argv ) {
+	std::cout << "Argv: " << *argv << std::endl;
 	namespace po = boost::program_options;
 	po::variables_map vm;
 	// clang-format off
@@ -52,7 +62,7 @@ boost::program_options::variables_map handleCMDArguments( int argc, const char**
 			( "clockCount", po::value<std::size_t>()->default_value( 0 ), "Number of clocks to use in decompositional analysis. Default is 0." )
 			( "singularSubspaceSize", po::value<std::size_t>()->default_value( 1 ), "Maximal number of variables in singular subspace. Default is 1, use -1 for unlimited.");
 
-	po::options_description allOptions("Allowed options.");
+	po::options_description allOptions("Allowed options");
 	allOptions.add(general).add(analysisParameters).add(plotting).add(preprocessing);
 
 	// clang-format on
