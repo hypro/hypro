@@ -23,31 +23,41 @@
 
 namespace hypro::benchmark {
 
-template <typename Representation>
-static void run_hydra_leaking_tank( ::benchmark::State& state ) {
+static void run_hydra_leaking_tank_box( ::benchmark::State& state ) {
+	// Perform setup here
+	using Number = mpq_class;
+	using Representation = hypro::BoxT<Number, hypro::Converter<Number>, BoxLinearOptimizationOn>;
+	namespace po = boost::program_options;
 	// -m leaking_tank_hypro_with_aggregation_separateControllerAndPlant_with_timer.model -r box -s
 	// BoxLinearOptimizationOn -a AGG -c 0 --clockCount 0 --decompose --singularSubspaceSize 1 --skipplot
 	// store arguments
 	std::size_t clocks = state.range( 0 );
-	std::size_t subspaces = 1;	// state.range( 1 );
-	// Perform setup here
-	using Number = double;
+	std::size_t subspaces = state.range( 1 );
 
 	// assemble settings
-	// create artificial options-mapping
+
 	std::string filename{
 		  getCSModelsPath() +
 		  "subspaceBenchmarks/leaking_tank_hypro_with_aggregation_separateControllerAndPlant_with_timer.model" };
-	std::string arguments =
-		  "-m " + filename + " -r " + Representation::type()._to_string() + " -s BoxLinearOptimizationOn";
-	// +" -a AGG -c"
-	//" 0 "
-	//"--clockCount " +
-	// std::to_string( clocks ) + " --decompose --singularSubspaceSize " +
-	// std::to_string( subspaces ) + " --skipplot";
-	std::cout << "Passed options: " << arguments << std::endl;
-	const char* args = arguments.c_str();
-	boost::program_options::variables_map options = hydra::handleCMDArguments( 7, &args );
+	const char* arguments[] = {
+		  "-m ",
+		  filename.c_str(),
+		  "-r",
+		  Representation::type()._to_string(),
+		  "-s",
+		  hypro::boxSetting_name::_from_integral( Representation::Settings::type_enum )._to_string(),
+		  "-a",
+		  "AGG",
+		  "-c",
+		  "0",
+		  "--clockCount",
+		  std::to_string( clocks ).c_str(),
+		  "--decompose",
+		  "--singularSubspaceSize",
+		  std::to_string( subspaces ).c_str(),
+		  "--skipplot",
+		  "--silent" };
+	po::variables_map options = hydra::handleCMDArguments( 17, arguments );
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<typename Representation::NumberType>( filename );
 	// perform preprocessing
@@ -60,11 +70,118 @@ static void run_hydra_leaking_tank( ::benchmark::State& state ) {
 		// run reachability analysis
 		auto result = ::hydra::reachability::analyze( automaton, settings, preprocessingInformation );
 	}
+	state.counters.insert( { { "clocks", clocks }, { "merge-bound", subspaces } } );
 }
+
+static void run_hydra_two_tanks_box( ::benchmark::State& state ) {
+	// Perform setup here
+	using Number = mpq_class;
+	using Representation = hypro::BoxT<Number, hypro::Converter<Number>, BoxLinearOptimizationOn>;
+	namespace po = boost::program_options;
+	// -m leaking_tank_hypro_with_aggregation_separateControllerAndPlant_with_timer.model -r box -s
+	// BoxLinearOptimizationOn -a AGG -c 0 --clockCount 0 --decompose --singularSubspaceSize 1 --skipplot
+	// store arguments
+	std::size_t clocks = state.range( 0 );
+	std::size_t subspaces = state.range( 1 );
+
+	// assemble settings
+
+	std::string filename{
+		  getCSModelsPath() +
+		  "subspaceBenchmarks/two_tank_system_hypro_with_aggregation_separateControllerAndPlant_with_timer.model" };
+	const char* arguments[] = {
+		  "-m ",
+		  filename.c_str(),
+		  "-r",
+		  Representation::type()._to_string(),
+		  "-s",
+		  hypro::boxSetting_name::_from_integral( Representation::Settings::type_enum )._to_string(),
+		  "-a",
+		  "AGG",
+		  "-c",
+		  "0",
+		  "--clockCount",
+		  std::to_string( clocks ).c_str(),
+		  "--decompose",
+		  "--singularSubspaceSize",
+		  std::to_string( subspaces ).c_str(),
+		  "--skipplot",
+		  "--silent" };
+	po::variables_map options = hydra::handleCMDArguments( 17, arguments );
+
+	auto [automaton, reachSettings] = hypro::parseFlowstarFile<typename Representation::NumberType>( filename );
+	// perform preprocessing
+	auto preprocessingInformation = hydra::preprocessing::preprocess( automaton, options["decompose"].as<bool>(),
+																	  options["singularSubspaceSize"].as<std::size_t>(),
+																	  options["clockCount"].as<std::size_t>() );
+	auto settings = hydra::processSettings( reachSettings, options );
+	// benchmark
+	for ( auto _ : state ) {
+		// run reachability analysis
+		auto result = ::hydra::reachability::analyze( automaton, settings, preprocessingInformation );
+	}
+	state.counters.insert( { { "clocks", clocks }, { "merge-bound", subspaces } } );
+}
+
+static void run_hydra_thermostat_box( ::benchmark::State& state ) {
+	// Perform setup here
+	using Number = mpq_class;
+	using Representation = hypro::BoxT<Number, hypro::Converter<Number>, BoxLinearOptimizationOn>;
+	namespace po = boost::program_options;
+	// -m leaking_tank_hypro_with_aggregation_separateControllerAndPlant_with_timer.model -r box -s
+	// BoxLinearOptimizationOn -a AGG -c 0 --clockCount 0 --decompose --singularSubspaceSize 1 --skipplot
+	// store arguments
+	std::size_t clocks = state.range( 0 );
+	std::size_t subspaces = state.range( 1 );
+
+	// assemble settings
+
+	std::string filename{
+		  getCSModelsPath() +
+		  "subspaceBenchmarks/thermostat_hypro_with_aggregation_separateControllerAndPlant_with_timer.model" };
+	const char* arguments[] = {
+		  "-m ",
+		  filename.c_str(),
+		  "-r",
+		  Representation::type()._to_string(),
+		  "-s",
+		  hypro::boxSetting_name::_from_integral( Representation::Settings::type_enum )._to_string(),
+		  "-a",
+		  "AGG",
+		  "-c",
+		  "0",
+		  "--clockCount",
+		  std::to_string( clocks ).c_str(),
+		  "--decompose",
+		  "--singularSubspaceSize",
+		  std::to_string( subspaces ).c_str(),
+		  "--skipplot",
+		  "--silent" };
+	po::variables_map options = hydra::handleCMDArguments( 17, arguments );
+
+	auto [automaton, reachSettings] = hypro::parseFlowstarFile<typename Representation::NumberType>( filename );
+	// perform preprocessing
+	auto preprocessingInformation = hydra::preprocessing::preprocess( automaton, options["decompose"].as<bool>(),
+																	  options["singularSubspaceSize"].as<std::size_t>(),
+																	  options["clockCount"].as<std::size_t>() );
+	auto settings = hydra::processSettings( reachSettings, options );
+	// benchmark
+	for ( auto _ : state ) {
+		// run reachability analysis
+		auto result = ::hydra::reachability::analyze( automaton, settings, preprocessingInformation );
+	}
+	state.counters.insert( { { "clocks", clocks }, { "merge-bound", subspaces } } );
+}
+
 // Register the function as a benchmark
-BENCHMARK_TEMPLATE( run_hydra_leaking_tank, hypro::BoxT<double, hypro::Converter<double>, BoxLinearOptimizationOn> )
-	  ->DenseRange( 0, 4, 1 )
-	  ->DenseRange( 1, 3, 1 )
+BENCHMARK( run_hydra_leaking_tank_box )
+	  ->ArgsProduct( { ::benchmark::CreateDenseRange( 1, 4, 1 ), ::benchmark::CreateDenseRange( 1, 3, 1 ) } )
+	  ->Unit( ::benchmark::kSecond );
+BENCHMARK( run_hydra_two_tanks_box )
+	  ->ArgsProduct( { ::benchmark::CreateDenseRange( 1, 4, 1 ), ::benchmark::CreateDenseRange( 1, 3, 1 ) } )
+	  ->Unit( ::benchmark::kSecond );
+BENCHMARK( run_hydra_thermostat_box )
+	  ->ArgsProduct( { ::benchmark::CreateDenseRange( 1, 4, 1 ), ::benchmark::CreateDenseRange( 1, 3, 1 ) } )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark

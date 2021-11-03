@@ -101,11 +101,13 @@ class DecompositionalAnalyzer {
 				}
 			}
 		}
-		std::cout << "Singular: " << mSingularSubspaces << ", discrete: " << mDiscreteSubspaces << ", lti: " << mSegmentedSubspaces << "\n";
+#ifdef HYPRO_LOGGING
+		INFO( "hypro.reachability", "Singular: " << mSingularSubspaces << ", discrete: " << mDiscreteSubspaces << ", lti: " << mSegmentedSubspaces << "\n" );
 		for ( std::size_t i = 0; i < mDecomposition.subspaces.size(); ++i ) {
-			std::cout << "subspace " << i << ": " << mDecomposition.subspaceTypes[i] << ", " << mDecomposition.subspaces[i] << "\n";
+			INFO( "hypro.reachability", "subspace " << i << ": " << mDecomposition.subspaceTypes[i] << ", " << mDecomposition.subspaces[i] << "\n" );
 		}
-		std::cout << "Used representations: lti: " << LTIRep::type() << ", singular: " << SingularRep::type() << ", discrete: " << DiscreteRep::type() << "\n";
+		INFO( "hypro.reachability", "Used representations: lti: " << LTIRep::type() << ", singular: " << SingularRep::type() << ", discrete: " << DiscreteRep::type() << "\n" );
+#endif
 	}
 
 	/**
