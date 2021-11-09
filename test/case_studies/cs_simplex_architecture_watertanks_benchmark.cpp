@@ -18,6 +18,7 @@
 #include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 #include <hypro/paths.h>
+#include <hypro/util/logging/Logger.h>
 #include <hypro/util/plotting/Plotter.h>
 #include <random>
 #include <string>
@@ -138,7 +139,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	RESET_STATS();
 	// Perform setup here
 	using Number = double;
-	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init.model" };
+	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init_ticks.model" };
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( getCSModelsPath() + filename );
 
@@ -216,6 +217,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	plt.rSettings().cummulative = false;
 	plt.setFilename( "simplex_watertanks" );
 
+	/*
 	// create hyperoctree
 	auto bbox = computeBoundingBox( roots ).projectOn( { 0, 1 } );
 	// widen dimensions until they are integer to increase stability
@@ -233,6 +235,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	}
 
 	// test some random points
+
 	std::mt19937 generator;
 	std::uniform_real_distribution<double> dist = std::uniform_real_distribution<double>( 0, 1 );
 	for ( std::size_t i = 0; i < 100; ++i ) {
@@ -247,6 +250,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 			plt.addPoint( point, hypro::plotting::colors[hypro::plotting::red] );
 		}
 	}
+	 */
 
 	for ( const auto& node : hypro::preorder( roots ) ) {
 		for ( const auto& segment : node.getFlowpipe() ) {
@@ -263,7 +267,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	}
 
 	// plot octree
-	plotRecursive( octree, plt );
+	// plotRecursive( octree, plt );
 
 	plt.plot2d( hypro::PLOTTYPE::png );
 	plt.plot2d( hypro::PLOTTYPE::pdf );
@@ -286,7 +290,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 15, 15, 1 )
+	  ->DenseRange( 150, 150, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
