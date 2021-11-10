@@ -41,96 +41,6 @@ void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<dou
 	}
 }
 
-class HyperOctreeFixture : public ::benchmark::Fixture {
-	using Number = double;
-
-  public:
-	void SetUp( const ::benchmark::State& state ) {
-		std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init.model" };
-
-		auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( getCSModelsPath() + filename );
-
-		auto settings = hypro::convert( reachSettings );
-		settings.rStrategy().front().detectJumpFixedPoints = true;
-		settings.rStrategy().front().detectFixedPointsByCoverage = false;
-		settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
-		settings.rFixedParameters().localTimeHorizon = 100;
-		settings.rFixedParameters().jumpDepth = 15;
-		settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
-		std::vector<hypro::Path<Number>> last_paths{};
-
-		roots = hypro::makeRoots<hypro::Box<Number>>( automaton );
-		auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( automaton, settings.fixedParameters(),
-																	   settings.strategy().front(), roots );
-		auto result = reacher.computeForwardReachability();
-	}
-
-	void TearDown( const ::benchmark::State& state ) {}
-
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots;
-	std::mt19937 generator;
-	std::uniform_real_distribution<double> dist = std::uniform_real_distribution<double>( 0, 1 );
-};
-
-BENCHMARK_F( HyperOctreeFixture, HyperOctree )( ::benchmark::State& st ) {
-	// create hyperoctree
-	auto bbox = computeBoundingBox( roots ).projectOn( { 0, 1 } );
-	// widen dimensions until they are integer to increase stability
-	for ( auto& interval : bbox.rIntervals() ) {
-		interval = carl::Interval<double>( std::floor( interval.lower() ), std::ceil( interval.upper() ) );
-	}
-
-	hypro::Hyperoctree<double> octree{ 2, 8, bbox };
-	// add to hyperoctree
-	for ( const auto& r : roots ) {
-		auto segments = getSegments( r );
-		for ( const auto& s : segments ) {
-			octree.add( s.projectOn( { 0, 1 } ) );
-		}
-	}
-
-	std::size_t count = 0;
-	for ( auto _ : st ) {
-		// create point
-		hypro::vector_t<double> coordinates = hypro::vector_t<double>( 2 );
-		for ( std::size_t d = 0; d < 2; ++d ) {
-			coordinates( d ) = dist( generator );
-		}
-		hypro::Point<double> point{ coordinates };
-		auto res = octree.contains( point );
-		if ( res ) {
-			++count;
-		}
-	}
-	st.counters["contained"] = ::benchmark::Counter( count, ::benchmark::Counter::kAvgIterations );
-}
-
-BENCHMARK_F( HyperOctreeFixture, ClassicLookup )( ::benchmark::State& st ) {
-	std::vector<hypro::Box<double>> segments;
-	for ( const auto& r : roots ) {
-		auto tmp = getSegments( r );
-		for ( auto& segment : tmp ) {
-			segments.push_back( segment.projectOn( { 0, 1 } ) );
-		}
-	}
-
-	std::size_t count = 0;
-	for ( auto _ : st ) {
-		// create point
-		hypro::vector_t<double> coordinates = hypro::vector_t<double>( 2 );
-		for ( std::size_t d = 0; d < 2; ++d ) {
-			coordinates( d ) = dist( generator );
-		}
-		hypro::Point<double> point{ coordinates };
-		auto res = std::any_of( std::begin( segments ), std::end( segments ),
-								[&point]( const auto& seg ) { return seg.contains( point ); } );
-		if ( res ) {
-			++count;
-		}
-	}
-	st.counters["contained"] = ::benchmark::Counter( count, ::benchmark::Counter::kAvgIterations );
-}
-
 template <class Representation>
 static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	// store arguments
@@ -140,13 +50,14 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	// Perform setup here
 	using Number = double;
 	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init_ticks.model" };
+	auto& plt = hypro::Plotter<Number>::getInstance();
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( getCSModelsPath() + filename );
 
 	auto settings = hypro::convert( reachSettings );
 	settings.rStrategy().front().detectJumpFixedPoints = true;
-	settings.rStrategy().front().detectFixedPointsByCoverage = false;
-	settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
+	settings.rStrategy().front().detectFixedPointsByCoverage = true;
+	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
 	settings.rFixedParameters().localTimeHorizon = 100;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
@@ -170,6 +81,10 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		auto nodes = std::size_t( 0 );
 		auto cyclic_path_count = std::size_t( 0 );
 		auto segments = std::size_t( 0 );
+		std::optional<hypro::Path<Number>> shortest{ std::nullopt };
+		const hypro::ReachTreeNode<Representation>* shortest_node{ nullptr };
+		std::optional<hypro::Path<Number>> shortest_cycle{ std::nullopt };
+		const hypro::ReachTreeNode<Representation>* shortest_cycle_node{ nullptr };
 
 		for ( const ReachTreeNode<Representation>& node : hypro::preorder( roots ) ) {
 			++nodes;
@@ -183,10 +98,19 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 					if ( has_discrete_cycle( node.getPath() ) ) {
 						INFO( "hypro.casestudies", "Path " << node.getPath() << " is cyclic." );
 						++cyclic_path_count;
+						if ( !shortest_cycle ||
+							 node.getPath().elements.size() < shortest_cycle.value().elements.size() ) {
+							shortest_cycle = node.getPath();
+							shortest_cycle_node = &node;
+						}
 					}
 #ifdef HYPRO_LOGGING
 					else {
 						INFO( "hypro.casestudies", "Path " << node.getPath() << " is truly unfinished." );
+						if ( !shortest || node.getPath().elements.size() < shortest.value().elements.size() ) {
+							shortest = node.getPath();
+							shortest_node = &node;
+						}
 					}
 #endif
 				}
@@ -207,11 +131,39 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 #ifdef HYPRO_STATISTICS
 		state.counters["fp-cov"] = hypro::Statistician::getInstance().getCounter( "FP-by-coverage" ).val;
 #endif
+		if ( shortest ) {
+			std::cout << "Shortest non-cyclic, unfinished path: " << shortest.value() << std::endl;
+			plt.clear();
+			plt.rSettings().overwriteFiles = true;
+			plt.rSettings().cummulative = false;
+			plt.setFilename( "shortest_unfinished_path" );
+			while ( shortest_node != nullptr ) {
+				for ( const auto& seg : shortest_node->getFlowpipe() ) {
+					plt.addObject( seg.projectOn( { 0, 1 } ).vertices() );
+				}
+				shortest_node = shortest_node->getParent();
+			}
+			plt.plot2d( hypro::PLOTTYPE::pdf );
+		}
+		if ( shortest_cycle ) {
+			std::cout << "Shortest cyclic, unfinished path: " << shortest_cycle.value() << std::endl;
+			plt.clear();
+			plt.rSettings().overwriteFiles = true;
+			plt.rSettings().cummulative = true;
+			plt.setFilename( "shortest_cyclic_path" );
+			while ( shortest_cycle_node != nullptr ) {
+				for ( const auto& seg : shortest_cycle_node->getFlowpipe() ) {
+					plt.addObject( seg.projectOn( { 0, 1 } ).vertices() );
+				}
+				shortest_cycle_node = shortest_cycle_node->getParent();
+			}
+			plt.plot2d( hypro::PLOTTYPE::pdf );
+			plt.plot2d( hypro::PLOTTYPE::gen );
+		}
 	}
 
 	// only plot the last run
 	// plotting
-	auto& plt = hypro::Plotter<Number>::getInstance();
 	plt.clear();
 	plt.rSettings().overwriteFiles = true;
 	plt.rSettings().cummulative = false;
@@ -252,6 +204,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	}
 	 */
 
+	/*
 	for ( const auto& node : hypro::preorder( roots ) ) {
 		for ( const auto& segment : node.getFlowpipe() ) {
 			if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
@@ -284,13 +237,13 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	for ( const auto& path : last_paths ) {
 		TRACE( channel, path );
 	}
-
+	*/
 	PRINT_STATS()
 }
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 150, 150, 1 )
+	  ->DenseRange( 200, 200, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
