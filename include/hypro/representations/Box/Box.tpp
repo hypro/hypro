@@ -788,6 +788,7 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 }
 template <typename Number, typename Converter, class Setting>
 std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::setMinus2( const BoxT<Number, Converter, Setting>& minusbox ) const {
+	//std::cout << "function hitted" << std::endl;
 	std::vector<hypro::BoxT<Number, Converter, Setting>> result;
 	if ( this->dimension() != minusbox.dimension() ) {
 		return result;
@@ -796,11 +797,14 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 		std::vector<carl::Interval<Number>> minus = minusbox.intervals();
 
 		//------------- check whether the difference is unchanged or empty -----------
+		// NOTE: without the unchanged test, the set difference is not computeted correctly (then one more min/max would be needed for disjunct sets).
 		bool empty = true;
 		bool unchanged = false;
 		for ( long unsigned int i = 0; i < this->dimension(); i++ ) {
 			if ( minus.at( i ).lower() <= box.at( i ).lower() ) {
-				if ( minus.at( i ).upper() <= box.at( i ).lower() ) {
+				if ( minus.at( i ).upper() < box.at( i ).lower() ) {
+					unchanged = true;
+				}else if ( minus.at( i ).upper() == box.at( i ).lower() ) {
 					if (box.at(i).lower()!=box.at(i).upper()){
 						unchanged = true;
 					}
@@ -817,6 +821,8 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 		}
 		if ( unchanged ) {
 			std::cout << "unchanged detected" << std::endl;
+			std::cout << "box: " << this->vertices() << std::endl;
+			std::cout << "minusbox: " << minusbox.vertices() << std::endl;
 			// result.push_back(this);
 			BoxT<Number, Converter, Setting> workbox( box );
 			result.push_back( workbox );
@@ -839,23 +845,24 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 			box3.at( i ).setLower( minus.at( i ).upper() );
 			if ( box2.at( i ).lower() < box2.at( i ).upper() ) {
 				BoxT<Number, Converter, Setting> workbox( box2 );
-				std::cout << "untere box nicht leer" << std::endl;
+				//std::cout << "untere box nicht leer " << i << std::endl;
 				result.push_back( workbox );
 				// carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
 				carl::Interval<Number> tmp( box2.at( i ).upper(), box.at( i ).upper() );
-				std::cout << tmp << std::endl;
+				//std::cout << tmp << std::endl;
 				box.at( i ) = tmp;
 			}
 			if ( box3.at( i ).lower() < box3.at( i ).upper() ) {
 				BoxT<Number, Converter, Setting> workbox2( box3 );
-				std::cout << "obere box nicht leer" << std::endl;
+				//std::cout << "obere box nicht leer " << i << std::endl;
 				result.push_back( workbox2 );
 				// carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
 				carl::Interval<Number> tmp2( box.at( i ).lower(), box3.at( i ).lower() );
-				std::cout << tmp2 << std::endl;
+				//std::cout << tmp2 << std::endl;
 				box.at( i ) = tmp2;
 			}
 		}
+		std::cout << result.size() << std::endl;
 		return result;
 	}
 	// return result;
