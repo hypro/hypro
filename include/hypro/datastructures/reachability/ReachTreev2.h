@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 
 #include "../../util/typetraits.h"
@@ -98,9 +107,9 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	const Representation& getInitialSet() const { return mInitialSet; }
 
 	[[deprecated( "Use getInitialSet() instead." )]] const Representation& getState() const { return mInitialSet; }
-
+	/// Getter for the location
 	const Location<Number>* getLocation() const { return mLocation; }
-
+	/// Getter for timing-information (global time when the node was active)
 	const carl::Interval<SegmentInd>& getTimings() const { return mTimings; }
 	std::vector<SegmentInd>& getFpTimings() { return mFpTimings; }
 	const std::vector<SegmentInd>& getFpTimings() const { return mFpTimings; }
@@ -112,8 +121,9 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	 * TODO Implement
 	 */
 	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
-
+	/// Sets the bounding box of the sets of reachable states for this node (caching)
 	void setBoundingBox( const std::vector<carl::Interval<Number>>& intervals ) { mInitialBoundingBox = intervals; }
+	/// Returns the bounding box stored for this nodes' sets of reachable states
 	const std::optional<std::vector<carl::Interval<Number>>>& getInitialBoundingBox() const { return mInitialBoundingBox; };
 
 	/**
@@ -126,10 +136,11 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	 * @return True, if the initial set of this node is fully contained in the initial set of another node of this tree, false otherwise, nset if this property has not been set yet.
 	 */
 	TRIBOOL hasFixedPoint() const { return mHasFixedPoint; }
-
+	/// Returns a pointer to the node in the path leading to this node-object, which is the reason for finding a fixed-point
 	ReachTreeNode<Representation>* getFixedPointReason() { return mFixedPointReason; }
-
+	/// Setter of a flag indicating the node is on a Zeno-cycle
 	void flagZenoCycle( bool zeno = true ) { mIsOnZenoCycle = zeno; }
+	/// Getter of the flag, which indicates whether the node is on a Zeno-cycle
 	bool isOnZenoCycle() const { return mIsOnZenoCycle; }
 };
 
