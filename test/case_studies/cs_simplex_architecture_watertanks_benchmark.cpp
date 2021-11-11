@@ -49,7 +49,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	RESET_STATS();
 	// Perform setup here
 	using Number = double;
-	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init_ticks.model" };
+	std::string filename{ "21_simplex_watertanks_deterministic_monitor_dbg_init_ticks.model" };
 	auto& plt = hypro::Plotter<Number>::getInstance();
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( getCSModelsPath() + filename );
@@ -61,13 +61,13 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	settings.rFixedParameters().localTimeHorizon = 100;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
-	std::vector<hypro::Path<Number>> last_paths{};
+	std::vector<std::pair<const hypro::Path<Number>, hypro::ReachTreeNode<Representation> const*>> last_paths{};
 
 	std::vector<ReachTreeNode<Representation>> roots;
 
 	for ( auto _ : state ) {
 		// This code gets timed
-		last_paths = std::vector<hypro::Path<Number>>{};
+		last_paths.clear();
 		roots = hypro::makeRoots<Representation>( automaton );
 		auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
 																   settings.strategy().front(), roots );
@@ -94,7 +94,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 					++finished_leaves;
 				} else {
 					++unfinished_leaves;
-					last_paths.push_back( node.getPath() );
+					last_paths.push_back( std::make_pair( node.getPath(), &node ) );
 					if ( has_discrete_cycle( node.getPath() ) ) {
 						INFO( "hypro.casestudies", "Path " << node.getPath() << " is cyclic." );
 						++cyclic_path_count;
@@ -163,7 +163,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	}
 
 	// only plot the last run
-	// plotting
+	// plottingtrue
 	plt.clear();
 	plt.rSettings().overwriteFiles = true;
 	plt.rSettings().cummulative = false;
@@ -234,16 +234,32 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 		  std::to_string( carl::convert<hypro::tNumber, double>( settings.fixedParameters().localTimeHorizon ) ) +
 		  "_TH." + std::to_string( state.range( 0 ) ) + "_jumps";
 	TRACE( channel, "#################################################" );
-	for ( const auto& path : last_paths ) {
-		TRACE( channel, path );
-	}
 	*/
+
+	std::cout << "Start plotting, " << std::to_string( last_paths.size() ) << " paths." << std::endl;
+	std::size_t path_count{ 0 };
+	for ( auto [path, leaf] : last_paths ) {
+		// TRACE( channel, path );
+		plt.clear();
+		plt.rSettings().overwriteFiles = true;
+		plt.rSettings().cummulative = false;
+		plt.setFilename( "unfinished_" + std::to_string( path_count ) );
+		while ( leaf != nullptr ) {
+			for ( const auto& seg : leaf->getFlowpipe() ) {
+				plt.addObject( seg.projectOn( { 0, 1 } ).vertices() );
+			}
+			leaf = leaf->getParent();
+		}
+		plt.plot2d( hypro::PLOTTYPE::png );
+		std::cout << "Plotted path " << std::to_string( path_count ) << std::endl;
+		++path_count;
+	}
 	PRINT_STATS()
 }
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 200, 200, 1 )
+	  ->DenseRange( 150, 150, 1 )
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
