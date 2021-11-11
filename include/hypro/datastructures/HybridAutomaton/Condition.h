@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 #include "../../representations/ConstraintSet/ConstraintSet.h"
 #include "../../representations/types.h"
@@ -80,6 +89,12 @@ class Condition {
 	bool contains( const Point<Number>& point, std::size_t I = 0 ) const {
 		auto opt = Optimizer<Number>( mConstraints[I].matrix(), mConstraints[I].vector() );
 		return opt.checkPoint( point );
+	}
+	/// returns some point which satisfies the condition
+	std::optional<hypro::Point<Number>> getInternalPoint( std::size_t I = 0 ) const {
+		auto opt = Optimizer<Number>( mConstraints[I].matrix(), mConstraints[I].vector() );
+		auto res = opt.getInternalPoint();
+		return res.errorCode == SOLUTION::FEAS ? std::optional<hypro::Point<Number>>{ res.optimumValue } : std::nullopt;
 	}
 	/// returns state space dimension
 	std::size_t dimension() const {
