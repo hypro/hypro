@@ -211,6 +211,38 @@ std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( con
 }
 
 /**
+ * Function to check, whether the incoming transition of the passed node closes a Zeno-cycle.
+ * @tparam Set
+ * @param child
+ * @return
+ */
+template <typename Set>
+std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( const ReachTreeNode<Set>* child ) {
+	using N = typename Set::NumberType;
+	std::vector<const Transition<N>*> result;
+	// search in the path to the root for a zeno-cycle
+	auto* parent = child->getParent();
+
+	while ( parent != nullptr ) {
+		// structural check: if the reset from the parent to the child is non-identity, this cannot be a Zeno transition
+		// TODO this is a very conservative check - if the overlay of both resets yields identity, this is also a Zeno transition.
+		if ( !child->getTransition()->getReset().isIdentity() ) {
+			return result;
+		}
+		// simple check: if the initial set fully satisfies the guard back to the parent and no variable is reset, we know (since the initial set already fully satisfies the guard from the parent to the child), that this is a Zeno loop.
+		for ( auto& transition : child->getLocation()->getTransitions() ) {
+			if ( transition->getTarget() == parent->getLocation() && transition->getReset().isIdentity() && intersect( child->getInitialSet(), transition->getGuard() ).first == CONTAINMENT::FULL ) {
+				DEBUG( "hypro.reachability", "Detected Zeno-transition from " << transition->getSource()->getName() << " to " << transition->getTarget()->getName() << " with set " << child->getInitialSet() )
+				result.push_back( transition.get() );
+			}
+		}
+		// ascend
+		parent = parent->getParent();
+	}
+	return result;
+}
+
+/**
  * Checks for fixed points by checking for containment and coverage (if possible) for not only the first but the first n segments.
  * @tparam Set The used set-representation
  * @param currentNode The current node which is checked for a fixed point

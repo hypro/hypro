@@ -58,7 +58,8 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 		// collect potential Zeno transitions
 		std::vector<const Transition<typename State::NumberType>*> ZenoTransitions{};
 		if ( mParameters.detectZenoBehavior && currentNode->getParent() != nullptr ) {
-			ZenoTransitions = getZenoTransitions( currentNode->getParent(), currentNode );
+			// ZenoTransitions = getZenoTransitions( currentNode->getParent(), currentNode );
+			ZenoTransitions = getZenoTransitions( currentNode );
 		}
 
 		// create jump successor tasks
