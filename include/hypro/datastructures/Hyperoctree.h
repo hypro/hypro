@@ -84,6 +84,12 @@ class Hyperoctree {
 		}
 	}
 
+	template <typename SetType>
+	bool contains( const SetType& set ) {
+		std::cout << "Implement this!" << std::endl;
+		return true;
+	}
+
 	bool isCovered() const {
 		return mCovered;
 	}
