@@ -21,7 +21,7 @@
 namespace hypro {
 
 template <class Representation>
-class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
+class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
   private:
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation>>;
@@ -77,7 +77,7 @@ class ReachTreeNode : private TreeNode<ReachTreeNode<Representation>> {
 	 */
 	Path<Number> getPath() const;
 
-	auto getParent() const { return this->mParent; }
+	// auto getParent() const { return this->mParent; }
 
 	Transition<Number> const* getTransition() const { return mTransition; }
 
