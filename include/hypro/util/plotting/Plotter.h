@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * @file   Plotter.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
@@ -50,15 +59,17 @@ const std::size_t colors[] = { 0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
  * @brief      A struct holding a basic set of options for the gnuplot plotting.
  */
 struct gnuplotSettings {
-	std::string name = "";												//< title
-	std::string filename = "out";										//< filename
-	std::size_t color = colors[blue];									//< default blue
-	bool fill = false;													//< do not fill
-	bool axes = true;													//< plot axes
-	bool grid = true;													//< plot grid
-	bool title = false;													//< plot title
-	double pointSize = 0.2;												//< pointsize
-	double linewidth = 0.1;												//< linewidth
+	std::string name = "";			   //< title
+	std::string filename = "out";	   //< filename
+	std::size_t color = colors[blue];  //< default blue
+	bool fill = false;				   //< do not fill
+	bool axes = true;				   //< plot axes
+	bool grid = true;				   //< plot grid
+	bool title = false;				   //< plot title
+	double pointSize = 0.2;			   //< pointsize
+	double linewidth = 0.1;			   //< linewidth
+	carl::Interval<double> xPlotInterval = carl::Interval<double>::emptyInterval();
+	carl::Interval<double> yPlotInterval = carl::Interval<double>::emptyInterval();
 	bool keepAspectRatio = true;										//< keep aspect ratio for both axes
 	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );	//< dimensions to plot
 	bool cummulative = false;											//< if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
