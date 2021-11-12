@@ -84,9 +84,45 @@ class Hyperoctree {
 		}
 	}
 
-	template <typename SetType>
-	bool contains( const SetType& set ) {
-		std::cout << "Implement this!" << std::endl;
+	bool contains( const Box<Number>& set ) {
+		if ( set.empty() ) {
+			return true;
+		}
+		if ( !mContainer.contains( set ) ) {
+			TRACE( "hypro.datastructures", "Set " << set << " is not contained in " << mContainer );
+			return false;
+		}
+		if ( mCovered ) {
+			TRACE( "hypro.datastructures", "Fully covered: " << *this );
+			return true;
+		} else {
+			if ( mChildren.empty() ) {
+				TRACE( "hypro.datastructures", "Check whether box " << set << " is contained in data\n" );
+				for ( const auto& b : mData ) {
+					TRACE( "hypro.datastructures", b );
+				}
+				std::vector<Box<Number>> remainder;
+				remainder.emplace_back( set );
+				auto dataIt = mData.begin();
+				for ( const auto& dataItem : mData ) {
+					std::vector<Box<Number>> newRemainder;
+					for ( const auto& box : remainder ) {
+						auto tmp = box.setMinus2( dataItem );
+						newRemainder.insert( newRemainder.end(), tmp.begin(), tmp.end() );
+					}
+					remainder = newRemainder;
+					if ( remainder.empty() ) {
+						break;
+					}
+				}
+				return remainder.empty();
+			} else {
+				TRACE( "hypro.datastructures", "Forward to child-nodes" );
+				return std::all_of( std::begin( mChildren ), std::end( mChildren ), [&set]( const auto& child ) {
+					return child->contains( set.intersect( child->mContainer ) );
+				} );
+			}
+		}
 		return true;
 	}
 
