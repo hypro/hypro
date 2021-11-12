@@ -112,7 +112,7 @@ void Plotter<Number>::plotPng() const {
 
 template<typename Number>
 void Plotter<Number>::plotGen() const {
-    plot2d(PLOTTYPE::gen);
+	plot2d( PLOTTYPE::gen );
 }
 
     template<typename Number>
@@ -332,8 +332,16 @@ void Plotter<Number>::writeGnuplot() const {
 			mOutfile << "unset border\nunset xtics\nunset ytics\n";
 		}
 
-		mOutfile << "set xrange [" << ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
-		mOutfile << "set yrange [" << ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
+		if ( !mSettings.xPlotInterval.isEmpty() ) {
+			mOutfile << "set xrange [" << mSettings.xPlotInterval.lower() << ":" << mSettings.xPlotInterval.upper() << "] \n";
+		} else {
+			mOutfile << "set xrange [" << ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
+		}
+		if ( !mSettings.yPlotInterval.isEmpty() ) {
+			mOutfile << "set yrange [" << mSettings.yPlotInterval.lower() << ":" << mSettings.yPlotInterval.upper() << "] \n";
+		} else {
+			mOutfile << "set yrange [" << ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
+		}
 
 		unsigned objectCount = 1;
 		unsigned currId = 0;
