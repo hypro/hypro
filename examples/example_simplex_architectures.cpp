@@ -22,8 +22,14 @@
 #include <random>
 #include <string>
 
+/* GENERAL ASSUMPTIONS */
+// The model does *not* contain timelocks
+
 // types
 using Representation = hypro::Box<double>;
+using Loc = hypro::Location<double> const*;
+using Point = hypro::Point<double>;
+using Box = hypro::Box<double>;
 // global constants
 static const std::vector<std::size_t> interesting_dimensions{ 0, 1, 3 };
 static const std::vector<std::size_t> controller_dimensions{ 2 };
@@ -54,8 +60,8 @@ struct ctrl {
 		return automaton.getLocations().at( val );
 	}
 
-	controller_update<Number> generateInput( hypro::Location<Number> const* loc ) {
-		return { loc, this->operator()() };
+	controller_update<Number> generateInput() {
+		return { nullptr, this->operator()() };
 	}
 
 	std::mt19937 generator;
@@ -64,68 +70,159 @@ struct ctrl {
 	std::discrete_distribution<int> disc_dist = std::discrete_distribution( { 50, 50 } );
 };
 
+template <typename R>
+void cutoffControllerJumps( hypro::ReachTreeNode<R>* node ) {
+	auto children = node->getChildren();
+	for ( auto childIt = children.begin(); childIt != children.end(); ++childIt ) {
+		if ( !( *childIt )->getTransition()->getReset().getAffineReset().isIdentity( 4 ) ) {
+			node->eraseChild( *childIt );
+		} else {
+			cutoffControllerJumps( *childIt );
+		}
+	}
+}
+
 template <typename Number>
 struct simulator {
-	std::vector<std::pair<hypro::Location<Number> const*, std::vector<Representation>>> simulate( bool updateBaseController ) {
+	// Assumptions: Hidden state variables of the specification are always clocks, we keep only the minimum and maximum in case simulation allows several values
+
+	void pointify( const Point& observation ) {
+		std::cout << "[Simulator] Pointify with observation " << observation << std::endl;
+		assert( observation.dimension() == 2 );
+		std::map<Loc, Box> samplesBoxes;
+		// create constraints which fix the observation
+		hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero( 6, 5 );
+		hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 6 );
+		// assign constraints: x1, x2 = observation, tick = cycle time
+		// x1
+		constraints( 0, 0 ) = 1;
+		constraints( 1, 0 ) = -1;
+		constants( 0 ) = observation.at( 0 );
+		constants( 1 ) = -observation.at( 0 );
+		// x2
+		constraints( 2, 1 ) = 1;
+		constraints( 3, 1 ) = -1;
+		constants( 2 ) = observation.at( 1 );
+		constants( 3 ) = -observation.at( 1 );
+		// tick
+		constraints( 4, 4 ) = 1;
+		constraints( 5, 4 ) = -1;
+		constants( 4 ) = mCycleTime;
+		constants( 5 ) = -mCycleTime;
+		// collect all leaf nodes that agree with the observation
+		for ( auto& r : roots ) {
+			for ( auto& n : hypro::preorder( r ) ) {
+				if ( n.isLeaf() ) {
+					auto [containment, result] = n.getFlowpipe().back().satisfiesHalfspaces( constraints, constants );
+					if ( containment != hypro::CONTAINMENT::NO ) {
+						std::cout << "[Simulator] New sample: " << result << std::endl;
+						if ( samplesBoxes.find( n.getLocation() ) != samplesBoxes.end() ) {
+							samplesBoxes[n.getLocation()] = samplesBoxes[n.getLocation()].unite( result );
+						} else {
+							samplesBoxes[n.getLocation()] = result;
+						}
+					}
+				}
+			}
+		}
+		// collect concrete samples from samplesboxes
+		mLastStates.clear();
+		for ( auto& [loc, box] : samplesBoxes ) {
+			auto tmp = box.vertices();
+			mLastStates[loc] = std::set<Point>( tmp.begin(), tmp.end() );
+			std::cout << "[Simulator] Add samples " << tmp << " to mLastStates." << std::endl;
+			assert( mLastStates[loc].size() == 2 );
+		}
+	}
+
+	bool simulate( bool updateBaseController ) {
 		// augment last state with controller update (e.g. set u), set clock to zero
 		// set mLastState as initial state of the model
 		// run simulation for cycle time (here: 1), pointify to potential new states
 		// return computed simulation trace, set mPotentialNewState & location
 		// TODO what if the plant is non-deterministic?
 
-		mIsBaseControllerSimulator = updateBaseController;
-
 		controller_update<Number> ctrlInput;
 		if ( updateBaseController ) {
-			ctrlInput = mBaseController.generateInput( mLastLocation );
+			// ctrlInput = mBaseController.generateInput();
+			//  TODO add assertion which checks that all controller locations are the same in the samples
+			auto locName = mLastStates.begin()->first->getName();
+			ctrlInput.loc = mLastStates.begin()->first;
+			if ( locName.find( "_open_" ) != std::string::npos ) {
+				ctrlInput.val = Point( hypro::vector_t<Number>::Ones( 1 ) * 0.0002 );
+			} else {
+				ctrlInput.val = Point( hypro::vector_t<Number>::Zero( 1 ) );
+			}
+			std::cout << "[Simulator] Generated output for base controller, u = " << ctrlInput.val << std::endl;
 		} else {
-			ctrlInput = mAdvancedController.generateInput( mLastLocation );
+			ctrlInput = mAdvancedController.generateInput();
+			std::cout << "[Simulator] Generated output for advanced controller, u = " << ctrlInput.val << std::endl;
 		}
-		// augment state with controller input
-		mLastState[2] = ctrlInput.val.at( 0 );
+
+		// cleanup roots for new simulation run
+		roots.clear();
+
+		for ( const auto& [loc, samples] : mLastStates ) {
+			for ( auto sample : samples ) {
+				// augment state with controller input
+				sample.at( 2 ) = ctrlInput.val.at( 0 );
+				// create intervals representing the initial state
+				std::vector<carl::Interval<Number>> intervals;
+				for ( Eigen::Index i = 0; i < sample.dimension(); ++i ) {
+					intervals.emplace_back( carl::Interval<Number>( sample.at( i ) ) );
+				}
+				auto initialBox = hypro::Condition<Number>{ intervals };
+				typename hypro::HybridAutomaton<Number>::locationConditionMap initialStates;
+				initialStates[loc] = initialBox;
+				mAutomaton.setInitialStates( initialStates );
+				auto sampleRoots = hypro::makeRoots<Representation>( mAutomaton );
+				// add roots for this sample to global reachtree
+				for ( auto&& sr : sampleRoots ) {
+					roots.emplace_back( std::move( sr ) );
+				}
+				std::cout << "[Simulator] Add sample " << sample << " for simulation." << std::endl;
+			}
+		}
 
 		// call simulation as reachability analysis for a maximal time duration of 1 (cycle time)
+		// copy settings to adjust jump depth etc.
+		mSettings.rFixedParameters().localTimeHorizon = carl::convert<double, hypro::tNumber>( mCycleTime );
+		mSettings.rFixedParameters().jumpDepth = 2 * std::ceil( mCycleTime / carl::convert<hypro::tNumber, double>( mSettings.strategy().front().timeStep ) );
+		// analysis
+		auto reacher = hypro::reachability::Reach<Representation>( mAutomaton, mSettings.fixedParameters(),
+																   mSettings.strategy().front(), roots );
+		auto result = reacher.computeForwardReachability();
+
+		// cutoff after cycle time
 		// TODO add functionality to run reachability analysis for a bounded global time
 		// Workaround: compute larger set, post-process: cutoff all nodes in the tree reachable via a controller-jump.
-
-		/*
-		std::vector<hypro::ReachTreeNode<Representation>> roots;
-		auto initialBox = hypro::Condition<Number>{ interval };
-		hypro::HybridAutomaton<Number>::locationConditionMap initialStates;
-		initialStates[sim.mLastLocation] = initialBox;
-		automaton.setInitialStates( initialStates );
-		// store initial set in octree - we know its cycle-time is zero
-		octrees.at(sim.mLastLocation).add( hypro::Box<Number>(intervals));
-		// initialize reachtree
-		roots = hypro::makeRoots<Representation>( automaton );
-		// analysis
-		auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
-		auto result = reacher.computeForwardReachability();
-		*/
-	}
-
-	void updateState( bool updateBaseController ) {
-		if ( ( updateBaseController && mIsBaseControllerSimulator ) || ( !updateBaseController && !mIsBaseControllerSimulator ) ) {
-			mLastState = mPotentialNewState;
-			mLastLocation = mPotentialNewLocation;
-		} else {
-			simulate( updateBaseController );
-			mLastState = mPotentialNewState;
-			mLastLocation = mPotentialNewLocation;
+		// note: in the system there is no trajectory with lenght longer than cycle time since the controller is definitely invoked after this time on any execution path.
+		for ( auto& root : roots ) {
+			cutoffControllerJumps( &root );
 		}
+
+		// return safety result
+		return ( result == hypro::REACHABILITY_RESULT::SAFE );
 	}
 
 	ctrl<Number>& mBaseController;
 	ctrl<Number>& mAdvancedController;
 	hypro::HybridAutomaton<Number>& mAutomaton;
 	hypro::Settings mSettings;
-	hypro::Point<Number> mLastState;
-	hypro::Location<Number> const* mLastLocation;
-	hypro::Point<Number> mPotentialNewState;
-	hypro::Location<Number> const* mPotentialNewLocation;
-	bool mIsBaseControllerSimulator = true;
+	double mCycleTime = 1.0;
+	std::vector<hypro::ReachTreeNode<Representation>> roots;
+	std::map<Loc, std::set<Point>> mLastStates;
 };
+
+template <typename N>
+static Point generateObservation( const simulator<N>& sim ) {
+	std::mt19937 generator;
+	std::uniform_int_distribution<std::size_t> loc_dist{ 0, sim.mLastStates.size() - 1 };
+	std::size_t chosenloc = loc_dist( generator );
+	Loc locptr = std::next( sim.mLastStates.begin(), chosenloc )->first;
+	std::uniform_int_distribution<std::size_t> point_dist{ 0, sim.mLastStates.at( locptr ).size() - 1 };
+	return std::next( sim.mLastStates.at( locptr ).begin(), point_dist( generator ) )->projectOn( { 0, 1 } );
+}
 
 template <typename Number>
 std::vector<carl::Interval<Number>> widenSample( const hypro::Point<Number>& sample, Number targetWidth ) {
@@ -161,13 +258,15 @@ int main() {
 	using Number = double;
 	// settings
 	// TODO make command line
-	std::size_t maxJumps = 15;
+	std::size_t iterations{ 5 };
+	std::size_t iteration_count{ 0 };
+	std::size_t maxJumps = 100;
 	Number widening = 0.1;
 	bool training = true;
-	std::string filename{ "21_simplex_watertanks_deterministic_monitor_small_init.model" };
+	std::string filename{ "21_simplex_watertanks_deterministic_monitor_dbg_init_ticks.model" };
 	// constraints for cycle-time equals zero, encodes t <= 0 && -t <= -0
 	hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero( 2, 5 );
-	hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 2, 5 );
+	hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 2 );
 	constraints( 0, 4 ) = 1;
 	constraints( 1, 4 ) = -1;
 	// parse model
@@ -196,30 +295,32 @@ int main() {
 	plt.clear();
 	plt.rSettings().overwriteFiles = true;
 	plt.rSettings().cummulative = false;
-	plt.setFilename( "simplex_watertanks_loop" );
-	// main loop which alternatingly invokels the controller and if necessary the analysis (training phase) for a bounded number of iterations
-	std::size_t iterations{ 10 };
+	plt.rSettings().xPlotInterval = carl::Interval<double>( 0, 1 );
+	plt.rSettings().yPlotInterval = carl::Interval<double>( 0, 1 );
 	// initialize system
-	sim.mLastState = automaton.getInitialStates().begin()->second.getInternalPoint().value();
-	sim.mLastLocation = automaton.getInitialStates().begin()->first;
+	auto intialLocation = automaton.getInitialStates().begin()->first;
+	auto initialValuation = automaton.getInitialStates().begin()->second.getInternalPoint().value();
+	sim.mLastStates[intialLocation] = { initialValuation };
 	// initial first reachability analysis for the initial point
 	// new reachability analysis
 	// reachability tree
 	std::vector<hypro::ReachTreeNode<Representation>> roots;
 	// update initial states - set to small box around sample
-	auto intervals = widenSample( sim.mLastState, widening );
+	auto intervals = widenSample( initialValuation, widening );
 	auto initialBox = hypro::Condition<Number>{ intervals };
 	hypro::HybridAutomaton<Number>::locationConditionMap initialStates;
-	initialStates[sim.mLastLocation] = initialBox;
+	initialStates[intialLocation] = initialBox;
 	automaton.setInitialStates( initialStates );
 	// store initial set in octree - we know its cycle-time is zero
-	octrees.at( sim.mLastLocation ).add( hypro::Box<Number>( intervals ) );
+	octrees.at( intialLocation ).add( hypro::Box<Number>( intervals ) );
 	// initialize reachtree
 	roots = hypro::makeRoots<Representation>( automaton );
 	// analysis
 	auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
 															   settings.strategy().front(), roots );
+	std::cout << "Run initial analysis ... " << std::flush;
 	auto result = reacher.computeForwardReachability();
+	std::cout << "done." << std::endl;
 	// post processing
 	if ( result != hypro::REACHABILITY_RESULT::SAFE ) {
 		std::cout << "System is initially not safe, need to deal with this." << std::endl;
@@ -238,58 +339,94 @@ int main() {
 		}
 	}
 
-	while ( iterations ) {
-		--iterations;
+	/* PLOTTING AFTER FIRST INIT */
+	for ( const auto& node : hypro::preorder( roots ) ) {
+		for ( const auto& segment : node.getFlowpipe() ) {
+			if ( node.hasFixedPoint() == hypro::TRIBOOL::TRUE ) {
+				plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
+							   hypro::plotting::colors[hypro::plotting::blue] );
+			} else if ( node.hasFixedPoint() == hypro::TRIBOOL::FALSE ) {
+				plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
+							   hypro::plotting::colors[hypro::plotting::orange] );
+			} else {
+				plt.addObject( segment.projectOn( { 0, 1 } ).vertices() );
+			}
+		}
+	}
+	plt.setFilename( "simplex_watertanks_loop_" + std::to_string( iteration_count ) );
+	plt.plot2d( hypro::PLOTTYPE::pdf );
+	plt.clear();
+
+	// main loop which alternatingly invokels the controller and if necessary the analysis (training phase) for a bounded number of iterations
+	while ( iteration_count < iterations ) {
+		++iteration_count;
+		std::cout << "Iteration " << iteration_count << std::endl;
 
 		// 1 simulation advanced controller, starting from initialvalue & location
-		auto simulationSets = sim.simulate( false );
+		std::cout << "Start advanced controller simulation." << std::endl;
+		bool advControllerSafe = sim.simulate( false );
 
 		// if all safe & last point in reach set, pointify resulting set, update initialstate, update monitor (current point)
-		bool advControllerUnsafe = false;
-		for ( auto it = simulationSets.begin(); it != simulationSets.end(); ) {
-			for ( auto sit = it->second.begin(); sit != it->second.end(); ) {
-				auto [containment, _] = hypro::ltiIntersectBadStates( *sit, it->first, automaton );
-				if ( containment != hypro::CONTAINMENT::NO ) {
-					// bad state reached -> use base controller
-					advControllerUnsafe = true;
-					break;
-				}
-			}
-			if ( advControllerUnsafe ) {
-				break;
-			}
-		}
-		if ( advControllerUnsafe ) {
+		if ( !advControllerSafe ) {
 			// use base controller as fallback since the advanced controller seem to be unsafe
-			sim.updateState( true );
+			std::cout << "Advanced controller is not safe, simulate base-controller, continue with next iteration." << std::endl;
+			sim.simulate( true );
+			sim.pointify( generateObservation( sim ) );
 			continue;
 		}
+		std::cout << "Advanced controller is safe, check if resulting simulation traces are in the octree." << std::endl;
 		// at this point simulationSets is safe, the simulator knows the new initial state
-		if ( octrees.at( sim.mPotentialNewLocation ).contains( sim.mPotentialNewState ) ) {
+		std::map<Loc, std::vector<Box>> unknownSamples;
+		for ( const auto& r : sim.roots ) {
+			for ( const auto& n : hypro::preorder( r ) ) {
+				if ( n.isLeaf() && !octrees.at( n.getLocation() ).contains( n.getFlowpipe().back().projectOn( interesting_dimensions ) ) ) {
+					unknownSamples[n.getLocation()].push_back( n.getFlowpipe().back() );
+				}
+			}
+		}
+		if ( unknownSamples.empty() ) {
 			// if no new states have been discovered by simulation, continue, i.e., write new state from advanced controller as initial state of the simulator for the next iteration
-			sim.updateState( false );
+			std::cout << "Advanced controller traces are in the octree." << std::endl;
+			sim.pointify( generateObservation( sim ) );
 		} else {
+			std::cout << "Advanced controller traces are not all in the octree." << std::endl;
 			if ( training ) {
+				std::cout << "Start training with " << unknownSamples.size() << " locations." << std::endl;
 				// if not in reach set: take new part, run base controller reachability analysis on this part
-				// TODO This all only works, if the plant is deterministic
 
-				initialStates.clear();
-				initialStates[sim.mPotentialNewLocation] = hypro::Condition<Number>( widenSample( sim.mPotentialNewState, widening ) );
-				automaton.setInitialStates( initialStates );
 				// initialize reachtree
-				roots = hypro::makeRoots<Representation>( automaton );
+				roots.clear();
+				std::size_t initialstateCount{ 0 };
+				for ( const auto& [loc, boxes] : unknownSamples ) {
+					for ( const auto& box : boxes ) {
+						initialStates.clear();
+						// initialStates[loc] = hypro::Condition<Number>( widenSample( sim.mPotentialNewState, widening ) );
+						initialStates[loc] = hypro::Condition<Number>( box.intervals() );
+						automaton.setInitialStates( initialStates );
+						auto tmp = hypro::makeRoots<Representation>( automaton );
+						std::for_each( std::begin( tmp ), std::end( tmp ), [&roots]( auto&& node ) { roots.emplace_back( std::move( node ) ); } );
+						++initialstateCount;
+					}
+				}
+				std::cout << "Set " << initialstateCount << " initial states for training, start analysis ... " << std::flush;
+
 				// analysis
 				auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
 																		   settings.strategy().front(), roots );
 				auto result = reacher.computeForwardReachability();
+				std::cout << " done." << std::endl;
 				// post processing
 				if ( result != hypro::REACHABILITY_RESULT::SAFE ) {
 					//// else switch to base controller, continue: simulate base controller, update sample (use monitor for this)
 					// write new state - effectively simulates and uses base controller
-					sim.updateState( true );
+					// TODO this is ovely conservative, we could at least store results for samples (roots) that were safe.
+					std::cout << "Advanced controller is not safe on the long run, simulate base-controller, continue with next iteration." << std::endl;
+					sim.simulate( true );
+					sim.pointify( generateObservation( sim ) );
 				} else {
 					//// if resulting analysis is safe, continue with advanced controller (pointify sample, update initial states), add to octree
-					sim.updateState( false );
+					std::cout << "Advanced controller is safe on the long run, update octree with new sets, continue with next iteration." << std::endl;
+					sim.pointify( generateObservation( sim ) );
 					// update octree
 					for ( const auto& r : roots ) {
 						for ( const auto& node : hypro::preorder( r ) ) {
@@ -304,29 +441,29 @@ int main() {
 				}
 			} else {
 				// we are not training and the sample is not yet known to be safe, switch to base controller
-				sim.updateState( true );
+				std::cout << "We are not training, simulate base controller, continue with next iteration." << std::endl;
+				sim.simulate( true );
+				sim.pointify( generateObservation( sim ) );
 			}
 		}
-	}
 
-	/*
-	for ( const auto& node : hypro::preorder( roots ) ) {
-		for ( const auto& segment : node.getFlowpipe() ) {
-			if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
-				plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
-							   hypro::plotting::colors[hypro::plotting::blue] );
-			} else if ( node.hasFixedPoint() == TRIBOOL::FALSE ) {
-				plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
-							   hypro::plotting::colors[hypro::plotting::orange] );
-			} else {
-				plt.addObject( segment.projectOn( { 0, 1 } ).vertices() );
+		for ( const auto& node : hypro::preorder( roots ) ) {
+			for ( const auto& segment : node.getFlowpipe() ) {
+				if ( node.hasFixedPoint() == hypro::TRIBOOL::TRUE ) {
+					plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
+								   hypro::plotting::colors[hypro::plotting::blue] );
+				} else if ( node.hasFixedPoint() == hypro::TRIBOOL::FALSE ) {
+					plt.addObject( segment.projectOn( { 0, 1 } ).vertices(),
+								   hypro::plotting::colors[hypro::plotting::orange] );
+				} else {
+					plt.addObject( segment.projectOn( { 0, 1 } ).vertices() );
+				}
 			}
 		}
+		plt.setFilename( "simplex_watertanks_loop_" + std::to_string( iteration_count ) );
+		plt.plot2d( hypro::PLOTTYPE::pdf );
+		plt.clear();
 	}
-	 */
 
-	plt.plot2d( hypro::PLOTTYPE::png );
-	plt.plot2d( hypro::PLOTTYPE::gen );
-	plt.plot2d( hypro::PLOTTYPE::tex );
 	return 0;
 }

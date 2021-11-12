@@ -2243,11 +2243,16 @@ hybrid reachability
     {
         valve_open1_closed_init
         {
+            #u in [0.0, 0.0]
+            #spec_t1 in [0, 0]
+            #tick in [0, 0]
+            #x1 in [0.21, 0.31]
+            #x2 in [0.21, 0.31]
             u in [0.0, 0.0]
             spec_t1 in [0, 0]
             tick in [0, 0]
-            x1 in [0.21, 0.31]
-            x2 in [0.21,0.31]
+            x1 in [0.21, 0.21]
+            x2 in [0.31, 0.31]
         }
     }
 }
