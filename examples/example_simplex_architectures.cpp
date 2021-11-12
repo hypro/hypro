@@ -66,8 +66,9 @@ struct ctrl {
 
 	std::mt19937 generator;
 	std::uniform_int_distribution<int> loc_dist{ 0, 23 };
-	std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0, 0.0005 );
-	std::discrete_distribution<int> disc_dist = std::discrete_distribution( { 50, 50 } );
+	// std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0, 0.0005 );
+	std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0.0005, 0.0008 );
+	std::discrete_distribution<int> disc_dist = std::discrete_distribution( { 10, 90 } );
 };
 
 template <typename R>
@@ -86,14 +87,15 @@ template <typename Number>
 struct simulator {
 	// Assumptions: Hidden state variables of the specification are always clocks, we keep only the minimum and maximum in case simulation allows several values
 
-	void pointify( const Point& observation ) {
-		std::cout << "[Simulator] Pointify with observation " << observation << std::endl;
+	void pointify() {
+		std::cout << "[Simulator] Pointify" << std::endl;
 		assert( observation.dimension() == 2 );
 		std::map<Loc, Box> samplesBoxes;
 		// create constraints which fix the observation
-		hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero( 6, 5 );
-		hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 6 );
+		hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero( 2, 5 );
+		hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 2 );
 		// assign constraints: x1, x2 = observation, tick = cycle time
+		/*
 		// x1
 		constraints( 0, 0 ) = 1;
 		constraints( 1, 0 ) = -1;
@@ -104,12 +106,13 @@ struct simulator {
 		constraints( 3, 1 ) = -1;
 		constants( 2 ) = observation.at( 1 );
 		constants( 3 ) = -observation.at( 1 );
+		 */
 		// tick
-		constraints( 4, 4 ) = 1;
-		constraints( 5, 4 ) = -1;
-		constants( 4 ) = mCycleTime;
-		constants( 5 ) = -mCycleTime;
-		// collect all leaf nodes that agree with the observation
+		constraints( 0, 4 ) = 1;
+		constraints( 1, 4 ) = -1;
+		constants( 0 ) = mCycleTime;
+		constants( 1 ) = -mCycleTime;
+		// collect all leaf nodes that agree with the cycle time
 		for ( auto& r : roots ) {
 			for ( auto& n : hypro::preorder( r ) ) {
 				if ( n.isLeaf() ) {
@@ -125,13 +128,41 @@ struct simulator {
 				}
 			}
 		}
+		// create an artificial observation
+		std::mt19937 generator;
+		std::uniform_int_distribution<std::size_t> loc_dist{ 0, samplesBoxes.size() - 1 };
+		std::size_t chosenloc = loc_dist( generator );
+		Loc locptr = std::next( samplesBoxes.begin(), chosenloc )->first;
+		Point observation = samplesBoxes.at( locptr ).vertices().front().projectOn( { 0, 1 } );
+		std::cout << "[Simulator] Observation: " << observation << std::endl;
+		// build constraints which represent the observation
+		constraints = hypro::matrix_t<Number>::Zero( 4, 5 );
+		constants = hypro::vector_t<Number>::Zero( 4 );
+		// assign constraints: x1, x2 = observation
+		// x1
+		constraints( 0, 0 ) = 1;
+		constraints( 1, 0 ) = -1;
+		constants( 0 ) = observation.at( 0 );
+		constants( 1 ) = -observation.at( 0 );
+		// x2
+		constraints( 2, 1 ) = 1;
+		constraints( 3, 1 ) = -1;
+		constants( 2 ) = observation.at( 1 );
+		constants( 3 ) = -observation.at( 1 );
+		// filter sample boxes for observation
+		for ( auto& [_, box] : samplesBoxes ) {
+			box = box.intersectHalfspaces( constraints, constants );
+		}
+
 		// collect concrete samples from samplesboxes
 		mLastStates.clear();
 		for ( auto& [loc, box] : samplesBoxes ) {
 			auto tmp = box.vertices();
-			mLastStates[loc] = std::set<Point>( tmp.begin(), tmp.end() );
-			std::cout << "[Simulator] Add samples " << tmp << " to mLastStates." << std::endl;
-			assert( mLastStates[loc].size() == 2 );
+			if ( !tmp.empty() ) {
+				mLastStates[loc] = std::set<Point>( tmp.begin(), tmp.end() );
+				std::cout << "[Simulator] Add samples " << mLastStates[loc] << " to mLastStates (location: " << loc->getName() << ")" << std::endl;
+				assert( mLastStates[loc].size() <= 2 );
+			}
 		}
 	}
 
@@ -354,7 +385,7 @@ int main() {
 		}
 	}
 	plt.setFilename( "simplex_watertanks_loop_" + std::to_string( iteration_count ) );
-	plt.plot2d( hypro::PLOTTYPE::pdf );
+	plt.plot2d( hypro::PLOTTYPE::png );
 	plt.clear();
 
 	// main loop which alternatingly invokels the controller and if necessary the analysis (training phase) for a bounded number of iterations
@@ -371,7 +402,7 @@ int main() {
 			// use base controller as fallback since the advanced controller seem to be unsafe
 			std::cout << "Advanced controller is not safe, simulate base-controller, continue with next iteration." << std::endl;
 			sim.simulate( true );
-			sim.pointify( generateObservation( sim ) );
+			sim.pointify();
 			continue;
 		}
 		std::cout << "Advanced controller is safe, check if resulting simulation traces are in the octree." << std::endl;
@@ -387,7 +418,7 @@ int main() {
 		if ( unknownSamples.empty() ) {
 			// if no new states have been discovered by simulation, continue, i.e., write new state from advanced controller as initial state of the simulator for the next iteration
 			std::cout << "Advanced controller traces are in the octree." << std::endl;
-			sim.pointify( generateObservation( sim ) );
+			sim.pointify();
 		} else {
 			std::cout << "Advanced controller traces are not all in the octree." << std::endl;
 			if ( training ) {
@@ -401,6 +432,13 @@ int main() {
 					for ( const auto& box : boxes ) {
 						initialStates.clear();
 						// initialStates[loc] = hypro::Condition<Number>( widenSample( sim.mPotentialNewState, widening ) );
+						// set sample u-value to the correct value (corresponding to the value the base controller would have chosen, this can be obtained from the location name)
+						auto newintervals = box.intervals();
+						if ( loc->getName().find( "_open_" ) != std::string::npos ) {
+							newintervals[2] = carl::Interval<Number>( 0.0002 );
+						} else {
+							newintervals[2] = carl::Interval<Number>( 0.0 );
+						}
 						initialStates[loc] = hypro::Condition<Number>( box.intervals() );
 						automaton.setInitialStates( initialStates );
 						auto tmp = hypro::makeRoots<Representation>( automaton );
@@ -422,11 +460,11 @@ int main() {
 					// TODO this is ovely conservative, we could at least store results for samples (roots) that were safe.
 					std::cout << "Advanced controller is not safe on the long run, simulate base-controller, continue with next iteration." << std::endl;
 					sim.simulate( true );
-					sim.pointify( generateObservation( sim ) );
+					sim.pointify();
 				} else {
 					//// if resulting analysis is safe, continue with advanced controller (pointify sample, update initial states), add to octree
 					std::cout << "Advanced controller is safe on the long run, update octree with new sets, continue with next iteration." << std::endl;
-					sim.pointify( generateObservation( sim ) );
+					sim.pointify();
 					// update octree
 					for ( const auto& r : roots ) {
 						for ( const auto& node : hypro::preorder( r ) ) {
@@ -443,7 +481,7 @@ int main() {
 				// we are not training and the sample is not yet known to be safe, switch to base controller
 				std::cout << "We are not training, simulate base controller, continue with next iteration." << std::endl;
 				sim.simulate( true );
-				sim.pointify( generateObservation( sim ) );
+				sim.pointify();
 			}
 		}
 
@@ -461,7 +499,7 @@ int main() {
 			}
 		}
 		plt.setFilename( "simplex_watertanks_loop_" + std::to_string( iteration_count ) );
-		plt.plot2d( hypro::PLOTTYPE::pdf );
+		plt.plot2d( hypro::PLOTTYPE::png );
 		plt.clear();
 	}
 
