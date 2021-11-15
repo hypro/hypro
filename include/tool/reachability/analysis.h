@@ -27,6 +27,6 @@ struct AnalysisResult {
 	std::vector<hypro::PlotData<FullState>> plotData{};
 };
 
-AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, hypro::PreprocessingInformation information );
+AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, hypro::PreprocessingInformation information, bool urgency_cegar = false );
 
 }  // namespace hydra::reachability
