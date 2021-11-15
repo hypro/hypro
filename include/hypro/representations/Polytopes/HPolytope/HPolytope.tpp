@@ -1443,9 +1443,13 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 		opt.setMatrix( checkmatrix );
 		opt.setVector( checkvector );
 		// default relation is LEQ, set LESS for original polytop
+		// GLPK cannot handle strict inequalities and throws error
+		// using weak inequalities instead is overapproximating
+#ifndef HYPRO_USE_GLPK
 		for ( long int t = 0; t < matrix.rows(); t++ ) {
 			opt.setRelation( carl::Relation::LESS, t + matrix2.rows() );
 		}
+#endif
 		bool check = opt.checkConsistency();
 		// create polytope and add to result vector
 		if ( check ) {
