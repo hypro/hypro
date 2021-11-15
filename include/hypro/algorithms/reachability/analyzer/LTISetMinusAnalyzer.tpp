@@ -46,16 +46,16 @@ auto LTISetMinusAnalyzer<State>::run() -> LTISetMinusResult {
 				carl::Interval<TimePoint> globalDuration{ initialSetDuration.lower() + enabledDuration.lower(), initialSetDuration.upper() + enabledDuration.upper() };
 
 				// if desired, try to detect fixed-point
-				bool fixedPointReached = mFixedParameters.detectFixedPoints;
+				bool fixedPointReached = mParameters.detectJumpFixedPoints;
 				auto boundingBox = std::vector<carl::Interval<Number>>{};
-				if ( mFixedParameters.detectFixedPoints ) {
+				if ( mParameters.detectJumpFixedPoints ) {
 					boundingBox = Converter<Number>::toBox( valuationSet ).intervals();
 					fixedPointReached = detectFixedPoint( valuationSet, transition->getTarget() );
 				}
 				// in any case add node to the search tree
 				ReachTreeNode<State>& childNode = currentNode->addChild( valuationSet, globalDuration, transition );
 				// set bounding box to speed up search in case the option is enabled
-				if ( mFixedParameters.detectFixedPoints ) {
+				if ( mParameters.detectJumpFixedPoints ) {
 					childNode.setBoundingBox( boundingBox );
 				}
 				// create Task, push only to queue, in case no fixed-point has been detected or detection is disabled
