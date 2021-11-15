@@ -995,7 +995,6 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::m
 		if ( evalRes.errorCode == SOLUTION::INFTY ) {
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.errorCode == SOLUTION::INFEAS ) {
-			std::cout << "1. return empty" << std::endl;
 			return Empty();
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.supportValue;
@@ -1010,7 +1009,6 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::m
 		if ( evalRes.errorCode == SOLUTION::INFTY ) {
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.errorCode == SOLUTION::INFEAS ) {
-			std::cout << "2. return empty" << std::endl;
 			return Empty();
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.supportValue;
@@ -1034,7 +1032,6 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::i
 		for ( const auto& plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
-		std::cout << "no return empty" << std::endl;
 		return res;
 	}
 }
@@ -1380,11 +1377,11 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 				result.push_back( workpoly );
 				copy.insert( h.invert() );
 			} else {
-				std::cout << "not helpful" << std::endl;
+				// std::cout << "not helpful" << std::endl;
 			}
 		} else {
 			// result.push_back(workpoly);
-			std::cout << "empty" << std::endl;
+			// std::cout << "empty" << std::endl;
 		}
 	}
 	return result;
@@ -1394,7 +1391,7 @@ template <typename Number, typename Converter, class Setting>
 std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus2( const HPolytopeT<Number, Converter, Setting>& minus ) const {
 	if (this->dimension()!=minus.dimension()){
 		std::vector<HPolytopeT<Number, Converter, Setting>> result;
-		std::cout << this->dimension() << " dimensionsvergleich " << minus.dimension() << std::endl;
+		// std::cout << this->dimension() << " dimensionsvergleich " << minus.dimension() << std::endl;
 		return result;
 	}
 	

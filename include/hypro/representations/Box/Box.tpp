@@ -820,16 +820,16 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 			}
 		}
 		if ( unchanged ) {
-			std::cout << "unchanged detected" << std::endl;
-			std::cout << "box: " << this->vertices() << std::endl;
-			std::cout << "minusbox: " << minusbox.vertices() << std::endl;
+			// std::cout << "unchanged detected" << std::endl;
+			// std::cout << "box: " << this->vertices() << std::endl;
+			// std::cout << "minusbox: " << minusbox.vertices() << std::endl;
 			// result.push_back(this);
 			BoxT<Number, Converter, Setting> workbox( box );
 			result.push_back( workbox );
 			return result;
 		}
 		if ( empty ) {
-			std::cout << "empty detected" << std::endl;
+			// std::cout << "empty detected" << std::endl;
 			BoxT<Number, Converter, Setting> workbox = BoxT();
 			result.push_back( workbox );
 			return result;
@@ -862,7 +862,7 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 				box.at( i ) = tmp2;
 			}
 		}
-		std::cout << result.size() << std::endl;
+		// std::cout << result.size() << std::endl;
 		return result;
 	}
 	// return result;
