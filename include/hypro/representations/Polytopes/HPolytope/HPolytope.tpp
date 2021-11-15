@@ -995,6 +995,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::m
 		if ( evalRes.errorCode == SOLUTION::INFTY ) {
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.errorCode == SOLUTION::INFEAS ) {
+			std::cout << "1. return empty" << std::endl;
 			return Empty();
 		} else {
 			result = mHPlanes.at( i ).offset() + evalRes.supportValue;
@@ -1009,6 +1010,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::m
 		if ( evalRes.errorCode == SOLUTION::INFTY ) {
 			// Do nothing - omit inserting plane.
 		} else if ( evalRes.errorCode == SOLUTION::INFEAS ) {
+			std::cout << "2. return empty" << std::endl;
 			return Empty();
 		} else {
 			result = rhs.constraints().at( i ).offset() + evalRes.supportValue;
@@ -1032,7 +1034,7 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::i
 		for ( const auto& plane : rhs.constraints() ) {
 			res.insert( plane );
 		}
-
+		std::cout << "no return empty" << std::endl;
 		return res;
 	}
 }
@@ -1390,6 +1392,12 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 
 template <typename Number, typename Converter, class Setting>
 std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus2( const HPolytopeT<Number, Converter, Setting>& minus ) const {
+	if (this->dimension()!=minus.dimension()){
+		std::vector<HPolytopeT<Number, Converter, Setting>> result;
+		std::cout << this->dimension() << " dimensionsvergleich " << minus.dimension() << std::endl;
+		return result;
+	}
+	
 	HPolytopeT<Number, Converter, Setting> minuspoly( minus.matrix(), minus.vector() );
 	minuspoly = minuspoly.removeRedundancy();
 	hypro::matrix_t<Number> matrix = this->matrix();
@@ -1410,11 +1418,12 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 		h2.invert();
 		// x: number of constraints
 		int x = matrix2.rows() + matrix.rows() + 1;
-		hypro::matrix_t<Number> checkmatrix = hypro::matrix_t<Number>( x, 2 );
+		hypro::matrix_t<Number> checkmatrix = hypro::matrix_t<Number>( x, this->dimension() );
 		hypro::vector_t<Number> checkvector = hypro::vector_t<Number>( x );
-		// create constraints als matrix and vector
+		// create constraints as matrix and vector
 		for ( long int t = 0; t < matrix2.rows(); t++ ) {
 			for ( long int v = 0; v < matrix2.cols(); v++ ) {
+				//std::cout << "x, t, v:" << x << t << v << std::endl;
 				checkmatrix( t, v ) = matrix2.row( t )( v );
 			}
 			checkvector( t ) = constants2( t );
@@ -1445,7 +1454,7 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 			result.push_back( workpoly );
 			copy.insert( h );
 		} else {
-			std::cout << "not helpful" << std::endl;
+			//std::cout << "not helpful" << std::endl;
 		}
 	}
 	return result;
