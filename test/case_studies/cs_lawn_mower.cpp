@@ -7,6 +7,7 @@
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 #include <hypro/util/plotting/Plotter.h>
+#include <hypro/paths.h>
 #include <string>
 
 namespace hypro::benchmark {
@@ -19,13 +20,14 @@ static void Lawn_Mower_Reachability( ::benchmark::State& state ) {
 	RESET_STATS();
 	// Perform setup here
 	using Number = double;
-	auto base_path = std::filesystem::current_path().parent_path().parent_path().append( "examples/input/" );
-	std::string filename{ "lawn_mower" };
+	auto base_path = getCSModelsPath();
+	std::string filename{ "lawn_mower.model" };
 
-	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path.string() + filename );
+	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( base_path + filename );
 
 	auto settings = hypro::convert( reachSettings );
-	settings.rFixedParameters().detectFixedPoints = true;
+	//settings.rFixedParameters().detectFixedPoints = true;
+	settings.rStrategy().begin()->detectJumpFixedPoints = true;
 	// settings.rFixedParameters().localTimeHorizon = 1;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
