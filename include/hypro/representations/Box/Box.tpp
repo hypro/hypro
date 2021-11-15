@@ -444,7 +444,7 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
-	if ( dimensions.empty() ) {
+	if ( dimensions.empty() || this->empty() ) {
 		return Empty();
 	}
 	std::vector<carl::Interval<Number>> newIntervals;
@@ -788,7 +788,6 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 }
 template <typename Number, typename Converter, class Setting>
 std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::setMinus2( const BoxT<Number, Converter, Setting>& minusbox ) const {
-	//std::cout << "function hitted" << std::endl;
 	std::vector<hypro::BoxT<Number, Converter, Setting>> result;
 	if ( this->dimension() != minusbox.dimension() ) {
 		return result;
@@ -820,18 +819,14 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 			}
 		}
 		if ( unchanged ) {
-			// std::cout << "unchanged detected" << std::endl;
-			// std::cout << "box: " << this->vertices() << std::endl;
-			// std::cout << "minusbox: " << minusbox.vertices() << std::endl;
 			// result.push_back(this);
 			BoxT<Number, Converter, Setting> workbox( box );
 			result.push_back( workbox );
 			return result;
 		}
 		if ( empty ) {
-			// std::cout << "empty detected" << std::endl;
-			BoxT<Number, Converter, Setting> workbox = BoxT();
-			result.push_back( workbox );
+			// BoxT<Number, Converter, Setting> workbox = BoxT();
+			// result.push_back( workbox );
 			return result;
 		}
 
@@ -843,26 +838,27 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 			std::vector<carl::Interval<Number>> box3 = box;	 // upper
 			box2.at( i ).setUpper( minus.at( i ).lower() );
 			box3.at( i ).setLower( minus.at( i ).upper() );
+			// check if the lower box (box2) is not empty
 			if ( box2.at( i ).lower() < box2.at( i ).upper() ) {
 				BoxT<Number, Converter, Setting> workbox( box2 );
-				//std::cout << "untere box nicht leer " << i << std::endl;
+				assert( !workbox.empty() );
 				result.push_back( workbox );
 				// carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
 				carl::Interval<Number> tmp( box2.at( i ).upper(), box.at( i ).upper() );
-				//std::cout << tmp << std::endl;
+				// std::cout << tmp << std::endl;
 				box.at( i ) = tmp;
 			}
+			// check if the upper box (box3) is not empty
 			if ( box3.at( i ).lower() < box3.at( i ).upper() ) {
 				BoxT<Number, Converter, Setting> workbox2( box3 );
-				//std::cout << "obere box nicht leer " << i << std::endl;
+				assert( !workbox2.empty() );
 				result.push_back( workbox2 );
 				// carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
 				carl::Interval<Number> tmp2( box.at( i ).lower(), box3.at( i ).lower() );
-				//std::cout << tmp2 << std::endl;
+				// std::cout << tmp2 << std::endl;
 				box.at( i ) = tmp2;
 			}
 		}
-		// std::cout << result.size() << std::endl;
 		return result;
 	}
 	// return result;
@@ -968,6 +964,46 @@ bool BoxT<Number, Converter, Setting>::contains( const BoxT<Number, Converter, S
 
 	for ( unsigned d = 0; d < this->dimension(); ++d ) {
 		if ( !mLimits[d].contains( box.interval( d ) ) ) {
+			return false;
+		}
+	}
+	return true;
+}
+
+template <typename Number, typename Converter, class Setting>
+std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::containmentReduce( const BoxT& other ) const {
+	std::size_t minDimension = std::min( this->dimension(), other.dimension() );
+
+	auto resIntervals = other.intervals();
+	auto currentContainment{ CONTAINMENT::FULL };
+	for ( unsigned d = 0; d < minDimension; ++d ) {
+		if ( !set_have_intersection( mLimits[d], other.interval( d ) ) ) {
+			return std::make_pair( CONTAINMENT::NO, BoxT::Empty() );
+		}
+		if ( !carl::set_is_subset( other.interval( d ), mLimits[d] ) ) {
+			currentContainment = CONTAINMENT::PARTIAL;
+			resIntervals[d] = carl::set_intersection( resIntervals[d], mLimits[d] );
+		}
+	}
+	// corner case: if a box is not defined in one dimension we assume it is unbounded in this dimension
+	if ( this->dimension() > other.dimension() ) {
+		for ( std::size_t i = minDimension; i < this->dimension(); ++i ) {
+			resIntervals.push_back( mLimits[i] );
+		}
+		currentContainment = CONTAINMENT::PARTIAL;
+	}
+
+	return std::make_pair( currentContainment, BoxT( resIntervals ) );
+}
+
+template <typename Number, typename Converter, class Setting>
+bool BoxT<Number, Converter, Setting>::intersects( const BoxT& box ) const {
+	if ( this->dimension() != box.dimension() ) {
+		return false;
+	}
+
+	for ( unsigned d = 0; d < this->dimension(); ++d ) {
+		if ( !carl::set_have_intersection( mLimits[d], box.interval( d ) ) ) {
 			return false;
 		}
 	}

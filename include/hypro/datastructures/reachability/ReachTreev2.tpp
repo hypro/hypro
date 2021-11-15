@@ -30,13 +30,14 @@ auto ReachTreeNode<Representation>::getPath() const -> Path<Number> {
 }
 
 template <typename Representation>
-void ReachTreeNode<Representation>::setFixedPoint( bool hasFixedPoint ) {
+void ReachTreeNode<Representation>::setFixedPoint( bool hasFixedPoint, ReachTreeNode<Representation>* reason ) {
 	mHasFixedPoint = hasFixedPoint ? TRIBOOL::TRUE : TRIBOOL::FALSE;
+	mFixedPointReason = reason;
 	// recursively mark nodes
 	if ( getParent() != nullptr ) {
 		if ( std::all_of( std::begin( getParent()->getChildren() ), std::end( getParent()->getChildren() ), []( const auto* child ) { return ( child->hasFixedPoint() == TRIBOOL::TRUE ); } ) ) {
 			COUNT( "recursive fixed point" );
-			getParent()->setFixedPoint( true );
+			getParent()->setFixedPoint( true, reason );
 		}
 	}
 }

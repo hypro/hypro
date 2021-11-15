@@ -13,6 +13,28 @@ Condition<Number>::Condition( const std::vector<std::variant<ConstraintSetT<Numb
 }
 
 template <typename Number>
+Condition<Number>::Condition( const std::vector<carl::Interval<Number>>& intervals ) {
+	std::vector<vector_t<Number>> rows;
+	std::vector<Number> constants;
+	std::size_t dim = intervals.size();
+	for ( std::size_t i = 0; i < dim; ++i ) {
+		if ( intervals[i].lowerBoundType() == carl::BoundType::WEAK ) {
+			vector_t<Number> r = vector_t<Number>::Zero( dim );
+			r( i ) = Number( -1 );
+			constants.emplace_back( -intervals[i].lower() );
+			rows.emplace_back( std::move( r ) );
+		}
+		if ( intervals[i].upperBoundType() == carl::BoundType::WEAK ) {
+			vector_t<Number> r = vector_t<Number>::Zero( dim );
+			r( i ) = Number( 1 );
+			constants.emplace_back( intervals[i].upper() );
+			rows.emplace_back( std::move( r ) );
+		}
+	}
+	mConstraints.emplace_back( createMatrix( rows ), createVector( constants ) );
+}
+
+template <typename Number>
 bool Condition<Number>::isAxisAligned() const {
 	for ( std::size_t i = 0; i < mConstraints.size(); ++i ) {
 		if ( !isAxisAligned( i ) ) {
@@ -142,14 +164,14 @@ Condition<Number> conditionFromIntervals( const std::vector<carl::Interval<Numbe
 }
 
 template <typename Number>
-void Condition<Number>::decompose( const Decomposition& decomposition ) {
+void Condition<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
 	if ( mConstraints.size() > 1 ) {
-		// already decomposed/empty constraints
+		//already decomposed/empty constraints
 		return;
-	} else if ( mConstraints.size() == 0 && decomposition.subspaces.size() > 0 ) {
-		// fill mConstaints with empty constraint sets
+	} else if ( mConstraints.size() == 0 && partition.size() > 0 ) {
+		//fill mConstaints with empty constraint sets
 		std::vector<ConstraintSetT<Number>> newCset;
-		for ( std::size_t i = 0; i < decomposition.subspaces.size(); i++ ) {
+		for ( std::size_t i = 0; i < partition.size(); i++ ) {
 			ConstraintSetT<Number> res = ConstraintSetT<Number>();
 			newCset.push_back( res );
 		}
@@ -167,7 +189,7 @@ void Condition<Number>::decompose( const Decomposition& decomposition ) {
 
 	std::vector<ConstraintSetT<Number>> newCset;
 	// for each set {i,j,..., k} select each constraint that defines over {i,j,k etc.}
-	for ( auto set : decomposition.subspaces ) {
+	for ( auto set : partition ) {
 #ifdef HYPRO_LOGGING
 		DEBUG( "hypro.datastructures", "decompose constraint for set: {" );
 		for ( auto entry : set ) {
@@ -183,7 +205,7 @@ void Condition<Number>::decompose( const Decomposition& decomposition ) {
 			bool containsVar = false;
 			for ( Eigen::Index j = 0; j < constraintsOld.cols(); j++ ) {
 				if ( constraintsOld( i, j ) != 0 && std::find( set.begin(), set.end(), j ) != set.end() ) {
-					// set contains variable j, which is also contained in this constraint
+					//set contains variable j, which is also contained in this constraint
 					containsVar = true;
 					break;
 				}
@@ -231,12 +253,17 @@ template <typename Number>
 void Condition<Number>::updateSetState() const {
 	for ( std::size_t i = 0; i < mConstraints.size(); ++i ) {
 		if ( mConditionSetState[i] == SETSTATE::UNKNOWN ) {
-			if ( mConstraints[i].size() == 0 ) {
+			// if the constraints are empty or all zero
+			if ( mConstraints[i].size() == 0 || mConstraints[i].empty() || ( mConstraints[i].matrix() == matrix_t<Number>::Zero( mConstraints[i].matrix().rows(), mConstraints[i].matrix().cols() ) && mConstraints[i].vector() == vector_t<Number>::Zero( mConstraints[i].vector().rows() ) ) ) {
 				mConditionSetState[i] = SETSTATE::UNIVERSAL;
-			} else if ( mConstraints[i].empty() ) {
-				mConditionSetState[i] = SETSTATE::EMPTY;
 			} else {
-				mConditionSetState[i] = SETSTATE::NONEMPTY;
+				auto opt = Optimizer<Number>( mConstraints[i].matrix(), mConstraints[i].vector() );
+				auto res = opt.checkConsistency();
+				if ( res ) {
+					mConditionSetState[i] = SETSTATE::NONEMPTY;
+				} else {
+					mConditionSetState[i] = SETSTATE::EMPTY;
+				}
 			}
 		}
 	}
@@ -249,9 +276,9 @@ bool Condition<Number>::cacheIsSane() const {
 }
 #endif
 
-// template<typename Number>
-// template<typename Representation, typename ...Rargs>
-// std::pair<bool,State<Number,Representation, Rargs...>> Condition<Number>::isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const {
+//template<typename Number>
+//template<typename Representation, typename ...Rargs>
+//std::pair<bool,State<Number,Representation, Rargs...>> Condition<Number>::isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const {
 //#ifdef HYDRA_USE_LOGGING
 //	DEBUG("hydra.datastructures","Checking condition.");
 //	DEBUG("hydra.datastructures","State: " << inState);
@@ -280,6 +307,6 @@ bool Condition<Number>::cacheIsSane() const {
 //
 //	//DEBUG("hydra.datastructures","Condition is satisfied: " << !empty);
 //	return std::make_pair(!empty, res);
-// }
+//}
 
 }  // namespace hypro

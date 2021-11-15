@@ -132,6 +132,13 @@ TYPED_TEST( BoxTest, Constructor ) {
 	EXPECT_EQ( TypeParam( 4 ), dBox.max().at( 1 ) );
 	EXPECT_EQ( true, dBox.contains( hypro::Point<TypeParam>( { 0, 3 } ) ) );
 
+	hypro::Box<TypeParam> eBox{ std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1, 2 },
+																		carl::Interval<TypeParam>{ 3, 4 } } };
+	EXPECT_EQ( TypeParam( 1 ), eBox.min().at( 0 ) );
+	EXPECT_EQ( TypeParam( 3 ), eBox.min().at( 1 ) );
+	EXPECT_EQ( TypeParam( 2 ), eBox.max().at( 0 ) );
+	EXPECT_EQ( TypeParam( 4 ), eBox.max().at( 1 ) );
+
 	hypro::Box<TypeParam> b = hypro::Box<TypeParam>::Empty();
 	EXPECT_TRUE( b.empty() );
 }
@@ -580,17 +587,21 @@ TYPED_TEST( BoxTest, SetMinus ) {
 	std::vector<hypro::Box<TypeParam>> result;
 	result = this->box1.setMinus2( this->box2 );
 	EXPECT_EQ( result.size(), (unsigned)1 );
-	// EXPECT_TRUE( result.empty() );
 	EXPECT_EQ( result.at( 0 ), this->box1 );
 
-	// result = this->box2.setMinus2( this->box1 );
-	// EXPECT_EQ( result.at(0), this->box2 );
+	result = this->box2.setMinus2( this->box1 );
+	ASSERT_EQ( result.size(), 1 );
+	EXPECT_EQ( result.at( 0 ), this->box2 );
 
 	result = this->box2.setMinus2( this->box2 );
-	EXPECT_TRUE( result.at( 0 ).empty() );
+	ASSERT_EQ( result.size(), 0 );
 
 	result = this->b1.setMinus2( this->b2 );
-	EXPECT_EQ( result.size(), (unsigned)2 );
-
-	// this->b1.projectOn(dimensions);*/
+	ASSERT_EQ( result.size(), 2 );
+	EXPECT_EQ( hypro::Box<TypeParam>( { carl::Interval<TypeParam>{ -2, 2 }, carl::Interval<TypeParam>{ 2, 4 },
+										carl::Interval<TypeParam>{ -4, -3 } } ),
+			   result.at( 0 ) );
+	EXPECT_EQ( hypro::Box<TypeParam>( { carl::Interval<TypeParam>{ -2, -1 }, carl::Interval<TypeParam>{ 2, 4 },
+										carl::Interval<TypeParam>{ -3, -2 } } ),
+			   result.at( 1 ) );
 }

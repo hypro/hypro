@@ -87,14 +87,18 @@ class Reset {
 
 	std::size_t hash() const;
 	/**
-	 * decomposes reset
-	 */
-	void decompose( const Decomposition& decomposition );
+    * decomposes reset
+    */
+	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 
 	friend std::ostream& operator<<( std::ostream& ostr, const Reset<Number>& a ) {
+		if ( a.isIdentity() ) {
+			ostr << "Identity";
+			return ostr;
+		}
 		for ( std::size_t i = 0; i < a.size(); ++i ) {
 			ostr << a.getAffineReset( i );
-			if ( a.getIntervals( i ).size() > 0 ) {
+			if ( a.getIntervals( i ).size() > 0 && !a.isIntervalIdentity() ) {
 				ostr << "\n";
 				for ( const auto& i : a.getIntervals( i ) ) {
 					ostr << i << ", ";
@@ -110,10 +114,10 @@ class Reset {
 		}
 
 		for ( std::size_t i = 0; i < lhs.size(); ++i ) {
-			if ( lhs.getAffineReset( i ) != rhs.getAffineReset( i ) ) {
+			if ( !( lhs.getAffineReset( i ) == rhs.getAffineReset( i ) ) ) {
 				return false;
 			}
-			if ( lhs.getIntervals( i ) != rhs.getIntervals( i ) ) {
+			if ( !( lhs.getIntervals( i ) == rhs.getIntervals( i ) ) ) {
 				return false;
 			}
 		}

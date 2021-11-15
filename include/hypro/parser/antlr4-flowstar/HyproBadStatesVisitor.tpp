@@ -34,12 +34,25 @@ namespace hypro {
 					auto it = lcMap.find(badStateInfo.first);
 					assert(it != lcMap.end());
 
+                                        // if either the new condition or the
+// existing one is already true, do nothing.
+                                        if(it->second.isTrue()) {
+                                              continue;
+}
+if(badStateInfo.second.isTrue()) {
+it->second = Condition<Number>();
+continue;
+}
+
 					//Extend inMapCondition.matrix with badStateInfo.matrix
 					matrix_t<Number> newMat = it->second.getMatrix();
 					Eigen::Index newMatRowsBefore = newMat.rows();
 					matrix_t<Number> currbStateMat = badStateInfo.second.getMatrix();
-					assert(newMat.cols() == currbStateMat.cols());
-					newMat.conservativeResize((newMat.rows()+currbStateMat.rows()),newMat.cols());
+					assert(newMat.cols() == currbStateMat
+.cols() || newMat.cols() == Eigen::Index(0) || currbStateMat.cols() ==
+Eigen::Index(0));
+					newMat.conservativeResize((newMat
+.rows()+currbStateMat.rows()),std::max(newMat.cols(), currbStateMat.cols()));
 					for(Eigen::Index i = newMat.rows()-currbStateMat.rows(); i < newMat.rows(); i++){
 						newMat.row(i) = currbStateMat.row(i-newMatRowsBefore);
 					}
@@ -94,7 +107,7 @@ namespace hypro {
 			Condition<Number> badStateConditions(badStatePair.first, badStatePair.second);
 			return std::make_pair(badLoc, badStateConditions);
 		} else {
-			return std::make_pair(badLoc, Condition<Number>(matrix_t<Number>::Zero(vars.size(), vars.size()),vector_t<Number>::Zero(vars.size())));
+			return std::make_pair(badLoc, Condition<Number>::True());
 		}
 
 	}

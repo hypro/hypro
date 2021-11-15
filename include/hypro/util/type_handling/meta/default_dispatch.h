@@ -12,28 +12,28 @@ using DefaultRepresentations =
 	  TypeList<
 			RepresentationCombinations<
 				  BoxT, BoxLinearOptimizationOn, BoxLinearOptimizationOff, BoxIntervalArithmeticOff, BoxAllOff>,
-			// RepresentationCombinations<
+			//RepresentationCombinations<
 			//	  CarlPolytopeT, CarlPolytopeSetting>,
 			RepresentationCombinations<
 				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
 			RepresentationCombinations<
-				  VPolytopeT, VPolytopeSetting>,
+				  VPolytopeT, VPolytopeSetting>/*
 			RepresentationCombinations<
 				  SupportFunctionT, SupportFunctionSetting, NoBoxReduction, NoBoxDetection, NoTrafoReduction, NoReduction, PolytopeSupportFunctionSetting>,
 			RepresentationCombinations<
 				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>,
 			RepresentationCombinations<
-				  TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>>;
+				  TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>*/>;
 
 using PolytopalRepresentations =
 	  TypeList<
-			// RepresentationCombinations<
+			//RepresentationCombinations<
 			//	  CarlPolytopeT, CarlPolytopeSetting>,
 			RepresentationCombinations<
 				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
 			RepresentationCombinations<
 				  VPolytopeT, VPolytopeSetting>
-			// RepresentationCombinations<
+			//RepresentationCombinations<
 			//	  TemplatePolyhedronT, TemplatePolyhedronDefault>
 			>;
 

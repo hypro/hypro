@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "../../representations/GeometricObjectBase.h"
+//#include "../../representations/GeometricObjectBase.h"
 #include "../../representations/types.h"
 #include "../../util/tuple_expansion/nth_element.h"
 #include "Condition.h"
@@ -45,20 +45,20 @@ class State {
 
   private:
 	/**
-	 * @brief       Checks whether the type of all elements in mSets matches the type stored in mTypes.
-	 */
+     * @brief       Checks whether the type of all elements in mSets matches the type stored in mTypes.
+     */
 	bool checkConsistency() const;
 
   public:
 	/**
-	 * @brief      Default constructor.
-	 */
+  	 * @brief      Default constructor.
+  	 */
 	State() = default;
 
 	/**
-	 * @brief      Copy constructor.
-	 * @param[in]  orig  The original.
-	 */
+     * @brief      Copy constructor.
+     * @param[in]  orig  The original.
+     */
 	State( const State<Number, Representation, Rargs...>& orig )
 		: mLoc( orig.getLocation() )
 		, mSets( orig.getSets() )
@@ -69,9 +69,9 @@ class State {
 	}
 
 	/**
-	 * @brief Move constructor.
-	 * @param orig The original.
-	 */
+     * @brief Move constructor.
+     * @param orig The original.
+     */
 	State( State<Number, Representation, Rargs...>&& orig )
 		: mLoc( orig.getLocation() )
 		, mSets( orig.getSets() )
@@ -82,10 +82,10 @@ class State {
 	}
 
 	/**
-	 * @brief      Copy assignment operator.
-	 * @param[in]  orig  The original
-	 * @return     A copy of the original state.
-	 */
+     * @brief      Copy assignment operator.
+     * @param[in]  orig  The original
+     * @return     A copy of the original state.
+     */
 	State<Number, Representation, Rargs...>& operator=( const State<Number, Representation, Rargs...>& orig ) {
 		TRACE( "hypro.datastructures", "Assignment operator for state with " << orig.getNumberSets() << " sets." );
 		// prevent self-assignment
@@ -106,10 +106,10 @@ class State {
 	}
 
 	/**
-	 * @brief      Move assignment operator.
-	 * @param[in]  orig  The original.
-	 * @return     A state corresponding to the original.
-	 */
+     * @brief      Move assignment operator.
+     * @param[in]  orig  The original.
+     * @return     A state corresponding to the original.
+     */
 	State<Number, Representation, Rargs...>& operator=( State<Number, Representation, Rargs...>&& orig ) {
 		mLoc = orig.getLocation();
 		mSets = orig.getSets();
@@ -121,9 +121,9 @@ class State {
 	}
 
 	/**
-	 * @brief      Constructor from a location pointer.
-	 * @param[in]  _loc  The location.
-	 */
+     * @brief      Constructor from a location pointer.
+     * @param[in]  _loc  The location.
+     */
 	State( const Location<Number>* _loc )
 		: mLoc( _loc )
 		, mSets()
@@ -135,12 +135,12 @@ class State {
 	}
 
 	/**
-	 * @brief      Constructor.
-	 * @param[in]  _loc        The location.
-	 * @param[in]  _rep        The primary state set.
-	 * @param[in]  sets        The additional state sets.
-	 * @param[in]  _timestamp  The timestamp.
-	 */
+     * @brief      Constructor.
+     * @param[in]  _loc        The location.
+     * @param[in]  _rep        The primary state set.
+     * @param[in]  sets        The additional state sets.
+     * @param[in]  _timestamp  The timestamp.
+     */
 	State( const Location<Number>* _loc,
 		   const Representation& _rep,
 		   const Rargs... sets,
@@ -163,11 +163,11 @@ class State {
 	}
 
 	/**
-	 * @brief Construct a new State object with just the state set.
-	 *
-	 * @param _rep  The state set.
-	 * @param _timestamp
-	 */
+     * @brief Construct a new State object with just the state set.
+     *
+     * @param _rep  The state set.
+     * @param _timestamp
+     */
 	State( const Representation& _rep,
 		   const carl::Interval<tNumber>& _timestamp = carl::Interval<tNumber>::unboundedInterval() )
 		: mLoc()
@@ -178,11 +178,11 @@ class State {
 	}
 
 	/**
-	 * @brief Construct a new State object with just the state set.
-	 *
-	 * @param sets The state set.
-	 * @param _timestamp
-	 */
+     * @brief Construct a new State object with just the state set.
+     *
+     * @param sets The state set.
+     * @param _timestamp
+     */
 	//	State( const Rargs... sets,
 	//		   const carl::Interval<tNumber>& _timestamp = carl::Interval<tNumber>::unboundedInterval() )
 	//		: mLoc( nullptr )
@@ -199,46 +199,52 @@ class State {
 	//		assert( checkConsistency() );
 	//	}
 
+	static State Empty() {
+		auto tmp = State();
+		assert( tmp.empty() );
+		return tmp;
+	}
+
 	/**
-	 * @brief      Gets the location.
-	 * @return     The location.
-	 */
+     * @brief      Gets the location.
+     * @return     The location.
+     */
 	const Location<Number>* getLocation() const { return mLoc; }
 
 	/**
-	 * @brief      Gets the location.
-	 * @return     The location.
-	 */
+     * @brief      Gets the location.
+     * @return     The location.
+     */
 	Location<Number>* rGetLocation() { return const_cast<Location<Number>*>( mLoc ); }
 
 	/**
-	 * @brief      Gets the number of contained sets.
-	 * @return     The number of sets.
-	 */
+     * @brief      Gets the number of contained sets.
+     * @return     The number of sets.
+     */
 	std::size_t getNumberSets() const {
 		assert( mSets.size() == mTypes.size() );
 		return mSets.size();
 	}
 
 	/**
-	 * @brief      Gets the i-th set.
-	 * @param[in]  i     Set index.
-	 * @return     The set.
-	 */
+     * @brief      Gets the i-th set.
+     * @param[in]  i     Set index.
+     * @return     The set.
+     */
 	const std::variant<Representation, Rargs...>& getSet( std::size_t i = 0 ) const;
 
 	/**
-	 * @brief      Gets a reference to the i-th set.
-	 * @param[in]  i     Set index.
-	 * @return     The set.
-	 */
+     * @brief      Gets a reference to the i-th set.
+     * @param[in]  i     Set index.
+     * @return     The set.
+     */
 	std::variant<Representation, Rargs...>& rGetSet( std::size_t i = 0 );
 
 	/**
-	 * @brief      Gets the type of the i-th set.
-	 * @param[in]  i     Set index.
-	 * @return     The set type.
-	 */
+     * @brief      Gets the type of the i-th set.
+     * @param[in]  i     Set index.
+     * @return     The set type.
+     */
 	representation_name getSetType( std::size_t i = 0 ) const {
 		TRACE( "hypro.datastructures", "Attempt to get set type at pos " << i << ", mTypes.size() = " << mTypes.size() );
 		assert( i < mTypes.size() );
@@ -249,68 +255,72 @@ class State {
 	}
 
 	/**
-	 * @brief      Gets all contained sets.
-	 * @return     The sets.
-	 */
+     * @brief      Gets all contained sets.
+     * @return     The sets.
+     */
 	const std::vector<repVariant>& getSets() const { return mSets; }
 
 	/**
-	 * @brief      Gets all contained types.
-	 * @return     The types.
-	 */
+     * @brief      Gets all contained types.
+     * @return     The types.
+     */
 	const std::vector<representation_name>& getTypes() const { return mTypes; }
 
 	/**
-	 * @brief      Gets the timestamp.
-	 * @return     The timestamp.
-	 */
+     * @brief      Gets the timestamp.
+     * @return     The timestamp.
+     */
 	const carl::Interval<tNumber>& getTimestamp() const { return mTimestamp; }
 
 	/**
-	 * @brief      Returns empty-flag value.
-	 * @return     True if empty, False otherwise.
-	 */
+     * @brief      Returns empty-flag value.
+     * @return     True if empty, False otherwise.
+     */
 	bool isEmpty() const;
+	/**
+	 * @brief Alias for isEmpty to be consistent with other representations.
+	 */
+	bool empty() const { return isEmpty(); }
 
 	/**
-	 * @brief      Returns empty-flag values.
-	 * @return     Vector of tribools.
-	 */
+     * @brief      Returns empty-flag values.
+     * @return     Vector of tribools.
+     */
 	const std::vector<TRIBOOL>& getEmptyStates() const { return mIsEmpty; }
 
 	/**
-	 * @brief      Returns empty-flag values.
-	 * @return     Vector of tribools.
-	 */
+     * @brief      Returns empty-flag values.
+     * @return     Vector of tribools.
+     */
 	std::vector<TRIBOOL>& rGetEmptyStates() { return mIsEmpty; }
 
 	/**
-	 * @brief      Sets the location.
-	 * @param[in]  l     The location.
-	 */
+     * @brief      Sets the location.
+     * @param[in]  l     The location.
+     */
 	void setLocation( const Location<Number>* l ) { mLoc = l; }
 
 	/**
-	 * @brief      Sets the set at position i.
-	 * @param[in]  s     The set.
-	 * @param[in]  i     The position.
-	 * @tparam     R     The type of s.
-	 */
+     * @brief      Sets the set at position i.
+     * @param[in]  s     The set.
+     * @param[in]  i     The position.
+     * @tparam     R     The type of s.
+     */
 	template <typename R>
 	void setSet( const R& s, std::size_t i = 0 );
 
 	/**
-	 * @brief     Sets the set at position i.
-	 * @param[in]  s     The set.
-	 * @param[in]  i     The position.
-	 */
+     * @brief     Sets the set at position i.
+     * @param[in]  s     The set.
+     * @param[in]  i     The position.
+     */
 	void setSet( const repVariant& s, std::size_t i = 0 );
 
 	/**
-	 * @brief      Sets the set type for the set at position i.
-	 * @param[in]  type  The type
-	 * @param[in]  I     The position.
-	 */
+     * @brief      Sets the set type for the set at position i.
+     * @param[in]  type  The type
+     * @param[in]  I     The position.
+     */
 	void setSetType( representation_name type, std::size_t I = 0 ) {
 		TRACE( "hypro.datastructures", "Attempt to set set type at pos " << I << " to type " << type << ", mSets.size() = " << mSets.size() << ", mTypes.size() = " << mTypes.size() );
 		assert( mSets.size() == mTypes.size() );
@@ -322,7 +332,7 @@ class State {
 		}
 		TRACE( "hypro.datastructures", "Set set type at pos " << I << " to type " << type );
 		mTypes[I] = type;
-		// assert(checkConsistency());
+		//assert(checkConsistency());
 	}
 
 	/**
@@ -332,18 +342,18 @@ class State {
 	void setTimestamp( const carl::Interval<tNumber>& t ) { mTimestamp = t; }
 
 	/**
-	 * @brief       Sets the sets.
-	 * @details     Note that this method directly sets the sets while ignoring the consistency of the previously stored types
-	 * @param[in]   sets  The sets.
-	 */
+     * @brief       Sets the sets.
+     * @details     Note that this method directly sets the sets while ignoring the consistency of the previously stored types
+     * @param[in]   sets  The sets.
+     */
 	void setSets( const std::vector<std::variant<Representation, Rargs...>>& sets );
 
 	/**
-	 * @brief       Sets the sets.
-	 * @details     A slower but safer version of setSets as it ensures that mTypes and mSets must be consistent
-	 *              in terms of length and content when being set.
-	 * @param[in]   sets    The sets to set.
-	 */
+     * @brief       Sets the sets.
+     * @details     A slower but safer version of setSets as it ensures that mTypes and mSets must be consistent
+     *              in terms of length and content when being set.
+     * @param[in]   sets    The sets to set.
+     */
 	void setSetsSave( const std::vector<std::variant<Representation, Rargs...>>& sets );
 
 	/**
@@ -387,11 +397,11 @@ class State {
 	}
 
 	/**
-	 * @brief      Meta-function to aggregate two states.
-	 * @details    Each contained set is aggregated with its corresponding set in the passed state.
-	 * @param[in]  in    The passed second state.
-	 * @return     A state which represents the closure of the union of both states.
-	 */
+     * @brief      Meta-function to aggregate two states.
+     * @details    Each contained set is aggregated with its corresponding set in the passed state.
+     * @param[in]  in    The passed second state.
+     * @return     A state which represents the closure of the union of both states.
+     */
 	State<Number, Representation, Rargs...> unite( const State<Number, Representation, Rargs...>& in ) const;
 
 	/**
@@ -402,41 +412,43 @@ class State {
 	State<Number, Representation, Rargs...> intersect( const State<Number, Representation, Rargs...>& in ) const;
 
 	/**
-	 * @brief      Meta-function to verify a state against a condition.
-	 * @details    Each contained set is verified separately. Note that once one verification fails the whole function directly returns.
-	 * This function is the equivalent to satisfiesHalfspaces in GeometricObject.
-	 * @param[in]  in    The passed condition.
-	 * @return     A pair of a Boolean and the resulting state. The Boolean is set to True, if the resulting state is not empty.
-	 */
+     * @brief      Meta-function to verify a state against a condition.
+     * @details    Each contained set is verified separately. Note that once one verification fails the whole function directly returns.
+     * This function is the equivalent to satisfiesHalfspaces in GeometricObject.
+     * @param[in]  in    The passed condition.
+     * @return     A pair of a Boolean and the resulting state. The Boolean is set to True, if the resulting state is not empty.
+     */
 	std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> satisfies( const Condition<Number>& in ) const;
 	std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> satisfiesHalfspaces( const matrix_t<Number>& constraints, const vector_t<Number>& constants ) const;
 
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, std::size_t I = 0 ) const;
+
 	/**
-	 * @brief      Meta-function to verify the i-th set of a state against the i-th component of a condition.
-	 * @param[in]  in    The passed condition.
-	 * @param[in]  I	 The set index.
-	 * @return     A pair of a Boolean and the resulting state. The Boolean is set to True, if the resulting state is not empty.
-	 */
+     * @brief      Meta-function to verify the i-th set of a state against the i-th component of a condition.
+     * @param[in]  in    The passed condition.
+     * @param[in]  I	 The set index.
+     * @return     A pair of a Boolean and the resulting state. The Boolean is set to True, if the resulting state is not empty.
+     */
 	std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> partiallySatisfies( const Condition<Number>& in, std::size_t I ) const;
 
 	State<Number, Representation, Rargs...> intersectHalfspaces( const matrix_t<Number>& constraints, const vector_t<Number>& constants, std::size_t I = 0 ) const;
 
 	/**
-	 * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
-	 * timestamp as well.
-	 * @param[in]  matrixExponentials   The solution to the differential equation system.
-	 * @param[in]  timeStepSize         The time step size.
-	 * @return     A state where each set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
-	 */
+     * @brief      Meta-function which can be used to transform all contained sets at once with the passed parameters and adjust the
+     * timestamp as well.
+     * @param[in]  matrixExponentials   The solution to the differential equation system.
+     * @param[in]  timeStepSize         The time step size.
+     * @return     A state where each set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
+     */
 	State<Number, Representation, Rargs...> applyTimeStep( const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& matrixExponentials, tNumber timeStepSize ) const;
 
 	/**
-	 * @brief      Meta-function which applies a transformation by the passed parameters and increases the timestamp for the i-th set.
-	 * @param[in]  flow          The solution to the differential equation system (a matrix exponential).
-	 * @param[in]  timeStepSize  The time step size.
-	 * @param[in]  I             The set index.
-	 * @return     A state where the i-th set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
-	 */
+     * @brief      Meta-function which applies a transformation by the passed parameters and increases the timestamp for the i-th set.
+     * @param[in]  flow          The solution to the differential equation system (a matrix exponential).
+     * @param[in]  timeStepSize  The time step size.
+     * @param[in]  I             The set index.
+     * @return     A state where the i-th set has been transformed by the passed parameters and the timestamp has been increased by timeStepSize.
+     */
 	State<Number, Representation, Rargs...> partiallyApplyTimeStep( const ConstraintSet<Number>& flow, tNumber timeStepSize, std::size_t I = 0 ) const;
 
 	State<Number, Representation, Rargs...> computeAndApplyLinearTimeStep( const std::vector<const matrix_t<Number>&>& flows, tNumber timeStepSize ) const;
@@ -448,10 +460,10 @@ class State {
 	State<Number, Representation, Rargs...> partiallyComputeAndApplyAffineTimeStep( const matrix_t<Number>& flow, tNumber timeStepSize, std::size_t I = 0 ) const;
 
 	/**
-	 * @brief      Meta-function, which applies an affine transformation to each set contained.
-	 * @param[in]  trafos  The trafos represented as a vector of ConstraintSet.
-	 * @return     A state where each set has been transformed by the corresponding ConstraintSet.
-	 */
+     * @brief      Meta-function, which applies an affine transformation to each set contained.
+     * @param[in]  trafos  The trafos represented as a vector of ConstraintSet.
+     * @return     A state where each set has been transformed by the corresponding ConstraintSet.
+     */
 	State<Number, Representation, Rargs...> applyTransformation( const std::vector<ConstraintSet<Number>>& trafos ) const;
 	State<Number, Representation, Rargs...> applyTransformation( const ConstraintSet<Number>& trafo, std::size_t I = 0 ) const;
 	State<Number, Representation, Rargs...> linearTransformation( const matrix_t<Number>& matrix ) const;
@@ -461,34 +473,34 @@ class State {
 	State<Number, Representation, Rargs...> applyTransformation( const ConstraintSet<Number>& trafo ) const;
 
 	/**
-	 * @brief      Meta-function, which applies an affine transformation to each set contained in the state and whose index is contained
-	 * in the second parameter.
-	 * @param[in]  trafos  The trafos represented as a vector of ConstraintSet.
-	 * @param[in]  sets    The indices of the sets to transform.
-	 * @return     A state where each indexed set has been transformed by the corresponding ConstraintSet.
-	 */
+     * @brief      Meta-function, which applies an affine transformation to each set contained in the state and whose index is contained
+     * in the second parameter.
+     * @param[in]  trafos  The trafos represented as a vector of ConstraintSet.
+     * @param[in]  sets    The indices of the sets to transform.
+     * @return     A state where each indexed set has been transformed by the corresponding ConstraintSet.
+     */
 	State<Number, Representation, Rargs...> partiallyApplyTransformation( const std::vector<ConstraintSet<Number>>& trafos, const std::vector<std::size_t>& sets ) const;
 
 	/**
-	 * @brief      Meta-function, which applies an affine transformation to the i-th set contained in the state
-	 * @param[in]  trafo  The trafo
-	 * @param[in]  I      The set index.
-	 * @return     A state where the i-th set has been transformed by the passed parameters.
-	 */
+     * @brief      Meta-function, which applies an affine transformation to the i-th set contained in the state
+     * @param[in]  trafo  The trafo
+     * @param[in]  I      The set index.
+     * @return     A state where the i-th set has been transformed by the passed parameters.
+     */
 	State<Number, Representation, Rargs...> partiallyApplyTransformation( const ConstraintSet<Number>& trafo, std::size_t I ) const;
 
-	// TODO: Documentation from here on
+	//TODO: Documentation from here on
 
 	State<Number, Representation, Rargs...> minkowskiSum( const State<Number, Representation, Rargs...>& rhs ) const;
 
 	State<Number, Representation, Rargs...> partiallyMinkowskiSum( const State<Number, Representation, Rargs...>& rhs, std::size_t I ) const;
 
 	/**
-	 * @brief      Checks whether a state is fully contained in caller-state.
-	 * @details    This calls "contains" for all stored state sets iteratively and returns "false" first time it can be detected.
-	 * @param[in]  rhs   The right hand side state.
-	 * @return     True, if every subset of rhs is fully contained in the respective subset of the caller-state.
-	 */
+     * @brief      Checks whether a state is fully contained in caller-state.
+     * @details    This calls "contains" for all stored state sets iteratively and returns "false" first time it can be detected.
+     * @param[in]  rhs   The right hand side state.
+     * @return     True, if every subset of rhs is fully contained in the respective subset of the caller-state.
+     */
 	bool contains( const State<Number, Representation, Rargs...>& rhs ) const;
 
 	std::vector<Point<Number>> vertices( std::size_t I = 0 ) const;
@@ -500,6 +512,7 @@ class State {
 
 	std::size_t getDimension( std::size_t I = 0 ) const;
 	std::size_t getDimensionOffset( std::size_t I ) const;
+	std::size_t dimension( std::size_t I = 0 ) const { return getDimension( I ); }
 
 	Number getSupremum( std::size_t I ) const;
 
@@ -512,16 +525,16 @@ class State {
 	void partiallyReduceRepresentation( std::size_t I );
 
 	/**
-	 * decomposes state set by projection
-	 */
-	void decompose( const Decomposition& decomposition );
+    * decomposes state set by projection
+    */
+	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 
 	/**
-	 * @brief      Outstream operator.
-	 * @param      out    The outstream.
-	 * @param[in]  state  The state.
-	 * @return     A reference to the outstream.
-	 */
+     * @brief      Outstream operator.
+     * @param      out    The outstream.
+     * @param[in]  state  The state.
+     * @return     A reference to the outstream.
+     */
 
 	friend std::ostream& operator<<( std::ostream& out, const State<Number, Representation, Rargs...>& state ) {
 		if ( state.getLocation() != nullptr ) {
@@ -529,10 +542,10 @@ class State {
 		} else {
 			out << "location: NULL";
 		}
-		// out << " at timestamp " << carl::convert<tNumber, double>( state.getTimestamp() ) << std::endl;
+		//out << " at timestamp " << carl::convert<tNumber, double>( state.getTimestamp() ) << std::endl;
 
-		// out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
-		// out << "Set: " << std::visit(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
+		//out << "Set: " << convert<Number,double>(Converter<Number>::toBox(state.getSet())) << std::endl;
+		//out << "Set: " << std::visit(genericConversionVisitor<repVariant,Number>(representation_name::box), state.getSet()) << std::endl;
 		if ( state.getNumberSets() > 0 ) {
 			out << "Set: " << std::visit( genericToStringVisitor(), state.getSet( 0 ) ) << std::endl;
 		}
@@ -545,12 +558,12 @@ class State {
 	}
 
 	/**
-	 * @brief      Comparison for equality operator.
-	 * @details    Note that this operator is very expensive in case both states are equal.
-	 * @param[in]  lhs   The left hand side.
-	 * @param[in]  rhs   The right hand side.
-	 * @return     True, if both states are equal, false otherwise.
-	 */
+     * @brief      Comparison for equality operator.
+     * @details    Note that this operator is very expensive in case both states are equal.
+     * @param[in]  lhs   The left hand side.
+     * @param[in]  rhs   The right hand side.
+     * @return     True, if both states are equal, false otherwise.
+     */
 	friend bool operator==( const State<Number, Representation, Rargs...>& lhs, const State<Number, Representation, Rargs...>& rhs ) {
 		// quick checks first
 		if ( lhs.getNumberSets() != rhs.getNumberSets() || lhs.mTimestamp != rhs.mTimestamp ) {
@@ -594,11 +607,11 @@ class State {
 	}
 
 	/**
-	 * @brief      Operator for unequal.
-	 * @param[in]  lhs   The left hand side.
-	 * @param[in]  rhs   The right hand side.
-	 * @return     True, if both states are not equal, false otherwise.
-	 */
+     * @brief      Operator for unequal.
+     * @param[in]  lhs   The left hand side.
+     * @param[in]  rhs   The right hand side.
+     * @return     True, if both states are not equal, false otherwise.
+     */
 	friend bool operator!=( const State<Number, Representation, Rargs...>& lhs, const State<Number, Representation, Rargs...>& rhs ) {
 		return !( lhs == rhs );
 	}
@@ -607,38 +620,38 @@ class State {
 /*
 template<typename Number, typename State>
 State parallelCompose(
-	const State& lhsInitState, const State& rhsInitState,
-	const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar, const std::vector<std::string> haVar,
-	const HybridAutomaton<Number, State> ha) {
+    const State& lhsInitState, const State& rhsInitState,
+    const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar, const std::vector<std::string> haVar,
+    const HybridAutomaton<Number, State> ha) {
 
-	State haInitState;
+    State haInitState;
 
-	// set location
-	std::string name = lhsInitState.getLocation()->getName()+"_"+rhsInitState.getLocation()->getName();
-	auto location = ha.getLocation(name);
-	assert(location != NULL);
-	haInitState.setLocation(location);
+    // set location
+    std::string name = lhsInitState.getLocation()->getName()+"_"+rhsInitState.getLocation()->getName();
+    auto location = ha.getLocation(name);
+    assert(location != NULL);
+    haInitState.setLocation(location);
 
-	// set constraint
-	// TODO: Move this.
-	ConstraintSet<Number> lhsConstraintSet = std::get<ConstraintSet<Number>>(lhsInitState.getSet(0));
-	ConstraintSet<Number> rhsConstraintSet = std::get<ConstraintSet<Number>>(rhsInitState.getSet(0));
-	matrix_t<Number> lhsMatrix = lhsConstraintSet.matrix();
-	matrix_t<Number> rhsMatrix = rhsConstraintSet.matrix();
-	vector_t<Number> lhsVector = lhsConstraintSet.vector();
-	vector_t<Number> rhsVector = rhsConstraintSet.vector();
-	matrix_t<Number> newMatrix = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
-	matrix_t<Number> newVector = combine(lhsVector, rhsVector);
-	ConstraintSet<Number> haConstraintSet = ConstraintSet<Number>(newMatrix, newVector);
+    // set constraint
+    // TODO: Move this.
+    ConstraintSet<Number> lhsConstraintSet = std::get<ConstraintSet<Number>>(lhsInitState.getSet(0));
+    ConstraintSet<Number> rhsConstraintSet = std::get<ConstraintSet<Number>>(rhsInitState.getSet(0));
+    matrix_t<Number> lhsMatrix = lhsConstraintSet.matrix();
+    matrix_t<Number> rhsMatrix = rhsConstraintSet.matrix();
+    vector_t<Number> lhsVector = lhsConstraintSet.vector();
+    vector_t<Number> rhsVector = rhsConstraintSet.vector();
+    matrix_t<Number> newMatrix = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
+    matrix_t<Number> newVector = combine(lhsVector, rhsVector);
+    ConstraintSet<Number> haConstraintSet = ConstraintSet<Number>(newMatrix, newVector);
 
-	//ConstraintSet<Number> haConstraintSet = combine(lhsConstraintSet, rhsConstraintSet, lhsVar, rhsVar, haVar);
-	haInitState.setSet(haConstraintSet ,0);
+    //ConstraintSet<Number> haConstraintSet = combine(lhsConstraintSet, rhsConstraintSet, lhsVar, rhsVar, haVar);
+    haInitState.setSet(haConstraintSet ,0);
 
-	// set timestamp
-	haInitState.setTimestamp(carl::Interval<Number>(0));
+    // set timestamp
+    haInitState.setTimestamp(carl::Interval<Number>(0));
 
-	// return state
-	return haInitState;
+    // return state
+    return haInitState;
 }
 */
 

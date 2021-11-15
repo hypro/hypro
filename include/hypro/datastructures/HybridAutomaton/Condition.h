@@ -2,6 +2,7 @@
 #include "../../representations/ConstraintSet/ConstraintSet.h"
 #include "../../representations/types.h"
 #include "../../types.h"
+#include "../../util/linearOptimization/Optimizer.h"
 #include "decomposition/Decomposition.h"
 
 #include <carl/interval/Interval.h>
@@ -42,6 +43,8 @@ class Condition {
 		, mHash( 0 ) {}
 	/// constructor from a set of constraint sets.
 	explicit Condition( const std::vector<std::variant<ConstraintSetT<Number>>>& sets );
+	/// constructor from a vector of intervals
+	explicit Condition( const std::vector<carl::Interval<Number>>& intervals );
 	/// copy constructor
 	Condition( const Condition& orig ) = default;
 	/// move constructor
@@ -52,6 +55,10 @@ class Condition {
 	Condition& operator=( Condition&& orig ) = default;
 	/// destructor
 	~Condition() = default;
+	/// static construction methods
+	static Condition True() {
+		return Condition();
+	}
 
 	/// returns number of subspaces
 	std::size_t size() const { return mConstraints.size(); }
@@ -61,7 +68,7 @@ class Condition {
 	bool isTrue() const {
 		assert( cacheIsSane() );
 		updateSetState();
-		return std::all_of( mConditionSetState.begin(), mConditionSetState.end(), []( const auto s ) { return s == SETSTATE::UNIVERSAL; } );
+		return this->empty() || std::all_of( mConditionSetState.begin(), mConditionSetState.end(), []( const auto s ) { return s == SETSTATE::UNIVERSAL; } );
 	}
 	/// checks, whether the condition is unsatisfiable by its own
 	bool isFalse() const {
@@ -98,15 +105,17 @@ class Condition {
 	/// computes string with dot-representation
 	std::string getDotRepresentation( const std::vector<std::string>& vars ) const;
 	/// decomposes constraints according to passed decomposition
-	void decompose( const Decomposition& decomposition );
+	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 	/// compare equal
 	friend bool operator==( const Condition& lhs, const Condition& rhs ) {
 		if ( lhs.hash() != rhs.hash() || lhs.size() != rhs.size() ) {
+			TRACE( "hypro.datastructures", "Hash or size are not equal, hashes: " << lhs.hash() << ", " << rhs.hash() << "; sizes: " << lhs.size() << ", " << rhs.size() );
 			return false;
 		}
 
 		for ( std::size_t i = 0; i < lhs.size(); ++i ) {
 			if ( ( lhs.getVector( i ) != rhs.getVector( i ) ) || ( lhs.getMatrix( i ) != rhs.getMatrix( i ) ) ) {
+				TRACE( "hypro.datastructures", "Matrix or vector are not equal." );
 				return false;
 			}
 		}

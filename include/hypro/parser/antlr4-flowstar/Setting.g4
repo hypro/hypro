@@ -14,7 +14,6 @@ import Formula;
 //////// Parser Rules
 
 setting 		: 'setting' '{' (fixedsteps | time | remainder | identity | qrprecond | plotsetting | fixedorders | adaptiveorders | cutoff | precision | filename | maxjumps | print)* '}' ;
-//setting 		: 'setting' '{' (fixedsteps | time | identity | plotsetting | fixedorders | precision | filename | maxjumps | print)* '}' ;
 
 //// Important Parser Rules
 

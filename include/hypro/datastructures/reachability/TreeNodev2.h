@@ -52,7 +52,9 @@ class TreeNode {
 		return mParent;
 	}
 
-	void setParent( DerivedNode* p ) { mParent = p; }
+	void setParent( DerivedNode* parent ) {
+		mParent = parent;
+	}
 };
 
 }  // namespace hypro

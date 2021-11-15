@@ -12,9 +12,11 @@ class singularJumpHandler {
 	using TransitionStateMap = typename std::map<Transition<Number>*, std::vector<Representation>>;
 
   public:
-	TransitionStateMap applyJump( const TransitionStateMap& states );
+	TransitionStateMap applyJump( const TransitionStateMap& states, std::size_t subspace = 0 );
 
-	void applyReset( Representation& state, Transition<Number>* transitionPtr ) const;
+	void applyReset( Representation& state, Transition<Number>* transitionPtr, std::size_t subspace = 0 ) const;
+
+	void applyReduction( Representation& state ) const;
 
 	TransitionStateMap applyReverseJump( const TransitionStateMap& states, Transition<Number>* transition );
 

@@ -20,6 +20,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
             #FirstSegmentHandlersTest.cpp #BROKEN
             UrgencyReachabilityTest.cpp
+            DecompositionalReachabilityTest.cpp
             )
 
     SET_SOURCE_FILES_PROPERTIES(${algorithm_test_sources} PROPERTIES COMPILE_FLAGS -O0)

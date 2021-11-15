@@ -1,9 +1,9 @@
-#include "ParserWrapper.h"
+#include "include/hypro/parser/antlr4-flowstar/ParserWrapper.h"
 
-#include "ErrorListener.h"
-#include "HybridAutomatonLexer.h"
-#include "HybridAutomatonParser.h"
-#include "HyproHAVisitor.h"
+#include "include/hypro/parser/antlr4-flowstar/ErrorListener.h"
+#include "include/hypro/parser/antlr4-flowstar/HybridAutomatonLexer.h"
+#include "include/hypro/parser/antlr4-flowstar/HybridAutomatonParser.h"
+#include "include/hypro/parser/antlr4-flowstar/HyproHAVisitor.h"
 
 
 namespace hypro {
@@ -51,82 +51,8 @@ namespace hypro {
 		//std::cout << "======== ALTERED VERSION =========\n" << rewriter.getText() << std::endl;
 		return rewriter.getText();
 	}
-/*
+
 	template<>
-	std::tuple<HybridAutomaton<mpq_class>, ReachabilitySettings> parseFlowstarFile<mpq_class>(const std::string& filename) {
-
-		//Create an AnTLRInputStream
-		ANTLRInputStream input;
-		openFile(filename,input);
-
-		//Create Error Listener
-		ErrorListener* errListener = new ErrorListener();
-
-		//Create a Lexer and feed it with the input
-		HybridAutomatonLexer lexer(&input);
-		lexer.removeErrorListeners();
-		lexer.addErrorListener(errListener);
-
-		//Create an empty TokenStream obj
-		CommonTokenStream tokens(&lexer);
-
-		//Fill the TokenStream (and output it for demonstration)
-		tokens.fill();
-
-		//Create a parser with error listener
-		HybridAutomatonParser parser(&tokens);
-		parser.removeErrorListeners();
-		parser.addErrorListener(errListener);
-		tree::ParseTree* tree = parser.start();
-
-		//Create TokenStreamRewriter, needed for constants if defined
-		//std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
-		//for(auto entry : parser.getConstants()){
-		//	std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
-		//}
-
-		if(parser.getConstants().size() > 0){
-			TokenStreamRewriter rewriter(&tokens);
-			std::string modified = replaceConstantsWithValues(rewriter, parser.getConstants());
-			ANTLRInputStream inputMod(modified);
-			HybridAutomatonLexer lexerMod(&inputMod);
-			lexerMod.removeErrorListeners();
-			lexerMod.addErrorListener(errListener);
-
-			//Create an empty TokenStream obj
-			CommonTokenStream tokensMod(&lexerMod);
-
-			//Fill the TokenStream (and output it for demonstration)
-			tokensMod.fill();
-
-			//Create a parser with error listener
-			HybridAutomatonParser parserMod(&tokensMod);
-			parserMod.removeErrorListeners();
-			parserMod.addErrorListener(errListener);
-			tree::ParseTree* tree = parserMod.start();
-
-			HyproHAVisitor<mpq_class> visitor;
-
-			HybridAutomaton<mpq_class> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class>>();
-
-			delete errListener;
-
-			return std::tuple<HybridAutomaton<mpq_class>&, ReachabilitySettings>(h, visitor.getSettings());
-
-		} else {
-
-			HyproHAVisitor<mpq_class> visitor;
-
-			HybridAutomaton<mpq_class> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class>>();
-
-			delete errListener;
-
-			return std::tuple<HybridAutomaton<mpq_class>&, ReachabilitySettings>(h, visitor.getSettings());
-		}
-	}
-*/
-	template<>
-	//std::tuple<HybridAutomaton<double>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
 	std::pair<HybridAutomaton<mpq_class>, ReachabilitySettings> parseFlowstarFile<mpq_class>(const std::string& filename) {
 
 		//Create an ANTLRInputStream
@@ -152,11 +78,6 @@ namespace hypro {
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
 		tree::ParseTree* tree = parser.start();
-
-		//std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
-		//for(auto entry : parser.getConstants()){
-		//	std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
-		//}
 
 		//Create TokenStreamRewriter, needed for constants if defined
 		//Replace constants with their values, then parse again
@@ -206,7 +127,6 @@ namespace hypro {
 
 
 	template<>
-	//std::tuple<HybridAutomaton<double>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
 	std::pair<HybridAutomaton<double>, ReachabilitySettings> parseFlowstarFile<double>(const std::string& filename) {
 
 		//Create an ANTLRInputStream
@@ -232,11 +152,6 @@ namespace hypro {
 		parser.removeErrorListeners();
 		parser.addErrorListener(errListener);
 		tree::ParseTree* tree = parser.start();
-
-		//std::cout << "Size of constant map: " << parser.getConstants().size() << std::endl;
-		//for(auto entry : parser.getConstants()){
-		//	std::cout << "Constant name: " << entry.first << " constant value " << entry.second << std::endl;
-		//}
 
 		//Create TokenStreamRewriter, needed for constants if defined
 		//Replace constants with their values, then parse again

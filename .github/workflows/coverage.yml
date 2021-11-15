@@ -12,6 +12,7 @@ on:
       - hypro-sonarcloud
       - fix/coverage
       - fix/codeCleanup
+      - maintenance/staticAnalysis
 
 jobs:
   sonarcloud:
@@ -84,3 +85,4 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: ${{runner.workspace}}/hypro
         run: ${{runner.workspace}}/dependencies/sonar-scanner-4.5.0.2216-linux/bin/sonar-scanner -X
+

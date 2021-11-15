@@ -8,6 +8,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             #endif
             OptimizerTest.cpp
             PlotterTest.cpp
+            #ReachTreePlotterTest.cpp
             UtilityTest.cpp
             )
 
@@ -40,14 +41,13 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runParserTests
             AntlrParserTest.cpp
-            ParserTest.cpp
             #AntlrParserCIFTest.cpp
             )
     add_dependencies(runParserTests hypro_resources antlr4cpp)
     target_include_directories(runParserTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
     target_link_libraries(runParserTests ${PROJECT_NAME}-static ${GTEST_LIBRARIES})
     #message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})
-    add_test(NAME parser COMMAND runParserTests)
+    add_test(NAME parser COMMAND runParserTests WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/test/core)
 
     add_dependencies(allTests runParserTests)
 

@@ -7,5 +7,8 @@ namespace hypro {
  */
 struct PreprocessingInformation {
 	DynamicType dynamic = DynamicType::affine;	///< detected type of dynamics
+    Decomposition decomposition{};
+    HybridAutomaton<hydra::Number> decomposedHa{};
+    std::size_t clockCount{ 0 };
 };
 }  // namespace hypro

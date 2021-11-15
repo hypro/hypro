@@ -159,6 +159,13 @@ unsigned Plotter<Number>::addObject( const Halfspace<Number>& _plane ) {
 }
 
 template <typename Number>
+void Plotter<Number>::removeObject( unsigned id ) {
+	if ( mObjects.find( id ) != mObjects.end() ) {
+		mObjects.erase( id );
+	}
+}
+
+template <typename Number>
 unsigned Plotter<Number>::addPoint( const Point<Number>& _point ) {
 	assert( _point.dimension() == 2 );
 	// initialize limits
@@ -297,7 +304,7 @@ void Plotter<Number>::writeGnuplot() const {
 				tmpId++;
 				INFO( "hypro.plotter", "Plotting object " << tmpId << "/" << ( mObjects.size() + mPoints.size() + mPlanes.size() ) );
 			}
-			if ( !plotObject.isPlotted && plotObject.vertices.size() > 0 ) {
+			if ( plotObject.vertices.size() > 0 ) {
 				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
 				for ( const auto vertex : plotObject.vertices ) {
 					assert( vertex.dimension() == 2 );

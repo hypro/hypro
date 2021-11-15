@@ -17,6 +17,8 @@ endif ()
 # Set default ExternalProject root directory
 set(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources)
 set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR})
+# disable update if no network is present
+set(EP_UPDATE_DISCONNECTED)
 
 # Set up glpk.
 # ATTENTION: It is important that this happens *before* CArL is loaded to ensure that the linker first links against
@@ -191,6 +193,12 @@ if (HYPRO_GSL_INTEGRATION)
     #else()
     #    message(STATUS "Library ${name} was not found.")
     #endif()
+endif ()
+
+# try finding graphviz - required for ReachTree plotting
+include(graphviz.cmake)
+if (HYPRO_HAS_GRAPHVIZ)
+    set(HYPRO_HAS_GRAPHVIZ ${HYPRO_HAS_GRAPHVIZ} PARENT_SCOPE)
 endif ()
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)

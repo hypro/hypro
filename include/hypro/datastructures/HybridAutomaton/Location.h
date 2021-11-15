@@ -23,6 +23,8 @@ static_assert( false, "This file may only be included indirectly by HybridAutoma
 #include <variant>
 
 namespace hypro {
+using namespace std::string_literals;
+
 template <typename Number>
 class Transition;
 
@@ -48,8 +50,8 @@ class Location {
 	std::vector<carl::Interval<Number>> mExternalInput;	 ///< External input/disturbance
 	bool mHasExternalInput = false;						 ///< Cache-flag
 	transitionVector mTransitions;						 ///< Outgoing transitions
-	Condition<Number> mInvariant;						 ///< Invariant condition
-	std::string mName = "";								 ///< Name of the location
+	Condition<Number> mInvariant = Condition<Number>();	 ///< Invariant condition
+	std::string mName = ""s;							 ///< Name of the location
 	unsigned mId;										 ///< ID - was used for comparison (deprecated)
 	mutable std::size_t mHash = 0;						 ///< Hash of the location
 	bool mIsUrgent = false;								 ///< Flag indicating that a location is urgent
@@ -58,7 +60,7 @@ class Location {
 	/// default constructor
 	Location();
 	/// construction by name
-	Location( const std::string& name );
+	Location( std::string name );
 	/// copy constructor
 	Location( const Location& loc );
 	/// construction from flow matrix
@@ -143,9 +145,9 @@ class Location {
 	/// adds outgoing transitions
 	void addTransition( std::unique_ptr<Transition<Number>>&& trans );
 	void removeTransition( Transition<Number>* transitionPtr ) {
-		mTransitions.erase( std::find_if( std::begin( mTransitions ), std::end( mTransitions ), [&]( auto& uPtr ) {
-			return uPtr.get() == transitionPtr;
-		} ) );
+	    mTransitions.erase(std::find_if(std::begin(mTransitions), std::end(mTransitions), [&](auto& uPtr){
+			  return uPtr.get() == transitionPtr;
+		  }));
 	}
 	/// creates a transition from this location to the target
 	Transition<Number>* createTransition( Location<Number>* target );
@@ -157,29 +159,29 @@ class Location {
 	std::size_t hash() const;
 
 	/**
-	 * @brief      Determines if this composed of rhs and some potential rest.
-	 * @details    Checks whether this location can be the result of a parallel composition where rhs is involved as a composite.
-	 *
-	 * @param[in]  rhs       The right hand side
-	 * @param[in]  rhsVars   The right hand side variables
-	 * @param[in]  thisVars  The variables of this location
-	 *
-	 * @return     True if composed of, False otherwise.
-	 */
-	// bool isComposedOf( const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const;
+     * @brief      Determines if this composed of rhs and some potential rest.
+     * @details    Checks whether this location can be the result of a parallel composition where rhs is involved as a composite.
+     *
+     * @param[in]  rhs       The right hand side
+     * @param[in]  rhsVars   The right hand side variables
+     * @param[in]  thisVars  The variables of this location
+     *
+     * @return     True if composed of, False otherwise.
+     */
+	//bool isComposedOf( const Location<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const;
 
 	/// returns dot-representation of the location
 	std::string getDotRepresentation( const std::vector<std::string>& vars ) const;
 	/// decomposes location into subspaces defined in the passed decomposition
-	void decompose( const Decomposition& decomposition );
+	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 	/// hash-based less operator
 	inline bool operator<( const Location<Number>& rhs ) const {
 		if ( this->hash() != rhs.hash() ) {
 			return this->hash() < rhs.hash();
 		} else {
-			// Case where we have to compare members, as same hashes do not necessarily mean equality between the locations.
-			// As order does not mean anything here semantically, we are free to choose anything that gives us an ordering between locations.
-			// Here, we choose the lexicographical order between the names.
+			//Case where we have to compare members, as same hashes do not necessarily mean equality between the locations.
+			//As order does not mean anything here semantically, we are free to choose anything that gives us an ordering between locations.
+			//Here, we choose the lexicographical order between the names.
 			return mName < rhs.getName();
 		}
 	}
@@ -238,20 +240,20 @@ class Location {
 			return false;
 		}
 		/*
-		for(auto lhsIt = mTransitions.begin(); lhsIt != mTransitions.end(); ++lhsIt) {
-			bool found = false;
-			for(auto rhsIt = rhs.getTransitions().begin(); rhsIt != rhs.getTransitions().end(); ++rhsIt) {
-				if(**lhsIt == **rhsIt) {
-					found = true;
-					break;
-				}
-			}
-			if(!found){
-				TRACE("hypro.datastructures","Transition not equal.");
-				return false;
-			}
-		}
-		*/
+        for(auto lhsIt = mTransitions.begin(); lhsIt != mTransitions.end(); ++lhsIt) {
+            bool found = false;
+            for(auto rhsIt = rhs.getTransitions().begin(); rhsIt != rhs.getTransitions().end(); ++rhsIt) {
+                if(**lhsIt == **rhsIt) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                TRACE("hypro.datastructures","Transition not equal.");
+                return false;
+            }
+        }
+        */
 		TRACE( "hypro.datastructures", "Equal." );
 		return true;
 	}
@@ -276,8 +278,8 @@ class Location {
 		}
 		ostr << "Inv.:\n"
 			 << l.getInvariant();
-		// ostr << l.getInvariant().getDiscreteCondition() << std::endl;
-		// ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
+		//ostr << l.getInvariant().getDiscreteCondition() << std::endl;
+		//ostr << "ExternalInput:\n" << l.getExternalInput() << std::endl;
 		ostr << "Transitions: " << std::endl;
 		for ( const auto& transitionPtr : l.getTransitions() ) {
 			ostr << *( transitionPtr.get() ) << std::endl;
@@ -302,10 +304,14 @@ struct locPtrComp {
 	bool operator()( const std::unique_ptr<Location<Number>>& lhs, const std::unique_ptr<Location<Number>>& rhs ) const { return ( *lhs < *rhs ); }
 };
 
-template <typename Number>
-// std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
-//                                 , const std::unique_ptr<Location<Number>>& rhs
-std::unique_ptr<Location<Number>> parallelCompose( const Location<Number>* lhs, const Location<Number>* rhs, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar );
+template<typename Number>
+//std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
+//                                , const std::unique_ptr<Location<Number>>& rhs
+std::unique_ptr<Location<Number>> parallelCompose(const Location<Number>* lhs
+                                                , const Location<Number>* rhs
+                                                , const std::vector<std::string>& lhsVar
+                                                , const std::vector<std::string>& rhsVar
+                                                , const std::vector<std::string>& haVar);
 
 }  // namespace hypro
 
@@ -318,14 +324,14 @@ namespace std {
 template <typename Number>
 struct hash<hypro::Location<Number>> {
 	std::size_t operator()( const hypro::Location<Number>& loc ) const {
-		// Flows
+		//Flows
 		std::size_t seed = 0;
 		for ( const auto& f : loc.getFlows() ) {
 			carl::hash_add( seed, std::visit( hypro::flowHashVisitor{}, f ) );
 		}
-		// Name
+		//Name
 		carl::hash_add( seed, std::hash<std::string>()( loc.getName() ) );
-		// Transitions
+		//Transitions
 		for ( const auto& t : loc.getTransitions() ) {
 			seed += std::hash<hypro::Transition<Number>*>()( t.get() );
 		}

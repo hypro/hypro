@@ -4,8 +4,6 @@
 #include "../../representations/types.h"
 #include "../../types.h"
 
-#include <utility>
-
 namespace hypro {
 
 /**
@@ -23,10 +21,10 @@ class genericUniteVisitor {
 
 	template <typename A>
 	inline T operator()( const A& lhs, const A& rhs ) const {
-		// auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
-		// TRACE("hydra.datastructures","Union visitor lhs " << tmpHPoly);
-		// tmpHPoly = Converter<Number>::toHPolytope(rhs);
-		// TRACE("hydra.datastructures","Union visitor rhs " << tmpHPoly);
+		//auto tmpHPoly = Converter<Number>::toHPolytope(lhs);
+		//TRACE("hydra.datastructures","Union visitor lhs " << tmpHPoly);
+		//tmpHPoly = Converter<Number>::toHPolytope(rhs);
+		//TRACE("hydra.datastructures","Union visitor rhs " << tmpHPoly);
 		return lhs.unite( rhs );
 	}
 };
@@ -124,7 +122,7 @@ class genericInternalConversionVisitor {
 
   public:
 	genericInternalConversionVisitor() = delete;
-	explicit genericInternalConversionVisitor( const Ext& in )
+	genericInternalConversionVisitor( const Ext& in )
 		: mExt( in ) {}
 
 	template <typename B>
@@ -179,25 +177,6 @@ class genericReductionVisitor {
 		lhs.reduceRepresentation();
 		return lhs;
 	}
-
-	template <typename Setting>
-	inline SupportFunctionNewT<Number, Converter<Number>, Setting> operator()( SupportFunctionNewT<Number, Converter<Number>, Setting> lhs ) const {
-		// Cut off the subtrees from the root of the supportfunction by overapproximating the representation with a hpolytope (or possibly a box)
-		// and set it as the leaf of a new tree
-		auto tmpSFN = std::visit( genericConvertAndGetVisitor<SupportFunctionNew<Number>>(), lhs );
-		if ( tmpSFN.getSettings().DETECT_BOX ) {
-			tmpSFN.reduceRepresentation();
-			auto isHPolyBox = isBox( tmpSFN.matrix(), tmpSFN.vector() );
-			if ( std::get<0>( isHPolyBox ) ) {
-				Box<Number> tmpBox( std::get<1>( isHPolyBox ) );
-				tmpSFN = SupportFunctionNew<Number>( tmpBox );
-			} else {
-				HPolytopeT<Number, hypro::Converter<Number>, HPolytopeOptimizerCaching> tmpHPoly( tmpSFN.matrix(), tmpSFN.vector() );
-				tmpSFN = SupportFunctionNew<Number>( tmpHPoly );
-			}
-		}
-		return tmpSFN;
-	}
 };
 
 /**
@@ -220,6 +199,22 @@ class genericSatisfiesHalfspacesVisitor {
 	template <typename B>
 	inline std::pair<CONTAINMENT, T> operator()( const B& lhs ) const {
 		return lhs.satisfiesHalfspaces( constraints, constants );
+	}
+};
+
+template <typename Number>
+class genericEvaluateVisitor {
+	protected:
+  const vector_t<Number>& direction;
+
+	public:
+  genericEvaluateVisitor() = delete;
+	genericEvaluateVisitor( const vector_t<Number>& _direction )
+		: direction( _direction ) {}
+
+	template <typename T>
+	inline EvaluationResult<Number> operator()( const T& set ) const {
+		return set.evaluate( direction );
 	}
 };
 
@@ -248,7 +243,7 @@ class genericOutstreamVisitor {
 
   public:
 	genericOutstreamVisitor() = delete;
-	explicit genericOutstreamVisitor( std::ostream& o )
+	genericOutstreamVisitor( std::ostream& o )
 		: out( o ) {}
 
 	template <typename T>
@@ -317,8 +312,8 @@ class genericProjectionVisitor {
 
   public:
 	genericProjectionVisitor() = delete;
-	explicit genericProjectionVisitor( std::vector<std::size_t> dim )
-		: mDimensions( std::move( dim ) ) {}
+	genericProjectionVisitor( const std::vector<std::size_t>& dim )
+		: mDimensions( dim ) {}
 
 	template <typename A>
 	inline T operator()( const A& lhs ) const {
@@ -338,7 +333,7 @@ class genericAssignIntervalsVisitor {
 
   public:
 	genericAssignIntervalsVisitor() = delete;
-	explicit genericAssignIntervalsVisitor( const std::map<std::size_t, carl::Interval<N>>& assignments )
+	genericAssignIntervalsVisitor( const std::map<std::size_t, carl::Interval<N>>& assignments )
 		: mAssignments( assignments ) {}
 
 	template <typename A>
@@ -376,7 +371,7 @@ class genericIntervalAssignmentVisitor {
 
   public:
 	genericIntervalAssignmentVisitor() = delete;
-	explicit genericIntervalAssignmentVisitor( const std::vector<carl::Interval<Number>>& assignments )
+	genericIntervalAssignmentVisitor( const std::vector<carl::Interval<Number>>& assignments )
 		: mAssignments( assignments ) {}
 
 	// TODO: Add SFINAE mechanism to ensure N=Number

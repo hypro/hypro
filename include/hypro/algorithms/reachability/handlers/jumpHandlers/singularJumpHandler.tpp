@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Representation>
-auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& states ) -> TransitionStateMap {
+auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& states, std::size_t subspace ) -> TransitionStateMap {
 	// holds a mapping of transitions to already processed (i.e. aggregated, resetted and reduced) states
 	TransitionStateMap processedStates;
 
@@ -16,10 +16,10 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 			Representation newState( state );
 
 			// apply reset function
-			applyReset( newState, transitionPtr );
+			applyReset( newState, transitionPtr, subspace );
 
 			// check invariant in new location
-			auto [containment, stateSet] = intersect( newState, transitionPtr->getTarget()->getInvariant() );
+			auto [containment, stateSet] = intersect( newState, transitionPtr->getTarget()->getInvariant(), subspace );
 			if ( containment == CONTAINMENT::NO ) {
 				continue;
 			}
@@ -39,23 +39,23 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 }
 
 template <typename Representation>
-void singularJumpHandler<Representation>::applyReset( Representation& stateSet, Transition<Number>* transitionPtr ) const {
+void singularJumpHandler<Representation>::applyReset( Representation& stateSet, Transition<Number>* transitionPtr, std::size_t subspace ) const {
 	// We have 3 different implementations for applying resets and want to check that they all give the same result.
 	// Note: applyResetFM is the one that definitely works.
 	// Todo: Decide for one implementation and remove other 2
 	if ( !transitionPtr->getReset().empty() ) {
 		Reset<Number> reset = transitionPtr->getReset();
-		assert( reset.getAffineReset().isSingular() && "Singular automata do not support linear/affine resets." );
+		assert( reset.getAffineReset( subspace ).isSingular() && "Singular automata do not support linear/affine resets." );
 
-		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset();
+		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset( subspace );
 		// if affine reset is singular and not identity, get constant resets
-		if ( !reset.getAffineReset().isIdentity() ) {
+		if ( !reset.getAffineReset( subspace ).isIdentity() ) {
 			WARN( "hypro.reachability", "Singular reset handler with affine constant assignments. Converting to interval reset." )
-			vector_t<Number> zeroRow = vector_t<Number>::Zero( reset.size() );
-			for ( std::size_t rowIndex = 0; rowIndex < reset.size(); ++rowIndex ) {
-				if ( reset.getMatrix().row( rowIndex ) == zeroRow ) {
+			matrix_t<Number> zeroRow = matrix_t<Number>::Zero( 1, reset.getMatrix( subspace ).cols() );
+			for ( Eigen::Index rowIndex = 0; rowIndex < reset.getMatrix( subspace ).rows(); ++rowIndex ) {
+				if ( reset.getMatrix( subspace ).row( rowIndex ) == zeroRow ) {
 					// add interval for constant reset
-					Number constant = reset.getVector()( rowIndex );
+					Number constant = reset.getVector( subspace )( rowIndex );
 					assert( intervalReset.getIntervals()[rowIndex].isEmpty() && "Reset has both affine and interval assignment" );
 					intervalReset.setInterval( carl::Interval<Number>( constant, constant ), rowIndex );
 				}
@@ -68,9 +68,9 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 			auto transformedSet2 = applyResetFindZeroConstraints( stateSet, intervalReset );
 			auto transformedSet3 = applyResetProjectAndExpand( stateSet, intervalReset );
 			assert( transformedSet1.contains( transformedSet2 ) );
-			// assert( transformedSet2.contains( transformedSet1 ) ); // TODO there is a bug in this approach
+			//assert( transformedSet2.contains( transformedSet1 ) ); // TODO there is a bug in this approach
 			assert( transformedSet1.contains( transformedSet3 ) );
-			// assert( transformedSet3.contains( transformedSet1 ) ); // TODO there might be a bug here as well
+			//assert( transformedSet3.contains( transformedSet1 ) ); // TODO there might be a bug here as well
 #endif
 			convert( transformedSet1, stateSet );
 			TRACE( "hypro.reachability", "Resulting state set " << stateSet );
@@ -100,7 +100,7 @@ HPolytope<Number> applyResetFM( Representation& stateSet, IntervalAssignment<Num
 	projectedSet = projectedSet.projectOutConservative( projectOutDimensions );
 	projectedSet.insert( newConstraints.begin(), newConstraints.end() );
 
-	return projectedSet;
+	return projectedSet.removeRedundancy();
 }
 
 template <typename Representation, typename Number>
@@ -257,7 +257,7 @@ auto singularJumpHandler<Representation>::applyReverseJump( const TransitionStat
 			}
 
 			// reduce if possible (Currently only for support functions)
-			stateSet.reduceRepresentation();
+			applyReduction( stateSet );
 
 			DEBUG( "hydra.worker.discrete", "Representation after reduction: " << stateSet );
 

@@ -17,7 +17,7 @@ namespace hypro {
  * @return std::pair<CONTAINMENT, Representation>
  */
 template <class Representation, class Number>
-std::pair<CONTAINMENT, Representation> intersect( Representation const& valuationSet, Condition<Number> const& condition ) {
+std::pair<CONTAINMENT, Representation> intersect( Representation const& valuationSet, Condition<Number> const& condition, std::size_t subspace = 0 ) {
 	// shortcut true condition
 	if ( condition.isTrue() ) {
 		return std::make_pair( CONTAINMENT::FULL, valuationSet );
@@ -26,8 +26,8 @@ std::pair<CONTAINMENT, Representation> intersect( Representation const& valuatio
 	if ( condition.isFalse() || valuationSet.empty() ) {
 		return std::make_pair( CONTAINMENT::NO, Representation::Empty() );
 	}
-	assert( valuationSet.dimension() == condition.dimension() );
-	return valuationSet.satisfiesHalfspaces( condition.getMatrix(), condition.getVector() );
+	//assert( valuationSet.dimension() == condition.dimension() );
+	return valuationSet.satisfiesHalfspaces( condition.getMatrix( subspace ), condition.getVector( subspace ) );
 }
 
 /**
@@ -73,25 +73,14 @@ Representation applyTimeEvolution( Representation const& valuationSet, matrix_t<
  * @param reset The object describing the reset function
  * @return Representation The set after applying the reset function
  */
-/*template <class Representation, class Number>
-Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset ) {
-	if ( std::any_of( reset.getIntervalReset().getIntervals().begin(), reset.getIntervalReset().getIntervals().end(),
-					  []( const auto& interval ) { return !interval.isEmpty(); } ) ) {
-		assert( false && "lti analyzer does not currently support interval assignments on reset" );
-		WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
-	}
-	return valuationSet.affineTransformation( reset.getMatrix(), reset.getVector() );
-}*/
 template <class Representation, class Number>
-Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset ) {
-	if ( !reset.isIntervalIdentity() ) {
-		assert( false && "lti analyzer does not currently support interval assignments on reset" );
-		WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
-	}
-    if ( reset.isAffineIdentity() ) {
-        return valuationSet;
+Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset, std::size_t subspace = 0 ) {
+    if ( std::any_of( reset.getIntervalReset( subspace ).getIntervals().begin(), reset.getIntervalReset( subspace ).getIntervals().end(),
+                []( const auto& interval ){ return !interval.isEmpty(); } ) ) {
+        assert( false && "lti analyzer does not currently support interval assignments on reset" );
+        WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
     }
-	return valuationSet.affineTransformation( reset.getMatrix(), reset.getVector() );
+    return valuationSet.affineTransformation( reset.getMatrix( subspace ), reset.getVector( subspace ) );
 }
 
 

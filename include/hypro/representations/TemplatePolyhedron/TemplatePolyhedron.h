@@ -37,7 +37,7 @@ template <typename Number, typename Converter, class Setting>
 class TemplatePolyhedronT : private GeometricObjectBase {
   private:
   public:
-	// Needed for Converter
+	//Needed for Converter
 	typedef Setting Settings;
 	typedef Number NumberType;
 	static constexpr auto type_enum = representation_name::polytope_t;
@@ -47,20 +47,20 @@ class TemplatePolyhedronT : private GeometricObjectBase {
 	 * Members
 	 **************************************************************************/
 
-	// The constraint matrix which is the same for every polyhedron until explicitly changed.
+	//The constraint matrix which is the same for every polyhedron until explicitly changed.
 	std::shared_ptr<const matrix_t<Number>> mMatrixPtr = nullptr;
 
-	// The offset vector, different for each instance of this class
+	//The offset vector, different for each instance of this class
 	vector_t<Number> mVector;
 
-	// Optimizer as member since needed in different functions
+	//Optimizer as member since needed in different functions
 	Optimizer<Number> mOptimizer;
 
-	// Flag whether current TPoly has no unnecessary constraints - saves computation time
+	//Flag whether current TPoly has no unnecessary constraints - saves computation time
 	bool mNonRedundant = false;
 
-	// Flag whether emptiness has been tested and if it was empty or not
-	// mutable TRIBOOL mEmpty = TRIBOOL::NSET;
+	//Flag whether emptiness has been tested and if it was empty or not
+	//mutable TRIBOOL mEmpty = TRIBOOL::NSET;
 
 	/***************************************************************************
 	 * Constructors
@@ -171,10 +171,10 @@ class TemplatePolyhedronT : private GeometricObjectBase {
 	 **************************************************************************/
 
 	/**
-	 * @brief Static method for the construction of an empty TemplatePolyhedron of required dimension.
-	 * @param dimension Required dimension.
-	 * @return Empty TemplatePolyhedron, with empty meaning it is an unfeasible inequation set.
-	 */
+	  * @brief Static method for the construction of an empty TemplatePolyhedron of required dimension.
+	  * @param dimension Required dimension.
+	  * @return Empty TemplatePolyhedron, with empty meaning it is an unfeasible inequation set.
+	  */
 	static TemplatePolyhedronT<Number, Converter, Setting> Empty( std::size_t dimension = 1 ) {
 		if ( dimension == 0 ) return TemplatePolyhedronT<Number, Converter, Setting>();
 		matrix_t<Number> zeroMat = matrix_t<Number>::Zero( 1, dimension );
@@ -205,7 +205,7 @@ class TemplatePolyhedronT : private GeometricObjectBase {
 	 * @param[in]  _direction  The direction/cost function.
 	 * @return     Maximum towards _direction.
 	 */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExact = true ) const;
 
 	/**
 	 * @brief      Multi-evaluation function (convex linear optimization).
@@ -255,10 +255,8 @@ class TemplatePolyhedronT : private GeometricObjectBase {
 #ifdef HYPRO_LOGGING
 	friend std::ostream& operator<<( std::ostream& out_stream, const TemplatePolyhedronT<Number, Converter, Setting>& b ) {
 		out_stream << "Mat Addr: " << b.rGetMatrixPtr() << "\n";
-		out_stream << "Mat:\n"
-				   << b.matrix();
-		out_stream << "Vec:\n"
-				   << b.vector();
+		out_stream << "Mat:\n" << b.matrix();
+		out_stream << "Vec:\n" << b.vector();
 #else
 	friend std::ostream& operator<<( std::ostream& out_stream, const TemplatePolyhedronT<Number, Converter, Setting>& ) {
 #endif
@@ -270,9 +268,9 @@ class TemplatePolyhedronT : private GeometricObjectBase {
 	 **************************************************************************/
 
 	/**
-	 * @brief      Getter for the space dimension.
-	 * @return     The dimension of the space.
-	 */
+	  * @brief      Getter for the space dimension.
+	  * @return     The dimension of the space.
+	  */
 	std::size_t dimension() const;
 
 	/**
@@ -297,7 +295,7 @@ class TemplatePolyhedronT : private GeometricObjectBase {
 	std::pair<CONTAINMENT, TemplatePolyhedronT> satisfiesHalfspace( const Halfspace<Number>& rhs ) const;
 	std::pair<CONTAINMENT, TemplatePolyhedronT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 
-	// NOTE: Probably changes the template matrix
+	//NOTE: Probably changes the template matrix
 	TemplatePolyhedronT<Number, Converter, Setting> projectOn( const std::vector<std::size_t>& dimensions ) const;
 
 	TemplatePolyhedronT<Number, Converter, Setting> linearTransformation( const matrix_t<Number>& A ) const;
@@ -334,7 +332,7 @@ class TemplatePolyhedronT : private GeometricObjectBase {
 	 * @param[in]  TemplatePolyhedrones  The TemplatePolyhedrones.
 	 * @return     The resulting TemplatePolyhedron.
 	 */
-	// static TemplatePolyhedronT<Number,Converter,Setting> unite( const std::vector<TemplatePolyhedronT<Number,Converter,Setting>>& TemplatePolyhedrones );
+	//static TemplatePolyhedronT<Number,Converter,Setting> unite( const std::vector<TemplatePolyhedronT<Number,Converter,Setting>>& TemplatePolyhedrones );
 	TemplatePolyhedronT<Number, Converter, Setting> unite( const std::vector<TemplatePolyhedronT<Number, Converter, Setting>>& TemplatePolyhedrones );
 
 	/**

@@ -12,46 +12,47 @@ REACHABILITY_RESULT SingularWorker<Representation>::computeForwardReachability( 
 }
 
 template <typename Representation>
-REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task ) {
+REACHABILITY_RESULT SingularWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, bool checkSafety ) {
 	using Number = typename Representation::NumberType;
 
 	Representation initialSet = task.getInitialSet();
 
-	auto [containment, segment] = intersect( initialSet, task.getLocation()->getInvariant() );
+	auto [containment, segment] = intersect( initialSet, task.getLocation()->getInvariant(), mSubspace );
 	if ( containment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
 
-	std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, task.getLocation(), mHybridAutomaton );
-	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
-		return REACHABILITY_RESULT::UNKNOWN;
+	if ( checkSafety ) {
+		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, task.getLocation(), mHybridAutomaton, mSubspace );
+		if ( containment != CONTAINMENT::NO ) {
+			// Todo: memorize the intersecting state set and keep state.
+			return REACHABILITY_RESULT::UNKNOWN;
+		}
 	}
 
 	// compute time successor states
 	// assert singular flow
-	assert( task.getLocation()->getLinearFlow().getFlowMatrix().leftCols( initialSet.dimension() ) == matrix_t<Number>::Zero( initialSet.dimension() + 1, initialSet.dimension() ) );
+	assert( task.getLocation()->getLinearFlow( mSubspace ).getFlowMatrix().leftCols( initialSet.dimension() ) == matrix_t<Number>::Zero( initialSet.dimension() + 1, initialSet.dimension() ) );
 
 	// construct point describing the dynamics
 	std::vector<Point<Number>> dynamics;
 	// The last column of the flow matrix are the constant derivatives. Only take the head to have consistent dimensions with the initial set
-	dynamics.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow().getFlowMatrix().col( initialSet.dimension() ) ).head( initialSet.dimension() ) );
+	dynamics.emplace_back( vector_t<Number>( task.getLocation()->getLinearFlow( mSubspace ).getFlowMatrix().col( initialSet.dimension() ) ).head( initialSet.dimension() ) );
 
 	Representation timeSuccessors = singularApplyBoundedTimeEvolution( segment, dynamics, carl::convert<tNumber, Number>( mSettings.localTimeHorizon ) );
-	auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant() );
+	auto [invariantContainment, constrainedTimeSuccessors] = intersect( timeSuccessors, task.getLocation()->getInvariant(), mSubspace );
 	if ( invariantContainment == CONTAINMENT::NO ) {
 		return REACHABILITY_RESULT::SAFE;
 	}
-
 	// add state to flowpipe
 	mFlowpipe.addState( constrainedTimeSuccessors );
-
-	std::tie( containment, segment ) = ltiIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton );
-	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
-		return REACHABILITY_RESULT::UNKNOWN;
+	if ( checkSafety ) {
+		std::tie( containment, segment ) = ltiIntersectBadStates( constrainedTimeSuccessors, task.getLocation(), mHybridAutomaton, mSubspace );
+		if ( containment != CONTAINMENT::NO ) {
+			// Todo: memorize the intersecting state set and keep state.
+			return REACHABILITY_RESULT::UNKNOWN;
+		}
 	}
-
 	return REACHABILITY_RESULT::SAFE;
 }
 
@@ -62,7 +63,7 @@ void SingularWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<
 	JumpPredecessors transitionEnablingStateSets;
 	for ( auto& stateSet : mFlowpipe ) {
 		for ( const auto& transitionPtr : task.getLocation()->getTransitions() ) {
-			auto [containment, set] = intersect( stateSet, transitionPtr->getGuard() );
+			auto [containment, set] = intersect( stateSet, transitionPtr->getGuard(), mSubspace );
 			if ( containment != CONTAINMENT::NO ) {
 				transitionEnablingStateSets[transitionPtr.get()] = { set };
 			}
@@ -76,7 +77,7 @@ void SingularWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<
 template <typename Representation>
 void SingularWorker<Representation>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {
 	singularJumpHandler<Representation> jmpHandler;
-	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets );
+	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets, mSubspace );
 }
 
 template <typename Representation>

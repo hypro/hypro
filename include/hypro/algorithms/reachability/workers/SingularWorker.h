@@ -29,13 +29,14 @@ class SingularWorker {
 
   public:
 	/// constructor from rectangular automaton and settings
-	SingularWorker( const HybridAutomaton<Number>& ha, const FixedAnalysisParameters& settings )
+	SingularWorker( const HybridAutomaton<Number>& ha, const FixedAnalysisParameters& settings, std::size_t subspace = 0 )
 		: mHybridAutomaton( ha )
-		, mSettings( settings ) {}
+		, mSettings( settings )
+		, mSubspace( subspace ) {}
 	/// computes a time transition followed by a discrete transition
 	REACHABILITY_RESULT computeForwardReachability( const ReachTreeNode<Representation>& task );
 	/// computes a time transition
-	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task );
+	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, bool checkSafety = true );
 	/// computes a discrete transition. Requires available time successors.
 	void computeJumpSuccessors( const ReachTreeNode<Representation>& task );
 	/// getter for discrete jump successor sets
@@ -63,6 +64,7 @@ class SingularWorker {
 	JumpSuccessors mJumpSuccessorSets;				  ///< Storage of computed jump successors
 	JumpPredecessors mJumpPredecessorSets;			  ///< Storage of computed jump predecessors
 	Flowpipe<Representation> mFlowpipe;				  ///< Storage of computed time successors
+	std::size_t mSubspace;
 };
 
 }  // namespace hypro

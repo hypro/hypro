@@ -239,12 +239,8 @@ TEST( FourierMotzkinEliminationTest, SingleVariableEquationInconsistent2 ) {
 	EXPECT_TRUE( hasRow( newConstraints, expectedConstraint2 ) );
 
 	Vector expectedConstraint3 = Vector( 3 );
-	expectedConstraint3 << 0, -2, 0;
+	expectedConstraint3 << 0, -1, 1;
 	EXPECT_TRUE( hasRow( newConstraints, expectedConstraint3 ) );
-
-	Vector expectedConstraint4 = Vector( 3 );
-	expectedConstraint4 << 0, -1, 1;
-	EXPECT_TRUE( hasRow( newConstraints, expectedConstraint4 ) );
 }
 
 TEST( FourierMotzkinEliminationTest, MatrixVersionSimple ) {

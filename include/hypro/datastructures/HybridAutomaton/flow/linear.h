@@ -81,6 +81,16 @@ class linearFlow {
 		return mFlowMatrix.row( varIndex ).isZero();
 	}
 
+	std::vector<std::size_t> getNonDiscreteDimensions() const {
+		std::vector<std::size_t> result;
+		for ( std::size_t d = 0; d < this->dimension(); ++d ) {
+			if ( !hasNoFlow( d ) ) {
+				result.push_back( d );
+			}
+		}
+		return result;
+	}
+
 	bool hasFlow( std::size_t varIndex ) const {
 		return !hasNoFlow( varIndex );
 	}
@@ -98,11 +108,34 @@ class linearFlow {
 		return DynamicType::linear;
 	}
 
+	DynamicType getDynamicsType( std::size_t varIndex ) const {
+		if ( isTimed( varIndex ) ) {
+			return DynamicType::timed;
+		}
+		if ( isDiscrete( varIndex ) ) {
+			return DynamicType::discrete;
+		}
+		if ( isSingular( varIndex ) ) {
+			return DynamicType::singular;
+		}
+		return DynamicType::linear;
+	}
+
 	bool isTimed() const {
 		TRACE( "hypro.decisionEntity", "Flowmatrix: " << mFlowMatrix );
 		Eigen::Index rows = mFlowMatrix.rows();
 		if ( mFlowMatrix.block( 0, 0, rows - 1, rows - 1 ) == matrix_t<Number>::Zero( rows - 1, rows - 1 ) ) {
 			if ( mFlowMatrix.block( 0, rows - 1, rows - 1, 1 ) == vector_t<Number>::Ones( rows - 1 ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool isTimed( std::size_t varIndex ) const {
+		Eigen::Index rows = mFlowMatrix.rows();
+		if ( mFlowMatrix.block( varIndex, 0, 1, rows - 1 ) == matrix_t<Number>::Zero( 1, rows - 1 ) ) {
+			if ( mFlowMatrix( varIndex, rows - 1 ) == 1 ) {
 				return true;
 			}
 		}
@@ -118,8 +151,21 @@ class linearFlow {
 		return false;
 	}
 
+	bool isSingular( std::size_t varIndex ) const {
+		TRACE( "hypro.decisionEntity", "Flowmatrix: " << mFlowMatrix );
+		Eigen::Index rows = mFlowMatrix.rows();
+		if ( mFlowMatrix.block( varIndex, 0, 1, rows - 1 ) == matrix_t<Number>::Zero( 1, rows - 1 ) ) {
+			return true;
+		}
+		return false;
+	}
+
 	bool isDiscrete() const {
 		return hasNoFlow();
+	}
+
+	bool isDiscrete( std::size_t varIndex ) const {
+		return hasNoFlow( varIndex );
 	}
 
 	friend bool operator==( const linearFlow<Number>& lhs, const linearFlow<Number>& rhs ) {

@@ -258,6 +258,8 @@ install(TARGETS ${PROJECT_NAME}-shared
 add_subdirectory(resources)
 # Create config.h by adding cmake defines dependent on option switches
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/flags.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/flags.h @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/paths.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/paths.h
+        @ONLY)
 add_subdirectory(test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 

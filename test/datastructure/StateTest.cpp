@@ -2,7 +2,6 @@
 #include "gtest/gtest.h"
 #include <hypro/datastructures/HybridAutomaton/State.h>
 #include <hypro/representations/GeometricObjectBase.h>
-#include <hypro/util/tuple_expansion/nth_element.h>
 #include <thread>
 
 using namespace hypro;
