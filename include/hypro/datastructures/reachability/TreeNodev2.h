@@ -66,6 +66,10 @@ class TreeNode {
 		}
 	}
 
+	void eraseChildren() {
+		mChildren.clear();
+	}
+
 	auto getParent() const -> DerivedNode* {
 		return mParent;
 	}

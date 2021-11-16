@@ -67,7 +67,7 @@ struct ctrl {
 	std::mt19937 generator;
 	std::uniform_int_distribution<int> loc_dist{ 0, 23 };
 	// std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0, 0.0005 );
-	std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0.0005, 0.0008 );
+	std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0.0003, 0.0005 );
 	std::discrete_distribution<int> disc_dist = std::discrete_distribution( { 10, 90 } );
 };
 
@@ -76,7 +76,8 @@ void cutoffControllerJumps( hypro::ReachTreeNode<R>* node ) {
 	auto children = node->getChildren();
 	for ( auto childIt = children.begin(); childIt != children.end(); ++childIt ) {
 		if ( !( *childIt )->getTransition()->getReset().getAffineReset().isIdentity( 4 ) ) {
-			node->eraseChild( *childIt );
+			(*childIt)->eraseChildren();
+			( *childIt )->getFlowpipe().clear();
 		} else {
 			cutoffControllerJumps( *childIt );
 		}
@@ -110,13 +111,16 @@ struct simulator {
 		// tick
 		constraints( 0, 4 ) = 1;
 		constraints( 1, 4 ) = -1;
-		constants( 0 ) = mCycleTime;
-		constants( 1 ) = -mCycleTime;
+//		constants( 0 ) = mCycleTime;
+//		constants( 1 ) = -mCycleTime;
+		constants( 0 ) = 0;
+		constants( 1 ) = -0;
 		// collect all leaf nodes that agree with the cycle time
 		for ( auto& r : roots ) {
 			for ( auto& n : hypro::preorder( r ) ) {
 				if ( n.isLeaf() ) {
-					auto [containment, result] = n.getFlowpipe().back().satisfiesHalfspaces( constraints, constants );
+					// I don't think we really need this check. We only consider initial sets of nodes that where reached by resetting the clock to zero.
+					auto [containment, result] = n.getInitialSet().satisfiesHalfspaces( constraints, constants );
 					if ( containment != hypro::CONTAINMENT::NO ) {
 						std::cout << "[Simulator] New sample: " << result << std::endl;
 						if ( samplesBoxes.find( n.getLocation() ) != samplesBoxes.end() ) {
@@ -410,8 +414,8 @@ int main() {
 		std::map<Loc, std::vector<Box>> unknownSamples;
 		for ( const auto& r : sim.roots ) {
 			for ( const auto& n : hypro::preorder( r ) ) {
-				if ( n.isLeaf() && !octrees.at( n.getLocation() ).contains( n.getFlowpipe().back().projectOn( interesting_dimensions ) ) ) {
-					unknownSamples[n.getLocation()].push_back( n.getFlowpipe().back() );
+				if ( n.isLeaf() && !octrees.at( n.getLocation() ).contains( n.getInitialSet().projectOn( interesting_dimensions ) ) ) {
+					unknownSamples[n.getLocation()].push_back( n.getInitialSet() );
 				}
 			}
 		}
@@ -423,6 +427,7 @@ int main() {
 			std::cout << "Advanced controller traces are not all in the octree." << std::endl;
 			if ( training ) {
 				std::cout << "Start training with " << unknownSamples.size() << " locations." << std::endl;
+//				std::cout << "Start training with samples: " << unknownSamples << std::endl;
 				// if not in reach set: take new part, run base controller reachability analysis on this part
 
 				// initialize reachtree
@@ -439,7 +444,7 @@ int main() {
 						} else {
 							newintervals[2] = carl::Interval<Number>( 0.0 );
 						}
-						initialStates[loc] = hypro::Condition<Number>( box.intervals() );
+						initialStates[loc] = hypro::Condition<Number>( newintervals );
 						automaton.setInitialStates( initialStates );
 						auto tmp = hypro::makeRoots<Representation>( automaton );
 						std::for_each( std::begin( tmp ), std::end( tmp ), [&roots]( auto&& node ) { roots.emplace_back( std::move( node ) ); } );
