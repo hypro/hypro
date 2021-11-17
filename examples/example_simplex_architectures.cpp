@@ -50,7 +50,8 @@ struct ctrl {
 		hypro::vector_t<double> coordinates = hypro::vector_t<double>::Zero( 1 );
 		for ( std::size_t d = 0; d < 1; ++d ) {
 			// value is with 50% probability zero and some value between 0 and 0.0005 otherwise
-			coordinates( d ) = disc_dist( generator ) * dist( generator );
+//			coordinates( d ) = disc_dist( generator ) * dist( generator );
+			coordinates( d ) = 0.0;
 		}
 		return hypro::Point<Number>{ coordinates };
 	}
@@ -289,13 +290,15 @@ void plotOctree( const hypro::Hyperoctree<double>& octree, hypro::Plotter<double
 	}
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "UnreachableCode"
 int main() {
 	using Number = double;
 	// settings
 	// TODO make command line
-	std::size_t iterations{ 5 };
+	std::size_t iterations{ 50 };
 	std::size_t iteration_count{ 0 };
-	std::size_t maxJumps = 100;
+	std::size_t maxJumps = 75;
 	Number widening = 0.1;
 	bool training = true;
 	std::string filename{ "21_simplex_watertanks_deterministic_monitor_dbg_init_ticks.model" };
@@ -510,3 +513,4 @@ int main() {
 
 	return 0;
 }
+#pragma clang diagnostic pop

@@ -2251,8 +2251,8 @@ hybrid reachability
             u in [0.0, 0.0]
             spec_t1 in [0, 0]
             tick in [0, 0]
-            x1 in [0.6, 0.6]
-            x2 in [0.5, 0.5]
+            x1 in [0.25, 0.25]
+            x2 in [0.25, 0.25]
         }
     }
 }
