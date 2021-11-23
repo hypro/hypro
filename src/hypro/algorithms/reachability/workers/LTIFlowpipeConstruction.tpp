@@ -30,6 +30,7 @@ Representation constructFirstSegment( Representation const& initialSet,
 									  linearFlow<Number> const& flow,
 									  matrix_t<Number> const& rawTransformation,
 									  tNumber timeStep ) {
+
 	//Zero'd dummy external input
 	Box<Number> externalInput{ std::make_pair(
 		  Point<Number>{ vector_t<Number>::Zero( flow.dimension() ) },
@@ -48,6 +49,7 @@ Representation constructFirstSegment( Representation const& initialSet,
 
 	//Horrible interface. Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
 	Representation bloatingSet{};
+	
 	convert( Number( Number( 1 ) / Number( 4 ) ) * errorBoxes.DifferenceBox, bloatingSet );
 
 	TRACE("hypro", "atDelta: " << atDelta.vertices());

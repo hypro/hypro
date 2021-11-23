@@ -5,6 +5,7 @@ namespace hypro {
 template <typename Representation>
 template <typename OutputIt>
 REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out ) const {
+
 	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, mSettings.timeStep ), mSettings.timeStep );
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant() );

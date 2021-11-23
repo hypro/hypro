@@ -115,11 +115,12 @@ std::ostream& operator<<( std::ostream& out, const ReachTreeNode<Representation>
 template <class Representation, class Number>
 std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> const& ha ) {
 	std::vector<ReachTreeNode<Representation>> roots{};
-
+	std::cout<<"dogu"<<std::endl;
 	std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ), []( auto const& locCond ) {
 		auto const& [location, condition] = locCond;
 		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix(), condition.getVector() }, carl::Interval<SegmentInd>{ 0, 0 } };
 	} );
+	std::cout<<"dogu"<<std::endl;
 
 	return roots;
 }

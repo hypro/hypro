@@ -2,24 +2,24 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 
 	# reduce compiler optimization for tests
 	set(datastructure_test_sources
-		DAGTest.cpp
-		DecompositionTest.cpp
-		EventTimingProviderTest.cpp
-		FlowpipeTest.cpp
-		HalfspaceTest.cpp
-		HIVTest.cpp
-		PointTest.cpp
-		VertexTest.cpp
-		VertexContainerTest.cpp
-		RangeTest.cpp
-		ReachTreeTest.cpp
-		StateTest.cpp
-		StateVisitorTest.cpp
+		#DAGTest.cpp
+#		DecompositionTest.cpp
+#		EventTimingProviderTest.cpp
+#		FlowpipeTest.cpp
+#		HalfspaceTest.cpp
+#		HIVTest.cpp
+#		PointTest.cpp
+#		VertexTest.cpp
+#		VertexContainerTest.cpp
+#		RangeTest.cpp
+#		ReachTreeTest.cpp
+#		StateTest.cpp
+#		StateVisitorTest.cpp
 		TreeTest.cpp
 		#StrategyTest.cpp
-		HybridAutomataTest.cpp
+#		HybridAutomataTest.cpp
 		#HybridAutomataOutputTest.cpp
-		WorkQueueTest.cpp
+#		WorkQueueTest.cpp
 		##HybridAutomataParallelCompositionTest.cpp
 	)
 

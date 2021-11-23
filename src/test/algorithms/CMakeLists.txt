@@ -8,14 +8,14 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
       #SumPerformanceTest.cpp
       # rahsTwoTankTest.cpp
       ReachabilityAnalysisTest.cpp
-      FourierMotzkinQETest.cpp
+      #FourierMotzkinQETest.cpp
       #VertexEnumerationTest.cpp
-      UtilityTest.cpp
-      QuickhullTest.cpp
-      QuickIntersectionTest.cpp
-      RectangularReachabilityTest.cpp
-      SingularReachabilityTest.cpp
-      TimeEvolutionTest.cpp
+      #UtilityTest.cpp
+      #QuickhullTest.cpp
+      #QuickIntersectionTest.cpp
+      #RectangularReachabilityTest.cpp
+      #SingularReachabilityTest.cpp
+      #TimeEvolutionTest.cpp
       #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
       #FirstSegmentHandlersTest.cpp #BROKEN
     )

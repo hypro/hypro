@@ -429,6 +429,8 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 	if ( empty ) {
 		return std::make_pair( CONTAINMENT::NO, tmp );
 	} else {
+        std::cout<<"Partial"<<std::endl;
+
 		return std::make_pair( CONTAINMENT::PARTIAL, tmp );
 	}
 }

@@ -110,9 +110,9 @@ SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSu
 //}
 
 template<typename Number>
-template<typename SupportFunctionSetting, typename inSetting>
-SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting> Converter<Number>::toSupportFunction( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting>();
+template<typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunctionNew( const StarsetT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE ) {
+	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>();
 }
 } // namespace hypro
 

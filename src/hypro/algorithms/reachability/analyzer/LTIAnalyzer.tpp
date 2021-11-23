@@ -9,6 +9,7 @@ template <typename State>
 auto LTIAnalyzer<State>::run() -> LTIResult {
 	//Setup settings for flowpipe construction in worker
 	TimeTransformationCache<Number> transformationCache;
+
 	LTIWorker<State> worker{
 		  *mHybridAutomaton,
 		  mParameters,

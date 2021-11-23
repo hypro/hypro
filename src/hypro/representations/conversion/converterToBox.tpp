@@ -146,7 +146,6 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const HPol
 					assert( minima( d ) <= maxima( d ) );										//only continue if the maximum value is not smaller than the minimum value
 				}
 			}
-
 			std::vector<carl::Interval<Number>> intervals;
 			for ( std::size_t i = 0; i < _source.dimension(); ++i ) {						//for every dimension
 				intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );	//create one interval per dimension with the corresponding minimal and maximal values
@@ -183,6 +182,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const HPol
 			}
 			intervals.push_back( carl::Interval<Number>( -distances[2 * i].supportValue, lowerBound, distances[2 * i + 1].supportValue, upperBound ) );	 //create one interval with the corresponding left and right end points (inverted lower interval end points)
 		}
+
 		result = BoxT<Number, Converter, BoxSetting>( intervals );
 	}
 	// if(mode == EXACT){                                                                              //checks if conversion was exact
@@ -431,12 +431,31 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Supp
 	return BoxT<Number, Converter, BoxSetting>( intervals );
 }
 
-}  // namespace hypro
-/*
+
 template<typename Number>
 template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return BoxT<Number,Converter<Number>,BoxSetting>();
-}
-*/
+    //HPolytope temp=Converter::toHPolytope(source.constraintss());
+	//temp=temp.removeRedundancy();
+	BoxT<Number,Converter<Number>,BoxSetting> tmp=Converter::toBox(source.constraintss());
+	return tmp.affineTransformation(source.generator(),source.center());
+	/*std::cout<<"point"<<std::endl;
+	std::cout<<source.generator()<<std::endl;
+	std::cout<<source.center()<<std::endl;
+	std::cout<<source.constraintss().matrix()<<std::endl;
+	std::cout<<source.constraintss().vector()<<std::endl;
 
+ 	std::vector<Point<Number>> res; 
+    ////std::cout<<"vertices"<<std::endl;
+    auto placeholder= tmp.vertices();
+	std::cout<<"point"<<std::endl;
+
+	for ( auto point : placeholder ) {
+		std::cout<<"point"<<point<<std::endl;
+        point=point.affineTransformation(source.generator(),source.center());
+        res.push_back(point);
+    }    
+	return BoxT<Number,Converter<Number>,BoxSetting>(res);*/
+}
+
+}  // namespace hypro

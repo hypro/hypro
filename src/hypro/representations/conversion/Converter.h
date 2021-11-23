@@ -472,6 +472,8 @@ class Converter {
 		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
 		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename SFNSetting = typename SupportFunctionNew::Settings, typename inSetting>
+		static SupportFunctionNewT<Number,Converter<Number>,SFNSetting> toSupportFunctionNew(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 
 	/* END Conversion (do not remove this comment!) */
 };

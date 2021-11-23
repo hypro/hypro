@@ -605,7 +605,10 @@ BoxT<Number, Converter, Setting> operator*( Number factor, const BoxT<Number, Co
  */
 template <typename From, typename To, typename Converter, class Setting>
 BoxT<To, Converter, Setting> convert( const BoxT<From, Converter, Setting>& in ) {
+	std::cout<<"dawg"<<std::endl;
+
 	std::pair<Point<From>, Point<From>> limits = in.limits();
+	std::cout<<"dawg"<<std::endl;
 	return BoxT<To, Converter, Setting>( std::make_pair( Point<To>( convert<From, To>( limits.first.rawCoordinates() ) ), Point<To>( convert<From, To>( limits.second.rawCoordinates() ) ) ) );
 }
 

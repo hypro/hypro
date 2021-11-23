@@ -14,7 +14,7 @@ template<typename Number>
 template<typename StarsetSetting, typename inSetting>
 StarsetT<Number,Converter<Number>,StarsetSetting> Converter<Number>::toStarset( const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& _source, const CONV_MODE  ) {
 	
-	return StarsetT<Number,Converter<Number>,StarsetSetting>();
+	return StarsetT<Number, Converter<Number>, StarsetSetting>( _source.matrix(), _source.vector() );
 
 }
 

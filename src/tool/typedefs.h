@@ -13,6 +13,8 @@ using CarlPolytopeType = hypro::CarlPolytopeT<Number, hypro::Converter<Number>,
 											  hypro::CarlPolytopeSetting>;
 using BoxType = hypro::Box<Number>;
 using HPolyType = hypro::HPolytope<Number>;
+using StarsetType = hypro::Starset<Number>;
+
 using VPolyType = hypro::VPolytope<Number>;
 using ZonotopeType = hypro::Zonotope<Number>;
 using ConstraintSetType = hypro::ConstraintSet<Number>;

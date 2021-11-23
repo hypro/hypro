@@ -6,9 +6,9 @@ if(${STATICLIB_SWITCH} STREQUAL "OFF")
 		#ifdef LOGGING_HYPRO
 		#LoggerTest.cpp
 		#endif
-		OptimizerTest.cpp
-		PlotterTest.cpp
-		UtilityTest.cpp
+		#OptimizerTest.cpp
+		#PlotterTest.cpp
+		#UtilityTest.cpp
 	)
 
 	SET_SOURCE_FILES_PROPERTIES(${core_test_sources} PROPERTIES COMPILE_FLAGS -O0)
