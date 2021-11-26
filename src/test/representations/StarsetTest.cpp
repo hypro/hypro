@@ -71,7 +71,7 @@ TYPED_TEST(StarsetTest, Constructor){
     hypro::matrix_t<TypeParam> transmat=hypro::matrix_t<TypeParam>(2,2);
     transmat<<cos(45),-sin(45),sin(45),cos(45);
     hypro::vector_t<TypeParam> offset=hypro::vector_t<TypeParam>(2);
-    offset<<5,5;
+    offset<<1,1;
     hypro::HPolytope<TypeParam> anotherHPolytope = hypro::HPolytope<TypeParam>(this->myStar1.constraintss().affineTransformation(this->myStar1.generator(),this->myStar1.center()) );
     hypro::HPolytope<TypeParam> anotherHPolytope2 = hypro::HPolytope<TypeParam>(this->myStar1.constraintss().affineTransformation(transmat,offset)  );
     hypro::HPolytope<TypeParam> united = anotherHPolytope.unite(anotherHPolytope2);

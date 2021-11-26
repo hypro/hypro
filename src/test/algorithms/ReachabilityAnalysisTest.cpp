@@ -26,7 +26,7 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 	void SetUp() override {
 		// initialize hybrid automaton
 		bball_ha = hypro::HybridAutomaton<Number>();
-		ha = hypro::parseFlowstarFile<Number>( "../examples/input/building.model" );
+		ha = hypro::parseFlowstarFile<Number>( "../../examples/arch21/aff/SRA01.model" );
 		// create location
 		std::unique_ptr<hypro::Location<Number>> loc{
 			  std::make_unique<hypro::Location<Number>>( hypro::Location<Number>{ "l0" } ) };
@@ -213,12 +213,12 @@ TEST_F( ReachabilityAnalysisTest, StarsetReachabilitBenchmark ) {
 
 	using tNumber = hypro::tNumber;
 	hypro::FixedAnalysisParameters fixedParameters;
-	fixedParameters.jumpDepth = 5;
+	fixedParameters.jumpDepth = 99999999;
 	fixedParameters.localTimeHorizon = 20;
-	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 200 );
+	fixedParameters.fixedTimeStep = tNumber( 1 ) ;
 
 	hypro::AnalysisParameters analysisParameters;
-	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 200 );
+	analysisParameters.timeStep = tNumber( 1 ) ;
 	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
 	analysisParameters.representation_type = hypro::representation_name::Starset;
 
