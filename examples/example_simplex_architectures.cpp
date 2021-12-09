@@ -2,9 +2,9 @@
  * Copyright (c) 2021.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /*
@@ -91,7 +91,6 @@ struct simulator {
 
 	void pointify() {
 		std::cout << "[Simulator] Pointify" << std::endl;
-		assert( observation.dimension() == 2 );
 		std::map<Loc, Box> samplesBoxes;
 		// create constraints which fix the observation
 		hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero( 2, 5 );
@@ -229,17 +228,19 @@ struct simulator {
 																   mSettings.strategy().front(), roots );
 		auto result = reacher.computeForwardReachability();
 
-		// cutoff after cycle time
-		// TODO add functionality to run reachability analysis for a bounded global time
-		// Workaround: compute larger set, post-process: cutoff all nodes in the tree reachable via a controller-jump.
-		// note: in the system there is no trajectory with lenght longer than cycle time since the controller is definitely invoked after this time on any execution path.
-		for ( auto& root : roots ) {
-			cutoffControllerJumps( &root );
-		}
+        // cutoff after cycle time
+        // TODO add functionality to run reachability analysis for a bounded global time
+        // Workaround: compute larger set, post-process: cutoff all nodes in the tree reachable via a controller-jump.
+        // note: in the system there is no trajectory with lenght longer than cycle time since the controller is definitely invoked after this time on any execution path.
+        for (auto &root: roots) {
+            cutoffControllerJumps(&root);
+        }
 
-		// return safety result
-		return ( result == hypro::REACHABILITY_RESULT::SAFE );
-	}
+        // return safety result
+        // dbg
+        std::cout << "[Simulator] simulate safety result: " << result << std::endl;
+        return (result == hypro::REACHABILITY_RESULT::SAFE);
+    }
 
 	ctrl<Number>& mBaseController;
 	ctrl<Number>& mAdvancedController;
@@ -358,7 +359,7 @@ int main() {
 															   settings.strategy().front(), roots );
 	std::cout << "Run initial analysis ... " << std::flush;
 	auto result = reacher.computeForwardReachability();
-	std::cout << "done." << std::endl;
+    std::cout << "done, result: " << result << std::endl;
 	// post processing
 	if ( result != hypro::REACHABILITY_RESULT::SAFE ) {
 		std::cout << "System is initially not safe, need to deal with this." << std::endl;
@@ -460,7 +461,7 @@ int main() {
 				auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
 																		   settings.strategy().front(), roots );
 				auto result = reacher.computeForwardReachability();
-				std::cout << " done." << std::endl;
+                std::cout << " done, result: " << result << std::endl;
 				// post processing
 				if ( result != hypro::REACHABILITY_RESULT::SAFE ) {
 					//// else switch to base controller, continue: simulate base controller, update sample (use monitor for this)

@@ -2257,7 +2257,7 @@ hybrid reachability
     }
 }
 
-unsafe
+unsafe set
 {
     valve_closed_open_bad {   spec_t1 >= 0.0 }
     valve_closed_closed_bad { spec_t1 >= 0.0 }
