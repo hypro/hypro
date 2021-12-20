@@ -56,9 +56,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 15.0
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 20.0
 
-                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 15.0   tick <= 1.0
+                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
             }
         }
 
@@ -110,9 +110,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 15.0
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 20.0
 
-                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 15.0   tick <= 1.0
+                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
             }
         }
 
@@ -164,9 +164,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 15.0
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 20.0
 
-                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 15.0   tick <= 1.0
+                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
             }
         }
 
@@ -218,9 +218,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 15.0
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 20.0
 
-                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 15.0   tick <= 1.0
+                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
             }
         }
 
@@ -272,9 +272,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 15.0
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 20.0
 
-                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 15.0   tick <= 1.0
+                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
             }
         }
 
@@ -326,9 +326,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 15.0
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 20.0
 
-                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 15.0   tick <= 1.0
+                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
             }
         }
 
@@ -380,9 +380,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 15.0
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 20.0
 
-                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 15.0   tick <= 1.0
+                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
             }
         }
 
@@ -434,9 +434,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 15.0
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 20.0
 
-                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 15.0   tick <= 1.0
+                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
             }
         }
 
@@ -1346,6 +1346,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1371,6 +1372,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1396,6 +1398,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1421,6 +1424,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1446,6 +1450,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1471,6 +1476,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1496,6 +1502,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1521,6 +1528,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1546,6 +1554,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1571,6 +1580,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1597,6 +1607,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1622,6 +1633,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0002
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1647,6 +1659,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1672,6 +1685,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1697,6 +1711,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1722,6 +1737,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1747,6 +1763,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1772,6 +1789,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1797,6 +1815,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1822,6 +1841,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1847,6 +1867,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1872,6 +1893,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1897,6 +1919,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -1922,6 +1945,7 @@ hybrid reachability
         }
         reset
         {
+            u' := 0.0
             tick' := 0.0
         }
         parallelotope aggregation {}
@@ -2033,9 +2057,9 @@ hybrid reachability
         valve_closed_open_antecedent -> valve_closed_open_bad
         guard
         {
-            # Original guard: spec_t1 >= 15.0
+            # Original guard: spec_t1 >= 20.0
 
-            spec_t1 >= 15.0
+            spec_t1 >= 20.0
         }
         reset
         {
@@ -2046,9 +2070,9 @@ hybrid reachability
         valve_closed_closed_antecedent -> valve_closed_closed_bad
         guard
         {
-            # Original guard: spec_t1 >= 15.0
+            # Original guard: spec_t1 >= 20.0
 
-            spec_t1 >= 15.0
+            spec_t1 >= 20.0
         }
         reset
         {
@@ -2059,9 +2083,9 @@ hybrid reachability
         valve_open1_open_antecedent -> valve_open1_open_bad
         guard
         {
-            # Original guard: spec_t1 >= 15.0
+            # Original guard: spec_t1 >= 20.0
 
-            spec_t1 >= 15.0
+            spec_t1 >= 20.0
         }
         reset
         {
@@ -2072,9 +2096,9 @@ hybrid reachability
         valve_open1_closed_antecedent -> valve_open1_closed_bad
         guard
         {
-            # Original guard: spec_t1 >= 15.0
+            # Original guard: spec_t1 >= 20.0
 
-            spec_t1 >= 15.0
+            spec_t1 >= 20.0
         }
         reset
         {
@@ -2085,9 +2109,9 @@ hybrid reachability
         valve_open2_open_antecedent -> valve_open2_open_bad
         guard
         {
-            # Original guard: spec_t1 >= 15.0
+            # Original guard: spec_t1 >= 20.0
 
-            spec_t1 >= 15.0
+            spec_t1 >= 20.0
         }
         reset
         {
@@ -2098,9 +2122,9 @@ hybrid reachability
         valve_open2_closed_antecedent -> valve_open2_closed_bad
         guard
         {
-            # Original guard: spec_t1 >= 15.0
+            # Original guard: spec_t1 >= 20.0
 
-            spec_t1 >= 15.0
+            spec_t1 >= 20.0
         }
         reset
         {
@@ -2111,9 +2135,9 @@ hybrid reachability
         valve_open3_open_antecedent -> valve_open3_open_bad
         guard
         {
-            # Original guard: spec_t1 >= 15.0
+            # Original guard: spec_t1 >= 20.0
 
-            spec_t1 >= 15.0
+            spec_t1 >= 20.0
         }
         reset
         {
@@ -2124,9 +2148,9 @@ hybrid reachability
         valve_open3_closed_antecedent -> valve_open3_closed_bad
         guard
         {
-            # Original guard: spec_t1 >= 15.0
+            # Original guard: spec_t1 >= 20.0
 
-            spec_t1 >= 15.0
+            spec_t1 >= 20.0
         }
         reset
         {
@@ -2251,8 +2275,8 @@ hybrid reachability
             u in [0.0, 0.0]
             spec_t1 in [0, 0]
             tick in [0, 0]
-            x1 in [0.25, 0.25]
-            x2 in [0.25, 0.25]
+            x1 in [0.21, 0.21]
+            x2 in [0.21, 0.21]
         }
     }
 }

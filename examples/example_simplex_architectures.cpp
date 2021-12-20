@@ -231,7 +231,7 @@ struct simulator {
         // cutoff after cycle time
         // TODO add functionality to run reachability analysis for a bounded global time
         // Workaround: compute larger set, post-process: cutoff all nodes in the tree reachable via a controller-jump.
-        // note: in the system there is no trajectory with lenght longer than cycle time since the controller is definitely invoked after this time on any execution path.
+        // note: in the system there is no trajectory with length longer than cycle time since the controller is definitely invoked after this time on any execution path.
         for (auto &root: roots) {
             cutoffControllerJumps(&root);
         }
@@ -299,7 +299,7 @@ int main() {
 	// TODO make command line
 	std::size_t iterations{ 50 };
 	std::size_t iteration_count{ 0 };
-	std::size_t maxJumps = 75;
+	std::size_t maxJumps = 70;
 	Number widening = 0.1;
 	bool training = true;
 	std::string filename{ "21_simplex_watertanks_deterministic_monitor_dbg_init_ticks.model" };
@@ -337,9 +337,9 @@ int main() {
 	plt.rSettings().xPlotInterval = carl::Interval<double>( 0, 1 );
 	plt.rSettings().yPlotInterval = carl::Interval<double>( 0, 1 );
 	// initialize system
-	auto intialLocation = automaton.getInitialStates().begin()->first;
+	auto initialLocation = automaton.getInitialStates().begin()->first;
 	auto initialValuation = automaton.getInitialStates().begin()->second.getInternalPoint().value();
-	sim.mLastStates[intialLocation] = { initialValuation };
+	sim.mLastStates[initialLocation] = { initialValuation };
 	// initial first reachability analysis for the initial point
 	// new reachability analysis
 	// reachability tree
@@ -348,10 +348,10 @@ int main() {
 	auto intervals = widenSample( initialValuation, widening );
 	auto initialBox = hypro::Condition<Number>{ intervals };
 	hypro::HybridAutomaton<Number>::locationConditionMap initialStates;
-	initialStates[intialLocation] = initialBox;
+	initialStates[initialLocation] = initialBox;
 	automaton.setInitialStates( initialStates );
 	// store initial set in octree - we know its cycle-time is zero
-	octrees.at( intialLocation ).add( hypro::Box<Number>( intervals ) );
+	octrees.at( initialLocation ).add( hypro::Box<Number>( intervals ) );
 	// initialize reachtree
 	roots = hypro::makeRoots<Representation>( automaton );
 	// analysis
@@ -396,7 +396,7 @@ int main() {
 	plt.plot2d( hypro::PLOTTYPE::png );
 	plt.clear();
 
-	// main loop which alternatingly invokels the controller and if necessary the analysis (training phase) for a bounded number of iterations
+	// main loop which alternatingly invokes the controller and if necessary the analysis (training phase) for a bounded number of iterations
 	while ( iteration_count < iterations ) {
 		++iteration_count;
 		std::cout << "Iteration " << iteration_count << std::endl;
