@@ -61,15 +61,28 @@ struct ctrl {
 		return automaton.getLocations().at( val );
 	}
 
-	controller_update<Number> generateInput() {
-		return { nullptr, this->operator()() };
-	}
+    controller_update<Number> generateInput(const hypro::Point<Number> &) {
+        return {nullptr, this->operator()()};
+    }
 
 	std::mt19937 generator;
 	std::uniform_int_distribution<int> loc_dist{ 0, 23 };
 	// std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0, 0.0005 );
 	std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0.0003, 0.0005 );
 	std::discrete_distribution<int> disc_dist = std::discrete_distribution( { 10, 90 } );
+};
+
+template<typename Number>
+struct ctrl_wrapper {
+    hypro::Point<Number> operator()(const hypro::Point<Number> &last_observation) {
+        hypro::vector_t<double> coordinates = hypro::vector_t<double>::Zero(1);
+        // TODO call actual controller on the last observation
+        return hypro::Point<Number>{coordinates};
+    }
+
+    controller_update<Number> generateInput(const hypro::Point<Number> &last_observation) {
+        return {nullptr, this->operator()(last_observation)};
+    }
 };
 
 template <typename R>
@@ -335,26 +348,32 @@ int main() {
 	// reachability analysis settings
 	auto settings = hypro::convert( reachSettings );
 	settings.rStrategy().front().detectJumpFixedPoints = true;
-	settings.rStrategy().front().detectFixedPointsByCoverage = false;
-	settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
-	settings.rFixedParameters().localTimeHorizon = 100;
-	settings.rFixedParameters().jumpDepth = maxJumps;
-	settings.rStrategy().begin()->aggregation = hypro::AGG_SETTING::AGG;
-	// random controller
-	ctrl<Number> baseCtrl;
-	ctrl<Number> advCtrl;
-	// monitor
-	simulator<Number> sim{ baseCtrl, advCtrl, automaton, settings };
-	// we store one octree per location
-	std::map<const hypro::Location<Number>*, hypro::Hyperoctree<Number>> octrees;
-	for ( const auto* locPtr : automaton.getLocations() ) {
-		// octree to store reachable sets, here fixed to [0,1] in each dimension
-		octrees.emplace( locPtr, hypro::Hyperoctree<Number>( 2, 6, hypro::Box<Number>{ std::vector<carl::Interval<Number>>{ carl::Interval<Number>{ 0, 1 }, carl::Interval<Number>{ 0, 1 }, carl::Interval<Number>{ 0, 15 } } } ) );
-	}
-	// maintain an instance of the plotter
-	auto& plt = hypro::Plotter<Number>::getInstance();
-	plt.clear();
-	plt.rSettings().overwriteFiles = true;
+    settings.rStrategy().front().detectFixedPointsByCoverage = false;
+    settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
+    settings.rFixedParameters().localTimeHorizon = 100;
+    settings.rFixedParameters().jumpDepth = maxJumps;
+    settings.rStrategy().begin()->aggregation = hypro::AGG_SETTING::AGG;
+    // random controller
+    ctrl<Number> baseCtrl;
+    ctrl<Number> advCtrl;
+    // monitor
+    simulator<Number> sim{baseCtrl, advCtrl, automaton, settings};
+    // TODO we assume that the model has a single initial state here
+    // set mLaststates of the simulator
+    assert(automaton.getInitialStates().size() == 1);
+    assert(automaton.getInitialStates().begin()->second.getInternalPoint().has_value());
+    sim.mLastStates[automaton.getInitialStates().begin()->first] = {automaton.getInitialStates().begin()->second.getInternalPoint().value().projectOn({0, 1})};
+    // we store one octree per location
+    std::map<const hypro::Location<Number> *, hypro::Hyperoctree<Number>> octrees;
+    for (const auto *locPtr: automaton.getLocations()) {
+        // octree to store reachable sets, here fixed to [0,1] in each dimension
+        octrees.emplace(locPtr, hypro::Hyperoctree<Number>(2, 6, hypro::Box<Number>{
+                std::vector<carl::Interval<Number>>{carl::Interval<Number>{0, 1}, carl::Interval<Number>{0, 1}, carl::Interval<Number>{0, 15}}}));
+    }
+    // maintain an instance of the plotter
+    auto &plt = hypro::Plotter<Number>::getInstance();
+    plt.clear();
+    plt.rSettings().overwriteFiles = true;
 	plt.rSettings().cummulative = false;
 	plt.rSettings().xPlotInterval = carl::Interval<double>( 0, 1 );
 	plt.rSettings().yPlotInterval = carl::Interval<double>( 0, 1 );
