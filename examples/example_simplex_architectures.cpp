@@ -56,20 +56,20 @@ struct ctrl {
 		return hypro::Point<Number>{ coordinates };
 	}
 
-	hypro::Location<Number>* operator()( const hypro::HybridAutomaton<Number>& automaton ) {
-		auto val = loc_dist( generator );
-		return automaton.getLocations().at( val );
-	}
+    hypro::Location<Number> *operator()(const hypro::HybridAutomaton<Number> &automaton) {
+        auto val = loc_dist(generator);
+        return automaton.getLocations().at(val);
+    }
 
     controller_update<Number> generateInput(const hypro::Point<Number> &) {
         return {nullptr, this->operator()()};
     }
 
-	std::mt19937 generator;
-	std::uniform_int_distribution<int> loc_dist{ 0, 23 };
-	// std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0, 0.0005 );
-	std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0.0003, 0.0005 );
-	std::discrete_distribution<int> disc_dist = std::discrete_distribution( { 10, 90 } );
+    std::mt19937 generator;
+    std::uniform_int_distribution<int> loc_dist{0, 23};
+    // std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>( 0, 0.0005 );
+    std::uniform_real_distribution<Number> dist = std::uniform_real_distribution<Number>(0.0003, 0.0005);
+    std::discrete_distribution<int> disc_dist = std::discrete_distribution({10, 90});
 };
 
 template<typename Number>
@@ -85,17 +85,17 @@ struct ctrl_wrapper {
     }
 };
 
-template <typename R>
-void cutoffControllerJumps( hypro::ReachTreeNode<R>* node ) {
-	auto children = node->getChildren();
-	for ( auto childIt = children.begin(); childIt != children.end(); ++childIt ) {
-		if ( !( *childIt )->getTransition()->getReset().getAffineReset().isIdentity( 4 ) ) {
-			(*childIt)->eraseChildren();
-			( *childIt )->getFlowpipe().clear();
-		} else {
-			cutoffControllerJumps( *childIt );
-		}
-	}
+template<typename R>
+void cutoffControllerJumps(hypro::ReachTreeNode<R> *node) {
+    auto children = node->getChildren();
+    for (auto childIt = children.begin(); childIt != children.end(); ++childIt) {
+        if (!(*childIt)->getTransition()->getReset().getAffineReset().isIdentity(4)) {
+            (*childIt)->eraseChildren();
+            (*childIt)->getFlowpipe().clear();
+        } else {
+            cutoffControllerJumps(*childIt);
+        }
+    }
 }
 
 template <typename Number>
@@ -109,36 +109,37 @@ struct simulator {
 		hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero( 2, 5 );
 		hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 2 );
 		// assign constraints: x1, x2 = observation, tick = cycle time
-		/*
-		// x1
-		constraints( 0, 0 ) = 1;
-		constraints( 1, 0 ) = -1;
-		constants( 0 ) = observation.at( 0 );
-		constants( 1 ) = -observation.at( 0 );
-		// x2
-		constraints( 2, 1 ) = 1;
-		constraints( 3, 1 ) = -1;
-		constants( 2 ) = observation.at( 1 );
-		constants( 3 ) = -observation.at( 1 );
-		 */
-		// tick
-		constraints( 0, 4 ) = 1;
-		constraints( 1, 4 ) = -1;
+        /*
+        // x1
+        constraints( 0, 0 ) = 1;
+        constraints( 1, 0 ) = -1;
+        constants( 0 ) = observation.at( 0 );
+        constants( 1 ) = -observation.at( 0 );
+        // x2
+        constraints( 2, 1 ) = 1;
+        constraints( 3, 1 ) = -1;
+        constants( 2 ) = observation.at( 1 );
+        constants( 3 ) = -observation.at( 1 );
+         */
+        // tick
+        constraints(0, 4) = 1;
+        constraints(1, 4) = -1;
 //		constants( 0 ) = mCycleTime;
 //		constants( 1 ) = -mCycleTime;
-		constants( 0 ) = 0;
-		constants( 1 ) = -0;
-		// collect all leaf nodes that agree with the cycle time
-		for ( auto& r : roots ) {
-			for ( auto& n : hypro::preorder( r ) ) {
-				if ( n.isLeaf() ) {
-					// I don't think we really need this check. We only consider initial sets of nodes that where reached by resetting the clock to zero.
-					auto [containment, result] = n.getInitialSet().satisfiesHalfspaces( constraints, constants );
-					if ( containment != hypro::CONTAINMENT::NO ) {
-						std::cout << "[Simulator] New sample: " << result << std::endl;
-						if ( samplesBoxes.find( n.getLocation() ) != samplesBoxes.end() ) {
-							samplesBoxes[n.getLocation()] = samplesBoxes[n.getLocation()].unite( result );
-						} else {
+        constants(0) = 0;
+        constants(1) = -0;
+        // collect all leaf nodes that agree with the cycle time
+        // TODO replace this loop by the provided filter methods
+        for (auto &r: roots) {
+            for (auto &n: hypro::preorder(r)) {
+                if (n.isLeaf()) {
+                    // I don't think we really need this check. We only consider initial sets of nodes that where reached by resetting the clock to zero.
+                    auto[containment, result] = n.getInitialSet().satisfiesHalfspaces(constraints, constants);
+                    if (containment != hypro::CONTAINMENT::NO) {
+                        std::cout << "[Simulator] New sample: " << result << std::endl;
+                        if (samplesBoxes.find(n.getLocation()) != samplesBoxes.end()) {
+                            samplesBoxes[n.getLocation()] = samplesBoxes[n.getLocation()].unite(result);
+                        } else {
 							samplesBoxes[n.getLocation()] = result;
 						}
 					}
@@ -203,12 +204,14 @@ struct simulator {
 			}
 			std::cout << "[Simulator] Generated output for base controller, u = " << ctrlInput.val << std::endl;
 		} else {
-			ctrlInput = mAdvancedController.generateInput();
-			std::cout << "[Simulator] Generated output for advanced controller, u = " << ctrlInput.val << std::endl;
-		}
+            // TODO add assertion: we are certain that all mLaststates should be equal in the first and second dimension
+            ctrlInput = mAdvancedController.generateInput(*(mLastStates.begin()->second.begin()));
+            std::cout << "[Simulator] Generated output for advanced controller, u = " << ctrlInput.val << std::endl;
+        }
 
 		// cleanup roots for new simulation run
 		roots.clear();
+        // TODO perform simulation also for the second model, e.g., clear roots here
 
 		for ( const auto& [loc, samples] : mLastStates ) {
 			for ( auto sample : samples ) {
@@ -222,24 +225,26 @@ struct simulator {
 				auto initialBox = hypro::Condition<Number>{ intervals };
 				typename hypro::HybridAutomaton<Number>::locationConditionMap initialStates;
 				initialStates[loc] = initialBox;
+                // TODO perform the following also for the second model
 				mAutomaton.setInitialStates( initialStates );
 				auto sampleRoots = hypro::makeRoots<Representation>( mAutomaton );
 				// add roots for this sample to global reachtree
 				for ( auto&& sr : sampleRoots ) {
-					roots.emplace_back( std::move( sr ) );
-				}
-				std::cout << "[Simulator] Add sample " << sample << " for simulation." << std::endl;
-			}
-		}
+                    roots.emplace_back(std::move(sr));
+                }
+                std::cout << "[Simulator] Add sample " << sample << " for simulation." << std::endl;
+            }
+        }
 
-		// call simulation as reachability analysis for a maximal time duration of 1 (cycle time)
-		// copy settings to adjust jump depth etc.
-		mSettings.rFixedParameters().localTimeHorizon = carl::convert<double, hypro::tNumber>( mCycleTime );
-		mSettings.rFixedParameters().jumpDepth = 2 * std::ceil( mCycleTime / carl::convert<hypro::tNumber, double>( mSettings.strategy().front().timeStep ) );
-		// analysis
-		auto reacher = hypro::reachability::Reach<Representation>( mAutomaton, mSettings.fixedParameters(),
-																   mSettings.strategy().front(), roots );
-		auto result = reacher.computeForwardReachability();
+        // call simulation as reachability analysis for a maximal time duration of 1 (cycle time)
+        // copy settings to adjust jump depth etc.
+        mSettings.rFixedParameters().localTimeHorizon = carl::convert<double, hypro::tNumber>(mCycleTime);
+        mSettings.rFixedParameters().jumpDepth = 2 * std::ceil(mCycleTime / carl::convert<hypro::tNumber, double>(mSettings.strategy().front().timeStep));
+        // analysis
+        // TODO perform analysis for the second model analogously
+        auto reacher = hypro::reachability::Reach<Representation>(mAutomaton, mSettings.fixedParameters(),
+                                                                  mSettings.strategy().front(), roots);
+        auto result = reacher.computeForwardReachability();
 
         // cutoff after cycle time
         // TODO add functionality to run reachability analysis for a bounded global time
@@ -255,13 +260,14 @@ struct simulator {
         return (result == hypro::REACHABILITY_RESULT::SAFE);
     }
 
-	ctrl<Number>& mBaseController;
-	ctrl<Number>& mAdvancedController;
-	hypro::HybridAutomaton<Number>& mAutomaton;
-	hypro::Settings mSettings;
-	double mCycleTime = 1.0;
-	std::vector<hypro::ReachTreeNode<Representation>> roots;
-	std::map<Loc, std::set<Point>> mLastStates;
+    ctrl<Number> &mBaseController;
+    ctrl<Number> &mAdvancedController;
+    hypro::HybridAutomaton<Number> &mAutomaton;
+    hypro::Settings mSettings;
+    double mCycleTime = 1.0;
+    // TODO add member for second reach tree
+    std::vector<hypro::ReachTreeNode<Representation>> roots;
+    std::map<Loc, std::set<Point>> mLastStates;
 };
 
 template <typename N>
@@ -329,25 +335,27 @@ void plotOctree(const hypro::Hyperoctree<double> &octree, hypro::Plotter<double>
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "UnreachableCode"
 int main() {
-	using Number = double;
-	// settings
-	// TODO make command line
-	std::size_t iterations{ 50 };
-	std::size_t iteration_count{ 0 };
-	std::size_t maxJumps = 70;
-	Number widening = 0.1;
-	bool training = true;
-	std::string filename{ "21_simplex_watertanks_deterministic_monitor_dbg_init_ticks.model" };
-	// constraints for cycle-time equals zero, encodes t <= 0 && -t <= -0
-	hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero( 2, 5 );
-	hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 2 );
-	constraints( 0, 4 ) = 1;
-	constraints( 1, 4 ) = -1;
-	// parse model
-	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( hypro::getCSModelsPath() + filename );
-	// reachability analysis settings
-	auto settings = hypro::convert( reachSettings );
-	settings.rStrategy().front().detectJumpFixedPoints = true;
+    using Number = double;
+    // settings
+    // TODO make command line
+    std::size_t iterations{50};
+    std::size_t iteration_count{0};
+    std::size_t maxJumps = 70;
+    Number widening = 0.1;
+    bool training = true;
+    std::string filename{"21_simplex_watertanks_deterministic_monitor_dbg_init_ticks.model"};
+    // TODO add second model here
+    // constraints for cycle-time equals zero, encodes t <= 0 && -t <= -0
+    hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero(2, 5);
+    hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero(2);
+    constraints(0, 4) = 1;
+    constraints(1, 4) = -1;
+    // parse model
+    auto[automaton, reachSettings] = hypro::parseFlowstarFile<Number>(hypro::getCSModelsPath() + filename);
+    // TODO parse second model here, settings should be the same
+    // reachability analysis settings
+    auto settings = hypro::convert(reachSettings);
+    settings.rStrategy().front().detectJumpFixedPoints = true;
     settings.rStrategy().front().detectFixedPointsByCoverage = false;
     settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
     settings.rFixedParameters().localTimeHorizon = 100;
@@ -375,37 +383,40 @@ int main() {
     plt.clear();
     plt.rSettings().overwriteFiles = true;
 	plt.rSettings().cummulative = false;
-	plt.rSettings().xPlotInterval = carl::Interval<double>( 0, 1 );
-	plt.rSettings().yPlotInterval = carl::Interval<double>( 0, 1 );
-	// initialize system
-	auto initialLocation = automaton.getInitialStates().begin()->first;
-	auto initialValuation = automaton.getInitialStates().begin()->second.getInternalPoint().value();
-	sim.mLastStates[initialLocation] = { initialValuation };
-	// initial first reachability analysis for the initial point
-	// new reachability analysis
-	// reachability tree
-	std::vector<hypro::ReachTreeNode<Representation>> roots;
-	// update initial states - set to small box around sample
-	auto intervals = widenSample( initialValuation, widening );
-	auto initialBox = hypro::Condition<Number>{ intervals };
-	hypro::HybridAutomaton<Number>::locationConditionMap initialStates;
-	initialStates[initialLocation] = initialBox;
-	automaton.setInitialStates( initialStates );
-	// store initial set in octree - we know its cycle-time is zero
-	octrees.at( initialLocation ).add( hypro::Box<Number>( intervals ) );
-	// initialize reachtree
-	roots = hypro::makeRoots<Representation>( automaton );
-	// analysis
-	auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
-															   settings.strategy().front(), roots );
-	std::cout << "Run initial analysis ... " << std::flush;
-	auto result = reacher.computeForwardReachability();
+    plt.rSettings().xPlotInterval = carl::Interval<double>(0, 1);
+    plt.rSettings().yPlotInterval = carl::Interval<double>(0, 1);
+    // initialize system
+    auto initialLocation = automaton.getInitialStates().begin()->first;
+    auto initialValuation = automaton.getInitialStates().begin()->second.getInternalPoint().value();
+    sim.mLastStates[initialLocation] = {initialValuation};
+    // initial first reachability analysis for the initial point
+    // new reachability analysis
+    // reachability tree
+    std::vector<hypro::ReachTreeNode<Representation>> roots;
+    // TODO create second reach tree here
+    // update initial states - set to small box around sample
+    auto intervals = widenSample(initialValuation, widening);
+    auto initialBox = hypro::Condition<Number>{intervals};
+    hypro::HybridAutomaton<Number>::locationConditionMap initialStates;
+    initialStates[initialLocation] = initialBox;
+    automaton.setInitialStates(initialStates);
+    // TODO update initial states of the second model as well here
+    // store initial set in octree - we know its cycle-time is zero
+    octrees.at(initialLocation).add(hypro::Box<Number>(intervals));
+    // initialize reachtree
+    roots = hypro::makeRoots<Representation>(automaton);
+    // TODO initialize reach tree for the second model here
+    // analysis
+    auto reacher = hypro::reachability::Reach<Representation>(automaton, settings.fixedParameters(),
+                                                              settings.strategy().front(), roots);
+    std::cout << "Run initial analysis ... " << std::flush;
+    auto result = reacher.computeForwardReachability();
     std::cout << "done, result: " << result << std::endl;
-	// post processing
-	if ( result != hypro::REACHABILITY_RESULT::SAFE ) {
-		std::cout << "System is initially not safe, need to deal with this." << std::endl;
-		exit( 1 );
-	} else {
+    // post processing
+    if (result != hypro::REACHABILITY_RESULT::SAFE) {
+        std::cout << "System is initially not safe, need to deal with this." << std::endl;
+        exit(1);
+    } else {
 		// update octree
 		for ( const auto& r : roots ) {
 			for ( const auto& node : hypro::preorder( r ) ) {
