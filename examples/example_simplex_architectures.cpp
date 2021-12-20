@@ -264,26 +264,48 @@ static Point generateObservation( const simulator<N>& sim ) {
 template <typename Number>
 std::vector<carl::Interval<Number>> widenSample( const hypro::Point<Number>& sample, Number targetWidth ) {
 	std::vector<carl::Interval<Number>> intervals = std::vector<carl::Interval<Number>>( 5, carl::Interval<Number>( 0 ) );
-	Number range = targetWidth / 2;
-	for ( std::size_t i = 0; i < sample.dimension(); ++i ) {
-		if ( std::find( interesting_dimensions.begin(), interesting_dimensions.end(), i ) != interesting_dimensions.end() ) {
-			intervals[i] = carl::Interval<Number>( sample.at( i ) - range, sample.at( i ) + range );
-		} else {
-			intervals[i] = carl::Interval<Number>( sample.at( i ) );
-		}
-	}
-	return intervals;
+    Number range = targetWidth / 2;
+    for (std::size_t i = 0; i < sample.dimension(); ++i) {
+        if (std::find(interesting_dimensions.begin(), interesting_dimensions.end(), i) != interesting_dimensions.end()) {
+            intervals[i] = carl::Interval<Number>(sample.at(i) - range, sample.at(i) + range);
+        } else {
+            intervals[i] = carl::Interval<Number>(sample.at(i));
+        }
+    }
+    return intervals;
 }
 
-void plotOctree( const hypro::Hyperoctree<double>& octree, hypro::Plotter<double>& plt ) {
-	if ( octree.isCovered() ) {
-		plt.addObject( octree.getContainer().projectOn( { 0, 1 } ).vertices(),
-					   hypro::plotting::colors[hypro::plotting::green] );
-	} else {
-		if ( !octree.getChildren().empty() ) {
-			for ( const auto& child : octree.getChildren() ) {
-				plotOctree( *child, plt );
-			}
+std::vector<hypro::Location<double> *> filterLocations(const std::vector<hypro::Location<double> *> &in, std::string filterExpression) {
+    std::vector<hypro::Location<double> *> result;
+    for (auto locPtr: in) {
+        if (locPtr->getName().find(filterExpression) != std::string::npos) {
+            result.push_back(locPtr);
+        }
+    }
+    return result;
+}
+
+std::vector<hypro::ReachTreeNode<Representation>> getTerminalNodes(const std::vector<hypro::ReachTreeNode<Representation>> &roots) {
+    std::vector<hypro::ReachTreeNode<Representation>> result;
+    for (const auto &root: roots) {
+        for (const auto &node: hypro::preorder(root)) {
+            if (node.getLocation()->getName().find("stopped") != std::string::npos && node.getTransition()->getSource()->getName().find("stopped") == std::string::npos) {
+                result.push_back(node);
+            }
+        }
+    }
+    return result;
+}
+
+void plotOctree(const hypro::Hyperoctree<double> &octree, hypro::Plotter<double> &plt) {
+    if (octree.isCovered()) {
+        plt.addObject(octree.getContainer().projectOn({0, 1}).vertices(),
+                      hypro::plotting::colors[hypro::plotting::green]);
+    } else {
+        if (!octree.getChildren().empty()) {
+            for (const auto &child: octree.getChildren()) {
+                plotOctree(*child, plt);
+            }
 		} else {
 			plt.addObject( octree.getContainer().projectOn( { 0, 1 } ).vertices(),
 						   hypro::plotting::colors[hypro::plotting::red] );
