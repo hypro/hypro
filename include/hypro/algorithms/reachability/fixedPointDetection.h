@@ -222,21 +222,25 @@ std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( con
 	std::vector<const Transition<N>*> result;
 	// search in the path to the root for a zeno-cycle
 	auto* parent = child->getParent();
-
+	// structural check: if the reset from the parent to the child is non-identity, this cannot be a Zeno transition
+	if ( !child->getTransition()->getReset().isIdentity() ) {
+		return result;
+	}
 	while ( parent != nullptr ) {
-		// structural check: if the reset from the parent to the child is non-identity, this cannot be a Zeno transition
-		// TODO this is a very conservative check - if the overlay of both resets yields identity, this is also a Zeno transition.
-		if ( !child->getTransition()->getReset().isIdentity() ) {
-			return result;
-		}
 		// simple check: if the initial set fully satisfies the guard back to the parent and no variable is reset, we know (since the initial set already fully satisfies the guard from the parent to the child), that this is a Zeno loop.
 		for ( auto& transition : child->getLocation()->getTransitions() ) {
+			// TODO this check is very conservative - here we check, whether the initial set is fully contained, while we could also check for partial coverage
+			// and only consider this part.
 			if ( transition->getTarget() == parent->getLocation() && transition->getReset().isIdentity() && intersect( child->getInitialSet(), transition->getGuard() ).first == CONTAINMENT::FULL ) {
 				DEBUG( "hypro.reachability", "Detected Zeno-transition from " << transition->getSource()->getName() << " to " << transition->getTarget()->getName() << " with set " << child->getInitialSet() )
 				result.push_back( transition.get() );
 			}
 		}
-		// ascend
+		// if the incoming transition to the parent is non-identity, the cycle cannot be declared Zeno (we ignore cases where the resets add up to identity)
+		if ( parent->getParent() != nullptr && !parent->getTransition()->getReset().isIdentity() ) {
+			return result;
+		}
+		// ascend, if the parent can be part of a Zeno cycle
 		parent = parent->getParent();
 	}
 	return result;
