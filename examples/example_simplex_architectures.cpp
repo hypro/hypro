@@ -285,17 +285,17 @@ std::vector<hypro::Location<double> *> filterLocations(const std::vector<hypro::
     return result;
 }
 
-std::vector<hypro::ReachTreeNode<Representation>> getTerminalNodes(const std::vector<hypro::ReachTreeNode<Representation>> &roots) {
-    std::vector<hypro::ReachTreeNode<Representation>> result;
-    for (const auto &root: roots) {
-        for (const auto &node: hypro::preorder(root)) {
-            if (node.getLocation()->getName().find("stopped") != std::string::npos && node.getTransition()->getSource()->getName().find("stopped") == std::string::npos) {
-                result.push_back(node);
-            }
-        }
-    }
-    return result;
-}
+//std::vector<hypro::ReachTreeNode<Representation>> getTerminalNodes(const std::vector<hypro::ReachTreeNode<Representation>> &roots) {
+//    std::vector<hypro::ReachTreeNode<Representation>> result;
+//    for (const auto &root: roots) {
+//        for (const auto &node: hypro::preorder(root)) {
+//            if (node.getLocation()->getName().find("stopped") != std::string::npos && node.getTransition()->getSource()->getName().find("stopped") == std::string::npos) {
+//                result.push_back(node);
+//            }
+//        }
+//    }
+//    return result;
+//}
 
 void plotOctree(const hypro::Hyperoctree<double> &octree, hypro::Plotter<double> &plt) {
     if (octree.isCovered()) {
@@ -321,8 +321,8 @@ int main() {
 	// TODO make command line
 	std::size_t iterations{ 50 };
 	std::size_t iteration_count{ 0 };
-	std::size_t maxJumps = 70;
-	Number widening = 0.1;
+	std::size_t maxJumps = 150;
+	Number widening = 0.01;
 	bool training = true;
 	std::string filename{ "21_simplex_watertanks_deterministic_monitor_dbg_init_ticks.model" };
 	// constraints for cycle-time equals zero, encodes t <= 0 && -t <= -0
@@ -335,8 +335,8 @@ int main() {
 	// reachability analysis settings
 	auto settings = hypro::convert( reachSettings );
 	settings.rStrategy().front().detectJumpFixedPoints = true;
-	settings.rStrategy().front().detectFixedPointsByCoverage = false;
-	settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
+	settings.rStrategy().front().detectFixedPointsByCoverage = true;
+	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
 	settings.rFixedParameters().localTimeHorizon = 100;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = hypro::AGG_SETTING::AGG;
