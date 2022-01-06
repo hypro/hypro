@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -820,48 +820,50 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 		}
 		if ( unchanged ) {
 			// result.push_back(this);
-			BoxT<Number, Converter, Setting> workbox( box );
-			result.push_back( workbox );
-			return result;
-		}
-		if ( empty ) {
-			// BoxT<Number, Converter, Setting> workbox = BoxT();
-			// result.push_back( workbox );
-			return result;
-		}
+            BoxT <Number, Converter, Setting> workbox(box);
+            result.push_back(workbox);
+            return result;
+        }
+        if (empty) {
+            // BoxT<Number, Converter, Setting> workbox = BoxT();
+            // result.push_back( workbox );
+            return result;
+        }
 
-		//------------- calculate difference -------------
-		long unsigned int i = minus.size();
-		while ( i > 0 ) {
-			i--;
-			std::vector<carl::Interval<Number>> box2 = box;	 // lower
-			std::vector<carl::Interval<Number>> box3 = box;	 // upper
-			box2.at( i ).setUpper( minus.at( i ).lower() );
-			box3.at( i ).setLower( minus.at( i ).upper() );
-			// check if the lower box (box2) is not empty
-			if ( box2.at( i ).lower() < box2.at( i ).upper() ) {
-				BoxT<Number, Converter, Setting> workbox( box2 );
-				assert( !workbox.empty() );
-				result.push_back( workbox );
-				// carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
-				carl::Interval<Number> tmp( box2.at( i ).upper(), box.at( i ).upper() );
-				// std::cout << tmp << std::endl;
-				box.at( i ) = tmp;
-			}
-			// check if the upper box (box3) is not empty
-			if ( box3.at( i ).lower() < box3.at( i ).upper() ) {
-				BoxT<Number, Converter, Setting> workbox2( box3 );
-				assert( !workbox2.empty() );
-				result.push_back( workbox2 );
-				// carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
-				carl::Interval<Number> tmp2( box.at( i ).lower(), box3.at( i ).lower() );
-				// std::cout << tmp2 << std::endl;
-				box.at( i ) = tmp2;
-			}
-		}
-		return result;
-	}
-	// return result;
+        //------------- calculate difference -------------
+        long unsigned int i = minus.size();
+        while (i > 0) {
+            i--;
+            std::vector<carl::Interval<Number>> box2 = box;     // lower
+            std::vector<carl::Interval<Number>> box3 = box;     // upper
+            box2.at(i).setUpper(minus.at(i).lower());
+            box3.at(i).setLower(minus.at(i).upper());
+            // check if the lower box (box2) is not empty
+            if (box2.at(i).lower() < box2.at(i).upper()) {
+                BoxT <Number, Converter, Setting> workbox(box2);
+                if (!workbox.empty()) {
+                    result.push_back(workbox);
+                }
+                // carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
+                carl::Interval<Number> tmp(box2.at(i).upper(), box.at(i).upper());
+                // std::cout << tmp << std::endl;
+                box.at(i) = tmp;
+            }
+            // check if the upper box (box3) is not empty
+            if (box3.at(i).lower() < box3.at(i).upper()) {
+                BoxT <Number, Converter, Setting> workbox(box3);
+                if (!workbox.empty()) {
+                    result.push_back(workbox);
+                }
+                // carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
+                carl::Interval<Number> tmp2(box.at(i).lower(), box3.at(i).lower());
+                // std::cout << tmp2 << std::endl;
+                box.at(i) = tmp2;
+            }
+        }
+        return result;
+    }
+    // return result;
 }
 
 template <typename Number, typename Converter, class Setting>
