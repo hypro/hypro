@@ -137,14 +137,10 @@ const StarsetT<Number, Converter, Setting>& StarsetT<Number, Converter, Setting>
 
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
-    //satisfiesda cevir halfspacei ayni koordinatta yaz hpolye ver
 
-    //std::string s= typeid(Representation).name();
-    //Representation intermediate;
     auto zz=this->calculateHalfspace(rhs);
     StarsetT<Number, Converter, Setting> star=this->intersectHalfspace(zz);
     auto ans=(constraints.satisfiesHalfspace(zz)); 
-    //std::cout<<constraints.satisfiesHalfspace(calculateHalfspace(rhs)))<<std::endl;
 
     return std::make_pair(std::get<0>(constraints.satisfiesHalfspace(calculateHalfspace(rhs))),std::move( star ));
 }
@@ -182,7 +178,6 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::linea
     matrix_t<Number> newGenerator = matrix_t<Number>(mGenerator.rows(),mGenerator.cols());
     newGenerator=A*mGenerator;
     vector_t<Number> newCenter=A*mCenter;
-    std::cout<<newGenerator<<std::endl;
     return StarsetT<Number, Converter, Setting>(newCenter,newGenerator,constraints);
 }
 
@@ -190,12 +185,10 @@ template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 
     if ( A.nonZeros()==0 ) {
-		std::vector<Point<Number>> points;
 		points.emplace_back( b );
 		return StarsetT<Number, Converter, Setting>(HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>( points ));
 	}
     if ( !this->empty()){
-        std::cout<<"affine"<<std::endl;
         return StarsetT<Number, Converter, Setting>(A*(mCenter)+b,A*mGenerator,constraints);
     }
     return *this;
@@ -218,8 +211,6 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minko
     }
 
     if(this->empty()){
-        std::cout<<this->shape()<<rhs.shape()<<std::endl;
-        std::cout<<this->limits()<<rhs.limits()<<std::endl;
         return rhs;
     }
 
@@ -233,7 +224,6 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minko
     //setting new shape Matrix  
     newmShapeMatrix.topLeftCorner(constraints.matrix().rows(),constraints.matrix().cols())=constraints.matrix();
     newmShapeMatrix.bottomRightCorner(rhs.shape().rows(),rhs.shape().cols())=rhs.shape();
-    std::cout<<"bura3"<<std::endl;
 
     //setting new limits vector
     newmLimits.head(constraints.vector().rows())=constraints.vector();
@@ -282,8 +272,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
      *      Zonotopes, Antoin Girard, HSCC2005 
      * Output is an overapproximation of convex hull of two star sets
      * Explanation for this method is written in Bachelor thesis of Dogu Tamgac*/
-    std::cout<<"uniteeee"<<std::endl;
-    std::cout<<"contind"<<std::endl;
+
     
     if ( this->empty() ) {
 		// if this is empty, the result is _rhs, even if _rhs is empty, too.
@@ -338,7 +327,6 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
                 matrix_t<Number> m=matrix_t<Number>::Identity(this->generator().cols(),this->generator().cols())-this->generator();
 
                 StarsetT<Number, Converter, Setting> S2=rhs.affineTransformation(m,(-this->center()));
-                std::cout<<m<<std::endl;
 
                  
                 matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(tmp1.generator().rows(),tmp1.generator().cols()+tmp2.generator().cols()+1); 
@@ -348,7 +336,6 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
                 newmGenerator.block(0,0,tmp1.generator().rows(),mGenerator.cols())=tmp1.generator();
                 matrix_t<Number> cent((matrix_t<Number>::Identity(this->generator().cols(),this->generator().cols()))*S2.center());
                 newmGenerator.block(0,tmp1.generator().cols(),tmp1.generator().rows(),1)=cent;
-                std::cout<<S2.generator()<<std::endl;
                 newmGenerator.block(0, tmp1.generator().cols()+1, tmp2.generator().rows() , tmp2.generator().cols())=S2.generator();
      
                 newmShapeMatrix.topLeftCorner(tmp1.shape().rows(),tmp1.shape().cols())=tmp1.shape();
@@ -392,7 +379,6 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 
                 newmGenerator.block(0,0,tmp2.generator().rows(),mGenerator.cols())=tmp2.generator();
                 matrix_t<Number> cent((matrix_t<Number>::Identity(this->generator().cols(),this->generator().cols()))*(tmp1.center()-tmp2.center()));
-                std::cout<<cent<<std::endl;
                 newmGenerator.block(0,tmp2.generator().cols(),tmp1.generator().rows(),1)=cent;
                 newmGenerator.block(0, tmp2.generator().cols()+1, tmp1.generator().rows() , tmp1.generator().cols())=tmp1.generator();
                 newmGenerator.block(0, tmp2.generator().cols()+tmp1.generator().cols()+1, tmp2.generator().rows() , tmp2.generator().cols())=-tmp2.generator();
@@ -436,7 +422,6 @@ template <typename Number, typename Converter, typename Setting>
  }
 template <typename Number, typename Converter, typename Setting>
 std::pair<matrix_t<Number>, vector_t<Number>> StarsetT<Number, Converter, Setting>::calculateHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec  ) const{
-    std::cout<<_mat<<_vec<<std::endl;
     return std::make_pair(_mat*this->generator(),_vec-vector_t<Number>(_mat*this->center()));;
 }
 
