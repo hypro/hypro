@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -322,26 +322,28 @@ int main() {
 	std::size_t iterations{ 50 };
 	std::size_t iteration_count{ 0 };
 	std::size_t maxJumps = 0;
-	Number widening = 0.01;
-	bool training = true;
-	std::string filename{ "21_simplex_cruise_control.model" };
-	// constraints for cycle-time equals zero, encodes t <= 0 && -t <= -0
-	hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero( 2, 5 );
-	hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero( 2 );
-	constraints( 0, 4 ) = 1;
-	constraints( 1, 4 ) = -1;
-	// parse model
-	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( hypro::getCSModelsPath() + filename );
-	// reachability analysis settings
-	auto settings = hypro::convert( reachSettings );
-	settings.rStrategy().front().detectJumpFixedPoints = true;
-	settings.rStrategy().front().detectFixedPointsByCoverage = true;
-	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
-	settings.rFixedParameters().localTimeHorizon = 25;
-	settings.rFixedParameters().jumpDepth = maxJumps;
-	settings.rStrategy().begin()->aggregation = hypro::AGG_SETTING::AGG;
-	// random controller
-	ctrl<Number> baseCtrl;
+    Number widening = 0.01;
+    bool training = true;
+    std::string filename{"21_simplex_cruise_control.model"};
+    // constraints for cycle-time equals zero, encodes t <= 0 && -t <= -0
+    hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>::Zero(2, 5);
+    hypro::vector_t<Number> constants = hypro::vector_t<Number>::Zero(2);
+    constraints(0, 4) = 1;
+    constraints(1, 4) = -1;
+    // parse model
+    auto[automaton, reachSettings] = hypro::parseFlowstarFile<Number>(hypro::getCSModelsPath() + filename);
+    // output automaton
+    std::cout << "Parsed automaton:\n" << automaton << std::endl;
+    // reachability analysis settings
+    auto settings = hypro::convert(reachSettings);
+    settings.rStrategy().front().detectJumpFixedPoints = true;
+    settings.rStrategy().front().detectFixedPointsByCoverage = true;
+    settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
+    settings.rFixedParameters().localTimeHorizon = 25;
+    settings.rFixedParameters().jumpDepth = maxJumps;
+    settings.rStrategy().begin()->aggregation = hypro::AGG_SETTING::AGG;
+    // random controller
+    ctrl<Number> baseCtrl;
 	ctrl<Number> advCtrl;
 	// monitor
 	simulator<Number> sim{ baseCtrl, advCtrl, automaton, settings };
