@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /*
@@ -55,24 +55,38 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( getCSModelsPath() + filename );
 
 	auto settings = hypro::convert( reachSettings );
-	settings.rStrategy().front().detectJumpFixedPoints = true;
-	settings.rStrategy().front().detectFixedPointsByCoverage = true;
-	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
-	settings.rFixedParameters().localTimeHorizon = 100;
-	settings.rFixedParameters().jumpDepth = maxJumps;
-	settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
-	std::vector<std::pair<const hypro::Path<Number>, hypro::ReachTreeNode<Representation> const*>> last_paths{};
+    settings.rStrategy().front().detectJumpFixedPoints = true;
+    settings.rStrategy().front().detectFixedPointsByCoverage = true;
+    settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
+    settings.rFixedParameters().localTimeHorizon = 20;
+    settings.rFixedParameters().jumpDepth = maxJumps;
+    settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
+    std::vector<std::pair<const hypro::Path<Number>, hypro::ReachTreeNode<Representation> const *>> last_paths{};
 
-	std::vector<ReachTreeNode<Representation>> roots;
+    std::vector<ReachTreeNode<Representation>> roots;
 
-	for ( auto _ : state ) {
-		// This code gets timed
-		last_paths.clear();
-		roots = hypro::makeRoots<Representation>( automaton );
-		auto reacher = hypro::reachability::Reach<Representation>( automaton, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
-		auto result = reacher.computeForwardReachability();
-		INFO( "hypro.casestudies", "System is safe: " << result );
+    // artificially bloat dimensions 0,1,3 to a width of 0.01
+    auto initialStates = automaton.getInitialStates();
+    for (auto &[loc, condition]: initialStates) {
+        auto box = hypro::Box<Number>(condition.getMatrix(), condition.getVector());
+        auto intervals = box.intervals();
+        for (std::size_t i = 0; i < 5; ++i) {
+            if (i == 0 || i == 1 || i == 3) {
+                intervals[i] = carl::Interval<Number>(intervals[i].lower() - 0.05, intervals[i].upper() + 0.05);
+            }
+        }
+        condition = hypro::Condition<Number>(intervals);
+    }
+    automaton.setInitialStates(initialStates);
+
+    for (auto _: state) {
+        // This code gets timed
+        last_paths.clear();
+        roots = hypro::makeRoots<Representation>(automaton);
+        auto reacher = hypro::reachability::Reach<Representation>(automaton, settings.fixedParameters(),
+                                                                  settings.strategy().front(), roots);
+        auto result = reacher.computeForwardReachability();
+        INFO("hypro.casestudies", "System is safe: " << result);
 
 		// statistics
 		auto finished_leaves = std::size_t( 0 );
@@ -259,7 +273,7 @@ static void Simplex_Watertanks_Reachability( ::benchmark::State& state ) {
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-	  ->DenseRange( 150, 150, 1 )
+        ->DenseRange(100, 200, 10)
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
