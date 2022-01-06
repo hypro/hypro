@@ -5,6 +5,8 @@ get_filename_component(@TARGET@_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 include(CMakeFindDependencyMacro)
 find_dependency(carl)
 
+@DEPENDENT_TARGETS@
+
 # Our library dependencies (contains definitions for IMPORTED targets)
 if(NOT TARGET @TARGET@ AND NOT @TARGET@_BINARY_DIR)
   include("${@TARGET@_CMAKE_DIR}/hyproTargets.cmake")

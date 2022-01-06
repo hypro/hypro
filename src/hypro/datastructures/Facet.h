@@ -106,6 +106,8 @@ class Facet {
 		}
 	}
 
+	Facet& operator=( const Facet& other ) = default;
+
 	~Facet() {}
 
 	/**
@@ -123,11 +125,11 @@ class Facet {
 	const neighborsSet& neighbors() const { return mNeighbors; }
 
 	void addNeighbor( const std::shared_ptr<Facet<Number>>& facet ) {
-		//std::cout << "Adding " << *facet << " to " << *this << std::endl;
+		// std::cout << "Adding " << *facet << " to " << *this << std::endl;
 		if ( !isNeighbor( facet ) ) {
 			mNeighbors.push_back( facet );
 			assert( isNeighbor( facet ) );
-			//facet->addNeighbor( std::make_shared<Facet<Number>>( *this ) );
+			// facet->addNeighbor( std::make_shared<Facet<Number>>( *this ) );
 		}
 	}
 
@@ -193,9 +195,9 @@ class Facet {
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
 
-			//std::cout << __func__ << " : " << __LINE__ << std::endl;
-			//std::cout << mNormal << std::endl;
-			//std::cout << insidePoints << "  " << mScalar << std::endl;
+			// std::cout << __func__ << " : " << __LINE__ << std::endl;
+			// std::cout << mNormal << std::endl;
+			// std::cout << insidePoints << "  " << mScalar << std::endl;
 			bool changed = false;
 			for ( unsigned i = 0; i < insidePoints.size(); i++ ) {
 				if ( isAbove( insidePoints.at( i ) ) ) {
@@ -292,7 +294,7 @@ class Facet {
 			}
 		}
 
-		//std::cout << matrix << std::endl;
+		// std::cout << matrix << std::endl;
 
 		// matrix(0,vectors[0].size()-1) = 1;
 		for ( unsigned j = 0; j < vectors[0].size(); j++ ) {
@@ -308,7 +310,7 @@ class Facet {
 		vector_t<Number> b = vector_t<Number>::Zero( vectors.size() );
 		b( 0 ) = 1;
 
-		//std::cout << __func__ << ": A " << std::endl << matrix << std::endl << ",b " << std::endl << b << std::endl;
+		// std::cout << __func__ << ": A " << std::endl << matrix << std::endl << ",b " << std::endl << b << std::endl;
 
 		matrix_t<Number> copyMatrix = matrix_t<Number>( matrix.rows(), matrix.cols() + 1 );
 		for ( unsigned colIt = 0; colIt < copyMatrix.cols() - 1; ++colIt ) {

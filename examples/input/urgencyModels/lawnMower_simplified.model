@@ -1,0 +1,186 @@
+# simplified version (without probabilities) from https://depend.cs.uni-saarland.de/tools/prohver/casestudies/#cav2010_autonomous_lawn_mower
+# automated lawn mower with a patch of flowers in the middle of the lawn. When the mower gets close to the flowers (critical zone), it switches directions via urgent transitions. The model is considered safe if the mower never enters the patch of flowers.
+
+hybrid reachability
+{
+ state var x,y
+
+ setting
+ {
+  fixed steps 0.15
+  time 50
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,y
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output lawn
+  max jumps 11
+  print on
+ }
+ 
+ modes
+ {
+  north_east
+  {
+    lti ode
+    {
+      x' = 10
+      y' = 9
+    }
+    inv
+    {
+      x >= 0 x <= 100 y >= 0 y <= 200
+    }
+  }
+  north_west
+  {
+    lti ode
+    {
+      x' = -10
+      y' = 9
+    }
+    inv
+    {
+      x >= 0 x <= 100 y >= 0 y <= 200 
+    }
+  }
+  south_east
+  {
+    lti ode
+    {
+      x' = 10
+      y' = -9
+    }
+    inv
+    {
+      x >= 0 x <= 100 y >= 0 y <= 200
+    }
+  }
+  south_west
+  {
+    lti ode
+    {
+      x' = -10
+      y' = -9
+    }
+    inv
+    {
+        x >= 0 x <= 100 y >= 0 y <= 200
+    }
+  }
+ }
+
+ jumps
+ {
+  north_east -> north_west
+  guard { x >= 100 }
+  reset {}
+  parallelotope aggregation {}
+
+  north_west -> north_east
+  guard { x <= 0}
+  reset {}
+  parallelotope aggregation {}
+
+  north_east -> south_east
+  guard { y >= 200 }
+  reset {}
+  parallelotope aggregation {}
+
+  south_east -> north_east
+  guard { y <= 0 }
+  reset {}
+  parallelotope aggregation {}
+
+  north_west -> south_west
+  guard { y >= 200 }
+  reset {}
+  parallelotope aggregation {}
+
+  south_west -> north_west
+  guard { y <= 0 }
+  reset {}
+  parallelotope aggregation {}
+
+  south_east -> south_west
+  guard { x >= 100 }
+  reset {}
+  parallelotope aggregation {}
+
+  south_west -> south_east
+  guard { x <= 0 }
+  reset {}
+  parallelotope aggregation {}
+
+
+
+
+  north_east -> north_west
+  guard { x >= 30 x <= 70 y >= 100 y <= 150 }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  north_west -> north_east
+  guard { x >= 30 x <= 70 y >= 100 y <= 150 }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  north_east -> south_east
+  guard { x >= 30 x <= 70 y >= 100 y <= 150 }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  south_east -> north_east
+  guard { x >= 30 x <= 70 y >= 100 y <= 150 }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  north_west -> south_west
+  guard { x >= 30 x <= 70 y >= 100 y <= 150 }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  south_west -> north_west
+  guard { x >= 30 x <= 70 y >= 100 y <= 150 }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  south_east -> south_west
+  guard { x >= 30 x <= 70 y >= 100 y <= 150 }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  south_west -> south_east
+  guard { x >= 30 x <= 70 y >= 100 y <= 150 }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+
+
+ }
+
+ init
+ {
+  north_east
+  {
+    x in [10,10]
+    y in [20,20]
+  }
+ }
+}
+
+
+unsafe set
+{
+  x >= 45 x <= 55 y <= 130 y >= 120
+}

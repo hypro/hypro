@@ -147,7 +147,8 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
 
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-    
+        std::cout<<"dogu yapar"<<std::endl
+
     if(this->empty()){
         return std::make_pair( CONTAINMENT::NO, std::move(*this ) );
     }
@@ -183,7 +184,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::linea
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
-
+    std::cout<<"dogu yapar"<<std::endl
     if ( A.nonZeros()==0 ) {
 		points.emplace_back( b );
 		return StarsetT<Number, Converter, Setting>(HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>( points ));

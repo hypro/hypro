@@ -1,4 +1,4 @@
-#include "FlowstarParser.h"
+#include "include/hypro/parser/antlr4-flowstar/FlowstarParser.h"
 
 namespace hypro {
 namespace parser{

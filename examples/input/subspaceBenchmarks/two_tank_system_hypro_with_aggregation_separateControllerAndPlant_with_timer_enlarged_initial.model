@@ -1,0 +1,3130 @@
+hybrid reachability
+{
+	state var h2, cycle_time2, h1, cycle_time1, global_time, P2_on_plc, high2, high1, P2, P1, P2_off_plc, P2_plc, P1_on_plc, P2_off, P1_on, P1_plc, P1_off_plc, P2_on, low2, low1, nextSfcLoc, P1_off
+	par { globalTimeHorizon=10.0 delta=1.0 }
+
+	setting
+	{
+		fixed steps 0.01
+		time 20
+		remainder estimation 1e-5
+		identity precondition
+		gnuplot octagon global_time, h1
+		fixed orders 5
+		cutoff 1e-12
+		precision 53
+		output two_tank_system_hypro_with_aggregation_separateControllerAndPlant_with_timer
+		max jumps 10000000
+		print on
+	}
+
+	modes
+	{
+
+		l1
+		{
+			poly ode 1
+			{
+				h1' = 0
+				h2' = 0
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				P2_plc = 0.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				P1_plc = 0.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l2
+		{
+			poly ode 1
+			{
+				h1' = 0
+				h2' = 0
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				h1 >= 40.0
+				P1_plc = 0.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l3
+		{
+			poly ode 1
+			{
+				h1' = 0
+				h2' = 0
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				h2 <= 0.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				P1_plc = 0.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l4
+		{
+			poly ode 1
+			{
+				h1' = 0
+				h2' = 0
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				h1 <= 0.0
+				P2_plc = 0.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l5
+		{
+			poly ode 1
+			{
+				h1' = 0
+				h2' = 0
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				h1 <= 0.0
+				h2 <= 0.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l6
+		{
+			poly ode 1
+			{
+				h1' = 0
+				h2' = 0
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				P2_plc = 0.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				h2 >= 40.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l7
+		{
+			poly ode 1
+			{
+				h1' = 0
+				h2' = 0
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				h1 >= 40.0
+				h2 >= 40.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l8
+		{
+			poly ode 1
+			{
+				h1' = 3
+				h2' = -3
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				P2_plc = 1.0
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				cycle_time1 <= delta
+				h1 <= 40.0
+				global_time <= globalTimeHorizon
+				h2 >= 0.0
+				P1_plc = 0.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l9
+		{
+			poly ode 1
+			{
+				h1' = 3
+				h2' = -3
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				P2_plc = 1.0
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				h1 <= 0.0
+				cycle_time1 <= delta
+				h1 <= 40.0
+				global_time <= globalTimeHorizon
+				h2 >= 0.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l10
+		{
+			poly ode 1
+			{
+				h1' = 3
+				h2' = -3
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				P2_plc = 1.0
+				cycle_time2 <= delta
+				cycle_time1 >= 0.0
+				cycle_time1 <= delta
+				h1 <= 40.0
+				global_time <= globalTimeHorizon
+				h2 >= 40.0
+				h2 >= 0.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l11
+		{
+			poly ode 1
+			{
+				h1' = -4
+				h2' = 4
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				P1_plc = 1.0
+				cycle_time1 >= 0.0
+				h2 <= 40.0
+				P2_plc = 0.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				h1 >= 0.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l12
+		{
+			poly ode 1
+			{
+				h1' = -4
+				h2' = 4
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				P1_plc = 1.0
+				cycle_time1 >= 0.0
+				h2 <= 40.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				h1 >= 40.0
+				h1 >= 0.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l13
+		{
+			poly ode 1
+			{
+				h1' = -4
+				h2' = 4
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time2 <= delta
+				P1_plc = 1.0
+				cycle_time1 >= 0.0
+				h2 <= 0.0
+				h2 <= 40.0
+				cycle_time1 <= delta
+				global_time <= globalTimeHorizon
+				h1 >= 0.0
+				cycle_time2 >= 0.0
+				global_time >= 0.0
+			}
+		}
+
+		l14
+		{
+			poly ode 1
+			{
+				h1' = -1
+				h2' = 1
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				P1_plc = 1.0
+				cycle_time1 >= 0.0
+				h2 <= 40.0
+				h1 <= 40.0
+				global_time <= globalTimeHorizon
+				global_time >= 0.0
+				P2_plc = 1.0
+				cycle_time2 <= delta
+				cycle_time1 <= delta
+				h1 >= 0.0
+				h2 >= 0.0
+				cycle_time2 >= 0.0
+			}
+		}
+
+		switch_off2__clock__switch_off1__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_off2__clock__switch_off1_in__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_off2__clock__switch_on1__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_off2__clock__switch_on1_in__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_off2_in__clock__switch_off1_in__user
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_off2_in__clock__switch_off1_in__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_off2_in__clock__switch_off1_in__comm
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_off2_in__clock__switch_on1_in__user
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_off2_in__clock__switch_on1_in__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_off2_in__clock__switch_on1_in__comm
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2__clock__switch_off1__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2__clock__switch_off1_in__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2__clock__switch_on1__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2__clock__switch_on1_in__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2_in__clock__switch_off1_in__user
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2_in__clock__switch_off1_in__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2_in__clock__switch_off1_in__comm
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2_in__clock__switch_on1_in__user
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2_in__clock__switch_on1_in__cycle
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+
+		switch_on2_in__clock__switch_on1_in__comm
+		{
+			poly ode 1
+			{
+				global_time' = 1
+				cycle_time1' = 1
+				cycle_time2' = 1
+				h2' = 0
+				h1' = 0
+				P2_on_plc' = 0
+				high2' = 0
+				high1' = 0
+				P2' = 0
+				P1' = 0
+				P2_off_plc' = 0
+				P2_plc' = 0
+				P1_on_plc' = 0
+				P2_off' = 0
+				P1_plc' = 0
+				P1_on' = 0
+				P1_off_plc' = 0
+				P2_on' = 0
+				low2' = 0
+				low1' = 0
+				nextSfcLoc' = 0
+				P1_off' = 0
+			}
+			inv
+			{
+				cycle_time1 = 0.0
+				global_time <= globalTimeHorizon
+				cycle_time2 = 0.0
+				global_time >= 0.0
+			}
+		}
+	}
+
+	jumps
+	{
+		l13 -> l14
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l14 -> l13
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l12 -> l14
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l14 -> l12
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l12 -> l13
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l13 -> l12
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l11 -> l13
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l13 -> l11
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l11 -> l12
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l12 -> l11
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l10 -> l14
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l14 -> l10
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l10 -> l12
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l12 -> l10
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l9 -> l14
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l14 -> l9
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l9 -> l13
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l13 -> l9
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l9 -> l10
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l10 -> l9
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l8 -> l10
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l10 -> l8
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l8 -> l9
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l9 -> l8
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l7 -> l14
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l14 -> l7
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l7 -> l12
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l12 -> l7
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l7 -> l11
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l11 -> l7
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l7 -> l10
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l10 -> l7
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l7 -> l8
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l8 -> l7
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l6 -> l12
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l12 -> l6
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l6 -> l11
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l11 -> l6
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l6 -> l7
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l7 -> l6
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l5 -> l14
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l14 -> l5
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l5 -> l13
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l13 -> l5
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l5 -> l11
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l11 -> l5
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l5 -> l9
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l9 -> l5
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l5 -> l8
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l8 -> l5
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l4 -> l13
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l13 -> l4
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l4 -> l11
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l11 -> l4
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l4 -> l6
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l6 -> l4
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l4 -> l5
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l5 -> l4
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l3 -> l9
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l9 -> l3
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l3 -> l8
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l8 -> l3
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l3 -> l5
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l5 -> l3
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l3 -> l4
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l4 -> l3
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l2 -> l10
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l10 -> l2
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l2 -> l8
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l8 -> l2
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l2 -> l7
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l7 -> l2
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l2 -> l6
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l6 -> l2
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l2 -> l3
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l3 -> l2
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l1 -> l7
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l7 -> l1
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l1 -> l6
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l6 -> l1
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l1 -> l5
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l5 -> l1
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l1 -> l4
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l4 -> l1
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l1 -> l3
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l3 -> l1
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l1 -> l2
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		l2 -> l1
+		guard { }
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l1
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l2
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l3
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l4
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l5
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l6
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l7
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l8
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l9
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l10
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l11
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l12
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l13
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__cycle -> l14
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 2 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l1
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l2
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l3
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l4
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l5
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l6
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l7
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l8
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l9
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l10
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l11
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l12
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l13
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__cycle -> l14
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 8 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l1
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l2
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l3
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l4
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l5
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l6
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l7
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l8
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l9
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l10
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l11
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l12
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l13
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__cycle -> l14
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 32 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l1
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l2
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l3
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l4
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l5
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l6
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l7
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l8
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l9
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l10
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l11
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l12
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l13
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__cycle -> l14
+		guard { cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { nextSfcLoc' := 26 }
+		parallelotope aggregation { }
+
+
+		l1 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l2 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l3 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l4 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l5 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l6 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l7 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l8 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l9 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l10 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l11 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l12 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l13 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l14 -> switch_on2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 2.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l1 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l2 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l3 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l4 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l5 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l6 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l7 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l8 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l9 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l10 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l11 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l12 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l13 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l14 -> switch_on2_in__clock__switch_off1_in__user
+		guard { cycle_time2 = delta cycle_time1 = delta nextSfcLoc = 8.0 }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l1 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l2 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l3 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l4 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l5 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l6 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l7 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l8 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l9 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l10 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l11 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l12 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l13 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l14 -> switch_off2_in__clock__switch_off1_in__user
+		guard { nextSfcLoc = 32.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l1 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l2 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l3 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l4 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l5 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l6 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l7 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l8 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l9 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l10 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l11 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l12 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l13 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		l14 -> switch_off2_in__clock__switch_on1_in__user
+		guard { nextSfcLoc = 26.0 cycle_time2 = delta cycle_time1 = delta }
+		reset { cycle_time1' := 0 cycle_time2' := 0 P2_plc' := P2 P2_off_plc' := P2_off P1_off_plc' := P1_off P1_plc' := P1 P1_on_plc' := P1_on P2_on_plc' := P2_on }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__comm -> switch_on2__clock__switch_on1__cycle
+		guard { h2 >= 32.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__comm -> switch_on2__clock__switch_on1__cycle
+		guard { h1 <= 32.0 h2 >= 32.0 h1 >= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__comm -> switch_on2__clock__switch_on1__cycle
+		guard { h1 <= 8.0 h2 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__comm -> switch_on2__clock__switch_on1__cycle
+		guard { h2 >= 8.0 h2 <= 32.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__comm -> switch_on2__clock__switch_on1__cycle
+		guard { h1 <= 32.0 h2 >= 8.0 h1 >= 8.0 h2 <= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__comm -> switch_on2__clock__switch_on1__cycle
+		guard { h1 <= 8.0 h2 >= 8.0 h2 <= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__comm -> switch_on2__clock__switch_on1__cycle
+		guard { h2 <= 8.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__comm -> switch_on2__clock__switch_on1__cycle
+		guard { h1 <= 32.0 h2 <= 8.0 h1 >= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__comm -> switch_on2__clock__switch_on1__cycle
+		guard { h1 <= 8.0 h2 <= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__user -> switch_on2_in__clock__switch_on1_in__comm
+		guard { P2_plc >= 1.0 P1_plc >= 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 1 P1_on_plc' := 0 P2_off_plc' := 1 P2_on_plc' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__user -> switch_on2_in__clock__switch_on1_in__comm
+		guard { P1_plc >= 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0 P2_plc <= 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 1 P1_on_plc' := 0 P2_off_plc' := 0 P2_on_plc' := 1 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__user -> switch_on2_in__clock__switch_on1_in__comm
+		guard { P2_plc >= 1.0 cycle_time1 = 0.0 P1_plc <= 0.0 cycle_time2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 0 P1_on_plc' := 1 P2_off_plc' := 1 P2_on_plc' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_on1_in__user -> switch_on2_in__clock__switch_on1_in__comm
+		guard { cycle_time1 = 0.0 P1_plc <= 0.0 cycle_time2 = 0.0 P2_plc <= 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 0 P1_on_plc' := 1 P2_off_plc' := 0 P2_on_plc' := 1 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__comm -> switch_on2__clock__switch_off1__cycle
+		guard { h2 >= 32.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__comm -> switch_on2__clock__switch_off1__cycle
+		guard { h1 <= 32.0 h2 >= 32.0 h1 >= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__comm -> switch_on2__clock__switch_off1__cycle
+		guard { h1 <= 8.0 h2 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__comm -> switch_on2__clock__switch_off1__cycle
+		guard { h2 >= 8.0 h2 <= 32.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__comm -> switch_on2__clock__switch_off1__cycle
+		guard { h1 <= 32.0 h2 >= 8.0 h1 >= 8.0 h2 <= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__comm -> switch_on2__clock__switch_off1__cycle
+		guard { h1 <= 8.0 h2 >= 8.0 h2 <= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__comm -> switch_on2__clock__switch_off1__cycle
+		guard { h2 <= 8.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__comm -> switch_on2__clock__switch_off1__cycle
+		guard { h1 <= 32.0 h2 <= 8.0 h1 >= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__comm -> switch_on2__clock__switch_off1__cycle
+		guard { h1 <= 8.0 h2 <= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__user -> switch_on2_in__clock__switch_off1_in__comm
+		guard { P2_plc >= 1.0 P1_plc >= 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 1 P1_on_plc' := 0 P2_off_plc' := 1 P2_on_plc' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__user -> switch_on2_in__clock__switch_off1_in__comm
+		guard { P1_plc >= 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0 P2_plc <= 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 1 P1_on_plc' := 0 P2_off_plc' := 0 P2_on_plc' := 1 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__user -> switch_on2_in__clock__switch_off1_in__comm
+		guard { P2_plc >= 1.0 cycle_time1 = 0.0 P1_plc <= 0.0 cycle_time2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 0 P1_on_plc' := 1 P2_off_plc' := 1 P2_on_plc' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2_in__clock__switch_off1_in__user -> switch_on2_in__clock__switch_off1_in__comm
+		guard { cycle_time1 = 0.0 P1_plc <= 0.0 cycle_time2 = 0.0 P2_plc <= 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 0 P1_on_plc' := 1 P2_off_plc' := 0 P2_on_plc' := 1 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_on1_in__cycle -> switch_off2_in__clock__switch_on1_in__cycle
+		guard { high1 = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 0 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_on1_in__cycle -> switch_off2_in__clock__switch_on1_in__cycle
+		guard { low2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 0 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_on1_in__cycle -> switch_off2_in__clock__switch_on1_in__cycle
+		guard { P2_off = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 0 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_on1_in__cycle -> switch_on2_in__clock__switch_on1_in__cycle
+		guard { low2 = 1.0 P2_off = 0.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_on1__cycle -> switch_on2__clock__switch_off1_in__cycle
+		guard { high2 = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 0 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_on1__cycle -> switch_on2__clock__switch_off1_in__cycle
+		guard { low1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 0 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_on1__cycle -> switch_on2__clock__switch_off1_in__cycle
+		guard { P1_off = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 0 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_on1__cycle -> switch_on2__clock__switch_on1_in__cycle
+		guard { P1_off = 0.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1_in__cycle -> switch_off2_in__clock__switch_off1_in__cycle
+		guard { high1 = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 0 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1_in__cycle -> switch_off2_in__clock__switch_off1_in__cycle
+		guard { low2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 0 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1_in__cycle -> switch_off2_in__clock__switch_off1_in__cycle
+		guard { P2_off = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 0 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1_in__cycle -> switch_on2_in__clock__switch_off1_in__cycle
+		guard { low2 = 1.0 P2_off = 0.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1__cycle -> switch_on2__clock__switch_off1_in__cycle
+		guard { low2 = 1.0 P1_on = 0.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1__cycle -> switch_on2__clock__switch_off1_in__cycle
+		guard { low2 = 1.0 P1_off = 1.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1__cycle -> switch_on2__clock__switch_off1_in__cycle
+		guard { low1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1__cycle -> switch_on2__clock__switch_off1_in__cycle
+		guard { high2 = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1__cycle -> switch_on2__clock__switch_on1_in__cycle
+		guard { low2 = 0.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 1 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1__cycle -> switch_on2__clock__switch_on1_in__cycle
+		guard { high1 = 1.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 1 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_on2__clock__switch_off1__cycle -> switch_on2__clock__switch_on1_in__cycle
+		guard { P1_on = 1.0 P1_off = 0.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 1 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__comm -> switch_off2__clock__switch_on1__cycle
+		guard { h2 >= 32.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__comm -> switch_off2__clock__switch_on1__cycle
+		guard { h1 <= 32.0 h2 >= 32.0 h1 >= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__comm -> switch_off2__clock__switch_on1__cycle
+		guard { h1 <= 8.0 h2 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__comm -> switch_off2__clock__switch_on1__cycle
+		guard { h2 >= 8.0 h2 <= 32.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__comm -> switch_off2__clock__switch_on1__cycle
+		guard { h1 <= 32.0 h2 >= 8.0 h1 >= 8.0 h2 <= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__comm -> switch_off2__clock__switch_on1__cycle
+		guard { h1 <= 8.0 h2 >= 8.0 h2 <= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__comm -> switch_off2__clock__switch_on1__cycle
+		guard { h2 <= 8.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__comm -> switch_off2__clock__switch_on1__cycle
+		guard { h1 <= 32.0 h2 <= 8.0 h1 >= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__comm -> switch_off2__clock__switch_on1__cycle
+		guard { h1 <= 8.0 h2 <= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__user -> switch_off2_in__clock__switch_on1_in__comm
+		guard { P2_plc >= 1.0 P1_plc >= 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 1 P1_on_plc' := 0 P2_off_plc' := 1 P2_on_plc' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__user -> switch_off2_in__clock__switch_on1_in__comm
+		guard { P1_plc >= 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0 P2_plc <= 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 1 P1_on_plc' := 0 P2_off_plc' := 0 P2_on_plc' := 1 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__user -> switch_off2_in__clock__switch_on1_in__comm
+		guard { P2_plc >= 1.0 cycle_time1 = 0.0 P1_plc <= 0.0 cycle_time2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 0 P1_on_plc' := 1 P2_off_plc' := 1 P2_on_plc' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_on1_in__user -> switch_off2_in__clock__switch_on1_in__comm
+		guard { cycle_time1 = 0.0 P1_plc <= 0.0 cycle_time2 = 0.0 P2_plc <= 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 0 P1_on_plc' := 1 P2_off_plc' := 0 P2_on_plc' := 1 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__comm -> switch_off2__clock__switch_off1__cycle
+		guard { h2 >= 32.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__comm -> switch_off2__clock__switch_off1__cycle
+		guard { h1 <= 32.0 h2 >= 32.0 h1 >= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__comm -> switch_off2__clock__switch_off1__cycle
+		guard { h1 <= 8.0 h2 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 1.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__comm -> switch_off2__clock__switch_off1__cycle
+		guard { h2 >= 8.0 h2 <= 32.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__comm -> switch_off2__clock__switch_off1__cycle
+		guard { h1 <= 32.0 h2 >= 8.0 h1 >= 8.0 h2 <= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__comm -> switch_off2__clock__switch_off1__cycle
+		guard { h1 <= 8.0 h2 >= 8.0 h2 <= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 1.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__comm -> switch_off2__clock__switch_off1__cycle
+		guard { h2 <= 8.0 h1 >= 32.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 1.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__comm -> switch_off2__clock__switch_off1__cycle
+		guard { h1 <= 32.0 h2 <= 8.0 h1 >= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 1.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__comm -> switch_off2__clock__switch_off1__cycle
+		guard { h1 <= 8.0 h2 <= 8.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { low2' := 0.0 high2' := 0.0 P2_off' := P2_off_plc P2_on' := P2_on_plc P2' := P2_plc low1' := 0.0 high1' := 0.0 P1' := P1_plc P1_off' := P1_off_plc P1_on' := P1_on_plc }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__user -> switch_off2_in__clock__switch_off1_in__comm
+		guard { P2_plc >= 1.0 P1_plc >= 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 1 P1_on_plc' := 0 P2_off_plc' := 1 P2_on_plc' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__user -> switch_off2_in__clock__switch_off1_in__comm
+		guard { P1_plc >= 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0 P2_plc <= 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 1 P1_on_plc' := 0 P2_off_plc' := 0 P2_on_plc' := 1 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__user -> switch_off2_in__clock__switch_off1_in__comm
+		guard { P2_plc >= 1.0 cycle_time1 = 0.0 P1_plc <= 0.0 cycle_time2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 0 P1_on_plc' := 1 P2_off_plc' := 1 P2_on_plc' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2_in__clock__switch_off1_in__user -> switch_off2_in__clock__switch_off1_in__comm
+		guard { cycle_time1 = 0.0 P1_plc <= 0.0 cycle_time2 = 0.0 P2_plc <= 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1_off_plc' := 0 P1_on_plc' := 1 P2_off_plc' := 0 P2_on_plc' := 1 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1_in__cycle -> switch_off2_in__clock__switch_on1_in__cycle
+		guard { low1 = 1.0 high2 = 0.0 P2_on = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1_in__cycle -> switch_off2_in__clock__switch_on1_in__cycle
+		guard { P2_off = 1.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1_in__cycle -> switch_off2_in__clock__switch_on1_in__cycle
+		guard { low2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1_in__cycle -> switch_off2_in__clock__switch_on1_in__cycle
+		guard { high1 = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1_in__cycle -> switch_on2_in__clock__switch_on1_in__cycle
+		guard { low1 = 0.0 low2 = 1.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 1 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1_in__cycle -> switch_on2_in__clock__switch_on1_in__cycle
+		guard { high2 = 1.0 low2 = 1.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 1 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1_in__cycle -> switch_on2_in__clock__switch_on1_in__cycle
+		guard { P2_on = 1.0 P2_off = 0.0 low2 = 1.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 1 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1__cycle -> switch_off2__clock__switch_off1_in__cycle
+		guard { high2 = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 0 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1__cycle -> switch_off2__clock__switch_off1_in__cycle
+		guard { low1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 0 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1__cycle -> switch_off2__clock__switch_off1_in__cycle
+		guard { P1_off = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 0 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_on1__cycle -> switch_off2__clock__switch_on1_in__cycle
+		guard { P1_off = 0.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1_in__cycle -> switch_off2_in__clock__switch_off1_in__cycle
+		guard { low1 = 1.0 high2 = 0.0 P2_on = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1_in__cycle -> switch_off2_in__clock__switch_off1_in__cycle
+		guard { P2_off = 1.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1_in__cycle -> switch_off2_in__clock__switch_off1_in__cycle
+		guard { low2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1_in__cycle -> switch_off2_in__clock__switch_off1_in__cycle
+		guard { high1 = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1_in__cycle -> switch_on2_in__clock__switch_off1_in__cycle
+		guard { low1 = 0.0 low2 = 1.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 1 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1_in__cycle -> switch_on2_in__clock__switch_off1_in__cycle
+		guard { high2 = 1.0 low2 = 1.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 1 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1_in__cycle -> switch_on2_in__clock__switch_off1_in__cycle
+		guard { P2_on = 1.0 P2_off = 0.0 low2 = 1.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P2' := 1 P2_on' := 0 P2_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1__cycle -> switch_off2__clock__switch_off1_in__cycle
+		guard { low2 = 1.0 P1_on = 0.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1__cycle -> switch_off2__clock__switch_off1_in__cycle
+		guard { low2 = 1.0 P1_off = 1.0 high1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1__cycle -> switch_off2__clock__switch_off1_in__cycle
+		guard { low1 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1__cycle -> switch_off2__clock__switch_off1_in__cycle
+		guard { high2 = 1.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1__cycle -> switch_off2__clock__switch_on1_in__cycle
+		guard { low2 = 0.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 1 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1__cycle -> switch_off2__clock__switch_on1_in__cycle
+		guard { high1 = 1.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 1 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+		switch_off2__clock__switch_off1__cycle -> switch_off2__clock__switch_on1_in__cycle
+		guard { P1_on = 1.0 P1_off = 0.0 low1 = 1.0 high2 = 0.0 cycle_time1 = 0.0 cycle_time2 = 0.0}
+		reset { P1' := 1 P1_on' := 0 P1_off' := 0 }
+		parallelotope aggregation { }
+
+
+	}
+
+	init
+	{
+		switch_on2_in__clock__switch_on1_in__comm
+		{
+			P1_on_plc in [0.0,0.0]
+			P1_off_plc in [1.0,1.0]
+			P2_plc in [1.0,1.0]
+			P2_on_plc in [0.0,0.0]
+			P1_on in [0.0,0.0]
+			P1_plc in [1.0,1.0]
+			P1 in [1.0,1.0]
+			P2_off_plc in [1.0,1.0]
+			P2_off in [1.0,1.0]
+			cycle_time1 in [0.0,0.0]
+			nextSfcLoc in [1.0,1.0]
+			P2_on in [0.0,0.0]
+			P2 in [1.0,1.0]
+			h1 in [25.0,26.0]
+			cycle_time2 in [0.0,0.0]
+			high1 in [0.0,0.0]
+			low1 in [1.0,1.0]
+			global_time in [0.0,0.0]
+			h2 in [25.0,26.0]
+			P1_off in [1.0,1.0]
+			high2 in [0.0,0.0]
+			low2 in [1.0,1.0]
+		}
+
+	}
+}

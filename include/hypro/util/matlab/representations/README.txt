@@ -1,0 +1,1 @@
+This folder contains wrappers for the classes that implement different state set representations in HyPro. Each of the folders contains the .m files that implement the Matlab side of the wrapper. The .tpp and .h files implement the C++ side of the wrapper.

@@ -1,0 +1,16 @@
+#pragma once
+
+namespace hypro {
+/// get input files path for case studies
+std::string getCSModelsPath()
+{
+    return "@CMAKE_SOURCE_DIR@/examples/input/";
+}
+
+/// get input files path for testing
+std::string getTestModelsPath()
+{
+    return "@CMAKE_SOURCE_DIR@/test/input/";
+}
+} // namespace hypro
+
