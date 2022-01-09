@@ -98,14 +98,18 @@ void InteractivePlotter<Representation>::printCurrentOptions() const {
 		}
 		std::cout << std::endl;
 	} else {
-		std::cout << "Select next transition (-1 to exit):\n";
-		for ( std::size_t i = 0; i < mCurrent->getChildren().size(); ++i ) {
-			std::cout << i << ": " << mCurrent->getLocation()->getName() << " -> " << mCurrent->getChildren()[i]->getLocation()->getName() << "\n";
-			std::cout << "guard:\n"
-					  << mCurrent->getChildren()[i]->getTransition()->getGuard() << "\n";
-			std::cout << "reset:\n"
-					  << mCurrent->getChildren()[i]->getTransition()->getReset() << "\n";
-		}
+        std::cout << "Current initial set:\n";
+        std::cout << mCurrent->getInitialSet() << "\n";
+        std::cout << "Select next transition (-1 to exit):\n";
+        for (std::size_t i = 0; i < mCurrent->getChildren().size(); ++i) {
+            std::cout << i << ": " << mCurrent->getLocation()->getName() << " -> " << mCurrent->getChildren()[i]->getLocation()->getName() << "\n";
+            std::cout << "guard:\n"
+                      << mCurrent->getChildren()[i]->getTransition()->getGuard() << "\n";
+            std::cout << "reset:\n"
+                      << mCurrent->getChildren()[i]->getTransition()->getReset() << "\n";
+            std::cout << "resulting in new initial set:\n"
+                      << mCurrent->getChildren()[i]->getInitialSet() << "\n";
+        }
 		std::cout << mCurrent->getChildren().size() << ": Ascend" << std::endl;
 	}
 }
