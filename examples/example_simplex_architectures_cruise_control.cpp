@@ -321,7 +321,7 @@ int main() {
 	// TODO make command line
 	std::size_t iterations{ 50 };
 	std::size_t iteration_count{ 0 };
-	std::size_t maxJumps = 0;
+	std::size_t maxJumps = 250;
     Number widening = 0.01;
     bool training = true;
     std::string filename{"21_simplex_cruise_control.model"};
@@ -407,13 +407,13 @@ int main() {
 	for ( const auto& node : hypro::preorder( roots ) ) {
 		for ( const auto& segment : node.getFlowpipe() ) {
 			if ( node.hasFixedPoint() == hypro::TRIBOOL::TRUE ) {
-				plt.addObject( segment.projectOn( { 1, 3 } ).vertices(),
+				plt.addObject( segment.projectOn( { 1, 4 } ).vertices(),
 							   hypro::plotting::colors[hypro::plotting::blue] );
 			} else if ( node.hasFixedPoint() == hypro::TRIBOOL::FALSE ) {
-				plt.addObject( segment.projectOn( { 1, 3 } ).vertices(),
+				plt.addObject( segment.projectOn( { 1, 4 } ).vertices(),
 							   hypro::plotting::colors[hypro::plotting::orange] );
 			} else {
-				plt.addObject( segment.projectOn( { 1, 3 } ).vertices() );
+				plt.addObject( segment.projectOn( { 1, 4 } ).vertices() );
 			}
 		}
 	}
