@@ -36,19 +36,20 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
     ReachTreeNode<Representation> *mFixedPointReason = nullptr;                   ///< points to the node which is the reason for fixed-point detection
     bool mIsOnZenoCycle = false;                                               ///< true, if the node is the end of a Zeno-Cycle
     bool mFinishesWithTimelock = false;                                        ///< true, if the node exhibits a timelock
+    bool mPotentiallyUnsafe = false;                                            ///< true, if the analysis has found a non-empty intersection with the set of bad states
 	std::map<Transition<Number>*, UrgencyRefinementLevel> mUrgRefinementLevels{};  ///< refinement level for outgoing urgent transitions
 	std::vector<SegmentInd> mFpTimings{};										   ///< timing information for simultaneous segments (urgency)
 	REACHABILITY_RESULT mSafetyResult;											   ///< safety of flowpipe segments
 
-  public:
-	// Exposition types
-	using Rep = Representation;
+public:
+    // Exposition types
+    using Rep = Representation;
 
-	// Forwarding from base
-	using Base::getChildren;
-	using Base::getDepth;
+    // Forwarding from base
+    using Base::getChildren;
+    using Base::getDepth;
 
-	ReachTreeNode( ReachTreeNode* parent, Transition<Number> const* transition, Location<Number> const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
+    ReachTreeNode(ReachTreeNode *parent, Transition<Number> const *transition, Location<Number> const *loc, Representation initialSet, carl::Interval<SegmentInd> timings)
 		: Base( parent )
 		, mLocation( loc )
 		, mTransition( transition )
@@ -150,6 +151,12 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 
     /// Setter for a flag indicating, that the node exhibits a timelock
     void flagTimelock(bool timelock = true) { mFinishesWithTimelock = timelock; }
+
+    /// Getter for the unsafe-status of this node
+    bool intersectedUnsafeRegion() const { return mPotentiallyUnsafe; }
+
+    /// Setter for a flag indicating, that the node has intersected the set of bad states
+    void flagUnsafe(bool unsafe = true) { mPotentiallyUnsafe = unsafe; }
 
     /// Getter for the timelock-status of this node, i.e., whether a timelock has been detected during analysis
     bool hasTimelock() const { return mFinishesWithTimelock; }
