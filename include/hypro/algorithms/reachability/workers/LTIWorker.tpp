@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "LTIWorker.h"
 
 namespace hypro {
@@ -12,8 +21,9 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant() );
 	// If the first segment did not fulfill the invariant of the location, the jump here should not have been made
 	if ( containment == CONTAINMENT::NO ) {
-		return REACHABILITY_RESULT::SAFE;
-	}
+        DEBUG("hypro.reachability", "First segment is not contained in the invariant, abort time successor computation.");
+        return REACHABILITY_RESULT::SAFE;
+    }
 
 	// insert segment
 	*out = segment;
@@ -30,17 +40,18 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	// while not done
 	DEBUG( "hypro.reachability", "Compute time successor states." );
 	for ( size_t segmentCount = 1; segmentCount < mNumSegments; ++segmentCount ) {
-		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
-		std::tie( containment, segment ) = intersect( segment, loc->getInvariant() );
-		if ( containment == CONTAINMENT::NO ) {
-			DEBUG( "hypro.reachability", "Segment " << segment << " invalidates the invariant condition." );
-			return REACHABILITY_RESULT::SAFE;
-		}
+        segment = applyTimeEvolution(segment, mTrafoCache.transformationMatrix(loc, mSettings.timeStep));
+        TRACE("hypro.reachability", "Computed segment: " << segment);
+        std::tie(containment, segment) = intersect(segment, loc->getInvariant());
+        if (containment == CONTAINMENT::NO) {
+            DEBUG("hypro.reachability", "Segment invalidates the invariant condition.");
+            return REACHABILITY_RESULT::SAFE;
+        }
 
-		*out = segment;
-		++out;
+        *out = segment;
+        ++out;
 
-		// intersect with badstates
+        // intersect with badstates
 		std::tie( containment, std::ignore ) = ltiIntersectBadStates( segment, loc, mHybridAutomaton );
 		if ( containment != CONTAINMENT::NO ) {
 			// Todo: memorize the intersecting state set and keep state.
@@ -226,27 +237,33 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 		auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation>{ transition.get() } );
 
 		SegmentInd cnt = 0;
-		for ( auto const& valuationSet : flowpipe ) {
-			auto [containment, intersected] = intersect( valuationSet, transition->getGuard() );
+for (
+auto const &valuationSet
+: flowpipe ) {
+auto[containment, intersected] = intersect(valuationSet, transition->getGuard());
 
-			if ( containment != CONTAINMENT::NO ) {
-				currentSucc.valuationSets.push_back( { intersected, cnt } );
-			}
-			++cnt;
-		}
-	}
+if ( containment != CONTAINMENT::NO ) {
+currentSucc.valuationSets.push_back( {
+intersected, cnt } );
+}
+++
+cnt;
+}
+}
 
-	DEBUG( "hypro.reachability", "enabledSegments: " << print( enabledSegments ) );
+TRACE("hypro.reachability", "enabledSegments: " << print(enabledSegments));
 
-	std::vector<JumpSuccessor<Representation>> successors{};
+std::vector<JumpSuccessor < Representation>>
+successors{
+};
 
-	// aggregation
-	// for each transition
-	for ( auto& [transition, valuationSets] : enabledSegments ) {
-		// no aggregation
-		std::size_t blockSize = 1;
-		if ( mSettings.aggregation == AGG_SETTING::AGG ) {
-			if ( mSettings.clustering > 0 ) {
+// aggregation
+// for each transition
+for ( auto&[transition, valuationSets] : enabledSegments ) {
+// no aggregation
+std::size_t blockSize = 1;
+if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+if ( mSettings.clustering > 0 ) {
 				blockSize = ( valuationSets.size() + mSettings.clustering ) / mSettings.clustering;	 // division rounding up
 			} else {
 				blockSize = valuationSets.size();

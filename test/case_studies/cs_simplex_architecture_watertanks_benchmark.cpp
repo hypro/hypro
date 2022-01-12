@@ -131,7 +131,7 @@ void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<dou
                     ++unfinished_leaves;
                     last_paths.push_back(std::make_pair(node.getPath(), &node));
                     if (has_discrete_cycle(node.getPath())) {
-                        INFO("hypro.casestudies", "Path " << node.getPath() << " is cyclic.");
+                        //INFO("hypro.casestudies", "Path " << node.getPath() << " is cyclic.");
                         ++cyclic_path_count;
                         if (!shortest_cycle ||
                             node.getPath().elements.size() < shortest_cycle.value().elements.size()) {
@@ -139,7 +139,7 @@ void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<dou
                             shortest_cycle_node = &node;
                         }
                     } else {
-                        INFO("hypro.casestudies", "Path " << node.getPath() << " is truly unfinished.");
+                        //INFO("hypro.casestudies", "Path " << node.getPath() << " is truly unfinished.");
                         if (!shortest || node.getPath().elements.size() < shortest.value().elements.size()) {
                             shortest = node.getPath();
                             shortest_node = &node;
@@ -176,8 +176,14 @@ void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<dou
         }
 		if ( shortest_cycle ) {
             std::cout << "Shortest cyclic, unfinished path (length " << shortest_cycle.value().elements.size() << "): " << shortest_cycle.value() << std::endl;
-            std::cout << "Flowpipe of the second to last node:\n";
-            for (const auto &seg: shortest_cycle_node->getParent()->getFlowpipe()) {
+            std::cout << "Initial set of the last node (@" << shortest_cycle_node << "): " << shortest_cycle_node->getInitialSet() << std::endl;
+            auto[containment, segment] = intersect(shortest_cycle_node->getInitialSet(), shortest_cycle_node->getLocation()->getInvariant());
+            std::cout << "Initial set is in the invariant: " << containment << ", resulting set: " << segment << std::endl;
+            std::cout << "Node depth: " << shortest_cycle_node->getDepth() << std::endl;
+            std::cout << "FLAGS: fixed-point: " << (shortest_cycle_node->hasFixedPoint() == TRIBOOL::TRUE) << ", is on Zeno-cycle: " << shortest_cycle_node->isOnZenoCycle() << ", has timelock: " <<
+                      shortest_cycle_node->hasTimelock() << ", bad states visited: " << shortest_cycle_node->intersectedUnsafeRegion() << std::endl;
+            std::cout << "Flowpipe of the last node:\n";
+            for (const auto &seg: shortest_cycle_node->getFlowpipe()) {
                 std::cout << seg << "\n";
             }
             std::cout << std::endl;
@@ -296,7 +302,7 @@ void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<dou
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-        ->DenseRange(26, 26, 1)
+        ->DenseRange(30, 30, 1)
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
