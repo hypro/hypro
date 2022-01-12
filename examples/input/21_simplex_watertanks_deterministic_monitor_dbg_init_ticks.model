@@ -10,7 +10,7 @@ hybrid reachability
     state var x1, x2, u, spec_t1, tick
 
     par {
-        cycle_time = 2.0
+        cycle_time = 1.0
     }
 
     setting
