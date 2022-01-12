@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "LTIWorker.h"
 
 namespace hypro {
@@ -13,8 +22,9 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant(), mSubspace );
 	//If the first segment did not fulfill the invariant of the location, the jump here should not have been made
 	if ( containment == CONTAINMENT::NO ) {
-		return REACHABILITY_RESULT::SAFE;
-	}
+        DEBUG("hypro.reachability", "First segment is not contained in the invariant, abort time successor computation.");
+        return REACHABILITY_RESULT::SAFE;
+    }
 
 	// insert segment
 	*out = segment;
@@ -61,14 +71,14 @@ auto LTIWorker<Representation>::getJumpSuccessors( std::vector<Representation> c
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {
-			blockSize = ( flowpipe.size() + mSettings.clustering ) / mSettings.clustering;	//division rounding up
+			blockSize = ( flowpipe.size() + mSettings.clustering ) / mSettings.clustering;	// division rounding up
 		} else {
 			blockSize = flowpipe.size();
 		}
 
 	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
 		if ( transition->getAggregation() == Aggregation::clustering ) {
-			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
+			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 		}
 	}
 	return JumpSuccessorGen{ flowpipe, transition, blockSize };
@@ -240,7 +250,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 		}
 	}
 
-	DEBUG( "hypro.reachability", "enabledSegments: " << print( enabledSegments ) );
+TRACE("hypro.reachability", "enabledSegments: " << print(enabledSegments));
 
 	std::vector<JumpSuccessor<Representation>> successors{};
 
@@ -251,14 +261,14 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 		std::size_t blockSize = 1;
 		if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 			if ( mSettings.clustering > 0 ) {
-				blockSize = ( valuationSets.size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
+				blockSize = ( valuationSets.size() + mSettings.clustering ) / mSettings.clustering;	 // division rounding up
 			} else {
 				blockSize = valuationSets.size();
 			}
 
 		} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
 			if ( transition->getAggregation() == Aggregation::clustering ) {
-				blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
+				blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 			}
 		}
 		successors.emplace_back( JumpSuccessor<Representation>{ transition, aggregate( blockSize, valuationSets ) } );

@@ -25,7 +25,8 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 		  transformationCache };
 
 	while ( !mWorkQueue.empty() ) {
-		ReachTreeNode<State>* currentNode = mWorkQueue.back();
+        ReachTreeNode<State> *currentNode = mWorkQueue.back();
+        DEBUG("hypro.reachability", "Processing node @" << currentNode << " with path " << currentNode->getPath());
         mWorkQueue.pop_back();
         REACHABILITY_RESULT safetyResult;
 
@@ -41,6 +42,7 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
         bool potentialTimelock = false;
         bool timelock = true; // is set to false if there is a transition that is enabled in the last segment
         if (currentNode->getFlowpipe().size() != worker.maxNumberSegments()) {
+            DEBUG("hypro.reachability", "Node has a potential timelock");
             potentialTimelock = true;
         }
 
@@ -49,6 +51,7 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
             detectContinuousFixedPoints(*currentNode, mRoots, mParameters.numberSetsForContinuousCoverage);
             // if the previous fixed-point test was successful, skip computation
             if (currentNode->hasFixedPoint() == TRIBOOL::TRUE) {
+                DEBUG("hypro.reachability", "Node has a fixed point, skip computation");
                 continue;
             }
         }
@@ -59,8 +62,9 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 
 		// Do not perform discrete jump if jump depth was reached
 		if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) {
-			continue;
-		}
+            DEBUG("hypro.reachability", "Node is at maximal jump depth");
+            continue;
+        }
 
 		// collect potential Zeno transitions
 		std::vector<const Transition<typename State::NumberType>*> ZenoTransitions{};
@@ -73,8 +77,9 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 		for ( const auto& [transition, timedValuationSets] : worker.computeJumpSuccessors( currentNode->getFlowpipe(), currentNode->getLocation() ) ) {
 			// Omit Zeno-transitions
 			if ( mParameters.detectZenoBehavior && std::find( std::begin( ZenoTransitions ), std::end( ZenoTransitions ), transition ) != std::end( ZenoTransitions ) ) {
-				continue;
-			}
+                DEBUG("hypro.reachability", "Node-successor via transition " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << " is on a Zeno-cycle");
+                continue;
+            }
 
 			for ( const auto [valuationSet, segmentsInterval] : timedValuationSets ) {
                 // update reachTree
@@ -86,6 +91,7 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
                 carl::Interval<TimePoint> globalDuration{initialSetDuration.lower() + enabledDuration.lower(), initialSetDuration.upper() + enabledDuration.upper()};
                 // if this transition is enabled in the last segment of a flowpipe which is bounded by an invariant, we do not have a timelock
                 if (potentialTimelock && enabledDuration.upper() == currentNode->getFlowpipe().size()) {
+                    DEBUG("hypro.reachability", "Node does not have a timelock");
                     timelock = false;
                 }
                 // in any case add node to the search tree
@@ -105,10 +111,13 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 				}
 				// create Task, push only to queue, in case no fixed-point has been detected or detection is disabled
 				if ( !fixedPointReached ) {
-					mWorkQueue.push_front( &childNode );
-				} else {
-					COUNT( "Finished branches (fixed-point)" );
-				}
+                    DEBUG("hypro.reachability", "Add node-successor to work-queue, path: " << childNode.getPath());
+                    addToQueue(&childNode);
+                    //mWorkQueue.push_front( &childNode );
+                } else {
+                    DEBUG("hypro.reachability", "Fixed point detected in node-successor");
+                    COUNT("Finished branches (fixed-point)");
+                }
 			}
 		}
 
@@ -117,6 +126,7 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
             for (auto cur = std::begin(currentNode->getFlowpipe()); cur != std::end(currentNode->getFlowpipe()); ++cur) {
                 for (auto succ = std::begin(currentNode->getFlowpipe()); succ != std::end(currentNode->getFlowpipe()); ++succ) {
                     if (succ->contains(*cur)) {
+                        DEBUG("hypro.reachability", "Detected continuous fixed point for current node");
                         currentNode->setFixedPoint();
                     }
                 }
