@@ -57,8 +57,10 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
         }
 
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
-			return { Failure{ currentNode } };
-		}
+            DEBUG("hypro.reachability", "Node is potentially unsafe");
+            currentNode->flagUnsafe();
+            return {Failure{currentNode}};
+        }
 
 		// Do not perform discrete jump if jump depth was reached
 		if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) {

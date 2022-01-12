@@ -36,6 +36,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
     ReachTreeNode<Representation> *mFixedPointReason = nullptr;                   ///< points to the node which is the reason for fixed-point detection
     bool mIsOnZenoCycle = false;                                               ///< true, if the node is the end of a Zeno-Cycle
     bool mFinishesWithTimelock = false;                                        ///< true, if the node exhibits a timelock
+    bool mPotentiallyUnsafe = false;                                            ///< true, if the analysis has found a non-empty intersection with the set of bad states
 
 public:
     // Exposition types
@@ -135,6 +136,12 @@ public:
 
     /// Setter for a flag indicating, that the node exhibits a timelock
     void flagTimelock(bool timelock = true) { mFinishesWithTimelock = timelock; }
+
+    /// Getter for the unsafe-status of this node
+    bool intersectedUnsafeRegion() const { return mPotentiallyUnsafe; }
+
+    /// Setter for a flag indicating, that the node has intersected the set of bad states
+    void flagUnsafe(bool unsafe = true) { mPotentiallyUnsafe = unsafe; }
 
     /// Getter for the timelock-status of this node, i.e., whether a timelock has been detected during analysis
     bool hasTimelock() const { return mFinishesWithTimelock; }
