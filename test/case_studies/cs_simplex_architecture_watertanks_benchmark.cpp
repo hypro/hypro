@@ -302,7 +302,7 @@ void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<dou
 // Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-        ->DenseRange(30, 30, 1)
+        ->DenseRange(100, 100, 1)
 	  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
