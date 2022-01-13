@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -860,9 +860,9 @@ std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::projectOut( const std::vector<std::size_t>& dimensions, bool viaLinearTransformation ) const {
 	TRACE( "hypro.representations.HPolytope", "out dimensions " << dimensions );
-	if ( dimensions.empty() ) {
-		return *this;
-	}
+	if (dimensions.empty() || size() == 0) {
+        return *this;
+    }
 
 	if ( viaLinearTransformation ) {
 		// projection by means of a linear transformation
