@@ -73,33 +73,27 @@ TYPED_TEST(StarsetTest, Constructor){
     hypro::vector_t<TypeParam> offset=hypro::vector_t<TypeParam>(2);
     offset<<1,1;
     hypro::HPolytope<TypeParam> anotherHPolytope = hypro::HPolytope<TypeParam>(this->myStar1.constraintss().affineTransformation(this->myStar1.generator(),this->myStar1.center()) );
-    hypro::HPolytope<TypeParam> anotherHPolytope2 = hypro::HPolytope<TypeParam>(this->myStar1.constraintss().affineTransformation(transmat,offset)  );
+    hypro::HPolytope<TypeParam> anotherHPolytope2 = hypro::HPolytope<TypeParam>(anotherHPolytope.affineTransformation(transmat,offset)  );
     hypro::HPolytope<TypeParam> united = anotherHPolytope.unite(anotherHPolytope2);
 
 
     auto ikincidegismis=this->myStar1.affineTransformation(transmat,offset);
-    auto sonucikinci=this->myStar1.unite(ikincidegismis);
+    auto sonucikinci=ikincidegismis.unite(this->myStar1);
     //hypro::Starset<TypeParam> sonucbirinci=ikincidegismis.unite(this->myStar1);
-    auto sup=hypro::Converter<TypeParam>::toSupportFunction(anotherHPolytope);
-    auto sup2=hypro::Converter<TypeParam>::toSupportFunction(anotherHPolytope2);
-    auto supunited=sup.unite(sup2);
-    std::cout<<"vertices"<<sonucikinci.vertices()<<std::endl;
+    std::cout<<"vertices"<<ikincidegismis.vertices()<<std::endl;
+    std::cout<<"vertices"<<anotherHPolytope2.vertices()<<std::endl;
+
     //std::cout<<"vertices"<<sonucbirinci.vertices()<<std::endl;
     hypro::Plotter<TypeParam> &plotter = hypro::Plotter<TypeParam>::getInstance();
 
     plotter.setFilename("Unitewhat");
-    //for (auto &node : preorder(roots)) {
-    // Plot single flowpipe
-    //for (auto &set : node.getFlowpipe()) {
-    //plotter.addObject(supunited.vertices());
     plotter.addObject(anotherHPolytope.vertices());
     plotter.addObject(anotherHPolytope2.vertices());
+    plotter.addObject(ikincidegismis.vertices());
     plotter.addObject(sonucikinci.vertices());
-    //plotter.addObject(united.vertices());
+    plotter.addObject(united.vertices());
 
 
-    //}
-    //}
     // write output.
     plotter.plot2d();
     

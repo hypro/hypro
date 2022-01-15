@@ -440,16 +440,13 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 template<typename Number>
 template<typename HPolytopeSetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPolytope( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	//std::cout<<"wtf"<<std::endl;
 	if(source.generator()==(matrix_t<Number>::Identity(source.generator().cols(),source.generator().cols()))){
 		return source.constraintss();
 	}
 	//HPolytopeT<Number,Converter<Number>,HPolytopeSetting> temp=source.constraintss();
 	VPolytopeT<Number,Converter<Number>,VPolytopeSetting> temp2= Converter::toVPolytope(source.constraintss());
 	auto temp3=HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(temp2.affineTransformation(source.generator(),source.center()).vertices());
-	//std::cout<<"TOhpoly"<<temp3.matrix()<<std::endl;
 	return temp3;
-	std::cout<<"wtf"<<std::endl;
-	return source.constraintss().affineTransformation(source.generator(),source.center());
+	//return source.constraintss().affineTransformation(source.generator(),source.center());
 }
 }

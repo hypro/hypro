@@ -13,7 +13,7 @@
 
 namespace hydra {
 
-using Number = mpq_class;
+using Number = double;
 using tNumber = hypro::tNumber;
 
 using SFType = hypro::SupportFunctionT<Number, hypro::Converter<Number>,

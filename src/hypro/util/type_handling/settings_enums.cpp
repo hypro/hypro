@@ -35,8 +35,8 @@ int stringToSetting( const std::string& name ) {
 		  hPolytopeSetting_name,
 		  vPolytopeSetting_name,
 		  carlPolytopeSetting_name,
-		  tpolySetting_name>::toSetting( name );
-		 // StarsetSetting_name>::toSetting( name );
+		  tpolySetting_name,
+		  StarsetSetting_name>::toSetting( name );
 }
 
 }  // namespace hypro

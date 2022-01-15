@@ -149,8 +149,7 @@ class StarsetT : private GeometricObjectBase {
    * @param[in]  _direction  The direction/cost function.
    * @return     Maximum towards _direction.
    */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction,
-									   bool ) const;
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction ) const;
 
 	/**
    * @brief      Multi-evaluation function (convex linear optimization).
@@ -325,7 +324,6 @@ class StarsetT : private GeometricObjectBase {
      */
     template <typename From, typename To, typename Converter, class Setting>
     StarsetT<To, Converter, Setting> convert( const StarsetT<From, Converter, Setting>& in ) {
-       std::cout<<"dog"<<std::endl;
         return StarsetT<To, Converter, Setting>( convert<From, To>( in.center() ), convert<From, To>( in.shape() ), convert<From, To>( in.limits() ),convert<From, To>( in.generator() ) );
 }
 }  // namespace hypro
