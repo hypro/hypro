@@ -859,20 +859,24 @@ std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number
 
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::projectOut( const std::vector<std::size_t>& dimensions, bool viaLinearTransformation ) const {
-	TRACE( "hypro.representations.HPolytope", "out dimensions " << dimensions );
-	if (dimensions.empty() || size() == 0) {
+    TRACE("hypro.representations.HPolytope", "out dimensions " << dimensions);
+    if (dimensions.empty() || size() == 0) {
+        return *this;
+    }
+    if (this->empty()) {
+        WARN("hypro", "Projection of the empty set, do not project.")
         return *this;
     }
 
-	if ( viaLinearTransformation ) {
-		// projection by means of a linear transformation
-		matrix_t<Number> projectionMatrix = matrix_t<Number>::Identity( this->dimension(), this->dimension() );
-		for ( auto i : dimensions ) {
-			projectionMatrix( i, i ) = 0;
-		}
-		// TODO remove empty cols which were projected out
-		return this->linearTransformation( projectionMatrix );
-	} else {
+    if (viaLinearTransformation) {
+        // projection by means of a linear transformation
+        matrix_t<Number> projectionMatrix = matrix_t<Number>::Identity(this->dimension(), this->dimension());
+        for (auto i: dimensions) {
+            projectionMatrix(i, i) = 0;
+        }
+        // TODO remove empty cols which were projected out
+        return this->linearTransformation(projectionMatrix);
+    } else {
 		auto [newConstraints, newConstants] = eliminateCols( this->matrix(), this->vector(), dimensions, false );
 		return { newConstraints, newConstants };
 	}
