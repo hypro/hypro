@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "Plotter.h"
 
 namespace hypro {
@@ -101,44 +110,93 @@ void Plotter<Number>::plotPng() const {
 	plot2d( PLOTTYPE::png );
 }
 
-template <typename Number>
+template<typename Number>
 void Plotter<Number>::plotGen() const {
-	plot2d( PLOTTYPE::gen );
+    plot2d(PLOTTYPE::gen);
 }
 
-template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color ) {
-	TRACE( "hypro.plotter", "" );
-	// reduce dimensions
-	if ( !_points.empty() ) {
-		assert( _points.begin()->dimension() == 2 );
-		// initialize limits
-		if ( mObjects.empty() && mPoints.empty() ) {
-			mLimits.first = _points.begin()->rawCoordinates();
-			mLimits.second = _points.begin()->rawCoordinates();
-		}
-		// update limits
-		for ( const auto& point : _points ) {
-			assert( point.dimension() == 2 );
-			for ( unsigned d = 0; d < mLimits.first.rows(); ++d ) {
-				mLimits.first( d ) = mLimits.first( d ) > point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.first( d );
-				mLimits.second( d ) = mLimits.second( d ) < point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.second( d );
-			}
-		}
+    template<typename Number>
+    unsigned Plotter<Number>::addObject(const std::vector<Point < Number>>
 
-		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color } ) );
-		mId++;
-		return ( mId - 1 );
-	}
-	return 0;
+    & _points,
+    std::optional<std::size_t> _color
+    ) { TRACE("hypro.plotter", "");
+// reduce dimensions
+if ( !_points.
+
+empty()
+
+) {
+bool objectIsTwoDimensional = true;
+if( _points.begin()->dimension() != 2 ) {
+objectIsTwoDimensional = false;
+WARN("hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped.")
+return 0;
+}
+// initialize limits
+if ( mObjects.
+
+empty() &&
+
+mPoints.
+
+empty()
+
+) {
+mLimits.
+first = _points.begin()->rawCoordinates();
+mLimits.
+second = _points.begin()->rawCoordinates();
+}
+// update limits
+for (
+const auto &point
+: _points ) {
+if( point.
+
+dimension()
+
+== 2 ) {
+for (
+unsigned d = 0;
+d<mLimits.first.
+
+rows();
+
+++d ) {
+mLimits.
+first( d ) = mLimits.first(d) > point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.first(d);
+mLimits.
+second( d ) = mLimits.second(d) < point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.second(d);
+}
+} else {
+objectIsTwoDimensional = false;
+WARN("hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped.")
+break;
+}
+}
+if(objectIsTwoDimensional) {
+mObjects.
+insert( std::make_pair(mId, plotting::PlotObject < Number > {_points, false, false, _color})
+);
+mId++;
+return ( mId - 1 );
+}
+}
+return 0;
 }
 
-template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>>& _points ) {
-	for ( const auto& part : _points ) {
-		addObject( part );
-		--mId;
-	}
+template<typename Number>
+unsigned Plotter<Number>::addObject(const std::vector<std::vector<Point < Number>>
+
+>& _points ) {
+for (
+const auto &part
+: _points ) {
+addObject( part );
+--
+mId;
+}
 	mId++;
 	return mId - 1;
 }
