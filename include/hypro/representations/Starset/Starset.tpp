@@ -147,9 +147,7 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
 
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Converter, Setting>::satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-    std::cout<<"buraya geldi"<<std::endl;
     if(this->empty()){
-        std::cout<<"buraya geldi1"<<std::endl;
         return std::make_pair( CONTAINMENT::NO, std::move(*this ) );
     }
 
@@ -159,11 +157,9 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
     StarsetT<Number, Converter, Setting> star=StarsetT<Number, Converter, Setting>(mCenter,mGenerator,std::get<1>(ans));
 
     if(CONTAINMENT::PARTIAL==std::get<0>(ans)){
-    std::cout<<"buraya geldi3"<<std::endl;
 
         return  std::make_pair( std::get<0>(ans),star.removeRedundancy());
     }
-    std::cout<<"buraya geldi4"<<std::endl;
 
     return std::make_pair(std::get<0>(ans),std::move(star));
 
@@ -185,9 +181,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::linea
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
-    std::cout<<"mGenerator"<<mGenerator<<std::endl;
-    std::cout<<"Shape"<<this->shape()<<std::endl;
-    std::cout<<"Shape"<<this->limits()<<std::endl;
+
 
 
     if ( A.nonZeros()==0 ) {
@@ -292,7 +286,6 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
     //Faster in small dimensions
     
     if(mGenerator.cols()<10){
-        std::cout<<"burdamiyim"<<std::endl; 
         auto intermediate=Converter::toHPolytope(*this );
         auto intermediate2=Converter::toHPolytope(rhs );
         return Converter::toStarset(intermediate.unite(intermediate2));
