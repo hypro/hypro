@@ -140,7 +140,7 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
 
     auto zz=this->calculateHalfspace(rhs);
     StarsetT<Number, Converter, Setting> star=this->intersectHalfspace(zz);
-    auto ans=(constraints.satisfiesHalfspace(zz)); 
+    //auto ans=(constraints.satisfiesHalfspace(zz)); 
 
     return std::make_pair(std::get<0>(constraints.satisfiesHalfspace(calculateHalfspace(rhs))),std::move( star ));
 }
@@ -150,10 +150,12 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
     if(this->empty()){
         return std::make_pair( CONTAINMENT::NO, std::move(*this ) );
     }
-
+    //write halfspace using my basis and center
     std::pair<matrix_t<Number>, vector_t<Number>> zz=this->calculateHalfspaces(_mat ,_vec);    
+    //check if constraints satisfy the halfspace
     auto ans=(constraints.satisfiesHalfspaces(std::get<0>(zz),std::get<1>(zz))); 
     
+    //Create a star set which is intersected with the given halfspace half space
     StarsetT<Number, Converter, Setting> star=StarsetT<Number, Converter, Setting>(mCenter,mGenerator,std::get<1>(ans));
 
     if(CONTAINMENT::PARTIAL==std::get<0>(ans)){
@@ -284,7 +286,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 		return *this;
 	}
     //Faster in small dimensions
-    
+    //option 1 in bachelor thesis
     if(mGenerator.cols()<10){
         auto intermediate=Converter::toHPolytope(*this );
         auto intermediate2=Converter::toHPolytope(rhs );
@@ -293,6 +295,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
     auto tmp1=StarsetT<Number, Converter, Setting>(this->center(),this->generator(),this->constraintss().removeRedundancy());
     auto tmp2=StarsetT<Number, Converter, Setting>(rhs.center(),rhs.generator(),rhs.constraintss().removeRedundancy());
     
+    //option 2 in bachelor thesis
     if(this->constraintss()==rhs.constraintss() ){
         if(this->generator()==matrix_t<Number>::Identity(this->generator().cols(),this->generator().cols())){
             if(rhs.generator()==rhs.generator()*this->generator()){
@@ -373,6 +376,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
      newmLimits.tail(tmp2.limits().rows())=tmp2.limits();
      return tmp2.minkowskiSum( StarsetT<Number, Converter, Setting>(newmCenter,newmGenerator,HPolytopeT<Number,Converter, HPolytopeOptimizerCaching>(newmShapeMatrix,newmLimits).removeRedundancy()));//.removeRedundancy() ;
 */
+    //option 3 in bachelor thesis
     matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(tmp1.generator().rows(),tmp1.generator().cols()+tmp2.generator().cols()*2+1); 
     matrix_t<Number> newmShapeMatrix=matrix_t<Number>::Zero(tmp1.shape().rows()+tmp2.shape().rows()*2+2,tmp1.shape().cols()+tmp2.shape().cols()*2+1);
     vector_t<Number> newmLimits=vector_t<Number>::Zero(tmp1.limits().rows()+tmp2.limits().rows()*2+2);
