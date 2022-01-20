@@ -17,16 +17,15 @@
 
 #include "Clock.h"
 #include "Settings.h"
+#include "algorithms/singularAnalysis/benchmarkSingularAnalyzer.h"
 #include "box/benchmarkBox.h"
 #include "polytopes/benchmarkPolytope.h"
-#include "algorithms/singularAnalysis/benchmarkSingularAnalyzer.h"
-#include "algorithms/decompositionalAnalysis/benchmarkDecompositionalAnalyzer.h"
 #include "supportFunction/benchmark_sf.h"
 #include "types.h"
-#include <hypro/flags.h>
 #include <future>
-#include <iostream>
+#include <hypro/flags.h>
 #include <hypro/representations/GeometricObjectBase.h>
+#include <iostream>
 
 int main( int argc, char const *argv[] ) {
 	benchmark::Timer general;
@@ -38,16 +37,13 @@ int main( int argc, char const *argv[] ) {
 	std::cout << "Benchmark polytopes." << std::endl;
 	s.maxDimension = 6;
 	s.iterations = 10;
-	//s.iterations = 10000000;
+	// s.iterations = 10000000;
 	benchmark::polytope::run( s );
 
 	std::cout << "Benchmark singular analyzer." << std::endl;
 	s.maxDimension = 5;
 	s.iterations = 4;
 	benchmark::singularAnalysis::run( s );
-
-	std::cout << "Benchmark decompositional analyzer." << std::endl;
-	benchmark::decompositionalAnalysis::run( s );
 
 	// std::cout << "Benchmark support functions." << std::endl;
 	// benchmark::sf::run( s );

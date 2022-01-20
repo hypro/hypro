@@ -250,7 +250,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 		}
 	}
 
-TRACE("hypro.reachability", "enabledSegments: " << print(enabledSegments));
+	TRACE( "hypro.reachability", "enabledSegments: " << print( enabledSegments ) );
 
 	std::vector<JumpSuccessor<Representation>> successors{};
 
