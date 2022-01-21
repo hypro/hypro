@@ -48,7 +48,7 @@ struct AffineTransformation {
 		return true;
 	}
 
-	bool isIdentity( size_t I ) const {
+	bool isIdentity( Eigen::Index I ) const {
 		for ( Eigen::Index j = 0; j < mTransformation.matrix().cols(); ++j ) {
 			if ( ( j != I && mTransformation.matrix()( I, j ) != Number( 0 ) ) || ( ( j == I && mTransformation.matrix()( I, j ) != Number( 1 ) ) ) ) {
 				return false;
