@@ -85,8 +85,9 @@ void InteractivePlotter<Representation>::plotCurrent() {
 	plt.setFilename( "out" );
 	plt.rSettings().overwriteFiles = true;
 	plt.plot2d( PLOTTYPE::pdf );
-
+#ifdef GNUPLOT_FOUND
 	std::system( "gnuplot out_pdf.plt" );
+#endif
 }
 
 template <typename Representation>

@@ -37,7 +37,7 @@ plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 }
 
 template <typename Number>
-void Plotter<Number>::plot2d( PLOTTYPE outformat ) const {
+void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 	std::size_t cnt = 0;
 	std::string filename = mSettings.filename;
 	std::string title = mSettings.name;
@@ -93,6 +93,14 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat ) const {
 		}
 	}
 	mOutfile.close();
+
+	if ( runGnuplot ) {
+#ifdef GNUPLOT_FOUND
+		std::stringstream ss;
+		ss << "gnuplot " + filename + "_" + plotting::to_string( outformat ) + ".plt";
+		std::system( ss.str().c_str() );
+#endif
+	}
 }
 
 template <typename Number>
@@ -110,93 +118,69 @@ void Plotter<Number>::plotPng() const {
 	plot2d( PLOTTYPE::png );
 }
 
-template<typename Number>
+template <typename Number>
 void Plotter<Number>::plotGen() const {
 	plot2d( PLOTTYPE::gen );
 }
 
-    template<typename Number>
-    unsigned Plotter<Number>::addObject(const std::vector<Point < Number>>
+template <typename Number>
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color ) {
+	TRACE( "hypro.plotter", "" );
+	// reduce dimensions
+	if ( !_points.empty() ) {
+		bool objectIsTwoDimensional = true;
+		if ( _points.begin()->dimension() != 2 ) {
+			objectIsTwoDimensional = false;
+			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
+			return 0;
+		}
+		// initialize limits
+		if ( mObjects.empty() && mPoints.empty() ) {
+			mLimits.first = _points.begin()->rawCoordinates();
+			mLimits.second = _points.begin()->rawCoordinates();
+		}
+		// update limits
+		for (
+			  const auto& point : _points ) {
+			if ( point.
 
-    & _points,
-    std::optional<std::size_t> _color
-    ) { TRACE("hypro.plotter", "");
-// reduce dimensions
-if ( !_points.
+				 dimension()
 
-empty()
+				 == 2 ) {
+				for (
+					  unsigned d = 0;
+					  d < mLimits.first.
 
-) {
-bool objectIsTwoDimensional = true;
-if( _points.begin()->dimension() != 2 ) {
-objectIsTwoDimensional = false;
-WARN("hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped.")
-return 0;
-}
-// initialize limits
-if ( mObjects.
+						  rows();
 
-empty() &&
-
-mPoints.
-
-empty()
-
-) {
-mLimits.
-first = _points.begin()->rawCoordinates();
-mLimits.
-second = _points.begin()->rawCoordinates();
-}
-// update limits
-for (
-const auto &point
-: _points ) {
-if( point.
-
-dimension()
-
-== 2 ) {
-for (
-unsigned d = 0;
-d<mLimits.first.
-
-rows();
-
-++d ) {
-mLimits.
-first( d ) = mLimits.first(d) > point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.first(d);
-mLimits.
-second( d ) = mLimits.second(d) < point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.second(d);
-}
-} else {
-objectIsTwoDimensional = false;
-WARN("hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped.")
-break;
-}
-}
-if(objectIsTwoDimensional) {
-mObjects.
-insert( std::make_pair(mId, plotting::PlotObject < Number > {_points, false, false, _color})
-);
-mId++;
-return ( mId - 1 );
-}
-}
-return 0;
+					  ++d ) {
+					mLimits.first( d ) = mLimits.first( d ) > point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.first( d );
+					mLimits.second( d ) = mLimits.second( d ) < point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.second( d );
+				}
+			} else {
+				objectIsTwoDimensional = false;
+				WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
+				break;
+			}
+		}
+		if ( objectIsTwoDimensional ) {
+			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color } ) );
+			mId++;
+			return ( mId - 1 );
+		}
+	}
+	return 0;
 }
 
-template<typename Number>
-unsigned Plotter<Number>::addObject(const std::vector<std::vector<Point < Number>>
+template <typename Number>
+unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>
 
->& _points ) {
-for (
-const auto &part
-: _points ) {
-addObject( part );
---
-mId;
-}
+													   >& _points ) {
+	for (
+		  const auto& part : _points ) {
+		addObject( part );
+		--mId;
+	}
 	mId++;
 	return mId - 1;
 }
@@ -294,19 +278,21 @@ void Plotter<Number>::writeGnuplot() const {
 		// extend ranges
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = carl::toDouble( ( carl::toDouble( max( d ) ) - carl::toDouble( min( d ) ) ) * 0.1 );
-			if ( rangeExt != 0 ) {
+			double rangeExt = carl::toDouble( ( carl::toDouble( max( d ) ) - carl::toDouble( min( d ) ) ) * 0.05 );
+			if ( rangeExt > 0.00001 ) {
 				ranges[d] = carl::Interval<double>( carl::toDouble( min( d ) ) - rangeExt, carl::toDouble( max( d ) ) + rangeExt );
+				std::cout << "Set rangeExt to " << rangeExt << " and get new bounds " << ranges[d] << " for dimension " << d << std::endl;
 			} else {
-				rangeExt = carl::toDouble( carl::toDouble( min( d ) ) * 0.1 );
+				rangeExt = carl::toDouble( carl::toDouble( min( d ) ) * 0.05 );
 				double leftBound = carl::toDouble( min( d ) ) - rangeExt;
 				double rightBound = carl::toDouble( max( d ) ) + rangeExt;
 				// if both bounds are zero, add a slight margin left and right so range is not empty
-				if ( leftBound == 0 && rightBound == 0 ) {
-					leftBound -= 0.1;
-					rightBound += 0.1;
+				if ( leftBound == rightBound == 0 ) {
+					leftBound -= 0.01;
+					rightBound += 0.01;
 				}
 				ranges[d] = carl::Interval<double>( leftBound, rightBound );
+				std::cout << "Update rangeExt to " << rangeExt << " and get new bounds " << ranges[d] << " for dimension " << d << std::endl;
 			}
 		}
 

@@ -1,5 +1,5 @@
 
-find_package(Graphviz)
+find_package(Graphviz QUIET)
 
 if (${GRAPHVIZ_FOUND})
     set(HYPRO_HAS_GRAPHVIZ ON PARENT_SCOPE)
@@ -27,5 +27,5 @@ if (${GRAPHVIZ_FOUND})
             )
 
     list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${GRAPHVIZ_INCLUDE_DIRS})
-
+    message(STATUS "Found Graphviz, enable plotting of ReachTrees from HyPro")
 endif ()

@@ -10,6 +10,7 @@
 #cmakedefine SUPPORT_MPFR
 #cmakedefine COMPARE_CDD
 #cmakedefine COMPARE_POLYMAKE
+#cmakedefine GNUPLOT_FOUND
 #cmakedefine HYPRO_USE_CLP
 #cmakedefine HYPRO_USE_GLPK
 #cmakedefine HYPRO_GSL_INTEGRATION

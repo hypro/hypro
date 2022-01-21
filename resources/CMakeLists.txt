@@ -201,4 +201,11 @@ if (HYPRO_HAS_GRAPHVIZ)
     set(HYPRO_HAS_GRAPHVIZ ${HYPRO_HAS_GRAPHVIZ} PARENT_SCOPE)
 endif ()
 
+# check whether gnuplot is present - allows direct usage during plotting
+find_package(Gnuplot QUIET)
+if (GNUPLOT_FOUND)
+    message(STATUS "Found Gnuplot, Plotter allows direkt usage of gnuplot from HyPro")
+    set(GNUPLOT_FOUND TRUE PARENT_SCOPE)
+endif ()
+
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)
