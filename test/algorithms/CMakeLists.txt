@@ -2,25 +2,25 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     # reduce compiler optimization for tests
     set(algorithm_test_sources
-            #FacetEnumerationTest.cpp
-            #ForwardReachabilityTest.cpp
-            #MinkowskiSumTest.cpp
-            #SumPerformanceTest.cpp
-            # rahsTwoTankTest.cpp
+            FacetEnumerationTest.cpp
+            ForwardReachabilityTest.cpp
+            MinkowskiSumTest.cpp
+            SumPerformanceTest.cpp
+            rahsTwoTankTest.cpp
             ReachabilityAnalysisTest.cpp
-           # FourierMotzkinQETest.cpp
-            #VertexEnumerationTest.cpp
-#            UtilityTest.cpp
- #           QuickhullTest.cpp
-  #          QuickIntersectionTest.cpp
-   #         RectangularReachabilityTest.cpp
-    #        SingularReachabilityTest.cpp
-      #      SetMinusReachabilityAnalysisTest.cpp
-     #       TimeEvolutionTest.cpp
-            #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
-            #FirstSegmentHandlersTest.cpp #BROKEN
-          #  UrgencyReachabilityTest.cpp
-           # DecompositionalReachabilityTest.cpp
+            FourierMotzkinQETest.cpp
+            VertexEnumerationTest.cpp
+            UtilityTest.cpp
+            QuickhullTest.cpp
+            QuickIntersectionTest.cpp
+            RectangularReachabilityTest.cpp
+            SingularReachabilityTest.cpp
+            SetMinusReachabilityAnalysisTest.cpp
+            TimeEvolutionTest.cpp
+            TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
+            FirstSegmentHandlersTest.cpp #BROKEN
+            UrgencyReachabilityTest.cpp
+            DecompositionalReachabilityTest.cpp
             )
 
     SET_SOURCE_FILES_PROPERTIES(${algorithm_test_sources} PROPERTIES COMPILE_FLAGS -O0)

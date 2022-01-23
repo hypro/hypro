@@ -2,13 +2,13 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     # reduce compiler optimization for tests
     set(core_test_sources
-          #  EigenAdaptionsTest.cpp
-            #ifdef LOGGING_HYPRO
-            #LoggerTest.cpp
+            EigenAdaptionsTest.cpp
+            ifdef LOGGING_HYPRO
+            LoggerTest.cpp
             #endif
-          #  OptimizerTest.cpp
-           # PlotterTest.cpp
-            #ReachTreePlotterTest.cpp
+            OptimizerTest.cpp
+            PlotterTest.cpp
+            ReachTreePlotterTest.cpp
             UtilityTest.cpp
             )
 
