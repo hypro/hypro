@@ -2,14 +2,14 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     # reduce compiler optimization for tests
     set(algorithm_test_sources
-            FacetEnumerationTest.cpp
-            ForwardReachabilityTest.cpp
-            MinkowskiSumTest.cpp
-            SumPerformanceTest.cpp
-            rahsTwoTankTest.cpp
+            #FacetEnumerationTest.cpp
+            #ForwardReachabilityTest.cpp
+            #MinkowskiSumTest.cpp
+            #SumPerformanceTest.cpp
+            # rahsTwoTankTest.cpp
             ReachabilityAnalysisTest.cpp
             FourierMotzkinQETest.cpp
-            VertexEnumerationTest.cpp
+            #VertexEnumerationTest.cpp
             UtilityTest.cpp
             QuickhullTest.cpp
             QuickIntersectionTest.cpp
@@ -17,8 +17,8 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             SingularReachabilityTest.cpp
             SetMinusReachabilityAnalysisTest.cpp
             TimeEvolutionTest.cpp
-            TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
-            FirstSegmentHandlersTest.cpp #BROKEN
+            #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
+            #FirstSegmentHandlersTest.cpp #BROKEN
             UrgencyReachabilityTest.cpp
             DecompositionalReachabilityTest.cpp
             )
