@@ -281,7 +281,6 @@ void Plotter<Number>::writeGnuplot() const {
 			double rangeExt = carl::toDouble( ( carl::toDouble( max( d ) ) - carl::toDouble( min( d ) ) ) * 0.05 );
 			if ( rangeExt > 0.00001 ) {
 				ranges[d] = carl::Interval<double>( carl::toDouble( min( d ) ) - rangeExt, carl::toDouble( max( d ) ) + rangeExt );
-				std::cout << "Set rangeExt to " << rangeExt << " and get new bounds " << ranges[d] << " for dimension " << d << std::endl;
 			} else {
 				rangeExt = carl::toDouble( carl::toDouble( min( d ) ) * 0.05 );
 				double leftBound = carl::toDouble( min( d ) ) - rangeExt;
@@ -292,7 +291,6 @@ void Plotter<Number>::writeGnuplot() const {
 					rightBound += 0.01;
 				}
 				ranges[d] = carl::Interval<double>( leftBound, rightBound );
-				std::cout << "Update rangeExt to " << rangeExt << " and get new bounds " << ranges[d] << " for dimension " << d << std::endl;
 			}
 		}
 
