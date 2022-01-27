@@ -41,16 +41,22 @@ void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<dou
     }
 }
 
-    template<typename R>
-    void addPathChronologously(const hypro::ReachTreeNode<R> *node, hypro::Plotter<typename R::NumberType> &plt) {
-        if (node != nullptr) {
-            // recursive call to keep order
-            addPathChronologously(node->getParent(), plt);
-            // add segments of the current node
-            for (const auto &seg: node->getFlowpipe()) {
-                plt.addObject(seg.projectOn({0, 1}).vertices());
-            }
-        }
+template <typename R>
+void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<typename R::NumberType>& plt, int numberNodes = -1, std::size_t skip = 0 ) {
+	if ( node != nullptr && numberNodes != 0 ) {
+		// recursive call to keep order
+		addPathChronologously( node->getParent(), plt, --numberNodes );
+		// add segments of the current node
+		std::size_t skipcount = 0;
+		for ( const auto& seg : node->getFlowpipe() ) {
+			if ( skipcount == 0 ) {
+				plt.addObject( seg.projectOn( { 0, 1 } ).vertices(), hypro::plotting::colors[node->getDepth() % 10] );
+				skipcount = skip;
+			} else {
+				--skipcount;
+			}
+		}
+	}
     }
 
     template<class Representation>
@@ -175,27 +181,32 @@ void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<dou
             plt.plot2d(hypro::PLOTTYPE::pdf);
         }
 		if ( shortest_cycle ) {
-            std::cout << "Shortest cyclic, unfinished path (length " << shortest_cycle.value().elements.size() << "): " << shortest_cycle.value() << std::endl;
-            std::cout << "Initial set of the last node (@" << shortest_cycle_node << "): " << shortest_cycle_node->getInitialSet() << std::endl;
-            auto[containment, segment] = intersect(shortest_cycle_node->getInitialSet(), shortest_cycle_node->getLocation()->getInvariant());
-            std::cout << "Initial set is in the invariant: " << containment << ", resulting set: " << segment << std::endl;
-            std::cout << "Node depth: " << shortest_cycle_node->getDepth() << std::endl;
-            std::cout << "FLAGS: fixed-point: " << (shortest_cycle_node->hasFixedPoint() == TRIBOOL::TRUE) << ", is on Zeno-cycle: " << shortest_cycle_node->isOnZenoCycle() << ", has timelock: " <<
-                      shortest_cycle_node->hasTimelock() << ", bad states visited: " << shortest_cycle_node->intersectedUnsafeRegion() << std::endl;
-            std::cout << "Flowpipe of the last node:\n";
-            for (const auto &seg: shortest_cycle_node->getFlowpipe()) {
-                std::cout << seg << "\n";
-            }
-            std::cout << std::endl;
-            plt.clear();
-            plt.rSettings().overwriteFiles = true;
-            plt.rSettings().cummulative = true;
-            plt.setFilename("shortest_cyclic_path");
-            addPathChronologously(shortest_cycle_node, plt);
-            plt.plot2d(hypro::PLOTTYPE::pdf);
-            plt.plot2d(hypro::PLOTTYPE::gen);
-        }
-        if (shortest_timelock) {
+			std::cout << "Shortest cyclic, unfinished path (length " << shortest_cycle.value().elements.size() << "): " << shortest_cycle.value() << std::endl;
+			std::cout << "Initial set of the last node (@" << shortest_cycle_node << "): " << shortest_cycle_node->getInitialSet() << std::endl;
+			auto [containment, segment] = intersect( shortest_cycle_node->getInitialSet(), shortest_cycle_node->getLocation()->getInvariant() );
+			std::cout << "Initial set is in the invariant: " << containment << ", resulting set: " << segment << std::endl;
+			std::cout << "Node depth: " << shortest_cycle_node->getDepth() << std::endl;
+			std::cout << "FLAGS: fixed-point: " << ( shortest_cycle_node->hasFixedPoint() == TRIBOOL::TRUE ) << ", is on Zeno-cycle: " << shortest_cycle_node->isOnZenoCycle() << ", has timelock: " << shortest_cycle_node->hasTimelock() << ", bad states visited: " << shortest_cycle_node->intersectedUnsafeRegion() << std::endl;
+			std::cout << "Flowpipe of the first node:\n";
+			auto root = shortest_cycle_node;
+			while ( root->getParent() != nullptr ) {
+				root = root->getParent();
+			}
+			for ( const auto& seg : root->getFlowpipe() ) {
+				std::cout << seg << "\n";
+			}
+			std::cout << "Flowpipe of the last node:\n";
+
+			std::cout << std::endl;
+			plt.clear();
+			plt.rSettings().overwriteFiles = true;
+			plt.rSettings().cummulative = true;
+			plt.setFilename( "shortest_cyclic_path" );
+			addPathChronologously( shortest_cycle_node, plt );
+			plt.plot2d( hypro::PLOTTYPE::pdf );
+			plt.plot2d( hypro::PLOTTYPE::gen );
+		}
+		if (shortest_timelock) {
             std::cout << "Shortest timelock path (length " << shortest_timelock.value().elements.size() << "): " << shortest_timelock.value() << std::endl;
             plt.clear();
             plt.rSettings().overwriteFiles = true;
@@ -283,26 +294,49 @@ void plotRecursive( const hypro::Hyperoctree<double>& octree, hypro::Plotter<dou
 	std::cout << "Start plotting, " << std::to_string( last_paths.size() ) << " paths." << std::endl;
 	std::size_t path_count{ 0 };
 	for ( auto [path, leaf] : last_paths ) {
-        // TRACE( channel, path );
-        plt.clear();
-        plt.rSettings().overwriteFiles = true;
-        plt.rSettings().cummulative = false;
-        plt.setFilename("unfinished_" + std::to_string(maxJumps) + "_jumps_" + std::to_string(path_count));
-        std::ofstream filestream;
-        filestream.open("unfinished_" + std::to_string(maxJumps) + "_jumps_" + std::to_string(path_count) + ".txt");
-        filestream << path << std::endl;
-        filestream.close();
-        addPathChronologously(leaf, plt);
-        plt.plot2d(hypro::PLOTTYPE::png);
-        //std::cout << "Plotted path " << std::to_string( path_count ) << std::endl;
-        ++path_count;
-    }
+		// TRACE( channel, path );
+		plt.clear();
+		plt.rSettings().overwriteFiles = true;
+		plt.rSettings().cummulative = true;
+		plt.setFilename( "unfinished_" + std::to_string( maxJumps ) + "_jumps_" + std::to_string( path_count ) );
+		std::ofstream filestream;
+		filestream.open( "unfinished_" + std::to_string( maxJumps ) + "_jumps_" + std::to_string( path_count ) + ".txt" );
+		filestream << path << std::endl;
+		filestream.close();
+		addPathChronologously( leaf, plt, 4 );
+		plt.plot2d( hypro::PLOTTYPE::pdf, true );
+		// std::cout << "Plotted path " << std::to_string( path_count ) << std::endl;
+		++path_count;
+	}
+	path_count = 0;
+	for ( auto [path, leaf] : last_paths ) {
+		// TRACE( channel, path );
+		plt.clear();
+		plt.rSettings().overwriteFiles = true;
+		plt.rSettings().cummulative = true;
+		plt.setFilename( "unfinished_first4_" + std::to_string( maxJumps ) + "_jumps_" + std::to_string( path_count ) );
+		while ( leaf->getDepth() != 3 ) {
+			leaf = leaf->getParent();
+		}
+		addPathChronologously( leaf, plt );
+		plt.plot2d( hypro::PLOTTYPE::pdf, true );
+		// std::cout << "Plotted path " << std::to_string( path_count ) << std::endl;
+		++path_count;
+	}
+	std::cout << "Plot 1st path cummulative, complete." << std::endl;
+	plt.clear();
+	plt.rSettings().overwriteFiles = true;
+	plt.rSettings().cummulative = true;
+	plt.setFilename( "unfinished_complete_" + std::to_string( maxJumps ) + "_jumps_0" );
+	addPathChronologously( last_paths.front().second, plt, -1, 10 );
+	plt.plot2d( hypro::PLOTTYPE::pdf, true );
+
 	PRINT_STATS()
-}
-// Register the function as a benchmark
+	}
+	// Register the function as a benchmark
 // BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::SupportFunction<double> )->DenseRange(1, 3, 1);
 BENCHMARK_TEMPLATE( Simplex_Watertanks_Reachability, hypro::Box<double> )
-        ->DenseRange(100, 100, 1)
-	  ->Unit( ::benchmark::kSecond );
+		  ->DenseRange( 200, 200, 1 )
+		  ->Unit( ::benchmark::kSecond );
 
 }  // namespace hypro::benchmark
