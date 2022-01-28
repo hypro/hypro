@@ -5,6 +5,7 @@
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/ReachTreev2.h>
 #include <hypro/datastructures/reachability/ReachTreev2Util.h>
+#include <hypro/datastructures/reachability/ReachTreev2Heuristics.h>
 #include <hypro/types.h>
 
 namespace test::detail {
@@ -92,4 +93,41 @@ TEST( ReachTreeTest, Paths ) {
 	std::stringstream ss;
 	ss << path;
 	EXPECT_EQ( "l0, [0, 1] -> l1", ss.str() );
+}
+
+TEST( ReachTreeTest, CycleHeuristics ) {
+	using Node = hypro::ReachTreeNode<test::detail::Representation<int>>;
+	using Loc = hypro::Location<int>;
+	std::vector<Loc*> locations;
+	Loc l0{ "l0" };
+	Loc l1{ "l1" };
+	Loc l2{ "l2" };
+	locations.push_back( &l0 );
+	locations.push_back( &l1 );
+	locations.push_back( &l2 );
+
+	// root node
+	hypro::ReachTreeNode<test::detail::Representation<int>> root{
+		  locations[0], { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 } };
+
+	// transition
+	hypro::Transition<int> trans0{ locations[0], locations[1] };
+	hypro::Transition<int> trans1{ locations[0], locations[2] };
+	hypro::Transition<int> trans2{ locations[1], locations[0] };
+	hypro::Transition<int> trans3{ locations[2], locations[0] };
+	hypro::Transition<int> trans4{ locations[2], locations[1] };
+
+	// add children cycling between 0 and 1 and visiting 2 once (and back), the content does not matter
+	auto* child = &root.addChild( { 2 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans1 );
+	child = &child->addChild( {3}, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans3);
+	auto leaf1 = &child->addChild( {3}, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans0);
+	// add children 0,1,2,1
+	child = &root.addChild( { 2 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans1 );
+	child = &child->addChild( {3}, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans4);
+	auto leaf2 = &child->addChild( {3}, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans2);
+	auto comp = hypro::LeastLocationCycleCount<int>{};
+	EXPECT_TRUE(  comp(leaf2, leaf1) );
+	EXPECT_TRUE(  comp(leaf1, leaf2) );
+	EXPECT_FALSE( comp(leaf1, leaf1) );
+	EXPECT_FALSE( comp(leaf2, leaf2) );
 }

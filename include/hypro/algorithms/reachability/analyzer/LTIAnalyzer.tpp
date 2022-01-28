@@ -36,9 +36,8 @@ auto LTIAnalyzer<State, multithreading>::run() -> LTIResult {
 						} );
 						{
 						}
-						currentNode = mWorkQueue.back();
+						currentNode = getNodeFromQueue();
 						DEBUG( "hypro.reachability", "Processing node @" << currentNode << " with path " << currentNode->getPath() );
-						mWorkQueue.pop_back();
 					}
 
 					auto result = processNode( worker, currentNode, transformationCache );
@@ -56,8 +55,7 @@ auto LTIAnalyzer<State, multithreading>::run() -> LTIResult {
 			  mFixedParameters.localTimeHorizon,
 			  transformationCache };
 		while ( !mWorkQueue.empty() ) {
-			auto* currentNode = mWorkQueue.back();
-			mWorkQueue.pop_back();
+			auto* currentNode = getNodeFromQueue();
 			auto result = processNode( worker, currentNode, transformationCache );
 			if ( result.isFailure() ) {
 				return result;

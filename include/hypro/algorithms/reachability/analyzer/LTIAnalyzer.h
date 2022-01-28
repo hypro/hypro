@@ -11,6 +11,7 @@
 #include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../datastructures/reachability/Flowpipe.h"
 #include "../../../datastructures/reachability/ReachTreev2.h"
+#include "../../../datastructures/reachability/ReachTreev2Heuristics.h"
 #include "../../../datastructures/reachability/TreeTraversal.h"
 #include "../../../types.h"
 #include "../fixedPointDetection.h"
@@ -18,9 +19,9 @@
 #include "./ReturnTypes.h"
 
 #include <atomic>
+#include <condition_variable>
 #include <mutex>
 #include <queue>
-#include <condition_variable>
 
 namespace hypro {
 
@@ -43,7 +44,7 @@ class LTIAnalyzer {
 		, mParameters( parameters )
 		, mRoots( roots ) {
 		for ( auto& root : roots ) {
-			mWorkQueue.push_front( &root );
+			addToQueue( &root );
 		}
 	}
 
@@ -59,12 +60,18 @@ class LTIAnalyzer {
 		if ( multithreading == MULTITHREADING::ENABLED ) {
 			{
 				std::unique_lock<std::mutex> lock( mQueueMutex );
-				mWorkQueue.push_front( node );
+				mWorkQueue.push( node );
 			}
 			mQueueNonEmpty.notify_one();
 		} else {
-			mWorkQueue.push_front( node );
+			mWorkQueue.push( node );
 		}
+	}
+
+	ReachTreeNode<State>* getNodeFromQueue() {
+		auto res = mWorkQueue.top();
+		mWorkQueue.pop();
+		return res;
 	}
 
 	void shutdown() {
@@ -90,19 +97,19 @@ class LTIAnalyzer {
 	bool detectFixedPoint( ReachTreeNode<State>& node );
 
   protected:
-	std::deque<ReachTreeNode<State>*> mWorkQueue;			///< queue which holds tasks for time successor computation
-	HybridAutomaton<Number> const* mHybridAutomaton;		///< pointer to the hybrid automaton
-	FixedAnalysisParameters mFixedParameters;				///< parameters which are fixed for the analysis
-	AnalysisParameters mParameters;							///< parameters which are specific for this call (relevant for CEGAR-refinement)
-	std::vector<ReachTreeNode<State>>& mRoots;				///< reference to the search tree, required for fixed-point detection
-	int mNumThreads = std::thread::hardware_concurrency();	///< number of used threads
-	std::vector<std::thread> mThreads;						///< vector of threads
-	std::vector<bool> mIdle;								///< vector of idle threads
-	std::mutex mQueueMutex;									///< mutex to access the queue
-	std::mutex mThreadPoolMutex;							///< mutex for the thread pool itself
-	std::condition_variable mQueueNonEmpty;					///< notification variable to indicate the queue is nonempty
-	std::atomic<bool> mTerminate = false;					///< indicates termination request
-	std::atomic<bool> mStopped = false;						///< indicator, whether shutdown was already invoked
+	std::priority_queue<ReachTreeNode<State>*, std::vector<ReachTreeNode<State>*>, DepthFirst<State>> mWorkQueue;  ///< queue which holds tasks for time successor computation
+	HybridAutomaton<Number> const* mHybridAutomaton;						   ///< pointer to the hybrid automaton
+	FixedAnalysisParameters mFixedParameters;								   ///< parameters which are fixed for the analysis
+	AnalysisParameters mParameters;											   ///< parameters which are specific for this call (relevant for CEGAR-refinement)
+	std::vector<ReachTreeNode<State>>& mRoots;								   ///< reference to the search tree, required for fixed-point detection
+	int mNumThreads = std::thread::hardware_concurrency();					   ///< number of used threads
+	std::vector<std::thread> mThreads;										   ///< vector of threads
+	std::vector<bool> mIdle;												   ///< vector of idle threads
+	std::mutex mQueueMutex;													   ///< mutex to access the queue
+	std::mutex mThreadPoolMutex;											   ///< mutex for the thread pool itself
+	std::condition_variable mQueueNonEmpty;									   ///< notification variable to indicate the queue is nonempty
+	std::atomic<bool> mTerminate = false;									   ///< indicates termination request
+	std::atomic<bool> mStopped = false;										   ///< indicator, whether shutdown was already invoked
 };
 
 }  // namespace hypro
