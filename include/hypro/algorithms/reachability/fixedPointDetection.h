@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 /*
  * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 09.09.21.
@@ -31,12 +31,13 @@ namespace hypro {
  */
 template <typename Number, typename Converter, typename Settings>
 bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& node, std::vector<ReachTreeNode<BoxT<Number, Converter, Settings>>>& roots, bool use_partial_coverage = false, std::size_t first_segments_to_test = 0 ) {
+	using BoxVector = std::vector<BoxT<Number, Converter, Settings>>;
 	assert( !node.getInitialBoundingBox() && "The bounding box should not have been set to ensure the node is not compared to itself." );
 #ifdef HYPRO_STATISTICS
 	START_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif
 
-	std::vector<BoxT<Number, Converter, Settings>> initialBoxes{ node.getInitialSet() };
+	BoxVector initialBoxes{ node.getInitialSet() };
 	for ( auto& root : roots ) {
 		for ( ReachTreeNode<BoxT<Number, Converter, Settings>>& treeNode : preorder( root ) ) {
 			// if the location matches and treenode is not the passed node (the passed node has no bounding box yet)
@@ -44,7 +45,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 				// use expensive coverage check
 				if ( use_partial_coverage ) {
 					// from all currently held remaining initial boxes subtract the current initial set to check (partial) coverage
-					std::vector<BoxT<Number, Converter, Settings>> tmp;
+					BoxVector tmp;
 					for ( const auto& box : initialBoxes ) {
 						auto remaining_boxes = box.setMinus2( treeNode.getInitialSet() );
 						tmp.insert( std::end( tmp ), std::begin( remaining_boxes ), std::end( remaining_boxes ) );
@@ -59,9 +60,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 							}
 						}
 					}
-					// the remaining boxes are the ones used in the next iteration
-					swap( tmp, initialBoxes );
-					if ( initialBoxes.empty() ) {
+					if ( tmp.empty() ) {
 #ifdef HYPRO_STATISTICS
 						STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 						COUNT( "FP-by-coverage" );
@@ -69,6 +68,8 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 						node.setFixedPoint( true, &treeNode );
 						return true;
 					}
+					// the remaining boxes are the ones used in the next iteration
+					swap( tmp, initialBoxes );
 				} else {
 					assert( treeNode.getInitialBoundingBox() );
 					// use standard check
@@ -81,14 +82,11 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 						node.setFixedPoint( true, &treeNode );
 						return true;
 					} else if ( first_segments_to_test > 0 ) {
-						std::size_t set_index = 0;
-						while ( set_index < first_segments_to_test && set_index < treeNode.getFlowpipe().size() ) {
-							if ( treeNode.getFlowpipe()[set_index].contains( initialBoxes.front() ) ) {
-								DEBUG( "hypro.reachability", "Found fixed point for location " << node.getLocation()->getName() << ". Set " << initialBoxes.front() << " is contained in segment " << set_index << ": " << treeNode.getFlowpipe()[set_index] );
-								node.setFixedPoint();
-								return true;
-							}
-							++set_index;
+						// check if the initial set can be covered by the given number of segments from the flowpipe of the current node
+						if ( is_covered( node.getInitialSet(), BoxVector( std::begin( treeNode.getFlowpipe() ), std::next( std::begin( treeNode.getFlowpipe() ), first_segments_to_test ) ) ) ) {
+							DEBUG( "hypro.reachability", "Found fixed point for location " << node.getLocation()->getName() << ". Achieved coverage by the first " << first_segments_to_test << " segments." );
+							node.setFixedPoint();
+							return true;
 						}
 					}
 				}
@@ -112,7 +110,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
  * @return True, if a fixed point has been detected, false otherwise
  */
 template <typename Set>
-bool detectJumpFixedPoint( ReachTreeNode<Set>& node, std::vector<ReachTreeNode<Set>>& roots, bool ) {
+bool detectJumpFixedPoint( ReachTreeNode<Set>& node, std::vector<ReachTreeNode<Set>>& roots, bool, std::size_t ) {
 	assert( !node.getInitialBoundingBox() && "The bounding box should not have been set to ensure the node is not compared to itself." );
 	using Number = typename Set::NumberType;
 #ifdef HYPRO_STATISTICS
@@ -269,7 +267,6 @@ bool detectContinuousFixedPoints( ReachTreeNode<Set>& currentNode, const std::ve
 					}
 				}
 				if ( is_covered( currentNode.getFlowpipe()[set_index].projectOn( nonDiscreteDimensions ), coverer ) ) {
-					std::cout << "Found fixed point in the first " << numberSets << " segments of some other node via coverage." << std::endl;
 					currentNode.setFixedPoint();
 					return true;
 				}
@@ -277,7 +274,6 @@ bool detectContinuousFixedPoints( ReachTreeNode<Set>& currentNode, const std::ve
 				std::size_t other_set_index = 0;
 				while ( other_set_index < numberSets && other_set_index < other_node.getFlowpipe().size() ) {
 					if ( other_node.getFlowpipe()[other_set_index].projectOn( nonDiscreteDimensions ).contains( currentNode.getFlowpipe()[set_index].projectOn( nonDiscreteDimensions ) ) ) {
-						std::cout << "Found fixed point in the first " << numberSets << " segments of some other node via containment." << std::endl;
 						currentNode.setFixedPoint();
 						return true;
 					}

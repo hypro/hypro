@@ -75,9 +75,10 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 	auto settings = hypro::convert( reachSettings );
     settings.rStrategy().front().detectJumpFixedPoints = true;
     settings.rStrategy().front().detectFixedPointsByCoverage = true;
-    settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
-    settings.rFixedParameters().localTimeHorizon = 20;
-    settings.rFixedParameters().jumpDepth = maxJumps;
+	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
+	settings.rStrategy().front().numberSetsForContinuousCoverage = 2;
+	settings.rFixedParameters().localTimeHorizon = 20;
+	settings.rFixedParameters().jumpDepth = maxJumps;
     settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
     std::vector<std::pair<const hypro::Path<Number>, hypro::ReachTreeNode<Representation> const *>> last_paths{};
 
@@ -101,10 +102,10 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
         // This code gets timed
         last_paths.clear();
         roots = hypro::makeRoots<Representation>(automaton);
-        auto reacher = hypro::reachability::Reach<Representation>(automaton, settings.fixedParameters(),
-                                                                  settings.strategy().front(), roots);
-        auto result = reacher.computeForwardReachability();
-        INFO("hypro.casestudies", "System is safe: " << result);
+		auto reacher = hypro::reachability::Reach<Representation, LeastLocationCycleCount<Representation>>( automaton, settings.fixedParameters(),
+																											settings.strategy().front(), roots );
+		auto result = reacher.computeForwardReachability();
+		INFO("hypro.casestudies", "System is safe: " << result);
 
         // statistics
         auto finished_leaves = std::size_t(0);

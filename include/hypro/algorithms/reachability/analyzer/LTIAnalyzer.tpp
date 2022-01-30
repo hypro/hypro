@@ -142,7 +142,7 @@ auto LTIAnalyzer<State, Heuristics, multithreading>::processNode( LTIWorker<Stat
 			auto boundingBox = std::vector<carl::Interval<Number>>{};
 			if ( mParameters.detectJumpFixedPoints ) {
 				boundingBox = Converter<Number>::toBox( childNode.getInitialSet() ).intervals();
-				fixedPointReached = detectJumpFixedPoint( childNode, mRoots, mParameters.detectFixedPointsByCoverage );
+				fixedPointReached = detectJumpFixedPoint( childNode, mRoots, mParameters.detectFixedPointsByCoverage, mParameters.numberSetsForContinuousCoverage );
 			}
 
 			// set bounding box to speed up search in case the option is enabled.
