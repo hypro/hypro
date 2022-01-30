@@ -41,13 +41,13 @@ namespace reachability {
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Representation, MULTITHREADING multithreading = MULTITHREADING::DISABLED>
+template <typename Representation, typename SearchHeuristic = DepthFirst<Representation>, MULTITHREADING multithreading = MULTITHREADING::DISABLED>
 class Reach {
   public:
 	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
 
   protected:
-	LTIAnalyzer<Representation> mAnalyzer;
+	LTIAnalyzer<Representation, SearchHeuristic, multithreading> mAnalyzer;
 
   public:
 	/**

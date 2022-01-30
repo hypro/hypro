@@ -16,15 +16,15 @@
 
 namespace hypro {
 
-template<typename R>
+template <typename R>
 struct DepthFirst {
-	constexpr bool operator()(const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs) {
+	constexpr bool operator()( const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs ) {
 		auto lhsDepth = lhs->getDepth();
 		auto rhsDepth = rhs->getDepth();
-		if(lhsDepth > rhsDepth) {
+		if ( lhsDepth > rhsDepth ) {
 			return true;
 		}
-		if(lhsDepth < rhsDepth) {
+		if ( lhsDepth < rhsDepth ) {
 			return false;
 		}
 		// use pointer comparison if nothing works
@@ -32,15 +32,15 @@ struct DepthFirst {
 	}
 };
 
-template<typename R>
+template <typename R>
 struct BreadthFirst {
-	constexpr bool operator()(const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs) {
+	constexpr bool operator()( const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs ) {
 		auto lhsDepth = lhs->getDepth();
 		auto rhsDepth = rhs->getDepth();
-		if(lhsDepth < rhsDepth) {
+		if ( lhsDepth < rhsDepth ) {
 			return true;
 		}
-		if(lhsDepth > rhsDepth) {
+		if ( lhsDepth > rhsDepth ) {
 			return false;
 		}
 		// use pointer comparison if nothing works
@@ -48,23 +48,23 @@ struct BreadthFirst {
 	}
 };
 
-template<typename R>
+template <typename R>
 struct LeastLocationCycleCount {
-	std::size_t largestLocationCycle(const ReachTreeNode<R>* in) {
+	std::size_t largestLocationCycle( const ReachTreeNode<R>* in ) {
 		std::map<Location<typename R::NumberType>*, std::size_t> counts;
-		for(const auto& intervalTransitionPair : in->getPath()) {
+		for ( const auto& intervalTransitionPair : in->getPath().elements ) {
 			counts[intervalTransitionPair.second->getSource()] += 1;
 		}
-		return std::max_element(std::begin(counts), std::end(counts), [](const auto &aPair, const auto &bPair){return aPair.second < bPair.second;}).second;
+		return std::max_element( std::begin( counts ), std::end( counts ), []( const auto& aPair, const auto& bPair ) { return aPair.second < bPair.second; } )->second;
 	}
 
-	constexpr bool operator()(const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs) {
-		auto lhsCycles = largestLocationCycle(lhs);
-		auto rhsCycles = largestLocationCycle(rhs);
-		if(lhsCycles < rhsCycles) {
+	constexpr bool operator()( const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs ) {
+		auto lhsCycles = largestLocationCycle( lhs );
+		auto rhsCycles = largestLocationCycle( rhs );
+		if ( lhsCycles < rhsCycles ) {
 			return true;
 		}
-		if(lhsCycles > rhsCycles) {
+		if ( lhsCycles > rhsCycles ) {
 			return false;
 		}
 		// use pointer comparison if nothing works
@@ -72,4 +72,4 @@ struct LeastLocationCycleCount {
 	}
 };
 
-} // namespace hypro
+}  // namespace hypro
