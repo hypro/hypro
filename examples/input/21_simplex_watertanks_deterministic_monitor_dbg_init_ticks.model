@@ -45,7 +45,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 >= 0.12
 
-                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time
+                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -63,7 +63,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -81,7 +81,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7
 
-                x1 <= 0.2   x2 <= 0.2   tick <= cycle_time
+                x1 <= 0.2   x2 <= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -99,7 +99,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 >= 0.12
 
-                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time
+                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -117,7 +117,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -135,7 +135,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1
 
-                x1 <= 0.2   x2 <= 0.2   tick <= cycle_time
+                x1 <= 0.2   x2 <= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -153,7 +153,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 >= 0.12
 
-                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time
+                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -171,7 +171,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -189,7 +189,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7
 
-                x1 >= 0.2   x2 >= 0.2   tick <= cycle_time
+                x1 >= 0.2   x2 >= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -207,7 +207,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 >= 0.12
 
-                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time
+                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -225,7 +225,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -243,7 +243,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1
 
-                x1 >= 0.2   x2 >= 0.2   tick <= cycle_time
+                x1 >= 0.2   x2 >= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -261,7 +261,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 >= 0.12
 
-                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time
+                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -279,7 +279,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -297,7 +297,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7
 
-                x1 <= 0.2   x2 >= 0.2   tick <= cycle_time
+                x1 <= 0.2   x2 >= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -315,7 +315,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 >= 0.12
 
-                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time
+                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -333,7 +333,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -351,7 +351,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1
 
-                x1 <= 0.2   x2 >= 0.2   tick <= cycle_time
+                x1 <= 0.2   x2 >= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -369,7 +369,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 >= 0.12
 
-                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time
+                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -387,7 +387,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -405,7 +405,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7
 
-                x1 >= 0.2   x2 <= 0.2   tick <= cycle_time
+                x1 >= 0.2   x2 <= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -423,7 +423,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 >= 0.12
 
-                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time
+                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -441,7 +441,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -459,7 +459,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1
 
-                x1 >= 0.2   x2 <= 0.2   tick <= cycle_time
+                x1 >= 0.2   x2 <= 0.2   tick <= cycle_time tick >= 0
             }
         }
     }
