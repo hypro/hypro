@@ -190,14 +190,19 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 			std::cout << "FLAGS: fixed-point: " << ( shortest_cycle_node->hasFixedPoint() == TRIBOOL::TRUE ) << ", is on Zeno-cycle: " << shortest_cycle_node->isOnZenoCycle() << ", has timelock: " << shortest_cycle_node->hasTimelock() << ", bad states visited: " << shortest_cycle_node->intersectedUnsafeRegion() << std::endl;
 			std::cout << "Flowpipe of the first node:\n";
 			auto root = shortest_cycle_node;
+			std::vector<Representation> initialSets;
 			while ( root->getParent() != nullptr ) {
+				initialSets.push_back( root->getInitialSet() );
 				root = root->getParent();
 			}
+			std::reverse( std::begin( initialSets ), std::end( initialSets ) );
 			for ( const auto& seg : root->getFlowpipe() ) {
 				std::cout << seg << "\n";
 			}
-			std::cout << "Flowpipe of the last node:\n";
-
+			std::cout << "Initial sets on the path:\n";
+			for ( const auto& seg : initialSets ) {
+				std::cout << seg << "\n";
+			}
 			std::cout << std::endl;
 			plt.clear();
 			plt.rSettings().overwriteFiles = true;
@@ -325,13 +330,14 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 		++path_count;
 	}
 	std::cout << "Plot 1st path cummulative, complete." << std::endl;
-	plt.clear();
-	plt.rSettings().overwriteFiles = true;
-	plt.rSettings().cummulative = true;
-	plt.setFilename( "unfinished_complete_" + std::to_string( maxJumps ) + "_jumps_0" );
-	addPathChronologously( last_paths.front().second, plt, -1, 10 );
-	plt.plot2d( hypro::PLOTTYPE::pdf, true );
-
+	if ( !last_paths.empty() ) {
+		plt.clear();
+		plt.rSettings().overwriteFiles = true;
+		plt.rSettings().cummulative = true;
+		plt.setFilename( "unfinished_complete_" + std::to_string( maxJumps ) + "_jumps_0" );
+		addPathChronologously( last_paths.front().second, plt, -1, 10 );
+		plt.plot2d( hypro::PLOTTYPE::pdf, true );
+	}
 	PRINT_STATS()
 	}
 	// Register the function as a benchmark
