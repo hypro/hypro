@@ -1,0 +1,2299 @@
+# Created by Hyst v1.6
+# Hybrid Automaton in Flow*
+# Converted from file: /home/stefan/tu/projects/21_simplex_architectures/models/watertanks/watertanks_deterministic_monitor.xml
+# Command Line arguments: -tool flowstar "" -debug -output /home/stefan/rwth/repositories/hypro/examples/input/21_simplex_watertanks_deterministic_monitor_small_init.model -input /home/stefan/tu/projects/21_simplex_architectures/models/watertanks/watertanks_deterministic_monitor.xml /home/stefan/tu/projects/21_simplex_architectures/models/watertanks/watertanks_deterministic_small_init.cfg
+
+
+hybrid reachability
+{
+    # Vars
+    state var x1, x2, u, spec_t1, tick
+
+    par {
+        cycle_time = 1.0
+        spec_time = 30.0
+    }
+
+    setting
+    {
+        fixed steps 0.01
+        time 1000
+        remainder estimation 1e-4
+        identity precondition
+        gnuplot octagon x1,x2
+        adaptive orders { min 3, max 8 }
+        cutoff 1e-15
+        precision 53
+        output out
+        max jumps 9999999
+        print on
+    }
+
+    modes
+    {
+        valve_closed_open_init
+        {
+            lti ode
+            {
+                x2' = -0.03649999999999998 * x2
+                x1' = 324.6753 * u
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 >= 0.12
+
+                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time
+            }
+        }
+
+        valve_closed_open_antecedent
+        {
+            lti ode
+            {
+                x2' = -0.03649999999999998 * x2
+                x1' = 324.6753 * u
+                u' = 0.0
+                spec_t1' = 1.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
+
+                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+            }
+        }
+
+        valve_closed_open_bad
+        {
+            lti ode
+            {
+                x2' = -0.03649999999999998 * x2
+                x1' = 324.6753 * u
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7
+
+                x1 <= 0.2   x2 <= 0.2   tick <= cycle_time
+            }
+        }
+
+        valve_closed_closed_init
+        {
+            lti ode
+            {
+                x2' = -0.03649999999999998 * x2
+                x1' = 324.6753 * u
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 >= 0.12
+
+                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time
+            }
+        }
+
+        valve_closed_closed_antecedent
+        {
+            lti ode
+            {
+                x2' = -0.03649999999999998 * x2
+                x1' = 324.6753 * u
+                u' = 0.0
+                spec_t1' = 1.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
+
+                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+            }
+        }
+
+        valve_closed_closed_bad
+        {
+            lti ode
+            {
+                x2' = -0.03649999999999998 * x2
+                x1' = 324.6753 * u
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1
+
+                x1 <= 0.2   x2 <= 0.2   tick <= cycle_time
+            }
+        }
+
+        valve_open1_open_init
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 >= 0.12
+
+                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time
+            }
+        }
+
+        valve_open1_open_antecedent
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 1.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
+
+                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+            }
+        }
+
+        valve_open1_open_bad
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7
+
+                x1 >= 0.2   x2 >= 0.2   tick <= cycle_time
+            }
+        }
+
+        valve_open1_closed_init
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 >= 0.12
+
+                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time
+            }
+        }
+
+        valve_open1_closed_antecedent
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 1.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
+
+                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+            }
+        }
+
+        valve_open1_closed_bad
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1
+
+                x1 >= 0.2   x2 >= 0.2   tick <= cycle_time
+            }
+        }
+
+        valve_open2_open_init
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 >= 0.12
+
+                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time
+            }
+        }
+
+        valve_open2_open_antecedent
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 1.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
+
+                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+            }
+        }
+
+        valve_open2_open_bad
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7
+
+                x1 <= 0.2   x2 >= 0.2   tick <= cycle_time
+            }
+        }
+
+        valve_open2_closed_init
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 >= 0.12
+
+                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time
+            }
+        }
+
+        valve_open2_closed_antecedent
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 1.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
+
+                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+            }
+        }
+
+        valve_open2_closed_bad
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1
+
+                x1 <= 0.2   x2 >= 0.2   tick <= cycle_time
+            }
+        }
+
+        valve_open3_open_init
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 >= 0.12
+
+                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time
+            }
+        }
+
+        valve_open3_open_antecedent
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 1.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
+
+                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+            }
+        }
+
+        valve_open3_open_bad
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7
+
+                x1 >= 0.2   x2 <= 0.2   tick <= cycle_time
+            }
+        }
+
+        valve_open3_closed_init
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 >= 0.12
+
+                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time
+            }
+        }
+
+        valve_open3_closed_antecedent
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 1.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
+
+                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time
+            }
+        }
+
+        valve_open3_closed_bad
+        {
+            lti ode
+            {
+                x1' = -0.17190000000000005 * x1 + 0.1719 * x2 + 324.6753 * u
+                x2' = -0.20840000000000003 * x2 + 0.1719 * x1
+                u' = 0.0
+                spec_t1' = 0.0
+                tick' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1
+
+                x1 >= 0.2   x2 <= 0.2   tick <= cycle_time
+            }
+        }
+    }
+
+    jumps
+    {
+        valve_closed_open_init -> valve_open1_open_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_antecedent -> valve_open1_open_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_bad -> valve_open1_open_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_init -> valve_open1_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_antecedent -> valve_open1_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_bad -> valve_open1_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_init -> valve_open2_open_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_antecedent -> valve_open2_open_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_bad -> valve_open2_open_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_init -> valve_open2_closed_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_antecedent -> valve_open2_closed_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_bad -> valve_open2_closed_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_init -> valve_open3_open_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_antecedent -> valve_open3_open_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_bad -> valve_open3_open_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_init -> valve_open3_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_antecedent -> valve_open3_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_bad -> valve_open3_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_init -> valve_closed_open_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_antecedent -> valve_closed_open_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_bad -> valve_closed_open_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_init -> valve_closed_closed_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_antecedent -> valve_closed_closed_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_bad -> valve_closed_closed_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_init -> valve_open2_open_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_antecedent -> valve_open2_open_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_bad -> valve_open2_open_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_init -> valve_open2_closed_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_antecedent -> valve_open2_closed_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_bad -> valve_open2_closed_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_init -> valve_open3_open_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_antecedent -> valve_open3_open_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_bad -> valve_open3_open_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_init -> valve_open3_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_antecedent -> valve_open3_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_bad -> valve_open3_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_init -> valve_closed_open_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_antecedent -> valve_closed_open_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_bad -> valve_closed_open_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_init -> valve_closed_closed_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_antecedent -> valve_closed_closed_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_bad -> valve_closed_closed_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_init -> valve_open3_open_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_antecedent -> valve_open3_open_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_bad -> valve_open3_open_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_init -> valve_open3_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_antecedent -> valve_open3_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_bad -> valve_open3_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_init -> valve_open1_open_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_antecedent -> valve_open1_open_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_bad -> valve_open1_open_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_init -> valve_open1_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_antecedent -> valve_open1_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_bad -> valve_open1_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 <= 0.2
+
+            x1 >= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_init -> valve_closed_open_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_antecedent -> valve_closed_open_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_bad -> valve_closed_open_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_init -> valve_closed_closed_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_antecedent -> valve_closed_closed_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_bad -> valve_closed_closed_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 <= 0.2
+
+            x1 <= 0.2   x2 <= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_init -> valve_open2_open_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_antecedent -> valve_open2_open_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_bad -> valve_open2_open_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_init -> valve_open2_closed_init
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_antecedent -> valve_open2_closed_antecedent
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_bad -> valve_open2_closed_bad
+        guard
+        {
+            # Original guard: x1 <= 0.2 & x2 >= 0.2
+
+            x1 <= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_init -> valve_open1_open_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_antecedent -> valve_open1_open_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_bad -> valve_open1_open_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_init -> valve_open1_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_antecedent -> valve_open1_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_bad -> valve_open1_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.2 & x2 >= 0.2
+
+            x1 >= 0.2   x2 >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_init -> valve_closed_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_init -> valve_closed_open_init
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_antecedent -> valve_closed_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_antecedent -> valve_closed_open_antecedent
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_bad -> valve_closed_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_bad -> valve_closed_open_bad
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_init -> valve_open1_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_init -> valve_open1_open_init
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_antecedent -> valve_open1_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_antecedent -> valve_open1_open_antecedent
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_bad -> valve_open1_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_bad -> valve_open1_open_bad
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_init -> valve_open2_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_init -> valve_open2_open_init
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_antecedent -> valve_open2_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_antecedent -> valve_open2_open_antecedent
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_bad -> valve_open2_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_bad -> valve_open2_open_bad
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_init -> valve_open3_closed_init
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_init -> valve_open3_open_init
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+
+        valve_open3_open_antecedent -> valve_open3_closed_antecedent
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_antecedent -> valve_open3_open_antecedent
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_bad -> valve_open3_closed_bad
+        guard
+        {
+            # Original guard: x1 >= 0.7
+
+            x1 >= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_bad -> valve_open3_open_bad
+        guard
+        {
+            x1 <= 0.7   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_init -> valve_closed_open_init
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_init -> valve_closed_closed_init
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_antecedent -> valve_closed_open_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_antecedent -> valve_closed_closed_antecedent
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_bad -> valve_closed_open_bad
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_bad -> valve_closed_closed_bad
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_init -> valve_open1_open_init
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_init -> valve_open1_closed_init
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_antecedent -> valve_open1_open_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_antecedent -> valve_open1_closed_antecedent
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_bad -> valve_open1_open_bad
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_bad -> valve_open1_closed_bad
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_init -> valve_open2_open_init
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_init -> valve_open2_closed_init
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_antecedent -> valve_open2_open_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_antecedent -> valve_open2_closed_antecedent
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_bad -> valve_open2_open_bad
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_bad -> valve_open2_closed_bad
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_init -> valve_open3_open_init
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_init -> valve_open3_closed_init
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_antecedent -> valve_open3_open_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_antecedent -> valve_open3_closed_antecedent
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_bad -> valve_open3_open_bad
+        guard
+        {
+            # Original guard: x2 <= 0.1
+
+            x2 <= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0002
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_bad -> valve_open3_closed_bad
+        guard
+        {
+            x2 >= 0.1   tick >= cycle_time
+        }
+        reset
+        {
+            u' := 0.0
+            tick' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_init -> valve_closed_open_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.12
+
+            x2 <= 0.12
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_init -> valve_closed_closed_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.12
+
+            x2 <= 0.12
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_init -> valve_open1_open_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.12
+
+            x2 <= 0.12
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_init -> valve_open1_closed_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.12
+
+            x2 <= 0.12
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_init -> valve_open2_open_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.12
+
+            x2 <= 0.12
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_init -> valve_open2_closed_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.12
+
+            x2 <= 0.12
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_init -> valve_open3_open_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.12
+
+            x2 <= 0.12
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_init -> valve_open3_closed_antecedent
+        guard
+        {
+            # Original guard: x2 <= 0.12
+
+            x2 <= 0.12
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_antecedent -> valve_closed_open_bad
+        guard
+        {
+            # Original guard: spec_t1 >= spec_time
+
+            spec_t1 >= spec_time
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_antecedent -> valve_closed_closed_bad
+        guard
+        {
+            # Original guard: spec_t1 >= spec_time
+
+            spec_t1 >= spec_time
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_antecedent -> valve_open1_open_bad
+        guard
+        {
+            # Original guard: spec_t1 >= spec_time
+
+            spec_t1 >= spec_time
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_antecedent -> valve_open1_closed_bad
+        guard
+        {
+            # Original guard: spec_t1 >= spec_time
+
+            spec_t1 >= spec_time
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_antecedent -> valve_open2_open_bad
+        guard
+        {
+            # Original guard: spec_t1 >= spec_time
+
+            spec_t1 >= spec_time
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_antecedent -> valve_open2_closed_bad
+        guard
+        {
+            # Original guard: spec_t1 >= spec_time
+
+            spec_t1 >= spec_time
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_antecedent -> valve_open3_open_bad
+        guard
+        {
+            # Original guard: spec_t1 >= spec_time
+
+            spec_t1 >= spec_time
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_antecedent -> valve_open3_closed_bad
+        guard
+        {
+            # Original guard: spec_t1 >= spec_time
+
+            spec_t1 >= spec_time
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_open_antecedent -> valve_closed_open_init
+        guard
+        {
+            # Original guard: x2 >= 0.3
+
+            x2 >= 0.3
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_closed_closed_antecedent -> valve_closed_closed_init
+        guard
+        {
+            # Original guard: x2 >= 0.3
+
+            x2 >= 0.3
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_open_antecedent -> valve_open1_open_init
+        guard
+        {
+            # Original guard: x2 >= 0.3
+
+            x2 >= 0.3
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open1_closed_antecedent -> valve_open1_closed_init
+        guard
+        {
+            # Original guard: x2 >= 0.3
+
+            x2 >= 0.3
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_open_antecedent -> valve_open2_open_init
+        guard
+        {
+            # Original guard: x2 >= 0.3
+
+            x2 >= 0.3
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open2_closed_antecedent -> valve_open2_closed_init
+        guard
+        {
+            # Original guard: x2 >= 0.3
+
+            x2 >= 0.3
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_open_antecedent -> valve_open3_open_init
+        guard
+        {
+            # Original guard: x2 >= 0.3
+
+            x2 >= 0.3
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+
+        valve_open3_closed_antecedent -> valve_open3_closed_init
+        guard
+        {
+            # Original guard: x2 >= 0.3
+
+            x2 >= 0.3
+        }
+        reset
+        {
+            spec_t1' := 0.0
+        }
+        parallelotope aggregation {}
+    }
+
+    init
+    {
+        valve_open1_closed_init
+        {
+            #u in [0.0, 0.0]
+            #spec_t1 in [0, 0]
+            #tick in [0, 0]
+            #x1 in [0.21, 0.31]
+            #x2 in [0.21, 0.31]
+            u in [0.0, 0.0]
+            spec_t1 in [0, 0]
+            tick in [0, 0]
+            x1 in [0.21, 0.21]
+            x2 in [0.21, 0.21]
+        }
+    }
+}
+
+unsafe set
+{
+    valve_closed_open_bad {   spec_t1 >= 0.0 }
+    valve_closed_closed_bad { spec_t1 >= 0.0 }
+    valve_open1_open_bad {    spec_t1 >= 0.0 }
+    valve_open1_closed_bad {  spec_t1 >= 0.0 }
+    valve_open2_open_bad {    spec_t1 >= 0.0 }
+    valve_open2_closed_bad {  spec_t1 >= 0.0 }
+    valve_open3_open_bad {    spec_t1 >= 0.0 }
+    valve_open3_closed_bad {  spec_t1 >= 0.0 }
+}

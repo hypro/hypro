@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -15,29 +15,26 @@ template <typename Representation>
 void InteractivePlotter<Representation>::run() {
 	auto rtPlt = ReachTreePlotter<Representation>( mRoots );
 	while ( true ) {
-		int option;
-		// print options
-		printCurrentOptions();
-		// process user input
-		if ( mCurrent == nullptr ) {
-			std::cin >> option;
-			if ( option == -1 ) {
-				break;
-			}
-			if ( option >= mRoots.size() || option < 0 ) {
-				std::cout << "Please pick a valid option." << std::endl;
-			} else {
-				mCurrent = &mRoots[option];
-				addSegments( mCurrent );
-				plotCurrent();
-				rtPlt.plot( { mCurrent } );
-			}
-		} else {
-			std::cin >> option;
-			if ( option == -1 ) {
-				break;
-			}
-			if ( option == mCurrent->getChildren().size() ) {
+        int option;
+        // print options
+        printCurrentOptions();
+        // read user input
+        std::cin >> option;
+        if (option == -1) {
+            break;
+        }
+        // process user input
+        if (mCurrent == nullptr) {
+            if (option >= mRoots.size() || option < 0) {
+                std::cout << "Please pick a valid option." << std::endl;
+            } else {
+                mCurrent = &mRoots[option];
+                addSegments(mCurrent);
+                plotCurrent();
+                rtPlt.plot({mCurrent});
+            }
+        } else {
+            if (option == mCurrent->getChildren().size()) {
 				removeSegments( mCurrent );
 				mCurrent = mCurrent->getParent();
 				plotCurrent();
@@ -88,8 +85,9 @@ void InteractivePlotter<Representation>::plotCurrent() {
 	plt.setFilename( "out" );
 	plt.rSettings().overwriteFiles = true;
 	plt.plot2d( PLOTTYPE::pdf );
-
+#ifdef GNUPLOT_FOUND
 	std::system( "gnuplot out_pdf.plt" );
+#endif
 }
 
 template <typename Representation>
@@ -101,14 +99,18 @@ void InteractivePlotter<Representation>::printCurrentOptions() const {
 		}
 		std::cout << std::endl;
 	} else {
-		std::cout << "Select next transition (-1 to exit):\n";
-		for ( std::size_t i = 0; i < mCurrent->getChildren().size(); ++i ) {
-			std::cout << i << ": " << mCurrent->getLocation()->getName() << " -> " << mCurrent->getChildren()[i]->getLocation()->getName() << "\n";
-			std::cout << "guard:\n"
-					  << mCurrent->getChildren()[i]->getTransition()->getGuard() << "\n";
-			std::cout << "reset:\n"
-					  << mCurrent->getChildren()[i]->getTransition()->getReset() << "\n";
-		}
+        std::cout << "Current initial set:\n";
+        std::cout << mCurrent->getInitialSet() << "\n";
+        std::cout << "Select next transition (-1 to exit):\n";
+        for (std::size_t i = 0; i < mCurrent->getChildren().size(); ++i) {
+            std::cout << i << ": " << mCurrent->getLocation()->getName() << " -> " << mCurrent->getChildren()[i]->getLocation()->getName() << "\n";
+            std::cout << "guard:\n"
+                      << mCurrent->getChildren()[i]->getTransition()->getGuard() << "\n";
+            std::cout << "reset:\n"
+                      << mCurrent->getChildren()[i]->getTransition()->getReset() << "\n";
+            std::cout << "resulting in new initial set:\n"
+                      << mCurrent->getChildren()[i]->getInitialSet() << "\n";
+        }
 		std::cout << mCurrent->getChildren().size() << ": Ascend" << std::endl;
 	}
 }

@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * @file   Plotter.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
@@ -50,15 +59,17 @@ const std::size_t colors[] = { 0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
  * @brief      A struct holding a basic set of options for the gnuplot plotting.
  */
 struct gnuplotSettings {
-	std::string name = "";												//< title
-	std::string filename = "out";										//< filename
-	std::size_t color = colors[blue];									//< default blue
-	bool fill = false;													//< do not fill
-	bool axes = true;													//< plot axes
-	bool grid = true;													//< plot grid
-	bool title = false;													//< plot title
-	double pointSize = 0.6;												//< pointsize
-	double linewidth = 0.1;												//< linewidth
+	std::string name = "";			   //< title
+	std::string filename = "out";	   //< filename
+	std::size_t color = colors[blue];  //< default blue
+	bool fill = false;				   //< do not fill
+	bool axes = true;				   //< plot axes
+	bool grid = true;				   //< plot grid
+	bool title = false;				   //< plot title
+	double pointSize = 0.2;			   //< pointsize
+	double linewidth = 0.1;			   //< linewidth
+	carl::Interval<double> xPlotInterval = carl::Interval<double>::emptyInterval();
+	carl::Interval<double> yPlotInterval = carl::Interval<double>::emptyInterval();
 	bool keepAspectRatio = true;										//< keep aspect ratio for both axes
 	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );	//< dimensions to plot
 	bool cummulative = false;											//< if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
@@ -89,7 +100,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	mutable std::ofstream mOutfile;
 	mutable std::map<unsigned, plotting::PlotObject<Number>> mObjects;
 	mutable std::multimap<unsigned, std::vector<Halfspace<Number>>> mPlanes;
-	mutable std::multimap<unsigned, Point<Number>> mPoints;
+	mutable std::vector<plotting::PlotObject<Number>> mPoints;
 	mutable std::multimap<unsigned, vector_t<Number>> mVectors;
 	mutable std::pair<int, int> mLastDimensions;
 	mutable std::pair<vector_t<Number>, vector_t<Number>> mLimits;
@@ -134,7 +145,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @details    The resulting *.plt file can be compiled to a pdf invoking gnuplot.
 	 * @param outformat Specifies the type of output file generated.
 	 */
-	void plot2d( PLOTTYPE outformat = PLOTTYPE::pdf ) const;
+	void plot2d( PLOTTYPE outformat = PLOTTYPE::pdf, bool runGnuplot = false ) const;
 
 	/**
 	 * @brief      Creates a LaTeX file of the currently passed objects.
@@ -200,17 +211,16 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @brief      Adds a point to the plotter.
 	 * @details    The point, in contrast to an object will be plotted as a cross.
 	 * @param[in]  _point  The point.
-	 * @return     An id referencing the point.
+	 * @param[in]  _color Optionally color the point.
 	 */
-	unsigned addPoint( const Point<Number>& _point );
+	unsigned addPoint( const Point<Number>& _point, std::optional<std::size_t> _color = std::nullopt );
 
 	/**
 	 * @brief      Adds points to the plotter.
 	 * @details    The points will be plotted as crosses.
 	 * @param[in]  _points  The points.
-	 * @return     An id referencing the last passed point.
 	 */
-	unsigned addPoints( const std::vector<Point<Number>>& _points );
+	void addPoints( const std::vector<Point<Number>>& _points );
 
 	/**
 	 * @brief      Adds a vector to the plotter.

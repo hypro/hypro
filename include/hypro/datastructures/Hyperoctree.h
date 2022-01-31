@@ -12,14 +12,12 @@
  */
 
 #pragma once
-#include "HyperoctreePredicates.h"
 
 namespace hypro {
 
 /**
- * Class to efficiently store data in a tree-like structure. The passed predicate is a functor which needs to implement a call-operator to determine, whether passed data fits the current node, does not fit the current node, or should be stored in a lower level.
- * @tparam Predicate
- * @tparam Data
+ * Class to efficiently store data in a tree-like structure.
+ * @tparam Number
  */
 template <typename Number>
 class Hyperoctree {
@@ -35,39 +33,133 @@ class Hyperoctree {
 	}
 
 	void add( const Box<Number>& data ) {
+		TRACE( "hypro.datastructures", "Add box " << data << " in " << *this );
 		// if this box is already fully covered, do nothing.
 		if ( mCovered ) {
+			TRACE( "hypro.datastructures", "This container is already covered." );
 			return;
 		}
 		// consider only the part that is contained in this box
-		auto [containment, result] = mContainer.containmentReduce( data );
+		std::pair<CONTAINMENT, Box<Number>> result = mContainer.containmentReduce( data );
 		// if the intersection of the data and this container is non-empty
-		if ( containment != CONTAINMENT::NO ) {
+		if ( result.first != CONTAINMENT::NO ) {
+			TRACE( "hypro.datastructures", "At least partial intersection, resulting box: " << result.second );
 			// the set is at least partially contained and we have already cut to the part that is also contained in this container, we can pass to the childen
 			if ( mRemainingDepth == 0 ) {
-				updateCoverage( result );
-				mData.emplace_back( result );
+				TRACE( "hypro.datastructures", "Reached leaf." );
+				mData.push_back( data );
+				updateCoverage( result.second );
 				return;
 			}
 			// make sure child nodes exist
 			updateChildren();
 			// forward call to children
-			std::for_each( std::begin( mChildren ), std::end( mChildren ), [&result]( const auto& child ) { child->add( result ); } );
+			TRACE( "hypro.datastructures", "Forward call to children" );
+			std::for_each( std::begin( mChildren ), std::end( mChildren ), [&result]( const auto& child ) { child->add( result.second ); } );
+			propagateCoverage();
 		}
 	}
 
+	bool contains( const Point<Number>& point ) const {
+		if ( !mContainer.contains( point ) ) {
+			TRACE( "hypro.datastructures", "Point " << point << " is not contained in " << mContainer );
+			return false;
+		}
+		if ( mCovered ) {
+			TRACE( "hypro.datastructures", "Fully covered: " << *this );
+			return true;
+		} else {
+			if ( mChildren.empty() ) {
+				TRACE( "hypro.datastructures", "Check whether point " << point << " is contained in data\n" );
+				for ( const auto& b : mData ) {
+					TRACE( "hypro.datastructures", b );
+				}
+				auto tmp = std::any_of( std::begin( mData ), std::end( mData ), [&point]( const auto& box ) { return box.contains( point ); } );
+				TRACE( "hypro.datastructures", "Contained in data of " << *this << ": " << tmp );
+				return tmp;
+			} else {
+				TRACE( "hypro.datastructures", "Forward to child-nodes" );
+				return std::any_of( std::begin( mChildren ), std::end( mChildren ), [&point]( const auto& child ) { return child->contains( point ); } );
+			}
+		}
+	}
+
+	bool contains( const Box<Number>& set ) {
+		if ( set.empty() ) {
+			return true;
+		}
+		if ( !mContainer.contains( set ) ) {
+			TRACE( "hypro.datastructures", "Set " << set << " is not contained in " << mContainer );
+			return false;
+		}
+		if ( mCovered ) {
+			TRACE( "hypro.datastructures", "Fully covered: " << *this );
+			return true;
+		} else {
+			if ( mChildren.empty() ) {
+				TRACE( "hypro.datastructures", "Check whether box " << set << " is contained in data\n" );
+				for ( const auto& b : mData ) {
+					TRACE( "hypro.datastructures", b );
+				}
+				std::vector<Box<Number>> remainder;
+				remainder.emplace_back( set );
+				auto dataIt = mData.begin();
+				for ( const auto& dataItem : mData ) {
+					std::vector<Box<Number>> newRemainder;
+					for ( const auto& box : remainder ) {
+						auto tmp = box.setMinus2( dataItem );
+						newRemainder.insert( newRemainder.end(), tmp.begin(), tmp.end() );
+					}
+					remainder = newRemainder;
+					if ( remainder.empty() ) {
+						break;
+					}
+				}
+				return remainder.empty();
+			} else {
+				TRACE( "hypro.datastructures", "Forward to child-nodes" );
+				return std::all_of( std::begin( mChildren ), std::end( mChildren ), [&set]( const auto& child ) {
+					return child->contains( set.intersect( child->mContainer ) );
+				} );
+			}
+		}
+		return true;
+	}
+
+	bool isCovered() const {
+		return mCovered;
+	}
+
+	const Box<Number>& getContainer() const { return mContainer; }
+	const std::vector<std::unique_ptr<Hyperoctree<Number>>>& getChildren() const { return mChildren; }
+
   private:
+	void propagateCoverage() {
+		std::for_each( std::begin( mChildren ), std::end( mChildren ), []( auto& child ) { child->propagateCoverage(); } );
+		// check intermediate nodes, leaf nodes update their coverage upon adding of content
+		if ( mRemainingDepth != 0 && !mChildren.empty() && std::all_of( std::begin( mChildren ), std::end( mChildren ), []( const auto& child ) { return child->isCovered(); } ) ) {
+			mCovered = true;
+			TRACE( "hypro.datastructures", "All children of " << *this << " are covered" );
+		}
+	}
+
 	void updateCoverage( const Box<Number>& newBox ) {
+		TRACE( "hypro.datastructures", "Update coverage on " << newBox );
 		std::vector<Box<Number>> tmp;
 		for ( const Box<Number>& box : mToBeCovered ) {
 			auto remainder = box.setMinus2( newBox );
 			tmp.insert( tmp.end(), std::begin( remainder ), std::end( remainder ) );
 		}
 		if ( tmp.empty() ) {
+			TRACE( "hypro.datastructures", "Everything covered, set covered and return" );
 			mCovered = true;
 			// the box is fully covered, no need to store child nodes or data
 			mChildren.erase( std::begin( mChildren ), std::end( mChildren ) );
 			mData.erase( std::begin( mData ), std::end( mData ) );
+		}
+		TRACE( "hypro.datastructures", "Not yet fully covered, remains:" );
+		for ( const auto& s : tmp ) {
+			TRACE( "hypro.datastructures", s );
 		}
 		// update what remains to be covered
 		std::swap( mToBeCovered, tmp );
@@ -110,6 +202,12 @@ class Hyperoctree {
 	std::vector<Box<Number>> mToBeCovered;
 	std::vector<Box<Number>> mData;	 ///< collects data suitable for this level
 };
+
+template <typename Number>
+std::ostream& operator<<( std::ostream& out, const Hyperoctree<Number>& in ) {
+	out << "Container: " << in.getContainer() << "\ncovered: " << in.isCovered();
+	return out;
+}
 
 }  // namespace hypro
 

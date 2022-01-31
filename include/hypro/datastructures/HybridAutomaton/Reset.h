@@ -49,7 +49,7 @@ class Reset {
 	bool mDecomposed = false;
 
   public:
-	Reset() = default;
+	Reset(){};
 	Reset( const Reset& orig )
 		: mAffineResets( orig.getAffineResets() )
 		, mIntervalResets( orig.getIntervalResets() ) {}

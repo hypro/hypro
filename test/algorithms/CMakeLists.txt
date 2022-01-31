@@ -19,6 +19,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             TimeEvolutionTest.cpp
             #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
             #FirstSegmentHandlersTest.cpp #BROKEN
+            ZenoDetectionTest.cpp
             UrgencyReachabilityTest.cpp
             DecompositionalReachabilityTest.cpp
             )

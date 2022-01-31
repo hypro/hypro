@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="Ctrl">
+    <param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="cycle_time" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="c" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="start_brake" type="label" local="false" />
+    <param name="stop_brake" type="label" local="false" />
+    <param name="start_accelerate" type="label" local="false" />
+    <param name="stop_accelerate" type="label" local="false" />
+    <location id="3" name="CtrlBrake" x="224.0" y="360.0" width="158.0" height="110.0">
+      <invariant>c &lt;= cycle_time</invariant>
+      <flow>c' == 1</flow>
+    </location>
+    <location id="5" name="CtrlN" x="237.0" y="553.0" width="164.0" height="140.0">
+      <invariant>c &lt;= cycle_time</invariant>
+      <flow>c' == 1</flow>
+    </location>
+    <location id="6" name="CtrlAccelerate" x="238.0" y="783.0" width="134.0" height="112.0">
+      <invariant>c &lt;= cycle_time</invariant>
+      <flow>c' == 1</flow>
+    </location>
+    <transition source="5" target="3">
+      <label>start_brake</label>
+      <guard>c==cycle_time &amp; 13&lt;=v</guard>
+      <assignment>c:=0</assignment>
+      <labelposition x="-169.0" y="-42.0" width="194.0" height="82.0" />
+      <middlepoint x="181.5" y="443.5" />
+    </transition>
+    <transition source="3" target="5">
+      <label>stop_brake</label>
+      <guard>v&lt;=11 &amp;
+c == cycle_time</guard>
+      <assignment>c := 0</assignment>
+      <labelposition x="33.0" y="-50.0" width="132.0" height="98.0" />
+      <middlepoint x="253.5" y="439.5" />
+    </transition>
+    <transition source="5" target="6">
+      <label>start_accelerate</label>
+      <guard>c==cycle_time &amp; v&lt;= -14</guard>
+      <assignment>c:=0</assignment>
+      <labelposition x="5.0" y="-36.0" width="212.0" height="82.0" />
+      <middlepoint x="272.5" y="670.0" />
+    </transition>
+    <transition source="6" target="5">
+      <label>stop_accelerate</label>
+      <guard>c==cycle_time &amp;
+-6 &lt;= v</guard>
+      <assignment>c := 0</assignment>
+      <labelposition x="-148.0" y="-34.0" width="122.0" height="80.0" />
+      <middlepoint x="200.5" y="671.0" />
+    </transition>
+    <transition source="6" target="6">
+      <guard>c==cycle_time &amp;
+v &lt;= -6</guard>
+      <assignment>c:=0</assignment>
+      <labelposition x="-74.0" y="7.0" width="144.0" height="78.0" />
+      <middlepoint x="-3.0" y="98.0" />
+    </transition>
+    <transition source="5" target="5">
+      <guard>c==cycle_time &amp;
+ -14&lt;=v &amp; v&lt;=13</guard>
+      <assignment>c:=0</assignment>
+      <labelposition x="-77.0" y="-50.0" width="126.0" height="90.0" />
+      <middlepoint x="-125.0" y="11.0" />
+    </transition>
+    <transition source="3" target="3">
+      <guard>c == cycle_time &amp;
+11&lt;=v</guard>
+      <assignment>c:=0</assignment>
+      <labelposition x="-56.0" y="-94.0" width="102.0" height="80.0" />
+    </transition>
+  </component>
+  <component id="Plant">
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="start_brake" type="label" local="false" />
+    <param name="stop_brake" type="label" local="false" />
+    <param name="start_accelerate" type="label" local="false" />
+    <param name="stop_accelerate" type="label" local="false" />
+    <location id="3" name="Brake1" x="224.0" y="353.0" width="158.0" height="110.0">
+      <invariant>-20&lt;=v &amp; v&lt;=20 &amp;
+0&lt;=t &amp; t&lt;=1.3</invariant>
+      <flow>x' == 0 &amp;
+v' == -t-1.2 &amp;
+t' == 0.5</flow>
+    </location>
+    <location id="4" name="Brake2" x="641.0" y="351.0" width="206.0" height="138.0">
+      <invariant>-20&lt;=v &amp; v&lt;=20 &amp;
+t==1.3</invariant>
+      <flow>x' == 0 &amp;
+v' == -2.5 &amp;
+t' == 0</flow>
+    </location>
+    <location id="5" name="N" x="237.0" y="553.0" width="164.0" height="140.0">
+      <invariant>-20 &lt;= v &amp; v&lt;=20 &amp;
+-500 &lt;= x &amp; x&lt;=500</invariant>
+      <flow>x' == v &amp; 
+v' == -0.001*x-0.052*v &amp;
+t' == 0</flow>
+    </location>
+    <location id="6" name="Accelerate" x="238.0" y="783.0" width="134.0" height="112.0">
+      <invariant>-20&lt;=v &amp; v&lt;=-20</invariant>
+      <flow>x' == 0 &amp;
+v' == 1.5 &amp;
+t' == 0</flow>
+    </location>
+    <transition source="3" target="4">
+      <guard>t == 1.3 &amp;
+5&lt;=v &amp; v&lt;=20</guard>
+      <labelposition x="-63.0" y="-19.0" width="176.0" height="88.0" />
+    </transition>
+    <transition source="4" target="5">
+      <label>stop_brake</label>
+      <assignment>x := 0 &amp;
+t:=0</assignment>
+      <labelposition x="-34.0" y="19.0" width="154.0" height="102.0" />
+    </transition>
+    <transition source="5" target="3">
+      <label>start_brake</label>
+      <assignment>t:=0 &amp;
+x:=0</assignment>
+      <labelposition x="-120.0" y="-37.0" width="92.0" height="78.0" />
+      <middlepoint x="181.5" y="443.5" />
+    </transition>
+    <transition source="5" target="6">
+      <label>start_accelerate</label>
+      <labelposition x="5.0" y="-50.0" width="212.0" height="110.0" />
+      <middlepoint x="272.5" y="670.0" />
+    </transition>
+    <transition source="6" target="5">
+      <label>stop_accelerate</label>
+      <assignment>x:=0</assignment>
+      <labelposition x="-137.0" y="-15.0" width="160.0" height="108.0" />
+      <middlepoint x="200.5" y="671.0" />
+    </transition>
+    <transition source="3" target="5">
+      <label>stop_brake</label>
+      <labelposition x="-2.0" y="-22.0" width="96.0" height="80.0" />
+      <middlepoint x="255.5" y="448.5" />
+    </transition>
+  </component>
+  <component id="Spec">
+    <param name="ts" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="max_time" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <location id="1" name="Init" x="223.0" y="230.0">
+      <flow>ts' == 1</flow>
+    </location>
+    <location id="2" name="Bad" x="223.0" y="414.0">
+      <flow>ts' == 0</flow>
+    </location>
+    <location id="3" name="Stable" x="516.0" y="227.0" width="142.0" height="74.0">
+      <invariant>v &lt;= 1 &amp; v &gt;= -1</invariant>
+      <flow>ts' == 0</flow>
+    </location>
+    <transition source="1" target="2">
+      <guard>ts==max_time</guard>
+      <assignment>ts:=0</assignment>
+      <labelposition x="18.0" y="-23.0" width="124.0" height="58.0" />
+    </transition>
+    <transition source="1" target="3">
+      <guard>ts &lt;= max_time &amp;
+v&lt;=2 &amp; v &gt;= -2</guard>
+      <assignment>ts := 0</assignment>
+      <labelposition x="-84.0" y="-7.0" width="170.0" height="78.0" />
+    </transition>
+    <transition source="3" target="2">
+      <guard>v&gt;=2</guard>
+      <labelposition x="-3.0" y="-18.0" />
+    </transition>
+    <transition source="3" target="2">
+      <guard>v&lt;=-2</guard>
+      <labelposition x="1.0" y="-13.0" />
+      <middlepoint x="385.5" y="345.5" />
+    </transition>
+  </component>
+  <component id="System">
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="c" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="ts" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+    <param name="start_brake" type="label" local="false" />
+    <param name="stop_brake" type="label" local="false" />
+    <param name="start_accelerate" type="label" local="false" />
+    <param name="stop_accelerate" type="label" local="false" />
+    <bind component="Ctrl" as="Ctrl_1" x="349.0" y="156.0">
+      <map key="v">v</map>
+      <map key="cycle_time">1</map>
+      <map key="c">c</map>
+      <map key="start_brake">start_brake</map>
+      <map key="stop_brake">stop_brake</map>
+      <map key="start_accelerate">start_accelerate</map>
+      <map key="stop_accelerate">stop_accelerate</map>
+    </bind>
+    <bind component="Plant" as="Plant_1" x="347.0" y="357.0">
+      <map key="x">x</map>
+      <map key="v">v</map>
+      <map key="t">t</map>
+      <map key="start_brake">start_brake</map>
+      <map key="stop_brake">stop_brake</map>
+      <map key="start_accelerate">start_accelerate</map>
+      <map key="stop_accelerate">stop_accelerate</map>
+    </bind>
+    <bind component="Spec" as="Spec_1" x="346.0" y="576.0">
+      <map key="ts">ts</map>
+      <map key="max_time">20</map>
+      <map key="v">v</map>
+    </bind>
+  </component>
+</sspaceex>
+

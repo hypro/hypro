@@ -37,7 +37,7 @@ plotting::gnuplotSettings& Plotter<Number>::rSettings() {
 }
 
 template <typename Number>
-void Plotter<Number>::plot2d( PLOTTYPE outformat ) const {
+void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 	std::size_t cnt = 0;
 	std::string filename = mSettings.filename;
 	std::string title = mSettings.name;
@@ -93,6 +93,14 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat ) const {
 		}
 	}
 	mOutfile.close();
+
+	if ( runGnuplot ) {
+#ifdef GNUPLOT_FOUND
+		std::stringstream ss;
+		ss << "gnuplot " + filename + "_" + plotting::to_string( outformat ) + ".plt";
+		std::system( ss.str().c_str() );
+#endif
+	}
 }
 
 template <typename Number>
@@ -110,93 +118,69 @@ void Plotter<Number>::plotPng() const {
 	plot2d( PLOTTYPE::png );
 }
 
-template<typename Number>
+template <typename Number>
 void Plotter<Number>::plotGen() const {
-    plot2d(PLOTTYPE::gen);
+	plot2d( PLOTTYPE::gen );
 }
 
-    template<typename Number>
-    unsigned Plotter<Number>::addObject(const std::vector<Point < Number>>
+template <typename Number>
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color ) {
+	TRACE( "hypro.plotter", "" );
+	// reduce dimensions
+	if ( !_points.empty() ) {
+		bool objectIsTwoDimensional = true;
+		if ( _points.begin()->dimension() != 2 ) {
+			objectIsTwoDimensional = false;
+			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
+			return 0;
+		}
+		// initialize limits
+		if ( mObjects.empty() && mPoints.empty() ) {
+			mLimits.first = _points.begin()->rawCoordinates();
+			mLimits.second = _points.begin()->rawCoordinates();
+		}
+		// update limits
+		for (
+			  const auto& point : _points ) {
+			if ( point.
 
-    & _points,
-    std::optional<std::size_t> _color
-    ) { TRACE("hypro.plotter", "");
-// reduce dimensions
-if ( !_points.
+				 dimension()
 
-empty()
+				 == 2 ) {
+				for (
+					  unsigned d = 0;
+					  d < mLimits.first.
 
-) {
-bool objectIsTwoDimensional = true;
-if( _points.begin()->dimension() != 2 ) {
-objectIsTwoDimensional = false;
-WARN("hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped.")
-return 0;
-}
-// initialize limits
-if ( mObjects.
+						  rows();
 
-empty() &&
-
-mPoints.
-
-empty()
-
-) {
-mLimits.
-first = _points.begin()->rawCoordinates();
-mLimits.
-second = _points.begin()->rawCoordinates();
-}
-// update limits
-for (
-const auto &point
-: _points ) {
-if( point.
-
-dimension()
-
-== 2 ) {
-for (
-unsigned d = 0;
-d<mLimits.first.
-
-rows();
-
-++d ) {
-mLimits.
-first( d ) = mLimits.first(d) > point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.first(d);
-mLimits.
-second( d ) = mLimits.second(d) < point.rawCoordinates()(d) ? point.rawCoordinates()(d) : mLimits.second(d);
-}
-} else {
-objectIsTwoDimensional = false;
-WARN("hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped.")
-break;
-}
-}
-if(objectIsTwoDimensional) {
-mObjects.
-insert( std::make_pair(mId, plotting::PlotObject < Number > {_points, false, false, _color})
-);
-mId++;
-return ( mId - 1 );
-}
-}
-return 0;
+					  ++d ) {
+					mLimits.first( d ) = mLimits.first( d ) > point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.first( d );
+					mLimits.second( d ) = mLimits.second( d ) < point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.second( d );
+				}
+			} else {
+				objectIsTwoDimensional = false;
+				WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
+				break;
+			}
+		}
+		if ( objectIsTwoDimensional ) {
+			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color } ) );
+			mId++;
+			return ( mId - 1 );
+		}
+	}
+	return 0;
 }
 
-template<typename Number>
-unsigned Plotter<Number>::addObject(const std::vector<std::vector<Point < Number>>
+template <typename Number>
+unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>
 
->& _points ) {
-for (
-const auto &part
-: _points ) {
-addObject( part );
---
-mId;
-}
+													   >& _points ) {
+	for (
+		  const auto& part : _points ) {
+		addObject( part );
+		--mId;
+	}
 	mId++;
 	return mId - 1;
 }
@@ -224,32 +208,16 @@ void Plotter<Number>::removeObject( unsigned id ) {
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addPoint( const Point<Number>& _point ) {
-	assert( _point.dimension() == 2 );
-	// initialize limits
-	if ( mObjects.empty() && mPoints.empty() ) {
-		mLimits.first = _point.rawCoordinates();
-		mLimits.second = _point.rawCoordinates();
-	}
-	// update limits
-	for ( unsigned d = 0; d < mLimits.first.rows(); ++d ) {
-		mLimits.first( d ) = mLimits.first( d ) > _point.rawCoordinates()( d ) ? _point.rawCoordinates()( d ) : mLimits.first( d );
-		mLimits.second( d ) = mLimits.second( d ) < _point.rawCoordinates()( d ) ? _point.rawCoordinates()( d ) : mLimits.second( d );
-	}
-
-	mPoints.insert( std::make_pair( mId, _point ) );
-	return mId++;
+unsigned Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color ) {
+	return addObject( { _point }, _color );
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
+void Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
 	for ( const auto& p : _points ) {
 		assert( p.dimension() == 2 );
 		addPoint( p );
-		--mId;
 	}
-	mId++;
-	return mId - 1;
 }
 
 template <typename Number>
@@ -310,17 +278,17 @@ void Plotter<Number>::writeGnuplot() const {
 		// extend ranges
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = carl::toDouble( ( carl::toDouble( max( d ) ) - carl::toDouble( min( d ) ) ) * 0.1 );
-			if ( rangeExt != 0 ) {
+			double rangeExt = carl::toDouble( ( carl::toDouble( max( d ) ) - carl::toDouble( min( d ) ) ) * 0.05 );
+			if ( rangeExt > 0.00001 ) {
 				ranges[d] = carl::Interval<double>( carl::toDouble( min( d ) ) - rangeExt, carl::toDouble( max( d ) ) + rangeExt );
 			} else {
-				rangeExt = carl::toDouble( carl::toDouble( min( d ) ) * 0.1 );
+				rangeExt = carl::toDouble( carl::toDouble( min( d ) ) * 0.05 );
 				double leftBound = carl::toDouble( min( d ) ) - rangeExt;
 				double rightBound = carl::toDouble( max( d ) ) + rangeExt;
 				// if both bounds are zero, add a slight margin left and right so range is not empty
-				if ( leftBound == 0 && rightBound == 0 ) {
-					leftBound -= 0.1;
-					rightBound += 0.1;
+				if ( leftBound == rightBound == 0 ) {
+					leftBound -= 0.01;
+					rightBound += 0.01;
 				}
 				ranges[d] = carl::Interval<double>( leftBound, rightBound );
 			}
@@ -348,8 +316,16 @@ void Plotter<Number>::writeGnuplot() const {
 			mOutfile << "unset border\nunset xtics\nunset ytics\n";
 		}
 
-		mOutfile << "set xrange [" << ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
-		mOutfile << "set yrange [" << ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
+		if ( !mSettings.xPlotInterval.isEmpty() ) {
+			mOutfile << "set xrange [" << mSettings.xPlotInterval.lower() << ":" << mSettings.xPlotInterval.upper() << "] \n";
+		} else {
+			mOutfile << "set xrange [" << ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
+		}
+		if ( !mSettings.yPlotInterval.isEmpty() ) {
+			mOutfile << "set yrange [" << mSettings.yPlotInterval.lower() << ":" << mSettings.yPlotInterval.upper() << "] \n";
+		} else {
+			mOutfile << "set yrange [" << ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
+		}
 
 		unsigned objectCount = 1;
 		unsigned currId = 0;
@@ -363,23 +339,33 @@ void Plotter<Number>::writeGnuplot() const {
 				INFO( "hypro.plotter", "Plotting object " << tmpId << "/" << ( mObjects.size() + mPoints.size() + mPlanes.size() ) );
 			}
 			if ( plotObject.vertices.size() > 0 ) {
-				mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
-				for ( const auto vertex : plotObject.vertices ) {
-					assert( vertex.dimension() == 2 );
-					if ( vertex.dimension() == 0 ) {
-						continue;
+				if ( plotObject.vertices.size() == 1 ) {
+					mOutfile << "set object " << std::dec << objectCount << " circle at first \\\n";
+					assert( plotObject.vertices[0].dimension() == 2 );
+					mOutfile << "  " << carl::toDouble( plotObject.vertices[0].at( 0 ) );
+					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
+						mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
 					}
-					mOutfile << "  " << carl::toDouble( vertex.at( 0 ) );
-					for ( unsigned d = 1; d < vertex.dimension(); ++d ) {
-						mOutfile << ", " << carl::toDouble( vertex.at( d ) );
+					mOutfile << " radius 0.005";
+				} else {
+					mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
+					for ( const auto vertex : plotObject.vertices ) {
+						assert( vertex.dimension() == 2 );
+						if ( vertex.dimension() == 0 ) {
+							continue;
+						}
+						mOutfile << "  " << carl::toDouble( vertex.at( 0 ) );
+						for ( unsigned d = 1; d < vertex.dimension(); ++d ) {
+							mOutfile << ", " << carl::toDouble( vertex.at( d ) );
+						}
+						mOutfile << " to \\\n";
 					}
-					mOutfile << " to \\\n";
-				}
-				// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
-				// Project to 2d	TODO: REINSERT ASSERTION
-				mOutfile << "  " << carl::toDouble( plotObject.vertices[0].at( 0 ) );
-				for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
-					mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
+					// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
+					// Project to 2d	TODO: REINSERT ASSERTION
+					mOutfile << "  " << carl::toDouble( plotObject.vertices[0].at( 0 ) );
+					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
+						mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
+					}
 				}
 
 				// color lookup
@@ -436,21 +422,36 @@ void Plotter<Number>::writeGnuplot() const {
 		}
 
 		if ( !mPoints.empty() ) {
+			// collect styles
+			std::map<std::size_t, std::pair<std::string, std::string>> styles_definitions_calls;
+			std::size_t style_index = 1;
+			std::stringstream ss;
+			ss << std::hex << plotting::colors[plotting::blue];
+			styles_definitions_calls[plotting::colors[plotting::blue]] = std::make_pair( std::to_string( style_index ), "set style line " + std::to_string( style_index ) + " lc rgb '#" + ss.str() + "' pt 7" );
+			ss.str( std::string() );
+			++style_index;
+			for ( const plotting::PlotObject<Number>& p : mPoints ) {
+				if ( p.color ) {
+					if ( styles_definitions_calls.find( p.color.value() ) == std::end( styles_definitions_calls ) ) {
+						ss << std::hex << p.color.value();
+						styles_definitions_calls[p.color.value()] = std::make_pair( std::to_string( style_index ), "set style line " + std::to_string( style_index ) + " lc rgb '#" + ss.str() + "' pt 7" );
+						ss.str( std::string() );
+						++style_index;
+					}
+				}
+			}
+
 			mOutfile << "# plotting points\n";
 			mOutfile << "set multiplot\n";
 			mOutfile << "unset key\n";
 			mOutfile << "set pointsize " << mSettings.pointSize << "\n";
-			mOutfile << "set style line 1 lc rgb '#" << std::hex << mSettings.color << "'\n";
-			mOutfile << "plot ";
-			mOutfile << "'-' w p ls 1";
-			for ( unsigned pos = 1; pos < mPoints.size(); ++pos ) {
-				mOutfile << ", '-' w p ls 1";
+			for ( const auto& [_, valuepair] : styles_definitions_calls ) {
+				mOutfile << valuepair.second << "\n";
 			}
-			mOutfile << "\n";
-		}
-		for ( auto pointIt = mPoints.begin(); pointIt != mPoints.end(); ++pointIt ) {
-			mOutfile << carl::toDouble( pointIt->second.at( 0 ) ) << " " << carl::toDouble( pointIt->second.at( 1 ) ) << "\n";
-			mOutfile << "e\n";
+			for ( const auto& pObj : mPoints ) {
+				auto col = pObj.color ? pObj.color.value() : plotting::colors[plotting::blue];
+				mOutfile << "plot '+' us (" << carl::toDouble( pObj.vertices.front().at( 0 ) ) << "):(" << carl::toDouble( pObj.vertices.front().at( 1 ) ) << ") w p ls " << styles_definitions_calls[col].first << "\n";
+			}
 		}
 		mOutfile << "\n";
 
