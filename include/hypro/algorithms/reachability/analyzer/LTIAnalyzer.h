@@ -27,7 +27,7 @@ namespace hypro {
 // indicates that the lti analysis succeeded, i.e. no
 struct LTISuccess {};
 
-template <typename State, MULTITHREADING multithreading = MULTITHREADING::DISABLED>
+template <typename State>
 class LTIAnalyzer {
 	using Number = typename State::NumberType;
 
@@ -45,6 +45,24 @@ class LTIAnalyzer {
 		for ( auto& root : roots ) {
 			mWorkQueue.push_front( &root );
 		}
+	}
+
+	/// move constructor
+	LTIAnalyzer(LTIAnalyzer&& other) :
+		  mWorkQueue(),
+	mHybridAutomaton(other.mHybridAutomaton),
+	mFixedParameters(std::move(other.mFixedParameters)),
+	mParameters(std::move(other.mParameters)),
+	mRoots(other.mRoots),
+		mNumThreads(),
+	mThreads(),
+	mIdle(),
+	mQueueMutex(),
+	mThreadPoolMutex(),
+	mQueueNonEmpty(),
+		mTerminate(),
+		mStopped()
+	{
 	}
 
 	~LTIAnalyzer() {
@@ -103,6 +121,7 @@ class LTIAnalyzer {
 	std::condition_variable mQueueNonEmpty;					///< notification variable to indicate the queue is nonempty
 	std::atomic<bool> mTerminate = false;					///< indicates termination request
 	std::atomic<bool> mStopped = false;						///< indicator, whether shutdown was already invoked
+	static constexpr MULTITHREADING multithreading = MULTITHREADING::DISABLED; ///< temporary flag to enable/disable multithreading
 };
 
 }  // namespace hypro
