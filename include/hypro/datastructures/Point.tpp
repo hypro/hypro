@@ -268,7 +268,7 @@ Point<Number> Point<Number>::linearTransformation( const matrix_t<Number>& A ) c
 template <typename Number>
 Point<Number> Point<Number>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 	assert( A.cols() == mCoordinates.rows() );
-	assert( b.rows() == mCoordinates.rows() );
+	// assert( b.rows() == mCoordinates.rows() );   // is it not possible that an affine transofrmation will change the dimension of the point?
 	return Point<Number>( A * mCoordinates + b );
 }
 

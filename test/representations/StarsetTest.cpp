@@ -21,37 +21,37 @@ class StarsetTest : public ::testing::Test {
 		planes1.push_back( hp3 );
 		planes1.push_back( hp4 );
 
-    hypro::vector_t<Number> center=hypro::vector_t<Number>(2);
-    hypro::vector_t<Number> Limits=hypro::vector_t<Number>(4);
-    hypro::matrix_t<Number> Generator=hypro::matrix_t<Number>(2,2);
-    hypro::matrix_t<Number> ShapeMatrix=hypro::matrix_t<Number>(4,2);
-    center<<10,1;
-    Limits<<1,1,1,1;
-    Generator<<1,2,0,1;
-    ShapeMatrix<<1,0,-1,0,0,1,0,-1;
-    myStar1= hypro::Starset<Number>(center,ShapeMatrix,Limits,Generator);
+        hypro::vector_t<Number> center=hypro::vector_t<Number>(2);
+        hypro::vector_t<Number> Limits=hypro::vector_t<Number>(4);
+        hypro::matrix_t<Number> Generator=hypro::matrix_t<Number>(2,2);
+        hypro::matrix_t<Number> ShapeMatrix=hypro::matrix_t<Number>(4,2);
+        center<<10,1;
+        Limits<<1,1,1,1;
+        Generator<<1,2,0,1;
+        ShapeMatrix<<1,0,-1,0,0,1,0,-1;
+        myStar1= hypro::Starset<Number>(center,ShapeMatrix,Limits,Generator);
 
-    hypro::vector_t<Number> center1=hypro::vector_t<Number>(2);
-    hypro::vector_t<Number> Limits1=hypro::vector_t<Number>(4);
-    hypro::matrix_t<Number> Generator1=hypro::matrix_t<Number>(2,2);
-    hypro::matrix_t<Number> ShapeMatrix1=hypro::matrix_t<Number>(4,2);
-    center1<<3,7;
-    Limits1<<1,1,1,1;
-    Generator1<<1,0,0,1;
-    ShapeMatrix1<<1,0,-1,0,0,1,0,-1;
-    myStar2= hypro::Starset<Number>(center1,ShapeMatrix1,Limits1,Generator1);
-    myStar=hypro::Starset<Number>();
+        hypro::vector_t<Number> center1=hypro::vector_t<Number>(2);
+        hypro::vector_t<Number> Limits1=hypro::vector_t<Number>(4);
+        hypro::matrix_t<Number> Generator1=hypro::matrix_t<Number>(2,2);
+        hypro::matrix_t<Number> ShapeMatrix1=hypro::matrix_t<Number>(4,2);
+        center1<<3,7;
+        Limits1<<1,1,1,1;
+        Generator1<<1,0,0,1;
+        ShapeMatrix1<<1,0,-1,0,0,1,0,-1;
+        myStar2= hypro::Starset<Number>(center1,ShapeMatrix1,Limits1,Generator1);
+        myStar=hypro::Starset<Number>();
 
-    hypro::vector_t<Number> center2=hypro::vector_t<Number>(2);
-    hypro::vector_t<Number> Limits2=hypro::vector_t<Number>(5);
-    hypro::matrix_t<Number> Generator2=hypro::matrix_t<Number>(2,2);
-    hypro::matrix_t<Number> ShapeMatrix2=hypro::matrix_t<Number>(5,2);
-    center2<<-12.8727,-15.8922;
-    Limits2<<0.000246886,7.94631,7.94656,0,-12.8727;
-    ShapeMatrix2<<1,0,0,1,1,1,-1,0,-1,1.62;
-    Generator2<<1,0,1.62,1;
+        // hypro::vector_t<Number> center2=hypro::vector_t<Number>(2);
+        // hypro::vector_t<Number> Limits2=hypro::vector_t<Number>(5);
+        // hypro::matrix_t<Number> Generator2=hypro::matrix_t<Number>(2,2);
+        // hypro::matrix_t<Number> ShapeMatrix2=hypro::matrix_t<Number>(5,2);
+        // center2<<-12.8727,-15.8922;
+        // Limits2<<0.000246886,7.94631,7.94656,0,-12.8727;
+        // ShapeMatrix2<<1,0,0,1,1,1,-1,0,-1,1.62;
+        // Generator2<<1,0,1.62,1;
 
-    myStar1000=hypro::Starset<Number>(center2,ShapeMatrix2,Limits2,Generator2);
+        // myStar1000=hypro::Starset<Number>(center2,ShapeMatrix2,Limits2,Generator2);
 	}
 
 	virtual void TearDown() {}
@@ -60,7 +60,7 @@ class StarsetTest : public ::testing::Test {
     hypro::Starset<Number> myStar;
     hypro::Starset<Number> myStar2;
     hypro::Starset<Number> myStar1;
-    hypro::Starset<Number> myStar1000;
+    // hypro::Starset<Number> myStar1000;
 
 
 };

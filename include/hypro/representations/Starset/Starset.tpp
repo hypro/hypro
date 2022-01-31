@@ -98,7 +98,7 @@ Number StarsetT<Number, Converter, Setting>::supremum() const {
 template <typename Number, typename Converter, typename Setting>
 std::vector<Point<Number>> StarsetT<Number, Converter, Setting>::vertices() const {
     std::vector<Point<Number>> res; 
-    auto placeholder= constraints.vertices();
+    auto placeholder = constraints.vertices();
 	for ( auto point : placeholder ) {
         point=point.affineTransformation(mGenerator,mCenter);
         res.push_back(point);

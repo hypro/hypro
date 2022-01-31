@@ -207,7 +207,13 @@ class StarsetT : private GeometricObjectBase {
 	friend std::ostream&
 	operator<<( std::ostream& ostr,
 				const StarsetT<Number, Converter, Setting>& b ) {
-		// Put outstream operations here.
+		
+      ostr << "Starset: " << std::endl;
+      ostr << b.center();
+      ostr << b.generator();
+      ostr << b.constraintss();
+      ostr << std::endl;
+
 		return ostr;
 	}
 

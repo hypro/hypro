@@ -6,9 +6,9 @@
  * Created on April 20, 2016, 3:43 PM
  */
 
-#include "../src/hypro/config.h"
-#include "../src/hypro/representations/GeometricObjectBase.h"
-#include "../src/hypro/util/plotting/Plotter.h"
+#include "hypro/config.h"
+#include "hypro/representations/GeometricObjectBase.h"
+#include "hypro/util/plotting/Plotter.h"
 #include <chrono>
 
 using namespace hypro;
@@ -145,7 +145,7 @@ int main() {
   points5.push_back(Point<Number>(p22));
   points5.push_back(Point<Number>(p23));
   points5.push_back(Point<Number>(p24));
-  plotter.addPoints(points5);
+  // plotter.addPoints(points5);
   vpolytope5 = VPolytope<Number>(points5);
 
   std::set<long int> results;
@@ -277,7 +277,7 @@ int main() {
   // plotter.addObject(result2.vertices());
   // plotter.addObject(result3.vertices());
   // plotter.addObject(result4.vertices());
-  plotter.addObject(result5.vertices());
+  // plotter.addObject(result5.vertices());
   plotter.plot2d();
   plotter.plotTex();
 
