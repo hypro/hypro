@@ -231,7 +231,6 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 	plt.rSettings().cummulative = false;
 	plt.setFilename( "simplex_watertanks" );
 
-	/*
 	// create hyperoctree
 	auto bbox = computeBoundingBox( roots ).projectOn( { 0, 1 } );
 	// widen dimensions until they are integer to increase stability
@@ -264,9 +263,7 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 			plt.addPoint( point, hypro::plotting::colors[hypro::plotting::red] );
 		}
 	}
-	 */
 
-	/*
 	for ( const auto& node : hypro::preorder( roots ) ) {
 		for ( const auto& segment : node.getFlowpipe() ) {
 			if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
@@ -282,7 +279,7 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 	}
 
 	// plot octree
-	// plotRecursive( octree, plt );
+	plotRecursive( octree, plt );
 
 	plt.plot2d( hypro::PLOTTYPE::png );
 	plt.plot2d( hypro::PLOTTYPE::pdf );
@@ -296,7 +293,7 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 		  std::to_string( carl::convert<hypro::tNumber, double>( settings.fixedParameters().localTimeHorizon ) ) +
 		  "_TH." + std::to_string( state.range( 0 ) ) + "_jumps";
 	TRACE( channel, "#################################################" );
-	*/
+
 	std::cout << "Start plotting, " << std::to_string( last_paths.size() ) << " paths." << std::endl;
 	std::size_t path_count{ 0 };
 	for ( auto [path, leaf] : last_paths ) {
