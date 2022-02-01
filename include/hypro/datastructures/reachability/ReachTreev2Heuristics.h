@@ -16,6 +16,10 @@
 
 namespace hypro {
 
+/**
+ * Heuristics which priorizes a high depth of a node, i.e., implements a depth-first approach
+ * @tparam R
+ */
 template <typename R>
 struct DepthFirst {
 	constexpr bool operator()( const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs ) {
@@ -32,6 +36,10 @@ struct DepthFirst {
 	}
 };
 
+/**
+ * Heuristics which priorizes a low depth of a node, i.e., implements a breadth-first approach
+ * @tparam R
+ */
 template <typename R>
 struct BreadthFirst {
 	constexpr bool operator()( const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs ) {
@@ -48,8 +56,18 @@ struct BreadthFirst {
 	}
 };
 
+/**
+ * Heuristics functor which takes the maximum number of repeated locations (excluding the last one) on the path to the node as a metric. The idea is to rate nodes with a lower cycle-count as better to enforce progress instead of looping.
+ * @tparam R
+ */
 template <typename R>
 struct LeastLocationCycleCount {
+	/**
+	 * Function to compute the largest number of repeated locations on a path to the passed node.
+	 * @details Note that the last location on the path is not considered.
+	 * @param in The node
+	 * @return The count of the occurrences of the location which appears the most on the path to the node.
+	 */
 	std::size_t largestLocationCycle( const ReachTreeNode<R>* in ) {
 		std::map<Location<typename R::NumberType>*, std::size_t> counts;
 		for ( const auto& intervalTransitionPair : in->getPath().elements ) {
