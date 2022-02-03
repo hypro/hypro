@@ -64,6 +64,8 @@ mark_as_advanced(DEVELOPER)
 mark_as_advanced(RESET_REFINEMENT)
 mark_as_advanced(EXPORT_TO_CMAKE)
 
+include(printCustomOptions)
+
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release" FORCE)
 endif ()
