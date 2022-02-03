@@ -231,6 +231,7 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 	plt.rSettings().cummulative = false;
 	plt.setFilename( "simplex_watertanks" );
 
+	/*
 	// create hyperoctree
 	auto bbox = computeBoundingBox( roots ).projectOn( { 0, 1 } );
 	// widen dimensions until they are integer to increase stability
@@ -246,9 +247,10 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 			octree.add( s.projectOn( { 0, 1 } ) );
 		}
 	}
+	 */
 
 	// test some random points
-
+	/*
 	std::mt19937 generator;
 	std::uniform_real_distribution<double> dist = std::uniform_real_distribution<double>( 0, 1 );
 	for ( std::size_t i = 0; i < 100; ++i ) {
@@ -263,7 +265,7 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 			plt.addPoint( point, hypro::plotting::colors[hypro::plotting::red] );
 		}
 	}
-
+	*/
 	for ( const auto& node : hypro::preorder( roots ) ) {
 		for ( const auto& segment : node.getFlowpipe() ) {
 			if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
@@ -279,12 +281,12 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 	}
 
 	// plot octree
-	plotRecursive( octree, plt );
+	// plotRecursive( octree, plt );
 
 	plt.plot2d( hypro::PLOTTYPE::png );
 	plt.plot2d( hypro::PLOTTYPE::pdf );
-	plt.plot2d( hypro::PLOTTYPE::gen );
-	plt.plot2d( hypro::PLOTTYPE::tex );
+	// plt.plot2d( hypro::PLOTTYPE::gen );
+	// plt.plot2d( hypro::PLOTTYPE::tex );
 
 	// output unfinished paths
 	std::string channel =
@@ -306,7 +308,7 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 		filestream.open( "unfinished_" + std::to_string( maxJumps ) + "_jumps_" + std::to_string( path_count ) + ".txt" );
 		filestream << path << std::endl;
 		filestream.close();
-		addPathChronologously( leaf, plt, 4 );
+		addPathChronologously( leaf, plt, 10 );
 		plt.plot2d( hypro::PLOTTYPE::pdf, true );
 		// std::cout << "Plotted path " << std::to_string( path_count ) << std::endl;
 		++path_count;
