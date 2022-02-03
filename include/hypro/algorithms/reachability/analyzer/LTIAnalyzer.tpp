@@ -56,6 +56,7 @@ auto LTIAnalyzer<State, Heuristics, multithreading>::run() -> LTIResult {
 			  transformationCache };
 		while ( !mWorkQueue.empty() ) {
 			auto* currentNode = getNodeFromQueue();
+			DEBUG( "hypro.reachability", "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName() << " with path " << currentNode->getPath() << " with heursitics value " << Heuristics{}.getValue( currentNode ) )
 			auto result = processNode( worker, currentNode, transformationCache );
 			if ( result.isFailure() ) {
 				return result;

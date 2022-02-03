@@ -231,7 +231,7 @@ std::string print( std::vector<Representation> const& sets ) {
 
 template <typename Representation>
 std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const {
-	TRACE( "hypro.reachability", "flowpipe: " << print( flowpipe ) );
+	// TRACE( "hypro.reachability", "flowpipe: " << print( flowpipe ) );
 
 	// transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation>> enabledSegments{};

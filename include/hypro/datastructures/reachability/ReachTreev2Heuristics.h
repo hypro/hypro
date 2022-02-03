@@ -34,6 +34,10 @@ struct DepthFirst {
 		// use pointer comparison if nothing works
 		return lhs < rhs;
 	}
+
+	std::size_t getValue( const ReachTreeNode<R>* in ) {
+		return in->getDepth();
+	}
 };
 
 /**
@@ -54,6 +58,10 @@ struct BreadthFirst {
 		// use pointer comparison if nothing works
 		return lhs < rhs;
 	}
+
+	std::size_t getValue( const ReachTreeNode<R>* in ) {
+		return in->getDepth();
+	}
 };
 
 /**
@@ -69,11 +77,18 @@ struct LeastLocationCycleCount {
 	 * @return The count of the occurrences of the location which appears the most on the path to the node.
 	 */
 	std::size_t largestLocationCycle( const ReachTreeNode<R>* in ) {
+		if ( in->getParent() == nullptr ) {
+			return 0;
+		}
 		std::map<Location<typename R::NumberType>*, std::size_t> counts;
 		for ( const auto& intervalTransitionPair : in->getPath().elements ) {
 			counts[intervalTransitionPair.second->getSource()] += 1;
 		}
 		return std::max_element( std::begin( counts ), std::end( counts ), []( const auto& aPair, const auto& bPair ) { return aPair.second < bPair.second; } )->second;
+	}
+
+	std::size_t getValue( const ReachTreeNode<R>* in ) {
+		return largestLocationCycle( in );
 	}
 
 	constexpr bool operator()( const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs ) {
