@@ -11,7 +11,13 @@
 // use rational arithmetic.
 typedef double Number;	// -3090.30109487     <=>      -3090.3   (mpq_class vs double)
 
-int main( int argc, char* argv[] ) {
+int main( int argc, char* argv[] ) {	
+	std::cout << "System arguments: ";
+	for(int i = 0; i < argc; i++) {
+		std::cout << argv[i] << " ";
+	}
+	std::cout << std::endl;
+
 	// define plotter settings
 	hypro::plotting::gnuplotSettings settings;
 	settings.filename = "FFReLU_example";
@@ -26,6 +32,8 @@ int main( int argc, char* argv[] ) {
 
 	// define input file name
 	const char* filename = "../examples/nnet/fc_relu.nnet";
+	if(argc > 2)
+		filename = argv[2];
 	std::cout << "Filename is: " << filename << std::endl;
 
 	// read and build neural network + time measurement
@@ -67,11 +75,20 @@ int main( int argc, char* argv[] ) {
 	limits << 1, 2, 1;
 
 	hypro::Starset<Number> input_star = hypro::Starset<Number>( center, constr, limits, basis );
+
+	if(argc > 3) {
+		std::cout << "Reading input star from: " << argv[3] << std::endl;
+		input_star = hypro::Starset<Number>::readFromFile(argv[3]);
+	}
+	std::cout << input_star << std::endl;
 	plotter.addObject( input_star.vertices(), hypro::plotting::colors[hypro::plotting::red] );
 	plotter.plot2d();
 	plotter.clear();
 
 	hypro::reachability::NN_reach_method method = hypro::reachability::NN_reach_method::EXACT;
+	if(argc > 1 && (argv[1][0] == 'o' || argv[1][0] == 'O'))
+		method = hypro::reachability::NN_reach_method::OVERAPPRX;
+		
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
 	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, true );
 

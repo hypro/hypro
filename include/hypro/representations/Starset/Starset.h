@@ -7,22 +7,20 @@ static_assert(
 	  "This file may only be included indirectly by GeometricObjectBase.h" );
 #endif
 
+#include "../../util/adaptions_eigen/adaptions_eigen.h"
+#include "../../util/convexHull.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
-#include "../types.h"
-#include "../../util/adaptions_eigen/adaptions_eigen.h"
 #include "../../util/typetraits.h"
-#include "../Polytopes/HPolytope/HPolytope.h"
-#include "../Polytopes/HPolytope/HPolytopeSetting.h"
 #include "../Box/Box.h"
 #include "../Box/BoxSetting.h"
-#include "../../util/convexHull.h"
+#include "../Polytopes/HPolytope/HPolytope.h"
+#include "../Polytopes/HPolytope/HPolytopeSetting.h"
+#include "../types.h"
 #include "StarsetSetting.h"
 
-#include <typeinfo>
 #include <string>
-
-
+#include <typeinfo>
 
 namespace hypro {
 
@@ -33,7 +31,7 @@ namespace hypro {
  * @tparam	   Settings   The used settings.
  * \ingroup geoState @{
  */
-template <typename Number, typename Converter, class Setting>//HPolytopeT<Number,Converter, HPolytopeSetting>>
+template <typename Number, typename Converter, class Setting>  //HPolytopeT<Number,Converter, HPolytopeSetting>>
 class StarsetT : private GeometricObjectBase {
   private:
   public:
@@ -45,17 +43,17 @@ class StarsetT : private GeometricObjectBase {
 	/***************************************************************************
    * Members
    **************************************************************************/
-    //A*alpha<=d
-    //center of the star domain
-    vector_t<Number> mCenter;
-    
-    // A in the given equation above
- /*!< the right side of the condition A*alpha<=d . */
+	//A*alpha<=d
+	//center of the star domain
+	vector_t<Number> mCenter;
 
-    matrix_t<Number> mGenerator;
-    
-	 HPolytopeT<Number,Converter, HPolytopeOptimizerCaching> constraints;
-    
+	// A in the given equation above
+	/*!< the right side of the condition A*alpha<=d . */
+
+	matrix_t<Number> mGenerator;
+
+	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> constraints;
+
   public:
 	/***************************************************************************
    * Constructors
@@ -65,24 +63,23 @@ class StarsetT : private GeometricObjectBase {
    * @brief      Creates an empty Starset.
    */
 	StarsetT();
-    
-    /*
+
+	/*
      * @brief   Creates a star set with generator, intervall and center  
      */
-    StarsetT(const vector_t<Number>& center,const matrix_t<Number>& shapematrix,const vector_t<Number>& limits,const matrix_t<Number>& generator);
-    /*
+	StarsetT( const vector_t<Number>& center, const matrix_t<Number>& shapematrix, const vector_t<Number>& limits, const matrix_t<Number>& generator );
+	/*
      * Starset with assuming standard basis and center as the origin
      * */
-    StarsetT(const matrix_t<Number>& shapematrix,const vector_t<Number>& limits);
-    StarsetT(const vector_t<Number>& center,const matrix_t<Number>& generator, const HPolytopeT<Number,Converter, HPolytopeOptimizerCaching> Constraints);
+	StarsetT( const matrix_t<Number>& shapematrix, const vector_t<Number>& limits );
+	StarsetT( const vector_t<Number>& center, const matrix_t<Number>& generator, const HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> Constraints );
 
-   StarsetT(const HPolytopeT<Number,Converter, HPolytopeOptimizerCaching> Constraints);
+	StarsetT( const HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> Constraints );
 	/**
    * @brief      Copy constructor.
    * @param[in]  orig  The original.
    */
 	StarsetT( const StarsetT& orig );
-
 
 	/**
    * @brief      Settings conversion constructor.
@@ -105,15 +102,59 @@ class StarsetT : private GeometricObjectBase {
 	/***************************************************************************
    * Getters & setters
    **************************************************************************/
-    
-    //getters for the starset
-    vector_t<Number> center() const;
+
+	//getters for the starset
+	vector_t<Number> center() const;
 	vector_t<Number> limits() const;
-    matrix_t<Number>  shape() const;
-    matrix_t<Number>  generator() const;
-    HPolytopeT<Number,Converter, HPolytopeOptimizerCaching> constraintss() const;
-    
+	matrix_t<Number> shape() const;
+	matrix_t<Number> generator() const;
+	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> constraintss() const;
+
 	Setting getSettings() const { return Setting{}; }
+
+	static StarsetT<Number, Converter, Setting> readFromFile( const char* filename ) {
+		//Load file and check if it exists
+		FILE* fstream = fopen( filename, "r" );
+		assert( fstream != NULL );
+
+		if ( fstream == NULL ) {
+			FATAL( "Could not open the input file: %s\n", filename );
+		}
+
+		int n, m, p;  // star dimension; number of variables; number of constraints
+		fscanf( fstream, "%d %d %d", &n, &m, &p );
+		vector_t<Number> center = vector_t<Number>( n );
+		matrix_t<Number> basis = matrix_t<Number>( n, m );
+		matrix_t<Number> shape = matrix_t<Number>( p, m );
+		vector_t<Number> limits = vector_t<Number>( p );
+		
+		double tmp;
+		for ( int i = 0; i < n; i++ ) {
+			fscanf( fstream, "%le", &tmp );
+			center[i] = carl::convert<double, Number>( tmp );
+		}
+
+		for ( int i = 0; i < n; i++ ) {
+			for ( int j = 0; j < m; j++ ) {
+				fscanf( fstream, "%le", &tmp );
+				basis( i, j ) = carl::convert<double, Number>( tmp );
+			}
+		}
+
+		for ( int i = 0; i < p; i++ ) {
+			for ( int j = 0; j < m; j++ ) {
+				fscanf( fstream, "%le", &tmp );
+				shape( i, j ) = carl::convert<double, Number>( tmp );
+			}
+		}
+
+		for ( int i = 0; i < p; i++ ) {
+			fscanf( fstream, "%le", &tmp );
+			limits[i] = carl::convert<double, Number>( tmp );
+		}
+
+		return StarsetT<Number, Converter, Setting>( center, shape, limits, basis );
+	}
 
 	/**
    * @brief Static method for the construction of an empty Starset of
@@ -207,12 +248,16 @@ class StarsetT : private GeometricObjectBase {
 	friend std::ostream&
 	operator<<( std::ostream& ostr,
 				const StarsetT<Number, Converter, Setting>& b ) {
-		
-      ostr << "Starset: " << std::endl;
-      ostr << b.center();
-      ostr << b.generator();
-      ostr << b.constraintss();
-      ostr << std::endl;
+		ostr << "================================================" << std::endl;
+		ostr << "Starset properties" << std::endl;
+		ostr << "Center: " << std::endl
+			 << b.center();
+		ostr << "Basis: " << std::endl
+			 << b.generator();
+		ostr << "Constraints: " << std::endl
+			 << b.constraintss();
+		ostr << std::endl;
+		ostr << "================================================" << std::endl;
 
 		return ostr;
 	}
@@ -279,14 +324,13 @@ class StarsetT : private GeometricObjectBase {
 	intersectHalfspaces( const matrix_t<Number>& _mat,
 						 const vector_t<Number>& _vec ) const;
 	bool contains( const Point<Number>& point ) const;
-   //StarsetT<Number, Converter, Setting,Representation>
+	//StarsetT<Number, Converter, Setting,Representation>
 	//checkifin( const Halfspace<Number>& hspace ) const;
-   
-   Halfspace<Number>	calculateHalfspace( const Halfspace<Number>& hspace ) const;
 
-   std::pair<matrix_t<Number>, vector_t<Number>>
-	calculateHalfspaces(const matrix_t<Number>& _mat, const vector_t<Number>& _vec  ) const;
+	Halfspace<Number> calculateHalfspace( const Halfspace<Number>& hspace ) const;
 
+	std::pair<matrix_t<Number>, vector_t<Number>>
+	calculateHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 
 	/**
    * @brief      Containment check for a Starset.
@@ -325,12 +369,12 @@ class StarsetT : private GeometricObjectBase {
 	void clear();
 };
 /** @} */
-    /*
+/*
      * Conversion for different Data types
      */
-    template <typename From, typename To, typename Converter, class Setting>
-    StarsetT<To, Converter, Setting> convert( const StarsetT<From, Converter, Setting>& in ) {
-        return StarsetT<To, Converter, Setting>( convert<From, To>( in.center() ), convert<From, To>( in.shape() ), convert<From, To>( in.limits() ),convert<From, To>( in.generator() ) );
+template <typename From, typename To, typename Converter, class Setting>
+StarsetT<To, Converter, Setting> convert( const StarsetT<From, Converter, Setting>& in ) {
+	return StarsetT<To, Converter, Setting>( convert<From, To>( in.center() ), convert<From, To>( in.shape() ), convert<From, To>( in.limits() ), convert<From, To>( in.generator() ) );
 }
 }  // namespace hypro
 

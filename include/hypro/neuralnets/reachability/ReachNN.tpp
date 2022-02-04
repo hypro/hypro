@@ -91,10 +91,10 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::stepReLU( int i, std::vecto
 		hypro::vector_t<Number> temp_2 = basis_2.row( i );
 		hypro::Halfspace<Number> neg_1 = hypro::Halfspace<Number>( hypro::Point<Number>( temp_2 ), -center_2[i] );
 		politope_2 = politope_2.intersectHalfspace( neg_1 );
-		center_2( i ) = 0.0;
-		for ( int d = 0; d < basis_2.cols(); d++ ) {
-			basis_2( i, d ) = 0.0;
-		}
+		hypro::matrix_t<Number> I_i = hypro::matrix_t<Number>::Identity(center.rows(), center.rows());
+		I_i(i, i) = 0.0;
+		center_2 = I_i * center_2;
+		basis_2 = I_i * basis_2;
 		hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, politope_2 );
 
 		result.push_back( star_1 );
@@ -151,12 +151,15 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::approxStepReLU( int i, std:
 		shape.row( shape.rows() - 1 ) = trd_constr;
 		limits[limits.rows() - 1] = ( ub * ( center[i] - lb ) ) / ( ub - lb );
 
+		hypro::matrix_t<Number> I_i = hypro::matrix_t<Number>::Identity(center.rows(), center.rows());
+		I_i(i, i) = 0.0;
+		basis = I_i * basis;
+		center = I_i * center;
+
 		// extend the basis with the standard basis vector as last column and set the actual basis vector to the null-vector
 		basis.conservativeResize( basis.rows(), basis.cols() + 1 );
 		basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
-		basis.col( i ) = hypro::vector_t<Number>::Zero( basis.rows() );
 		basis( i, basis.cols() - 1 ) = 1;
-		center[i] = 0.0;
 
 		hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
 		result.push_back( res_star );

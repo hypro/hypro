@@ -223,12 +223,14 @@ void test_relu_exact() {
 		hypro::matrix_t<Number> basis_2 = basis;
 		hypro::HPolytope<Number> politope_2 = politope;
 
+		hypro::matrix_t<Number> I2_0 = hypro::matrix_t<Number>::Identity(2, 2);
+		I2_0(0, 0) = 0;
+
 		hypro::vector_t<Number> temp_2 = basis_2.row( 0 );
 		hypro::Halfspace<Number> neg_1 = hypro::Halfspace<Number>( hypro::Point<Number>( temp_2 ), -center_2[0] );
 		politope_2 = politope_2.intersectHalfspace( neg_1 );
-		center_2( 0 ) = 0;
-		basis_2( 0, 0 ) = 0;
-		basis_2( 0, 1 ) = 0;
+		center_2 = I2_0 * center_2;
+		basis_2 = I2_0 * basis_2;
 		hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, politope_2 );
 		plotter.addObject( star_2.vertices(), hypro::plotting::colors[hypro::plotting::lila] );
 		// std::cout << center_2 << std::endl
@@ -257,9 +259,11 @@ void test_relu_exact() {
 		hypro::matrix_t<Number> basis_4 = basis_1;
 		hypro::HPolytope<Number> politope_4 = politope_1;
 
-		center_4( 1 ) = 0;
-		basis_4( 1, 0 ) = 0;
-		basis_4( 1, 1 ) = 0;
+		hypro::matrix_t<Number> I2_1 = hypro::matrix_t<Number>::Identity(2, 2);
+		I2_1(1, 1) = 0;
+
+		center_4 = I2_1 * center_4;
+		basis_4 = I2_1 * basis_4;
 		hypro::vector_t<Number> temp_4 = basis_4.row( 1 );
 		hypro::Halfspace<Number> neg_2 = hypro::Halfspace<Number>( hypro::Point<Number>( temp_4 ), -center_4[1] );
 		politope_4 = politope_4.intersectHalfspace( neg_2 );
@@ -288,9 +292,8 @@ void test_relu_exact() {
 		hypro::matrix_t<Number> basis_6 = basis_2;
 		hypro::HPolytope<Number> politope_6 = politope_2;
 
-		center_6( 1 ) = 0;
-		basis_6( 1, 0 ) = 0;
-		basis_6( 1, 1 ) = 0;
+		center_6 = I2_1 * center_6;
+		basis_6 = I2_1 * basis_6;
 		hypro::vector_t<Number> temp_6 = basis_6.row( 1 );
 		hypro::Halfspace<Number> neg_3 = hypro::Halfspace<Number>( hypro::Point<Number>( temp_6 ), -center_6[1] );
 		politope_6 = politope_6.intersectHalfspace( neg_3 );
@@ -431,12 +434,17 @@ void test_relu_overapprx() {
 		shape.row( shape.rows() - 1 ) = trd_constr_1;
 		limits[limits.rows() - 1] = ( ub_1 * ( center[0] - lb_1 ) ) / ( ub_1 - lb_1 );
 
+
+		hypro::matrix_t<Number> I2_0 = hypro::matrix_t<Number>::Identity(2, 2);
+		I2_0(0, 0) = 0;
+
+		basis = I2_0 * basis;
+
 		// extend the basis with the standard basis vector as last column and set the actual basis vector to the null-vector
 		basis.conservativeResize( basis.rows(), basis.cols() + 1 );
 		basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
-		basis.col( 0 ) = hypro::vector_t<Number>::Zero( basis.rows() );
 		basis( 0, basis.cols() - 1 ) = 1;
-		center[0] = 0.0;
+		center = I2_0 * center;
 
 		hypro::Starset<Number> star_1 = hypro::Starset<Number>( center, shape, limits, basis );
 		std::cout << "Abstract star:" << std::endl
@@ -486,12 +494,16 @@ void test_relu_overapprx() {
 		shape.row( shape.rows() - 1 ) = trd_constr_3;
 		limits[limits.rows() - 1] = ( ub_2 * ( center[1] - lb_2 ) ) / ( ub_2 - lb_2 );
 
+		hypro::matrix_t<Number> I2_1 = hypro::matrix_t<Number>::Identity(2, 2);
+		I2_1(1, 1) = 0;
+
+		basis = I2_1 * basis;
+
 		// extend the basis with the standard basis vector as last column and set the actual basis vector to the null-vector
 		basis.conservativeResize( basis.rows(), basis.cols() + 1 );
 		basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
-		basis.col( 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
 		basis( 1, basis.cols() - 1 ) = 1;
-		center[1] = 0.0;
+		center = I2_1 * center;
 
 		hypro::Starset<Number> star_2 = hypro::Starset<Number>( center, shape, limits, basis );
 		std::cout << "Abstract star:" << std::endl
