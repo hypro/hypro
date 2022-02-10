@@ -153,7 +153,7 @@ auto LTIAnalyzer<State, Heuristics, multithreading>::processNode( LTIWorker<Stat
 			}
 			// create Task, push only to queue, in case no fixed-point has been detected or detection is disabled
 			if ( !fixedPointReached ) {
-				DEBUG( "hypro.reachability", "Add node-successor to work-queue, path: " << childNode.getPath() );
+				DEBUG( "hypro.reachability", "Add node-successor (@ " << &childNode << ") to work-queue, path: " << childNode.getPath() );
 				addToQueue( &childNode );
 				// mWorkQueue.push_front( &childNode );
 			} else {

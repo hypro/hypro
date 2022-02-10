@@ -31,6 +31,7 @@ namespace hypro {
  */
 template <typename Number, typename Converter, typename Settings>
 bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& node, std::vector<ReachTreeNode<BoxT<Number, Converter, Settings>>>& roots, bool use_partial_coverage = false, std::size_t first_segments_to_test = 0 ) {
+	DEBUG( "hypro.reachability", "Try to find fixed point for node @" << &node );
 	using BoxVector = std::vector<BoxT<Number, Converter, Settings>>;
 	assert( !node.getInitialBoundingBox() && "The bounding box should not have been set to ensure the node is not compared to itself." );
 #ifdef HYPRO_STATISTICS
@@ -65,6 +66,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 						STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 						COUNT( "FP-by-coverage" );
 #endif
+						DEBUG( "hypro.reachability", "The nodes' initial set " << node.getInitialSet() << " in location " << node.getLocation()->getName() << " could be covered by several other initial sets." );
 						node.setFixedPoint( true, &treeNode );
 						return true;
 					}
@@ -75,7 +77,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 					// use standard check
 					const auto& nodeInitialBoundingBox = treeNode.getInitialBoundingBox();
 					if ( nodeInitialBoundingBox && treeNode.getInitialSet().contains( initialBoxes.front() ) ) {
-						DEBUG( "hypro.reachability", "Found fixed point for location " << node.getLocation()->getName() << ". Set " << initialBoxes.front() << " is contained in the initial set " << treeNode.getInitialSet() );
+						DEBUG( "hypro.reachability", "Found fixed point for node @" << &node << " in location " << node.getLocation()->getName() << ". Set " << initialBoxes.front() << " is contained in the initial set " << treeNode.getInitialSet() );
 #ifdef HYPRO_STATISTICS
 						STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif
@@ -84,7 +86,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 					} else if ( first_segments_to_test > 0 ) {
 						// check if the initial set can be covered by the given number of segments from the flowpipe of the current node
 						if ( is_covered( node.getInitialSet(), BoxVector( std::begin( treeNode.getFlowpipe() ), std::next( std::begin( treeNode.getFlowpipe() ), first_segments_to_test ) ) ) ) {
-							DEBUG( "hypro.reachability", "Found fixed point for location " << node.getLocation()->getName() << ". Achieved coverage by the first " << first_segments_to_test << " segments." );
+							DEBUG( "hypro.reachability", "Found fixed point for node @" << &node << " in location " << node.getLocation()->getName() << ". Achieved coverage by the first " << first_segments_to_test << " segments." );
 							node.setFixedPoint();
 							return true;
 						}
@@ -184,35 +186,13 @@ bool is_covered( const Set&, const std::vector<Set>& ) {
  * @param child The child node
  * @return A vector of transitions that are Zeno
  */
-template <typename Set>
-std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( const ReachTreeNode<Set>* parent, const ReachTreeNode<Set>* child ) {
-	using N = typename Set::NumberType;
-	std::vector<const Transition<N>*> result;
-	//// structural check: if child is not a child of parent, exit
-	//// TODO this is a pointer comparison, we need a comparison of reachTreeNodes
-	// if( std::none_of(std::begin(parent->getChildren()), std::end(parent->getChildren()), [child](const auto* childNode){ return childNode == child; }) ) {
-	//	return result;
-	// }
-	//  structural check: if the reset from the parent to the child is non-identity, this cannot be a Zeno transition
-	//  TODO this is a very conservative check - if the overlay of both resets yields identity, this is also a Zeno transition.
-	if ( !child->getTransition()->getReset().isIdentity() ) {
-		return result;
-	}
-	// simple check: if the initial set fully satisfies the guard back to the parent and no variable is reset, we know (since the initial set already fully satisfies the guard from the parent to the child), that this is a Zeno loop.
-	for ( auto& transition : child->getLocation()->getTransitions() ) {
-		if ( transition->getTarget() == parent->getLocation() && transition->getReset().isIdentity() && intersect( child->getInitialSet(), transition->getGuard() ).first == CONTAINMENT::FULL ) {
-			DEBUG( "hypro.reachability", "Detected Zeno-transition from " << transition->getSource()->getName() << " to " << transition->getTarget()->getName() << " with set " << child->getInitialSet() )
-			result.push_back( transition.get() );
-		}
-	}
-	return result;
-}
 
 /**
  * Function to check, whether the incoming transition of the passed node closes a Zeno-cycle.
- * @tparam Set
- * @param child
- * @return
+ * @details The idea is to check, whether the initial set in the child node fully satisfies a guard of a transition to the parent node and whether both transitions do have identity-resets. In this case, the jump back does not provide new information but allows for Zeno-behavior.
+ * @tparam Set The used set representation
+ * @param child The child node
+ * @return A vector of transitions that are Zeno
  */
 template <typename Set>
 std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( const ReachTreeNode<Set>* child ) {
