@@ -79,6 +79,12 @@ public:
 	 */
 	Path<Number> getPath() const;
 
+	/**
+	 * Returns a path, i.e., a sequence of nodes of the reach tree which lead to the current node.
+	 * @return A sequence of nodes
+	 */
+	std::vector<ReachTreeNode const*> getTreePath() const;
+
 	// auto getParent() const { return this->mParent; }
 
 	Transition<Number> const* getTransition() const { return mTransition; }
@@ -158,13 +164,21 @@ public:
     /// Setter for a flag indicating, that the node has intersected the set of bad states
     void flagUnsafe(bool unsafe = true) { mPotentiallyUnsafe = unsafe; }
 
-    /// Getter for the timelock-status of this node, i.e., whether a timelock has been detected during analysis
-    bool hasTimelock() const { return mFinishesWithTimelock; }
+	/// Getter for the timelock-status of this node, i.e., whether a timelock has been detected during analysis
+	bool hasTimelock() const { return mFinishesWithTimelock; }
 };
 
 template <typename Representation>
 std::ostream& operator<<( std::ostream& out, const ReachTreeNode<Representation>& node ) {
 	out << "{ " << node.getLocation()->getName() << ", init " << node.getInitialSet() << " }";
+	return out;
+}
+
+template <typename Representation>
+std::ostream& operator<<( std::ostream& out, const std::vector<ReachTreeNode<Representation> const*>& nodes ) {
+	for ( const auto ptr : nodes ) {
+		out << ptr->getLocation()->getName() << ", " << ptr->getTimings() << ", @" << ptr << "\n";
+	}
 	return out;
 }
 

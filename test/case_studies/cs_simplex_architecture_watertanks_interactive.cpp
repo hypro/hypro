@@ -32,10 +32,10 @@ void Simplex_Watertanks_Reachability( std::size_t maxJumps = 5 ) {
         auto box = hypro::Box<Number>(condition.getMatrix(), condition.getVector());
         auto intervals = box.intervals();
         for (std::size_t i = 0; i < 5; ++i) {
-            if (i == 0 || i == 1 || i == 3) {
-                intervals[i] = carl::Interval<Number>(intervals[i].lower() - 0.05, intervals[i].upper() + 0.05);
-            }
-        }
+			if ( i == 0 || i == 1 ) {  //|| i == 3) {
+				intervals[i] = carl::Interval<Number>( intervals[i].lower() - 0.05, intervals[i].upper() + 0.05 );
+			}
+		}
         condition = hypro::Condition<Number>(intervals);
     }
     automaton.setInitialStates(initialStates);

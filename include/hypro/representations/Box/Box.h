@@ -433,7 +433,6 @@ class BoxT : private GeometricObjectBase {
 	friend std::ostream& operator<<( std::ostream& ostr, const BoxT<Number, Converter, Setting>& b ) {
 		ostr << "{ ";
 		if ( !b.empty() ) {
-			// ostr << b.min() << "; " << b.max() << std::endl;
 			for ( const auto& i : b.intervals() ) {
 				ostr << i << " ";
 			}

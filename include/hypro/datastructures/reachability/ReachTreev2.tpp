@@ -38,6 +38,18 @@ auto ReachTreeNode<Representation>::getPath() const -> Path<Number> {
 	return path;
 }
 
+template <typename R>
+std::vector<ReachTreeNode<R> const*> ReachTreeNode<R>::getTreePath() const {
+	std::vector<ReachTreeNode<R> const*> path;
+
+	auto const* node = this;
+	while ( node->mParent != nullptr ) {
+		path.push_back( node );
+		node = node->mParent;
+	}
+	return path;
+}
+
 template <typename Representation>
 void ReachTreeNode<Representation>::setFixedPoint( bool hasFixedPoint, ReachTreeNode<Representation>* reason ) {
 	mHasFixedPoint = hasFixedPoint ? TRIBOOL::TRUE : TRIBOOL::FALSE;

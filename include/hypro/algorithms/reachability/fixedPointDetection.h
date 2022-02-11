@@ -70,6 +70,12 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 						node.setFixedPoint( true, &treeNode );
 						return true;
 					}
+#ifdef HYPRO_LOGGING
+					DEBUG( "hypro.reachability", "Remaining boxes to be covered: " );
+					for ( const auto& b : tmp ) {
+						DEBUG( "hypro.reachability", b );
+					}
+#endif
 					// the remaining boxes are the ones used in the next iteration
 					swap( tmp, initialBoxes );
 				} else {
