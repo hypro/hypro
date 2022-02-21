@@ -208,4 +208,8 @@ if (GNUPLOT_FOUND)
     set(GNUPLOT_FOUND TRUE PARENT_SCOPE)
 endif ()
 
+# for serialization
+include(cereal.cmake)
+
+
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)

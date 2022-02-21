@@ -13,7 +13,19 @@
 
 #pragma once
 
+#include "../representations/GeometricObjectBase.h"
+#include "../util/serialization/interval_serialization.h"
+
+#include <cereal/types/common.hpp>
+#include <cereal/types/vector.hpp>
+
 namespace hypro {
+
+template <typename N>
+class Hyperoctree;
+
+template <class Archive, typename N>
+void serialize( Archive& archive, Hyperoctree<N>& tree );
 
 /**
  * Class to efficiently store data in a tree-like structure.
@@ -22,8 +34,15 @@ namespace hypro {
 template <typename Number>
 class Hyperoctree {
 	using cellVector = std::vector<Box<Number>>;
+	template <class Archive>
+	friend void serialize( Archive& archive, Hyperoctree<Number>& tree );
 
   public:
+	/*
+	 * Default constructor. Should not be used, but is required for serialization. Instead use constructor with splits, depth and container parameter.
+	 */
+	Hyperoctree() {}
+	/// Constructor, is to be used in favor of the default constructor.
 	Hyperoctree( std::size_t splits, std::size_t maxDepth, const Box<Number>& container )
 		: mSplits( splits )
 		, mRemainingDepth( maxDepth )
@@ -32,6 +51,38 @@ class Hyperoctree {
 		mToBeCovered.push_back( container );
 	}
 
+	/**
+	 * @brief Setter for the splits-value.
+	 * @details Avoid using this function, as it is very expensive when used on a non-empty hyperoctree.
+	 * @param splits New number of splits.
+	 */
+	void setSplits( std::size_t splits ) {
+		// TODO what needs to be done: recursively collect everything, temporarily keep it, update the splits-value and reinsert everything.
+		throw std::logic_error( "This function is not yet implemented." );
+	}
+	/**
+	 * @brief Setter for the depth-value
+	 * @details Avoid using this, as it is very expensive for non-empty hyperoctrees. Resets the remaining depth - potentially allows to mess up the data-structure to get imbalanced trees and such.
+	 * @param depth New depth value.
+	 */
+	void setDepth( std::size_t depth ) {
+		// TODO what needs to be done: recursively collect everything, temporarily keep it, update the depth-value and reinsert everything.
+		throw std::logic_error( "This function is not yet implemented." );
+	}
+	/**
+	 * @brief Setter for the container boundaries
+	 * @details Avoid this, this is very expensive and even allows to create inconsistent state for non-empty hyperoctrees.
+	 * @param box
+	 */
+	void setContainer( const Box<Number> box ) {
+		// TODO what needs to be done: recursively collect everything, temporarily keep it, update the container and reinsert everything.
+		throw std::logic_error( "This function is not yet implemented." );
+	}
+	/**
+	 * @brief Add a box to the tree
+	 * @details Recursively adds a box to the tree, which is potentially split during the process.
+	 * @param data The new box
+	 */
 	void add( const Box<Number>& data ) {
 		TRACE( "hypro.datastructures", "Add box " << data << " in " << *this );
 		// if this box is already fully covered, do nothing.
@@ -222,7 +273,37 @@ std::ostream& operator<<( std::ostream& out, const Hyperoctree<Number>& in ) {
 	out << "Container: " << in.getContainer() << "\ncovered: " << in.isCovered();
 	return out;
 }
+/// serialization-function
+template <class Archive>
+void serialize( Archive& archive,
+				Hyperoctree<double>& tree ) {
+	archive( tree.mSplits, tree.mRemainingDepth, tree.mCovered, tree.mContainer, tree.mToBeCovered, tree.mData, tree.mChildren );
+}
 
 }  // namespace hypro
 
-//#include "Hyperoctree.tpp"
+// Specialization for LoadAndConstruct for hyperoctrees
+namespace cereal {
+template <>
+struct LoadAndConstruct<hypro::Hyperoctree<double>> {
+	// load_and_construct will be passed the archive that you will be loading
+	// from as well as a special construct object that can be used to invoke
+	// the constructor for your class.
+	//
+	// More advanced functionality is available using construct, such as accessing
+	// class members, which is detailed in the doxygen docs.
+	//
+	// As with the internal load_and_construct, versioning can be supported by adding an
+	// additional final parameter: const std::uint32_t version
+	template <class Archive>
+	static void load_and_construct( Archive& ar, cereal::construct<hypro::Hyperoctree<double>>& construct ) {
+		std::size_t splits, depth;
+		bool covered;
+		hypro::Box<double> container;
+		std::vector<hypro::Box<double>> toBeCovered, data;
+		std::vector<hypro::Hyperoctree<double>> children;
+		ar( splits, depth, covered, container, toBeCovered, data, children );
+		construct( splits, depth, container, covered, toBeCovered, data, children );
+	}
+};
+}  // namespace cereal
