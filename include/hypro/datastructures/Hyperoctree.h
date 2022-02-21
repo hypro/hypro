@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -131,13 +131,27 @@ class Hyperoctree {
 	}
 
 	const Box<Number>& getContainer() const { return mContainer; }
-	const std::vector<std::unique_ptr<Hyperoctree<Number>>>& getChildren() const { return mChildren; }
+	/// Getter for child-trees. The union of all child-trees covers the set represented by the container.
+	const std::vector<Hyperoctree<Number>>& getChildren() const { return mChildren; }
+	/// Equality-comparison operator.
+	bool operator==( const Hyperoctree<Number>& other ) const {
+		if ( mSplits != other.mSplits || mRemainingDepth != other.mRemainingDepth || mCovered != other.mCovered || mContainer != other.mContainer ) {
+			return false;
+		}
+		if ( !std::equal( std::begin( mData ), std::end( mData ), std::begin( other.mData ) ) ) {
+			return false;
+		}
+		if ( !std::equal( std::begin( mToBeCovered ), std::end( mToBeCovered ), std::begin( other.mToBeCovered ) ) ) {
+			return false;
+		}
+		return std::equal( std::begin( mChildren ), std::end( mChildren ), std::begin( other.mChildren ) );
+	}
 
   private:
 	void propagateCoverage() {
-		std::for_each( std::begin( mChildren ), std::end( mChildren ), []( auto& child ) { child->propagateCoverage(); } );
+		std::for_each( std::begin( mChildren ), std::end( mChildren ), []( auto& child ) { child.propagateCoverage(); } );
 		// check intermediate nodes, leaf nodes update their coverage upon adding of content
-		if ( mRemainingDepth != 0 && !mChildren.empty() && std::all_of( std::begin( mChildren ), std::end( mChildren ), []( const auto& child ) { return child->isCovered(); } ) ) {
+		if ( mRemainingDepth != 0 && !mChildren.empty() && std::all_of( std::begin( mChildren ), std::end( mChildren ), []( const auto& child ) { return child.isCovered(); } ) ) {
 			mCovered = true;
 			TRACE( "hypro.datastructures", "All children of " << *this << " are covered" );
 		}
@@ -186,7 +200,7 @@ class Hyperoctree {
 				for ( std::size_t pos = 0; pos < dim; ++pos ) {
 					newIntervals.push_back( splitIntervals[pos][intervalIndices[pos]] );
 				}
-				mChildren.emplace_back( std::make_unique<Hyperoctree<Number>>( mSplits, mRemainingDepth - 1, Box<Number>( newIntervals ) ) );
+				mChildren.emplace_back( Hyperoctree<Number>( mSplits, mRemainingDepth - 1, Box<Number>( newIntervals ) ) );
 			}
 		}
 	}
