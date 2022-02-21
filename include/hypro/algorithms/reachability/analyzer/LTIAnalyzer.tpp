@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "LTIAnalyzer.h"
@@ -35,6 +35,9 @@ auto LTIAnalyzer<State, Heuristics, multithreading>::run() -> LTIResult {
 							return !mWorkQueue.empty() || mTerminate;
 						} );
 						{
+							std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
+							mIdle[i] = false;
+							std::cout << "Thread " << i << " is not idle." << std::endl;
 						}
 						currentNode = getNodeFromQueue();
 						DEBUG( "hypro.reachability", "Processing node @" << currentNode << " with path " << currentNode->getPath() );
@@ -44,9 +47,17 @@ auto LTIAnalyzer<State, Heuristics, multithreading>::run() -> LTIResult {
 					if ( result.isFailure() ) {
 						// TODO call for termination
 					}
+					{
+						std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
+						std::cout << "Thread " << i << " is idle." << std::endl;
+						mIdle[i] = true;
+						mAllIdle.notify_all();
+					}
 				}
 			} ) );
 		}
+		// wait();
+		shutdown();
 	} else {
 		TimeTransformationCache<Number> transformationCache;
 		LTIWorker<State> worker{
