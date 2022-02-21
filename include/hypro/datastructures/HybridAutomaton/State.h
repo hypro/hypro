@@ -1,4 +1,13 @@
 
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 
 //#include "../../representations/GeometricObjectBase.h"
@@ -234,30 +243,34 @@ class State {
 	const std::variant<Representation, Rargs...>& getSet( std::size_t i = 0 ) const;
 
 	/**
-     * @brief      Gets a reference to the i-th set.
-     * @param[in]  i     Set index.
-     * @return     The set.
-     */
+	 * @brief      Gets a reference to the i-th set.
+	 * @param[in]  i     Set index.
+	 * @return     The set.
+	 */
 	std::variant<Representation, Rargs...>& rGetSet( std::size_t i = 0 );
 
 	/**
-     * @brief      Gets the type of the i-th set.
-     * @param[in]  i     Set index.
-     * @return     The set type.
-     */
-	representation_name getSetType( std::size_t i = 0 ) const {
-		TRACE( "hypro.datastructures", "Attempt to get set type at pos " << i << ", mTypes.size() = " << mTypes.size() );
-		assert( i < mTypes.size() );
-		TRACE( "hypro.datastructures", "Type is " << mTypes.at( i ) );
+	 * @brief      Gets the type of the i-th set.
+	 * @param[in]  i     Set index.
+	 * @return     The set type.
+	 */
+	[[deprecated( "Use type() instead." )]] representation_name getSetType( std::size_t i = 0 ) const {
+		return this->type( i );
+	}
+
+	representation_name type( std::size_t I = 0 ) const {
+		TRACE( "hypro.datastructures", "Attempt to get set type at pos " << I << ", mTypes.size() = " << mTypes.size() );
+		assert( I < mTypes.size() );
+		TRACE( "hypro.datastructures", "Type is " << mTypes.at( I ) );
 		assert( mSets.size() == mTypes.size() );
 		assert( checkConsistency() );
-		return mTypes.at( i );
+		return mTypes.at( I );
 	}
 
 	/**
-     * @brief      Gets all contained sets.
-     * @return     The sets.
-     */
+	 * @brief      Gets all contained sets.
+	 * @return     The sets.
+	 */
 	const std::vector<repVariant>& getSets() const { return mSets; }
 
 	/**

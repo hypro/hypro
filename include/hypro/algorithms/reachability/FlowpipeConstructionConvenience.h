@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -10,6 +10,7 @@
 #pragma once
 
 #include "../../datastructures/HybridAutomaton/Condition.h"
+#include "../../datastructures/HybridAutomaton/State.h"
 #include "types.h"
 
 #include <utility>
@@ -106,6 +107,10 @@ Box<typename Representation::NumberType> computeBoundingBox( const Representatio
 	return hypro::Converter<typename Representation::NumberType>::toBox( set );
 }
 
+template <typename Number, typename Representation, typename... Rargs>
+Box<Number> computeBoundingBox( const hypro::State<Number, Representation, Rargs...>& set ) {
+	return std::visit( genericConvertAndGetVisitor<Box<Number>>(), set.getSet() );
+}
 template <class Representation>
 Box<typename Representation::NumberType> computeBoundingBox( const ReachTreeNode<Representation>& node ) {
 	auto box = computeBoundingBox( node.getFlowpipe().front() );
