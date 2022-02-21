@@ -125,6 +125,11 @@ void Plotter<Number>::plotGen() const {
 
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color ) {
+	return addObject(_points, "", _color);
+}
+
+template <typename Number>
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::string objectTitle, std::optional<std::size_t> _color ) {
 	TRACE( "hypro.plotter", "" );
 	// reduce dimensions
 	if ( !_points.empty() ) {
@@ -164,7 +169,7 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			}
 		}
 		if ( objectIsTwoDimensional ) {
-			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color } ) );
+			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, _objectTitle } ) );
 			mId++;
 			return ( mId - 1 );
 		}
@@ -304,6 +309,9 @@ void Plotter<Number>::writeGnuplot() const {
 			if ( mSettings.grid ) {
 				mOutfile << "set grid back\n";
 			}
+			if ( mSettings.key ) {
+				mOutfile << "set key outside\n";
+			}
 			if ( mSettings.axes ) {
 				mOutfile << "# axis settings\n";
 				mOutfile << "set xzeroaxis\n";
@@ -330,6 +338,7 @@ void Plotter<Number>::writeGnuplot() const {
 		unsigned objectCount = 1;
 		unsigned currId = 0;
 		unsigned tmpId = 0;
+		std::string keyContent = "";
 		mOutfile << "\n# plotting sets\n";
 
 		for ( auto& [id, plotObject] : mObjects ) {
@@ -379,12 +388,21 @@ void Plotter<Number>::writeGnuplot() const {
 				else
 					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
 
+				if ( mSettings.key ) {
+					mOutfile << "set style line " << std::dec << objectCount << " lc rgb '#" << std::hex << color << "' lt 1 lw 5\n";
+					keyContent = keyContent + ", NaN ls " + std::to_string(objectCount) + " title \"" + plotObject.objectTitle + "\"";
+				}
+
 				if ( mSettings.cummulative ) {
 					mOutfile << "\nplot ";
 					for ( unsigned d = 0; d < min.rows(); ++d ) {
 						mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
 					}
-					mOutfile << "NaN notitle \n";
+					if ( mSettings.key ) {
+						mOutfile << "NaN notitle" << keyContent << "\n";
+					} else {
+						mOutfile << "NaN notitle\n";
+					}
 				}
 				// mark as plotted
 				plotObject.isPlotted = true;
