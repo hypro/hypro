@@ -14,8 +14,8 @@
 
 namespace hypro {
 
-template <typename State, MULTITHREADING multithreading>
-auto LTIAnalyzer<State, multithreading>::run() -> LTIResult {
+template <typename State>
+auto LTIAnalyzer<State>::run() -> LTIResult {
 	if ( multithreading == MULTITHREADING::ENABLED ) {
 		mIdle = std::vector( mNumThreads, false );
 		for ( int i = 0; i < mNumThreads; i++ ) {
@@ -67,8 +67,8 @@ auto LTIAnalyzer<State, multithreading>::run() -> LTIResult {
 	}
 }
 
-template <typename State, MULTITHREADING multithreading>
-auto LTIAnalyzer<State, multithreading>::processNode( LTIWorker<State>& worker, ReachTreeNode<State>* node, TimeTransformationCache<Number>& transformationCache ) -> LTIResult {
+template <typename State>
+auto LTIAnalyzer<State>::processNode( LTIWorker<State>& worker, ReachTreeNode<State>* node, TimeTransformationCache<Number>& transformationCache ) -> LTIResult {
 	REACHABILITY_RESULT safetyResult;
 
 	// set bounding box required for fixed-point test

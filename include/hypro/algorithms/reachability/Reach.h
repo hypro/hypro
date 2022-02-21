@@ -41,7 +41,7 @@ namespace reachability {
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Representation, MULTITHREADING multithreading = MULTITHREADING::DISABLED>
+template <typename Representation>
 class Reach {
   public:
 	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
