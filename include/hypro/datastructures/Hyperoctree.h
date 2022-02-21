@@ -106,11 +106,15 @@ class Hyperoctree {
 			updateChildren();
 			// forward call to children
 			TRACE( "hypro.datastructures", "Forward call to children" );
-			std::for_each( std::begin( mChildren ), std::end( mChildren ), [&result]( const auto& child ) { child->add( result.second ); } );
+			std::for_each( std::begin( mChildren ), std::end( mChildren ), [&result]( auto& child ) { child.add_recursive( result.second ); } );
 			propagateCoverage();
 		}
 	}
-
+	/**
+	 * @brief Containment test for a single point
+	 * @param point The point
+	 * @return True, if the point is contained in the set represented by the hyperoctree.
+	 */
 	bool contains( const Point<Number>& point ) const {
 		if ( !mContainer.contains( point ) ) {
 			TRACE( "hypro.datastructures", "Point " << point << " is not contained in " << mContainer );
@@ -130,12 +134,16 @@ class Hyperoctree {
 				return tmp;
 			} else {
 				TRACE( "hypro.datastructures", "Forward to child-nodes" );
-				return std::any_of( std::begin( mChildren ), std::end( mChildren ), [&point]( const auto& child ) { return child->contains( point ); } );
+				return std::any_of( std::begin( mChildren ), std::end( mChildren ), [&point]( const auto& child ) { return child.contains( point ); } );
 			}
 		}
 	}
-
-	bool contains( const Box<Number>& set ) {
+	/**
+	 * @brief Containment test for a box
+	 * @param set The box
+	 * @return True, if the box is fully contained in the set represented by the hyperoctree.
+	 */
+	bool contains( const Box<Number>& set ) const {
 		if ( set.empty() ) {
 			return true;
 		}
@@ -170,17 +178,20 @@ class Hyperoctree {
 			} else {
 				TRACE( "hypro.datastructures", "Forward to child-nodes" );
 				return std::all_of( std::begin( mChildren ), std::end( mChildren ), [&set]( const auto& child ) {
-					return child->contains( set.intersect( child->mContainer ) );
+					return child.contains( set.intersect( child.mContainer ) );
 				} );
 			}
 		}
 		return true;
 	}
-
+	/**
+	 * @brief Getter for the coverage value
+	 * @return True, if the added sets fully cover the maximal set representable by this hyperoctree.
+	 */
 	bool isCovered() const {
 		return mCovered;
 	}
-
+	/// Getter for the set-container, i.e., the maximal representable set of the hyperoctree.
 	const Box<Number>& getContainer() const { return mContainer; }
 	/// Getter for child-trees. The union of all child-trees covers the set represented by the container.
 	const std::vector<Hyperoctree<Number>>& getChildren() const { return mChildren; }
@@ -199,6 +210,7 @@ class Hyperoctree {
 	}
 
   private:
+	/// Recursively propagage coverage value up in the tree. Required after adding new sets: when all children are fully covered, the parent is also marked as fully covered.
 	void propagateCoverage() {
 		std::for_each( std::begin( mChildren ), std::end( mChildren ), []( auto& child ) { child.propagateCoverage(); } );
 		// check intermediate nodes, leaf nodes update their coverage upon adding of content
@@ -207,7 +219,7 @@ class Hyperoctree {
 			TRACE( "hypro.datastructures", "All children of " << *this << " are covered" );
 		}
 	}
-
+	/// Updates the storage of sets which still need to be covered in the current tree before achieving full coverage.
 	void updateCoverage( const Box<Number>& newBox ) {
 		TRACE( "hypro.datastructures", "Update coverage on " << newBox );
 		std::vector<Box<Number>> tmp;
@@ -229,7 +241,7 @@ class Hyperoctree {
 		// update what remains to be covered
 		std::swap( mToBeCovered, tmp );
 	}
-
+	/// initialization of child trees
 	void updateChildren() {
 		if ( mChildren.empty() && mRemainingDepth != 0 ) {
 			// create splits
@@ -240,7 +252,6 @@ class Hyperoctree {
 			for ( std::size_t i = 0; i < dim; ++i ) {
 				splitIntervals[i] = split_homogeneously_weak_bounds( intervals[i], mSplits );
 			}
-
 			// create all boxes by creating all combinations of intervals
 			Combinator boxCombinator{ mSplits, dim };
 			while ( !boxCombinator.end() ) {
@@ -255,19 +266,44 @@ class Hyperoctree {
 			}
 		}
 	}
-	bool add_recursive( const Box<Number>& data, HyperOctreeOp parentDecision, Hyperoctree<Number>& parent );
-	void insertData( const Box<Number>& obj ) { mData.push_back( obj ); }
+	/// Recursive function which is called during adding of sets to the hyperoctree.
+	void add_recursive( const Box<Number>& data ) {
+		TRACE( "hypro.datastructures", "Add box " << data << " in " << *this );
+		// if this box is already fully covered, do nothing.
+		if ( mCovered ) {
+			TRACE( "hypro.datastructures", "This container is already covered." );
+			return;
+		}
+		// consider only the part that is contained in this box
+		std::pair<CONTAINMENT, Box<Number>> result = mContainer.containmentReduce( data );
+		// if the intersection of the data and this container is non-empty
+		if ( result.first != CONTAINMENT::NO ) {
+			TRACE( "hypro.datastructures", "At least partial intersection, resulting box: " << result.second );
+			// the set is at least partially contained and we have already cut to the part that is also contained in this container, we can pass to the childen
+			if ( mRemainingDepth == 0 ) {
+				TRACE( "hypro.datastructures", "Reached leaf." );
+				mData.push_back( data );
+				updateCoverage( result.second );
+				return;
+			}
+			// make sure child nodes exist
+			updateChildren();
+			// forward call to children
+			TRACE( "hypro.datastructures", "Forward call to children" );
+			std::for_each( std::begin( mChildren ), std::end( mChildren ), [&result]( auto& child ) { child.add_recursive( result.second ); } );
+		}
+	}
 
   protected:
-	std::size_t mSplits = 1;
-	std::size_t mRemainingDepth = 0;  ///< indicates how may more splits can be made
-	std::vector<std::unique_ptr<Hyperoctree<Number>>> mChildren;
-	bool mCovered = false;
-	Box<Number> mContainer;
-	std::vector<Box<Number>> mToBeCovered;
-	std::vector<Box<Number>> mData;	 ///< collects data suitable for this level
+	std::size_t mSplits = 1;					 ///< number of splits done per dimension
+	std::size_t mRemainingDepth = 0;			 ///< indicates how may more splits can be made
+	std::vector<Hyperoctree<Number>> mChildren;	 ///< child trees, if the remaining depth is larger than zero
+	bool mCovered = false;						 ///< flag - if true, the whole container is covered by sets that have been added.
+	Box<Number> mContainer;						 ///< container representing the maximal set that can be represented
+	std::vector<Box<Number>> mToBeCovered;		 ///< cache which stores what area needs to be covered in order to fully cover the container
+	std::vector<Box<Number>> mData;				 ///< collects data suitable for this level
 };
-
+/// outstream-operator
 template <typename Number>
 std::ostream& operator<<( std::ostream& out, const Hyperoctree<Number>& in ) {
 	out << "Container: " << in.getContainer() << "\ncovered: " << in.isCovered();
