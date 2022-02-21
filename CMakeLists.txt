@@ -173,7 +173,7 @@ set_target_properties(${PROJECT_NAME}-static PROPERTIES
         LINKER_LANGUAGE CXX
         )
 
-target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
+#target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
 target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
 
 target_include_directories(${PROJECT_NAME}-static
@@ -196,7 +196,7 @@ set_target_properties(${PROJECT_NAME}-shared PROPERTIES
         LINKER_LANGUAGE CXX
         )
 
-target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
+#target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread)
 
 target_include_directories(${PROJECT_NAME}-shared
@@ -244,6 +244,8 @@ endif ()
 
 ########################################################################################
 
+include(GNUInstallDirs)
+
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include FILES_MATCHING PATTERN "*.tpp")
 
@@ -252,9 +254,17 @@ install(TARGETS ${PROJECT_NAME}-static
         LIBRARY DESTINATION ${LIB_INSTALL_DIR}
         ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static)
 install(TARGETS ${PROJECT_NAME}-shared
+        EXPORT ${PROJECT_NAME}_Targets
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         EXPORT ${PROJECT_NAME}
-        LIBRARY DESTINATION ${LIB_INSTALL_DIR}
-        ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/shared)
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT ${PROJECT_NAME}_Runtime
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        COMPONENT ${PROJECT_NAME}_Runtime
+        NAMELINK_COMPONENT ${PROJECT_NAME}_Development
+        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        COMPONENT ${PROJECT_NAME}_Development
+        )
 
 
 add_subdirectory(resources)
