@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "test/defines.h"
 #include "gtest/gtest.h"
 #include <cassert>
@@ -206,4 +215,89 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityUnsafe2 ) {
 	EXPECT_TRUE( roots.front().getFlowpipe().size() == 1 );
 	EXPECT_EQ( std::size_t( 1 ), hypro::getNumberNodes( roots.front() ) );
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, reachabilityResult );
+}
+
+TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInit ) {
+	using I = carl::Interval<Number>;
+	using IV = std::vector<I>;
+	using Box = hypro::Box<Number>;
+
+	// update initial states: they should not be contained in the invariant
+	hypro::HybridAutomaton<Number>::locationConditionMap initialStatesMap;
+	Box initialSet{IV{ I{ -4, -3 }, I{0,0} } };
+	initialStatesMap[this->bball_ha.getLocations().front()] = hypro::conditionFromIntervals(initialSet.intervals());
+	this->bball_ha.setInitialStates(initialStatesMap);
+	// create initial states - chose a state set representation, here: boxes
+	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
+		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+
+	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
+
+	using tNumber = hypro::tNumber;
+	hypro::FixedAnalysisParameters fixedParameters;
+	fixedParameters.jumpDepth = 3;
+	fixedParameters.localTimeHorizon = 5;
+	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
+
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_h;
+
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
+
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
+																   settings.strategy().front(), roots );
+
+	// run reacher. Return type explicit to be able to monitor changes
+	auto reachabilityResult = reacher.computeForwardReachability();
+
+	// since the invariant is directly invalidated, not much should happen during analysis, i.e., no node should be expanded.
+	EXPECT_TRUE( roots.front().getFlowpipe().size() == 0 );
+	EXPECT_EQ( std::size_t( 1 ), hypro::getNumberNodes( roots.front() ) );
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
+}
+
+TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInvariant ) {
+	// update invariant to something that is FALSE per se, here: x <= 0 and x >= 1
+	Matrix invariantConstraints = Matrix::Zero( 2, 2 );
+	Vector invariantOffsets = Vector::Zero( 2 );
+	invariantConstraints( 0, 0 ) = Number( 1 );
+	invariantConstraints( 1, 0 ) = Number( -1 );
+	invariantOffsets << 0,-1;
+	// assign new invariant to location
+	this->bball_ha.getLocations().front()->setInvariant( hypro::Condition( invariantConstraints, invariantOffsets ) );
+	std::cout << "new invariant: " << this->bball_ha.getLocations().front()->getInvariant() << std::endl;
+	std::cout << "has set state: " << this->bball_ha.getLocations().front()->getInvariant().getConditionSetState(0) << std::endl;
+	this->bball_ha.getLocations().front()->getInvariant().updateSetState();
+	std::cout << "has set state: " << this->bball_ha.getLocations().front()->getInvariant().getConditionSetState(0) << std::endl;
+	// create initial states - chose a state set representation, here: boxes
+	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
+		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+
+	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
+
+	using tNumber = hypro::tNumber;
+	hypro::FixedAnalysisParameters fixedParameters;
+	fixedParameters.jumpDepth = 3;
+	fixedParameters.localTimeHorizon = 5;
+	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
+
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_h;
+
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
+
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
+																   settings.strategy().front(), roots );
+
+	// run reacher. Return type explicit to be able to monitor changes
+	auto reachabilityResult = reacher.computeForwardReachability();
+
+	// since the invariant is directly invalidated, not much should happen during analysis, i.e., no node should be expanded.
+	EXPECT_TRUE( roots.front().getFlowpipe().size() == 0 );
+	EXPECT_EQ( std::size_t( 1 ), hypro::getNumberNodes( roots.front() ) );
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
 }
