@@ -8,6 +8,7 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <cassert>
 #include <hypro/algorithms/reachability/Reach.h>
@@ -224,9 +225,9 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInit ) {
 
 	// update initial states: they should not be contained in the invariant
 	hypro::HybridAutomaton<Number>::locationConditionMap initialStatesMap;
-	Box initialSet{IV{ I{ -4, -3 }, I{0,0} } };
-	initialStatesMap[this->bball_ha.getLocations().front()] = hypro::conditionFromIntervals(initialSet.intervals());
-	this->bball_ha.setInitialStates(initialStatesMap);
+	Box initialSet{ IV{ I{ -4, -3 }, I{ 0, 0 } } };
+	initialStatesMap[this->bball_ha.getLocations().front()] = hypro::conditionFromIntervals( initialSet.intervals() );
+	this->bball_ha.setInitialStates( initialStatesMap );
 	// create initial states - chose a state set representation, here: boxes
 	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
 		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
@@ -264,7 +265,7 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInvariant ) {
 	Vector invariantOffsets = Vector::Zero( 2 );
 	invariantConstraints( 0, 0 ) = Number( 1 );
 	invariantConstraints( 1, 0 ) = Number( -1 );
-	invariantOffsets << 0,-1;
+	invariantOffsets << 0, -1;
 	// assign new invariant to location
 	this->bball_ha.getLocations().front()->setInvariant( hypro::Condition( invariantConstraints, invariantOffsets ) );
 	// create initial states - chose a state set representation, here: boxes
