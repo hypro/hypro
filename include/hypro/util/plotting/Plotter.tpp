@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "Plotter.h"
@@ -140,20 +140,9 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			mLimits.second = _points.begin()->rawCoordinates();
 		}
 		// update limits
-		for (
-			  const auto& point : _points ) {
-			if ( point.
-
-				 dimension()
-
-				 == 2 ) {
-				for (
-					  unsigned d = 0;
-					  d < mLimits.first.
-
-						  rows();
-
-					  ++d ) {
+		for ( const auto& point : _points ) {
+			if ( point.dimension() == 2 ) {
+				for ( unsigned d = 0; d < mLimits.first.rows(); ++d ) {
 					mLimits.first( d ) = mLimits.first( d ) > point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.first( d );
 					mLimits.second( d ) = mLimits.second( d ) < point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.second( d );
 				}
@@ -173,11 +162,8 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>
-
-													   >& _points ) {
-	for (
-		  const auto& part : _points ) {
+unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>>& _points ) {
+	for ( const auto& part : _points ) {
 		addObject( part );
 		--mId;
 	}
@@ -236,7 +222,6 @@ void Plotter<Number>::setObjectColor( unsigned _id, const std::size_t _color ) {
 
 template <typename Number>
 void Plotter<Number>::clear() {
-	mLastDimensions = std::make_pair( -1, -1 );
 	mId = 1;
 	mObjects.clear();
 	mPlanes.clear();
