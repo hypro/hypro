@@ -117,4 +117,3 @@ TEST( UtilityTest, CreateTemplateDirections ) {
 	res = hypro::computeTemplate<double>( 2, 12 );
 	EXPECT_EQ( res.size(), unsigned( 12 ) );
 }
-

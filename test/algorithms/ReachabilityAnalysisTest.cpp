@@ -267,10 +267,6 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInvariant ) {
 	invariantOffsets << 0,-1;
 	// assign new invariant to location
 	this->bball_ha.getLocations().front()->setInvariant( hypro::Condition( invariantConstraints, invariantOffsets ) );
-	std::cout << "new invariant: " << this->bball_ha.getLocations().front()->getInvariant() << std::endl;
-	std::cout << "has set state: " << this->bball_ha.getLocations().front()->getInvariant().getConditionSetState(0) << std::endl;
-	this->bball_ha.getLocations().front()->getInvariant().updateSetState();
-	std::cout << "has set state: " << this->bball_ha.getLocations().front()->getInvariant().getConditionSetState(0) << std::endl;
 	// create initial states - chose a state set representation, here: boxes
 	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
 		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
