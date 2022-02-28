@@ -3,6 +3,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
     # reduce compiler optimization for tests
     set(utility_test_sources
             SerializationTest.cpp
+            SequenceGenerationTest.cpp
             )
 
     SET_SOURCE_FILES_PROPERTIES(${utility_test_sources} PROPERTIES COMPILE_FLAGS -O0)

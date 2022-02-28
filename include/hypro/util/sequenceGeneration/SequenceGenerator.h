@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 #include "generators.h"
 
@@ -20,7 +29,7 @@ template <typename IterationAlgorithm>
 class PermutationSequenceGenerator {
   private:
 	std::vector<std::size_t> mCurrent;	///< the current tuple
-	std::size_t max;					///< all elements are less than max
+	std::vector<std::size_t> max;		///< all elements are less than max
 	bool mEnd;							///< indicates the end of the sequence has been reached
 
   public:
@@ -30,6 +39,12 @@ class PermutationSequenceGenerator {
 	 * @param numberChoices Number of generated elements per tuple
 	 */
 	PermutationSequenceGenerator( std::size_t domainUpperBound, std::size_t numberChoices )
+		: mCurrent( IterationAlgorithm::initialize( numberChoices, std::vector<std::size_t>( numberChoices, domainUpperBound ) ) )
+		, max( std::vector<std::size_t>( numberChoices, domainUpperBound ) )
+		, mEnd( false ) {
+	}
+
+	PermutationSequenceGenerator( std::vector<std::size_t> domainUpperBound, std::size_t numberChoices )
 		: mCurrent( IterationAlgorithm::initialize( numberChoices, domainUpperBound ) )
 		, max( domainUpperBound )
 		, mEnd( false ) {
@@ -54,6 +69,7 @@ class PermutationSequenceGenerator {
 		}
 		return res;
 
+		/*
 		std::vector<std::size_t> tmp = mCurrent;
 
 		// find pos to iterate
@@ -78,6 +94,7 @@ class PermutationSequenceGenerator {
 		}
 
 		return tmp;
+		 */
 	}
 
 	/// returns true if the end of the sequence has been reached, false otherwise
