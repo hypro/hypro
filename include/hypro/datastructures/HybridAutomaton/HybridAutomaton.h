@@ -84,13 +84,17 @@ class HybridAutomaton {
 	HybridAutomaton& operator=( HybridAutomaton<Number>&& rhs );
 
 	/**
-     * @brief      Getter function.
-     */
+	 * @brief      Getter function.
+	 */
 	///@{
 	//* @return The set of locations. */
 	std::vector<Location<Number>*> getLocations() const;
+	/// getter for a single location identified by its hash
 	Location<Number>* getLocation( const std::size_t hash ) const;
+	/// getter for a single location identified by its name
 	Location<Number>* getLocation( const std::string& name ) const;
+	/// getter for a single location identified by its position in the vector of locations
+	Location<Number>* getLocationByIndex( const std::size_t index ) const;
 	//* @return The set of transitions. */
 	std::vector<Transition<Number>*> getTransitions() const;
 	//* @return The set of initial states. */
