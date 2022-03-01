@@ -105,14 +105,11 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 
 	// try callback
 	if ( callback.has_value() ) {
-		std::cout << "There is a callback." << std::endl;
 		auto func = callback.value();
 		if ( func( node.getInitialSet(), node.getLocation() ) ) {
 			node.setFixedPoint( true );
 			return true;
 		}
-	} else {
-		std::cout << "There is not callback" << std::endl;
 	}
 
 #ifdef HYPRO_STATISTICS
