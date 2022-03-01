@@ -10,6 +10,7 @@
 #pragma once
 
 #include "../../datastructures/HybridAutomaton/Condition.h"
+#include "../../datastructures/reachability/ReachTreev2.h"
 #include "types.h"
 
 #include <utility>
