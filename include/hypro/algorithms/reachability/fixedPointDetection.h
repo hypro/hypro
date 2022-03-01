@@ -31,7 +31,7 @@ namespace hypro {
  * @return True, if a fixed point has been detected, false otherwise
  */
 template <typename Number, typename Converter, typename Settings>
-bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& node, std::vector<ReachTreeNode<BoxT<Number, Converter, Settings>>>& roots, bool use_partial_coverage = false, std::size_t first_segments_to_test = 0 ) {
+bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& node, std::vector<ReachTreeNode<BoxT<Number, Converter, Settings>>>& roots, std::optional<std::function<bool( const BoxT<Number, Converter, Settings>&, const Location<Number>* )>>& callback = std::nullopt, bool use_partial_coverage = false, std::size_t first_segments_to_test = 0 ) {
 	DEBUG( "hypro.reachability", "Try to find fixed point for node @" << &node );
 	using BoxVector = std::vector<BoxT<Number, Converter, Settings>>;
 	assert( !node.getInitialBoundingBox() && "The bounding box should not have been set to ensure the node is not compared to itself." );
@@ -102,6 +102,19 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 			}
 		}
 	}
+
+	// try callback
+	if ( callback.has_value() ) {
+		std::cout << "There is a callback." << std::endl;
+		auto func = callback.value();
+		if ( func( node.getInitialSet(), node.getLocation() ) ) {
+			node.setFixedPoint( true );
+			return true;
+		}
+	} else {
+		std::cout << "There is not callback" << std::endl;
+	}
+
 #ifdef HYPRO_STATISTICS
 	STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif
@@ -119,7 +132,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
  * @return True, if a fixed point has been detected, false otherwise
  */
 template <typename Set>
-bool detectJumpFixedPoint( ReachTreeNode<Set>& node, std::vector<ReachTreeNode<Set>>& roots, bool, std::size_t ) {
+bool detectJumpFixedPoint( ReachTreeNode<Set>& node, std::vector<ReachTreeNode<Set>>& roots, std::optional<std::function<bool( const Set&, const Location<typename Set::NumberType>* )>>&, bool, std::size_t ) {
 	assert( !node.getInitialBoundingBox() && "The bounding box should not have been set to ensure the node is not compared to itself." );
 	using Number = typename Set::NumberType;
 #ifdef HYPRO_STATISTICS

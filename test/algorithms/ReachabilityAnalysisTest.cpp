@@ -298,3 +298,45 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInvariant ) {
 	EXPECT_EQ( std::size_t( 1 ), hypro::getNumberNodes( roots.front() ) );
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
 }
+
+TEST_F( ReachabilityAnalysisTest, TrivialFixedPointCallback ) {
+	// create initial states - chose a state set representation, here: boxes
+	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
+		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+
+	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
+
+	using tNumber = hypro::tNumber;
+	hypro::FixedAnalysisParameters fixedParameters;
+	fixedParameters.jumpDepth = 3;
+	fixedParameters.localTimeHorizon = 5;
+	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
+
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_h;
+	analysisParameters.detectJumpFixedPoints = true;
+
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
+
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
+																   settings.strategy().front(), roots );
+
+	// create trivial callback, which always returns true
+	std::function<bool( const hypro::Box<Number>&, const hypro::Location<Number>* )> fixedPointCallback = []( const hypro::Box<Number>&, const hypro::Location<Number>* ) -> bool { std::cout << "Callback" << std::endl; return true; };
+	// test callback
+	hypro::Box<Number> test;
+	EXPECT_TRUE( fixedPointCallback( test, nullptr ) );
+	// set up callback structure
+	hypro::ReachabilityCallbacks<hypro::Box<Number>, hypro::Location<Number>> callbacks{ fixedPointCallback };
+	// set callbacks
+	reacher.setCallbacks( callbacks );
+
+	// run reacher. Return type explicit to be able to monitor changes
+	auto reachabilityResult = reacher.computeForwardReachability();
+
+	EXPECT_EQ( std::size_t( 2 ), hypro::getNumberNodes( roots.front() ) );
+	EXPECT_TRUE( std::all_of( std::begin( roots.front().getChildren() ), std::end( roots.front().getChildren() ), []( auto* node ) { return node->getFlowpipe().size() == 0; } ) );
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
+}

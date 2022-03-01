@@ -17,6 +17,7 @@
 #include "../fixedPointDetection.h"
 #include "../workers/LTIWorker.h"
 #include "./ReturnTypes.h"
+#include "../ReachabilityCallbacks.h"
 
 #include <atomic>
 #include <condition_variable>
@@ -91,6 +92,8 @@ class LTIAnalyzer {
 		mStopped = true;
 	}
 
+	void setCallbacks( const ReachabilityCallbacks<State, Location<Number>>& callbacks ) { mCallbacks = callbacks; };
+
   private:
 	LTIResult run_impl();
 	LTIResult processNode( LTIWorker<State>& worker, ReachTreeNode<State>* node, TimeTransformationCache<Number>& transformationCache );
@@ -112,6 +115,7 @@ class LTIAnalyzer {
 	std::atomic<bool> mStopped = false;																		///< indicator, whether shutdown was already invoked
 	std::mutex mIdleWorkerMutex;
 	std::condition_variable mAllIdle;
+	ReachabilityCallbacks<State, Location<Number>> mCallbacks;	///< collection of callback functions
 };
 
 }  // namespace hypro

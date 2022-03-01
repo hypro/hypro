@@ -26,6 +26,7 @@
 #include "analyzer/LTISetMinusAnalyzer.h"
 #include "analyzer/ReturnTypes.h"
 #include "analyzer/SingularAnalyzer.h"
+#include "ReachabilityCallbacks.h"
 
 namespace hypro {
 /**
@@ -43,6 +44,8 @@ namespace reachability {
  */
 template <typename Representation, typename SearchHeuristic = DepthFirst<Representation>, MULTITHREADING multithreading = MULTITHREADING::DISABLED>
 class Reach {
+	using Number = typename Representation::NumberType;
+
   public:
 	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
 
@@ -67,6 +70,8 @@ class Reach {
 	REACHABILITY_RESULT computeForwardReachability() {
 		return mAnalyzer.run().result();
 	}
+
+	void setCallbacks( const ReachabilityCallbacks<Representation, Location<Number>>& callbacks ) { mAnalyzer.setCallbacks( callbacks ); }
 };
 
 template <typename Representation>
