@@ -22,11 +22,11 @@
 #pragma once
 #include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../datastructures/reachability/Settings.h"
+#include "ReachabilityCallbacks.h"
 #include "analyzer/LTIAnalyzer.h"
 #include "analyzer/LTISetMinusAnalyzer.h"
 #include "analyzer/ReturnTypes.h"
 #include "analyzer/SingularAnalyzer.h"
-#include "ReachabilityCallbacks.h"
 
 namespace hypro {
 /**

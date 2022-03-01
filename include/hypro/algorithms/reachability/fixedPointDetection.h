@@ -11,9 +11,9 @@
  */
 
 #pragma once
-#include "FlowpipeConstructionConvenience.h"
 #include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../representations/GeometricObjectBase.h"
+#include "FlowpipeConstructionConvenience.h"
 
 namespace hypro {
 

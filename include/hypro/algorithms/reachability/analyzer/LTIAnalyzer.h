@@ -14,10 +14,10 @@
 #include "../../../datastructures/reachability/ReachTreev2Heuristics.h"
 #include "../../../datastructures/reachability/TreeTraversal.h"
 #include "../../../types.h"
+#include "../ReachabilityCallbacks.h"
 #include "../fixedPointDetection.h"
 #include "../workers/LTIWorker.h"
 #include "./ReturnTypes.h"
-#include "../ReachabilityCallbacks.h"
 
 #include <atomic>
 #include <condition_variable>
