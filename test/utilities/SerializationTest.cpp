@@ -104,6 +104,7 @@ TEST( runUtilityTests, EmptyHyperoctreeSerialization ) {
 TEST( runUtilityTests, HyperoctreeSerialization ) {
 	using Interval = carl::Interval<double>;
 	using Box = hypro::Box<double>;
+	using Point = hypro::Point<double>;
 	using Tree = hypro::Hyperoctree<double>;
 	std::stringstream ss;
 
@@ -112,8 +113,19 @@ TEST( runUtilityTests, HyperoctreeSerialization ) {
 	Tree in{ 2, 2, container };
 	Tree out{ 1, 1, Box{} };
 
-	in.add( Box{ std::vector<Interval>{ Interval{ 0.1, 0.6 }, Interval{ 0.1, 0.3 } } } );
-	in.add( Box{ std::vector<Interval>{ Interval{ 0.5, 0.75 }, Interval{ 0.5, 1.0 } } } );
+	auto b1 = Box{ std::vector<Interval>{ Interval{ 0.1, 0.6 }, Interval{ 0.1, 0.3 } } };
+	auto b2 = Box{ std::vector<Interval>{ Interval{ 0.5, 0.75 }, Interval{ 0.5, 1.0 } } };
+	auto origin = Point{ { 0, 0 } };
+	auto p1 = Point{ { 0.5, 0.2 } };
+	auto p2 = Point{ { 0.7, 0.7 } };
+
+	in.add( b1 );
+	in.add( b2 );
+	EXPECT_TRUE( in.contains( b1 ) );
+	EXPECT_TRUE( in.contains( b2 ) );
+	EXPECT_TRUE( in.contains( p1 ) );
+	EXPECT_TRUE( in.contains( p2 ) );
+	EXPECT_FALSE( in.contains( origin ) );
 
 	{
 		{
@@ -125,6 +137,11 @@ TEST( runUtilityTests, HyperoctreeSerialization ) {
 			iarchive( out );							// Read the data from the archive
 		}
 		EXPECT_EQ( in, out );
+		EXPECT_TRUE( out.contains( b1 ) );
+		EXPECT_TRUE( out.contains( b2 ) );
+		EXPECT_TRUE( out.contains( p1 ) );
+		EXPECT_TRUE( out.contains( p2 ) );
+		EXPECT_FALSE( out.contains( origin ) );
 	}
 	{
 		out = Tree{};
@@ -139,5 +156,10 @@ TEST( runUtilityTests, HyperoctreeSerialization ) {
 			iarchive( out );							// Read the data from the archive
 		}
 		EXPECT_EQ( in, out );
+		EXPECT_TRUE( out.contains( b1 ) );
+		EXPECT_TRUE( out.contains( b2 ) );
+		EXPECT_TRUE( out.contains( p1 ) );
+		EXPECT_TRUE( out.contains( p2 ) );
+		EXPECT_FALSE( out.contains( origin ) );
 	}
 }
