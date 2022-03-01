@@ -169,7 +169,7 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			}
 		}
 		if ( objectIsTwoDimensional ) {
-			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, _objectTitle } ) );
+			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, objectTitle } ) );
 			mId++;
 			return ( mId - 1 );
 		}
