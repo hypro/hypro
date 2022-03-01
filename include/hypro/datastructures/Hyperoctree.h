@@ -189,12 +189,18 @@ class Hyperoctree {
 	 * @return True, if the added sets fully cover the maximal set representable by this hyperoctree.
 	 */
 	bool isCovered() const {
+		assert( !mCovered || mData.empty() );
 		return mCovered;
 	}
 	/// Getter for the set-container, i.e., the maximal representable set of the hyperoctree.
 	const Box<Number>& getContainer() const { return mContainer; }
 	/// Getter for child-trees. The union of all child-trees covers the set represented by the container.
-	const std::vector<Hyperoctree<Number>>& getChildren() const { return mChildren; }
+	const std::vector<Hyperoctree<Number>>& getChildren() const {
+		assert( mChildren.empty() || mData.empty() );
+		return mChildren;
+	}
+	/// Getter for the stored sets. Should be non-empty only for leaf nodes.
+	const std::vector<Box<Number>>& getData() const { return mData; }
 	/// Equality-comparison operator.
 	bool operator==( const Hyperoctree<Number>& other ) const {
 		if ( mSplits != other.mSplits || mRemainingDepth != other.mRemainingDepth || mCovered != other.mCovered || mContainer != other.mContainer ) {

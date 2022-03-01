@@ -34,8 +34,8 @@ namespace hypro {
  * @brief      Class for linear hybrid automata.
  * @tparam     Number  Number type.
  * @details	   The automaton owns all the locations and transitions. Newly created locations and transitions
- 			   can only be added as unique pointers. If another class/object requests a location/transition,
- 			   then only normal pointers are returned.
+			   can only be added as unique pointers. If another class/object requests a location/transition,
+			   then only normal pointers are returned.
  */
 template <typename Number>
 class HybridAutomaton {
@@ -54,33 +54,33 @@ class HybridAutomaton {
 
   public:
 	/**
-  	 * @brief      	Default constructor.
-  	 */
+	 * @brief      	Default constructor.
+	 */
 	HybridAutomaton() {}
 
 	/**
-     * @brief      	Copy constructor.
-     * @param[in]  	hybrid  The original hybrid automaton.
-     * @details 	This operation is costly as it performs deep copies
-     */
+	 * @brief      	Copy constructor.
+	 * @param[in]  	hybrid  The original hybrid automaton.
+	 * @details 	This operation is costly as it performs deep copies
+	 */
 	HybridAutomaton( const HybridAutomaton<Number>& hybrid );
 
 	/**
-     * @brief 		Destructor
-     */
+	 * @brief 		Destructor
+	 */
 	virtual ~HybridAutomaton() {}
 
 	/**
-     * @brief 		Copy Assignment
-     * @param[in]	rhs 	The original hybrid automaton
-     * @details 	This operation is costly as it performs deep copies
-     */
+	 * @brief 		Copy Assignment
+	 * @param[in]	rhs 	The original hybrid automaton
+	 * @details 	This operation is costly as it performs deep copies
+	 */
 	HybridAutomaton& operator=( const HybridAutomaton<Number>& rhs );
 
 	/**
-     * @brief 		Move Assignment
-     * @param[in]	rhs 	The original hybrid automaton
-     */
+	 * @brief 		Move Assignment
+	 * @param[in]	rhs 	The original hybrid automaton
+	 */
 	HybridAutomaton& operator=( HybridAutomaton<Number>&& rhs );
 
 	/**
@@ -112,8 +112,8 @@ class HybridAutomaton {
 	///@}
 
 	/**
-     * @brief      Setter function.
-     */
+	 * @brief      Setter function.
+	 */
 	///@{
 	void setLocations( Locations&& locs ) {
 		assert( checkConsistency() );
@@ -128,8 +128,8 @@ class HybridAutomaton {
 	///@}
 
 	/**
-     * @brief      Extension function.
-     */
+	 * @brief      Extension function.
+	 */
 	///@{
 	const std::unique_ptr<Location<Number>>& addLocation( const Location<Number>& location );
 	const std::unique_ptr<Location<Number>>& addLocation( std::unique_ptr<Location<Number>>&& location );
@@ -157,26 +157,26 @@ class HybridAutomaton {
 	Location<Number>* createLocation( Location<Number>* original );
 
 	/**
-     * @brief Decomposes an automaton into the components
-     *  defined by decomposition. The vector should contain
-     *  sets of variables that are at least syntactically
-     *  independet to each other.
-     */
+	 * @brief Decomposes an automaton into the components
+	 *  defined by decomposition. The vector should contain
+	 *  sets of variables that are at least syntactically
+	 *  independet to each other.
+	 */
 	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 
 	/**
-     * @brief      Reduces the automaton, i.e. removes Locations which are not connected to the automaton by transitions.
-     */
+	 * @brief      Reduces the automaton, i.e. removes Locations which are not connected to the automaton by transitions.
+	 */
 	void reduce();
 
 	/**
-     * @brief Function which tests whether this can be the result of a parallel composition with rhs.
-     * @details Used to verify the result of operator|| for hybrid automata. Checks whether this automaton can be the composed of rhs and some
-     * (potentially empty) other composite.
-     *
-     * @param rhs Automaton which can be a component of this.
-     * @return True, if this is composed of rhs and some (possibly empty) rest.
-     */
+	 * @brief Function which tests whether this can be the result of a parallel composition with rhs.
+	 * @details Used to verify the result of operator|| for hybrid automata. Checks whether this automaton can be the composed of rhs and some
+	 * (potentially empty) other composite.
+	 *
+	 * @param rhs Automaton which can be a component of this.
+	 * @return True, if this is composed of rhs and some (possibly empty) rest.
+	 */
 	bool isComposedOf( const HybridAutomaton<Number>& rhs ) const;
 
 	std::string getDotRepresentation() const;
@@ -184,11 +184,11 @@ class HybridAutomaton {
 	std::string getStatistics() const;
 
 	/**
-     * @brief      Comparison for equality operator.
-     * @param[in]  lhs   The left hand side.
-     * @param[in]  rhs   The right hand side.
-     * @return     True, if both automata are equal, false otherwise.
-     */
+	 * @brief      Comparison for equality operator.
+	 * @param[in]  lhs   The left hand side.
+	 * @param[in]  rhs   The right hand side.
+	 * @return     True, if both automata are equal, false otherwise.
+	 */
 	friend bool operator==( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs ) {
 		TRACE( "hypro.datastructures", "Call to operator" );
 		if ( !is_equal( lhs.getLocations(), rhs.getLocations() ) ) {
@@ -264,21 +264,21 @@ class HybridAutomaton {
 	}
 
 	/**
-     * @brief      Parallel Composition Operator.
-     * @param[in]  lhs   The left hand side.
-     * @param[in]  rhs   The right hand side.
-     * @return     Return parallel composition of two Automata.
-     */
-	//This template is needed or else gcc spits out the warning -Wno-non-template-friend
-	//Num represents Number and Stat represents State
+	 * @brief      Parallel Composition Operator.
+	 * @param[in]  lhs   The left hand side.
+	 * @param[in]  rhs   The right hand side.
+	 * @return     Return parallel composition of two Automata.
+	 */
+	// This template is needed or else gcc spits out the warning -Wno-non-template-friend
+	// Num represents Number and Stat represents State
 	template <typename Num>
 	friend HybridAutomaton<Num> operator||( const HybridAutomaton<Num>& lhs, const HybridAutomaton<Num>& rhs );
 	/**
-     * @brief      Combination Operator.
-     * @param[in]  lhs   The left hand side.
-     * @param[in]  rhs   The right hand side.
-     * @return     Return compositional Automata of two Automata.
-     */
+	 * @brief      Combination Operator.
+	 * @param[in]  lhs   The left hand side.
+	 * @param[in]  rhs   The right hand side.
+	 * @return     Return compositional Automata of two Automata.
+	 */
 	friend HybridAutomatonComp<Number> operator+( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs ) {
 		HybridAutomatonComp<Number> hac;
 		hac.addAutomata( lhs );
