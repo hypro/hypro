@@ -103,18 +103,19 @@ TEST( runUtilityTests, EmptyHyperoctreeSerialization ) {
 
 TEST( runUtilityTests, HyperoctreeSerialization ) {
 	using Interval = carl::Interval<double>;
+	using IV = std::vector<Interval>;
 	using Box = hypro::Box<double>;
 	using Point = hypro::Point<double>;
 	using Tree = hypro::Hyperoctree<double>;
 	std::stringstream ss;
 
-	Box container{ std::vector<Interval>{ Interval{ 0, 1 }, Interval{ 0, 1 } } };
+	Box container{ IV{ Interval{ 0, 1 }, Interval{ 0, 1 } } };
 	// hyperoctree with 2 splits, maxdepth 2 and the container
 	Tree in{ 2, 2, container };
 	Tree out{ 1, 1, Box{} };
 
-	auto b1 = Box{ std::vector<Interval>{ Interval{ 0.1, 0.6 }, Interval{ 0.1, 0.3 } } };
-	auto b2 = Box{ std::vector<Interval>{ Interval{ 0.5, 0.75 }, Interval{ 0.5, 1.0 } } };
+	auto b1 = Box{ IV{ Interval{ 0.1, 0.6 }, Interval{ 0.1, 0.3 } } };
+	auto b2 = Box{ IV{ Interval{ 0.5, 0.75 }, Interval{ 0.5, 1.0 } } };
 	auto origin = Point{ { 0, 0 } };
 	auto p1 = Point{ { 0.5, 0.2 } };
 	auto p2 = Point{ { 0.7, 0.7 } };
@@ -161,5 +162,20 @@ TEST( runUtilityTests, HyperoctreeSerialization ) {
 		EXPECT_TRUE( out.contains( p1 ) );
 		EXPECT_TRUE( out.contains( p2 ) );
 		EXPECT_FALSE( out.contains( origin ) );
+		auto intermediate_child_it = std::find_if( std::begin( out.getChildren() ), std::end( out.getChildren() ), []( const Tree& child ) { return child.getContainer() == Box{ IV{ Interval{ 0.5, 1.0 }, Interval{ 0.5, 1.0 } } }; } );
+		auto child1_it = std::find_if( std::begin( intermediate_child_it->getChildren() ), std::end( intermediate_child_it->getChildren() ), []( const Tree& child ) { return child.getContainer() == Box{ IV{ Interval{ 0.5, 0.75 }, Interval{ 0.5, 0.75 } } }; } );
+		auto child2_it = std::find_if( std::begin( intermediate_child_it->getChildren() ), std::end( intermediate_child_it->getChildren() ), []( const Tree& child ) { return child.getContainer() == Box{ IV{ Interval{ 0.5, 0.75 }, Interval{ 0.75, 1.0 } } }; } );
+		auto child3_it = std::find_if( std::begin( intermediate_child_it->getChildren() ), std::end( intermediate_child_it->getChildren() ), []( const Tree& child ) { return child.getContainer() == Box{ IV{ Interval{ 0.75, 1.0 }, Interval{ 0.5, 0.75 } } }; } );
+		auto child4_it = std::find_if( std::begin( intermediate_child_it->getChildren() ), std::end( intermediate_child_it->getChildren() ), []( const Tree& child ) { return child.getContainer() == Box{ IV{ Interval{ 0.75, 1.0 }, Interval{ 0.75, 1.0 } } }; } );
+		ASSERT_TRUE( intermediate_child_it != std::end( out.getChildren() ) );
+		ASSERT_TRUE( child1_it != std::end( intermediate_child_it->getChildren() ) );
+		ASSERT_TRUE( child2_it != std::end( intermediate_child_it->getChildren() ) );
+		ASSERT_TRUE( child3_it != std::end( intermediate_child_it->getChildren() ) );
+		ASSERT_TRUE( child4_it != std::end( intermediate_child_it->getChildren() ) );
+		EXPECT_FALSE( intermediate_child_it->isCovered() );
+		EXPECT_TRUE( child1_it->isCovered() );
+		EXPECT_TRUE( child2_it->isCovered() );
+		EXPECT_FALSE( child3_it->isCovered() );
+		EXPECT_FALSE( child4_it->isCovered() );
 	}
 }
