@@ -84,7 +84,7 @@ class Hyperoctree {
 	 * @param data The new box
 	 */
 	void add( const Box<Number>& data ) {
-		TRACE( "hypro.datastructures", "Add box " << data << " in " << *this );
+		DEBUG( "hypro.datastructures", "Add box " << data << " in " << *this );
 		// if this box is already fully covered, do nothing.
 		if ( mCovered ) {
 			TRACE( "hypro.datastructures", "This container is already covered." );
@@ -199,10 +199,26 @@ class Hyperoctree {
 		assert( mChildren.empty() || mData.empty() );
 		return mChildren;
 	}
-	/// Getter for the stored sets. Should be non-empty only for leaf nodes.
-	const std::vector<Box<Number>>& getData() const { return mData; }
-	/// Temporary: Getter for remaining depht
+	/// Getter for the stored sets. Should be non-empty only for leaf nodes and only if they are not fully covered.
+	const std::vector<Box<Number>>& getData() const {
+		assert( !mCovered || mData.empty() );
+		return mData;
+	}
+	/// Getter for remaining depth
 	std::size_t getRemainingDepth() const { return mRemainingDepth; }
+	/// Computes the number of boxes stored: either a covered container or the number of elements in data
+	std::size_t size() const {
+		if ( mCovered ) {
+			return 1;
+		} else if ( !mChildren.empty() ) {
+			assert( mData.empty() );
+			std::size_t res = 1;
+			std::for_each( std::begin( mChildren ), std::end( mChildren ), [&res]( const auto& child ) { res += child.size(); } );
+			return res;
+		} else {
+			return mData.size() + 1;
+		}
+	}
 	/// Equality-comparison operator.
 	bool operator==( const Hyperoctree<Number>& other ) const {
 		if ( mSplits != other.mSplits || mRemainingDepth != other.mRemainingDepth || mCovered != other.mCovered || mContainer != other.mContainer ) {
