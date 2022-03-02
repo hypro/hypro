@@ -106,7 +106,7 @@ class Hyperoctree {
 			updateChildren();
 			// forward call to children
 			TRACE( "hypro.datastructures", "Forward call to children" );
-			std::for_each( std::begin( mChildren ), std::end( mChildren ), [&result]( auto& child ) { child.add_recursive( result.second ); } );
+			std::for_each( std::begin( mChildren ), std::end( mChildren ), [&result]( auto& child ) { child.add( result.second ); } );
 			propagateCoverage();
 		}
 	}
@@ -201,6 +201,8 @@ class Hyperoctree {
 	}
 	/// Getter for the stored sets. Should be non-empty only for leaf nodes.
 	const std::vector<Box<Number>>& getData() const { return mData; }
+	/// Temporary: Getter for remaining depht
+	std::size_t getRemainingDepth() const { return mRemainingDepth; }
 	/// Equality-comparison operator.
 	bool operator==( const Hyperoctree<Number>& other ) const {
 		if ( mSplits != other.mSplits || mRemainingDepth != other.mRemainingDepth || mCovered != other.mCovered || mContainer != other.mContainer ) {
