@@ -39,6 +39,15 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 	START_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif
 
+	// try callback
+	if ( callback.has_value() ) {
+		auto func = callback.value();
+		if ( func( node.getInitialSet(), node.getLocation() ) ) {
+			node.setFixedPoint( true );
+			return true;
+		}
+	}
+
 	BoxVector initialBoxes{ node.getInitialSet() };
 	for ( auto& root : roots ) {
 		for ( ReachTreeNode<BoxT<Number, Converter, Settings>>& treeNode : preorder( root ) ) {
@@ -100,15 +109,6 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 					}
 				}
 			}
-		}
-	}
-
-	// try callback
-	if ( callback.has_value() ) {
-		auto func = callback.value();
-		if ( func( node.getInitialSet(), node.getLocation() ) ) {
-			node.setFixedPoint( true );
-			return true;
 		}
 	}
 
