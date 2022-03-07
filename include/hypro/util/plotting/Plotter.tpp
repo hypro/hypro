@@ -389,8 +389,8 @@ void Plotter<Number>::writeGnuplot() const {
 					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
 
 				if ( mSettings.key ) {
-					mOutfile << "set style line " << std::dec << objectCount << " lc rgb '#" << std::hex << color << "' lt 1 lw 5\n";
-					keyContent = keyContent + ", NaN ls " + std::to_string(objectCount) + " title \"" + plotObject.objectTitle + "\"";
+					mOutfile << "set style line " << std::dec << objectCount << " lc rgb '#" << std::hex << color << std::dec << "' lt 1 lw 5\n";
+					keyContent = keyContent + ", NaN ls " + std::to_string( objectCount ) + " title \"" + plotObject.objectTitle + "\"";
 				}
 
 				if ( mSettings.cummulative ) {
