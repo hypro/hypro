@@ -491,6 +491,8 @@ TYPED_TEST( BoxTest, IntersectionHalfspace ) {
 TYPED_TEST( BoxTest, Membership ) {
 	hypro::Point<TypeParam> p( { 4, 2 } );
 	EXPECT_TRUE( this->box1.contains( p ) );
+	// self-containment
+	EXPECT_TRUE( this->box1.contains( this->box1 ) );
 }
 
 TYPED_TEST( BoxTest, NumberReduction ) {
