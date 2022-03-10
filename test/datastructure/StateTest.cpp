@@ -73,19 +73,19 @@ TEST( StateTest, Conversion ) {
 	EXPECT_NO_THROW( std::get<hypro::HPolytope<double>>( s.getSet() ) );
 	EXPECT_ANY_THROW( std::get<hypro::Box<double>>( s.getSet() ) );
 	EXPECT_ANY_THROW( std::get<SupportFunction<double>>( s.getSet() ) );
-	EXPECT_EQ( representation_name::polytope_h, s.getSetType() );
+	EXPECT_EQ( representation_name::polytope_h, s.type() );
 
 	s.setAndConvertType<SupportFunction<double>>();
 	EXPECT_ANY_THROW( std::get<hypro::HPolytope<double>>( s.getSet() ) );
 	EXPECT_ANY_THROW( std::get<hypro::Box<double>>( s.getSet() ) );
 	EXPECT_NO_THROW( std::get<SupportFunction<double>>( s.getSet() ) );
-	EXPECT_EQ( representation_name::support_function, s.getSetType() );
+	EXPECT_EQ( representation_name::support_function, s.type() );
 
 	s.setAndConvertType<State_t<double>::nth_representation<0>>();
 	EXPECT_ANY_THROW( std::get<hypro::HPolytope<double>>( s.getSet() ) );
 	EXPECT_NO_THROW( std::get<hypro::Box<double>>( s.getSet() ) );
 	EXPECT_ANY_THROW( std::get<SupportFunction<double>>( s.getSet() ) );
-	EXPECT_EQ( representation_name::box, s.getSetType() );
+	EXPECT_EQ( representation_name::box, s.type() );
 }
 
 TEST( StateTest, letTimePassZeroFlow ) {
