@@ -187,6 +187,11 @@ auto LTIAnalyzer<State, Heuristics, multithreading>::processNode( LTIWorker<Stat
 	}
 	// set timelock flag
 	node->flagTimelock( timelock );
+	// if node has no children, the node can be flagged as having a fixed point
+	if ( node->getChildren().empty() ) {
+		node->setFixedPoint( true );
+	}
+
 	return { LTISuccess{} };
 }
 
