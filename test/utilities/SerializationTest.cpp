@@ -161,6 +161,7 @@ TEST( runUtilityTests, HyperoctreeSerialization ) {
 		EXPECT_TRUE( out.contains( b2 ) );
 		EXPECT_TRUE( out.contains( p1 ) );
 		EXPECT_TRUE( out.contains( p2 ) );
+		EXPECT_TRUE( !out.getContainer().empty() );
 		EXPECT_FALSE( out.contains( origin ) );
 		auto intermediate_child_it = std::find_if( std::begin( out.getChildren() ), std::end( out.getChildren() ), []( const Tree& child ) { return child.getContainer() == Box{ IV{ Interval{ 0.5, 1.0 }, Interval{ 0.5, 1.0 } } }; } );
 		auto child1_it = std::find_if( std::begin( intermediate_child_it->getChildren() ), std::end( intermediate_child_it->getChildren() ), []( const Tree& child ) { return child.getContainer() == Box{ IV{ Interval{ 0.5, 0.75 }, Interval{ 0.5, 0.75 } } }; } );

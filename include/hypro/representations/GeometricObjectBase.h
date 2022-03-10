@@ -59,6 +59,11 @@ class GeometricObjectBase {
 	 * @param state The state the member is set to.
 	 */
 	void setEmptyState( SETSTATE state ) { mEmptyState = state; }
+
+	template <class Archive>
+	[[maybe_unused]] void serialize( Archive& ar ) {
+		ar( mEmptyState );
+	}
 };
 
 /** @} */

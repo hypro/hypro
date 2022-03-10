@@ -622,7 +622,8 @@ class BoxT : private GeometricObjectBase {
 	/// Serialization function required by cereal
 	template <typename Archive>
 	void serialize( Archive& ar ) {
-		ar( mLimits );
+		// ar( cereal::base_class<GeometricObjectBase>( this ), mLimits );
+		ar( mEmptyState, mLimits );
 	}
 };
 
