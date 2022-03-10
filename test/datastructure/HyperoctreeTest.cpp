@@ -35,11 +35,17 @@ TEST( HyperoctreeTest, Insertion ) {
 	EXPECT_TRUE( octree.contains( hypro::Point<double>{ 2, 1 } ) );
 	EXPECT_TRUE( octree.contains( hypro::Point<double>{ 2, 2 } ) );
 	EXPECT_TRUE( octree.contains( hypro::Point<double>{ 1.5, 1.5 } ) );
+	// check the actual box
+	EXPECT_TRUE( octree.contains( hypro::Box<double>(
+		  std::vector<carl::Interval<double>>( { carl::Interval<double>( 1, 2 ), carl::Interval<double>( 1, 2 ) } ) ) ) );
 
 	EXPECT_FALSE( octree.contains( hypro::Point<double>{ 0.9, 1 } ) );
 	EXPECT_FALSE( octree.contains( hypro::Point<double>{ 1, 2.1 } ) );
 	EXPECT_FALSE( octree.contains( hypro::Point<double>{ 0, 0 } ) );
 	EXPECT_FALSE( octree.contains( hypro::Point<double>{ 5, 5 } ) );
+	// the container should not be fully contained
+	EXPECT_FALSE( octree.contains( hypro::Box<double>(
+		  std::vector<carl::Interval<double>>( { carl::Interval<double>( 0, 10 ), carl::Interval<double>( 0, 10 ) } ) ) ) );
 }
 
 TEST( HyperoctreeTest, Coverage ) {

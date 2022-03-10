@@ -153,13 +153,11 @@ class Hyperoctree {
 		}
 		if ( mCovered ) {
 			TRACE( "hypro.datastructures", "Fully covered: " << *this );
+			assert( mContainer.contains( set ) );
 			return true;
 		} else {
 			if ( mChildren.empty() ) {
 				TRACE( "hypro.datastructures", "Check whether box " << set << " is contained in data\n" );
-				for ( const auto& b : mData ) {
-					TRACE( "hypro.datastructures", b );
-				}
 				std::vector<Box<Number>> remainder;
 				remainder.emplace_back( set );
 				auto dataIt = mData.begin();
