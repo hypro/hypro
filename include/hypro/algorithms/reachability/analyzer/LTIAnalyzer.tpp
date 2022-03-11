@@ -87,7 +87,13 @@ auto LTIAnalyzer<State, Heuristics, multithreading>::processNode( LTIWorker<Stat
 	}
 
 	// bounded time evolution
-	safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ) );
+	if ( mFixedParameters.globalTimeHorizon > 0 ) {
+		// the number of required segments is the difference of the number of segments required to reach the global time horizon and the minimally current covered number of segments
+		SegmentInd segmentsToCompute = std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.globalTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::infinity() ) ) - node->getTimings().lower();
+		safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ), segmentsToCompute );
+	} else {
+		safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ) );
+	}
 
 	// check, whether the full time horizon has been exploited - if not, an invariant has bound the evolution and we might have a timelock
 	bool potentialTimelock = false;
