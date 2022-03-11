@@ -21,7 +21,7 @@ namespace hypro {
 
 template <typename SetType, typename Location>
 struct ReachabilityCallbacks {
-	std::optional<std::function<bool( const SetType&, const Location* loc )>> fixedPointCallback = std::nullopt;
+	std::function<bool( const SetType&, const Location* loc )> fixedPointCallback;
 };
 
 }  // namespace hypro
