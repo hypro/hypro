@@ -124,7 +124,7 @@ void Plotter<Number>::plotGen() const {
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color ) {
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
 	TRACE( "hypro.plotter", "" );
 	// reduce dimensions
 	if ( !_points.empty() ) {
@@ -153,7 +153,7 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			}
 		}
 		if ( objectIsTwoDimensional ) {
-			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color } ) );
+			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings } ) );
 			mId++;
 			return ( mId - 1 );
 		}
@@ -194,8 +194,8 @@ void Plotter<Number>::removeObject( unsigned id ) {
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color ) {
-	return addObject( { _point }, _color );
+unsigned Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
+	return addObject( { _point }, _color, settings );
 }
 
 template <typename Number>
@@ -359,7 +359,7 @@ void Plotter<Number>::writeGnuplot() const {
 					color = plotObject.color.value();
 				}
 
-				if ( mSettings.fill )
+				if ( mSettings.fill || ( plotObject.settings.has_value() && plotObject.settings.value().fill ) )
 					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
 				else
 					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
