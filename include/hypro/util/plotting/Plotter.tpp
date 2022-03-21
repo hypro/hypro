@@ -638,7 +638,7 @@ bool Plotter<Number>::isLeftTurn( const Point<Number>& a, const Point<Number>& b
 	// Number val = c.polarCoordinates(a,false)[1] -
 	// b.polarCoordinates(a,false)[1];
 
-	return ( val > 0 );
+	return ( val >= 0 );
 }
 
 template <typename Number>

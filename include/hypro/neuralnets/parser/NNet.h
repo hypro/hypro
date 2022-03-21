@@ -207,13 +207,13 @@ std::ostream& operator<<( std::ostream& ostr, const NNet<Number>& _rhs ) {
 	ostr << std::endl;
 
 	ostr << "Mean values: ";
-	for ( int i = 0; i < _rhs.inputSize(); i++ ) {
+	for ( int i = 0; i < _rhs.inputSize() + 1; i++ ) {
 		ostr << _rhs.means()[i] << " ";
 	}
 	ostr << std::endl;
 
 	ostr << "Ranges: ";
-	for ( int i = 0; i < _rhs.inputSize(); i++ ) {
+	for ( int i = 0; i < _rhs.inputSize() + 1; i++ ) {
 		ostr << _rhs.ranges()[i] << " ";
 	}
 	ostr << std::endl;

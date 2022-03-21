@@ -14,6 +14,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../../util/sequenceGeneration/SequenceGenerator.h"
 #include "../../../util/statistics/statistics.h"
 #include "../../../util/typetraits.h"
+#include "../redundantPoints.h"
 #include "../Cone.h"
 #include "VPolytopeSetting.h"
 #include "util.h"

@@ -518,13 +518,39 @@ void test_relu_overapprx() {
 	plotter.plot2d();
 }
 
+void test_ACAS_property_4(int argc, char* argv[]) {
+	// define input file name
+	const char* filename = "../examples/nnet/acasxu/ACASXU_experimental_v2a_2_6.nnet";
+	if(argc > 1)
+		filename = argv[1];
+	std::cout << "Filename is: " << filename << std::endl;
+
+	// read and build neural network + time measurement
+	auto start = std::chrono::steady_clock::now();
+	hypro::NNet<Number> acas_nn = hypro::NNet<Number>( filename );
+	auto end = std::chrono::steady_clock::now();
+	std::cout << "Total time elapsed during building the network: "
+			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
+	// std::cout << acas_nn << std::endl;
+
+	hypro::vector_t<Number> inputs = hypro::vector_t<Number>(5);
+	inputs << 1600, 0, 0, 1100, 750;
+	std::cout << "Input vector: " << inputs << std::endl;
+
+	bool normalizeInput = true;
+	bool normalizeOutput = true;
+	hypro::vector_t<Number> outputs = acas_nn.evaluateNetwork(inputs, normalizeInput, normalizeOutput);
+	std::cout << "Output vector: " << outputs << std::endl;
+}
+
 int main( int argc, char* argv[] ) {
 	auto start = std::chrono::steady_clock::now();
 	// test_network_read();
 	// test_acas_xu();
 	// test_network_plot();
 	// test_relu_exact();
-	test_relu_overapprx();
+	// test_relu_overapprx();
+	test_ACAS_property_4(argc, argv);
 	auto end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during executing the program: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;

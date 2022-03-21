@@ -37,7 +37,7 @@ include(hypromacros)
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
-option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
+option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." ON)
 option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" ON)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
 option(HYPRO_GSL_INTEGRATION "Link to gsl and provide numerical integration methods" OFF)
@@ -175,6 +175,11 @@ set_target_properties(${PROJECT_NAME}-static PROPERTIES
 target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
 target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
 
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(${PROJECT_NAME}-static PUBLIC OpenMP::OpenMP_CXX)
+endif()
+
 target_include_directories(${PROJECT_NAME}-static
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
         PUBLIC
@@ -198,6 +203,11 @@ set_target_properties(${PROJECT_NAME}-shared PROPERTIES
 
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread)
+
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(${PROJECT_NAME}-shared PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
 target_include_directories(${PROJECT_NAME}-shared
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src

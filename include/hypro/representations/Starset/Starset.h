@@ -16,6 +16,7 @@ static_assert(
 #include "../Box/BoxSetting.h"
 #include "../Polytopes/HPolytope/HPolytope.h"
 #include "../Polytopes/HPolytope/HPolytopeSetting.h"
+// #include "../Polytopes/redundantPoints.h"
 #include "../types.h"
 #include "StarsetSetting.h"
 
@@ -118,7 +119,7 @@ class StarsetT : private GeometricObjectBase {
 		assert( fstream != NULL );
 
 		if ( fstream == NULL ) {
-			FATAL( "Could not open the input file: %s\n", filename );
+			FATAL( "hypro.representation.starset", "Could not open the input file: %s\n" );
 		}
 
 		int n, m, p;  // star dimension; number of variables; number of constraints

@@ -15,6 +15,8 @@
 #pragma once
 #include "../../representations/GeometricObjectBase.h"
 #include "../parser/NNet.h"
+#include "../../util/plotting/Plotter.h"
+#include "../../util/logging/Logger.h"
 
 #include <iostream>
 #include <vector>  // change it later to a better container for Star-sets
@@ -39,9 +41,9 @@ class ReachNN {
 		: mNNet( nnet ) {}
 
 	// methods
-	std::vector<hypro::Starset<Number>> forwardAnalysis( const hypro::Starset<Number>& input_set, NN_reach_method method, bool return_intermediates = false ) const;
-	std::vector<hypro::Starset<Number>> layerReach( int l, const std::vector<hypro::Starset<Number>>& input_sets, NN_reach_method method, bool return_intermediates ) const;
-	std::vector<hypro::Starset<Number>> reachReLU( const hypro::Starset<Number>& input_star1, NN_reach_method method, bool return_intermediate ) const;
+	std::vector<hypro::Starset<Number>> forwardAnalysis( const hypro::Starset<Number>& input_set, NN_reach_method method, bool plot_intermediates = false ) const;
+	std::vector<hypro::Starset<Number>> layerReach( int l, const std::vector<hypro::Starset<Number>>& input_sets, NN_reach_method method, bool plot_intermediates ) const;
+	std::vector<hypro::Starset<Number>> reachReLU( const hypro::Starset<Number>& input_star1, NN_reach_method method, bool plot_intermediates ) const;
 	std::vector<hypro::Starset<Number>> stepReLU( int i, std::vector<hypro::Starset<Number>>& input_sets ) const;
 	std::vector<hypro::Starset<Number>> approxStepReLU( int i, std::vector<hypro::Starset<Number>>& input_sets ) const;
 };

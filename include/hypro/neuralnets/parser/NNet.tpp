@@ -100,7 +100,7 @@ NNet<Number>::NNet( const char* filename ) {
 	assert( fstream != NULL );
 
 	if ( fstream == NULL ) {
-		FATAL( "Could not open the input file: %s\n", filename );
+		FATAL( "hypro.neuralnets.parser", "Could not open the input file: %s\n" );
 	}
 
 	//Initialize variables
@@ -148,17 +148,17 @@ NNet<Number>::NNet( const char* filename ) {
 	}
 
 	//Load Mean and Range of inputs
-	mMeans = vector_t<Number>( mInputSize );
+	mMeans = vector_t<Number>( mInputSize + 1 );
 	line = fgets( buffer, bufferSize, fstream );
 	record = strtok( line, ",\n" );
-	for ( i = 0; i < mInputSize; i++ ) {
+	for ( i = 0; i < mInputSize + 1; i++ ) {
 		mMeans[i] = carl::convert<double, Number>( atof( record ) );
 		record = strtok( NULL, ",\n" );
 	}
-	mRanges = vector_t<Number>( mInputSize );
+	mRanges = vector_t<Number>( mInputSize + 1 );
 	line = fgets( buffer, bufferSize, fstream );
 	record = strtok( line, ",\n" );
-	for ( i = 0; i < mInputSize; i++ ) {
+	for ( i = 0; i < mInputSize + 1; i++ ) {
 		mRanges[i] = carl::convert<double, Number>( atof( record ) );
 		record = strtok( NULL, ",\n" );
 	}
@@ -228,6 +228,7 @@ vector_t<Number> NNet<Number>::evaluateNetwork( const vector_t<Number>& inputs, 
 				outputs[i] = ( outputs[i] - mMeans[i] ) / mRanges[i];
 			}
 		}
+		std::cout << "Normalized inputs: " << outputs << std::endl;
 	}
 
 	for ( layer = 0; layer < mNumLayers; layer++ ) {
@@ -247,9 +248,10 @@ vector_t<Number> NNet<Number>::evaluateNetwork( const vector_t<Number>& inputs, 
 
 	//Write the final output value to the allocated spot in memory
 	if ( normalizeOutput ) {
+		std::cout << "Outputs before normalization: " << outputs << std::endl;
 		std::cout << "Normalizing the output vector..." << std::endl;
 		for ( i = 0; i < mOutputSize; i++ ) {
-			outputs[i] = outputs[i] * mRanges[i] + mMeans[i];
+			outputs[i] = outputs[i] * mRanges[mInputSize] + mMeans[mInputSize];
 		}
 	}
 

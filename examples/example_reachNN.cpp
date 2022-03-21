@@ -20,15 +20,19 @@ int main( int argc, char* argv[] ) {
 
 	// define plotter settings
 	hypro::plotting::gnuplotSettings settings;
-	settings.filename = "FFReLU_example";
+	settings.name = "Reachability analysis of FFNN with ReLU activation function";
+	settings.filename = "FFNN_ReLU_reach";
 	settings.fill = true;
-	settings.pointSize = 3.0;
 	settings.linewidth = 3.0;
 	settings.keepAspectRatio = true;
+	settings.xPlotInterval = carl::Interval<double>(-2.2, +2.2);
+	settings.yPlotInterval = carl::Interval<double>(-2.2, +2.2);
+	// settings.overwriteFiles = true;
 
 	// get plotter reference.
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 	plotter.updateSettings( settings );
+	plotter.clear();
 
 	// define input file name
 	const char* filename = "../examples/nnet/fc_relu.nnet";
@@ -75,35 +79,66 @@ int main( int argc, char* argv[] ) {
 	limits << 1, 2, 1;
 
 	hypro::Starset<Number> input_star = hypro::Starset<Number>( center, constr, limits, basis );
-
 	if(argc > 3) {
 		std::cout << "Reading input star from: " << argv[3] << std::endl;
 		input_star = hypro::Starset<Number>::readFromFile(argv[3]);
 	}
 	std::cout << input_star << std::endl;
-	plotter.addObject( input_star.vertices(), hypro::plotting::colors[hypro::plotting::red] );
-	plotter.plot2d();
-	plotter.clear();
+	// plotter.addObject( input_star.vertices(), hypro::plotting::colors[hypro::plotting::red] );
+	// plotter.plot2d();
+	// plotter.clear();
 
 	hypro::reachability::NN_reach_method method = hypro::reachability::NN_reach_method::EXACT;
 	if(argc > 1 && (argv[1][0] == 'o' || argv[1][0] == 'O'))
 		method = hypro::reachability::NN_reach_method::OVERAPPRX;
 		
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
-	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, true );
+	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, false );
 
 	int N = output_set.size();
 	for ( int i = 0; i < N; i++ ) {
-		std::cout << output_set[i] << std::endl;
-		std::cout << "========================================" << std::endl;
-		std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
-		if ( method == hypro::reachability::NN_reach_method::EXACT && i % 4 == 3 ) {
-			plotter.addPoint( vertices[0] );
+		// std::cout << output_set[i] << std::endl;
+		// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
+		// std::cout << "Vertices: " << vertices << std::endl;
+		// plotter.addObject( vertices, hypro::plotting::colors[(2 * i) % 9] );
+		bool COC_is_not_minimal = true;
+		for ( int j = 1; j < output_set[i].dimension(); j++) {
+			// std::cout << "Checking output safety constraint: " << j << std::endl;
+			hypro::vector_t<Number> center = output_set[i].center();
+			hypro::matrix_t<Number> basis = output_set[i].generator();
+			hypro::matrix_t<Number> shape = output_set[i].shape();
+			hypro::matrix_t<Number> limits = output_set[i].limits();
+
+			shape.conservativeResize(shape.rows() + 1, shape.cols());
+			limits.conservativeResize(limits.rows() + 1, 1);
+
+			shape.row(shape.rows() - 1) = basis.row(0) - basis.row(j);
+			limits.row(limits.rows() - 1) = center.row(j) - center.row(0);
+
+			hypro::Starset<Number> new_star = hypro::Starset<Number>(center, shape, limits, basis);
+			// std::cout << "Checking emptiness" << std::endl;
+			if(new_star.empty()) {
+				COC_is_not_minimal = false;
+				break;
+			}
+
+			// hypro::vector_t<Number> normal_vect = hypro::vector_t<Number>::Zero(output_set[i].dimension());
+			// normal_vect[0] = -1;
+			// normal_vect[i] = +1;
+			// Number offset = 0;
+			// hypro::Halfspace<Number> constraint_part = hypro::Halfspace<Number>(hypro::Point<Number>(normal_vect), offset);
+			// if(output_set[i].satisfiesHalfspace(constraint_part).first == hypro::CONTAINMENT::FULL) {
+			// 	COC_is_not_minimal = true;
+			// 	break;
+			// }
+		}
+		if(COC_is_not_minimal) {
+			std::cout << "Star number " << i << " satisfied property 3 (4)" << std::endl;
 		} else {
-			plotter.addObject( vertices, hypro::plotting::colors[(2 * i) % 9] );	// i % 10 is the color of the enum from 9 to 0 (Plotter.h)
+			std::cout << "Star number " << i << "does not satisfy property 3 (4)" << std::endl;
 		}
 	}
-	plotter.plot2d();
+	// plotter.plot2d();
 
 	return 0;
 }
