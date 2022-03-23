@@ -24,7 +24,7 @@ namespace hypro {
 			for(auto tr : ctx->transition()){
 				//trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
 				//std::unique_ptr<Transition<Number>> t(std::move(visit(tr).template as<std::unique_ptr<Transition<Number>>>()));
-				Transition<Number>* t = visit(tr);//.antlrcpp::Any::as<Transition<Number>*>();
+				Transition<Number>* t = visit(tr).template as<Transition<Number>*>();//.antlrcpp::Any::as<Transition<Number>*>();
 				//trSet.insert(t);
 				trSet.emplace(t);
 				//(t->getSource())->addTransition(t);
@@ -34,7 +34,7 @@ namespace hypro {
 		} else if(ctx->stochastictransition().size() > 0){
 			std::set<Transition<Number>*> trSet;
 			for(auto tr : ctx->stochastictransition()){
-				std::set<StochasticTransition<Number> *> tSet = visit(tr);
+				std::set<StochasticTransition<Number> *> tSet = visit(tr).template as<std::set<StochasticTransition<Number> *>>();
 				for(auto t : tSet){
 					trSet.emplace(t);
 				}
@@ -53,7 +53,7 @@ namespace hypro {
 		Transition<Number>* t = new Transition<Number>();
 
 		//1.Collect start/destination location from visitFromTo
-		std::pair<Location<Number>*,Location<Number>*> fromTo = visit(ctx->fromto());
+		std::pair<Location<Number>*,Location<Number>*> fromTo = visit(ctx->fromto()).template as<std::pair<Location<Number>*,Location<Number>*>>();
 		t->setSource(fromTo.first);
 		t->setTarget(fromTo.second);
 
@@ -71,7 +71,7 @@ namespace hypro {
 			std::cout << "WARNING: Please refrain from entering multiple guard constraints via several guard spaces. Typing one guard space of the form 'guard { constraint1 constraint2 ... }' is sufficient->" << std::endl;
 		}
 		if(ctx->guard().size() == 1){
-			Condition<Number> inv = visit(ctx->guard()[0]);
+			Condition<Number> inv = visit(ctx->guard()[0]).template as<Condition<Number>>();
 			t->setGuard(inv);
 		}
 
@@ -80,7 +80,7 @@ namespace hypro {
 			std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces. Typing one reset space of the form 'reset { allocation1 allocation2 ... }' is sufficient->" << std::endl;
 		}
 		if(ctx->resetfct().size() == 1){
-			Reset<Number> reset = visit(ctx->resetfct()[0]);
+			Reset<Number> reset = visit(ctx->resetfct()[0]).template as<Reset<Number>>();
 			t->setReset(reset);
 		}
 
@@ -90,7 +90,7 @@ namespace hypro {
 			exit(0);
 		}
 		if(ctx->aggregation().size() == 1){
-			Aggregation agg = visit(ctx->aggregation()[0]);
+			Aggregation agg = visit(ctx->aggregation()[0]).template as<Aggregation>();
 			t->setAggregation(agg);
 		}
 
@@ -142,7 +142,7 @@ namespace hypro {
 		//1.Call HyproFormulaVisitor and get pair of matrix and vector if constrset exists
 		if(ctx->constrset() != NULL){
 			HyproFormulaVisitor<Number> visitor(vars);
-			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
 			Condition<Number> inv;
 			inv.setMatrix(result.first);
 			inv.setVector(result.second);
@@ -186,13 +186,13 @@ namespace hypro {
 		//1.Call HyproFormulaVisitor::visitPolynom()
 		if(ctx->polynom() != NULL){
 			HyproFormulaVisitor<Number> visitor(vars);
-			vector_t<Number> tmp = visitor.visit(ctx->polynom());
+			vector_t<Number> tmp = visitor.visit(ctx->polynom()).template as<vector_t<Number>>();
 			alloc = tmp;
 		}
 		//NOTE: Intervals are parsed but not handled yet
 		if(ctx->interval() != NULL){
 			HyproFormulaVisitor<Number> visitor(vars);
-			carl::Interval<Number> tmp = visitor.visit(ctx->interval());
+			carl::Interval<Number> tmp = visitor.visit(ctx->interval()).template as<carl::Interval<Number>>();
 			alloc = tmp;
 		}
 
@@ -217,7 +217,7 @@ namespace hypro {
 		std::size_t affineAssignmentCnt = 0;
 		std::size_t intervalAssignmentCnt = 0;
 		for(unsigned i=0; i < ctx->allocation().size(); i++){
-			std::pair<allocVariant,unsigned> valuesNPos = visit(ctx->allocation()[i]);
+			std::pair<allocVariant,unsigned> valuesNPos = visit(ctx->allocation()[i]).template as<std::pair<allocVariant,unsigned>>();
 			if(valuesNPos.first.index() == 0) {
 				auto assignment = std::get<vector_t<Number>>(valuesNPos.first);
 				if(static_cast<unsigned>(assignment.rows()) != vars.size()+1){
@@ -266,13 +266,13 @@ namespace hypro {
 
 		if (ctx->probtransition().size() > 0) {
 			for (auto tr : ctx->probtransition()) {
-				StochasticTransition<Number>* t = visit(tr);
+				StochasticTransition<Number>* t = visit(tr).template as<StochasticTransition<Number>*>();
 				trSet.emplace(t);
 			}
 		}
 
 		// 1. Collect start location from visitProbfrom
-		StochasticLocation<Number>* probFrom = visit(ctx->probfrom());
+		StochasticLocation<Number>* probFrom = visit(ctx->probfrom()).template as<StochasticLocation<Number>*>();
 		for (auto t : trSet) {
 			t->setSource(probFrom);
 		}
@@ -295,7 +295,7 @@ namespace hypro {
 			std::cout << "WARNING: Please refrain from entering multiple guard constraints via several guard spaces. Typing one guard space of the form 'guard { constraint1 constraint2 ... }' is sufficient->" << std::endl;
 		}
 		if(ctx->guard().size() == 1){
-			Condition<Number> inv = visit(ctx->guard()[0]);
+			Condition<Number> inv = visit(ctx->guard()[0]).template as<Condition<Number>>();
 			for (auto t : trSet) {
 				t->setGuard(inv);
 			}
@@ -323,7 +323,7 @@ namespace hypro {
 		StochasticTransition<Number>* t = new StochasticTransition<Number>();
 
 		// 1. Collect probability and destination location from visitProbTo
-		std::pair<Number,StochasticLocation<Number>*> probTo = visit(ctx->probto());
+		std::pair<Number,StochasticLocation<Number>*> probTo = visit(ctx->probto()).template as<std::pair<Number,StochasticLocation<Number>*>>();
 		t->setTransitionWeight(probTo.first);
 		t->setTarget(probTo.second);
 		
@@ -332,7 +332,7 @@ namespace hypro {
 			std::cout << "WARNING: Please refrain from entering multiple reset allocations via several reset spaces. Typing one reset space of the form 'reset { allocation1 allocation2 ... }' is sufficient->" << std::endl;
 		}
 		if(ctx->resetfct().size() == 1){
-			Reset<Number> reset = visit(ctx->resetfct()[0]);
+			Reset<Number> reset = visit(ctx->resetfct()[0]).template as<Reset<Number>>();
 			t->setReset(reset);
 		}
 
@@ -342,7 +342,7 @@ namespace hypro {
 			exit(0);
 		}
 		if(ctx->aggregation().size() == 1){
-			Aggregation agg = visit(ctx->aggregation()[0]);
+			Aggregation agg = visit(ctx->aggregation()[0]).template as<Aggregation>();
 			t->setAggregation(agg);
 		}
 		return t;

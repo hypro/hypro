@@ -49,7 +49,7 @@ namespace hypro {
 		if(ctx->plotsetting().size() >= 1){
 			for(const auto& p : ctx->plotsetting()){
 				if(p->VARIABLE().size() >= 1){
-					std::vector<std::size_t> plotDimTuple = visit(p);
+					std::vector<std::size_t> plotDimTuple = visit(p).template as<std::vector<std::size_t>>();
 					plotDims.push_back(plotDimTuple);
 				}
 			}
@@ -73,7 +73,7 @@ namespace hypro {
 			std::cerr << "ERROR: max jumps in settings has been defined multiple times." << std::endl;
       		exit(0);
 		} else if(ctx->maxjumps().size() == 1){
-			jumps = visit(ctx->maxjumps()[0]);
+			jumps = visit(ctx->maxjumps()[0]).template as<int>();
 		} else {
 			std::cerr << "ERROR: max jumps has not been defined" << std::endl;
       		exit(0);
