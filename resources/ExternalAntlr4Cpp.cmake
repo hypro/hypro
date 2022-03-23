@@ -19,7 +19,7 @@ ExternalProject_ADD(
         # GIT_REPOSITORY    ${ANTLR4CPP_EXTERNAL_REPO}
         # GIT_TAG           ${ANTLR4CPP_EXTERNAL_TAG}
         #SOURCE_DIR ${ANTLR4CPP_LOCAL_REPO}  #Added for local copy
-        URL https://www.antlr.org/download/antlr4-cpp-runtime-4.9.2-source.zip
+        URL https://www.antlr.org/download/antlr4-cpp-runtime-4.9.3-source.zip
         #SOURCE_DIR ${EP_PREFIX_DIR}/src/antlr4cpp
         INSTALL_DIR ${EP_PREFIX_DIR}/src/antlr4cpp-build
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=${EP_PREFIX_DIR}/src/antlr4cpp-build -DCMAKE_CXX_FLAGS=${RESSOURCES_FLAGS} -DBUILD_SHARED_LIBS=ON -DBUILD_TESTS=OFF -DWITH_DEMO=False -DWITH_LIBCXX=False ${EP_PREFIX_DIR}/src/antlr4cpp

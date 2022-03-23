@@ -20,7 +20,7 @@ namespace hypro {
 
 		//2.Calls visit(ctx->setting()) to get reachability settings
 		HyproSettingVisitor<Number> settingVisitor = HyproSettingVisitor<Number>(varVec);
-		reachSettings = settingVisitor.visit(ctx->setting());
+		reachSettings = settingVisitor.visit(ctx->setting()).template as<hypro::ReachabilitySettings>();
 
 		//3.Calls visit(ctx->modes()) to get locSet
 		HyproLocationVisitor<Number> locVisitor = HyproLocationVisitor<Number>(varVec);
