@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     //     printf(" world(%d) \n", ID);
     // }
 
-    int m = 5 + rand() % 5;
+    int m = 2 + rand() % 5;
     std::cout << "m = " << m << std::endl;
 
     std::vector<Number> result = std::vector<Number>();
@@ -48,9 +48,9 @@ int main(int argc, char* argv[]) {
             #pragma omp critical
             {
                 result.insert( result.end(), inner_results.begin(), inner_results.end() );
+                print_vector(result);
             }
         }
-
     }
     
     return 0;

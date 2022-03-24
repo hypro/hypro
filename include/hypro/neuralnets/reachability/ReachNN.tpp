@@ -34,12 +34,15 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const st
 // this for loop could be parallelized
 #pragma omp parallel for
 	for ( int i = 0; i < N; i++ ) {
-		if ( plot_intermediates )
+		if ( plot_intermediates ) {
+#pragma omp critical
 			plotter.addObject( input_sets[i].vertices(), hypro::plotting::colors[hypro::plotting::red] );
+		}
 
 		hypro::Starset<Number> current_star = input_sets[i].affineTransformation( weights, biases );
 
 		if ( plot_intermediates ) {
+#pragma omp critical
 			// std::cout << "Here: " << current_star.vertices() << std::endl;
 			plotter.addObject( current_star.vertices(), hypro::plotting::colors[hypro::plotting::green] );
 			plotter.plot2d();
@@ -82,9 +85,9 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Sta
 			case NN_reach_method::OVERAPPRX:
 				// apply the overapproximate method
 				// std::cout << "Applying the overapproximate method" << std::endl;
-				std::cout << "Applying ReLU on dimension: " << i << std::endl;
+				// std::cout << "Applying ReLU on dimension: " << i << std::endl;
 				I_n = approxStepReLU( i, I_n );
-				std::cout << "Inner polytope shape: (num_constrains, dim_constrains) = (" << I_n[I_n.size() - 1].constraintss().size() << ", " << I_n[I_n.size() - 1].constraintss().dimension() << ")" << std::endl;
+				// std::cout << "Inner polytope shape: (num_constrains, dim_constrains) = (" << I_n[I_n.size() - 1].constraintss().size() << ", " << I_n[I_n.size() - 1].constraintss().dimension() << ")" << std::endl;
 
 				break;
 			default:
@@ -92,6 +95,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Sta
 				// std::cout << "Invalid analysis method specified" << std::endl;
 		}
 		if ( plot_intermediates ) {
+#pragma omp critical
 			for ( int i = 0; i < I_n.size(); i++ ) {
 				plotter.addObject( I_n[i].vertices(), hypro::plotting::colors[( 2 * i ) % 9] );
 			}
@@ -184,7 +188,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::approxStepReLU( int i, std:
 		Number lb = -eval_low_result.supportValue + center[i];
 		Number ub = eval_high_result.supportValue + center[i];
 
-		std::cout << "Star bounds = [" << lb << ", " << ub << "]" << std::endl;
+		// std::cout << "Star bounds = [" << lb << ", " << ub << "]" << std::endl;
 
 		if ( lb >= 0 ) {
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
@@ -239,7 +243,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::approxStepReLU( int i, std:
 		basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
 		basis( i, basis.cols() - 1 ) = 1;
 
-		std::cout << "Creating new star" << std::endl;
+		// std::cout << "Creating new star" << std::endl;
 
 		hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
 		result.push_back( res_star );
