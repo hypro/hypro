@@ -31,12 +31,9 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const st
 	hypro::matrix_t<Number> weights = layer_l.first;
 	hypro::vector_t<Number> biases = layer_l.second;
 
-	// this for loop could be parallelized
-	#pragma omp parallel for
+// this for loop could be parallelized
+#pragma omp parallel for
 	for ( int i = 0; i < N; i++ ) {
-		int tid = omp_get_thread_num();
-		printf("Thead %d is working.\n", tid);
-
 		if ( plot_intermediates )
 			plotter.addObject( input_sets[i].vertices(), hypro::plotting::colors[hypro::plotting::red] );
 
@@ -50,16 +47,19 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const st
 		}
 
 		std::vector<hypro::Starset<Number>> result_stars;
-		if (l < mNNet.numLayers() - 1) {
+		if ( l < mNNet.numLayers() - 1 ) {
 			// the last layer is just an affine transformation, so it does not have ReLU activation functions
 			// in the case of ACAS Xu networks, there are 6 hidden layers in total 300 ReLU nodes,  + 5 output nodes, those are only affine mappings
 			result_stars = reachReLU( current_star, method, plot_intermediates );
 		} else {
-			std::cout << "Last layer, no ReLU step applied" << std::endl;
+			// std::cout << "Last layer, no ReLU step applied" << std::endl;
 			result_stars = std::vector<hypro::Starset<Number>>();
-			result_stars.push_back(current_star);
+			result_stars.push_back( current_star );
 		}
-		result.insert( result.end(), result_stars.begin(), result_stars.end() );
+#pragma omp critical
+		{
+			result.insert( result.end(), result_stars.begin(), result_stars.end() );
+		}
 	}
 
 	return result;	// empty list
@@ -84,17 +84,16 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Sta
 				// std::cout << "Applying the overapproximate method" << std::endl;
 				std::cout << "Applying ReLU on dimension: " << i << std::endl;
 				I_n = approxStepReLU( i, I_n );
-				std::cout << "Inner polytope shape: (num_constrains, dim_constrains) = (" << 
-						I_n[I_n.size() - 1].constraintss().size() << ", " << I_n[I_n.size() - 1].constraintss().dimension() << ")" << std::endl;
+				std::cout << "Inner polytope shape: (num_constrains, dim_constrains) = (" << I_n[I_n.size() - 1].constraintss().size() << ", " << I_n[I_n.size() - 1].constraintss().dimension() << ")" << std::endl;
 
 				break;
 			default:
-				FATAL( "Invalid analysis method specified: %s\n", method );
+				FATAL( "hypro.neuralnets.reachability", "Invalid analysis method specified" );
 				// std::cout << "Invalid analysis method specified" << std::endl;
 		}
 		if ( plot_intermediates ) {
 			for ( int i = 0; i < I_n.size(); i++ ) {
-				plotter.addObject( I_n[i].vertices(), hypro::plotting::colors[(2 * i) % 9] );
+				plotter.addObject( I_n[i].vertices(), hypro::plotting::colors[( 2 * i ) % 9] );
 			}
 			plotter.plot2d();
 			plotter.clear();

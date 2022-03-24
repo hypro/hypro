@@ -119,11 +119,13 @@ class StarsetT : private GeometricObjectBase {
 		assert( fstream != NULL );
 
 		if ( fstream == NULL ) {
-			FATAL( "hypro.representation.starset", "Could not open the input file: %s\n" );
+			FATAL( "hypro.representations.starset", "Could not open the input file" );
 		}
 
 		int n, m, p;  // star dimension; number of variables; number of constraints
-		fscanf( fstream, "%d %d %d", &n, &m, &p );
+		if(fscanf( fstream, "%d %d %d", &n, &m, &p ) != 3) {
+			FATAL("hypro.representations.starset", "Error during reading the input file" )
+		}
 		vector_t<Number> center = vector_t<Number>( n );
 		matrix_t<Number> basis = matrix_t<Number>( n, m );
 		matrix_t<Number> shape = matrix_t<Number>( p, m );
@@ -131,26 +133,34 @@ class StarsetT : private GeometricObjectBase {
 		
 		double tmp;
 		for ( int i = 0; i < n; i++ ) {
-			fscanf( fstream, "%le", &tmp );
+			if(fscanf( fstream, "%le", &tmp ) != 1) {
+				FATAL("hypro.representations.starset", "Error during reading the input file" )
+			}
 			center[i] = carl::convert<double, Number>( tmp );
 		}
 
 		for ( int i = 0; i < n; i++ ) {
 			for ( int j = 0; j < m; j++ ) {
-				fscanf( fstream, "%le", &tmp );
+				if(fscanf( fstream, "%le", &tmp ) != 1) {
+					FATAL("hypro.representations.starset", "Error during reading the input file" )
+				}
 				basis( i, j ) = carl::convert<double, Number>( tmp );
 			}
 		}
 
 		for ( int i = 0; i < p; i++ ) {
 			for ( int j = 0; j < m; j++ ) {
-				fscanf( fstream, "%le", &tmp );
+				if(fscanf( fstream, "%le", &tmp ) != 1) {
+					FATAL("hypro.representations.starset", "Error during reading the input file" )
+				}
 				shape( i, j ) = carl::convert<double, Number>( tmp );
 			}
 		}
 
 		for ( int i = 0; i < p; i++ ) {
-			fscanf( fstream, "%le", &tmp );
+			if(fscanf( fstream, "%le", &tmp ) != 1) {
+				FATAL("hypro.representations.starset", "Error during reading the input file" )
+			}
 			limits[i] = carl::convert<double, Number>( tmp );
 		}
 

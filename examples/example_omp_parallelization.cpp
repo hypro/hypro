@@ -45,7 +45,10 @@ int main(int argc, char* argv[]) {
                 inner_results.push_back(1 + rand() % 3);
             }
 
-            result.insert( result.end(), inner_results.begin(), inner_results.end() );
+            #pragma omp critical
+            {
+                result.insert( result.end(), inner_results.begin(), inner_results.end() );
+            }
         }
 
     }

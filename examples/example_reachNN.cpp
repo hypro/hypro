@@ -93,51 +93,57 @@ int main( int argc, char* argv[] ) {
 		method = hypro::reachability::NN_reach_method::OVERAPPRX;
 		
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
+
+	start = std::chrono::steady_clock::now();
 	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, false );
+	end = std::chrono::steady_clock::now();
+	std::cout << "Total time elapsed during NN reachability analysis: "
+			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
 
 	int N = output_set.size();
-	for ( int i = 0; i < N; i++ ) {
+	std::cout << "Number of final stars: " << N << std::endl;
+	// for ( int i = 0; i < N; i++ ) {
 		// std::cout << output_set[i] << std::endl;
 		// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
 		// std::cout << "Vertices: " << vertices << std::endl;
 		// plotter.addObject( vertices, hypro::plotting::colors[(2 * i) % 9] );
-		bool COC_is_not_minimal = true;
-		for ( int j = 1; j < output_set[i].dimension(); j++) {
-			// std::cout << "Checking output safety constraint: " << j << std::endl;
-			hypro::vector_t<Number> center = output_set[i].center();
-			hypro::matrix_t<Number> basis = output_set[i].generator();
-			hypro::matrix_t<Number> shape = output_set[i].shape();
-			hypro::matrix_t<Number> limits = output_set[i].limits();
+		// bool COC_is_not_minimal = true;
+		// for ( int j = 1; j < output_set[i].dimension(); j++) {
+		// 	// std::cout << "Checking output safety constraint: " << j << std::endl;
+		// 	hypro::vector_t<Number> center = output_set[i].center();
+		// 	hypro::matrix_t<Number> basis = output_set[i].generator();
+		// 	hypro::matrix_t<Number> shape = output_set[i].shape();
+		// 	hypro::matrix_t<Number> limits = output_set[i].limits();
 
-			shape.conservativeResize(shape.rows() + 1, shape.cols());
-			limits.conservativeResize(limits.rows() + 1, 1);
+		// 	shape.conservativeResize(shape.rows() + 1, shape.cols());
+		// 	limits.conservativeResize(limits.rows() + 1, 1);
 
-			shape.row(shape.rows() - 1) = basis.row(0) - basis.row(j);
-			limits.row(limits.rows() - 1) = center.row(j) - center.row(0);
+		// 	shape.row(shape.rows() - 1) = basis.row(0) - basis.row(j);
+		// 	limits.row(limits.rows() - 1) = center.row(j) - center.row(0);
 
-			hypro::Starset<Number> new_star = hypro::Starset<Number>(center, shape, limits, basis);
-			// std::cout << "Checking emptiness" << std::endl;
-			if(new_star.empty()) {
-				COC_is_not_minimal = false;
-				break;
-			}
+		// 	hypro::Starset<Number> new_star = hypro::Starset<Number>(center, shape, limits, basis);
+		// 	// std::cout << "Checking emptiness" << std::endl;
+		// 	if(new_star.empty()) {
+		// 		COC_is_not_minimal = false;
+		// 		break;
+		// 	}
 
-			// hypro::vector_t<Number> normal_vect = hypro::vector_t<Number>::Zero(output_set[i].dimension());
-			// normal_vect[0] = -1;
-			// normal_vect[i] = +1;
-			// Number offset = 0;
-			// hypro::Halfspace<Number> constraint_part = hypro::Halfspace<Number>(hypro::Point<Number>(normal_vect), offset);
-			// if(output_set[i].satisfiesHalfspace(constraint_part).first == hypro::CONTAINMENT::FULL) {
-			// 	COC_is_not_minimal = true;
-			// 	break;
-			// }
-		}
-		if(COC_is_not_minimal) {
-			std::cout << "Star number " << i << " satisfied property 3 (4)" << std::endl;
-		} else {
-			std::cout << "Star number " << i << "does not satisfy property 3 (4)" << std::endl;
-		}
-	}
+		// 	// hypro::vector_t<Number> normal_vect = hypro::vector_t<Number>::Zero(output_set[i].dimension());
+		// 	// normal_vect[0] = -1;
+		// 	// normal_vect[i] = +1;
+		// 	// Number offset = 0;
+		// 	// hypro::Halfspace<Number> constraint_part = hypro::Halfspace<Number>(hypro::Point<Number>(normal_vect), offset);
+		// 	// if(output_set[i].satisfiesHalfspace(constraint_part).first == hypro::CONTAINMENT::FULL) {
+		// 	// 	COC_is_not_minimal = true;
+		// 	// 	break;
+		// 	// }
+		// }
+		// if(COC_is_not_minimal) {
+		// 	std::cout << "Star number " << i << " satisfied property 3 (4)" << std::endl;
+		// } else {
+		// 	std::cout << "Star number " << i << "does not satisfy property 3 (4)" << std::endl;
+		// }
+	// }
 	// plotter.plot2d();
 
 	return 0;
