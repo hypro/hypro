@@ -6,6 +6,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <iomanip>
 #include <vector>
 
 // use rational arithmetic.
@@ -135,31 +136,33 @@ int main( int argc, char* argv[] ) {
 			// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
 			// std::cout << "Vertices: " << vertices << std::endl;
 		} else {
-			std::cout << "Star number " << i << " does not satisfy property 4" << std::endl;
+			std::cout << "Star number " << i << " does not satisfy the property" << std::endl;
 
 			// std::cout << output_set[i] << std::endl;
 			// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
 			// std::cout << "Vertices: " << vertices << std::endl;
 			
-			std::cout << "The new star: " << std::endl;
-			std::cout << new_star << std::endl;
-			std::cout << "New star vertices: " << new_star.vertices() << std::endl;
+			// std::cout << "The new star: " << std::endl;
+			// std::cout << new_star << std::endl;
+			// std::cout << "New star vertices: " << new_star.vertices() << std::endl;
 
-			std::vector<hypro::Point<Number>> inner_vertices = new_star.constraintss().vertices();
-			hypro::vector_t<Number> new_center = new_star.center();
-			hypro::matrix_t<Number> new_basis = new_star.generator();
+			// std::vector<hypro::Point<Number>> inner_vertices = new_star.constraintss().vertices();
+			// hypro::vector_t<Number> new_center = new_star.center();
+			// hypro::matrix_t<Number> new_basis = new_star.generator();
 
-			for( auto point : inner_vertices ) {
-				std::cout << "Inner point: " << point << std::endl;
-				hypro::Point<Number> star_point = point.affineTransformation(new_basis, new_center);
-				std::cout << "One new point: " << star_point << std::endl;
-			}
+			// for( auto point : inner_vertices ) {
+			// 	std::cout << "Inner point: " << point << std::endl;
+			// 	hypro::Point<Number> star_point = point.affineTransformation(new_basis, new_center);
+			// 	std::cout << "One new point: " << star_point << std::endl;
+			// }
 
 			num_not_satisfied++;
 		}
 	}
 
-	std::cout << "In total " << num_not_satisfied << " out of " << N << " stars did not satisfy the property." << std::endl;
+	std::cout << std::fixed;
+	std::cout << std::setprecision(2);
+	std::cout << "In total " << (((double) num_not_satisfied / N) * 100.0) << "\% of stars did not satisfy the property." << std::endl;
 
 	// plotter.plot2d();
 
