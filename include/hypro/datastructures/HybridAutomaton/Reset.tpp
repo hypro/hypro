@@ -111,7 +111,7 @@ bool Reset<Number>::isIdentity( std::size_t I ) const {
 		I -= mAffineResets.at( subspace ).size();
 		offset -= mAffineResets.at( subspace ).size();
 	}
-	matrix_t<Number> testRow = matrix_t<Number>::Zero( mAffineResets.at( subspace ).mTransformation.dimension(), mAffineResets.at( subspace ).mTransformation.dimension() );
+	matrix_t<Number> testRow = matrix_t<Number>::Zero( 1, mAffineResets.at( subspace ).mTransformation.dimension() );
 	testRow( 0, offset ) = 1;
 	return mAffineResets.at( subspace ).mTransformation.matrix().row( offset ) == testRow && mAffineResets.at( subspace ).mTransformation.vector()( offset ) == 0;
 }
