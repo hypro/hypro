@@ -132,6 +132,15 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	unsigned addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> color = std::nullopt, std::optional<plotting::gnuplotSettings> settings = std::nullopt );
 
 	/**
+	 * Similar to addObject, but does not apply Graham's scan on the passed points to not change the order of points.
+	 * @param _points An ordered sequence of points
+	 * @param color Optional coloring information
+	 * @param settings Optional individual gnuplot settings
+	 * @return A unique id, whcih allows to reference the object later to change it
+	 */
+	unsigned addOrderedObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> color = std::nullopt, std::optional<plotting::gnuplotSettings> settings = std::nullopt );
+
+	/**
 	 * @brief      Adds several objects represented as a vector of vectors of points. Duplicates and points inside will be removed by the plotter,
 	 * which runs a 2d-convex hull algorithm (Graham's scan) one the vertices.
 	 * @param[in]  _points  The points.

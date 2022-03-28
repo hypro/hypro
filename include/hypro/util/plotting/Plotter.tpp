@@ -139,21 +139,24 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			mLimits.first = _points.begin()->rawCoordinates();
 			mLimits.second = _points.begin()->rawCoordinates();
 		}
-		// update limits
-		for ( const auto& point : _points ) {
-			if ( point.dimension() == 2 ) {
-				for ( unsigned d = 0; d < mLimits.first.rows(); ++d ) {
-					mLimits.first( d ) = mLimits.first( d ) > point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.first( d );
-					mLimits.second( d ) = mLimits.second( d ) < point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.second( d );
-				}
-			} else {
-				objectIsTwoDimensional = false;
-				WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
-				break;
-			}
+	}
+	return 0;
+}
+
+template <typename Number>
+unsigned Plotter<Number>::addOrderedObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
+	TRACE( "hypro.plotter", "" );
+	// reduce dimensions
+	if ( !_points.empty() ) {
+		bool objectIsTwoDimensional = true;
+		if ( _points.begin()->dimension() != 2 ) {
+			objectIsTwoDimensional = false;
+			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
+			return 0;
 		}
+		updateLimits( _points );
 		if ( objectIsTwoDimensional ) {
-			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings } ) );
+			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, true, false, _color, settings } ) );
 			mId++;
 			return ( mId - 1 );
 		}
