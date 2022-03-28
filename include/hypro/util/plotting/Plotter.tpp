@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "Plotter.h"
@@ -54,7 +54,7 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 
 	mOutfile.open( filename + "_" + plotting::to_string( outformat ) + ".plt" );
 
-	if ( ( !mObjects.empty() && !mObjects.begin()->second.vertices.empty() ) || !mPoints.empty() ) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
+	if ( ( !mObjects.empty() && !mObjects.begin()->second.vertices.empty() ) || !mPoints.empty() || !mVectors.empty() ) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
 		// preamble
 		mOutfile << "# settings\n";
@@ -134,10 +134,11 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
 			return 0;
 		}
-		// initialize limits
-		if ( mObjects.empty() && mPoints.empty() ) {
-			mLimits.first = _points.begin()->rawCoordinates();
-			mLimits.second = _points.begin()->rawCoordinates();
+		updateLimits( _points );
+		if ( objectIsTwoDimensional ) {
+			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings } ) );
+			mId++;
+			return ( mId - 1 );
 		}
 	}
 	return 0;
@@ -210,8 +211,19 @@ void Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
 }
 
 template <typename Number>
-void Plotter<Number>::addVector( const vector_t<Number>& _vector ) {
-	mVectors.insert( std::make_pair( mId++, _vector ) );
+void Plotter<Number>::addVector( const vector_t<Number>& _vector, std::optional<vector_t<Number>> origin ) {
+	if ( origin.has_value() ) {
+		if ( origin.value().rows() != 2 ) {
+			throw std::logic_error( "The passed origin is not 2-dimensional." );
+		}
+		std::vector<Point<Number>> points{ Point<Number>{ _vector }, Point<Number>{ origin.value() } };
+		updateLimits( points );
+		mVectors.insert( std::make_pair( mId++, std::make_pair( origin.value(), _vector ) ) );
+	} else {
+		std::vector<Point<Number>> points{ Point<Number>{ _vector }, Point<Number>{ vector_t<Number>::Zero( 2 ) } };
+		updateLimits( points );
+		mVectors.insert( std::make_pair( mId++, std::make_pair( vector_t<Number>::Zero( 2 ), _vector ) ) );
+	}
 }
 
 template <typename Number>
@@ -234,6 +246,26 @@ void Plotter<Number>::clear() {
 }
 
 template <typename Number>
+void Plotter<Number>::updateLimits( const std::vector<Point<Number>>& points ) {
+	// initialize limits
+	if ( mObjects.empty() && mPoints.empty() && mVectors.empty() ) {
+		mLimits.first = points.begin()->rawCoordinates();
+		mLimits.second = points.begin()->rawCoordinates();
+	}
+	// update limits
+	for ( const auto& point : points ) {
+		if ( point.dimension() == 2 ) {
+			for ( unsigned d = 0; d < mLimits.first.rows(); ++d ) {
+				mLimits.first( d ) = mLimits.first( d ) > point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.first( d );
+				mLimits.second( d ) = mLimits.second( d ) < point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.second( d );
+			}
+		} else {
+			throw std::logic_error( "Attempting to plot an object that is not 2-dimensional" );
+		}
+	}
+}
+
+template <typename Number>
 void Plotter<Number>::init( const std::string& _filename ) {
 	mOutfile.open( _filename );
 }
@@ -246,10 +278,9 @@ void Plotter<Number>::writeGnuplot() const {
 
 	if ( !mVectors.empty() ) {
 		mOutfile << "# plotting vectors normalized to length 1\n";
-		unsigned arrowIndex = 0;
-		for ( auto& vector : mVectors ) {
-			vector_t<Number> normalized = vector.second / norm( vector.second );
-			mOutfile << "set arrow " << arrowIndex++ << " from 0,0 to " << normalized( 0 ) << "," << normalized( 1 ) << "\n";
+		unsigned arrowIndex = 1;
+		for ( auto& [_, vector] : mVectors ) {
+			mOutfile << "set arrow from " << vector.first( 0 ) << "," << vector.first( 1 ) << " to " << vector.second( 0 ) << "," << vector.second( 1 ) << "\n";
 		}
 		mOutfile << "\n";
 	}
@@ -281,6 +312,8 @@ void Plotter<Number>::writeGnuplot() const {
 				ranges[d] = carl::Interval<double>( leftBound, rightBound );
 			}
 		}
+		// determine point-radius
+		double pointRadius = std::min( ranges[0].diameter(), ranges[1].diameter() ) * 0.01;
 
 		// preamble
 
@@ -334,7 +367,7 @@ void Plotter<Number>::writeGnuplot() const {
 					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
 						mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
 					}
-					mOutfile << " radius 0.005";
+					mOutfile << " radius " << pointRadius;
 				} else {
 					mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
 					for ( const auto vertex : plotObject.vertices ) {
