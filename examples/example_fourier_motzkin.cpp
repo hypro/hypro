@@ -28,15 +28,25 @@ int main( int argc, char* argv[] ) {
 	hypro::NNet<Number> rotate_nn = hypro::NNet<Number>( filename );
 	std::cout << rotate_nn << std::endl;
 
-	// a triangle:  |>
+	// // a triangle:  |>
+	// hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );
+	// hypro::matrix_t<Number> basis = hypro::matrix_t<Number>( 2, 2 );
+	// hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 3, 2 );
+	// hypro::vector_t<Number> limits = hypro::vector_t<Number>( 3 );
+	// center << 0, 0;
+	// basis << 1, 0, 0, 1;
+	// constr << -1, 0, 1, 1, 1, -1;
+	// limits << 1, 1, 1;
+
+	//a simple rectangle [_]
 	hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );
 	hypro::matrix_t<Number> basis = hypro::matrix_t<Number>( 2, 2 );
-	hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 3, 2 );
-	hypro::vector_t<Number> limits = hypro::vector_t<Number>( 3 );
+	hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 4, 2 );
+	hypro::vector_t<Number> limits = hypro::vector_t<Number>( 4 );
 	center << 0, 0;
 	basis << 1, 0, 0, 1;
-	constr << -1, 0, 1, 1, 1, -1;
-	limits << 1, 1, 1;
+	constr << 1, 0, 0, 1, -1, 0, 0, -1;
+	limits << 2, 1, 1, 1;
 
     // create and plot the star-set
 	hypro::Starset<Number> input_star = hypro::Starset<Number>( center, constr, limits, basis );

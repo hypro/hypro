@@ -96,8 +96,10 @@ int main( int argc, char* argv[] ) {
 		
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
 
+	bool create_plots = true;
+
 	start = std::chrono::steady_clock::now();
-	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, false );
+	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, create_plots );
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
