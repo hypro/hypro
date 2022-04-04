@@ -58,6 +58,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
   private:
 	mutable std::ofstream mOutfile;
 	mutable std::map<unsigned, plotting::PlotObject<Number>> mObjects;
+	mutable std::map<unsigned, plotting::PlotObject<Number>> mLines;
 	mutable std::multimap<unsigned, std::vector<Halfspace<Number>>> mPlanes;
 	mutable std::vector<plotting::PlotObject<Number>> mPoints;
 	mutable std::multimap<unsigned, std::pair<vector_t<Number>, vector_t<Number>>> mVectors;
@@ -172,6 +173,13 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @param id The id of the object to be removed
 	 */
 	void removeObject( unsigned id );
+
+	/**
+	 * Plots a line built from segments connecting nodes.
+	 * @param points A sequence of nodes which define the line segments of the polyline
+	 * @param color Optional color for the polyline
+	 */
+	void addPolyline( const std::vector<Point<Number>>& points, std::optional<std::size_t> color = std::nullopt );
 
 	/**
 	 * @brief      Adds a point to the plotter.

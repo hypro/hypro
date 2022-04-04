@@ -128,18 +128,14 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 	TRACE( "hypro.plotter", "" );
 	// reduce dimensions
 	if ( !_points.empty() ) {
-		bool objectIsTwoDimensional = true;
 		if ( _points.begin()->dimension() != 2 ) {
-			objectIsTwoDimensional = false;
 			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
 			return 0;
 		}
 		updateLimits( _points );
-		if ( objectIsTwoDimensional ) {
-			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings } ) );
-			mId++;
-			return ( mId - 1 );
-		}
+		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings } ) );
+		mId++;
+		return ( mId - 1 );
 	}
 	return 0;
 }
@@ -149,18 +145,14 @@ unsigned Plotter<Number>::addOrderedObject( const std::vector<Point<Number>>& _p
 	TRACE( "hypro.plotter", "" );
 	// reduce dimensions
 	if ( !_points.empty() ) {
-		bool objectIsTwoDimensional = true;
 		if ( _points.begin()->dimension() != 2 ) {
-			objectIsTwoDimensional = false;
 			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
 			return 0;
 		}
 		updateLimits( _points );
-		if ( objectIsTwoDimensional ) {
-			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, true, false, _color, settings } ) );
-			mId++;
-			return ( mId - 1 );
-		}
+		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, true, false, _color, settings } ) );
+		mId++;
+		return ( mId - 1 );
 	}
 	return 0;
 }
@@ -194,6 +186,21 @@ template <typename Number>
 void Plotter<Number>::removeObject( unsigned id ) {
 	if ( mObjects.find( id ) != mObjects.end() ) {
 		mObjects.erase( id );
+	}
+}
+
+template <typename Number>
+void Plotter<Number>::addPolyline( const std::vector<Point<Number>>& points, std::optional<std::size_t> color ) {
+	if ( !points.empty() ) {
+		bool objectIsTwoDimensional = true;
+		if ( points.begin()->dimension() != 2 ) {
+			objectIsTwoDimensional = false;
+			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
+			return;
+		}
+		updateLimits( points );
+		mLines.insert( std::make_pair( mId, plotting::PlotObject<Number>{ points, true, false, color, std::nullopt } ) );
+		mId++;
 	}
 }
 
@@ -285,7 +292,7 @@ void Plotter<Number>::writeGnuplot() const {
 		mOutfile << "\n";
 	}
 
-	if ( ( !mObjects.empty() && !mObjects.begin()->second.vertices.empty() ) || !mPoints.empty() ) {
+	if ( ( !mObjects.empty() && !mObjects.begin()->second.vertices.empty() ) || !mPoints.empty() || !mLines.empty() ) {
 		TRACE( "hypro.plotter", "Start plotting objects." );
 		// set object
 		vector_t<Number> min = vector_t<Number>( 2 );
@@ -438,6 +445,25 @@ void Plotter<Number>::writeGnuplot() const {
 						mOutfile << off << "\n";
 						++index;
 					}
+				}
+			}
+		}
+
+		// plot polylines
+		if ( !mLines.empty() ) {
+			mOutfile << "\n# plot polylines\n";
+			std::size_t segmentIdx = 1;
+			for ( const auto& [id, lineObj] : mLines ) {
+				for ( auto lineIdx = std::begin( lineObj.vertices ); lineIdx != std::next( std::end( lineObj.vertices ), -1 ); ++lineIdx ) {
+					auto next = std::next( lineIdx );
+					std::stringstream ss;
+					if ( lineObj.color.has_value() ) {
+						ss << std::hex << plotting::colors[lineObj.color.value()];
+					} else {
+						ss << std::hex << plotting::colors[plotting::blue];
+					}
+					mOutfile << "set arrow " << segmentIdx++ << " from \\\n";
+					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
 				}
 			}
 		}
