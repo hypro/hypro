@@ -47,7 +47,7 @@ int main() {
 	plotter.addPoint( Point<Number>( { carl::rationalize<Number>( -1.5 ), 3 } ) );
 
 	// we can also add poly-lines, i.e., a sequence of line segments. Optionally, set a color
-	plotter.addPolyline( { Point<Number>{ 0.5, 0.5 }, Point<Number>{ 0.2, 0.5 }, Point<Number>{ 0.2, 0.7 }, Point<Number>{ 1.0, 0.5 } }, plotting::violett );
+	plotter.addPolyline( { Point<Number>{ 0.5, 0.5 }, Point<Number>{ 0.2, 0.5 }, Point<Number>{ 0.2, 0.7 }, Point<Number>{ 1.0, 0.5 } }, plotting::colors[plotting::violett] );
 
 	// create a three-dimensional box
 	std::vector<carl::Interval<Number>> intervals;
