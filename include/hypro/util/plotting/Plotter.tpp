@@ -462,7 +462,7 @@ void Plotter<Number>::writeGnuplot() const {
 					} else {
 						ss << std::hex << mSettings.color;
 					}
-					mOutfile << "set arrow " << segmentIdx++ << " from \\\n";
+					mOutfile << "set arrow " << std::dec << segmentIdx++ << " from \\\n";
 					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
 				}
 			}
