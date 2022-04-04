@@ -420,6 +420,25 @@ void Plotter<Number>::writeGnuplot() const {
 			++objectCount;
 		}
 
+		// plot polylines
+		if ( !mLines.empty() ) {
+			mOutfile << "\n# plot polylines\n";
+			std::size_t segmentIdx = 1;
+			for ( const auto& [id, lineObj] : mLines ) {
+				for ( auto lineIdx = std::begin( lineObj.vertices ); lineIdx != std::next( std::end( lineObj.vertices ), -1 ); ++lineIdx ) {
+					auto next = std::next( lineIdx );
+					std::stringstream ss;
+					if ( lineObj.color.has_value() ) {
+						ss << std::hex << lineObj.color.value();
+					} else {
+						ss << std::hex << mSettings.color;
+					}
+					mOutfile << "set arrow " << segmentIdx++ << " from \\\n";
+					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
+				}
+			}
+		}
+
 		if ( mPlanes.empty() && mPoints.empty() ) {
 			mOutfile << "plot - NaN notitle\n";
 		}
@@ -445,25 +464,6 @@ void Plotter<Number>::writeGnuplot() const {
 						mOutfile << off << "\n";
 						++index;
 					}
-				}
-			}
-		}
-
-		// plot polylines
-		if ( !mLines.empty() ) {
-			mOutfile << "\n# plot polylines\n";
-			std::size_t segmentIdx = 1;
-			for ( const auto& [id, lineObj] : mLines ) {
-				for ( auto lineIdx = std::begin( lineObj.vertices ); lineIdx != std::next( std::end( lineObj.vertices ), -1 ); ++lineIdx ) {
-					auto next = std::next( lineIdx );
-					std::stringstream ss;
-					if ( lineObj.color.has_value() ) {
-						ss << std::hex << lineObj.color.value();
-					} else {
-						ss << std::hex << mSettings.color;
-					}
-					mOutfile << "set arrow " << segmentIdx++ << " from \\\n";
-					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
 				}
 			}
 		}
