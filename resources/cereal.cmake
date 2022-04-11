@@ -20,17 +20,17 @@ message(STATUS "Cereal include dir: ${cereal_INCLUDE_DIR}")
 add_dependencies(${PROJECT_NAME}_resources cereal::cereal)
 
 #target_link_libraries(${PROJECT_NAME}-objects INTERFACE cereal::cereal)
-#target_link_libraries(${PROJECT_NAME}-shared INTERFACE cereal::cereal)
+#target_link_libraries(${PROJECT_NAME}-shared INTERFACE cereal)
 #target_link_libraries(${PROJECT_NAME}-static PRIVATE cereal)
 
-#target_include_directories(${PROJECT_NAME}-objects
-#        PRIVATE ${cereal_INCLUDE_DIR}
-#        )
-#target_include_directories(${PROJECT_NAME}-static
-#        PRIVATE ${cereal_INCLUDE_DIR}
-#        )
-#target_include_directories(${PROJECT_NAME}-shared
-#        PRIVATE ${cereal_INCLUDE_DIR}
-#        )
+target_include_directories(${PROJECT_NAME}-objects
+        PRIVATE ${cereal_INCLUDE_DIR}
+        )
+target_include_directories(${PROJECT_NAME}-static
+        PRIVATE ${cereal_INCLUDE_DIR}
+        )
+target_include_directories(${PROJECT_NAME}-shared
+        PRIVATE ${cereal_INCLUDE_DIR}
+        )
 
 #list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${cereal_INCLUDE_DIR})

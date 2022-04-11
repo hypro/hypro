@@ -6,7 +6,6 @@
 #	   Stefan Schupp stefan.schupp@cs.rwth-aachen.de      #
 #                                                             #
 # Author: Stefan Schupp
-# Credit: Sebastian Junges, Gereon Kremer
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
