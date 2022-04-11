@@ -38,7 +38,7 @@ namespace hypro {
 				}
 
 				//1.Get ConstraintSet, build State and add to localStateMap
-				ConstraintSetT<Number> conSet = visit(initStateCtx);
+				ConstraintSetT<Number> conSet = visit(initStateCtx).template as<ConstraintSetT<Number>>();
 				assert(initialLoc != NULL);
 				//std::cout << "Parsed initial state description: " << conSet.matrix() << " <= " << conSet.vector() << std::endl;
 				initialState.emplace(std::make_pair(initialLoc, Condition<Number>(conSet.matrix(), conSet.vector())));
@@ -67,7 +67,7 @@ namespace hypro {
 				}
 
 				//1.Get ConstraintSet, build State and add to localStateMap
-				std::pair<ConstraintSetT<Number>, Number> initProb = visit(initStateCtx);
+				std::pair<ConstraintSetT<Number>, Number> initProb = visit(initStateCtx).template as<std::pair<ConstraintSetT<Number>, Number>>();
 				assert(initialLoc != NULL);
 				initialState.emplace(std::make_pair(initialLoc, std::make_pair(Condition<Number>(initProb.first.matrix(), initProb.first.vector()),initProb.second)));
 			}
@@ -111,7 +111,7 @@ namespace hypro {
 
   		//1.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
-		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
 		//std::cout << "In visit init: " << result.first << " <= " << result.second << std::endl;
 
 		//2.Build ConstraintSet and return it
@@ -150,7 +150,7 @@ namespace hypro {
 
   		//1.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
-		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
 		//std::cout << "In visit init: " << result.first << " <= " << result.second << std::endl;
 		// ConstraintSetT<Number> constraints = ConstraintSetT<Number>(result.first, result.second);
 

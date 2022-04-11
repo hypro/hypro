@@ -31,7 +31,7 @@ namespace hypro {
 					}
 				}
 
-				Location<Number>* loc = visit(ctx->location().at(i));
+				Location<Number>* loc = visit(ctx->location().at(i)).template as<Location<Number>*>();
 				assert(loc != nullptr);
 				locSet.emplace(loc);
 				i++;
@@ -51,7 +51,7 @@ namespace hypro {
 					}
 				}
 
-				StochasticLocation<Number>* loc = visit(ctx->stochasticlocation().at(i));
+				StochasticLocation<Number>* loc = visit(ctx->stochasticlocation().at(i)).template as<StochasticLocation<Number>*>();
 				assert(loc != nullptr);
 				locSet.emplace(loc);
 				i++;
@@ -67,7 +67,7 @@ namespace hypro {
 	antlrcpp::Any HyproLocationVisitor<Number>::visitLocation(HybridAutomatonParser::LocationContext *ctx){
 
 		//1.Calls visit(ctx->activities()) to get flow (as a variant) and externalInputBox
-		std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
+		std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities()).template as<std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>>>();
 
 		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
 		//By default, if no invariant is given, return a 0xn matrix because we have zero contraints over n variables
@@ -75,7 +75,7 @@ namespace hypro {
 
 		bool firstTime = true;
 		for(auto& currInvCtx : ctx->invariants()){
-			Condition<Number> currInv = visit(currInvCtx);
+			Condition<Number> currInv = visit(currInvCtx).template as<Condition<Number>>();
 			if(currInv != Condition<Number>()){
 				if(firstTime || inv.isTrue()){
 					inv = currInv;
@@ -124,7 +124,7 @@ namespace hypro {
 			loc->setExtInput(std::get<2>(flowAndExtInput));
 		}
 		// set labels, if any
-		LocationLabels labels = visit(ctx->loc_labels());
+		LocationLabels labels = visit(ctx->loc_labels()).template as<LocationLabels>();
 		if(labels.isUrgent) {
 			loc->setUrgent();
 		}
@@ -154,7 +154,7 @@ namespace hypro {
 				if(ctx->equation()[i]->VARIABLE()->getText() == (vars[j] + "'")){
 					linearFlows[j] = tmpRow;
 					if(ctx->equation(i)->interval() != NULL){
-						carl::Interval<Number> intervalValues = equationVisitor.visit(ctx->equation(i)->interval());
+						carl::Interval<Number> intervalValues = equationVisitor.visit(ctx->equation(i)->interval()).template as<carl::Interval<Number>>();
 						extInputVec[j] = intervalValues;
 					}
 					break;
@@ -165,7 +165,7 @@ namespace hypro {
 		HyproFormulaVisitor<Number> intervalVisitor(vars);
 		for(unsigned i=0; i < ctx->intervalexpr().size(); i++){
 			// parse interval
-			carl::Interval<Number> tmpintv = intervalVisitor.visit(ctx->intervalexpr(i)->interval());
+			carl::Interval<Number> tmpintv = intervalVisitor.visit(ctx->intervalexpr(i)->interval()).template as<carl::Interval<Number>>();
 			// find according variable and store in mapping
 			for(unsigned j=0; j < vars.size(); j++){
 				if(ctx->intervalexpr()[i]->VARIABLE()->getText() == (vars[j])){
@@ -197,7 +197,7 @@ namespace hypro {
 
 			//1.Call HyproFormulaVisitor and get pair of matrix and vector
 			HyproFormulaVisitor<Number> visitor(vars);
-			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset());
+			std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
 
 			//2.Build condition out of them
 			Condition<Number> inv;
@@ -217,7 +217,7 @@ namespace hypro {
 	antlrcpp::Any HyproLocationVisitor<Number>::visitStochasticlocation(HybridAutomatonParser::StochasticlocationContext *ctx) {
 
 		//1.Calls visit(ctx->activities()) to get flow (as a variant) and externalInputBox
-		std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities());
+		std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>> flowAndExtInput = visit(ctx->activities()).template as<std::tuple<linearFlow<Number>, rectangularFlow<Number>,std::vector<carl::Interval<Number>>>>();
 
 		//2.Iteratively Calls visit(ctx->invariant()) to get all conditions and collect them in one big condition
 		//By default, if no invariant is given, return a 0xn matrix because we have zero contraints over n variables
@@ -225,7 +225,7 @@ namespace hypro {
 
 		bool firstTime = true;
 		for(auto& currInvCtx : ctx->invariants()){
-			Condition<Number> currInv = visit(currInvCtx);
+			Condition<Number> currInv = visit(currInvCtx).template as<Condition<Number>>();
 			if(currInv != Condition<Number>()){
 				if(firstTime){
 					inv = currInv;
@@ -256,7 +256,7 @@ namespace hypro {
 		}
 
 		//3.Calls visit(ctx->probdistribution()) to get probability distribution
-		matrix_t<Number> probdist = visit(ctx->probdistribution());
+		matrix_t<Number> probdist = visit(ctx->probdistribution()).template as<matrix_t<Number>>();
 
 		//4.Returns a ptr to location
 		StochasticLocation<Number>* loc = new StochasticLocation<Number>();

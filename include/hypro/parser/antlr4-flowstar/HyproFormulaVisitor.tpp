@@ -227,8 +227,8 @@ namespace hypro {
 		}
 
 		//1.Call visit(ctx->expression()) for both sides to get 2 vectors
-		vector_t<Number> poly1 = visit(ctx->expression()[0]);
-		vector_t<Number> poly2 = visit(ctx->expression()[1]);
+		vector_t<Number> poly1 = visit(ctx->expression()[0]).template as<vector_t<Number>>();
+		vector_t<Number> poly2 = visit(ctx->expression()[1]).template as<vector_t<Number>>();
 
 		//2.Shorten both vectors by one, save last coeff and save everything in pair
 		Number poly1Back = poly1(poly1.size()-1);
@@ -311,7 +311,7 @@ namespace hypro {
 		}
 
 		//1.Get inverval
-		carl::Interval<Number> intervalValues = visit(ctx->interval());
+		carl::Interval<Number> intervalValues = visit(ctx->interval()).template as<carl::Interval<Number>>();
 
 		//2.Make constraint vectors
 		std::vector<std::pair<vector_t<Number>,Number>> constraintVec;
