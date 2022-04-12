@@ -4,6 +4,7 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/HybridAutomaton/State.h>
@@ -314,7 +315,29 @@ TYPED_TEST( HybridAutomataTest, TransitionTest ) {
 	EXPECT_TRUE( empty.isIdentity() );
 	EXPECT_TRUE( empty.isAffineIdentity() );
 	EXPECT_TRUE( empty.isIntervalIdentity() );
-	EXPECT_TRUE( empty.isIntervalIdentity() );
+
+	matrix_t<TypeParam> id = matrix_t<TypeParam>::Identity( 3, 3 );
+	vector_t<TypeParam> zero = vector_t<TypeParam>::Zero( 3 );
+	Reset<TypeParam> identity{ id, zero };
+	EXPECT_TRUE( identity.isIdentity() );
+	EXPECT_TRUE( identity.isAffineIdentity() );
+	EXPECT_TRUE( identity.isIntervalIdentity() );
+	EXPECT_TRUE( identity.isIdentity( 0 ) );
+	EXPECT_TRUE( identity.isIdentity( 1 ) );
+	EXPECT_TRUE( identity.isIdentity( 2 ) );
+
+	matrix_t<TypeParam> mat = matrix_t<TypeParam>::Identity( 3, 3 );
+	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero( 3 );
+	vec( 0 ) = 1;
+	mat( 0, 2 ) = 1;
+	mat( 2, 1 ) = 1;
+	Reset<TypeParam> r{ mat, vec };
+	EXPECT_FALSE( r.isIdentity() );
+	EXPECT_FALSE( r.isAffineIdentity() );
+	EXPECT_TRUE( r.isIntervalIdentity() );
+	EXPECT_FALSE( r.isIdentity( 0 ) );
+	EXPECT_TRUE( r.isIdentity( 1 ) );
+	EXPECT_FALSE( r.isIdentity( 2 ) );
 }
 
 /**

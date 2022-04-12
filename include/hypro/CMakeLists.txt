@@ -7,7 +7,8 @@ list(FILTER sources EXCLUDE REGEX MHyPro.cpp|MReach.cpp|CompareMHyProAndCORA/exa
 
 add_library(${PROJECT_NAME}-objects OBJECT ${sources})
 add_dependencies(${PROJECT_NAME}-objects hypro_resources)
-build_target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC GLPK_STATIC ANTLR4_SHARED clp_STATIC coinUtils_STATIC z3_SHARED)
+build_target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC GLPK_STATIC ANTLR4_SHARED clp_STATIC
+        coinUtils_STATIC z3_SHARED cereal::cereal)
 target_include_directories(${PROJECT_NAME}-objects
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
@@ -17,6 +18,9 @@ target_include_directories(${PROJECT_NAME}-objects
 
 ########################################################################################
 # Create static and shared libraries
+
+message(STATUS "Libraries static ${${PROJECT_NAME}_LIBRARIES_STATIC}")
+message(STATUS "Libraries shared ${${PROJECT_NAME}_LIBRARIES_SHARED}")
 
 add_library(${PROJECT_NAME}-static STATIC $<TARGET_OBJECTS:${PROJECT_NAME}-objects>)
 set_target_properties(${PROJECT_NAME}-static PROPERTIES

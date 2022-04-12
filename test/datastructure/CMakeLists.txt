@@ -38,6 +38,7 @@ target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR} ${
 target_link_libraries(runDatastructureTests PUBLIC
         ${PROJECT_NAME}-static
         ${GTEST_LIBRARIES}
+        cereal::cereal
         )
 
 cotire(runDatastructureTests)

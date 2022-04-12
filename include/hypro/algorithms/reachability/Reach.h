@@ -22,6 +22,7 @@
 #pragma once
 #include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../datastructures/reachability/Settings.h"
+#include "ReachabilityCallbacks.h"
 #include "analyzer/LTIAnalyzer.h"
 #include "analyzer/LTISetMinusAnalyzer.h"
 #include "analyzer/ReturnTypes.h"
@@ -41,13 +42,15 @@ namespace reachability {
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Representation>
+template <typename Representation, typename SearchHeuristic = DepthFirst<Representation>, MULTITHREADING multithreading = MULTITHREADING::DISABLED>
 class Reach {
+	using Number = typename Representation::NumberType;
+
   public:
 	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
 
   protected:
-	LTIAnalyzer<Representation> mAnalyzer;
+	LTIAnalyzer<Representation, SearchHeuristic, multithreading> mAnalyzer;
 
   public:
 	/**
@@ -67,6 +70,8 @@ class Reach {
 	REACHABILITY_RESULT computeForwardReachability() {
 		return mAnalyzer.run().result();
 	}
+
+	void setCallbacks( const ReachabilityCallbacks<Representation, Location<Number>>& callbacks ) { mAnalyzer.setCallbacks( callbacks ); }
 };
 
 template <typename Representation>

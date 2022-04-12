@@ -84,11 +84,12 @@ class Reset {
 	bool isAffineIdentity() const;
 	bool isIntervalIdentity() const;
 	bool isIdentity() const;
+	bool isIdentity( std::size_t I ) const;
 
 	std::size_t hash() const;
 	/**
-    * decomposes reset
-    */
+	 * decomposes reset
+	 */
 	void decompose( const std::vector<std::vector<std::size_t>>& partition );
 
 	friend std::ostream& operator<<( std::ostream& ostr, const Reset<Number>& a ) {

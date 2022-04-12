@@ -17,34 +17,34 @@ namespace hypro {
 class  HybridAutomatonParser : public antlr4::Parser {
 public:
   enum {
-    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7,
-    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14,
-    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20,
-    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, POLY = 25, LINEAR = 26,
-    NONLINEAR = 27, NONPOLY = 28, LTI = 29, ODE = 30, URGENT = 31, IN = 32,
-    TRUE = 33, FALSE = 34, PAR = 35, JUMPS = 36, GUARD = 37, RESET = 38,
-    PARALLELOTOPE = 39, BOX = 40, JUMP = 41, DEFINE = 42, COMMENT = 43,
-    EQUALS = 44, BOOLRELATION = 45, PLUS = 46, MINUS = 47, TIMES = 48, DIVIDE = 49,
-    SBOPEN = 50, SBCLOSE = 51, CBOPEN = 52, CBCLOSE = 53, RBOPEN = 54, RBCLOSE = 55,
-    COMMA = 56, NUMBER = 57, CONSTANT = 58, VARIABLE = 59, WS = 60, INTERVALAGG = 61,
+    T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
+    T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
+    T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
+    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, POLY = 25, LINEAR = 26, 
+    NONLINEAR = 27, NONPOLY = 28, LTI = 29, ODE = 30, URGENT = 31, IN = 32, 
+    TRUE = 33, FALSE = 34, PAR = 35, JUMPS = 36, GUARD = 37, RESET = 38, 
+    PARALLELOTOPE = 39, BOX = 40, JUMP = 41, DEFINE = 42, COMMENT = 43, 
+    EQUALS = 44, BOOLRELATION = 45, PLUS = 46, MINUS = 47, TIMES = 48, DIVIDE = 49, 
+    SBOPEN = 50, SBCLOSE = 51, CBOPEN = 52, CBCLOSE = 53, RBOPEN = 54, RBCLOSE = 55, 
+    COMMA = 56, NUMBER = 57, CONSTANT = 58, VARIABLE = 59, WS = 60, INTERVALAGG = 61, 
     EXPONENTIAL = 62
   };
 
   enum {
-    RuleStart = 0, RuleVardeclaration = 1, RuleConstantdeclaration = 2,
-    RuleModes = 3, RuleLocation = 4, RuleActivities = 5, RuleInvariants = 6,
-    RuleStochasticlocation = 7, RuleProbdistribution = 8, RuleLoc_labels = 9,
-    RuleReplacedexpr = 10, RuleConstantexpr = 11, RuleConnector = 12, RuleTerm = 13,
-    RuleBracketExpression = 14, RulePolynom = 15, RuleExpression = 16, RuleEquation = 17,
-    RuleConstraint = 18, RuleInterval = 19, RuleIntervalexpr = 20, RuleConstrset = 21,
-    RuleInit = 22, RuleInitstate = 23, RuleProbinitstate = 24, RuleUnsafeset = 25,
-    RuleLbadstate = 26, RuleGbadstate = 27, RuleJumps = 28, RuleTransition = 29,
-    RuleFromto = 30, RuleUrgent = 31, RuleGuard = 32, RuleLabels = 33, RuleAllocation = 34,
-    RuleResetfct = 35, RuleAggregation = 36, RuleStochastictransition = 37,
-    RuleProbtransition = 38, RuleProbfrom = 39, RuleProbto = 40, RuleSetting = 41,
-    RuleFixedsteps = 42, RuleTime = 43, RulePlotsetting = 44, RuleFilename = 45,
-    RuleMaxjumps = 46, RulePrint = 47, RuleRemainder = 48, RuleIdentity = 49,
-    RuleQrprecond = 50, RuleFixedorders = 51, RuleAdaptiveorders = 52, RuleCutoff = 53,
+    RuleStart = 0, RuleVardeclaration = 1, RuleConstantdeclaration = 2, 
+    RuleModes = 3, RuleLocation = 4, RuleActivities = 5, RuleInvariants = 6, 
+    RuleStochasticlocation = 7, RuleProbdistribution = 8, RuleLoc_labels = 9, 
+    RuleReplacedexpr = 10, RuleConstantexpr = 11, RuleConnector = 12, RuleTerm = 13, 
+    RuleBracketExpression = 14, RulePolynom = 15, RuleExpression = 16, RuleEquation = 17, 
+    RuleConstraint = 18, RuleInterval = 19, RuleIntervalexpr = 20, RuleConstrset = 21, 
+    RuleInit = 22, RuleInitstate = 23, RuleProbinitstate = 24, RuleUnsafeset = 25, 
+    RuleLbadstate = 26, RuleGbadstate = 27, RuleJumps = 28, RuleTransition = 29, 
+    RuleFromto = 30, RuleUrgent = 31, RuleGuard = 32, RuleLabels = 33, RuleAllocation = 34, 
+    RuleResetfct = 35, RuleAggregation = 36, RuleStochastictransition = 37, 
+    RuleProbtransition = 38, RuleProbfrom = 39, RuleProbto = 40, RuleSetting = 41, 
+    RuleFixedsteps = 42, RuleTime = 43, RulePlotsetting = 44, RuleFilename = 45, 
+    RuleMaxjumps = 46, RulePrint = 47, RuleRemainder = 48, RuleIdentity = 49, 
+    RuleQrprecond = 50, RuleFixedorders = 51, RuleAdaptiveorders = 52, RuleCutoff = 53, 
     RulePrecision = 54
   };
 
@@ -115,7 +115,7 @@ public:
   class FixedordersContext;
   class AdaptiveordersContext;
   class CutoffContext;
-  class PrecisionContext;
+  class PrecisionContext; 
 
   class  StartContext : public antlr4::ParserRuleContext {
   public:
@@ -133,7 +133,7 @@ public:
     UnsafesetContext *unsafeset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   StartContext* start();
@@ -148,7 +148,7 @@ public:
     antlr4::tree::TerminalNode* COMMA(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   VardeclarationContext* vardeclaration();
@@ -166,7 +166,7 @@ public:
     ReplacedexprContext* replacedexpr(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ConstantdeclarationContext* constantdeclaration();
@@ -183,7 +183,7 @@ public:
     StochasticlocationContext* stochasticlocation(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ModesContext* modes();
@@ -201,7 +201,7 @@ public:
     InvariantsContext* invariants(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   LocationContext* location();
@@ -226,7 +226,7 @@ public:
     IntervalexprContext* intervalexpr(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ActivitiesContext* activities();
@@ -240,7 +240,7 @@ public:
     ConstrsetContext *constrset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   InvariantsContext* invariants();
@@ -258,7 +258,7 @@ public:
     InvariantsContext* invariants(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   StochasticlocationContext* stochasticlocation();
@@ -273,7 +273,7 @@ public:
     EquationContext* equation(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ProbdistributionContext* probdistribution();
@@ -285,7 +285,7 @@ public:
     antlr4::tree::TerminalNode *URGENT();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   Loc_labelsContext* loc_labels();
@@ -301,7 +301,7 @@ public:
     antlr4::tree::TerminalNode* MINUS(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ReplacedexprContext* replacedexpr();
@@ -319,7 +319,7 @@ public:
     antlr4::tree::TerminalNode *MINUS();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ConstantexprContext* constantexpr();
@@ -332,7 +332,7 @@ public:
     antlr4::tree::TerminalNode *MINUS();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ConnectorContext* connector();
@@ -352,7 +352,7 @@ public:
     ConnectorContext* connector(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   TermContext* term();
@@ -373,7 +373,7 @@ public:
     antlr4::tree::TerminalNode* MINUS(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   BracketExpressionContext* bracketExpression();
@@ -390,7 +390,7 @@ public:
     ConnectorContext* connector(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   PolynomContext* polynom();
@@ -402,7 +402,7 @@ public:
     PolynomContext *polynom();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ExpressionContext* expression();
@@ -418,7 +418,7 @@ public:
     IntervalContext *interval();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   EquationContext* equation();
@@ -433,7 +433,7 @@ public:
     antlr4::tree::TerminalNode *EQUALS();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ConstraintContext* constraint();
@@ -453,7 +453,7 @@ public:
     antlr4::tree::TerminalNode* MINUS(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   IntervalContext* interval();
@@ -467,7 +467,7 @@ public:
     IntervalContext *interval();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   IntervalexprContext* intervalexpr();
@@ -484,7 +484,7 @@ public:
     IntervalexprContext* intervalexpr(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ConstrsetContext* constrset();
@@ -501,7 +501,7 @@ public:
     ProbinitstateContext* probinitstate(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   InitContext* init();
@@ -516,7 +516,7 @@ public:
     antlr4::tree::TerminalNode *CBCLOSE();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   InitstateContext* initstate();
@@ -533,7 +533,7 @@ public:
     antlr4::tree::TerminalNode *CBCLOSE();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ProbinitstateContext* probinitstate();
@@ -550,7 +550,7 @@ public:
     LbadstateContext* lbadstate(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   UnsafesetContext* unsafeset();
@@ -565,7 +565,7 @@ public:
     ConstrsetContext *constrset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   LbadstateContext* lbadstate();
@@ -575,9 +575,11 @@ public:
     GbadstateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     ConstrsetContext *constrset();
+    antlr4::tree::TerminalNode *CBOPEN();
+    antlr4::tree::TerminalNode *CBCLOSE();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   GbadstateContext* gbadstate();
@@ -595,7 +597,7 @@ public:
     StochastictransitionContext* stochastictransition(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   JumpsContext* jumps();
@@ -617,7 +619,7 @@ public:
     AggregationContext* aggregation(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   TransitionContext* transition();
@@ -631,7 +633,7 @@ public:
     antlr4::tree::TerminalNode *JUMP();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   FromtoContext* fromto();
@@ -643,7 +645,7 @@ public:
     antlr4::tree::TerminalNode *URGENT();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   UrgentContext* urgent();
@@ -658,7 +660,7 @@ public:
     ConstrsetContext *constrset();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   GuardContext* guard();
@@ -673,7 +675,7 @@ public:
     antlr4::tree::TerminalNode* VARIABLE(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   LabelsContext* labels();
@@ -688,7 +690,7 @@ public:
     IntervalContext *interval();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   AllocationContext* allocation();
@@ -704,7 +706,7 @@ public:
     AllocationContext* allocation(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ResetfctContext* resetfct();
@@ -720,7 +722,7 @@ public:
     antlr4::tree::TerminalNode *INTERVALAGG();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   AggregationContext* aggregation();
@@ -742,7 +744,7 @@ public:
     ProbtransitionContext* probtransition(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   StochastictransitionContext* stochastictransition();
@@ -758,7 +760,7 @@ public:
     AggregationContext* aggregation(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ProbtransitionContext* probtransition();
@@ -772,7 +774,7 @@ public:
     antlr4::tree::TerminalNode* MINUS(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ProbfromContext* probfrom();
@@ -786,7 +788,7 @@ public:
     antlr4::tree::TerminalNode *VARIABLE();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   ProbtoContext* probto();
@@ -825,7 +827,7 @@ public:
     PrintContext* print(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   SettingContext* setting();
@@ -837,7 +839,7 @@ public:
     antlr4::tree::TerminalNode *NUMBER();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   FixedstepsContext* fixedsteps();
@@ -849,7 +851,7 @@ public:
     antlr4::tree::TerminalNode *NUMBER();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   TimeContext* time();
@@ -864,7 +866,7 @@ public:
     antlr4::tree::TerminalNode* COMMA(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   PlotsettingContext* plotsetting();
@@ -876,7 +878,7 @@ public:
     antlr4::tree::TerminalNode *VARIABLE();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   FilenameContext* filename();
@@ -888,7 +890,7 @@ public:
     antlr4::tree::TerminalNode *NUMBER();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   MaxjumpsContext* maxjumps();
@@ -900,7 +902,7 @@ public:
     antlr4::tree::TerminalNode *VARIABLE();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   PrintContext* print();
@@ -912,7 +914,7 @@ public:
     antlr4::tree::TerminalNode *EXPONENTIAL();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   RemainderContext* remainder();
@@ -923,7 +925,7 @@ public:
     virtual size_t getRuleIndex() const override;
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   IdentityContext* identity();
@@ -934,7 +936,7 @@ public:
     virtual size_t getRuleIndex() const override;
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   QrprecondContext* qrprecond();
@@ -946,7 +948,7 @@ public:
     antlr4::tree::TerminalNode *NUMBER();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   FixedordersContext* fixedorders();
@@ -962,7 +964,7 @@ public:
     antlr4::tree::TerminalNode *CBCLOSE();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   AdaptiveordersContext* adaptiveorders();
@@ -974,7 +976,7 @@ public:
     antlr4::tree::TerminalNode *EXPONENTIAL();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   CutoffContext* cutoff();
@@ -986,7 +988,7 @@ public:
     antlr4::tree::TerminalNode *NUMBER();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-
+   
   };
 
   PrecisionContext* precision();

@@ -43,9 +43,14 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	// while not done
 	for ( size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount ) {
 		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ) );
+#ifdef HYPRO_LOGGING
+		auto tmp = segment;
+#endif
 		std::tie( containment, segment ) = intersect( segment, loc->getInvariant(), mSubspace );
 		if ( containment == CONTAINMENT::NO ) {
-			DEBUG( "hypro.reachability", "Segment " << segment << " invalidates the invariant condition." );
+#ifdef HYPRO_LOGGING
+			DEBUG( "hypro.reachability", "Segment " << tmp << " invalidates the invariant condition." );
+#endif
 			return REACHABILITY_RESULT::SAFE;
 		}
 
@@ -194,7 +199,7 @@ std::string print( std::vector<EnabledSets<Representation>> const& pipes ) {
 
 	for ( auto& pipe : pipes ) {
 		for ( auto& indSet : pipe.valuationSets ) {
-			str << "[" << indSet.index << "] " << indSet.valuationSet.vertices() << " ";
+			str << "[" << indSet.index << "] " << indSet.valuationSet << " ";
 		}
 		str << "\n";
 	}
@@ -209,7 +214,7 @@ std::string print( std::vector<JumpSuccessor<Representation>> const& pipes ) {
 
 	for ( auto& pipe : pipes ) {
 		for ( auto& indSet : pipe.valuationSets ) {
-			str << "[" << indSet.time << "] " << indSet.valuationSet.vertices() << " ";
+			str << "[" << indSet.time << "] " << indSet.valuationSet << " ";
 		}
 		str << "\n";
 	}
@@ -223,7 +228,7 @@ std::string print( std::vector<Representation> const& sets ) {
 	std::stringstream str{};
 
 	for ( auto& set : sets ) {
-		str << set.vertices() << " ";
+		str << set << " ";
 	}
 	str << "\n";
 	return str.str();
@@ -231,7 +236,7 @@ std::string print( std::vector<Representation> const& sets ) {
 
 template <typename Representation>
 std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const {
-	TRACE( "hypro.reachability", "flowpipe: " << print( flowpipe ) );
+	// TRACE( "hypro.reachability", "flowpipe: " << print( flowpipe ) );
 
 	// transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation>> enabledSegments{};

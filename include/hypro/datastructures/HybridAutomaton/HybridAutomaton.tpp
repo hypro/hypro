@@ -123,6 +123,11 @@ Location<Number>* HybridAutomaton<Number>::getLocation( const std::string& name 
 }
 
 template <typename Number>
+Location<Number>* HybridAutomaton<Number>::getLocationByIndex( const std::size_t index ) const {
+	return mLocations.at( index ).get();
+}
+
+template <typename Number>
 std::vector<Transition<Number>*> HybridAutomaton<Number>::getTransitions() const {
 	std::vector<Transition<Number>*> res;
 	for ( const auto& loc : mLocations ) {

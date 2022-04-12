@@ -210,4 +210,8 @@ endif ()
 
 find_package(OpenMP)
 
+# for serialization
+include(cereal.cmake)
+
+
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)

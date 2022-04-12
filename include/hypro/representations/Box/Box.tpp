@@ -791,6 +791,8 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 	std::vector<hypro::BoxT<Number, Converter, Setting>> result;
 	if ( this->dimension() != minusbox.dimension() ) {
 		return result;
+	} else if ( minusbox.contains( *this ) ) {
+		return result;
 	} else {
 		std::vector<carl::Interval<Number>> box = this->intervals();
 		std::vector<carl::Interval<Number>> minus = minusbox.intervals();

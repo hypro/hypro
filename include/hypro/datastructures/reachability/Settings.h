@@ -40,6 +40,7 @@ struct FixedAnalysisParameters {
 	size_t jumpDepth{ std::numeric_limits<int>::max() };  ///< bound for maximal number of executed jumps
 	tNumber localTimeHorizon = 0;						  ///< bound for maximal duration of time elapse per flowpipe, use negative value for unbounded time (not always supported)
 	tNumber fixedTimeStep = 0;							  ///< a time step that all timesteps of the analysis parameters are multiples of, i.e. fixedTimeStep * timeStepFactor = timeStep.
+	tNumber globalTimeHorizon = -1;						  ///< bound for maximal time duration (globally) - computation should stop, when each trace covers this duration (but not exactly then), negative if not used (default)
 	bool silent = false;								  ///< if true, no output for stdout is generated
 #if HYPRO_USE_PPL
 	unsigned long pplDenominator{ defaultPPLDenominator };

@@ -54,7 +54,7 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 
 	mOutfile.open( filename + "_" + plotting::to_string( outformat ) + ".plt" );
 
-	if ( ( !mObjects.empty() && !mObjects.begin()->second.vertices.empty() ) || !mPoints.empty() ) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
+	if ( ( !mObjects.empty() && !mObjects.begin()->second.vertices.empty() ) || !mPoints.empty() || !mVectors.empty() ) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
 		// preamble
 		mOutfile << "# settings\n";
@@ -124,65 +124,42 @@ void Plotter<Number>::plotGen() const {
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color ) {
-	return addObject(_points, "", _color);
-}
-
-template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::string objectTitle, std::optional<std::size_t> _color ) {
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
 	TRACE( "hypro.plotter", "" );
 	// reduce dimensions
 	if ( !_points.empty() ) {
-		bool objectIsTwoDimensional = true;
 		if ( _points.begin()->dimension() != 2 ) {
-			objectIsTwoDimensional = false;
 			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
 			return 0;
 		}
-		// initialize limits
-		if ( mObjects.empty() && mPoints.empty() ) {
-			mLimits.first = _points.begin()->rawCoordinates();
-			mLimits.second = _points.begin()->rawCoordinates();
-		}
-		// update limits
-		for (
-			  const auto& point : _points ) {
-			if ( point.
-
-				 dimension()
-
-				 == 2 ) {
-				for (
-					  unsigned d = 0;
-					  d < mLimits.first.
-
-						  rows();
-
-					  ++d ) {
-					mLimits.first( d ) = mLimits.first( d ) > point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.first( d );
-					mLimits.second( d ) = mLimits.second( d ) < point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.second( d );
-				}
-			} else {
-				objectIsTwoDimensional = false;
-				WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
-				break;
-			}
-		}
-		if ( objectIsTwoDimensional ) {
-			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, objectTitle } ) );
-			mId++;
-			return ( mId - 1 );
-		}
+		updateLimits( _points );
+		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings } ) );
+		mId++;
+		return ( mId - 1 );
 	}
 	return 0;
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>
+unsigned Plotter<Number>::addOrderedObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
+	TRACE( "hypro.plotter", "" );
+	// reduce dimensions
+	if ( !_points.empty() ) {
+		if ( _points.begin()->dimension() != 2 ) {
+			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
+			return 0;
+		}
+		updateLimits( _points );
+		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, true, false, _color, settings } ) );
+		mId++;
+		return ( mId - 1 );
+	}
+	return 0;
+}
 
-													   >& _points ) {
-	for (
-		  const auto& part : _points ) {
+template <typename Number>
+unsigned Plotter<Number>::addObject( const std::vector<std::vector<Point<Number>>>& _points ) {
+	for ( const auto& part : _points ) {
 		addObject( part );
 		--mId;
 	}
@@ -213,8 +190,23 @@ void Plotter<Number>::removeObject( unsigned id ) {
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color ) {
-	return addObject( { _point }, _color );
+void Plotter<Number>::addPolyline( const std::vector<Point<Number>>& points, std::optional<std::size_t> color ) {
+	if ( !points.empty() ) {
+		bool objectIsTwoDimensional = true;
+		if ( points.begin()->dimension() != 2 ) {
+			objectIsTwoDimensional = false;
+			WARN( "hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped." )
+			return;
+		}
+		updateLimits( points );
+		mLines.insert( std::make_pair( mId, plotting::PlotObject<Number>{ points, true, false, color, std::nullopt } ) );
+		mId++;
+	}
+}
+
+template <typename Number>
+unsigned Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
+	return addObject( { _point }, _color, settings );
 }
 
 template <typename Number>
@@ -226,8 +218,19 @@ void Plotter<Number>::addPoints( const std::vector<Point<Number>>& _points ) {
 }
 
 template <typename Number>
-void Plotter<Number>::addVector( const vector_t<Number>& _vector ) {
-	mVectors.insert( std::make_pair( mId++, _vector ) );
+void Plotter<Number>::addVector( const vector_t<Number>& _vector, std::optional<vector_t<Number>> origin ) {
+	if ( origin.has_value() ) {
+		if ( origin.value().rows() != 2 ) {
+			throw std::logic_error( "The passed origin is not 2-dimensional." );
+		}
+		std::vector<Point<Number>> points{ Point<Number>{ _vector }, Point<Number>{ origin.value() } };
+		updateLimits( points );
+		mVectors.insert( std::make_pair( mId++, std::make_pair( origin.value(), _vector ) ) );
+	} else {
+		std::vector<Point<Number>> points{ Point<Number>{ _vector }, Point<Number>{ vector_t<Number>::Zero( 2 ) } };
+		updateLimits( points );
+		mVectors.insert( std::make_pair( mId++, std::make_pair( vector_t<Number>::Zero( 2 ), _vector ) ) );
+	}
 }
 
 template <typename Number>
@@ -241,13 +244,32 @@ void Plotter<Number>::setObjectColor( unsigned _id, const std::size_t _color ) {
 
 template <typename Number>
 void Plotter<Number>::clear() {
-	mLastDimensions = std::make_pair( -1, -1 );
 	mId = 1;
 	mObjects.clear();
 	mPlanes.clear();
 	mPoints.clear();
 	mVectors.clear();
 	mObjectColors.clear();
+}
+
+template <typename Number>
+void Plotter<Number>::updateLimits( const std::vector<Point<Number>>& points ) {
+	// initialize limits
+	if ( mObjects.empty() && mPoints.empty() && mVectors.empty() ) {
+		mLimits.first = points.begin()->rawCoordinates();
+		mLimits.second = points.begin()->rawCoordinates();
+	}
+	// update limits
+	for ( const auto& point : points ) {
+		if ( point.dimension() == 2 ) {
+			for ( unsigned d = 0; d < mLimits.first.rows(); ++d ) {
+				mLimits.first( d ) = mLimits.first( d ) > point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.first( d );
+				mLimits.second( d ) = mLimits.second( d ) < point.rawCoordinates()( d ) ? point.rawCoordinates()( d ) : mLimits.second( d );
+			}
+		} else {
+			throw std::logic_error( "Attempting to plot an object that is not 2-dimensional" );
+		}
+	}
 }
 
 template <typename Number>
@@ -263,15 +285,14 @@ void Plotter<Number>::writeGnuplot() const {
 
 	if ( !mVectors.empty() ) {
 		mOutfile << "# plotting vectors normalized to length 1\n";
-		unsigned arrowIndex = 0;
-		for ( auto& vector : mVectors ) {
-			vector_t<Number> normalized = vector.second / norm( vector.second );
-			mOutfile << "set arrow " << arrowIndex++ << " from 0,0 to " << normalized( 0 ) << "," << normalized( 1 ) << "\n";
+		unsigned arrowIndex = 1;
+		for ( auto& [_, vector] : mVectors ) {
+			mOutfile << "set arrow from " << vector.first( 0 ) << "," << vector.first( 1 ) << " to " << vector.second( 0 ) << "," << vector.second( 1 ) << "\n";
 		}
 		mOutfile << "\n";
 	}
 
-	if ( ( !mObjects.empty() && !mObjects.begin()->second.vertices.empty() ) || !mPoints.empty() ) {
+	if ( ( !mObjects.empty() && !mObjects.begin()->second.vertices.empty() ) || !mPoints.empty() || !mLines.empty() ) {
 		TRACE( "hypro.plotter", "Start plotting objects." );
 		// set object
 		vector_t<Number> min = vector_t<Number>( 2 );
@@ -298,6 +319,8 @@ void Plotter<Number>::writeGnuplot() const {
 				ranges[d] = carl::Interval<double>( leftBound, rightBound );
 			}
 		}
+		// determine point-radius
+		double pointRadius = std::min( ranges[0].diameter(), ranges[1].diameter() ) * 0.01;
 
 		// preamble
 
@@ -355,7 +378,7 @@ void Plotter<Number>::writeGnuplot() const {
 					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
 						mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
 					}
-					mOutfile << " radius 0.005";
+					mOutfile << " radius " << pointRadius;
 				} else {
 					mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
 					for ( const auto vertex : plotObject.vertices ) {
@@ -383,7 +406,7 @@ void Plotter<Number>::writeGnuplot() const {
 					color = plotObject.color.value();
 				}
 
-				if ( mSettings.fill )
+				if ( mSettings.fill || ( plotObject.settings.has_value() && plotObject.settings.value().fill ) )
 					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
 				else
 					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
@@ -408,6 +431,25 @@ void Plotter<Number>::writeGnuplot() const {
 				plotObject.isPlotted = true;
 			}
 			++objectCount;
+		}
+
+		// plot polylines
+		if ( !mLines.empty() ) {
+			mOutfile << "\n# plot polylines\n";
+			std::size_t segmentIdx = 1;
+			for ( const auto& [id, lineObj] : mLines ) {
+				for ( auto lineIdx = std::begin( lineObj.vertices ); lineIdx != std::next( std::end( lineObj.vertices ), -1 ); ++lineIdx ) {
+					auto next = std::next( lineIdx );
+					std::stringstream ss;
+					if ( lineObj.color.has_value() ) {
+						ss << std::hex << lineObj.color.value();
+					} else {
+						ss << std::hex << mSettings.color;
+					}
+					mOutfile << "set arrow " << std::dec << segmentIdx++ << " from \\\n";
+					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
+				}
+			}
 		}
 
 		if ( mPlanes.empty() && mPoints.empty() ) {
@@ -435,6 +477,25 @@ void Plotter<Number>::writeGnuplot() const {
 						mOutfile << off << "\n";
 						++index;
 					}
+				}
+			}
+		}
+
+		// plot polylines
+		if ( !mLines.empty() ) {
+			mOutfile << "\n# plot polylines\n";
+			std::size_t segmentIdx = 1;
+			for ( const auto& [id, lineObj] : mLines ) {
+				for ( auto lineIdx = std::begin( lineObj.vertices ); lineIdx != std::next( std::end( lineObj.vertices ), -1 ); ++lineIdx ) {
+					auto next = std::next( lineIdx );
+					std::stringstream ss;
+					if ( lineObj.color.has_value() ) {
+						ss << std::hex << lineObj.color.value();
+					} else {
+						ss << std::hex << mSettings.color;
+					}
+					mOutfile << "set arrow " << std::dec << segmentIdx++ << " from \\\n";
+					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
 				}
 			}
 		}

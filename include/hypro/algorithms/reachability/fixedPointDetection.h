@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -13,6 +13,7 @@
 #pragma once
 #include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../representations/GeometricObjectBase.h"
+#include "FlowpipeConstructionConvenience.h"
 
 namespace hypro {
 
@@ -30,13 +31,23 @@ namespace hypro {
  * @return True, if a fixed point has been detected, false otherwise
  */
 template <typename Number, typename Converter, typename Settings>
-bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& node, std::vector<ReachTreeNode<BoxT<Number, Converter, Settings>>>& roots, bool use_partial_coverage = false, std::size_t first_segments_to_test = 0 ) {
+bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& node, std::vector<ReachTreeNode<BoxT<Number, Converter, Settings>>>& roots, std::function<bool( const BoxT<Number, Converter, Settings>&, const Location<Number>* )>& callback, bool use_partial_coverage = false, std::size_t first_segments_to_test = 0 ) {
+	DEBUG( "hypro.reachability", "Try to find fixed point for node @" << &node );
+	using BoxVector = std::vector<BoxT<Number, Converter, Settings>>;
 	assert( !node.getInitialBoundingBox() && "The bounding box should not have been set to ensure the node is not compared to itself." );
 #ifdef HYPRO_STATISTICS
 	START_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif
 
-	std::vector<BoxT<Number, Converter, Settings>> initialBoxes{ node.getInitialSet() };
+	// try callback
+	if ( callback ) {
+		if ( callback( node.getInitialSet(), node.getLocation() ) ) {
+			node.setFixedPoint( true );
+			return true;
+		}
+	}
+
+	BoxVector initialBoxes{ node.getInitialSet() };
 	for ( auto& root : roots ) {
 		for ( ReachTreeNode<BoxT<Number, Converter, Settings>>& treeNode : preorder( root ) ) {
 			// if the location matches and treenode is not the passed node (the passed node has no bounding box yet)
@@ -44,7 +55,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 				// use expensive coverage check
 				if ( use_partial_coverage ) {
 					// from all currently held remaining initial boxes subtract the current initial set to check (partial) coverage
-					std::vector<BoxT<Number, Converter, Settings>> tmp;
+					BoxVector tmp;
 					for ( const auto& box : initialBoxes ) {
 						auto remaining_boxes = box.setMinus2( treeNode.getInitialSet() );
 						tmp.insert( std::end( tmp ), std::begin( remaining_boxes ), std::end( remaining_boxes ) );
@@ -59,42 +70,47 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
 							}
 						}
 					}
-					// the remaining boxes are the ones used in the next iteration
-					swap( tmp, initialBoxes );
-					if ( initialBoxes.empty() ) {
+					if ( tmp.empty() ) {
 #ifdef HYPRO_STATISTICS
 						STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 						COUNT( "FP-by-coverage" );
 #endif
+						DEBUG( "hypro.reachability", "The nodes' initial set " << node.getInitialSet() << " in location " << node.getLocation()->getName() << " could be covered by several other initial sets." );
 						node.setFixedPoint( true, &treeNode );
 						return true;
 					}
+#ifdef HYPRO_LOGGING
+					DEBUG( "hypro.reachability", "Remaining boxes to be covered: " );
+					for ( const auto& b : tmp ) {
+						DEBUG( "hypro.reachability", b );
+					}
+#endif
+					// the remaining boxes are the ones used in the next iteration
+					swap( tmp, initialBoxes );
 				} else {
 					assert( treeNode.getInitialBoundingBox() );
 					// use standard check
 					const auto& nodeInitialBoundingBox = treeNode.getInitialBoundingBox();
 					if ( nodeInitialBoundingBox && treeNode.getInitialSet().contains( initialBoxes.front() ) ) {
-						DEBUG( "hypro.reachability", "Found fixed point for location " << node.getLocation()->getName() << ". Set " << initialBoxes.front() << " is contained in the initial set " << treeNode.getInitialSet() );
+						DEBUG( "hypro.reachability", "Found fixed point for node @" << &node << " in location " << node.getLocation()->getName() << ". Set " << initialBoxes.front() << " is contained in the initial set " << treeNode.getInitialSet() );
 #ifdef HYPRO_STATISTICS
 						STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif
 						node.setFixedPoint( true, &treeNode );
 						return true;
 					} else if ( first_segments_to_test > 0 ) {
-						std::size_t set_index = 0;
-						while ( set_index < first_segments_to_test && set_index < treeNode.getFlowpipe().size() ) {
-							if ( treeNode.getFlowpipe()[set_index].contains( initialBoxes.front() ) ) {
-								DEBUG( "hypro.reachability", "Found fixed point for location " << node.getLocation()->getName() << ". Set " << initialBoxes.front() << " is contained in segment " << set_index << ": " << treeNode.getFlowpipe()[set_index] );
-								node.setFixedPoint();
-								return true;
-							}
-							++set_index;
+						// check if the initial set can be covered by the given number of segments from the flowpipe of the current node
+						if ( is_covered( node.getInitialSet(), BoxVector( std::begin( treeNode.getFlowpipe() ), std::next( std::begin( treeNode.getFlowpipe() ), first_segments_to_test ) ) ) ) {
+							DEBUG( "hypro.reachability", "Found fixed point for node @" << &node << " in location " << node.getLocation()->getName() << ". Achieved coverage by the first " << first_segments_to_test << " segments." );
+							node.setFixedPoint();
+							return true;
 						}
 					}
 				}
 			}
 		}
 	}
+
 #ifdef HYPRO_STATISTICS
 	STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif
@@ -112,13 +128,13 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
  * @return True, if a fixed point has been detected, false otherwise
  */
 template <typename Set>
-bool detectJumpFixedPoint( ReachTreeNode<Set>& node, std::vector<ReachTreeNode<Set>>& roots, bool ) {
+bool detectJumpFixedPoint( ReachTreeNode<Set>& node, std::vector<ReachTreeNode<Set>>& roots, std::optional<std::function<bool( const Set&, const Location<typename Set::NumberType>* )>>&, bool, std::size_t ) {
 	assert( !node.getInitialBoundingBox() && "The bounding box should not have been set to ensure the node is not compared to itself." );
 	using Number = typename Set::NumberType;
 #ifdef HYPRO_STATISTICS
 	START_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif
-	std::vector<carl::Interval<Number>> boundingBox = Converter<Number>::toBox( node.getInitialSet() ).intervals();
+	std::vector<carl::Interval<Number>> boundingBox = computeBoundingBox( node.getInitialSet() ).intervals();
 	for ( auto& root : roots ) {
 		for ( auto& treeNode : preorder( root ) ) {
 			// if the location matches and the bounding boxes contain each other, then also perform the (possibly expensive) full containment test.
@@ -186,35 +202,13 @@ bool is_covered( const Set&, const std::vector<Set>& ) {
  * @param child The child node
  * @return A vector of transitions that are Zeno
  */
-template <typename Set>
-std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( const ReachTreeNode<Set>* parent, const ReachTreeNode<Set>* child ) {
-	using N = typename Set::NumberType;
-	std::vector<const Transition<N>*> result;
-	//// structural check: if child is not a child of parent, exit
-	//// TODO this is a pointer comparison, we need a comparison of reachTreeNodes
-	// if( std::none_of(std::begin(parent->getChildren()), std::end(parent->getChildren()), [child](const auto* childNode){ return childNode == child; }) ) {
-	//	return result;
-	// }
-	//  structural check: if the reset from the parent to the child is non-identity, this cannot be a Zeno transition
-	//  TODO this is a very conservative check - if the overlay of both resets yields identity, this is also a Zeno transition.
-	if ( !child->getTransition()->getReset().isIdentity() ) {
-		return result;
-	}
-	// simple check: if the initial set fully satisfies the guard back to the parent and no variable is reset, we know (since the initial set already fully satisfies the guard from the parent to the child), that this is a Zeno loop.
-	for ( auto& transition : child->getLocation()->getTransitions() ) {
-		if ( transition->getTarget() == parent->getLocation() && transition->getReset().isIdentity() && intersect( child->getInitialSet(), transition->getGuard() ).first == CONTAINMENT::FULL ) {
-			DEBUG( "hypro.reachability", "Detected Zeno-transition from " << transition->getSource()->getName() << " to " << transition->getTarget()->getName() << " with set " << child->getInitialSet() )
-			result.push_back( transition.get() );
-		}
-	}
-	return result;
-}
 
 /**
  * Function to check, whether the incoming transition of the passed node closes a Zeno-cycle.
- * @tparam Set
- * @param child
- * @return
+ * @details The idea is to check, whether the initial set in the child node fully satisfies a guard of a transition to the parent node and whether both transitions do have identity-resets. In this case, the jump back does not provide new information but allows for Zeno-behavior.
+ * @tparam Set The used set representation
+ * @param child The child node
+ * @return A vector of transitions that are Zeno
  */
 template <typename Set>
 std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( const ReachTreeNode<Set>* child ) {
@@ -269,7 +263,6 @@ bool detectContinuousFixedPoints( ReachTreeNode<Set>& currentNode, const std::ve
 					}
 				}
 				if ( is_covered( currentNode.getFlowpipe()[set_index].projectOn( nonDiscreteDimensions ), coverer ) ) {
-					std::cout << "Found fixed point in the first " << numberSets << " segments of some other node via coverage." << std::endl;
 					currentNode.setFixedPoint();
 					return true;
 				}
@@ -277,7 +270,6 @@ bool detectContinuousFixedPoints( ReachTreeNode<Set>& currentNode, const std::ve
 				std::size_t other_set_index = 0;
 				while ( other_set_index < numberSets && other_set_index < other_node.getFlowpipe().size() ) {
 					if ( other_node.getFlowpipe()[other_set_index].projectOn( nonDiscreteDimensions ).contains( currentNode.getFlowpipe()[set_index].projectOn( nonDiscreteDimensions ) ) ) {
-						std::cout << "Found fixed point in the first " << numberSets << " segments of some other node via containment." << std::endl;
 						currentNode.setFixedPoint();
 						return true;
 					}

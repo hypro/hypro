@@ -26,30 +26,30 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation>>;
 
-    Location<Number> const *mLocation = nullptr;                               ///< location in which the flowpipe was computed
-    Transition<Number> const *mTransition{};                                   ///< the transition which lead here. nullptr for roots
-    std::vector<Representation> mFlowpipe{};                                   ///< contains computed flowpipe
-    Representation mInitialSet;                                                   ///< contains initial set for the flowpipe
-    carl::Interval<SegmentInd> mTimings{};                                       ///< global time covered by inital set (used as offset)
-    std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
-    TRIBOOL mHasFixedPoint = TRIBOOL::NSET;                                       ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
-    ReachTreeNode<Representation> *mFixedPointReason = nullptr;                   ///< points to the node which is the reason for fixed-point detection
-    bool mIsOnZenoCycle = false;                                               ///< true, if the node is the end of a Zeno-Cycle
-    bool mFinishesWithTimelock = false;                                        ///< true, if the node exhibits a timelock
-    bool mPotentiallyUnsafe = false;                                            ///< true, if the analysis has found a non-empty intersection with the set of bad states
+	Location<Number> const* mLocation = nullptr;								   ///< location in which the flowpipe was computed
+	Transition<Number> const* mTransition{};									   ///< the transition which lead here. nullptr for roots
+	std::vector<Representation> mFlowpipe{};									   ///< contains computed flowpipe
+	Representation mInitialSet;													   ///< contains initial set for the flowpipe
+	carl::Interval<SegmentInd> mTimings{};										   ///< global time covered by inital set (used as offset)
+	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};	   ///< optional bounding box of the initial set
+	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;										   ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
+	ReachTreeNode<Representation>* mFixedPointReason = nullptr;					   ///< points to the node which is the reason for fixed-point detection
+	bool mIsOnZenoCycle = false;												   ///< true, if the node is the end of a Zeno-Cycle
+	bool mFinishesWithTimelock = false;											   ///< true, if the node exhibits a timelock
+	bool mPotentiallyUnsafe = false;											   ///< true, if the analysis has found a non-empty intersection with the set of bad states
 	std::map<Transition<Number>*, UrgencyRefinementLevel> mUrgRefinementLevels{};  ///< refinement level for outgoing urgent transitions
 	std::vector<SegmentInd> mFpTimings{};										   ///< timing information for simultaneous segments (urgency)
 	REACHABILITY_RESULT mSafetyResult;											   ///< safety of flowpipe segments
 
-public:
-    // Exposition types
-    using Rep = Representation;
+  public:
+	// Exposition types
+	using Rep = Representation;
 
-    // Forwarding from base
-    using Base::getChildren;
-    using Base::getDepth;
+	// Forwarding from base
+	using Base::getChildren;
+	using Base::getDepth;
 
-    ReachTreeNode(ReachTreeNode *parent, Transition<Number> const *transition, Location<Number> const *loc, Representation initialSet, carl::Interval<SegmentInd> timings)
+	ReachTreeNode( ReachTreeNode* parent, Transition<Number> const* transition, Location<Number> const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
 		: Base( parent )
 		, mLocation( loc )
 		, mTransition( transition )
@@ -79,6 +79,12 @@ public:
 	 */
 	Path<Number> getPath() const;
 
+	/**
+	 * Returns a path, i.e., a sequence of nodes of the reach tree which lead to the current node.
+	 * @return A sequence of nodes
+	 */
+	std::vector<ReachTreeNode const*> getTreePath() const;
+
 	// auto getParent() const { return this->mParent; }
 
 	Transition<Number> const* getTransition() const { return mTransition; }
@@ -96,9 +102,9 @@ public:
 	void setSafety( REACHABILITY_RESULT result ) { mSafetyResult = result; }
 
 	/**
-   * @brief Get access to the urgent Transitions
-   * @return Map of urgent transitions to refinement level
-   */
+	 * @brief Get access to the urgent Transitions
+	 * @return Map of urgent transitions to refinement level
+	 */
 	std::map<Transition<Number>*, UrgencyRefinementLevel>& getUrgencyRefinementLevels() { return mUrgRefinementLevels; }
 	std::map<Transition<Number>*, UrgencyRefinementLevel> const& getUrgencyRefinementLevels() const { return mUrgRefinementLevels; }
 
@@ -134,37 +140,45 @@ public:
 	 */
 	void setFixedPoint( bool hasFixedPoint = true, ReachTreeNode<Representation>* reason = nullptr );
 
-    /**
-     * Returns whether this node represents a fixed point.
-     * @return True, if the initial set of this node is fully contained in the initial set of another node of this tree, false otherwise, nset if this property has not been set yet.
-     */
-    TRIBOOL hasFixedPoint() const { return mHasFixedPoint; }
+	/**
+	 * Returns whether this node represents a fixed point.
+	 * @return True, if the initial set of this node is fully contained in the initial set of another node of this tree, false otherwise, nset if this property has not been set yet.
+	 */
+	TRIBOOL hasFixedPoint() const { return mHasFixedPoint; }
 
-    /// Returns a pointer to the node in the path leading to this node-object, which is the reason for finding a fixed-point
-    ReachTreeNode<Representation> *getFixedPointReason() { return mFixedPointReason; }
+	/// Returns a pointer to the node in the path leading to this node-object, which is the reason for finding a fixed-point
+	ReachTreeNode<Representation>* getFixedPointReason() { return mFixedPointReason; }
 
-    /// Setter of a flag indicating the node is on a Zeno-cycle
-    void flagZenoCycle(bool zeno = true) { mIsOnZenoCycle = zeno; }
+	/// Setter of a flag indicating the node is on a Zeno-cycle
+	void flagZenoCycle( bool zeno = true ) { mIsOnZenoCycle = zeno; }
 
-    /// Getter of the flag, which indicates whether the node is on a Zeno-cycle
-    bool isOnZenoCycle() const { return mIsOnZenoCycle; }
+	/// Getter of the flag, which indicates whether the node is on a Zeno-cycle
+	bool isOnZenoCycle() const { return mIsOnZenoCycle; }
 
-    /// Setter for a flag indicating, that the node exhibits a timelock
-    void flagTimelock(bool timelock = true) { mFinishesWithTimelock = timelock; }
+	/// Setter for a flag indicating, that the node exhibits a timelock
+	void flagTimelock( bool timelock = true ) { mFinishesWithTimelock = timelock; }
 
-    /// Getter for the unsafe-status of this node
-    bool intersectedUnsafeRegion() const { return mPotentiallyUnsafe; }
+	/// Getter for the unsafe-status of this node
+	bool intersectedUnsafeRegion() const { return mPotentiallyUnsafe; }
 
-    /// Setter for a flag indicating, that the node has intersected the set of bad states
-    void flagUnsafe(bool unsafe = true) { mPotentiallyUnsafe = unsafe; }
+	/// Setter for a flag indicating, that the node has intersected the set of bad states
+	void flagUnsafe( bool unsafe = true ) { mPotentiallyUnsafe = unsafe; }
 
-    /// Getter for the timelock-status of this node, i.e., whether a timelock has been detected during analysis
-    bool hasTimelock() const { return mFinishesWithTimelock; }
+	/// Getter for the timelock-status of this node, i.e., whether a timelock has been detected during analysis
+	bool hasTimelock() const { return mFinishesWithTimelock; }
 };
 
 template <typename Representation>
 std::ostream& operator<<( std::ostream& out, const ReachTreeNode<Representation>& node ) {
 	out << "{ " << node.getLocation()->getName() << ", init " << node.getInitialSet() << " }";
+	return out;
+}
+
+template <typename Representation>
+std::ostream& operator<<( std::ostream& out, const std::vector<ReachTreeNode<Representation> const*>& nodes ) {
+	for ( const auto ptr : nodes ) {
+		out << ptr->getLocation()->getName() << ", " << ptr->getTimings() << ", @" << ptr << "\n";
+	}
 	return out;
 }
 
