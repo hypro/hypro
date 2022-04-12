@@ -431,4 +431,32 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Supp
 	return BoxT<Number, Converter, BoxSetting>( intervals );
 }
 
-}  // namespace hypro
+  // namespace hypro
+
+template<typename Number>
+template<typename BoxSetting, typename inSetting>
+BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+    //std::cout<<"amk"<<std::endl;
+    //HPolytope temp=Converter::toHPolytope(source.constraintss());
+	//temp=temp.removeRedundancy();
+	BoxT<Number,Converter<Number>,BoxSetting> tmp=Converter::toBox(source.constraintss());
+	return tmp.affineTransformation(source.generator(),source.center());
+	/*std::cout<<"point"<<std::endl;
+	std::cout<<source.generator()<<std::endl;
+	std::cout<<source.center()<<std::endl;
+	std::cout<<source.constraintss().matrix()<<std::endl;
+	std::cout<<source.constraintss().vector()<<std::endl;
+
+ 	std::vector<Point<Number>> res; 
+    ////std::cout<<"vertices"<<std::endl;
+    auto placeholder= tmp.vertices();
+	std::cout<<"point"<<std::endl;
+
+	for ( auto point : placeholder ) {
+		std::cout<<"point"<<point<<std::endl;
+        point=point.affineTransformation(source.generator(),source.center());
+        res.push_back(point);
+    }    
+	return BoxT<Number,Converter<Number>,BoxSetting>(res);*/
+}
+}

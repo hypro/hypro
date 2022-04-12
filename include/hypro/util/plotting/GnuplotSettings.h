@@ -42,6 +42,7 @@ struct gnuplotSettings {
 	bool plain = false;							  //< overrides most settings
 	bool overwriteFiles = false;				  //< set to enable file overwriting
 	std::size_t writeIntermediate = 0;			  //< set to a strictly positve number n to write (append) every n objects to a file, those objects are deleted from the plotter afterwards
+	bool key = false; //< if true, a key/legend is added to the plot
 };
 
 }  // namespace hypro::plotting

@@ -90,4 +90,11 @@ TemplatePolyhedronT<Number, Converter<Number>, TemplatePolyhedronSetting> Conver
 //	return TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting>();
 // }
 
-}  // namespace hypro
+  // namespace hypro
+template<typename Number>
+template<typename TemplatePolyhedronSetting, typename inSetting>
+TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> Converter<Number>::toTemplatePolyhedron( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting>();
+}
+
+}

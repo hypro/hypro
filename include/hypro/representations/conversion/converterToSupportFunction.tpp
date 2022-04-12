@@ -110,4 +110,11 @@ SupportFunctionT<Number, Converter<Number>, SFSetting> Converter<Number>::toSupp
 	return SupportFunctionT<Number, Converter, SFSetting>();
 }
 
-}  // namespace hypro
+  // namespace hypro
+
+template<typename Number>
+template<typename SFSetting, typename inSetting>
+SupportFunctionT<Number,Converter<Number>,SFSetting> Converter<Number>::toSupportFunction( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return SupportFunctionT<Number,Converter,SFSetting>();
+}
+}

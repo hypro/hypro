@@ -8,7 +8,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             #endif
             OptimizerTest.cpp
             PlotterTest.cpp
-            #ReachTreePlotterTest.cpp
+            ReachTreePlotterTest.cpp
             UtilityTest.cpp
             )
 

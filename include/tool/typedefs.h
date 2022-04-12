@@ -13,7 +13,7 @@
 
 namespace hydra {
 
-using Number = mpq_class;
+using Number = double;
 using tNumber = hypro::tNumber;
 
 using SFType = hypro::SupportFunctionT<Number, hypro::Converter<Number>,
@@ -26,6 +26,8 @@ using VPolyType = hypro::VPolytope<Number>;
 using ZonotopeType = hypro::Zonotope<Number>;
 using ConstraintSetType = hypro::ConstraintSet<Number>;
 using DifferenceBoundsType = hypro::DifferenceBounds<Number>;
+using StarsetType = hypro::Starset<Number>;
+
 #ifdef HYPRO_USE_PPL
 using PolytopeType = hypro::Polytope<Number>;
 #endif

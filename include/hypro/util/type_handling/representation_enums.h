@@ -20,5 +20,6 @@ BETTER_ENUM( representation_name, int,
 			 SFN,
 			 polytope_t,
 			 UNDEF,
+			 Starset,
 			 genStar )
 }  // namespace hypro

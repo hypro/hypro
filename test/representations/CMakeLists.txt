@@ -14,10 +14,11 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             SupportFunctionTest.cpp
             #TaylorModelTest.cpp
             VPolytopeTest.cpp
-            ZonotopeTest.cpp
+            #ZonotopeTest.cpp
             SupportFunctionNewTest.cpp
             TemplatePolyhedronTest.cpp
             #OrthoplexTest.cpp
+            StarsetTest.cpp
             )
 
     if (HYPRO_USE_PPL)

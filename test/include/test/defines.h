@@ -87,6 +87,8 @@ TYPED_TEST_CASE( PolytopeSupportFunctionTest, allTypes );
 TYPED_TEST_CASE( SupportFunctionTest, allTypes );
 // TYPED_TEST_CASE(TaylorModelTest, floatTypes); // problem in carl/src/carl/interval/Interval.h:641:19
 TYPED_TEST_CASE( VPolytopeTest, allTypes );
+TYPED_TEST_CASE( StarsetTest, allTypes );
+
 TYPED_TEST_CASE( ZonotopeTest, allTypes );	// problem in carl/src/carl/numbers/adaption_float/FLOAT_T.h:791:37
 TYPED_TEST_CASE( DifferenceBoundsTest, allTypes );
 TYPED_TEST_CASE( SupportFunctionNewTest, allTypes );

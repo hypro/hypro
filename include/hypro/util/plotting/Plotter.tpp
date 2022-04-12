@@ -332,6 +332,9 @@ void Plotter<Number>::writeGnuplot() const {
 			if ( mSettings.grid ) {
 				mOutfile << "set grid back\n";
 			}
+			if ( mSettings.key ) {
+				mOutfile << "set key outside\n";
+			}
 			if ( mSettings.axes ) {
 				mOutfile << "# axis settings\n";
 				mOutfile << "set xzeroaxis\n";
@@ -358,6 +361,7 @@ void Plotter<Number>::writeGnuplot() const {
 		unsigned objectCount = 1;
 		unsigned currId = 0;
 		unsigned tmpId = 0;
+		std::string keyContent = "";
 		mOutfile << "\n# plotting sets\n";
 
 		for ( auto& [id, plotObject] : mObjects ) {
@@ -407,12 +411,21 @@ void Plotter<Number>::writeGnuplot() const {
 				else
 					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
 
+				if ( mSettings.key ) {
+					mOutfile << "set style line " << std::dec << objectCount << " lc rgb '#" << std::hex << color << std::dec << "' lt 1 lw 5\n";
+					keyContent = keyContent + ", NaN ls " + std::to_string( objectCount ) + " title \"" + plotObject.objectTitle + "\"";
+				}
+
 				if ( mSettings.cummulative ) {
 					mOutfile << "\nplot ";
 					for ( unsigned d = 0; d < min.rows(); ++d ) {
 						mOutfile << "[" << ranges[d].lower() << ":" << ranges[d].upper() << "] ";
 					}
-					mOutfile << "NaN notitle \n";
+					if ( mSettings.key ) {
+						mOutfile << "NaN notitle" << keyContent << "\n";
+					} else {
+						mOutfile << "NaN notitle\n";
+					}
 				}
 				// mark as plotted
 				plotObject.isPlotted = true;
@@ -704,7 +717,7 @@ bool Plotter<Number>::isLeftTurn( const Point<Number>& a, const Point<Number>& b
 	// Number val = c.polarCoordinates(a,false)[1] -
 	// b.polarCoordinates(a,false)[1];
 
-	return ( val > 0 );
+	return ( val >= 0 );
 }
 
 template <typename Number>

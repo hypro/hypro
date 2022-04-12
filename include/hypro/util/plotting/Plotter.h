@@ -43,6 +43,7 @@ struct PlotObject {
 	bool isPlotted = false;									 //< true, if the object has already been written to a file
 	std::optional<std::size_t> color = std::nullopt;		 //< set to custom color id
 	std::optional<gnuplotSettings> settings = std::nullopt;	 //< optional custom settings
+	std::string objectTitle = ""; 					  //< set to custom object title
 };
 
 }  // namespace plotting
@@ -123,6 +124,16 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	[[deprecated( "Use plot2d(PLOTTYPE::png) instead." )]] void plotPng() const;  // marked for deprecation: 6.6.20
 
 	[[deprecated( "Use plot2d(PLOTTYPE::gen) instead." )]] void plotGen() const;  // marked for deprecation: 6.6.20
+
+	/**
+	 * @brief      Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter,
+	 * which runs a 2d-convex hull algorithm (Graham's scan) one the vertices.
+	 * @param[in]  _points  The points.
+	 * @param[in]  _objectTitle  Title of the object for the key.
+	 * @param[in]  _color  Optionally color the object.
+	 * @return     A unique id, which allows to reference the object to change its colors.
+	 */
+	unsigned addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> __color = std::nullopt );
 
 	/**
 	 * @brief      Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter,

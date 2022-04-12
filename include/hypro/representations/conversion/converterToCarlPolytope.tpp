@@ -400,4 +400,11 @@ CarlPolytopeT<Number, Converter<Number>, CarlPolySetting> Converter<Number>::toC
 	}
 }
 
-}  // namespace hypro
+  // namespace hypro
+
+template<typename Number>
+template<typename CarlPolySetting, typename inSetting>
+CarlPolytopeT<Number,Converter<Number>,CarlPolySetting> Converter<Number>::toCarlPolytope( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return CarlPolytopeT<Number,Converter<Number>,CarlPolySetting>();
+}
+}

@@ -88,4 +88,11 @@ ConstraintSetT<Number, CSSetting> Converter<Number>::toConstraintSet( const Supp
 	return ConstraintSetT<Number, CSSetting>( _source.matrix(), _source.vector() );
 }
 
-}  // namespace hypro
+  // namespace hypro
+
+template<typename Number>
+template<typename ConstraintSetSetting, typename inSetting>
+ConstraintSetT<Number,ConstraintSetSetting> Converter<Number>::toConstraintSet( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	return ConstraintSetT<Number,ConstraintSetSetting>();
+}
+}

@@ -9,7 +9,8 @@
 #include <hypro/representations/GeometricObjectBase.h>
 #include <hypro/util/plotting/Plotter.h>
 #include <hypro/util/statistics/statistics.h>
-#include <zconf.h>
+// #include <zconf.h>
+// #include <resources/glpk-5.0/src/zlib/zconf.h>
 #ifdef HYPRO_USE_LACE
 #include <lace.h>
 #endif
@@ -88,6 +89,12 @@ static void computeReachableStates( const std::string& filename,
 		plotter.setFilename( extendedFilename );
 		std::vector<std::size_t> plottingDimensions =
 			  settings.plotting().plotDimensions.at( 0 );
+
+		for ( size_t plottingDimension : plottingDimensions ) {
+			std::cout << plottingDimension << " ";
+		}
+		std::cout << std::endl;
+		
 		plotter.rSettings().dimensions.first = plottingDimensions.front();
 		plotter.rSettings().dimensions.second = plottingDimensions.back();
 		plotter.rSettings().cummulative = false;
@@ -96,8 +103,18 @@ static void computeReachableStates( const std::string& filename,
 		typename hypro::HybridAutomaton<Number>::locationConditionMap
 			  badStateMapping = automaton.getLocalBadStates();
 		for ( const auto& state : badStateMapping ) {
+			auto matrix = state.second.getMatrix( 0 );
+			auto vector = state.second.getVector( 0 );
+			// if ( filename == "../examples/input/bouncing_ball.model") {
+			// 	std::cout << "Invert matrix columns..." << std::endl;
+			// 	for(int i = 0; i < 4; ++i) {
+			// 		Number val_c = matrix(i, 0);
+			// 		matrix(i, 0) = matrix(i, 1);
+			// 		matrix(i, 1) = val_c;
+			// 	}
+			// }
 			unsigned bs = plotter.addObject(
-				  Representation( state.second.getMatrix( 0 ), state.second.getVector( 0 ) )
+				  Representation( matrix, vector ).projectOn( plottingDimensions )
 						.vertices(),
 				  hypro::plotting::colors[hypro::plotting::red] );
 		}
@@ -106,8 +123,8 @@ static void computeReachableStates( const std::string& filename,
 		for ( const auto& flowpipe : flowpipes ) {
 			unsigned cnt = 0;
 			for ( const auto& segment : flowpipe ) {
-				std::cout << "Plot segment " << cnt << "/" << flowpipe.size()
-						  << std::endl;
+				// std::cout << "Plot segment " << cnt << "/" << flowpipe.size()
+						//   << std::endl;
 				plotter.addObject( segment.projectOn( plottingDimensions ).vertices() );
 				++cnt;
 			}

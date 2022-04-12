@@ -16,7 +16,7 @@ jobs:
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +29,7 @@ jobs:
       - name: Download Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        run: git clone --depth 1 --branch 19.10 https://github.com/smtrat/carl carl && sudo apt install libeigen3-dev uuid-dev
+        run: git clone --depth 1 --branch 21.11 https://github.com/ths-rwth/carl carl && sudo apt install libeigen3-dev uuid-dev libboost-system1.71-dev libboost-program-options1.71-dev libboost-test1.71-dev libboost-timer1.71-dev libboost-chrono1.71-dev libboost-serialization1.71-dev libbliss-dev
 
       - name: Cache Dependencies
         id: cache-dependencies

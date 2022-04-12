@@ -1,5 +1,5 @@
-#include "representations/GeometricObject.h"
-#include "datastructures/Halfspace.h"
+#include "hypro/representations/GeometricObject.h"
+#include "hypro/datastructures/Halfspace.h"
 
 int main(){
 

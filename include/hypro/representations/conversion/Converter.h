@@ -6,6 +6,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #define INCL_FROM_CONVERTERHEADER true
 
 #include "../../util/pca.h"
+#include "../Starset/Starset.h"
 #include "../../util/templateDirections.h"
 #include "../Box/Box.h"
 #include "../ConstraintSet/ConstraintSet.h"
@@ -42,6 +43,7 @@ class Converter {
   public:
 	/* BEGIN typedefs (do not remove this comment!) */
 
+		using Starset = StarsetT<Number,Converter,StarsetDefault>;
 	// using Orthoplex = OrthoplexT<Number,Converter,OrthoplexDefault>;
 	using TemplatePolyhedron = TemplatePolyhedronT<Number, Converter, TemplatePolyhedronDefault>;
 	using Box = BoxT<Number, Converter, BoxLinearOptimizationOn>;
@@ -62,6 +64,35 @@ class Converter {
 	/* END typedefs (do not remove this comment!) */
 
 	/* BEGIN Conversion (do not remove this comment!) */
+
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const TemplatePolyhedronT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const BoxT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const CarlPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const ConstraintSetT<Number,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const Ellipsoid& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const HPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const VPolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const DifferenceBoundsT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		#ifdef HYPRO_USE_PPL
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const PolytopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		#endif
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const SupportFunctionT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const ZonotopeT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
+		template<typename StarsetSetting = typename Starset::Settings, typename inSetting>
+		static StarsetT<Number,Converter<Number>,StarsetSetting> toStarset(const SupportFunctionNewT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	/*
 			template<typename OrthoplexSetting = typename Orthoplex::Settings, typename inSetting>
 			static OrthoplexT<Number,Converter<Number>,OrthoplexSetting> toOrthoplex(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
@@ -95,6 +126,8 @@ class Converter {
 
 	template <typename TemplatePolyhedronSetting = typename TemplatePolyhedron::Settings, typename inSetting>
 	static TemplatePolyhedronT<Number, Converter<Number>, TemplatePolyhedronSetting> toTemplatePolyhedron( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename TemplatePolyhedronSetting = typename TemplatePolyhedron::Settings, typename inSetting>
+		static TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> toTemplatePolyhedron(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename TemplatePolyhedronSetting = typename TemplatePolyhedron::Settings, typename inSetting>
 	// static TemplatePolyhedronT<Number,Converter<Number>,TemplatePolyhedronSetting> toTemplatePolyhedron(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename TemplatePolyhedronSetting = typename TemplatePolyhedron::Settings, typename inSetting>
@@ -124,6 +157,8 @@ class Converter {
 
 	template <typename BoxSetting = typename Box::Settings, typename inSetting>
 	static BoxT<Number, Converter<Number>, BoxSetting> toBox( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename BoxSetting = typename Box::Settings, typename inSetting>
+		static BoxT<Number,Converter<Number>,BoxSetting> toBox(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename BoxSetting = typename Box::Settings, typename inSetting>
 	// static BoxT<Number,Converter<Number>,BoxSetting> toBox(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename BoxSetting = typename Box::Settings, typename InSetting>
@@ -153,6 +188,8 @@ class Converter {
 
 	template <typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
 	static CarlPolytopeT<Number, Converter<Number>, CarlPolytopeSetting> toCarlPolytope( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
+		static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
 	// static CarlPolytopeT<Number,Converter<Number>,CarlPolytopeSetting> toCarlPolytope(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename CarlPolytopeSetting = typename CarlPolytope::Settings, typename inSetting>
@@ -182,6 +219,8 @@ class Converter {
 
 	template <typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
 	static ConstraintSetT<Number, CSSetting> toConstraintSet( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename ConstraintSetSetting = typename ConstraintSet::Settings, typename inSetting>
+		static ConstraintSetT<Number,ConstraintSetSetting> toConstraintSet(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
 	// static ConstraintSetT<Number,CSSetting> toConstraintSet(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename CSSetting = typename ConstraintSet::Settings, typename inSetting>
@@ -211,6 +250,8 @@ class Converter {
 
 	template <typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 	static HPolytopeT<Number, Converter<Number>, HPolySetting> toHPolytope( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename HPolytopeSetting = typename HPolytope::Settings, typename inSetting>
+		static HPolytopeT<Number,Converter<Number>,HPolytopeSetting> toHPolytope(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 	// static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename HPolySetting = typename HPolytope::Settings, typename inSetting>
@@ -240,6 +281,8 @@ class Converter {
 
 	template <typename VPolySetting = typename VPolytope::Settings, typename inSetting>
 	static VPolytopeT<Number, Converter<Number>, VPolySetting> toVPolytope( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename VPolytopeSetting = typename VPolytope::Settings, typename inSetting>
+		static VPolytopeT<Number,Converter<Number>,VPolytopeSetting> toVPolytope(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename VPolySetting = typename VPolytope::Settings, typename inSetting>
 	// static VPolytopeT<Number,Converter<Number>,VPolySetting> toVPolytope(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename VPolySetting = typename VPolytope::Settings, typename inSetting>
@@ -269,6 +312,8 @@ class Converter {
 
 	template <typename SFSetting = typename SupportFunction::Settings, typename inSetting>
 	static SupportFunctionT<Number, Converter<Number>, SFSetting> toSupportFunction( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename SupportFunctionSetting = typename SupportFunction::Settings, typename inSetting>
+		static SupportFunctionT<Number,Converter<Number>,SupportFunctionSetting> toSupportFunction(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename SFSetting = typename SupportFunction::Settings, typename inSetting>
 	// static SupportFunctionT<Number,Converter<Number>,SFSetting> toSupportFunction(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename SFSetting = typename SupportFunction::Settings, typename inSetting>
@@ -298,6 +343,8 @@ class Converter {
 
 	template <typename ZonotopeSetting = typename Zonotope::Settings, typename inSetting>
 	static ZonotopeT<Number, Converter<Number>, ZonotopeSetting> toZonotope( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename ZonotopeSetting = typename Zonotope::Settings, typename inSetting>
+		static ZonotopeT<Number,Converter<Number>,ZonotopeSetting> toZonotope(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename ZonotopeSetting = typename Zonotope::Settings, typename inSetting>
 	// static ZonotopeT<Number,Converter<Number>,ZonotopeSetting> toZonotope(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename ZonotopeSetting = typename Zonotope::Settings, typename inSetting>
@@ -328,6 +375,8 @@ class Converter {
 #ifdef HYPRO_USE_PPL
 	template <typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
 	static PolytopeT<Number, Converter<Number>, PolytopeSetting> toPolytope( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
+		static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
 	// static PolytopeT<Number,Converter<Number>,PolytopeSetting> toPolytope(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
@@ -356,6 +405,8 @@ class Converter {
 
 	template <typename DBSetting = typename DifferenceBounds::Settings, typename inSetting>
 	static DifferenceBoundsT<Number, Converter<Number>, DBSetting> toDifferenceBounds( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
+		template<typename DifferenceBoundsSetting = typename DifferenceBounds::Settings, typename inSetting>
+		static DifferenceBoundsT<Number,Converter<Number>,DifferenceBoundsSetting> toDifferenceBounds(const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename DBSetting = typename DifferenceBounds::Settings, typename inSetting>
 	// static DifferenceBoundsT<Number,Converter<Number>,DBSetting> toDifferenceBounds(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	template <typename DBSetting = typename DifferenceBounds::Settings, typename inSetting>
@@ -418,6 +469,7 @@ class Converter {
 }  // namespace hypro
 
 #include "typedefs.h"
+#include "converterToStarset.tpp"
 //#include "converterToOrthoplex.tpp"
 #include "converterToBox.tpp"
 #include "converterToCarlPolytope.tpp"
