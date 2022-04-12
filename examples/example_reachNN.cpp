@@ -96,7 +96,7 @@ int main( int argc, char* argv[] ) {
 		
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
 
-	bool create_plots = true;
+	bool create_plots = false;
 
 	start = std::chrono::steady_clock::now();
 	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, create_plots );
@@ -138,7 +138,7 @@ int main( int argc, char* argv[] ) {
 			// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
 			// std::cout << "Vertices: " << vertices << std::endl;
 		} else {
-			std::cout << "Star number " << i << " does not satisfy the property" << std::endl;
+			std::cout << "Star number " << i << " violates the property" << std::endl;
 
 			// std::cout << output_set[i] << std::endl;
 			// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
@@ -164,7 +164,7 @@ int main( int argc, char* argv[] ) {
 
 	std::cout << std::fixed;
 	std::cout << std::setprecision(2);
-	std::cout << "In total " << (((double) num_not_satisfied / N) * 100.0) << "\% of stars did not satisfy the property." << std::endl;
+	std::cout << "In total " << (((double) num_not_satisfied / N) * 100.0) << "\% of stars violates the property." << std::endl;
 
 	// plotter.plot2d();
 
