@@ -31,12 +31,12 @@ jobs:
         working-directory: ${{runner.workspace}}/dependencies
         run: git clone --depth 1 --branch master https://github.com/ths-rwth/carl carl && sudo apt install libeigen3-dev uuid-dev libboost-system1.71-dev libboost-program-options1.71-dev libboost-test1.71-dev libboost-timer1.71-dev libboost-chrono1.71-dev libboost-serialization1.71-dev libbliss-dev
 
-      # - name: Cache Dependencies
-      #   id: cache-dependencies
-      #   uses: actions/cache@v2
-      #   with:
-      #     path: ${{runner.workspace}}/dependencies
-      #     key: ${{ runner.os }}-deps-${{ hashFiles('**/*.h', '**/*.cpp', '**/*.tpp') }}
+      - name: Cache Dependencies
+        id: cache-dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{runner.workspace}}/dependencies
+          key: ${{ runner.os }}-deps-${{ hashFiles('**/*.h', '**/*.cpp', '**/*.tpp') }}
 
       - name: Create Build Environment for Dependencies
         shell: bash
