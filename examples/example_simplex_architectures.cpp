@@ -337,6 +337,7 @@ int main() {
 	settings.rStrategy().front().detectJumpFixedPoints = true;
 	settings.rStrategy().front().detectFixedPointsByCoverage = true;
 	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
+	settings.rStrategy().front().numberSetsForContinuousCoverage = 2;
 	settings.rFixedParameters().localTimeHorizon = 100;
 	settings.rFixedParameters().jumpDepth = maxJumps;
 	settings.rStrategy().begin()->aggregation = hypro::AGG_SETTING::AGG;

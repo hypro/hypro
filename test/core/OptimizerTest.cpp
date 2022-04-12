@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "gtest/gtest.h"
 #include <hypro/util/linearOptimization/Optimizer.h>
 #include <iostream>
@@ -136,6 +145,14 @@ TEST( OptimizerTest, checkConsistency ) {
 	EXPECT_NEAR( -6.0, res.supportValue, 1.0e-8 );
 	EXPECT_EQ( SOLUTION::FEAS, res.errorCode );
 	EXPECT_NEAR_VECTORS( controlVec, res.optimumValue, 1.0e-8 );
+
+	matrix_t<double> linconstraints = matrix_t<double>::Zero(2,2);
+	linconstraints(0,0) = 1;
+	linconstraints(1,0) = -1;
+	vector_t<double> constants = vector_t<double>::Zero(2);
+	constants << 0,-1;
+	Optimizer<double> op1{linconstraints, constants};
+	EXPECT_FALSE(op1.checkConsistency());
 }
 
 TEST( OptimizerTest, oneDimensional ) {

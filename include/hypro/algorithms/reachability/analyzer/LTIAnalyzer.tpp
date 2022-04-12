@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "LTIAnalyzer.h"
@@ -14,8 +14,8 @@
 
 namespace hypro {
 
-template <typename State>
-auto LTIAnalyzer<State>::run() -> LTIResult {
+template <typename State, typename Heuristics, MULTITHREADING multithreading>
+auto LTIAnalyzer<State, Heuristics, multithreading>::run() -> LTIResult {
 	if ( multithreading == MULTITHREADING::ENABLED ) {
 		mIdle = std::vector( mNumThreads, false );
 		for ( int i = 0; i < mNumThreads; i++ ) {
@@ -35,19 +35,29 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 							return !mWorkQueue.empty() || mTerminate;
 						} );
 						{
+							std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
+							mIdle[i] = false;
+							std::cout << "Thread " << i << " is not idle." << std::endl;
 						}
-						currentNode = mWorkQueue.back();
+						currentNode = getNodeFromQueue();
 						DEBUG( "hypro.reachability", "Processing node @" << currentNode << " with path " << currentNode->getPath() );
-						mWorkQueue.pop_back();
 					}
 
 					auto result = processNode( worker, currentNode, transformationCache );
 					if ( result.isFailure() ) {
 						// TODO call for termination
 					}
+					{
+						std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
+						std::cout << "Thread " << i << " is idle." << std::endl;
+						mIdle[i] = true;
+						mAllIdle.notify_all();
+					}
 				}
 			} ) );
 		}
+		// wait();
+		shutdown();
 	} else {
 		TimeTransformationCache<Number> transformationCache;
 		LTIWorker<State> worker{
@@ -56,8 +66,8 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 			  mFixedParameters.localTimeHorizon,
 			  transformationCache };
 		while ( !mWorkQueue.empty() ) {
-			auto* currentNode = mWorkQueue.back();
-			mWorkQueue.pop_back();
+			auto* currentNode = getNodeFromQueue();
+			DEBUG( "hypro.reachability", "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName() << " with path " << currentNode->getTreePath() << " with heursitics value " << Heuristics{}.getValue( currentNode ) )
 			auto result = processNode( worker, currentNode, transformationCache );
 			if ( result.isFailure() ) {
 				return result;
@@ -67,8 +77,8 @@ auto LTIAnalyzer<State>::run() -> LTIResult {
 	}
 }
 
-template <typename State>
-auto LTIAnalyzer<State>::processNode( LTIWorker<State>& worker, ReachTreeNode<State>* node, TimeTransformationCache<Number>& transformationCache ) -> LTIResult {
+template <typename State, typename Heuristics, MULTITHREADING multithreading>
+auto LTIAnalyzer<State, Heuristics, multithreading>::processNode( LTIWorker<State>& worker, ReachTreeNode<State>* node, TimeTransformationCache<Number>& transformationCache ) -> LTIResult {
 	REACHABILITY_RESULT safetyResult;
 
 	// set bounding box required for fixed-point test
@@ -77,7 +87,13 @@ auto LTIAnalyzer<State>::processNode( LTIWorker<State>& worker, ReachTreeNode<St
 	}
 
 	// bounded time evolution
-	safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ) );
+	if ( mFixedParameters.globalTimeHorizon > 0 ) {
+		// the number of required segments is the difference of the number of segments required to reach the global time horizon and the minimally current covered number of segments
+		SegmentInd segmentsToCompute = std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.globalTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::infinity() ) ) - node->getTimings().lower();
+		safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ), segmentsToCompute );
+	} else {
+		safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ) );
+	}
 
 	// check, whether the full time horizon has been exploited - if not, an invariant has bound the evolution and we might have a timelock
 	bool potentialTimelock = false;
@@ -144,7 +160,7 @@ auto LTIAnalyzer<State>::processNode( LTIWorker<State>& worker, ReachTreeNode<St
 			auto boundingBox = std::vector<carl::Interval<Number>>{};
 			if ( mParameters.detectJumpFixedPoints ) {
 				boundingBox = Converter<Number>::toBox( childNode.getInitialSet() ).intervals();
-				fixedPointReached = detectJumpFixedPoint( childNode, mRoots, mParameters.detectFixedPointsByCoverage );
+				fixedPointReached = detectJumpFixedPoint( childNode, mRoots, mCallbacks.fixedPointCallback, mParameters.detectFixedPointsByCoverage, mParameters.numberSetsForContinuousCoverage );
 			}
 
 			// set bounding box to speed up search in case the option is enabled.
@@ -154,7 +170,7 @@ auto LTIAnalyzer<State>::processNode( LTIWorker<State>& worker, ReachTreeNode<St
 			}
 			// create Task, push only to queue, in case no fixed-point has been detected or detection is disabled
 			if ( !fixedPointReached ) {
-				DEBUG( "hypro.reachability", "Add node-successor to work-queue, path: " << childNode.getPath() );
+				DEBUG( "hypro.reachability", "Add node-successor (@ " << &childNode << ") to work-queue, path: " << childNode.getPath() );
 				addToQueue( &childNode );
 				// mWorkQueue.push_front( &childNode );
 			} else {
@@ -177,6 +193,11 @@ auto LTIAnalyzer<State>::processNode( LTIWorker<State>& worker, ReachTreeNode<St
 	}
 	// set timelock flag
 	node->flagTimelock( timelock );
+	// if node has no children, the node can be flagged as having a fixed point
+	if ( node->getChildren().empty() ) {
+		node->setFixedPoint( true );
+	}
+
 	return { LTISuccess{} };
 }
 

@@ -22,6 +22,8 @@
 #include "../../datastructures/Point.h"
 #include "../logging/Logger.h"
 #include "../type_handling/plottype_enums.h"
+#include "Colors.h"
+#include "GnuplotSettings.h"
 #include "PlotterUtil.h"
 
 #include <carl/interval/Interval.h>
@@ -34,57 +36,13 @@
 namespace hypro {
 namespace plotting {
 
-/**
- * Enum required for referencing colors in the color array.
- */
-enum {
-	petrol = 0,
-	turquoise,
-	green,
-	maygreen,
-	orange,
-	red,
-	bordeaux,
-	violett,
-	lila,
-	blue
-};
-/**
- * Color array holding a set of colors.
- */
-const std::size_t colors[] = { 0x006165, 0x0098A1, 0x57AB27, 0xBDCD00, 0xF6A800,
-							   0xCC071E, 0xA11035, 0x612158, 0x7A6FAC, 0x00549F };
-
-/**
- * @brief      A struct holding a basic set of options for the gnuplot plotting.
- */
-struct gnuplotSettings {
-	std::string name = "";			   //< title
-	std::string filename = "out";	   //< filename
-	std::size_t color = colors[blue];  //< default blue
-	bool fill = false;				   //< do not fill
-	bool axes = true;				   //< plot axes
-	bool grid = true;				   //< plot grid
-	bool title = false;				   //< plot title
-	bool key = false;                  //< plot key
-	double pointSize = 0.2;			   //< pointsize
-	double linewidth = 0.1;			   //< linewidth
-	carl::Interval<double> xPlotInterval = carl::Interval<double>::emptyInterval();
-	carl::Interval<double> yPlotInterval = carl::Interval<double>::emptyInterval();
-	bool keepAspectRatio = true;										//< keep aspect ratio for both axes
-	std::pair<unsigned, unsigned> dimensions = std::make_pair( 0, 1 );	//< dimensions to plot
-	bool cummulative = false;											//< if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)
-	bool plain = false;													//< overrides most settings
-	bool overwriteFiles = false;										//< set to enable file overwriting
-	std::size_t writeIntermediate = 0;									//< set to a strictly positve number n to write (append) every n objects to a file, those objects are deleted from the plotter afterwards
-};
-
 template <typename Number>
 struct PlotObject {
-	std::vector<Point<Number>> vertices;			  //< vertices of the object
-	bool isPrepared = false;						  //< true, if the vertices are already in order and reduced (Graham's scan)
-	bool isPlotted = false;							  //< true, if the object has already been written to a file
-	std::optional<std::size_t> color = std::nullopt;  //< set to custom color id
+	std::vector<Point<Number>> vertices;					 //< vertices of the object
+	bool isPrepared = false;								 //< true, if the vertices are already in order and reduced (Graham's scan)
+	bool isPlotted = false;									 //< true, if the object has already been written to a file
+	std::optional<std::size_t> color = std::nullopt;		 //< set to custom color id
+	std::optional<gnuplotSettings> settings = std::nullopt;	 //< optional custom settings
 	std::string objectTitle = ""; 					  //< set to custom object title
 };
 
@@ -101,10 +59,10 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
   private:
 	mutable std::ofstream mOutfile;
 	mutable std::map<unsigned, plotting::PlotObject<Number>> mObjects;
+	mutable std::map<unsigned, plotting::PlotObject<Number>> mLines;
 	mutable std::multimap<unsigned, std::vector<Halfspace<Number>>> mPlanes;
 	mutable std::vector<plotting::PlotObject<Number>> mPoints;
-	mutable std::multimap<unsigned, vector_t<Number>> mVectors;
-	mutable std::pair<int, int> mLastDimensions;
+	mutable std::multimap<unsigned, std::pair<vector_t<Number>, vector_t<Number>>> mVectors;
 	mutable std::pair<vector_t<Number>, vector_t<Number>> mLimits;
 	std::map<unsigned, std::size_t> mObjectColors;
 	plotting::gnuplotSettings mSettings = plotting::gnuplotSettings{};
@@ -112,8 +70,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 
   protected:
 	Plotter()
-		: mLastDimensions( std::make_pair( -1, -1 ) )
-		, mId( 1 ) {}
+		: mId( 1 ) {}
 
   public:
 	~Plotter();
@@ -184,7 +141,16 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @param[in]  _points  The points.
 	 * @return     A unique id, which allows to reference the object to change its colors.
 	 */
-	unsigned addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color = std::nullopt );
+	unsigned addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> color = std::nullopt, std::optional<plotting::gnuplotSettings> settings = std::nullopt );
+
+	/**
+	 * Similar to addObject, but does not apply Graham's scan on the passed points to not change the order of points.
+	 * @param _points An ordered sequence of points
+	 * @param color Optional coloring information
+	 * @param settings Optional individual gnuplot settings
+	 * @return A unique id, whcih allows to reference the object later to change it
+	 */
+	unsigned addOrderedObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> color = std::nullopt, std::optional<plotting::gnuplotSettings> settings = std::nullopt );
 
 	/**
 	 * @brief      Adds several objects represented as a vector of vectors of points. Duplicates and points inside will be removed by the plotter,
@@ -220,12 +186,19 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	void removeObject( unsigned id );
 
 	/**
+	 * Plots a line built from segments connecting nodes.
+	 * @param points A sequence of nodes which define the line segments of the polyline
+	 * @param color Optional color for the polyline
+	 */
+	void addPolyline( const std::vector<Point<Number>>& points, std::optional<std::size_t> color = std::nullopt );
+
+	/**
 	 * @brief      Adds a point to the plotter.
 	 * @details    The point, in contrast to an object will be plotted as a cross.
 	 * @param[in]  _point  The point.
 	 * @param[in]  _color Optionally color the point.
 	 */
-	unsigned addPoint( const Point<Number>& _point, std::optional<std::size_t> _color = std::nullopt );
+	unsigned addPoint( const Point<Number>& _point, std::optional<std::size_t> _color = std::nullopt, std::optional<plotting::gnuplotSettings> settings = std::nullopt );
 
 	/**
 	 * @brief      Adds points to the plotter.
@@ -239,7 +212,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @details    A vector will be plotted as an arrow starting from the origin.
 	 * @param[in]  _vector  The vector.
 	 */
-	void addVector( const vector_t<Number>& _vector );
+	void addVector( const vector_t<Number>& _vector, std::optional<vector_t<Number>> origin = std::nullopt );
 
 	/**
 	 * @brief      Sets the object color.
@@ -260,6 +233,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 
   private:
 	// auxiliary functions
+	void updateLimits( const std::vector<Point<Number>>& points );
 	void init( const std::string& _filename );
 	void writeGnuplot() const;
 	void writeGen() const;

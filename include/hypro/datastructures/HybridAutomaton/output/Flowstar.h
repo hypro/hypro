@@ -16,24 +16,6 @@ std::string toFlowstarFormat( const matrix_t<Number>& in,
 	res << prefix;
 	bool first = true;
 	for ( Eigen::Index colI = 0; colI < in.cols(); ++colI ) {
-		if ( in( 0, colI ) > 0 ) {
-			if ( !first ) {
-				res << " +";
-			} else {
-				first = false;
-			}
-			if ( in( 0, colI ) != 1 ) {
-				res << in( 0, colI );
-			}
-		} else if ( in( 0, colI ) < 0 ) {
-			res << " " << in( 0, colI );
-		}
-		if ( in( 0, colI ) != 0 && colI != in.cols() - 1 && in( 0, colI ) != 1 ) {
-			res << "*";
-		}
-		if ( in( 0, colI ) != 0 && colI != in.cols() - 1 ) {
-			res << varNameMap.at( colI );
-		}
 		// const part
 		if ( colI == in.cols() - 1 ) {
 			if ( first ) {
@@ -43,6 +25,23 @@ std::string toFlowstarFormat( const matrix_t<Number>& in,
 					res << in( 0, colI );
 				else
 					res << " + " << in( 0, colI );
+			}
+		} else {
+			if ( in( 0, colI ) > 0 ) {
+				if ( !first ) {
+					res << " +";
+				} else {
+					first = false;
+				}
+				if ( in( 0, colI ) != 1 ) {
+					res << in( 0, colI );
+				}
+			} else if ( in( 0, colI ) < 0 ) {
+				res << " " << in( 0, colI );
+			}
+			if ( in( 0, colI ) != 0 && in( 0, colI ) != 1 ) {
+				res << "*";
+				res << varNameMap.at( colI );
 			}
 		}
 	}
@@ -140,7 +139,7 @@ std::string toFlowstarFormat( const Location<Number>* loc,
 		// flow
 		out << prefix << "\tpoly ode 1";
 		out << prefix << "\t{";
-		out << toFlowstarFormat<Number>( loc->getLinearFlow().getFlowMatrix(), varNameMap, prefix );
+		out << toFlowstarFormat<Number>( loc->getLinearFlow(), varNameMap, prefix );
 		out << prefix << "\t}";
 		// invariant
 		out << prefix << "\tinv";
@@ -156,44 +155,33 @@ std::string toFlowstarFormat( const Location<Number>* loc,
 
 std::string toFlowstarFormat( const ReachabilitySettings& settings,
 							  const std::map<Eigen::Index, std::string>& varNameMap,
-							  const std::string& prefix ) {
-	std::stringstream res;
-
-	res << prefix << "setting";
-	res << prefix << "{";
-	res << prefix << "\tfixed steps " << settings.timeStep;
-	res << prefix << "\ttime " << settings.timeBound;
-	if ( !settings.plotDimensions.empty() ) {
-		for ( const auto& dims : settings.plotDimensions ) {
-			assert( dims.size() == 2 );
-			res << prefix << "\tgnuplot octagon " << varNameMap.at( dims[0] ) << "," << varNameMap.at( dims[1] );
-		}
-	}
-
-	res << prefix << "\toutput " << settings.fileName;
-	res << prefix << "\tmax jumps " << settings.jumpDepth;
-	res << prefix << "}";
-
-	return res.str();
-}
+							  const std::string& prefix );
 
 template <typename Number>
 std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const ReachabilitySettings& settings = ReachabilitySettings() ) {
 	std::stringstream res;
 	std::map<Eigen::Index, std::string> vars;
+	for(std::size_t i = 0; i < in.getVariables().size(); ++i){
+		vars[i] = in.getVariables()[i];
+	}
 
 	res << "hybrid reachability\n{\n";
 
 	if ( !in.getLocations().empty() ) {
 		if ( in.dimension() > 0 ) {
 			// variables (note: the last dimension is for constants)
-			res << "\tstate var x_0";
-			vars[0] = "x_0";
+			res << "\tstate var ";
+			if(!vars.count(0)) {
+				vars[0] = "x_0";
+			}
+			res << vars[0];
+			std::cout << "add variable " << vars[0] << std::endl;
 			for ( std::size_t cnt = 1; cnt < in.dimension(); ++cnt ) {
-				res << ", x_" << cnt;
-				std::stringstream tmp;
-				tmp << "x_" << cnt;
-				vars[cnt] = tmp.str();
+				if(!vars.count(cnt)) {
+					vars[cnt] = "x_" + std::to_string(cnt);
+				}
+				res << ", " << vars[cnt];
+				std::cout << "add variable " << vars[cnt] << std::endl;
 			}
 			res << "\n";
 		}
@@ -222,13 +210,17 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 				res << " }";
 				res << "\n\t\treset {";
 				// std::cout << "output reset " << transPtr->getReset().getMatrix() << std::endl;
-				for ( Eigen::Index rowI = 0; rowI < transPtr->getReset().getMatrix().rows(); ++rowI ) {
-					std::stringstream tmp;
-					tmp << " " << vars[rowI] << "' := ";
-					matrix_t<Number> tmpBlock = matrix_t<Number>::Zero( 1, transPtr->getReset().getMatrix().cols() + 1 );
-					tmpBlock.block( 0, 0, 1, transPtr->getReset().getMatrix().cols() ) = transPtr->getReset().getMatrix().row( rowI );
-					tmpBlock( 0, transPtr->getReset().getMatrix().cols() ) = transPtr->getReset().getVector()( rowI );
-					res << toFlowstarFormat( tmpBlock, vars, tmp.str() );
+				if ( !transPtr->getReset().empty() ) {
+					for ( Eigen::Index rowI = 0; rowI < transPtr->getReset().getMatrix().rows(); ++rowI ) {
+						if ( !transPtr->getReset().isIdentity( rowI ) ) {
+							std::stringstream tmp;
+							tmp << " " << vars[rowI] << "' := ";
+							matrix_t<Number> tmpBlock = matrix_t<Number>::Zero( 1, transPtr->getReset().getMatrix().cols() + 1 );
+							tmpBlock.block( 0, 0, 1, transPtr->getReset().getMatrix().cols() ) = transPtr->getReset().getMatrix().row( rowI );
+							tmpBlock( 0, transPtr->getReset().getMatrix().cols() ) = transPtr->getReset().getVector()( rowI );
+							res << toFlowstarFormat( tmpBlock, vars, tmp.str() );
+						}
+					}
 				}
 				res << " }";
 				if ( transPtr->getAggregation() ) {

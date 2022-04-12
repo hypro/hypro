@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -11,6 +11,7 @@
 
 #include "../../datastructures/HybridAutomaton/Condition.h"
 #include "../../datastructures/reachability/ReachTreev2.h"
+#include "../../datastructures/HybridAutomaton/State.h"
 #include "types.h"
 
 #include <utility>
@@ -36,7 +37,7 @@ std::pair<CONTAINMENT, Representation> intersect( Representation const& valuatio
 	if ( condition.isFalse() || valuationSet.empty() ) {
 		return std::make_pair( CONTAINMENT::NO, Representation::Empty() );
 	}
-	//assert( valuationSet.dimension() == condition.dimension() );
+	// assert( valuationSet.dimension() == condition.dimension() );
 	return valuationSet.satisfiesHalfspaces( condition.getMatrix( subspace ), condition.getVector( subspace ) );
 }
 
@@ -85,15 +86,15 @@ Representation applyTimeEvolution( Representation const& valuationSet, matrix_t<
  */
 template <class Representation, class Number>
 Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset, std::size_t subspace = 0 ) {
-    if ( !reset.isIntervalIdentity() && std::any_of( reset.getIntervalReset( subspace ).getIntervals().begin(), reset.getIntervalReset( subspace ).getIntervals().end(),
-                []( const auto& interval ){ return !interval.isEmpty(); } ) ) {
-        assert( false && "lti analyzer does not currently support interval assignments on reset" );
-        WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
-    }
+	if ( !reset.isIntervalIdentity() && std::any_of( reset.getIntervalReset( subspace ).getIntervals().begin(), reset.getIntervalReset( subspace ).getIntervals().end(),
+													 []( const auto& interval ) { return !interval.isEmpty(); } ) ) {
+		assert( false && "lti analyzer does not currently support interval assignments on reset" );
+		WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
+	}
 	if ( reset.isAffineIdentity() ) {
 		return valuationSet;
 	}
-    return valuationSet.affineTransformation( reset.getMatrix( subspace ), reset.getVector( subspace ) );
+	return valuationSet.affineTransformation( reset.getMatrix( subspace ), reset.getVector( subspace ) );
 }
 
 /**
@@ -107,6 +108,10 @@ Box<typename Representation::NumberType> computeBoundingBox( const Representatio
 	return hypro::Converter<typename Representation::NumberType>::toBox( set );
 }
 
+template <typename Number, typename Representation, typename... Rargs>
+Box<Number> computeBoundingBox( const hypro::State<Number, Representation, Rargs...>& set ) {
+	return std::visit( genericConvertAndGetVisitor<Box<Number>>(), set.getSet() );
+}
 template <class Representation>
 Box<typename Representation::NumberType> computeBoundingBox( const ReachTreeNode<Representation>& node ) {
 	auto box = computeBoundingBox( node.getFlowpipe().front() );
@@ -138,9 +143,9 @@ template <class Representation, class Number>
 std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
 	auto [containment, intersectedMinus] = intersect( valuationSet, condition );
 	if ( containment == CONTAINMENT::NO ) {
-		return valuationSet.empty() ? std::vector<Representation>{ } : std::vector<Representation>{ valuationSet };
+		return valuationSet.empty() ? std::vector<Representation>{} : std::vector<Representation>{ valuationSet };
 	} else if ( containment == CONTAINMENT::FULL ) {
-		return { };
+		return {};
 	}
 	// case distinction because box constructor only works for bounded sets
 	if ( Representation::type_enum == representation_name::box ) {

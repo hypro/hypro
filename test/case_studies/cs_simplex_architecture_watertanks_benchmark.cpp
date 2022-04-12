@@ -75,9 +75,10 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 	auto settings = hypro::convert( reachSettings );
     settings.rStrategy().front().detectJumpFixedPoints = true;
     settings.rStrategy().front().detectFixedPointsByCoverage = true;
-    settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
-    settings.rFixedParameters().localTimeHorizon = 20;
-    settings.rFixedParameters().jumpDepth = maxJumps;
+	settings.rStrategy().front().detectContinuousFixedPointsLocally = true;
+	settings.rStrategy().front().numberSetsForContinuousCoverage = 2;
+	settings.rFixedParameters().localTimeHorizon = 20;
+	settings.rFixedParameters().jumpDepth = maxJumps;
     settings.rStrategy().begin()->aggregation = AGG_SETTING::AGG;
     std::vector<std::pair<const hypro::Path<Number>, hypro::ReachTreeNode<Representation> const *>> last_paths{};
 
@@ -101,10 +102,10 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
         // This code gets timed
         last_paths.clear();
         roots = hypro::makeRoots<Representation>(automaton);
-        auto reacher = hypro::reachability::Reach<Representation>(automaton, settings.fixedParameters(),
-                                                                  settings.strategy().front(), roots);
-        auto result = reacher.computeForwardReachability();
-        INFO("hypro.casestudies", "System is safe: " << result);
+		auto reacher = hypro::reachability::Reach<Representation, LeastLocationCycleCount<Representation>>( automaton, settings.fixedParameters(),
+																											settings.strategy().front(), roots );
+		auto result = reacher.computeForwardReachability();
+		INFO("hypro.casestudies", "System is safe: " << result);
 
         // statistics
         auto finished_leaves = std::size_t(0);
@@ -189,14 +190,19 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 			std::cout << "FLAGS: fixed-point: " << ( shortest_cycle_node->hasFixedPoint() == TRIBOOL::TRUE ) << ", is on Zeno-cycle: " << shortest_cycle_node->isOnZenoCycle() << ", has timelock: " << shortest_cycle_node->hasTimelock() << ", bad states visited: " << shortest_cycle_node->intersectedUnsafeRegion() << std::endl;
 			std::cout << "Flowpipe of the first node:\n";
 			auto root = shortest_cycle_node;
+			std::vector<Representation> initialSets;
 			while ( root->getParent() != nullptr ) {
+				initialSets.push_back( root->getInitialSet() );
 				root = root->getParent();
 			}
+			std::reverse( std::begin( initialSets ), std::end( initialSets ) );
 			for ( const auto& seg : root->getFlowpipe() ) {
 				std::cout << seg << "\n";
 			}
-			std::cout << "Flowpipe of the last node:\n";
-
+			std::cout << "Initial sets on the path:\n";
+			for ( const auto& seg : initialSets ) {
+				std::cout << seg << "\n";
+			}
 			std::cout << std::endl;
 			plt.clear();
 			plt.rSettings().overwriteFiles = true;
@@ -241,9 +247,10 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 			octree.add( s.projectOn( { 0, 1 } ) );
 		}
 	}
+	 */
 
 	// test some random points
-
+	/*
 	std::mt19937 generator;
 	std::uniform_real_distribution<double> dist = std::uniform_real_distribution<double>( 0, 1 );
 	for ( std::size_t i = 0; i < 100; ++i ) {
@@ -258,9 +265,7 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 			plt.addPoint( point, hypro::plotting::colors[hypro::plotting::red] );
 		}
 	}
-	 */
-
-	/*
+	*/
 	for ( const auto& node : hypro::preorder( roots ) ) {
 		for ( const auto& segment : node.getFlowpipe() ) {
 			if ( node.hasFixedPoint() == TRIBOOL::TRUE ) {
@@ -280,8 +285,8 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 
 	plt.plot2d( hypro::PLOTTYPE::png );
 	plt.plot2d( hypro::PLOTTYPE::pdf );
-	plt.plot2d( hypro::PLOTTYPE::gen );
-	plt.plot2d( hypro::PLOTTYPE::tex );
+	// plt.plot2d( hypro::PLOTTYPE::gen );
+	// plt.plot2d( hypro::PLOTTYPE::tex );
 
 	// output unfinished paths
 	std::string channel =
@@ -290,7 +295,7 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 		  std::to_string( carl::convert<hypro::tNumber, double>( settings.fixedParameters().localTimeHorizon ) ) +
 		  "_TH." + std::to_string( state.range( 0 ) ) + "_jumps";
 	TRACE( channel, "#################################################" );
-	*/
+
 	std::cout << "Start plotting, " << std::to_string( last_paths.size() ) << " paths." << std::endl;
 	std::size_t path_count{ 0 };
 	for ( auto [path, leaf] : last_paths ) {
@@ -303,7 +308,7 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 		filestream.open( "unfinished_" + std::to_string( maxJumps ) + "_jumps_" + std::to_string( path_count ) + ".txt" );
 		filestream << path << std::endl;
 		filestream.close();
-		addPathChronologously( leaf, plt, 4 );
+		addPathChronologously( leaf, plt, 10 );
 		plt.plot2d( hypro::PLOTTYPE::pdf, true );
 		// std::cout << "Plotted path " << std::to_string( path_count ) << std::endl;
 		++path_count;
@@ -324,13 +329,14 @@ void addPathChronologously( const hypro::ReachTreeNode<R>* node, hypro::Plotter<
 		++path_count;
 	}
 	std::cout << "Plot 1st path cummulative, complete." << std::endl;
-	plt.clear();
-	plt.rSettings().overwriteFiles = true;
-	plt.rSettings().cummulative = true;
-	plt.setFilename( "unfinished_complete_" + std::to_string( maxJumps ) + "_jumps_0" );
-	addPathChronologously( last_paths.front().second, plt, -1, 10 );
-	plt.plot2d( hypro::PLOTTYPE::pdf, true );
-
+	if ( !last_paths.empty() ) {
+		plt.clear();
+		plt.rSettings().overwriteFiles = true;
+		plt.rSettings().cummulative = true;
+		plt.setFilename( "unfinished_complete_" + std::to_string( maxJumps ) + "_jumps_0" );
+		addPathChronologously( last_paths.front().second, plt, -1, 10 );
+		plt.plot2d( hypro::PLOTTYPE::pdf, true );
+	}
 	PRINT_STATS()
 	}
 	// Register the function as a benchmark

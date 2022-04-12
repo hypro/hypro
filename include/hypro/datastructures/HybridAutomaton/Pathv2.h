@@ -51,6 +51,7 @@ struct Path {
 
 template <typename Number>
 std::ostream& operator<<( std::ostream& out, const Path<Number>& path ) {
+	auto printNode = []( const auto ) {};
 	out << path.rootLocation->getName();
 	for ( const auto& pair : path.elements ) {
 		out << ", " << pair.first << " -> " << pair.second->getTarget()->getName();

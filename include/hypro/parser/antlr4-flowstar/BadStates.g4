@@ -17,4 +17,4 @@ unsafeset 			: 'unsafe set' '{' (gbadstate | lbadstate)* '}' ;
 
 lbadstate 			: VARIABLE '{' constrset? '}' ;
 
-gbadstate			: constrset ;
+gbadstate			:  constrset | CBOPEN constrset CBCLOSE;

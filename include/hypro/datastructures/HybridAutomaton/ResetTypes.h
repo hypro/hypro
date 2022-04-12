@@ -39,7 +39,7 @@ struct AffineTransformation {
 
 	static ResetType type() { return ResetType::affine; }
 
-	std::size_t size() { return mTransformation.size(); }
+	std::size_t size() const { return mTransformation.size(); }
 
 	bool isIdentity() const {
 		if ( mTransformation.matrix() != matrix_t<Number>::Identity( mTransformation.matrix().rows(), mTransformation.matrix().rows() ) || mTransformation.vector() != vector_t<Number>::Zero( mTransformation.vector().rows() ) ) {
