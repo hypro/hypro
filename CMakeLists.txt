@@ -175,7 +175,6 @@ set_target_properties(${PROJECT_NAME}-static PROPERTIES
 target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
 target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
 
-find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
     target_link_libraries(${PROJECT_NAME}-static PUBLIC OpenMP::OpenMP_CXX)
 endif()
@@ -204,7 +203,6 @@ set_target_properties(${PROJECT_NAME}-shared PROPERTIES
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread)
 
-find_package(OpenMP)
 if(OpenMP_CXX_FOUND)
     target_link_libraries(${PROJECT_NAME}-shared PUBLIC OpenMP::OpenMP_CXX)
 endif()
