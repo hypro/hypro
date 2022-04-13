@@ -60,8 +60,11 @@ int main() {
 	// plotted
 	auto projectedBox = box.projectOn( { 0, 1 } );
 
-	// push vertices of projected box to Plotter, store id of object
-	std::size_t id = plotter.addObject( projectedBox.vertices() );
+	// push vertices of projected box to Plotter, store id of object. We add a description to the box
+	std::size_t id = plotter.addObject( projectedBox.vertices(), "This box is important" );
+	// to also show the description, enable the key setting in the plotter
+	plotter.rSettings().key = true;
+	plotter.rSettings().cummulative = true;
 
 	// we can adjust the color of an object, default is blue.
 	plotter.setObjectColor( id, plotting::colors[plotting::green] );
@@ -75,6 +78,7 @@ int main() {
 	// supported: pdf (plot2d), tex (plotTex), and eps (plotEps). plain gnuplot
 	// files (*.gen) may also be created via plotGen().
 	plotter.plot2d( PLOTTYPE::pdf );
+	plotter.plot2d( PLOTTYPE::png );
 	plotter.plot2d( PLOTTYPE::tex );
 	plotter.plot2d( PLOTTYPE::eps );
 
