@@ -536,9 +536,9 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransfo
 	// TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
 	// std::cout << "Linear trafo ";
 	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>( this->dimension() );
+#pragma omp parallel for
 	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
 		newIntervals[i] = carl::Interval<Number>{ b( i ) };
-		// std::cout << "initialize interval" << newIntervals[i] << std::endl;
 		for ( std::size_t j = 0; j < this->dimension(); ++j ) {
 			newIntervals[i] = newIntervals[i] + A( i, j ) * this->intervals()[j];
 			// std::cout << "update to: " << newIntervals[i] << " using: A(i,j): " << A(i,j) << ", interval: " << this->intervals()[j] << std::endl;
