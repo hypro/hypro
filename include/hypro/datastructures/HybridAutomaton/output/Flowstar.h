@@ -119,7 +119,7 @@ std::string toFlowstarFormat( const flowVariant<Number>& f,
 		case DynamicType::rectangular: {
 			auto flow = std::get<rectangularFlow<Number>>( f ).getFlowIntervals();
 			for ( const auto& vFlowPair : flow ) {
-				out << prefix << "\t\t" << vFlowPair.first << "' = " << vFlowPair.second << std::endl;
+				out << prefix << "\t\t" << vFlowPair.first << "' in " << vFlowPair.second;
 			}
 		}
 	}
@@ -175,13 +175,11 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 				vars[0] = "x_0";
 			}
 			res << vars[0];
-			std::cout << "add variable " << vars[0] << std::endl;
 			for ( std::size_t cnt = 1; cnt < in.dimension(); ++cnt ) {
 				if ( !vars.count( cnt ) ) {
 					vars[cnt] = "x_" + std::to_string( cnt );
 				}
 				res << ", " << vars[cnt];
-				std::cout << "add variable " << vars[cnt] << std::endl;
 			}
 			res << "\n";
 		}
