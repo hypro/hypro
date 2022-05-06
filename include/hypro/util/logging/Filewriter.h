@@ -1,6 +1,7 @@
 #pragma once
 #include "../multithreading/LockableBase.h"
 
+#include <filesystem>
 #include <fstream>
 
 namespace hypro {
@@ -17,6 +18,14 @@ class LockedFileWriter : public LockableBase {
 		std::ofstream fileStream;
 		fileStream.open( filename );
 		fileStream.close();
+	}
+
+	void deleteFile() const {
+		try {
+			std::filesystem::remove( filename );
+		} catch ( const std::filesystem::filesystem_error& err ) {
+			std::cout << "filesystem error: " << err.what() << '\n';
+		}
 	}
 
 	const LockedFileWriter& operator<<( const std::string& content ) const {
