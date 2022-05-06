@@ -98,7 +98,7 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 #ifdef GNUPLOT_FOUND
 		std::stringstream ss;
 		ss << "gnuplot " + filename + "_" + plotting::to_string( outformat ) + ".plt";
-		std::system( ss.str().c_str() );
+		auto returnvalue = std::system( ss.str().c_str() );
 #endif
 	}
 }
