@@ -96,8 +96,8 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Sta
 		}
 		if ( plot_intermediates ) {
 #pragma omp critical
-			for ( int i = 0; i < I_n.size(); i++ ) {
-				plotter.addObject( I_n[i].vertices(), hypro::plotting::colors[( 2 * i ) % 9] );
+			for ( int j = 0; j < I_n.size(); j++ ) {
+				plotter.addObject( I_n[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
 			}
 			plotter.plot2d();
 			plotter.clear();

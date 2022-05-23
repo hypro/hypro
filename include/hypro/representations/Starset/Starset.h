@@ -261,6 +261,7 @@ class StarsetT : private GeometricObjectBase {
 				const StarsetT<Number, Converter, Setting>& b ) {
 		ostr << "================================================" << std::endl;
 		ostr << "Starset properties" << std::endl;
+		ostr << "Dimension: " << b.dimension() << std::endl;
 		ostr << "Center: " << std::endl
 			 << b.center();
 		ostr << "Basis: " << std::endl
