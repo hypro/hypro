@@ -161,7 +161,7 @@ hypro::vector_t<Number> calculate_gradient(const hypro::NNet<Number>& nnet, cons
                     ).array() * (ReLU(sign(t2))).array()).matrix()
                 ).array() * (ReLU(sign(t1))).array()).matrix()
             ).array() * (ReLU(sign(t0))).array()).matrix()
-    ).array();
+    );
 
     // return coeff * W1.transpose() * ((
     //         W2.transpose()  * ((
@@ -200,20 +200,34 @@ hypro::vector_t<Number> forward_step( const hypro::NNet<Number> nnet, const hypr
 }
 
 
-hypro::vector_t<Number> find_input_given_output(const hypro::NNet<Number> nnet, const hypro::vector_t<Number>& y, int max_it = 1000, Number eps = 0.001, Number eta = 0.01) {
+hypro::vector_t<Number> find_input_given_output(const hypro::NNet<Number> nnet, const hypro::vector_t<Number>& y, int max_it = 50000, Number eps = 0.01, Number eta = 0.001) {
     hypro::vector_t<Number> x_n = hypro::vector_t<Number>::Random(y.rows());
     int it = 0;
     while(it < max_it) {
         if(it % 100 == 0)
             std::cout << "Iteration: " << it << " / " << max_it << std::endl;
-        if(l2_norm(y - forward_step(nnet, x_n)) <= eps)
+
+        if(l2_norm(y - forward_step(nnet, x_n)) <= eps) {
+            std::cout << "Early stop condition met at iteration " << it << std::endl;
             return x_n;
-        // std::cout << "calculating gradient..." << std::endl;
-        // std::cout << calculate_gradient(nnet, y, x_n).array() << std::endl;
-        if(l2_norm(calculate_gradient(nnet, y, x_n)) > 0)
-            std::cout << it << " - " << l2_norm(calculate_gradient(nnet, y, x_n)) << std::endl;
+        }
+
         // std::cout << "stepping" << std::endl;
-        x_n = x_n - (eta * calculate_gradient(nnet, y, x_n).array()).matrix();
+        auto x_n_copy = hypro::vector_t<Number>(x_n);
+        auto gradient = calculate_gradient(nnet, y, x_n);
+        x_n = x_n - eta * gradient;
+
+        std::cout << x_n << std::endl;
+
+        // std::cout << "calculating gradient..." << std::endl;
+        // std::cout << gradient.array() << std::endl;
+        if(l2_norm(gradient) == 0) {
+            std::cout << "Stopping at iteration " << it << std::endl;
+            break;
+        }
+        // else
+        //     std::cout << it << " - " << l2_norm(gradient) << " => " << l2_norm(x_n_copy - x_n) << std::endl;
+
         it++;
     }
     return x_n;
@@ -242,7 +256,7 @@ void test_network_weights_inversion(const char* nn_filename, const char* star_fi
     // then do it again backwards using the inverted weight matrices
     // see if the final result is the same as the original input
 
-    for(int i = 0; i < input_nn.numLayers(); i++) {
+    for(int i = 0; i < input_nn.numLayers() - 1; i++) {
         std::pair<hypro::matrix_t<Number>, hypro::vector_t<Number>> layerParams = input_nn.layerParams(i);
         hypro::matrix_t<Number> weights = layerParams.first;
         hypro::vector_t<Number> biases = layerParams.second;
@@ -255,7 +269,7 @@ void test_network_weights_inversion(const char* nn_filename, const char* star_fi
 
     hypro::vector_t<Number> output = hypro::vector_t<Number>(sample);
 
-    for(int i = input_nn.numLayers() - 1; i >= 0; i--) {
+    for(int i = input_nn.numLayers() - 2; i >= 0; i--) {
         std::pair<hypro::matrix_t<Number>, hypro::vector_t<Number>> layerParams = input_nn.layerParams(i);
         hypro::matrix_t<Number> weights = layerParams.first;
         hypro::vector_t<Number> biases = layerParams.second;
@@ -267,23 +281,32 @@ void test_network_weights_inversion(const char* nn_filename, const char* star_fi
         hypro::matrix_t<Number> weightsInverse = weights.completeOrthogonalDecomposition().pseudoInverse();
         sample = weightsInverse * (sample - biases);
 
-        // std::cout << weightsInverse * weights << std::endl;
+        
     }
 
     std::cout << "Sample point: " << std::endl;
     std::cout << sample << std::endl;
 
-    hypro::vector_t<Number> predicted = find_input_given_output(input_nn, output);
+    for(int i = input_nn.numLayers() - 2; i >= 0; i--) {
+        std::pair<hypro::matrix_t<Number>, hypro::vector_t<Number>> layerParams = input_nn.layerParams(i);
+        hypro::matrix_t<Number> weights = layerParams.first;
+        hypro::vector_t<Number> biases = layerParams.second;
 
-    std::cout << "Original input: " << std::endl;
-    std::cout << original_sample << std::endl;
-    std::cout << "Predicted input: " << std::endl;
-    std::cout << predicted << std::endl;
+        hypro::matrix_t<Number> weightsInverse = weights.completeOrthogonalDecomposition().pseudoInverse();
+        std::cout << weightsInverse * weights << std::endl;
+    }
 
-    std::cout << "Original output: " << std::endl;
-    std::cout << output << std::endl;
-    std::cout << "Predicted output:" << std::endl;
-    std::cout << forward_step(input_nn, predicted);
+    // hypro::vector_t<Number> predicted = find_input_given_output(input_nn, output);
+
+    // std::cout << "Original input: " << std::endl;
+    // std::cout << original_sample << std::endl;
+    // std::cout << "Predicted input: " << std::endl;
+    // std::cout << predicted << std::endl;
+
+    // std::cout << "Original output: " << std::endl;
+    // std::cout << output << std::endl;
+    // std::cout << "Predicted output:" << std::endl;
+    // std::cout << forward_step(input_nn, predicted);
 }
 
 int main(int argc, char* argv[]) {

@@ -32,7 +32,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const st
 	hypro::vector_t<Number> biases = layer_l.second;
 
 // this for loop could be parallelized
-// #pragma omp parallel for
+#pragma omp parallel for
 	for ( int i = 0; i < N; i++ ) {
 		if ( plot_intermediates ) {
 #pragma omp critical
