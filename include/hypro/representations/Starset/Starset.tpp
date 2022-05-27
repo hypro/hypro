@@ -251,7 +251,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
 	// return constraints.contains( point.affineTransformation( this->generator(), mCenter ) );
-	return Converter::toHPolytope( *this ).affineTransformation(mGenerator, mCenter).contains(point);
+	return Converter::toHPolytope( *this ).contains(point);
 }
 
 template <typename Number, typename Converter, typename Setting>

@@ -222,7 +222,7 @@ class StarsetT : private GeometricObjectBase {
 	friend bool
 	operator==( const StarsetT<Number, Converter, Setting>& b1,
 				const StarsetT<Number, Converter, SettingRhs>& b2 ) {
-		return false;
+		return (Converter::toHPolytope(b1) == Converter::toHPolytope(b2));
 	}
 
 	/**
