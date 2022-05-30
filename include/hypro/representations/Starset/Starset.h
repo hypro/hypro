@@ -354,6 +354,19 @@ class StarsetT : private GeometricObjectBase {
 		  const StarsetT<Number, Converter, Setting>& Starset ) const;
 
 	/**
+	 * @brief Get a single sample Point of the Starset
+	 * @return the sample point
+	 */
+	hypro::Point<Number> getSingleSample(int max_it = 10000) const;
+
+	/**
+	 * @brief Get a set of sample Points of the Starset
+	 * @param[in] n  the sample size 
+	 * @return the set of sample points
+	 */
+	std::set<hypro::Point<Number>> getSetOfSamples(int n = 1, int max_it = 10000) const;
+
+	/**
    * @brief      Computes the union of two Starsetes.
    * @param[in]  rhs   The right hand side Starset.
    * @return     The resulting Starset.

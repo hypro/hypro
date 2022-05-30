@@ -290,6 +290,8 @@ class HPolytopeT : private GeometricObjectBase {
 	bool contains( const Point<Number>& point ) const;
 	bool contains( const vector_t<Number>& vec ) const;
 	bool contains( const HPolytopeT& rhs ) const;
+	hypro::Point<Number> getSingleSample(int max_it = 10000) const;
+	std::set<hypro::Point<Number>> getSetOfSamples(int n = 1, int max_it = 10000) const;
 	HPolytopeT unite( const HPolytopeT& rhs ) const;
 	static HPolytopeT unite( const std::vector<HPolytopeT>& rhs );
 	void reduceRepresentation() {

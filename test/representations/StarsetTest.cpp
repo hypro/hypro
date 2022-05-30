@@ -165,48 +165,78 @@ TYPED_TEST( StarsetTest, AffineTransformation ) {
 
 TYPED_TEST( StarsetTest, ContainsPoint ) {
 	hypro::Point<TypeParam> p1( { -6, -2 } );
-  EXPECT_TRUE( this->star_2d_triang2.contains( p1 ) );
+	EXPECT_TRUE( this->star_2d_triang2.contains( p1 ) );
 
-  hypro::Point<TypeParam> p2( { 2, 2 } );
-  EXPECT_TRUE( this->star_2d_triang2.contains( p2 ) );
+	hypro::Point<TypeParam> p2( { 2, 2 } );
+	EXPECT_TRUE( this->star_2d_triang2.contains( p2 ) );
 
-  hypro::Point<TypeParam> p3( { 2, -2 } );
-  EXPECT_TRUE( this->star_2d_triang2.contains( p3 ) );
+	hypro::Point<TypeParam> p3( { 2, -2 } );
+	EXPECT_TRUE( this->star_2d_triang2.contains( p3 ) );
 }
 
 TYPED_TEST( StarsetTest, ContainsStar ) {
-  hypro::matrix_t<TypeParam> transform = hypro::matrix_t<TypeParam>(2,2);
-  transform << -2, 0, 0, 1;
-  hypro::Starset<TypeParam> transformed_triang1 = this->star_2d_triang1.linearTransformation(transform);
-  EXPECT_TRUE(this->star_2d_triang2.contains(transformed_triang1));
+	hypro::matrix_t<TypeParam> transform = hypro::matrix_t<TypeParam>( 2, 2 );
+	transform << -2, 0, 0, 1;
+	hypro::Starset<TypeParam> transformed_triang1 = this->star_2d_triang1.linearTransformation( transform );
+	EXPECT_TRUE( this->star_2d_triang2.contains( transformed_triang1 ) );
+}
+
+TYPED_TEST( StarsetTest, GetSampleAndContains ) {
+	// check for 100 sample points if they are all in the H-polytope
+	int n = 100;
+	for(int i = 0; i < n; i++) {
+		hypro::Point<TypeParam> sample = this->star_2d_triang1.getSingleSample();
+		EXPECT_TRUE( this->star_2d_triang1.contains(sample) );
+	}
+}
+
+TYPED_TEST( StarsetTest, GetSetOfSamplesAndContains ) {
+	int n = 100;
+	std::set<hypro::Point<TypeParam>> setOfSamples = this->star_2d_triang2.getSetOfSamples(n);
+	for(auto sample : setOfSamples) {
+		EXPECT_TRUE( this->star_2d_triang2.contains(sample) );
+	}
 }
 
 TYPED_TEST( StarsetTest, Vertices ) {
 	std::vector<hypro::Point<TypeParam>> v = this->star_2d_triang2.vertices();
-  hypro::Point<TypeParam> p1( { -6, -2 } );
-  hypro::Point<TypeParam> p2( { 2, 2 } );
-  hypro::Point<TypeParam> p3( { 2, -2 } );
-  EXPECT_EQ(3, v.size());
-  ASSERT_NE(std::find(v.begin(), v.end(), p1), v.end());  // check if the vertices vector contains p1
-  ASSERT_NE(std::find(v.begin(), v.end(), p2), v.end());
-  ASSERT_NE(std::find(v.begin(), v.end(), p3), v.end());
+	hypro::Point<TypeParam> p1( { -6, -2 } );
+	hypro::Point<TypeParam> p2( { 2, 2 } );
+	hypro::Point<TypeParam> p3( { 2, -2 } );
+	EXPECT_EQ( 3, v.size() );
+	ASSERT_NE( std::find( v.begin(), v.end(), p1 ), v.end() );	// check if the vertices vector contains p1
+	ASSERT_NE( std::find( v.begin(), v.end(), p2 ), v.end() );
+	ASSERT_NE( std::find( v.begin(), v.end(), p3 ), v.end() );
 }
 
 TYPED_TEST( StarsetTest, MinkowskiSum ) {
-  // use sampling to check if for a p1 from Star1 and for a p2 from Star2 is p1+p2 in Star1+Star2
+	// use sampling to check if for a p1 from Star1 and for a p2 from Star2 is p1+p2 in Star1+Star2
+	int n = 100;
+	std::set<hypro::Point<TypeParam>> setOfSamples1 = this->star_2d_triang1.getSetOfSamples(n);
+	std::set<hypro::Point<TypeParam>> setOfSamples2 = this->star_2d_triang2.getSetOfSamples(n);
+
 	hypro::Starset<TypeParam> sum_star = this->star_2d_triang1.minkowskiSum( this->star_2d_triang2 );
-	EXPECT_EQ(this->star_2d_triang1.dimension(), sum_star.dimension());
-  EXPECT_EQ(this->star_2d_triang2.dimension(), sum_star.dimension());
+	EXPECT_EQ( this->star_2d_triang1.dimension(), sum_star.dimension() );
+	EXPECT_EQ( this->star_2d_triang2.dimension(), sum_star.dimension() );
+
+	typename std::set<hypro::Point<TypeParam>>::iterator it1 = setOfSamples1.begin();
+	typename std::set<hypro::Point<TypeParam>>::iterator it2 = setOfSamples2.begin();
+
+	for(int i = 0; i < n; i++) {
+		EXPECT_TRUE(sum_star.contains((*it1) + (*it2)));
+		it1++;
+		it2++;
+	}
 }
 
 TYPED_TEST( StarsetTest, Empty ) {
 	EXPECT_FALSE( this->star_2d_rect.empty() );
 }
 
-TYPED_TEST (StarsetTest, IntersectHalfspaceEmpty ) {
-  hypro::Halfspace<TypeParam> halfplane = hypro::Halfspace<TypeParam>( { 1, 0 }, -2 );
-  hypro::Starset<TypeParam> sliced_star = this->star_2d_rect.intersectHalfspace(halfplane);
-  EXPECT_TRUE(sliced_star.empty());
+TYPED_TEST( StarsetTest, IntersectHalfspaceEmpty ) {
+	hypro::Halfspace<TypeParam> halfplane = hypro::Halfspace<TypeParam>( { 1, 0 }, -2 );
+	hypro::Starset<TypeParam> sliced_star = this->star_2d_rect.intersectHalfspace( halfplane );
+	EXPECT_TRUE( sliced_star.empty() );
 }
 
 // TYPED_TEST( StarsetTest, Union ) {

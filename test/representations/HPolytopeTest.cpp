@@ -434,6 +434,27 @@ TYPED_TEST( HPolytopeTest, MembershipCached ) {
 	EXPECT_FALSE( cachedPoly.contains( p5 ) );
 }
 
+TYPED_TEST( HPolytopeTest, GetSampleAndContains ) {
+	HPolytopeT<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes1 };
+
+	// check for 100 sample points if they are all in the H-polytope
+	int n = 100;
+	for(int i = 0; i < n; i++) {
+		hypro::Point<TypeParam> sample = cachedPoly.getSingleSample();
+		EXPECT_TRUE( cachedPoly.contains(sample) );
+	}
+}
+
+TYPED_TEST( HPolytopeTest, GetSetOfSamplesAndContains ) {
+	HPolytopeT<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes2 };
+
+	int n = 100;
+	std::set<hypro::Point<TypeParam>> setOfSamples = cachedPoly.getSetOfSamples(n);
+	for(auto sample : setOfSamples) {
+		EXPECT_TRUE( cachedPoly.contains(sample) );
+	}
+}
+
 TYPED_TEST( HPolytopeTest, MultiEvaluate ) {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 	matrix_t<TypeParam> dirs = matrix_t<TypeParam>::Identity( 2, 2 );
