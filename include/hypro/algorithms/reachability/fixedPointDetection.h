@@ -128,7 +128,7 @@ bool detectJumpFixedPoint( ReachTreeNode<BoxT<Number, Converter, Settings>>& nod
  * @return True, if a fixed point has been detected, false otherwise
  */
 template <typename Set>
-bool detectJumpFixedPoint( ReachTreeNode<Set>& node, std::vector<ReachTreeNode<Set>>& roots, std::optional<std::function<bool( const Set&, const Location<typename Set::NumberType>* )>>&, bool, std::size_t ) {
+bool detectJumpFixedPoint( ReachTreeNode<Set>& node, std::vector<ReachTreeNode<Set>>& roots, std::function<bool( const Set&, const Location<typename Set::NumberType>* )>&, bool, std::size_t ) {
 	assert( !node.getInitialBoundingBox() && "The bounding box should not have been set to ensure the node is not compared to itself." );
 	using Number = typename Set::NumberType;
 #ifdef HYPRO_STATISTICS
@@ -141,7 +141,7 @@ bool detectJumpFixedPoint( ReachTreeNode<Set>& node, std::vector<ReachTreeNode<S
 			// Attention: to ensure the current node is not used by itself, its bounding box has not been set yet.
 			if ( treeNode.getLocation() == node.getLocation() ) {
 				const auto& nodeInitialBoundingBox = treeNode.getInitialBoundingBox();
-				if ( nodeInitialBoundingBox && std::equal( std::begin( boundingBox ), std::end( boundingBox ), std::begin( nodeInitialBoundingBox.value() ), std::end( nodeInitialBoundingBox.value() ), []( const auto& setBoxIntv, const auto& initBoxIntv ) { return initBoxIntv.contains( setBoxIntv ); } ) && treeNode.getInitialSet().contains( node.getInitialSet() ) ) {
+				if ( nodeInitialBoundingBox && std::equal( std::begin( boundingBox ), std::end( boundingBox ), std::begin( nodeInitialBoundingBox.value() ), std::end( nodeInitialBoundingBox.value() ), []( const auto&setBoxIntv, const auto&initBoxIntv ) { return initBoxIntv.contains( setBoxIntv ); } ) && treeNode.getInitialSet().contains( node.getInitialSet() ) ) {
 					TRACE( "hypro.reachability", "Fixed-point detected." );
 #ifdef HYPRO_STATISTICS
 					STOP_BENCHMARK_OPERATION( "Fixed-point detection" );

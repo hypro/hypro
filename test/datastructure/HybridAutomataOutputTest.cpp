@@ -4,10 +4,12 @@
  */
 
 #include "../defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/HybridAutomaton/output/Flowstar.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/util/VariablePool.h>
 #include <hypro/util/logging/Filewriter.h>
 
 template <typename Number>
@@ -139,35 +141,88 @@ hypro::HybridAutomaton<Number> createSingularAutomaton() {
 	return res;
 }
 
+template <typename Number>
+hypro::HybridAutomaton<Number> createRectangularAutomaton() {
+	// automaton created from a parametric location tree of a hybrid Petri net
+	using Interval = carl::Interval<Number>;
+
+	hypro::HybridAutomaton<Number> res;
+
+	// get location pointers
+	auto* l1 = res.createLocation();
+	l1->setName( "l1" );
+	auto* l2 = res.createLocation();
+	l2->setName( "l2" );
+
+	// initialize variables
+	hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+	auto& a = pool.newCarlVariable( "a" );
+	auto& b = pool.newCarlVariable( "b" );
+	auto& c = pool.newCarlVariable( "c" );
+
+	typename hypro::rectangularFlow<Number>::flowMap flows;
+	flows[a] = Interval( 2, 3 );
+	flows[b] = Interval( 1, 6 );
+	flows[c] = Interval( -2, 4 );
+	l1->setFlow( hypro::rectangularFlow<Number>{ flows } );
+
+	flows.clear();
+	flows[a] = Interval( 2, 3 );
+	flows[b] = Interval( 1, 6 );
+	flows[c] = Interval( -2, 4 );
+	l2->setFlow( hypro::rectangularFlow<Number>{ flows } );
+
+	return res;
+}
+
 /**
  * Hybrid Automaton Test
  */
-TEST( HybridAutomataOutputTest, HybridAutomatonTest ) {
+TEST( HybridAutomataOutputTest, LinearHybridAutomatonTest ) {
 	hypro::LockedFileWriter out{ "tmp.model" };
 	out.clearFile();
 	auto automaton{ createSingularAutomaton<mpq_class>() };
-	std::cout << hypro::toFlowstarFormat( automaton, hypro::ReachabilitySettings{ 1, 1, 1 } );
 	out << hypro::toFlowstarFormat( automaton, hypro::ReachabilitySettings{ 1, 1, 1 } );
 
 	auto [automatonParsed, settings] = hypro::parseFlowstarFile<mpq_class>( std::string( "tmp.model" ) );
-	// std::remove( "tmp.model" );
 
 	auto otherLocs = automatonParsed.getLocations();
 	for ( auto loc : automaton.getLocations() ) {
 		bool found = false;
-		std::cout << "Compare loc " << *loc << " To " << std::endl << std::endl;
 		for ( auto otherLoc : otherLocs ) {
-			std::cout << *otherLoc << std::endl;
 			if ( *loc == *otherLoc ) {
 				found = true;
-				std::cout << "Equal" << std::endl << std::endl;
 				break;
-			} else {
-				std::cout << "NOT Equal" << std::endl << std::endl;
 			}
 		}
 		EXPECT_TRUE( found );
 	}
+	out.deleteFile();
+
+	EXPECT_EQ( automaton, automatonParsed );
+	SUCCEED();
+}
+
+TEST( HybridAutomataOutputTest, RectangularHybridAutomatonTest ) {
+	hypro::LockedFileWriter out{ "tmp.model" };
+	out.clearFile();
+	auto automaton{ createRectangularAutomaton<mpq_class>() };
+	out << hypro::toFlowstarFormat( automaton, hypro::ReachabilitySettings{ 1, 1, 1 } );
+
+	auto [automatonParsed, settings] = hypro::parseFlowstarFile<mpq_class>( std::string( "tmp.model" ) );
+
+	auto otherLocs = automatonParsed.getLocations();
+	for ( auto loc : automaton.getLocations() ) {
+		bool found = false;
+		for ( auto otherLoc : otherLocs ) {
+			if ( *loc == *otherLoc ) {
+				found = true;
+				break;
+			}
+		}
+		EXPECT_TRUE( found );
+	}
+	out.deleteFile();
 
 	EXPECT_EQ( automaton, automatonParsed );
 	SUCCEED();

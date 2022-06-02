@@ -119,7 +119,7 @@ std::string toFlowstarFormat( const flowVariant<Number>& f,
 		case DynamicType::rectangular: {
 			auto flow = std::get<rectangularFlow<Number>>( f ).getFlowIntervals();
 			for ( const auto& vFlowPair : flow ) {
-				out << prefix << "\t\t" << vFlowPair.first << "' = " << vFlowPair.second << std::endl;
+				out << prefix << "\t\t" << vFlowPair.first << "' in " << vFlowPair.second;
 			}
 		}
 	}
@@ -139,7 +139,7 @@ std::string toFlowstarFormat( const Location<Number>* loc,
 		// flow
 		out << prefix << "\tpoly ode 1";
 		out << prefix << "\t{";
-		out << toFlowstarFormat<Number>( loc->getLinearFlow(), varNameMap, prefix );
+		out << toFlowstarFormat<Number>( *( loc->getFlows().begin() ), varNameMap, prefix );
 		out << prefix << "\t}";
 		// invariant
 		out << prefix << "\tinv";
@@ -161,7 +161,7 @@ template <typename Number>
 std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const ReachabilitySettings& settings = ReachabilitySettings() ) {
 	std::stringstream res;
 	std::map<Eigen::Index, std::string> vars;
-	for(std::size_t i = 0; i < in.getVariables().size(); ++i){
+	for ( std::size_t i = 0; i < in.getVariables().size(); ++i ) {
 		vars[i] = in.getVariables()[i];
 	}
 
@@ -171,17 +171,15 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 		if ( in.dimension() > 0 ) {
 			// variables (note: the last dimension is for constants)
 			res << "\tstate var ";
-			if(!vars.count(0)) {
+			if ( !vars.count( 0 ) ) {
 				vars[0] = "x_0";
 			}
 			res << vars[0];
-			std::cout << "add variable " << vars[0] << std::endl;
 			for ( std::size_t cnt = 1; cnt < in.dimension(); ++cnt ) {
-				if(!vars.count(cnt)) {
-					vars[cnt] = "x_" + std::to_string(cnt);
+				if ( !vars.count( cnt ) ) {
+					vars[cnt] = "x_" + std::to_string( cnt );
 				}
 				res << ", " << vars[cnt];
-				std::cout << "add variable " << vars[cnt] << std::endl;
 			}
 			res << "\n";
 		}

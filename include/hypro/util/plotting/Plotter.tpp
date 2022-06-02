@@ -98,7 +98,7 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 #ifdef GNUPLOT_FOUND
 		std::stringstream ss;
 		ss << "gnuplot " + filename + "_" + plotting::to_string( outformat ) + ".plt";
-		std::system( ss.str().c_str() );
+		auto returnvalue = std::system( ss.str().c_str() );
 #endif
 	}
 }
@@ -125,6 +125,11 @@ void Plotter<Number>::plotGen() const {
 
 template <typename Number>
 unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
+	return addObject( _points, "", _color, settings );
+}
+
+template <typename Number>
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
 	TRACE( "hypro.plotter", "" );
 	// reduce dimensions
 	if ( !_points.empty() ) {
@@ -133,7 +138,7 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			return 0;
 		}
 		updateLimits( _points );
-		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings } ) );
+		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings, _objectTitle } ) );
 		mId++;
 		return ( mId - 1 );
 	}
@@ -414,6 +419,7 @@ void Plotter<Number>::writeGnuplot() const {
 				if ( mSettings.key ) {
 					mOutfile << "set style line " << std::dec << objectCount << " lc rgb '#" << std::hex << color << std::dec << "' lt 1 lw 5\n";
 					keyContent = keyContent + ", NaN ls " + std::to_string( objectCount ) + " title \"" + plotObject.objectTitle + "\"";
+					std::cout << "Key Content: " << keyContent << std::endl;
 				}
 
 				if ( mSettings.cummulative ) {
