@@ -13,7 +13,7 @@ std::string toFlowstarFormat( const matrix_t<Number>& in,
 							  const std::string& prefix ) {
 	assert( in.rows() == 1 );
 	std::stringstream res;
-	res << prefix;
+	res << std::fixed << prefix;
 	bool first = true;
 	for ( Eigen::Index colI = 0; colI < in.cols(); ++colI ) {
 		// const part
@@ -38,6 +38,9 @@ std::string toFlowstarFormat( const matrix_t<Number>& in,
 				}
 			} else if ( in( 0, colI ) < 0 ) {
 				res << " " << in( 0, colI );
+				if(first) {
+					first = false;
+				}
 			}
 			if ( in( 0, colI ) != 0 && in( 0, colI ) != 1 ) {
 				res << "*";
@@ -45,6 +48,7 @@ std::string toFlowstarFormat( const matrix_t<Number>& in,
 			}
 		}
 	}
+	res << std::scientific;
 	return res.str();
 }
 
@@ -54,6 +58,7 @@ std::string toFlowstarFormat( const Condition<Number>& in,
 							  const std::string& prefix ) {
 	std::stringstream res;
 	if ( in.size() > 0 ) {
+		res << std::fixed;
 		for ( Eigen::Index rowI = 0; rowI < in.getMatrix().rows(); ++rowI ) {
 			res << prefix;
 			bool first = true;
@@ -76,6 +81,7 @@ std::string toFlowstarFormat( const Condition<Number>& in,
 			}
 			res << " <= " << in.getVector()( rowI );
 		}
+		res << std::scientific;
 	}
 	return res.str();
 }
