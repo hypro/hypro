@@ -440,17 +440,17 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 template<typename Number>
 template<typename HPolytopeSetting, typename inSetting>
 HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPolytope( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	//if basis is standard, center is zero vector and star set is not empty, return the constraints from the star set 
-	if(source.generator()==(matrix_t<Number>::Identity(source.generator().cols(),source.generator().cols())) && source.center()==vector_t<Number>::Zero(source.center().rows())&& !source.empty()){
-		return source.constraintss().matrix();
+		// if the center is the zero vector and the basis is the identity matrix, return the contraints of the star set
+		int star_dim = source.center().rows();
+		if(	source.center() == (vector_t<Number>::Zero(star_dim)) &&
+			source.generator() == (matrix_t<Number>::Identity(star_dim, star_dim)) ) {
+			return source.constraintss();
+		}
 		
+		// we apply the affine transformation (basis and center) on the constraint set
+		return source.constraintss().affineTransformation(source.generator(),source.center());	
+
+		// another way to handle this is to convert the Starset to a V-Polytope (finding the vertices) and then apply the affine transformation 
+		// and convert the result to a H-Polytope
 	}
-	
-	//HPolytopeT<Number,Converter<Number>,HPolytopeSetting> temp=source.constraintss();
-	VPolytopeT<Number,Converter<Number>,VPolytopeSetting> temp2= Converter::toVPolytope(source.constraintss());
-	auto temp3=HPolytopeT<Number,Converter<Number>,HPolytopeSetting>(temp2.affineTransformation(source.generator(),source.center()).vertices());
-	
-	return temp3;
-	//return source.constraintss().affineTransformation(source.generator(),source.center());
-}
 }

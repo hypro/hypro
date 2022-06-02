@@ -90,13 +90,13 @@ static void computeReachableStates( const std::string& filename,
 		std::vector<std::size_t> plottingDimensions =
 			  settings.plotting().plotDimensions.at( 0 );
 
-		for ( size_t plottingDimension : plottingDimensions ) {
-			std::cout << plottingDimension << " ";
-		}
-		std::cout << std::endl;
+		// for ( size_t plottingDimension : plottingDimensions ) {
+		// 	std::cout << plottingDimension << " ";
+		// }
+		// std::cout << std::endl;
 		
-		plotter.rSettings().dimensions.first = plottingDimensions.front();
-		plotter.rSettings().dimensions.second = plottingDimensions.back();
+		plotter.rSettings().dimensions.push_back(plottingDimensions.front());
+		plotter.rSettings().dimensions.push_back(plottingDimensions.back());
 		plotter.rSettings().cummulative = false;
 
 		// bad states plotting

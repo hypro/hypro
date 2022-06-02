@@ -21,7 +21,7 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 
 	// setup
 	gvc = gvContext();
-	graph = agopen( "reachTree", Agstrictdirected, 0 );
+	graph = agopen( std::string( "reachTree" ).data(), Agstrictdirected, 0 );
 	gvLayout( gvc, graph, "dot" );
 
 	// set default node properties
@@ -61,7 +61,7 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 			}
 			if ( node.getParent() != nullptr ) {
 				assert( mNodePointers.find( node.getParent() ) != mNodePointers.end() );
-				agedge( graph, mNodePointers[node.getParent()], nptr, "", 1 );
+				agedge( graph, mNodePointers[node.getParent()], nptr, std::string( "" ).data(), 1 );
 			}
 		}
 	}

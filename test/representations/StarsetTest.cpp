@@ -1,233 +1,247 @@
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/representations/sampling/sampling.h>
 #include <hypro/util/plotting/Plotter.h>
-
 
 template <typename Number>
 class StarsetTest : public ::testing::Test {
   protected:
-    
 	virtual void SetUp() {
-        // star set
-    
-		hypro::Halfspace<Number> hp1( { Number( 1 ), Number( 0 ) }, Number( 2 ) );
-		hypro::Halfspace<Number> hp2( { Number( 0 ), Number( 1 ) }, Number( 2 ) );
-		hypro::Halfspace<Number> hp3( { Number( -1 ), Number( 0 ) }, Number( 2 ) );
-		hypro::Halfspace<Number> hp4( { Number( 0 ), -Number( 1 ) }, Number( 2 ) );
+		// create some number of stars
 
-        planes1.push_back( hp1 );
-		planes1.push_back( hp2 );
-		planes1.push_back( hp3 );
-		planes1.push_back( hp4 );
+		// create a star using the default constructor
+		this->default_star = hypro::Starset<Number>();
 
-        hypro::vector_t<Number> center=hypro::vector_t<Number>(2);
-        hypro::vector_t<Number> Limits=hypro::vector_t<Number>(4);
-        hypro::matrix_t<Number> Generator=hypro::matrix_t<Number>(2,2);
-        hypro::matrix_t<Number> ShapeMatrix=hypro::matrix_t<Number>(4,2);
-        center<<10,1;
-        Limits<<1,1,1,1;
-        Generator<<1,2,0,1;
-        ShapeMatrix<<1,0,-1,0,0,1,0,-1;
-        myStar1= hypro::Starset<Number>(center,ShapeMatrix,Limits,Generator);
+		int star_dim = 2;
 
-        hypro::vector_t<Number> center1=hypro::vector_t<Number>(2);
-        hypro::vector_t<Number> Limits1=hypro::vector_t<Number>(4);
-        hypro::matrix_t<Number> Generator1=hypro::matrix_t<Number>(2,2);
-        hypro::matrix_t<Number> ShapeMatrix1=hypro::matrix_t<Number>(4,2);
-        center1<<3,7;
-        Limits1<<1,1,1,1;
-        Generator1<<1,0,0,1;
-        ShapeMatrix1<<1,0,-1,0,0,1,0,-1;
-        myStar2= hypro::Starset<Number>(center1,ShapeMatrix1,Limits1,Generator1);
-        myStar=hypro::Starset<Number>();
+		// a simple rectangle [_]
+		hypro::vector_t<Number> center1 = hypro::vector_t<Number>( 2 );
+		hypro::matrix_t<Number> basis1 = hypro::matrix_t<Number>( 2, 2 );
+		hypro::matrix_t<Number> constr1 = hypro::matrix_t<Number>( 4, 2 );
+		hypro::vector_t<Number> limits1 = hypro::vector_t<Number>( 4 );
+		center1 << 0, 0;
+		basis1 << 1, 0, 0, 1;
+		constr1 << 1, 0, -1, 0, 0, 1, 0, -1;
+		limits1 << 2, 1, 1, 1;
+		this->star_2d_rect = hypro::Starset<Number>( center1, constr1, limits1, basis1 );
 
-        // hypro::vector_t<Number> center2=hypro::vector_t<Number>(2);
-        // hypro::vector_t<Number> Limits2=hypro::vector_t<Number>(5);
-        // hypro::matrix_t<Number> Generator2=hypro::matrix_t<Number>(2,2);
-        // hypro::matrix_t<Number> ShapeMatrix2=hypro::matrix_t<Number>(5,2);
-        // center2<<-12.8727,-15.8922;
-        // Limits2<<0.000246886,7.94631,7.94656,0,-12.8727;
-        // ShapeMatrix2<<1,0,0,1,1,1,-1,0,-1,1.62;
-        // Generator2<<1,0,1.62,1;
+		// a triangle:  |>
+		hypro::vector_t<Number> center2 = hypro::vector_t<Number>( 2 );
+		hypro::matrix_t<Number> basis2 = hypro::matrix_t<Number>( 2, 2 );
+		hypro::matrix_t<Number> constr2 = hypro::matrix_t<Number>( 3, 2 );
+		hypro::vector_t<Number> limits2 = hypro::vector_t<Number>( 3 );
+		center2 << 0, 0;
+		basis2 << 1, 0, 0, 1;
+		constr2 << -1, 0, 1, 1, 1, -1;
+		limits2 << 1, 1, 1;
+		this->star_2d_triang1 = hypro::Starset<Number>( center2, constr2, limits2, basis2 );
 
-        // myStar1000=hypro::Starset<Number>(center2,ShapeMatrix2,Limits2,Generator2);
+		// another triangle: /_|   (reversed, scaled)
+		hypro::vector_t<Number> center3 = hypro::vector_t<Number>( 2 );
+		hypro::matrix_t<Number> basis3 = hypro::matrix_t<Number>( 2, 2 );
+		hypro::matrix_t<Number> constr3 = hypro::matrix_t<Number>( 3, 2 );
+		hypro::vector_t<Number> limits3 = hypro::vector_t<Number>( 3 );
+		center3 << 0, 0;
+		basis3 << -2, 0, 0, 1;
+		constr3 << -1, 0, 0, -1, 1, 1;
+		limits3 << 1, 2, 1;
+		this->star_2d_triang2 = hypro::Starset<Number>( center3, constr3, limits3, basis3 );
+
+		star_dim = 5;
+		// 5d box
+		hypro::vector_t<Number> center4 = hypro::vector_t<Number>::Zero( star_dim );
+		hypro::matrix_t<Number> basis4 = hypro::matrix_t<Number>::Identity( star_dim, star_dim );
+
+		hypro::matrix_t<Number> upper_bounds = hypro::matrix_t<Number>::Identity( star_dim, star_dim );
+		hypro::matrix_t<Number> lower_bounds = hypro::matrix_t<Number>::Identity( star_dim, star_dim ) * ( -1 );
+
+		hypro::matrix_t<Number> constr4 = hypro::matrix_t<Number>( 2 * star_dim, star_dim );
+		constr4 << lower_bounds, upper_bounds;
+		hypro::vector_t<Number> limits4 = hypro::vector_t<Number>::Ones( 2 * star_dim );
+		this->star_5d_box = hypro::Starset<Number>( center4, constr4, limits4, basis4 );
 	}
 
 	virtual void TearDown() {}
-    std::vector<hypro::Halfspace<Number>> planes1;
 
-    hypro::Starset<Number> myStar;
-    hypro::Starset<Number> myStar2;
-    hypro::Starset<Number> myStar1;
-    // hypro::Starset<Number> myStar1000;
-
-
+	hypro::Starset<Number> default_star;
+	hypro::Starset<Number> star_2d_rect;
+	hypro::Starset<Number> star_2d_triang1;
+	hypro::Starset<Number> star_2d_triang2;
+	hypro::Starset<Number> star_5d_box;
 };
 
+TYPED_TEST( StarsetTest, Constructor ) {
+	// test default constructor  (not working yet for some reason)
+	// EXPECT_EQ(this->default_star, hypro::Starset<TypeParam>());
 
-TYPED_TEST(StarsetTest, Constructor){
-    EXPECT_NE(this->myStar.limits(),this->myStar2.limits() );
-    hypro::matrix_t<TypeParam> transmat=hypro::matrix_t<TypeParam>(2,2);
-    transmat<<cos(45),-sin(45),sin(45),cos(45);
-    hypro::vector_t<TypeParam> offset=hypro::vector_t<TypeParam>(2);
-    offset<<1,1;
-    hypro::HPolytope<TypeParam> anotherHPolytope = hypro::HPolytope<TypeParam>(this->myStar1.constraintss().affineTransformation(this->myStar1.generator(),this->myStar1.center()) );
-    hypro::HPolytope<TypeParam> anotherHPolytope2 = hypro::HPolytope<TypeParam>(anotherHPolytope.affineTransformation(transmat,offset)  );
-    hypro::HPolytope<TypeParam> united = anotherHPolytope.unite(anotherHPolytope2);
+	// test initializing constructors with 2d and 5d stars
+	int star_dim = 2;
 
+	// a simple rectangle [_]
+	hypro::vector_t<TypeParam> center1 = hypro::vector_t<TypeParam>( 2 );
+	hypro::matrix_t<TypeParam> basis1 = hypro::matrix_t<TypeParam>( 2, 2 );
+	hypro::matrix_t<TypeParam> constr1 = hypro::matrix_t<TypeParam>( 4, 2 );
+	hypro::vector_t<TypeParam> limits1 = hypro::vector_t<TypeParam>( 4 );
+	center1 << 0, 0;
+	basis1 << 1, 0, 0, 1;
+	constr1 << 1, 0, -1, 0, 0, 1, 0, -1;
+	limits1 << 2, 1, 1, 1;
+	EXPECT_EQ( this->star_2d_rect, hypro::Starset<TypeParam>( constr1, limits1 ) );
 
-    auto ikincidegismis=this->myStar1.affineTransformation(transmat,offset);
-    auto sonucikinci=ikincidegismis.unite(this->myStar1);
-    //hypro::Starset<TypeParam> sonucbirinci=ikincidegismis.unite(this->myStar1);
-    std::cout<<"vertices"<<ikincidegismis.vertices()<<std::endl;
-    std::cout<<"vertices"<<anotherHPolytope2.vertices()<<std::endl;
+	// a triangle:  |>
+	hypro::vector_t<TypeParam> center2 = hypro::vector_t<TypeParam>( 2 );
+	hypro::matrix_t<TypeParam> basis2 = hypro::matrix_t<TypeParam>( 2, 2 );
+	hypro::matrix_t<TypeParam> constr2 = hypro::matrix_t<TypeParam>( 3, 2 );
+	hypro::vector_t<TypeParam> limits2 = hypro::vector_t<TypeParam>( 3 );
+	center2 << 0, 0;
+	basis2 << 1, 0, 0, 1;
+	constr2 << -1, 0, 1, 1, 1, -1;
+	limits2 << 1, 1, 1;
+	hypro::HPolytope<TypeParam> polytope2 = hypro::HPolytope<TypeParam>( constr2, limits2 );
+	EXPECT_EQ( this->star_2d_triang1, hypro::Starset<TypeParam>( center2, basis2, polytope2 ) );
 
-    //std::cout<<"vertices"<<sonucbirinci.vertices()<<std::endl;
-    hypro::Plotter<TypeParam> &plotter = hypro::Plotter<TypeParam>::getInstance();
+	// another triangle: /_|   (reversed, scaled)
+	hypro::vector_t<TypeParam> center3 = hypro::vector_t<TypeParam>( 2 );
+	hypro::matrix_t<TypeParam> basis3 = hypro::matrix_t<TypeParam>( 2, 2 );
+	hypro::matrix_t<TypeParam> constr3 = hypro::matrix_t<TypeParam>( 3, 2 );
+	hypro::vector_t<TypeParam> limits3 = hypro::vector_t<TypeParam>( 3 );
+	center3 << 0, 0;
+	basis3 << -2, 0, 0, 1;
+	constr3 << -1, 0, 0, -1, 1, 1;
+	limits3 << 1, 2, 1;
+	EXPECT_EQ( this->star_2d_triang2, hypro::Starset<TypeParam>( center3, constr3, limits3, basis3 ) );
 
-    plotter.setFilename("Unitewhat");
-    plotter.addObject(anotherHPolytope.vertices());
-    plotter.addObject(anotherHPolytope2.vertices());
-    plotter.addObject(ikincidegismis.vertices());
-    plotter.addObject(sonucikinci.vertices());
-    plotter.addObject(united.vertices());
+	star_dim = 5;
+	// 5d box
+	hypro::vector_t<TypeParam> center4 = hypro::vector_t<TypeParam>::Zero( star_dim );
+	hypro::matrix_t<TypeParam> basis4 = hypro::matrix_t<TypeParam>::Identity( star_dim, star_dim );
 
+	hypro::matrix_t<TypeParam> upper_bounds = hypro::matrix_t<TypeParam>::Identity( star_dim, star_dim );
+	hypro::matrix_t<TypeParam> lower_bounds = hypro::matrix_t<TypeParam>::Identity( star_dim, star_dim ) * ( -1 );
 
-    // write output.
-    plotter.plot2d();
-    
+	hypro::matrix_t<TypeParam> constr4 = hypro::matrix_t<TypeParam>( 2 * star_dim, star_dim );
+	constr4 << lower_bounds, upper_bounds;
+	hypro::vector_t<TypeParam> limits4 = hypro::vector_t<TypeParam>::Ones( 2 * star_dim );
+	hypro::HPolytope<TypeParam> polytope4 = hypro::HPolytope<TypeParam>( constr4, limits4 );
+	EXPECT_EQ( this->star_5d_box, hypro::Starset<TypeParam>( polytope4 ) );
 
-}
-/*
-TYPED_TEST(StarsetTest, LinearandDimension){
-    hypro::matrix_t<TypeParam> transmat=hypro::matrix_t<TypeParam>(2,2);
-    transmat<<1,2,1,2;
-    
-    hypro::Starset<TypeParam> myStar3=this->myStar1.linearTransformation(transmat);
-    
-    hypro::matrix_t<TypeParam> transformedgen=hypro::matrix_t<TypeParam>(2,2);
-    transformedgen<<1,2,1,2;
-    EXPECT_EQ(myStar3.generator(),transformedgen);
-    EXPECT_EQ(myStar3.dimension(),2);
-}
+	// test copy-constructor
+	EXPECT_EQ( this->star_2d_triang2, hypro::Starset<TypeParam>( this->star_2d_triang2 ) );
 
-TYPED_TEST(StarsetTest, Affine){
-
-    hypro::matrix_t<TypeParam> transmat=hypro::matrix_t<TypeParam>(2,2);
-    transmat<<cos(45*3.14159/180),-sin(45*3.14159/180),sin(45*3.14159/180),cos(45*3.14159/180);
-    hypro::vector_t<TypeParam> offset=hypro::vector_t<TypeParam>(2);
-    offset<<1,0;
-    hypro::Plotter<TypeParam> &plotter = hypro::Plotter<TypeParam>::getInstance();
-    hypro::Starset<TypeParam> myStar555=this->myStar2.affineTransformation(transmat,offset);
-
-    plotter.setFilename("Starset_example2for_thesis");
-    //for (auto &node : preorder(roots)) {
-    // Plot single flowpipe
-    //for (auto &set : node.getFlowpipe()) {
-     plotter.addObject(myStar555.vertices());
-    //}
-    //}
-    // write output.
-    plotter.plot2d();
-    hypro::HPolytope<TypeParam> anotherHPolytope = hypro::HPolytope<TypeParam>( this->planes1 );
-
-    hypro::Starset<TypeParam> myStar3=hypro::Starset<TypeParam>(anotherHPolytope);
-    hypro::matrix_t<TypeParam> transformedgen=hypro::matrix_t<TypeParam>(2,2);
-    transformedgen<<2,2,2,2;
-
-    hypro::Starset<TypeParam> myStar55=myStar3.affineTransformation(transformedgen,offset);
-    hypro::HPolytope<TypeParam> anotherHPolytope2=anotherHPolytope.affineTransformation(transformedgen,offset);
-    
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope.affineTransformation(transformedgen,offset).vertices()<<std::endl;
-
-
-    //EXPECT_EQ(myStar3.generator(),transformedgen);
-    //EXPECT_EQ(myStar3.center(),offset+transmat*this->myStar1.center());
-}
-TYPED_TEST(StarsetTest, HalfspaceIntersection_s){
-    hypro::Halfspace<TypeParam> halff= hypro::Halfspace<TypeParam>({1,1},2);
-    //hypro::Starset<TypeParam> myStar3=this->myStar1.intersectHalfspace(halff);
-    hypro::Halfspace<TypeParam> halff1= hypro::Halfspace<TypeParam>({1,1},-2);
-    hypro::Halfspace<TypeParam> halff2= hypro::Halfspace<TypeParam>({1,-1},2);
-    hypro::Halfspace<TypeParam> halff3= hypro::Halfspace<TypeParam>({-1,1},2);
-    
-
-    hypro::matrix_t<TypeParam> transmat=hypro::matrix_t<TypeParam>(2,2);
-    transmat<<1,2,1,2;
-    hypro::vector_t<TypeParam> offset=hypro::vector_t<TypeParam>(2);
-    offset<<1,1;
-
-    hypro::HPolytope<TypeParam> anotherHPolytope = hypro::HPolytope<TypeParam>( this->planes1 );
-    hypro::Starset<TypeParam> myStar3=hypro::Starset<TypeParam>(anotherHPolytope);
-    
-    hypro::matrix_t<TypeParam> transformedgen=hypro::matrix_t<TypeParam>(2,2);
-    transformedgen<<2,2,2,2;
-
-    myStar3=myStar3.affineTransformation(transformedgen,offset);
-     anotherHPolytope=anotherHPolytope.affineTransformation(transformedgen,offset);
-    
-
-    hypro::Starset<TypeParam> myStar55=myStar3.intersectHalfspace(halff);
-    hypro::HPolytope<TypeParam> anotherHPolytope2=anotherHPolytope.intersectHalfspace(halff);
-    std::cout<<"1:"<<std::endl;
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope2.vertices()<<std::endl;
-
-    myStar55=myStar3.intersectHalfspace(halff1);
-    anotherHPolytope2=anotherHPolytope.intersectHalfspace(halff1);
-    std::cout<<"2:"<<std::endl;
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope2.vertices()<<std::endl;
-
-    myStar55=myStar3.intersectHalfspace(halff2);
-    anotherHPolytope2=anotherHPolytope.intersectHalfspace(halff2);
-    std::cout<<"3:"<<std::endl;
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope2.vertices()<<std::endl;
-
-    myStar55=myStar3.intersectHalfspace(halff3);
-    anotherHPolytope2=anotherHPolytope.intersectHalfspace(halff3);
-    std::cout<<"4:"<<std::endl;
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope2.vertices()<<std::endl;
-    //EXPECT_EQ(myStar3.shape(),shapecheck);
-    //EXPECT_EQ(myStar3.limits(),limitcheck);
-    
-    //hypro::Starset<TypeParam> myStar5=this->myStar1.intersectHalfspaces(matt,vecc);
-    //EXPECT_EQ(myStar4.shape(),myStar5.shape());
-}
-TYPED_TEST(StarsetTest, MinkowskiSum){
-    hypro::Starset<TypeParam> myStar3=this->myStar1.minkowskiSum(this->myStar2);
-    std::cout<<myStar3.shape()<<std::endl;
+	// test assignment operator
+	hypro::Starset<TypeParam> tmp_triang1 = this->star_2d_triang1;
+	EXPECT_EQ( this->star_2d_triang1, tmp_triang1 );
 }
 
-TYPED_TEST(StarsetTest, Containspoint){
-    hypro::Point<TypeParam> p1( { 3, 3 } );
-    EXPECT_EQ(this->myStar1.contains(p1),true);
+TYPED_TEST( StarsetTest, Dimension ) {
+	EXPECT_EQ( 1, this->default_star.dimension() );
+	EXPECT_EQ( 2, this->star_2d_rect.dimension() );
+	EXPECT_EQ( 2, this->star_2d_triang1.dimension() );
+	EXPECT_EQ( 2, this->star_2d_triang2.dimension() );
+	EXPECT_EQ( 5, this->star_5d_box.dimension() );
 }
 
-TYPED_TEST(StarsetTest, Vertices){
-    std::cout<<this->myStar1.vertices()<<std::endl;
+TYPED_TEST( StarsetTest, LinearTransformation ) {
+	hypro::matrix_t<TypeParam> transmat = hypro::matrix_t<TypeParam>( 2, 2 );
+	transmat << cos( 45 ), -sin( 45 ), sin( 45 ), cos( 45 );
+
+	hypro::Starset<TypeParam> transformed_rect = this->star_2d_rect.linearTransformation( transmat );
+	EXPECT_EQ( transmat * this->star_2d_rect.generator(), transformed_rect.generator() );
+	EXPECT_EQ( transmat * this->star_2d_rect.center(), transformed_rect.center() );
 }
 
-TYPED_TEST(StarsetTest, Empty){
-    std::cout<<this->myStar1.empty()<<std::endl;
-    EXPECT_EQ(this->myStar1.empty(),false);
+TYPED_TEST( StarsetTest, AffineTransformation ) {
+	hypro::matrix_t<TypeParam> transmat = hypro::matrix_t<TypeParam>( 2, 2 );
+	transmat << cos( 45 ), -sin( 45 ), sin( 45 ), cos( 45 );
+
+	hypro::vector_t<TypeParam> offset = hypro::vector_t<TypeParam>( 2 );
+	offset << 1, 1;
+
+	hypro::Starset<TypeParam> transformed_rect = this->star_2d_rect.affineTransformation( transmat, offset );
+	EXPECT_EQ( transmat * this->star_2d_rect.generator(), transformed_rect.generator() );
+	EXPECT_EQ( transmat * this->star_2d_rect.center() + offset, transformed_rect.center() );
 }
 
+TYPED_TEST( StarsetTest, ContainsPoint ) {
+	hypro::Point<TypeParam> p1( { -6, -2 } );
+	EXPECT_TRUE( this->star_2d_triang2.contains( p1 ) );
 
-TYPED_TEST(StarsetTest, ContainsStar){
-    std::cout<<this->myStar1.contains(this->myStar2)<<std::endl;
+	hypro::Point<TypeParam> p2( { 2, 2 } );
+	EXPECT_TRUE( this->star_2d_triang2.contains( p2 ) );
 
+	hypro::Point<TypeParam> p3( { 2, -2 } );
+	EXPECT_TRUE( this->star_2d_triang2.contains( p3 ) );
 }
 
-
-TYPED_TEST(StarsetTest, Union){
-    hypro::Starset<TypeParam> myStar3=this->myStar1.unite(this->myStar2);
-    std::cout<<"Generator: "<<myStar3.generator()<<std::endl;
-    std::cout<<"Shape: "<<myStar3.shape()<<std::endl;
-
+TYPED_TEST( StarsetTest, ContainsStar ) {
+	hypro::matrix_t<TypeParam> transform = hypro::matrix_t<TypeParam>( 2, 2 );
+	transform << -2, 0, 0, 1;
+	hypro::Starset<TypeParam> transformed_triang1 = this->star_2d_triang1.linearTransformation( transform );
+	EXPECT_TRUE( this->star_2d_triang2.contains( transformed_triang1 ) );
 }
-*/
+
+TYPED_TEST( StarsetTest, GetSetOfSamplesAndContains ) {
+	int n = 100;
+	std::set<hypro::Point<TypeParam>> setOfSamples = uniform_sampling(this->star_2d_triang2, n);
+	for(auto sample : setOfSamples) {
+		EXPECT_TRUE( this->star_2d_triang2.contains(sample) );
+	}
+}
+
+TYPED_TEST( StarsetTest, Vertices ) {
+	std::vector<hypro::Point<TypeParam>> v = this->star_2d_triang2.vertices();
+	hypro::Point<TypeParam> p1( { -6, -2 } );
+	hypro::Point<TypeParam> p2( { 2, 2 } );
+	hypro::Point<TypeParam> p3( { 2, -2 } );
+	EXPECT_EQ( 3, v.size() );
+	ASSERT_NE( std::find( v.begin(), v.end(), p1 ), v.end() );	// check if the vertices vector contains p1
+	ASSERT_NE( std::find( v.begin(), v.end(), p2 ), v.end() );
+	ASSERT_NE( std::find( v.begin(), v.end(), p3 ), v.end() );
+}
+
+TYPED_TEST( StarsetTest, MinkowskiSum ) {
+	// use sampling to check if for a p1 from Star1 and for a p2 from Star2 is p1+p2 in Star1+Star2
+	// check the vertices instead
+	int n = 100;
+	std::set<hypro::Point<TypeParam>> setOfSamples1 = uniform_sampling(this->star_2d_triang1, n);
+	std::set<hypro::Point<TypeParam>> setOfSamples2 = uniform_sampling(this->star_2d_triang2, n);
+
+	hypro::Starset<TypeParam> sum_star = this->star_2d_triang1.minkowskiSum( this->star_2d_triang2 );
+	EXPECT_EQ( this->star_2d_triang1.dimension(), sum_star.dimension() );
+	EXPECT_EQ( this->star_2d_triang2.dimension(), sum_star.dimension() );
+
+	typename std::set<hypro::Point<TypeParam>>::iterator it1 = setOfSamples1.begin();
+	typename std::set<hypro::Point<TypeParam>>::iterator it2 = setOfSamples2.begin();
+
+	for(int i = 0; i < n; i++) {
+		EXPECT_TRUE(sum_star.contains((*it1) + (*it2)));
+		it1++;
+		it2++;
+	}
+
+	std::vector<hypro::Point<TypeParam>> vertices1 = this->star_2d_triang1.vertices();
+	std::vector<hypro::Point<TypeParam>> vertices2 = this->star_2d_triang2.vertices();
+	for(auto vertex1 : vertices1) {
+		for(auto vertex2 : vertices2) {
+			EXPECT_TRUE(sum_star.contains(vertex1 + vertex2));
+		}
+	}
+}
+
+TYPED_TEST( StarsetTest, Empty ) {
+	EXPECT_FALSE( this->star_2d_rect.empty() );
+}
+
+TYPED_TEST( StarsetTest, IntersectHalfspaceEmpty ) {
+	hypro::Halfspace<TypeParam> halfplane = hypro::Halfspace<TypeParam>( { 1, 0 }, -2 );
+	hypro::Starset<TypeParam> sliced_star = this->star_2d_rect.intersectHalfspace( halfplane );
+	EXPECT_TRUE( sliced_star.empty() );
+}
+
+// TYPED_TEST( StarsetTest, Union ) {
+//   // the result of the union could be non-convex, so overapproximation is needed (is it already implemented?)
+//   // hypro::Starset<TypeParam> the_same = this->star_2d_triang2.unite( this->star_2d_triang2 );
+//   // EXPECT_EQ(this->star_2d_triang2, the_same);
+// }

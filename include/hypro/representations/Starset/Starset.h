@@ -109,7 +109,7 @@ class StarsetT : private GeometricObjectBase {
 	vector_t<Number> limits() const;
 	matrix_t<Number> shape() const;
 	matrix_t<Number> generator() const;
-	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> constraintss() const;
+	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> constraintss() const; // rename constraints()
 
 	Setting getSettings() const { return Setting{}; }
 
@@ -222,7 +222,7 @@ class StarsetT : private GeometricObjectBase {
 	friend bool
 	operator==( const StarsetT<Number, Converter, Setting>& b1,
 				const StarsetT<Number, Converter, SettingRhs>& b2 ) {
-		return false;
+		return (Converter::toHPolytope(b1) == Converter::toHPolytope(b2));
 	}
 
 	/**
@@ -261,6 +261,7 @@ class StarsetT : private GeometricObjectBase {
 				const StarsetT<Number, Converter, Setting>& b ) {
 		ostr << "================================================" << std::endl;
 		ostr << "Starset properties" << std::endl;
+		ostr << "Dimension: " << b.dimension() << std::endl;
 		ostr << "Center: " << std::endl
 			 << b.center();
 		ostr << "Basis: " << std::endl

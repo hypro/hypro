@@ -77,9 +77,6 @@ HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> StarsetT<Number, Conver
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::empty() const {
-	if ( mGenerator.isZero( 0.0000001 ) ) {
-		return 1;
-	}
 	return constraints.empty();
 }
 
@@ -253,7 +250,8 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
-	return constraints.contains( point.affineTransformation( this->generator(), mCenter ) );
+	// return constraints.contains( point.affineTransformation( this->generator(), mCenter ) );
+	return Converter::toHPolytope( *this ).contains(point);
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -262,6 +260,7 @@ bool StarsetT<Number, Converter, Setting>::contains( const StarsetT<Number, Conv
 	auto rhs = Converter::toHPolytope( Starset );
 	return intermediate.contains( rhs );
 }
+
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite( const StarsetT<Number, Converter, Setting>& rhs ) const {
 	/*The method implemented here is similar to the method proposed by
