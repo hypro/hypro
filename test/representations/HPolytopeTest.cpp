@@ -17,6 +17,7 @@
 #include "test/defines.h"
 #include "gtest/gtest.h"
 #include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/representations/sampling/sampling.h>
 
 using namespace hypro;
 
@@ -434,22 +435,11 @@ TYPED_TEST( HPolytopeTest, MembershipCached ) {
 	EXPECT_FALSE( cachedPoly.contains( p5 ) );
 }
 
-TYPED_TEST( HPolytopeTest, GetSampleAndContains ) {
-	HPolytopeT<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes1 };
-
-	// check for 100 sample points if they are all in the H-polytope
-	int n = 100;
-	for(int i = 0; i < n; i++) {
-		hypro::Point<TypeParam> sample = cachedPoly.getSingleSample();
-		EXPECT_TRUE( cachedPoly.contains(sample) );
-	}
-}
-
 TYPED_TEST( HPolytopeTest, GetSetOfSamplesAndContains ) {
 	HPolytopeT<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes2 };
 
 	int n = 100;
-	std::set<hypro::Point<TypeParam>> setOfSamples = cachedPoly.getSetOfSamples(n);
+	std::set<hypro::Point<TypeParam>> setOfSamples = uniform_sampling(cachedPoly, n);
 	for(auto sample : setOfSamples) {
 		EXPECT_TRUE( cachedPoly.contains(sample) );
 	}

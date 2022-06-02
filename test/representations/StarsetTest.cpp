@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 #include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/representations/sampling/sampling.h>
 #include <hypro/util/plotting/Plotter.h>
 
 template <typename Number>
@@ -181,18 +182,9 @@ TYPED_TEST( StarsetTest, ContainsStar ) {
 	EXPECT_TRUE( this->star_2d_triang2.contains( transformed_triang1 ) );
 }
 
-TYPED_TEST( StarsetTest, GetSampleAndContains ) {
-	// check for 100 sample points if they are all in the H-polytope
-	int n = 100;
-	for(int i = 0; i < n; i++) {
-		hypro::Point<TypeParam> sample = this->star_2d_triang1.getSingleSample();
-		EXPECT_TRUE( this->star_2d_triang1.contains(sample) );
-	}
-}
-
 TYPED_TEST( StarsetTest, GetSetOfSamplesAndContains ) {
 	int n = 100;
-	std::set<hypro::Point<TypeParam>> setOfSamples = this->star_2d_triang2.getSetOfSamples(n);
+	std::set<hypro::Point<TypeParam>> setOfSamples = uniform_sampling(this->star_2d_triang2, n);
 	for(auto sample : setOfSamples) {
 		EXPECT_TRUE( this->star_2d_triang2.contains(sample) );
 	}
@@ -211,9 +203,10 @@ TYPED_TEST( StarsetTest, Vertices ) {
 
 TYPED_TEST( StarsetTest, MinkowskiSum ) {
 	// use sampling to check if for a p1 from Star1 and for a p2 from Star2 is p1+p2 in Star1+Star2
+	// check the vertices instead
 	int n = 100;
-	std::set<hypro::Point<TypeParam>> setOfSamples1 = this->star_2d_triang1.getSetOfSamples(n);
-	std::set<hypro::Point<TypeParam>> setOfSamples2 = this->star_2d_triang2.getSetOfSamples(n);
+	std::set<hypro::Point<TypeParam>> setOfSamples1 = uniform_sampling(this->star_2d_triang1, n);
+	std::set<hypro::Point<TypeParam>> setOfSamples2 = uniform_sampling(this->star_2d_triang2, n);
 
 	hypro::Starset<TypeParam> sum_star = this->star_2d_triang1.minkowskiSum( this->star_2d_triang2 );
 	EXPECT_EQ( this->star_2d_triang1.dimension(), sum_star.dimension() );
@@ -226,6 +219,14 @@ TYPED_TEST( StarsetTest, MinkowskiSum ) {
 		EXPECT_TRUE(sum_star.contains((*it1) + (*it2)));
 		it1++;
 		it2++;
+	}
+
+	std::vector<hypro::Point<TypeParam>> vertices1 = this->star_2d_triang1.vertices();
+	std::vector<hypro::Point<TypeParam>> vertices2 = this->star_2d_triang2.vertices();
+	for(auto vertex1 : vertices1) {
+		for(auto vertex2 : vertices2) {
+			EXPECT_TRUE(sum_star.contains(vertex1 + vertex2));
+		}
 	}
 }
 

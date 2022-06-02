@@ -109,7 +109,7 @@ class StarsetT : private GeometricObjectBase {
 	vector_t<Number> limits() const;
 	matrix_t<Number> shape() const;
 	matrix_t<Number> generator() const;
-	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> constraintss() const;
+	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> constraintss() const; // rename constraints()
 
 	Setting getSettings() const { return Setting{}; }
 
@@ -352,19 +352,6 @@ class StarsetT : private GeometricObjectBase {
    */
 	bool contains(
 		  const StarsetT<Number, Converter, Setting>& Starset ) const;
-
-	/**
-	 * @brief Get a single sample Point of the Starset
-	 * @return the sample point
-	 */
-	hypro::Point<Number> getSingleSample(int max_it = 10000) const;
-
-	/**
-	 * @brief Get a set of sample Points of the Starset
-	 * @param[in] n  the sample size 
-	 * @return the set of sample points
-	 */
-	std::set<hypro::Point<Number>> getSetOfSamples(int n = 1, int max_it = 10000) const;
 
 	/**
    * @brief      Computes the union of two Starsetes.

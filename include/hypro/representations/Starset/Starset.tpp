@@ -261,37 +261,6 @@ bool StarsetT<Number, Converter, Setting>::contains( const StarsetT<Number, Conv
 	return intermediate.contains( rhs );
 }
 
-template<typename Number, typename Converter, typename Setting>
-hypro::Point<Number> StarsetT<Number, Converter, Setting>::getSingleSample(int max_it) const {
-	return hypro::Point<Number>(mCenter + mGenerator * (constraints.getSingleSample().rawCoordinates()));
-}
-
-template<typename Number, typename Converter, typename Setting>
-std::set<hypro::Point<Number>> StarsetT<Number, Converter, Setting>::getSetOfSamples(int n, int max_it) const {
-	std::set<hypro::Point<Number>> poly_samples = constraints.getSetOfSamples(n);
-	std::set<hypro::Point<Number>> result_set = std::set<hypro::Point<Number>>();
-	for(auto sample : poly_samples) {
-		hypro::Point<Number> transformed = hypro::Point<Number>(mCenter + mGenerator * sample.rawCoordinates());
-		if(result_set.find(transformed) == result_set.end())
-			result_set.insert(transformed);
-			
-	}
-	int i = 0;
-	while(result_set.size() < n) {
-		if(i == max_it) {
-			FATAL("hypro.representations.Starset", "Cannot find the requested number of samples");
-			break;
-		}
-
-		hypro::Point<Number> trans_poly_sample = hypro::Point<Number>(mCenter + mGenerator * (constraints.getSingleSample().rawCoordinates()));
-		if(result_set.find(trans_poly_sample) != result_set.end())
-			result_set.insert(trans_poly_sample);
-		
-		i++;
-	}
-	return result_set;
-}
-
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite( const StarsetT<Number, Converter, Setting>& rhs ) const {
 	/*The method implemented here is similar to the method proposed by
