@@ -1,0 +1,80 @@
+hybrid reachability
+{
+ state var x, global_time
+
+ setting
+ {
+  fixed steps 0.1
+  time 2
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon global_time, x
+  fixed orders 5
+  cutoff 1e-12
+  precision 53
+  output thermostat_basic
+  max jumps 5
+  print on
+ }
+
+ modes
+ {
+  l_on
+  {
+   poly ode 1
+   {
+    x' = -0.5*x + 15
+    global_time' = 1
+   }
+
+   inv
+   {
+    x <= 23
+   }
+  }
+
+  l_off
+  {
+   poly ode 1
+   {
+    x' = -0.5*x
+    global_time' = 1
+   }
+
+   inv
+   {
+    x >= 17
+   }
+  }
+ }
+
+ jumps
+ {
+  l_on -> l_off
+  guard {x >= 22 }
+  reset { }
+  parallelotope aggregation {}
+
+  l_off -> l_on
+  guard {x <= 18 }
+  reset { }
+  parallelotope aggregation {}
+
+ }
+
+ init
+ {
+  l_on
+  {
+   x in [20.0,20.0]
+   global_time in [0.0,0.0]
+  }
+ }
+}
+
+#unsafe set
+#{
+# shutdown
+# {
+# }
+#}

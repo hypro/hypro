@@ -190,6 +190,17 @@ void HybridAutomaton<Number>::addTransition( std::unique_ptr<Transition<Number>>
 }
 
 template <typename Number>
+void HybridAutomaton<Number>::addSelfTransition( std::unique_ptr<Location<Number>>&& location, const Label& lab ){
+	Transition<Number> transition;
+	//transition.setAggregation( hypro::Aggregation::clustering );
+	//transition.setClusterBound( 5 );
+	transition.setSource( location.get() );
+	transition.setTarget( location.get() );
+	transition.addLabel( lab );
+	location->addTransition( std::make_unique<hypro::Transition<Number>>( transition ) );
+}
+
+template <typename Number>
 Location<Number>* HybridAutomaton<Number>::createLocation() {
 	return mLocations.emplace_back( std::make_unique<Location<Number>>( Location<Number>{} ) ).get();
 }

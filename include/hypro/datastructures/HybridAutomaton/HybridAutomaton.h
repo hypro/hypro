@@ -134,6 +134,7 @@ class HybridAutomaton {
 	const std::unique_ptr<Location<Number>>& addLocation( const Location<Number>& location );
 	const std::unique_ptr<Location<Number>>& addLocation( std::unique_ptr<Location<Number>>&& location );
 	void addTransition( std::unique_ptr<Transition<Number>>&& transition );
+	void addSelfTransition( std::unique_ptr<Location<Number>>&& location, const Label& lab );
 	void addInitialState( const Location<Number>* loc, const Condition<Number>& state ) {
 		assert( std::find( this->getLocations().begin(), this->getLocations().end(), loc ) != this->getLocations().end() );
 		mInitialStates.emplace( std::make_pair( loc, state ) );

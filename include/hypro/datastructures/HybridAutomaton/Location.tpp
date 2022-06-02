@@ -181,6 +181,9 @@ void Location<Number>::setTransitions( transitionVector&& trans ) {
 template <typename Number>
 void Location<Number>::addTransition( std::unique_ptr<Transition<Number>>&& trans ) {
 	//std::cout << "add transition from " << trans->getSource() << " to " << trans->getTarget() << ", this is " << this << std::endl;
+	std::cout << trans->getSource() << std::endl;
+	std::cout << this << std::endl;
+
 	assert( trans->getSource() == this );
 	mTransitions.emplace_back( std::move( trans ) );
 	mHash = 0;
