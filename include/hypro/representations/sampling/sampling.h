@@ -157,6 +157,7 @@ std::set<Point<typename Set::NumberType>> uniform_sampling( const Set& set, std:
 // TODO:
 // continue working on the CEGAR approach and use the already implemented sampling method
 // implement starset.contains() in a better way
+// have 2 methods for starset.contains(Point) 1. with converstion to HPolyTope + Caching / other with only simplex SAT-solving 
 // sampling a set such that the samples are close to the bounderies:
 // 1. sample a point uniformly
 // 2. pick the closest halfplane
