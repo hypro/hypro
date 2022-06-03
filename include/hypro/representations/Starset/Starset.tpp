@@ -7,33 +7,33 @@ template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT()
 	: mCenter( vector_t<Number>::Zero( 1 ) )
 	, mGenerator( matrix_t<Number>::Zero( 1, 1 ) )
-	, constraints() {
+	, mConstraints() {
 }
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT( const vector_t<Number>& center, const matrix_t<Number>& shapematrix, const vector_t<Number>& limits, const matrix_t<Number>& generator )
 	: mCenter( center )
 	, mGenerator( generator )
-	, constraints( shapematrix, limits ) {
+	, mConstraints( shapematrix, limits ) {
 }
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT( const vector_t<Number>& center, const matrix_t<Number>& generator, const HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> Constraints )
 	: mCenter( center )
 	, mGenerator( generator )
-	, constraints( Constraints ) {
+	, mConstraints( Constraints ) {
 }
 // only with
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT( const matrix_t<Number>& shapematrix, const vector_t<Number>& limits )
 	: mCenter( vector_t<Number>::Zero( shapematrix.cols() ) )
 	, mGenerator( matrix_t<Number>::Identity( shapematrix.cols(), shapematrix.cols() ) )
-	, constraints( shapematrix, limits ) {
+	, mConstraints( shapematrix, limits ) {
 }
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT( HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> Constraints )
 	: mCenter( vector_t<Number>::Zero( Constraints.matrix().cols() ) )
 	, mGenerator( matrix_t<Number>::Identity( Constraints.matrix().cols(), Constraints.matrix().cols() ) )
-	, constraints( Constraints ) {
+	, mConstraints( Constraints ) {
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -41,7 +41,7 @@ StarsetT<Number, Converter, Setting>::StarsetT( const StarsetT<Number, Converter
 	: GeometricObjectBase( orig )
 	, mCenter( orig.center() )
 	, mGenerator( orig.generator() )
-	, constraints( orig.constraintss() ) {
+	, mConstraints( orig.constraints() ) {
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -49,7 +49,7 @@ StarsetT<Number, Converter, Setting>::StarsetT( StarsetT<Number, Converter, Sett
 	: GeometricObjectBase( orig )
 	, mCenter( orig.center() )
 	, mGenerator( orig.generator() )
-	, constraints( orig.constraintss() ) {
+	, mConstraints( orig.constraints() ) {
 }
 
 // new getters
@@ -59,11 +59,11 @@ vector_t<Number> StarsetT<Number, Converter, Setting>::center() const {
 }
 template <typename Number, typename Converter, typename Setting>
 vector_t<Number> StarsetT<Number, Converter, Setting>::limits() const {
-	return constraints.vector();
+	return mConstraints.vector();
 }
 template <typename Number, typename Converter, typename Setting>
 matrix_t<Number> StarsetT<Number, Converter, Setting>::shape() const {
-	return constraints.matrix();
+	return mConstraints.matrix();
 }
 template <typename Number, typename Converter, typename Setting>
 matrix_t<Number> StarsetT<Number, Converter, Setting>::generator() const {
@@ -71,13 +71,13 @@ matrix_t<Number> StarsetT<Number, Converter, Setting>::generator() const {
 }
 
 template <typename Number, typename Converter, typename Setting>
-HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> StarsetT<Number, Converter, Setting>::constraintss() const {
-	return constraints;
+HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> StarsetT<Number, Converter, Setting>::constraints() const {
+	return mConstraints;
 }
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::empty() const {
-	return constraints.empty();
+	return mConstraints.empty();
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -87,7 +87,7 @@ Number StarsetT<Number, Converter, Setting>::supremum() const {
 template <typename Number, typename Converter, typename Setting>
 std::vector<Point<Number>> StarsetT<Number, Converter, Setting>::vertices() const {
 	std::vector<Point<Number>> res;
-	auto placeholder = constraints.vertices();
+	auto placeholder = mConstraints.vertices();
 	for ( auto point : placeholder ) {
 		point = point.affineTransformation( mGenerator, mCenter );
 
@@ -121,7 +121,7 @@ std::size_t StarsetT<Number, Converter, Setting>::dimension() const {
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::removeRedundancy() {
-	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, constraints.removeRedundancy() );
+	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, mConstraints.removeRedundancy() );
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -137,10 +137,10 @@ template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	auto zz = this->calculateHalfspace( rhs );
 	StarsetT<Number, Converter, Setting> star = this->intersectHalfspace( zz );
-	// auto ans=(constraints.satisfiesHalfspace(zz));
+	// auto ans=(mConstraints.satisfiesHalfspace(zz));
 
 	// why calling calculateHalfspace again, we already have zz
-	return std::make_pair( std::get<0>( constraints.satisfiesHalfspace( calculateHalfspace( rhs ) ) ), std::move( star ) );  
+	return std::make_pair( std::get<0>( mConstraints.satisfiesHalfspace( calculateHalfspace( rhs ) ) ), std::move( star ) );  
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -150,8 +150,8 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
 	}
 	// write halfspace using my basis and center
 	std::pair<matrix_t<Number>, vector_t<Number>> zz = this->calculateHalfspaces( _mat, _vec );
-	// check if constraints satisfy the halfspace
-	auto ans = ( constraints.satisfiesHalfspaces( std::get<0>( zz ), std::get<1>( zz ) ) );
+	// check if mConstraints satisfy the halfspace
+	auto ans = ( mConstraints.satisfiesHalfspaces( std::get<0>( zz ), std::get<1>( zz ) ) );
 
 	// Create a star set which is intersected with the given halfspace half space
 	StarsetT<Number, Converter, Setting> star = StarsetT<Number, Converter, Setting>( mCenter, mGenerator, std::get<1>( ans ) );
@@ -172,7 +172,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::linea
 	matrix_t<Number> newGenerator = matrix_t<Number>( mGenerator.rows(), mGenerator.cols() );
 	newGenerator = A * mGenerator;
 	vector_t<Number> newCenter = A * mCenter;
-	return StarsetT<Number, Converter, Setting>( newCenter, newGenerator, constraints );
+	return StarsetT<Number, Converter, Setting>( newCenter, newGenerator, mConstraints );
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -186,7 +186,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affin
 	// what is the reason behind checking if the star is empty? In the NNCS verification it slows down the process
 	// In my opinion the affine transformation is fast enough, 
 	// especially in my case checking checking the emptiness takes much more time than applying the affine transformation
-		return StarsetT<Number, Converter, Setting>( A * ( mCenter ) + b, A * mGenerator, constraints );
+		return StarsetT<Number, Converter, Setting>( A * ( mCenter ) + b, A * mGenerator, mConstraints );
 	// }
 	return *this;
 }
@@ -212,18 +212,18 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minko
 	}
 
 	matrix_t<Number> newmGenerator = matrix_t<Number>::Zero( mGenerator.rows(), mGenerator.cols() + rhs.generator().cols() );
-	matrix_t<Number> newmShapeMatrix = matrix_t<Number>::Zero( constraints.matrix().rows() + rhs.shape().rows(), constraints.matrix().cols() + rhs.shape().cols() );
-	vector_t<Number> newmLimits = vector_t<Number>::Zero( constraints.vector().rows() + rhs.limits().rows() );
+	matrix_t<Number> newmShapeMatrix = matrix_t<Number>::Zero( mConstraints.matrix().rows() + rhs.shape().rows(), mConstraints.matrix().cols() + rhs.shape().cols() );
+	vector_t<Number> newmLimits = vector_t<Number>::Zero( mConstraints.vector().rows() + rhs.limits().rows() );
 
 	newmGenerator.block( 0, 0, mGenerator.rows(), mGenerator.cols() ) = mGenerator;
 	newmGenerator.block( 0, mGenerator.cols(), rhs.generator().rows(), rhs.generator().cols() ) = rhs.generator();
 
 	// setting new shape Matrix
-	newmShapeMatrix.topLeftCorner( constraints.matrix().rows(), constraints.matrix().cols() ) = constraints.matrix();
+	newmShapeMatrix.topLeftCorner( mConstraints.matrix().rows(), mConstraints.matrix().cols() ) = mConstraints.matrix();
 	newmShapeMatrix.bottomRightCorner( rhs.shape().rows(), rhs.shape().cols() ) = rhs.shape();
 
 	// setting new limits vector
-	newmLimits.head( constraints.vector().rows() ) = constraints.vector();
+	newmLimits.head( mConstraints.vector().rows() ) = mConstraints.vector();
 	newmLimits.tail( rhs.limits().rows() ) = rhs.limits();
 	// setting new center
 	vector_t<Number> newmCenter = mCenter + rhs.center();
@@ -240,12 +240,12 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
-	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, constraints.intersectHalfspace( hspace ) );
+	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, mConstraints.intersectHalfspace( hspace ) );
 }
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, constraints.intersectHalfspaces( _mat, _vec ) );
+	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, mConstraints.intersectHalfspaces( _mat, _vec ) );
 }
 
 // Implement Starset.containts(point) method using conversion to H-Polytope
@@ -257,8 +257,8 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 // Implement Starset.contains(point) method using SAT checking (y = c + Vx && P(x))
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
-	hypro::matrix_t<Number> shape_mat = constraints.matrix();
-	hypro::vector_t<Number> limit_vec = constraints.vector();
+	hypro::matrix_t<Number> shape_mat = mConstraints.matrix();
+	hypro::vector_t<Number> limit_vec = mConstraints.vector();
 
 	hypro::matrix_t<Number> new_basis_mat = mGenerator;
 	hypro::matrix_t<Number> new_center_vec = point.rawCoordinates() - mCenter;
@@ -306,11 +306,11 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 		auto intermediate2 = Converter::toHPolytope( rhs );
 		return Converter::toStarset( intermediate.unite( intermediate2 ) );
 	}
-	auto tmp1 = StarsetT<Number, Converter, Setting>( this->center(), this->generator(), this->constraintss().removeRedundancy() );
-	auto tmp2 = StarsetT<Number, Converter, Setting>( rhs.center(), rhs.generator(), rhs.constraintss().removeRedundancy() );
+	auto tmp1 = StarsetT<Number, Converter, Setting>( this->center(), this->generator(), this->constraints().removeRedundancy() );
+	auto tmp2 = StarsetT<Number, Converter, Setting>( rhs.center(), rhs.generator(), rhs.constraints().removeRedundancy() );
 
 	// option 2 in bachelor thesis
-	if ( this->constraintss() == rhs.constraintss() ) {
+	if ( this->constraints() == rhs.constraints() ) {
 		if ( this->generator() == matrix_t<Number>::Identity( this->generator().cols(), this->generator().cols() ) ) {
 			if ( rhs.generator() == rhs.generator() * this->generator() ) {
 				matrix_t<Number> m = matrix_t<Number>::Identity( this->generator().cols(), this->generator().cols() ) - rhs.generator();
@@ -412,7 +412,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite( const std::vector<StarsetT<Number, Converter, Setting>>& Starsets ) {
-	StarsetT<Number, Converter, Setting> star = StarsetT<Number, Converter, Setting>( Starsets[0].center(), Starsets[0].generator(), Starsets[0].constraintss() );
+	StarsetT<Number, Converter, Setting> star = StarsetT<Number, Converter, Setting>( Starsets[0].center(), Starsets[0].generator(), Starsets[0].constraints() );
 	for ( int i = 1; i < Starsets.size(); i++ ) {
 		star = star.unite( Starsets[i] );
 	}

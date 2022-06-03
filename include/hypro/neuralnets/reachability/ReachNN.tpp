@@ -7,7 +7,7 @@ template <typename Number>
 std::vector<hypro::Starset<Number>> ReachNN<Number>::forwardAnalysis( const hypro::Starset<Number>& input_set, NN_reach_method method, bool plot_intermediates ) const {
 	// std::cout << method << std::endl;
 	// std::cout << mNNet << std::endl;
-	// std::cout << input_set.constraintss() << std::endl;
+	// std::cout << input_set.constraints() << std::endl;
 	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
 	result.push_back( input_set );
 	for ( int l = 0; l < mNNet.numLayers(); l++ ) {
@@ -87,7 +87,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Sta
 				// std::cout << "Applying the overapproximate method" << std::endl;
 				// std::cout << "Applying ReLU on dimension: " << i << std::endl;
 				I_n = approxStepReLU( i, I_n );
-				// std::cout << "Inner polytope shape: (num_constrains, dim_constrains) = (" << I_n[I_n.size() - 1].constraintss().size() << ", " << I_n[I_n.size() - 1].constraintss().dimension() << ")" << std::endl;
+				// std::cout << "Inner polytope shape: (num_constrains, dim_constrains) = (" << I_n[I_n.size() - 1].constraints().size() << ", " << I_n[I_n.size() - 1].constraints().dimension() << ")" << std::endl;
 
 				break;
 			default:
@@ -114,7 +114,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::stepReLU( int i, std::vecto
 	for ( int j = 0; j < k; j++ ) {
 		hypro::vector_t<Number> center = input_sets[j].center();
 		hypro::matrix_t<Number> basis = input_sets[j].generator();
-		hypro::HPolytope<Number> politope = input_sets[j].constraintss();
+		hypro::HPolytope<Number> politope = input_sets[j].constraints();
 
 		hypro::vector_t<Number> dir_vect = basis.row( i );
 		auto eval_low_result = politope.evaluate( -1.0 * dir_vect );
@@ -182,8 +182,8 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::approxStepReLU( int i, std:
 		hypro::vector_t<Number> limits = input_star.limits();
 
 		hypro::vector_t<Number> dir_vect = basis.row( i );
-		auto eval_low_result = input_star.constraintss().evaluate( -1.0 * dir_vect );
-		auto eval_high_result = input_star.constraintss().evaluate( dir_vect );
+		auto eval_low_result = input_star.constraints().evaluate( -1.0 * dir_vect );
+		auto eval_high_result = input_star.constraints().evaluate( dir_vect );
 
 		Number lb = -eval_low_result.supportValue + center[i];
 		Number ub = eval_high_result.supportValue + center[i];

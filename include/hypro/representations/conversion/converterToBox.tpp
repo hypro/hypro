@@ -437,15 +437,15 @@ template<typename Number>
 template<typename BoxSetting, typename inSetting>
 BoxT<Number,Converter<Number>,BoxSetting> Converter<Number>::toBox( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
     //std::cout<<"amk"<<std::endl;
-    //HPolytope temp=Converter::toHPolytope(source.constraintss());
+    //HPolytope temp=Converter::toHPolytope(source.constraints());
 	//temp=temp.removeRedundancy();
-	BoxT<Number,Converter<Number>,BoxSetting> tmp=Converter::toBox(source.constraintss());
+	BoxT<Number,Converter<Number>,BoxSetting> tmp=Converter::toBox(source.constraints());
 	return tmp.affineTransformation(source.generator(),source.center());
 	/*std::cout<<"point"<<std::endl;
 	std::cout<<source.generator()<<std::endl;
 	std::cout<<source.center()<<std::endl;
-	std::cout<<source.constraintss().matrix()<<std::endl;
-	std::cout<<source.constraintss().vector()<<std::endl;
+	std::cout<<source.constraints().matrix()<<std::endl;
+	std::cout<<source.constraints().vector()<<std::endl;
 
  	std::vector<Point<Number>> res; 
     ////std::cout<<"vertices"<<std::endl;

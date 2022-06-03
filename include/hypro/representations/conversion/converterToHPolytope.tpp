@@ -444,11 +444,11 @@ HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPoly
 		int star_dim = source.center().rows();
 		if(	source.center() == (vector_t<Number>::Zero(star_dim)) &&
 			source.generator() == (matrix_t<Number>::Identity(star_dim, star_dim)) ) {
-			return source.constraintss();
+			return source.constraints();
 		}
 		
 		// we apply the affine transformation (basis and center) on the constraint set
-		return source.constraintss().affineTransformation(source.generator(),source.center());	
+		return source.constraints().affineTransformation(source.generator(),source.center());	
 
 		// another way to handle this is to convert the Starset to a V-Polytope (finding the vertices) and then apply the affine transformation 
 		// and convert the result to a H-Polytope

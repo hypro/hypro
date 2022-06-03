@@ -52,7 +52,7 @@ std::set<Point<Number>> uniform_sampling( const ZonotopeT<Number, Converter, Set
 
 template <typename Number, typename Converter, typename Settings>
 std::set<Point<Number>> uniform_sampling( const StarsetT<Number, Converter, Settings>& set, std::size_t num_samples, std::size_t max_trials = 10 ) {
-	const int dim = set.constraintss().dimension();
+	const int dim = set.constraints().dimension();
 
 	std::set<Point<Number>> samples;
 
@@ -62,7 +62,7 @@ std::set<Point<Number>> uniform_sampling( const StarsetT<Number, Converter, Sett
 	}
 
 	// find the bounding box
-	auto bounding_box = Converter::toBox( set.constraintss() );
+	auto bounding_box = Converter::toBox( set.constraints() );
 
 	// declare random distributions
 	std::random_device rd;	   // Will be used to obtain a seed for the random number engine
@@ -85,7 +85,7 @@ std::set<Point<Number>> uniform_sampling( const StarsetT<Number, Converter, Sett
 			candidate_vector[j] = carl::convert<double, Number>( distributions[j]( gen ) );
 		}
 
-		if ( set.constraintss().contains( candidate_vector ) ) {
+		if ( set.constraints().contains( candidate_vector ) ) {
 			samples.insert( hypro::Point<Number>{ set.center() + set.generator() * candidate_vector } );
 
 			if ( samples.size() == num_samples ) {

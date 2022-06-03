@@ -85,7 +85,7 @@ int main( int argc, char* argv[] ) {
 		input_star = hypro::Starset<Number>::readFromFile(argv[3]);
 	}
 	std::cout << input_star << std::endl;
-	// std::cout << "Initial inner politope vertices: " << input_star.constraintss().vertices() << std::endl;
+	// std::cout << "Initial inner politope vertices: " << input_star.constraints().vertices() << std::endl;
 	// plotter.addObject( input_star.vertices(), hypro::plotting::colors[hypro::plotting::red] );
 	// plotter.plot2d();
 	// plotter.clear();
@@ -148,7 +148,7 @@ int main( int argc, char* argv[] ) {
 			// std::cout << new_star << std::endl;
 			// std::cout << "New star vertices: " << new_star.vertices() << std::endl;
 
-			// std::vector<hypro::Point<Number>> inner_vertices = new_star.constraintss().vertices();
+			// std::vector<hypro::Point<Number>> inner_vertices = new_star.constraints().vertices();
 			// hypro::vector_t<Number> new_center = new_star.center();
 			// hypro::matrix_t<Number> new_basis = new_star.generator();
 

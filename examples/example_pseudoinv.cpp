@@ -36,7 +36,7 @@ hypro::vector_t<Number> get_single_sample(const hypro::Starset<Number>& star, in
 
     hypro::vector_t<Number> center = star.center();
     hypro::matrix_t<Number> basis = star.generator();
-    hypro::HPolytope<Number> polytope = star.constraintss();
+    hypro::HPolytope<Number> polytope = star.constraints();
 
     // std::cout << center << std::endl;
     // std::cout << basis << std::endl;
