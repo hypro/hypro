@@ -173,6 +173,9 @@ TYPED_TEST( StarsetTest, ContainsPoint ) {
 
 	hypro::Point<TypeParam> p3( { 2, -2 } );
 	EXPECT_TRUE( this->star_2d_triang2.contains( p3 ) );
+
+	hypro::Point<TypeParam> p4( { -7, -2 } );
+	EXPECT_FALSE( this->star_2d_triang2.contains( p4 ) );
 }
 
 TYPED_TEST( StarsetTest, ContainsStar ) {

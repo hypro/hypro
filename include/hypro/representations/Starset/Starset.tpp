@@ -248,10 +248,31 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, constraints.intersectHalfspaces( _mat, _vec ) );
 }
 
+// Implement Starset.containts(point) method using conversion to H-Polytope
+// template <typename Number, typename Converter, typename Setting>
+// bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
+// 	return Converter::toHPolytope( *this ).contains(point);
+// }
+
+// Implement Starset.contains(point) method using SAT checking (y = c + Vx && P(x))
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
-	// return constraints.contains( point.affineTransformation( this->generator(), mCenter ) );
-	return Converter::toHPolytope( *this ).contains(point);
+	hypro::matrix_t<Number> shape_mat = constraints.matrix();
+	hypro::vector_t<Number> limit_vec = constraints.vector();
+
+	hypro::matrix_t<Number> new_basis_mat = mGenerator;
+	hypro::matrix_t<Number> new_center_vec = point.rawCoordinates() - mCenter;
+
+	int row_num = 2 * mGenerator.rows() + shape_mat.rows();
+	int col_num = shape_mat.cols();
+	hypro::matrix_t<Number> final_mat = hypro::matrix_t<Number>(row_num, col_num);
+	hypro::vector_t<Number> final_vec = hypro::vector_t<Number>(row_num);
+
+	final_mat << shape_mat, new_basis_mat, -new_basis_mat;
+	final_vec << limit_vec, new_center_vec, -new_center_vec;
+
+	hypro::Optimizer<Number> optimizer(final_mat, final_vec);
+	return optimizer.checkConsistency();
 }
 
 template <typename Number, typename Converter, typename Setting>
