@@ -29,7 +29,7 @@ struct HPolytopeOptimizerCaching {
 
 // increased caching for faster containment check (improves e.g., Monte Carlo Sampling)
 struct HPolytopeBoundingBoxCaching {
-	static constexpr int type_enum = hPolytopeSetting_name::HPolytopeOptimizerCaching;
+	static constexpr int type_enum = hPolytopeSetting_name::HPolytopeBoundingBoxCaching;
 	static constexpr bool REDUCE_NUMBERS = true;
 	static constexpr bool AVOID_CONVERSION = true;
 	static constexpr bool OPTIMIZER_CACHING = true;

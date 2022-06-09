@@ -16,19 +16,21 @@ StarsetT<Number, Converter, Setting>::StarsetT( const vector_t<Number>& center, 
 	, mGenerator( generator )
 	, mConstraints( shapematrix, limits ) {
 }
+
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT( const vector_t<Number>& center, const matrix_t<Number>& generator, const HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> Constraints )
 	: mCenter( center )
 	, mGenerator( generator )
 	, mConstraints( Constraints ) {
 }
-// only with
+
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT( const matrix_t<Number>& shapematrix, const vector_t<Number>& limits )
 	: mCenter( vector_t<Number>::Zero( shapematrix.cols() ) )
 	, mGenerator( matrix_t<Number>::Identity( shapematrix.cols(), shapematrix.cols() ) )
 	, mConstraints( shapematrix, limits ) {
 }
+
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting>::StarsetT( HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> Constraints )
 	: mCenter( vector_t<Number>::Zero( Constraints.matrix().cols() ) )
@@ -57,14 +59,17 @@ template <typename Number, typename Converter, typename Setting>
 vector_t<Number> StarsetT<Number, Converter, Setting>::center() const {
 	return mCenter;
 }
+
 template <typename Number, typename Converter, typename Setting>
 vector_t<Number> StarsetT<Number, Converter, Setting>::limits() const {
 	return mConstraints.vector();
 }
+
 template <typename Number, typename Converter, typename Setting>
 matrix_t<Number> StarsetT<Number, Converter, Setting>::shape() const {
 	return mConstraints.matrix();
 }
+
 template <typename Number, typename Converter, typename Setting>
 matrix_t<Number> StarsetT<Number, Converter, Setting>::generator() const {
 	return mGenerator;
@@ -73,6 +78,19 @@ matrix_t<Number> StarsetT<Number, Converter, Setting>::generator() const {
 template <typename Number, typename Converter, typename Setting>
 HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> StarsetT<Number, Converter, Setting>::constraints() const {
 	return mConstraints;
+}
+
+template <typename Number, typename Converter, typename Setting>
+HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> StarsetT<Number, Converter, Setting>::eqvPolytope() const {
+	if ( Settings::CACHE_EQV_POLYTOPE ) {
+		if( !mEqvPoly ) {
+			updateEquivalentPolytope();
+		}
+		return (*mEqvPoly);
+	} else {
+		HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> poly = Converter::toHPolytope(*this);
+		return poly;
+	}
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -193,12 +211,15 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affin
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minkowskiSum( const StarsetT<Number, Converter, Setting>& rhs ) const {
+	assert(this->dimension() == rhs.dimension());
+
 	// assuming same dimension
 	if ( mGenerator.cols() < 10 ) {
-		auto intermediate = Converter::toHPolytope( *this );
-		auto intermediate2 = Converter::toHPolytope( rhs );
-		return Converter::toStarset( intermediate.minkowskiSum( intermediate2 ) );
+		auto intermediate1 = this->eqvPolytope();
+		auto intermediate2 =   rhs.eqvPolytope();
+		return Converter::toStarset( intermediate1.minkowskiSum(intermediate2) );
 	}
+
 	if ( this->generator().rows() != rhs.generator().rows() ) {
 		return *this;
 	}
@@ -233,8 +254,8 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minko
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersect( const StarsetT<Number, Converter, Setting>& rhs ) const {
-	auto intermediate = Converter::toHPolytope( *this );
-	auto intermediate2 = Converter::toHPolytope( rhs );
+	auto intermediate = this->eqvPolytope();
+	auto intermediate2 = rhs.eqvPolytope();
 	return Converter::toStarset( intermediate.intersect( intermediate2 ) ).removeRedundancy();
 }
 
@@ -248,13 +269,15 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, mConstraints.intersectHalfspaces( _mat, _vec ) );
 }
 
-// Implement Starset.containts(point) method using conversion to H-Polytope
-// template <typename Number, typename Converter, typename Setting>
-// bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
-// 	return Converter::toHPolytope( *this ).contains(point);
-// }
+// Starset.containts(point) method using the cached converted H-Polytope
+template <typename Number, typename Converter, typename Setting>
+bool StarsetT<Number, Converter, Setting>::containsCached( const Point<Number>& point ) const {
+	if ( !Settings::CACHE_EQV_POLYTOPE )
+		return this->contains(point);
+	return eqvPolytope().contains(point);
+}
 
-// Implement Starset.contains(point) method using SAT checking (y = c + Vx && P(x))
+// Starset.contains(point) method using SAT checking (y = c + Vx && P(x))
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
 	hypro::matrix_t<Number> shape_mat = mConstraints.matrix();
@@ -277,8 +300,8 @@ bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point 
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const StarsetT<Number, Converter, Setting>& Starset ) const {
-	auto intermediate = Converter::toHPolytope( *this );
-	auto rhs = Converter::toHPolytope( Starset );
+	auto intermediate = this->eqvPolytope();
+	auto rhs = Starset.eqvPolytope();
 	return intermediate.contains( rhs );
 }
 
@@ -302,8 +325,8 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 	// Faster in small dimensions
 	// option 1 in bachelor thesis
 	if ( mGenerator.cols() < 10 ) {
-		auto intermediate = Converter::toHPolytope( *this );
-		auto intermediate2 = Converter::toHPolytope( rhs );
+		auto intermediate = this->eqvPolytope();
+		auto intermediate2 = rhs.eqvPolytope();
 		return Converter::toStarset( intermediate.unite( intermediate2 ) );
 	}
 	auto tmp1 = StarsetT<Number, Converter, Setting>( this->center(), this->generator(), this->constraints().removeRedundancy() );
@@ -422,12 +445,14 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 template <typename Number, typename Converter, typename Setting>
 void StarsetT<Number, Converter, Setting>::reduceRepresentation() {
 }
+
 template <typename Number, typename Converter, typename Setting>
 Halfspace<Number> StarsetT<Number, Converter, Setting>::calculateHalfspace( const Halfspace<Number>& hspace ) const {
 	matrix_t<Number> temp = matrix_t<Number>( 1, 1 );
 	temp( 0, 0 ) = hspace.offset();
 	return Halfspace<Number>( ( hspace.normal().transpose() * this->generator() ), ( temp - ( hspace.normal().transpose() ) * ( this->center() ) )( 0, 0 ) );
 }
+
 template <typename Number, typename Converter, typename Setting>
 std::pair<matrix_t<Number>, vector_t<Number>> StarsetT<Number, Converter, Setting>::calculateHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
 	return std::make_pair( _mat * this->generator(), _vec - vector_t<Number>( _mat * this->center() ) );
@@ -435,6 +460,25 @@ std::pair<matrix_t<Number>, vector_t<Number>> StarsetT<Number, Converter, Settin
 
 template <typename Number, typename Converter, typename Setting>
 void StarsetT<Number, Converter, Setting>::clear() {
+}
+
+template <typename Number, typename Converter, class Setting>
+void StarsetT<Number, Converter, Setting>::updateEquivalentPolytope() const {
+	if ( Settings::CACHE_EQV_POLYTOPE ) {
+		mEqvPoly = Converter::toHPolytope(*this);
+	}
+}
+
+template <typename Number, typename Converter, class Setting>
+void StarsetT<Number, Converter, Setting>::updateCache() const {
+	updateEquivalentPolytope();
+}
+
+template <typename Number, typename Converter, class Setting>
+void StarsetT<Number, Converter, Setting>::invalidateCache() const {
+	if ( Settings::CACHE_EQV_POLYTOPE ) {
+		mEqvPoly = std::nullopt;
+	}
 }
 
 }  // namespace hypro

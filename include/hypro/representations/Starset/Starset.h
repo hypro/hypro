@@ -16,7 +16,6 @@ static_assert(
 #include "../Box/BoxSetting.h"
 #include "../Polytopes/HPolytope/HPolytope.h"
 #include "../Polytopes/HPolytope/HPolytopeSetting.h"
-// #include "../Polytopes/redundantPoints.h"
 #include "../types.h"
 #include "StarsetSetting.h"
 
@@ -52,7 +51,11 @@ class StarsetT : private GeometricObjectBase {
 	/*!< the right side of the condition A*alpha<=d . */
 	matrix_t<Number> mGenerator;
 
+	// Convex, linear set of constraints of the variable set
 	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> mConstraints;
+
+	// Cached equaivalent H-Polytope of the starset
+	mutable std::optional<HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>> mEqvPoly = std::nullopt;	
 
   public:
 	/***************************************************************************
@@ -114,6 +117,7 @@ class StarsetT : private GeometricObjectBase {
 	matrix_t<Number> shape() const;
 	matrix_t<Number> generator() const;
 	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> constraints() const;
+	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> eqvPolytope() const;
 
 	Setting getSettings() const { return Setting{}; }
 
@@ -339,14 +343,25 @@ class StarsetT : private GeometricObjectBase {
 	StarsetT<Number, Converter, Setting>
 	intersectHalfspaces( const matrix_t<Number>& _mat,
 						 const vector_t<Number>& _vec ) const;
-	bool contains( const Point<Number>& point ) const;
-	// StarsetT<Number, Converter, Setting,Representation>
-	// checkifin( const Halfspace<Number>& hspace ) const;
-
 	Halfspace<Number> calculateHalfspace( const Halfspace<Number>& hspace ) const;
 
 	std::pair<matrix_t<Number>, vector_t<Number>>
 	calculateHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
+
+	/**
+	 * @brief 		Containment check for a given Point, using the cached H-Polytope
+	 * @param 		point 	The given Point
+	 * @return 		true, of the point is contained in the Starset
+	 */
+	bool containsCached( const Point<Number>& point ) const;
+
+	/**
+	 * @brief 		Containment check for a given Point, using LP solving
+	 * @param 		point 	The given Point
+	 * @return 		true, of the point is contained in the Starset
+	 */
+	bool contains( const Point<Number>& point ) const;
+
 
 	/**
 	 * @brief      Containment check for a Starset.
@@ -383,6 +398,10 @@ class StarsetT : private GeometricObjectBase {
 	 * @brief      Makes this Starset equal to the empty Starset.
 	 */
 	void clear();
+
+	void updateEquivalentPolytope() const;
+	void updateCache() const;
+	void invalidateCache() const;
 };
 /** @} */
 /*

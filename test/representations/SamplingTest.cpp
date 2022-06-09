@@ -1,6 +1,7 @@
 
 #include "test/defines.h"
 #include "gtest/gtest.h"
+#include <hypro/representations/GeometricObjectBase.h>
 #include <hypro/representations/sampling/sampling.h>
 
 template <typename Number>
@@ -23,7 +24,7 @@ class SamplingTest : public ::testing::Test {
 
         zonotope = hypro::Zonotope<Number>(center, basis);
 
-        starset = hypro::Starset<Number>(center, basis, hPolytope);
+        starset = hypro::StarsetT<Number, hypro::Converter<Number>, hypro::StarsetEqvPolytopeCaching>(center, basis, hPolytope);
 	}
 
 	virtual void TearDown() {}
@@ -31,10 +32,9 @@ class SamplingTest : public ::testing::Test {
     hypro::Box<Number> box;
     hypro::HPolytope<Number> hPolytope;
     hypro::Zonotope<Number> zonotope;
-    hypro::Starset<Number> starset;
+    hypro::StarsetT<Number, hypro::Converter<Number>, hypro::StarsetEqvPolytopeCaching> starset;
 
-    const std::size_t num_samples = 1000;
-	
+    const std::size_t num_samples = 10;
 };
 
 TYPED_TEST( SamplingTest, BoxUniform ) {
@@ -71,5 +71,13 @@ TYPED_TEST( SamplingTest, StarsetUniform ) {
 
     for(auto& sample : samples) {
         EXPECT_TRUE(this->starset.contains(sample));
+    }
+}
+
+TYPED_TEST( SamplingTest, StarsetUniformCached ) {
+    std::set<hypro::Point<TypeParam>> samples = hypro::uniform_sampling(this->starset, this->num_samples);
+
+    for(auto& sample : samples) {
+        EXPECT_TRUE(this->starset.containsCached(sample));
     }
 }

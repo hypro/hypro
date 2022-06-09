@@ -436,21 +436,20 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 	}
 }
 
-  // namespace hypro
-template<typename Number>
-template<typename HPolytopeSetting, typename inSetting>
-HPolytopeT<Number,Converter<Number>,HPolytopeSetting> Converter<Number>::toHPolytope( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-		// if the center is the zero vector and the basis is the identity matrix, return the contraints of the star set
-		int star_dim = source.center().rows();
-		if(	source.center() == (vector_t<Number>::Zero(star_dim)) &&
-			source.generator() == (matrix_t<Number>::Identity(star_dim, star_dim)) ) {
-			return source.constraints();
-		}
-		
-		// we apply the affine transformation (basis and center) on the constraint set
-		return source.constraints().affineTransformation(source.generator(),source.center());	
-
-		// another way to handle this is to convert the Starset to a V-Polytope (finding the vertices) and then apply the affine transformation 
-		// and convert the result to a H-Polytope
+template <typename Number>
+template <typename HPolySetting, typename inSetting>
+HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolytope( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
+	// if the center is the zero vector and the basis is the identity matrix, return the contraints of the star set
+	int star_dim = source.center().rows();
+	if(	source.center() == (vector_t<Number>::Zero(star_dim)) &&
+		source.generator() == (matrix_t<Number>::Identity(star_dim, star_dim)) ) {
+		return source.constraints();
 	}
+
+	// we apply the affine transformation (basis and center) on the constraint set
+	return source.constraints().affineTransformation(source.generator(),source.center());
+	// another way to handle this is to convert the Starset to a V-Polytope (finding the vertices) and then apply the affine transformation 
+	// and convert the result to a H-Polytope
+}
+
 }
