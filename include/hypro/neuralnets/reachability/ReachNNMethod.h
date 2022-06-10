@@ -2,7 +2,7 @@
 
 namespace hypro {
 
-enum class NN_reach_method {
+enum class NN_REACH_METHOD {
 	EXACT,
 	OVERAPPRX,
 };

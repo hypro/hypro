@@ -4,7 +4,7 @@ namespace hypro {
 namespace reachability {
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> ReachNN<Number>::forwardAnalysis( const hypro::Starset<Number>& input_set, NN_reach_method method, bool plot_intermediates ) const {
+std::vector<hypro::Starset<Number>> ReachNN<Number>::forwardAnalysis( const hypro::Starset<Number>& input_set, NN_REACH_METHOD method, bool plot_intermediates ) const {
 	// std::cout << method << std::endl;
 	// std::cout << mNNet << std::endl;
 	// std::cout << input_set.constraints() << std::endl;
@@ -20,7 +20,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::forwardAnalysis( const hypr
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const std::vector<hypro::Starset<Number>>& input_sets, NN_reach_method method, bool plot_intermediates ) const {
+std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const std::vector<hypro::Starset<Number>>& input_sets, NN_REACH_METHOD method, bool plot_intermediates ) const {
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
 	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
@@ -69,7 +69,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const st
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Starset<Number>& input_star1, NN_reach_method method, bool plot_intermediates ) const {
+std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Starset<Number>& input_star1, NN_REACH_METHOD method, bool plot_intermediates ) const {
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
 	std::vector<hypro::Starset<Number>> I_n = std::vector<hypro::Starset<Number>>();
@@ -77,12 +77,12 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Sta
 	for ( int i = 0; i < input_star1.generator().rows(); i++ ) {
 		// iterate over the dimensions of the input star
 		switch ( method ) {
-			case NN_reach_method::EXACT:
+			case NN_REACH_METHOD::EXACT:
 				// apply the exact method
 				// std::cout << "Applying the exact method" << std::endl;
 				I_n = stepReLU( i, I_n );
 				break;
-			case NN_reach_method::OVERAPPRX:
+			case NN_REACH_METHOD::OVERAPPRX:
 				// apply the overapproximate method
 				// std::cout << "Applying the overapproximate method" << std::endl;
 				// std::cout << "Applying ReLU on dimension: " << i << std::endl;
