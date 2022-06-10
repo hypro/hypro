@@ -90,9 +90,9 @@ int main( int argc, char* argv[] ) {
 	// plotter.plot2d();
 	// plotter.clear();
 
-	hypro::reachability::NN_reach_method method = hypro::reachability::NN_reach_method::EXACT;
+	hypro::NN_reach_method method = hypro::NN_reach_method::EXACT;
 	if(argc > 1 && (argv[1][0] == 'o' || argv[1][0] == 'O'))
-		method = hypro::reachability::NN_reach_method::OVERAPPRX;
+		method = hypro::NN_reach_method::OVERAPPRX;
 		
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
 

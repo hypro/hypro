@@ -228,7 +228,7 @@ template <typename Number>
 template <typename VPolySetting, typename inSetting>
 VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolytope( const SupportFunctionT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE mode, std::size_t numberOfDirections ) {
 	VPolytopeT<Number, Converter<Number>, VPolySetting> target;
-	if ( mode == OVER ) {
+	if ( mode == CONV_MODE::OVER ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 		// std::cout << "toVPolytope::over" << std::endl;
@@ -266,7 +266,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		// constructs a V-Polytope out of the computed halfspaces (implicit conversion H->V)
 		target = VPolytopeT<Number, Converter, VPolySetting>( constraints, constants );
 	}
-	if ( mode == UNDER ) {
+	if ( mode == CONV_MODE::UNDER ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 		// std::cout << "toVPolytope::over" << std::endl;
@@ -304,7 +304,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		target = VPolytopeT<Number, Converter, VPolySetting>( points );
 	}
 
-	if ( mode == ALTERNATIVE ) {
+	if ( mode == CONV_MODE::ALTERNATIVE ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 
@@ -500,7 +500,7 @@ template <typename Number>
 template <typename VPolySetting, typename inSetting>
 VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolytope( const SupportFunctionNewT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE mode, std::size_t numberOfDirections ) {
 	VPolytopeT<Number, Converter<Number>, VPolySetting> target;
-	if ( mode == OVER ) {
+	if ( mode == CONV_MODE::OVER ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 
@@ -538,7 +538,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		// constructs a V-Polytope out of the computed halfspaces (implicit conversion H->V)
 		target = VPolytopeT<Number, Converter, VPolySetting>( constraints, constants );
 	}
-	if ( mode == UNDER ) {
+	if ( mode == CONV_MODE::UNDER ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 
@@ -576,7 +576,7 @@ VPolytopeT<Number, Converter<Number>, VPolySetting> Converter<Number>::toVPolyto
 		target = VPolytopeT<Number, Converter, VPolySetting>( points );
 	}
 
-	if ( mode == ALTERNATIVE ) {
+	if ( mode == CONV_MODE::ALTERNATIVE ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 

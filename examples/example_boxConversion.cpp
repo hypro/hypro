@@ -93,7 +93,7 @@ int main() {
         1000;
 
     start = clock::now();
-    Converter<Number>::toBox(hpolytope2, ALTERNATIVE);
+    Converter<Number>::toBox(hpolytope2, CONV_MODE::ALTERNATIVE);
     std::cout
         << "Total time2(Evaluation): "
         << std::chrono::duration_cast<timeunit>(clock::now() - start).count() /
@@ -119,7 +119,7 @@ int main() {
         1000;
 
     start = clock::now();
-    Converter<Number>::toBox(hpolytope3, ALTERNATIVE);
+    Converter<Number>::toBox(hpolytope3, CONV_MODE::ALTERNATIVE);
     std::cout
         << "Total time3(Evaluation): "
         << std::chrono::duration_cast<timeunit>(clock::now() - start).count() /

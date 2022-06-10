@@ -80,9 +80,9 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 	}
 
 	HPolytope target;
-	if ( mode == EXACT ) {
+	if ( mode == CONV_MODE::EXACT ) {
 		target = HPolytope( _source.vertices() );
-	} else if ( mode == OVER ) {
+	} else if ( mode == CONV_MODE::OVER ) {
 		// gets vertices from source object
 		typename VPolytopeT<Number, Converter<Number>, inSetting>::pointVector vertices = _source.vertices();
 
@@ -284,9 +284,9 @@ HPolytopeT<Number, Converter<Number>, HPolySetting> Converter<Number>::toHPolyto
 	}
 
 	HPolytope target;
-	if ( mode == EXACT ) {
+	if ( mode == CONV_MODE::EXACT ) {
 		target = HPolytope( source.vertices() );
-	} else if ( mode == OVER ) {
+	} else if ( mode == CONV_MODE::OVER ) {
 		// gets vertices from source object
 		auto vertices = source.vertices();
 

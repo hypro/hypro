@@ -127,7 +127,7 @@ template <typename Number>
 template <typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonotope( const VPolytopeT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE mode ) {
 	// overapproximation
-	// if( mode == OVER){
+	// if( mode == CONV_MODE::OVER){
 	// gets dimension from source object
 	std::size_t dim = _source.dimension();
 
@@ -224,7 +224,7 @@ template <typename Number>
 template <typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonotope( const SupportFunctionT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE mode, std::size_t numberOfDirections ) {
 	Zonotope res;
-	if ( mode == OVER ) {
+	if ( mode == CONV_MODE::OVER ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 
@@ -268,7 +268,7 @@ ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonot
 		res = toZonotope( sampleVPoly, mode );
 	}
 
-	if ( mode == ALTERNATIVE ) {
+	if ( mode == CONV_MODE::ALTERNATIVE ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 
@@ -442,7 +442,7 @@ template <typename Number>
 template <typename ZonotopeSetting, typename inSetting>
 ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonotope( const SupportFunctionNewT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE mode, std::size_t numberOfDirections ) {
 	Zonotope res;
-	if ( mode == OVER ) {
+	if ( mode ==CONV_MODE::OVER ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 
@@ -486,7 +486,7 @@ ZonotopeT<Number, Converter<Number>, ZonotopeSetting> Converter<Number>::toZonot
 		res = toZonotope( sampleVPoly, mode );
 	}
 
-	if ( mode == ALTERNATIVE ) {
+	if ( mode == CONV_MODE::ALTERNATIVE ) {
 		// gets dimension of source object
 		std::size_t dim = _source.dimension();
 

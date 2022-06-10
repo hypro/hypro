@@ -31,7 +31,7 @@ namespace hypro {
  * @brief      enum for differentiating between exact conversion and over-/underapproximation (some functions support an alternative computation method).
  */
 
-enum CONV_MODE {
+enum class CONV_MODE {
 	EXACT,
 	OVER,
 	UNDER,

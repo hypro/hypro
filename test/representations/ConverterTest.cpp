@@ -193,12 +193,12 @@ TYPED_TEST( ConverterTest, toBox ) {
 	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->vpolytope2 );
 	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope );
 	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope2 );
-	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope, ALTERNATIVE );
-	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope2, ALTERNATIVE );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope, CONV_MODE::ALTERNATIVE );
+	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->zonotope2, CONV_MODE::ALTERNATIVE );
 	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope );
 	Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope2 );
-	auto result = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope, ALTERNATIVE );
-	auto result2 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope2, ALTERNATIVE );
+	auto result = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope, CONV_MODE::ALTERNATIVE );
+	auto result2 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope2, CONV_MODE::ALTERNATIVE );
 	auto result3 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope );
 	auto result4 = Converter<TypeParam>::template toBox<BoxLinearOptimizationOn>( this->hpolytope2 );
 #ifdef HYPRO_USE_PPL
@@ -219,9 +219,9 @@ TYPED_TEST( ConverterTest, toHPolytope ) {
 		auto result3 = Converter<TypeParam>::toHPolytope( this->support2 );
 		auto result4 = Converter<TypeParam>::toHPolytope( this->zonotope );
 		auto result5 = Converter<TypeParam>::toHPolytope( this->zonotope2 );
-		auto result6 = Converter<TypeParam>::toHPolytope( this->vpolytope, OVER );
-		auto result7 = Converter<TypeParam>::toHPolytope( this->vpolytope2, OVER );
-		auto result8 = Converter<TypeParam>::toHPolytope( this->vpolytope3, OVER );
+		auto result6 = Converter<TypeParam>::toHPolytope( this->vpolytope, CONV_MODE::OVER );
+		auto result7 = Converter<TypeParam>::toHPolytope( this->vpolytope2, CONV_MODE::OVER );
+		auto result8 = Converter<TypeParam>::toHPolytope( this->vpolytope3, CONV_MODE::OVER );
 		auto result9 = Converter<TypeParam>::toHPolytope( this->box );
 #ifdef HYPRO_USE_PPL
 		auto result10 = Converter<TypeParam>::toHPolytope( this->pplpolytope );
@@ -264,12 +264,12 @@ TYPED_TEST( ConverterTest, toSupportFunction ) {
 TYPED_TEST( ConverterTest, toVPolytope ) {
 	try {
 		auto result = Converter<TypeParam>::toVPolytope( this->vpolytope );
-		auto result2 = Converter<TypeParam>::toVPolytope( this->support, OVER );
-		auto result3 = Converter<TypeParam>::toVPolytope( this->support2, OVER );
+		auto result2 = Converter<TypeParam>::toVPolytope( this->support, CONV_MODE::OVER );
+		auto result3 = Converter<TypeParam>::toVPolytope( this->support2, CONV_MODE::OVER );
 		auto result4 = Converter<TypeParam>::toVPolytope( this->zonotope );
 		auto result5 = Converter<TypeParam>::toVPolytope( this->zonotope2 );
-		auto result6 = Converter<TypeParam>::toVPolytope( this->hpolytope, OVER );
-		auto result7 = Converter<TypeParam>::toVPolytope( this->hpolytope2, OVER );
+		auto result6 = Converter<TypeParam>::toVPolytope( this->hpolytope, CONV_MODE::OVER );
+		auto result7 = Converter<TypeParam>::toVPolytope( this->hpolytope2, CONV_MODE::OVER );
 		auto result8 = Converter<TypeParam>::toVPolytope( this->box );
 #ifdef HYPRO_USE_PPL
 		auto result10 = Converter<TypeParam>::toVPolytope( this->pplpolytope );
@@ -295,8 +295,8 @@ TYPED_TEST( ConverterTest, toZonotope ) {
 		auto result5 = Converter<TypeParam>::toZonotope( this->vpolytope3 );
 		auto result6 = Converter<TypeParam>::toZonotope( this->hpolytope );
 		auto result7 = Converter<TypeParam>::toZonotope( this->hpolytope2 );
-		auto result8 = Converter<TypeParam>::toZonotope( this->support, ALTERNATIVE );
-		auto result9 = Converter<TypeParam>::toZonotope( this->support2, ALTERNATIVE );
+		auto result8 = Converter<TypeParam>::toZonotope( this->support, CONV_MODE::ALTERNATIVE );
+		auto result9 = Converter<TypeParam>::toZonotope( this->support2, CONV_MODE::ALTERNATIVE );
 #ifdef HYPRO_USE_PPL
 		auto result10 = Converter<TypeParam>::toZonotope( this->pplpolytope );
 		auto result11 = Converter<TypeParam>::toZonotope( this->pplpolytope2 );
@@ -349,8 +349,8 @@ TYPED_TEST( ConverterTest, toSupportFunctionNew ) {
 		// VECTOR FUNCTION
 		auto result6 = Converter<TypeParam>::toSupportFunctionNew( this->hpolytope );
 		auto result7 = Converter<TypeParam>::toSupportFunctionNew( this->hpolytope2 );
-		auto result8 = Converter<TypeParam>::toSupportFunctionNew( this->support, ALTERNATIVE );
-		auto result9 = Converter<TypeParam>::toSupportFunctionNew( this->support2, ALTERNATIVE );
+		auto result8 = Converter<TypeParam>::toSupportFunctionNew( this->support, CONV_MODE::ALTERNATIVE );
+		auto result9 = Converter<TypeParam>::toSupportFunctionNew( this->support2, CONV_MODE::ALTERNATIVE );
 #ifdef HYPRO_USE_PPL
 		auto result10 = Converter<TypeParam>::toSupportFunctionNew( this->pplpolytope );
 		auto result11 = Converter<TypeParam>::toSupportFunctionNew( this->pplpolytope2 );

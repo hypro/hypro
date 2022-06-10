@@ -13,6 +13,7 @@
  */
 
 #pragma once
+#include "ReachNNMethod.h"
 #include "../../representations/GeometricObjectBase.h"
 #include "../parser/NNet.h"
 #include "../../util/plotting/Plotter.h"
@@ -23,11 +24,6 @@
 
 namespace hypro {
 namespace reachability {
-
-enum NN_reach_method {
-	EXACT,
-	OVERAPPRX,
-};
 
 // TODO: add comments and description/documentation for the different functions
 template <typename Number>

@@ -74,7 +74,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Supp
 		intervals.push_back( carl::Interval<Number>( -distances[2 * i].supportValue, lowerBound, distances[2 * i + 1].supportValue, upperBound ) );	 // create one interval with the corresponding left and right end points (inverted lower interval end points)
 	}
 
-	// if (mode == EXACT){                                                                                      //checks if conversion was exact
+	// if (mode == CONV_MODE::EXACT){                                                                                      //checks if conversion was exact
 	//     bool foundEqual;
 	//     std::vector<Point<Number>> newVertices = _target.vertices();                                         //computes vertices from the just newly created box
 	//     for (const auto& newVertex : newVertices){                                                           //for every new vertex (from the box)
@@ -110,7 +110,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const VPol
 			intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );	// create one interval per dimension with the corresponding minimal and maximal values
 		}
 
-		// if(mode == EXACT){                                                                               //checks if conversion was exact
+		// if(mode == CONV_MODE::EXACT){                                                                               //checks if conversion was exact
 		//     bool foundEqual;
 		//     std::vector<Point<Number>> newVertices = _target.vertices();                                 //computes vertices from the just newly created box
 		//     for (const auto& newVertex : newVertices){                                                   //for every new vertex (from the box)
@@ -133,7 +133,7 @@ template <typename Number>
 template <typename BoxSetting, typename inSetting>
 BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const HPolytopeT<Number, Converter<Number>, inSetting>& _source, const CONV_MODE mode ) {
 	BoxT<Number, Converter, BoxSetting> result;
-	if ( mode == OVER ) {
+	if ( mode == CONV_MODE::OVER ) {
 		std::vector<Point<Number>> vertices = _source.vertices();  // gets vertices as a vector from the source object (is actually a conversion from H-Polytope to V-Polytope)
 		if ( !vertices.empty() ) {
 			vector_t<Number> minima = vertices[0].rawCoordinates();	 // creates a vector_t with the first vertex of the source object
@@ -156,7 +156,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const HPol
 		}
 	}
 
-	if ( mode == ALTERNATIVE ) {
+	if ( mode == CONV_MODE::ALTERNATIVE ) {
 		std::size_t dim = _source.dimension();	// gets dimension from the source object
 
 		std::vector<EvaluationResult<Number>> distances;
@@ -185,7 +185,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const HPol
 		}
 		result = BoxT<Number, Converter, BoxSetting>( intervals );
 	}
-	// if(mode == EXACT){                                                                              //checks if conversion was exact
+	// if(mode == CONV_MODE::EXACT){                                                                              //checks if conversion was exact
 	//     bool foundEqual;
 	//     std::vector<Point<Number>> newVertices = _result.vertices();                                //computes vertices from the just newly created box
 	//     for (const auto& newVertex : newVertices){                                                  //for every new vertex (from the box)
@@ -229,7 +229,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Zono
 			}
 		}
 
-		// if(mode == EXACT){                                                                                      //checks if conversion was exact
+		// if(mode == CONV_MODE::EXACT){                                                                                      //checks if conversion was exact
 		//     bool foundEqual;
 		//     std::vector<Point<Number>> newVertices = _target.vertices();                                        //computes vertices from the just newly created box
 		//     for (const auto& newVertex : newVertices){                                                          //for every new vertex (from the box)
@@ -343,7 +343,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Diff
 //		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );                                              //create one interval per dimension with the corresponding minimal and maximal values
 //	}
 //
-//     // if(mode == EXACT){                                                                                                              //checks if conversion was exact
+//     // if(mode == CONV_MODE::EXACT){                                                                                                              //checks if conversion was exact
 //     //     bool foundEqual;
 //     //     std::vector<Point<Number>> newVertices = _target.vertices();                                                                //computes vertices from the just newly created box
 //     //     for (const auto& newVertex : newVertices){                                                                                  //for every new vertex (from the box)
@@ -417,7 +417,7 @@ BoxT<Number, Converter<Number>, BoxSetting> Converter<Number>::toBox( const Supp
 		intervals.push_back( carl::Interval<Number>( -distances[2 * i].supportValue, lowerBound, distances[2 * i + 1].supportValue, upperBound ) );
 	}
 
-	// if (mode == EXACT){                                                                                      //checks if conversion was exact
+	// if (mode == CONV_MODE::EXACT){                                                                                      //checks if conversion was exact
 	//     bool foundEqual;
 	//     std::vector<Point<Number>> newVertices = _target.vertices();                                         //computes vertices from the just newly created box
 	//     for (const auto& newVertex : newVertices){                                                           //for every new vertex (from the box)
