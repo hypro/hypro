@@ -1,7 +1,7 @@
 /**
  * Class that holds the implementation of a Neural Network.
  * @file NNet.tpp
- * 
+ *
  * @author László Antal <antal@informatik.rwth-aachen.de>
 
  * @version 2022-01-20
@@ -55,6 +55,11 @@ unsigned int* NNet<Number>::layerSizes() const {
 }
 
 template <typename Number>
+unsigned int NNet<Number>::layerSize( int i ) const {
+	return mLayerSizes[i];
+}
+
+template <typename Number>
 vector_t<Number> NNet<Number>::mins() const {
 	return mMins;
 }
@@ -90,12 +95,12 @@ std::pair<matrix_t<Number>, vector_t<Number>> NNet<Number>::layerParams( int i )
 	return std::make_pair( mWeights[i], mBiases[i] );
 }
 
-//Take in a .nnet filename with path and load the network from the file
-//Inputs:  filename - const char* that specifies the name and path of file
-//Outputs: NNet<Number> - the loaded neural network
+// Take in a .nnet filename with path and load the network from the file
+// Inputs:  filename - const char* that specifies the name and path of file
+// Outputs: NNet<Number> - the loaded neural network
 template <typename Number>
 NNet<Number>::NNet( const char* filename ) {
-	//Load file and check if it exists
+	// Load file and check if it exists
 	FILE* fstream = fopen( filename, "r" );
 	assert( fstream != NULL );
 
@@ -103,23 +108,23 @@ NNet<Number>::NNet( const char* filename ) {
 		FATAL( "hypro.neuralnets.parser", "Could not open the input file: %s\n" );
 	}
 
-	//Initialize variables
+	// Initialize variables
 	int bufferSize = 10240;
 	char* buffer = new char[bufferSize];
 	char *record, *line;
 	int i = 0, layer = 0, row = 0, j = 0, param = 0;
 
-	//Read int parameters of neural network
+	// Read int parameters of neural network
 	line = fgets( buffer, bufferSize, fstream );
 	while ( strstr( line, "//" ) != NULL )
-		line = fgets( buffer, bufferSize, fstream );  //skip header lines
+		line = fgets( buffer, bufferSize, fstream );  // skip header lines
 	record = strtok( line, ",\n" );
 	mNumLayers = atoi( record );
 	mInputSize = atoi( strtok( NULL, ",\n" ) );
 	mOutputSize = atoi( strtok( NULL, ",\n" ) );
 	mMaxLayerSize = atoi( strtok( NULL, ",\n" ) );
 
-	//Allocate space for and read values of the array members of the network
+	// Allocate space for and read values of the array members of the network
 	mLayerSizes = new unsigned int[mNumLayers + 1];
 	line = fgets( buffer, bufferSize, fstream );
 	record = strtok( line, ",\n" );
@@ -128,10 +133,10 @@ NNet<Number>::NNet( const char* filename ) {
 		record = strtok( NULL, ",\n" );
 	}
 
-	//Skip the unsused paramter
+	// Skip the unsused paramter
 	line = fgets( buffer, bufferSize, fstream );
 
-	//Load Min and Max values of inputs
+	// Load Min and Max values of inputs
 	mMins = vector_t<Number>( mInputSize );
 	line = fgets( buffer, bufferSize, fstream );
 	record = strtok( line, ",\n" );
@@ -147,7 +152,7 @@ NNet<Number>::NNet( const char* filename ) {
 		record = strtok( NULL, ",\n" );
 	}
 
-	//Load Mean and Range of inputs
+	// Load Mean and Range of inputs
 	mMeans = vector_t<Number>( mInputSize + 1 );
 	line = fgets( buffer, bufferSize, fstream );
 	record = strtok( line, ",\n" );
@@ -163,7 +168,7 @@ NNet<Number>::NNet( const char* filename ) {
 		record = strtok( NULL, ",\n" );
 	}
 
-	//Allocate weights and biases of Neural Network
+	// Allocate weights and biases of Neural Network
 	mWeights = new matrix_t<Number>[mNumLayers];
 	mBiases = new vector_t<Number>[mNumLayers];
 	for ( int i = 0; i < mNumLayers; i++ ) {
@@ -174,10 +179,10 @@ NNet<Number>::NNet( const char* filename ) {
 		// std::cout << "\t biases dim: (" << mBiases[i].rows() << ", " << mBiases[i].cols() << ")." << std::endl;
 	}
 
-	//Iteration parameters
+	// Iteration parameters
 	layer = 0, param = 0, i = 0, j = 0;
 
-	//Read in parameters and put them in the matrix
+	// Read in parameters and put them in the matrix
 	while ( ( line = fgets( buffer, bufferSize, fstream ) ) != NULL ) {
 		if ( i >= mLayerSizes[layer + 1] ) {
 			if ( param == 0 ) {
@@ -208,7 +213,7 @@ NNet<Number>::NNet( const char* filename ) {
 	delete[] buffer;
 }
 
-//Complete one forward pass for a given set of inputs and return output values
+// Complete one forward pass for a given set of inputs and return output values
 template <typename Number>
 vector_t<Number> NNet<Number>::evaluateNetwork( const vector_t<Number>& inputs, bool normalizeInput, bool normalizeOutput ) const {
 	assert( mInputSize == inputs.rows() );
@@ -216,7 +221,7 @@ vector_t<Number> NNet<Number>::evaluateNetwork( const vector_t<Number>& inputs, 
 	vector_t<Number> outputs = inputs;
 	int i, j, layer;
 
-	//Normalize inputs
+	// Normalize inputs
 	if ( normalizeInput ) {
 		std::cout << "Normalizing the input vector..." << std::endl;
 		for ( i = 0; i < mInputSize; i++ ) {
@@ -237,8 +242,8 @@ vector_t<Number> NNet<Number>::evaluateNetwork( const vector_t<Number>& inputs, 
 
 		outputs = mWeights[layer] * outputs + mBiases[layer];
 		if ( layer < ( mNumLayers - 1 ) ) {
-			//Perform ReLU
-			// outputs = outputs.unaryExpr( []( Number x ) { return max( x, 0 ); } );
+			// Perform ReLU
+			//  outputs = outputs.unaryExpr( []( Number x ) { return max( x, 0 ); } );
 			for ( i = 0; i < mLayerSizes[i + 1]; i++ ) {
 				if ( outputs[i] < 0.0f )
 					outputs[i] = carl::convert<double, Number>( 0.0f );
@@ -246,7 +251,7 @@ vector_t<Number> NNet<Number>::evaluateNetwork( const vector_t<Number>& inputs, 
 		}
 	}
 
-	//Write the final output value to the allocated spot in memory
+	// Write the final output value to the allocated spot in memory
 	if ( normalizeOutput ) {
 		std::cout << "Outputs before normalization: " << outputs << std::endl;
 		std::cout << "Normalizing the output vector..." << std::endl;
@@ -257,7 +262,7 @@ vector_t<Number> NNet<Number>::evaluateNetwork( const vector_t<Number>& inputs, 
 
 	assert( mOutputSize == outputs.rows() );
 
-	//Return the output vector
+	// Return the output vector
 	return outputs;
 }
 
