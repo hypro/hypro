@@ -88,7 +88,7 @@ HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> StarsetT<Number, Conver
 		}
 		return (*mEqvPoly);
 	} else {
-		HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> poly = Converter::toHPolytope(*this);
+		HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> poly = Converter::template toHPolytope<HPolytopeBoundingBoxCaching, Setting>(*this);
 		return poly;
 	}
 }
@@ -465,7 +465,7 @@ void StarsetT<Number, Converter, Setting>::clear() {
 template <typename Number, typename Converter, class Setting>
 void StarsetT<Number, Converter, Setting>::updateEquivalentPolytope() const {
 	if ( Settings::CACHE_EQV_POLYTOPE ) {
-		mEqvPoly = Converter::toHPolytope(*this);
+		mEqvPoly = Converter::template toHPolytope<HPolytopeBoundingBoxCaching, Setting>(*this);
 	}
 }
 

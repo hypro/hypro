@@ -50,7 +50,6 @@ class Converter {
 	using ConstraintSet = ConstraintSetT<Number, ConstraintSetSettings>;
 	using Ellipsoid = EllipsoidT<Number, Converter>;
 	using HPolytope = HPolytopeT<Number, Converter, HPolytopeSetting>;
-	using HPolytopeCached = HPolytopeT<Number, Converter, HPolytopeBoundingBoxCaching>;
 	using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number, Converter, BoxLinearOptimizationOn>;
 	using VPolytope = VPolytopeT<Number, Converter, VPolytopeSetting>;
 	using DifferenceBounds = DifferenceBoundsT<Number, Converter, DifferenceBoundsSetting>;
@@ -251,7 +250,7 @@ class Converter {
 
 	template <typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 	static HPolytopeT<Number, Converter<Number>, HPolySetting> toHPolytope( const TemplatePolyhedronT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
-	template <typename HPolySetting = typename HPolytopeCached::Settings, typename inSetting>
+	template <typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 	static HPolytopeT<Number, Converter<Number>, HPolySetting> toHPolytope( const StarsetT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
 	// template<typename HPolySetting = typename HPolytope::Settings, typename inSetting>
 	// static HPolytopeT<Number,Converter<Number>,HPolySetting> toHPolytope(const OrthoplexT<Number,Converter<Number>,inSetting>& source, const CONV_MODE = CONV_MODE::EXACT);
