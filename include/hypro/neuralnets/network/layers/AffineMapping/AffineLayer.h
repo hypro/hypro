@@ -15,17 +15,15 @@ namespace hypro {
 
 template <typename Number>
 class AffineLayer : public LayerBase<Number> {
-  protected:
-	unsigned short int mLayerSize;
+  private:
 	vector_t<Number> mBias;
 	matrix_t<Number> mWeights;
 
   public:
 	AffineLayer();
-	AffineLayer( unsigned short int layerSize, const vector_t<Number>& bias, const matrix_t<Number>& weights );
+	AffineLayer( unsigned short int layerSize, unsigned short int layerIndex, const vector_t<Number>& bias, const matrix_t<Number>& weights );
 
 	virtual const NN_LAYER_TYPE layerType() const;	// getter for the type of the layer in the form of an enum member
-	virtual unsigned short int layerSize() const;	// getter for the size of the layer
 	vector_t<Number> bias() const;
 	matrix_t<Number> weights() const;
 

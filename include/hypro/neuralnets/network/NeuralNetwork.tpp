@@ -40,10 +40,10 @@ NeuralNetwork<Number>::NeuralNetwork( const hypro::NNet<Number>& nnet )
 		assert( weights.cols() == prevLayerSize );
 		prevLayerSize = layerSize;
 
-		AffineLayer<Number>* affLayer = new AffineLayer<Number>( layerSize, bias, weights );
+		AffineLayer<Number>* affLayer = new AffineLayer<Number>( layerSize, mLayers.size(), bias, weights );
 		mLayers.push_back( affLayer );
 		if ( i < nnet.numLayers() - 1 ) {
-			ReLULayer<Number>* relLayer = new ReLULayer<Number>( layerSize );
+			ReLULayer<Number>* relLayer = new ReLULayer<Number>( layerSize, mLayers.size());
 			mLayers.push_back( relLayer );
 		}
 	}
@@ -52,6 +52,9 @@ NeuralNetwork<Number>::NeuralNetwork( const hypro::NNet<Number>& nnet )
 
 template <typename Number>
 NeuralNetwork<Number>::~NeuralNetwork() {
+	for ( auto layer : mLayers ) {
+		delete layer;
+	}
 }
 
 // ============ getters and setters ============
@@ -160,12 +163,10 @@ std::vector<Starset<Number>> NeuralNetwork<Number>::forwardPass( const hypro::St
 	// TODO: add some printed information with cout // TRACE + assertions
 	std::vector<Starset<Number>> outputSets = std::vector<hypro::Starset<Number>>();
 	outputSets.push_back( inputSet );
-	int i = 0;
 	for ( auto layer : mLayers ) {
-		std::cout << "Computing output of layer: " << i << ", layer type: " << layer->layerType()._to_string() << std::endl;
+		std::cout << "Computing output of layer: " << layer->layerIndex() << ", layer type: " << layer->layerType()._to_string() << std::endl;
 		outputSets = layer->forwardPass( outputSets, method, plotIntermediates );
 		std::cout << "Number of stars: " << outputSets.size() << std::endl;
-		i++;
 	}
 	return outputSets;
 }

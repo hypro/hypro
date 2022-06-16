@@ -173,9 +173,8 @@ std::ostream& operator<<( std::ostream& ostr, const NeuralNetwork<Number>& _rhs 
 	ostr << std::endl;
 
 	ostr << "Layers: " << std::endl;
-	int i = 0;
 	for ( auto layer : _rhs.mLayers ) {
-		ostr << "Layer number " << i << std::endl;
+		ostr << "Layer number " << layer->layerIndex() << std::endl;
 		switch ( layer->layerType() ) {
 			case NN_LAYER_TYPE::AFFINE:
 				ostr << ( *static_cast<AffineLayer<Number>*>( layer ) ) << std::endl;
@@ -186,7 +185,6 @@ std::ostream& operator<<( std::ostream& ostr, const NeuralNetwork<Number>& _rhs 
 			default:
 				TRACE( "hypro.neuralnets.NeuralNetwork", "Unknown layer type " << layer->layerType() );
 		}
-		i++;
 	}
 	ostr << std::endl;
 

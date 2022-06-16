@@ -13,11 +13,12 @@
 namespace hypro {
 
 template <typename Number>
-AffineLayer<Number>::AffineLayer() {}
+AffineLayer<Number>::AffineLayer()
+	: LayerBase<Number>() {}
 
 template <typename Number>
-AffineLayer<Number>::AffineLayer( unsigned short int layerSize, const vector_t<Number>& bias, const matrix_t<Number>& weights )
-	: mLayerSize( layerSize )
+AffineLayer<Number>::AffineLayer( unsigned short int layerSize, unsigned short int layerIndex, const vector_t<Number>& bias, const matrix_t<Number>& weights )
+	: LayerBase<Number>( layerSize, layerIndex )
 	, mBias( bias )
 	, mWeights( weights ) {
 	assert( bias.rows() == weights.rows() );
@@ -27,11 +28,6 @@ AffineLayer<Number>::AffineLayer( unsigned short int layerSize, const vector_t<N
 template <typename Number>
 const NN_LAYER_TYPE AffineLayer<Number>::layerType() const {
 	return NN_LAYER_TYPE::AFFINE;
-}
-
-template <typename Number>
-unsigned short int AffineLayer<Number>::layerSize() const {
-	return mLayerSize;
 }
 
 template <typename Number>
@@ -54,14 +50,14 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
 	int N = inputSet.size();  // number of input stars
 
-// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
-// 	for ( int i = 0; i < N; ++i ) {
-// 		Starset<Number> temp = inputSet[i].affineTransformation( mWeights, mBias );
-// 		{
-// #pragma omp critical
-// 			result.push_back( temp );
-// 		}
-// 	}
+	// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
+	// 	for ( int i = 0; i < N; ++i ) {
+	// 		Starset<Number> temp = inputSet[i].affineTransformation( mWeights, mBias );
+	// 		{
+	// #pragma omp critical
+	// 			result.push_back( temp );
+	// 		}
+	// 	}
 	for ( int i = 0; i < N; ++i ) {
 		result.push_back( inputSet[i].affineTransformation( mWeights, mBias ) );
 	}

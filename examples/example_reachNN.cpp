@@ -51,7 +51,7 @@ int main( int argc, char* argv[] ) {
 	// std::cout << rotate_nn << std::endl;
 
 	hypro::NeuralNetwork<Number> network = hypro::NeuralNetwork<Number>( rotate_nn );
-	// std::cout << network << std::endl;
+	std::cout << network << std::endl;
 
 	// a simple rectangle [_]
 	// hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );

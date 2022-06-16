@@ -14,20 +14,15 @@ namespace hypro {
 
 template <typename Number>
 ReLULayer<Number>::ReLULayer()
-	: mLayerSize( 0 ) {}
+	: LayerBase<Number>() {}
 
 template <typename Number>
-ReLULayer<Number>::ReLULayer( unsigned short int layerSize )
-	: mLayerSize( layerSize ) {}
+ReLULayer<Number>::ReLULayer( unsigned short int layerSize, unsigned short int layerIndex )
+	: LayerBase<Number>( layerSize, layerIndex ) {}
 
 template <typename Number>
 const NN_LAYER_TYPE ReLULayer<Number>::layerType() const {
 	return NN_LAYER_TYPE::RELU;
-}
-
-template <typename Number>
-unsigned short int ReLULayer<Number>::layerSize() const {
-	return mLayerSize;
 }
 
 template <typename Number>
