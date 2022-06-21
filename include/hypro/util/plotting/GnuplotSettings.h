@@ -32,7 +32,7 @@ struct gnuplotSettings {
 	bool axes = true;				   //< plot axes
 	bool grid = true;				   //< plot grid
 	bool title = false;				   //< plot title
-	bool key = false; 				   //> plot key/legend
+	bool key = false;				   //> plot key/legend
 	double pointSize = 0.2;			   //< pointsize
 	double linewidth = 0.1;			   //< linewidth
 	carl::Interval<double> xPlotInterval = carl::Interval<double>::emptyInterval();
@@ -43,7 +43,6 @@ struct gnuplotSettings {
 	bool plain = false;							  //< overrides most settings
 	bool overwriteFiles = false;				  //< set to enable file overwriting
 	std::size_t writeIntermediate = 0;			  //< set to a strictly positve number n to write (append) every n objects to a file, those objects are deleted from the plotter afterwards
-	bool key = false; //< if true, a key/legend is added to the plot
 };
 
 }  // namespace hypro::plotting
