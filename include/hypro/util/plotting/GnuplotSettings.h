@@ -32,6 +32,7 @@ struct gnuplotSettings {
 	bool axes = true;				   //< plot axes
 	bool grid = true;				   //< plot grid
 	bool title = false;				   //< plot title
+	bool key = false; 				   //> plot key/legend
 	double pointSize = 0.2;			   //< pointsize
 	double linewidth = 0.1;			   //< linewidth
 	carl::Interval<double> xPlotInterval = carl::Interval<double>::emptyInterval();

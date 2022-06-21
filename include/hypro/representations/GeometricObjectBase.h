@@ -17,6 +17,9 @@
 #ifdef HYPRO_STATISTICS
 #include "../util/statistics/statistics.h"
 #endif
+#ifdef HYPRO_USE_OPENMP
+#include <omp.h>
+#endif
 
 namespace hypro {
 

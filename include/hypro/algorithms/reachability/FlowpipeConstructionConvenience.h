@@ -130,6 +130,7 @@ Box<typename Representation::NumberType> computeBoundingBox( const std::vector<R
 	return box;
 }
 
+
 /**
  * @brief Computes the set difference of a state set with a condition.
  * @tparam Representation The type of state set representation

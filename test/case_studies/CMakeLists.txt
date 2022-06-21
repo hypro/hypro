@@ -31,6 +31,11 @@ if (HYPRO_BENCHMARK)
     target_include_directories(cs_simplex_watertanks_interactive PRIVATE ${CMAKE_SOURCE_DIR}/test/include/)
     add_dependencies(cs_simplex_watertanks_interactive ${PROJECT_NAME}_resources)
 
+    add_executable(cs_rectangular_sha_car_benchmark cs_rectangular_sha_car_benchmark.cpp)
+    target_link_libraries(cs_rectangular_sha_car_benchmark ${PROJECT_NAME}-shared)
+    target_include_directories(cs_rectangular_sha_car_benchmark PRIVATE ${CMAKE_SOURCE_DIR}/test/include/)
+    add_dependencies(cs_rectangular_sha_car_benchmark ${PROJECT_NAME}_resources)
+
     add_executable(cs_lawn_mower cs_lawn_mower.cpp)
     target_link_libraries(cs_lawn_mower ${PROJECT_NAME}-shared
             ${GBENCHMARK_LIBRARIES})

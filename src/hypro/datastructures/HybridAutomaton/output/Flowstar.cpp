@@ -16,7 +16,7 @@
 namespace hypro {
 
 std::string toFlowstarFormat( const ReachabilitySettings& settings,
-							  const std::map<Eigen::Index, std::string>& varNameMap,
+							  const std::map<Eigen::Index, std::string>&,
 							  const std::string& prefix ) {
 	std::stringstream res;
 
