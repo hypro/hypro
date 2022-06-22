@@ -34,14 +34,11 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT& orig )
 
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector& planes )
-	: mHPlanes()
+	: mHPlanes( planes )
 	, mDimension( 0 )
 	, mNonRedundant( false ) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
-		for ( const auto& plane : planes ) {
-			mHPlanes.push_back( plane );
-		}
 #ifndef NDEBUG
 		bool empty = this->empty();
 #endif
