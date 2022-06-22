@@ -11,6 +11,7 @@ set(datastructure_test_sources
         VertexTest.cpp
         VertexContainerTest.cpp
         RangeTest.cpp
+        ReachabilitySettingsTest.cpp
         ReachTreeTest.cpp
         StateTest.cpp
         StateVisitorTest.cpp
