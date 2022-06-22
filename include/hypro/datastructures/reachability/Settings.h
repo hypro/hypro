@@ -91,7 +91,7 @@ class Settings {
 		mFixedParameters.fixedTimeStep = mpq_class( numerator_gcd, denominator_lcm );
 
 		for ( AnalysisParameters& params : mStrategy ) {
-			mpq_class timeStepFactor = mpq_class( 1 );
+			mpq_class timeStepFactor = (int)1;
 			if ( mFixedParameters.fixedTimeStep != 0 ) {
 				mpq_class timeStepFactor = params.timeStep / mFixedParameters.fixedTimeStep;
 			}
