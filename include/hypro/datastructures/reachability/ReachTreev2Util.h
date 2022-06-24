@@ -69,9 +69,27 @@ auto getMaximalDepth( RootType&& root ) -> std::vector<std::vector<typename deta
 }
 
 template <typename RootType>
+auto getNumberNodes( std::vector<RootType>&& roots ) -> std::size_t {
+	std::size_t res{ 0 };
+	for ( auto&& root : roots ) {
+		visitPreorder( std::forward<RootType>( root ), [&res]( auto& node ) { ++res; } );
+	}
+	return res;
+}
+
+template <typename RootType>
 auto getNumberNodes( RootType&& root ) -> std::size_t {
 	std::size_t res{ 0 };
 	visitPreorder( std::forward<RootType>( root ), [&res]( auto& node ) { ++res; } );
+	return res;
+}
+
+template <typename RootType>
+auto getNumberSegments( std::vector<RootType>&& roots ) -> std::size_t {
+	std::size_t res = 0;
+	for ( auto&& root : roots ) {
+		visitPreorder( std::forward<RootType>( root ), [&res]( auto& node ) { res += node.getFlowpipe().size(); } );
+	}
 	return res;
 }
 
