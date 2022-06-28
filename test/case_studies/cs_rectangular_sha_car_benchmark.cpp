@@ -18,6 +18,7 @@
 #include <hypro/paths.h>
 #include <hypro/util/logging/Logger.h>
 #include <hypro/util/plotting/Plotter.h>
+#include <hypro/util/statistics/statistics.h>
 #include <string>
 
 int main() {
@@ -35,9 +36,13 @@ int main() {
 	auto roots = hypro::makeRoots<Representation, mpq_class>( automaton );
 
 	auto analyzer = hypro::RectangularAnalyzer<Representation>( automaton, settings, roots );
+	START_BENCHMARK_OPERATION( "Reachability Analysis" );
 	auto result = analyzer.run();
+	STOP_BENCHMARK_OPERATION( "Reachability Analysis" );
 
 	// plotting
+	/*
+	START_BENCHMARK_OPERATION( "Plotting" );
 	auto& plt = hypro::Plotter<mpq_class>::getInstance();
 	for ( const auto& root : roots ) {
 		for ( const auto& node : hypro::preorder( root ) ) {
@@ -47,6 +52,8 @@ int main() {
 		}
 	}
 	plt.plot2d( hypro::PLOTTYPE::png, true );
-
+	STOP_BENCHMARK_OPERATION( "Plotting" );
+	*/
+	PRINT_STATS();
 	return 0;
 }
