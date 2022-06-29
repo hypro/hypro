@@ -94,9 +94,8 @@ static void computeReachableStates( const std::string& filename,
 			std::cout << plottingDimension << " ";
 		}
 		std::cout << std::endl;
-		
-		plotter.rSettings().dimensions.first = plottingDimensions.front();
-		plotter.rSettings().dimensions.second = plottingDimensions.back();
+
+		plotter.rSettings().dimensions = plottingDimensions;
 		plotter.rSettings().cummulative = false;
 
 		// bad states plotting
@@ -114,8 +113,7 @@ static void computeReachableStates( const std::string& filename,
 			// 	}
 			// }
 			unsigned bs = plotter.addObject(
-				  Representation( matrix, vector ).projectOn( plottingDimensions )
-						.vertices(),
+				  Representation( matrix, vector ).projectOn( plottingDimensions ).vertices(),
 				  hypro::plotting::colors[hypro::plotting::red] );
 		}
 
@@ -124,7 +122,7 @@ static void computeReachableStates( const std::string& filename,
 			unsigned cnt = 0;
 			for ( const auto& segment : flowpipe ) {
 				// std::cout << "Plot segment " << cnt << "/" << flowpipe.size()
-						//   << std::endl;
+				//   << std::endl;
 				plotter.addObject( segment.projectOn( plottingDimensions ).vertices() );
 				++cnt;
 			}
