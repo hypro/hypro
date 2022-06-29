@@ -72,9 +72,15 @@ class Reset {
 	const std::vector<carl::Interval<Number>>& getIntervals( std::size_t I = 0 ) const;
 	std::vector<carl::Interval<Number>>& rGetIntervals( std::size_t I = 0 );
 
-	const AffineTransformation<Number>& getAffineReset( std::size_t I = 0 ) const { return mAffineResets[I]; }
+	const AffineTransformation<Number>& getAffineReset( std::size_t I = 0 ) const {
+		assert( I < mAffineResets.size() );
+		return mAffineResets[I];
+	}
 	const std::vector<AffineTransformation<Number>>& getAffineResets() const { return mAffineResets; }
-	const IntervalAssignment<Number>& getIntervalReset( std::size_t I = 0 ) const { return mIntervalResets[I]; }
+	const IntervalAssignment<Number>& getIntervalReset( std::size_t I = 0 ) const {
+		assert( I < mIntervalResets.size() );
+		return mIntervalResets[I];
+	}
 	const std::vector<IntervalAssignment<Number>>& getIntervalResets() const { return mIntervalResets; }
 
 	void setVector( const vector_t<Number>& in, std::size_t I = 0 );
