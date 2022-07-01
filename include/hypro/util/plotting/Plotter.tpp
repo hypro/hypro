@@ -9,6 +9,8 @@
 
 #include "Plotter.h"
 
+#include <future>
+
 namespace hypro {
 
 template <typename Number>
@@ -98,7 +100,7 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 #ifdef GNUPLOT_FOUND
 		std::stringstream ss;
 		ss << "gnuplot " + filename + "_" + plotting::to_string( outformat ) + ".plt";
-		auto returnvalue = std::system( ss.str().c_str() );
+		std::async( std::launch::async, [&]() { std::system( ss.str().c_str() ); } );
 #endif
 	}
 }
