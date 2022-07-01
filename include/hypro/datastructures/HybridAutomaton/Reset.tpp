@@ -83,6 +83,12 @@ void Reset<Number>::setIntervals( const std::vector<carl::Interval<Number>>& int
 }
 
 template <typename Number>
+void Reset<Number>::addResetTransformation( const AffineTransformation<Number> trafo ) {
+	mAffineResets.push_back( trafo );
+	mIntervalResets.emplace_back( IntervalAssignment<Number>() );
+}
+
+template <typename Number>
 bool Reset<Number>::isAffineIdentity() const {
 	return mAffineResets.empty() || std::all_of( mAffineResets.begin(), mAffineResets.end(), []( const auto& affineReset ) { return affineReset.isIdentity(); } );
 }
@@ -294,4 +300,19 @@ void Reset<Number>::decompose( const std::vector<std::vector<std::size_t>>& part
 	mDecomposed = true;
 	mHash = 0;
 }
+
+template <typename Number>
+Reset<Number> operator+( const Reset<Number>& lhs, const Reset<Number>& rhs ) {
+	assert( lhs.getAffineResets().size() == rhs.getAffineResets().size() );
+	if ( !lhs.isIntervalIdentity() || !rhs.isIntervalIdentity() ) {
+		throw std::logic_error( "Operator + is not yet implemented for interval resets." );
+	}
+
+	Reset<Number> res;
+	for ( std::size_t i = 0; i < lhs.getAffineResets().size(); ++i ) {
+		res.addResetTransformation( lhs.getAffineReset( i ) + rhs.getAffineReset( i ) );
+	}
+	return res;
+}
+
 }  // namespace hypro

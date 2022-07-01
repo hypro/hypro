@@ -87,6 +87,8 @@ class Reset {
 	void setMatrix( const matrix_t<Number>& in, std::size_t I = 0 );
 	void setIntervals( const std::vector<carl::Interval<Number>>& intervals, std::size_t I = 0 );
 
+	void addResetTransformation( const AffineTransformation<Number> trafo );
+
 	bool isAffineIdentity() const;
 	bool isIntervalIdentity() const;
 	bool isIdentity() const;
@@ -140,6 +142,9 @@ template <typename Number>
 Reset<Number> combine(
 	  const Reset<Number>& lhs, const Reset<Number>& rhs,
 	  const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar );
+
+template <typename Number>
+Reset<Number> operator+( const Reset<Number>& lhs, const Reset<Number>& rhs );
 
 }  // namespace hypro
 

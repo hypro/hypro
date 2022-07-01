@@ -119,6 +119,10 @@ struct AffineTransformation {
 	friend bool operator==( const AffineTransformation<Number>& lhs, const AffineTransformation<Number>& rhs ) {
 		return lhs.mTransformation == rhs.mTransformation;
 	}
+
+	friend AffineTransformation<Number> operator+( const AffineTransformation<Number>& lhs, const AffineTransformation<Number>& rhs ) {
+		return AffineTransformation<Number>{ matrix_t<Number>( lhs.mTransformation.matrix() * ( rhs.mTransformation.matrix() ) ), lhs.mTransformation.vector() + rhs.mTransformation.vector() };
+	}
 };
 
 template <typename Number>

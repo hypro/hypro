@@ -234,6 +234,33 @@ TYPED_TEST( HybridAutomataTest, FlowTest ) {
 	EXPECT_EQ( rectFlow.dimension(), std::size_t( 1 ) );
 }
 
+/// Reset-types test
+TYPED_TEST( HybridAutomataTest, ResetTest ) {
+	using M = matrix_t<TypeParam>;
+	using V = vector_t<TypeParam>;
+
+	V translation = V::Zero( 2 );
+	translation( 0 ) = TypeParam( 2 );
+	Reset<TypeParam> resetA, resetB;
+	resetA.addResetTransformation( { M::Identity( 2, 2 ), translation } );
+	resetB.addResetTransformation( { M::Identity( 2, 2 ), -translation } );
+	auto res = resetA + resetB;
+	EXPECT_TRUE( res.isIdentity() );
+
+	M scaling = M::Identity( 2, 2 );
+	scaling( 0, 0 ) = TypeParam( 2 );
+	scaling( 1, 1 ) = TypeParam( 4 );
+	resetA.rGetMatrix( 0 ) = scaling;
+	res = resetA + resetB;
+	EXPECT_FALSE( res.isIdentity() );
+
+	scaling( 0, 0 ) = TypeParam( 0.5 );
+	scaling( 1, 1 ) = TypeParam( 0.25 );
+	resetB.rGetMatrix( 0 ) = scaling;
+	res = resetA + resetB;
+	EXPECT_TRUE( res.isIdentity() );
+}
+
 /*
 TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 {
