@@ -86,22 +86,33 @@ struct AffineTransformation {
 		}
 		bool firstrow = true;
 		for ( Eigen::Index row = 0; row < in.mTransformation.matrix().rows(); ++row ) {
-            // skip identity resets
-            if (in.isIdentity(std::size_t(row))) {
-                continue;
-            }
-            if (!firstrow) {
-                out << "\n";
-            } else {
-                firstrow = false;
-            }
-            out << "x" << row << " := ";
-            if (in.mTransformation.matrix().row(row) == matrix_t<Number>::Zero(1, in.mTransformation.matrix().cols())) {
-                out << "0";
-            } else {
-                out << to_string<Number>(in.mTransformation.matrix().row(row));
-            }
-        }
+			// skip identity resets
+			if ( in.isIdentity( std::size_t( row ) ) ) {
+				continue;
+			}
+			if ( !firstrow ) {
+				out << "\n";
+			} else {
+				firstrow = false;
+			}
+			out << "x" << row << " := ";
+			bool allZero = false;
+			if ( in.mTransformation.matrix().row( row ) == matrix_t<Number>::Zero( 1, in.mTransformation.matrix().cols() ) ) {
+				allZero = true;
+				if ( in.mTransformation.vector()( row ) == 0 ) {
+					out << "0";
+				}
+			} else {
+				out << to_string<Number>( in.mTransformation.matrix().row( row ) );
+			}
+			if ( in.mTransformation.vector()( row ) != 0 ) {
+				if ( allZero || in.mTransformation.vector()( row ) < 0 ) {
+					out << in.mTransformation.vector()( row );
+				} else {
+					out << " + " << in.mTransformation.vector()( row );
+				}
+			}
+		}
 		return out;
 	}
 
