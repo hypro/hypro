@@ -121,6 +121,12 @@ struct AffineTransformation {
 	}
 
 	friend AffineTransformation<Number> operator+( const AffineTransformation<Number>& lhs, const AffineTransformation<Number>& rhs ) {
+		if ( rhs.isIdentity() ) {
+			return lhs;
+		}
+		if ( lhs.isIdentity() ) {
+			return rhs;
+		}
 		return AffineTransformation<Number>{ matrix_t<Number>( lhs.mTransformation.matrix() * ( rhs.mTransformation.matrix() ) ), lhs.mTransformation.vector() + rhs.mTransformation.vector() };
 	}
 };
