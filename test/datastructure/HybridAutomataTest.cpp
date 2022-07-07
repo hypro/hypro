@@ -257,6 +257,8 @@ TYPED_TEST( HybridAutomataTest, ResetTest ) {
 	scaling( 0, 0 ) = TypeParam( 0.5 );
 	scaling( 1, 1 ) = TypeParam( 0.25 );
 	resetB.rGetMatrix( 0 ) = scaling;
+	V scaledTranslation = -0.5 * resetA.getVector( 0 );
+	resetB.rGetVector( 0 ) = scaledTranslation;
 	res = resetA + resetB;
 	EXPECT_TRUE( res.isIdentity() );
 }

@@ -127,7 +127,7 @@ struct AffineTransformation {
 		if ( lhs.isIdentity() ) {
 			return rhs;
 		}
-		return AffineTransformation<Number>{ matrix_t<Number>( lhs.mTransformation.matrix() * ( rhs.mTransformation.matrix() ) ), lhs.mTransformation.vector() + rhs.mTransformation.vector() };
+		return AffineTransformation<Number>{ matrix_t<Number>( lhs.mTransformation.matrix() * ( rhs.mTransformation.matrix() ) ), lhs.mTransformation.vector() + lhs.mTransformation.matrix() * rhs.mTransformation.vector() };
 	}
 };
 

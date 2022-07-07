@@ -91,3 +91,46 @@ TEST( ZenoDetectionTest, CummulativeResets ) {
 	EXPECT_EQ( 1, zenoTransitions.size() );
 	EXPECT_EQ( transition2, zenoTransitions.front() );
 }
+
+TEST( ZenoDetectionTest, SymbolicApproach ) {
+	using M = hypro::matrix_t<Number>;
+	using V = hypro::vector_t<Number>;
+
+	auto ha = hypro::HybridAutomaton<Number>{};
+	auto loc1 = ha.createLocation();
+	auto loc2 = ha.createLocation();
+	auto transition = loc1->createTransition( loc2 );
+	M trafo = M::Identity( 2, 2 );
+	trafo( 0, 0 ) = 0;
+	V trans = V::Zero( 2 );
+	trans( 0 ) = 2;
+	transition->setReset( { trafo, trans } );
+	M constraint = M::Zero( 2, 2 );
+	constraint << 1, 0, -1, 0;
+	V constant = V::Zero( 2 );
+	transition->setGuard( { constraint, constant } );
+
+	auto root = Node{ loc1, Box{ std::vector<Interval>{ Interval{ 0, 1 }, Interval{ 0, 1 } } }, TimeInterval{ 0, 0 } };
+	auto child{ std::move( root.addChild( Box{ std::vector<Interval>{ Interval{ 0, 1 }, Interval{ 0, 1 } } }, TimeInterval{ 0, 0 },
+										  transition ) ) };
+
+	auto zenoTransitions = hypro::getZenoTransitions( &child );
+	EXPECT_EQ( 0, zenoTransitions.size() );
+
+	/* add further nodes, which are non-Zeno */
+	auto transition2 = loc2->createTransition( loc1 );
+
+	Vector translation = Vector( 2 );
+	translation << 0, 0;
+	Reset reset{ trafo, translation };
+	transition2->setReset( reset );
+	constant( 0 ) = 2;
+	constant( 1 ) = -2;
+	transition2->setGuard( { constraint, constant } );
+	auto child2{ std::move( child.addChild( Box{ std::vector<Interval>{ Interval{ 0, 1 }, Interval{ 0, 1 } } }, TimeInterval{ 0, 0 },
+											transition2 ) ) };
+	auto path = child2.getPath();
+
+	bool hasZeno = isZenoCycle( path );
+	EXPECT_TRUE( hasZeno );
+}
