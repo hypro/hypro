@@ -20,7 +20,7 @@ set(datastructure_test_sources
         HybridAutomataTest.cpp
         #HybridAutomataOutputTest.cpp
         WorkQueueTest.cpp
-        ##HybridAutomataParallelCompositionTest.cpp
+        HybridAutomataParallelCompositionTest.cpp
         )
 
 SET_SOURCE_FILES_PROPERTIES(${datastructure_test_sources} PROPERTIES COMPILE_FLAGS -O0)

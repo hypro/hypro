@@ -146,20 +146,22 @@ Reset<Number> combine(
 	matrix_t<Number> newMat;
 	vector_t<Number> newVec;
 
-	if ( lhs.size() == 0 && rhs.size() != 0 ) {
+	if ( lhs.isIdentity() && !rhs.isIdentity() ) {
 		// std::cout << "take rhs" << std::endl;
 		newMat = combine( matrix_t<Number>( 0, 0 ), rhs.getMatrix(), haVar, lhsVar, rhsVar );
 		newVec = combine( vector_t<Number>( 0 ), rhs.getVector() );
-	} else if ( lhs.size() != 0 && rhs.size() == 0 ) {
+	} else if ( !lhs.isIdentity() && rhs.isIdentity() ) {
 		// std::cout << "take lhs" << std::endl;
 		newMat = combine( lhs.getMatrix(), matrix_t<Number>( 0, 0 ), haVar, lhsVar, rhsVar );
 		newVec = combine( lhs.getVector(), vector_t<Number>( 0 ) );
-	} else if ( lhs.size() == 0 && rhs.size() == 0 ) {
+	} else if ( lhs.isIdentity() && rhs.isIdentity() ) {
 		// std::cout << "both empty" << std::endl;
 		return Reset<Number>();
 	} else {
 		assert( lhs.size() != 0 );
 		assert( rhs.size() != 0 );
+		assert( !lhs.isIdentity() );
+		assert( !rhs.isIdentity() );
 		// std::cout << "Default." << std::endl;
 		// std::cout << "Combine: " << lhs.getMatrix() << " and " << rhs.getMatrix() << std::endl;
 		// std::cout << "LhsVAR:";
@@ -176,7 +178,7 @@ Reset<Number> combine(
 		std::size_t lhsIC = 0;
 		std::size_t rhsIR = 0;
 		std::size_t rhsIC = 0;
-		bool admissible = true;	 // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
+		bool admissible = true;	 // flag used to denote a non-admissible reset, i.e. shared variables with different reset.
 		// iterate over all rows
 		for ( std::size_t rowI = 0; rowI != haVar.size(); ++rowI ) {
 			// std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
@@ -239,11 +241,9 @@ Reset<Number> combine(
 		// newVec = combine(lhs.getVector(), rhs.getVector());
 	}
 
-	Reset<Number> re;
-	re.setMatrix( newMat );
-	re.setVector( newVec );
+	std::cout << "Combined resets: " << newMat << ", " << newVec << std::endl;
 
-	return re;
+	return Reset<Number>{ newMat, newVec };
 }
 
 template <typename Number>
