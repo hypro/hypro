@@ -29,6 +29,8 @@
 #include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../datastructures/reachability/ReachTreev2Util.h"
 #include "../../datastructures/reachability/Settings.h"
+#include "GraphvizSettings.h"
+#include "PlotterUtil.h"
 
 namespace hypro::plotting {
 
@@ -41,7 +43,8 @@ template <typename Representation>
 class ReachTreePlotter {
   public:
 	ReachTreePlotter( const std::vector<ReachTreeNode<Representation>>& roots )
-		: mRoots( roots ) {}
+		: mRoots( roots )
+		, mSettings( { "rt_out", false } ) {}
 
 	/**
 	 * @brief Plots the complete reachtree
@@ -55,6 +58,13 @@ class ReachTreePlotter {
 	 * @param highlights Nodes that should be highlighted in the plot
 	 */
 	void plotPath( const ReachTreeNode<Representation>* node, const std::vector<ReachTreeNode<Representation>*>& highlights );
+
+	/**
+	 * Returns a reference to the internal plotting settings.
+	 * @details Should be used for easy access to the settings.
+	 * @return A reference to the internal graphvizSettings
+	 */
+	graphvizSettings& rSettings() { return mSettings; }
 
   private:
 	/**
@@ -91,6 +101,7 @@ class ReachTreePlotter {
 
 	const std::vector<ReachTreeNode<Representation>>& mRoots;				  ///< Stores the roots of a reachtree, in case the full tree needs to be plotted.
 	std::map<const ReachTreeNode<Representation>*, Agnode_t*> mNodePointers;  ///< Internal cache for nodes
+	graphvizSettings mSettings;												  ///< Settings for plotting
 };
 
 }  // namespace hypro::plotting

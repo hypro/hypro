@@ -289,6 +289,28 @@ class Location {
 		ostr << "\n}";
 		return ostr;
 	}
+	/// only prints the content without the transitions, i.e., only the name, dynamics, and invariant constraints
+	std::string printContent() const {
+		std::stringstream ss;
+		ss << getName() << "\n";
+		for ( size_t i = 0; i < getNumberSubspaces(); i++ ) {
+			switch ( getFlowTypes()[i] ) {
+				case DynamicType::linear:
+					ss << std::get<linearFlow<Number>>( getFlows()[i] ) << std::endl;
+					break;
+				case DynamicType::rectangular:
+					ss << std::get<rectangularFlow<Number>>( getFlows()[i] ) << std::endl;
+					break;
+				default:
+					break;
+			}
+		}
+		if ( !getInvariant().empty() ) {
+			ss << "\n"
+			   << getInvariant();
+		}
+		return ss.str();
+	}
 
   private:
 	bool isConsistent() const {

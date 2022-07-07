@@ -47,8 +47,6 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 		while ( file_exists( filename + "_" + plotting::to_string( outformat ) + ".plt" ) ) {
 			std::stringstream ss;
 			ss << mSettings.filename << "-" << cnt;
-			// title = ss.str();
-			// filename = title + "_pdf.plt";
 			filename = ss.str();
 			++cnt;
 		}
