@@ -1,5 +1,5 @@
 #pragma once
-#include "../../../flags.h"
+#include <hypro/flags.h>
 #ifdef HYPRO_USE_Z3
 #include <carl/numbers/numbers.h>
 #include <gmpxx.h>

@@ -14,10 +14,11 @@
 //
 
 #pragma once
-#include "../../../../../src/hypro/flags.h"
 #include "../../../datastructures/Point.h"
 #include "../../../types.h"
 #include "../EvaluationResult.h"
+
+#include <hypro/flags.h>
 #ifdef HYPRO_USE_Z3
 #include "z3Context.h"
 
@@ -173,6 +174,16 @@ static std::pair<z3::expr, z3::expr> createFormula( const matrix_t<Number>& _con
 	}
 
 	return std::make_pair( formula, objective );
+}
+
+template <typename Number>
+static z3::expr createFormula( const ConstraintsT<Number>& constraint_conjunction, z3Context& c, std::vector<z3::expr>& variables ) {
+	z3::expr formula( c );
+
+	for ( const auto& constraint : constraint_conjunction ) {
+		formula = formula && createFormula( constraint, variables );
+	}
+	return formula;
 }
 
 template <typename Number>
