@@ -96,9 +96,17 @@ TEST( ZenoDetectionTest, SymbolicApproach ) {
 	using M = hypro::matrix_t<Number>;
 	using V = hypro::vector_t<Number>;
 
+	// cleanup variables pool for better readability of the variables' names
+	hypro::VariablePool::getInstance().clear();
+
 	auto ha = hypro::HybridAutomaton<Number>{};
 	auto loc1 = ha.createLocation();
 	auto loc2 = ha.createLocation();
+	// set flow, required
+	M flow = M::Identity( 3, 3 );
+	flow( 2, 2 ) = 0;
+	loc1->setFlow( flow );
+	loc2->setFlow( flow );
 	auto transition = loc1->createTransition( loc2 );
 	M trafo = M::Identity( 2, 2 );
 	trafo( 0, 0 ) = 0;
