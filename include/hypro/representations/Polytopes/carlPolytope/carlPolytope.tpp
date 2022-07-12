@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "carlPolytope.h"
 
 namespace hypro {
@@ -90,15 +99,72 @@ CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setti
 			assert( ( CarlPolytopeT<Number, Converter, Setting>( constraints * A.inverse(), constants ).size() == this->size() ) );
 			return CarlPolytopeT<Number, Converter, Setting>( constraints * A.inverse(), constants );
 		} else {
-			TRACE( "hypro.representations.carlPolytope", "Use V-Conversion for linear transformation." );
-			auto intermediate = Converter::toVPolytope( *this );
-			intermediate = intermediate.linearTransformation( A );
-			auto res = Converter::toCarlPolytope( intermediate );
-			return res;
+			TRACE( "hypro.representations.carlPolytope", "Use Fourier-Motzkin elimination for linear transformation." );
+			auto problem_description = mFormula;
+			std::size_t dim = this->dimension();
+			matrix_t<Number> trafo = matrix_t<Number>::Zero( dim, dim * 2 );
+			trafo.block( 0, 0, dim, dim ) = A;
+			trafo.block( 0, dim, dim, dim ) = -matrix_t<Number>::Identity( dim, dim );
+			FormulasT<Number> single_translations;
+			for ( Eigen::Index row = 0; row < dim; ++row ) {
+				single_translations.push_back( FormulaT<Number>{ rowToConstraint<Number>( Vector( trafo.row( row ) ), 0, carl::Relation::EQ ) } );
+			}
+			FormulaT<Number> translation_formula{ carl::FormulaType::AND, single_translations };
+			problem_description = FormulaT<Number>( carl::FormulaType::AND, problem_description, translation_formula );
+			// assemble variables
+			std::vector<carl::Variable> variables;
+			for ( std::size_t i = 0; i < dim; ++i ) {
+				variables.push_back( VariablePool::getInstance().carlVarByIndex( i ) );
+			}
+
+			FourierMotzkinQE<Number> qe_method{ problem_description, QEQuery{ { QuantifierType::EXISTS, variables } } };
+			auto result = qe_method.eliminateQuantifiers();
+
+			// substitute variables back
+			for ( std::size_t i = 0; i < dim; ++i ) {
+				result = result.substitute( VariablePool::getInstance().carlVarByIndex( dim + i ), VariablePool::getInstance().carlVarByIndex( i ) );
+			}
+			return CarlPolytopeT{ result, dim };
 		}
 	} else {
 		return *this;
 	}
+}
+
+template <typename Number, typename Converter, typename Setting>
+CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+	TRACE( "hypro.representations.carlPolytope", "Use Fourier-Motzkin elimination for affine transformation." );
+	auto problem_description = mFormula;
+	std::size_t dim = this->dimension();
+	std::size_t rows = dim;
+	std::size_t cols = dim * 2;
+	std::size_t arows = A.rows();
+	assert( A.rows() == rows );
+	assert( A.cols() == dim );
+	matrix_t<tNumber> trafo = matrix_t<tNumber>::Zero( rows, cols );
+	trafo.block( 0, 0, rows, dim ) = convert<Number, tNumber>( A );
+	trafo.block( 0, dim, dim, dim ) = -matrix_t<tNumber>::Identity( dim, dim );
+	FormulasT<tNumber> single_translations;
+	for ( Eigen::Index row = 0; row < dim; ++row ) {
+		single_translations.push_back( FormulaT<tNumber>{ rowToConstraint<tNumber>( vector_t<tNumber>( trafo.row( row ) ), carl::convert<Number, tNumber>( -b( row ) ), carl::Relation::EQ ) } );
+		TRACE( "hypro.representations.carlPolytope", "Add translation constraint " << single_translations.back() << " originating from " << vector_t<tNumber>( trafo.row( row ) ) << " and " << b( row ) );
+	}
+	FormulaT<tNumber> translation_formula{ carl::FormulaType::AND, single_translations };
+	problem_description = FormulaT<tNumber>( carl::FormulaType::AND, problem_description, translation_formula );
+	// assemble variables
+	std::vector<carl::Variable> variables;
+	for ( std::size_t i = 0; i < dim; ++i ) {
+		variables.push_back( VariablePool::getInstance().carlVarByIndex( i ) );
+	}
+
+	FourierMotzkinQE<tNumber> qe_method{ problem_description, QEQuery{ { QuantifierType::EXISTS, variables } } };
+	auto result = qe_method.eliminateQuantifiers();
+
+	// substitute variables back
+	for ( std::size_t i = 0; i < dim; ++i ) {
+		result = result.substitute( VariablePool::getInstance().carlVarByIndex( dim + i ), PolyT<tNumber>( VariablePool::getInstance().carlVarByIndex( i ) ) );
+	}
+	return CarlPolytopeT{ result, dim };
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -189,27 +255,11 @@ void CarlPolytopeT<Number, Converter, Setting>::addConstraint( const ConstraintT
 	constraints.push_back( constraint );
 	mFormula = FormulaT<tNumber>( carl::FormulaType::AND, constraintsToFormulas( constraints ) );
 	TRACE( "hypro.representations.carlPolytope", "After adding a constraint " << *this );
-	mSpaceDimensionSet = false;
-	detectDimension();
 }
 
 template <typename Number, typename Converter, typename Setting>
 void CarlPolytopeT<Number, Converter, Setting>::addConstraints( const std::vector<ConstraintT<tNumber>>& constraints ) {
-	// reset Half-space cache
-	mHalfspaces.clear();
-	// if not empty, reset cache
-	if ( mEmptyState != SETSTATE::EMPTY ) {
-		mEmptyState = SETSTATE::UNKNOWN;
-	} else {
-		return;
-	}
-	// add constraints to formula
-	auto cCopy = constraints;
-	mFormula.getConstraints( cCopy );
-	mFormula = FormulaT<tNumber>( carl::FormulaType::AND, constraintsToFormulas( cCopy ) );
-	TRACE( "hypro.representations.carlPolytope", "After adding constraints " << *this );
-	mSpaceDimensionSet = false;
-	detectDimension();
+	std::for_each( std::begin( constraints ), std::end( constraints ), [&]( const auto& c ) { this->addConstraint( c ); } );
 }
 
 template <typename Number, typename Converter, typename Setting>
