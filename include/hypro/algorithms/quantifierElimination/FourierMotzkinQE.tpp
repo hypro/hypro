@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "FourierMotzkinQE.h"
 
 namespace hypro {
@@ -32,7 +41,7 @@ FormulaT<Number> FourierMotzkinQE<Number>::eliminateQuantifiers() {
 
 			// assemble new formula
 			mFormula = FormulaT<Number>( carl::FormulaType::AND, newConstraints );
-			DEBUG( "hypro.algorithms.qe", "Done elimiating " << var << ", new formula size: " << mFormula.size() );
+			DEBUG( "hypro.algorithms.qe", "Done elimiating " << var << ", new formula size: " << mFormula.size() << ", new formula: " << mFormula );
 		}
 	}
 
@@ -44,8 +53,15 @@ FormulaT<Number> FourierMotzkinQE<Number>::eliminateQuantifiers() {
 template <typename Number>
 typename FourierMotzkinQE<Number>::FormulaPartition FourierMotzkinQE<Number>::findBounds(
 	  const carl::Variable& variable ) {
+	TRACE( "hypro.algorithms.qe", "Find bounds in " << mFormula );
 	// result vector initialized with three subsets
 	typename FourierMotzkinQE<Number>::FormulaPartition res{ 4, std::vector<FormulaT<Number>>() };
+	// corner-cases
+	if ( !mFormula.isNary() && mFormula.getType() != carl::FormulaType::CONSTRAINT ) {
+		// if any other case happens, this should not be
+		assert( mFormula.isFalse() || mFormula.isTrue() );
+		return res;
+	}
 
 	// if the formula only contains one constraint, check for occurence of the variable.
 	if ( mFormula.getType() == carl::FormulaType::CONSTRAINT ) {
@@ -160,16 +176,17 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 
 	// substitute
 	for ( const auto& f : substitutes ) {
-		// std::cout << "Substitute: " << f << std::endl;
+		TRACE( "hypro.algorithms.qe", "Substitute variable " << v << " using: " << f );
 		assert( f.getType() == carl::FormulaType::CONSTRAINT );
-		PolyT<Number> substitute = -( f.constraint().lhs() - f.constraint().coefficient( v, 1 ) * v );
+		PolyT<Number> substitute = -( f.constraint().lhs() - f.constraint().coefficient( v, 1 ) * v ) / f.constraint().coefficient( v, 1 );
+		TRACE( "hypro.algorithms.qe", "Substitution polynomial is: " << substitute );
 		// lower bounds
 		for ( auto fc : bounds[0] ) {
 			assert( fc.getType() == carl::FormulaType::CONSTRAINT );
 			constraints.emplace_back( hypro::substitute( fc.constraint().lhs(), v, substitute ),
 									  // constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
 									  fc.constraint().relation() );
-			// std::cout << "substitute lower bound to " << constraints.back() << std::endl;
+			TRACE( "hypro.algorithms.qe", "Substitute lower bound " << fc << " to " << constraints.back() );
 		}
 		// upper bounds
 		for ( auto fc : bounds[1] ) {
@@ -177,7 +194,7 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 			constraints.emplace_back( hypro::substitute( fc.constraint().lhs(), v, substitute ),
 									  // constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
 									  fc.constraint().relation() );
-			// std::cout << "substitute upper bound to " << constraints.back() << std::endl;
+			TRACE( "hypro.algorithms.qe", "Substitute upper bound " << fc << " to " << constraints.back() );
 		}
 	}
 
