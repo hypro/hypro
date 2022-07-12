@@ -240,49 +240,6 @@ std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( con
 	return result;
 }
 
-template <typename Number>
-bool isZenoCycle( const Path<Number>& path ) {
-	// check, whether the locations match
-	if ( path.elements.front().second->getSource() != path.elements.back().second->getTarget() ) {
-		return false;
-	}
-	// keep first guard set
-	auto initialGuardCondition = halfspacesToConstraints<mpq_class, Number>( path.elements.front().second->getGuard().getMatrix(), path.elements.front().second->getGuard().getVector() );
-	// collect expression for all guards and resets
-	auto currentSet = initialGuardCondition;
-	for ( const std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>& element : path.elements ) {
-		auto& guardCondition = element.second->getGuard();
-		auto& reset = element.second->getReset();
-		auto guardConstraints = halfspacesToConstraints<mpq_class, Number>( guardCondition.getMatrix(), guardCondition.getVector() );
-		// apply guard - conjunction
-		currentSet.insert( currentSet.end(), std::begin( guardConstraints ), std::end( guardConstraints ) );
-		// gather substitutions for reset
-		std::map<carl::Variable, PolyT<mpq_class>> substitutions;
-		if ( !reset.isIdentity() ) {
-			for ( Eigen::Index row = 0; row < reset.getAffineReset().size(); ++row ) {
-				if ( !reset.isIdentity( row ) ) {
-					vector_t<Number> trafoRow = reset.getAffineReset().mTransformation.matrix().row( row );
-					auto cstr = halfspaceToConstraint<mpq_class, Number>( trafoRow, reset.getAffineReset().mTransformation.vector()( row ) );
-					auto poly = cstr.lhs() - carl::convert<Number, mpq_class>( reset.getAffineReset().mTransformation.vector()( row ) );
-					substitutions.insert( std::make_pair( VariablePool::getInstance().carlVarByIndex( row ), poly ) );
-				}
-			}
-		}
-		// apply reset, create a copy of the constraints
-		ConstraintsT<mpq_class> newConstraints;
-		for ( auto& constraint : guardConstraints ) {
-			newConstraints.template emplace_back( carl::substitute( constraint.lhs(), substitutions ), carl::Relation::LEQ );
-		}
-		guardConstraints = newConstraints;
-	}
-	std::cout << "current set: \n";
-	for ( const auto& c : currentSet )
-		std::cout << c << ", ";
-	std::cout << "\nthe initial condition was: ";
-	for ( const auto& c : initialGuardCondition )
-		std::cout << c << ", " << std::endl;
-	return currentSet == initialGuardCondition;
-}
 
 template <typename Number>
 bool isZenoCycle2( const Path<Number>& path ) {
@@ -291,59 +248,31 @@ bool isZenoCycle2( const Path<Number>& path ) {
 		return false;
 	}
 	// keep first guard set
-	auto initialGuardCondition = halfspacesToConstraints<mpq_class, Number>( path.elements.front().second->getGuard().getMatrix(), path.elements.front().second->getGuard().getVector() );
-	// collect expression for all guards and resets
+	auto initialGuardCondition = CarlPolytope<Number>( path.elements.front().second->getGuard().getMatrix(), path.elements.front().second->getGuard().getVector() );
+	// manually set dimension as the guard-condition may be "true" and hides the state space dimension
+	initialGuardCondition.setDimension( path.elements.front().second->getSource()->dimension() );
+	// std::cout << "Initial guard set " << initialGuardCondition << " with dimension " << initialGuardCondition.dimension() << std::endl;
+	//  collect expression for all guards and resets
 	auto currentSet = initialGuardCondition;
+	// std::cout << "Current set " << currentSet << " with dimension " << currentSet.dimension() << std::endl;
 	for ( const std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>& element : path.elements ) {
 		auto& guardCondition = element.second->getGuard();
 		auto& reset = element.second->getReset();
+		// std::cout << "Guard: " << guardCondition << ", and current set: " << currentSet << ", with dimensions " << guardCondition.dimension() << " and " << currentSet.dimension() << std::endl;
+		//  non-trivial guard -> dimensions must be equal
+		assert( ( guardCondition.isTrue() || guardCondition.isFalse() ) || currentSet.dimension() == guardCondition.dimension() );
 		auto guardConstraints = halfspacesToConstraints<mpq_class, Number>( guardCondition.getMatrix(), guardCondition.getVector() );
 		// apply guard - conjunction
-		currentSet.insert( currentSet.end(), std::begin( guardConstraints ), std::end( guardConstraints ) );
-		// gather substitutions for reset
-		std::map<carl::Variable, PolyT<mpq_class>> substitutions;
+		currentSet.addConstraints( guardConstraints );
+		// std::cout << "(after adding constraints) Current set " << currentSet << " with dimension " << currentSet.dimension() << std::endl;
 		if ( !reset.isIdentity() ) {
-			for ( Eigen::Index row = 0; row < reset.getAffineReset().size(); ++row ) {
-				if ( !reset.isIdentity( row ) ) {
-					vector_t<Number> trafoRow = reset.getAffineReset().mTransformation.matrix().row( row );
-					auto cstr = halfspaceToConstraint<mpq_class, Number>( trafoRow, reset.getAffineReset().mTransformation.vector()( row ) );
-					auto poly = cstr.lhs() - carl::convert<Number, mpq_class>( reset.getAffineReset().mTransformation.vector()( row ) );
-					substitutions.insert( std::make_pair( VariablePool::getInstance().carlVarByIndex( row ), poly ) );
-				}
-			}
+			currentSet = currentSet.affineTransformation( reset.getMatrix(), reset.getVector() );
+			// std::cout << "(after transformation) Current set " << currentSet << " with dimension " << currentSet.dimension() << std::endl;
 		}
-		// apply reset, create a copy of the constraints
-		ConstraintsT<mpq_class> newConstraints;
-		for ( auto& constraint : guardConstraints ) {
-			newConstraints.template emplace_back( carl::substitute( constraint.lhs(), substitutions ), carl::Relation::LEQ );
-		}
-		guardConstraints = newConstraints;
 	}
-	std::cout << "current set: \n";
-	for ( const carl::Constraint<PolyT<mpq_class>>& c : currentSet )
-		std::cout << c << ", ";
+	// std::cout << "current set: " << currentSet << std::endl;
 
-	// collect variables
-	std::set<carl::Variable> variables;
-	for ( const carl::Constraint<PolyT<mpq_class>>& c : currentSet ) {
-		auto tmp = c.variables();
-		variables.insert( std::begin( tmp ), std::end( tmp ) );
-	}
-	std::vector<carl::Variable> vars{ std::begin( variables ), std::end( variables ) };
-
-	FormulaT<mpq_class> current_set_formula = FormulaT<mpq_class>( carl::FormulaType::TRUE );
-	for ( const auto& c : currentSet ) {
-		current_set_formula = FormulaT<mpq_class>( carl::FormulaType::AND, current_set_formula, FormulaT<mpq_class>( c ) );
-	}
-
-	FourierMotzkinQE<mpq_class> qe = FourierMotzkinQE( current_set_formula, { { QuantifierType::EXISTS, vars } } );
-	auto resultformula = qe.eliminateQuantifiers();
-
-	std::cout << "Formula after elimination: " << resultformula << std::endl;
-
-	std::cout << "\nthe initial condition was: ";
-	for ( const auto& c : initialGuardCondition )
-		std::cout << c << ", " << std::endl;
+	// std::cout << "\nthe initial condition was: " << initialGuardCondition << std::endl;
 	return currentSet == initialGuardCondition;
 }
 
