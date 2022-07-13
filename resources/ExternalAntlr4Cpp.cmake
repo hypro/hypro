@@ -29,7 +29,7 @@ ExternalProject_ADD(
         LOG_BUILD ON
         LOG_MERGED_STDOUTERR ON
         LOG_OUTPUT_ON_FAILURE ON
-        #INSTALL_COMMAND ""
+        INSTALL_COMMAND ""
 )
 
 ExternalProject_Get_Property(antlr4cpp INSTALL_DIR)

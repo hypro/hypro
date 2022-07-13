@@ -14,6 +14,7 @@
 #include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../representations/GeometricObjectBase.h"
 #include "../../representations/Polytopes/carlPolytope/util.h"
+#include "../../representations/equivalence.h"
 #include "FlowpipeConstructionConvenience.h"
 
 namespace hypro {
@@ -241,7 +242,7 @@ std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( con
 }
 
 template <typename Number>
-bool isZenoCycle2( const Path<Number>& path ) {
+bool isZenoCycle( const Path<Number>& path ) {
 	// check, whether the locations match
 	if ( path.elements.front().second->getSource() != path.elements.back().second->getTarget() ) {
 		return false;
@@ -263,6 +264,7 @@ bool isZenoCycle2( const Path<Number>& path ) {
 		auto guardConstraints = halfspacesToConstraints<mpq_class, Number>( guardCondition.getMatrix(), guardCondition.getVector() );
 		// apply guard - conjunction
 		currentSet.addConstraints( guardConstraints );
+		currentSet.setDimension( initialGuardCondition.dimension() );
 		// std::cout << "(after adding constraints) Current set " << currentSet << " with dimension " << currentSet.dimension() << std::endl;
 		if ( !reset.isIdentity() ) {
 			currentSet = currentSet.affineTransformation( reset.getMatrix(), reset.getVector() );
@@ -272,7 +274,7 @@ bool isZenoCycle2( const Path<Number>& path ) {
 	// std::cout << "current set: " << currentSet << std::endl;
 
 	// std::cout << "\nthe initial condition was: " << initialGuardCondition << std::endl;
-	return currentSet == initialGuardCondition;
+	return symbolicEquivalence( currentSet, initialGuardCondition );
 }
 
 /**

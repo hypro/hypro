@@ -139,6 +139,6 @@ TEST( ZenoDetectionTest, SymbolicApproach ) {
 											transition2 ) ) };
 	auto path = child2.getPath();
 
-	bool hasZeno = isZenoCycle2( path );
+	bool hasZeno = isZenoCycle( path );
 	EXPECT_TRUE( hasZeno );
 }

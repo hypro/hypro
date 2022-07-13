@@ -139,7 +139,7 @@ CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setti
 	std::size_t rows = dim;
 	std::size_t cols = dim * 2;
 	std::size_t arows = A.rows();
-	assert( A.rows() == rows );
+	assert( A.rows() == dim );
 	assert( A.cols() == dim );
 	matrix_t<tNumber> trafo = matrix_t<tNumber>::Zero( rows, cols );
 	trafo.block( 0, 0, rows, dim ) = convert<Number, tNumber>( A );
@@ -254,6 +254,7 @@ void CarlPolytopeT<Number, Converter, Setting>::addConstraint( const ConstraintT
 	mFormula.getConstraints( constraints );
 	constraints.push_back( constraint );
 	mFormula = FormulaT<tNumber>( carl::FormulaType::AND, constraintsToFormulas( constraints ) );
+	detectDimension();
 	TRACE( "hypro.representations.carlPolytope", "After adding a constraint " << *this );
 }
 
