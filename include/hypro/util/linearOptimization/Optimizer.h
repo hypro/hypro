@@ -64,7 +64,7 @@ class Optimizer {
 	mutable std::vector<carl::Relation> mRelationSymbols;
 
 	// dependent members, all mutable
-#ifdef HYPRO_USE_SMTRAT
+#if HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
 	mutable smtrat::SimplexSolver mSmtratSolver;
 	mutable smtrat::FormulaT mCurrentFormula;
 	mutable std::unordered_map<smtrat::FormulaT, std::size_t> mFormulaMapping;
@@ -74,11 +74,11 @@ class Optimizer {
 #endif
 #endif
 	mutable std::mutex mContextLock;
-#ifdef HYPRO_USE_GLPK
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 	// Glpk as a presolver
 	mutable std::map<std::thread::id, glpk_context> mGlpkContexts;
 #endif
-#ifdef HYPRO_USE_CLP
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 	// CLP as a solver
 	mutable std::map<std::thread::id, clp_context> mClpContexts;
 #endif
@@ -93,7 +93,7 @@ class Optimizer {
 		, mConsistencyChecked( false )
 		, maximize( max )
 		, mRelationSymbols() {
-#ifdef HYPRO_USE_GLPK
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 		glp_term_out( GLP_OFF );
 #endif
 #ifdef VERIFY_RESULT
@@ -131,7 +131,7 @@ class Optimizer {
 		, mConsistencyChecked( false )
 		, maximize( max )
 		, mRelationSymbols( std::vector<carl::Relation>( constraints.rows(), carl::Relation::LEQ ) ) {
-#ifdef HYPRO_USE_GLPK
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 		glp_term_out( GLP_OFF );
 #endif
 		assert( constraints.rows() > 0 );
@@ -150,15 +150,19 @@ class Optimizer {
 	void cleanContexts();
 
 #ifndef NDEBUG
-	inline SOLUTION getLastConsistencyAnswer() const { return mLastConsistencyAnswer; }
-	inline bool getConsistencyChecked() const { return mConsistencyChecked; }
+	inline SOLUTION getLastConsistencyAnswer() const {
+		return mLastConsistencyAnswer;
+	}
+	inline bool getConsistencyChecked() const {
+		return mConsistencyChecked;
+	}
 #endif
-#ifdef HYPRO_USE_GLPK
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 	inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
 		return mGlpkContexts;
 	}
 #endif
-#ifdef HYPRO_USE_CLP
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 	inline const std::map<std::thread::id, clp_context>& getCLPContexts() const {
 		return mClpContexts;
 	}
@@ -169,10 +173,10 @@ class Optimizer {
 		std::swap( lhs.mConstraintVector, rhs.mConstraintVector );
 		std::swap( lhs.mConsistencyChecked, rhs.mConsistencyChecked );
 		std::swap( lhs.mRelationSymbols, rhs.mRelationSymbols );
-#ifdef HYPRO_USE_GLPK
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 		std::swap( lhs.mGlpkContexts, rhs.mGlpkContexts );
 #endif
-#ifdef HYPRO_USE_CLP
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 		std::swap( lhs.mClpContexts, rhs.mClpContexts );
 #endif
 		std::swap( lhs.mLastConsistencyAnswer, rhs.mLastConsistencyAnswer );

@@ -17,7 +17,7 @@ void Optimizer<Number>::cleanContexts() {
 	TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " attempts to erase its context. (@" << this << ")" );
 
 	std::lock_guard<std::mutex> lock( mContextLock );
-#ifdef HYPRO_USE_GLPK
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 	auto ctxtItGlpk = mGlpkContexts.find( std::this_thread::get_id() );
 	if ( ctxtItGlpk != mGlpkContexts.end() ) {
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mGlpkContexts.size() );
@@ -27,7 +27,7 @@ void Optimizer<Number>::cleanContexts() {
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mGlpkContexts.size() );
 	}
 #endif
-#ifdef HYPRO_USE_CLP
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 	auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
 	if ( ctxtItClp != mClpContexts.end() ) {
 		TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mClpContexts.size() );
@@ -154,12 +154,12 @@ void Optimizer<Number>::clear() {
 	//	mSmtratSolver.clear();
 	//#endif
 	std::lock_guard<std::mutex> lock( mContextLock );
-#ifdef HYPRO_USE_GLPK
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 	while ( !mGlpkContexts.empty() ) {
 		mGlpkContexts.erase( mGlpkContexts.begin() );
 	}
 #endif
-#ifdef HYPRO_USE_CLP
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 	while ( !mClpContexts.empty() ) {
 		mClpContexts.erase( mClpContexts.begin() );
 	}
@@ -296,14 +296,14 @@ bool Optimizer<Number>::checkConsistency() const {
 		return true;
 	}
 
-#ifdef HYPRO_USE_SMTRAT
+#if HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
 	// TRACE("hypro.optimizer","Use smtrat for consistency check.");
 	mLastConsistencyAnswer = smtratCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
-#elif defined( HYPRO_USE_Z3 )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
 	mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
-#elif defined( HYPRO_USE_SOPLEX )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
 	mLastConsistencyAnswer = soplexCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
 	mConsistencyChecked = true;
 #endif
@@ -332,11 +332,11 @@ bool Optimizer<Number>::checkPoint( const Point<Number>& _point ) const {
 		return true;
 	}
 
-#ifdef HYPRO_USE_Z3
+#if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
 	return z3CheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
-#elif defined( HYPRO_USE_SMTRAT )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
 	return smtratCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
-#elif defined( HYPRO_USE_SOPLEX )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
 	return soplexCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
 	return glpkCheckPoint( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point );
@@ -358,11 +358,11 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
 
 	EvaluationResult<Number> res;
 
-#if defined( HYPRO_USE_SMTRAT )
+#if HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
 	res = smtratGetInternalPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
-#elif defined( HYPRO_USE_SOPLEX )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
 	res = soplexGetInternalPoint<Number>( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
@@ -392,11 +392,11 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 		return res;
 	}
 
-#ifdef HYPRO_USE_Z3
+#if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
 	res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
-#elif defined( HYPRO_USE_SMTRAT )  // elif HYPRO_USE_SMTRAT
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
 	res = smtratRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
-#elif defined( HYPRO_USE_SOPLEX )
+#elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
 	res = soplexRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
 	res = glpkRedundantConstraints( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
@@ -412,7 +412,7 @@ std::vector<std::size_t> Optimizer<Number>::redundantConstraints() const {
 template <typename Number>
 bool Optimizer<Number>::isSane() const {
 #ifndef NDEBUG
-#ifdef HYPRO_USE_GLPK
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 	// std::lock_guard<std::mutex> lock( mContextLock );
 	TRACE( "hypro.optimizer", "Have " << mGlpkContexts.size() << " instances to check." );
 	for ( const auto& glpPair : mGlpkContexts ) {
@@ -431,7 +431,7 @@ template <typename Number>
 void Optimizer<Number>::initialize() const {
 	assert( isSane() );
 
-#if defined( HYPRO_USE_GLPK )
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 	std::lock_guard<std::mutex> lock( mContextLock );
 	mGlpkContexts[std::this_thread::get_id()].createLPInstance();
 	assert( mGlpkContexts[std::this_thread::get_id()].mInitialized == true );
@@ -444,7 +444,7 @@ void Optimizer<Number>::initialize() const {
 		mGlpkContexts.emplace( std::this_thread::get_id(), glpk_context() );
 	}
 #endif
-#if defined( HYPRO_USE_CLP )
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 	if ( mClpContexts.find( std::this_thread::get_id() ) == mClpContexts.end() ) {
 		std::lock_guard<std::mutex> lock( mContextLock );
 		TRACE( "hypro.optimizer", "Actual creation." );
@@ -461,20 +461,20 @@ void Optimizer<Number>::updateConstraints() const {
 	assert( isSane() );
 	initialize();
 
-#if defined( HYPRO_USE_GLPK )
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 	{
 		std::lock_guard<std::mutex> lock( mContextLock );
 		mGlpkContexts[std::this_thread::get_id()].updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
 	}
 #endif
-#if defined( HYPRO_USE_CLP )
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 	{
 		std::lock_guard<std::mutex> lock( mContextLock );
 		mClpContexts[std::this_thread::get_id()].updateConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
 	}
 #endif
 
-#ifdef HYPRO_USE_SMTRAT
+#if HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
 #ifndef RECREATE_SOLVER
 	mSmtratSolver.pop();
 	if ( !mSmtratSolver.formula().empty() ) {
@@ -510,7 +510,7 @@ void Optimizer<Number>::updateConstraints() const {
 
 template <typename Number>
 void Optimizer<Number>::clearCache() const {
-#ifdef HYPRO_USE_GLPK
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
 	{
 		std::lock_guard<std::mutex> lock( mContextLock );
 		for ( auto& idContextPair : mGlpkContexts ) {
@@ -518,7 +518,7 @@ void Optimizer<Number>::clearCache() const {
 		}
 	}
 #endif
-#ifdef HYPRO_USE_CLP
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
 	{
 		std::lock_guard<std::mutex> lock( mContextLock );
 		for ( auto& idContextPair : mClpContexts ) {

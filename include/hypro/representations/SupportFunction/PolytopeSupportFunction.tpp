@@ -270,7 +270,7 @@ EvaluationResult<Number> PolytopeSupportFunction<Number, Setting>::evaluate( con
 	if ( Setting::PPOLYTOPESUPPORTFUNCTION_VERBOSE ) {
 		std::cout << __func__ << ": " << *this << " evaluated in direction " << convert<Number, double>( l ) << " results in " << res << std::endl;
 	}
-#if defined( HYPRO_USE_SMTRAT ) || defined( HYPRO_USE_Z3 ) || defined( HYPRO_USE_SOPLEX )
+#if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE or HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT or HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
 	assert( res.errorCode != SOLUTION::FEAS || this->contains( res.optimumValue ) );
 #endif
 	// assert( std::size_t(l.rows()) == mDimension );
