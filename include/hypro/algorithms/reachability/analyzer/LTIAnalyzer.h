@@ -50,21 +50,20 @@ class LTIAnalyzer {
 	}
 
 	/// move constructor
-	LTIAnalyzer(LTIAnalyzer&& other) :
-		  mWorkQueue(),
-	mHybridAutomaton(other.mHybridAutomaton),
-	mFixedParameters(std::move(other.mFixedParameters)),
-	mParameters(std::move(other.mParameters)),
-	mRoots(other.mRoots),
-		mNumThreads(),
-	mThreads(),
-	mIdle(),
-	mQueueMutex(),
-	mThreadPoolMutex(),
-	mQueueNonEmpty(),
-		mTerminate(),
-		mStopped()
-	{
+	LTIAnalyzer( LTIAnalyzer&& other )
+		: mWorkQueue()
+		, mHybridAutomaton( other.mHybridAutomaton )
+		, mFixedParameters( std::move( other.mFixedParameters ) )
+		, mParameters( std::move( other.mParameters ) )
+		, mRoots( other.mRoots )
+		, mNumThreads()
+		, mThreads()
+		, mIdle()
+		, mQueueMutex()
+		, mThreadPoolMutex()
+		, mQueueNonEmpty()
+		, mTerminate()
+		, mStopped() {
 	}
 
 	~LTIAnalyzer() {

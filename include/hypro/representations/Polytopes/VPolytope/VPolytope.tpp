@@ -388,11 +388,8 @@ bool VPolytopeT<Number, Converter, S>::contains( const vector_t<Number>& vec ) c
 
 template <typename Number, typename Converter, typename S>
 bool VPolytopeT<Number, Converter, S>::contains( const VPolytopeT<Number, Converter, S>& _other ) const {
-	// std::cout << *this<< " " << __func__ << " " << _other << std::endl;
 	for ( const auto& vertex : _other.vertices() ) {
-		// std::cout << __func__ << " check vertex " << vertex << std::endl;
 		if ( !this->contains( vertex ) ) {
-			// std::cout << "false" << std::endl;
 			return false;
 		}
 	}
@@ -660,7 +657,7 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 			simplex.push();
 		}
 #else
-		mVertices = removeRedundantPoints(mVertices);
+		mVertices = removeRedundantPoints( mVertices );
 #endif
 	}
 	mReduced = true;

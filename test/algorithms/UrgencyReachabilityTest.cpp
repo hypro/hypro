@@ -1,3 +1,5 @@
+#include "test/defines.h"
+
 #include <gtest/gtest.h>
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/algorithms/reachability/analyzer/UrgencyCEGARAnalyzer.h>
@@ -6,8 +8,6 @@
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/Settings.h>
 #include <hypro/representations/GeometricObjectBase.h>
-
-#include "test/defines.h"
 
 using namespace hypro;
 

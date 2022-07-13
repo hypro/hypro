@@ -37,7 +37,7 @@ add_dependencies(runDatastructureTests hypro_resources)
 target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
 
 target_link_libraries(runDatastructureTests PUBLIC
-        ${PROJECT_NAME}-static
+        ${PROJECT_NAME}-shared
         ${GTEST_LIBRARIES}
         cereal::cereal
         )

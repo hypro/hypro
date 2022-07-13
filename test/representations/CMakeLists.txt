@@ -38,7 +38,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     target_link_libraries(runRepresentationTests PUBLIC
             ${GTEST_LIBRARIES}
-            ${PROJECT_NAME}-static
+            ${PROJECT_NAME}-shared
             )
 
     cotire(runRepresentationTests)

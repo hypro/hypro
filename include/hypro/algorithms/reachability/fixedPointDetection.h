@@ -240,7 +240,6 @@ std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( con
 	return result;
 }
 
-
 template <typename Number>
 bool isZenoCycle2( const Path<Number>& path ) {
 	// check, whether the locations match
