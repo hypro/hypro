@@ -251,3 +251,56 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, labelledTransitions ) {
 
 	EXPECT_TRUE( std::any_of( std::begin( res.getLocations().front()->getTransitions() ), std::end( res.getLocations().front()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == expectedLabels; } ) );
 }
+
+TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariablesAndlabelledTransitions ) {
+	using namespace hypro;
+	auto ha1 = HybridAutomaton<TypeParam>();
+	auto ha2 = HybridAutomaton<TypeParam>();
+	ha1.setVariables( { "a", "b"} );
+	ha2.setVariables( { "a" } );
+
+	auto* loc11 = ha1.createLocation( "l11" );
+	auto* loc12 = ha1.createLocation( "l12" );
+	auto* loc21 = ha2.createLocation( "l21" );
+	auto* loc22 = ha2.createLocation( "l22" );
+	// set initial states since otherwise the cleanup of the ||-operator removes all non-reachable locations
+	ha1.addInitialState( loc11, conditionFromIntervals<TypeParam>( { carl::Interval<TypeParam>{ 1 }, carl::Interval<TypeParam>{ 0, 1 } } ) );
+	ha2.addInitialState( loc21, conditionFromIntervals<TypeParam>( { carl::Interval<TypeParam>{ 1 } } ) );
+	// flow is not interesting, use identity flow for all variables here
+	matrix_t<TypeParam> flow1a = matrix_t<TypeParam>::Identity( 3, 3 );
+	flow1a( 0, 0 ) = 1;
+	matrix_t<TypeParam> flow2a = matrix_t<TypeParam>::Identity( 3, 3 );
+	flow2a( 0, 0 ) = -1;
+	matrix_t<TypeParam> flow1b = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow1a( 0, 0 ) = 1;
+	matrix_t<TypeParam> flow2b = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow2a( 0, 0 ) = -1;
+	loc11->setFlow( flow1a );
+	loc12->setFlow( flow2a );
+	loc21->setFlow( flow1b );
+	loc22->setFlow( flow2b );
+	// create transitions, one self-loop and one transition from l11 to l12 in the first component, a synchronizing self-loop in the second component
+	auto* t1 = loc11->createTransition( loc12 );
+	auto* t2 = loc12->createTransition( loc11 );
+	auto* t3 = loc21->createTransition( loc22 );
+	auto* t4 = loc22->createTransition( loc21 );
+
+	t1->setLabels( { Label{ "label1" } } );
+	t3->setLabels( { Label{ "label1" } } );
+	t2->setLabels( { Label{ "label2" } } );
+	t4->setLabels( { Label{ "label2" } } );
+
+	auto res = ha1 || ha2;
+
+	hypro::plotting::plot( ha1, "ha1" );
+	hypro::plotting::plot( ha2, "ha2" );
+	hypro::plotting::plot( res, "res" );
+
+	EXPECT_EQ( 2, res.getVariables().size() );
+	ASSERT_EQ( 2, res.getLocations().size() );
+	std::vector<Label> expectedLabels{ Label( "label1" ),  Label( "label2" ) };
+	EXPECT_EQ( 1, res.getLocations().front()->getTransitions().size() );
+	EXPECT_EQ( 1, res.getLocations().back()->getTransitions().size() );
+
+	EXPECT_TRUE( std::any_of( std::begin( res.getLocations().front()->getTransitions() ), std::end( res.getLocations().front()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == expectedLabels; } ) );
+}
