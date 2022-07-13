@@ -1,6 +1,7 @@
 #include "hypro/neuralnets/parser/NNet.h"
 #include "hypro/neuralnets/reachability/ReachNN.h"
 #include "hypro/neuralnets/network/NeuralNetwork.h"
+#include "hypro/neuralnets/reachability_tree/ReachabilityTree.h"
 #include "hypro/representations/GeometricObjectBase.h"
 // #include "hypro/representations/Starset/Starset.h"
 #include "hypro/util/plotting/Plotter.h"
@@ -51,7 +52,7 @@ int main( int argc, char* argv[] ) {
 	// std::cout << rotate_nn << std::endl;
 
 	hypro::NeuralNetwork<Number> network = hypro::NeuralNetwork<Number>( rotate_nn );
-	std::cout << network << std::endl;
+	// std::cout << network << std::endl;
 
 	// a simple rectangle [_]
 	// hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );
@@ -99,16 +100,19 @@ int main( int argc, char* argv[] ) {
 		method = hypro::NN_REACH_METHOD::OVERAPPRX;
 
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
+	hypro::reachability::ReachabilityTree<Number> reach_tree(network, input_star.constraints());
 
 	bool create_plots = false;
 
 	start = std::chrono::steady_clock::now();
 	// std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, create_plots ); // old verification implemented for NNet
-	std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
+	// std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
+	std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(input_star, method, hypro::SEARCH_STRATEGY::BFS);
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
 
+	// verificaton (and plotting) of the output sets
 	int N = output_set.size();
 	std::cout << "Number of final stars: " << N << std::endl;
 	int num_not_satisfied = 0;

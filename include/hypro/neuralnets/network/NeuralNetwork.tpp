@@ -26,7 +26,7 @@ NeuralNetwork<Number>::NeuralNetwork( const hypro::NNet<Number>& nnet )
 	, mMeans( nnet.means() )
 	, mRanges( nnet.ranges() ) {
 	// initialize an empty list
-	mLayers = std::list<LayerBase<Number>*>();
+	mLayers = std::list<std::shared_ptr<LayerBase<Number>>>();
 
 	// iterate over the layers of the NNet and create the corresponding layers
 	unsigned short int prevLayerSize = mInputSize;
@@ -40,11 +40,13 @@ NeuralNetwork<Number>::NeuralNetwork( const hypro::NNet<Number>& nnet )
 		assert( weights.cols() == prevLayerSize );
 		prevLayerSize = layerSize;
 
-		AffineLayer<Number>* affLayer = new AffineLayer<Number>( layerSize, mLayers.size(), bias, weights );
-		mLayers.push_back( affLayer );
+		// AffineLayer<Number>* affLayer = new AffineLayer<Number>( layerSize, mLayers.size(), bias, weights );
+		// mLayers.push_back( affLayer );
+		mLayers.push_back( std::make_shared<AffineLayer<Number>>( layerSize, mLayers.size(), bias, weights ) );
 		if ( i < nnet.numLayers() - 1 ) {
-			ReLULayer<Number>* relLayer = new ReLULayer<Number>( layerSize, mLayers.size());
-			mLayers.push_back( relLayer );
+			// ReLULayer<Number>* relLayer = new ReLULayer<Number>( layerSize, mLayers.size() );
+			// mLayers.push_back( relLayer );
+			mLayers.push_back( std::make_shared<ReLULayer<Number>>( layerSize, mLayers.size() ) );
 		}
 	}
 	assert( prevLayerSize == mOutputSize );
@@ -52,9 +54,6 @@ NeuralNetwork<Number>::NeuralNetwork( const hypro::NNet<Number>& nnet )
 
 template <typename Number>
 NeuralNetwork<Number>::~NeuralNetwork() {
-	for ( auto layer : mLayers ) {
-		delete layer;
-	}
 }
 
 // ============ getters and setters ============
@@ -99,12 +98,12 @@ hypro::vector_t<Number> NeuralNetwork<Number>::ranges() const {
 }
 
 template <typename Number>
-std::list<LayerBase<Number>*> NeuralNetwork<Number>::layers() const {
+std::list<std::shared_ptr<LayerBase<Number>>> NeuralNetwork<Number>::layers() const {
 	return mLayers;
 }
 
 template <typename Number>
-LayerBase<Number>* NeuralNetwork<Number>::layers( int index ) const {
+std::shared_ptr<LayerBase<Number>> NeuralNetwork<Number>::layers( int index ) const {
 	auto layerIter = mLayers.begin();
 	std::advance( layerIter, index );
 	return ( *layerIter );

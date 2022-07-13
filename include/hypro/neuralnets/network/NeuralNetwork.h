@@ -1,7 +1,7 @@
 /**
  * @file NeuralNetwork.h
  * @author László Antal <antal@informatik.rwth-aachen.de>
- * @brief Neural Network general wrapper class.
+ * @brief General wrapper class for representing a Neural Network.
  * @date 2022-06-10
  */
 
@@ -30,7 +30,7 @@ class NeuralNetwork {
 	hypro::vector_t<Number> mMeans;	  // Array of the means used to scale the inputs and outputs
 	hypro::vector_t<Number> mRanges;  // Array of the ranges used to scale the inputs and outputs
 
-	std::list<hypro::LayerBase<Number>*> mLayers;  // Composition of the layers
+	std::list<std::shared_ptr<hypro::LayerBase<Number>>> mLayers;  // Composition of the layers
 
   public:
 	// ======== constructors and destructor ========
@@ -102,14 +102,14 @@ class NeuralNetwork {
 	 * @brief Retun an ordered list of the layers of the Neural Network.
 	 * @return The list of Layer objects of the network.
 	 */
-	std::list<LayerBase<Number>*> layers() const;
+	std::list<std::shared_ptr<LayerBase<Number>>> layers() const;
 
 	/**
 	 * @brief Returns the Layer of the Neural Network corresponding to the specified index
 	 * @param[in] index - the number of the layer
 	 * @return The required Layer object
 	 */
-	LayerBase<Number>* layers( int index ) const;
+	std::shared_ptr<LayerBase<Number>> layers( int index ) const;
 
 	// ============= utility functions =============
 	// e.g. printing the network
@@ -121,15 +121,32 @@ class NeuralNetwork {
 	/**
 	 * @brief Evaluate the Neural Network given the input vector.
 	 *
-	 * @param inputs[in] Input vector.
+	 * @param inputVec[in] Input vector.
 	 * @param normalizeInput[in] Optional parameter for input vector normalization.
 	 * @param normalizeOutput[in] Optional parameter for output vector normalization.
 	 * @return vector_t<Number> Resulting output vector.
 	 */
 	hypro::vector_t<Number> forwardPass( const hypro::vector_t<Number>& inputVec, bool normalizeInput = false, bool normalizeOutput = false ) const;
 
+	/**
+	 * @brief Evaluate the Neural Network given the input set.
+	 *
+	 * @param inputSet[in] The input set.
+	 * @param method[in] The reachability analysis method.
+	 * @param plotIntermediates[in] Flag for plotting intermediate stars.
+	 * @return std::vector<hypro::Starset<Number>> Resulting output set.
+	 */
 	std::vector<hypro::Starset<Number>> forwardPass( const hypro::Starset<Number>& inputSet, hypro::NN_REACH_METHOD method, bool plotIntermediates = false ) const;
 
+	/**
+	 * @brief
+	 *
+	 * @param inputSet[in] The input set.
+	 * @param safeSet[in] The safe set.
+	 * @param method[in] The reachability analysis method.
+	 * @param plotIntermediates[in] Flag for plotting intermediate stars.
+	 * @return boolean which indicates if the Neural Network is safe.
+	 */
 	bool verifyNetwork( const hypro::HPolytope<Number>& inputSet, const hypro::HPolytope<Number>& safeSet, hypro::NN_REACH_METHOD method = hypro::NN_REACH_METHOD::EXACT, bool plotIntermediates = false ) const;
 };
 
@@ -174,17 +191,10 @@ std::ostream& operator<<( std::ostream& ostr, const NeuralNetwork<Number>& _rhs 
 
 	ostr << "Layers: " << std::endl;
 	for ( auto layer : _rhs.mLayers ) {
-		ostr << "Layer number " << layer->layerIndex() << std::endl;
-		switch ( layer->layerType() ) {
-			case NN_LAYER_TYPE::AFFINE:
-				ostr << ( *static_cast<AffineLayer<Number>*>( layer ) ) << std::endl;
-				break;
-			case NN_LAYER_TYPE::RELU:
-				ostr << ( *static_cast<ReLULayer<Number>*>( layer ) ) << std::endl;
-				break;
-			default:
-				TRACE( "hypro.neuralnets.NeuralNetwork", "Unknown layer type " << layer->layerType() );
-		}
+		ostr << "<------------->" << std::endl;
+		ostr << "Layer index: " << layer->layerIndex() << std::endl;
+		ostr << (*layer);
+		ostr << "<------------->" << std::endl;
 	}
 	ostr << std::endl;
 

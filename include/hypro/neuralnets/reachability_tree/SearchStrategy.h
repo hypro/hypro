@@ -7,4 +7,4 @@ enum class SEARCH_STRATEGY {
 	DFS,
 };
 
-} // namespace hypro
+}  // namespace hypro

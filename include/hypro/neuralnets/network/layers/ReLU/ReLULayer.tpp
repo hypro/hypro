@@ -35,10 +35,10 @@ vector_t<Number> ReLULayer<Number>::forwardPass( const vector_t<Number>& inputVe
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> ReLULayer<Number>::reachReLU( const hypro::Starset<Number>& input_star1, NN_REACH_METHOD method, bool plotIntermediates ) const {
+std::vector<hypro::Starset<Number>> ReLULayer<Number>::reachReLU( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plotIntermediates ) const {
 	std::vector<hypro::Starset<Number>> I_n = std::vector<hypro::Starset<Number>>();
-	I_n.push_back( input_star1 );
-	for ( int i = 0; i < input_star1.generator().rows(); i++ ) {
+	I_n.push_back( inputSet );
+	for ( int i = 0; i < inputSet.generator().rows(); i++ ) {
 		// iterate over the dimensions of the input star
 		switch ( method ) {
 			case NN_REACH_METHOD::EXACT:
@@ -55,16 +55,33 @@ std::vector<hypro::Starset<Number>> ReLULayer<Number>::reachReLU( const hypro::S
 }
 
 template <typename Number>
-std::vector<Starset<Number>> ReLULayer<Number>::forwardPass( const std::vector<Starset<Number>>& inputSet, NN_REACH_METHOD method, bool plotIntermediates ) const {
-	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
-	int N = inputSet.size();  // number of input stars
+std::vector<hypro::Starset<Number>> ReLULayer<Number>::forwardPass( const hypro::Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const {
+	std::vector<hypro::Starset<Number>> I_n = std::vector<hypro::Starset<Number>>();
+	I_n.push_back( inputSet );
+	switch ( method ) {
+		case NN_REACH_METHOD::EXACT:
+			I_n = ReLU<Number>::stepReLU( index, I_n );
+			break;
+		case NN_REACH_METHOD::OVERAPPRX:
+			I_n = ReLU<Number>::approxStepReLU( index, I_n );
+			break;
+		default:
+			FATAL( "hypro.neuralnets.reachability", "Invalid analysis method specified" );
+	}
+	return I_n;
+}
 
-#pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
+template <typename Number>
+std::vector<Starset<Number>> ReLULayer<Number>::forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const {
+	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
+	int N = inputSets.size();  // number of input stars
+
+// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
 	for ( int i = 0; i < N; ++i ) {
 		std::vector<hypro::Starset<Number>> resultSets;
-		resultSets = reachReLU( inputSet[i], method, plotIntermediates );
+		resultSets = reachReLU( inputSets[i], method, plotIntermediates );
 
-#pragma omp critical
+// #pragma omp critical
 		{
 			result.insert( result.end(), resultSets.begin(), resultSets.end() );
 		}

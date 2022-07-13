@@ -17,6 +17,7 @@ class ReLU {
 
   private:
 	ReLU(){};
+	~ReLU(){};
 };
 
 }  // namespace hypro

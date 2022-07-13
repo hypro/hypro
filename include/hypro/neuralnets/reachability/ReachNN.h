@@ -2,22 +2,22 @@
  * Class that implements the reachability analysis for FFNN.
  * @file ReachNN.h
  * @author László Antal <antal@informatik.rwth-aachen.de>
- * @brief Class that implements the forward reachability analysis for 
- * Feedforward Nerual Networks (FFNN) with ReLU activation 
+ * @brief Class that implements the forward reachability analysis for
+ * Feedforward Nerual Networks (FFNN) with ReLU activation
  * functions after each layer (except last layer).
  * @version 2022-01-27
  * @date 2022-01-27
- * 
+ *
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #pragma once
-#include "ReachNNMethod.h"
 #include "../../representations/GeometricObjectBase.h"
-#include "../parser/NNet.h"
-#include "../../util/plotting/Plotter.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/plotting/Plotter.h"
+#include "../parser/NNet.h"
+#include "ReachNNMethod.h"
 
 #include <iostream>
 #include <vector>  // change it later to a better container for Star-sets

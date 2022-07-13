@@ -8,5 +8,4 @@ enum class NN_REACH_METHOD {
 	CEGAR,
 };
 
-} // namespace hypro
-
+}  // namespace hypro
