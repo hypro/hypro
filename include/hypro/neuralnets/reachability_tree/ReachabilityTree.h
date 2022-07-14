@@ -24,11 +24,15 @@ namespace reachability {
 template <typename Number>
 class ReachabilityTree {
   private:
-	NeuralNetwork<Number> mNetwork;					 // the analysied neural network
-	HPolytope<Number> mInputSet;					 // the input set of the network
 	ReachabilityNode<Number>* mRoot;				 // root node of the reachability analysis tree
 	std::vector<ReachabilityNode<Number>*> mLeaves;	 // the leaves of the reachability tree
 	unsigned short int mDepth;						 // depth of the reachability tree
+
+	NeuralNetwork<Number> mNetwork;	 // the analysied neural network
+	HPolytope<Number> mInputSet;	 // the input set of the network
+	HPolytope<Number> mSafeSet;		 // the safe set specified in the form of a HPolytope
+	bool mIsSafe;					 // true if the reachability tree is safe
+	bool mISComplete;				 // true if the  computation of the reachability tree finished
 
   public:
 	// Default constructor
@@ -38,7 +42,7 @@ class ReachabilityTree {
 	~ReachabilityTree();
 
 	// Initializer constructor
-	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet );
+	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const HPolytope<Number>& safeSet );
 
 	ReachabilityNode<Number>* root() const;
 
@@ -46,13 +50,13 @@ class ReachabilityTree {
 
 	unsigned short int depth() const;
 
-	std::vector<Starset<Number>> forwardPass( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const;
-
-	bool verify( const HPolytope<Number>& safeSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const;
+	std::vector<Starset<Number>> forwardPass( NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const;
+	void computeReachTree( const Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy );
+	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy );
 
   private:
 	Starset<Number> prepareInput() const;
-	HPolytope<Number> prepareSafeSet( const HPolytope<Number>& safeSet ) const;
+	HPolytope<Number> prepareSafeSet() const;
 	bool isSubResultSafe( const std::vector<Starset<Number>>& subResult, const HPolytope<Number>& safeSet ) const;
 };
 

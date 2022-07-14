@@ -12,9 +12,10 @@ ReachabilityTree<Number>::~ReachabilityTree() {
 }
 
 template <typename Number>
-ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet )
+ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const HPolytope<Number>& safeSet )
 	: mNetwork( network )
-	, mInputSet( inputSet ) {}
+	, mInputSet( inputSet )
+	, mSafeSet( safeSet ) {}
 
 template <typename Number>
 ReachabilityNode<Number>* ReachabilityTree<Number>::root() const {
@@ -39,9 +40,9 @@ Starset<Number> ReachabilityTree<Number>::prepareInput() const {
 }
 
 template <typename Number>
-HPolytope<Number> ReachabilityTree<Number>::prepareSafeSet( const HPolytope<Number>& safeSet ) const {
+HPolytope<Number> ReachabilityTree<Number>::prepareSafeSet() const {
 	// TODO: implement de-normalization
-	return safeSet;
+	return mSafeSet;
 }
 
 template <typename Number>
@@ -50,7 +51,7 @@ bool ReachabilityTree<Number>::isSubResultSafe( const std::vector<Starset<Number
 }
 
 template <typename Number>
-std::vector<Starset<Number>> ReachabilityTree<Number>::forwardPass( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const {
+std::vector<Starset<Number>> ReachabilityTree<Number>::forwardPass( const Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const {
 	std::vector<Starset<Number>> outputSets;
 
 	// BFS -> we always push to the end and we pop the first
@@ -91,16 +92,79 @@ std::vector<Starset<Number>> ReachabilityTree<Number>::forwardPass( const hypro:
 	return outputSets;
 }
 
+// This method computes the rechability tree using a specified input starset and an NN_REACH_METHOD starting from a given neuron
+// It can be used just to compute a subtree from the j. neuron of the k.th layer
+// the subtree then could be inserted into the search tree (replacing and deleting the old subtree)
 template <typename Number>
-bool ReachabilityTree<Number>::verify( const HPolytope<Number>& safeSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const {
+void ReachabilityTree<Number>::computeReachTree( const Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy, int layerNumber, int neuronNumber ) {
+	// create the root_job and add to the queue
+	SearchJob root_job( inputSet, mNetwork.layers( layerNumber ), mNetwork.layers(), neuronNumber );
+	std::deque<SearchJob<Number>> jobQueue;
+	jobQueue.push_back( root_job );
+
+	// perform BFS / DFS until the queue is empty
+	while ( !jobQueue.empty() ) {
+		SearchJob job = jobQueue.front();
+		std::vector<SearchJob<Number>> newJobs = job.compute( method );
+		jobQueue.pop_front();
+		for ( auto newJob : newJobs ) {
+			if ( newJob.isFinalResult() ) {
+				for ( auto finalResult : newJob.finalResult() ) {
+					outputSets.push_back( finalResult );
+				}
+			} else {
+				switch ( strategy ) {
+					case SEARCH_STRATEGY::BFS:
+						jobQueue.push_back( newJob );
+						break;
+					case SEARCH_STRATEGY::DFS:
+						jobQueue.push_front( newJob );
+						break;
+					default:
+						FATAL( "hypro.neuralnets.reachability_tree.ReachabilityTree", "Unknown search strategy" << strategy );
+				}
+			}
+		}
+	}
+}
+
+// here in the verify method just call the forwardPass method to calculate the EXACT or OVERAPPROXIMATIVE result
+// if it is CEGAR countinue with the refinement, otherwise just stop and verify the "leaves"
+// if the method is not CEGAR than it makes no sense to save the intermediate stars into the search tree
+
+template <typename Number>
+bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) {
 	// TODO: introduce two boolean parameters for input and output normalization
 	Starset<Number> starInput = prepareInput();
-	HPolytope<Number> safeOutput = prepareSafeSet( safeSet );
+	HPolytope<Number> safeOutput = prepareSafeSet();
 	// let's assume for now that the safeSet could only be a conjunction of halfspaces and it describes the set of all safe output vectors
 	// TODO: later add some generalization to it
 
-	// BFS -> we always push to the end and we pop the first
-	// DFS -> we always push to the beginning and we pop the first
+	switch ( method ) {
+		case NN_REACH_METHOD::EXACT:
+		case NN_REACH_METHOD::OVERAPPROX:
+			// if we apply the EXACT or OVERAPPROX method, regardless if the computation of the reachability tree is complete or not
+			// we can surely return the answer
+			computeReachTree( starInput, method, strategy );
+			return mIsSafe;
+		case NN_REACH_METHOD::CEGAR:
+			// for both the CEGAR mehtod we start with a fully overapproximate reachability analysis
+			// then we refine the result of the overapproximate reachability
+			computeReachTree( starInput, NN_REACH_METHOD::OVERAPPROX, strategy );
+		default:
+			FATAL( "hypro.neuralnets.reachability_tree", "Invalid analysis method specified" );
+			break;
+	}
+
+	if ( mIsSafe )
+		// if the method is CEGAR and the reachable sets are all safe then the whole network is safe
+		return true;
+
+	// else we start the refinement
+	// TODO: implement the refinement algorithm
+
+	return false;
+	exit(0);
 
 	// create the root_job and add to the queue
 	SearchJob root_job( starInput, mNetwork.layers( 0 ), mNetwork.layers(), 0 );
@@ -138,6 +202,10 @@ bool ReachabilityTree<Number>::verify( const HPolytope<Number>& safeSet, NN_REAC
 				}
 			}
 		}
+	}
+
+	if ( method == NN_REACH_METHOD::CEGAR && !mIsSafe ) {
+		// perform CEGAR refinement until it becomes safe or we can show that it is unsafe
 	}
 
 	std::cout << "In total the final number of reachable sets is " << num_final_sets << std::endl;

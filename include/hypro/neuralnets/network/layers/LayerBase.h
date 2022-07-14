@@ -11,6 +11,8 @@
 
 #pragma once
 #include "../../../util/logging/Logger.h"
+#include "../../../types.h"
+#include "../../../representations/GeometricObjectBase.h"
 #include "NNLayerType.h"
 
 namespace hypro {

@@ -1,6 +1,6 @@
+#include "hypro/neuralnets/network/NeuralNetwork.h"
 #include "hypro/neuralnets/parser/NNet.h"
 #include "hypro/neuralnets/reachability/ReachNN.h"
-#include "hypro/neuralnets/network/NeuralNetwork.h"
 #include "hypro/neuralnets/reachability_tree/ReachabilityTree.h"
 #include "hypro/representations/GeometricObjectBase.h"
 // #include "hypro/representations/Starset/Starset.h"
@@ -11,7 +11,7 @@
 #include <iostream>
 #include <vector>
 
-// use rational arithmetic.
+// use floating point arithmetic.
 typedef double Number;	// -3090.30109487     <=>      -3090.3   (mpq_class vs double)
 
 int main( int argc, char* argv[] ) {
@@ -19,7 +19,7 @@ int main( int argc, char* argv[] ) {
 	for ( int i = 0; i < argc; i++ ) {
 		std::cout << argv[i] << " ";
 	}
-	std::cout << std::endl;
+	std::cout << "\n\n";
 
 	// define plotter settings
 	hypro::plotting::gnuplotSettings settings;
@@ -37,6 +37,27 @@ int main( int argc, char* argv[] ) {
 	plotter.updateSettings( settings );
 	plotter.clear();
 
+	// define the reachability method
+	hypro::NN_REACH_METHOD method = hypro::NN_REACH_METHOD::CEGAR;
+	if ( argc > 1 ) {
+		switch ( argv[1][0] ) {
+			case 'c':
+			case 'C':
+				method = hypro::NN_REACH_METHOD::CEGAR;
+				break;
+			case 'e':
+			case 'E':
+				method = hypro::NN_REACH_METHOD::EXACT;
+				break;
+			case 'o':
+			case 'O':
+				method = hypro::NN_REACH_METHOD::OVERAPPRX;
+				break;
+			default:
+				method = hypro::NN_REACH_METHOD::CEGAR;
+		}
+	}
+
 	// define input file name
 	const char* filename = "../examples/nnet/fc_relu.nnet";
 	if ( argc > 2 )
@@ -52,62 +73,49 @@ int main( int argc, char* argv[] ) {
 	// std::cout << rotate_nn << std::endl;
 
 	hypro::NeuralNetwork<Number> network = hypro::NeuralNetwork<Number>( rotate_nn );
-	// std::cout << network << std::endl;
+	std::cout << network << std::endl;
 
 	// a simple rectangle [_]
-	// hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );
-	// hypro::matrix_t<Number> basis = hypro::matrix_t<Number>( 2, 2 );
-	// hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 4, 2 );
-	// hypro::vector_t<Number> limits = hypro::vector_t<Number>( 4 );
-	// center << 0, 0;
-	// basis << 1, 0, 0, 1;
-	// constr << 1, 0, -1, 0, 0, 1, 0, -1;
-	// limits << 2, 1, 1, 1;
-
-	// a triangle:  |>
-	// hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );
-	// hypro::matrix_t<Number> basis = hypro::matrix_t<Number>( 2, 2 );
-	// hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 3, 2 );
-	// hypro::vector_t<Number> limits = hypro::vector_t<Number>( 3 );
-	// center << 0, 0;
-	// basis << 1, 0, 0, 1;
-	// constr << -1, 0, 1, 1, 1, -1;
-	// limits << 1, 1, 1;
-
-	// another triangle: /_|   (reversed, scaled)
 	hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );
 	hypro::matrix_t<Number> basis = hypro::matrix_t<Number>( 2, 2 );
-	hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 3, 2 );
-	hypro::vector_t<Number> limits = hypro::vector_t<Number>( 3 );
+	hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 4, 2 );
+	hypro::vector_t<Number> limits = hypro::vector_t<Number>( 4 );
 	center << 0, 0;
-	basis << -2, 0, 0, 1;
-	constr << -1, 0, 0, -1, 1, 1;
-	limits << 1, 2, 1;
-
+	basis << 1, 0, 0, 1;
+	constr << 1, 0, -1, 0, 0, 1, 0, -1;
+	limits << 2, 1, 1, 1;
 	hypro::Starset<Number> input_star = hypro::Starset<Number>( center, constr, limits, basis );
 	if ( argc > 3 ) {
 		std::cout << "Reading input star from: " << argv[3] << std::endl;
 		input_star = hypro::Starset<Number>::readFromFile( argv[3] );
 	}
 	std::cout << input_star << std::endl;
-	// std::cout << "Initial inner politope vertices: " << input_star.constraints().vertices() << std::endl;
-	// plotter.addObject( input_star.vertices(), hypro::plotting::colors[hypro::plotting::red] );
-	// plotter.plot2d();
-	// plotter.clear();
 
-	hypro::NN_REACH_METHOD method = hypro::NN_REACH_METHOD::EXACT;
-	if ( argc > 1 && ( argv[1][0] == 'o' || argv[1][0] == 'O' ) )
-		method = hypro::NN_REACH_METHOD::OVERAPPRX;
+	hypro::vector_t<Number> center2 = hypro::vector_t<Number>( 2 );
+	hypro::matrix_t<Number> basis2 = hypro::matrix_t<Number>( 2, 2 );
+	hypro::matrix_t<Number> constr2 = hypro::matrix_t<Number>( 4, 2 );
+	hypro::vector_t<Number> limits2 = hypro::vector_t<Number>( 4 );
+	center2 << 0, 0;
+	basis2 << 1, 0, 0, 1;
+	constr2 << 1, 0, -1, 0, 0, 1, 0, -1;
+	limits2 << 0.5, 0, 1, 0;
+	hypro::Starset<Number> safe_star = hypro::Starset<Number>( center2, constr2, limits2, basis2 );
+	if ( argc > 4 ) {
+		std::cout << "Reading safety specification from: " << argv[4] << std::endl;
+		safe_star = hypro::Starset<Number>::readFromFile( argv[4] );
+	}
+	std::cout << safe_star << std::endl;
 
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
-	hypro::reachability::ReachabilityTree<Number> reach_tree(network, input_star.constraints());
+	hypro::reachability::ReachabilityTree<Number> reach_tree( network, input_star.constraints(), safe_star.constraints() );
 
 	bool create_plots = false;
 
 	start = std::chrono::steady_clock::now();
-	// std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, create_plots ); // old verification implemented for NNet
+	// std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, create_plots );	// old verification implemented for NNet
 	// std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
-	std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(input_star, method, hypro::SEARCH_STRATEGY::BFS);
+	// std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(method, hypro::SEARCH_STRATEGY::DFS);
+	bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS );
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
@@ -118,9 +126,9 @@ int main( int argc, char* argv[] ) {
 	int num_not_satisfied = 0;
 	for ( int i = 0; i < N; i++ ) {
 		// std::cout << output_set[i] << std::endl;
-		// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
+		std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
 		// std::cout << "Vertices: " << vertices << std::endl;
-		// plotter.addObject( vertices, hypro::plotting::colors[(2 * i) % 9] );
+		plotter.addObject( vertices, hypro::plotting::colors[( 2 * i ) % 9] );
 
 		hypro::vector_t<Number> center = output_set[i].center();
 		hypro::matrix_t<Number> basis = output_set[i].generator();
@@ -174,7 +182,10 @@ int main( int argc, char* argv[] ) {
 	std::cout << std::setprecision( 2 );
 	std::cout << "In total " << ( ( (double)num_not_satisfied / N ) * 100.0 ) << "\% of stars violates the property." << std::endl;
 
-	// plotter.plot2d();
+	plotter.addObject( safe_star.vertices(), hypro::plotting::colors[hypro::plotting::bordeaux] );
+	plotter.plot2d();
+
+	std::cout << "Program finished successfully." << std::endl;
 
 	return 0;
 }
