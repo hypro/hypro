@@ -261,11 +261,36 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
-	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, mConstraints.intersectHalfspace( hspace ) );
+	// check if the dimension of the halfspace is the same as the dimension of the starset 
+	assert(hspace.normal.rows() == mGenerator.rows());
+	
+	// get the attributes of the starset
+	vector_t<Number> center = mCenter;
+	matrix_t<Number> generator = mGenerator;
+	matrix_t<Number> shape = this->shape();
+	vector_t<Number> limits = this->limits();
+
+	// get the attributes of the halfspace
+	vector_t<Number> normal = hspace.normal();
+	Number offset = hspace.offset();
+
+	// multiply each row of the generator with the corresponding element from the normal vector and then sum up each column individually
+	generator = generator.array().colwise() * normal.array();
+	vector_t<Number> scaled_sum = generator.colwise().sum();
+
+	// using the result we will add one more new constraint, i.e. one more row to the shape matrix and one more element to the limits vector
+	shape.conservativeResize(shape.rows() + 1, shape.cols());
+	limits.conservativeResize(shape.rows() + 1);
+
+	shape.row(shape.rows() - 1) = scaled_sum;
+	limits[shape.rows() - 1] = offset - normal.dot(center);
+
+	return StarsetT<Number, Converter, Setting>( mCenter, shape, limits, mGenerator);
 }
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
+	// TODO: this method is wrong fix it as the previous intersectHalfspace(hspace) method
 	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, mConstraints.intersectHalfspaces( _mat, _vec ) );
 }
 

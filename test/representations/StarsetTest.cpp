@@ -187,9 +187,9 @@ TYPED_TEST( StarsetTest, ContainsStar ) {
 
 TYPED_TEST( StarsetTest, GetSetOfSamplesAndContains ) {
 	int n = 100;
-	std::set<hypro::Point<TypeParam>> setOfSamples = uniform_sampling(this->star_2d_triang2, n);
-	for(auto sample : setOfSamples) {
-		EXPECT_TRUE( this->star_2d_triang2.contains(sample) );
+	std::set<hypro::Point<TypeParam>> setOfSamples = uniform_sampling( this->star_2d_triang2, n );
+	for ( auto sample : setOfSamples ) {
+		EXPECT_TRUE( this->star_2d_triang2.contains( sample ) );
 	}
 }
 
@@ -208,8 +208,8 @@ TYPED_TEST( StarsetTest, MinkowskiSum ) {
 	// use sampling to check if for a p1 from Star1 and for a p2 from Star2 is p1+p2 in Star1+Star2
 	// check the vertices instead
 	int n = 100;
-	std::set<hypro::Point<TypeParam>> setOfSamples1 = uniform_sampling(this->star_2d_triang1, n);
-	std::set<hypro::Point<TypeParam>> setOfSamples2 = uniform_sampling(this->star_2d_triang2, n);
+	std::set<hypro::Point<TypeParam>> setOfSamples1 = uniform_sampling( this->star_2d_triang1, n );
+	std::set<hypro::Point<TypeParam>> setOfSamples2 = uniform_sampling( this->star_2d_triang2, n );
 
 	hypro::Starset<TypeParam> sum_star = this->star_2d_triang1.minkowskiSum( this->star_2d_triang2 );
 	EXPECT_EQ( this->star_2d_triang1.dimension(), sum_star.dimension() );
@@ -218,17 +218,17 @@ TYPED_TEST( StarsetTest, MinkowskiSum ) {
 	typename std::set<hypro::Point<TypeParam>>::iterator it1 = setOfSamples1.begin();
 	typename std::set<hypro::Point<TypeParam>>::iterator it2 = setOfSamples2.begin();
 
-	for(int i = 0; i < n; i++) {
-		EXPECT_TRUE(sum_star.contains((*it1) + (*it2)));
+	for ( int i = 0; i < n; i++ ) {
+		EXPECT_TRUE( sum_star.contains( ( *it1 ) + ( *it2 ) ) );
 		it1++;
 		it2++;
 	}
 
 	std::vector<hypro::Point<TypeParam>> vertices1 = this->star_2d_triang1.vertices();
 	std::vector<hypro::Point<TypeParam>> vertices2 = this->star_2d_triang2.vertices();
-	for(auto vertex1 : vertices1) {
-		for(auto vertex2 : vertices2) {
-			EXPECT_TRUE(sum_star.contains(vertex1 + vertex2));
+	for ( auto vertex1 : vertices1 ) {
+		for ( auto vertex2 : vertices2 ) {
+			EXPECT_TRUE( sum_star.contains( vertex1 + vertex2 ) );
 		}
 	}
 }
@@ -241,6 +241,30 @@ TYPED_TEST( StarsetTest, IntersectHalfspaceEmpty ) {
 	hypro::Halfspace<TypeParam> halfplane = hypro::Halfspace<TypeParam>( { 1, 0 }, -2 );
 	hypro::Starset<TypeParam> sliced_star = this->star_2d_rect.intersectHalfspace( halfplane );
 	EXPECT_TRUE( sliced_star.empty() );
+
+	double ang = 45 * (PI / 180);
+	// std::cout << "Rotation matrix with radians: " << ang << std::endl;
+	hypro::matrix_t<TypeParam> transmat = hypro::matrix_t<TypeParam>( 2, 2 );
+	transmat << cos( ang ), -sin( ang ), sin( ang ), cos( ang );
+
+	hypro::vector_t<TypeParam> offset = hypro::vector_t<TypeParam>( 2 );
+	offset << -0.5, -0.5;
+
+	hypro::Starset<TypeParam> new_star = this->star_2d_rect.affineTransformation( transmat, offset );
+
+	hypro::Halfspace<TypeParam> halfplane2 = hypro::Halfspace<TypeParam>( { 1, 1 }, 1 );
+	hypro::Starset<TypeParam> intersection1 = new_star.intersectHalfspace( halfplane2 );
+	// std::cout << "vertices1: " << intersection1.vertices() << std::endl;
+
+	EXPECT_TRUE( intersection1.contains( hypro::Point<TypeParam>( { 0.4, 0.4 } ) ) );
+	EXPECT_FALSE( intersection1.contains( hypro::Point<TypeParam>( { 0.7, 0.7 } ) ) );
+
+	hypro::Halfspace<TypeParam> halfplane3 = hypro::Halfspace<TypeParam>( { 2, 1 }, 1 );
+	hypro::Starset<TypeParam> intersection2 = new_star.intersectHalfspace( halfplane3 );
+	// std::cout << "vertices2: " << intersection2.vertices() << std::endl;
+
+	EXPECT_TRUE( intersection2.contains( hypro::Point<TypeParam>( { 0.3, 0.0 } ) ) );
+	EXPECT_FALSE( intersection2.contains( hypro::Point<TypeParam>( { 0.7, 0.0 } ) ) );
 }
 
 // TYPED_TEST( StarsetTest, Union ) {
