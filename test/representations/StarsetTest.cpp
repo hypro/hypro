@@ -242,10 +242,10 @@ TYPED_TEST( StarsetTest, IntersectHalfspaceEmpty ) {
 	hypro::Starset<TypeParam> sliced_star = this->star_2d_rect.intersectHalfspace( halfplane );
 	EXPECT_TRUE( sliced_star.empty() );
 
-	double ang = 45 * (PI / 180);
-	// std::cout << "Rotation matrix with radians: " << ang << std::endl;
+	double ang = 45 * ( PI / 180 );
 	hypro::matrix_t<TypeParam> transmat = hypro::matrix_t<TypeParam>( 2, 2 );
 	transmat << cos( ang ), -sin( ang ), sin( ang ), cos( ang );
+	// std::cout << "Rotation matrix with radians: " << ang << std::endl;
 
 	hypro::vector_t<TypeParam> offset = hypro::vector_t<TypeParam>( 2 );
 	offset << -0.5, -0.5;
@@ -265,6 +265,30 @@ TYPED_TEST( StarsetTest, IntersectHalfspaceEmpty ) {
 
 	EXPECT_TRUE( intersection2.contains( hypro::Point<TypeParam>( { 0.3, 0.0 } ) ) );
 	EXPECT_FALSE( intersection2.contains( hypro::Point<TypeParam>( { 0.7, 0.0 } ) ) );
+}
+
+TYPED_TEST( StarsetTest, IntersectHalfspaces ) {
+	double ang = 45 * ( PI / 180 );
+	hypro::matrix_t<TypeParam> transmat = hypro::matrix_t<TypeParam>( 2, 2 );
+	transmat << cos( ang ), -sin( ang ), sin( ang ), cos( ang );
+	// std::cout << "Rotation matrix with radians: " << ang << std::endl;
+
+	hypro::vector_t<TypeParam> offset = hypro::vector_t<TypeParam>( 2 );
+	offset << -0.5, -0.5;
+
+	hypro::Starset<TypeParam> new_star = this->star_2d_rect.affineTransformation( transmat, offset );
+
+	hypro::matrix_t<TypeParam> _mat = hypro::matrix_t<TypeParam>( 4, 2 );
+	_mat << 1, 1, -1, -1, 1, -1, -1, 1;
+	hypro::vector_t<TypeParam> _vec = hypro::vector_t<TypeParam>( 4 );
+	_vec << 0.1, 0.1, 0.1, 0.1;
+
+	hypro::Starset<TypeParam> resultStar = new_star.intersectHalfspaces( _mat, _vec );
+	EXPECT_TRUE( resultStar.contains( hypro::Point<TypeParam>( { +0.0, +0.0 } ) ) );
+	EXPECT_FALSE( resultStar.contains( hypro::Point<TypeParam>( { +0.2, +0.2 } ) ) );
+	EXPECT_FALSE( resultStar.contains( hypro::Point<TypeParam>( { +0.2, -0.2 } ) ) );
+	EXPECT_FALSE( resultStar.contains( hypro::Point<TypeParam>( { -0.2, +0.2 } ) ) );
+	EXPECT_FALSE( resultStar.contains( hypro::Point<TypeParam>( { -0.2, -0.2 } ) ) );
 }
 
 // TYPED_TEST( StarsetTest, Union ) {

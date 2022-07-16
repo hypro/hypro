@@ -83,12 +83,12 @@ HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> StarsetT<Number, Conver
 template <typename Number, typename Converter, typename Setting>
 HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> StarsetT<Number, Converter, Setting>::eqvPolytope() const {
 	if ( Settings::CACHE_EQV_POLYTOPE ) {
-		if( !mEqvPoly ) {
+		if ( !mEqvPoly ) {
 			updateEquivalentPolytope();
 		}
-		return (*mEqvPoly);
+		return ( *mEqvPoly );
 	} else {
-		HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> poly = Converter::template toHPolytope<HPolytopeBoundingBoxCaching, Setting>(*this);
+		HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> poly = Converter::template toHPolytope<HPolytopeBoundingBoxCaching, Setting>( *this );
 		return poly;
 	}
 }
@@ -109,11 +109,11 @@ std::vector<Point<Number>> StarsetT<Number, Converter, Setting>::vertices() cons
 	for ( auto point : placeholder ) {
 		point = point.affineTransformation( mGenerator, mCenter );
 
-        // should not add points to the results that are already in
+		// should not add points to the results that are already in
 		bool alreadyIn = false;
 		for ( int i = 0; i < res.size(); i++ ) {
-            // dependending on using floating point or exact arithmetic, this equality could be checked with a threshold
-			if ( point == res[i] ) {        
+			// dependending on using floating point or exact arithmetic, this equality could be checked with a threshold
+			if ( point == res[i] ) {
 				alreadyIn = true;
 				break;
 			}
@@ -121,7 +121,7 @@ std::vector<Point<Number>> StarsetT<Number, Converter, Setting>::vertices() cons
 		if ( !alreadyIn )
 			res.push_back( point );
 	}
-	return removeRedundantPoints(res);
+	return removeRedundantPoints( res );
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -158,7 +158,7 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
 	// auto ans=(mConstraints.satisfiesHalfspace(zz));
 
 	// why calling calculateHalfspace again, we already have zz
-	return std::make_pair( std::get<0>( mConstraints.satisfiesHalfspace( calculateHalfspace( rhs ) ) ), std::move( star ) );  
+	return std::make_pair( std::get<0>( mConstraints.satisfiesHalfspace( calculateHalfspace( rhs ) ) ), std::move( star ) );
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -200,24 +200,24 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::affin
 		points.emplace_back( b );
 		return StarsetT<Number, Converter, Setting>( HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>( points ) );
 	}
-	// if ( !this->empty() ) {  
+	// if ( !this->empty() ) {
 	// what is the reason behind checking if the star is empty? In the NNCS verification it slows down the process
-	// In my opinion the affine transformation is fast enough, 
+	// In my opinion the affine transformation is fast enough,
 	// especially in my case checking checking the emptiness takes much more time than applying the affine transformation
-		return StarsetT<Number, Converter, Setting>( A * ( mCenter ) + b, A * mGenerator, mConstraints );
+	return StarsetT<Number, Converter, Setting>( A * ( mCenter ) + b, A * mGenerator, mConstraints );
 	// }
 	return *this;
 }
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minkowskiSum( const StarsetT<Number, Converter, Setting>& rhs ) const {
-	assert(this->dimension() == rhs.dimension());
+	assert( this->dimension() == rhs.dimension() );
 
 	// assuming same dimension
 	if ( mGenerator.cols() < 10 ) {
 		auto intermediate1 = this->eqvPolytope();
-		auto intermediate2 =   rhs.eqvPolytope();
-		return Converter::toStarset( intermediate1.minkowskiSum(intermediate2) );
+		auto intermediate2 = rhs.eqvPolytope();
+		return Converter::toStarset( intermediate1.minkowskiSum( intermediate2 ) );
 	}
 
 	if ( this->generator().rows() != rhs.generator().rows() ) {
@@ -261,9 +261,9 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
-	// check if the dimension of the halfspace is the same as the dimension of the starset 
-	assert(hspace.normal.rows() == mGenerator.rows());
-	
+	// check if the dimension of the halfspace is the same as the dimension of the starset
+	assert( hspace.normal.rows() == mGenerator.rows() );
+
 	// get the attributes of the starset
 	vector_t<Number> center = mCenter;
 	matrix_t<Number> generator = mGenerator;
@@ -279,27 +279,56 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 	vector_t<Number> scaled_sum = generator.colwise().sum();
 
 	// using the result we will add one more new constraint, i.e. one more row to the shape matrix and one more element to the limits vector
-	shape.conservativeResize(shape.rows() + 1, shape.cols());
-	limits.conservativeResize(shape.rows() + 1);
+	shape.conservativeResize( shape.rows() + 1, shape.cols() );
+	limits.conservativeResize( shape.rows() + 1, 1 );
 
-	shape.row(shape.rows() - 1) = scaled_sum;
-	limits[shape.rows() - 1] = offset - normal.dot(center);
+	shape.row( shape.rows() - 1 ) = scaled_sum;
+	limits[shape.rows() - 1] = offset - normal.dot( center );
 
-	return StarsetT<Number, Converter, Setting>( mCenter, shape, limits, mGenerator);
+	return StarsetT<Number, Converter, Setting>( mCenter, shape, limits, mGenerator );
 }
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const {
-	// TODO: this method is wrong fix it as the previous intersectHalfspace(hspace) method
-	return StarsetT<Number, Converter, Setting>( mCenter, mGenerator, mConstraints.intersectHalfspaces( _mat, _vec ) );
+	// check if the number of  halfspace matrix and vector are consistent and the dimension of the halfspaces is the same as the dimension of the starset
+	assert( _mat.rows() == _vec.rows() );
+	assert( _mat.cols() == mGenerator.rows() );
+
+	// get the attributes of the starset
+	vector_t<Number> center = mCenter;
+	matrix_t<Number> generator = mGenerator;
+	matrix_t<Number> shape = this->shape();
+	vector_t<Number> limits = this->limits();
+
+	// we allocate n new entries in the shape and limit matrices for the new constraints
+	shape.conservativeResize( shape.rows() + _mat.rows(), shape.cols() );
+	limits.conservativeResize( shape.rows() + _mat.rows(), 1 );
+
+	// this loop could be executed in parallel
+	// #pragma omp parallel for
+	for ( int i = 0; i < _mat.rows(); i++ ) {
+		// get the attributes of the halfspace: normal vector and offset
+		vector_t<Number> normal = _mat.row( i );
+		Number offset = _vec[i];
+
+		// multiply each row of the generator with the corresponding element from the normal vector and then sum up each column individually
+		matrix_t<Number> new_generator = generator.array().colwise() * normal.array();
+		vector_t<Number> scaled_sum = new_generator.colwise().sum();
+
+		// add the new constraints to the shape matrix and limits vector
+		shape.row( shape.rows() - _mat.rows() + i ) = scaled_sum;
+		limits[shape.rows() - _mat.rows() + i] = offset - normal.dot( center );
+	}
+
+	return StarsetT<Number, Converter, Setting>( mCenter, shape, limits, mGenerator );
 }
 
 // Starset.containts(point) method using the cached converted H-Polytope
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::containsCached( const Point<Number>& point ) const {
 	if ( !Settings::CACHE_EQV_POLYTOPE )
-		return this->contains(point);
-	return eqvPolytope().contains(point);
+		return this->contains( point );
+	return eqvPolytope().contains( point );
 }
 
 // Starset.contains(point) method using SAT checking (y = c + Vx && P(x))
@@ -313,13 +342,13 @@ bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point 
 
 	int row_num = 2 * mGenerator.rows() + shape_mat.rows();
 	int col_num = shape_mat.cols();
-	hypro::matrix_t<Number> final_mat = hypro::matrix_t<Number>(row_num, col_num);
-	hypro::vector_t<Number> final_vec = hypro::vector_t<Number>(row_num);
+	hypro::matrix_t<Number> final_mat = hypro::matrix_t<Number>( row_num, col_num );
+	hypro::vector_t<Number> final_vec = hypro::vector_t<Number>( row_num );
 
 	final_mat << shape_mat, new_basis_mat, -new_basis_mat;
 	final_vec << limit_vec, new_center_vec, -new_center_vec;
 
-	hypro::Optimizer<Number> optimizer(final_mat, final_vec);
+	hypro::Optimizer<Number> optimizer( final_mat, final_vec );
 	return optimizer.checkConsistency();
 }
 
@@ -490,7 +519,7 @@ void StarsetT<Number, Converter, Setting>::clear() {
 template <typename Number, typename Converter, class Setting>
 void StarsetT<Number, Converter, Setting>::updateEquivalentPolytope() const {
 	if ( Settings::CACHE_EQV_POLYTOPE ) {
-		mEqvPoly = Converter::template toHPolytope<HPolytopeBoundingBoxCaching, Setting>(*this);
+		mEqvPoly = Converter::template toHPolytope<HPolytopeBoundingBoxCaching, Setting>( *this );
 	}
 }
 
