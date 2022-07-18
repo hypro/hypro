@@ -15,7 +15,7 @@
 typedef double Number;	// -3090.30109487     <=>      -3090.3   (mpq_class vs double)
 
 int main( int argc, char* argv[] ) {
-	std::cout << "System arguments: ";
+	std::cout << "\nSystem arguments: ";
 	for ( int i = 0; i < argc; i++ ) {
 		std::cout << argv[i] << " ";
 	}
@@ -59,7 +59,7 @@ int main( int argc, char* argv[] ) {
 	}
 
 	// define input file name
-	const char* filename = "../examples/nnet/fc_relu.nnet";
+	const char* filename = "../examples/nnet/fc_2-2-2.nnet";
 	if ( argc > 2 )
 		filename = argv[2];
 	std::cout << "Filename is: " << filename << std::endl;
@@ -120,70 +120,70 @@ int main( int argc, char* argv[] ) {
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
 
-	// verificaton (and plotting) of the output sets
-	int N = output_set.size();
-	std::cout << "Number of final stars: " << N << std::endl;
-	int num_not_satisfied = 0;
-	for ( int i = 0; i < N; i++ ) {
-		// std::cout << output_set[i] << std::endl;
-		std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
-		// std::cout << "Vertices: " << vertices << std::endl;
-		plotter.addObject( vertices, hypro::plotting::colors[( 2 * i ) % 9] );
+	// // verificaton (and plotting) of the output sets
+	// int N = output_set.size();
+	// std::cout << "Number of final stars: " << N << std::endl;
+	// int num_not_satisfied = 0;
+	// for ( int i = 0; i < N; i++ ) {
+	// 	// std::cout << output_set[i] << std::endl;
+	// 	std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
+	// 	// std::cout << "Vertices: " << vertices << std::endl;
+	// 	plotter.addObject( vertices, hypro::plotting::colors[( 2 * i ) % 9] );
 
-		hypro::vector_t<Number> center = output_set[i].center();
-		hypro::matrix_t<Number> basis = output_set[i].generator();
-		hypro::matrix_t<Number> shape = output_set[i].shape();
-		hypro::matrix_t<Number> limits = output_set[i].limits();
+	// 	hypro::vector_t<Number> center = output_set[i].center();
+	// 	hypro::matrix_t<Number> basis = output_set[i].generator();
+	// 	hypro::matrix_t<Number> shape = output_set[i].shape();
+	// 	hypro::matrix_t<Number> limits = output_set[i].limits();
 
-		for ( int j = 1; j < output_set[i].dimension(); j++ ) {
-			// std::cout << "Checking output safety constraint: " << j << std::endl;
+	// 	for ( int j = 1; j < output_set[i].dimension(); j++ ) {
+	// 		// std::cout << "Checking output safety constraint: " << j << std::endl;
 
-			shape.conservativeResize( shape.rows() + 1, shape.cols() );
-			limits.conservativeResize( limits.rows() + 1, 1 );
+	// 		shape.conservativeResize( shape.rows() + 1, shape.cols() );
+	// 		limits.conservativeResize( limits.rows() + 1, 1 );
 
-			shape.row( shape.rows() - 1 ) = basis.row( 0 ) - basis.row( j );
-			limits.row( limits.rows() - 1 ) = center.row( j ) - center.row( 0 );
-		}
+	// 		shape.row( shape.rows() - 1 ) = basis.row( 0 ) - basis.row( j );
+	// 		limits.row( limits.rows() - 1 ) = center.row( j ) - center.row( 0 );
+	// 	}
 
-		hypro::Starset<Number> new_star = hypro::Starset<Number>( center, shape, limits, basis );
-		// std::cout << "Checking emptiness" << std::endl;
-		if ( new_star.empty() ) {
-			// std::cout << "Star number " << i << " satisfied property 4" << std::endl;
+	// 	hypro::Starset<Number> new_star = hypro::Starset<Number>( center, shape, limits, basis );
+	// 	// std::cout << "Checking emptiness" << std::endl;
+	// 	if ( new_star.empty() ) {
+	// 		// std::cout << "Star number " << i << " satisfied property 4" << std::endl;
 
-			// std::cout << output_set[i] << std::endl;
-			// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
-			// std::cout << "Vertices: " << vertices << std::endl;
-		} else {
-			std::cout << "Star number " << i << " violates the property" << std::endl;
+	// 		// std::cout << output_set[i] << std::endl;
+	// 		// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
+	// 		// std::cout << "Vertices: " << vertices << std::endl;
+	// 	} else {
+	// 		std::cout << "Star number " << i << " violates the property" << std::endl;
 
-			// std::cout << output_set[i] << std::endl;
-			// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
-			// std::cout << "Vertices: " << vertices << std::endl;
+	// 		// std::cout << output_set[i] << std::endl;
+	// 		// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
+	// 		// std::cout << "Vertices: " << vertices << std::endl;
 
-			// std::cout << "The new star: " << std::endl;
-			// std::cout << new_star << std::endl;
-			// std::cout << "New star vertices: " << new_star.vertices() << std::endl;
+	// 		// std::cout << "The new star: " << std::endl;
+	// 		// std::cout << new_star << std::endl;
+	// 		// std::cout << "New star vertices: " << new_star.vertices() << std::endl;
 
-			// std::vector<hypro::Point<Number>> inner_vertices = new_star.constraints().vertices();
-			// hypro::vector_t<Number> new_center = new_star.center();
-			// hypro::matrix_t<Number> new_basis = new_star.generator();
+	// 		// std::vector<hypro::Point<Number>> inner_vertices = new_star.constraints().vertices();
+	// 		// hypro::vector_t<Number> new_center = new_star.center();
+	// 		// hypro::matrix_t<Number> new_basis = new_star.generator();
 
-			// for( auto point : inner_vertices ) {
-			// 	std::cout << "Inner point: " << point << std::endl;
-			// 	hypro::Point<Number> star_point = point.affineTransformation(new_basis, new_center);
-			// 	std::cout << "One new point: " << star_point << std::endl;
-			// }
+	// 		// for( auto point : inner_vertices ) {
+	// 		// 	std::cout << "Inner point: " << point << std::endl;
+	// 		// 	hypro::Point<Number> star_point = point.affineTransformation(new_basis, new_center);
+	// 		// 	std::cout << "One new point: " << star_point << std::endl;
+	// 		// }
 
-			num_not_satisfied++;
-		}
-	}
+	// 		num_not_satisfied++;
+	// 	}
+	// }
 
-	std::cout << std::fixed;
-	std::cout << std::setprecision( 2 );
-	std::cout << "In total " << ( ( (double)num_not_satisfied / N ) * 100.0 ) << "\% of stars violates the property." << std::endl;
+	// std::cout << std::fixed;
+	// std::cout << std::setprecision( 2 );
+	// std::cout << "In total " << ( ( (double)num_not_satisfied / N ) * 100.0 ) << "\% of stars violates the property." << std::endl;
 
-	plotter.addObject( safe_star.vertices(), hypro::plotting::colors[hypro::plotting::bordeaux] );
-	plotter.plot2d();
+	// plotter.addObject( safe_star.vertices(), hypro::plotting::colors[hypro::plotting::bordeaux] );
+	// plotter.plot2d();
 
 	std::cout << "Program finished successfully." << std::endl;
 

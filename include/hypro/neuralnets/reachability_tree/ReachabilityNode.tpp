@@ -4,24 +4,22 @@ namespace hypro {
 namespace reachability {
 
 template <typename Number>
-ReachabilityNode<Number>::ReachabilityNode() {
-	// TODO: Implement this default constructor
-	mPlotter = hypro::Plotter<Number>::getInstance();
-}
+ReachabilityNode<Number>::ReachabilityNode()
+	: mPlotter( hypro::Plotter<Number>::getInstance() ) {}
 
 template <typename Number>
 ReachabilityNode<Number>::ReachabilityNode( Starset<Number> representation, NN_REACH_METHOD method, int layerNumber, int neuronNumber )
 	: mRepresentation( representation )
 	, mMethod( method )
 	, mLayerNumber( layerNumber )
-	, mLayerNumber( neuronNumber )
+	, mNeuronNumber( neuronNumber )
 	, mIsLeaf( false )
 	, mIsSafe( false )
+	, mIsComputed( false )
 	, mHasParent( false )
 	, mHasPosChild( false )
-	, mHasNegChild( false ) {
-	mPlotter = hypro::Plotter<Number>::getInstance();
-}
+	, mHasNegChild( false )
+	, mPlotter( hypro::Plotter<Number>::getInstance() ) {}
 
 template <typename Number>
 bool ReachabilityNode<Number>::isLeaf() const {
@@ -41,6 +39,16 @@ bool ReachabilityNode<Number>::isSafe() const {
 template <typename Number>
 void ReachabilityNode<Number>::setIsSafe( bool isSafe ) {
 	mIsSafe = isSafe;
+}
+
+template <typename Number>
+bool ReachabilityNode<Number>::isComputed() const {
+	return mIsComputed;
+}
+
+template <typename Number>
+void ReachabilityNode<Number>::setIsComputed( bool isComputed ) {
+	mIsComputed = isComputed;
 }
 
 template <typename Number>
@@ -137,7 +145,34 @@ void ReachabilityNode<Number>::setRepresentation( const Starset<Number>& represe
 }
 
 template <typename Number>
-void plot( bool holdOn, size_t color ) const {
+bool ReachabilityNode<Number>::isSafe( const HPolytope<Number>& safeSet ) const {
+	bool safe = true;
+	if ( mIsLeaf ) {
+		// if the node is a leaf, then we check whether the inner representation (star) is safe
+		for ( auto halfspace : safeSet.constraints() ) {
+			vector_t<Number> normal = halfspace.normal();
+			Number offset = halfspace.offset();
+			// intersect the starset with the opposite of the halfspace
+			// if the result is not empty, then we know that the starset contains elements that are not in the safe set
+			Starset<Number> newSet = mRepresentation.intersectHalfspace( Halfspace<Number>( -normal, -offset ) );
+			if ( !newSet.empty() ) {
+				safe = false;
+				break;
+			}
+		}
+	} else {
+		// if the node is not a leaf, then it safetiness depends on the childs
+		if ( mHasNegChild )
+			safe &= mNegChild->isSafe();
+		if ( mHasPosChild )
+			safe &= mPosChild->isSafe();
+	}
+
+	return safe;
+}
+
+template <typename Number>
+void ReachabilityNode<Number>::plot( bool holdOn, size_t color ) const {
 	std::vector<hypro::Point<Number>> vertices = mRepresentation.vertices();
 	mPlotter.addObject( vertices, color );
 	if ( !holdOn ) {

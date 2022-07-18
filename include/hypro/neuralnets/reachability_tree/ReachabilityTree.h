@@ -32,7 +32,7 @@ class ReachabilityTree {
 	HPolytope<Number> mInputSet;	 // the input set of the network
 	HPolytope<Number> mSafeSet;		 // the safe set specified in the form of a HPolytope
 	bool mIsSafe;					 // true if the reachability tree is safe
-	bool mISComplete;				 // true if the  computation of the reachability tree finished
+	bool mIsComplete;				 // true if the  computation of the reachability tree finished
 
   public:
 	// Default constructor
@@ -50,9 +50,16 @@ class ReachabilityTree {
 
 	unsigned short int depth() const;
 
-	std::vector<Starset<Number>> forwardPass( NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const;
-	void computeReachTree( const Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy );
+	std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const;
+	ReachabilityNode<Number>* computeReachTree( const Starset<Number>& inputSet, const HPolytope<Number>& safeSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy, int layerNumber, int neuronNumber );
 	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy );
+
+	/**
+	 * @brief A method to produce a counterexample of the
+	 *
+	 * @return std::vector<Number> the counterexample input
+	 */
+	std::vector<Number> produceCounterExample() const;
 
   private:
 	Starset<Number> prepareInput() const;

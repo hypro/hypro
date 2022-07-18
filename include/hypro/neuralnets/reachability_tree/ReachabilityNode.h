@@ -10,10 +10,10 @@
  */
 
 #pragma once
-#include "../reachability/ReachNNMethod.h"
 #include "../../representations/GeometricObjectBase.h"
-#include "../../util/plotting/Plotter.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/plotting/Plotter.h"
+#include "../reachability/ReachNNMethod.h"
 
 namespace hypro {
 namespace reachability {
@@ -23,8 +23,9 @@ namespace reachability {
 template <typename Number>
 class ReachabilityNode {
   private:
-	bool mIsLeaf;  // data holder to fast check if a node is a leaf node
-	bool mIsSafe;  // data holder to check if a node is a safe node
+	bool mIsLeaf;	  // data holder to fast check if a node is a leaf node
+	bool mIsSafe;	  // data holder to check if a node is a safe node
+	bool mIsComputed;  // data holder to check the computation of the node is finished (i.e. it has all its childs)
 
 	bool mHasParent;
 	ReachabilityNode<Number>* mParent;
@@ -53,6 +54,8 @@ class ReachabilityNode {
 	void setIsLeaf( bool isLeaf );
 	bool isSafe() const;
 	void setIsSafe( bool isSafe );
+	bool isComputed() const;
+	void setIsComputed( bool isComputed );
 
 	bool hasParent() const;
 	void setHasParent( bool hasParent );
@@ -75,11 +78,14 @@ class ReachabilityNode {
 	void setMethod( NN_REACH_METHOD method );
 
 	Starset<Number> representation() const;
-	void setRepresentation(const Starset<Number>& representation);
+	void setRepresentation( const Starset<Number>& representation );
+
+	// functionalities 
+	bool isSafe(const HPolytope<Number>& safeSet ) const;
 
 	// utility methods
-	void plot( bool holdOn = false, size_t color = 0x006165 ) const;	 // allow to plot only if the representation is two dimensional
-											 // when holdOn is true, we do not create the plot, only add the object to it
+	void plot( bool holdOn = false, size_t color = 0x006165 ) const;  // allow to plot only if the representation is two dimensional
+																	  // when holdOn is true, we do not create the plot, only add the object to it
 };
 
 }  // namespace reachability

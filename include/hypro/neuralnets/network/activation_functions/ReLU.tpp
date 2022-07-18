@@ -58,8 +58,8 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::stepReLU( int i, std::vector<h
 		basis_2 = I_i * basis_2;
 		hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, politope_2 );
 
-		result.push_back( star_1 );
 		result.push_back( star_2 );
+		result.push_back( star_1 );
 	}
 
 	return result;

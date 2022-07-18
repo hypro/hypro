@@ -10,74 +10,97 @@
  */
 #pragma once
 
+#include "ReachabilityNode.h"
+
 namespace hypro {
 namespace reachability {
 
 template <typename Number>
 class SearchJob {
   private:
-	Starset<Number> mSet;  // TODO: consider using pointer to the set instead of copying
-	std::shared_ptr<LayerBase<Number>> mLayer;
+	ReachabilityNode<Number>* mNode;
 	std::list<std::shared_ptr<hypro::LayerBase<Number>>> mAllLayers;
-	unsigned short int mIndex;
 	bool mIsFinalResult = false;
-	std::vector<Starset<Number>> mFinalResult;
 
   public:
-	SearchJob( const Starset<Number>& set, std::shared_ptr<LayerBase<Number>> layer, const std::list<std::shared_ptr<hypro::LayerBase<Number>>>& allLayers, unsigned short int index )
-		: mSet( set )
-		, mLayer( layer )
+	SearchJob( ReachabilityNode<Number>* node, const std::list<std::shared_ptr<hypro::LayerBase<Number>>>& allLayers )
+		: mNode( node )
 		, mAllLayers( allLayers )
-		, mIndex( index ) {}
+		, mIsFinalResult( false ) {}
 
-	SearchJob( const Starset<Number>& set, std::shared_ptr<LayerBase<Number>> layer, const std::list<std::shared_ptr<hypro::LayerBase<Number>>>& allLayers, unsigned short int index, bool isFinalResult, const std::vector<Starset<Number>>& finalResult )
-		: mSet( set )
-		, mLayer( layer )
+	SearchJob( ReachabilityNode<Number>* node, const std::list<std::shared_ptr<hypro::LayerBase<Number>>>& allLayers, bool isFinalResult )
+		: mNode( node )
 		, mAllLayers( allLayers )
-		, mIndex( index )
-		, mIsFinalResult( isFinalResult )
-		, mFinalResult( finalResult ) {}
+		, mIsFinalResult( isFinalResult ) {}
 
 	std::vector<SearchJob<Number>> compute( NN_REACH_METHOD method ) {
-		std::vector<SearchJob<Number>> newJobs;
+		unsigned short int mLayerNum = mNode->layerNumber();
+		unsigned short int mIndex = mNode->neuronNumber();
+		typename std::list<std::shared_ptr<hypro::LayerBase<Number>>>::iterator it = mAllLayers.begin();
+		std::advance(it, mLayerNum);
+		std::shared_ptr<hypro::LayerBase<Number>> mLayer = (*it);
+		Starset<Number> mSet = mNode->representation();
+
 		std::vector<Starset<Number>> newSets = mLayer->forwardPass( mSet, mIndex, method );
 		int N = newSets.size();
+
+		// the new jobs produced by calculating the current job
+		std::vector<SearchJob<Number>> newJobs;
+		mNode->setIsComputed( true );
 
 		// check if it was the last neuron of the last layer, so this job produces (part of) the final result
 		if ( ( mLayer->layerIndex() == mAllLayers.size() - 1 ) && ( ( mLayer->layerType() == NN_LAYER_TYPE::AFFINE ) ||
 																	( mLayer->layerType() != NN_LAYER_TYPE::AFFINE ) && ( mIndex == mLayer->layerSize() - 1 ) ) ) {
-			newJobs.push_back( SearchJob( mSet, mLayer, mAllLayers, mIndex, true, newSets ) );
+			// for the last neuron of the last layer all of the computed result sets is a final result
+			for ( auto newSet : newSets ) {
+				ReachabilityNode<Number>* leafNode = new ReachabilityNode<Number>( newSet, method, mLayerNum + 1, 0 );
+				leafNode->setParent( mNode );
+				leafNode->setIsLeaf( true );
+				newJobs.push_back( SearchJob( leafNode, mAllLayers, true ) );
+			}
 			return newJobs;
 		}
 
-		// set the new layer to the current layer
-		typename std::list<std::shared_ptr<hypro::LayerBase<Number>>>::iterator it = mAllLayers.begin();
-		std::advance( it, mLayer->layerIndex() + 1 );
-		std::shared_ptr<LayerBase<Number>> newLayer = ( *it );
+		// find the location of the next neuron
+		unsigned short int newLayerNum = 0;
 		unsigned short int newIndex = 0;
+		ReachabilityNode<Number>* nextNode;
 
 		switch ( mLayer->layerType() ) {
 			case NN_LAYER_TYPE::AFFINE:
+				newLayerNum = mLayerNum + 1;
+				newIndex = 0;
 				// create the new jobs
 				for ( int i = 0; i < N; ++i ) {
-					newJobs.push_back( SearchJob( newSets[i], newLayer, mAllLayers, newIndex ) );
+					// this for always should iterate only once
+					// TODO: set the pointers to the parent and backward
+					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
+					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
 				break;
 			case NN_LAYER_TYPE::RELU:
 			case NN_LAYER_TYPE::HARD_TANH:
 				if ( mIndex < mLayer->layerSize() - 1 ) {
-					// get the current layer if it is not the last neuron in the layer
-					std::advance( it, -1 );
-					newLayer = ( *it );
+					// get the next neuron in the current layer
+					newLayerNum = mLayerNum;
 					newIndex = mIndex + 1;
 
 				} else {
-					// if it is the last neuron in the layer
+					// get the first neuron of the next layer
+					newLayerNum = mLayerNum + 1;
 					newIndex = 0;
 				}
 				// create the new jobs
 				for ( int i = 0; i < N; ++i ) {
-					newJobs.push_back( SearchJob( newSets[i], newLayer, mAllLayers, newIndex ) );
+					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
+					nextNode->setParent( mNode );
+					if ( !mNode->hasPosChild() ) {
+						mNode->setPosChild(nextNode);
+					}
+					if ( !mNode->hasNegChild() ) {
+						mNode->setNegChild(nextNode);
+					}
+					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
 
 				if ( mLayer->layerType() == NN_LAYER_TYPE::HARD_TANH )
@@ -93,10 +116,8 @@ class SearchJob {
 		return mIsFinalResult;
 	}
 
-	std::vector<Starset<Number>> finalResult() const {
-		if ( mIsFinalResult )
-			return mFinalResult;
-		return std::vector<Starset<Number>>();
+	ReachabilityNode<Number>* getNode() const {
+		return mNode;
 	}
 };
 
