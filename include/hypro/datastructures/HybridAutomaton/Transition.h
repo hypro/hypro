@@ -54,51 +54,51 @@ class Transition {
 	bool mUrgent = false;								  /// Flag if transition is urgent.
 	Number mTriggerTime = Number( -1 );					  /// Trigger-time: if positive acts as an additional guard.
 	std::vector<Label> mLabels = std::vector<Label>();
-	std::optional<Condition<Number>> mJumpEnablingSet; /// possibly cached jump set
+	std::optional<Condition<Number>> mJumpEnablingSet;	/// possibly cached jump set
 	mutable std::size_t mHash = 0;
 
   public:
 	/**
-  	 * @brief      Default constructor.
-  	 */
+	 * @brief      Default constructor.
+	 */
 	Transition() = default;
 
 	/**
-     * @brief      Copy constructor.
-     * @param[in]  orig  The original.
-     */
+	 * @brief      Copy constructor.
+	 * @param[in]  orig  The original.
+	 */
 	Transition( const Transition<Number>& orig ) = default;
 
 	/**
-     * @brief      Move constructor.
-     * @param[in]  orig  The original.
-     */
+	 * @brief      Move constructor.
+	 * @param[in]  orig  The original.
+	 */
 	Transition( Transition<Number>&& orig ) = default;
 
 	/**
-     * @brief      Copy assignment operator.
-     * @param[in]  orig  The original.
-     * @return     A copy of the passed transition.
-     */
+	 * @brief      Copy assignment operator.
+	 * @param[in]  orig  The original.
+	 * @return     A copy of the passed transition.
+	 */
 	Transition& operator=( const Transition<Number>& orig ) = default;
 
 	/**
-     * @brief      Move assignment operator.
-     * @param[in]  orig  The original.
-     * @return     Result.
-     */
+	 * @brief      Move assignment operator.
+	 * @param[in]  orig  The original.
+	 * @return     Result.
+	 */
 	Transition& operator=( Transition<Number>&& orig ) = default;
 
 	/**
-     * @brief      Destroys the object.
-     */
+	 * @brief      Destroys the object.
+	 */
 	virtual ~Transition() {}
 
 	/**
-     * @brief      Constructor from source and target location.
-     * @param      source  The source
-     * @param      target  The target
-     */
+	 * @brief      Constructor from source and target location.
+	 * @param      source  The source
+	 * @param      target  The target
+	 */
 	Transition( Location<Number>* source, Location<Number>* target )
 		: mSource( source )
 		, mTarget( target )
@@ -109,12 +109,12 @@ class Transition {
 		, mLabels() {}
 
 	/**
-     * @brief      Full constructor for basic transition.
-     * @param      source  The source.
-     * @param      target  The target.
-     * @param[in]  guard   The guard.
-     * @param[in]  reset   The reset.
-     */
+	 * @brief      Full constructor for basic transition.
+	 * @param      source  The source.
+	 * @param      target  The target.
+	 * @param[in]  guard   The guard.
+	 * @param[in]  reset   The reset.
+	 */
 	Transition( Location<Number>* source, Location<Number>* target, const Condition<Number>& guard, const Reset<Number>& reset )
 		: mSource( source )
 		, mTarget( target )
@@ -210,15 +210,15 @@ class Transition {
 	bool isComposedOf( const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const;
 
 	/**
-    * decomposes guard  and reset of this transition.
-    */
+	 * decomposes guard  and reset of this transition.
+	 */
 	void decompose( const std::vector<std::vector<std::size_t>>& partition ) {
 		mGuard.decompose( partition );
 		mReset.decompose( partition );
 		mHash = 0;
 	}
 
-	/** 
+	/**
 	 * @brief			Computes the set from which transition can be taken.
 	 * @detail 		The jump enabling set is the intersection of the guard and the
 	 * 						preimage of the target invariant under the reset function.
@@ -227,11 +227,11 @@ class Transition {
 	Condition<Number> getJumpEnablingSet();
 
 	/**
-     * @brief      Outstream operator.
-     * @param      ostr  The outstream.
-     * @param[in]  t     The transition.
-     * @return     Reference to the outstream.
-     */
+	 * @brief      Outstream operator.
+	 * @param      ostr  The outstream.
+	 * @param[in]  t     The transition.
+	 * @return     Reference to the outstream.
+	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const Transition<Number>& t ) {
 		ostr << "{ @" << &t << " "
 			 << t.getSource()->getName() << " (@" << t.getSource() << ") -";
@@ -264,11 +264,11 @@ class Transition {
 	}
 
 	/**
-     * @brief      Equality comparison operator.
-     * @param[in]  lhs   The left hand side.
-     * @param[in]  rhs   The right hand side.
-     * @return     True if both transitions are equal, false otherwise.
-     */
+	 * @brief      Equality comparison operator.
+	 * @param[in]  lhs   The left hand side.
+	 * @param[in]  rhs   The right hand side.
+	 * @return     True if both transitions are equal, false otherwise.
+	 */
 	friend bool operator==( const Transition<Number>& lhs, const Transition<Number>& rhs ) {
 		if ( ( *lhs.mSource != *rhs.mSource ) ||
 			 ( *lhs.mTarget != *rhs.mTarget ) ||
@@ -283,21 +283,21 @@ class Transition {
 	}
 
 	/**
-     * @brief       Inequality comparison operator
-     * @param[in]   lhs     The left hand side
-     * @param[in]   rhs     The right hand side
-     * Qreturn      True if both transitions are unequal, false otherwise
-     */
+	 * @brief       Inequality comparison operator
+	 * @param[in]   lhs     The left hand side
+	 * @param[in]   rhs     The right hand side
+	 * Qreturn      True if both transitions are unequal, false otherwise
+	 */
 	friend bool operator!=( const Transition<Number>& lhs, const Transition<Number>& rhs ) {
 		return !( lhs == rhs );
 	}
 
 	/**
-     * @brief       Equality operator for sets of unique pointers to transitions.
-     * @details     First tests whether the size of the sets are equal. Then compares the transitions the unique pointers point to for equality.
-     * @param[in]   lhs     left hand side; first set to compare
-     * @param[in]   rhs     right hand sid; second set to compare
-     */
+	 * @brief       Equality operator for sets of unique pointers to transitions.
+	 * @details     First tests whether the size of the sets are equal. Then compares the transitions the unique pointers point to for equality.
+	 * @param[in]   lhs     left hand side; first set to compare
+	 * @param[in]   rhs     right hand sid; second set to compare
+	 */
 	friend bool operator==( const std::set<std::unique_ptr<Transition<Number>>>& lhs, const std::set<std::unique_ptr<Transition<Number>>>& rhs ) {
 		if ( lhs.size() != rhs.size() ) {
 			return false;
@@ -313,16 +313,8 @@ class Transition {
 	}
 };
 
-
-template<typename Number>
-std::unique_ptr<Transition<Number>> parallelCompose(const Transition<Number>* lhsT
-                                                    , const Transition<Number>* rhsT
-                                                    , const std::vector<std::string>& lhsVar
-                                                    , const std::vector<std::string>& rhsVar
-                                                    , const std::vector<std::string>& haVar
-                                                    , const HybridAutomaton<Number>& ha
-                                                    , const std::set<Label> lhsLabels
-                                                    , const std::set<Label> rhsLabels);
+template <typename Number>
+std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* lhsT, const Transition<Number>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<Location<Number>*>>& masters = {} );
 }  // namespace hypro
 
 namespace std {

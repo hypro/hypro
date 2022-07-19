@@ -256,7 +256,7 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariablesAndlabelledTra
 	using namespace hypro;
 	auto ha1 = HybridAutomaton<TypeParam>();
 	auto ha2 = HybridAutomaton<TypeParam>();
-	ha1.setVariables( { "a", "b"} );
+	ha1.setVariables( { "a", "b" } );
 	ha2.setVariables( { "a" } );
 
 	auto* loc11 = ha1.createLocation( "l11" );
@@ -290,7 +290,7 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariablesAndlabelledTra
 	t2->setLabels( { Label{ "label2" } } );
 	t4->setLabels( { Label{ "label2" } } );
 
-	auto res = ha1 || ha2;
+	auto res = hypro::parallelCompose( ha1, ha2, { { "a", { loc11, loc12 } }, { "b", { loc11, loc12 } } } );
 
 	hypro::plotting::plot( ha1, "ha1" );
 	hypro::plotting::plot( ha2, "ha2" );
@@ -298,9 +298,13 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariablesAndlabelledTra
 
 	EXPECT_EQ( 2, res.getVariables().size() );
 	ASSERT_EQ( 2, res.getLocations().size() );
-	std::vector<Label> expectedLabels{ Label( "label1" ),  Label( "label2" ) };
 	EXPECT_EQ( 1, res.getLocations().front()->getTransitions().size() );
 	EXPECT_EQ( 1, res.getLocations().back()->getTransitions().size() );
 
-	EXPECT_TRUE( std::any_of( std::begin( res.getLocations().front()->getTransitions() ), std::end( res.getLocations().front()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == expectedLabels; } ) );
+	EXPECT_TRUE( std::any_of( std::begin( res.getLocations().front()->getTransitions() ), std::end( res.getLocations().front()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == std::vector<Label>{ Label( "label1" ) }; } ) );
+	EXPECT_TRUE( std::any_of( std::begin( res.getLocations().back()->getTransitions() ), std::end( res.getLocations().back()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == std::vector<Label>{ Label( "label2" ) }; } ) );
+	EXPECT_TRUE( std::none_of( std::begin( res.getLocations().front()->getTransitions() ), std::end( res.getLocations().front()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == std::vector<Label>{ Label( "label1" ), Label( "label2" ) }; } ) );
+	EXPECT_TRUE( std::none_of( std::begin( res.getLocations().front()->getTransitions() ), std::end( res.getLocations().front()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == std::vector<Label>{}; } ) );
+	EXPECT_TRUE( std::none_of( std::begin( res.getLocations().back()->getTransitions() ), std::end( res.getLocations().back()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == std::vector<Label>{ Label( "label1" ), Label( "label2" ) }; } ) );
+	EXPECT_TRUE( std::none_of( std::begin( res.getLocations().back()->getTransitions() ), std::end( res.getLocations().back()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == std::vector<Label>{}; } ) );
 }

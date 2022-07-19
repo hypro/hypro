@@ -329,9 +329,7 @@ struct locPtrComp {
 };
 
 template <typename Number>
-// std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
-//                                 , const std::unique_ptr<Location<Number>>& rhs
-std::unique_ptr<Location<Number>> parallelCompose( const Location<Number>* lhs, const Location<Number>* rhs, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar );
+std::unique_ptr<Location<Number>> parallelCompose( const Location<Number>* lhs, const Location<Number>* rhs, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const std::map<std::string, std::vector<Location<Number>*>>& masters = {} );
 
 }  // namespace hypro
 

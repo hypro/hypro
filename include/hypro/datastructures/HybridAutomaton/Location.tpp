@@ -191,7 +191,7 @@ void Location<Number>::setTransitions( transitionVector&& trans ) {
 
 template <typename Number>
 void Location<Number>::addTransition( std::unique_ptr<Transition<Number>>&& trans ) {
-	//std::cout << "add transition from " << trans->getSource() << " to " << trans->getTarget() << ", this is " << this << std::endl;
+	// std::cout << "add transition from " << trans->getSource() << " to " << trans->getTarget() << ", this is " << this << std::endl;
 	assert( trans->getSource() == this );
 	mTransitions.emplace_back( std::move( trans ) );
 	mHash = 0;
@@ -415,97 +415,115 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
 */
 
 template <typename Number>
-//std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
-//                                , const std::unique_ptr<Location<Number>>& rhs
-std::unique_ptr<Location<Number>> parallelCompose( const Location<Number>* lhs, const Location<Number>* rhs, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar ) {
-	//compute flow
+// std::unique_ptr<Location<Number>> parallelCompose(const std::unique_ptr<Location<Number>>& lhs
+//                                 , const std::unique_ptr<Location<Number>>& rhs
+std::unique_ptr<Location<Number>> parallelCompose( const Location<Number>* lhs, const Location<Number>* rhs, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const std::map<std::string, std::vector<Location<Number>*>>& masters ) {
+	auto copied_lhsvars = lhsVar;
+	auto copied_rhsvars = rhsVar;
+	for ( const auto& var : haVar ) {
+		if ( masters.count( var ) > 0 ) {
+			if ( std::find( std::begin( masters.at( var ) ), std::end( masters.at( var ) ), lhs ) != std::end( masters.at( var ) ) ) {
+				auto it = std::find( std::begin( copied_rhsvars ), std::end( copied_rhsvars ), var );
+				if ( it != std::end( copied_rhsvars ) ) {
+					copied_rhsvars.erase( it );
+				}
+			} else if ( std::find( std::begin( masters.at( var ) ), std::end( masters.at( var ) ), rhs ) != std::end( masters.at( var ) ) ) {
+				auto it = std::find( std::begin( copied_lhsvars ), std::end( copied_lhsvars ), var );
+				if ( it != std::end( copied_lhsvars ) ) {
+					copied_lhsvars.erase( it );
+				}
+			}
+		}
+	}
+
+	// compute flow
 	matrix_t<Number> haFlow = matrix_t<Number>::Zero( haVar.size() + 1, haVar.size() + 1 );
 
-	//std::cout << "combine Locations " << lhs->getName() << " and " << rhs->getName() << std::endl;
-	//std::cout << "With flows " << lhs->getFlow() << " and " << rhs->getFlow() << std::endl;
+	TRACE( "hypro.datastructures.hybridAutomaton", "Combine Locations " << lhs->getName() << " and " << rhs->getName() );
+	// std::cout << "With flows " << lhs->getFlow() << " and " << rhs->getFlow() << std::endl;
 
 	std::size_t lhsIR = 0, lhsIC = 0, rhsIR = 0, rhsIC = 0;
 	bool admissible = true;	 // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
 	// iterate over all rows
 	for ( std::size_t rowI = 0; rowI != haVar.size(); ++rowI ) {
-		//std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
-		//std::cout << "lhsIR: " << lhsIR << std::endl;
-		//std::cout << "rhsIR: " << rhsIR << std::endl;
-		//std::cout << "Now left hand side." << std::endl;
-		if ( lhsIR < lhsVar.size() && lhsVar[lhsIR] == haVar[rowI] ) {
+		// std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
+		// std::cout << "lhsIR: " << lhsIR << std::endl;
+		// std::cout << "rhsIR: " << rhsIR << std::endl;
+		// std::cout << "Now left hand side." << std::endl;
+		if ( lhsIR < copied_lhsvars.size() && copied_lhsvars[lhsIR] == haVar[rowI] ) {
 			// iterate over all columns
 			lhsIC = 0;
 			for ( std::size_t colI = 0; colI != haVar.size(); ++colI ) {
-				//std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
-				//std::cout << "lhsIC: " << lhsIC << std::endl;
-				//std::cout << "rhsIC: " << rhsIC << std::endl;
-				if ( lhsVar[lhsIC] == haVar[colI] ) {
+				// std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
+				// std::cout << "lhsIC: " << lhsIC << std::endl;
+				// std::cout << "rhsIC: " << rhsIC << std::endl;
+				if ( copied_lhsvars[lhsIC] == haVar[colI] ) {
 					haFlow( rowI, colI ) = lhs->getLinearFlow().getFlowMatrix()( lhsIR, lhsIC );
 					++lhsIC;
-					if ( lhsIC == lhsVar.size() ) {
+					if ( lhsIC == copied_lhsvars.size() ) {
 						break;
 					}
 				}
 			}
 			++lhsIR;
 		}
-		//std::cout << "lhsIR: " << lhsIR << std::endl;
-		//std::cout << "intermediate result: " << haFlow << std::endl;
-		//std::cout << "Now right hand side." << std::endl;
-		if ( rhsIR < rhsVar.size() && rhsVar[rhsIR] == haVar[rowI] ) {
+		// std::cout << "lhsIR: " << lhsIR << std::endl;
+		// std::cout << "intermediate result: " << haFlow << std::endl;
+		// std::cout << "Now right hand side." << std::endl;
+		if ( rhsIR < copied_rhsvars.size() && copied_rhsvars[rhsIR] == haVar[rowI] ) {
 			// iterate over all columns
 			rhsIC = 0;
 			for ( std::size_t colI = 0; colI != haVar.size(); ++colI ) {
-				//std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
-				//std::cout << "lhsIC: " << lhsIC << std::endl;
-				//std::cout << "rhsIC: " << rhsIC << std::endl;
-				if ( rhsVar[rhsIC] == haVar[colI] ) {
+				// std::cout << "Consider composed col " << colI << " for var " << haVar[colI] << std::endl;
+				// std::cout << "lhsIC: " << lhsIC << std::endl;
+				// std::cout << "rhsIC: " << rhsIC << std::endl;
+				if ( copied_rhsvars[rhsIC] == haVar[colI] ) {
 					// TODO: the check is not entirely correct, since the flow can be non-admissible but set to 0 in lhs and something != 0 in rhs.
 					if ( haFlow( rowI, colI ) != 0 && rhs->getLinearFlow().getFlowMatrix()( rhsIR, rhsIC ) != haFlow( rowI, colI ) ) {
 						admissible = false;
 						break;
 					}
 
-					//std::cout << "haFlow sizes: " << haFlow.rows() << "x" << haFlow.cols() << std::endl;
-					//std::cout << "rhs->getFlow() sizes: " << rhs->getFlow().rows() << "x" << rhs->getFlow().cols() << std::endl;
-					//std::cout << "rowI: " << rowI << " colI " << colI << " rhsIR " << rhsIR << " rhsIC " << rhsIC << std::endl;
-					//assert(rowI < haFlow.rows());
-					//assert(colI < haFlow.cols());
-					//assert(rhsIR <= rhs->getFlow().rows());
-					//assert(rhsIC <= rhs->getFlow().cols());
+					// std::cout << "haFlow sizes: " << haFlow.rows() << "x" << haFlow.cols() << std::endl;
+					// std::cout << "rhs->getFlow() sizes: " << rhs->getFlow().rows() << "x" << rhs->getFlow().cols() << std::endl;
+					// std::cout << "rowI: " << rowI << " colI " << colI << " rhsIR " << rhsIR << " rhsIC " << rhsIC << std::endl;
+					// assert(rowI < haFlow.rows());
+					// assert(colI < haFlow.cols());
+					// assert(rhsIR <= rhs->getFlow().rows());
+					// assert(rhsIC <= rhs->getFlow().cols());
 					haFlow( rowI, colI ) = rhs->getLinearFlow().getFlowMatrix()( rhsIR, rhsIC );
 					++rhsIC;
-					if ( rhsIC == rhsVar.size() ) {
+					if ( rhsIC == copied_rhsvars.size() ) {
 						break;
 					}
 				}
 			}
 			++rhsIR;
 		}
-		//std::cout << "rhsIR: " << rhsIR << std::endl;
+		// std::cout << "rhsIR: " << rhsIR << std::endl;
 		if ( !admissible )
 			break;
 	}
 
 	// constant parts - TODO: integrate into loop above?
 	for ( unsigned rowI = 0; rowI < haFlow.rows() - 1; ++rowI ) {
-		//std::cout << "Constant part for var " << haVar[rowI] << std::endl;
+		// std::cout << "Constant part for var " << haVar[rowI] << std::endl;
 		unsigned lhsPos = 0;
 		unsigned rhsPos = 0;
 		bool leftFound = false;
 		bool rightFound = false;
-		while ( lhsPos != lhsVar.size() ) {
-			if ( lhsVar[lhsPos] == haVar[rowI] ) {
+		while ( lhsPos != copied_lhsvars.size() ) {
+			if ( copied_lhsvars[lhsPos] == haVar[rowI] ) {
 				leftFound = true;
-				//std::cout << "Found in lhs at pos " << lhsPos << std::endl;
+				// std::cout << "Found in lhs at pos " << lhsPos << std::endl;
 				break;
 			}
 			++lhsPos;
 		}
 
-		while ( rhsPos != rhsVar.size() ) {
-			if ( rhsVar[rhsPos] == haVar[rowI] ) {
-				//std::cout << "Found in rhs at pos " << lhsPos << std::endl;
+		while ( rhsPos != copied_rhsvars.size() ) {
+			if ( copied_rhsvars[rhsPos] == haVar[rowI] ) {
+				// std::cout << "Found in rhs at pos " << lhsPos << std::endl;
 				rightFound = true;
 				break;
 			}
@@ -519,18 +537,19 @@ std::unique_ptr<Location<Number>> parallelCompose( const Location<Number>* lhs, 
 					break;
 				} else {
 					haFlow( rowI, haFlow.cols() - 1 ) = lhs->getLinearFlow().getFlowMatrix()( lhsPos, lhs->getLinearFlow().getFlowMatrix().cols() - 1 );
-					//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+					// std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
 				}
 			} else {
 				haFlow( rowI, haFlow.cols() - 1 ) = lhs->getLinearFlow().getFlowMatrix()( lhsPos, lhs->getLinearFlow().getFlowMatrix().cols() - 1 );
-				//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+				// std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
 			}
 		} else {
 			if ( rightFound ) {
 				haFlow( rowI, haFlow.cols() - 1 ) = rhs->getLinearFlow().getFlowMatrix()( rhsPos, rhs->getLinearFlow().getFlowMatrix().cols() - 1 );
-				//std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
+				// std::cout << "Set to " << haFlow(rowI,haFlow.cols()-1) << std::endl;
 			} else {
-				//std::cout << "Variable is neither part of lhs or rhs!" << std::endl;
+				// std::cout << "Variable is neither part of lhs or rhs!" << std::endl;
+				FATAL( "hypro.datastructures.hybridAutomaton", "Constant part for variable in row " << rowI << " is not defined=" );
 				assert( false );
 				admissible = false;
 			}
@@ -538,33 +557,25 @@ std::unique_ptr<Location<Number>> parallelCompose( const Location<Number>* lhs, 
 	}
 
 	if ( !admissible ) {
-		FATAL( "hypro.datastructures", "Failed to create parallel composition of locations." );
+		FATAL( "hypro.datastructures.hybridAutomaton", "Failed to create parallel composition of locations." );
 		return nullptr;
 	}
 
-	//Location<Number>* res = LocationManager<Number>::getInstance().create();
+	// Location<Number>* res = LocationManager<Number>::getInstance().create();
 	std::unique_ptr<Location<Number>> res = std::make_unique<Location<Number>>();
 
-	//set name
+	// set name
 	res->setName( lhs->getName() + "_" + rhs->getName() );
 
-	//std::cout << "Created flow: " << haFlow << " for location " << res->getName();
+	// std::cout << "Created flow: " << haFlow << " for location " << res->getName();
 
 	res->setFlow( haFlow );
 
-	//set invariant
-	Condition<Number> inv = combine( lhs->getInvariant(), rhs->getInvariant(), haVar, lhsVar, rhsVar );
+	// set invariant
+	Condition<Number> inv = combine( lhs->getInvariant(), rhs->getInvariant(), haVar, copied_lhsvars, copied_rhsvars );
 	res->setInvariant( inv );
-
-	//std::cout << "Created invariant: " << inv << " for location " << res->getName();
-
-	//std::cout << "setExtInput" << std::endl;
-	//set extinput
-	//loc->setExtInput(flowAndExtInput.second);
-	//return std::unique_ptr<Location<Number>>(res);
 	return res;
 }
-
 
 template <typename Number>
 void Location<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
@@ -577,7 +588,6 @@ void Location<Number>::decompose( const std::vector<std::vector<std::size_t>>& p
 	std::vector<DynamicType> newFlowTypes;
 
 	auto& vpool = VariablePool::getInstance();
-
 
 	for ( auto& subspace : partition ) {
 		if ( mFlowTypes[0] == DynamicType::discrete || mFlowTypes[0] == DynamicType::timed || mFlowTypes[0] == DynamicType::singular || mFlowTypes[0] == DynamicType::affine || mFlowTypes[0] == DynamicType::linear ) {
@@ -613,6 +623,5 @@ void Location<Number>::decompose( const std::vector<std::vector<std::size_t>>& p
 	}
 	mHash = 0;
 }
-
 
 }  // namespace hypro

@@ -62,6 +62,7 @@ template <typename Number>
 void plot( const HybridAutomaton<Number>& automaton, std::string filename = "ha_out" ) {
 	auto plt = HybridAutomatonPlotter<Number>( automaton );
 	plt.rSettings().filename = filename;
+	plt.rSettings().overwriteFiles = true;
 	plt.plot();
 }
 

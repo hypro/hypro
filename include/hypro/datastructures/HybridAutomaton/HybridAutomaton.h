@@ -275,6 +275,7 @@ class HybridAutomaton {
 	// Num represents Number and Stat represents State
 	template <typename Num>
 	friend HybridAutomaton<Num> operator||( const HybridAutomaton<Num>& lhs, const HybridAutomaton<Num>& rhs );
+
 	/**
 	 * @brief      Combination Operator.
 	 * @param[in]  lhs   The left hand side.
@@ -311,6 +312,9 @@ class HybridAutomaton {
 		return true;
 	}
 };
+
+template <typename Number>
+HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs, const std::map<std::string, std::vector<Location<Number>*>>& masters = {} );
 
 }  // namespace hypro
 
