@@ -308,3 +308,117 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariablesAndlabelledTra
 	EXPECT_TRUE( std::none_of( std::begin( res.getLocations().back()->getTransitions() ), std::end( res.getLocations().back()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == std::vector<Label>{ Label( "label1" ), Label( "label2" ) }; } ) );
 	EXPECT_TRUE( std::none_of( std::begin( res.getLocations().back()->getTransitions() ), std::end( res.getLocations().back()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == std::vector<Label>{}; } ) );
 }
+
+
+TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariables ) {
+	using namespace hypro;
+	auto ha1 = HybridAutomaton<TypeParam>();
+	auto ha2 = HybridAutomaton<TypeParam>();
+	ha1.setVariables( { "a" } );
+	ha2.setVariables( { "a" } );
+
+	auto* loc11 = ha1.createLocation( "l11" );
+	auto* loc12 = ha1.createLocation( "l12" );
+	auto* loc21 = ha2.createLocation( "l21" );
+	auto* loc22 = ha2.createLocation( "l22" );
+	auto* loc23 = ha2.createLocation( "l23" );
+	// set initial states since otherwise the cleanup of the ||-operator removes all non-reachable locations
+	ha1.addInitialState( loc11, conditionFromIntervals<TypeParam>( { carl::Interval<TypeParam>{ 1 } } ) );
+	ha2.addInitialState( loc21, conditionFromIntervals<TypeParam>( { carl::Interval<TypeParam>{ 1 } } ) );
+
+	matrix_t<TypeParam> flow1a = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow1a( 0, 0 ) = 1;
+	matrix_t<TypeParam> flow2a = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow2a( 0, 0 ) = -1;
+
+	loc11->setFlow( flow1a );
+	loc12->setFlow( flow2a );
+
+	// x <= 0
+	matrix_t<TypeParam> invariant_constraints      = matrix_t<TypeParam>::Zero( 1, 1 );
+	vector_t<TypeParam> invariant_constants        = vector_t<TypeParam>::Zero( 1 );
+	invariant_constraints( 0, 0 ) = 1;
+	invariant_constants << 0;
+	loc11->setInvariant({invariant_constraints,invariant_constants});
+
+	// x <= 1
+	invariant_constraints      = matrix_t<TypeParam>::Zero( 1, 1 );
+	invariant_constants        = vector_t<TypeParam>::Zero( 1 );
+	invariant_constraints( 0, 0 ) = 1;
+	invariant_constants << 1;
+	loc21->setInvariant({invariant_constraints,invariant_constants});
+
+	// 1 <= x <= 4
+	invariant_constraints      = matrix_t<TypeParam>::Zero( 2, 1 );
+	invariant_constants        = vector_t<TypeParam>::Zero( 2 );
+	invariant_constraints( 0, 0 ) = 1;
+	invariant_constraints( 1, 0 ) = -1;
+	invariant_constants << 4, -1;
+	loc22->setInvariant({invariant_constraints,invariant_constants});
+
+	// x >= 4
+	invariant_constraints      = matrix_t<TypeParam>::Zero( 1, 1 );
+	invariant_constants        = vector_t<TypeParam>::Zero( 1 );
+	invariant_constraints( 0, 0 ) = -1;
+	invariant_constants << -4;
+	loc23->setInvariant({invariant_constraints,invariant_constants});
+
+
+	// create transitions
+	auto* t1 = loc11->createTransition( loc12 );
+	auto* t2 = loc12->createTransition( loc11 );
+	auto* t3 = loc21->createTransition( loc22 );
+	auto* t4 = loc22->createTransition( loc21 );
+	auto* t5 = loc22->createTransition( loc23 );
+	auto* t6 = loc23->createTransition( loc22 );
+
+	matrix_t<TypeParam> guard_constraints = matrix_t<TypeParam>::Zero(1,1);
+	guard_constraints(0,0) = -5;
+	vector_t<TypeParam> guard_constants = vector_t<TypeParam>::Zero(1);
+	guard_constants << -1;
+	t1->setGuard({guard_constraints,guard_constants});
+
+	guard_constraints = matrix_t<TypeParam>::Zero(1,1);
+	guard_constraints(0,0) = 1;
+	guard_constants = vector_t<TypeParam>::Zero(1);
+	guard_constants << 0;
+	t2->setGuard({guard_constraints,guard_constants});
+
+	guard_constraints = matrix_t<TypeParam>::Zero(2,1);
+	guard_constraints(0,0) = 1;
+	guard_constraints(1,0) = -1;
+	guard_constants = vector_t<TypeParam>::Zero(2);
+	guard_constants << 1, -1;
+	t3->setGuard({guard_constraints,guard_constants});
+
+	guard_constraints = matrix_t<TypeParam>::Zero(2,1);
+	guard_constraints(0,0) = 1;
+	guard_constraints(1,0) = -1;
+	guard_constants = vector_t<TypeParam>::Zero(2);
+	guard_constants << 1, -1;
+	t4->setGuard({guard_constraints,guard_constants});
+
+	guard_constraints = matrix_t<TypeParam>::Zero(2,1);
+	guard_constraints(0,0) = 1;
+	guard_constraints(1,0) = -1;
+	guard_constants = vector_t<TypeParam>::Zero(2);
+	guard_constants << 4, -4;
+	t5->setGuard({guard_constraints,guard_constants});
+
+	guard_constraints = matrix_t<TypeParam>::Zero(2,1);
+	guard_constraints(0,0) = 1;
+	guard_constraints(1,0) = -1;
+	guard_constants = vector_t<TypeParam>::Zero(2);
+	guard_constants << -4, 4;
+	t6->setGuard({guard_constraints,guard_constants});
+
+	auto res = hypro::parallelCompose( ha1, ha2, { { "a", { loc11, loc12 } } } );
+
+	hypro::plotting::plot( ha1, "ha1" );
+	hypro::plotting::plot( ha2, "ha2" );
+	hypro::plotting::plot( res, "res" );
+
+	EXPECT_EQ( 1, res.getVariables().size() );
+	ASSERT_EQ( 6, res.getLocations().size() );
+	// TODO Add more assertions
+}

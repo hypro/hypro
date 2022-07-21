@@ -308,7 +308,7 @@ std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* l
 	}
 
 	// set guard
-	Condition<Number> haGuard = combine( lhsT->getGuard(), rhsT->getGuard(), haVar, guard_lhsvars, guard_rhsvars );
+	Condition<Number> haGuard = combine( lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar );
 	t->setGuard( haGuard );
 
 	// set reset

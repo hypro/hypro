@@ -241,7 +241,7 @@ Reset<Number> combine(
 		// newVec = combine(lhs.getVector(), rhs.getVector());
 	}
 
-	std::cout << "Combined resets: " << newMat << ", " << newVec << std::endl;
+//	std::cout << "Combined resets: " << newMat << ", " << newVec << std::endl;
 
 	return Reset<Number>{ newMat, newVec };
 }

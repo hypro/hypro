@@ -637,7 +637,8 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>( Transition<Number>( loc, loc ) );
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>( matrix_t<Number>::Identity( rhsVar.size(), rhsVar.size() ), vector_t<Number>::Zero( rhsVar.size() ) );
-				if ( !sharedVars.empty() ) {
+				auto lhsReset = lhsT->getReset();
+				if ( !sharedVars.empty() && !lhsReset.empty()) {
 					// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
 					// an admissible combined reset.
 					// Todo: iterate over rows, then over cols (only the ones which correspond to shared vars) and set the resets accordingly.
@@ -645,10 +646,11 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 					for ( auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt ) {
 						// std::cout << "update row " << shdIt->second.second << std::endl;
 						for ( auto colIt = sharedVars.begin(); colIt != sharedVars.end(); ++colIt ) {
-							tmpReset.rGetMatrix()( shdIt->second.second, colIt->second.second ) = lhsT->getReset().getMatrix()( shdIt->second.first, colIt->second.first );
+							tmpReset.rGetMatrix()( shdIt->second.second, colIt->second.second ) = lhsReset.getMatrix()( shdIt->second.first, colIt->second.first );
 						}
-						tmpReset.rGetVector()( shdIt->second.second ) = lhsT->getReset().getVector()( shdIt->second.first );
+						tmpReset.rGetVector()( shdIt->second.second ) = lhsReset.getVector()( shdIt->second.first );
 					}
+
 				}
 
 				tmp->setReset( tmpReset );
@@ -670,14 +672,15 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>( Transition<Number>( loc, loc ) );
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>( matrix_t<Number>::Identity( lhsVar.size(), lhsVar.size() ), vector_t<Number>::Zero( lhsVar.size() ) );
-				if ( !sharedVars.empty() ) {
+				auto rhsReset = rhsT->getReset();
+				if ( !sharedVars.empty() && !rhsReset.empty()) {
 					// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
 					// an admissible combined reset.
 					for ( auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt ) {
 						for ( auto colIt = sharedVars.begin(); colIt != sharedVars.end(); ++colIt ) {
-							tmpReset.rGetMatrix()( shdIt->second.first, colIt->second.first ) = rhsT->getReset().getMatrix()( shdIt->second.second, colIt->second.second );
+							tmpReset.rGetMatrix()( shdIt->second.first, colIt->second.first ) = rhsReset.getMatrix()( shdIt->second.second, colIt->second.second );
 						}
-						tmpReset.rGetVector()( shdIt->second.first ) = rhsT->getReset().getVector()( shdIt->second.second );
+						tmpReset.rGetVector()( shdIt->second.first ) = rhsReset.getVector()( shdIt->second.second );
 					}
 				}
 
