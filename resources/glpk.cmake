@@ -3,6 +3,9 @@ set(glpk_version "5.0")
 # create build folder to be able to use it as an include folder
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/resources/src/glpk-build/include)
 
+set(temp_cxx_flags "-fPIC -I${gmpxx_include_dir}")
+message(STATUS "tmp flags: ${temp_cxx_flags}")
+
 ExternalProject_Add(
         glpk
         SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/glpk-${glpk_version}"

@@ -20,11 +20,6 @@ set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR})
 # disable update if no network is present
 set(EP_UPDATE_DISCONNECTED)
 
-# Set up glpk.
-# ATTENTION: It is important that this happens *before* CArL is loaded to ensure that the linker first links against
-# glpk and second agains gmp and gmpxx inherited from CArL.
-include(glpk.cmake)
-
 
 # carl setup which deals with external carl and own carl instance (the later registers itself to cmake)
 find_package(carl)
@@ -97,6 +92,15 @@ set(CARL_OLD_STRUCTURE ${CARL_OLD_STRUCTURE} PARENT_SCOPE)
 set(CARL_POLY_MEMBER_SUBSTITUTE ${CARL_POLY_MEMBER_SUBSTITUTE} PARENT_SCOPE)
 set(CARL_LOGGING_POST_1910 ${CARL_LOGGING_POST_1910} PARENT_SCOPE)
 
+# Set up glpk.
+# EXPERIMENTAL ORDERING
+# ATTENTION: It is important that this happens *before* CArL is loaded to ensure that the linker first links against
+# glpk and second agains gmp and gmpxx inherited from CArL.
+get_target_property(gmpxx_include_dirs GMPXX_STATIC INTERFACE_INCLUDE_DIRECTORIES)
+set(gmpxx_include_dir ${gmpxx_include_dirs})
+message(STATUS "tmp include dir: ${gmpxx_include_dir}")
+include(glpk.cmake)
+
 # gtest needs to be build in any case, since one should not use system-versions of gtest
 include(gtest.cmake)
 
@@ -166,6 +170,14 @@ if (HYPRO_USE_SOPLEX)
     load_library(${PROJECT_NAME} soplex 0)
     target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${soplex_LIBRARY} -lz)
     target_link_libraries(${PROJECT_NAME}-static PUBLIC ${soplex_LIBRARY} -lz)
+endif ()
+
+if (HYPRO_USE_MC++)
+    load_library(${PROJECT_NAME} mc++ 0)
+    if (NOT mc++_FOUND)
+        message(STATUS "Downloading MC++")
+        include(mc++.cmake)
+    endif ()
 endif ()
 
 if (HYPRO_GSL_INTEGRATION)
