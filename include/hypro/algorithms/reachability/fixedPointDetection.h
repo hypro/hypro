@@ -247,34 +247,29 @@ bool isZenoCycle( const Path<Number>& path ) {
 	if ( path.elements.front().second->getSource() != path.elements.back().second->getTarget() ) {
 		return false;
 	}
+#ifdef HYPRO_HAVE_SMT
 	// keep first guard set
 	auto initialGuardCondition = CarlPolytope<Number>( path.elements.front().second->getGuard().getMatrix(), path.elements.front().second->getGuard().getVector() );
 	// manually set dimension as the guard-condition may be "true" and hides the state space dimension
 	initialGuardCondition.setDimension( path.elements.front().second->getSource()->dimension() );
-	// std::cout << "Initial guard set " << initialGuardCondition << " with dimension " << initialGuardCondition.dimension() << std::endl;
 	//  collect expression for all guards and resets
 	auto currentSet = initialGuardCondition;
-	// std::cout << "Current set " << currentSet << " with dimension " << currentSet.dimension() << std::endl;
 	for ( const std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>& element : path.elements ) {
 		auto& guardCondition = element.second->getGuard();
 		auto& reset = element.second->getReset();
-		// std::cout << "Guard: " << guardCondition << ", and current set: " << currentSet << ", with dimensions " << guardCondition.dimension() << " and " << currentSet.dimension() << std::endl;
 		//  non-trivial guard -> dimensions must be equal
 		assert( ( guardCondition.isTrue() || guardCondition.isFalse() ) || currentSet.dimension() == guardCondition.dimension() );
 		auto guardConstraints = halfspacesToConstraints<mpq_class, Number>( guardCondition.getMatrix(), guardCondition.getVector() );
 		// apply guard - conjunction
 		currentSet.addConstraints( guardConstraints );
 		currentSet.setDimension( initialGuardCondition.dimension() );
-		// std::cout << "(after adding constraints) Current set " << currentSet << " with dimension " << currentSet.dimension() << std::endl;
 		if ( !reset.isIdentity() ) {
 			currentSet = currentSet.affineTransformation( reset.getMatrix(), reset.getVector() );
-			// std::cout << "(after transformation) Current set " << currentSet << " with dimension " << currentSet.dimension() << std::endl;
 		}
 	}
-	// std::cout << "current set: " << currentSet << std::endl;
-
-	// std::cout << "\nthe initial condition was: " << initialGuardCondition << std::endl;
 	return symbolicEquivalence( currentSet, initialGuardCondition );
+#endif
+	return false;
 }
 
 /**

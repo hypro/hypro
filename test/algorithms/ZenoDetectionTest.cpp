@@ -124,7 +124,7 @@ TEST( ZenoDetectionTest, SymbolicApproach ) {
 
 	auto zenoTransitions = hypro::getZenoTransitions( &child );
 	EXPECT_EQ( 0, zenoTransitions.size() );
-
+#ifdef HYPRO_HAVE_SMT
 	/* add further nodes, which are non-Zeno */
 	auto transition2 = loc2->createTransition( loc1 );
 
@@ -141,4 +141,5 @@ TEST( ZenoDetectionTest, SymbolicApproach ) {
 
 	bool hasZeno = isZenoCycle( path );
 	EXPECT_TRUE( hasZeno );
+#endif
 }
