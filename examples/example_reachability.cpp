@@ -118,7 +118,7 @@ static void computeReachableStates( const std::string& filename,
 			unsigned cnt = 0;
 			for ( const auto& segment : flowpipe ) {
 				// std::cout << "Plot segment " << cnt << "/" << flowpipe.size()
-						//   << std::endl;
+				//   << std::endl;
 				plotter.addObject( segment.projectOn( plottingDimensions ).vertices() );
 				++cnt;
 			}

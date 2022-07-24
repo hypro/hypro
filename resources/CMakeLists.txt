@@ -25,7 +25,6 @@ set(EP_UPDATE_DISCONNECTED)
 # glpk and second agains gmp and gmpxx inherited from CArL.
 include(glpk.cmake)
 
-
 # carl setup which deals with external carl and own carl instance (the later registers itself to cmake)
 find_package(carl)
 if (carl_FOUND)
@@ -166,6 +165,14 @@ if (HYPRO_USE_SOPLEX)
     load_library(${PROJECT_NAME} soplex 0)
     target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${soplex_LIBRARY} -lz)
     target_link_libraries(${PROJECT_NAME}-static PUBLIC ${soplex_LIBRARY} -lz)
+endif ()
+
+if (HYPRO_USE_MC++)
+    load_library(${PROJECT_NAME} mc++ 0)
+    if (NOT mc++_FOUND)
+        message(STATUS "Downloading MC++")
+        include(mc++.cmake)
+    endif ()
 endif ()
 
 if (HYPRO_GSL_INTEGRATION)
