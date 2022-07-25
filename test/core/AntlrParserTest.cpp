@@ -8,6 +8,7 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <bits/c++config.h>
 #include <carl/interval/Interval.h>
@@ -20,7 +21,6 @@
 #include <hypro/representations/conversion/typedefs.h>
 #include <hypro/types.h>
 #include <iostream>
-
 #include <unistd.h>	 //getcwd()
 
 // using namespace antlr4;
@@ -36,9 +36,7 @@ class AntlrParserTest : public ::testing::Test {
 
 	void cwd() {
 		char cwd[1024];
-		if ( getcwd( cwd, sizeof( cwd ) ) != nullptr )
-			fprintf( stdout, "Current working dir: %s\n", cwd );
-		else
+		if ( getcwd( cwd, sizeof( cwd ) ) == nullptr )
 			std::cerr << "getcwd() error" << std::endl;
 	}
 };
@@ -57,11 +55,11 @@ TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 		hypro::Location<TypeParam>* loc1 = automaton.getLocations().back();
 		EXPECT_EQ( std::size_t( 0 ), loc0->getTransitions().size() );
 		EXPECT_EQ( std::size_t( 0 ), loc1->getTransitions().size() );
-		if(loc0->getName() == "rod1") {
+		if ( loc0->getName() == "rod1" ) {
 			EXPECT_EQ( "rod2", loc1->getName() );
 			EXPECT_FALSE( loc0->isUrgent() );
 			EXPECT_TRUE( loc1->isUrgent() );
-		} else if (loc0->getName() == "rod2") {
+		} else if ( loc0->getName() == "rod2" ) {
 			EXPECT_EQ( "rod1", loc1->getName() );
 			EXPECT_FALSE( loc1->isUrgent() );
 			EXPECT_TRUE( loc0->isUrgent() );
@@ -316,7 +314,6 @@ TYPED_TEST( AntlrParserTest, BracketParsingTest ) {
 		controlMatrix( 12, 1 ) = 3;
 		controlMatrix( 12, 13 ) = 4;
 		if ( std::is_same<TypeParam, double>::value ) {
-			std::cout << loc->getLinearFlow().getFlowMatrix() << std::endl;
 			EXPECT_TRUE( controlMatrix.isApprox( loc->getLinearFlow().getFlowMatrix() ) );
 		} else {
 			SUCCEED();

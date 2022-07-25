@@ -417,11 +417,7 @@ TEST( SingularRechabilityTest, SingularAnalyzerWithJumpsUnsafe ) {
 	std::map<const hypro::Location<Number>*, hypro::Condition<Number>> localBadStates;
 	localBadStates[l1] = badState;
 
-	std::cout << "Create local bad states with locptr " << l1 << std::endl;
 	automaton.setLocalBadStates( localBadStates );
-	for ( auto lptr : automaton.getLocations() ) {
-		std::cout << "avaliable loc: " << lptr << std::endl;
-	}
 
 	auto initialNodes8 = hypro::makeRoots<VPoly, Number>( automaton );
 	auto analyzer8 = hypro::SingularAnalyzer<VPoly>(

@@ -181,12 +181,10 @@ namespace hypro {
 
   		//Only integers allowed
   		std::string numAsText = ctx->NUMBER()->getText();
-  		//std::cout << "---- num before: " << numAsText << std::endl;
   		std::size_t pos = numAsText.find(".");
 		if(pos != std::string::npos){
 			numAsText = std::string(numAsText, 0, pos);
 		}
-		//std::cout << "---- num after: " << numAsText << std::endl;
 		return std::stoi(numAsText);
   	}
 /*

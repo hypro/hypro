@@ -60,13 +60,9 @@ namespace hypro {
 		//4.1.Make a set of unique ptrs to transitions
 		for(auto t : tSet){
 			assert(t != nullptr);
-			//std::cout << "Transition from " << t->getSource() << "("<< t->getSource()->getName() << ")" << " to " << t->getTarget() << "(" << t->getTarget()->getName() << ")"<< std::endl;
-			//std::cout << "Reset is " << t->getReset() << std::endl;
 			for(auto& l : uniquePtrLocSet){
-				//std::cout << "Location raw: " << l.get() <<  "(" << l->getName() << ")" << std::endl;
 				assert(t != nullptr);
 				if(t->getSource() == l.get()) {
-					// l->addTransition(std::move(std::make_unique<Transition<Number>>(*t)));
 					StochasticTransition<Number>* stoTrans = dynamic_cast<StochasticTransition<Number>*>( t );
 					if ( !stoTrans ) {
 						l->addTransition(std::move
@@ -75,7 +71,6 @@ namespace hypro {
 						l->addTransition(std::move
 (std::unique_ptr<StochasticTransition<Number>>( stoTrans )));
 					}
-					//std::cout << "Added." << std::endl;
 					break;
 				}
 			}
@@ -115,35 +110,6 @@ namespace hypro {
 			gBadStates = bStateVisitor.getGlobalBadStates();
 		}
 
-#ifdef HYPRO_LOGGING
-/*
-		COUT("================================\n");
-		COUT("From the parser\n");
-		COUT("================================\n");
-		COUT("Parsed variables: " << vars << std::endl);
-		COUT("Reachability settings:\n" << reachSettings);
-		COUT("All locations:\n");COUT("Size:"); COUT(locSet.size());
-		for(auto it = locSet.begin(); it != locSet.end(); ++it){
-			COUT(**it);
-		}
-		//COUT("All Transitions:\n");
-		//for(auto it = transSet.begin(); it != transSet.end(); ++it){
-		//	COUT(**it);
-		//}
-		COUT("Initial state:\n");
-		for(auto it = initSet.begin(); it != initSet.end(); ++it){
-			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
-		}
-		COUT("Local Bad states:\n");
-		for(auto it = lBadStates.begin(); it != lBadStates.end(); ++it){
-			COUT("Bad Location: " << it->first->getName() << " and bad state: " << it->second);
-		}
-		COUT("Global Bad states:\n");
-		for(const auto& g : gBadStates){
-			COUT("Global Bad condition: " << g);
-		}
-*/
-#endif
 		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number> ha;
 		ha.setLocations(std::move(uniquePtrLocSet));

@@ -419,7 +419,6 @@ void Plotter<Number>::writeGnuplot() const {
 				if ( mSettings.key ) {
 					mOutfile << "set style line " << std::dec << objectCount << " lc rgb '#" << std::hex << color << std::dec << "' lt 1 lw 5\n";
 					keyContent = keyContent + ", NaN ls " + std::to_string( objectCount ) + " title \"" + plotObject.objectTitle + "\"";
-					std::cout << "Key Content: " << keyContent << std::endl;
 				}
 
 				if ( mSettings.cummulative ) {
@@ -469,7 +468,6 @@ void Plotter<Number>::writeGnuplot() const {
 			mOutfile << "# plotting Halfspaces\n";
 			for ( const auto& planePair : mPlanes ) {
 				for ( const auto& plane : planePair.second ) {
-					// std::cout << "Plot plane " << plane << std::endl;
 					assert( plane.dimension() == 2 );
 					vector_t<Number> normal = plane.normal();
 

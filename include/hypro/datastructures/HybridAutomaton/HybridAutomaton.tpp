@@ -243,7 +243,6 @@ bool HybridAutomaton<Number>::isComposedOf( const HybridAutomaton<Number>& rhs )
 	// check variable sets
 	for ( const auto& v : rhs.getVariables() ) {
 		if ( std::find( mVariables.begin(), mVariables.end(), v ) == mVariables.end() ) {
-			// std::cout << "Variable " << v << " not contained in this, return false" << std::endl;
 			return false;
 		}
 	}
@@ -432,7 +431,6 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 					// Todo: iterate over rows, then over cols (only the ones which correspond to shared vars) and set the resets accordingly.
 
 					for ( auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt ) {
-						// std::cout << "update row " << shdIt->second.second << std::endl;
 						for ( auto colIt = sharedVars.begin(); colIt != sharedVars.end(); ++colIt ) {
 							tmpReset.rGetMatrix()( shdIt->second.second, colIt->second.second ) = lhsT->getReset().getMatrix()( shdIt->second.first, colIt->second.first );
 						}
@@ -638,19 +636,17 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>( matrix_t<Number>::Identity( rhsVar.size(), rhsVar.size() ), vector_t<Number>::Zero( rhsVar.size() ) );
 				auto lhsReset = lhsT->getReset();
-				if ( !sharedVars.empty() && !lhsReset.empty()) {
+				if ( !sharedVars.empty() && !lhsReset.empty() ) {
 					// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
 					// an admissible combined reset.
 					// Todo: iterate over rows, then over cols (only the ones which correspond to shared vars) and set the resets accordingly.
 
 					for ( auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt ) {
-						// std::cout << "update row " << shdIt->second.second << std::endl;
 						for ( auto colIt = sharedVars.begin(); colIt != sharedVars.end(); ++colIt ) {
 							tmpReset.rGetMatrix()( shdIt->second.second, colIt->second.second ) = lhsReset.getMatrix()( shdIt->second.first, colIt->second.first );
 						}
 						tmpReset.rGetVector()( shdIt->second.second ) = lhsReset.getVector()( shdIt->second.first );
 					}
-
 				}
 
 				tmp->setReset( tmpReset );
@@ -673,7 +669,7 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>( matrix_t<Number>::Identity( lhsVar.size(), lhsVar.size() ), vector_t<Number>::Zero( lhsVar.size() ) );
 				auto rhsReset = rhsT->getReset();
-				if ( !sharedVars.empty() && !rhsReset.empty()) {
+				if ( !sharedVars.empty() && !rhsReset.empty() ) {
 					// Attention: This is a temporary solution. Naturally, we would need to replicate the reset on the shared variables to create
 					// an admissible combined reset.
 					for ( auto shdIt = sharedVars.begin(); shdIt != sharedVars.end(); ++shdIt ) {

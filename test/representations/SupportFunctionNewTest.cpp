@@ -5,6 +5,7 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <cmath>
 #include <hypro/representations/GeometricObjectBase.h>
@@ -581,10 +582,6 @@ TYPED_TEST( SupportFunctionNewTest, Constructors ) {
 	EXPECT_TRUE( sfMove.getRoot()->getChildren().size() == std::size_t( 0 ) );
 	EXPECT_EQ( sfTrafo.getRoot().use_count(), long( 1 ) );
 	EXPECT_EQ( sf.getRoot().use_count(), long( 3 ) );
-	// std::cout << "Address of sf root ptr: " << sf.getRoot() << std::endl;
-	// std::cout << "Address of sfTrafo root ptr: " << sfTrafo.getRoot() << std::endl;
-	// std::cout << "Address of sfCopy root ptr: " << sfCopy.getRoot() << std::endl;
-	// std::cout << "Address of sfMove root ptr: " << sfMove.getRoot() << std::endl;
 
 	// Move assign
 	sfMove = std::move( sfTrafo );
@@ -1046,10 +1043,11 @@ TYPED_TEST( SupportFunctionNewTest, StorageSize ) {
 	EXPECT_TRUE( sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size() );
 
 	try {
-		std::cout << "Size of sf1: " << sf1.size() << std::endl;
-		std::cout << "Size of sf2: " << sf2.size() << std::endl;
-		std::cout << "Size of sfWithTrafo: " << sfWithTrafo.size() << std::endl;
-		std::cout << "Size of sum: " << sum.size() << std::endl;
+		std::stringstream ss;
+		ss << "Size of sf1: " << sf1.size() << std::endl;
+		ss << "Size of sf2: " << sf2.size() << std::endl;
+		ss << "Size of sfWithTrafo: " << sfWithTrafo.size() << std::endl;
+		ss << "Size of sum: " << sum.size() << std::endl;
 	} catch ( const std::runtime_error& e ) {
 		FAIL();
 	}

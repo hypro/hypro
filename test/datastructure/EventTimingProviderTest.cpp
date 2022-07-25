@@ -1,4 +1,5 @@
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/timing/EventTimingProvider.h>
@@ -61,9 +62,6 @@ TEST_F( EventTimingTest, FindPath1 ) {
 	// EXPECT_EQ(nullptr, tProvider.getTimingNode(p1));
 
 	auto timings = tProvider.getTimings( p1 );
-	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
-	}
 
 	EXPECT_EQ( std::nullopt, timings );
 
@@ -125,7 +123,6 @@ TEST_F( EventTimingTest, FindPath2 ) {
 
 	EXPECT_NE( std::nullopt, timings );
 	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
 		EXPECT_TRUE( ( *timings ).satisfiedInvariant( carl::Interval<T>( 1, 5 ) ) );
 	}
 }
@@ -189,7 +186,6 @@ TEST_F( EventTimingTest, FindPath3 ) {
 	// timings should be null, as we do not have information in ch2.
 	EXPECT_NE( std::nullopt, timings );
 	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
 		EXPECT_TRUE( ( *timings ).satisfiedInvariant( carl::Interval<T>( 1, 2 ) ) );
 	}
 }
@@ -247,9 +243,6 @@ TEST_F( EventTimingTest, FindPath4 ) {
 
 	// query using the previously created path
 	auto timings = tProvider.getTimings( p1 );
-	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
-	}
 	EXPECT_NE( std::nullopt, timings );
 }
 
@@ -306,8 +299,5 @@ TEST_F( EventTimingTest, FindPath5 ) {
 
 	// query using the previously created path
 	auto timings = tProvider.getTimings( p1 );
-	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
-	}
 	EXPECT_NE( std::nullopt, timings );
 }

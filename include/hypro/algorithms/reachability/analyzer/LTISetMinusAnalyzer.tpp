@@ -7,7 +7,7 @@ namespace hypro {
 
 template <typename State>
 auto LTISetMinusAnalyzer<State>::run() -> LTISetMinusResult {
-	//Setup settings for flowpipe construction in worker
+	// Setup settings for flowpipe construction in worker
 	TimeTransformationCache<Number> transformationCache;
 	LTISetMinusWorker<State> worker{
 		  *mHybridAutomaton,
@@ -20,17 +20,12 @@ auto LTISetMinusAnalyzer<State>::run() -> LTISetMinusResult {
 		mWorkQueue.pop_back();
 		REACHABILITY_RESULT safetyResult;
 
-		std::cout << "analyzer vor computetimesucessors" << currentNode->getInitialSet() << std::endl;
 		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( currentNode->getFlowpipe() ) );
-		std::cout << "analyzer nach computetimesucessors";
-		for (auto segment : currentNode->getFlowpipe()){
-			std::cout << segment.vertices() << std::endl;
-		}		
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
 			return { Failure{ currentNode } };
 		}
 
-		//Do not perform discrete jump if jump depth was reached
+		// Do not perform discrete jump if jump depth was reached
 		if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) continue;
 
 		// create jump successor tasks
@@ -64,7 +59,6 @@ auto LTISetMinusAnalyzer<State>::run() -> LTISetMinusResult {
 				}
 			}
 		}
-		std::cout << "analyzer nach computejumpsucessors, workqueuesize: " << mWorkQueue.size() << std::endl;
 	}
 
 	return { LTISetMinusSuccess{} };
@@ -81,9 +75,8 @@ bool LTISetMinusAnalyzer<State>::detectFixedPoint( const State& valuationSet, co
 		for ( auto& node : preorder( root ) ) {
 			const auto& nodeInitialBoundingBox = node.getInitialBoundingBox();
 			// if the location matches and the bounding boxes contain each other, then also perform the (possibly expensive) full containment test.
-			if ( nodeInitialBoundingBox && node.getLocation() == loc && std::equal( std::begin( boundingBox ), std::end( boundingBox ), std::begin( nodeInitialBoundingBox.value() ), std::end( nodeInitialBoundingBox.value() ), []( const auto& setBoxIntv, const auto& initBoxIntv ) { return initBoxIntv.contains( setBoxIntv ); } ) && node.getInitialSet().contains( valuationSet ) ) {
+			if ( nodeInitialBoundingBox && node.getLocation() == loc && std::equal( std::begin( boundingBox ), std::end( boundingBox ), std::begin( nodeInitialBoundingBox.value() ), std::end( nodeInitialBoundingBox.value() ), []( const auto&setBoxIntv, const auto&initBoxIntv ) { return initBoxIntv.contains( setBoxIntv ); } ) && node.getInitialSet().contains( valuationSet ) ) {
 				TRACE( "hypro.reachability", "Fixed-point detected." );
-				std::cout << "Fixed point detected." << std::endl;
 #ifdef HYPRO_STATISTICS
 				STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif

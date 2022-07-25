@@ -17,6 +17,7 @@
 #include "../../hypro/datastructures/Point.h"
 #include "../../hypro/representations/types.h"
 #include "../../hypro/types.h"
+
 #include <random>
 
 namespace hypro {
@@ -29,8 +30,8 @@ class ObjectGenerator {
 
   public:
 	ObjectGenerator( BenchmarkSetup<Number> _setup )
-		: mSetup( _setup ),
-		  mRand( 4 )  // chosen by fair dice roll. Guaranteed to be random.
+		: mSetup( _setup )
+		, mRand( 4 )  // chosen by fair dice roll. Guaranteed to be random.
 	{}
 
 	Representation createSet() const {}
@@ -43,7 +44,6 @@ class ObjectGenerator {
 			vector_t<Number> coordinates( _setup.dimension );
 			for ( unsigned j = 0; j < _setup.dimension; ++j ) {
 				coordinates( j ) = Number( distr( mRand ) );
-				// std::cout << "coordinates(" << j << ") = " << coordinates(j) << std::endl;
 			}
 			pointVector.push_back( Point<Number>( coordinates ) );
 		}
@@ -106,7 +106,9 @@ struct BaseGenerator {
 
   public:
 	typedef void type;
-	BaseGenerator( const BenchmarkSetup<Number>& _setup ) : mSetup( _setup ), mGenerator( _setup ) {}
+	BaseGenerator( const BenchmarkSetup<Number>& _setup )
+		: mSetup( _setup )
+		, mGenerator( _setup ) {}
 	virtual void operator()() const = 0;
 };
 }  // namespace hypro

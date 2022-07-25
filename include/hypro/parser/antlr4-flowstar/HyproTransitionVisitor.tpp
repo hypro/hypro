@@ -117,7 +117,6 @@ namespace hypro {
 		bool foundRight = false;
 		std::pair<Location<Number>*,Location<Number>*> fromTo;
 		for(const auto& loc : locSet){
-			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()[0]->getText()){
 				foundLeft = true;
 				fromTo.first = loc;
@@ -356,7 +355,6 @@ namespace hypro {
 		bool found = false;
 		StochasticLocation<Number>* from;
 		for(const auto& loc : locSet){
-			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()->getText()){
 				found = true;
 				from = dynamic_cast<StochasticLocation<Number>*>( loc );
@@ -379,7 +377,6 @@ namespace hypro {
 		bool found = false;
 		std::pair<Number,StochasticLocation<Number>*> to;
 		for(const auto& loc : locSet){
-			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()->getText()){
 				found = true;
 				to.second = dynamic_cast<StochasticLocation<Number>*>( loc );

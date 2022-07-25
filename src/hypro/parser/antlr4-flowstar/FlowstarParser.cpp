@@ -32,7 +32,6 @@ namespace parser{
 				rewriter.replace(i, i, constants.at(it->first));
 			}
 		}
-		//std::cout << "======== ALTERED VERSION =========\n" << rewriter.getText() << std::endl;
 		return rewriter.getText();
 	}
 

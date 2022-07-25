@@ -47,7 +47,7 @@ std::string toFlowstarFormat( const matrix_t<Number>& in,
 				}
 			} else if ( in( 0, colI ) < 0 ) {
 				res << " " << in( 0, colI );
-				if(first) {
+				if ( first ) {
 					first = false;
 				}
 			}
@@ -214,7 +214,6 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 			// transitions
 			res << "\tjumps\n\t{";
 			for ( const auto transPtr : in.getTransitions() ) {
-				// std::cout << "output transition " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
 				res << "\n\t\t" << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName();
 				if ( transPtr->isUrgent() )
 					res << "\n\t\turgent";
@@ -222,7 +221,6 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 				res << toFlowstarFormat( transPtr->getGuard(), vars, " " );
 				res << " }";
 				res << "\n\t\treset {";
-				// std::cout << "output reset " << transPtr->getReset().getMatrix() << std::endl;
 				if ( !transPtr->getReset().empty() ) {
 					for ( Eigen::Index rowI = 0; rowI < transPtr->getReset().getMatrix().rows(); ++rowI ) {
 						if ( !transPtr->getReset().isIdentity( rowI ) ) {
@@ -259,7 +257,6 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 		// bad states
 		if ( in.getLocalBadStates().size() > 0 ) {
 			res << "\n\tunsafe set\n\t{";
-
 			res << "\n\t}\n";
 		}
 	}

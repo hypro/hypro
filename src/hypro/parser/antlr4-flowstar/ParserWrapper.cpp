@@ -7,15 +7,6 @@
 
 
 namespace hypro {
-/*
-	void cwd(){
-		char cwd[1024];
-	   	if (getcwd(cwd, sizeof(cwd)) != NULL)
-	       fprintf(stdout, "Current working dir: %s\n", cwd);
-	   	else
-	       std::cerr << "getcwd() error" << std::endl;
-	}
-*/
 	void openFile(const std::string& filename, ANTLRInputStream& input) {
 
 		std::fstream ifs(filename);
@@ -48,7 +39,6 @@ namespace hypro {
 				rewriter.replace(i, i, constants.at(it->first));
 			}
 		}
-		//std::cout << "======== ALTERED VERSION =========\n" << rewriter.getText() << std::endl;
 		return rewriter.getText();
 	}
 

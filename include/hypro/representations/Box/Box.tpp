@@ -67,7 +67,6 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 					vector_t<Number> vertex = luDecomposition.solve( intersectionConstants );
 					assert( vertex.rows() == _constraints.cols() );
 					possibleVertices.emplace( std::move( vertex ) );
-					// std::cout<< "Vertex computed: " << convert<Number,double>(vertex).transpose() << std::endl;
 				}
 			}
 			assert( !possibleVertices.empty() );
@@ -388,9 +387,6 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 		return std::make_pair( CONTAINMENT::NO, *this );
 	}
 
-	// std::cout << __func__ << " This: " << convert<Number,double>(*this) << std::endl;
-	// std::cout << __func__ << ": input matrix: " << convert<Number,double>(_mat) << std::endl << "input vector: " << convert<Number,double>(_vec) << std::endl;
-	// std::cout << __func__ << ": This->dimension() = " << this->dimension() << std::endl;
 	assert( this->dimension() == unsigned( _mat.cols() ) );
 	std::vector<unsigned> limitingPlanes;
 
@@ -399,10 +395,6 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 		for ( unsigned d = 0; d < _mat.cols(); ++d ) {
 			evaluatedBox += mLimits[d] * Number( _mat( rowIndex, d ) );
 		}
-
-		// std::cout << __func__ << " Row: " << convert<Number,double>(_mat.row(rowIndex)) << std::endl;
-		// std::cout << __func__ << " Evaluated box: " << evaluatedBox << std::endl;
-		// std::cout << __func__ << " Distance: " << carl::convert<Number,double>(_vec(rowIndex)) << std::endl;
 
 		if ( evaluatedBox.lower() > _vec( rowIndex ) ) {
 			return std::make_pair( CONTAINMENT::NO, Empty() );
@@ -481,7 +473,6 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::linearTransfo
 		for ( int j = 0; j < A.cols(); ++j ) {
 			Number a = mLimits[j].lower() * A( k, j );
 			Number b = mLimits[j].upper() * A( k, j );
-			// std::cout << "Obtained values " << a << " and " << b << " for dimension " << k << " and colum " << j << std::endl;
 			if ( a > b ) {
 				newIntervals[k] = newIntervals[k] + carl::Interval<Number>( b, a );
 			} else {
@@ -493,9 +484,6 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::linearTransfo
 	BoxT<Number, Converter, Setting> res( newIntervals );
 	res.reduceNumberRepresentation();
 
-	// std::cout << "Res: " << res << std::endl;
-	// std::cout << "min transformed: " << Point<Number>(A*this->min().rawCoordinates()) << std::endl;
-	// std::cout << "max transformed: " << Point<Number>(A*this->max().rawCoordinates()) << std::endl;
 	assert( res.contains( Point<Number>( A * this->min().rawCoordinates() ) ) );
 	assert( res.contains( Point<Number>( A * this->max().rawCoordinates() ) ) );
 #ifndef NDEBUG
@@ -526,25 +514,18 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::linearTransfo
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
-	// std::cout << "in box::affinetransformation: " << this->limits() << std::endl;
-	// std::cout << A << std::endl;
-	// std::cout << b << std::endl;
 	if ( this->empty() ) {
-		// std::cout << "box empty" << std::endl;
 		return *this;
 	}
-	// TRACE("hypro.representations.box","This: " << *this << ", A: " << A << "b: " << b);
-	// std::cout << "Linear trafo ";
+	TRACE( "hypro.representations.box", "This: " << *this << ", A: " << A << "b: " << b );
 	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>( this->dimension() );
 #pragma omp parallel for
 	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
 		newIntervals[i] = carl::Interval<Number>{ b( i ) };
 		for ( std::size_t j = 0; j < this->dimension(); ++j ) {
 			newIntervals[i] = newIntervals[i] + A( i, j ) * this->intervals()[j];
-			// std::cout << "update to: " << newIntervals[i] << " using: A(i,j): " << A(i,j) << ", interval: " << this->intervals()[j] << std::endl;
 		}
 	}
-	// std::cout << "in box::affinetransformation: " << BoxT<Number, Converter, Setting>{ newIntervals } << std::endl;
 	return BoxT<Number, Converter, Setting>{ newIntervals };
 }
 
@@ -599,7 +580,6 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersect( co
 
 template <typename Number, typename Converter, class Setting>
 BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
-	// std::cout << __func__ << " of " << *this << " and " << hspace << std::endl;
 	if ( !this->empty() ) {
 		if ( Setting::USE_INTERVAL_ARITHMETIC ) {
 			std::vector<carl::Interval<Number>> intervals = this->intervals();
@@ -614,7 +594,6 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 			bool holdsMin = hspace.contains( boxcopy.min() );
 			bool holdsMax = hspace.contains( boxcopy.max() );
 			if ( holdsMin && holdsMax ) {
-				// std::cout << __func__ << " Min and Max are below the halfspace." << std::endl;
 				return *this;
 			}
 
@@ -639,7 +618,6 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 				return boxcopy;
 			}
 
-			// std::cout << __func__ << " Min below: " << holdsMin << ", Max below: " << holdsMax << std::endl;
 			std::size_t dim = this->dimension();
 
 			// Phase 1: Find starting point (point outside) for phase 2 by depth-first search or use limit points, if applicable
@@ -666,15 +644,11 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 			}
 			// farestPointOutside is the point farest point in direction of the plane normal - if it is contained in the halfspace, there is no intersection.
 			if ( hspace.contains( farestPointOutside.rawCoordinates() ) ) {
-				// std::cout << __func__ << " Farest point outside is contained - return full box." << std::endl;
 				return *this;
 			}
 			if ( !hspace.contains( farestPointInside.rawCoordinates() ) ) {
-				// std::cout << __func__ << " Farest point inside is  NOT contained - return EMPTY box." << std::endl;
 				return BoxT<Number, Converter, Setting>::Empty();
 			}
-
-			// std::cout << __func__ << " Farest point outside: " << convert<Number,double>(farestPointOutside.rawCoordinates()).transpose() << std::endl;
 
 			// at this point farestPointOutside is outside and farestPointInside is inside - the plane intersects the box somehow.
 			std::vector<Point<Number>> discoveredPoints;
@@ -683,12 +657,9 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 			workingQueue.push( farestPointOutside );
 
 			// BFS search of points outside and intersection points.
-			// std::cout << __func__ << " Start BFS search." << std::endl;
 			while ( !workingQueue.empty() ) {
-				// std::cout << "Queue size: " << workingQueue.size() << std::endl;
 				Point<Number> current = workingQueue.front();
 				workingQueue.pop();
-				// std::cout << "Current Point: " << convert<Number,double>(current.rawCoordinates()).transpose() << std::endl;
 				//  create and test neighbors
 				for ( unsigned d = 0; d < dim; ++d ) {
 					Point<Number> tmp = current;
@@ -700,16 +671,13 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 						tmp[d] = tmp.at( d ) == boxcopy.intervals()[d].lower() ? boxcopy.intervals()[d].upper() : boxcopy.intervals()[d].lower();
 					} else {
 						// UNSINN!?
-						// std::cout << "Could create point " << tmp << ", but is the same as " << current << std::endl;
 						assert( tmp == current );
 						continue;
 					}
 
-					// std::cout << "Created search-point: " << convert<Number,double>(tmp.rawCoordinates()).transpose() << std::endl;
 					//  if neighbor is new, test is, otherwise skip.
 					if ( std::find( discoveredPoints.begin(), discoveredPoints.end(), tmp ) == discoveredPoints.end() ) {
 						if ( !hspace.contains( tmp.rawCoordinates() ) ) {
-							// std::cout << "is also outside, enqueue." << std::endl;
 							workingQueue.push( tmp );
 						} else {
 							Number dCoord = 0;
@@ -722,16 +690,12 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 							dCoord /= -hspace.normal()( d );
 							Point<Number> intersectionPoint = tmp;
 							intersectionPoint[d] = dCoord;
-							// std::cout << "is inside, intersection point is " << convert<Number,double>(intersectionPoint.rawCoordinates()).transpose() << std::endl;
 							intersectionPoints.push_back( intersectionPoint );
 						}
-					} else {
-						// std::cout << "Already discovered - skip." << std::endl;
 					}
 				}
 				discoveredPoints.push_back( current );
 			}
-			// std::cout << __func__ << " BFS search finished." << std::endl;
 
 			// at this point we know that either min or max or both are outside but not both inside.
 			if ( !holdsMin && !holdsMax ) {
@@ -802,8 +766,8 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 			if ( minus.at( i ).lower() <= box.at( i ).lower() ) {
 				if ( minus.at( i ).upper() < box.at( i ).lower() ) {
 					unchanged = true;
-				}else if ( minus.at( i ).upper() == box.at( i ).lower() ) {
-					if (box.at(i).lower()!=box.at(i).upper()){
+				} else if ( minus.at( i ).upper() == box.at( i ).lower() ) {
+					if ( box.at( i ).lower() != box.at( i ).upper() ) {
 						unchanged = true;
 					}
 				}
@@ -819,50 +783,48 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 		}
 		if ( unchanged ) {
 			// result.push_back(this);
-            BoxT <Number, Converter, Setting> workbox(box);
-            result.push_back(workbox);
-            return result;
-        }
-        if (empty) {
-            // BoxT<Number, Converter, Setting> workbox = BoxT();
-            // result.push_back( workbox );
-            return result;
-        }
+			BoxT<Number, Converter, Setting> workbox( box );
+			result.push_back( workbox );
+			return result;
+		}
+		if ( empty ) {
+			// BoxT<Number, Converter, Setting> workbox = BoxT();
+			// result.push_back( workbox );
+			return result;
+		}
 
-        //------------- calculate difference -------------
-        long unsigned int i = minus.size();
-        while (i > 0) {
-            i--;
-            std::vector<carl::Interval<Number>> box2 = box;     // lower
-            std::vector<carl::Interval<Number>> box3 = box;     // upper
-            box2.at(i).setUpper(minus.at(i).lower());
-            box3.at(i).setLower(minus.at(i).upper());
-            // check if the lower box (box2) is not empty
-            if (box2.at(i).lower() < box2.at(i).upper()) {
-                BoxT <Number, Converter, Setting> workbox(box2);
-                if (!workbox.empty()) {
-                    result.push_back(workbox);
-                }
-                // carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
-                carl::Interval<Number> tmp(box2.at(i).upper(), box.at(i).upper());
-                // std::cout << tmp << std::endl;
-                box.at(i) = tmp;
-            }
-            // check if the upper box (box3) is not empty
-            if (box3.at(i).lower() < box3.at(i).upper()) {
-                BoxT <Number, Converter, Setting> workbox(box3);
-                if (!workbox.empty()) {
-                    result.push_back(workbox);
-                }
-                // carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
-                carl::Interval<Number> tmp2(box.at(i).lower(), box3.at(i).lower());
-                // std::cout << tmp2 << std::endl;
-                box.at(i) = tmp2;
-            }
-        }
-        return result;
-    }
-    // return result;
+		//------------- calculate difference -------------
+		long unsigned int i = minus.size();
+		while ( i > 0 ) {
+			i--;
+			std::vector<carl::Interval<Number>> box2 = box;	 // lower
+			std::vector<carl::Interval<Number>> box3 = box;	 // upper
+			box2.at( i ).setUpper( minus.at( i ).lower() );
+			box3.at( i ).setLower( minus.at( i ).upper() );
+			// check if the lower box (box2) is not empty
+			if ( box2.at( i ).lower() < box2.at( i ).upper() ) {
+				BoxT<Number, Converter, Setting> workbox( box2 );
+				if ( !workbox.empty() ) {
+					result.push_back( workbox );
+				}
+				// carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
+				carl::Interval<Number> tmp( box2.at( i ).upper(), box.at( i ).upper() );
+				box.at( i ) = tmp;
+			}
+			// check if the upper box (box3) is not empty
+			if ( box3.at( i ).lower() < box3.at( i ).upper() ) {
+				BoxT<Number, Converter, Setting> workbox( box3 );
+				if ( !workbox.empty() ) {
+					result.push_back( workbox );
+				}
+				// carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
+				carl::Interval<Number> tmp2( box.at( i ).lower(), box3.at( i ).lower() );
+				box.at( i ) = tmp2;
+			}
+		}
+		return result;
+	}
+	// return result;
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -1048,7 +1010,6 @@ void BoxT<Number, Converter, Setting>::clear() {
 
 template <typename Number, typename Converter, class Setting>
 void BoxT<Number, Converter, Setting>::print() const {
-	// std::cout << *this << std::endl;
 }
 
 }  // namespace hypro

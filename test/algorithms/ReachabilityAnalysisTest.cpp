@@ -324,7 +324,7 @@ TEST_F( ReachabilityAnalysisTest, TrivialFixedPointCallback ) {
 																   settings.strategy().front(), roots );
 
 	// create trivial callback, which always returns true
-	std::function<bool( const hypro::Box<Number>&, const hypro::Location<Number>* )> fixedPointCallback = []( const hypro::Box<Number>&, const hypro::Location<Number>* ) -> bool { std::cout << "Callback" << std::endl; return true; };
+	std::function<bool( const hypro::Box<Number>&, const hypro::Location<Number>* )> fixedPointCallback = []( const hypro::Box<Number>&, const hypro::Location<Number>* ) -> bool { return true; };
 	// test callback
 	hypro::Box<Number> test;
 	EXPECT_TRUE( fixedPointCallback( test, nullptr ) );

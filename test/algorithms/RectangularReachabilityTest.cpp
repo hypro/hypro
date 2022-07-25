@@ -1,5 +1,6 @@
 #include "test/algorithms/automata/automataCreation.h"
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
@@ -392,9 +393,6 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachability1 ) {
 		} );
 	} );
 
-	std::for_each( flowpipes.begin(), flowpipes.end(),
-				   [&]( const auto& segment ) { std::cout << "segment: " << segment << std::endl; } );
-
 	// checks
 	EXPECT_EQ( std::size_t( 1 ), flowpipes.size() );
 	for ( const auto& p : reachable_points ) {
@@ -438,9 +436,6 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumps ) {
 		} );
 	} );
 
-	std::for_each( flowpipes.begin(), flowpipes.end(),
-				   [&]( const auto& segment ) { std::cout << "segment: " << segment << std::endl; } );
-
 	// checks
 	EXPECT_EQ( std::size_t( 2 ), flowpipes.size() );
 	EXPECT_TRUE( is_reachable_in( Point{ 0 }, flowpipes ) );  // initial set, also in loc 2
@@ -482,9 +477,6 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumpsTwoDimensio
 			flowpipes.insert( flowpipes.end(), flowpipe.begin(), flowpipe.end() );
 		} );
 	} );
-
-	std::for_each( flowpipes.begin(), flowpipes.end(),
-				   [&]( const auto& segment ) { std::cout << "segment: " << segment << std::endl; } );
 
 	// checks
 	EXPECT_EQ( std::size_t( 11 ), flowpipes.size() );
@@ -557,7 +549,6 @@ TYPED_TEST( RectangularReachabilityTest, BackwardsTimeComputation ) {
 	EXPECT_TRUE( result == hypro::REACHABILITY_RESULT::SAFE );
 	EXPECT_TRUE( worker.getFlowpipe().size() >= std::size_t( 1 ) );
 	const auto& segment{ worker.getFlowpipe().front() };
-	std::cout << "Computed segment: " << segment << std::endl;
 	auto& plt = hypro::Plotter<Number>::getInstance();
 	plt.addObject( segment.vertices() );
 	plt.setFilename( "backwards_computation" );
