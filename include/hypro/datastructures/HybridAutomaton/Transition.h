@@ -36,6 +36,9 @@ enum Aggregation { none = 0,
 				   clustering };
 
 template <typename Number>
+class HybridAutomaton;
+
+template <typename Number>
 class Location;
 
 /**
