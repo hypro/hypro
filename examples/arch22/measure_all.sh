@@ -1,5 +1,5 @@
 #!/bin/bash
-TOOL_PATH=../../build/bin/hydra
+TOOL_PATH=../../cmake-build-release/bin/hydra
 
 run_benchmark() {
     if [[ ! -p mypipe ]]; then
