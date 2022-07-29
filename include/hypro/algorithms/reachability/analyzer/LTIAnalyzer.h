@@ -26,10 +26,16 @@
 
 namespace hypro {
 
+struct UseMultithreading {
+};
+
+struct NoMultithreading {
+};
+
 // indicates that the lti analysis succeeded, i.e. no
 struct LTISuccess {};
 
-template <typename State, typename Heuristics = DepthFirst<State>, MULTITHREADING multithreading = MULTITHREADING::DISABLED>
+template <typename State, typename Heuristics = DepthFirst<State>, typename Multithreading = NoMultithreading>
 class LTIAnalyzer {
 	using Number = typename State::NumberType;
 
@@ -67,7 +73,7 @@ class LTIAnalyzer {
 	}
 
 	~LTIAnalyzer() {
-		if ( multithreading == MULTITHREADING::ENABLED && !mStopped ) {
+		if ( std::is_same_v<Multithreading, UseMultithreading> && !mStopped ) {
 			shutdown();
 		}
 	}
@@ -75,7 +81,7 @@ class LTIAnalyzer {
 	LTIResult run();
 
 	void addToQueue( ReachTreeNode<State>* node ) {
-		if ( multithreading == MULTITHREADING::ENABLED ) {
+		if ( std::is_same<Multithreading, UseMultithreading>::value ) {
 			{
 				std::unique_lock<std::mutex> lock( mQueueMutex );
 				mWorkQueue.push( node );
