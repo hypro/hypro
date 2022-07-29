@@ -55,7 +55,7 @@ namespace hypro {
 		//4.Calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, locSet);
-		std::set<Transition<Number>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
+		std::set<Transition<Number,Location<Number>>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number,Location<Number>>*>>();
 
 		//4.1.Make a set of unique ptrs to transitions
 		for(auto t : tSet){
@@ -63,13 +63,13 @@ namespace hypro {
 			for(auto& l : uniquePtrLocSet){
 				assert(t != nullptr);
 				if(t->getSource() == l.get()) {
-					StochasticTransition<Number>* stoTrans = dynamic_cast<StochasticTransition<Number>*>( t );
+					StochasticTransition<Number,Location<Number>>* stoTrans = dynamic_cast<StochasticTransition<Number,Location<Number>>*>( t );
 					if ( !stoTrans ) {
 						l->addTransition(std::move
-(std::unique_ptr<Transition<Number>>(t)));
+(std::unique_ptr<Transition<Number,Location<Number>>>(t)));
 					} else {
 						l->addTransition(std::move
-(std::unique_ptr<StochasticTransition<Number>>( stoTrans )));
+(std::unique_ptr<StochasticTransition<Number,Location<Number>>>( stoTrans )));
 					}
 					break;
 				}

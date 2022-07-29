@@ -26,20 +26,20 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation>>;
 
-	Location<Number> const* mLocation = nullptr;								   ///< location in which the flowpipe was computed
-	Transition<Number> const* mTransition{};									   ///< the transition which lead here. nullptr for roots
-	std::vector<Representation> mFlowpipe{};									   ///< contains computed flowpipe
-	Representation mInitialSet;													   ///< contains initial set for the flowpipe
-	carl::Interval<SegmentInd> mTimings{};										   ///< global time covered by inital set (used as offset)
-	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};	   ///< optional bounding box of the initial set
-	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;										   ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
-	ReachTreeNode<Representation>* mFixedPointReason = nullptr;					   ///< points to the node which is the reason for fixed-point detection
-	bool mIsOnZenoCycle = false;												   ///< true, if the node is the end of a Zeno-Cycle
-	bool mFinishesWithTimelock = false;											   ///< true, if the node exhibits a timelock
-	bool mPotentiallyUnsafe = false;											   ///< true, if the analysis has found a non-empty intersection with the set of bad states
-	std::map<Transition<Number>*, UrgencyRefinementLevel> mUrgRefinementLevels{};  ///< refinement level for outgoing urgent transitions
-	std::vector<SegmentInd> mFpTimings{};										   ///< timing information for simultaneous segments (urgency)
-	REACHABILITY_RESULT mSafetyResult;											   ///< safety of flowpipe segments
+	Location<Number> const* mLocation = nullptr;													 ///< location in which the flowpipe was computed
+	Transition<Number, Location<Number>> const* mTransition{};										 ///< the transition which lead here. nullptr for roots
+	std::vector<Representation> mFlowpipe{};														 ///< contains computed flowpipe
+	Representation mInitialSet;																		 ///< contains initial set for the flowpipe
+	carl::Interval<SegmentInd> mTimings{};															 ///< global time covered by inital set (used as offset)
+	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};						 ///< optional bounding box of the initial set
+	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;															 ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
+	ReachTreeNode<Representation>* mFixedPointReason = nullptr;										 ///< points to the node which is the reason for fixed-point detection
+	bool mIsOnZenoCycle = false;																	 ///< true, if the node is the end of a Zeno-Cycle
+	bool mFinishesWithTimelock = false;																 ///< true, if the node exhibits a timelock
+	bool mPotentiallyUnsafe = false;																 ///< true, if the analysis has found a non-empty intersection with the set of bad states
+	std::map<Transition<Number, Location<Number>>*, UrgencyRefinementLevel> mUrgRefinementLevels{};	 ///< refinement level for outgoing urgent transitions
+	std::vector<SegmentInd> mFpTimings{};															 ///< timing information for simultaneous segments (urgency)
+	REACHABILITY_RESULT mSafetyResult;																 ///< safety of flowpipe segments
 
   public:
 	// Exposition types
@@ -49,7 +49,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	using Base::getChildren;
 	using Base::getDepth;
 
-	ReachTreeNode( ReachTreeNode* parent, Transition<Number> const* transition, Location<Number> const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
+	ReachTreeNode( ReachTreeNode* parent, Transition<Number, Location<Number>> const* transition, Location<Number> const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
 		: Base( parent )
 		, mLocation( loc )
 		, mTransition( transition )
@@ -71,7 +71,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	 * @param transition The transition taken to the new location
 	 * @return A reference to the new child
 	 */
-	ReachTreeNode& addChild( Representation initialSet, carl::Interval<SegmentInd> timings, Transition<Number> const* transition );
+	ReachTreeNode& addChild( Representation initialSet, carl::Interval<SegmentInd> timings, Transition<Number, Location<Number>> const* transition );
 
 	/**
 	 * @brief Get the path to the current node (computed)
@@ -87,7 +87,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 
 	// auto getParent() const { return this->mParent; }
 
-	Transition<Number> const* getTransition() const { return mTransition; }
+	Transition<Number, Location<Number>> const* getTransition() const { return mTransition; }
 
 	/**
 	 * @brief Get access to the flowpipe
@@ -105,8 +105,8 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	 * @brief Get access to the urgent Transitions
 	 * @return Map of urgent transitions to refinement level
 	 */
-	std::map<Transition<Number>*, UrgencyRefinementLevel>& getUrgencyRefinementLevels() { return mUrgRefinementLevels; }
-	std::map<Transition<Number>*, UrgencyRefinementLevel> const& getUrgencyRefinementLevels() const { return mUrgRefinementLevels; }
+	std::map<Transition<Number, Location<Number>>*, UrgencyRefinementLevel>& getUrgencyRefinementLevels() { return mUrgRefinementLevels; }
+	std::map<Transition<Number, Location<Number>>*, UrgencyRefinementLevel> const& getUrgencyRefinementLevels() const { return mUrgRefinementLevels; }
 
 	/**
 	 * @brief Get the initial set
@@ -128,7 +128,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	 * @return std::vector<carl::Interval<SegmentInd>>
 	 * TODO Implement
 	 */
-	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number> const* const transition ) const;
+	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number, Location<Number>> const* const transition ) const;
 	/// Sets the bounding box of the sets of reachable states for this node (caching)
 	void setBoundingBox( const std::vector<carl::Interval<Number>>& intervals ) { mInitialBoundingBox = intervals; }
 	/// Returns the bounding box stored for this nodes' sets of reachable states

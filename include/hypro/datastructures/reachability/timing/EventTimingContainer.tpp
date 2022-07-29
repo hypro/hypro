@@ -55,7 +55,7 @@ void EventTimingContainer<Number>::merge( const EventTimingContainer<Number>& sn
 }
 
 template <typename Number>
-bool EventTimingContainer<Number>::hasTransitionEvent( Transition<Number>* transition ) const {
+bool EventTimingContainer<Number>::hasTransitionEvent( Transition<Number, Location<Number>>* transition ) const {
 	return ( mTransitionEvents.find( transition ) != mTransitionEvents.end() &&
 			 ( mTransitionEvents.at( transition ).size() > 1 ||
 			   ( mTransitionEvents.at( transition ).back().type != CONTAINMENT::BOT &&
@@ -63,7 +63,7 @@ bool EventTimingContainer<Number>::hasTransitionEvent( Transition<Number>* trans
 }
 
 template <typename Number>
-bool EventTimingContainer<Number>::hasTransitionEvent( const carl::Interval<tNumber>& timeInterval, Transition<Number>* transition ) const {
+bool EventTimingContainer<Number>::hasTransitionEvent( const carl::Interval<tNumber>& timeInterval, Transition<Number, Location<Number>>* transition ) const {
 	if ( mTransitionEvents.find( transition ) == mTransitionEvents.end() ) {
 		return false;
 	}
@@ -73,7 +73,7 @@ bool EventTimingContainer<Number>::hasTransitionEvent( const carl::Interval<tNum
 }
 
 template <typename Number>
-bool EventTimingContainer<Number>::hasTransitionInformation( const carl::Interval<tNumber>& timeInterval, Transition<Number>* transition ) const {
+bool EventTimingContainer<Number>::hasTransitionInformation( const carl::Interval<tNumber>& timeInterval, Transition<Number, Location<Number>>* transition ) const {
 	if ( mTransitionEvents.find( transition ) == mTransitionEvents.end() ) {
 		return false;
 	}
@@ -120,11 +120,11 @@ bool EventTimingContainer<Number>::hasPositiveBadStateEvent( const carl::Interva
 }
 
 template <typename Number>
-void EventTimingContainer<Number>::insertTransition( Transition<Number>* transition, const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) {
-	//#ifdef HYPRO_LOGGING
+void EventTimingContainer<Number>::insertTransition( Transition<Number, Location<Number>>* transition, const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) {
+	// #ifdef HYPRO_LOGGING
 	//	auto tmp = carl::convert<tNumber, double>( timeInterval );
 	//	TRACE( "hypro.datastructures.etc", "In " << this << ": Transition: " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash//() << " in time " << tmp );
-	//#endif
+	// #endif
 	if ( mTransitionEvents.find( transition ) == mTransitionEvents.end() ) {
 		assert( !mInvariantEvents.empty() );
 		// initialize with same time horizon as invariants and bad states.
@@ -136,17 +136,17 @@ void EventTimingContainer<Number>::insertTransition( Transition<Number>* transit
 }
 
 template <typename Number>
-const std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& EventTimingContainer<Number>::getTransitionTimings() const {
+const std::map<Transition<Number, Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& EventTimingContainer<Number>::getTransitionTimings() const {
 	return mTransitionEvents;
 }
 
 template <typename Number>
-std::map<Transition<Number>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& EventTimingContainer<Number>::rGetTransitionTimings() {
+std::map<Transition<Number, Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& EventTimingContainer<Number>::rGetTransitionTimings() {
 	return mTransitionEvents;
 }
 
 template <typename Number>
-const HierarchicalIntervalVector<CONTAINMENT, tNumber>& EventTimingContainer<Number>::getTransitionTimings( Transition<Number>* transition ) const {
+const HierarchicalIntervalVector<CONTAINMENT, tNumber>& EventTimingContainer<Number>::getTransitionTimings( Transition<Number, Location<Number>>* transition ) const {
 	return mTransitionEvents.at( transition );
 }
 
@@ -158,20 +158,20 @@ const HierarchicalIntervalVector<CONTAINMENT, tNumber>& EventTimingContainer<Num
 template <typename Number>
 void EventTimingContainer<Number>::insertInvariant( const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) {
 	assert( !mInvariantEvents.empty() );
-	//#ifdef HYPRO_LOGGING
+	// #ifdef HYPRO_LOGGING
 	//	auto tmp = carl::convert<tNumber, double>( timeInterval );
 	//	TRACE( "hypro.datastructures.etc", "Invariant type " << type << " in time " << tmp );
-	//#endif
+	// #endif
 	return mInvariantEvents.insertInterval( type, timeInterval );
 }
 
 template <typename Number>
 void EventTimingContainer<Number>::insertBadState( const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) {
 	assert( !mBadStateEvents.empty() );
-	//#ifdef HYPRO_LOGGING
+	// #ifdef HYPRO_LOGGING
 	//	auto tmp = carl::convert<tNumber, double>( timeInterval );
 	//	TRACE( "hypro.datastructures.etc", "BadState type " << type << " in time " << tmp );
-	//#endif
+	// #endif
 	mBadStateEvents.insertInterval( type, timeInterval );
 }
 

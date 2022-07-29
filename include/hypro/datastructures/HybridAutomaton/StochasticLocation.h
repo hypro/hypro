@@ -8,7 +8,7 @@
 
 namespace hypro {
 
-template <typename Number>
+template <typename Number, typename LocationType>
 class StochasticTransition;
 
 /**
@@ -18,7 +18,7 @@ class StochasticTransition;
 template <typename Number>
 class StochasticLocation : public Location<Number> {
   public:
-	using stochasticTransitionVector = std::vector<std::unique_ptr<StochasticTransition<Number>>>;
+	using stochasticTransitionVector = std::vector<std::unique_ptr<StochasticTransition<Number, StochasticLocation<Number>>>>;
 
   private:
 	// Number mProbability = 1;

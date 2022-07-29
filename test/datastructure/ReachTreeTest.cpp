@@ -8,13 +8,14 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <bits/c++config.h>
 #include <carl/interval/Interval.h>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/ReachTreev2.h>
-#include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/datastructures/reachability/ReachTreev2Heuristics.h>
+#include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/types.h>
 
 namespace test::detail {
@@ -37,7 +38,7 @@ TEST( ReachtTreeTest, Constructor ) {
 	// transition
 	hypro::Location<int> source;
 	hypro::Location<int> target;
-	hypro::Transition<int> trans{ &source, &target };
+	hypro::Transition<int, hypro::Location<int>> trans{ &source, &target };
 
 	// add children
 	root.addChild( { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans );
@@ -54,7 +55,7 @@ TEST( ReachtTreeTest, CountSegments ) {
 	// transition
 	hypro::Location<int> source;
 	hypro::Location<int> target;
-	hypro::Transition<int> trans{ &source, &target };
+	hypro::Transition<int, hypro::Location<int>> trans{ &source, &target };
 
 	// add children
 	auto& ch1 = root.addChild( { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 }, &trans );
@@ -86,8 +87,8 @@ TEST( ReachTreeTest, Paths ) {
 		  locations[0], { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 } };
 
 	// transition
-	hypro::Transition<int> trans0{ locations[0], locations[1] };
-	hypro::Transition<int> trans1{ locations[0], locations[2] };
+	hypro::Transition<int, Loc> trans0{ locations[0], locations[1] };
+	hypro::Transition<int, Loc> trans1{ locations[0], locations[2] };
 
 	// add children
 	root.addChild( { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans0 );
@@ -121,11 +122,11 @@ TEST( ReachTreeTest, CycleHeuristics ) {
 		  locations[0], { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 } };
 
 	// transition
-	hypro::Transition<int> trans0{ locations[0], locations[1] };
-	hypro::Transition<int> trans1{ locations[0], locations[2] };
-	hypro::Transition<int> trans2{ locations[1], locations[0] };
-	hypro::Transition<int> trans3{ locations[2], locations[0] };
-	hypro::Transition<int> trans4{ locations[2], locations[1] };
+	hypro::Transition<int, Loc> trans0{ locations[0], locations[1] };
+	hypro::Transition<int, Loc> trans1{ locations[0], locations[2] };
+	hypro::Transition<int, Loc> trans2{ locations[1], locations[0] };
+	hypro::Transition<int, Loc> trans3{ locations[2], locations[0] };
+	hypro::Transition<int, Loc> trans4{ locations[2], locations[1] };
 
 	// add children: 0 -> 2 -> 0 -> 1
 	auto* child = &root.addChild( { 2 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans1 );

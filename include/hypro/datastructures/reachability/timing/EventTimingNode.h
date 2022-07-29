@@ -13,7 +13,7 @@ class EventTimingNode : public DAGNode<EventTimingNode<Number>> {
   protected:
 	EventTimingContainer<Number> mTimings;
 	const Location<Number>* mLocation = nullptr;
-	const Transition<Number>* mEntryTransition = nullptr;
+	const Transition<Number, Location<Number>>* mEntryTransition = nullptr;
 	carl::Interval<tNumber> mEntryTimestamp;
 	TimingAggregate<Number> mTimingAggregate;
 	std::size_t mLevel = 0;
@@ -30,7 +30,7 @@ class EventTimingNode : public DAGNode<EventTimingNode<Number>> {
 	const EventTimingContainer<Number>& getTimings() const;
 	EventTimingContainer<Number>& rGetTimings();
 	const Location<Number>* getLocation() const;
-	const Transition<Number>* getEntryTransition() const;
+	const Transition<Number, Location<Number>>* getEntryTransition() const;
 	const carl::Interval<tNumber>& getEntryTimestamp() const;
 	TimingAggregate<Number>& rGetTimingAggregate();
 
@@ -41,7 +41,7 @@ class EventTimingNode : public DAGNode<EventTimingNode<Number>> {
 	void setLocation( const Location<Number>* loc );
 	void setEntryTimestamp( const carl::Interval<tNumber>& t );
 	void extendEntryTimestamp( const carl::Interval<tNumber>& t );
-	void setEntryTransition( const Transition<Number>* trans );
+	void setEntryTransition( const Transition<Number, Location<Number>>* trans );
 
 	friend std::ostream& operator<<( std::ostream& out, const EventTimingNode<Number>& in ) {
 		out << "lvl. " << in.getLevel() << ", content: ";

@@ -80,7 +80,7 @@ struct LeastLocationCycleCount {
 		if ( in->getParent() == nullptr ) {
 			return 0;
 		}
-		std::map<Location<typename R::NumberType>*, std::size_t> counts;
+		std::map<const Location<typename R::NumberType>*, std::size_t> counts;
 		for ( const auto& intervalTransitionPair : in->getPath().elements ) {
 			counts[intervalTransitionPair.second->getSource()] += 1;
 		}

@@ -2,16 +2,16 @@
 
 namespace hypro {
 
-template <typename Number>
-std::size_t Transition<Number>::hash() const {
+template <typename Number, typename LocationType>
+std::size_t Transition<Number, LocationType>::hash() const {
 	if ( mHash == 0 ) {
-		mHash = std::hash<Transition<Number>>()( *this );
+		mHash = std::hash<Transition<Number, LocationType>>()( *this );
 	}
 	return mHash;
 }
 
-template <typename Number>
-std::string Transition<Number>::getDotRepresentation( const std::vector<std::string>& vars ) const {
+template <typename Number, typename LocationType>
+std::string Transition<Number, LocationType>::getDotRepresentation( const std::vector<std::string>& vars ) const {
 	std::stringstream o;
 	o << this->getSource()->hash() << " -> " << this->getTarget()->hash();
 	if ( getLabels().size() != 0 || ( mReset.size() > 0 && !mReset.isIdentity() ) || mGuard.size() != 0 ) {
@@ -48,8 +48,8 @@ std::string Transition<Number>::getDotRepresentation( const std::vector<std::str
 	return o.str();
 }
 
-template <typename Number>
-bool Transition<Number>::isComposedOf( const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const {
+template <typename Number, typename LocationType>
+bool Transition<Number, LocationType>::isComposedOf( const Transition<Number, LocationType>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const {
 	// compare source and target location
 	if ( this->getSource()->getName().find( rhs.getSource()->getName() ) == std::string::npos ||
 		 this->getTarget()->getName().find( rhs.getTarget()->getName() ) == std::string::npos ) {
@@ -141,8 +141,8 @@ bool Transition<Number>::isComposedOf( const Transition<Number>& rhs, const std:
 	return true;
 }
 
-template <typename Number>
-Condition<Number> Transition<Number>::getJumpEnablingSet() {
+template <typename Number, typename LocationType>
+Condition<Number> Transition<Number, LocationType>::getJumpEnablingSet() {
 	if ( mJumpEnablingSet ) {
 		return mJumpEnablingSet.value();
 	}
@@ -200,22 +200,22 @@ Condition<Number> Transition<Number>::getJumpEnablingSet() {
 	return mJumpEnablingSet.value();
 }
 
-template <typename Number>
-std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* lhsT, const Transition<Number>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<Location<Number>*>>& masters ) {
+template <typename Number, typename LocationType>
+std::unique_ptr<Transition<Number, LocationType>> parallelCompose( const Transition<Number, LocationType>* lhsT, const Transition<Number, LocationType>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<LocationType*>>& masters ) {
 	assert( haVar.size() >= lhsVar.size() );
 	assert( haVar.size() >= rhsVar.size() );
 
 	TRACE( "hypro.datastructures", "Parallel composition of " << *lhsT << "\n\n and \n\n"
 															  << *rhsT );
 
-	// Transition<Number>* t = new Transition<Number>();
-	// std::unique_ptr<Transition<Number>> t = new Transition<Number>()
-	std::unique_ptr<Transition<Number>> t = std::make_unique<Transition<Number>>();
+	// Transition<Number,LocationType>* t = new Transition<Number,LocationType>();
+	// std::unique_ptr<Transition<Number,LocationType>> t = new Transition<Number,LocationType>()
+	std::unique_ptr<Transition<Number, LocationType>> t = std::make_unique<Transition<Number, LocationType>>();
 
 	// set target and source. If they do not exist, this means that the combined location was not admissible for some reason and thus, the transition also cannot be added.
 	// TODO: returning nullptr in case the locations do not exist seems like a hotfix for now, as it indicates that something went wrong elsewhere.
-	Location<Number>* source = ha.getLocation( lhsT->getSource()->getName() + '_' + rhsT->getSource()->getName() );
-	Location<Number>* target = ha.getLocation( lhsT->getTarget()->getName() + '_' + rhsT->getTarget()->getName() );
+	auto* source = ha.getLocation( lhsT->getSource()->getName() + '_' + rhsT->getSource()->getName() );
+	auto* target = ha.getLocation( lhsT->getTarget()->getName() + '_' + rhsT->getTarget()->getName() );
 	if ( source != nullptr && target != nullptr ) {
 		t->setTarget( target );
 		t->setSource( source );

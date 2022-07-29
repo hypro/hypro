@@ -12,8 +12,8 @@ namespace hypro {
  * @brief      Class for a transition in a stochastic automaton.
  * @tparam     Number  The used number type.
  */
-template <typename Number>
-class StochasticTransition : public Transition<Number> {
+template <typename Number, typename LocationType>
+class StochasticTransition : public Transition<Number, LocationType> {
   private:
 	Number mProbability = 1;
 	Number mTransitionWeight;

@@ -23,7 +23,7 @@ const Location<Number>* EventTimingNode<Number>::getLocation() const {
 }
 
 template <typename Number>
-const Transition<Number>* EventTimingNode<Number>::getEntryTransition() const {
+const Transition<Number, Location<Number>>* EventTimingNode<Number>::getEntryTransition() const {
 	return mEntryTransition;
 }
 
@@ -65,7 +65,7 @@ void EventTimingNode<Number>::extendEntryTimestamp( const carl::Interval<tNumber
 }
 
 template <typename Number>
-void EventTimingNode<Number>::setEntryTransition( const Transition<Number>* trans ) {
+void EventTimingNode<Number>::setEntryTransition( const Transition<Number, Location<Number>>* trans ) {
 	mEntryTransition = trans;
 }
 

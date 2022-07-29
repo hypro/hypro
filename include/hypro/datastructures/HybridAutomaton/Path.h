@@ -15,7 +15,7 @@ namespace hypro {
  */
 template <typename Number, typename tNumber = hypro::tNumber>
 struct TPathElement {
-	Transition<Number>* transition = nullptr;											  /// Pointer to a transition in case of a discrete step.
+	Transition<Number, Location<Number>>* transition = nullptr;							  /// Pointer to a transition in case of a discrete step.
 	carl::Interval<tNumber> timeInterval = carl::Interval<tNumber>::unboundedInterval();  /// Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled.
 
 	/**
@@ -23,7 +23,7 @@ struct TPathElement {
 	 * @param      t            The transition.
 	 * @param[in]  enabledTime  The enabled time.
 	 */
-	TPathElement( Transition<Number>* t, const carl::Interval<tNumber>& enabledTime )
+	TPathElement( Transition<Number, Location<Number>>* t, const carl::Interval<tNumber>& enabledTime )
 		: transition( t )
 		, timeInterval( enabledTime ) {}
 
@@ -47,7 +47,7 @@ struct TPathElement {
 		return timeInterval;
 	}
 
-	Transition<Number>* getTransition() const {
+	Transition<Number, Location<Number>>* getTransition() const {
 		return transition;
 	}
 
@@ -120,9 +120,9 @@ class Path {
 	};
 
 	void add( const TPathElement<Number, tNumber>& elem );
-	void addTransition( Transition<Number>* t, const carl::Interval<tNumber>& enabledTime );
+	void addTransition( Transition<Number, Location<Number>>* t, const carl::Interval<tNumber>& enabledTime );
 	void addTimeStep( const carl::Interval<tNumber>& timeStep );
-	std::pair<Transition<Number>*, carl::Interval<tNumber>> getTransitionToJumpDepth( unsigned depth ) const;
+	std::pair<Transition<Number, Location<Number>>*, carl::Interval<tNumber>> getTransitionToJumpDepth( unsigned depth ) const;
 
 	Path& deleteAfterPos( std::size_t cutpos );
 	Path& deleteBeforePos( std::size_t cutpos );
@@ -136,8 +136,8 @@ class Path {
 	tNumber maximalTimeSpan( typename std::deque<TPathElement<Number, tNumber>>::const_iterator start, typename std::deque<TPathElement<Number, tNumber>>::const_iterator end ) const;
 
 	std::size_t getNumberDiscreteJumps() const;
-	std::vector<Transition<Number>*> getTransitionSequence( typename std::deque<TPathElement<Number, tNumber>>::const_iterator start, typename std::deque<TPathElement<Number, tNumber>>::const_iterator end ) const;
-	std::vector<Transition<Number>*> getTransitionSequence() const { return this->getTransitionSequence( mPath.begin(), mPath.end() ); }
+	std::vector<Transition<Number, Location<Number>>*> getTransitionSequence( typename std::deque<TPathElement<Number, tNumber>>::const_iterator start, typename std::deque<TPathElement<Number, tNumber>>::const_iterator end ) const;
+	std::vector<Transition<Number, Location<Number>>*> getTransitionSequence() const { return this->getTransitionSequence( mPath.begin(), mPath.end() ); }
 	bool hasChatteringZeno() const;
 
 	// comparison - read as "is longer than"

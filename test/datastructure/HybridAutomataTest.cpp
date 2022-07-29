@@ -115,8 +115,8 @@ class HybridAutomataTest : public ::testing::Test {
 	Location<Number>* loc2;
 	Location<Number>* copyOfLoc1;
 	Location<Number>* copyOfLoc2;
-	Transition<Number>* trans;
-	Transition<Number>* copyOfTrans;
+	Transition<Number, Location<Number>>* trans;
+	Transition<Number, Location<Number>>* copyOfTrans;
 	HybridAutomaton<Number> hybrid;
 
 	// Other Objects: Vectors, Matrices, Guards...
@@ -133,7 +133,7 @@ class HybridAutomataTest : public ::testing::Test {
 
 	std::vector<Location<Number>*> initLocSet;
 
-	std::vector<std::unique_ptr<Transition<Number>>> transSet;
+	std::vector<std::unique_ptr<Transition<Number, Location<Number>>>> transSet;
 
 	vector_t<Number> coordinates = vector_t<Number>( 2, 1 );
 	valuation_t<Number> poly;
@@ -151,7 +151,7 @@ class HybridAutomataTest : public ::testing::Test {
 		return false;
 	}
 
-	bool find( const Transition<Number>* trans, const std::vector<Transition<Number>*>& transSet ) const {
+	bool find( const Transition<Number, Location<Number>>* trans, const std::vector<Transition<Number, Location<Number>>*>& transSet ) const {
 		if ( trans == nullptr || transSet.empty() ) return false;
 		for ( auto& ptrToTrans : transSet ) {
 			if ( *ptrToTrans == *( trans ) ) {
@@ -328,7 +328,7 @@ TYPED_TEST( HybridAutomataTest, TransitionTest ) {
 	EXPECT_EQ( this->trans->getGuard().getMatrix(), this->guard.getMatrix() );
 
 	// creation of transitions from source and target
-	std::unique_ptr<Transition<TypeParam>> t( new Transition<TypeParam>( this->loc1, this->loc2 ) );
+	std::unique_ptr<Transition<TypeParam, Location<TypeParam>>> t( new Transition<TypeParam, Location<TypeParam>>( this->loc1, this->loc2 ) );
 	EXPECT_EQ( t->getSource(), this->loc1 );
 	EXPECT_EQ( t->getTarget(), this->loc2 );
 	EXPECT_EQ( t->getAggregation(), Aggregation::none );
@@ -383,7 +383,7 @@ TYPED_TEST( HybridAutomataTest, HybridAutomatonTest ) {
 	anotherCopyOfLoc1->rGetTransitions().clear();
 
 	// Re-insert correct transition (take guards and resets, update source and target)
-	Transition<TypeParam>* aTrans = anotherCopyOfLoc1->createTransition( this->trans );
+	Transition<TypeParam, Location<TypeParam>>* aTrans = anotherCopyOfLoc1->createTransition( this->trans );
 	aTrans->setTarget( anotherCopyOfLoc2 );
 	EXPECT_FALSE( aTrans == nullptr );
 

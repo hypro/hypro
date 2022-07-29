@@ -96,7 +96,7 @@ class HybridAutomaton {
 	/// getter for a single location identified by its position in the vector of locations
 	Location<Number>* getLocationByIndex( const std::size_t index ) const;
 	//* @return The set of transitions. */
-	std::vector<Transition<Number>*> getTransitions() const;
+	std::vector<Transition<Number, Location<Number>>*> getTransitions() const;
 	//* @return The set of initial states. */
 	const locationConditionMap& getInitialStates() const { return mInitialStates; }
 	//* @return The set of bad states bound to locations. */
@@ -133,7 +133,7 @@ class HybridAutomaton {
 	///@{
 	const std::unique_ptr<Location<Number>>& addLocation( const Location<Number>& location );
 	const std::unique_ptr<Location<Number>>& addLocation( std::unique_ptr<Location<Number>>&& location );
-	void addTransition( std::unique_ptr<Transition<Number>>&& transition );
+	void addTransition( std::unique_ptr<Transition<Number, Location<Number>>>&& transition );
 	void addInitialState( const Location<Number>* loc, const Condition<Number>& state ) {
 		assert( std::find( this->getLocations().begin(), this->getLocations().end(), loc ) != this->getLocations().end() );
 		mInitialStates.emplace( std::make_pair( loc, state ) );
@@ -149,7 +149,7 @@ class HybridAutomaton {
 		mGlobalBadStates.push_back( state );
 	}
 	///@}
-	void removeTransition( Transition<Number>* transitionPtr ) {
+	void removeTransition( Transition<Number, Location<Number>>* transitionPtr ) {
 		transitionPtr->getSource()->removeTransition( transitionPtr );
 	}
 

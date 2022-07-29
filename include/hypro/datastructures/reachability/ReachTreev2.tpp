@@ -14,7 +14,7 @@ namespace hypro {
 template <class Representation>
 ReachTreeNode<Representation>& ReachTreeNode<Representation>::addChild( Representation initialSet,
 																		carl::Interval<SegmentInd> timings,
-																		const Transition<Number>* transition ) {
+																		const Transition<Number, Location<Number>>* transition ) {
 	return Base::addChild( this, transition, transition->getTarget(), std::move( initialSet ), timings );
 }
 

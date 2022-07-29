@@ -25,10 +25,10 @@ static_assert( false, "This file may only be included indirectly by HybridAutoma
 namespace hypro {
 using namespace std::string_literals;
 
-template <typename Number>
+template <typename Number, typename LocationType>
 class Transition;
 
-template <typename Number>
+template <typename Number, typename LocationType>
 class StochasticTransition;
 
 template <typename Number>
@@ -42,7 +42,7 @@ using flowVariant = std::variant<linearFlow<Number>, affineFlow<Number>, rectang
 template <typename Number>
 class Location {
   public:
-	using transitionVector = std::vector<std::unique_ptr<Transition<Number>>>;
+	using transitionVector = std::vector<std::unique_ptr<Transition<Number, Location<Number>>>>;
 
   private:
 	std::vector<flowVariant<Number>> mFlows;			 ///< Dynamics
@@ -145,16 +145,16 @@ class Location {
 	/// setter for vector of outgoing transitions (move)
 	void setTransitions( transitionVector&& trans );
 	/// adds outgoing transitions
-	void addTransition( std::unique_ptr<Transition<Number>>&& trans );
-	void removeTransition( Transition<Number>* transitionPtr ) {
+	void addTransition( std::unique_ptr<Transition<Number, Location<Number>>>&& trans );
+	void removeTransition( Transition<Number, Location<Number>>* transitionPtr ) {
 		mTransitions.erase( std::find_if( std::begin( mTransitions ), std::end( mTransitions ), [&]( auto& uPtr ) {
 			return uPtr.get() == transitionPtr;
 		} ) );
 	}
 	/// creates a transition from this location to the target
-	Transition<Number>* createTransition( Location<Number>* target );
+	Transition<Number, Location<Number>>* createTransition( Location<Number>* target );
 	/// adds a copy of the passed transition with the source being this location
-	Transition<Number>* createTransition( Transition<Number>* target );
+	Transition<Number, Location<Number>>* createTransition( Transition<Number, Location<Number>>* target );
 	/// setter for external input/disturbance
 	void setExtInput( const std::vector<carl::Interval<Number>>& b );
 	/// returns hash value of the location
@@ -351,7 +351,7 @@ struct hash<hypro::Location<Number>> {
 		carl::hash_add( seed, std::hash<std::string>()( loc.getName() ) );
 		// Transitions
 		for ( const auto& t : loc.getTransitions() ) {
-			seed += std::hash<hypro::Transition<Number>*>()( t.get() );
+			seed += std::hash<hypro::Transition<Number, hypro::Location<Number>>*>()( t.get() );
 		}
 		// Invariant
 		carl::hash_add( seed, loc.getInvariant().hash() );

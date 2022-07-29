@@ -132,8 +132,8 @@ Location<Number>* HybridAutomaton<Number>::getLocationByIndex( const std::size_t
 }
 
 template <typename Number>
-std::vector<Transition<Number>*> HybridAutomaton<Number>::getTransitions() const {
-	std::vector<Transition<Number>*> res;
+std::vector<Transition<Number, Location<Number>>*> HybridAutomaton<Number>::getTransitions() const {
+	std::vector<Transition<Number, Location<Number>>*> res;
 	for ( const auto& loc : mLocations ) {
 		for ( const auto& tPtr : loc->getTransitions() ) {
 			res.emplace_back( tPtr.get() );
@@ -183,7 +183,7 @@ const std::unique_ptr<Location<Number>>& HybridAutomaton<Number>::addLocation( s
 }
 
 template <typename Number>
-void HybridAutomaton<Number>::addTransition( std::unique_ptr<Transition<Number>>&& transition ) {
+void HybridAutomaton<Number>::addTransition( std::unique_ptr<Transition<Number, Location<Number>>>&& transition ) {
 	assert( transition != nullptr );
 	for ( auto& l : mLocations ) {
 		if ( l.get() == transition->getSource() ) {
@@ -408,7 +408,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	std::set<Label> rhsLabels = rhs.getLabels();
 	for ( const auto& lhsT : lhs.getTransitions() ) {
 		for ( const auto& rhsT : rhs.getTransitions() ) {
-			std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+			std::unique_ptr<Transition<Number, Location<Number>>> t = parallelCompose( lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 			if ( t ) {
 				// ha.addTransition( std::move( t ) );
 				( t->getSource() )->addTransition( std::move( t ) );
@@ -422,7 +422,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	for ( const auto& lhsT : lhs.getTransitions() ) {
 		if ( lhsT->getLabels().empty() ) {
 			for ( const auto& loc : rhs.getLocations() ) {
-				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>( Transition<Number>( loc, loc ) );
+				std::unique_ptr<Transition<Number, Location<Number>>> tmp = std::make_unique<Transition<Number, Location<Number>>>( Transition<Number, Location<Number>>( loc, loc ) );
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>( matrix_t<Number>::Identity( rhsVar.size(), rhsVar.size() ), vector_t<Number>::Zero( rhsVar.size() ) );
 				if ( !sharedVars.empty() ) {
@@ -441,7 +441,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( lhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number, Location<Number>>> t = parallelCompose( lhsT, tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
 					// ha.addTransition( std::move( t ) );
 					( t->getSource() )->addTransition( std::move( t ) );
@@ -454,7 +454,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	for ( const auto& rhsT : rhs.getTransitions() ) {
 		if ( rhsT->getLabels().empty() ) {
 			for ( const auto& loc : lhs.getLocations() ) {
-				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>( Transition<Number>( loc, loc ) );
+				std::unique_ptr<Transition<Number, Location<Number>>> tmp = std::make_unique<Transition<Number, Location<Number>>>( Transition<Number, Location<Number>>( loc, loc ) );
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>( matrix_t<Number>::Identity( lhsVar.size(), lhsVar.size() ), vector_t<Number>::Zero( lhsVar.size() ) );
 				if ( !sharedVars.empty() ) {
@@ -471,7 +471,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( rhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( tmp.get(), rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number, Location<Number>>> t = parallelCompose( tmp.get(), rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
 					// ha.addTransition( std::move( t ) );
 					( t->getSource() )->addTransition( std::move( t ) );
@@ -618,7 +618,7 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 	std::set<Label> rhsLabels = rhs.getLabels();
 	for ( const auto& lhsT : lhs.getTransitions() ) {
 		for ( const auto& rhsT : rhs.getTransitions() ) {
-			std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels, masters );
+			std::unique_ptr<Transition<Number, Location<Number>>> t = parallelCompose( lhsT, rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels, masters );
 			if ( t ) {
 				// ha.addTransition( std::move( t ) );
 				( t->getSource() )->addTransition( std::move( t ) );
@@ -632,7 +632,7 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 	for ( const auto& lhsT : lhs.getTransitions() ) {
 		if ( lhsT->getLabels().empty() ) {
 			for ( const auto& loc : rhs.getLocations() ) {
-				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>( Transition<Number>( loc, loc ) );
+				std::unique_ptr<Transition<Number, Location<Number>>> tmp = std::make_unique<Transition<Number, Location<Number>>>( Transition<Number, Location<Number>>( loc, loc ) );
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>( matrix_t<Number>::Identity( rhsVar.size(), rhsVar.size() ), vector_t<Number>::Zero( rhsVar.size() ) );
 				auto lhsReset = lhsT->getReset();
@@ -652,7 +652,7 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( lhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( lhsT, tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number, Location<Number>>> t = parallelCompose( lhsT, tmp.get(), lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
 					// ha.addTransition( std::move( t ) );
 					( t->getSource() )->addTransition( std::move( t ) );
@@ -665,7 +665,7 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 	for ( const auto& rhsT : rhs.getTransitions() ) {
 		if ( rhsT->getLabels().empty() ) {
 			for ( const auto& loc : lhs.getLocations() ) {
-				std::unique_ptr<Transition<Number>> tmp = std::make_unique<Transition<Number>>( Transition<Number>( loc, loc ) );
+				std::unique_ptr<Transition<Number, Location<Number>>> tmp = std::make_unique<Transition<Number, Location<Number>>>( Transition<Number, Location<Number>>( loc, loc ) );
 				// TODO: temporary test -> fix!
 				Reset<Number> tmpReset = Reset<Number>( matrix_t<Number>::Identity( lhsVar.size(), lhsVar.size() ), vector_t<Number>::Zero( lhsVar.size() ) );
 				auto rhsReset = rhsT->getReset();
@@ -683,7 +683,7 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 				tmp->setReset( tmpReset );
 				tmp->setAggregation( rhsT->getAggregation() );
 
-				std::unique_ptr<Transition<Number>> t = parallelCompose( tmp.get(), rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
+				std::unique_ptr<Transition<Number, Location<Number>>> t = parallelCompose( tmp.get(), rhsT, lhsVar, rhsVar, haVar, ha, lhsLabels, rhsLabels );
 				if ( t ) {
 					// ha.addTransition( std::move( t ) );
 					( t->getSource() )->addTransition( std::move( t ) );

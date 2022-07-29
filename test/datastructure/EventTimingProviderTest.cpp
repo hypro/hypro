@@ -18,9 +18,9 @@ class EventTimingTest : public ::testing::Test {
 		auto& tProvider = EventTimingProvider<double>::getInstance();
 		// set up location and transition to simulate reachability analysis.
 		loc = new Location<double>();
-		std::unique_ptr<Transition<double>> t = std::make_unique<Transition<double>>( loc, loc );
+		std::unique_ptr<Transition<double, Location<double>>> t = std::make_unique<Transition<double, Location<double>>>( loc, loc );
 		loc->addTransition( std::move( t ) );
-		std::unique_ptr<Transition<double>> t2 = std::make_unique<Transition<double>>( loc, loc );
+		std::unique_ptr<Transition<double, Location<double>>> t2 = std::make_unique<Transition<double, Location<double>>>( loc, loc );
 		loc->addTransition( std::move( t2 ) );
 		tRaw = loc->getTransitions()[0].get();
 		tRaw2 = loc->getTransitions()[1].get();
@@ -39,8 +39,8 @@ class EventTimingTest : public ::testing::Test {
 	}
 
 	Location<double>* loc;
-	Transition<double>* tRaw;
-	Transition<double>* tRaw2;
+	Transition<double, Location<double>>* tRaw;
+	Transition<double, Location<double>>* tRaw2;
 
 	EventTimingNode<double>* initNode;
 };
