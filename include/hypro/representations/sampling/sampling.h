@@ -100,6 +100,59 @@ std::set<Point<Number>> uniform_sampling( const StarsetT<Number, Converter, Sett
 	return samples;
 }
 
+template <typename Number, typename Converter, typename Settings>
+std::set<Point<Number>> uniform_constrained_sampling( const StarsetT<Number, Converter, Settings>& set, const HPolytope<Number>& rejectionSet, std::size_t num_samples, std::size_t max_trials = 10 ) {
+	const int dim = set.constraints().dimension();
+
+	std::set<Point<Number>> samples;
+
+	if ( set.empty() ) {
+		TRACE( "hypro.representations.sampling", "The specified set is empty." );
+		return samples;
+	}
+
+	// find the bounding box
+	auto bounding_box = Converter::toBox( set.constraints() );
+
+	// declare random distributions
+	std::random_device rd;	   // Will be used to obtain a seed for the random number engine
+	std::mt19937 gen( rd() );  // Standard mersenne_twister_engine seeded with rd()
+	std::vector<std::uniform_real_distribution<double>> distributions;
+
+	// initialize the random distributions (n = dimension of the representation)
+	for ( int j = 0; j < dim; j++ ) {
+		distributions.push_back( std::uniform_real_distribution<>(
+			  carl::convert<Number, double>( bounding_box.interval( j ).lower() ),
+			  carl::convert<Number, double>( bounding_box.interval( j ).upper() ) ) );
+	}
+
+	// try to find the required number of samples
+	std::size_t i = 0;
+	while ( i < max_trials * num_samples ) {
+		hypro::vector_t<Number> candidate_vector = hypro::vector_t<Number>( dim );
+
+		for ( int j = 0; j < dim; j++ ) {
+			candidate_vector[j] = carl::convert<double, Number>( distributions[j]( gen ) );
+		}
+
+		if ( set.constraints().contains( candidate_vector ) ) {
+			hypro::Point<Number> candidate = hypro::Point<Number>{ set.center() + set.generator() * candidate_vector };
+			if ( !rejectionSet.contains(candidate)) {
+				samples.insert( candidate );
+
+				if ( samples.size() == num_samples ) {
+					return samples;
+				}
+			}
+		}
+
+		i++;
+	}
+
+	TRACE( "hypro.representations.sampling", "Could not find the required number of samples" );
+	return samples;
+}
+
 // template<template<typename, typename...> class Set, typename Number, typename... rest>
 // std::set<Point<Number>> uniform_sampling(const Set<Number, rest...>& set, std::size_t num_samples, std::size_t max_trials = 10) {
 template <typename Set>

@@ -18,7 +18,7 @@ class SamplingTest : public ::testing::Test {
         hPolytope = hypro::HPolytope<Number>({hspace1, hspace2, hspace3, hspace4});
 
         hypro::vector_t<Number> center = hypro::vector_t<Number>(2);
-        center << 1, 1;
+        center << 0, 0;
         hypro::matrix_t<Number> basis = hypro::matrix_t<Number>(2, 2);
         basis << -2, 0, 0, 1;
 
@@ -34,7 +34,7 @@ class SamplingTest : public ::testing::Test {
     hypro::Zonotope<Number> zonotope;
     hypro::StarsetT<Number, hypro::Converter<Number>, hypro::StarsetEqvPolytopeCaching> starset;
 
-    const std::size_t num_samples = 10;
+    const std::size_t num_samples = 1000;
 };
 
 TYPED_TEST( SamplingTest, BoxUniform ) {
@@ -79,5 +79,14 @@ TYPED_TEST( SamplingTest, StarsetUniformCached ) {
 
     for(auto& sample : samples) {
         EXPECT_TRUE(this->starset.containsCached(sample));
+    }
+}
+
+TYPED_TEST( SamplingTest, StarsetConstrainedUniform ) {
+    std::set<hypro::Point<TypeParam>> samples = hypro::uniform_constrained_sampling(this->starset, this->hPolytope, this->num_samples);
+
+    for(auto& sample : samples) {
+        EXPECT_TRUE(this->starset.contains(sample));
+        EXPECT_FALSE(this->hPolytope.contains(sample));
     }
 }
