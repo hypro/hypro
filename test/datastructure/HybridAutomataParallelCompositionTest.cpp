@@ -301,7 +301,6 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariablesAndlabelledTra
 	EXPECT_TRUE( std::none_of( std::begin( res.getLocations().back()->getTransitions() ), std::end( res.getLocations().back()->getTransitions() ), [&]( auto& t ) { return t.get()->getLabels() == std::vector<Label>{}; } ) );
 }
 
-
 TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariables ) {
 	using namespace hypro;
 	auto ha1 = HybridAutomaton<TypeParam>();
@@ -327,34 +326,33 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariables ) {
 	loc12->setFlow( flow2a );
 
 	// x <= 0
-	matrix_t<TypeParam> invariant_constraints      = matrix_t<TypeParam>::Zero( 1, 1 );
-	vector_t<TypeParam> invariant_constants        = vector_t<TypeParam>::Zero( 1 );
+	matrix_t<TypeParam> invariant_constraints = matrix_t<TypeParam>::Zero( 1, 1 );
+	vector_t<TypeParam> invariant_constants = vector_t<TypeParam>::Zero( 1 );
 	invariant_constraints( 0, 0 ) = 1;
 	invariant_constants << 0;
-	loc11->setInvariant({invariant_constraints,invariant_constants});
+	loc11->setInvariant( { invariant_constraints, invariant_constants } );
 
 	// x <= 1
-	invariant_constraints      = matrix_t<TypeParam>::Zero( 1, 1 );
-	invariant_constants        = vector_t<TypeParam>::Zero( 1 );
+	invariant_constraints = matrix_t<TypeParam>::Zero( 1, 1 );
+	invariant_constants = vector_t<TypeParam>::Zero( 1 );
 	invariant_constraints( 0, 0 ) = 1;
 	invariant_constants << 1;
-	loc21->setInvariant({invariant_constraints,invariant_constants});
+	loc21->setInvariant( { invariant_constraints, invariant_constants } );
 
 	// 1 <= x <= 4
-	invariant_constraints      = matrix_t<TypeParam>::Zero( 2, 1 );
-	invariant_constants        = vector_t<TypeParam>::Zero( 2 );
+	invariant_constraints = matrix_t<TypeParam>::Zero( 2, 1 );
+	invariant_constants = vector_t<TypeParam>::Zero( 2 );
 	invariant_constraints( 0, 0 ) = 1;
 	invariant_constraints( 1, 0 ) = -1;
 	invariant_constants << 4, -1;
-	loc22->setInvariant({invariant_constraints,invariant_constants});
+	loc22->setInvariant( { invariant_constraints, invariant_constants } );
 
 	// x >= 4
-	invariant_constraints      = matrix_t<TypeParam>::Zero( 1, 1 );
-	invariant_constants        = vector_t<TypeParam>::Zero( 1 );
+	invariant_constraints = matrix_t<TypeParam>::Zero( 1, 1 );
+	invariant_constants = vector_t<TypeParam>::Zero( 1 );
 	invariant_constraints( 0, 0 ) = -1;
 	invariant_constants << -4;
-	loc23->setInvariant({invariant_constraints,invariant_constants});
-
+	loc23->setInvariant( { invariant_constraints, invariant_constants } );
 
 	// create transitions
 	auto* t1 = loc11->createTransition( loc12 );
@@ -364,45 +362,45 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariables ) {
 	auto* t5 = loc22->createTransition( loc23 );
 	auto* t6 = loc23->createTransition( loc22 );
 
-	matrix_t<TypeParam> guard_constraints = matrix_t<TypeParam>::Zero(1,1);
-	guard_constraints(0,0) = -5;
-	vector_t<TypeParam> guard_constants = vector_t<TypeParam>::Zero(1);
+	matrix_t<TypeParam> guard_constraints = matrix_t<TypeParam>::Zero( 1, 1 );
+	guard_constraints( 0, 0 ) = -5;
+	vector_t<TypeParam> guard_constants = vector_t<TypeParam>::Zero( 1 );
 	guard_constants << -1;
-	t1->setGuard({guard_constraints,guard_constants});
+	t1->setGuard( { guard_constraints, guard_constants } );
 
-	guard_constraints = matrix_t<TypeParam>::Zero(1,1);
-	guard_constraints(0,0) = 1;
-	guard_constants = vector_t<TypeParam>::Zero(1);
+	guard_constraints = matrix_t<TypeParam>::Zero( 1, 1 );
+	guard_constraints( 0, 0 ) = 1;
+	guard_constants = vector_t<TypeParam>::Zero( 1 );
 	guard_constants << 0;
-	t2->setGuard({guard_constraints,guard_constants});
+	t2->setGuard( { guard_constraints, guard_constants } );
 
-	guard_constraints = matrix_t<TypeParam>::Zero(2,1);
-	guard_constraints(0,0) = 1;
-	guard_constraints(1,0) = -1;
-	guard_constants = vector_t<TypeParam>::Zero(2);
+	guard_constraints = matrix_t<TypeParam>::Zero( 2, 1 );
+	guard_constraints( 0, 0 ) = 1;
+	guard_constraints( 1, 0 ) = -1;
+	guard_constants = vector_t<TypeParam>::Zero( 2 );
 	guard_constants << 1, -1;
-	t3->setGuard({guard_constraints,guard_constants});
+	t3->setGuard( { guard_constraints, guard_constants } );
 
-	guard_constraints = matrix_t<TypeParam>::Zero(2,1);
-	guard_constraints(0,0) = 1;
-	guard_constraints(1,0) = -1;
-	guard_constants = vector_t<TypeParam>::Zero(2);
+	guard_constraints = matrix_t<TypeParam>::Zero( 2, 1 );
+	guard_constraints( 0, 0 ) = 1;
+	guard_constraints( 1, 0 ) = -1;
+	guard_constants = vector_t<TypeParam>::Zero( 2 );
 	guard_constants << 1, -1;
-	t4->setGuard({guard_constraints,guard_constants});
+	t4->setGuard( { guard_constraints, guard_constants } );
 
-	guard_constraints = matrix_t<TypeParam>::Zero(2,1);
-	guard_constraints(0,0) = 1;
-	guard_constraints(1,0) = -1;
-	guard_constants = vector_t<TypeParam>::Zero(2);
+	guard_constraints = matrix_t<TypeParam>::Zero( 2, 1 );
+	guard_constraints( 0, 0 ) = 1;
+	guard_constraints( 1, 0 ) = -1;
+	guard_constants = vector_t<TypeParam>::Zero( 2 );
 	guard_constants << 4, -4;
-	t5->setGuard({guard_constraints,guard_constants});
+	t5->setGuard( { guard_constraints, guard_constants } );
 
-	guard_constraints = matrix_t<TypeParam>::Zero(2,1);
-	guard_constraints(0,0) = 1;
-	guard_constraints(1,0) = -1;
-	guard_constants = vector_t<TypeParam>::Zero(2);
+	guard_constraints = matrix_t<TypeParam>::Zero( 2, 1 );
+	guard_constraints( 0, 0 ) = 1;
+	guard_constraints( 1, 0 ) = -1;
+	guard_constants = vector_t<TypeParam>::Zero( 2 );
 	guard_constants << -4, 4;
-	t6->setGuard({guard_constraints,guard_constants});
+	t6->setGuard( { guard_constraints, guard_constants } );
 
 	auto res = hypro::parallelCompose( ha1, ha2, { { "a", { loc11, loc12 } } } );
 
