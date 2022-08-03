@@ -239,10 +239,6 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, labelledTransitions ) {
 
 	auto res = ha1 || ha2;
 
-	hypro::plotting::plot( ha1, "ha1" );
-	hypro::plotting::plot( ha2, "ha2" );
-	hypro::plotting::plot( res, "res" );
-
 	EXPECT_EQ( 3, res.getVariables().size() );
 	ASSERT_EQ( 2, res.getLocations().size() );
 	std::vector<Label> expectedLabels{ Label( "label1" ) };
@@ -291,10 +287,6 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariablesAndlabelledTra
 	t4->setLabels( { Label{ "label2" } } );
 
 	auto res = hypro::parallelCompose( ha1, ha2, { { "a", { loc11, loc12 } }, { "b", { loc11, loc12 } } } );
-
-	hypro::plotting::plot( ha1, "ha1" );
-	hypro::plotting::plot( ha2, "ha2" );
-	hypro::plotting::plot( res, "res" );
 
 	EXPECT_EQ( 2, res.getVariables().size() );
 	ASSERT_EQ( 2, res.getLocations().size() );
@@ -413,10 +405,6 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariables ) {
 	t6->setGuard({guard_constraints,guard_constants});
 
 	auto res = hypro::parallelCompose( ha1, ha2, { { "a", { loc11, loc12 } } } );
-
-	hypro::plotting::plot( ha1, "ha1" );
-	hypro::plotting::plot( ha2, "ha2" );
-	hypro::plotting::plot( res, "res" );
 
 	EXPECT_EQ( 1, res.getVariables().size() );
 	ASSERT_EQ( 6, res.getLocations().size() );
