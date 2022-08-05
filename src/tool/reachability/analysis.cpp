@@ -61,10 +61,8 @@ std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automat
 	return plotData;
 }
 
-
-
 template <typename LTIRep>
-std::vector<PlotData<FullState>> decompositional_analyze ( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting, std::size_t clockCount ) {
+std::vector<PlotData<FullState>> decompositional_analyze( HybridAutomaton<Number>& decomposedHa, Decomposition& decomposition, Settings setting, std::size_t clockCount ) {
 	START_BENCHMARK_OPERATION( "Verification" );
 	using Number = typename LTIRep::NumberType;
 	using SingularRep = hypro::VPolytope<Number>;
@@ -251,7 +249,7 @@ struct SingularDispatcher {
 AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, PreprocessingInformation information, bool urgency_cegar ) {
 	if ( urgency_cegar ) {
 		return { dispatchUrgency<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
-																			setting.strategy().front().representation_setting, UrgencyCEGARDispatcher{}, automaton, setting ) };
+																		   setting.strategy().front().representation_setting, UrgencyCEGARDispatcher{}, automaton, setting ) };
 	}
 	if ( information.decomposition.subspaces.size() > 1 ) {
 		// decompositional analysis
@@ -266,7 +264,7 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, P
 		case DynamicType::linear:
 			if ( urgency_cegar ) {
 				return { dispatchUrgency<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
-																			setting.strategy().front().representation_setting, UrgencyCEGARDispatcher{}, automaton, setting ) };
+																				   setting.strategy().front().representation_setting, UrgencyCEGARDispatcher{}, automaton, setting ) };
 			} else if ( setting.strategy().size() == 1 ) {
 				return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
 																			setting.strategy().front().representation_setting, LTIDispatcher{}, automaton, setting ) };
@@ -276,7 +274,7 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, P
 			break;
 		case DynamicType::rectangular: {
 			// no dispatch for rectangular automata, representation and setting are fixed
-			//return { rectangular_analyze<hypro::State<Number, CarlPolytope<Number>>>( automaton, setting ) };
+			// return { rectangular_analyze<hypro::State<Number, CarlPolytope<Number>>>( automaton, setting ) };
 			assert( false );
 			[[fallthrough]];
 		}
@@ -289,7 +287,6 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, P
 			return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
 																		setting.strategy().front().representation_setting, SingularDispatcher{}, automaton, setting ) };
 	*/
-			[[fallthrough]];
 		}
 		case DynamicType::timed:
 			[[fallthrough]];
@@ -298,7 +295,15 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, P
 		case DynamicType::mixed:
 			assert( false && "specialized analysis not implemented yet." );
 		default:
-			assert( false && "No analyzer selected." );
+			// TODO workaround, currently
+			if ( setting.strategy().size() == 1 ) {
+				return { dispatch<hydra::Number, Converter<hydra::Number>>( setting.strategy().front().representation_type,
+																			setting.strategy().front().representation_setting, LTIDispatcher{}, automaton, setting ) };
+			} else {
+				return { cegar_analyze( automaton, setting ) };
+			}
+			break;
+			[[fallthrough]];
 			break;
 	}
 	throw std::invalid_argument( "Invalid automaton type." );

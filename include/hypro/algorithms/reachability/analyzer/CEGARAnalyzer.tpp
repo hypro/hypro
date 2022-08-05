@@ -3,6 +3,7 @@
 
 #include "../../../representations/GeometricObjectBase.h"
 #include "../../../util/combine.h"
+#include "../../../util/typetraits.h"
 #include "CEGARAnalyzer.h"
 
 namespace hypro::detail {

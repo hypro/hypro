@@ -11,7 +11,7 @@ run_benchmark() {
     $TOOL_PATH $1 > mypipe &
     while IFS= read -r line
     do
-        [[ $line =~ 'Verification: '([0-9]*\.[0-9]*)'s' ]] && runningTime=${BASH_REMATCH[1]}
+        [[ $line =~ 'Verification: '([0-9]*\.[0-9]*)' s' ]] && runningTime=${BASH_REMATCH[1]}
         [[ $line =~ 'The model is safe.' ]] && safe=${BASH_REMATCH[0]}
         #echo $line
     done < mypipe

@@ -12,30 +12,31 @@ using DefaultRepresentations =
 	  TypeList<
 			RepresentationCombinations<
 				  BoxT, BoxLinearOptimizationOn, BoxLinearOptimizationOff, BoxIntervalArithmeticOff, BoxAllOff>,
-			//RepresentationCombinations<
+			// RepresentationCombinations<
 			//	  CarlPolytopeT, CarlPolytopeSetting>,
 			RepresentationCombinations<
 				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
 			RepresentationCombinations<
 				  VPolytopeT, VPolytopeSetting>,
 			RepresentationCombinations<
-				  StarsetT, StarsetDefault>/*
+				  StarsetT, StarsetDefault>,
 			RepresentationCombinations<
 				  SupportFunctionT, SupportFunctionSetting, NoBoxReduction, NoBoxDetection, NoTrafoReduction, NoReduction, PolytopeSupportFunctionSetting>,
 			RepresentationCombinations<
-				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic>,
-			RepresentationCombinations<
-				  TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>*/>;
+				  SupportFunctionNewT, SupportFunctionNewDefault, SupportFunctionNewMorePrecision, SupportFunctionNewNoReduction, SupportFunctionNewLeGuernic> /*,
+			 RepresentationCombinations<
+				   TemplatePolyhedronT, TemplatePolyhedronDefault, OctagonShape>*/
+			>;
 
 using PolytopalRepresentations =
 	  TypeList<
-			//RepresentationCombinations<
+			// RepresentationCombinations<
 			//	  CarlPolytopeT, CarlPolytopeSetting>,
 			RepresentationCombinations<
 				  HPolytopeT, HPolytopeSetting, HPolytopeOptimizerCaching>,
 			RepresentationCombinations<
 				  VPolytopeT, VPolytopeSetting>
-			//RepresentationCombinations<
+			// RepresentationCombinations<
 			//	  TemplatePolyhedronT, TemplatePolyhedronDefault>
 			>;
 
@@ -45,7 +46,6 @@ using SetMinusRepresentations =
 				  BoxT, BoxLinearOptimizationOn, BoxLinearOptimizationOff, BoxIntervalArithmeticOff, BoxAllOff>,
 			RepresentationCombinations<
 				  HPolytopeT, HPolytopeSetting>>;
-
 
 template <class Number, class Converter>
 using RepresentationsList = flattenRepresentations<Number, Converter, DefaultRepresentations>;

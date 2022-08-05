@@ -856,24 +856,24 @@ std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number
 
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::projectOut( const std::vector<std::size_t>& dimensions, bool viaLinearTransformation ) const {
-    TRACE("hypro.representations.HPolytope", "out dimensions " << dimensions);
-    if (dimensions.empty() || size() == 0) {
-        return *this;
-    }
-    if (this->empty()) {
-        WARN("hypro", "Projection of the empty set, do not project.")
-        return *this;
-    }
+	TRACE( "hypro.representations.HPolytope", "out dimensions " << dimensions );
+	if ( dimensions.empty() || size() == 0 ) {
+		return *this;
+	}
+	if ( this->empty() ) {
+		WARN( "hypro", "Projection of the empty set, do not project." )
+		return *this;
+	}
 
-    if (viaLinearTransformation) {
-        // projection by means of a linear transformation
-        matrix_t<Number> projectionMatrix = matrix_t<Number>::Identity(this->dimension(), this->dimension());
-        for (auto i: dimensions) {
-            projectionMatrix(i, i) = 0;
-        }
-        // TODO remove empty cols which were projected out
-        return this->linearTransformation(projectionMatrix);
-    } else {
+	if ( viaLinearTransformation ) {
+		// projection by means of a linear transformation
+		matrix_t<Number> projectionMatrix = matrix_t<Number>::Identity( this->dimension(), this->dimension() );
+		for ( auto i : dimensions ) {
+			projectionMatrix( i, i ) = 0;
+		}
+		// TODO remove empty cols which were projected out
+		return this->linearTransformation( projectionMatrix );
+	} else {
 		auto [newConstraints, newConstants] = eliminateCols( this->matrix(), this->vector(), dimensions, false );
 		return { newConstraints, newConstants };
 	}
@@ -1074,6 +1074,9 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const Point<Number>& poin
 
 template <typename Number, typename Converter, class Setting>
 bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number>& vec ) const {
+	if ( this->empty() ) {
+		return false;
+	}
 	if ( Setting::CACHE_BOUNDING_BOX ) {
 		if ( !mBox ) {
 			// update cache
@@ -1390,12 +1393,12 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 
 template <typename Number, typename Converter, class Setting>
 std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus2( const HPolytopeT<Number, Converter, Setting>& minus ) const {
-	if (this->dimension()!=minus.dimension()){
+	if ( this->dimension() != minus.dimension() ) {
 		std::vector<HPolytopeT<Number, Converter, Setting>> result;
 		// std::cout << this->dimension() << " dimensionsvergleich " << minus.dimension() << std::endl;
 		return result;
 	}
-	
+
 	HPolytopeT<Number, Converter, Setting> minuspoly( minus.matrix(), minus.vector() );
 	minuspoly = minuspoly.removeRedundancy();
 	hypro::matrix_t<Number> matrix = this->matrix();
@@ -1421,7 +1424,7 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 		// create constraints as matrix and vector
 		for ( long int t = 0; t < matrix2.rows(); t++ ) {
 			for ( long int v = 0; v < matrix2.cols(); v++ ) {
-				//std::cout << "x, t, v:" << x << t << v << std::endl;
+				// std::cout << "x, t, v:" << x << t << v << std::endl;
 				checkmatrix( t, v ) = matrix2.row( t )( v );
 			}
 			checkvector( t ) = constants2( t );
@@ -1456,7 +1459,7 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 			result.push_back( workpoly );
 			copy.insert( h );
 		} else {
-			//std::cout << "not helpful" << std::endl;
+			// std::cout << "not helpful" << std::endl;
 		}
 	}
 	return result;

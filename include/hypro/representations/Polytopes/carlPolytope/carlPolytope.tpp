@@ -105,24 +105,24 @@ CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setti
 			matrix_t<Number> trafo = matrix_t<Number>::Zero( dim, dim * 2 );
 			trafo.block( 0, 0, dim, dim ) = A;
 			trafo.block( 0, dim, dim, dim ) = -matrix_t<Number>::Identity( dim, dim );
-			FormulasT<Number> single_translations;
+			FormulasT<tNumber> single_translations;
 			for ( Eigen::Index row = 0; row < dim; ++row ) {
-				single_translations.push_back( FormulaT<Number>{ rowToConstraint<Number>( Vector( trafo.row( row ) ), 0, carl::Relation::EQ ) } );
+				single_translations.push_back( FormulaT<tNumber>{ rowToConstraint<tNumber, Number>( vector_t<Number>( trafo.row( row ) ), Number( 0 ), carl::Relation::EQ ) } );
 			}
-			FormulaT<Number> translation_formula{ carl::FormulaType::AND, single_translations };
-			problem_description = FormulaT<Number>( carl::FormulaType::AND, problem_description, translation_formula );
+			FormulaT<tNumber> translation_formula{ carl::FormulaType::AND, single_translations };
+			problem_description = FormulaT<tNumber>( carl::FormulaType::AND, problem_description, translation_formula );
 			// assemble variables
 			std::vector<carl::Variable> variables;
 			for ( std::size_t i = 0; i < dim; ++i ) {
 				variables.push_back( VariablePool::getInstance().carlVarByIndex( i ) );
 			}
 
-			FourierMotzkinQE<Number> qe_method{ problem_description, QEQuery{ { QuantifierType::EXISTS, variables } } };
+			FourierMotzkinQE<tNumber> qe_method{ problem_description, QEQuery{ { QuantifierType::EXISTS, variables } } };
 			auto result = qe_method.eliminateQuantifiers();
 
 			// substitute variables back
 			for ( std::size_t i = 0; i < dim; ++i ) {
-				result = result.substitute( VariablePool::getInstance().carlVarByIndex( dim + i ), VariablePool::getInstance().carlVarByIndex( i ) );
+				result = result.substitute( VariablePool::getInstance().carlVarByIndex( dim + i ), FormulaT<tNumber>::PolynomialType( VariablePool::getInstance().carlVarByIndex( i ) ) );
 			}
 			return CarlPolytopeT{ result, dim };
 		}
