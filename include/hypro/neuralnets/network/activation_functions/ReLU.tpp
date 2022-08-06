@@ -19,12 +19,12 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::stepReLU( int i, std::vector<h
 		Number lb = -eval_low_result.supportValue + center[i];
 		Number ub = eval_high_result.supportValue + center[i];
 
-		if ( lb >= 0 ) {
+		if ( lb >= -1e-8 ) {
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, basis, politope );
 			result.push_back( res_star );
 			continue;
 		}
-		if ( ub <= 0 ) {
+		if ( ub <= +1e-8 ) {
 			hypro::matrix_t<Number> I_i = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			I_i( i, i ) = 0.0;
 			basis = I_i * basis;
@@ -58,8 +58,8 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::stepReLU( int i, std::vector<h
 		basis_2 = I_i * basis_2;
 		hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, politope_2 );
 
-		result.push_back( star_2 );
 		result.push_back( star_1 );
+		result.push_back( star_2 );
 	}
 
 	return result;
@@ -86,12 +86,12 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, std::ve
 
 		// std::cout << "Star bounds = [" << lb << ", " << ub << "]" << std::endl;
 
-		if ( lb >= 0 ) {
+		if ( lb >= -1e-8 ) {
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
 			result.push_back( res_star );
 			continue;
 		}
-		if ( ub <= 0 ) {
+		if ( ub <= +1e-8 ) {
 			hypro::matrix_t<Number> I_i = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			I_i( i, i ) = 0.0;
 			basis = I_i * basis;
@@ -138,8 +138,6 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, std::ve
 		basis.conservativeResize( basis.rows(), basis.cols() + 1 );
 		basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
 		basis( i, basis.cols() - 1 ) = 1;
-
-		// std::cout << "Creating new star" << std::endl;
 
 		hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
 		result.push_back( res_star );
