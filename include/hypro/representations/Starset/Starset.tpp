@@ -274,15 +274,12 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 	vector_t<Number> normal = hspace.normal();
 	Number offset = hspace.offset();
 
-	// multiply each row of the generator with the corresponding element from the normal vector and then sum up each column individually
-	generator = generator.array().colwise() * normal.array();
-	vector_t<Number> scaled_sum = generator.colwise().sum();
-
 	// using the result we will add one more new constraint, i.e. one more row to the shape matrix and one more element to the limits vector
 	shape.conservativeResize( shape.rows() + 1, shape.cols() );
 	limits.conservativeResize( shape.rows() + 1, 1 );
 
-	shape.row( shape.rows() - 1 ) = scaled_sum;
+	// multiply each row of the generator with the corresponding element from the normal vector and then sum up each column individually
+	shape.row( shape.rows() - 1 ) = normal.transpose() * generator;
 	limits[shape.rows() - 1] = offset - normal.dot( center );
 
 	return StarsetT<Number, Converter, Setting>( mCenter, shape, limits, mGenerator );
@@ -311,12 +308,8 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 		vector_t<Number> normal = _mat.row( i );
 		Number offset = _vec[i];
 
-		// multiply each row of the generator with the corresponding element from the normal vector and then sum up each column individually
-		matrix_t<Number> new_generator = generator.array().colwise() * normal.array();
-		vector_t<Number> scaled_sum = new_generator.colwise().sum();
-
 		// add the new constraints to the shape matrix and limits vector
-		shape.row( shape.rows() - _mat.rows() + i ) = scaled_sum;
+		shape.row( shape.rows() - _mat.rows() + i ) = normal.transpose() * generator;;
 		limits[shape.rows() - _mat.rows() + i] = offset - normal.dot( center );
 	}
 
