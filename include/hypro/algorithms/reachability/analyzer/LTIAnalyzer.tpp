@@ -14,19 +14,19 @@
 
 namespace hypro {
 
-template <typename State, typename Heuristics, typename Multithreading>
-auto LTIAnalyzer<State, Heuristics, Multithreading>::run() -> LTIResult {
+template <typename State, typename Automaton, typename Heuristics, typename Multithreading>
+auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResult {
 	if ( std::is_same_v<Multithreading, UseMultithreading> ) {
 		mIdle = std::vector( mNumThreads, false );
 		for ( int i = 0; i < mNumThreads; i++ ) {
 			mThreads.push_back( std::thread( [this, i]() {
 				TimeTransformationCache<Number> transformationCache;
-				LTIWorker<State> worker{
+				LTIWorker<State, Automaton> worker{
 					  *mHybridAutomaton,
 					  mParameters,
 					  mFixedParameters.localTimeHorizon,
 					  transformationCache };
-				ReachTreeNode<State>* currentNode;
+				ReachTreeNode<State, LocationT>* currentNode;
 				while ( !mTerminate ) {
 					{
 						std::unique_lock<std::mutex> lock( mQueueMutex );
@@ -60,7 +60,7 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::run() -> LTIResult {
 		shutdown();
 	} else {
 		TimeTransformationCache<Number> transformationCache;
-		LTIWorker<State> worker{
+		LTIWorker<State, Automaton> worker{
 			  *mHybridAutomaton,
 			  mParameters,
 			  mFixedParameters.localTimeHorizon,
@@ -77,8 +77,8 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::run() -> LTIResult {
 	}
 }
 
-template <typename State, typename Heuristics, typename Multithreading>
-auto LTIAnalyzer<State, Heuristics, Multithreading>::processNode( LTIWorker<State>& worker, ReachTreeNode<State>* node, TimeTransformationCache<Number>& transformationCache ) -> LTIResult {
+template <typename State, typename Automaton, typename Heuristics, typename Multithreading>
+auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::processNode( LTIWorker<State, Automaton>& worker, ReachTreeNode<State, LocationT>* node, TimeTransformationCache<Number>& transformationCache ) -> LTIResult {
 	REACHABILITY_RESULT safetyResult;
 
 	// set bounding box required for fixed-point test
@@ -126,7 +126,7 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::processNode( LTIWorker<Stat
 	}
 
 	// collect potential Zeno transitions
-	std::vector<const Transition<typename State::NumberType>*> ZenoTransitions{};
+	std::vector<const TransitionT*> ZenoTransitions{};
 	if ( mParameters.detectZenoBehavior && node->getParent() != nullptr ) {
 		// ZenoTransitions = getZenoTransitions( currentNode->getParent(), currentNode );
 		ZenoTransitions = getZenoTransitions( node );
@@ -154,7 +154,7 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::processNode( LTIWorker<Stat
 				timelock = false;
 			}
 			// in any case add node to the search tree
-			ReachTreeNode<State>& childNode = node->addChild( valuationSet, globalDuration, transition );
+			ReachTreeNode<State, LocationT>& childNode = node->addChild( valuationSet, globalDuration, transition );
 			// if desired, try to detect fixed-point
 			bool fixedPointReached = mParameters.detectJumpFixedPoints;
 			auto boundingBox = std::vector<carl::Interval<Number>>{};
