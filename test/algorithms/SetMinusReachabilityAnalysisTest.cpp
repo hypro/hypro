@@ -1,17 +1,10 @@
 /*
- * Copyright (c) 2021.
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
- * Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "test/defines.h"
@@ -63,7 +56,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		loc0->setInvariant( hypro::Condition( invariantConstraints0, invariantOffsets0 ) );
 
 		// create transition
-		hypro::Transition<Number> trans01{ loc0.get(), loc0.get() };
+		hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType> trans01{ loc0.get(), loc0.get() };
 		// create guard
 		Matrix guardConstraints01 = Matrix::Zero( 4, 2 );
 		Vector guardOffsets01 = Vector::Zero( 4 );
@@ -88,7 +81,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// make transition urgent
 		trans01.setUrgent();
 		// assign transition to location
-		loc0->addTransition( std::make_unique<hypro::Transition<Number>>( trans01 ) );
+		loc0->addTransition( std::make_unique<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>>( trans01 ) );
 
 		// create initial configuration
 		Matrix initialConstraints0 = Matrix::Zero( 4, 2 );
@@ -164,7 +157,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		south_west->setInvariant( hypro::Condition( invariantmat, invariantoff ) );
 
 		// create transitions
-		hypro::Transition<Number>* north_east_north_west = north_east->createTransition( north_west );
+		auto* north_east_north_west = north_east->createTransition( north_west );
 		// create guard
 		Matrix guardmat_ne_nw = Matrix::Zero( 1, 2 );
 		Vector guardoff_ne_nw = Vector::Zero( 1 );
@@ -183,7 +176,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// north_east_north_west->setAggregation( hypro::Aggregation::aggregation );
 		// north_east->addTransition( std::make_unique<hypro::Transition<Number>>( north_east_north_west ) );
 
-		hypro::Transition<Number>* north_west_north_east = north_west->createTransition( north_east );
+		auto* north_west_north_east = north_west->createTransition( north_east );
 		// create guard
 		Matrix guardmat_nw_ne = Matrix::Zero( 1, 2 );
 		Vector guardoff_nw_ne = Vector::Zero( 1 );
@@ -202,7 +195,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		north_west_north_east->setAggregation( hypro::Aggregation::aggregation );
 		// north_west->addTransition( std::make_unique<hypro::Transition<Number>>( north_west_north_east ) );
 
-		hypro::Transition<Number>* north_east_south_east = north_east->createTransition( south_east );
+		auto* north_east_south_east = north_east->createTransition( south_east );
 		// create guard
 		Matrix guardmat_ne_se = Matrix::Zero( 1, 2 );
 		Vector guardoff_ne_se = Vector::Zero( 1 );
@@ -221,7 +214,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// north_east_south_east->setAggregation( hypro::Aggregation::aggregation );
 		// north_east->addTransition( std::make_unique<hypro::Transition<Number>>( north_east_south_east ) );
 
-		hypro::Transition<Number>* south_east_north_east = south_east->createTransition( north_east );
+		auto* south_east_north_east = south_east->createTransition( north_east );
 		// create guard
 		Matrix guardmat_se_ne = Matrix::Zero( 1, 2 );
 		Vector guardoff_se_ne = Vector::Zero( 1 );
@@ -240,7 +233,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		south_east_north_east->setAggregation( hypro::Aggregation::aggregation );
 		// south_east->addTransition( std::make_unique<hypro::Transition<Number>>( south_east_north_east ) );
 
-		hypro::Transition<Number>* north_west_south_west = north_west->createTransition( south_west );
+		auto* north_west_south_west = north_west->createTransition( south_west );
 		// create guard
 		Matrix guardmat_nw_sw = Matrix::Zero( 1, 2 );
 		Vector guardoff_nw_sw = Vector::Zero( 1 );
@@ -259,7 +252,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		north_west_south_west->setAggregation( hypro::Aggregation::aggregation );
 		// north_west->addTransition( std::make_unique<hypro::Transition<Number>>( north_west_south_west ) );
 
-		hypro::Transition<Number>* south_west_north_west = south_west->createTransition( north_west );
+		auto* south_west_north_west = south_west->createTransition( north_west );
 		// create guard
 		Matrix guardmat_sw_nw = Matrix::Zero( 1, 2 );
 		Vector guardoff_sw_nw = Vector::Zero( 1 );
@@ -278,7 +271,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		south_west_north_west->setAggregation( hypro::Aggregation::aggregation );
 		// south_west->addTransition( std::make_unique<hypro::Transition<Number>>( south_west_north_west ) );
 
-		hypro::Transition<Number>* south_east_south_west = south_east->createTransition( south_west );
+		auto* south_east_south_west = south_east->createTransition( south_west );
 		// create guard
 		Matrix guardmat_se_sw = Matrix::Zero( 1, 2 );
 		Vector guardoff_se_sw = Vector::Zero( 1 );
@@ -297,7 +290,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		south_east_south_west->setAggregation( hypro::Aggregation::aggregation );
 		// south_east->addTransition( std::make_unique<hypro::Transition<Number>>( south_east_south_west ) );
 
-		hypro::Transition<Number>* south_west_south_east = south_west->createTransition( south_east );
+		auto* south_west_south_east = south_west->createTransition( south_east );
 		// create guard
 		Matrix guardmat_sw_se = Matrix::Zero( 1, 2 );
 		Vector guardoff_sw_se = Vector::Zero( 1 );
@@ -316,7 +309,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		south_west_south_east->setAggregation( hypro::Aggregation::aggregation );
 		// south_west->addTransition( std::make_unique<hypro::Transition<Number>>( south_west_south_east ) );
 
-		hypro::Transition<Number>* urgent_ne_nw = north_east->createTransition( north_west );
+		auto* urgent_ne_nw = north_east->createTransition( north_west );
 		// create guard
 		Matrix urgent_guard_mat = Matrix::Zero( 4, 2 );
 		Vector urgent_guard_off = Vector::Zero( 4 );
@@ -342,7 +335,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		urgent_ne_nw->setUrgent();
 		// north_east->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_ne_nw ) );
 
-		hypro::Transition<Number>* urgent_nw_ne = north_west->createTransition( north_east );
+		auto* urgent_nw_ne = north_west->createTransition( north_east );
 		// assign guard to transition
 		urgent_nw_ne->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// create reset
@@ -357,7 +350,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		urgent_nw_ne->setUrgent();
 		// north_west->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_nw_ne ) );
 
-		hypro::Transition<Number>* urgent_ne_se = north_east->createTransition( south_east );
+		auto* urgent_ne_se = north_east->createTransition( south_east );
 		// assign guard to transition
 		Matrix urgent_guard_mat_test = Matrix::Zero( 4, 2 );
 		Vector urgent_guard_off_test = Vector::Zero( 4 );
@@ -382,7 +375,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		urgent_ne_se->setUrgent();
 		// north_east->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_ne_se ) );
 
-		hypro::Transition<Number>* urgent_se_ne = south_east->createTransition( north_east );
+		auto* urgent_se_ne = south_east->createTransition( north_east );
 		// assign guard to transition
 		urgent_se_ne->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// create reset
@@ -397,28 +390,28 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		urgent_se_ne->setUrgent();
 		// south_east->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_se_ne ) );
 
-		hypro::Transition<Number>* urgent_nw_sw = north_west->createTransition( south_west );
+		auto* urgent_nw_sw = north_west->createTransition( south_west );
 		urgent_nw_sw->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// urgent_nw_sw.setReset( hypro::Reset<Number>( urgent_resetmat_se_ne, urgent_resetoff_se_ne ) );
 		urgent_nw_sw->setAggregation( hypro::Aggregation::aggregation );
 		urgent_nw_sw->setUrgent();
 		// north_west->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_nw_sw ) );
 
-		hypro::Transition<Number>* urgent_sw_nw = south_west->createTransition( north_west );
+		auto* urgent_sw_nw = south_west->createTransition( north_west );
 		urgent_sw_nw->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// urgent_sw_nw.setReset( hypro::Reset<Number>( urgent_resetmat_se_ne, urgent_resetoff_se_ne ) );
 		urgent_sw_nw->setAggregation( hypro::Aggregation::aggregation );
 		urgent_sw_nw->setUrgent();
 		// south_west->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_sw_nw ) );
 
-		hypro::Transition<Number>* urgent_se_sw = south_east->createTransition( south_west );
+		auto* urgent_se_sw = south_east->createTransition( south_west );
 		urgent_se_sw->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// urgent_se_sw.setReset( hypro::Reset<Number>( urgent_resetmat_se_ne, urgent_resetoff_se_ne ) );
 		urgent_se_sw->setAggregation( hypro::Aggregation::aggregation );
 		urgent_se_sw->setUrgent();
 		// south_east->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_se_sw ) );
 
-		hypro::Transition<Number>* urgent_sw_se = south_west->createTransition( south_east );
+		auto* urgent_sw_se = south_west->createTransition( south_east );
 		urgent_sw_se->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// urgent_sw_se.setReset( hypro::Reset<Number>( urgent_resetmat_se_ne, urgent_resetoff_se_ne ) );
 		urgent_sw_se->setAggregation( hypro::Aggregation::aggregation );
@@ -448,8 +441,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 
 TEST_F( SetMinusReachabilityAnalysisTest, LawnMowerAutomatonBoxes ) {
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
-		  hypro::makeRoots<hypro::Box<Number>>( this->lawnMower );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->lawnMower );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -468,8 +460,8 @@ TEST_F( SetMinusReachabilityAnalysisTest, LawnMowerAutomatonBoxes ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto analyzer = hypro::LTISetMinusAnalyzer<hypro::Box<Number>>( this->lawnMower, settings.fixedParameters(),
-																	settings.strategy().front(), roots );
+	auto analyzer = hypro::LTISetMinusAnalyzer<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->lawnMower, settings.fixedParameters(),
+																									settings.strategy().front(), roots );
 	analyzer.run();
 	/*auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->lawnMower, settings.fixedParameters(),
 																   settings.strategy().front(), roots );
@@ -492,8 +484,7 @@ TEST_F( SetMinusReachabilityAnalysisTest, LawnMowerAutomatonBoxes ) {
 
 TEST_F( SetMinusReachabilityAnalysisTest, LawnMowerAutomatonPolytopes ) {
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::HPolytope<Number>>> roots =
-		  hypro::makeRoots<hypro::HPolytope<Number>>( this->lawnMower );
+	auto roots = hypro::makeRoots<hypro::HPolytope<Number>>( this->lawnMower );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -512,8 +503,8 @@ TEST_F( SetMinusReachabilityAnalysisTest, LawnMowerAutomatonPolytopes ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::ReachUrgency<hypro::HPolytope<Number>>( this->lawnMower, settings.fixedParameters(),
-																				settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::ReachUrgency<hypro::HPolytope<Number>, hypro::HybridAutomaton<Number>>( this->lawnMower, settings.fixedParameters(),
+																												settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();

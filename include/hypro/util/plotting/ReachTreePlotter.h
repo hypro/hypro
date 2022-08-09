@@ -39,10 +39,10 @@ namespace hypro::plotting {
  * @details ALlows to plot a complete reachtree or a path to a node. Nodes in the plot can be highlighted.
  * @tparam Representation State set representation type
  */
-template <typename Representation>
+template <typename Node>
 class ReachTreePlotter {
   public:
-	ReachTreePlotter( const std::vector<ReachTreeNode<Representation>>& roots )
+	ReachTreePlotter( const std::vector<Node>& roots )
 		: mRoots( roots )
 		, mSettings( { "rt_out", false } ) {}
 
@@ -50,14 +50,14 @@ class ReachTreePlotter {
 	 * @brief Plots the complete reachtree
 	 * @param highlights Nodes that should be highlighted in the plot
 	 */
-	void plot( const std::vector<ReachTreeNode<Representation>*>& highlights = {} );
+	void plot( const std::vector<Node*>& highlights = {} );
 
 	/**
 	 * @brief Plots the path to the passed node of a reachtree.
 	 * @param node The node
 	 * @param highlights Nodes that should be highlighted in the plot
 	 */
-	void plotPath( const ReachTreeNode<Representation>* node, const std::vector<ReachTreeNode<Representation>*>& highlights );
+	void plotPath( const Node* node, const std::vector<Node*>& highlights );
 
 	/**
 	 * Returns a reference to the internal plotting settings.
@@ -74,7 +74,7 @@ class ReachTreePlotter {
 	 * @param count An internal counter, should be increased for every call, used to ensure uniqueness.
 	 * @return
 	 */
-	std::string createName( const ReachTreeNode<Representation>* node, std::size_t count ) {
+	std::string createName( const Node* node, std::size_t count ) {
 		std::string name = "{ { n_" + std::to_string( count ) + "} | ";
 		name += " { location | ";
 		if ( node->getParent() == nullptr ) {
@@ -99,9 +99,9 @@ class ReachTreePlotter {
 		return name;
 	}
 
-	const std::vector<ReachTreeNode<Representation>>& mRoots;				  ///< Stores the roots of a reachtree, in case the full tree needs to be plotted.
-	std::map<const ReachTreeNode<Representation>*, Agnode_t*> mNodePointers;  ///< Internal cache for nodes
-	graphvizSettings mSettings;												  ///< Settings for plotting
+	const std::vector<Node>& mRoots;				 ///< Stores the roots of a reachtree, in case the full tree needs to be plotted.
+	std::map<const Node*, Agnode_t*> mNodePointers;	 ///< Internal cache for nodes
+	graphvizSettings mSettings;						 ///< Settings for plotting
 };
 
 }  // namespace hypro::plotting

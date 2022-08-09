@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /*
@@ -39,8 +39,8 @@ class ComposedLocation : public Location<Number> {
 	const HybridAutomatonComp<Number>& mAutomaton;					 ///< Reference to the original automaton this location is part of
 	std::map<std::string, std::vector<Location<Number>*>> mMasters;	 ///< Maps Variables to sets of locations in which the dynamics of this variable is overriding dynamics in other components
   public:
-	void
-	validate() const;
+	/// Helper function which converts a location-stub to a fully composed location
+	void validate() const;
 	/// constructor
 	ComposedLocation( const HybridAutomatonComp<Number>& automaton )
 		: mAutomaton( automaton ) {}
@@ -60,7 +60,10 @@ class ComposedLocation : public Location<Number> {
 		, mAutomaton( other.mAutomaton )
 		, mMasters( other.mMasters ) {
 	}
-
+	/// getter of indices of locations combined in this location
+	const std::vector<std::size_t>& getComponentLocationIndices() const {
+		return mCompositionals;
+	}
 	/// returns the number of subspaces
 	std::size_t getNumberSubspaces() const {
 		validate();
@@ -116,8 +119,8 @@ class ComposedLocation : public Location<Number> {
 		validate();
 		return Location<Number>::isUrgent();
 	}
-	/// getter for the validity flag
-	bool isValid() const {
+	/// getter to query whether the location is a stub or whether it is fully composed
+	inline bool isValid() const {
 		return mIsValid;
 	}
 	/// getter for the state space dimension
@@ -180,11 +183,14 @@ class HybridAutomatonComp {
 				 LOCALBADSTATES = 1,
 				 GLOBALBADSTATES = 2,
 				 VARIABLES = 3,
+				 LABELS = 4,
 				 Count };
 
   public:
-	using Locations = std::vector<ComposedLocation<Number>>;
-	using locationConditionMap = std::map<ComposedLocation<Number>, Condition<Number>>;
+	using LocationType = ComposedLocation<Number>;
+	using Locations = std::list<LocationType>;
+	using TransitionType = Transition<Number, LocationType>;
+	using locationConditionMap = std::map<LocationType*, Condition<Number>>;
 	using conditionVector = std::vector<Condition<Number>>;
 	using variableVector = std::vector<std::string>;
 
@@ -196,10 +202,11 @@ class HybridAutomatonComp {
 	mutable conditionVector mGlobalBadStates;		 /// The set of bad states which are not bound to any location.
 	mutable std::vector<std::string> mVariables;	 /// Cache for the variables of the composed automata.
 	mutable std::map<unsigned, std::vector<unsigned>> mSharedVars;
-	mutable std::vector<bool> mCachesValid = std::vector<bool>( CACHE::Count, false );		///< Set of flags used to indicate cache validity
-	mutable std::map<std::size_t, std::vector<std::size_t>> mGlobalToLocalVars;				///< Mapping from global var idx to local ones
-	mutable std::map<std::pair<std::size_t, std::size_t>, std::size_t> mLocalToGlobalVars;	///< Mapping from automaton and var idx (pair) to global var idx
-	mutable std::map<std::vector<std::size_t>, std::size_t> mComposedLocs;					///< Mapping from indices of components to the index in the location vector
+	mutable std::vector<bool> mCachesValid = std::vector<bool>( CACHE::Count, false );		 ///< Set of flags used to indicate cache validity
+	mutable std::map<std::size_t, std::vector<long int>> mGlobalToLocalVars;				 ///< Mapping from global var idx to local ones
+	mutable std::map<std::pair<std::size_t, long int>, std::size_t> mLocalToGlobalVars;		 ///< Mapping from automaton and var idx (pair) to global var idx
+	mutable std::map<std::vector<std::size_t>, typename Locations::iterator> mComposedLocs;	 ///< Mapping from indices of components to the index in the location vector
+	mutable std::set<Label> mLabels;														 /// Jump-synchronizationLabels
 
   public:
 	HybridAutomatonComp(){};
@@ -230,11 +237,11 @@ class HybridAutomatonComp {
 	 */
 	///@{
 	//* @return The set of locations. */
-	std::vector<Location<Number>*> getLocations() const;
+	std::vector<LocationType*> getLocations() const;
 	/// getter for a single location identified by its hash
-	Location<Number>* getLocation( const std::size_t hash ) const;
+	LocationType* getLocation( const std::size_t hash ) const;
 	/// getter for a single location identified by its name
-	Location<Number>* getLocation( const std::string& name ) const;
+	LocationType* getLocation( const std::string& name ) const;
 	//* @return The set of initial states. */
 	const locationConditionMap& getInitialStates() const;
 	//* @return The set of bad states bound to locations. */
@@ -246,7 +253,7 @@ class HybridAutomatonComp {
 	//* @return The vector of variables. */
 	const variableVector& getVariables() const;
 	//* @return The set of all labels. */
-	std::set<Label> getLabels() const;
+	const std::set<Label>& getLabels() const;
 	///@}
 
 	/**

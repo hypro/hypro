@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "test/defines.h"
 
 #include <gtest/gtest.h>
@@ -44,8 +53,8 @@ HybridAutomaton<Number> createHa() {
 	Condition<Number> g1( A1, b1 );
 	Reset<Number> r1{ Matrix::Identity( 2, 2 ), Vector::Zero( 2 ) };
 
-	std::unique_ptr<Transition<Number>> t0 =
-		  std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), g1, r1 );
+	auto t0 =
+		  std::make_unique<Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>>( uniqueLoc0.get(), uniqueLoc1.get(), g1, r1 );
 	t0->setUrgent();
 	t0->addLabel( Label( "t0" ) );
 	uniqueLoc0->addTransition( std::move( t0 ) );
@@ -58,8 +67,8 @@ HybridAutomaton<Number> createHa() {
 	Condition<Number> g2( A2, b2 );
 	Reset<Number> r2{ Matrix::Identity( 2, 2 ), Vector::Zero( 2 ) };
 
-	std::unique_ptr<Transition<Number>> t1 =
-		  std::make_unique<Transition<Number>>( uniqueLoc0.get(), uniqueLoc1.get(), g2, r2 );
+	auto t1 =
+		  std::make_unique<Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>>( uniqueLoc0.get(), uniqueLoc1.get(), g2, r2 );
 	t1->setUrgent();
 	t1->addLabel( Label( "t1" ) );
 	uniqueLoc0->addTransition( std::move( t1 ) );
@@ -92,7 +101,7 @@ TEST( UrgencyHandling, Cutoff ) {
 
 	// create dummy transition to hold guard
 	Location<Number> loc;
-	Transition<Number> trans( &loc, &loc );
+	Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType> trans( &loc, &loc );
 
 	ltiUrgencyHandler<VPolytope<Number>> urgencyHandler;
 	Vector p1( 2 ), p2( 2 ), p3( 2 ), p4( 2 );
@@ -124,7 +133,7 @@ TEST( UrgencyHandling, Cutoff ) {
 	vec << 1.5;
 	cond.setMatrix( mat );
 	cond.setVector( vec );
-	trans = Transition<Number>( &loc, &loc );
+	trans = Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>( &loc, &loc );
 	trans.setGuard( cond );
 	res = urgencyHandler.cutoff( square, &trans );
 
@@ -151,7 +160,7 @@ TEST( UrgencyHandling, Cutoff ) {
 	vec << -0.5, -0.5;
 	cond.setMatrix( mat );
 	cond.setVector( vec );
-	trans = Transition<Number>( &loc, &loc );
+	trans = Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>( &loc, &loc );
 	trans.setGuard( cond );
 	res = urgencyHandler.cutoff( cube, &trans );
 
@@ -181,7 +190,7 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
 	auto automaton = createHa<Number>();
 
 	auto l0 = automaton.getLocation( "l0" );
-	Transition<Number>*t0, *t1;
+	Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>*t0, *t1;
 	for ( auto const& t : l0->getTransitions() ) {
 		if ( t->getLabels()[0].getName() == "t0" ) t0 = t.get();
 		if ( t->getLabels()[0].getName() == "t1" ) t1 = t.get();
@@ -195,8 +204,8 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
 	analysisParameters.representation_type = Representation::type();
 
 	TimeTransformationCache<Number> cache{};
-	UrgencyCEGARWorker<Representation> worker( automaton, analysisParameters, 10, cache );
-	ReachTreeNode<Representation> node( l0, initialSet, carl::Interval<SegmentInd>( 0 ) );
+	UrgencyCEGARWorker<Representation, decltype( automaton )> worker( automaton, analysisParameters, 10, cache );
+	ReachTreeNode<Representation, typename decltype( automaton )::LocationType> node( l0, initialSet, carl::Interval<SegmentInd>( 0 ) );
 
 	node.getUrgencyRefinementLevels()[t0] = UrgencyRefinementLevel::SETDIFF;
 	node.getUrgencyRefinementLevels()[t1] = UrgencyRefinementLevel::FULL;
@@ -263,7 +272,7 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
 	auto automaton = createHa<Number>();
 
 	auto l0 = automaton.getLocation( "l0" );
-	Transition<Number>*t0, *t1;
+	Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>*t0, *t1;
 	for ( auto const& t : l0->getTransitions() ) {
 		if ( t->getLabels()[0].getName() == "t0" ) t0 = t.get();
 		if ( t->getLabels()[0].getName() == "t1" ) t1 = t.get();
@@ -279,8 +288,8 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
 
 	UrgencyCEGARSettings refinementSettings;
 	refinementSettings.refinementLevels = { UrgencyRefinementLevel::FULL, UrgencyRefinementLevel::SETDIFF };
-	UrgencyCEGARAnalyzer<Representation> analyzerNoBadStates( automaton, fixedParameters, analysisParameters,
-															  refinementSettings );
+	UrgencyCEGARAnalyzer<Representation, decltype( automaton )> analyzerNoBadStates( automaton, fixedParameters, analysisParameters,
+																					 refinementSettings );
 	auto analysisResult = analyzerNoBadStates.run();
 	auto roots = analyzerNoBadStates.getRoots();
 
@@ -294,8 +303,8 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
 	badStateMat << 1, 0, 0, -1;
 	badStateVec << 0.25, -0.75;
 	automaton.setGlobalBadStates( { Condition<Number>( badStateMat, badStateVec ) } );
-	UrgencyCEGARAnalyzer<Representation> analyzerBadReachable( automaton, fixedParameters, analysisParameters,
-															   refinementSettings );
+	UrgencyCEGARAnalyzer<Representation, decltype( automaton )> analyzerBadReachable( automaton, fixedParameters, analysisParameters,
+																					  refinementSettings );
 	analysisResult = analyzerBadReachable.run();
 	roots = analyzerBadReachable.getRoots();
 
@@ -313,8 +322,8 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
 	badStateVec << -4, -0.6;
 	automaton.setGlobalBadStates( { Condition<Number>( badStateMat, badStateVec ) } );
 	refinementSettings.heuristic = UrgencyRefinementHeuristic::CONSTRAINT_COUNT;
-	UrgencyCEGARAnalyzer<Representation> analyzerRefine1( automaton, fixedParameters, analysisParameters,
-														  refinementSettings );
+	UrgencyCEGARAnalyzer<Representation, decltype( automaton )> analyzerRefine1( automaton, fixedParameters, analysisParameters,
+																				 refinementSettings );
 	analysisResult = analyzerRefine1.run();
 	roots = analyzerRefine1.getRoots();
 
@@ -330,8 +339,8 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, Refinement ) {
 	EXPECT_EQ( UrgencyRefinementLevel::SETDIFF, roots[2]->getUrgencyRefinementLevels()[t1] );
 
 	refinementSettings.heuristic = UrgencyRefinementHeuristic::VOLUME;
-	UrgencyCEGARAnalyzer<Representation> analyzerRefine2( automaton, fixedParameters, analysisParameters,
-														  refinementSettings );
+	UrgencyCEGARAnalyzer<Representation, decltype( automaton )> analyzerRefine2( automaton, fixedParameters, analysisParameters,
+																				 refinementSettings );
 	analysisResult = analyzerRefine2.run();
 	roots = analyzerRefine2.getRoots();
 	// t1 has the larger volume so it should be refined first, which verifies safety.

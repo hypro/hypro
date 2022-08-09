@@ -1,13 +1,22 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "UrgencyCEGARWorker.h"
 
 namespace hypro {
 
-template <typename Representation>
-REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon, bool pruneUrgentSegments ) {
+template <typename Representation, typename Automaton>
+REACHABILITY_RESULT UrgencyCEGARWorker<Representation, Automaton>::computeTimeSuccessors( const ReachTreeNode<Representation, LocationT>& task, std::size_t timeHorizon, bool pruneUrgentSegments ) {
 	START_BENCHMARK_OPERATION( "Time successor computation" );
 	assert( mFlowpipe.size() == 0 );
 	reset();
-	const Location<Number>* loc = task.getLocation();
+	auto* loc = task.getLocation();
 	Representation initialSet = task.getInitialSet();
 
 	// initial set should not consider urgent guards, so it is treated separately
@@ -59,9 +68,9 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::computeTimeSuccessors( c
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <typename Representation>
-REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::handleSegment(
-	  const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing, bool pruneUrgentSegments ) {
+template <typename Representation, typename Automaton>
+REACHABILITY_RESULT UrgencyCEGARWorker<Representation, Automaton>::handleSegment(
+	  const ReachTreeNode<Representation, LocationT>& task, const Representation& segment, SegmentInd timing, bool pruneUrgentSegments ) {
 	const Location<Number>* loc = task.getLocation();
 	ltiUrgencyHandler<Representation> urgencyHandler;
 
@@ -130,8 +139,8 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation>::handleSegment(
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <typename Representation>
-auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task, const Transition<Number>* transition, const carl::Interval<SegmentInd>& timeOfJump )
+template <typename Representation, typename Automaton>
+auto UrgencyCEGARWorker<Representation, Automaton>::computeJumpSuccessors( const ReachTreeNode<Representation, LocationT>& task, const Transition<Number, LocationT>* transition, const carl::Interval<SegmentInd>& timeOfJump )
 	  -> std::vector<TimedValuationSet<Representation>> {
 	START_BENCHMARK_OPERATION( "Jump successor computation" );
 	assert( transition->getSource() == task.getLocation() );
@@ -156,14 +165,14 @@ auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeN
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {
-			blockSize = ( mJumpPredecessors[transition].size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
+			blockSize = ( mJumpPredecessors[transition].size() + mSettings.clustering ) / mSettings.clustering;	 // division rounding up
 		} else {
 			blockSize = mJumpPredecessors[transition].size();
 		}
 
 	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
 		if ( transition->getAggregation() == Aggregation::clustering ) {
-			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
+			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 		}
 	}
 
@@ -189,24 +198,24 @@ auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeN
 	return successors;
 }
 
-template <typename Representation>
-auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeNode<Representation>& task )
-	  -> std::vector<JumpSuccessor<Representation>> {
-	const Location<Number>* loc = task.getLocation();
-	std::vector<JumpSuccessor<Representation>> successors{};
+template <typename Representation, typename Automaton>
+auto UrgencyCEGARWorker<Representation, Automaton>::computeJumpSuccessors( const ReachTreeNode<Representation, LocationT>& task )
+	  -> std::vector<JumpSuccessor<Representation, LocationT>> {
+	auto* loc = task.getLocation();
+	std::vector<JumpSuccessor<Representation, LocationT>> successors{};
 	for ( const auto& transition : loc->getTransitions() ) {
 		successors.push_back( { transition.get(), computeJumpSuccessors( task, transition.get() ) } );
 	}
 	return successors;
 }
 
-template <typename Representation>
-void UrgencyCEGARWorker<Representation>::addSegment( const Representation& segment, SegmentInd timing ) {
+template <typename Representation, typename Automaton>
+void UrgencyCEGARWorker<Representation, Automaton>::addSegment( const Representation& segment, SegmentInd timing ) {
 	mFlowpipe.push_back( IndexedValuationSet<Representation>{ segment, timing } );
 }
 
-template <typename Representation>
-void UrgencyCEGARWorker<Representation>::addSegment( const std::vector<Representation>& segment, SegmentInd timing ) {
+template <typename Representation, typename Automaton>
+void UrgencyCEGARWorker<Representation, Automaton>::addSegment( const std::vector<Representation>& segment, SegmentInd timing ) {
 	for ( auto splitSegment : segment ) {
 		if ( !splitSegment.empty() ) {
 			mFlowpipe.push_back( IndexedValuationSet<Representation>{ splitSegment, timing } );
@@ -214,8 +223,8 @@ void UrgencyCEGARWorker<Representation>::addSegment( const std::vector<Represent
 	}
 }
 
-template <typename Representation>
-void UrgencyCEGARWorker<Representation>::insertFlowpipe( ReachTreeNode<Representation>& node ) const {
+template <typename Representation, typename Automaton>
+void UrgencyCEGARWorker<Representation, Automaton>::insertFlowpipe( ReachTreeNode<Representation, LocationT>& node ) const {
 	for ( auto [segment, index] : mFlowpipe ) {
 		node.getFlowpipe().push_back( segment );
 		node.getFpTimings().push_back( index );

@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * Class that describes a hybrid automaton.
  * @file   hybridAutomaton.h
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
@@ -40,7 +49,9 @@ namespace hypro {
 template <typename Number>
 class HybridAutomaton {
   public:
-	using Locations = std::vector<std::unique_ptr<Location<Number>>>;
+	using LocationType = Location<Number>;
+	using Locations = std::vector<std::unique_ptr<LocationType>>;
+	using TransitionType = Transition<Number, LocationType>;
 	using locationConditionMap = std::map<const Location<Number>*, Condition<Number>>;
 	using conditionVector = std::vector<Condition<Number>>;
 	using variableVector = std::vector<std::string>;
@@ -96,7 +107,7 @@ class HybridAutomaton {
 	/// getter for a single location identified by its position in the vector of locations
 	Location<Number>* getLocationByIndex( const std::size_t index ) const;
 	//* @return The set of transitions. */
-	std::vector<Transition<Number, Location<Number>>*> getTransitions() const;
+	std::vector<Transition<Number, LocationType>*> getTransitions() const;
 	//* @return The set of initial states. */
 	const locationConditionMap& getInitialStates() const { return mInitialStates; }
 	//* @return The set of bad states bound to locations. */
@@ -133,7 +144,7 @@ class HybridAutomaton {
 	///@{
 	const std::unique_ptr<Location<Number>>& addLocation( const Location<Number>& location );
 	const std::unique_ptr<Location<Number>>& addLocation( std::unique_ptr<Location<Number>>&& location );
-	void addTransition( std::unique_ptr<Transition<Number, Location<Number>>>&& transition );
+	void addTransition( std::unique_ptr<Transition<Number, LocationType>>&& transition );
 	void addInitialState( const Location<Number>* loc, const Condition<Number>& state ) {
 		assert( std::find( this->getLocations().begin(), this->getLocations().end(), loc ) != this->getLocations().end() );
 		mInitialStates.emplace( std::make_pair( loc, state ) );

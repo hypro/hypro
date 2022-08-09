@@ -1,9 +1,18 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "singularJumpHandler.h"
 
 namespace hypro {
 
-template <typename Representation>
-auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& states, std::size_t subspace ) -> TransitionStateMap {
+template <typename Representation, typename Location>
+auto singularJumpHandler<Representation, Location>::applyJump( const TransitionStateMap& states, std::size_t subspace ) -> TransitionStateMap {
 	// holds a mapping of transitions to already processed (i.e. aggregated, resetted and reduced) states
 	TransitionStateMap processedStates;
 
@@ -38,16 +47,16 @@ auto singularJumpHandler<Representation>::applyJump( const TransitionStateMap& s
 	return processedStates;
 }
 
-template <typename Representation>
-void singularJumpHandler<Representation>::applyReset( Representation& stateSet, Transition<Number>* transitionPtr, std::size_t subspace ) const {
+template <typename Representation, typename Location>
+void singularJumpHandler<Representation, Location>::applyReset( Representation& stateSet, Transition<Number, Location>* transitionPtr, std::size_t subspace ) const {
 	// We have 3 different implementations for applying resets and want to check that they all give the same result.
 	// Note: applyResetFM is the one that definitely works.
 	// Todo: Decide for one implementation and remove other 2
 	if ( !transitionPtr->getReset().empty() ) {
-		Reset<Number> reset = transitionPtr->getReset();
+		const auto& reset = transitionPtr->getReset();
 		assert( reset.getAffineReset( subspace ).isSingular() && "Singular automata do not support linear/affine resets." );
 
-		IntervalAssignment<Number> intervalReset = transitionPtr->getReset().getIntervalReset( subspace );
+		auto intervalReset = transitionPtr->getReset().getIntervalReset( subspace );
 		// if affine reset is singular and not identity, get constant resets
 		if ( !reset.getAffineReset( subspace ).isIdentity() ) {
 			WARN( "hypro.reachability", "Singular reset handler with affine constant assignments. Converting to interval reset." )
@@ -68,9 +77,9 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 			auto transformedSet2 = applyResetFindZeroConstraints( stateSet, intervalReset );
 			auto transformedSet3 = applyResetProjectAndExpand( stateSet, intervalReset );
 			assert( transformedSet1.contains( transformedSet2 ) );
-			//assert( transformedSet2.contains( transformedSet1 ) ); // TODO there is a bug in this approach
+			// assert( transformedSet2.contains( transformedSet1 ) ); // TODO there is a bug in this approach
 			assert( transformedSet1.contains( transformedSet3 ) );
-			//assert( transformedSet3.contains( transformedSet1 ) ); // TODO there might be a bug here as well
+			// assert( transformedSet3.contains( transformedSet1 ) ); // TODO there might be a bug here as well
 #endif
 			convert( transformedSet1, stateSet );
 			TRACE( "hypro.reachability", "Resulting state set " << stateSet );
@@ -216,8 +225,8 @@ HPolytope<Number> applyResetProjectAndExpand( Representation& stateSet, Interval
 	return transformedSet;
 }
 
-template <typename Representation>
-auto singularJumpHandler<Representation>::applyReverseJump( const TransitionStateMap& states, Transition<Number>* transition ) -> TransitionStateMap {
+template <typename Representation, typename Location>
+auto singularJumpHandler<Representation, Location>::applyReverseJump( const TransitionStateMap& states, Transition<Number, Location>* transition ) -> TransitionStateMap {
 	// holds a mapping of transitions to states which need to be aggregated
 	TransitionStateMap toAggregate;
 	// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant

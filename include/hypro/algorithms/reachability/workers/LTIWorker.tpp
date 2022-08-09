@@ -2,18 +2,18 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "LTIWorker.h"
 
 namespace hypro {
 
-template <typename Representation>
+template <typename Representation, typename HybridAutomaton>
 template <typename OutputIt>
-REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out, int segmentsToCompute, bool checkSafety ) const {
+REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out, int segmentsToCompute, bool checkSafety ) const {
 	if ( segmentsToCompute < 0 ) {
 		segmentsToCompute = mNumSegments;
 	}
@@ -71,8 +71,8 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <class Representation>
-auto LTIWorker<Representation>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number> const* transition ) const -> JumpSuccessorGen {
+template <typename Representation, typename HybridAutomaton>
+auto LTIWorker<Representation, HybridAutomaton>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number, LocationT> const* transition ) const -> JumpSuccessorGen {
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {
@@ -89,13 +89,13 @@ auto LTIWorker<Representation>::getJumpSuccessors( std::vector<Representation> c
 	return JumpSuccessorGen{ flowpipe, transition, blockSize };
 }
 
-template <class Representation>
-struct LTIWorker<Representation>::EnabledSegmentsGen {
+template <typename Representation, typename HybridAutomaton>
+struct LTIWorker<Representation, HybridAutomaton>::EnabledSegmentsGen {
 	std::vector<Representation> const* flowpipe;
-	Transition<Number> const* transition;
+	Transition<Number, LocationT> const* transition;
 	std::size_t current = 0;
 
-	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<Number> const* transition )
+	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<Number, LocationT> const* transition )
 		: flowpipe( flowpipe )
 		, transition( transition ) {}
 
@@ -126,8 +126,8 @@ struct LTIWorker<Representation>::EnabledSegmentsGen {
 	}
 };
 
-template <class Representation>
-struct LTIWorker<Representation>::AggregatedGen {
+template <typename Representation, typename HybridAutomaton>
+struct LTIWorker<Representation, HybridAutomaton>::AggregatedGen {
 	size_t segmentsPerBlock{};
 	std::vector<Representation>* enabled{};
 	std::size_t firstEnabled{};
@@ -153,18 +153,18 @@ struct LTIWorker<Representation>::AggregatedGen {
 	}
 };
 
-template <class Representation>
-struct LTIWorker<Representation>::JumpSuccessorGen {
+template <typename Representation, typename HybridAutomaton>
+struct LTIWorker<Representation, HybridAutomaton>::JumpSuccessorGen {
 	std::optional<std::pair<std::vector<Representation>, SegmentInd>> mEnabledRange = std::pair<std::vector<Representation>, SegmentInd>{};
 
 	size_t mSegmentsPerBlock{};
-	Transition<Number> const* mTransition;
+	Transition<Number, LocationT> const* mTransition;
 
 	EnabledSegmentsGen mEnabled;
 	AggregatedGen mAggregated;
 
   public:
-	JumpSuccessorGen( std::vector<Representation> const& flowpipe, Transition<Number> const* transition, size_t segmentsPerBlock )
+	JumpSuccessorGen( std::vector<Representation> const& flowpipe, Transition<Number, LocationT> const* transition, size_t segmentsPerBlock )
 		: mSegmentsPerBlock( segmentsPerBlock )
 		, mTransition( transition )
 		, mEnabled( &flowpipe, transition )
@@ -193,8 +193,8 @@ struct LTIWorker<Representation>::JumpSuccessorGen {
 	}
 };
 
-template <typename Representation>
-std::string print( std::vector<EnabledSets<Representation>> const& pipes ) {
+template <typename Representation, typename HybridAutomaton>
+std::string print( std::vector<EnabledSets<Representation, typename HybridAutomaton::LocationType>> const& pipes ) {
 	std::stringstream str{};
 
 	for ( auto& pipe : pipes ) {
@@ -208,8 +208,8 @@ std::string print( std::vector<EnabledSets<Representation>> const& pipes ) {
 	return str.str();
 }
 
-template <typename Representation>
-std::string print( std::vector<JumpSuccessor<Representation>> const& pipes ) {
+template <typename Representation, typename HybridAutomaton>
+std::string print( std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType>> const& pipes ) {
 	std::stringstream str{};
 
 	for ( auto& pipe : pipes ) {
@@ -223,7 +223,7 @@ std::string print( std::vector<JumpSuccessor<Representation>> const& pipes ) {
 	return str.str();
 }
 
-template <typename Representation>
+template <typename Representation, typename HybridAutomaton>
 std::string print( std::vector<Representation> const& sets ) {
 	std::stringstream str{};
 
@@ -234,15 +234,15 @@ std::string print( std::vector<Representation> const& sets ) {
 	return str.str();
 }
 
-template <typename Representation>
-std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const {
+template <typename Representation, typename HybridAutomaton>
+std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType>> LTIWorker<Representation, HybridAutomaton>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, LocationT const* loc ) const {
 	// TRACE( "hypro.reachability", "flowpipe: " << print( flowpipe ) );
 
 	// transition x enabled segments, segment ind
-	std::vector<EnabledSets<Representation>> enabledSegments{};
+	std::vector<EnabledSets<Representation, typename HybridAutomaton::LocationType>> enabledSegments{};
 
 	for ( const auto& transition : loc->getTransitions() ) {
-		auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation>{ transition.get() } );
+		auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation, typename HybridAutomaton::LocationType>{ transition.get() } );
 
 		SegmentInd cnt = 0;
 		for ( auto const& valuationSet : flowpipe ) {
@@ -257,7 +257,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 
 	TRACE( "hypro.reachability", "enabledSegments: " << print( enabledSegments ) );
 
-	std::vector<JumpSuccessor<Representation>> successors{};
+	std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType>> successors{};
 
 	// aggregation
 	// for each transition
@@ -276,7 +276,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 				blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 			}
 		}
-		successors.emplace_back( JumpSuccessor<Representation>{ transition, aggregate( blockSize, valuationSets ) } );
+		successors.emplace_back( JumpSuccessor<Representation, typename HybridAutomaton::LocationType>{ transition, aggregate( blockSize, valuationSets ) } );
 		TRACE( "hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << ", " << transition->getReset() << ": enabledSegments after aggregation: " << print( successors ) );
 	}
 	DEBUG( "hypro.reachability", "enabledSegments after aggregation: " << print( successors ) );
@@ -302,8 +302,8 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 	return successors;
 }
 
-template <typename Representation>
-std::vector<TimedValuationSet<Representation>> LTIWorker<Representation>::computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<Number> const* transition ) const {
+template <typename Representation, typename HybridAutomaton>
+std::vector<TimedValuationSet<Representation>> LTIWorker<Representation, HybridAutomaton>::computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<Number, LocationT> const* transition ) const {
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {

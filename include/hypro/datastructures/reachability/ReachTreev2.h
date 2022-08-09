@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #pragma once
@@ -20,26 +20,27 @@
 
 namespace hypro {
 
-template <class Representation>
-class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
+template <class Representation, class Location>
+class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
   private:
 	using Number = rep_number<Representation>;
-	using Base = TreeNode<ReachTreeNode<Representation>>;
+	using Base = TreeNode<ReachTreeNode<Representation, Location>>;
+	using TransitionT = Transition<Number, Location>;
 
-	Location<Number> const* mLocation = nullptr;													 ///< location in which the flowpipe was computed
-	Transition<Number, Location<Number>> const* mTransition{};										 ///< the transition which lead here. nullptr for roots
-	std::vector<Representation> mFlowpipe{};														 ///< contains computed flowpipe
-	Representation mInitialSet;																		 ///< contains initial set for the flowpipe
-	carl::Interval<SegmentInd> mTimings{};															 ///< global time covered by inital set (used as offset)
-	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};						 ///< optional bounding box of the initial set
-	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;															 ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
-	ReachTreeNode<Representation>* mFixedPointReason = nullptr;										 ///< points to the node which is the reason for fixed-point detection
-	bool mIsOnZenoCycle = false;																	 ///< true, if the node is the end of a Zeno-Cycle
-	bool mFinishesWithTimelock = false;																 ///< true, if the node exhibits a timelock
-	bool mPotentiallyUnsafe = false;																 ///< true, if the analysis has found a non-empty intersection with the set of bad states
-	std::map<Transition<Number, Location<Number>>*, UrgencyRefinementLevel> mUrgRefinementLevels{};	 ///< refinement level for outgoing urgent transitions
-	std::vector<SegmentInd> mFpTimings{};															 ///< timing information for simultaneous segments (urgency)
-	REACHABILITY_RESULT mSafetyResult;																 ///< safety of flowpipe segments
+	Location const* mLocation = nullptr;									   ///< location in which the flowpipe was computed
+	TransitionT const* mTransition{};										   ///< the transition which lead here. nullptr for roots
+	std::vector<Representation> mFlowpipe{};								   ///< contains computed flowpipe
+	Representation mInitialSet;												   ///< contains initial set for the flowpipe
+	carl::Interval<SegmentInd> mTimings{};									   ///< global time covered by inital set (used as offset)
+	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
+	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;									   ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
+	ReachTreeNode<Representation, Location>* mFixedPointReason = nullptr;	   ///< points to the node which is the reason for fixed-point detection
+	bool mIsOnZenoCycle = false;											   ///< true, if the node is the end of a Zeno-Cycle
+	bool mFinishesWithTimelock = false;										   ///< true, if the node exhibits a timelock
+	bool mPotentiallyUnsafe = false;										   ///< true, if the analysis has found a non-empty intersection with the set of bad states
+	std::map<TransitionT*, UrgencyRefinementLevel> mUrgRefinementLevels{};	   ///< refinement level for outgoing urgent transitions
+	std::vector<SegmentInd> mFpTimings{};									   ///< timing information for simultaneous segments (urgency)
+	REACHABILITY_RESULT mSafetyResult;										   ///< safety of flowpipe segments
 
   public:
 	// Exposition types
@@ -49,7 +50,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	using Base::getChildren;
 	using Base::getDepth;
 
-	ReachTreeNode( ReachTreeNode* parent, Transition<Number, Location<Number>> const* transition, Location<Number> const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
+	ReachTreeNode( ReachTreeNode* parent, TransitionT const* transition, Location const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
 		: Base( parent )
 		, mLocation( loc )
 		, mTransition( transition )
@@ -57,7 +58,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 		, mTimings( timings ) {
 	}
 
-	ReachTreeNode( Location<Number> const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
+	ReachTreeNode( Location const* loc, Representation initialSet, carl::Interval<SegmentInd> timings )
 		: mLocation( loc )
 		, mInitialSet( initialSet )
 		, mTimings( timings ) {
@@ -71,7 +72,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	 * @param transition The transition taken to the new location
 	 * @return A reference to the new child
 	 */
-	ReachTreeNode& addChild( Representation initialSet, carl::Interval<SegmentInd> timings, Transition<Number, Location<Number>> const* transition );
+	ReachTreeNode& addChild( Representation initialSet, carl::Interval<SegmentInd> timings, TransitionT const* transition );
 
 	/**
 	 * @brief Get the path to the current node (computed)
@@ -87,7 +88,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 
 	// auto getParent() const { return this->mParent; }
 
-	Transition<Number, Location<Number>> const* getTransition() const { return mTransition; }
+	TransitionT const* getTransition() const { return mTransition; }
 
 	/**
 	 * @brief Get access to the flowpipe
@@ -105,8 +106,8 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	 * @brief Get access to the urgent Transitions
 	 * @return Map of urgent transitions to refinement level
 	 */
-	std::map<Transition<Number, Location<Number>>*, UrgencyRefinementLevel>& getUrgencyRefinementLevels() { return mUrgRefinementLevels; }
-	std::map<Transition<Number, Location<Number>>*, UrgencyRefinementLevel> const& getUrgencyRefinementLevels() const { return mUrgRefinementLevels; }
+	std::map<TransitionT*, UrgencyRefinementLevel>& getUrgencyRefinementLevels() { return mUrgRefinementLevels; }
+	std::map<TransitionT*, UrgencyRefinementLevel> const& getUrgencyRefinementLevels() const { return mUrgRefinementLevels; }
 
 	/**
 	 * @brief Get the initial set
@@ -116,7 +117,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 
 	[[deprecated( "Use getInitialSet() instead." )]] const Representation& getState() const { return mInitialSet; }
 	/// Getter for the location
-	const Location<Number>* getLocation() const { return mLocation; }
+	const Location* getLocation() const { return mLocation; }
 	/// Getter for timing-information (global time when the node was active)
 	const carl::Interval<SegmentInd>& getTimings() const { return mTimings; }
 	std::vector<SegmentInd>& getFpTimings() { return mFpTimings; }
@@ -128,7 +129,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	 * @return std::vector<carl::Interval<SegmentInd>>
 	 * TODO Implement
 	 */
-	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( Transition<Number, Location<Number>> const* const transition ) const;
+	std::vector<carl::Interval<SegmentInd>> getEnabledTimings( TransitionT const* const transition ) const;
 	/// Sets the bounding box of the sets of reachable states for this node (caching)
 	void setBoundingBox( const std::vector<carl::Interval<Number>>& intervals ) { mInitialBoundingBox = intervals; }
 	/// Returns the bounding box stored for this nodes' sets of reachable states
@@ -138,7 +139,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	 * Set the fixed-point state to a Boolean value (once set, cannot be unset), true if the initial set of this node is fully contained in the initial set of another node, false otherwise.
 	 * @param hasFixedPoint
 	 */
-	void setFixedPoint( bool hasFixedPoint = true, ReachTreeNode<Representation>* reason = nullptr );
+	void setFixedPoint( bool hasFixedPoint = true, ReachTreeNode<Representation, Location>* reason = nullptr );
 
 	/**
 	 * Returns whether this node represents a fixed point.
@@ -147,7 +148,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	TRIBOOL hasFixedPoint() const { return mHasFixedPoint; }
 
 	/// Returns a pointer to the node in the path leading to this node-object, which is the reason for finding a fixed-point
-	ReachTreeNode<Representation>* getFixedPointReason() { return mFixedPointReason; }
+	ReachTreeNode<Representation, Location>* getFixedPointReason() { return mFixedPointReason; }
 
 	/// Setter of a flag indicating the node is on a Zeno-cycle
 	void flagZenoCycle( bool zeno = true ) { mIsOnZenoCycle = zeno; }
@@ -168,14 +169,14 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation>> {
 	bool hasTimelock() const { return mFinishesWithTimelock; }
 };
 
-template <typename Representation>
-std::ostream& operator<<( std::ostream& out, const ReachTreeNode<Representation>& node ) {
+template <typename Representation, typename Location>
+std::ostream& operator<<( std::ostream& out, const ReachTreeNode<Representation, Location>& node ) {
 	out << "{ " << node.getLocation()->getName() << ", init " << node.getInitialSet() << " }";
 	return out;
 }
 
-template <typename Representation>
-std::ostream& operator<<( std::ostream& out, const std::vector<ReachTreeNode<Representation> const*>& nodes ) {
+template <typename Representation, typename Location>
+std::ostream& operator<<( std::ostream& out, const std::vector<ReachTreeNode<Representation, Location> const*>& nodes ) {
 	for ( const auto ptr : nodes ) {
 		out << ptr->getLocation()->getName() << ", " << ptr->getTimings() << ", @" << ptr << "\n";
 	}
@@ -187,15 +188,15 @@ std::ostream& operator<<( std::ostream& out, const std::vector<ReachTreeNode<Rep
  * @tparam Representation
  * @tparam Number
  * @param ha
- * @return std::vector<ReachTreeNode<Representation>>
+ * @return std::vector<ReachTreeNode<Representation,Location>>
  */
-template <class Representation, class Number>
-std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> const& ha ) {
-	std::vector<ReachTreeNode<Representation>> roots{};
+template <typename Representation, typename Automaton>
+std::vector<ReachTreeNode<Representation, typename Automaton::LocationType>> makeRoots( Automaton const& ha ) {
+	std::vector<ReachTreeNode<Representation, typename Automaton::LocationType>> roots{};
 
 	std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ), []( auto const& locCond ) {
 		auto const& [location, condition] = locCond;
-		return ReachTreeNode<Representation>{ location, Representation{ condition.getMatrix(), condition.getVector() }, carl::Interval<SegmentInd>{ 0, 0 } };
+		return ReachTreeNode<Representation, typename Automaton::LocationType>{ location, Representation{ condition.getMatrix(), condition.getVector() }, carl::Interval<SegmentInd>{ 0, 0 } };
 	} );
 
 	return roots;
@@ -204,8 +205,8 @@ std::vector<ReachTreeNode<Representation>> makeRoots( HybridAutomaton<Number> co
 template <class RTN>
 struct RTN_Rep_i;
 
-template <class Representation>
-struct RTN_Rep_i<ReachTreeNode<Representation>> {
+template <class Representation, class... Ts>
+struct RTN_Rep_i<ReachTreeNode<Representation, Ts...>> {
 	using type = Representation;
 };
 

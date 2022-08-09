@@ -10,8 +10,8 @@
 #pragma once
 
 #include "../../datastructures/HybridAutomaton/Condition.h"
-#include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../datastructures/HybridAutomaton/State.h"
+#include "../../datastructures/reachability/ReachTreev2.h"
 #include "types.h"
 
 #include <utility>
@@ -86,15 +86,15 @@ Representation applyTimeEvolution( Representation const& valuationSet, matrix_t<
  */
 template <class Representation, class Number>
 Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset, std::size_t subspace = 0 ) {
-    if ( !reset.isIntervalIdentity() && std::any_of( reset.getIntervalReset( subspace ).getIntervals().begin(), reset.getIntervalReset( subspace ).getIntervals().end(),
-                []( const auto& interval ){ return !interval.isEmpty(); } ) ) {
-        assert( false && "lti analyzer does not currently support interval assignments on reset" );
-        WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
-    }
+	if ( !reset.isIntervalIdentity() && std::any_of( reset.getIntervalReset( subspace ).getIntervals().begin(), reset.getIntervalReset( subspace ).getIntervals().end(),
+													 []( const auto& interval ) { return !interval.isEmpty(); } ) ) {
+		assert( false && "lti analyzer does not currently support interval assignments on reset" );
+		WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
+	}
 	if ( reset.isAffineIdentity() ) {
 		return valuationSet;
 	}
-    return valuationSet.affineTransformation( reset.getMatrix( subspace ), reset.getVector( subspace ) );
+	return valuationSet.affineTransformation( reset.getMatrix( subspace ), reset.getVector( subspace ) );
 }
 
 /**
@@ -112,8 +112,8 @@ template <typename Number, typename Representation, typename... Rargs>
 Box<Number> computeBoundingBox( const hypro::State<Number, Representation, Rargs...>& set ) {
 	return std::visit( genericConvertAndGetVisitor<Box<Number>>(), set.getSet() );
 }
-template <class Representation>
-Box<typename Representation::NumberType> computeBoundingBox( const ReachTreeNode<Representation>& node ) {
+template <class Representation, class... Ts>
+Box<typename Representation::NumberType> computeBoundingBox( const ReachTreeNode<Representation, Ts...>& node ) {
 	auto box = computeBoundingBox( node.getFlowpipe().front() );
 	for ( const auto& s : getSegments( node ) ) {
 		box = box.unite( computeBoundingBox( s ) );
@@ -121,15 +121,14 @@ Box<typename Representation::NumberType> computeBoundingBox( const ReachTreeNode
 	return box;
 }
 
-template <class Representation>
-Box<typename Representation::NumberType> computeBoundingBox( const std::vector<ReachTreeNode<Representation>>& trees ) {
+template <class Representation, class... Ts>
+Box<typename Representation::NumberType> computeBoundingBox( const std::vector<ReachTreeNode<Representation, Ts...>>& trees ) {
 	auto box = computeBoundingBox( trees.front() );
 	for ( auto treeIt = std::next( std::begin( trees ) ); treeIt != std::end( trees ); ++treeIt ) {
 		box = box.unite( computeBoundingBox( *treeIt ) );
 	}
 	return box;
 }
-
 
 /**
  * @brief Computes the set difference of a state set with a condition.
@@ -143,9 +142,9 @@ template <class Representation, class Number>
 std::vector<Representation> setDifference( Representation const& valuationSet, Condition<Number> const& condition ) {
 	auto [containment, intersectedMinus] = intersect( valuationSet, condition );
 	if ( containment == CONTAINMENT::NO ) {
-		return valuationSet.empty() ? std::vector<Representation>{ } : std::vector<Representation>{ valuationSet };
+		return valuationSet.empty() ? std::vector<Representation>{} : std::vector<Representation>{ valuationSet };
 	} else if ( containment == CONTAINMENT::FULL ) {
-		return { };
+		return {};
 	}
 	// case distinction because box constructor only works for bounded sets
 	if ( Representation::type_enum == representation_name::box ) {

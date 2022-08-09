@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "HybridAutomatonComp.h"
@@ -72,13 +72,13 @@ void ComposedLocation<Number>::validate() const {
 					// the global variable is also in the local variable set, import flow, if admissible
 					const auto& localFlow = lPtr->getLinearFlow().getFlowMatrix();
 					// maps the global var index to the row in the local flow
-					std::size_t localRow = mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx];
+					auto localRow = mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx];
 					// try to import local flow
 					for ( std::size_t localCol = 0; localCol != localFlow.cols(); ++localCol ) {
 						// check admissibility by checking agains all other automata
 						for ( std::size_t otherAutomatonIdx = 0; otherAutomatonIdx != mAutomaton.mAutomata.size(); ++otherAutomatonIdx ) {
 							// column of the same variable in the other automaton, can be -1 if the other automaton does not have this variable
-							std::size_t otherCol = mAutomaton.mGlobalToLocalVars[mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )]][otherAutomatonIdx];
+							auto otherCol = mAutomaton.mGlobalToLocalVars[mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )]][otherAutomatonIdx];
 							// do not compare to one self and skip, if the other automaton does not have the variable (localCol) in its set
 							// or if it does not have information about the main variable (globalIdx)
 							if ( otherAutomatonIdx == automatonIdx || otherCol < 0 || mAutomaton.mGlobalToLocalVars[globalVIdx][otherAutomatonIdx] < 0 ) {
@@ -130,37 +130,151 @@ void ComposedLocation<Number>::validate() const {
 	castawayConst().setInvariant( Condition<Number>( invariantConstraints, invariantConstants ) );
 	// Location<Number>::setInvariant( Condition<Number>( invariantConstraints, invariantConstants ) );
 
-	// build stumps of transitions, idea: use permutations of indices to identify all possible combinations
-	std::vector<std::size_t> bounds;
-	for ( const auto* l : locs ) {
-		bounds.push_back( l->getTransitions().size() );
-	}
-	hypro::Combinator perm{ bounds, locs.size() };
-	// loop over all permutations and create according transitions
-	while ( !perm.end() ) {
-		auto selection = perm();
-		// quick check: if the transitions synchronize, all of them should
-		const std::vector<Label>& syncLabels = locs.front()->getTransitions()[selection.front()]->getLabels();
-		bool skip = false;
-		for ( std::size_t automatonIdx = 1; automatonIdx < locs.size(); ++automatonIdx ) {
-			if ( locs[automatonIdx]->getTransitions()[selection[automatonIdx]]->getLabels() != syncLabels ) {
-				skip = true;
-				break;
+	// build stumps of transitions, idea: for non-synchronizing jumps, only one component changes its location,
+	// for synchronizing jumps, all components change their location. Thus, separate synchronizing and non-synchronizing jumps,
+	// handle separately
+	using TransitionT = Transition<Number, Location<Number>>;
+	std::multimap<std::size_t, TransitionT*> nonSynchronizedJumps;
+	std::map<std::vector<Label>, std::vector<TransitionT*>> synchronizedJumps;
+	// collect synchronized and non-synchronized jumps
+	for ( std::size_t locationIdx = 0; locationIdx < locs.size(); ++locationIdx ) {
+		for ( const auto& t : locs[locationIdx]->getTransitions() ) {
+			auto* tPtr = t.get();
+			// synchronizing jump
+			if ( !tPtr->getLabels().empty() ) {
+				if ( synchronizedJumps.count( tPtr->getLabels() ) == 0 ) {
+					synchronizedJumps.emplace( std::make_pair( tPtr->getLabels(), std::vector<TransitionT*>{} ) );
+				}
+				synchronizedJumps[tPtr->getLabels()].push_back( tPtr );
+			} else {
+				nonSynchronizedJumps.insert( std::make_pair( locationIdx, tPtr ) );
 			}
 		}
-		if ( skip ) {
-			continue;
+	}
+	// remove all synchronizing jumps where not all components can participate
+	for ( auto jumpIt = std::begin( synchronizedJumps ); jumpIt != std::end( synchronizedJumps ); ) {
+		if ( jumpIt->second.size() != locs.size() ) {
+			jumpIt = synchronizedJumps.erase( jumpIt );
+		} else {
+			++jumpIt;
 		}
+	}
 
+	// handle non-synchronizing jumps first
+	for ( const auto& [componentIdx, tPtr] : nonSynchronizedJumps ) {
 		matrix_t<Number> guardConstraints = matrix_t<Number>::Zero( 0, haVars.size() );
 		vector_t<Number> guardConstants = vector_t<Number>::Zero( 0 );
 		matrix_t<Number> resetMatrix = matrix_t<Number>::Identity( haVars.size(), haVars.size() );
 		vector_t<Number> resetVector = vector_t<Number>::Zero( haVars.size() );
 		bool urgent = false;
 		std::vector<std::size_t> targetLocationIndices;
-		for ( std::size_t automatonIdx = 0; automatonIdx < selection.size(); ++automatonIdx ) {
+		for ( std::size_t automatonIdx = 0; automatonIdx < locs.size(); ++automatonIdx ) {
+			// if the component does not change location, use the same local location as target, do nothing apart from that
+			if ( automatonIdx != componentIdx ) {
+				targetLocationIndices.push_back( mCompositionals[automatonIdx] );
+			} else {
+				auto* lPtr = locs[automatonIdx];
+				// once one transition is urgent, the compose will be as well
+				if ( tPtr->isUrgent() ) {
+					urgent = true;
+				}
+				// assemble target location indices, required later to identify possible duplicate composed target locations
+				targetLocationIndices.push_back( getIndex( mAutomaton.mAutomata[automatonIdx].getLocations(), tPtr->getTarget() ) );
+				// cannot be undefined, otherwise the target location would not be in the location set of the automaton holding the source location
+				assert( targetLocationIndices.back() >= 0 );
+				// handling of the guard condition
+				const auto& localGuard = tPtr->getGuard();
+				if ( !localGuard.isTrue() ) {
+					for ( std::size_t constraintIdx = 0; constraintIdx < localGuard.getMatrix().rows(); ++constraintIdx ) {
+						vector_t<Number> newRow = vector_t<Number>::Zero( haVars.size() );
+						for ( std::size_t localCol = 0; localCol != localGuard.getMatrix().cols(); ++localCol ) {
+							newRow( mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localGuard.getMatrix()( constraintIdx, localCol );
+						}
+						appendRow( guardConstraints, newRow );
+						appendRow( guardConstants, localGuard.getVector()( constraintIdx ) );
+					}
+				}
+
+				// handling of the reset
+				// TODO extend to interval resets
+				for ( std::size_t globalVIdx = 0; globalVIdx != mAutomaton.getVariables().size(); ++globalVIdx ) {
+					auto globalVName = mAutomaton.getVariables()[globalVIdx];
+					// if the variable is mastered
+					// TODO check for the right variable
+					if ( localMasters.count( globalVName ) > 0 ) {
+						// if the current location is the master, simply write reset indicated by globalVIdx, else do nothing
+						if ( localMasters[globalVName].front() == lPtr ) {
+							const auto& localReset = tPtr->getReset();
+							if ( !localReset.isIdentity() ) {
+								for ( std::size_t localCol = 0; localCol != localReset.getMatrix().cols(); ++localCol ) {
+									resetMatrix( globalVIdx, mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localReset.getMatrix()( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx], localCol );
+								}
+								resetVector( globalVIdx ) = localReset.getVector()( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx] );
+							}
+						}
+					} else {
+						// the variable is not mastered
+						// check if the current automaton has information for this variable, if not (value is -1), skip
+						if ( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx] > 0 ) {
+							// the global variable is also in the local variable set, import reset, if admissible
+							// distinguish between identity resets (which might have an empty matrix) and others
+							if ( tPtr->getReset().isIdentity() ) {
+								// do nothing
+							} else {
+								// is not identity, i.e., does definitely have a matrix
+								const auto& localResetMatrix = tPtr->getReset().getMatrix();
+								const auto& localResetVector = tPtr->getReset().getVector();
+								// maps the global var index to the row in the local reset
+								std::size_t localRow = mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx];
+								// import local reset
+								for ( std::size_t localCol = 0; localCol != localResetMatrix.cols(); ++localCol ) {
+									resetMatrix( globalVIdx, mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localResetMatrix( localRow, localCol );
+								}  // loop over local variable idx
+							}	   // if is identity - else
+						}		   // if automaton does have information on this variable
+					}			   // if variable is not mastered
+				}				   // loop over all globally available variables for resets
+			}
+		}
+
+		// at this point we have all guards, all resets, urgency
+		// create stub for a new target location, if it does not yet exist
+		auto targetPosition = std::end( mAutomaton.mLocations );
+		{
+			auto entryPairIt = mAutomaton.mComposedLocs.find( targetLocationIndices );
+			if ( entryPairIt != std::end( mAutomaton.mComposedLocs ) ) {
+				targetPosition = entryPairIt->second;
+			} else {
+				mAutomaton.mLocations.emplace_back( mAutomaton );
+				auto& newLoc = mAutomaton.mLocations.back();
+				newLoc.mCompositionals = targetLocationIndices;
+				newLoc.mIsValid = false;
+				targetPosition = std::prev( std::end( mAutomaton.mLocations ) );
+				mAutomaton.mComposedLocs[targetLocationIndices] = targetPosition;
+			}
+		}
+		// create new transition
+		std::unique_ptr<CompTransition> newTransition = std::make_unique<CompTransition>();
+		//  fill properties
+		newTransition->setGuard( { guardConstraints, guardConstants } );
+		newTransition->setReset( { resetMatrix, resetVector } );
+		newTransition->setUrgent( urgent );
+		newTransition->setSource( const_cast<ComposedLocation<Number>*>( this ) );
+		newTransition->setTarget( &( *targetPosition ) );
+		mTransitions.emplace_back( std::move( newTransition ) );
+	}
+
+	// handle synchronizing jumps
+	for ( auto transitionIt = std::begin( synchronizedJumps ); transitionIt != std::end( synchronizedJumps ); ++transitionIt ) {
+		matrix_t<Number> guardConstraints = matrix_t<Number>::Zero( 0, haVars.size() );
+		vector_t<Number> guardConstants = vector_t<Number>::Zero( 0 );
+		matrix_t<Number> resetMatrix = matrix_t<Number>::Identity( haVars.size(), haVars.size() );
+		vector_t<Number> resetVector = vector_t<Number>::Zero( haVars.size() );
+		bool urgent = false;
+		std::vector<std::size_t> targetLocationIndices;
+		for ( std::size_t automatonIdx = 0; automatonIdx < locs.size(); ++automatonIdx ) {
+			auto* tPtr = transitionIt->second[automatonIdx];
 			auto* lPtr = locs[automatonIdx];
-			auto* tPtr = locs[automatonIdx]->getTransitions()[selection[automatonIdx]].get();
 			// once one transition is urgent, the compose will be as well
 			if ( tPtr->isUrgent() ) {
 				urgent = true;
@@ -201,63 +315,43 @@ void ComposedLocation<Number>::validate() const {
 					}
 				} else {
 					// the variable is not mastered
+					// TODO currently there are no sanity checks here!
 					// check if the current automaton has information for this variable, if not (value is -1), skip
 					if ( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx] > 0 ) {
 						// the global variable is also in the local variable set, import reset, if admissible
 						// distinguish between identity resets (which might have an empty matrix) and others
 						if ( tPtr->getReset().isIdentity() ) {
-							// is identity - check with all other automata, if okay, do nothing, since the matrix is initialized as an identity reset
-							for ( std::size_t otherAutomatonIdx = 0; otherAutomatonIdx != mAutomaton.mAutomata.size(); ++otherAutomatonIdx ) {
-								auto* otherTPtr = locs[otherAutomatonIdx]->getTransitions()[selection[otherAutomatonIdx]].get();
-								if ( !otherTPtr->getReset().isIdentity() ) {
-									throw std::logic_error( "Resets of shared variables are not admissible" );
-								}
-							}
+							// do nothing
 						} else {
 							// is not identity, i.e., does definitely have a matrix
 							const auto& localResetMatrix = tPtr->getReset().getMatrix();
 							const auto& localResetVector = tPtr->getReset().getVector();
 							// maps the global var index to the row in the local reset
 							std::size_t localRow = mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx];
-							// try to import local reset
+							// import local reset
 							for ( std::size_t localCol = 0; localCol != localResetMatrix.cols(); ++localCol ) {
-								// check admissibility by checking against all other automata
-								for ( std::size_t otherAutomatonIdx = 0; otherAutomatonIdx != mAutomaton.mAutomata.size(); ++otherAutomatonIdx ) {
-									auto* otherTPtr = locs[otherAutomatonIdx]->getTransitions()[selection[otherAutomatonIdx]].get();
-									// column of the same variable in the other automaton, can be -1 if the other automaton does not have this variable
-									std::size_t otherCol = mAutomaton.mGlobalToLocalVars[mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )]][otherAutomatonIdx];
-									// do not compare to one self and skip, if the other automaton does not have the variable (localCol) in its set
-									// or if it does not have information about the main variable (globalIdx)
-									if ( otherAutomatonIdx == automatonIdx || otherCol < 0 || mAutomaton.mGlobalToLocalVars[globalVIdx][otherAutomatonIdx] < 0 ) {
-										continue;
-									}
-									// the other automaton has information on this (local col) variable
-									const auto& otherReset = otherTPtr->getReset();
-									if ( otherReset.isIdentity() || otherReset.getMatrix()( mAutomaton.mGlobalToLocalVars[globalVIdx][otherAutomatonIdx], otherCol ) != localResetMatrix( localRow, localCol ) || otherReset.getVector()( mAutomaton.mGlobalToLocalVars[globalVIdx][otherAutomatonIdx] ) != resetVector( localRow ) ) {
-										throw std::logic_error( "Resets of shared variables are not admissible" );
-									}
-								}
-								// if we reach here, the flow is admissible for the current col
 								resetMatrix( globalVIdx, mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localResetMatrix( localRow, localCol );
 							}  // loop over local variable idx
 						}	   // if is identity - else
 					}		   // if automaton does have information on this variable
 				}			   // if variable is not mastered
-			}				   // loop over all globally available variables
+			}				   // loop over all globally available variables for resets
 		}
 
-		// at this point we have all single transitions, all guards, all resets, urgency
+		// at this point we have all guards, all resets, urgency
 		// create stub for a new target location, if it does not yet exist
-		std::size_t targetIndex = mAutomaton.mLocations.size();
+		auto targetPosition = std::end( mAutomaton.mLocations );
 		{
 			auto entryPairIt = mAutomaton.mComposedLocs.find( targetLocationIndices );
 			if ( entryPairIt != std::end( mAutomaton.mComposedLocs ) ) {
-				targetIndex = entryPairIt->second;
+				targetPosition = entryPairIt->second;
 			} else {
 				mAutomaton.mLocations.emplace_back( mAutomaton );
 				auto& newLoc = mAutomaton.mLocations.back();
 				newLoc.mCompositionals = targetLocationIndices;
 				newLoc.mIsValid = false;
+				targetPosition = std::prev( std::end( mAutomaton.mLocations ) );
+				mAutomaton.mComposedLocs[targetLocationIndices] = targetPosition;
 			}
 		}
 		// create new transition
@@ -265,10 +359,10 @@ void ComposedLocation<Number>::validate() const {
 		//  fill properties
 		newTransition->setGuard( { guardConstraints, guardConstants } );
 		newTransition->setReset( { resetMatrix, resetVector } );
+		newTransition->setLabels( transitionIt->first );
 		newTransition->setUrgent( urgent );
-		newTransition->setLabels( syncLabels );
 		newTransition->setSource( const_cast<ComposedLocation<Number>*>( this ) );
-		newTransition->setTarget( &mAutomaton.mLocations[targetIndex] );
+		newTransition->setTarget( &( *targetPosition ) );
 		mTransitions.emplace_back( std::move( newTransition ) );
 	}
 
@@ -276,31 +370,32 @@ void ComposedLocation<Number>::validate() const {
 }
 
 template <typename Number>
-std::vector<Location<Number>*> HybridAutomatonComp<Number>::getLocations() const {
-	std::vector<Location<Number>*> res;
-	// collect all currently discovered locations, validate those, make sure not to validate further ones, as this will unroll the whole automaton
-	for ( std::size_t locationIdx = 0; locationIdx < mLocations.size(); ++locationIdx ) {
-		mLocations[locationIdx].validate();
-		res.push_back( &( mLocations[locationIdx] ) );
+std::vector<typename HybridAutomatonComp<Number>::LocationType*> HybridAutomatonComp<Number>::getLocations() const {
+	std::vector<LocationType*> res;
+	// collect all currently discovered and validated locations, make sure not to validate further ones, as this will unroll the whole automaton
+	for ( auto locIt = std::begin( mLocations ); locIt != std::end( mLocations ); ++locIt ) {
+		if ( locIt->isValid() ) {
+			res.push_back( &( *locIt ) );
+		}
 	}
 	return res;
 }
 
 template <typename Number>
-Location<Number>* HybridAutomatonComp<Number>::getLocation( const std::size_t hash ) const {
-	for ( const auto* l : mLocations ) {
+typename HybridAutomatonComp<Number>::LocationType* HybridAutomatonComp<Number>::getLocation( const std::size_t hash ) const {
+	for ( const auto& l : mLocations ) {
 		if ( l->hash() == hash ) {
-			return l;
+			return &l;
 		}
 	}
 	return nullptr;
 }
 
 template <typename Number>
-Location<Number>* HybridAutomatonComp<Number>::getLocation( const std::string& name ) const {
-	for ( const auto* l : mLocations ) {
+typename HybridAutomatonComp<Number>::LocationType* HybridAutomatonComp<Number>::getLocation( const std::string& name ) const {
+	for ( const auto& l : mLocations ) {
 		if ( l->getName() == name ) {
-			return l;
+			return &l;
 		}
 	}
 	return nullptr;
@@ -355,16 +450,18 @@ const typename HybridAutomatonComp<Number>::locationConditionMap& HybridAutomato
 				auto entryPairIt = mComposedLocs.find( locationIndices );
 				if ( entryPairIt == std::end( mComposedLocs ) ) {
 					ComposedLocation<Number> tmp{ *this };
+					tmp.mCompositionals = locationIndices;
+					tmp.mIsValid = false;
 					mLocations.emplace_back( std::move( tmp ) );
-					auto& newLoc = mLocations.back();
-					newLoc.mCompositionals = locationIndices;
-					newLoc.mIsValid = false;
-					mComposedLocs[locationIndices] = mLocations.size() - 1;
+					std::cout << "adress of loc " << &mLocations.back() << std::endl;
+					mComposedLocs[locationIndices] = std::prev( std::end( mLocations ) );
 				}
 			}
 			assert( mComposedLocs.count( locationIndices ) > 0 );
 			// write initial states
-			mInitialStates[mLocations[mComposedLocs[locationIndices]]] = Condition<Number>( initialMatrix, initialVector );
+			ComposedLocation<Number>* lPtr = &( *mComposedLocs[locationIndices] );
+			std::cout << "Lptr: " << lPtr << std::endl;
+			mInitialStates[lPtr] = Condition<Number>( initialMatrix, initialVector );
 		}
 		mCachesValid[CACHE::INITIALSTATES] = true;
 	}
@@ -412,13 +509,14 @@ const std::vector<std::string>& HybridAutomatonComp<Number>::getVariables() cons
 }
 
 template <typename Number>
-std::set<Label> HybridAutomatonComp<Number>::getLabels() const {
-	std::set<Label> res;
-	for ( std::size_t automatonIdx = 0; automatonIdx < mAutomata.size(); ++automatonIdx ) {
-		auto labels = mAutomata[automatonIdx].getLabels();
-		res.insert( std::begin( labels ), std::end( labels ) );
+const std::set<Label>& HybridAutomatonComp<Number>::getLabels() const {
+	if ( !mCachesValid[CACHE::LABELS] ) {
+		for ( std::size_t automatonIdx = 0; automatonIdx < mAutomata.size(); ++automatonIdx ) {
+			auto labels = mAutomata[automatonIdx].getLabels();
+			mLabels.insert( std::begin( labels ), std::end( labels ) );
+		}
 	}
-	return res;
+	return mLabels;
 }
 
 template <typename Number>
@@ -430,7 +528,7 @@ void HybridAutomatonComp<Number>::setVariableMapping() const {
 		mLocalToGlobalVars.clear();
 		// for each global variable
 		for ( std::size_t globalIdx = 0; globalIdx < mVariables.size(); ++globalIdx ) {
-			mGlobalToLocalVars[globalIdx] = std::vector<std::size_t>{ mAutomata.size() };
+			mGlobalToLocalVars[globalIdx] = std::vector<long int>( mAutomata.size() );
 			// for each component
 			for ( std::size_t automatonIdx = 0; automatonIdx < mAutomata.size(); ++automatonIdx ) {
 				mGlobalToLocalVars[globalIdx][automatonIdx] = getIndex( mAutomata[automatonIdx].getVariables(), mVariables[globalIdx] );

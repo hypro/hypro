@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "test/algorithms/automata/automataCreation.h"
 #include "test/defines.h"
 
@@ -128,7 +137,7 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 	hypro::Condition<Number> guard( transConstraint, transConstants );
 	hypro::Reset<Number> reset{ { carl::Interval<Number>{ 0, 0 }, carl::Interval<Number>{ 0, 0 } } };
 
-	hypro::Transition<Number>* trans0 = loc0->createTransition( loc0 );
+	auto* trans0 = loc0->createTransition( loc0 );
 	trans0->setGuard( guard );
 	trans0->setReset( reset );
 
@@ -139,7 +148,7 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 	guard = hypro::Condition<Number>( transConstraint, transConstants );
 	reset = hypro::Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	hypro::Transition<Number>* trans1 = loc0->createTransition( loc1 );
+	auto* trans1 = loc0->createTransition( loc1 );
 	trans1->setGuard( guard );
 	trans1->setReset( reset );
 
@@ -180,12 +189,12 @@ hypro::HybridAutomaton<Number> createRectangularHA4() {
 	hypro::Condition<Number> guard( transConstraint, transConstants );
 	hypro::Reset<Number> reset{ { { 1, 1 } } };
 
-	std::unique_ptr<hypro::Transition<Number>> trans0 =
-		  std::make_unique<hypro::Transition<Number>>( loc.get(), loc.get(), guard, reset );
+	auto trans0 =
+		  std::make_unique<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>>( loc.get(), loc.get(), guard, reset );
 
 	reset = hypro::Reset<Number>{ { { -1, -1 } } };
-	std::unique_ptr<hypro::Transition<Number>> trans1 =
-		  std::make_unique<hypro::Transition<Number>>( loc.get(), loc.get(), guard, reset );
+	auto trans1 =
+		  std::make_unique<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>>( loc.get(), loc.get(), guard, reset );
 
 	loc->addTransition( std::move( trans0 ) );
 	loc->addTransition( std::move( trans1 ) );
@@ -337,7 +346,7 @@ TYPED_TEST( RectangularReachabilityTest, WorkerConstruction ) {
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
 							  { analysisParameters } };
 
-	auto worker = hypro::RectangularWorker<TypeParam>( automaton, settings );
+	auto worker = hypro::RectangularWorker<TypeParam, hypro::HybridAutomaton<Number>>( automaton, settings );
 	SUCCEED();
 }
 
@@ -345,7 +354,7 @@ TYPED_TEST( RectangularReachabilityTest, ReacherConstruction ) {
 	using Number = typename TypeParam::NumberType;
 
 	auto [automaton, reachable_points, non_reachable_points] = hypro::testing::createRectangularHA<Number>();
-	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
+	auto roots = hypro::makeRoots<TypeParam, decltype( automaton )>( automaton );
 
 	hypro::AnalysisParameters analysisParameters;
 	analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
@@ -356,8 +365,8 @@ TYPED_TEST( RectangularReachabilityTest, ReacherConstruction ) {
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
 							  { analysisParameters } };
 
-	auto reach = hypro::reachability::ReachBase<TypeParam, hypro::RectangularAnalyzer<TypeParam>>( automaton, settings,
-																								   roots );
+	auto reach = hypro::reachability::ReachBase<TypeParam, hypro::HybridAutomaton<Number>, hypro::RectangularAnalyzer<TypeParam, hypro::HybridAutomaton<Number>>>( automaton, settings,
+																																								   roots );
 	SUCCEED();
 }
 
@@ -365,7 +374,7 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachability1 ) {
 	using Number = typename TypeParam::NumberType;
 
 	auto [automaton, reachable_points, non_reachable_points] = hypro::testing::createRectangularHA<Number>();
-	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
+	auto roots = hypro::makeRoots<TypeParam, decltype( automaton )>( automaton );
 	EXPECT_EQ( std::size_t( 1 ), roots.size() );
 
 	hypro::AnalysisParameters analysisParameters;
@@ -377,8 +386,8 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachability1 ) {
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
 							  { analysisParameters } };
 
-	auto reach = hypro::reachability::ReachBase<TypeParam, hypro::RectangularAnalyzer<TypeParam>>( automaton, settings,
-																								   roots );
+	auto reach = hypro::reachability::ReachBase<TypeParam, decltype( automaton ), hypro::RectangularAnalyzer<TypeParam, decltype( automaton )>>( automaton, settings,
+																																				 roots );
 
 	// call verifier, validate result
 	auto reachabilityResult = reach.computeForwardReachability();
@@ -408,7 +417,7 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumps ) {
 	using Number = typename TypeParam::NumberType;
 
 	auto automaton = createRectangularHA2<Number>();
-	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
+	auto roots = hypro::makeRoots<TypeParam, decltype( automaton )>( automaton );
 	EXPECT_EQ( std::size_t( 1 ), roots.size() );
 
 	hypro::AnalysisParameters analysisParameters;
@@ -420,8 +429,8 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumps ) {
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
 							  { analysisParameters } };
 
-	auto reach = hypro::reachability::ReachBase<TypeParam, hypro::RectangularAnalyzer<TypeParam>>( automaton, settings,
-																								   roots );
+	auto reach = hypro::reachability::ReachBase<TypeParam, decltype( automaton ), hypro::RectangularAnalyzer<TypeParam, decltype( automaton )>>( automaton, settings,
+																																				 roots );
 
 	// call verifier, validate result
 	auto reachabilityResult = reach.computeForwardReachability();
@@ -450,7 +459,7 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumpsTwoDimensio
 	using Number = typename TypeParam::NumberType;
 
 	auto automaton = createRectangularHA3<Number>();
-	auto roots = hypro::makeRoots<TypeParam, Number>( automaton );
+	auto roots = hypro::makeRoots<TypeParam, decltype( automaton )>( automaton );
 	EXPECT_EQ( std::size_t( 1 ), roots.size() );
 
 	hypro::AnalysisParameters analysisParameters;
@@ -462,8 +471,8 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumpsTwoDimensio
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
 							  { analysisParameters } };
 
-	auto reach = hypro::reachability::ReachBase<TypeParam, hypro::RectangularAnalyzer<TypeParam>>( automaton, settings,
-																								   roots );
+	auto reach = hypro::reachability::ReachBase<TypeParam, decltype( automaton ), hypro::RectangularAnalyzer<TypeParam, decltype( automaton )>>( automaton, settings,
+																																				 roots );
 
 	// call verifier, validate result
 	auto reachabilityResult = reach.computeForwardReachability();
@@ -528,7 +537,7 @@ TYPED_TEST( RectangularReachabilityTest, BackwardsTimeComputation ) {
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
 							  { analysisParameters } };
 
-	auto worker = hypro::RectangularWorker<TypeParam>( ha, settings );
+	auto worker = hypro::RectangularWorker<TypeParam, decltype( ha )>( ha, settings );
 
 	// Create initial set (unit box)
 	Matrix constraints = Matrix::Zero( 4, 2 );
@@ -543,7 +552,7 @@ TYPED_TEST( RectangularReachabilityTest, BackwardsTimeComputation ) {
 	auto timings = carl::Interval<hypro::SegmentInd>{ 0, 2 };
 
 	// Create artificial task for backwards analysis
-	hypro::ReachTreeNode<TypeParam> taskNode{ l1ptr, initialSet, timings };
+	hypro::ReachTreeNode<TypeParam, typename decltype( ha )::LocationType> taskNode{ l1ptr, initialSet, timings };
 
 	auto result = worker.computeTimePredecessors( taskNode );
 	EXPECT_TRUE( result == hypro::REACHABILITY_RESULT::SAFE );
