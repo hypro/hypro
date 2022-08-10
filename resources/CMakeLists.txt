@@ -10,6 +10,7 @@ set(RESSOURCES_FLAGS "-std=c++17 -Wno-error ${CMAKE_CXX_FLAGS} -Wno-error")
 # Load modules
 include(ExternalProject)
 include(FetchContent)
+set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/resources/src)
 if (DEVELOPER)
     include(CMakePrintHelpers)
 endif ()
@@ -232,7 +233,9 @@ if (HYPRO_USE_OPENMP)
 endif ()
 
 # for serialization
-include(cereal.cmake)
+if (HYPRO_USE_SERIALIZATION)
+    include(cereal.cmake)
+endif ()
 
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)

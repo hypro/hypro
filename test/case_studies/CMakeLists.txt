@@ -9,14 +9,14 @@ if (HYPRO_BENCHMARK)
 
     find_package(Boost COMPONENTS program_options REQUIRED)
     add_executable(cs_hypro_decomposition_benchmark cs_hypro_decomposition_benchmark.cpp
-            ${CMAKE_SOURCE_DIR}/src/tool/cli/cli.cpp ${CMAKE_SOURCE_DIR}/src/tool/cli/settingsProcessing.cpp
-            ${CMAKE_SOURCE_DIR}/src/tool/cli/DynamicStrategyBuilder.cc
-            ${CMAKE_SOURCE_DIR}/src/tool/reachability/analysis.cpp
-            ${CMAKE_SOURCE_DIR}/src/tool/preprocessing/preprocessing.cpp)
+            ${CMAKE_SOURCE_DIR}/src/hydra/cli/cli.cpp ${CMAKE_SOURCE_DIR}/src/hydra/cli/settingsProcessing.cpp
+            ${CMAKE_SOURCE_DIR}/src/hydra/cli/DynamicStrategyBuilder.cc
+            ${CMAKE_SOURCE_DIR}/src/hydra/reachability/analysis.cpp
+            ${CMAKE_SOURCE_DIR}/src/hydra/preprocessing/preprocessing.cpp)
     target_link_libraries(cs_hypro_decomposition_benchmark ${PROJECT_NAME}-shared
             ${GBENCHMARK_LIBRARIES} Boost::program_options)
     target_include_directories(cs_hypro_decomposition_benchmark PRIVATE ${GBENCHMARK_INCLUDE_DIR}
-            ${CMAKE_SOURCE_DIR}/test/include/ ${CMAKE_SOURCE_DIR}/include/tool/)
+            ${CMAKE_SOURCE_DIR}/test/include/ ${CMAKE_SOURCE_DIR}/include/hydra/)
     add_dependencies(cs_hypro_decomposition_benchmark ${PROJECT_NAME}_resources)
 
     add_executable(cs_simplex_watertanks_benchmark cs_simplex_architecture_watertanks_benchmark.cpp)

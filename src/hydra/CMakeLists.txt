@@ -3,7 +3,7 @@ file(GLOB_RECURSE tool_sources RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp)
 
 # create target
 add_executable(hydra EXCLUDE_FROM_ALL ${tool_sources})
-target_include_directories(hydra PRIVATE ${CMAKE_SOURCE_DIR}/include/tool)
+target_include_directories(hydra PRIVATE ${CMAKE_SOURCE_DIR}/include/hydra)
 
 # find hypro
 find_package(${PROJECT_NAME} REQUIRED)

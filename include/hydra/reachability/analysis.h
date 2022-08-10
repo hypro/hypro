@@ -7,36 +7,26 @@
  *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/*
- * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 23.03.22.
- */
+#pragma once
+#include "typedefs.h"
 
-#include "hypro/datastructures/HybridAutomaton/output/Flowstar.h"
+#include <hypro/algorithms/reachability/analyzer/LTIAnalyzer.h>
+#include <hypro/datastructures/HybridAutomaton/State.h>
+#include <hypro/datastructures/reachability/PreprocessingInformation.h>
+#include <hypro/util/type_handling/dispatch.h>
 
-namespace hypro {
+namespace hydra::reachability {
 
-std::string toFlowstarFormat( const ReachabilitySettings& settings,
-							  const std::map<Eigen::Index, std::string>&,
-							  const std::string& prefix ) {
-	std::stringstream res;
+using namespace hypro;
 
-	res << prefix << "setting";
-	res << prefix << "{";
-	res << prefix << "\tfixed steps " << settings.timeStep;
-	res << prefix << "\ttime " << settings.timeBound;
-	/*
-	if ( !settings.plotDimensions.empty() ) {
-		for ( const auto& dims : settings.plotDimensions ) {
-			assert( dims.size() == 2 );
-			res << prefix << "\tgnuplot octagon " << varNameMap.at( dims[0] ) << "," << varNameMap.at( dims[1] );
-		}
-	}
-	*/
-	res << prefix << "\toutput " << settings.fileName;
-	res << prefix << "\tmax jumps " << settings.jumpDepth;
-	res << prefix << "}";
+using FullState = hypro::apply<hypro::State, concat<TypeList<Number, CarlPolytope<Number>>, RepresentationsList<Number, Converter<Number>>>>;
 
-	return res.str();
-}
+using PolytopalState = hypro::apply<hypro::State, PolytopeTypesList<Number, Converter<Number>>>;
 
-}  // namespace hypro
+struct AnalysisResult {
+	std::vector<hypro::PlotData<FullState>> plotData{};
+};
+
+AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, hypro::PreprocessingInformation information, bool urgency_cegar = false );
+
+}  // namespace hydra::reachability

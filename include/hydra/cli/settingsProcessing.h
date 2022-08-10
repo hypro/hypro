@@ -7,36 +7,12 @@
  *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/*
- * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 23.03.22.
- */
+#pragma once
+#include <boost/program_options.hpp>
+#include <hypro/datastructures/reachability/Settings.h>
 
-#include "hypro/datastructures/HybridAutomaton/output/Flowstar.h"
+namespace hydra {
 
-namespace hypro {
+hypro::Settings processSettings( const hypro::ReachabilitySettings& parsedSettings, const boost::program_options::variables_map& cliOptions );
 
-std::string toFlowstarFormat( const ReachabilitySettings& settings,
-							  const std::map<Eigen::Index, std::string>&,
-							  const std::string& prefix ) {
-	std::stringstream res;
-
-	res << prefix << "setting";
-	res << prefix << "{";
-	res << prefix << "\tfixed steps " << settings.timeStep;
-	res << prefix << "\ttime " << settings.timeBound;
-	/*
-	if ( !settings.plotDimensions.empty() ) {
-		for ( const auto& dims : settings.plotDimensions ) {
-			assert( dims.size() == 2 );
-			res << prefix << "\tgnuplot octagon " << varNameMap.at( dims[0] ) << "," << varNameMap.at( dims[1] );
-		}
-	}
-	*/
-	res << prefix << "\toutput " << settings.fileName;
-	res << prefix << "\tmax jumps " << settings.jumpDepth;
-	res << prefix << "}";
-
-	return res.str();
-}
-
-}  // namespace hypro
+}  // namespace hydra

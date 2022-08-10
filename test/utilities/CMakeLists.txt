@@ -21,7 +21,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
     target_link_libraries(runUtilityTests PUBLIC
             ${GTEST_LIBRARIES}
             ${PROJECT_NAME}-shared
-            cereal::cereal
+            #cereal::cereal
             )
 
     cotire(runUtilityTests)

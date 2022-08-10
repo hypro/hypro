@@ -28,7 +28,6 @@ endif ()
 export_target(DEPENDENT_TARGETS GLPK_STATIC)
 export_target(DEPENDENT_TARGETS ANTLR4_STATIC)
 export_target(DEPENDENT_TARGETS ANTLR4_SHARED)
-export_target(DEPENDENT_TARGETS cereal::cereal)
 if (HYPRO_USE_MIMALLOC)
     export_target(DEPENDENT_TARGETS mimalloc_SHARED)
     export_target(DEPENDENT_TARGETS mimalloc_STATIC)
@@ -85,7 +84,7 @@ configure_package_config_file(cmake/hyproConfig.cmake.in ${CMAKE_CURRENT_BINARY_
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/installedConfig/hyproConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/hyproConfigVersion.cmake
         DESTINATION ${CMAKE_INSTALL_DIR})
 
-install(EXPORT ${PROJECT_NAME} FILE "${PROJECT_NAME}Targets.cmake" DESTINATION ${CMAKE_INSTALL_DIR})
+#install(EXPORT ${PROJECT_NAME} FILE "${PROJECT_NAME}Targets.cmake" DESTINATION ${CMAKE_INSTALL_DIR})
 
 # Install the export set for use with the install-tree
 #install(EXPORT ${HYPRO_TARGETS} DESTINATION ${PROJECT_BINARY_DIR}) # COMPONENT dev)

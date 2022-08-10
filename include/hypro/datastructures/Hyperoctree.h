@@ -13,19 +13,27 @@
 
 #pragma once
 
+//clang-format off
+#include <hypro/flags.h>
+//clang-format on
+
 #include "../representations/GeometricObjectBase.h"
 #include "../util/serialization/interval_serialization.h"
 
+#ifdef HYPRO_USE_SERIALIZATION
 #include <cereal/types/common.hpp>
 #include <cereal/types/vector.hpp>
+#endif
 
 namespace hypro {
 
 template <typename N>
 class Hyperoctree;
 
+#ifdef HYPRO_USE_SERIALIZATION
 template <class Archive, typename N>
 void serialize( Archive& archive, Hyperoctree<N>& tree );
+#endif
 
 /**
  * Class to efficiently store data in a tree-like structure.
@@ -34,8 +42,10 @@ void serialize( Archive& archive, Hyperoctree<N>& tree );
 template <typename Number>
 class Hyperoctree {
 	using cellVector = std::vector<Box<Number>>;
+#ifdef HYPRO_USE_SERIALIZATION
 	template <class Archive>
 	friend void serialize( Archive& archive, Hyperoctree<Number>& tree );
+#endif
 
   public:
 	/*
@@ -331,15 +341,18 @@ std::ostream& operator<<( std::ostream& out, const Hyperoctree<Number>& in ) {
 	out << "Container: " << in.getContainer() << "\ncovered: " << in.isCovered();
 	return out;
 }
+#ifdef HYPRO_USE_SERIALIZATION
 /// serialization-function
 template <class Archive>
 void serialize( Archive& archive,
 				Hyperoctree<double>& tree ) {
 	archive( tree.mSplits, tree.mRemainingDepth, tree.mCovered, tree.mContainer, tree.mToBeCovered, tree.mData, tree.mChildren );
 }
+#endif
 
 }  // namespace hypro
 
+#ifdef HYPRO_USE_SERIALIZATION
 // Specialization for LoadAndConstruct for hyperoctrees
 namespace cereal {
 template <>
@@ -365,3 +378,4 @@ struct LoadAndConstruct<hypro::Hyperoctree<double>> {
 	}
 };
 }  // namespace cereal
+#endif

@@ -13,6 +13,11 @@
 
 #include "test/defines.h"
 
+//clang-format off
+#include <hypro/flags.h>
+#ifdef HYPRO_USE_SERIALIZATION
+//clang-format on
+
 #include "gtest/gtest.h"
 #include <carl/numbers/numbers.h>
 #include <cereal/archives/binary.hpp>
@@ -180,3 +185,5 @@ TEST( runUtilityTests, HyperoctreeSerialization ) {
 		EXPECT_FALSE( child4_it->isCovered() );
 	}
 }
+
+#endif

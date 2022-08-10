@@ -18,6 +18,7 @@
 #cmakedefine HYPRO_HAVE_SMT
 #cmakedefine HYPRO_USE_PPL
 #cmakedefine HYPRO_USE_OPENMP
+#cmakedefine HYPRO_USE_SERIALIZATION
 #cmakedefine HYPRO_USE_SMTRAT
 #cmakedefine HYPRO_USE_SOPLEX
 #cmakedefine HYPRO_USE_Z3

@@ -13,9 +13,13 @@
 
 #ifndef HYPRO_MPQ_SERIALIZATION_H
 #define HYPRO_MPQ_SERIALIZATION_H
-
+// clang-format off
+#include <hypro/flags.h>
+#ifdef HYPRO_USE_SERIALIZATION
 #include <carl/numbers/numbers.h>
 #include <cereal/types/string.hpp>
+
+// clang-format on
 
 namespace cereal {
 
@@ -34,5 +38,7 @@ void load( Archive& archive,
 }
 
 }  // namespace cereal
+
+#endif
 
 #endif	// HYPRO_MPQ_SERIALIZATION_H

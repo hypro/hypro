@@ -17,6 +17,9 @@
 #include "mpq_serialization.h"
 
 #include <carl/interval/Interval.h>
+#include <hypro/flags.h>
+
+#ifdef HYPRO_USE_SERIALIZATION
 
 namespace cereal {
 
@@ -57,5 +60,7 @@ void load( Archive& archive,
 }
 
 }  // namespace cereal
+
+#endif
 
 #endif	// HYPRO_INTERVAL_SERIALIZATION_H
