@@ -61,37 +61,51 @@ void ComposedLocation<Number>::validate() const {
 				// if the current location is the master, simply write flow row indicated by globalVIdx, else do nothing
 				if ( localMasters[globalVName].front() == lPtr ) {
 					const auto& localFlow = lPtr->getLinearFlow().getFlowMatrix();
-					for ( std::size_t localCol = 0; localCol != localFlow.cols(); ++localCol ) {
-						haFlow( globalVIdx, mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localFlow( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx], localCol );
+					for ( std::size_t localCol = 0; localCol < localFlow.cols(); ++localCol ) {
+						if ( localCol != localFlow.cols() - 1 ) {
+							haFlow( globalVIdx, mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localFlow( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx], localCol );
+						} else {
+							haFlow( globalVIdx, haFlow.cols() - 1 ) = localFlow( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx], localCol );
+						}
 					}
 				}
 			} else {
 				// the variable is not mastered
 				// check if the current automaton has information for this variable, if not (value is -1), skip
-				if ( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx] > 0 ) {
+				if ( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx] >= 0 ) {
 					// the global variable is also in the local variable set, import flow, if admissible
-					const auto& localFlow = lPtr->getLinearFlow().getFlowMatrix();
+					auto localFlow = lPtr->getLinearFlow().getFlowMatrix();
 					// maps the global var index to the row in the local flow
 					auto localRow = mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx];
 					// try to import local flow
-					for ( std::size_t localCol = 0; localCol != localFlow.cols(); ++localCol ) {
-						// check admissibility by checking agains all other automata
+					for ( std::size_t localCol = 0; localCol < localFlow.cols(); ++localCol ) {
+						bool isConst = ( localCol == localFlow.cols() - 1 );
+						// check admissibility by checking against all other automata
 						for ( std::size_t otherAutomatonIdx = 0; otherAutomatonIdx != mAutomaton.mAutomata.size(); ++otherAutomatonIdx ) {
 							// column of the same variable in the other automaton, can be -1 if the other automaton does not have this variable
-							auto otherCol = mAutomaton.mGlobalToLocalVars[mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )]][otherAutomatonIdx];
+							long int otherCol;
+							if ( isConst ) {
+								otherCol = locs[otherAutomatonIdx]->getLinearFlow().getFlowMatrix().cols() - 1;
+							} else {
+								otherCol = mAutomaton.mGlobalToLocalVars[mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )]][otherAutomatonIdx];
+							}
 							// do not compare to one self and skip, if the other automaton does not have the variable (localCol) in its set
 							// or if it does not have information about the main variable (globalIdx)
 							if ( otherAutomatonIdx == automatonIdx || otherCol < 0 || mAutomaton.mGlobalToLocalVars[globalVIdx][otherAutomatonIdx] < 0 ) {
 								continue;
 							}
 							// the other automaton has information on this (local col) variable
-							const auto& otherFlow = locs[otherAutomatonIdx]->getLinearFlow().getFlowMatrix();
+							auto otherFlow = locs[otherAutomatonIdx]->getLinearFlow().getFlowMatrix();
 							if ( otherFlow( mAutomaton.mGlobalToLocalVars[globalVIdx][otherAutomatonIdx], otherCol ) != localFlow( localRow, localCol ) ) {
 								throw std::logic_error( "Flows of shared variables are not admissible" );
 							}
 						}
 						// if we reach here, the flow is admissible for the current col
-						haFlow( globalVIdx, mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localFlow( localRow, localCol );
+						if ( isConst ) {
+							haFlow( globalVIdx, haFlow.cols() - 1 ) = localFlow( localRow, localCol );
+						} else {
+							haFlow( globalVIdx, mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localFlow( localRow, localCol );
+						}
 					}  // loop over local variable idx
 				}
 			}  // if variable is not mastered
@@ -183,17 +197,23 @@ void ComposedLocation<Number>::validate() const {
 				// cannot be undefined, otherwise the target location would not be in the location set of the automaton holding the source location
 				assert( targetLocationIndices.back() >= 0 );
 				// handling of the guard condition
+				std::cout << "Transition: " << *tPtr << std::endl;
 				const auto& localGuard = tPtr->getGuard();
 				if ( !localGuard.isTrue() ) {
+					std::cout << "consider matrix " << localGuard.getMatrix() << " and vector " << localGuard.getVector() << std::endl;
 					for ( std::size_t constraintIdx = 0; constraintIdx < localGuard.getMatrix().rows(); ++constraintIdx ) {
 						vector_t<Number> newRow = vector_t<Number>::Zero( haVars.size() );
 						for ( std::size_t localCol = 0; localCol != localGuard.getMatrix().cols(); ++localCol ) {
-							newRow( mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localGuard.getMatrix()( constraintIdx, localCol );
+							auto coeff = localGuard.getMatrix()( constraintIdx, localCol );
+							auto pos = mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )];
+							newRow( pos ) = coeff;
 						}
 						appendRow( guardConstraints, newRow );
 						appendRow( guardConstants, localGuard.getVector()( constraintIdx ) );
+						std::cout << "after adding constraints: " << guardConstraints << " and vector " << guardConstants << std::endl;
 					}
 				}
+				std::cout << "Final guard matrix: " << guardConstraints << " and vector " << guardConstants << std::endl;
 
 				// handling of the reset
 				// TODO extend to interval resets
@@ -215,7 +235,7 @@ void ComposedLocation<Number>::validate() const {
 					} else {
 						// the variable is not mastered
 						// check if the current automaton has information for this variable, if not (value is -1), skip
-						if ( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx] > 0 ) {
+						if ( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx] >= 0 ) {
 							// the global variable is also in the local variable set, import reset, if admissible
 							// distinguish between identity resets (which might have an empty matrix) and others
 							if ( tPtr->getReset().isIdentity() ) {
@@ -275,6 +295,7 @@ void ComposedLocation<Number>::validate() const {
 		for ( std::size_t automatonIdx = 0; automatonIdx < locs.size(); ++automatonIdx ) {
 			auto* tPtr = transitionIt->second[automatonIdx];
 			auto* lPtr = locs[automatonIdx];
+			std::cout << "Transition: " << *tPtr << std::endl;
 			// once one transition is urgent, the compose will be as well
 			if ( tPtr->isUrgent() ) {
 				urgent = true;
@@ -284,8 +305,9 @@ void ComposedLocation<Number>::validate() const {
 			// cannot be undefined, otherwise the target location would not be in the location set of the automaton holding the source location
 			assert( targetLocationIndices.back() >= 0 );
 			// handling of the guard condition
-			const auto& localGuard = tPtr->getGuard();
+			auto localGuard = tPtr->getGuard();
 			if ( !localGuard.isTrue() ) {
+				std::cout << "consider matrix " << localGuard.getMatrix() << " and vector " << localGuard.getVector() << std::endl;
 				for ( std::size_t constraintIdx = 0; constraintIdx < localGuard.getMatrix().rows(); ++constraintIdx ) {
 					vector_t<Number> newRow = vector_t<Number>::Zero( haVars.size() );
 					for ( std::size_t localCol = 0; localCol != localGuard.getMatrix().cols(); ++localCol ) {
@@ -293,8 +315,10 @@ void ComposedLocation<Number>::validate() const {
 					}
 					appendRow( guardConstraints, newRow );
 					appendRow( guardConstants, localGuard.getVector()( constraintIdx ) );
+					std::cout << "after adding constraints: " << guardConstraints << " and vector " << guardConstants << std::endl;
 				}
 			}
+			std::cout << "Final guard matrix: " << guardConstraints << " and vector " << guardConstants << std::endl;
 
 			// handling of the reset
 			// TODO extend to interval resets
@@ -317,7 +341,7 @@ void ComposedLocation<Number>::validate() const {
 					// the variable is not mastered
 					// TODO currently there are no sanity checks here!
 					// check if the current automaton has information for this variable, if not (value is -1), skip
-					if ( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx] > 0 ) {
+					if ( mAutomaton.mGlobalToLocalVars[globalVIdx][automatonIdx] >= 0 ) {
 						// the global variable is also in the local variable set, import reset, if admissible
 						// distinguish between identity resets (which might have an empty matrix) and others
 						if ( tPtr->getReset().isIdentity() ) {

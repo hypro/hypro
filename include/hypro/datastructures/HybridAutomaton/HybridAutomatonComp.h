@@ -10,6 +10,7 @@
 /*
  * Class that describes a hybrid automaton with components.
  * @file   HybridAutomatonComp.cpp
+ * @author Stefan Schupp <stefan.schupp@tuwien.ac.at>
  */
 
 #pragma once

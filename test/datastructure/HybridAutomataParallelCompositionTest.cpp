@@ -421,12 +421,17 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariables ) {
 
 TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSingle ) {
 	using namespace hypro;
+	matrix_t<TypeParam> flow = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow( 1, 1 ) = 0;
 	auto ha1 = HybridAutomaton<TypeParam>();
 	ha1.setVariables( { "a" } );
 	// locations
 	auto* l1 = ha1.createLocation( "l1" );
+	l1->setFlow( flow );
 	auto* l2 = ha1.createLocation( "l2" );
+	l2->setFlow( flow );
 	auto* l3 = ha1.createLocation( "l3" );
+	l3->setFlow( flow );
 	// transitions
 	auto* t12 = l1->createTransition( l2 );
 	auto* t23 = l2->createTransition( l3 );
@@ -584,4 +589,92 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompTwoAutomata ) {
 	EXPECT_EQ( 9, cmp.getLocations().size() );
 	ASSERT_EQ( 1, l16->getTransitions().size() );
 	EXPECT_EQ( l14->getName(), l16->getTransitions().front()->getTarget()->getName() );
+}
+
+TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSharedVariables ) {
+	using namespace hypro;
+	matrix_t<TypeParam> flow2 = matrix_t<TypeParam>::Identity( 3, 3 );
+	flow2( 2, 2 ) = 0;
+	flow2( 0, 0 ) = 2;
+	flow2( 0, 2 ) = 3;
+	matrix_t<TypeParam> flow1 = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow1( 1, 1 ) = 0;
+	std::cout << "Flow2: " << flow2 << ", flow1: " << flow1 << std::endl;
+	auto ha1 = HybridAutomaton<TypeParam>();
+	ha1.setVariables( { "a", "b" } );
+	// locations
+	auto* l1 = ha1.createLocation( "l1" );
+	l1->setFlow( flow2 );
+	auto* l2 = ha1.createLocation( "l2" );
+	l2->setFlow( flow2 );
+	// transitions
+	auto* t12 = l1->createTransition( l2 );
+	// guard a >= 0
+	matrix_t<TypeParam> guardConstr = matrix_t<TypeParam>::Zero( 1, 2 );
+	auto guardConst = vector_t<TypeParam>::Zero( 1 );
+	guardConstr( 0, 0 ) = TypeParam( -1 );
+	t12->setGuard( { guardConstr, guardConst } );
+	auto* t23 = l2->createTransition( l1 );
+	t23->addLabel( Label{ "label" } );
+	// guard a <= 1
+	matrix_t<TypeParam> guardConstr1 = matrix_t<TypeParam>::Zero( 1, 2 );
+	vector_t<TypeParam> guardConst1 = vector_t<TypeParam>::Ones( 1 );
+	guardConstr( 0, 0 ) = 1;
+	t23->setGuard( { guardConstr1, guardConst1 } );
+	// initial configuration: l1, a = 1
+	ha1.setInitialStates( { { l1, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 }, carl::Interval<TypeParam>{ 1 } } ) } } );
+	// second automaton
+	auto ha2 = HybridAutomaton<TypeParam>();
+	ha2.setVariables( { "b" } );
+	// locations
+	auto* l4 = ha2.createLocation( "l4" );
+	l4->setFlow( flow1 );
+	// transitions
+	auto* t11 = l4->createTransition( l4 );
+	t11->addLabel( Label{ "label" } );
+	t11->setUrgent();
+	// guard b >= 2
+	matrix_t<TypeParam> guardConstr2 = matrix_t<TypeParam>::Zero( 1, 1 );
+	vector_t<TypeParam> guardConst2 = vector_t<TypeParam>::Ones( 1 );
+	guardConstr2( 0, 0 ) = -1;
+	guardConst2( 0 ) = -2;
+	t11->setGuard( { guardConstr2, guardConst2 } );
+	// initial configuration: l1, a = 1
+	ha2.setInitialStates( { { l4, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
+	// composition
+	auto cmp = HybridAutomatonComp<TypeParam>();
+	using Ltype = typename decltype( cmp )::LocationType;
+	cmp.addAutomaton( std::move( ha1 ) );
+	cmp.addAutomaton( std::move( ha2 ) );
+	//
+	EXPECT_EQ( 2, cmp.getVariables().size() );
+	auto expectedVariables = std::vector<std::string>{ "a", "b" };
+	EXPECT_EQ( expectedVariables, cmp.getVariables() );
+	EXPECT_EQ( 0, cmp.getLocations().size() );
+	//
+	auto initialStates = cmp.getInitialStates();
+	EXPECT_EQ( 0, cmp.getLocations().size() );
+	EXPECT_EQ( "l1_l4", initialStates.begin()->first->getName() );
+	EXPECT_EQ( 1, cmp.getLocations().size() );
+	EXPECT_EQ( flow2, cmp.getLocations().front()->getLinearFlow().getFlowMatrix() );
+	ASSERT_EQ( 1, cmp.getLocations().front()->getTransitions().size() );
+	auto* t1 = cmp.getLocations().front()->getTransitions().front().get();
+	EXPECT_TRUE( t1->getLabels().empty() );
+	EXPECT_FALSE( t1->isUrgent() );
+	EXPECT_EQ( "l2_l4", t1->getTarget()->getName() );
+	auto* loc2 = t1->getTarget();
+	EXPECT_EQ( 2, cmp.getLocations().size() );
+	ASSERT_EQ( 1, loc2->getTransitions().size() );
+	auto* t2 = loc2->getTransitions().front().get();
+	EXPECT_TRUE( t2->isUrgent() );
+	auto expectedLabels = std::vector<Label>{ Label{ "label" } };
+	EXPECT_EQ( expectedLabels, t2->getLabels() );
+	matrix_t<TypeParam> guardConstr3 = matrix_t<TypeParam>::Zero( 2, 2 );
+	vector_t<TypeParam> guardConst3 = vector_t<TypeParam>::Zero( 2 );
+	guardConstr3( 0, 0 ) = 1;
+	guardConst3( 0 ) = 1;
+	guardConstr3( 1, 1 ) = -1;
+	guardConst3( 1 ) = -2;
+	auto expectedGuard = hypro::Condition<TypeParam>{ guardConstr3, guardConst3 };
+	EXPECT_EQ( expectedGuard, t2->getGuard() );
 }
