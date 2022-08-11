@@ -34,11 +34,11 @@ class ComposedLocation : public Location<Number> {
 	using transitionVector = std::vector<std::unique_ptr<CompTransition>>;
 
   private:
-	mutable bool mIsValid = false;									 ///< Flag indicating whether the location has been initialized
-	mutable transitionVector mTransitions;							 ///< Outgoing transitions
-	std::vector<std::size_t> mCompositionals;						 ///< Indices of the locations in the single automata
-	const HybridAutomatonComp<Number>& mAutomaton;					 ///< Reference to the original automaton this location is part of
-	std::map<std::string, std::vector<Location<Number>*>> mMasters;	 ///< Maps Variables to sets of locations in which the dynamics of this variable is overriding dynamics in other components
+	mutable bool mIsValid = false;					///< Flag indicating whether the location has been initialized
+	mutable transitionVector mTransitions;			///< Outgoing transitions
+	std::vector<std::size_t> mCompositionals;		///< Indices of the locations in the single automata
+	const HybridAutomatonComp<Number>& mAutomaton;	///< Reference to the original automaton this location is part of
+
   public:
 	/// Helper function which converts a location-stub to a fully composed location
 	void validate() const;
@@ -50,16 +50,14 @@ class ComposedLocation : public Location<Number> {
 		: mIsValid( false )
 		, mTransitions()
 		, mCompositionals( std::move( other.mCompositionals ) )
-		, mAutomaton( std::move( other.mAutomaton ) )
-		, mMasters( std::move( other.mMasters ) ) {
+		, mAutomaton( std::move( other.mAutomaton ) ) {
 	}
 
 	ComposedLocation( const ComposedLocation<Number>& other )
 		: mIsValid( false )
 		, mTransitions()
 		, mCompositionals( other.mCompositionals )
-		, mAutomaton( other.mAutomaton )
-		, mMasters( other.mMasters ) {
+		, mAutomaton( other.mAutomaton ) {
 	}
 	/// getter of indices of locations combined in this location
 	const std::vector<std::size_t>& getComponentLocationIndices() const {
@@ -207,17 +205,30 @@ class HybridAutomatonComp {
 	mutable std::map<std::size_t, std::vector<long int>> mGlobalToLocalVars;				 ///< Mapping from global var idx to local ones
 	mutable std::map<std::pair<std::size_t, long int>, std::size_t> mLocalToGlobalVars;		 ///< Mapping from automaton and var idx (pair) to global var idx
 	mutable std::map<std::vector<std::size_t>, typename Locations::iterator> mComposedLocs;	 ///< Mapping from indices of components to the index in the location vector
-	mutable std::set<Label> mLabels;														 /// Jump-synchronizationLabels
+	mutable std::set<Label> mLabels;														 ///< Jump-synchronizationLabels
+	std::map<std::string, std::vector<std::pair<std::size_t, std::size_t>>> mMasters;		 ///< Maps Variables to sets of locations in which the dynamics of this variable is overriding dynamics in other components
 
   public:
 	HybridAutomatonComp(){};
 
 	~HybridAutomatonComp(){};
 
-	void addAutomaton( HybridAutomaton<Number> automaton ) {
-		mAutomata.emplace_back( std::move( automaton ) );
+	void addAutomaton( HybridAutomaton<Number>&& automaton ) {
 		// invalidate caches
-		mCachesValid = std::vector<bool>( CACHE::Count, false );
+		invalidateCaches();
+		mAutomata.emplace_back( std::move( automaton ) );
+	}
+
+	void addMasterLocations( std::size_t componentIndex, const std::map<std::string, std::vector<std::size_t>>& masters ) {
+		invalidateCaches();
+		for ( const auto& [var, locationIndices] : masters ) {
+			if ( mMasters.count( var ) == 0 ) {
+				mMasters[var] = std::vector<std::pair<std::size_t, std::size_t>>();
+			}
+			for ( auto locIndex : locationIndices ) {
+				mMasters[var].emplace_back( componentIndex, locIndex );
+			}
+		}
 	}
 
 	/**
@@ -329,6 +340,7 @@ class HybridAutomatonComp {
 
   private:
 	void setVariableMapping() const;
+	void invalidateCaches() const;
 };
 }  // namespace hypro
 
