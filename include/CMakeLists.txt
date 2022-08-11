@@ -98,14 +98,19 @@ if (APPLE)
 endif ()
 
 # we do not specify destinations, since we use the defaults
+include(GNUInstallDirs)
 install(TARGETS ${PROJECT_NAME}-shared
         EXPORT ${PROJECT_NAME}Targets
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         FILE_SET ${PROJECT_NAME}_headers
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/hypro
         )
 install(TARGETS ${PROJECT_NAME}-static
-        EXPORT ${PROJECT_NAME}Targets)
+        EXPORT ${PROJECT_NAME}Targets
+        LIBRARY DESTINATION
+        )
 
 install(EXPORT ${PROJECT_NAME}Targets
         FILE "${PROJECT_NAME}Targets.cmake"
-        DESTINATION lib/cmake/${PROJECT_NAME}
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
         )

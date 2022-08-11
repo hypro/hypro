@@ -152,8 +152,6 @@ add_subdirectory(include)
 
 ########################################################################################
 
-include(GNUInstallDirs)
-
 add_subdirectory(resources)
 # Create config.h by adding cmake defines dependent on option switches
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/flags.h.in ${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/flags.h @ONLY)
