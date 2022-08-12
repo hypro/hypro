@@ -25,20 +25,21 @@ namespace hypro {
 template <typename Number>
 class Dictionary {
   private:
-	matrix_t<Number> mDictionary;	  // table
-	std::vector<Eigen::Index> mB;	  // basis
-	std::vector<Eigen::Index> mN;	  // co-basis
-	ConstrainSet<Number> mConstrains;  // original constraints
+	matrix_t<Number> mDictionary;	   ///< table
+	std::vector<Eigen::Index> mB;	   ///< basis
+	std::vector<Eigen::Index> mN;	   ///< co-basis
+	ConstrainSet<Number> mConstrains;  ///< original constraints
 
   public:
 	Dictionary() = default;
 	Dictionary( const Dictionary& rhs );
 	Dictionary( const matrix_t<Number>& rhs, std::vector<Eigen::Index> base, std::vector<Eigen::Index> cobase );
 	Dictionary( const matrix_t<Number>& rhs, std::vector<Eigen::Index> base, std::vector<Eigen::Index> cobase, ConstrainSet<Number> constrains );
+	Dictionary& operator=( const Dictionary& other ) = default;
+
 	/**
 	 * @brief Build a dictionary with mDictionary=rhs, mB=base and mN=cobase.
 	 */
-
 	Dictionary( const std::vector<Halfspace<Number>>& hsv );
 	/**
 	 * @brief Build a dictionary based on the hyperplane set hsv.
@@ -112,7 +113,7 @@ class Dictionary {
 	 * @brief is (i,j) the pivot given by the Bland's rule for the dictionary obtained by pivoting around (i,j).
 	 */
 	bool reverse( const Eigen::Index i, const Eigen::Index j );
-	bool reverse_old( const Eigen::Index i, const Eigen::Index j );  //before optimization
+	bool reverse_old( const Eigen::Index i, const Eigen::Index j );	 // before optimization
 
 	bool reverseDual( const Eigen::Index i, const Eigen::Index j, const std::vector<Eigen::Index>& availableIndices );
 	bool reverseDual_old( const Eigen::Index i, const Eigen::Index j, const std::vector<Eigen::Index> availableIndices );
@@ -154,22 +155,22 @@ class Dictionary {
 
 	friend bool operator==( const Dictionary<Number>& lhs, const Dictionary<Number>& rhs ) {
 		if ( lhs.mB != rhs.mB ) {
-			//std::cout << __func__ << " Basis not equal." << std::endl;
+			// std::cout << __func__ << " Basis not equal." << std::endl;
 			return false;
 		}
 
 		if ( lhs.mN != rhs.mN ) {
-			//std::cout << __func__ << " CoBasis not equal." << std::endl;
+			// std::cout << __func__ << " CoBasis not equal." << std::endl;
 			return false;
 		}
 
 		if ( lhs.mConstrains != rhs.mConstrains ) {
-			//std::cout << __func__ << " ConstraintSet not equal." << std::endl;
+			// std::cout << __func__ << " ConstraintSet not equal." << std::endl;
 			return false;
 		}
 
 		if ( lhs.mDictionary != rhs.mDictionary ) {
-			//std::cout << __func__ << " Tableau not equal." << std::endl;
+			// std::cout << __func__ << " Tableau not equal." << std::endl;
 			return false;
 		}
 

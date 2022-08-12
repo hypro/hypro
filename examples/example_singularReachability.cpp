@@ -4,12 +4,12 @@
  */
 
 #include "representations/GeometricObjectBase.h"
-#include <algorithms/reachability/workers/ContextBasedReachabilityWorker.h>
-#include <datastructures/reachability/ReachTree.h>
-#include <datastructures/reachability/SettingsProvider.h>
-#include <datastructures/reachability/Task.h>
-#include <datastructures/reachability/timing/EventTimingProvider.h>
-#include <datastructures/reachability/workQueue/WorkQueueManager.h>
+#include "algorithms/reachability/workers/ContextBasedReachabilityWorker.h"
+#include "datastructures/reachability/ReachTree.h"
+#include "datastructures/reachability/SettingsProvider.h"
+#include "datastructures/reachability/Task.h"
+#include "datastructures/reachability/timing/EventTimingProvider.h"
+#include "datastructures/reachability/workQueue/WorkQueueManager.h"
 #include <iostream>
 
 int main() {

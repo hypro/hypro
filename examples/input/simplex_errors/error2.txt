@@ -1,0 +1,2 @@
+Initial Zustand beginnt nur bei x2=0.2
+Laut Invariante und "bloating" sollte die initial Region aber x2 \in [0.2, 0.25] sein.

@@ -1,0 +1,45 @@
+#pragma once
+
+// clang-format off
+#define SOLVER_GLPK 1
+#define SOLVER_CLP 2
+#define SOLVER_SMTRAT 3
+#define SOLVER_ZTHREE 4
+#define SOLVER_SOPLEX 5
+
+#cmakedefine SUPPORT_MPFR
+#cmakedefine COMPARE_CDD
+#cmakedefine COMPARE_POLYMAKE
+#cmakedefine GNUPLOT_FOUND
+#cmakedefine HYPRO_USE_CLP
+#cmakedefine HYPRO_USE_GLPK
+#cmakedefine HYPRO_GSL_INTEGRATION
+#cmakedefine HYPRO_HAS_GRAPHVIZ
+#cmakedefine HYPRO_HAVE_SMT
+#cmakedefine HYPRO_USE_PPL
+#cmakedefine HYPRO_USE_OPENMP
+#cmakedefine HYPRO_USE_SMTRAT
+#cmakedefine HYPRO_USE_SOPLEX
+#cmakedefine HYPRO_USE_Z3
+#cmakedefine HYPRO_PRIMARY_SOLVER @HYPRO_PRIMARY_SOLVER@
+#cmakedefine HYPRO_SECONDARY_SOLVER @HYPRO_SECONDARY_SOLVER@
+#cmakedefine HYPRO_BENCHMARK
+#cmakedefine HYPRO_HAS_GRAPHVIZ
+#cmakedefine USE_CLANG
+#cmakedefine EXTERNALIZE_CLASSES
+#cmakedefine HYPRO_LOGGING
+#cmakedefine HYPRO_STATISTICS
+#cmakedefine FORWARD_REACHABILITY_METHOD_2
+#cmakedefine QUICKHULL_USE_LOW_DIMENSIONAL_IMPROVEMENT
+#cmakedefine RESET_REFINEMENT
+#cmakedefine CARL_OLD_INTERVALS
+#cmakedefine CARL_OLD_STRUCTURE
+#cmakedefine CARL_POLY_MEMBER_SUBSTITUTE
+#cmakedefine CARL_VARIABLE_VARIANTS
+#cmakedefine CARL_LOGGING_POST_1910
+
+#ifdef HYPRO_USE_SOPLEX
+#define SOPLEX_WITH_GMP
+#endif
+
+// clang-format on

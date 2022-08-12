@@ -3,7 +3,7 @@
 
 #include "../../datastructures/HybridAutomaton/Location.h"
 #include "../../datastructures/HybridAutomaton/LocationManager.h"
-#include "../../datastructures/HybridAutomaton/Transition.h"
+#include "../../../../include/hypro/datastructures/HybridAutomaton/Transition.h"
 #include "../../types.h"
 #include "HybridSystemBaseVisitor.h"
 #include "HybridSystemVisitor.h"

@@ -5,13 +5,13 @@
 namespace hypro {
 
 /***************************************************************************
-	 * Constructors
-	 **************************************************************************/
+ * Constructors
+ **************************************************************************/
 
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT() {}
 
-//copy constructor
+// copy constructor
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number, Converter, Setting>& orig )
 	: GeometricObjectBase( orig )
@@ -23,7 +23,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Supp
 	}
 }
 
-//move constructor
+// move constructor
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( SupportFunctionNewT<Number, Converter, Setting>&& orig )
 	: mRoot( std::move( orig.getRoot() ) ) {
@@ -35,7 +35,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( SupportFun
 	orig.clear();
 }
 
-//settings constructor
+// settings constructor
 template <typename Number, typename Converter, typename Setting>
 template <typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>>>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const SupportFunctionNewT<Number, Converter, SettingRhs>& orig ) {
@@ -45,16 +45,16 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Supp
 		using RGNPtr = RootGrowNode<Number, Converter, SettingRhs>*;
 		using SharedRGNPtr = std::shared_ptr<RootGrowNode<Number, Converter, Setting>>;
 
-		//Do nothing
+		// Do nothing
 		std::function<void( RGNPtr )> doNothing = []( RGNPtr ) {};
 
-		//Convert settings of leaves
+		// Convert settings of leaves
 		std::function<SharedRGNPtr( RGNPtr )> convertLeaves =
 			  []( RGNPtr n ) -> SharedRGNPtr {
 			return convertSettings<Number, Converter, Setting, SettingRhs>( n );
 		};
 
-		//Convert settings of operations, then add their children, then add the dimension
+		// Convert settings of operations, then add their children, then add the dimension
 		std::function<SharedRGNPtr( RGNPtr, std::vector<SharedRGNPtr>& )> convertOps =
 			  []( RGNPtr n, std::vector<SharedRGNPtr>& v ) -> SharedRGNPtr {
 			SharedRGNPtr convertedOp = convertSettings<Number, Converter, Setting, SettingRhs>( n );
@@ -69,12 +69,12 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Supp
 	}
 }
 
-//constructor for adding a new node
+// constructor for adding a new node
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const std::shared_ptr<RootGrowNode<Number, Converter, Setting>>& root )
 	: mRoot( root ) {}
 
-//Halfspace constructor
+// Halfspace constructor
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Halfspace<Number>& hspace )
 	: mMatrix( hspace.matrix() )
@@ -84,7 +84,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Half
 	mRoot = std::make_shared<Leaf<Number, Converter, Setting, Halfspace<Number>>>( tmp );
 }
 
-//Generic Leaf constructor
+// Generic Leaf constructor
 template <typename Number, typename Converter, typename Setting>
 template <typename Representation>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Representation& r ) {
@@ -99,13 +99,13 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const Repr
 		} else {
 			using HPolyWithOptimizerCaching = HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>;
 			mRoot = std::make_shared<Leaf<Number, Converter, Setting, HPolyWithOptimizerCaching>>( std::make_shared<HPolyWithOptimizerCaching>( r.matrix(), r.vector() ) );
-			//mRoot = std::make_shared<Leaf<Number, Converter, Setting, Representation>>( std::make_shared<Representation>(tmp) );
+			// mRoot = std::make_shared<Leaf<Number, Converter, Setting, Representation>>( std::make_shared<Representation>(tmp) );
 		}
 	}
 	assert( mRoot != nullptr );
 }
 
-//Matrix vector constructor
+// Matrix vector constructor
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matrix_t<Number>& mat, const vector_t<Number>& vec ) {
 	INFO( "hypro.representations", "SFN mat-vec-constr: mat: \n"
@@ -133,7 +133,7 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const matr
 	mTemplateSet = true;
 }
 
-//Halfspace vector constructor
+// Halfspace vector constructor
 /*TODO: Optimize hspace constructor with isBox(), this ctor is never used but needed for compilation */
 template <typename Number, typename Converter, typename Setting>
 SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const std::vector<Halfspace<Number>>& hspaces ) {
@@ -142,8 +142,8 @@ SupportFunctionNewT<Number, Converter, Setting>::SupportFunctionNewT( const std:
 }
 
 /***************************************************************************
-	 * Getters & setters
-	 **************************************************************************/
+ * Getters & setters
+ **************************************************************************/
 
 template <typename Number, typename Converter, typename Setting>
 void SupportFunctionNewT<Number, Converter, Setting>::addOperation( RootGrowNode<Number, Converter, Setting>* newRoot ) const {
@@ -166,10 +166,10 @@ void SupportFunctionNewT<Number, Converter, Setting>::addOperation( RootGrowNode
 }
 
 /***************************************************************************
-	 * Tree Traversal
-	 **************************************************************************/
+ * Tree Traversal
+ **************************************************************************/
 
-//When Result type and Param type = void
+// When Result type and Param type = void
 template <typename Number, typename Converter, typename Setting>
 void SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	  std::function<void( RootGrowNode<Number, Converter, Setting>* )>&& transform,
@@ -177,24 +177,27 @@ void SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	  std::function<void( RootGrowNode<Number, Converter, Setting>* )>&& aggregate ) const {
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, Parameters<Dummy>& )> tNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> {
-		transform( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		// transform( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		transform( n );
 		return Parameters<Dummy>( Dummy() );
 	};
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, Parameters<Dummy>& )> cNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> {
-		compute( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		// compute( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		compute( n );
 		return Parameters<Dummy>( Dummy() );
 	};
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, std::vector<Parameters<Dummy>>&, Parameters<Dummy>& )> aNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, std::vector<Parameters<Dummy>>&, Parameters<Dummy>& ) -> Parameters<Dummy> {
-		aggregate( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		// aggregate( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		aggregate( n );
 		return Parameters<Dummy>( Dummy() );
 	};
 	Parameters<Dummy> noInitParams = Parameters<Dummy>( Dummy() );
 	traverse( std::move( tNotVoid ), std::move( cNotVoid ), std::move( aNotVoid ), std::forward<Parameters<Dummy>>( noInitParams ) );
 }
 
-//When Param type = void, but Result type not
+// When Param type = void, but Result type not
 template <typename Number, typename Converter, typename Setting>
 template <typename Result>
 Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
@@ -218,7 +221,7 @@ Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	return traverse( std::move( tNotVoid ), std::move( cNotVoid ), std::move( aWithParams ), std::forward<Parameters<Dummy>>( noInitParams ) );
 }
 
-//When Result type = void, but Param type not
+// When Result type = void, but Param type not
 template <typename Number, typename Converter, typename Setting>
 template <typename... Rargs>
 void SupportFunctionNewT<Number, Converter, Setting>::traverse(
@@ -239,7 +242,7 @@ void SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	traverse( std::move( transform ), std::move( cNotVoid ), std::move( aNotVoid ), std::forward<Parameters<Rargs...>>( initParams ) );
 }
 
-//Actual traverse function. Result type and Param type not void
+// Actual traverse function. Result type and Param type not void
 template <typename Number, typename Converter, typename Setting>
 template <typename Result, typename... Rargs>
 Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
@@ -247,12 +250,12 @@ Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	  std::function<Result( RootGrowNode<Number, Converter, Setting>*, Parameters<Rargs...>& )>&& compute,
 	  std::function<Result( RootGrowNode<Number, Converter, Setting>*, std::vector<Result>&, Parameters<Rargs...>& )>&& aggregate,
 	  Parameters<Rargs...>&& initParams ) const {
-	//Usings
+	// Usings
 	using Node = RootGrowNode<Number, Converter, Setting>*;
 	using Param = Parameters<Rargs...>;
 	using Res = Result;
 
-	//Prepare Stacks
+	// Prepare Stacks
 	std::vector<Node> callStack;
 	std::vector<Param> paramStack;
 	std::vector<std::pair<int, std::vector<Res>>> resultStack;
@@ -260,7 +263,7 @@ Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	paramStack.push_back( initParams );
 	resultStack.push_back( std::make_pair( -1, std::vector<Res>() ) );
 
-	//Traversal loop
+	// Traversal loop
 	while ( !callStack.empty() ) {
 		Node cur = callStack.back();
 		Param currentParam = paramStack.back();
@@ -268,11 +271,11 @@ Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
 		if ( cur->getOriginCount() == 0 ) {
 			std::pair<int, std::vector<Res>> currentResult = resultStack.back();
 
-			//If leaf and end of stack is reached
+			// If leaf and end of stack is reached
 			if ( currentResult.first == -1 ) {
 				return std::apply( compute, std::forward_as_tuple( cur, currentParam ) );
 
-				//If leaf and not end of stack is reached
+				// If leaf and not end of stack is reached
 			} else {
 				resultStack.at( currentResult.first ).second.push_back( std::apply( compute, std::forward_as_tuple( cur, currentParam ) ) );
 			}
@@ -283,7 +286,7 @@ Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
 			resultStack.pop_back();
 
 		} else {
-			//If enough arguments for operation of node and #arguments != 0
+			// If enough arguments for operation of node and #arguments != 0
 			if ( resultStack.back().second.size() >= cur->getOriginCount() ) {
 				Res accumulatedResult = std::apply( aggregate, std::forward_as_tuple( cur, resultStack.back().second, currentParam ) );
 
@@ -300,7 +303,7 @@ Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
 				paramStack.pop_back();
 				resultStack.pop_back();
 
-				//Every other case (recursive call)
+				// Every other case (recursive call)
 			} else {
 				// here we create the new stack levels.
 				std::size_t callingFrame = callStack.size() - 1;
@@ -317,8 +320,8 @@ Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
 }
 
 /***************************************************************************
-	 * Evaluation
-	 **************************************************************************/
+ * Evaluation
+ **************************************************************************/
 
 template <typename Number, typename Converter, typename Setting>
 bool SupportFunctionNewT<Number, Converter, Setting>::empty() const {
@@ -326,16 +329,16 @@ bool SupportFunctionNewT<Number, Converter, Setting>::empty() const {
 
 	if ( mEmptyState != SETSTATE::UNKNOWN ) return ( mEmptyState == SETSTATE::EMPTY );
 
-	//first function - parameters are not transformed
+	// first function - parameters are not transformed
 	std::function<void( RootGrowNode<Number, Converter, Setting>* )> doNothing = []( RootGrowNode<Number, Converter, Setting>* ) {};
 
-	//if leaf - call empty function of representation
+	// if leaf - call empty function of representation
 	std::function<bool( RootGrowNode<Number, Converter, Setting>* )> leafEmpty =
 		  []( RootGrowNode<Number, Converter, Setting>* n ) -> bool {
 		return n->empty();
 	};
 
-	//if not leaf - not empty if all children not empty
+	// if not leaf - not empty if all children not empty
 	std::function<bool( RootGrowNode<Number, Converter, Setting>*, std::vector<bool>& )> childrenEmpty =
 		  []( RootGrowNode<Number, Converter, Setting>* n, std::vector<bool>& childrenEmpty ) -> bool {
 		return n->empty( childrenEmpty );
@@ -350,17 +353,17 @@ template <typename Number, typename Converter, typename Setting>
 Number SupportFunctionNewT<Number, Converter, Setting>::supremum() const {
 	if ( mRoot == nullptr ) return Number( 0 );
 
-	//first function - parameters are not transformed
+	// first function - parameters are not transformed
 	std::function<void( RootGrowNode<Number, Converter, Setting>* )> doNothing = []( RootGrowNode<Number, Converter, Setting>* ) {};
 
-	//leaves compute the supremum point
+	// leaves compute the supremum point
 	std::function<Point<Number>( RootGrowNode<Number, Converter, Setting>* )> supremumPointLeaf =
 		  []( RootGrowNode<Number, Converter, Setting>* n ) -> Point<Number> {
 		assert( n->getType() == SFNEW_TYPE::LEAF );
 		return n->supremumPoint();
 	};
 
-	//operations call their own supremum functions
+	// operations call their own supremum functions
 	std::function<Point<Number>( RootGrowNode<Number, Converter, Setting>*, std::vector<Point<Number>>& )> supremumPointOp =
 		  []( RootGrowNode<Number, Converter, Setting>* n, std::vector<Point<Number>>& v ) -> Point<Number> {
 		return n->supremumPoint( v );
@@ -407,7 +410,7 @@ std::vector<EvaluationResult<Number>> SupportFunctionNewT<Number, Converter, Set
 	using RGNPtr = RootGrowNode<Number, Converter, Setting>*;
 	using EvalVec = std::vector<EvaluationResult<Number>>;
 
-	//Define lambda functions that will call the functions transform, compute and aggregate dependent on the current node type
+	// Define lambda functions that will call the functions transform, compute and aggregate dependent on the current node type
 	std::function<Matrix( RGNPtr, Matrix& )> trans =
 		  [&]( RGNPtr n, Matrix& param ) -> Matrix {
 		return n->transform( std::get<0>( param.args ) );
@@ -423,26 +426,26 @@ std::vector<EvaluationResult<Number>> SupportFunctionNewT<Number, Converter, Set
 		return n->aggregate( resultStackBack, std::get<0>( currentParam.args ) );
 	};
 
-	//Traverse the underlying SupportFunctionNewT with the three functions and given directions as initial parameters.
+	// Traverse the underlying SupportFunctionNewT with the three functions and given directions as initial parameters.
 	Parameters<matrix_t<Number>> params = Parameters<matrix_t<Number>>( _directions );
 	return traverse( std::move( trans ), std::move( comp ), std::move( agg ), std::move( params ) );
 }
 
-//Find out if tree has at least one trafoOp and if yes, update the linTrafoParameters
+// Find out if tree has at least one trafoOp and if yes, update the linTrafoParameters
 template <typename Number, typename Converter, typename Setting>
 bool SupportFunctionNewT<Number, Converter, Setting>::hasTrafo( std::shared_ptr<const LinTrafoParameters<Number, Setting>>& ltParam, const matrix_t<Number>& A, const vector_t<Number>& b ) const {
 	if ( mRoot == nullptr ) return false;
 
-	//first function - parameters are not transformed
+	// first function - parameters are not transformed
 	std::function<void( RootGrowNode<Number, Converter, Setting>* )> doNothing = []( RootGrowNode<Number, Converter, Setting>* ) {};
 
-	//second function - leaves cannot be operations
+	// second function - leaves cannot be operations
 	std::function<bool( RootGrowNode<Number, Converter, Setting>* )> leavesAreNotTrafoOps =
 		  []( RootGrowNode<Number, Converter, Setting>* ) -> bool {
 		return false;
 	};
 
-	//third function - if current node type or given result is TRAFO, then update and return true
+	// third function - if current node type or given result is TRAFO, then update and return true
 	std::function<bool( RootGrowNode<Number, Converter, Setting>*, std::vector<bool>& )> checkAndUpdateTrafo =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, std::vector<bool>& haveSubtreesTrafo ) -> bool {
 		if ( n->getType() == SFNEW_TYPE::TRAFO ) {
@@ -461,8 +464,8 @@ bool SupportFunctionNewT<Number, Converter, Setting>::hasTrafo( std::shared_ptr<
 }
 
 /***************************************************************************
-	 * General Interface
-	 **************************************************************************/
+ * General Interface
+ **************************************************************************/
 
 template <typename Number, typename Converter, typename Setting>
 std::size_t SupportFunctionNewT<Number, Converter, Setting>::dimension() const {
@@ -488,26 +491,26 @@ vector_t<Number> SupportFunctionNewT<Number, Converter, Setting>::vector() const
 	return mVector;
 }
 
-//template<typename Number, typename Converter, typename Setting>
-//void SupportFunctionNewT<Number,Converter,Setting>::removeRedundancy() {
+// template<typename Number, typename Converter, typename Setting>
+// void SupportFunctionNewT<Number,Converter,Setting>::removeRedundancy() {
 //	// Support functions are already non-redundant (Polytope support functions are made non-redundant upon construction).
-//}
+// }
 
 template <typename Number, typename Converter, typename Setting>
 std::size_t SupportFunctionNewT<Number, Converter, Setting>::size() const {
 	if ( mRoot == nullptr ) return std::size_t( 0 );
 
-	//first function - parameters are not transformed
+	// first function - parameters are not transformed
 	std::function<void( RootGrowNode<Number, Converter, Setting>* )> doNothing = []( RootGrowNode<Number, Converter, Setting>* ) {};
 
-	//leaves compute their storage size
+	// leaves compute their storage size
 	std::function<std::size_t( RootGrowNode<Number, Converter, Setting>* )> sizeofLeaf =
 		  []( RootGrowNode<Number, Converter, Setting>* n ) -> std::size_t {
 		assert( n->getType() == SFNEW_TYPE::LEAF );
 		return sizeof( *n );
 	};
 
-	//operations compute their storage size and add it to the ones of their children
+	// operations compute their storage size and add it to the ones of their children
 	std::function<std::size_t( RootGrowNode<Number, Converter, Setting>*, std::vector<std::size_t>& )> sizeofOp =
 		  []( RootGrowNode<Number, Converter, Setting>* n, std::vector<std::size_t>& v ) -> std::size_t {
 		std::size_t storage = 0;
@@ -520,45 +523,45 @@ std::size_t SupportFunctionNewT<Number, Converter, Setting>::size() const {
 	return traverse( std::move( doNothing ), std::move( sizeofLeaf ), std::move( sizeofOp ) );
 }
 
-//template<typename Number, typename Converter, typename Setting>
-//const SupportFunctionNewT<Number,Converter,Setting>& SupportFunctionNewT<Number,Converter,Setting>::reduceNumberRepresentation() { }
+// template<typename Number, typename Converter, typename Setting>
+// const SupportFunctionNewT<Number,Converter,Setting>& SupportFunctionNewT<Number,Converter,Setting>::reduceNumberRepresentation() { }
 
 template <typename Number, typename Converter, typename Setting>
 std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportFunctionNewT<Number, Converter, Setting>::satisfiesHalfspace( const Halfspace<Number>& rhs ) const {
 	TRACE( "hypro.representations.supportFunctionNew", "Halfspace: " << rhs );
-	//std::cout << "SFN::satisfiesHalfspace, this mat: \n" << this->matrix() << "vector: \n" << this->vector() << "halfspace: \n" << rhs << std::endl;
+	// std::cout << "SFN::satisfiesHalfspace, this mat: \n" << this->matrix() << "vector: \n" << this->vector() << "halfspace: \n" << rhs << std::endl;
 	if ( mRoot == nullptr ) {
 		return std::make_pair( CONTAINMENT::BOT, *this );
 	}
 	if ( this->empty() ) {
 		return std::make_pair( CONTAINMENT::NO, *this );
 	}
-	//Check for emptiness not needed here since satisfiesHalfspace() is only called via satisfiedHalfspaces(), which already checks emptiness
+	// Check for emptiness not needed here since satisfiesHalfspace() is only called via satisfiedHalfspaces(), which already checks emptiness
 	bool limiting = false;
 	EvaluationResult<Number> planeEvalRes = this->evaluate( rhs.normal(), false );
-	//std::cout << "SFN::satisfiesHalfspace, planeEvalRes: " << planeEvalRes << " rhs offset: " << rhs.offset() << std::endl;
+	// std::cout << "SFN::satisfiesHalfspace, planeEvalRes: " << planeEvalRes << " rhs offset: " << rhs.offset() << std::endl;
 	if ( planeEvalRes.errorCode == SOLUTION::INFEAS ) {
-		//std::cout << "SFN::satisfiesHalfspace, Is infeasible (should not happen)." << std::endl;
+		// std::cout << "SFN::satisfiesHalfspace, Is infeasible (should not happen)." << std::endl;
 		////std::cout << "Set is (Hpoly): " << std::endl << Converter::toHPolytope(*this) << std::endl;
-		//assert(Converter::toHPolytope(*this).empty());
+		// assert(Converter::toHPolytope(*this).empty());
 		return std::make_pair( CONTAINMENT::NO, *this );
 	} else if ( planeEvalRes.supportValue > rhs.offset() ) {
-		//std::cout << "SFN::satisfiesHalfspace, Object will be limited. " << std::endl;
-		// the actual object will be limited by the new plane
+		// std::cout << "SFN::satisfiesHalfspace, Object will be limited. " << std::endl;
+		//  the actual object will be limited by the new plane
 		limiting = true;
 		// //std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << this->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
 		// //std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
 		if ( this->evaluate( -( rhs.normal() ), false ).supportValue < -( rhs.offset() ) ) {
 			// the object lies fully outside one of the planes -> return false
-			//std::cout << "SFN::satisfiesHalfspace, fullyOutside " << std::endl;
+			// std::cout << "SFN::satisfiesHalfspace, fullyOutside " << std::endl;
 			return std::make_pair( CONTAINMENT::NO, this->intersectHalfspace( rhs ) );
 		}
 	}
 	if ( limiting ) {
-		//std::cout << "SFN::satisfiesHalfspace, partial containment" << std::endl;
+		// std::cout << "SFN::satisfiesHalfspace, partial containment" << std::endl;
 		return std::make_pair( CONTAINMENT::PARTIAL, this->intersectHalfspace( rhs ) );
 	} else {
-		//std::cout << "SFN::satisfiesHalfspace, full containment" << std::endl;
+		// std::cout << "SFN::satisfiesHalfspace, full containment" << std::endl;
 		return std::make_pair( CONTAINMENT::FULL, *this );
 	}
 }
@@ -583,9 +586,9 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 		return satisfiesHalfspace( Halfspace<Number>( vector_t<Number>( _mat.row( 0 ) ), _vec( 0 ) ) );
 	}
 
-	//auto res = this->intersectHalfspaces( _mat, _vec );
-	//CONTAINMENT empty = res.empty() ? CONTAINMENT::NO : CONTAINMENT::YES;
-	//return std::make_pair( empty, res );
+	// auto res = this->intersectHalfspaces( _mat, _vec );
+	// CONTAINMENT empty = res.empty() ? CONTAINMENT::NO : CONTAINMENT::YES;
+	// return std::make_pair( empty, res );
 
 	std::vector<unsigned> limitingPlanes;
 	for ( unsigned rowI = 0; rowI < _mat.rows(); ++rowI ) {
@@ -594,21 +597,21 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 		DEBUG( "hypro.representations.supportFunctionNew", "Return from evaluate." );
 		if ( planeEvalRes.errorCode == SOLUTION::INFEAS ) {
 			TRACE( "hypro.representations.supportFunctionNew", "Is infeasible (should not happen)." );
-			//std::cout << "SFN::satisfiesHalfspaces, infeas" << std::endl;
+			// std::cout << "SFN::satisfiesHalfspaces, infeas" << std::endl;
 			return std::make_pair( CONTAINMENT::NO, *this );
-			//return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
+			// return std::make_pair(CONTAINMENT::NO, this->intersectHalfspaces(_mat,_vec) );
 		} else if ( !carl::AlmostEqual2sComplement( planeEvalRes.supportValue, _vec( rowI ), 2 ) && planeEvalRes.supportValue > _vec( rowI ) ) {
 			TRACE( "hypro.representations.supportFunctionNew", "Object will be limited, as " << planeEvalRes.supportValue << " > " << _vec( rowI ) );
-			//std::cout << "SFN::satisfiesHalfspaces, limited" << std::endl;
-			// the actual object will be limited by the new plane
+			// std::cout << "SFN::satisfiesHalfspaces, limited" << std::endl;
+			//  the actual object will be limited by the new plane
 			limitingPlanes.push_back( rowI );
 			Number invDirVal = this->evaluate( -( _mat.row( rowI ) ), true ).supportValue;
-			//TRACE("hypro.representations.supportFunctionNew", "evaluate(" << -(_mat.row(rowI)) << ") <=  " << -(_vec(rowI)) << ": " << invDirVal << " <= " << -(_vec(rowI)));
-			//TRACE("hypro.representations.supportFunctionNew", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << carl::toDouble(_vec(rowI)));
+			// TRACE("hypro.representations.supportFunctionNew", "evaluate(" << -(_mat.row(rowI)) << ") <=  " << -(_vec(rowI)) << ": " << invDirVal << " <= " << -(_vec(rowI)));
+			// TRACE("hypro.representations.supportFunctionNew", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << carl::toDouble(_vec(rowI)));
 			if ( -invDirVal > _vec( rowI ) ) {
 				return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
 			}
-			//if ( !carl::AlmostEqual2sComplement( invDirVal, Number( -( _vec( rowI ) ) ), 2 ) && -invDirVal > _vec( rowI ) ) {
+			// if ( !carl::AlmostEqual2sComplement( invDirVal, Number( -( _vec( rowI ) ) ), 2 ) && -invDirVal > _vec( rowI ) ) {
 			//	// exact verification in case the values are close to each other
 			//	if ( carl::AlmostEqual2sComplement( Number( -invDirVal ), planeEvalRes.supportValue, 16 ) ) {
 			//		EvaluationResult<Number> secndPosEval = this->evaluate( _mat.row( rowI ), true );
@@ -628,13 +631,13 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 			//		//std::cout << "SFN::satisfiesHalfspaces, non exact fullyOutside" << std::endl;
 			//		return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
 			//	}
-			//}
+			// }
 		}
 	}
 	if ( limitingPlanes.size() < unsigned( _mat.rows() ) ) {
 		if ( limitingPlanes.size() == 0 ) {
 			TRACE( "hypro.representations.supportFunctionNew", " Object will stay the same" );
-			//std::cout << "SFN::satisfiesHalfspaces, full inside since no liming planes" << std::endl;
+			// std::cout << "SFN::satisfiesHalfspaces, full inside since no liming planes" << std::endl;
 			return std::make_pair( CONTAINMENT::FULL, *this );
 		}
 		TRACE( "hypro.representations.supportFunctionNew", " Object will be limited but not empty (" << limitingPlanes.size() << " planes)" );
@@ -642,7 +645,7 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 		matrix_t<Number> planes = matrix_t<Number>( limitingPlanes.size(), _mat.cols() );
 		vector_t<Number> distances = vector_t<Number>( limitingPlanes.size() );
 		for ( unsigned i = 0; i < distances.rows(); ++i ) {
-			//std::cout << "Set row " << i << " to plane " << limitingPlanes.back() << std::endl;
+			// std::cout << "Set row " << i << " to plane " << limitingPlanes.back() << std::endl;
 			planes.row( i ) = _mat.row( limitingPlanes.back() );
 			distances( i ) = _vec( limitingPlanes.back() );
 			limitingPlanes.pop_back();
@@ -768,19 +771,19 @@ template <typename Number, typename Converter, typename Setting>
 bool SupportFunctionNewT<Number, Converter, Setting>::contains( const vector_t<Number>& point ) const {
 	if ( mRoot == nullptr ) return false;
 
-	//first function - Parameters are backtransformed into the domain space of the given operation
+	// first function - Parameters are backtransformed into the domain space of the given operation
 	std::function<Parameters<vector_t<Number>>( RootGrowNode<Number, Converter, Setting>*, Parameters<vector_t<Number>>& )> reverseOp =
 		  []( RootGrowNode<Number, Converter, Setting>* n, Parameters<vector_t<Number>>& p ) -> Parameters<vector_t<Number>> {
 		return Parameters<vector_t<Number>>( n->reverseOp( std::get<0>( p.args ) ) );
 	};
 
-	//second function - calls contains() of leaf
+	// second function - calls contains() of leaf
 	std::function<bool( RootGrowNode<Number, Converter, Setting>*, Parameters<vector_t<Number>>& )> doesLeafContain =
 		  []( RootGrowNode<Number, Converter, Setting>* n, Parameters<vector_t<Number>>& p ) -> bool {
 		return n->contains( std::get<0>( p.args ) );
 	};
 
-	//third function - calls contains() of operations
+	// third function - calls contains() of operations
 	std::function<bool( RootGrowNode<Number, Converter, Setting>*, std::vector<bool>&, Parameters<vector_t<Number>>& )> aggregate =
 		  []( RootGrowNode<Number, Converter, Setting>* n, std::vector<bool>& v, Parameters<vector_t<Number>>& p ) {
 			  return n->contains( v, std::get<0>( p.args ) );
@@ -808,13 +811,13 @@ bool SupportFunctionNewT<Number, Converter, Setting>::contains( const SupportFun
 					return false;
 				}
 			} else {
-				//If this is bound and rhs is unbound, then this does not contain rhs on this side and therefore overall
+				// If this is bound and rhs is unbound, then this does not contain rhs on this side and therefore overall
 				return false;
 			}
 		}
-		//If this is unbound and rhs bound, then rhs is still contained on this side
-		//If both are unbound, then both SFs are halfspaces and are only contained in each other, if the normals point to the same direction
-		//while the offset of rhs is smaller than of this.
+		// If this is unbound and rhs bound, then rhs is still contained on this side
+		// If both are unbound, then both SFs are halfspaces and are only contained in each other, if the normals point to the same direction
+		// while the offset of rhs is smaller than of this.
 	}
 	return true;
 }
@@ -859,13 +862,13 @@ void SupportFunctionNewT<Number, Converter, Setting>::clear() {
 
 template <typename Number, typename Converter, typename Setting>
 std::vector<std::size_t> SupportFunctionNewT<Number, Converter, Setting>::collectProjections() const {
-	//TODO: Check if right
+	// TODO: Check if right
 	if ( mRoot == nullptr ) return std::vector<std::size_t>();
 
-	//first function - do nothing
+	// first function - do nothing
 	std::function<void( RootGrowNode<Number, Converter, Setting>* )> doNothing = []( RootGrowNode<Number, Converter, Setting>* ) {};
 
-	//second function - leaves return a vector of ascending dimensions
+	// second function - leaves return a vector of ascending dimensions
 	std::function<std::vector<std::size_t>( RootGrowNode<Number, Converter, Setting>* )> collectLeafDimensions =
 		  []( RootGrowNode<Number, Converter, Setting>* n ) -> std::vector<std::size_t> {
 		std::vector<std::size_t> res;
@@ -875,7 +878,7 @@ std::vector<std::size_t> SupportFunctionNewT<Number, Converter, Setting>::collec
 		return res;
 	};
 
-	//third function - call the respective function of the node which sorts out unwanted dimensions
+	// third function - call the respective function of the node which sorts out unwanted dimensions
 	std::function<std::vector<std::size_t>( RootGrowNode<Number, Converter, Setting>*, std::vector<std::vector<std::size_t>>& )> intersectDims =
 		  []( RootGrowNode<Number, Converter, Setting>* n, std::vector<std::vector<std::size_t>>& dims ) -> std::vector<std::size_t> {
 		return n->intersectDims( dims );
@@ -891,7 +894,7 @@ void SupportFunctionNewT<Number, Converter, Setting>::evaluateTemplate( std::siz
 
 		matrix_t<Number> templateDirectionMatrix = combineRows( templateDirections );
 
-		//lets the support function evaluate the offset of the halfspaces for each direction
+		// lets the support function evaluate the offset of the halfspaces for each direction
 		std::vector<EvaluationResult<Number>> offsets = this->multiEvaluate( templateDirectionMatrix );
 
 		std::vector<std::size_t> boundedConstraints;

@@ -1,5 +1,6 @@
 #FROM fefrei/carl:19.01
-FROM smtrat/carl:latest
+#FROM smtrat/carl:latest
+FROM stefanschupp/carl:latest
 RUN apt-get update \
     && apt-get install -y \
     gcc-8-base \
@@ -8,7 +9,6 @@ RUN apt-get update \
     pkg-config \
     libboost-dev
 COPY / /root/hypro/
-RUN cd /root/hypro \
-    && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. \
-    && make resources \
-    && make
+RUN cd /root/hypro && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DHYPRO_LOGGING=OFF -DHYPRO_STATISTICS=ON ..
+RUN cd /root/hypro/build && make hypro_resources -j`nproc`
+RUN cd /root/hypro/build && cmake .. && make hypro -j`nproc`

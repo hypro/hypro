@@ -1,0 +1,16 @@
+if (HYPRO_BENCHMARK)
+    add_executable(benchmark_boxes benchmark_boxes_openmp.cpp)
+    target_link_libraries(benchmark_boxes ${PROJECT_NAME}-shared ${GBENCHMARK_LIBRARIES})
+    target_include_directories(benchmark_boxes PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
+    add_dependencies(benchmark_boxes ${PROJECT_NAME}_resources)
+
+    add_executable(benchmark_hyperoctree benchmark_hyperoctree.cpp)
+    target_link_libraries(benchmark_hyperoctree ${PROJECT_NAME}-shared ${GBENCHMARK_LIBRARIES})
+    target_include_directories(benchmark_hyperoctree PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
+    add_dependencies(benchmark_hyperoctree ${PROJECT_NAME}_resources)
+
+    add_executable(benchmark_template_linear_optimization benchmark_template_linear_optimization.cpp)
+    target_link_libraries(benchmark_template_linear_optimization ${PROJECT_NAME}-shared ${GBENCHMARK_LIBRARIES})
+    target_include_directories(benchmark_template_linear_optimization PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
+    add_dependencies(benchmark_template_linear_optimization ${PROJECT_NAME}_resources)
+endif ()

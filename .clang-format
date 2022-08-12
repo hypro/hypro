@@ -1,5 +1,5 @@
 ---
-Language:        Cpp
+Language: Cpp
 # BasedOnStyle:  Google
 AccessModifierOffset: -2
 ConstructorInitializerIndentWidth: 4
@@ -17,7 +17,7 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializersBeforeComma: true
 BinPackParameters: true
 BinPackArguments: true
-ColumnLimit:     0
+ColumnLimit: 0
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 DerivePointerAlignment: false
 ExperimentalAutoDetectBinPacking: false
@@ -30,6 +30,7 @@ NamespaceIndentation: None
 ObjCSpaceAfterProperty: false
 ObjCSpaceBeforeProtocolList: false
 PenaltyBreakBeforeFirstCallParameter: 1
+ReflowComments: true
 PenaltyBreakComment: 300
 PenaltyBreakString: 1000
 PenaltyBreakFirstLessLess: 120
@@ -38,21 +39,21 @@ PenaltyReturnTypeOnItsOwnLine: 200
 PointerAlignment: Left
 SpacesBeforeTrailingComments: 2
 Cpp11BracedListStyle: true
-Standard:        Auto
-IndentWidth:     4
-TabWidth:        4
-UseTab:          Always
+Standard: Auto
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always
 BreakBeforeBraces: Attach
 SpacesInParentheses: true
-SpacesInAngles:  false
+SpacesInAngles: false
 SpaceInEmptyParentheses: false
 SpacesInCStyleCastParentheses: false
 SpacesInContainerLiterals: true
 SpaceBeforeAssignmentOperators: true
 ContinuationIndentWidth: 6
-CommentPragmas:  '^ IWYU pragma:'
-ForEachMacros:   [ foreach, Q_FOREACH, BOOST_FOREACH ]
+CommentPragmas: '^ IWYU pragma:'
+ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH ]
 SpaceBeforeParens: ControlStatements
-DisableFormat:   false
+DisableFormat: false
 IncludeBlocks: Regroup
 ...

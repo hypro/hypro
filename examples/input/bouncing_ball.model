@@ -53,11 +53,12 @@ hybrid reachability
 }
 
 
-#unsafe set
-#{
-#  l
-#  {
-#   x in [4,6]
-#   v in [-2.5,0]
-#  }
-#}
+unsafe set
+{
+  l
+  {
+   x in [4,6]
+   v in [-2.5,0]
+   
+  }
+}

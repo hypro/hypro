@@ -2,11 +2,15 @@
  *
  */
 
-#include "algorithms/reachability/Reach.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "parser/antlr4-flowstar/ParserWrapper.h"
-#include "representations/GeometricObjectBase.h"
-#include "util/statistics/statistics.h"
+#include <hypro/algorithms/reachability/Reach.h>
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/reachability/ReachTreev2Util.h>
+#include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/util/plotting/Plotter.h>
+#include <hypro/util/statistics/statistics.h>
+// #include <zconf.h>
+// #include <resources/glpk-5.0/src/zlib/zconf.h>
 #ifdef HYPRO_USE_LACE
 #include <lace.h>
 #endif
@@ -19,24 +23,16 @@ static void computeReachableStates( const std::string& filename,
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
-	std::pair<hypro::HybridAutomaton<Number>, hypro::ReachabilitySettings> ha = hypro::parseFlowstarFile<Number>( filename );
+	auto [automaton, parsedSettings] = hypro::parseFlowstarFile<Number>( filename );
+	hypro::Settings settings = hypro::convert( parsedSettings );
+	auto roots = hypro::makeRoots<Representation>( automaton );
 
-	hypro::reachability::Reach<Number, hypro::reachability::ReachSettings, hypro::State_t<Number>> reacher( ha.first, ha.second );
-	reacher.setRepresentationType( type );
-	// reacher.initQueue();
-	std::vector<hypro::State_t<Number>> initialStates;
-	for ( const auto& locConditionPair : ha.first.getInitialStates() ) {
-		hypro::State_t<Number> initState =
-			  hypro::State_t<Number>( locConditionPair.first );
-		initState.setSet( Representation( locConditionPair.second.getMatrix(),
-										  locConditionPair.second.getVector() ) );
-		initialStates.emplace_back( std::move( initState ) );
-	}
-	reacher.setInitialStates( std::move( initialStates ) );
+	hypro::reachability::Reach<Representation> reacher( automaton, settings.fixedParameters(), settings.strategy().front(), roots );
 
 	std::cout << "Initiated queues" << std::endl;
 
-	auto flowpipes = reacher.computeForwardReachability();
+	auto result = reacher.computeForwardReachability();
+	auto flowpipes = getFlowpipes( roots );
 
 	std::cout
 		  << "Finished computation of reachable states: "
@@ -44,11 +40,11 @@ static void computeReachableStates( const std::string& filename,
 				   1000.0
 		  << " ms" << std::endl;
 
-	if ( ha.second.plotDimensions.size() > 0 ) {
+	if ( settings.plotting().plotDimensions.size() > 0 ) {
 		clock::time_point startPlotting = clock::now();
 
-		hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
-		std::string extendedFilename = ha.second.fileName;
+		auto& plotter = hypro::Plotter<Number>::getInstance();
+		std::string extendedFilename = settings.plotting().plotFileNames.front();
 		switch ( Representation::type() ) {
 			case hypro::representation_name::polytope_t: {
 				extendedFilename += "_tpoly";
@@ -92,77 +88,38 @@ static void computeReachableStates( const std::string& filename,
 		std::cout << "filename is " << extendedFilename << std::endl;
 		plotter.setFilename( extendedFilename );
 		std::vector<std::size_t> plottingDimensions =
-			  ha.second.plotDimensions.at( 0 );
-		plotter.rSettings().dimensions.first = plottingDimensions.front();
-		plotter.rSettings().dimensions.second = plottingDimensions.back();
+			  settings.plotting().plotDimensions.at( 0 );
+		plotter.rSettings().dimensions.push_back(plottingDimensions.front());
+		plotter.rSettings().dimensions.push_back(plottingDimensions.back());
 		plotter.rSettings().cummulative = false;
 
 		// bad states plotting
 		typename hypro::HybridAutomaton<Number>::locationConditionMap
-			  badStateMapping = ha.first.getLocalBadStates();
+			  badStateMapping = automaton.getLocalBadStates();
 		for ( const auto& state : badStateMapping ) {
+			auto matrix = state.second.getMatrix( 0 );
+			auto vector = state.second.getVector( 0 );
+			// if ( filename == "../examples/input/bouncing_ball.model") {
+			// 	std::cout << "Invert matrix columns..." << std::endl;
+			// 	for(int i = 0; i < 4; ++i) {
+			// 		Number val_c = matrix(i, 0);
+			// 		matrix(i, 0) = matrix(i, 1);
+			// 		matrix(i, 1) = val_c;
+			// 	}
+			// }
 			unsigned bs = plotter.addObject(
-				  Representation( state.second.getMatrix( 0 ), state.second.getVector( 0 ) )
-						.vertices() );
-			plotter.setObjectColor( bs, hypro::plotting::colors[hypro::plotting::red] );
+				  Representation( matrix, vector ).projectOn( plottingDimensions )
+						.vertices(),
+				  hypro::plotting::colors[hypro::plotting::red] );
 		}
 
 		// segments plotting
-		for ( const auto& flowpipePair : flowpipes ) {
-			std::cout << "Plot flowpipe " << flowpipePair.first << std::endl;
+		for ( const auto& flowpipe : flowpipes ) {
 			unsigned cnt = 0;
-			for ( const auto& segment : flowpipePair.second ) {
-				std::cout << "Plot segment " << cnt << "/" << flowpipePair.second.size()
-						  << std::endl;
-				Representation seg = std::get<Representation>( segment.getSet( 0 ) );
-				switch ( type ) {
-					case hypro::representation_name::SFN: {
-						unsigned tmp =
-							  plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
-						plotter.setObjectColor(
-							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
-														   ( sizeof( hypro::plotting::colors ) /
-															 sizeof( *hypro::plotting::colors ) )] );
-						break;
-					}
-					case hypro::representation_name::support_function: {
-						unsigned tmp =
-							  plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
-						plotter.setObjectColor(
-							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
-														   ( sizeof( hypro::plotting::colors ) /
-															 sizeof( *hypro::plotting::colors ) )] );
-						break;
-					}
-					case hypro::representation_name::zonotope: {
-						unsigned tmp =
-							  plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
-						plotter.setObjectColor(
-							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
-														   ( sizeof( hypro::plotting::colors ) /
-															 sizeof( *hypro::plotting::colors ) )] );
-						plotter.rSettings().dimensions.first = 0;
-						plotter.rSettings().dimensions.second = 1;
-						break;
-					}
-					case hypro::representation_name::box: {
-						unsigned tmp =
-							  plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
-						plotter.setObjectColor(
-							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
-														   ( sizeof( hypro::plotting::colors ) /
-															 sizeof( *hypro::plotting::colors ) )] );
-						plotter.rSettings().dimensions.first = 0;
-						plotter.rSettings().dimensions.second = 1;
-						break;
-					}
-					default:
-						unsigned tmp = plotter.addObject( seg.projectOn( plottingDimensions ).vertices() );
-						plotter.setObjectColor(
-							  tmp, hypro::plotting::colors[flowpipePair.first->getState().getLocation()->hash() %
-														   ( sizeof( hypro::plotting::colors ) /
-															 sizeof( *hypro::plotting::colors ) )] );
-				}
+			for ( const auto& segment : flowpipe ) {
+				// std::cout << "Plot segment " << cnt << "/" << flowpipe.size()
+				//   << std::endl;
+				plotter.addObject( segment.projectOn( plottingDimensions ).vertices() );
 				++cnt;
 			}
 		}
@@ -170,11 +127,10 @@ static void computeReachableStates( const std::string& filename,
 		PRINT_STATS()
 
 		std::cout << "Write to file." << std::endl;
-		// std::cout << "Use dimensions: " << plotter.settings().dimensions.first <<
-		// ", " << plotter.settings().dimensions.second << std::endl;
-		plotter.plot2d();
-		plotter.plotGen();
-		plotter.plotTex();
+
+		plotter.plot2d( hypro::PLOTTYPE::pdf );
+		plotter.plot2d( hypro::PLOTTYPE::tex );
+		plotter.plot2d( hypro::PLOTTYPE::gen );
 
 		std::cout << "Finished plotting: "
 				  << std::chrono::duration_cast<timeunit>( clock::now() -
@@ -196,8 +152,8 @@ int main( int argc, char** argv ) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	using Number = mpq_class;
-	// using Number = double;
+	//using Number = mpq_class;
+	using Number = double;
 #endif
 
 	switch ( rep ) {

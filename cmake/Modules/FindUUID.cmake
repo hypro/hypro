@@ -9,7 +9,7 @@
 # FOUND_LIBUUID            e2fsprogs UUID found
 #
 
-INCLUDE(FindPkgConfig)
+find_package(PkgConfig)
 INCLUDE(CheckCXXSourceRuns)
 INCLUDE(FindPackageHandleStandardArgs)
 
@@ -44,11 +44,11 @@ if(NOT UUID_FOUND)
 	endif()
 endif()
 
-if(UUID_FOUND)
-	message(STATUS "Found libuuid: ${UUID_INCLUDE_DIRS}")
-else()
-	message(STATUS "Library libuuid was not found.")
-endif()
+#if(UUID_FOUND)
+#	message(STATUS "Found libuuid: ${UUID_INCLUDE_DIRS}")
+#else()
+#	message(STATUS "Library libuuid was not found.")
+#endif()
 
 find_package_handle_standard_args(UUID DEFAULT_MSG UUID_FOUND)
 MARK_AS_ADVANCED(UUID_LIBRARIES UUID_INCLUDE_DIRS)

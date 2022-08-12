@@ -8,10 +8,10 @@
  * @version     2014-11-23
  */
 
-#include "../src/hypro/config.h"
-#include "../src/hypro/datastructures/Point.h"
-#include "../src/hypro/representations/GeometricObjectBase.h"
-#include "../src/hypro/util/plotting/Plotter.h"
+#include "hypro/config.h"
+#include "hypro/datastructures/Point.h"
+#include "hypro/representations/GeometricObjectBase.h"
+#include "hypro/util/plotting/Plotter.h"
 
 int main() {
 
@@ -32,12 +32,13 @@ int main() {
       number_t(51) / number_t(5),
       number_t(10200500738519539) / number_t(1000001000000000),
       number_t(51) / number_t(5);
-  std::cout << matrix << std::endl;
+  std::cout << matrix << std::endl << constants << std::endl;
 
   hypro::matrix_t<number_t> matrix2 = hypro::matrix_t<number_t>(4, 2);
   matrix2 << 1000000000, 0, -1000000000, 0, 0, 1000000000, 0, -1000000000;
   hypro::vector_t<number_t> constants2 = hypro::vector_t<number_t>(4);
   constants2 << 50725487, 50725487, 50725487, 50725487;
+  std::cout << matrix2 << std::endl << constants2 << std::endl;
 
   hypro::HPolytope<number_t> hpoly(matrix, constants);
   hypro::HPolytope<number_t> hpoly2(matrix2, constants2);

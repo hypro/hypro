@@ -1,7 +1,8 @@
-#include "settings_enums.h"
+#include "hypro/util/type_handling/settings_enums.h"
 
-#include <assert.h>
-#include <representations/GeometricObjectBase.h>
+#include "hypro/representations/GeometricObjectBase.h"
+
+#include <cassert>
 
 namespace hypro {
 
@@ -32,8 +33,10 @@ int stringToSetting( const std::string& name ) {
 		  supportFunctionSetting_name,
 		  sfnSetting_name,
 		  hPolytopeSetting_name,
+		  vPolytopeSetting_name,
 		  carlPolytopeSetting_name,
-		  tpolySetting_name>::toSetting( name );
+		  tpolySetting_name,
+		  StarsetSetting_name>::toSetting( name );
 }
 
 }  // namespace hypro

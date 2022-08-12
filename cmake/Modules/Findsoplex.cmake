@@ -6,15 +6,16 @@
 #  soplex_DEFINITIONS - Compiler switches required for using soplex
 
 find_package(PkgConfig)
-pkg_check_modules(PC_LIBsoplex QUIET libsoplex)
+pkg_check_modules(PC_LIBsoplex QUIET soplex-pic)
 set(soplex_DEFINITIONS ${PC_LIBsoplex_CFLAGS_OTHER})
 
 find_path(soplex_INCLUDE_DIR soplex.h
           HINTS ${PC_LIBsoplex_INCLUDEDIR} ${PC_LIBsoplex_INCLUDE_DIRS}
           PATH_SUFFIXES soplex )
 
-find_library(soplex_LIBRARY NAMES soplex soplex
-             HINTS ${PC_LIBsoplex_LIBDIR} ${PC_LIBsoplex_LIBRARY_DIRS} )
+find_library(soplex_LIBRARY NAMES libsoplex-pic.a soplex-pic
+             HINTS ${PC_LIBsoplex_LIBDIR} ${PC_LIBsoplex_LIBRARY_DIRS}
+             PATHS /usr/local/lib )
 
 include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set soplex_FOUND to TRUE
@@ -25,9 +26,5 @@ find_package_handle_standard_args(soplex  FOUND_VAR soplex_FOUND
 set(soplex_LIBRARIES ${soplex_LIBRARY} )
 set(soplex_INCLUDE_DIRS ${soplex_INCLUDE_DIR} )
 
-#message("FindSoplex: LIBRARIES: " ${soplex_LIBRARIES})
-#message("FindSoplex: LIBRARY: " ${soplex_LIBRARY})
-#message("FindSoplex: INCLUDE_DIRS: " ${soplex_INCLUDE_DIRS})
-#message("FindSoplex: INCLUDE_DIR: " ${soplex_INCLUDE_DIR})
 
 mark_as_advanced(soplex_INCLUDE_DIR soplex_LIBRARY )

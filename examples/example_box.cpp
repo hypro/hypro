@@ -8,7 +8,7 @@
 
 #include "datastructures/Halfspace.h"
 #include "representations/GeometricObjectBase.h"
-#include "util/plotting/Plotter.h"
+#include "hypro/util/plotting/Plotter.h"
 
 int main() {
   // use rational arithmetic.
@@ -53,11 +53,16 @@ int main() {
   hypro::Box<Number> testbox2(std::make_pair(hypro::Point<Number>({-2, -2}),
                                              hypro::Point<Number>({2, 2})));
 
+  std::vector<hypro::Point<Number>> tvertices2 = testbox2.vertices();
+  for (const auto &vertex : tvertices2)
+    std::cout << vertex << std::endl;
+
   // create a halfspace (cutter) from a normal vector and an offset.
   hypro::matrix_t<Number> normal = hypro::matrix_t<Number>(1, 2);
   hypro::vector_t<Number> offset = hypro::vector_t<Number>(1);
   normal << 1, 1;
   offset << carl::rationalize<Number>(-0.5);
+  std::cout << "normal: " << normal << std::endl << "offset: " << offset << std::endl;
   hypro::vector_t<Number> hsNormal = hypro::vector_t<Number>(2);
   hsNormal << 1, 1;
   hypro::Halfspace<Number> cutter =

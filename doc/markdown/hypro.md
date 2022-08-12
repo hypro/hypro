@@ -13,6 +13,8 @@ Information about the provided [utility functions](@ref utilFunc) can be found i
 
 Section [examples](@ref examples) gives a short description about the available examples shipped with HyPro and their intention.
 
+A small (growing) collection of [tutorials](@ref tutorials) shows how to use the library.
+
 ### Contact
 
 Please note that this documentation is under construction - if you have requests or further questions, please do not hesitate to contact us on github:

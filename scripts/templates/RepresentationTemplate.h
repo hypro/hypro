@@ -21,9 +21,7 @@ namespace hypro {
  * \ingroup geoState @{
  */
 template <typename Number, typename Converter, class Setting>
-class REPRESENTATIONT
-	: public GeometricObject<Number,
-							 REPRESENTATIONT<Number, Converter, Setting>> {
+class REPRESENTATIONT : private GeometricObjectBase {
   private:
   public:
 	typedef Number NumberType;

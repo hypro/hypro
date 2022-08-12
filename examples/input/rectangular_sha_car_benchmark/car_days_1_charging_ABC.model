@@ -1,0 +1,196 @@
+hybrid reachability
+{
+	state var clk, x_battery, restart, s_charging_0, s_driving_0
+
+setting
+{
+	fixed steps 1
+	time 0
+	output car_benchmark_days_1
+	max jumps 0
+}	modes
+	{
+
+		chargingC_0
+		{
+			poly ode 1
+			{
+				clk' in [1, 1]
+				x_battery' in [1, 2]
+				restart' in [0, 0]
+				s_charging_0' in [1, 1]
+				s_driving_0' in [0, 0]
+			}
+			inv
+			{
+				 -1*clk <= 0
+				clk <= 15
+				 -1*x_battery <= 0
+				x_battery <= 10
+			}
+		}
+		chargingB_0
+		{
+			poly ode 1
+			{
+				clk' in [1, 1]
+				x_battery' in [2, 5]
+				restart' in [0, 0]
+				s_charging_0' in [1, 1]
+				s_driving_0' in [0, 0]
+			}
+			inv
+			{
+				 -1*clk <= 0
+				clk <= 15
+				 -1*x_battery <= 0
+				x_battery <= 8
+			}
+		}
+		chargingA_0
+		{
+			poly ode 1
+			{
+				clk' in [1, 1]
+				x_battery' in [3, 6]
+				restart' in [0, 0]
+				s_charging_0' in [1, 1]
+				s_driving_0' in [0, 0]
+			}
+			inv
+			{
+				 -1*clk <= 0
+				clk <= 15
+				 -1*x_battery <= 0
+				x_battery <= 3
+			}
+		}
+		noCharging_0
+		{
+			poly ode 1
+			{
+				clk' in [1, 1]
+				x_battery' in [0, 0]
+				restart' in [0, 0]
+				s_charging_0' in [1, 1]
+				s_driving_0' in [0, 0]
+			}
+			inv
+			{
+				 -1*clk <= 0
+				clk <= 15
+				 -1*x_battery <= 0
+				x_battery <= 10
+			}
+		}
+		driving_0
+		{
+			poly ode 1
+			{
+				clk' in [1, 1]
+				x_battery' in [-1, -1]
+				restart' in [0, 0]
+				s_charging_0' in [0, 0]
+				s_driving_0' in [1, 1]
+			}
+			inv
+			{
+				 -1*clk <= 0
+				clk <= 15
+				 -1*x_battery <= 0
+				x_battery <= 10
+			}
+		}
+		arrival_0
+		{
+			poly ode 1
+			{
+				clk' in [1, 1]
+				x_battery' in [0, 0]
+				restart' in [0, 0]
+				s_charging_0' in [0, 0]
+				s_driving_0' in [0, 0]
+			}
+			inv
+			{
+				 -1*clk <= 0
+				clk <= 15
+				 -1*x_battery <= 0
+				x_battery <= 10
+			}
+		}
+		empty_battery
+		{
+			poly ode 1
+			{
+				clk' in [1, 1]
+				x_battery' in [0, 0]
+				restart' in [0, 0]
+				s_charging_0' in [0, 0]
+				s_driving_0' in [0, 0]
+			}
+			inv
+			{
+				 -1*clk <= 0
+				clk <= 15
+				 -1*x_battery <= 0
+				x_battery <= 10
+			}
+		}
+	}
+	jumps
+	{
+		chargingC_0 -> noCharging_0
+		guard {  -1*x_battery <= -10 x_battery <= 10 }
+		reset { }
+
+		chargingC_0 -> driving_0
+		guard { }
+		reset { }
+
+		chargingB_0 -> chargingC_0
+		guard {  -1*x_battery <= -8 x_battery <= 8 }
+		reset { }
+
+		chargingB_0 -> driving_0
+		guard { }
+		reset { }
+
+		chargingA_0 -> chargingB_0
+		guard {  -1*x_battery <= -3 x_battery <= 3 }
+		reset { }
+
+		chargingA_0 -> driving_0
+		guard { }
+		reset { }
+
+		noCharging_0 -> driving_0
+		guard { }
+		reset { }
+
+		driving_0 -> arrival_0
+		guard { }
+		reset { }
+
+		driving_0 -> empty_battery
+		guard {  -1*x_battery <= 0 x_battery <= 0 }
+		reset { }
+
+	}
+	init
+	{
+		chargingA_0
+		{
+			 -1*clk <= 0
+			clk <= 0
+			 -1*x_battery <= 0
+			x_battery <= 2
+			 -1*restart <= 0
+			restart <= 0
+			 -1*s_charging_0 <= -1
+			s_charging_0 <= 1
+			 -1*s_driving_0 <= 0
+			s_driving_0 <= 0
+		}
+	}
+}
