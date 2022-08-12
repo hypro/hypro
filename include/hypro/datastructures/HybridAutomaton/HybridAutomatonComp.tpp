@@ -376,6 +376,14 @@ void ComposedLocation<Number>::validate() const {
 		mTransitions.emplace_back( std::move( newTransition ) );
 	}
 
+	// update bad-states mapping during validation
+	mAutomaton.setLocalBadStateMapping();
+	for ( const auto& [key, condition] : mAutomaton.mLocalBadStateMapping ) {
+		if ( mCompositionals[key.first] == key.second ) {
+			mAutomaton.mLocalBadStates[this] = condition;
+		}
+	}
+
 	mIsValid = true;
 }
 
@@ -479,7 +487,21 @@ const typename HybridAutomatonComp<Number>::locationConditionMap& HybridAutomato
 template <typename Number>
 const typename HybridAutomatonComp<Number>::locationConditionMap& HybridAutomatonComp<Number>::getLocalBadStates() const {
 	if ( !mCachesValid[CACHE::LOCALBADSTATES] ) {
-		throw NotImplemented();
+		// collect all local bad states from all automata. Each existing (valid) location, check if one of its components
+		// is a local bad state - if so, update the list
+		setLocalBadStateMapping();
+
+		for ( const auto& location : mLocations ) {
+			// detect potentially relevant locations that require testing
+			if ( location.isValid() && mLocalBadStates.count( &location ) < 0 ) {
+				for ( const auto& [key, condition] : mLocalBadStateMapping ) {
+					if ( location.mCompositionals[key.first] == key.second ) {
+						mLocalBadStates[&location] = condition;
+					}
+				}
+			}
+		}
+
 		mCachesValid[CACHE::LOCALBADSTATES] = true;
 	}
 	return mLocalBadStates;
@@ -488,7 +510,9 @@ const typename HybridAutomatonComp<Number>::locationConditionMap& HybridAutomato
 template <typename Number>
 const typename HybridAutomatonComp<Number>::conditionVector& HybridAutomatonComp<Number>::getGlobalBadStates() const {
 	if ( !mCachesValid[CACHE::GLOBALBADSTATES] ) {
-		throw NotImplemented();
+		for ( std::size_t automatonIdx = 0; automatonIdx < mAutomata.size(); ++automatonIdx ) {
+			mGlobalBadStates.insert( std::end( mGlobalBadStates ), std::begin( mAutomata[automatonIdx].getGlobalBadStates() ), std::end( mAutomata[automatonIdx].getGlobalBadStates() ) );
+		}
 		mCachesValid[CACHE::GLOBALBADSTATES] = true;
 	}
 	return mGlobalBadStates;
@@ -562,8 +586,32 @@ void HybridAutomatonComp<Number>::invalidateCaches() const {
 	mGlobalToLocalVars.clear();
 	mLocalToGlobalVars.clear();
 	mComposedLocs.clear();
+	mLocalBadStateMapping.clear();
 	mLabels.clear();
 	mCachesValid = std::vector<bool>( CACHE::Count, false );
+}
+
+template <typename Number>
+void HybridAutomatonComp<Number>::setLocalBadStateMapping() const {
+	if ( !mCachesValid[CACHE::LOCALBADSTATEMAPPING] ) {
+		mLocalBadStateMapping.clear();
+		for ( std::size_t automatonIdx = 0; automatonIdx < mAutomata.size(); ++automatonIdx ) {
+			auto locs = mAutomata[automatonIdx].getLocations();
+			for ( const auto& [location, condition] : mAutomata[automatonIdx].getLocalBadStates() ) {
+				long int locationIdx = -1;
+				for ( locationIdx = 0; locationIdx < locs.size(); ++locationIdx ) {
+					if ( locs[locationIdx] == location ) {
+						break;
+					}
+				}
+				if ( locationIdx < 0 ) {
+					throw std::logic_error( "Index for location " + location->getName() + " could not be found." );
+				}
+				mLocalBadStateMapping[std::make_pair( automatonIdx, locationIdx )] = condition;
+			}
+		}
+		mCachesValid[CACHE::LOCALBADSTATEMAPPING] = true;
+	}
 }
 
 }  // namespace hypro

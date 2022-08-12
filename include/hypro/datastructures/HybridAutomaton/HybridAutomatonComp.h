@@ -32,6 +32,7 @@ class ComposedLocation : public Location<Number> {
   public:
 	using CompTransition = Transition<Number, ComposedLocation<Number>>;
 	using transitionVector = std::vector<std::unique_ptr<CompTransition>>;
+	using NumberType = Number;
 
   private:
 	mutable bool mIsValid = false;					///< Flag indicating whether the location has been initialized
@@ -138,9 +139,9 @@ class ComposedLocation : public Location<Number> {
 		return Location<Number>::hash();
 	}
 	/// returns dot-representation of the location
-	std::string getDotRepresentation( const std::vector<std::string>& vars ) const { throw NotImplemented(); }
+	std::string getDotRepresentation( const std::vector<std::string>& vars ) const { throw NotImplemented( __func__ ); }
 	/// decomposes location into subspaces defined in the passed decomposition
-	void decompose( const std::vector<std::vector<std::size_t>>& partition ) { throw NotImplemented(); }
+	void decompose( const std::vector<std::vector<std::size_t>>& partition ) { throw NotImplemented( __func__ ); }
 	/// hash-based less operator
 	inline bool operator<( const ComposedLocation<Number>& rhs ) const {
 		validate();
@@ -183,13 +184,14 @@ class HybridAutomatonComp {
 				 GLOBALBADSTATES = 2,
 				 VARIABLES = 3,
 				 LABELS = 4,
+				 LOCALBADSTATEMAPPING = 5,
 				 Count };
 
   public:
 	using LocationType = ComposedLocation<Number>;
 	using Locations = std::list<LocationType>;
 	using TransitionType = Transition<Number, LocationType>;
-	using locationConditionMap = std::map<LocationType*, Condition<Number>>;
+	using locationConditionMap = std::map<LocationType const*, Condition<Number>>;
 	using conditionVector = std::vector<Condition<Number>>;
 	using variableVector = std::vector<std::string>;
 
@@ -201,12 +203,13 @@ class HybridAutomatonComp {
 	mutable conditionVector mGlobalBadStates;		 /// The set of bad states which are not bound to any location.
 	mutable std::vector<std::string> mVariables;	 /// Cache for the variables of the composed automata.
 	mutable std::map<unsigned, std::vector<unsigned>> mSharedVars;
-	mutable std::vector<bool> mCachesValid = std::vector<bool>( CACHE::Count, false );		 ///< Set of flags used to indicate cache validity
-	mutable std::map<std::size_t, std::vector<long int>> mGlobalToLocalVars;				 ///< Mapping from global var idx to local ones
-	mutable std::map<std::pair<std::size_t, long int>, std::size_t> mLocalToGlobalVars;		 ///< Mapping from automaton and var idx (pair) to global var idx
-	mutable std::map<std::vector<std::size_t>, typename Locations::iterator> mComposedLocs;	 ///< Mapping from indices of components to the index in the location vector
-	mutable std::set<Label> mLabels;														 ///< Jump-synchronizationLabels
-	std::map<std::string, std::vector<std::pair<std::size_t, std::size_t>>> mMasters;		 ///< Maps Variables to sets of locations in which the dynamics of this variable is overriding dynamics in other components
+	mutable std::vector<bool> mCachesValid = std::vector<bool>( CACHE::Count, false );				 ///< Set of flags used to indicate cache validity
+	mutable std::map<std::size_t, std::vector<long int>> mGlobalToLocalVars;						 ///< Mapping from global var idx to local ones
+	mutable std::map<std::pair<std::size_t, long int>, std::size_t> mLocalToGlobalVars;				 ///< Mapping from automaton and var idx (pair) to global var idx
+	mutable std::map<std::vector<std::size_t>, typename Locations::iterator> mComposedLocs;			 ///< Mapping from indices of components to the index in the location vector
+	mutable std::map<std::pair<std::size_t, std::size_t>, Condition<Number>> mLocalBadStateMapping;	 ///< Mapping from component and location to condition of bad states
+	mutable std::set<Label> mLabels;																 ///< Jump-synchronizationLabels
+	std::map<std::string, std::vector<std::pair<std::size_t, std::size_t>>> mMasters;				 ///< Maps Variables to sets of locations in which the dynamics of this variable is overriding dynamics in other components
 
   public:
 	HybridAutomatonComp(){};
@@ -217,6 +220,18 @@ class HybridAutomatonComp {
 		// invalidate caches
 		invalidateCaches();
 		mAutomata.emplace_back( std::move( automaton ) );
+	}
+
+	void removeAutomaton( std::size_t idx ) {
+		if ( idx < mAutomata.size() ) {
+			auto it = std::begin( mAutomata );
+			while ( idx != 0 ) {
+				--idx;
+				++it;
+			}
+			mAutomata.erase( it );
+			invalidateCaches();
+		}
 	}
 
 	void addMasterLocations( std::size_t componentIndex, const std::map<std::string, std::vector<std::size_t>>& masters ) {
@@ -274,7 +289,7 @@ class HybridAutomatonComp {
 	 *  sets of variables that are at least syntactically
 	 *  independet to each other.
 	 */
-	void decompose( const std::vector<std::vector<std::size_t>>& partition ) { throw NotImplemented(); }
+	void decompose( const std::vector<std::vector<std::size_t>>& partition ) { throw NotImplemented( __func__ ); }
 
 	/// Reduction function, currently a no-op for compositional hybrid automata, as the reachable part is built on the fly anyway
 	void reduce() {}
@@ -289,9 +304,9 @@ class HybridAutomatonComp {
 		return std::any_of( std::begin( mAutomata ), std::end( mAutomata ), [&rhs]( const auto& ha ) { return ha == rhs; } );
 	}
 
-	std::string getDotRepresentation() const { throw NotImplemented(); }
+	std::string getDotRepresentation() const { throw NotImplemented( __func__ ); }
 
-	std::string getStatistics() const { throw NotImplemented(); }
+	std::string getStatistics() const { throw NotImplemented( __func__ ); }
 
 	/**
 	 * @brief      Comparison for equality operator.
@@ -327,7 +342,7 @@ class HybridAutomatonComp {
 	 */
 
 	inline friend std::ostream& operator<<( std::ostream& ostr, const HybridAutomatonComp<Number>& a ) {
-		throw NotImplemented();
+		throw NotImplemented( __func__ );
 		return ostr;
 	}
 
@@ -341,6 +356,7 @@ class HybridAutomatonComp {
   private:
 	void setVariableMapping() const;
 	void invalidateCaches() const;
+	void setLocalBadStateMapping() const;
 };
 }  // namespace hypro
 

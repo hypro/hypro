@@ -106,6 +106,10 @@ class HybridAutomaton {
 	Location<Number>* getLocation( const std::string& name ) const;
 	/// getter for a single location identified by its position in the vector of locations
 	Location<Number>* getLocationByIndex( const std::size_t index ) const;
+	/// getter for the number of locations, faster than getLocations().size()
+	std::size_t getNumberLocations() const { return mLocations.size(); }
+	/// returns the index of the passed location
+	long int getLocationIndex( const Location<Number>* location ) const;
 	//* @return The set of transitions. */
 	std::vector<Transition<Number, LocationType>*> getTransitions() const;
 	//* @return The set of initial states. */
