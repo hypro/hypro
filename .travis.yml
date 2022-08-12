@@ -2,7 +2,7 @@ dist: xenial
 env:
   global:
     - GH_REPO_NAME: hypro
-    - DOXYFILE: $TRAVIS_BUILD_DIR/build/doc/Doxygen
+    - DOXYFILE: $TRAVIS_BUILD_DIR/build/docs/Doxygen
     - GH_REPO_REF: github.com/hypro/hypro.git
     - secure: "VrgSZAgTRTdH1rq0OHXHtArOA5SyLsJX9YA9O5c+PSXI/drMjc3pGsTIK3NA7xcyGaEIT+DjzV36yxvAz/3uurYkFtiz/sl1suziy6nSNBqvQSE01lBU9GnqHpkPg6/alnijG0Bf3KvXTdw5MmRaK+f9corNJAa+s1sP0rP7WMQ="
 

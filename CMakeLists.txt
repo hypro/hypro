@@ -287,7 +287,7 @@ include(export)
 
 
 if (CREATE_DOC)
-    add_subdirectory(doc EXCLUDE_FROM_ALL)
+    add_subdirectory(docs EXCLUDE_FROM_ALL)
 endif ()
 
 # # # # # # # # # # # # # # # # # # # # # #

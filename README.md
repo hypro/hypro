@@ -1,4 +1,4 @@
-![](doc/hypro_Logo.png)
+![](docs/hypro_Logo.png)
 
 # HyPro - A C++ library for the representation of state sets for the reachability analysis of hybrid systems
 
