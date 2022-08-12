@@ -33,4 +33,9 @@ entries:
             output: web, pdf
             type: homepage
 
+          - title: Examples
+            url: /examples.html
+            output: web, pdf
+            type: homepage
+
 
