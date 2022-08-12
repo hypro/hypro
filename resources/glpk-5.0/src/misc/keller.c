@@ -1,82 +1,72 @@
-/* keller.c (cover edges by cliques, Kellerman's heuristic) */
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 
-/***********************************************************************
-*  This code is part of GLPK (GNU Linear Programming Kit).
-*  Copyright (C) 2009-2013 Free Software Foundation, Inc.
-*  Written by Andrew Makhorin <mao@gnu.org>.
-*
-*  GLPK is free software: you can redistribute it and/or modify it
-*  under the terms of the GNU General Public License as published by
-*  the Free Software Foundation, either version 3 of the License, or
-*  (at your option) any later version.
-*
-*  GLPK is distributed in the hope that it will be useful, but WITHOUT
-*  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-*  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public
-*  License for more details.
-*
-*  You should have received a copy of the GNU General Public License
-*  along with GLPK. If not, see <http://www.gnu.org/licenses/>.
-***********************************************************************/
+/* keller.c (cover edges by cliques, Kellerman's heuristic) */
 
 #include "glpk.h"
 #include "env.h"
 #include "keller.h"
 
 /***********************************************************************
-*  NAME
-*
-*  kellerman - cover edges by cliques with Kellerman's heuristic
-*
-*  SYNOPSIS
-*
-*  #include "keller.h"
-*  int kellerman(int n, int (*func)(void *info, int i, int ind[]),
-*     void *info, glp_graph *H);
-*
-*  DESCRIPTION
-*
-*  The routine kellerman implements Kellerman's heuristic algorithm
-*  to find a minimal set of cliques which cover all edges of specified
-*  graph G = (V, E).
-*
-*  The parameter n specifies the number of vertices |V|, n >= 0.
-*
-*  Formal routine func specifies the set of edges E in the following
-*  way. Running the routine kellerman calls the routine func and passes
-*  to it parameter i, which is the number of some vertex, 1 <= i <= n.
-*  In response the routine func should store numbers of all vertices
-*  adjacent to vertex i to locations ind[1], ind[2], ..., ind[len] and
-*  return the value of len, which is the number of adjacent vertices,
-*  0 <= len <= n. Self-loops are allowed, but ignored. Multiple edges
-*  are not allowed.
-*
-*  The parameter info is a transit pointer (magic cookie) passed to the
-*  formal routine func as its first parameter.
-*
-*  The result provided by the routine kellerman is the bipartite graph
-*  H = (V union C, F), which defines the covering found. (The program
-*  object of type glp_graph specified by the parameter H should be
-*  previously created with the routine glp_create_graph. On entry the
-*  routine kellerman erases the content of this object with the routine
-*  glp_erase_graph.) Vertices of first part V correspond to vertices of
-*  the graph G and have the same ordinal numbers 1, 2, ..., n. Vertices
-*  of second part C correspond to cliques and have ordinal numbers
-*  n+1, n+2, ..., n+k, where k is the total number of cliques in the
-*  edge covering found. Every edge f in F in the program object H is
-*  represented as arc f = (i->j), where i in V and j in C, which means
-*  that vertex i of the graph G is in clique C[j], 1 <= j <= k. (Thus,
-*  if two vertices of the graph G are in the same clique, these vertices
-*  are adjacent in G, and corresponding edge is covered by that clique.)
-*
-*  RETURNS
-*
-*  The routine Kellerman returns k, the total number of cliques in the
-*  edge covering found.
-*
-*  REFERENCE
-*
-*  For more details see: glpk/doc/notes/keller.pdf (in Russian). */
+ *  NAME
+ *
+ *  kellerman - cover edges by cliques with Kellerman's heuristic
+ *
+ *  SYNOPSIS
+ *
+ *  #include "keller.h"
+ *  int kellerman(int n, int (*func)(void *info, int i, int ind[]),
+ *     void *info, glp_graph *H);
+ *
+ *  DESCRIPTION
+ *
+ *  The routine kellerman implements Kellerman's heuristic algorithm
+ *  to find a minimal set of cliques which cover all edges of specified
+ *  graph G = (V, E).
+ *
+ *  The parameter n specifies the number of vertices |V|, n >= 0.
+ *
+ *  Formal routine func specifies the set of edges E in the following
+ *  way. Running the routine kellerman calls the routine func and passes
+ *  to it parameter i, which is the number of some vertex, 1 <= i <= n.
+ *  In response the routine func should store numbers of all vertices
+ *  adjacent to vertex i to locations ind[1], ind[2], ..., ind[len] and
+ *  return the value of len, which is the number of adjacent vertices,
+ *  0 <= len <= n. Self-loops are allowed, but ignored. Multiple edges
+ *  are not allowed.
+ *
+ *  The parameter info is a transit pointer (magic cookie) passed to the
+ *  formal routine func as its first parameter.
+ *
+ *  The result provided by the routine kellerman is the bipartite graph
+ *  H = (V union C, F), which defines the covering found. (The program
+ *  object of type glp_graph specified by the parameter H should be
+ *  previously created with the routine glp_create_graph. On entry the
+ *  routine kellerman erases the content of this object with the routine
+ *  glp_erase_graph.) Vertices of first part V correspond to vertices of
+ *  the graph G and have the same ordinal numbers 1, 2, ..., n. Vertices
+ *  of second part C correspond to cliques and have ordinal numbers
+ *  n+1, n+2, ..., n+k, where k is the total number of cliques in the
+ *  edge covering found. Every edge f in F in the program object H is
+ *  represented as arc f = (i->j), where i in V and j in C, which means
+ *  that vertex i of the graph G is in clique C[j], 1 <= j <= k. (Thus,
+ *  if two vertices of the graph G are in the same clique, these vertices
+ *  are adjacent in G, and corresponding edge is covered by that clique.)
+ *
+ *  RETURNS
+ *
+ *  The routine Kellerman returns k, the total number of cliques in the
+ *  edge covering found.
+ *
+ *  REFERENCE
+ *
+ *  For more details see: glpk/docs/notes/keller.pdf (in Russian). */
 
 struct set
 {     /* set of vertices */

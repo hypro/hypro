@@ -21,7 +21,7 @@ resources/glpk-5.0/
 *.idx
 *.java
 *.interp
-doc/docpage/_site/
+docs/docpage/_site/
 
 examples/nnet/acasxu
 examples/nnet/coav

@@ -1,0 +1,35 @@
+---
+type: title
+search: exclude
+permalink: /titlepage.html/
+---
+<!--
+  ~ Copyright (c) 2022.
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  ~
+  ~   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+  ~
+  ~   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  -->
+
+<div class="printTitleArea">
+    <div class="printTitle">{{site.print_title}}</div>
+    <div class="printSubtitle">{{site.print_subtitle}}</div>
+    <div class="lastGeneratedDate">Last generated: {{ site.time | date: '%B %d, %Y' }}</div>
+    <hr/>
+
+    <div class="printTitleImage">
+        <img src="{{site.url}}/{{site.baseurl}}/images/company_logo_big.png" alt="Company Logo"/>
+    </div>
+
+    <div class="copyrightBoilerplate">
+        <p>&copy; {{ site.time | date: "%Y" }} {{site.company_name}}. This is a boilerplate copyright statement... All
+            rights reserved. No part of this publication may be reproduced, distributed, or transmitted in any form or
+            by any means, including photocopying, recording, or other electronic or mechanical methods, without the
+            prior written permission of the publisher, except in the case of brief quotations embodied in critical
+            reviews and certain other noncommercial uses permitted by copyright law.
+        </p>
+
+    </div>
+
+</div>

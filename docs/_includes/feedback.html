@@ -1,0 +1,26 @@
+<!--
+  ~ Copyright (c) 2022.
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+  ~
+  ~   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+  ~
+  ~   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  -->
+
+<li>
+    {% if site.feedback_text %}
+    {% assign feedback_text = site.feedback_text %}
+    {% else %}
+    {% assign feedback_text = "Feedback" %}
+    {% endif %}
+
+    {% if site.feedback_link %}
+    <a class="email" title="Submit feedback" href="{{site.feedback_link}}">{{feedback_text}}</a>
+    {% else %}
+    <a class="email" title="Submit feedback" href="#"
+       onclick="javascript:window.location='mailto:{{site.feedback_email}}?subject={{site.feedback_subject_line}} feedback&body=I have some feedback about the {{page.title}} page: ' + window.location.href;"><i
+            class="fa fa-envelope-o"></i> {{feedback_text}}</a>
+    {% endif %}
+</li>
+
+{% comment %} Copyright 2021 Google LLC {% endcomment %}
