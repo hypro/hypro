@@ -5,33 +5,61 @@ permalink: mydoc_setup.html
 folder: mydoc
 ---
 
-## Overview
+# Installation {#installation}
 
-This site provides documentation, training, and other notes for the Jekyll Documentation theme. There's a lot of
-information about how to do a variety of things here, and it's not all unique to this theme. But by and large,
-understanding how to do things in Jekyll depends on how your theme is coded. As a result, these additional details are
-provided.
+After having installed all necessary [dependencies](@ref dependencies), the library can be compiled out of source and
+installed using _cmake_. In the following we assume a build folder named 'build' will be used. The following terminal
+commands will allow for a build with the default settings enabled (for more options see [options](@ref options)):
 
-The instructions here are geared towards technical writers working on documentation. You may have a team of one or more
-technical writers working on documentation for multiple projects. You can use this same theme to author all of your
-documentation for each of your products. The theme is built to accommodate documentation for multiple products on the
-same site.
+~~~.bash
+cmake ..
+make resources
+make
+~~~
 
-## Survey of features
+To install the library to your system, use
 
-Some of the more prominent features of this theme include the following:
+~~~.bash
+make install
+~~~
 
-* Bootstrap framework
-* [Navgoco multi-level sidebar](http://www.komposta.net/article/navgoco) for table of contents
-* Ability to specify different sidebars for different products
-* Top navigation bar with drop-down menus
-* Notes, tips, and warning information notes
-* Tags for alternative navigation
-* Advanced landing page layouts from
-  the [Modern Business theme](http://startbootstrap.com/template-overviews/modern-business/).
+Options {#options}
+------------------
+In its current state, the main features of HyPro can be configured via _cmake_ or its gui _ccmake_, which can be invoked
+by (from the build folder):
 
-## Getting started
+~~~.bash
+ccmake ..
+~~~
 
-To get started, see [Getting Started][index].
+The currently available options are:
+
+* HYPRO_LOGGING - Allows to completely enable/disable all logging macros (default: ON).
+* HYPRO_USE_COTIRE - Enables/disables the usage of [cotire](https://github.com/sakra/cotire), which allows for faster
+  builds (default: OFF).
+* HYPRO_USE_OPENMP - Enables/disables the usage of OpenMP in Eigen3 (default: OFF).
+* HYPRO_USE_PPL - Enables/disables the PPL-wrapper class. Note that PPL has to be installed to use this feature (
+  default: OFF).
+* HYPRO_USE_SMTRAT - Enables/disables the usage of SMT-RAT as a secondary linear optimization backend. Note that SMT-RAT
+  has to be installed to use this feature (default: OFF).
+* HYPRO_USE_SOPLEX - Enables/disables the usage of SoPlex as a secondary linear optimization backend. Note that SoPlex
+  has to be installed to use this feature (default: OFF).
+* HYPRO_USE_Z3 - Enables/disables the usage of Z3 as a secondary linear optimization backend. Note that Z3 has to be
+  installed to use this feature (default: OFF).
+* STATICLIB_SWITCH - Allows to compile a static-linked version of HyPro (default: OFF).
+* CREATE_DOC - Allows to locally build this documentation (default: OFF).
+
+Examples
+--------
+
+Each provided example file comes with its own target, which can be build by using the examples name, i.e. use
+
+~~~.bash
+make example_zonotope
+~~~
+
+to build an example showing the basic usage of the zonotope representation. Each built example binary can be found in
+the folder build/bin/.
+
 
 {% include links.html %}

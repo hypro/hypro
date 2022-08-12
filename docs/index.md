@@ -5,4 +5,6 @@ sidebar: mydoc_sidebar
 permalink: index.html
 ---
 
-Test.
+<p align="center">
+  <img src="pics/hypro_Logo.png"/>
+</p>

@@ -41,15 +41,3 @@ The currently available options are:
   installed to use this feature (default: OFF).
 * STATICLIB_SWITCH - Allows to compile a static-linked version of HyPro (default: OFF).
 * CREATE_DOC - Allows to locally build this documentation (default: OFF).
-
-Examples
---------
-
-Each provided example file comes with its own target, which can be build by using the examples name, i.e. use
-
-~~~.bash
-make example_zonotope
-~~~
-
-to build an example showing the basic usage of the zonotope representation. Each built example binary can be found in
-the folder build/bin/.
