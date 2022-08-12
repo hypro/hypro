@@ -121,7 +121,7 @@ class LTIAnalyzer {
 
   private:
 	LTIResult run_impl();
-	LTIResult processNode( LTIWorker<State, Automaton>& worker, ReachTreeNode<State, LocationT>* node, TimeTransformationCache<Number>& transformationCache );
+	LTIResult processNode( LTIWorker<State, Automaton>& worker, ReachTreeNode<State, LocationT>* node, TimeTransformationCache<LocationT>& transformationCache );
 	bool detectFixedPoint( ReachTreeNode<State, LocationT>& node );
 
   protected:

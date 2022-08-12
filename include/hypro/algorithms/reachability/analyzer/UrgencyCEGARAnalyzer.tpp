@@ -13,7 +13,7 @@ namespace hypro {
 
 template <typename Representation, typename Automaton>
 auto UrgencyCEGARAnalyzer<Representation, Automaton>::run() -> UrgencyCEGARResult {
-	TimeTransformationCache<Number> transformationCache;
+	TimeTransformationCache<LocationT> transformationCache;
 	UrgencyCEGARWorker<Representation, Automaton> worker{
 		  *mHybridAutomaton,
 		  mParameters,

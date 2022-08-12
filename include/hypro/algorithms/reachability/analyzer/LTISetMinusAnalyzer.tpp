@@ -17,7 +17,7 @@ namespace hypro {
 template <typename State, typename Automaton>
 auto LTISetMinusAnalyzer<State, Automaton>::run() -> LTISetMinusResult {
 	// Setup settings for flowpipe construction in worker
-	TimeTransformationCache<Number> transformationCache;
+	TimeTransformationCache<LocationT> transformationCache;
 	LTISetMinusWorker<State, Automaton> worker{
 		  *mHybridAutomaton,
 		  mParameters,

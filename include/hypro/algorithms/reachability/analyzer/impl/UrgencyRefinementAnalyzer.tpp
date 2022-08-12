@@ -118,7 +118,7 @@ bool UrgencyRefinementAnalyzer<Representation, Automaton>::matchesPathTransition
 template <typename Representation, typename Automaton>
 auto UrgencyRefinementAnalyzer<Representation, Automaton>::run() -> RefinementResult {
 	// Setup settings for flowpipe construction in worker
-	TimeTransformationCache<Number> transformationCache;
+	TimeTransformationCache<LocationT> transformationCache;
 	UrgencyCEGARWorker<Representation, Automaton> worker{
 		  *mHybridAutomaton,
 		  mParameters,
@@ -438,7 +438,7 @@ bool UrgencyRefinementAnalyzer<Representation, Automaton>::isSuitableForRefineme
 template <typename Representation, typename Automaton>
 bool UrgencyRefinementAnalyzer<Representation, Automaton>::isPathUnsafe( ReachTreeNode<Representation, LocationT>* initialNode, Path<Number> path, std::size_t initialTimeHorizon ) {
 	// todo: reuse worker or at least transformationCache
-	TimeTransformationCache<Number> transformationCache;
+	TimeTransformationCache<LocationT> transformationCache;
 	UrgencyCEGARWorker<Representation, Automaton> worker{
 		  *mHybridAutomaton,
 		  mParameters,

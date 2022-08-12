@@ -35,7 +35,7 @@ class LTIWorker {
   public:
 	struct JumpSuccessorGen;
 
-	LTIWorker( const HybridAutomaton& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache, std::size_t subspace = 0 )
+	LTIWorker( const HybridAutomaton& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<LocationT>& trafoCache, std::size_t subspace = 0 )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
 		, mLocalTimeHorizon( localTimeHorizon )
@@ -57,10 +57,10 @@ class LTIWorker {
 	std::vector<TimedValuationSet<Representation>> computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<Number, LocationT> const* trans ) const;
 
   protected:
-	const HybridAutomaton& mHybridAutomaton;	   ///< hybrid automaton to analyze
-	const AnalysisParameters& mSettings;		   ///< analysis settings
-	tNumber mLocalTimeHorizon;					   ///< local time horizon
-	TimeTransformationCache<Number>& mTrafoCache;  ///< cache for matrix exponential
+	const HybridAutomaton& mHybridAutomaton;		  ///< hybrid automaton to analyze
+	const AnalysisParameters& mSettings;			  ///< analysis settings
+	tNumber mLocalTimeHorizon;						  ///< local time horizon
+	TimeTransformationCache<LocationT>& mTrafoCache;  ///< cache for matrix exponential
 	std::size_t mSubspace;
 
 	size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );

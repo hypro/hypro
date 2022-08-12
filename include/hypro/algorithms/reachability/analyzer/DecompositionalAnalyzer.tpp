@@ -13,7 +13,7 @@ namespace hypro {
 
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep, typename Automaton>
 auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep, Automaton>::run() -> DecompositionalResult {
-	std::vector<TimeTransformationCache<Number>> cache( mDecomposition.subspaces.size(), TimeTransformationCache<Number>() );
+	std::vector<TimeTransformationCache<LocationT>> cache( mDecomposition.subspaces.size(), TimeTransformationCache<LocationT>() );
 	auto workers = initializeWorkers( cache );
 
 	while ( !mWorkQueue.empty() ) {
@@ -97,7 +97,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep, A
 }
 
 template <typename LTIRep, typename SingularRep, typename DiscreteRep, typename RectangularRep, typename Automaton>
-auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep, Automaton>::initializeWorkers( std::vector<TimeTransformationCache<Number>>& cache ) -> std::vector<WorkerVariant> {
+auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep, Automaton>::initializeWorkers( std::vector<TimeTransformationCache<LocationT>>& cache ) -> std::vector<WorkerVariant> {
 	std::vector<WorkerVariant> workers;
 	for ( std::size_t subspace = 0; subspace < mDecomposition.subspaces.size(); ++subspace ) {
 		switch ( mDecomposition.subspaceTypes[subspace] ) {

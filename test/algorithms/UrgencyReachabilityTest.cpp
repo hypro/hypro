@@ -203,7 +203,7 @@ TYPED_TEST( UrgencyCEGARReachabilityTest, TimeElapse ) {
 	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 10 );
 	analysisParameters.representation_type = Representation::type();
 
-	TimeTransformationCache<Number> cache{};
+	TimeTransformationCache<typename hypro::HybridAutomaton<Number>::LocationType> cache{};
 	UrgencyCEGARWorker<Representation, decltype( automaton )> worker( automaton, analysisParameters, 10, cache );
 	ReachTreeNode<Representation, typename decltype( automaton )::LocationType> node( l0, initialSet, carl::Interval<SegmentInd>( 0 ) );
 

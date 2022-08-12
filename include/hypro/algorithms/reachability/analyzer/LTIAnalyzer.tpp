@@ -20,7 +20,7 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 		mIdle = std::vector( mNumThreads, false );
 		for ( int i = 0; i < mNumThreads; i++ ) {
 			mThreads.push_back( std::thread( [this, i]() {
-				TimeTransformationCache<Number> transformationCache;
+				TimeTransformationCache<LocationT> transformationCache;
 				LTIWorker<State, Automaton> worker{
 					  *mHybridAutomaton,
 					  mParameters,
@@ -59,7 +59,7 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 		// wait();
 		shutdown();
 	} else {
-		TimeTransformationCache<Number> transformationCache;
+		TimeTransformationCache<LocationT> transformationCache;
 		LTIWorker<State, Automaton> worker{
 			  *mHybridAutomaton,
 			  mParameters,
@@ -78,7 +78,7 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 }
 
 template <typename State, typename Automaton, typename Heuristics, typename Multithreading>
-auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::processNode( LTIWorker<State, Automaton>& worker, ReachTreeNode<State, LocationT>* node, TimeTransformationCache<Number>& transformationCache ) -> LTIResult {
+auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::processNode( LTIWorker<State, Automaton>& worker, ReachTreeNode<State, LocationT>* node, TimeTransformationCache<LocationT>& transformationCache ) -> LTIResult {
 	REACHABILITY_RESULT safetyResult;
 
 	// set bounding box required for fixed-point test

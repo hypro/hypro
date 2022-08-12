@@ -38,7 +38,7 @@ class UrgencyCEGARWorker {
 	using Flowpipe = std::vector<IndexedValuationSet<Representation>>;
 
   public:
-	UrgencyCEGARWorker( const Automaton& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
+	UrgencyCEGARWorker( const Automaton& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<LocationT>& trafoCache )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
 		, mLocalTimeHorizon( localTimeHorizon )
@@ -135,7 +135,7 @@ class UrgencyCEGARWorker {
 	const Automaton& mHybridAutomaton;																					 ///< hybrid automaton to analyze
 	const AnalysisParameters& mSettings;																				 ///< analysis settings
 	tNumber mLocalTimeHorizon;																							 ///< local time horizon
-	TimeTransformationCache<Number>& mTrafoCache;																		 ///< cache for matrix exponential
+	TimeTransformationCache<LocationT>& mTrafoCache;																	 ///< cache for matrix exponential
 	Flowpipe mFlowpipe;																									 ///< Storage of computed time successors
 	std::map<const Transition<Number, LocationT>*, std::vector<IndexedValuationSet<Representation>>> mJumpPredecessors;	 ///< Cache jump predecessors
 

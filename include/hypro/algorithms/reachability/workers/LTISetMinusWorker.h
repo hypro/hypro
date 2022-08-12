@@ -35,7 +35,7 @@ class LTISetMinusWorker {
   public:
 	struct JumpSuccessorGen;
 
-	LTISetMinusWorker( const Automaton& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
+	LTISetMinusWorker( const Automaton& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<typename Automaton::LocationType>& trafoCache )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
 		, mLocalTimeHorizon( localTimeHorizon )
@@ -48,10 +48,10 @@ class LTISetMinusWorker {
 	JumpSuccessorGen getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number, typename Automaton::LocationType> const* transition ) const;
 
   protected:
-	const Automaton& mHybridAutomaton;			   ///< hybrid automaton to analyze
-	const AnalysisParameters& mSettings;		   ///< analysis settings
-	tNumber mLocalTimeHorizon;					   ///< local time horizon
-	TimeTransformationCache<Number>& mTrafoCache;  ///< cache for matrix exponential
+	const Automaton& mHybridAutomaton;										 ///< hybrid automaton to analyze
+	const AnalysisParameters& mSettings;									 ///< analysis settings
+	tNumber mLocalTimeHorizon;												 ///< local time horizon
+	TimeTransformationCache<typename Automaton::LocationType>& mTrafoCache;	 ///< cache for matrix exponential
 
 	size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
 };

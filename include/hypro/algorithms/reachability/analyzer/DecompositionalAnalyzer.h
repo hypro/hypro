@@ -332,10 +332,10 @@ class DecompositionalAnalyzer {
 	}
 
 	/**
-     * @brief       Initialize workers for the subspaces.
-     * @return      The initizalized workers as vector of variants.
-     */
-	auto initializeWorkers( std::vector<TimeTransformationCache<Number>>& cache ) -> std::vector<WorkerVariant>;
+	 * @brief       Initialize workers for the subspaces.
+	 * @return      The initizalized workers as vector of variants.
+	 */
+	auto initializeWorkers( std::vector<TimeTransformationCache<LocationT>>& cache ) -> std::vector<WorkerVariant>;
 
 	/**
      * @brief       Preliminary check that nodes are consistent (e.g. no initial set is empty).
