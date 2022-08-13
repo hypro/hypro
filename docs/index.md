@@ -6,5 +6,5 @@ permalink: index.html
 ---
 
 <p align="center">
-  <img src="{{" pics/hypro_Logo.png"}}"/>
+  <img src="{{" images/hypro_Logo.png"}}"/>
 </p>
