@@ -5,6 +5,6 @@ sidebar: mydoc_sidebar
 permalink: index.html
 ---
 
-<p align="center">
-  <img src="{{"images/hypro_Logo.png"}}"/>
-</p>
+
+{% include image.html file="hypro_Logo.png" alt="HyPro log" %}
+
