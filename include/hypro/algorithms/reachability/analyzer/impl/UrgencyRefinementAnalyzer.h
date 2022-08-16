@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #pragma once
@@ -166,7 +166,7 @@ class UrgencyRefinementAnalyzer {
 	 * @param initialTimeHorizon A time horizon that is used only to limit the first time elapse.
 	 * @return true if the path is unsafe and false otherwise.
 	 */
-	bool isPathUnsafe( ReachTreeNode<Representation, LocationT>* initialNode, Path<Number> path, std::size_t initialTimeHorizon );
+	bool isPathUnsafe( ReachTreeNode<Representation, LocationT>* initialNode, Path<Number, LocationT> path, std::size_t initialTimeHorizon );
 
 	/**
 	 * @brief Evaluate the given heuristic for a transition and a node.
@@ -190,7 +190,7 @@ class UrgencyRefinementAnalyzer {
 	FixedAnalysisParameters mFixedParameters;						   ///< Analysis parameters
 	AnalysisParameters mParameters;									   ///< Used analysis settings
 	UrgencyCEGARSettings mRefinementSettings;						   ///< Settings that contain information about refinement levels
-	Path<Number> mPath{};											   ///< Path to the initial unsafe node
+	Path<Number, LocationT> mPath{};								   ///< Path to the initial unsafe node
 	ReachTreeNode<Representation, LocationT>* mFailureNode;			   ///< The initial failure node
 	std::list<ReachTreeNode<Representation, LocationT>>* mRoots;	   ///< The roots of the reach tree
 	size_t const mMaxSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.localTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::max() ) ) );
