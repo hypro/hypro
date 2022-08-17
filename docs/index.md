@@ -6,5 +6,5 @@ permalink: index.html
 ---
 
 
-{% include image.html file="hypro_Logo.png" alt="HyPro log" %}
+{% include image.html file="hypro_Logo.png" alt="HyPro logo" %}
 
