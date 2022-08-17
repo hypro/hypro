@@ -14,7 +14,7 @@ use_math: true
 
 ## General Idea
 
-A d-dimensional box as the Cartesian product of d real-valued intervals is represented by an ordered sequence of d intervals in HyPro. $\mathbb{R}$
+A d-dimensional box as the Cartesian product of d real-valued intervals is represented by an ordered sequence of d intervals in HyPro.
 
 ## Implementation Details
 
