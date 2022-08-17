@@ -46,3 +46,18 @@ entries:
             url: /boxes.html
             output: web, pdf
             type: homepage
+
+          - title: Polytopes
+            url: /polytopes.html
+            output: web, pdf
+            type: homepage
+
+          - title: Support Functions
+            url: /support_functions.html
+            output: web, pdf
+            type: homepage
+
+          - title: Zonotopes
+            url: /zonotopes.html
+            output: web, pdf
+            type: homepage
