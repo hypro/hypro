@@ -61,3 +61,12 @@ entries:
             url: /zonotopes.html
             output: web, pdf
             type: homepage
+
+      - title: Utility
+        output: web, pdf
+        folderitems:
+
+          - title: Plotting
+            url: /plotting.html
+            output: web, pdf
+            type: homepage
