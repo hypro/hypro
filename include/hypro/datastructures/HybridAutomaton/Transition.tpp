@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "Transition.h"
 
 namespace hypro {
@@ -223,19 +232,21 @@ std::unique_ptr<Transition<Number, LocationType>> parallelCompose( const Transit
 		return nullptr;
 	}
 
-	// set label
+	// set labels
 	if ( lhsT->getLabels() == rhsT->getLabels() ) {
-		// std::cout << "a" << std::endl;
+		// transitions agree on their synchronization labels
 		t->setLabels( lhsT->getLabels() );
-	} else if ( !( lhsT->getLabels().empty() ) and rhsLabels.set::count( *( lhsT->getLabels().begin() ) ) == 0 and rhsT->getLabels().empty() ) {
-		// std::cout << "b" << std::endl;
+	}
+	// TODO Stefan: Why did we come up with these cases? If you can find a reason, include them again, but add detailed documentation, because I cannot understand this right now
+	/*else if ( !( lhsT->getLabels().empty() ) and rhsLabels.set::count( *( lhsT->getLabels().begin() ) ) == 0 and rhsT->getLabels().empty() ) {
+		//
 		t->setLabels( lhsT->getLabels() );
 	} else if ( !( rhsT->getLabels().empty() ) and lhsLabels.set::count( *( rhsT->getLabels().begin() ) ) == 0 and lhsT->getLabels().empty() ) {
 		// std::cout << "c" << std::endl;
 		t->setLabels( rhsT->getLabels() );
-	} else {
-		// std::cout << "d" << std::endl;
-		// delete t;
+	}*/
+	else {
+		// the label sets do not agree, i.e., they are not both empty or not both the same, delete the transition candidate t
 		return nullptr;
 	}
 
