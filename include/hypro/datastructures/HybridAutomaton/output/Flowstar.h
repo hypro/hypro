@@ -234,6 +234,19 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 					}
 				}
 				res << " }";
+				if ( !transPtr->getLabels().empty() ) {
+					res << "\n\t\tlabel { ";
+					bool first = true;
+					for ( const auto& label : transPtr->getLabels() ) {
+						if ( first ) {
+							res << label;
+							first = false;
+						} else {
+							res << ", " << label;
+						}
+					}
+					res << " }";
+				}
 				if ( transPtr->getAggregation() ) {
 					res << "\n\t\tparallelotope aggregation {}";
 				}
