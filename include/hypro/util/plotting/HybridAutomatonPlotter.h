@@ -27,8 +27,8 @@
 #undef FALSE
 #endif
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "../fileHandling.h"
 #include "GraphvizSettings.h"
-#include "PlotterUtil.h"
 
 namespace hypro::plotting {
 
