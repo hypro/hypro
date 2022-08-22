@@ -49,7 +49,8 @@ REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSucce
 		std::tie( containment, segment ) = intersect( segment, loc->getInvariant(), mSubspace );
 		if ( containment == CONTAINMENT::NO ) {
 #ifdef HYPRO_LOGGING
-			DEBUG( "hypro.reachability", "Segment " << tmp << " invalidates the invariant condition." );
+			DEBUG( "hypro.reachability", "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition." );
+			DEBUG( "hypro.reachability", "Compute time successor states done." );
 #endif
 			return REACHABILITY_RESULT::SAFE;
 		}
@@ -63,6 +64,7 @@ REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSucce
 			if ( containment != CONTAINMENT::NO ) {
 				// Todo: memorize the intersecting state set and keep state.
 				DEBUG( "hypro.reachability", "Segment " << segment << " intersects the set of bad states, terminate." );
+				DEBUG( "hypro.reachability", "Compute time successor states done." );
 				return REACHABILITY_RESULT::UNKNOWN;
 			}
 		}
