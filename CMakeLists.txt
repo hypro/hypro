@@ -139,9 +139,6 @@ if (CLANG_TIDY)
     message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif ()
 
-
-enable_testing()
-
 # # # # # # # # # # # # # # # # # # # # # #
 # D. Invoke subdirectories.
 # # # # # # # # # # # # # # # # # # # # # #
@@ -274,6 +271,8 @@ add_subdirectory(resources)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/flags.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/flags.h @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/paths.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/paths.h
         @ONLY)
+
+enable_testing()
 add_subdirectory(test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 

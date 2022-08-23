@@ -14,6 +14,7 @@
 #ifndef HYPRO_SERIALIZATION_H
 #define HYPRO_SERIALIZATION_H
 
+#include "eigen_serialization.h"
 #include "interval_serialization.h"
 #include "mpq_serialization.h"
 

@@ -17,7 +17,7 @@
 #include <carl/numbers/numbers.h>
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/vector.hpp>
-#include <fstream>
+#include <hypro/datastructures/HybridAutomaton/Condition.h>
 #include <hypro/datastructures/Hyperoctree.h>
 #include <hypro/representations/GeometricObjectBase.h>
 #include <hypro/util/serialization/serialization.h>
@@ -62,6 +62,52 @@ TEST( runUtilityTests, IntervalSerialization ) {
 	}
 	EXPECT_EQ( i1, i2 );
 	EXPECT_EQ( i3, i4 );
+}
+
+TEST( runUtilityTests, ConstraintSetSerialization ) {
+	using Matrix = hypro::matrix_t<double>;
+	using Vector = hypro::vector_t<double>;
+	using CS = hypro::ConstraintSet<double>;
+	std::stringstream ss;
+
+	Matrix constraints = Matrix::Identity( 2, 2 );
+	Vector constants = Vector::Ones( 2 );
+	CS in{ constraints, constants };
+	CS out;
+
+	{
+		cereal::BinaryOutputArchive oarchive( ss );	 // Create an output archive
+
+		oarchive( in );	 // Write the data to the archive
+	}
+	{
+		cereal::BinaryInputArchive iarchive( ss );	// Create an input archive
+		iarchive( out );							// Read the data from the archive
+	}
+	EXPECT_EQ( in, out );
+}
+
+TEST( runUtilityTests, ConditionSerialization ) {
+	using Matrix = hypro::matrix_t<double>;
+	using Vector = hypro::vector_t<double>;
+	using Cond = hypro::Condition<double>;
+	std::stringstream ss;
+
+	Matrix constraints = Matrix::Identity( 2, 2 );
+	Vector constants = Vector::Ones( 2 );
+	Cond in{ constraints, constants };
+	Cond out;
+
+	{
+		cereal::BinaryOutputArchive oarchive( ss );	 // Create an output archive
+
+		oarchive( in );	 // Write the data to the archive
+	}
+	{
+		cereal::BinaryInputArchive iarchive( ss );	// Create an input archive
+		iarchive( out );							// Read the data from the archive
+	}
+	EXPECT_EQ( in, out );
 }
 
 TEST( runUtilityTests, BoxSerialization ) {
