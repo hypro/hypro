@@ -70,3 +70,8 @@ entries:
             url: /plotting.html
             output: web, pdf
             type: homepage
+
+          - title: Linear Optimization
+            url: /optimization.html
+            output: web, pdf
+            type: homepage
