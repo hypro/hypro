@@ -138,7 +138,14 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			return 0;
 		}
 		updateLimits( _points );
-		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings, _objectTitle } ) );
+		// TODO improve, dirty hack to distinguish points from objects that consist only of one point
+		if ( _points.size() == 1 ) {
+			auto tmp = _points;
+			tmp.push_back( _points.front() );
+			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ tmp, false, false, _color, settings, _objectTitle } ) );
+		} else {
+			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings, _objectTitle } ) );
+		}
 		mId++;
 		return ( mId - 1 );
 	}
