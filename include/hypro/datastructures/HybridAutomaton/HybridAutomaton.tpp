@@ -718,8 +718,8 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 		for ( auto const& [loc_rhs, condition_rhs] : rhs.getInitialStates() ) {
 			// simply put constraints (rows) below each other, but reorder variables (columns) of both lhs and rhs to fit new order
 
-			auto num_constraints_lhs = condition_lhs.getMatrix().rows();
-			auto num_constraints_rhs = condition_rhs.getMatrix().rows();
+			auto num_constraints_lhs = condition_lhs.isTrue() ? 0 : condition_lhs.getMatrix().rows();
+			auto num_constraints_rhs = condition_rhs.isTrue() ? 0 : condition_rhs.getMatrix().rows();
 
 			auto total_constraints = num_constraints_lhs + num_constraints_rhs;
 			matrix_t<Number> constraints{ total_constraints, haVar.size() };
@@ -741,8 +741,12 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 			}
 
 			vector_t<Number> constants{ num_constraints_lhs + num_constraints_rhs };
-			constants.head( num_constraints_lhs ) = condition_lhs.getVector();
-			constants.tail( num_constraints_rhs ) = condition_rhs.getVector();
+			if ( num_constraints_lhs > 0 ) {
+				constants.head( num_constraints_lhs ) = condition_lhs.getVector();
+			}
+			if ( num_constraints_rhs > 0 ) {
+				constants.tail( num_constraints_rhs ) = condition_rhs.getVector();
+			}
 
 			std::string loc_name = loc_lhs->getName() + "_" + loc_rhs->getName();
 			Location<Number> const* init_loc = ha.getLocation( loc_name );
