@@ -238,6 +238,8 @@ std::unique_ptr<Transition<Number, LocationType>> parallelCompose( const Transit
 		t->setLabels( lhsT->getLabels() );
 	}
 	// TODO Stefan: Why did we come up with these cases? If you can find a reason, include them again, but add detailed documentation, because I cannot understand this right now
+	// TODO Stefan, update: This might be, if we have 3 or more automata to synchronize. Idea: Argue only about labels that both automata agree on, keep the rest (unsynchronized).
+	// TODO Stefan, update: The set of labels of an automaton should be a superset of the set of labels it uses on its transitions.
 	/*else if ( !( lhsT->getLabels().empty() ) and rhsLabels.set::count( *( lhsT->getLabels().begin() ) ) == 0 and rhsT->getLabels().empty() ) {
 		//
 		t->setLabels( lhsT->getLabels() );

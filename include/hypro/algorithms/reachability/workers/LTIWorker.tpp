@@ -279,9 +279,9 @@ std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType
 			}
 		}
 		successors.emplace_back( JumpSuccessor<Representation, typename HybridAutomaton::LocationType>{ transition, aggregate( blockSize, valuationSets ) } );
-		TRACE( "hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << ", " << transition->getReset() << ": enabledSegments after aggregation: " << print( successors ) );
+		TRACE( "hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << ", " << transition->getReset() << ":\nenabledSegments after aggregation: " << print( successors ) << "\n" );
 	}
-	DEBUG( "hypro.reachability", "enabledSegments after aggregation: " << print( successors ) );
+	DEBUG( "hypro.reachability", "All enabledSegments after aggregation: " << print( successors ) );
 
 	// applyReset
 	for ( auto& [transition, valuationSets] : successors ) {
