@@ -129,7 +129,7 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings, bool isPoints ) {
 	TRACE( "hypro.plotter", "" );
 	// reduce dimensions
 	if ( !_points.empty() ) {
@@ -138,14 +138,7 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			return 0;
 		}
 		updateLimits( _points );
-		// TODO improve, dirty hack to distinguish points from objects that consist only of one point
-		if ( _points.size() == 1 ) {
-			auto tmp = _points;
-			tmp.push_back( _points.front() );
-			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ tmp, false, false, _color, settings, _objectTitle } ) );
-		} else {
-			mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings, _objectTitle } ) );
-		}
+		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings, _objectTitle, isPoints } ) );
 		mId++;
 		return ( mId - 1 );
 	}
@@ -218,7 +211,7 @@ void Plotter<Number>::addPolyline( const std::vector<Point<Number>>& points, std
 
 template <typename Number>
 unsigned Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
-	return addObject( { _point }, _color, settings );
+	return addObject( { _point }, "", _color, settings, true );
 }
 
 template <typename Number>
@@ -383,14 +376,16 @@ void Plotter<Number>::writeGnuplot() const {
 				INFO( "hypro.plotter", "Plotting object " << tmpId << "/" << ( mObjects.size() + mPoints.size() + mPlanes.size() ) );
 			}
 			if ( plotObject.vertices.size() > 0 ) {
-				if ( plotObject.vertices.size() == 1 ) {
-					mOutfile << "set object " << std::dec << objectCount << " circle at first \\\n";
-					assert( plotObject.vertices[0].dimension() == 2 );
-					mOutfile << "  " << carl::toDouble( plotObject.vertices[0].at( 0 ) );
-					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
-						mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
+				if ( plotObject.isPoints ) {
+					for ( const auto& p : plotObject.vertices ) {
+						mOutfile << "set object " << std::dec << objectCount << " circle at first \\\n";
+						assert( p.dimension() == 2 );
+						mOutfile << "  " << carl::toDouble( p.at( 0 ) );
+						for ( unsigned d = 1; d < p.dimension(); ++d ) {
+							mOutfile << ", " << carl::toDouble( p.at( d ) );
+						}
+						mOutfile << " radius " << pointRadius;
 					}
-					mOutfile << " radius " << pointRadius;
 				} else {
 					mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
 					for ( const auto vertex : plotObject.vertices ) {

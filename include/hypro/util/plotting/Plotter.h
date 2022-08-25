@@ -45,6 +45,7 @@ struct PlotObject {
 	std::optional<std::size_t> color = std::nullopt;		 //< set to custom color id
 	std::optional<gnuplotSettings> settings = std::nullopt;	 //< optional custom settings
 	std::string objectTitle = "";							 //< set to custom object title
+	bool isPoints = false;									 //< true, if points should be handled as individual points instead of polygons
 };
 
 }  // namespace plotting
@@ -134,7 +135,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @param[in]  _color  Optionally color the object.
 	 * @return     A unique id, which allows to reference the object to change its colors.
 	 */
-	unsigned addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> _color = std::nullopt, std::optional<plotting::gnuplotSettings> settings = std::nullopt );
+	unsigned addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> _color = std::nullopt, std::optional<plotting::gnuplotSettings> settings = std::nullopt, bool isPoints = false );
 
 	/**
 	 * @brief      Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter,
