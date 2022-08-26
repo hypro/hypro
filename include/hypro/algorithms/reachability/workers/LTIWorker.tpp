@@ -16,6 +16,9 @@ template <typename OutputIt>
 REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out, int segmentsToCompute, bool checkSafety ) const {
 	if ( segmentsToCompute < 0 ) {
 		segmentsToCompute = mNumSegments;
+	} else if ( segmentsToCompute == 0 ) {
+		DEBUG( "hypro.reachability", "No segments to compute (reached global time horizon, segmentsToCompute == 0), return." );
+		return REACHABILITY_RESULT::SAFE;
 	}
 	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow( mSubspace ), mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ), mSettings.timeStep );
 
@@ -228,12 +231,14 @@ std::string print( std::vector<JumpSuccessor<Representation, Location>> const& p
 template <typename Representation, typename HybridAutomaton>
 std::string print( std::vector<Representation> const& sets ) {
 	std::stringstream str{};
-
 	for ( auto& set : sets ) {
-		str << set << "; ";
+		if ( !set.empty() ) {
+			str << set << "; ";
+		}
 	}
-	str << "\n";
-	return str.str();
+	auto resultString = str.str();
+	str.str( "" );
+	return resultString;
 }
 
 template <typename Representation, typename HybridAutomaton>
@@ -279,9 +284,9 @@ std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType
 			}
 		}
 		successors.emplace_back( JumpSuccessor<Representation, typename HybridAutomaton::LocationType>{ transition, aggregate( blockSize, valuationSets ) } );
-		TRACE( "hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << ", " << transition->getReset() << ":\nenabledSegments after aggregation: " << print( successors ) << "\n" );
+		// TRACE( "hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << ", " << transition->getReset() << ":\nenabledSegments after aggregation: " << print( successors ) << "\n" );
 	}
-	DEBUG( "hypro.reachability", "All enabledSegments after aggregation: " << print( successors ) );
+	// DEBUG( "hypro.reachability", "All enabledSegments after aggregation: " << print( successors ) );
 
 	// applyReset
 	for ( auto& [transition, valuationSets] : successors ) {

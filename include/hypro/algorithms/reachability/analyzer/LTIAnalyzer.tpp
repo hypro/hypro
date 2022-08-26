@@ -90,6 +90,10 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::processNode( LTI
 	if ( mFixedParameters.globalTimeHorizon > 0 ) {
 		// the number of required segments is the difference of the number of segments required to reach the global time horizon and the minimally current covered number of segments
 		SegmentInd segmentsToCompute = std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.globalTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::infinity() ) ) - node->getTimings().lower();
+		DEBUG( "hypro.reachability", "Start to compute " << segmentsToCompute << " segments." );
+		if ( segmentsToCompute < 0 ) {
+			segmentsToCompute = 0;
+		}
 		safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ), segmentsToCompute );
 	} else {
 		safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ) );
