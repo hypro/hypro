@@ -36,7 +36,7 @@ include(hypromacros)
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
-option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." ON)
+option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" ON)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
 option(HYPRO_GSL_INTEGRATION "Link to gsl and provide numerical integration methods" OFF)
