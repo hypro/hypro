@@ -756,6 +756,14 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 
 	// localBadstates
 	// globalBAdstates
+	typename HybridAutomaton<Number>::conditionVector globalSpec;
+	for ( const auto& condition : lhs.getGlobalBadStates() ) {
+		globalSpec.push_back( combine( condition, hypro::Condition<Number>::True(), haVar, lhsVar, rhsVar ) );
+	}
+	for ( const auto& condition : rhs.getGlobalBadStates() ) {
+		globalSpec.push_back( combine( condition, hypro::Condition<Number>::True(), haVar, lhsVar, rhsVar ) );
+	}
+	ha.setGlobalBadStates( globalSpec );
 
 	// remove non-reachable locations and transitions.
 	if ( reduce ) {
