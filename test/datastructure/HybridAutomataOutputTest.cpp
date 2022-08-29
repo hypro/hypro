@@ -3,12 +3,13 @@
  * Author: ckugler
  */
 
-#include "../defines.h"
+#include "test/defines.h"
 
 #include "gtest/gtest.h"
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/HybridAutomaton/output/Flowstar.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
+#include <hypro/paths.h>
 #include <hypro/util/VariablePool.h>
 #include <hypro/util/logging/Filewriter.h>
 
@@ -178,7 +179,7 @@ hypro::HybridAutomaton<Number> createRectangularAutomaton() {
 /**
  * Hybrid Automaton Test
  */
-TEST( HybridAutomataOutputTest, LinearHybridAutomatonTest ) {
+TEST( HybridAutomataOutputTest, SingularHybridAutomatonTest ) {
 	hypro::LockedFileWriter out{ "tmp.model" };
 	out.clearFile();
 	auto automaton{ createSingularAutomaton<mpq_class>() };
@@ -201,6 +202,38 @@ TEST( HybridAutomataOutputTest, LinearHybridAutomatonTest ) {
 
 	EXPECT_EQ( automaton, automatonParsed );
 	SUCCEED();
+}
+
+TEST( HybridAutomataOutputTest, LinearHybridAutomatonTest ) {
+	hypro::LockedFileWriter out{ "tmp.model" };
+	out.clearFile();
+
+	auto [automatonParsed, settings] = hypro::parseFlowstarFile<mpq_class>( hypro::getTestModelsPath() + "parser/test_bad_states.txt" );
+
+	out << hypro::toFlowstarFormat( automatonParsed, hypro::ReachabilitySettings{ 1, 1, 1 } );
+
+	std::cout << hypro::toFlowstarFormat( automatonParsed, hypro::ReachabilitySettings{ 1, 1, 1 } ) << std::endl;
+
+	std::fstream f1, f2;
+	int flag = 3;
+
+	f1.open( hypro::getTestModelsPath() + "parser/test_bad_states.model", std::ios::in );
+	f2.open( "tmp.model", std::ios::in );
+
+	while ( true ) {
+		auto c1 = f1.get();
+		auto c2 = f2.get();
+		if ( c1 != c2 ) {
+			flag = 0;
+			break;
+		}
+		if ( ( c1 == EOF ) || ( c2 == EOF ) )
+			break;
+	}
+
+	out.deleteFile();
+
+	EXPECT_TRUE( flag );
 }
 
 TEST( HybridAutomataOutputTest, RectangularHybridAutomatonTest ) {

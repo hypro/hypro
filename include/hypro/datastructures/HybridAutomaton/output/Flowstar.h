@@ -268,8 +268,16 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 		res << "\n\t}\n";
 
 		// bad states
-		if ( in.getLocalBadStates().size() > 0 ) {
+		if ( in.getLocalBadStates().size() > 0 || in.getGlobalBadStates().size() > 0 ) {
 			res << "\n\tunsafe set\n\t{";
+			for ( const auto& [loc, cond] : in.getLocalBadStates() ) {
+				res << "\n\t\t" << loc->getName() << "{";
+				res << toFlowstarFormat( cond, vars, "\n\t\t\t" );
+				res << "\n\t\t}";
+			}
+			for ( const auto& cond : in.getGlobalBadStates() ) {
+				res << toFlowstarFormat( cond, vars, "\n\t\t" );
+			}
 			res << "\n\t}\n";
 		}
 	}
