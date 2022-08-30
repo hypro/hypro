@@ -151,9 +151,6 @@ class BoxT : private GeometricObjectBase {
 		, mLimits( _intervals ) {
 		for ( const auto& i : mLimits ) {
 			TRACE( "hypro.representations", "Add interval: " << i );
-			if ( i.isUnbounded() ) {
-				mEmptyState = SETSTATE::EMPTY;
-			}
 			if ( i.isEmpty() ) {
 				mEmptyState = SETSTATE::EMPTY;
 				break;
