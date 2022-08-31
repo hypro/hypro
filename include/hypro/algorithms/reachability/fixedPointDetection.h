@@ -224,6 +224,7 @@ std::vector<const Transition<typename Set::NumberType, Loc>*> getZenoTransitions
 		// simple check: if the initial set fully satisfies the guard back to the parent and no variable is reset, we know (since the initial set already fully satisfies the guard from the parent to the child), that this is a Zeno loop.
 		for ( auto& transition : child->getLocation()->getTransitions() ) {
 			// TODO this check is very conservative - here we check, whether the initial set is fully contained, while we could also check for partial coverage
+			// TODO BUG! We need to check the guards on the complete cycle!
 			// and only consider this part.
 			if ( transition->getTarget() == parent->getLocation() && ( cummulative + transition->getReset() ).isIdentity() && intersect( child->getInitialSet(), transition->getGuard() ).first == CONTAINMENT::FULL ) {
 				DEBUG( "hypro.reachability", "Detected Zeno-transition from " << transition->getSource()->getName() << " to " << transition->getTarget()->getName() << " with set " << child->getInitialSet() )
