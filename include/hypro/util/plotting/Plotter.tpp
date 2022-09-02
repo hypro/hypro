@@ -254,6 +254,7 @@ void Plotter<Number>::clear() {
 	mPlanes.clear();
 	mPoints.clear();
 	mVectors.clear();
+	mLines.clear();
 	mObjectColors.clear();
 }
 
