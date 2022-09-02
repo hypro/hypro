@@ -44,6 +44,7 @@ bool isBounded( const BoxT<Number, Converter, Setting>& in ) {
 
 /**
  * @brief Overload for checking boundedness for h-polytopes.
+ * @details Checks, if the bounding box of the polytope is bounded.
  * @tparam Number The number type
  * @tparam Converter The converter
  * @tparam Setting The used settings
