@@ -294,6 +294,8 @@ class HybridAutomatonComp {
 	LocationType* getLocation( const std::size_t hash ) const;
 	/// getter for a single location identified by its name
 	LocationType* getLocation( const std::string& name ) const;
+	/// getter for a single location identified by its index
+	LocationType* getLocationByIndex( std::size_t index ) const;
 	//* @return The set of initial states. */
 	const locationConditionMap& getInitialStates() const;
 	//* @return The set of bad states bound to locations. */

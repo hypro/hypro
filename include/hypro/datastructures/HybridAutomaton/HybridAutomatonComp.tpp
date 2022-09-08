@@ -429,6 +429,29 @@ typename HybridAutomatonComp<Number>::LocationType* HybridAutomatonComp<Number>:
 }
 
 template <typename Number>
+typename HybridAutomatonComp<Number>::LocationType* HybridAutomatonComp<Number>::getLocationByIndex( std::size_t index ) const {
+	// find the correct composite, we assume the given ordering induced by the order of addition of components
+	// initialize to zero
+	std::vector<std::size_t> locationIndices{ mAutomata.size(), 0 };
+	int componentIndex = mAutomata.size() - 1;
+	while ( index != 0 ) {
+		if ( index > mAutomata[componentIndex].getLocations().size() ) {
+			locationIndices[componentIndex] = index % mAutomata[componentIndex].getLocations().size();
+			index -= index / mAutomata[componentIndex].getLocations().size();
+			--componentIndex;
+		} else {
+			locationIndices[componentIndex] = index;
+			break;
+		}
+		if ( index > 0 && componentIndex < 0 ) {
+			throw std::logic_error( "Passed index is too large." );
+		}
+	}
+	auto it = addLocationStubByIndicesSafe( locationIndices );
+	return &( *it );
+}
+
+template <typename Number>
 const typename HybridAutomatonComp<Number>::locationConditionMap& HybridAutomatonComp<Number>::getInitialStates() const {
 	if ( !mCachesValid[CACHE::INITIALSTATES] ) {
 		// cleanup
