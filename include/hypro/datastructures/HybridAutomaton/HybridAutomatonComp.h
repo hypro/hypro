@@ -164,7 +164,8 @@ class ComposedLocation : public Location<Number> {
 	/// outstream operator
 	friend std::ostream& operator<<( std::ostream& ostr, const ComposedLocation<Number>& l ) {
 		l.validate();
-		return Location<Number>::printContent();
+		ostr << static_cast<const Location<Number>&>( l );
+		return ostr;
 	}
 	/// only prints the content without the transitions, i.e., only the name, dynamics, and invariant constraints
 	std::string printContent() const {
@@ -358,6 +359,24 @@ class HybridAutomatonComp {
 			if ( !l ) return false;
 		}
 		return true;
+	}
+
+	friend std::ostream& operator<<( std::ostream& ostr, const HybridAutomatonComp<Number>& a ) {
+		ostr << "initial states (" << a.getInitialStates().size() << "): " << std::endl;
+		for ( auto initialIt = a.getInitialStates().begin(); initialIt != a.getInitialStates().end(); ++initialIt ) {
+			ostr << ( ( *initialIt ).first )->getName() << ": " << ( *initialIt ).second << std::endl;
+		}
+		ostr << "locations (" << a.getLocations().size() << "): " << std::endl;
+		for ( auto l : a.getLocations() ) {
+			if ( l->isValid() ) {
+				ostr << *l << std::endl;
+			}
+		}
+		ostr << "local bad states (" << a.getLocalBadStates().size() << "): " << std::endl;
+		for ( auto badStateIt = a.getLocalBadStates().begin(); badStateIt != a.getLocalBadStates().end(); ++badStateIt ) {
+			ostr << ( ( *badStateIt ).first )->getName() << ": " << ( *badStateIt ).second << std::endl;
+		}
+		return ostr;
 	}
 
   private:
