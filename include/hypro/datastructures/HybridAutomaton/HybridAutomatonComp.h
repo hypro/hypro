@@ -29,33 +29,38 @@ template <typename Number>
 class ComposedLocation : public Location<Number> {
 	friend class HybridAutomatonComp<Number>;
 
+	enum VALIDITY { NAME = 0,
+					REST = 1,
+					Count };
+
   public:
 	using CompTransition = Transition<Number, ComposedLocation<Number>>;
 	using transitionVector = std::vector<std::unique_ptr<CompTransition>>;
 	using NumberType = Number;
 
   private:
-	mutable bool mIsValid = false;					///< Flag indicating whether the location has been initialized
-	mutable transitionVector mTransitions;			///< Outgoing transitions
-	std::vector<std::size_t> mCompositionals;		///< Indices of the locations in the single automata
-	const HybridAutomatonComp<Number>& mAutomaton;	///< Reference to the original automaton this location is part of
+	mutable std::vector<bool> mIsValid = std::vector<bool>( VALIDITY::Count, false );  ///< Flag indicating whether the location has been initialized
+	mutable transitionVector mTransitions;											   ///< Outgoing transitions
+	std::vector<std::size_t> mCompositionals;										   ///< Indices of the locations in the single automata
+	const HybridAutomatonComp<Number>& mAutomaton;									   ///< Reference to the original automaton this location is part of
 
   public:
 	/// Helper function which converts a location-stub to a fully composed location
 	void validate() const;
 	/// constructor
 	ComposedLocation( const HybridAutomatonComp<Number>& automaton )
-		: mAutomaton( automaton ) {}
+		: mAutomaton( automaton )
+		, mIsValid( std::vector<bool>( VALIDITY::Count, false ) ) {}
 
 	ComposedLocation( ComposedLocation<Number>&& other )
-		: mIsValid( false )
+		: mIsValid( std::vector<bool>( VALIDITY::Count, false ) )
 		, mTransitions()
 		, mCompositionals( std::move( other.mCompositionals ) )
 		, mAutomaton( std::move( other.mAutomaton ) ) {
 	}
 
 	ComposedLocation( const ComposedLocation<Number>& other )
-		: mIsValid( false )
+		: mIsValid( std::vector<bool>( VALIDITY::Count, false ) )
 		, mTransitions()
 		, mCompositionals( other.mCompositionals )
 		, mAutomaton( other.mAutomaton ) {
@@ -111,7 +116,7 @@ class ComposedLocation : public Location<Number> {
 	}
 	/// getter for the name of the location
 	std::string getName() const {
-		validate();
+		validateName();
 		return Location<Number>::getName();
 	}
 	/// getter for the urgency-flag
@@ -121,7 +126,7 @@ class ComposedLocation : public Location<Number> {
 	}
 	/// getter to query whether the location is a stub or whether it is fully composed
 	inline bool isValid() const {
-		return mIsValid;
+		return std::all_of( std::begin( mIsValid ), std::end( mIsValid ), []( bool val ) { return val; } );
 	}
 	/// getter for the state space dimension
 	std::size_t dimension() const {
@@ -170,6 +175,8 @@ class ComposedLocation : public Location<Number> {
   private:
 	/// hack to be able to modify the base class
 	Location<Number>& castawayConst() const { return const_cast<ComposedLocation<Number>&>( *this ); }
+	/// validates only the location name
+	void validateName() const;
 };
 
 /**
@@ -358,6 +365,7 @@ class HybridAutomatonComp {
 	void invalidateCaches() const;
 	void setLocalBadStateMapping() const;
 };
+
 }  // namespace hypro
 
 #include "HybridAutomatonComp.tpp"

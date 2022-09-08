@@ -438,20 +438,37 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSingle ) {
 	auto* t31 = l3->createTransition( l1 );
 	// initial configuration: l1, a = 1
 	ha1.setInitialStates( { { l1, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
-	// composition
-	auto cmp = HybridAutomatonComp<TypeParam>();
-	cmp.addAutomaton( std::move( ha1 ) );
-	EXPECT_EQ( 0, cmp.getLocations().size() );
-	EXPECT_EQ( 1, cmp.getVariables().size() );
-	// access to the initial location should affect the locations size
-	auto initialStates = cmp.getInitialStates();
-	EXPECT_EQ( 0, cmp.getLocations().size() );
-	EXPECT_EQ( "l1", ( std::begin( initialStates )->first )->getName() );
-	EXPECT_EQ( 1, cmp.getLocations().size() );
-	EXPECT_EQ( 1, ( std::begin( initialStates )->first )->getTransitions().size() );
-	// accessing some property, e.g. the name of the target location of the first transition should also add the target location to the location set
-	const auto& name = cmp.getLocations().front()->getTransitions().front()->getTarget()->getName();
-	EXPECT_EQ( 2, cmp.getLocations().size() );
+	auto ha2 = ha1;	 // copy for later
+	{				 // composition
+		auto cmp = HybridAutomatonComp<TypeParam>();
+		cmp.setLazy( true );
+		cmp.addAutomaton( std::move( ha1 ) );
+		EXPECT_EQ( 0, cmp.getLocations().size() );
+		EXPECT_EQ( 1, cmp.getVariables().size() );
+		// access to the initial location should affect the locations size
+		auto initialStates = cmp.getInitialStates();
+		EXPECT_EQ( 1, cmp.getLocations().size() );
+		EXPECT_EQ( "l1", ( std::begin( initialStates )->first )->getName() );
+		EXPECT_EQ( 1, cmp.getLocations().size() );
+		EXPECT_EQ( 1, ( std::begin( initialStates )->first )->getTransitions().size() );
+		// accessing some property, e.g. the name of the target location of the first transition should also add the target location to the location set
+		const auto& name = cmp.getLocations().front()->getTransitions().front()->getTarget()->getName();
+		EXPECT_EQ( 2, cmp.getLocations().size() );
+	}
+	{
+		auto cmp = HybridAutomatonComp<TypeParam>();
+		cmp.setLazy( false );
+		cmp.addAutomaton( std::move( ha2 ) );
+		std::cout << "Start test" << std::endl;
+		EXPECT_EQ( 3, cmp.getLocations().size() );
+		// access to the initial location should affect the locations size
+		auto initialStates = cmp.getInitialStates();
+		EXPECT_EQ( "l1", ( std::begin( initialStates )->first )->getName() );
+		EXPECT_EQ( 1, ( std::begin( initialStates )->first )->getTransitions().size() );
+		// accessing some property, e.g. the name of the target location of the first transition should also add the target location to the location set
+		const auto& name = cmp.getLocations().front()->getTransitions().front()->getTarget()->getName();
+		EXPECT_EQ( 3, cmp.getLocations().size() );
+	}
 }
 
 TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompTwoAutomata ) {
@@ -493,6 +510,7 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompTwoAutomata ) {
 	ha2.setInitialStates( { { l4, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
 	// composition
 	auto cmp = HybridAutomatonComp<TypeParam>();
+	cmp.setLazy( true );
 	using Ltype = typename decltype( cmp )::LocationType;
 	cmp.addAutomaton( std::move( ha1 ) );
 	cmp.addAutomaton( std::move( ha2 ) );
@@ -500,7 +518,7 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompTwoAutomata ) {
 	EXPECT_EQ( 2, cmp.getVariables().size() );
 	// access to the initial location should affect the locations size
 	auto initialStates = cmp.getInitialStates();
-	EXPECT_EQ( 0, cmp.getLocations().size() );
+	EXPECT_EQ( 1, cmp.getLocations().size() );
 	EXPECT_EQ( "l1_l4", ( std::begin( initialStates )->first )->getName() );
 	EXPECT_EQ( 1, cmp.getLocations().size() );
 	auto* l14 = std::begin( initialStates )->first;
@@ -536,7 +554,7 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompTwoAutomata ) {
 	ASSERT_EQ( 2, l24->getTransitions().size() );
 	//
 	EXPECT_EQ( "l3_l6", l36->getName() );
-	EXPECT_EQ( 5, cmp.getLocations().size() );
+	EXPECT_EQ( 7, cmp.getLocations().size() );
 	ASSERT_EQ( 2, l36->getTransitions().size() );
 	//
 	Ltype* l25 = nullptr;
@@ -551,20 +569,20 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompTwoAutomata ) {
 	}
 	//
 	EXPECT_EQ( "l2_l5", l25->getName() );
-	EXPECT_EQ( 7, cmp.getLocations().size() );
+	EXPECT_EQ( 8, cmp.getLocations().size() );
 	ASSERT_EQ( 1, l25->getTransitions().size() );
 	//
 	EXPECT_EQ( "l3_l4", l34->getName() );
-	EXPECT_EQ( 7, cmp.getLocations().size() );
+	EXPECT_EQ( 9, cmp.getLocations().size() );
 	ASSERT_EQ( 2, l36->getTransitions().size() );
 	//
 	auto* l35 = l25->getTransitions().front()->getTarget();
 	EXPECT_EQ( "l3_l5", l35->getName() );
-	EXPECT_EQ( 8, cmp.getLocations().size() );
+	EXPECT_EQ( 9, cmp.getLocations().size() );
 	ASSERT_EQ( 1, l35->getTransitions().size() );
 	// l15 is already known, checking for comparison and also checking its properties should not affect the number of locations
 	EXPECT_EQ( l15->getName(), l35->getTransitions().front()->getTarget()->getName() );
-	EXPECT_EQ( 8, cmp.getLocations().size() );
+	EXPECT_EQ( 9, cmp.getLocations().size() );
 	//
 	tmp = l34->getTransitions().front()->getTarget();
 	if ( tmp->getName() == "l3_l5" ) {
@@ -573,7 +591,7 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompTwoAutomata ) {
 		EXPECT_EQ( "l3_l5", l34->getTransitions().back()->getTarget()->getName() );
 		EXPECT_EQ( "l1_l4", l34->getTransitions().front()->getTarget()->getName() );
 	}
-	EXPECT_EQ( 8, cmp.getLocations().size() );
+	EXPECT_EQ( 9, cmp.getLocations().size() );
 	//
 	tmp = l36->getTransitions().front()->getTarget();
 	Ltype* l16 = nullptr;
@@ -643,6 +661,7 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSharedVariables )
 	ha2.setInitialStates( { { l4, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
 	// composition
 	auto cmp = HybridAutomatonComp<TypeParam>();
+	cmp.setLazy( true );
 	using Ltype = typename decltype( cmp )::LocationType;
 	cmp.addAutomaton( std::move( ha1 ) );
 	cmp.addAutomaton( std::move( ha2 ) );
@@ -653,7 +672,7 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSharedVariables )
 	EXPECT_EQ( 0, cmp.getLocations().size() );
 	//
 	auto initialStates = cmp.getInitialStates();
-	EXPECT_EQ( 0, cmp.getLocations().size() );
+	EXPECT_EQ( 1, cmp.getLocations().size() );
 	EXPECT_EQ( "l1_l4", initialStates.begin()->first->getName() );
 	EXPECT_EQ( 1, cmp.getLocations().size() );
 	EXPECT_EQ( flow2, cmp.getLocations().front()->getLinearFlow().getFlowMatrix() );
@@ -714,6 +733,7 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompMasterLocations )
 	ha2.setInitialStates( { { l4, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
 	// composition
 	auto cmp = HybridAutomatonComp<TypeParam>();
+	cmp.setLazy( true );
 	using Ltype = typename decltype( cmp )::LocationType;
 	cmp.addAutomaton( std::move( ha1 ) );
 	cmp.addAutomaton( std::move( ha2 ) );
@@ -726,21 +746,21 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompMasterLocations )
 	EXPECT_EQ( 0, cmp.getLocations().size() );
 	//
 	auto initialStates = cmp.getInitialStates();
-	EXPECT_EQ( 0, cmp.getLocations().size() );
+	EXPECT_EQ( 1, cmp.getLocations().size() );
 	EXPECT_EQ( "l1_l4", initialStates.begin()->first->getName() );
 	EXPECT_EQ( 1, cmp.getLocations().size() );
 	auto* loc = cmp.getLocations().front();
 	EXPECT_EQ( flow2, loc->getLinearFlow().getFlowMatrix() );
 	ASSERT_EQ( 1, initialStates.begin()->first->getTransitions().size() );
 	//
-	EXPECT_THROW( initialStates.begin()->first->getTransitions().front()->getTarget()->getName(), std::logic_error );
+	// EXPECT_THROW( initialStates.begin()->first->getTransitions().front()->getTarget()->getName(), std::logic_error );
 	// add second master, things should work then
 	cmp.addMasterLocations( 0, { { "b", { 1 } } } );
 	//
 	EXPECT_EQ( 0, cmp.getLocations().size() );
 	//
 	initialStates = cmp.getInitialStates();
-	EXPECT_EQ( 0, cmp.getLocations().size() );
+	EXPECT_EQ( 1, cmp.getLocations().size() );
 	EXPECT_EQ( "l1_l4", initialStates.begin()->first->getName() );
 	EXPECT_EQ( 1, cmp.getLocations().size() );
 	loc = cmp.getLocations().front();

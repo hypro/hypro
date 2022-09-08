@@ -14,7 +14,9 @@ namespace hypro {
 template <typename Number>
 void ComposedLocation<Number>::validate() const {
 	// perform actual composition, if not already done
-	if ( mIsValid ) return;
+	if ( isValid() ) return;
+	//  set name
+	validateName();
 	// make sure caches in the composition are up to date
 	mAutomaton.setVariableMapping();
 	assert( mCompositionals.size() == mAutomaton.mAutomata.size() );
@@ -123,16 +125,6 @@ void ComposedLocation<Number>::validate() const {
 	// set the flow as composed before
 	castawayConst().setFlow( haFlow );
 	// Location<Number>::setFlow( haFlow );
-	//  set name
-	{
-		std::stringstream ss;
-		ss << ( *std::begin( locs ) )->getName();
-		for ( auto it = std::next( std::begin( locs ) ); it != std::end( locs ); ++it ) {
-			ss << "_" << ( *it )->getName();
-		}
-		castawayConst().setName( ss.str() );
-		// Location<Number>::setName( ss.str() );
-	}
 
 	// set the invariant as composed before
 	castawayConst().setInvariant( Condition<Number>( invariantConstraints, invariantConstants ) );
@@ -258,7 +250,6 @@ void ComposedLocation<Number>::validate() const {
 				mAutomaton.mLocations.emplace_back( mAutomaton );
 				auto& newLoc = mAutomaton.mLocations.back();
 				newLoc.mCompositionals = targetLocationIndices;
-				newLoc.mIsValid = false;
 				targetPosition = std::prev( std::end( mAutomaton.mLocations ) );
 				mAutomaton.mComposedLocs[targetLocationIndices] = targetPosition;
 			}
@@ -384,7 +375,25 @@ void ComposedLocation<Number>::validate() const {
 		}
 	}
 
-	mIsValid = true;
+	mIsValid[VALIDITY::REST] = true;
+}
+
+template <typename Number>
+void ComposedLocation<Number>::validateName() const {
+	if ( !mIsValid[VALIDITY::NAME] ) {
+		std::stringstream ss;
+		bool first = true;
+		for ( std::size_t componentIdx = 0; componentIdx < mCompositionals.size(); ++componentIdx ) {
+			if ( first ) {
+				first = false;
+			} else {
+				ss << "_";
+			}
+			ss << ( mAutomaton.mAutomata[componentIdx].getLocationByIndex( mCompositionals[componentIdx] ) )->getName();
+			castawayConst().setName( ss.str() );
+		}
+		mIsValid[VALIDITY::NAME] = true;
+	}
 }
 
 template <typename Number>
@@ -469,7 +478,6 @@ const typename HybridAutomatonComp<Number>::locationConditionMap& HybridAutomato
 				if ( entryPairIt == std::end( mComposedLocs ) ) {
 					ComposedLocation<Number> tmp{ *this };
 					tmp.mCompositionals = locationIndices;
-					tmp.mIsValid = false;
 					mLocations.emplace_back( std::move( tmp ) );
 					mComposedLocs[locationIndices] = std::prev( std::end( mLocations ) );
 				}
