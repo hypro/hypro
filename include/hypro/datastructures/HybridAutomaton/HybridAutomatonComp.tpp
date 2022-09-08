@@ -668,7 +668,6 @@ void HybridAutomatonComp<Number>::setVariableMapping() const {
 			for ( std::size_t automatonIdx = 0; automatonIdx < mAutomata.size(); ++automatonIdx ) {
 				mGlobalToLocalVars[globalIdx][automatonIdx] = getIndex( mAutomata[automatonIdx].getVariables(), mVariables[globalIdx] );
 				TRACE( "hypro.datastructures", "Global variable " << mVariables[globalIdx] << " at pos " << globalIdx << " is equal to variable at pos " << mGlobalToLocalVars[globalIdx][automatonIdx] << " of component " << automatonIdx );
-				std::cout << "Global variable " << mVariables[globalIdx] << " at pos " << globalIdx << " is equal to variable at pos " << mGlobalToLocalVars[globalIdx][automatonIdx] << " of component " << automatonIdx << std::endl;
 			}
 		}
 		// establish reverse mapping
