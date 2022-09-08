@@ -372,11 +372,6 @@ class HybridAutomatonComp {
 	}
 	 */
 
-	inline friend std::ostream& operator<<( std::ostream& ostr, const HybridAutomatonComp<Number>& a ) {
-		throw NotImplemented( __func__ );
-		return ostr;
-	}
-
 	inline bool checkConsistency() const {
 		for ( const auto& l : mLocations ) {
 			if ( !l ) return false;
