@@ -72,7 +72,7 @@ class Reach {
 		return mAnalyzer.run().result();
 	}
 
-	void setCallbacks( const ReachabilityCallbacks<Representation, Location<Number>>& callbacks ) { mAnalyzer.setCallbacks( callbacks ); }
+	void setCallbacks( const ReachabilityCallbacks<Representation, typename Automaton::LocationType>& callbacks ) { mAnalyzer.setCallbacks( callbacks ); }
 };
 
 template <typename Representation, typename Automaton>

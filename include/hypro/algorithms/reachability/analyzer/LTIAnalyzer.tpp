@@ -16,6 +16,7 @@ namespace hypro {
 
 template <typename State, typename Automaton, typename Heuristics, typename Multithreading>
 auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResult {
+	DEBUG( "hypro.reachability", "Start LTI Reachability Analysis." );
 	if ( std::is_same_v<Multithreading, UseMultithreading> ) {
 		mIdle = std::vector( mNumThreads, false );
 		for ( int i = 0; i < mNumThreads; i++ ) {
@@ -70,9 +71,11 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 			DEBUG( "hypro.reachability", "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName() << " with path " << currentNode->getTreePath() << " with heursitics value " << Heuristics{}.getValue( currentNode ) )
 			auto result = processNode( worker, currentNode, transformationCache );
 			if ( result.isFailure() ) {
+				DEBUG( "hypro.reachability", "End LTI Reachability Analysis." );
 				return result;
 			}
 		}
+		DEBUG( "hypro.reachability", "End LTI Reachability Analysis." );
 		return { LTISuccess{} };
 	}
 }

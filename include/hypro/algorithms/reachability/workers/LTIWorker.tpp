@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "LTIWorker.h"
@@ -218,10 +218,12 @@ std::string print( std::vector<JumpSuccessor<Representation, Location>> const& p
 	std::stringstream str{};
 
 	for ( auto& pipe : pipes ) {
-		for ( auto& indSet : pipe.valuationSets ) {
-			str << "[" << indSet.time << "] " << indSet.valuationSet << " ";
+		if ( !pipe.valuationSets.empty() ) {
+			for ( auto& indSet : pipe.valuationSets ) {
+				str << "[" << indSet.time << "] " << indSet.valuationSet << " ";
+			}
+			str << "\n";
 		}
-		str << "\n";
 	}
 	str << "\n";
 
@@ -248,7 +250,9 @@ std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType
 	// transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation, typename HybridAutomaton::LocationType>> enabledSegments{};
 
+	TRACE( "hypro.reachability", "Find non-empty guard intersections" );
 	for ( const auto& transition : loc->getTransitions() ) {
+		TRACE( "hypro.reachability", "Consider transition " << ( *transition.get() ) );
 		auto& currentSucc = enabledSegments.emplace_back( EnabledSets<Representation, typename HybridAutomaton::LocationType>{ transition.get() } );
 
 		SegmentInd cnt = 0;
@@ -262,7 +266,7 @@ std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType
 		}
 	}
 
-	TRACE( "hypro.reachability", "enabledSegments: " << print( enabledSegments ) );
+	TRACE( "hypro.reachability", "Guard-enabling segments: " << print( enabledSegments ) );
 
 	std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType>> successors{};
 
