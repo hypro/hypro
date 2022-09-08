@@ -243,6 +243,22 @@ class HybridAutomatonComp {
 		}
 	}
 
+	/**
+	 * @brief Makes the component with the passed index master for all its variables in the composition
+	 * @param componentIndex The index (order of addition to the composition, zero-indexed) of the component
+	 */
+	void makeComponentMaster( std::size_t componentIndex ) {
+		auto variables = mAutomata.at( componentIndex ).getVariables();
+		for ( const auto& var : variables ) {
+			if ( mMasters.count( var ) == 0 ) {
+				mMasters[var] = std::vector<std::pair<std::size_t, std::size_t>>();
+			}
+			for ( std::size_t locationIndex = 0; locationIndex < mAutomata[componentIndex].getNumberLocations(); ++locationIndex ) {
+				mMasters[var].emplace_back( componentIndex, locationIndex );
+			}
+		}
+	}
+
 	void addMasterLocations( std::size_t componentIndex, const std::map<std::string, std::vector<std::size_t>>& masters ) {
 		invalidateCaches();
 		for ( const auto& [var, locationIndices] : masters ) {
