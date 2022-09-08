@@ -204,6 +204,7 @@ class HybridAutomatonComp {
 	using variableVector = std::vector<std::string>;
 
   private:
+	bool fullLazy = false;
 	std::vector<HybridAutomaton<Number>> mAutomata;	 /// The set of hybrid automata that is composed.
 	mutable Locations mLocations;					 /// Cache for the locations of the hybrid automaton already discovered.
 	mutable locationConditionMap mInitialStates;	 /// The set of initial states.
@@ -290,6 +291,10 @@ class HybridAutomatonComp {
 	//* @return The set of all labels. */
 	const std::set<Label>& getLabels() const;
 	///@}
+
+	void setLazy( bool lazy ) { fullLazy = lazy; }
+
+	void setInitialStates( const locationConditionMap& states ) { mInitialStates = states; }
 
 	/**
 	 * @brief Decomposes an automaton into the components
@@ -383,6 +388,9 @@ class HybridAutomatonComp {
 	void setVariableMapping() const;
 	void invalidateCaches() const;
 	void setLocalBadStateMapping() const;
+	typename Locations::iterator addLocationStubByIndicesSafe( const std::vector<std::size_t>& indices ) const;
+	typename Locations::iterator addLocationStubByIndices( const std::vector<std::size_t>& indices ) const;
+	void createAllLocations() const;
 };
 
 }  // namespace hypro

@@ -622,4 +622,42 @@ void HybridAutomatonComp<Number>::setLocalBadStateMapping() const {
 	}
 }
 
+template <typename Number>
+typename HybridAutomatonComp<Number>::Locations::iterator HybridAutomatonComp<Number>::addLocationStubByIndicesSafe( const std::vector<std::size_t>& indices ) const {
+	auto res = mComposedLocs.find( indices );
+	if ( res == std::end( mComposedLocs ) ) {
+		return addLocationStubByIndices( indices );
+	} else {
+		return res->second;
+	}
+}
+
+template <typename Number>
+typename HybridAutomatonComp<Number>::Locations::iterator HybridAutomatonComp<Number>::addLocationStubByIndices( const std::vector<std::size_t>& indices ) const {
+	ComposedLocation<Number> tmp{ *this };
+	tmp.mCompositionals = indices;
+	mLocations.emplace_back( std::move( tmp ) );
+	mComposedLocs[indices] = std::prev( std::end( mLocations ) );
+	return std::prev( mLocations.end() );
+}
+
+template <typename Number>
+void HybridAutomatonComp<Number>::createAllLocations() const {
+	std::vector<std::size_t> numberLocations;
+	for ( std::size_t componentIdx = 0; componentIdx < mAutomata.size(); ++componentIdx ) {
+		numberLocations.push_back( mAutomata[componentIdx].getNumberLocations() );
+	}
+
+	auto perm = hypro::Combinator{ numberLocations, mAutomata.size() };
+	while ( !perm.end() ) {
+		auto indices = perm();
+		/*std::cout << "Add location for indices ";
+		for ( auto i : indices ) {
+			std::cout << i << "  ";
+		}
+		std::cout << std::endl;*/
+		addLocationStubByIndicesSafe( indices );
+	}
+}
+
 }  // namespace hypro
