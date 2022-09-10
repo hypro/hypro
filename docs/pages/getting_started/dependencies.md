@@ -45,7 +45,7 @@ Clone and build CArL
 ## Additional (optional) dependencies
 
 Currently HyPro provides an extended interface for linear solving, which allows to _additionally_ add __two__ of the
-following linear optimizers as solving backends (see also [linear optimization](/optimization.html)):
+following linear optimizers as solving backends (see also [linear optimization](/hypro/optimization.html)):
 
 - [glpk](https://www.gnu.org/software/glpk/)
 - [SMT-RAT](https://github.com/smtrat/smtrat)
