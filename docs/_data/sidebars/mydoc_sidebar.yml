@@ -75,3 +75,12 @@ entries:
             url: /optimization.html
             output: web, pdf
             type: homepage
+
+      - title: Developers
+        output: web, pdf
+        folderitems:
+
+          - title: git
+            url: /git.html
+            output: web, pdf
+            type: homepage
