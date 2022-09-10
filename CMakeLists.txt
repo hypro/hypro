@@ -70,6 +70,9 @@ if (NOT CMAKE_BUILD_TYPE)
 endif ()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
 
+# policies
+cmake_policy(VERSION 3.15) # sets all policies to NEW that are available in cmake 3.15
+
 # handling of optimization backends
 include(optimization_backends)
 
