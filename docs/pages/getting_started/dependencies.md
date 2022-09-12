@@ -30,8 +30,7 @@ Use the following commands to install CArL in an simplified way:
 Install most dependencies using a package manager (here: apt, Ubuntu):
 
 ```bash
-sudo apt install libeigen3-dev uuid-dev libbliss-dev libboost-system1.71-dev libboost-program-options1.71-dev libboost-test1.
-71-dev libboost-timer1.71-dev libboost-chrono1.71-dev libboost-serialization1.71-dev
+sudo apt install libeigen3-dev uuid-dev libbliss-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev
 ```
 
 Clone and build CArL
