@@ -186,7 +186,7 @@ namespace hypro {
 
 		// 2. assemble linear Flow
 		matrix_t<Number> flowMatrix = matrix_t<Number>::Zero(vars.size()+1,vars.size()+1);
-		for(const auto f : linearFlows) {
+		for(const auto& f : linearFlows) {
 			flowMatrix.row(f.first) = f.second;
 		}
 
@@ -309,7 +309,7 @@ namespace hypro {
 
 		// 2. assemble probability distribution
 		matrix_t<Number> distMatrix = matrix_t<Number>::Zero(vars.size()+1,vars.size()+1);
-		for(const auto exp : linearExp) {
+		for(const auto& exp : linearExp) {
 			distMatrix.row(exp.first) = exp.second;
 		}
 
