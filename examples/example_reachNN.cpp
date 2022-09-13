@@ -6,6 +6,8 @@
 // #include "hypro/representations/Starset/Starset.h"
 #include "hypro/util/plotting/Plotter.h"
 
+#include "hypro/parser/representations/parseHPolytope.tpp"
+
 #include <chrono>
 #include <iomanip>
 #include <iostream>
@@ -78,38 +80,30 @@ int main( int argc, char* argv[] ) {
 	// std::cout << network << std::endl;
 
 	// a simple rectangle [_]
-	hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );
-	hypro::matrix_t<Number> basis = hypro::matrix_t<Number>( 2, 2 );
 	hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 4, 2 );
 	hypro::vector_t<Number> limits = hypro::vector_t<Number>( 4 );
-	center << 0, 0;
-	basis << 1, 0, 0, 1;
 	constr << 1, 0, -1, 0, 0, 1, 0, -1;
 	limits << 2, 1, 1, 1;
-	hypro::Starset<Number> input_star = hypro::Starset<Number>( center, constr, limits, basis );
+	hypro::HPolytope<Number> input_poly = hypro::HPolytope<Number>( constr, limits );
 	if ( argc > 3 ) {
-		std::cout << "Reading input star from: " << argv[3] << std::endl;
-		input_star = hypro::Starset<Number>::readFromFile( argv[3] );
+		std::cout << "Reading input constraints from: " << argv[3] << std::endl;
+		input_poly = hypro::readHpolytopeFromFile<Number>( argv[3] );
 	}
-	std::cout << input_star << std::endl;
+	std::cout << input_poly << std::endl;
 
-	hypro::vector_t<Number> center2 = hypro::vector_t<Number>( 2 );
-	hypro::matrix_t<Number> basis2 = hypro::matrix_t<Number>( 2, 2 );
 	hypro::matrix_t<Number> constr2 = hypro::matrix_t<Number>( 4, 2 );
 	hypro::vector_t<Number> limits2 = hypro::vector_t<Number>( 4 );
-	center2 << 0, 0;
-	basis2 << 1, 0, 0, 1;
 	constr2 << 1, 0, -1, 0, 0, 1, 0, -1;
 	limits2 << 0.5, 0, 1, 0;
-	hypro::Starset<Number> safe_star = hypro::Starset<Number>( center2, constr2, limits2, basis2 );
+	hypro::HPolytope<Number> safe_poly = hypro::HPolytope<Number>( constr2, limits2 );
 	if ( argc > 4 ) {
 		std::cout << "Reading safety specification from: " << argv[4] << std::endl;
-		safe_star = hypro::Starset<Number>::readFromFile( argv[4] );
+		safe_poly = hypro::readHpolytopeFromFile<Number>( argv[4] );
 	}
-	std::cout << safe_star << std::endl;
+	std::cout << safe_poly << std::endl;
 
 	// hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
-	hypro::reachability::ReachabilityTree<Number> reach_tree( network, input_star.constraints(), safe_star.constraints() );
+	hypro::reachability::ReachabilityTree<Number> reach_tree( network, input_poly, safe_poly );
 
 	bool create_plots = false;
 
