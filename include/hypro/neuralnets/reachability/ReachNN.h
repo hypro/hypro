@@ -16,7 +16,7 @@
 #include "../../representations/GeometricObjectBase.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/plotting/Plotter.h"
-#include "../parser/NNet.h"
+#include "../../parser/neuralnets/nnet/NNet.h"
 #include "ReachNNMethod.h"
 
 #include <iostream>

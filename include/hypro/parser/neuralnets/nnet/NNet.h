@@ -9,8 +9,8 @@
  */
 
 #pragma once
-#include "../../types.h"
-#include "../../util/logging/Logger.h"
+#include "types.h"
+#include "util/logging/Logger.h"
 
 namespace hypro {
 template <typename Number>

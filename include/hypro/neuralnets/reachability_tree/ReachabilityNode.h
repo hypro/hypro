@@ -82,7 +82,7 @@ class ReachabilityNode {
 	void setRepresentation( const Starset<Number>& representation );
 
 	// functionalities
-	bool checkSafe( const HPolytope<Number>& safeSet ) const;
+	bool checkSafe( const std::vector<HPolytope<Number>>& safeSets ) const;
 
 	// utility methods
 	void plot( bool holdOn = false, size_t color = 0xCC071E ) const;  // allow to plot only if the representation is two dimensional

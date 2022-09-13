@@ -1,5 +1,5 @@
 #include "hypro/neuralnets/network/NeuralNetwork.h"
-#include "hypro/neuralnets/parser/NNet.h"
+#include "hypro/parser/neuralnets/nnet/NNet.h"
 #include "hypro/neuralnets/reachability/ReachNN.h"
 #include "hypro/neuralnets/reachability_tree/ReachabilityTree.h"
 #include "hypro/representations/GeometricObjectBase.h"
@@ -95,15 +95,17 @@ int main( int argc, char* argv[] ) {
 	hypro::vector_t<Number> limits2 = hypro::vector_t<Number>( 4 );
 	constr2 << 1, 0, -1, 0, 0, 1, 0, -1;
 	limits2 << 0.5, 0, 1, 0;
-	hypro::HPolytope<Number> safe_poly = hypro::HPolytope<Number>( constr2, limits2 );
+	std::vector<hypro::HPolytope<Number>> safe_polys = std::vector<hypro::HPolytope<Number>>();
 	if ( argc > 4 ) {
 		std::cout << "Reading safety specification from: " << argv[4] << std::endl;
-		safe_poly = hypro::readHpolytopeFromFile<Number>( argv[4] );
+		safe_polys = hypro::readKHpolytopesFromFile<Number>( argv[4] );
+	} else {
+		safe_polys.push_back( hypro::HPolytope<Number>(constr2, limits2) );
 	}
-	std::cout << safe_poly << std::endl;
+	std::cout << safe_polys << std::endl;
 
 	// hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
-	hypro::reachability::ReachabilityTree<Number> reach_tree( network, input_poly, safe_poly );
+	hypro::reachability::ReachabilityTree<Number> reach_tree( network, input_poly, safe_polys );
 
 	bool create_plots = false;
 

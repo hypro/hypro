@@ -7,7 +7,7 @@
 
 #pragma once
 #include "../../util/logging/Logger.h"
-#include "../parser/NNet.h"
+#include "../../parser/neuralnets/nnet/NNet.h"
 #include "../reachability/ReachNNMethod.h"
 #include "layers/AffineMapping/AffineLayer.h"
 #include "layers/LayerBase.h"

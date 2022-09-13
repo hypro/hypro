@@ -13,10 +13,10 @@ ReachabilityTree<Number>::~ReachabilityTree() {
 }
 
 template <typename Number>
-ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const HPolytope<Number>& safeSet )
+ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets )
 	: mNetwork( network )
 	, mInputSet( inputSet )
-	, mSafeSet( safeSet )
+	, mSafeSets( safeSets )
 	, mPlotter( hypro::Plotter<Number>::getInstance() ) {
 	unsigned short int depth = 1;
 	for ( auto layer : mNetwork.layers() ) {
@@ -54,16 +54,16 @@ Starset<Number> ReachabilityTree<Number>::prepareInput( bool normalize ) const {
 }
 
 template <typename Number>
-HPolytope<Number> ReachabilityTree<Number>::prepareSafeSet( bool normalize ) const {
+std::vector<HPolytope<Number>> ReachabilityTree<Number>::prepareSafeSet( bool normalize ) const {
 	// TODO: implement de-normalization
 	if ( normalize ) {
 		// do the de-normalization
 	}
-	return mSafeSet;
+	return mSafeSets;
 }
 
 template <typename Number>
-bool ReachabilityTree<Number>::isSubResultSafe( const std::vector<Starset<Number>>& subResult, const HPolytope<Number>& safeSet ) const {
+bool ReachabilityTree<Number>::isSubResultSafe( const std::vector<Starset<Number>>& subResult, const std::vector<HPolytope<Number>>& safeSets ) const {
 	// TODO: implement this method
 	return true;
 }
@@ -115,7 +115,7 @@ std::vector<Starset<Number>> ReachabilityTree<Number>::forwardPass( const Starse
 // It can be used just to compute a subtree from the j. neuron of the k.th layer
 // the subtree then could be inserted into the search tree (replacing and deleting the old subtree)
 template <typename Number>
-ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( ReachabilityNode<Number>* rootNode, const HPolytope<Number>& safeSet, SEARCH_STRATEGY strategy ) {
+ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy ) {
 	// create the root_job and add to the queue
 	SearchJob<Number> root_job( rootNode, mNetwork.layers() );
 	std::deque<SearchJob<Number>> jobQueue;
@@ -136,7 +136,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 				// std::cout << newJob.getNode()->representation() << std::endl;
 				ReachabilityNode<Number>* leafNode = newJob.getNode();
 				mLeaves.push_back( leafNode );
-				if ( !leafNode->checkSafe( safeSet ) ) {
+				if ( !leafNode->checkSafe( safeSets ) ) {
 					leafNode->setSafe( false );
 					mIsSafe = false;
 				} else {
@@ -168,7 +168,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 template <typename Number>
 bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots, bool normalizeInput, bool normalizeOutput ) {
 	Starset<Number> starInput = prepareInput( normalizeInput );
-	HPolytope<Number> safeOutput = prepareSafeSet( normalizeOutput );
+	std::vector<HPolytope<Number>> safeOutput = prepareSafeSet( normalizeOutput );
 	// let's assume for now that the safeSet could only be a conjunction of halfspaces and it describes the set of all safe output vectors
 	// TODO: later add some generalization to it
 	// TODO: make the safe set an arbitrary number of conjunctions and/or disjunctions of halfspaces, i.e. it is a vector of HPolytopes (DNF)
@@ -313,40 +313,44 @@ bool ReachabilityTree<Number>::counterExampleIsValid( Point<Number> candidate, R
 }
 
 template <typename Number>
-Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<Number> set, HPolytope<Number> rejectionSet ) const {
+Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<Number> set, std::vector<HPolytope<Number>> rejectionSets ) const {
 	// TODO: this should be with random sampling (with the preference of picking the counterexample close or far away from the safe set but in the first (?) output set)
 	// TODO: the sampling becomes very slow when the rejectionSet covers a high portion of the sampling set in this case some other algorithm for sampling should be used
 
-	int sampling_trials = 10;
+	// int sampling_trials = 10;
 
-	// try to find a counterexmaple with MC sampling
-	std::set<Point<Number>> samples = uniform_constrained_sampling( set, rejectionSet, 1, sampling_trials );
-	if ( samples.size() > 0 )
-		return *( samples.begin() );
+	// // try to find a counterexmaple with MC sampling
+	// std::set<Point<Number>> samples = uniform_constrained_sampling( set, rejectionSets, 1, sampling_trials );
+	// if ( samples.size() > 0 )
+	// 	return *( samples.begin() );
 
-	// if the sampling does not work out for the whole set try to reduce it to multiple smaller sets
-	for ( auto constraint : rejectionSet.constraints() ) {
-		Starset<Number> intermediateSet = set.intersectHalfspace( Halfspace<Number>( -1 * constraint.normal(), -constraint.offset() ) );
-		if ( !intermediateSet.empty() ) {
-			std::set<Point<Number>> newSamples = uniform_constrained_sampling( intermediateSet, rejectionSet, 1, sampling_trials );
-			if ( newSamples.size() > 0 ) {
-				return *( newSamples.begin() );
-			}
-		}
-	}
+	// // if the sampling does not work out for the whole set try to reduce it to multiple smaller sets
+	// for ( auto rejectionSet : rejectionSets ) {
+	// 	for ( auto constraint : rejectionSet.constraints() ) {
+	// 		Starset<Number> intermediateSet = set.intersectHalfspace( Halfspace<Number>( -1 * constraint.normal(), -constraint.offset() ) );
+	// 		if ( !intermediateSet.empty() ) {
+	// 			std::set<Point<Number>> newSamples = uniform_constrained_sampling( intermediateSet, rejectionSets, 1, sampling_trials );
+	// 			if ( newSamples.size() > 0 ) {
+	// 				return *( newSamples.begin() );
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	// if sampling does not work at all, just try LP solving
-	for ( auto constraint : rejectionSet.constraints() ) {
-		// add the reversed constraint (with a little bloating)
-		Starset<Number> intermediateSet = set.intersectHalfspace( Halfspace<Number>( -1 * constraint.normal(), -constraint.offset() ) );
-		std::vector<Point<Number>> vertices = intermediateSet.vertices();
-		if ( vertices.size() > 0 ) {
-			vector_t<Number> middle_point = vertices[0].rawCoordinates();
-			for ( int i = 1; i < vertices.size(); i++ ) {
-				middle_point += vertices[i].rawCoordinates();
+	for ( auto rejectionSet : rejectionSets ) {
+		for ( auto constraint : rejectionSet.constraints() ) {
+			// add the reversed constraint (with a little bloating)
+			Starset<Number> intermediateSet = set.intersectHalfspace( Halfspace<Number>( -1 * constraint.normal(), -constraint.offset() ) );
+			std::vector<Point<Number>> vertices = intermediateSet.vertices();
+			if ( vertices.size() > 0 ) {
+				vector_t<Number> middle_point = vertices[0].rawCoordinates();
+				for ( int i = 1; i < vertices.size(); i++ ) {
+					middle_point += vertices[i].rawCoordinates();
+				}
+				middle_point /= vertices.size();
+				return Point<Number>( middle_point );
 			}
-			middle_point /= vertices.size();
-			return Point<Number>( middle_point );
 		}
 	}
 

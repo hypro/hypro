@@ -31,7 +31,7 @@ class ReachabilityTree {
 
 	NeuralNetwork<Number> mNetwork;	 // the analized neural network
 	HPolytope<Number> mInputSet;	 // the input set of the network
-	HPolytope<Number> mSafeSet;		 // the safe set specified in the form of a HPolytope
+	std::vector<HPolytope<Number>> mSafeSets;		 // the safe set specified in the form of a vector of HPolytopes
 	bool mIsSafe;					 // true if the reachability tree is safe
 	bool mIsComplete;				 // true if the  computation of the reachability tree finished
 
@@ -45,7 +45,7 @@ class ReachabilityTree {
 	~ReachabilityTree();
 
 	// Initializer constructor
-	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const HPolytope<Number>& safeSet );
+	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets );
 
 	ReachabilityNode<Number>* root() const;
 
@@ -54,7 +54,7 @@ class ReachabilityTree {
 	unsigned short int depth() const;
 
 	std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const;
-	ReachabilityNode<Number>* computeReachTree( ReachabilityNode<Number>* rootNode, const HPolytope<Number>& safeSet, SEARCH_STRATEGY strategy );
+	ReachabilityNode<Number>* computeReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy );
 	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots = false, bool normalizeInput = false, bool normalizeOutput = false );
 
 	bool counterExampleIsValid( Point<Number> candidate, ReachabilityNode<Number>* node ) const;
@@ -64,7 +64,7 @@ class ReachabilityTree {
 	 *
 	 * @return Return a Point<Number>, the counterexample candidate
 	 */
-	Point<Number> produceCounterExampleCandidate( Starset<Number> set, HPolytope<Number> rejectionSet ) const;
+	Point<Number> produceCounterExampleCandidate( Starset<Number> set, std::vector<HPolytope<Number>> rejectionSet ) const;
 
 	Starset<Number> getFirstNonEmptyLeaf() const;
 
@@ -94,8 +94,8 @@ class ReachabilityTree {
 
   private:
 	Starset<Number> prepareInput( bool normalize ) const;
-	HPolytope<Number> prepareSafeSet( bool normalize ) const;
-	bool isSubResultSafe( const std::vector<Starset<Number>>& subResult, const HPolytope<Number>& safeSet ) const;
+	std::vector<HPolytope<Number>> prepareSafeSet( bool normalize ) const;
+	bool isSubResultSafe( const std::vector<Starset<Number>>& subResult, const std::vector<HPolytope<Number>>& safeSet ) const;
 };
 
 }  // namespace reachability
