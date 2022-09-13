@@ -26,6 +26,13 @@ const NN_LAYER_TYPE ReLULayer<Number>::layerType() const {
 }
 
 template <typename Number>
+vector_t<Number> ReLULayer<Number>::forwardPass( const vector_t<Number>& inputVec, int i ) const {
+	vector_t<Number> outputVec = inputVec;
+	outputVec[i] = outputVec[i] >= 0 ? outputVec[i] : 0;
+	return outputVec;
+}
+
+template <typename Number>
 vector_t<Number> ReLULayer<Number>::forwardPass( const vector_t<Number>& inputVec ) const {
 	vector_t<Number> outputVec = inputVec;
 	for ( int i = 0; i < outputVec.size(); ++i ) {
@@ -76,17 +83,34 @@ std::vector<Starset<Number>> ReLULayer<Number>::forwardPass( const std::vector<S
 	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
 	int N = inputSets.size();  // number of input stars
 
-// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
+	// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
 	for ( int i = 0; i < N; ++i ) {
 		std::vector<hypro::Starset<Number>> resultSets;
 		resultSets = reachReLU( inputSets[i], method, plotIntermediates );
 
-// #pragma omp critical
+		// #pragma omp critical
 		{
 			result.insert( result.end(), resultSets.begin(), resultSets.end() );
 		}
 	}
 	return result;
+}
+
+template <typename Number>
+Point<Number> ReLULayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
+	assert( neuronNumber < y.dimension() );
+	assert( y[neuronNumber] >= 0 );
+
+	// std::cout << "relu " << neuronNumber << " backpropagation" << std::endl;
+
+	// if the points coordinate at the corresponding neurons dimension is positive, then the point is not changed
+	if ( y[neuronNumber] > 0 ) {
+		return y;
+	}
+
+	// if it is negative need to apply linear optimization in the inputset (or other algorithm) to find the corresponding point
+	// TODO: implement this
+	return y;
 }
 
 }  // namespace hypro

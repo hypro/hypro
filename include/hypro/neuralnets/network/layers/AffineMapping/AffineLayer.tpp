@@ -71,4 +71,12 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 	return result;
 }
 
+template <typename Number>
+Point<Number> AffineLayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
+	// TODO: implement a smarter way to do this backpropagation which works in all cases
+	matrix_t<Number> weightsInverse = mWeights.completeOrthogonalDecomposition().pseudoInverse();
+	// std::cout << "affine backpropagation" << std::endl;
+	return Point<Number>(weightsInverse * (y.rawCoordinates() - mBias));
+}
+
 }  // namespace hypro

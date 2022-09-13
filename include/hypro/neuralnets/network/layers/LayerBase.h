@@ -50,6 +50,15 @@ class LayerBase {
 	virtual std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const = 0;
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const = 0;
 
+	/**
+	 * @brief Propagates back y to the previous neuron in the layer. I.e. given y, y = f(x), x \in I, return x
+	 * 
+	 * @param[in] y, the counterexample candidate to propagate back 
+	 * @param[in] neuronNumber, the number of the neuron at which we apply the backpropagation
+	 * @param[in] inputSet, the input set which should include the result of the backpropagation
+	 * @return Point<Number> the backpropagated final result
+	 */
+	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const = 0;
 
 	// ============= utility functions =============
 
