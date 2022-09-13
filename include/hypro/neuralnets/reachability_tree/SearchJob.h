@@ -41,12 +41,21 @@ class SearchJob {
 		std::shared_ptr<hypro::LayerBase<Number>> mLayer = (*it);
 		Starset<Number> mSet = mNode->representation();
 
+		// std::cout << "mLayerNum: " << mLayerNum << " index: " << mIndex << std::endl;
+		// std::cout << "mSet: " << mSet << std::endl;
+		// std::cout << "method: " << method << std::endl;
+
+		// std::cout << "mLayer name: " << mLayer->layerType() << std::endl;
+		// std::cout << "mLayer: " << (*mLayer) << std::endl;
+
 		std::vector<Starset<Number>> newSets = mLayer->forwardPass( mSet, mIndex, method );
 		int N = newSets.size();
 
+		// std::cout << "forward done" << std::endl;
+
 		// the new jobs produced by calculating the current job
 		std::vector<SearchJob<Number>> newJobs;
-		mNode->setIsComputed( true );
+		mNode->setComputed( true );
 
 		// check if it was the last neuron of the last layer, so this job produces (part of) the final result
 		if ( ( mLayer->layerIndex() == mAllLayers.size() - 1 ) && ( ( mLayer->layerType() == NN_LAYER_TYPE::AFFINE ) ||
@@ -55,7 +64,16 @@ class SearchJob {
 			for ( auto newSet : newSets ) {
 				ReachabilityNode<Number>* leafNode = new ReachabilityNode<Number>( newSet, method, mLayerNum + 1, 0 );
 				leafNode->setParent( mNode );
-				leafNode->setIsLeaf( true );
+				leafNode->setLeaf( true );
+				leafNode->setComputed( true );
+				if ( !mNode->hasPosChild() ) {
+					mNode->setPosChild(leafNode);
+				}
+				else {
+					if ( !mNode->hasNegChild() ) {
+						mNode->setNegChild(leafNode);
+					}
+				}
 				newJobs.push_back( SearchJob( leafNode, mAllLayers, true ) );
 			}
 			return newJobs;
@@ -75,6 +93,8 @@ class SearchJob {
 					// this for always should iterate only once
 					// TODO: set the pointers to the parent and backward
 					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
+					nextNode->setParent( mNode );
+					mNode->setPosChild( nextNode );
 					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
 				break;
@@ -97,9 +117,12 @@ class SearchJob {
 					if ( !mNode->hasPosChild() ) {
 						mNode->setPosChild(nextNode);
 					}
-					if ( !mNode->hasNegChild() ) {
-						mNode->setNegChild(nextNode);
+					else {
+						if ( !mNode->hasNegChild() ) {
+							mNode->setNegChild(nextNode);
+						}
 					}
+
 					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
 

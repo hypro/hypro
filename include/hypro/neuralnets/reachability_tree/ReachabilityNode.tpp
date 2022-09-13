@@ -21,13 +21,27 @@ ReachabilityNode<Number>::ReachabilityNode( Starset<Number> representation, NN_R
 	, mHasNegChild( false )
 	, mPlotter( hypro::Plotter<Number>::getInstance() ) {}
 
+// template <typename Number>
+// ReachabilityNode<Number>::~ReachabilityNode() {
+// 	if ( !mIsLeaf ) {
+// 		if ( mHasPosChild ) {
+// 			mHasPosChild = false;
+// 			delete mPosChild;
+// 		}
+// 		if ( mHasNegChild ) {
+// 			mHasNegChild = false;
+// 			delete mNegChild;
+// 		}
+// 	}
+// }
+
 template <typename Number>
 bool ReachabilityNode<Number>::isLeaf() const {
 	return mIsLeaf;
 }
 
 template <typename Number>
-void ReachabilityNode<Number>::setIsLeaf( bool isLeaf ) {
+void ReachabilityNode<Number>::setLeaf( bool isLeaf ) {
 	mIsLeaf = isLeaf;
 }
 
@@ -37,7 +51,7 @@ bool ReachabilityNode<Number>::isSafe() const {
 }
 
 template <typename Number>
-void ReachabilityNode<Number>::setIsSafe( bool isSafe ) {
+void ReachabilityNode<Number>::setSafe( bool isSafe ) {
 	mIsSafe = isSafe;
 }
 
@@ -47,7 +61,7 @@ bool ReachabilityNode<Number>::isComputed() const {
 }
 
 template <typename Number>
-void ReachabilityNode<Number>::setIsComputed( bool isComputed ) {
+void ReachabilityNode<Number>::setComputed( bool isComputed ) {
 	mIsComputed = isComputed;
 }
 
@@ -145,7 +159,7 @@ void ReachabilityNode<Number>::setRepresentation( const Starset<Number>& represe
 }
 
 template <typename Number>
-bool ReachabilityNode<Number>::isSafe( const HPolytope<Number>& safeSet ) const {
+bool ReachabilityNode<Number>::checkSafe( const HPolytope<Number>& safeSet ) const {
 	bool safe = true;
 	if ( mIsLeaf ) {
 		// if the node is a leaf, then we check whether the inner representation (star) is safe
@@ -173,10 +187,11 @@ bool ReachabilityNode<Number>::isSafe( const HPolytope<Number>& safeSet ) const 
 
 template <typename Number>
 void ReachabilityNode<Number>::plot( bool holdOn, size_t color ) const {
+	// std::cout << mRepresentation << std::endl;
 	std::vector<hypro::Point<Number>> vertices = mRepresentation.vertices();
 	mPlotter.addObject( vertices, color );
 	if ( !holdOn ) {
-		mPlotter.plot2d();
+		mPlotter.plot2d( PLOTTYPE::png );
 	}
 }
 

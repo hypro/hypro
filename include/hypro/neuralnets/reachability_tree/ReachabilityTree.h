@@ -11,6 +11,7 @@
 // #include "SearchStrategy.h"
 
 #pragma once
+#include "../../representations/sampling/sampling.h"
 #include "ReachabilityNode.h"
 #include "SearchJob.h"
 #include "SearchStrategy.h"
@@ -34,6 +35,8 @@ class ReachabilityTree {
 	bool mIsSafe;					 // true if the reachability tree is safe
 	bool mIsComplete;				 // true if the  computation of the reachability tree finished
 
+	hypro::Plotter<Number>& mPlotter;
+
   public:
 	// Default constructor
 	ReachabilityTree();
@@ -51,15 +54,44 @@ class ReachabilityTree {
 	unsigned short int depth() const;
 
 	std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const;
-	ReachabilityNode<Number>* computeReachTree( const Starset<Number>& inputSet, const HPolytope<Number>& safeSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy, int layerNumber, int neuronNumber );
+	ReachabilityNode<Number>* computeReachTree( ReachabilityNode<Number>* rootNode, const HPolytope<Number>& safeSet, SEARCH_STRATEGY strategy );
 	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy );
 
+
+	bool counterExampleIsValid( Point<Number> candidate, ReachabilityNode<Number>* node ) const;
+
 	/**
-	 * @brief A method to produce a counterexample of the
+	 * @brief A method that produces a counterexample candidate for the current ReachabilityTree using sampling.
 	 *
-	 * @return std::vector<Number> the counterexample input
+	 * @return Return a Point<Number>, the counterexample candidate
 	 */
-	std::vector<Number> produceCounterExample() const;
+	Point<Number> produceCounterExampleCandidate( Starset<Number> set, HPolytope<Number> rejectionSet ) const;
+
+	Starset<Number> getFirstNonEmptyLeaf() const;
+
+	void updateLeaves(ReachabilityNode<Number>* node);
+
+	/**
+	 * @brief Find the source neuron of a countereaxmple candidate (if exists).
+	 *
+	 * @param[in] candidate: a counter example candidate Point<Number>
+	 * @param[in] leaf: the reachability tree leaf from which we start the search
+	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <candidate, node> which indicates the source neuron of the countereaxmple, return <candidate, nullptr> if it is a true countereaxmple
+	 */
+	std::pair<Point<Number>, ReachabilityNode<Number>*> identifyCounterExampleSource( const Point<Number>& candidate, ReachabilityNode<Number>* leaf ) const;
+
+	/**
+	 * @brief Calculates the corresponding point from the previous set such that applying the previous nodes computations on it we would get back the counterexample candidate
+	 *
+	 * @param[in] candidate, the candidate for which we try to find the correspodning point from the previous node
+	 * @param[in] parentLayer, layer of the previous node
+	 * @param[in] parentNeuron, neuron number of the previous node
+	 * @param[in] parentSet, the representation of the previous node
+	 * @return Point<Number> the corresponding point
+	 */
+	Point<Number> propagateCandidateBack( const Point<Number>& candidate, int parentLayer, int parentNeuron, const Starset<Number>& parentSet ) const;
+
+	void plotTree( ReachabilityNode<Number>* current, std::string filename ) const;
 
   private:
 	Starset<Number> prepareInput() const;

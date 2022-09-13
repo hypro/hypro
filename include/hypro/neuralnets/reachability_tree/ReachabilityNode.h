@@ -23,8 +23,8 @@ namespace reachability {
 template <typename Number>
 class ReachabilityNode {
   private:
-	bool mIsLeaf;	  // data holder to fast check if a node is a leaf node
-	bool mIsSafe;	  // data holder to check if a node is a safe node
+	bool mIsLeaf;	   // data holder to fast check if a node is a leaf node
+	bool mIsSafe;	   // data holder to check if a node is a safe node
 	bool mIsComputed;  // data holder to check the computation of the node is finished (i.e. it has all its childs)
 
 	bool mHasParent;
@@ -48,14 +48,15 @@ class ReachabilityNode {
 	// constructors and destructor
 	ReachabilityNode();
 	ReachabilityNode( Starset<Number> representation, NN_REACH_METHOD method, int layerNumber, int neuronNumber );
+	// ~ReachabilityNode();
 
 	// getter and setter methods
 	bool isLeaf() const;
-	void setIsLeaf( bool isLeaf );
+	void setLeaf( bool isLeaf );
 	bool isSafe() const;
-	void setIsSafe( bool isSafe );
+	void setSafe( bool isSafe );
 	bool isComputed() const;
-	void setIsComputed( bool isComputed );
+	void setComputed( bool isComputed );
 
 	bool hasParent() const;
 	void setHasParent( bool hasParent );
@@ -80,11 +81,11 @@ class ReachabilityNode {
 	Starset<Number> representation() const;
 	void setRepresentation( const Starset<Number>& representation );
 
-	// functionalities 
-	bool isSafe(const HPolytope<Number>& safeSet ) const;
+	// functionalities
+	bool checkSafe( const HPolytope<Number>& safeSet ) const;
 
 	// utility methods
-	void plot( bool holdOn = false, size_t color = 0x006165 ) const;  // allow to plot only if the representation is two dimensional
+	void plot( bool holdOn = false, size_t color = 0xCC071E ) const;  // allow to plot only if the representation is two dimensional
 																	  // when holdOn is true, we do not create the plot, only add the object to it
 };
 
