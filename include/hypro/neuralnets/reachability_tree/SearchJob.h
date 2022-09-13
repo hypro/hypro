@@ -51,8 +51,6 @@ class SearchJob {
 		std::vector<Starset<Number>> newSets = mLayer->forwardPass( mSet, mIndex, method );
 		int N = newSets.size();
 
-		// std::cout << "forward done" << std::endl;
-
 		// the new jobs produced by calculating the current job
 		std::vector<SearchJob<Number>> newJobs;
 		mNode->setComputed( true );
@@ -91,7 +89,6 @@ class SearchJob {
 				// create the new jobs
 				for ( int i = 0; i < N; ++i ) {
 					// this for always should iterate only once
-					// TODO: set the pointers to the parent and backward
 					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
 					nextNode->setParent( mNode );
 					mNode->setPosChild( nextNode );

@@ -29,7 +29,7 @@ class ReachabilityTree {
 	std::vector<ReachabilityNode<Number>*> mLeaves;	 // the leaves of the reachability tree
 	unsigned short int mDepth;						 // depth of the reachability tree
 
-	NeuralNetwork<Number> mNetwork;	 // the analysied neural network
+	NeuralNetwork<Number> mNetwork;	 // the analized neural network
 	HPolytope<Number> mInputSet;	 // the input set of the network
 	HPolytope<Number> mSafeSet;		 // the safe set specified in the form of a HPolytope
 	bool mIsSafe;					 // true if the reachability tree is safe
@@ -55,8 +55,7 @@ class ReachabilityTree {
 
 	std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const;
 	ReachabilityNode<Number>* computeReachTree( ReachabilityNode<Number>* rootNode, const HPolytope<Number>& safeSet, SEARCH_STRATEGY strategy );
-	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy );
-
+	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots = false, bool normalizeInput = false, bool normalizeOutput = false );
 
 	bool counterExampleIsValid( Point<Number> candidate, ReachabilityNode<Number>* node ) const;
 
@@ -69,7 +68,7 @@ class ReachabilityTree {
 
 	Starset<Number> getFirstNonEmptyLeaf() const;
 
-	void updateLeaves(ReachabilityNode<Number>* node);
+	void updateLeaves( ReachabilityNode<Number>* node );
 
 	/**
 	 * @brief Find the source neuron of a countereaxmple candidate (if exists).
@@ -94,8 +93,8 @@ class ReachabilityTree {
 	void plotTree( ReachabilityNode<Number>* current, std::string filename ) const;
 
   private:
-	Starset<Number> prepareInput() const;
-	HPolytope<Number> prepareSafeSet() const;
+	Starset<Number> prepareInput( bool normalize ) const;
+	HPolytope<Number> prepareSafeSet( bool normalize ) const;
 	bool isSubResultSafe( const std::vector<Starset<Number>>& subResult, const HPolytope<Number>& safeSet ) const;
 };
 

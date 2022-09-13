@@ -57,6 +57,8 @@ int main( int argc, char* argv[] ) {
 				method = hypro::NN_REACH_METHOD::CEGAR;
 		}
 	}
+	std::cout << "The reachability method is " << method._to_string() << std::endl
+			  << std::endl;
 
 	// define input file name
 	const char* filename = "../examples/nnet/fc_2-2-2.nnet";
@@ -73,7 +75,7 @@ int main( int argc, char* argv[] ) {
 	// std::cout << rotate_nn << std::endl;
 
 	hypro::NeuralNetwork<Number> network = hypro::NeuralNetwork<Number>( rotate_nn );
-	std::cout << network << std::endl;
+	// std::cout << network << std::endl;
 
 	// a simple rectangle [_]
 	hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );
@@ -106,7 +108,7 @@ int main( int argc, char* argv[] ) {
 	}
 	std::cout << safe_star << std::endl;
 
-	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
+	// hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
 	hypro::reachability::ReachabilityTree<Number> reach_tree( network, input_star.constraints(), safe_star.constraints() );
 
 	bool create_plots = false;
@@ -115,7 +117,7 @@ int main( int argc, char* argv[] ) {
 	// std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, create_plots );	// old verification implemented for NNet
 	// std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
 	// std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(method, hypro::SEARCH_STRATEGY::DFS);
-	bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS );
+	bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots );
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;

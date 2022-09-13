@@ -42,17 +42,23 @@ unsigned short int ReachabilityTree<Number>::depth() const {
 }
 
 template <typename Number>
-Starset<Number> ReachabilityTree<Number>::prepareInput() const {
+Starset<Number> ReachabilityTree<Number>::prepareInput( bool normalize ) const {
 	// this function should transform the input polytope (e.g. an ACAS property) into an input set to the network
 	// i.e. it should transform the input polytope using min-max normalization and mean-std scaling
 	// min-max normalization <=> add all upper and lower bounding halfspaces to the polytope and then remove redundant constraints
 	// mean-std scaling <=> subtract mean (translation vector) and scale by std (scaling matrix)  => affine transformation
+	if ( normalize ) {
+		// do the normalization
+	}
 	return Starset<Number>( mInputSet );
 }
 
 template <typename Number>
-HPolytope<Number> ReachabilityTree<Number>::prepareSafeSet() const {
+HPolytope<Number> ReachabilityTree<Number>::prepareSafeSet( bool normalize ) const {
 	// TODO: implement de-normalization
+	if ( normalize ) {
+		// do the de-normalization
+	}
 	return mSafeSet;
 }
 
@@ -119,7 +125,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 	while ( !jobQueue.empty() ) {  // TODO: && mIsSafe  do not forget to break the search erlier if tree is not safe
 		SearchJob<Number> job = jobQueue.front();
 		// std::cout << job.getNode()->layerNumber() << " " << job.getNode()->neuronNumber() << std::endl;
-		std::cout << job.getNode()->representation() << std::endl;
+		// std::cout << job.getNode()->representation() << std::endl;
 		std::vector<SearchJob<Number>> newJobs = job.compute( rootNode->method() );
 		jobQueue.pop_front();
 		for ( auto newJob : newJobs ) {
@@ -127,7 +133,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 				// check if the leaf satisfies the safety property
 				// if not then early stop condition is met and the loop can be stopped
 				// std::cout << newJob.getNode()->layerNumber() << " " << newJob.getNode()->neuronNumber() << std::endl;
-				std::cout << newJob.getNode()->representation() << std::endl;
+				// std::cout << newJob.getNode()->representation() << std::endl;
 				ReachabilityNode<Number>* leafNode = newJob.getNode();
 				mLeaves.push_back( leafNode );
 				if ( !leafNode->checkSafe( safeSet ) ) {
@@ -160,10 +166,9 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 // if the method is not CEGAR than it makes no sense to save the intermediate stars into the search tree
 
 template <typename Number>
-bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) {
-	// TODO: introduce two boolean parameters for input and output normalization
-	Starset<Number> starInput = prepareInput();
-	HPolytope<Number> safeOutput = prepareSafeSet();
+bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots, bool normalizeInput, bool normalizeOutput ) {
+	Starset<Number> starInput = prepareInput( normalizeInput );
+	HPolytope<Number> safeOutput = prepareSafeSet( normalizeOutput );
 	// let's assume for now that the safeSet could only be a conjunction of halfspaces and it describes the set of all safe output vectors
 	// TODO: later add some generalization to it
 	// TODO: make the safe set an arbitrary number of conjunctions and/or disjunctions of halfspaces, i.e. it is a vector of HPolytopes (DNF)
@@ -180,6 +185,8 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 			// if we apply the EXACT or OVERAPPROX method, regardless if the computation of the reachability tree is complete or not
 			// we can surely return the answer
 			mRoot = computeReachTree( rootNode, safeOutput, strategy );
+			if ( createPlots )
+				plotTree( mRoot, method._to_string() );
 			std::cout << "The neural network is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
 			std::cout << "The number of final sets is " << mLeaves.size() << std::endl;
 			return mIsSafe;
@@ -198,11 +205,11 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 		std::cout << "The neural network is safe" << std::endl;
 		return true;
 	}
-	// else we start the refinement
-	// TODO: implement the refinement algorithm
 
+	// else we start the refinement
 	int ctx = 0;
-	plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
+	if ( createPlots )
+		plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
 
 	// repeat until we either find a real counterexample or we can verify that the network is safe
 	// TODO: introduce a max number of iterations
@@ -274,7 +281,8 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 		refinedNode->setNegChild( negSubTree );
 
 		ctx++;
-		plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
+		if ( createPlots )
+			plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
 	}
 
 	mLeaves.clear();  // TODO: do not clear the leaves that are not affected
@@ -300,7 +308,7 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 template <typename Number>
 bool ReachabilityTree<Number>::counterExampleIsValid( Point<Number> candidate, ReachabilityNode<Number>* node ) const {
 	// TODO: consider here using exact arithmetic instead floating point (you can use for this purpose the representation converter class)
-	
+
 	return true;
 }
 

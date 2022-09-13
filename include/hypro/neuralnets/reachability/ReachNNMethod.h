@@ -2,10 +2,6 @@
 
 namespace hypro {
 
-enum class NN_REACH_METHOD {
-	EXACT,
-	OVERAPPRX,
-	CEGAR,
-};
+BETTER_ENUM( NN_REACH_METHOD, int, EXACT, OVERAPPRX, CEGAR );
 
 }  // namespace hypro
