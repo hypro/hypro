@@ -11,7 +11,6 @@
 #include "../../hypro/representations/GeometricObjectBase.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
-#include <carl/core/VariablePool.h>
 
 using namespace hypro;
 using namespace carl;

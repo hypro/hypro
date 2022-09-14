@@ -188,7 +188,7 @@ void RectangularContext<State>::execOnStart() {
 	INFO( "hypro.worker", std::this_thread::get_id() << ": Desired refinement level: " << mTask->btInfo.btLevel );
 	INFO( "hypro.worker", std::this_thread::get_id() << ": Number sets (current strategy level): " << mTask->treeNode->getStateAtLevel( mTask->btInfo.btLevel ).getNumberSets() );
 	INFO( "hypro.worker", std::this_thread::get_id() << ": Location: " << mTask->treeNode->getStateAtLevel( mTask->btInfo.btLevel ).getLocation()->getName() << "(" << mTask->treeNode->getStateAtLevel( mTask->btInfo.btLevel ).getLocation()->hash() << ")" );
-	INFO( "hypro.worker", std::this_thread::get_id() << ": Time step size (current strategy level): " << carl::toDouble( mStrategy.getParameters( mTask->btInfo.btLevel ).timeStep ) );
+	INFO( "hypro.worker", std::this_thread::get_id() << ": Time step size (current strategy level): " << toDouble( mStrategy.getParameters( mTask->btInfo.btLevel ).timeStep ) );
 	INFO( "hypro.worker", std::this_thread::get_id() << ": Representation (current strategy level): " << mStrategy.getParameters( mTask->btInfo.btLevel ).representation_type );
 	INFO( "hypro.worker", std::this_thread::get_id() << ": Refinements:" );
 #ifdef HYPRO_LOGGING
@@ -540,7 +540,7 @@ void RectangularContext<State>::execBeforeLoop() {
 
 template <typename State>
 bool RectangularContext<State>::doneCondition() {
-	DEBUG( "hypro.worker", "Checking done condition: CurrentLocalTime (" << carl::toDouble( mCurrentLocalTime ) << ") > timeBound (" << mSettings.timeBound << "), number of continuous evolution handlers: " << mContinuousEvolutionHandlers.size() );
+	DEBUG( "hypro.worker", "Checking done condition: CurrentLocalTime (" << toDouble( mCurrentLocalTime ) << ") > timeBound (" << mSettings.timeBound << "), number of continuous evolution handlers: " << mContinuousEvolutionHandlers.size() );
 	return ( mContinuousEvolutionHandlers.size() == 0 ) || ( mCurrentLocalTime > mSettings.timeBound );
 }
 

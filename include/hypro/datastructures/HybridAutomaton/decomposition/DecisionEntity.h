@@ -11,7 +11,6 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/connected_components.hpp>
 #include <boost/graph/graph_traits.hpp>
-#include <carl/util/Singleton.h>
 
 namespace hypro {
 /**

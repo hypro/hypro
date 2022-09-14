@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../../types.h"
 #include "../../../util/logging/Filewriter.h"
 #include "../../../util/logging/Logger.h"
 #include "../../HybridAutomaton/HybridAutomaton.h"
@@ -9,7 +10,6 @@
 #include "EventTimingContainer.h"
 #include "EventTimingNode.h"
 
-#include <carl/util/Singleton.h>
 #include <optional>
 #include <string>
 

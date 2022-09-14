@@ -1,7 +1,6 @@
 #pragma once
+#include "../../../types.h"
 #include "HierarchicalIntervalVector.h"
-
-#include <carl/interval/Interval.h>
 
 namespace hypro {
 

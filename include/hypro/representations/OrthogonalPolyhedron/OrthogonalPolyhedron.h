@@ -10,11 +10,11 @@
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Vertex.h"
 #include "../../datastructures/VertexContainer.h"
+#include "../../types.h"
 #include "../Box/Box.h"
 #include "Grid.h"
 #include "NeighborhoodContainer.h"
 
-#include <carl/core/Variable.h>
 #include <fstream>
 #include <iosfwd>
 #include <list>

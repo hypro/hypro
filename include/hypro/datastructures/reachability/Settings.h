@@ -12,7 +12,6 @@
 #include "../../util/type_handling/representation_enums.h"
 #include "../../util/type_handling/settings_enums.h"
 
-#include <carl/numbers/numbers.h>
 #include <iosfwd>
 #include <string>
 
@@ -194,8 +193,8 @@ struct ReachabilitySettings {
 	 * @return     Reference to the outstream.
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const ReachabilitySettings& rhs ) {
-		ostr << "Local time-horizon: " << carl::toDouble( rhs.timeBound ) << std::endl;
-		ostr << "Time-step size: " << carl::toDouble( rhs.timeStep ) << std::endl;
+		ostr << "Local time-horizon: " << toDouble( rhs.timeBound ) << std::endl;
+		ostr << "Time-step size: " << toDouble( rhs.timeStep ) << std::endl;
 		ostr << "Jump-depth: " << rhs.jumpDepth << std::endl;
 		ostr << "Clustering: " << rhs.clustering << std::endl;
 		return ostr;

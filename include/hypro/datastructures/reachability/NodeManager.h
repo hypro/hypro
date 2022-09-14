@@ -14,7 +14,6 @@
 #include "ReachTree.h"
 #include "ReachTreeNode.h"
 
-#include <carl/util/Singleton.h>
 #include <iosfwd>
 
 namespace hypro {

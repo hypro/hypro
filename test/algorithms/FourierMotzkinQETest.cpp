@@ -10,9 +10,9 @@ using Constr = ConstraintT<mpq_class>;
 using Form = FormulaT<mpq_class>;
 
 TEST( FourierMotzkinEliminationTest, SingleVariable ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) - Pol( y ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) + Pol( y ) + Pol( -5 ), carl::Relation::LEQ );
@@ -30,8 +30,8 @@ TEST( FourierMotzkinEliminationTest, SingleVariable ) {
 }
 
 TEST( FourierMotzkinEliminationTest, NoReminder ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
 
 	Constr c1 = Constr( Pol( x ) - Pol( y ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ) + Pol( -5 ), carl::Relation::LEQ );
@@ -51,9 +51,9 @@ TEST( FourierMotzkinEliminationTest, NoReminder ) {
 }
 
 TEST( FourierMotzkinEliminationTest, Reminder ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) - Pol( y ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ) + Pol( -5 ), carl::Relation::LEQ );
@@ -75,9 +75,9 @@ TEST( FourierMotzkinEliminationTest, Reminder ) {
 }
 
 TEST( FourierMotzkinEliminationTest, MultipleVariables ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) - Pol( y ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( y ), carl::Relation::GEQ );
@@ -97,9 +97,9 @@ TEST( FourierMotzkinEliminationTest, MultipleVariables ) {
 }
 
 TEST( FourierMotzkinEliminationTest, SingleVariableEquation ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ), carl::Relation::LEQ );
@@ -124,9 +124,9 @@ TEST( FourierMotzkinEliminationTest, SingleVariableEquation ) {
 }
 
 TEST( FourierMotzkinEliminationTest, SingleVariableEquationInconsistent ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ), carl::Relation::LEQ );
@@ -150,9 +150,9 @@ TEST( FourierMotzkinEliminationTest, SingleVariableEquationInconsistent ) {
 }
 
 TEST( FourierMotzkinEliminationTest, SingleVariableEquationInconsistent2 ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ), carl::Relation::LEQ );

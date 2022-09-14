@@ -10,8 +10,6 @@
 #include "../types.h"
 #include "../util.h"
 
-#include <carl/interval/Interval.h>
-
 namespace hypro {
 
 template <class Number>
@@ -35,7 +33,6 @@ ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> co
 
 template <class Representation>
 std::vector<Representation> aggregate( int segmentsPerBlock, std::vector<Representation>& valuationSets );
-
 
 }  // namespace hypro
 

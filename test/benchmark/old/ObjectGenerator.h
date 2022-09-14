@@ -38,8 +38,8 @@ class ObjectGenerator {
 
 	Representation createSet( BenchmarkSetup<Number> _setup ) const {
 		std::vector<Point<Number>> pointVector;
-		std::uniform_real_distribution<double> distr( carl::toDouble( _setup.minValue ),
-													  carl::toDouble( _setup.maxValue ) );
+		std::uniform_real_distribution<double> distr( toDouble( _setup.minValue ),
+													  toDouble( _setup.maxValue ) );
 		for ( unsigned i = 0; i < _setup.vertices; ++i ) {
 			vector_t<Number> coordinates( _setup.dimension );
 			for ( unsigned j = 0; j < _setup.dimension; ++j ) {
@@ -51,8 +51,8 @@ class ObjectGenerator {
 	}
 
 	vector_t<Number> createVector( BenchmarkSetup<Number> _setup ) const {
-		std::uniform_real_distribution<double> distr( carl::toDouble( _setup.minValue ),
-													  carl::toDouble( _setup.maxValue ) );
+		std::uniform_real_distribution<double> distr( toDouble( _setup.minValue ),
+													  toDouble( _setup.maxValue ) );
 		vector_t<Number> coordinates( _setup.dimension );
 		for ( unsigned j = 0; j < _setup.dimension; ++j ) {
 			coordinates( j ) = Number( distr( mRand ) );
@@ -81,8 +81,8 @@ class ObjectGenerator {
 			// Generate point inside box
 			vector_t<Number> p = vector_t<Number>::Zero( rep.dimension() );
 			for ( unsigned i = 0; i < rep.dimension(); i++ ) {
-				std::uniform_real_distribution<double> distr( carl::toDouble( rep.min().at( i ) ),
-															  carl::toDouble( rep.max().at( i ) ) );
+				std::uniform_real_distribution<double> distr( toDouble( rep.min().at( i ) ),
+															  toDouble( rep.max().at( i ) ) );
 				p( i ) = Number( distr( mRand ) );
 			}
 			// Compute halfplane distance

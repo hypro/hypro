@@ -1,9 +1,8 @@
 
 #pragma once
+#include "../../../types.h"
 #include "helper_functions.h"
 #include "soplex_hypro.h"
-
-#include <carl/core/Relation.h>
 
 namespace hypro {
 

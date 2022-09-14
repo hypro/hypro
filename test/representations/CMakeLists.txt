@@ -2,6 +2,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     # reduce compiler optimization for tests
     set(representation_test_sources
+            BoundednessTest.cpp
             BoxTest.cpp
             CarlPolytopeTest.cpp
             ConverterTest.cpp

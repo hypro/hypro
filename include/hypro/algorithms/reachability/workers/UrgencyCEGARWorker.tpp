@@ -149,7 +149,7 @@ auto UrgencyCEGARWorker<Representation, Automaton>::computeJumpSuccessors( const
 	if ( mJumpPredecessors.find( transition ) == mJumpPredecessors.end() ) {
 		mJumpPredecessors[transition] = std::vector<IndexedValuationSet<Representation>>();
 		for ( std::size_t i = 0; i < task.getFlowpipe().size(); ++i ) {
-			if ( timeOfJump.isUnbounded() ||
+			if ( isUnbounded( timeOfJump ) ||
 				 ( task.getTimings().lower() + task.getFpTimings()[i] <= timeOfJump.upper() && task.getTimings().upper() + task.getFpTimings()[i] >= timeOfJump.lower() ) ) {
 				auto [containment, intersected] = intersect( task.getFlowpipe()[i], transition->getGuard() );
 				if ( containment != CONTAINMENT::NO ) {

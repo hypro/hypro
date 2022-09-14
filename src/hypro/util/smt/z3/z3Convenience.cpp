@@ -26,17 +26,17 @@
 namespace hypro {
 
 z3::expr toZ3( const FormulaT<tNumber>& inFormula, z3Context& c, std::map<std::size_t, z3::expr>& z3variables ) {
-	switch ( inFormula.getType() ) {
+	switch ( getType( inFormula ) ) {
 		case carl::FormulaType::CONSTRAINT: {
 			auto& pool = VariablePool::getInstance();
 			const auto& constraint = inFormula.constraint();
 			const auto& pol = constraint.lhs();
 			assert( pol.isLinear() );
 			auto vars = variables( pol );
-			z3::expr poly = c.real_val( pol.constantPart() );
+			z3::expr poly = c.real_val( constantPart( pol ) );
 			for ( const auto& v : vars ) {
 				auto coef = pol.coeff( v, 1 );
-				auto z3coeff = c.real_val( coef.constantPart() );
+				auto z3coeff = c.real_val( constantPart( coef ) );
 				if ( z3variables.count( pool.id( v ) ) == 0 ) {
 					const char* varName = ( "x_" + std::to_string( pool.id( v ) ) ).c_str();
 					auto var = c.real_const( varName );

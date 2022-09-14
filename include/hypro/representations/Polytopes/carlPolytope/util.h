@@ -104,10 +104,10 @@ vector_t<D> constraintNormal( const ConstraintT<N>& c, std::size_t dim ) {
 		if ( c.relation() == carl::Relation::LEQ || c.relation() == carl::Relation::LESS ||
 			 c.relation() == carl::Relation::EQ ) {
 			normal( VariablePool::getInstance().id( getVar( var ) ) ) =
-				  carl::convert<N, D>( c.lhs().coeff( getVar( var ), 1 ).constantPart() );
+				  carl::convert<N, D>( constantPart( c.lhs().coeff( getVar( var ), 1 ) ) );
 		} else {
 			normal( VariablePool::getInstance().id( getVar( var ) ) ) =
-				  -carl::convert<N, D>( c.lhs().coeff( getVar( var ), 1 ).constantPart() );
+				  -carl::convert<N, D>( constantPart( c.lhs().coeff( getVar( var ), 1 ) ) );
 		}
 	}
 	return normal;
@@ -117,9 +117,9 @@ template <typename N, typename D>
 D normalizedOffset( const ConstraintT<N>& c ) {
 	if ( c.relation() == carl::Relation::LEQ || c.relation() == carl::Relation::LESS ||
 		 c.relation() == carl::Relation::EQ ) {
-		return -carl::convert<N, D>( c.lhs().constantPart() );
+		return -carl::convert<N, D>( constantPart( c.lhs() ) );
 	} else {
-		return carl::convert<N, D>( c.lhs().constantPart() );
+		return carl::convert<N, D>( constantPart( c.lhs() ) );
 	}
 }
 
@@ -149,7 +149,7 @@ std::vector<Halfspace<D>> computeHalfspaces( const FormulaT<N>& formula, std::si
 
 	std::vector<Halfspace<D>> res;
 	std::vector<ConstraintT<N>> constraints;
-	formula.getConstraints( constraints );
+	getConstraints( formula, constraints );
 
 	for ( const auto& c : constraints ) {
 		auto tmp = constraintToHalfspace<N, D>( c, dim );
@@ -161,12 +161,12 @@ std::vector<Halfspace<D>> computeHalfspaces( const FormulaT<N>& formula, std::si
 
 template <typename N, typename D>
 D computeWidening( const ConstraintT<N>& constraint ) {
-	if ( constraint.lhs().constantPart() == carl::constant_zero<N>().get() ) {
+	if ( constantPart( constraint.lhs() ) == carl::constant_zero<N>().get() ) {
 		return 0;
 	}
 
 	// check if origin contained
-	bool originContained = constraint.lhs().constantPart() > 0;
+	bool originContained = constantPart( constraint.lhs() ) > 0;
 	D widening = 0.0001;
 	D normOff = normalizedOffset<N, D>( constraint );
 

@@ -14,7 +14,6 @@
 #include "test/defines.h"
 
 #include "gtest/gtest.h"
-#include <carl/numbers/numbers.h>
 #include <cereal/archives/binary.hpp>
 #include <cereal/types/vector.hpp>
 #include <hypro/datastructures/HybridAutomaton/Condition.h>

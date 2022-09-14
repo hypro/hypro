@@ -73,7 +73,7 @@ EvaluationResult<Number> glpkOptimizeLinearPostSolve( glpk_context& context, con
 	int* rowIndices = new int[constraints.cols() + 1];
 	double* rowValues = new double[constraints.cols() + 1];
 	for ( int i = 0; i <= constraints.cols(); ++i ) {
-		rowValues[i] = carl::toDouble( _direction( i - 1 ) );
+		rowValues[i] = toDouble( _direction( i - 1 ) );
 		rowIndices[i] = i;
 	}
 	// Add row to problem:
@@ -81,10 +81,10 @@ EvaluationResult<Number> glpkOptimizeLinearPostSolve( glpk_context& context, con
 
 	// Set presolution bound:
 	if ( glp_get_obj_dir( context.lp ) == GLP_MAX ) {
-		glp_set_row_bnds( context.lp, constraints.rows() + 1, GLP_LO, carl::toDouble( preSolution.supportValue ), 0.0 );
+		glp_set_row_bnds( context.lp, constraints.rows() + 1, GLP_LO, toDouble( preSolution.supportValue ), 0.0 );
 	} else {
 		assert( glp_get_obj_dir( context.lp ) == GLP_MIN );
-		glp_set_row_bnds( context.lp, constraints.rows() + 1, GLP_UP, 0.0, carl::toDouble( preSolution.supportValue ) );
+		glp_set_row_bnds( context.lp, constraints.rows() + 1, GLP_UP, 0.0, toDouble( preSolution.supportValue ) );
 	}
 
 	EvaluationResult<Number> res = glpkOptimizeLinear( context, _direction, constraints, constants, useExact );
@@ -113,7 +113,7 @@ EvaluationResult<Number> glpkOptimizeLinear( glpk_context& context, const vector
 	// setup glpk
 	for ( unsigned i = 0; i < constraints.cols(); i++ ) {
 		glp_set_col_bnds( context.lp, i + 1, GLP_FR, 0.0, 0.0 );
-		glp_set_obj_coef( context.lp, i + 1, carl::toDouble( _direction( i ) ) );
+		glp_set_obj_coef( context.lp, i + 1, toDouble( _direction( i ) ) );
 	}
 	/* solve problem */
 	if ( useExact ) {
@@ -149,7 +149,7 @@ bool glpkCheckPoint( glpk_context& context, const matrix_t<Number>& constraints,
 	// set point
 	assert( constraints.cols() == point.rawCoordinates().rows() );
 	for ( unsigned i = 0; i < constraints.cols(); ++i ) {
-		glp_set_col_bnds( context.lp, i + 1, GLP_FX, carl::toDouble( point.rawCoordinates()( i ) ), 0.0 );
+		glp_set_col_bnds( context.lp, i + 1, GLP_FX, toDouble( point.rawCoordinates()( i ) ), 0.0 );
 		glp_set_obj_coef( context.lp, i + 1, 1.0 );	 // not needed?
 	}
 	glp_simplex( context.lp, &context.parm );
@@ -214,15 +214,15 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 			switch ( relation ) {
 				case carl::Relation::LEQ:
 					// set upper bounds, lb-values (here 0.0) are ignored.
-					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_UP, 0.0, carl::toDouble( constants( constraintIndex ) ) );
+					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_UP, 0.0, toDouble( constants( constraintIndex ) ) );
 					break;
 				case carl::Relation::GEQ:
 					// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_LO, carl::toDouble( constants( constraintIndex ) ), 0.0 );
+					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_LO, toDouble( constants( constraintIndex ) ), 0.0 );
 					break;
 				case carl::Relation::EQ:
 					// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_FX, carl::toDouble( constants( constraintIndex ) ), 0.0 );
+					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_FX, toDouble( constants( constraintIndex ) ), 0.0 );
 					break;
 				default:
 					// glpk cannot handle strict inequalities.
@@ -241,15 +241,15 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 		switch ( relations[idx] ) {
 			case carl::Relation::LEQ:
 				// set upper bounds, lb-values (here 0.0) are ignored.
-				glp_set_row_bnds( context.lp, int( idx ) + 1, GLP_UP, 0.0, carl::toDouble( constants( idx ) ) );
+				glp_set_row_bnds( context.lp, int( idx ) + 1, GLP_UP, 0.0, toDouble( constants( idx ) ) );
 				break;
 			case carl::Relation::GEQ:
 				// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-				glp_set_row_bnds( context.lp, int( idx ) + 1, GLP_LO, carl::toDouble( constants( idx ) ), 0.0 );
+				glp_set_row_bnds( context.lp, int( idx ) + 1, GLP_LO, toDouble( constants( idx ) ), 0.0 );
 				break;
 			case carl::Relation::EQ:
 				// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-				glp_set_row_bnds( context.lp, int( idx ) + 1, GLP_FX, carl::toDouble( constants( idx ) ), 0.0 );
+				glp_set_row_bnds( context.lp, int( idx ) + 1, GLP_FX, toDouble( constants( idx ) ), 0.0 );
 				break;
 			default:
 				// glpk cannot handle strict inequalities.

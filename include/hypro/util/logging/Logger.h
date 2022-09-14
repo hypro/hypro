@@ -1,7 +1,7 @@
 #pragma once
 
-#include <carl/io/streamingOperators.h>
 #include <hypro/flags.h>
+#include <hypro/types.h>
 #include <iostream>
 #include <sstream>
 #include <thread>

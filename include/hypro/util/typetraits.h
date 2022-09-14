@@ -1,5 +1,6 @@
 #pragma once
-#include <carl/numbers/numbers.h>
+#include "../types.h"
+
 #include <memory>
 #include <type_traits>
 

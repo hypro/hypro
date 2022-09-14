@@ -8,9 +8,9 @@
 
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Vertex.h"
+#include "../../types.h"
 
 #include <bitset>
-#include <carl/core/Variable.h>
 #include <map>
 #include <vector>
 

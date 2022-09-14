@@ -9,8 +9,6 @@
 #include "Strategy.h"
 #include "StrategyNode.h"
 
-#include <carl/util/Singleton.h>
-
 namespace hypro {
 /**
  * SettingsProvider is a Singleton class providing meta information about the reachability analysis process.

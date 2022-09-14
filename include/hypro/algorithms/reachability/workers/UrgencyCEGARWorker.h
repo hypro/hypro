@@ -87,7 +87,7 @@ class UrgencyCEGARWorker {
 	std::vector<TimedValuationSet<Representation>> computeJumpSuccessors(
 		  const ReachTreeNode<Representation, LocationT>& task,
 		  const Transition<Number, LocationT>* transition,
-		  const carl::Interval<SegmentInd>& timeOfJump = carl::Interval<SegmentInd>::unboundedInterval() );
+		  const carl::Interval<SegmentInd>& timeOfJump = createUnboundedInterval<SegmentInd>() );
 
 	/**
 	 * @brief Computes the states reachable by taking any discrete transition.

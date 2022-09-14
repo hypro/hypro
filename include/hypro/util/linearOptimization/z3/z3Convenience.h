@@ -20,10 +20,9 @@
 
 #include <hypro/flags.h>
 #ifdef HYPRO_USE_Z3
+#include "../../../types.h"
 #include "z3Context.h"
 
-#include <carl/core/Relation.h>
-#include <carl/util/Singleton.h>
 #include <thread>
 
 namespace hypro {

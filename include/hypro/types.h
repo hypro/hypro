@@ -9,11 +9,14 @@
 
 #pragma once
 
+// clang-format off
+#include <hypro/flags.h>
+// clang-format on
+
+#include "util/adaptions_carl/adaptions_includes.h"
 #include "util/type_handling/better_enums/enum_default_ctor.h"
 
 #include <boost/operators.hpp>
-#include <carl/numbers/numbers.h>
-#include <carl/util/hash.h>
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/StdVector>

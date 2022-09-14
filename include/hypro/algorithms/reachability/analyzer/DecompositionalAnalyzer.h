@@ -9,7 +9,6 @@
 
 #pragma once
 #include <boost/function_output_iterator.hpp>
-#include <carl/numbers/numbers.h>
 #include <hypro/algorithms/reachability/analyzer/DecompositionalUtil.h>
 #include <hypro/algorithms/reachability/analyzer/ReturnTypes.h>
 #include <hypro/algorithms/reachability/types.h>

@@ -35,7 +35,7 @@ template <typename Number, typename tNumber>
 std::pair<Transition<Number, Location<Number>>*, carl::Interval<tNumber>> Path<Number, tNumber>::getTransitionToJumpDepth( unsigned depth ) const {
 	TRACE( "hypro.datastructures", "Get transition for depth " << depth << " in path " << *this );
 	if ( depth == 0 ) {
-		return std::make_pair( nullptr, carl::Interval<tNumber>::unboundedInterval() );
+		return std::make_pair( nullptr, createUnboundedInterval<tNumber>() );
 	}
 
 	unsigned pos = 0;
@@ -50,7 +50,7 @@ std::pair<Transition<Number, Location<Number>>*, carl::Interval<tNumber>> Path<N
 	}
 	if ( pos == mPath.size() ) {
 		TRACE( "hypro.datastructures", "Did not find appropriate transition." );
-		return std::make_pair( nullptr, carl::Interval<tNumber>::emptyInterval() );
+		return std::make_pair( nullptr, createEmptyInterval<tNumber>() );
 	}
 	return std::make_pair( mPath.at( pos ).transition, mPath.at( pos ).timeInterval );
 }

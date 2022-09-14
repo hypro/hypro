@@ -99,7 +99,7 @@ TYPED_TEST( CarlPolytopeTest, AddConstraint ) {
 	EXPECT_EQ( std::size_t( 2 ), c1.dimension() );
 
 	// add constraints which introduce a new variable - the dimension should be increased.
-	carl::Variable t = carl::freshRealVariable( "t" );
+	carl::Variable t = hypro::freshRealVariable( "t" );
 	c1.addConstraint( hypro::ConstraintT<TypeParam>( hypro::PolyT<TypeParam>( t ), carl::Relation::GEQ ) );
 	EXPECT_EQ( std::size_t( 3 ), c1.dimension() );
 

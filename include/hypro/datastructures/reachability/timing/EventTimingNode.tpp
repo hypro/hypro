@@ -61,7 +61,11 @@ void EventTimingNode<Number>::setEntryTimestamp( const carl::Interval<tNumber>& 
 template <typename Number>
 void EventTimingNode<Number>::extendEntryTimestamp( const carl::Interval<tNumber>& t ) {
 	TRACE( "hypro.datastructures.timing", "Update entry timestamp of " << this << " to " << t );
+#ifdef CARL_OLD_STRUCTURE
 	mEntryTimestamp = mEntryTimestamp.convexHull( t );
+#else
+	mEntryTimestamp = mEntryTimestamp.convex_hull( t );
+#endif
 }
 
 template <typename Number>

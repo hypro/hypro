@@ -1,11 +1,11 @@
 #pragma once
 #ifdef HYPRO_USE_CLP
+#include "../../../types.h"
 #include "../../logging/Logger.h"
 #include "helperFunctions.h"
 
 #include <ClpSimplex.hpp>
 #include <CoinPackedMatrix.hpp>
-#include <carl/core/Relation.h>
 
 namespace hypro {
 
@@ -68,15 +68,15 @@ struct clp_context {
 			for ( int i = 0; i < constants.rows(); ++i ) {
 				switch ( relations[i] ) {
 					case carl::Relation::LEQ:
-						mUpperBounds[i] = carl::toDouble( constants( i ) );
+						mUpperBounds[i] = toDouble( constants( i ) );
 						mLowerBounds[i] = -COIN_DBL_MAX;
 						break;
 					case carl::Relation::GEQ:
 						mUpperBounds[i] = COIN_DBL_MAX;
-						mLowerBounds[i] = carl::toDouble( constants( i ) );
+						mLowerBounds[i] = toDouble( constants( i ) );
 						break;
 					case carl::Relation::EQ:
-						mUpperBounds[i] = carl::toDouble( constants( i ) );
+						mUpperBounds[i] = toDouble( constants( i ) );
 						mLowerBounds[i] = mUpperBounds[i];
 						break;
 					default:

@@ -142,7 +142,6 @@ auto UrgencyRefinementAnalyzer<Representation, Automaton>::run() -> RefinementRe
 		// pop node
 		auto* currentNode = mWorkQueue.front();
 		mWorkQueue.pop_front();
-		// std::cout << "CEGAR Node at depth " << currentNode->getDepth() << "\n";
 
 		// skip descendants of refined nodes
 		auto node = currentNode;
@@ -373,7 +372,7 @@ bool UrgencyRefinementAnalyzer<Representation, Automaton>::isSuitableForRefineme
 	*/
 
 	// used for aggregation of initial set if demanded
-	TimedValuationSet<Representation> aggregatedInitial{ Representation::Empty(), carl::Interval<SegmentInd>::emptyInterval() };
+	TimedValuationSet<Representation> aggregatedInitial{ Representation::Empty(), createEmptyInterval<SegmentInd>() };
 
 	// path from candidate node to unsafe node
 	auto path = unsafeNode->getPath().tail( unsafeNode->getDepth() - candidate.node->getDepth() );
@@ -401,10 +400,10 @@ bool UrgencyRefinementAnalyzer<Representation, Automaton>::isSuitableForRefineme
 		} else {
 			if ( mRefinementSettings.aggregatedRefine ) {
 				aggregatedInitial.valuationSet = aggregatedInitial.valuationSet.unite( initial );
-				if ( aggregatedInitial.time.isEmpty() ) {
+				if ( isEmpty( aggregatedInitial.time ) ) {
 					aggregatedInitial.time = carl::Interval<SegmentInd>( candidateFpTimings[fpIndex] );
 				} else {
-					aggregatedInitial.time.setUpper( candidateFpTimings[fpIndex] );
+					setUpperBound( aggregatedInitial.time, candidateFpTimings[fpIndex] );
 				}
 			} else {
 				// get time horizon for first task

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <carl/core/MultivariatePolynomial.h>
-#include <carl/formula/Formula.h>
+#include "util/adaptions_carl/adaptions_includes.h"
 
 namespace hypro {
 

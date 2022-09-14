@@ -199,7 +199,7 @@ void TimedContext<State>::checkTransition() {
 
 template <typename State>
 carl::Interval<tNumber> TimedContext<State>::computeShortestElapsedTimeIntervalForSubspace( State& in, size_t index ) {
-	carl::Interval<tNumber> minInterval = carl::Interval<tNumber>::emptyInterval();
+	carl::Interval<tNumber> minInterval = createEmptyInterval<tNumber>();
 	tNumber minDiameter = -1.0;
 	// this should always be a dbm. If not, we deliberately throw the bad get exception
 	hypro::DifferenceBounds<Number> dbm = std::get<hypro::DifferenceBounds<Number>>( in.getSet( index ) );
@@ -288,7 +288,7 @@ carl::Interval<tNumber> TimedContext<State>::handshakeTimestamps( State& preOp, 
 		postOpTimeIntervals.insert( std::make_pair( index, normalized ) );
 	}
 
-	carl::Interval<tNumber> agreedTimeStamp = carl::Interval<tNumber>::emptyInterval();
+	carl::Interval<tNumber> agreedTimeStamp = createEmptyInterval<tNumber>();
 	bool first = true;
 	for ( auto it = postOpTimeIntervals.begin(); it != postOpTimeIntervals.end(); ++it ) {
 		if ( first ) {
@@ -303,7 +303,7 @@ carl::Interval<tNumber> TimedContext<State>::handshakeTimestamps( State& preOp, 
 
 	if ( agreedTimeStamp.isEmpty() ) {
 		// there was no agreement on the jump timestamp
-		return carl::Interval<tNumber>::emptyInterval();
+		return createEmptyInterval<tNumber>();
 	}
 	for ( size_t index = 0; index < postOp.getNumberSets(); index++ ) {
 		if ( types.at( index ) != hypro::SUBSPACETYPE::TIMED ) {

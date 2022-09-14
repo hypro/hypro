@@ -23,7 +23,7 @@ CoinPackedMatrix createMatrix( const matrix_t<Number>& in ) {
 	int pos = 0;
 	for ( int rowI = 0; rowI < in.rows(); ++rowI ) {
 		for ( int colI = 0; colI < in.cols(); ++colI ) {
-			elements[pos] = carl::toDouble( in( rowI, colI ) );
+			elements[pos] = toDouble( in( rowI, colI ) );
 			rowIndices[pos] = rowI;
 			colIndices[pos] = colI;
 			++pos;

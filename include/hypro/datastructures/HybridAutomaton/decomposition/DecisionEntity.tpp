@@ -286,7 +286,7 @@ template <typename Number>
 void DecisionEntity<Number>::addEdgesForRectTrafo( const std::vector<carl::Interval<Number>>& intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph ) {
 	for ( size_t i = 0; i < intervals.size(); i++ ) {
 		for ( size_t j = 0; j < intervals.size(); j++ ) {
-			if ( i != j && intervals[i] != carl::Interval<Number>::emptyInterval() && intervals[j] != carl::Interval<Number>::emptyInterval() ) {
+			if ( i != j && intervals[i] != createEmptyInterval<Number>() && intervals[j] != createEmptyInterval<Number>() ) {
 				boost::add_edge( i, j, graph );
 			}
 		}

@@ -196,12 +196,12 @@ std::vector<TimedValuationSet<Representation>> aggregate( size_t segmentsPerBloc
 
 		// block is now full, finish previous and start next one
 		if ( blockCount == segmentsPerBlock ) {
-			aggregated.back().time.setUpper( ind );
+			setUpperBound( aggregated.back().time, ind );
 			blockCount = 0;
 		}
 	}
 	// closure of last block which might be incomplete
-	aggregated.back().time.setUpper( enabled.back().index );
+	setUpperBound( aggregated.back().time, enabled.back().index );
 
 	return aggregated;
 }
