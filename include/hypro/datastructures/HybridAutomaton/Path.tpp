@@ -50,7 +50,7 @@ std::pair<Transition<Number>*, carl::Interval<tNumber>> Path<Number, tNumber>::g
 	}
 	if ( pos == mPath.size() ) {
 		TRACE( "hypro.datastructures", "Did not find appropriate transition." );
-		return std::make_pair( nullptr, carl::Interval<tNumber>::emptyInterval() );
+		return std::make_pair( nullptr, createEmptyInterval<tNumber>() );
 	}
 	return std::make_pair( mPath.at( pos ).transition, mPath.at( pos ).timeInterval );
 }

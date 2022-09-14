@@ -217,7 +217,7 @@ template <typename Number, typename Converter, typename Setting>
 std::vector<carl::Interval<Number>> CarlPolytopeT<Number, Converter, Setting>::getIntervals() const {
 	if ( this->empty() ) {
 		std::vector<carl::Interval<Number>> res;
-		res.emplace_back( carl::Interval<Number>::emptyInterval() );
+		res.emplace_back( createEmptyInterval<Number>() );
 		return res;
 	}
 	// Note: Alternatively use FM-elimination.

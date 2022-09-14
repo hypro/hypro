@@ -363,7 +363,7 @@ bool UrgencyRefinementAnalyzer<Representation>::isSuitableForRefinement(
 	*/
 
 	// used for aggregation of initial set if demanded
-	TimedValuationSet<Representation> aggregatedInitial{ Representation::Empty(), carl::Interval<SegmentInd>::emptyInterval() };
+	TimedValuationSet<Representation> aggregatedInitial{ Representation::Empty(), createEmptyInterval<SegmentInd>() };
 
 	// path from candidate node to unsafe node
 	auto path = unsafeNode->getPath().tail( unsafeNode->getDepth() - candidate.node->getDepth() );
@@ -391,7 +391,7 @@ bool UrgencyRefinementAnalyzer<Representation>::isSuitableForRefinement(
 		} else {
 			if ( mRefinementSettings.aggregatedRefine ) {
 				aggregatedInitial.valuationSet = aggregatedInitial.valuationSet.unite( initial );
-				if ( aggregatedInitial.time.isEmpty() ) {
+				if ( isEmpty( aggregatedInitial.time ) ) {
 					aggregatedInitial.time = carl::Interval<SegmentInd>( candidateFpTimings[fpIndex] );
 				} else {
 					setUpperBound( aggregatedInitial.time, candidateFpTimings[fpIndex] );

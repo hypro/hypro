@@ -44,7 +44,7 @@ class TimeInformation {
 	TimeInformation()
 		: mTimeIntervals( TimeIntervals{} ) {}
 	TimeInformation( std::size_t clockCount )
-		: mTimeIntervals( TimeIntervals( clockCount, carl::Interval<Number>::emptyInterval() ) ) {}
+		: mTimeIntervals( TimeIntervals( clockCount, createEmptyInterval<Number>() ) ) {}
 	TimeInformation( const TimeIntervals& timeIntervals )
 		: mTimeIntervals( timeIntervals ) {}
 	TimeInformation( std::size_t clockCount, Number lower, Number upper )
@@ -69,7 +69,7 @@ class TimeInformation {
 	}
 	bool empty() const {
 		return std::any_of( mTimeIntervals.begin(), mTimeIntervals.end(), []( const auto& time ) {
-			return time.isEmpty();
+			return isEmpty( time );
 		} );
 	}
 	TimeInformation<Number> intersect( const TimeInformation<Number>& rhs ) const {

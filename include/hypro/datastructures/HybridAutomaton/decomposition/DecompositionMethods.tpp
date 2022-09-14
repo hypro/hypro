@@ -2,7 +2,7 @@
 
 namespace hypro {
 template <typename Number>
-representation_name getRepresentationForSubspace( const Location<Number> &loc, size_t index ) {
+representation_name getRepresentationForSubspace( const Location<Number>& loc, size_t index ) {
 	// in the beginning we assume it is a timed automaton
 	bool isTimed = isTimedSubspace( loc, index );
 
@@ -14,7 +14,7 @@ representation_name getRepresentationForSubspace( const Location<Number> &loc, s
 }
 
 template <typename Number>
-representation_name getRepresentationForAutomaton( const HybridAutomaton<Number> &ha ) {
+representation_name getRepresentationForAutomaton( const HybridAutomaton<Number>& ha ) {
 	// in the beginning we assume it is a timed automaton
 	bool isTimed = isTimedAutomaton( ha );
 
@@ -26,7 +26,7 @@ representation_name getRepresentationForAutomaton( const HybridAutomaton<Number>
 }
 
 template <typename Number>
-representation_name getRepresentationForLocation( const Location<Number> &loc ) {
+representation_name getRepresentationForLocation( const Location<Number>& loc ) {
 	// in the beginning we assume it is a timed automaton
 	bool isTimed = isTimedLocation( loc );
 
@@ -38,21 +38,21 @@ representation_name getRepresentationForLocation( const Location<Number> &loc ) 
 }
 
 template <typename Number>
-bool isDiscreteSubspace( const Location<Number> &loc, size_t index ) {
+bool isDiscreteSubspace( const Location<Number>& loc, size_t index ) {
 	assert( index < loc.getNumberSubspaces() );
-	if ( loc.getFlowTypes()[ index ] == DynamicType::rectangular ) {
+	if ( loc.getFlowTypes()[index] == DynamicType::rectangular ) {
 		return false;
 	}
 	return loc.getLinearFlow( index ).isDiscrete();
 }
 
 template <typename Number>
-bool isTimedSubspace( const Location<Number> &loc, size_t index ) {
+bool isTimedSubspace( const Location<Number>& loc, size_t index ) {
 	assert( index < loc.getNumberSubspaces() );
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index );
-	if ( loc.getFlowTypes()[ index ] == DynamicType::rectangular ) {
+	if ( loc.getFlowTypes()[index] == DynamicType::rectangular ) {
 		return false;
-	}	
+	}
 	// check if flow is of the form
 	//	0 ... 0 1
 	//  .........
@@ -72,7 +72,7 @@ bool isTimedSubspace( const Location<Number> &loc, size_t index ) {
 		}
 	}
 
-	for ( const auto &transition : loc.getTransitions() ) {
+	for ( const auto& transition : loc.getTransitions() ) {
 		TRACE( "hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 
 		// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -116,12 +116,12 @@ bool isTimedSubspace( const Location<Number> &loc, size_t index ) {
 }
 
 template <typename Number>
-bool isSingularSubspace( const Location<Number> &loc, size_t index ) {
+bool isSingularSubspace( const Location<Number>& loc, size_t index ) {
 	assert( index < loc.getNumberSubspaces() );
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index );
-	if ( loc.getFlowTypes()[ index ] == DynamicType::rectangular ) {
+	if ( loc.getFlowTypes()[index] == DynamicType::rectangular ) {
 		return false;
-	}	
+	}
 	// check if flow is of the form
 	//	0 ... 0 c_1
 	//  .........
@@ -141,7 +141,7 @@ bool isSingularSubspace( const Location<Number> &loc, size_t index ) {
 		}
 	}
 
-	for ( const auto &transition : loc.getTransitions() ) {
+	for ( const auto& transition : loc.getTransitions() ) {
 		TRACE( "hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 
 		// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -166,10 +166,10 @@ bool isSingularSubspace( const Location<Number> &loc, size_t index ) {
 }
 
 template <typename Number>
-bool isRectangularSubspace( const Location<Number> &loc, size_t index ) {
+bool isRectangularSubspace( const Location<Number>& loc, size_t index ) {
 	assert( index < loc.getNumberSubspaces() );
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() << ", subspace " << index );
-	if ( loc.getFlowTypes()[ index ] != DynamicType::rectangular ) {
+	if ( loc.getFlowTypes()[index] != DynamicType::rectangular ) {
 		TRACE( "hypro.decisionEntity", "Flow is not rectangular." );
 		return false;
 	}
@@ -182,7 +182,7 @@ bool isRectangularSubspace( const Location<Number> &loc, size_t index ) {
 		}
 	}
 
-	for ( const auto &transition : loc.getTransitions() ) {
+	for ( const auto& transition : loc.getTransitions() ) {
 		TRACE( "hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 
 		// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -212,7 +212,7 @@ bool isRectangularSubspace( const Location<Number> &loc, size_t index ) {
 }
 
 template <typename Number>
-bool isTimedLocation( const Location<Number> &loc ) {
+bool isTimedLocation( const Location<Number>& loc ) {
 	TRACE( "hypro.decisionEntity", "Investigating " << loc.getName() );
 	// check if flow is of the form
 	//	0 ... 0 1
@@ -232,7 +232,7 @@ bool isTimedLocation( const Location<Number> &loc ) {
 		return false;
 	}
 
-	for ( const auto &transition : loc.getTransitions() ) {
+	for ( const auto& transition : loc.getTransitions() ) {
 		TRACE( "hypro.decisionEntity", "Investigating " << transition->getSource()->getName() << " -> " << transition->getTarget()->getName() );
 
 		// for each transitions check if the constraints of the guard set only only contain 0s and one entry 1/-1 at most
@@ -273,7 +273,7 @@ bool isTimedLocation( const Location<Number> &loc ) {
 }
 
 template <typename Number>
-bool isRectangularLocation( const Location<Number> &loc ) {
+bool isRectangularLocation( const Location<Number>& loc ) {
 	for ( size_t i = 0; i < loc.getNumberFlow(); i++ ) {
 		if ( !isRectangularSubspace( loc, i ) ) {
 			return false;
@@ -283,18 +283,18 @@ bool isRectangularLocation( const Location<Number> &loc ) {
 }
 
 template <typename Number>
-bool isTimedAutomaton( const HybridAutomaton<Number> &ha ) {
+bool isTimedAutomaton( const HybridAutomaton<Number>& ha ) {
 	return std::all_of( ha.getLocations().begin(), ha.getLocations().end(), []( auto locPtr ) { return isTimedLocation( *locPtr ); } );
 }
 
 template <typename Number>
-bool isRectangularAutomaton( const HybridAutomaton<Number> &ha ) {
+bool isRectangularAutomaton( const HybridAutomaton<Number>& ha ) {
 	return std::all_of( ha.getLocations().begin(), ha.getLocations().end(), []( auto locPtr ) { return isRectangularLocation( *locPtr ); } );
 }
 
 template <typename Number>
-bool checkDecomposed( const HybridAutomaton<Number> &automaton ) {
-	for ( const auto &locConditionPair : automaton.getInitialStates() ) {
+bool checkDecomposed( const HybridAutomaton<Number>& automaton ) {
+	for ( const auto& locConditionPair : automaton.getInitialStates() ) {
 		if ( locConditionPair.second.size() > 1 ) {
 			return true;
 		}
@@ -305,7 +305,7 @@ bool checkDecomposed( const HybridAutomaton<Number> &automaton ) {
 namespace detail {
 
 template <typename Number>
-void addEdgesForAffineTrafo( matrix_t<Number> affineTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
+void addEdgesForAffineTrafo( matrix_t<Number> affineTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph ) {
 	matrix_t<Number> tmp( affineTrafo );
 	// we do not consider the constant part of the trafo
 	tmp.conservativeResize( tmp.rows() - 1, tmp.cols() - 1 );
@@ -314,7 +314,7 @@ void addEdgesForAffineTrafo( matrix_t<Number> affineTrafo, boost::adjacency_list
 }
 
 template <typename Number>
-void addEdgesForLinTrafo( matrix_t<Number> linTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
+void addEdgesForLinTrafo( matrix_t<Number> linTrafo, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph ) {
 	for ( Eigen::Index i = 0; i < linTrafo.rows(); i++ ) {
 		for ( Eigen::Index j = 0; j < linTrafo.cols(); j++ ) {
 			if ( linTrafo( i, j ) != 0 ) {
@@ -325,10 +325,10 @@ void addEdgesForLinTrafo( matrix_t<Number> linTrafo, boost::adjacency_list<boost
 }
 
 template <typename Number>
-void addEdgesForRectTrafo( const std::vector<carl::Interval<Number>> &intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
+void addEdgesForRectTrafo( const std::vector<carl::Interval<Number>>& intervals, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph ) {
 	for ( size_t i = 0; i < intervals.size(); i++ ) {
 		for ( size_t j = 0; j < intervals.size(); j++ ) {
-			if ( i != j && intervals[i] != carl::Interval<Number>::emptyInterval() && intervals[j] != carl::Interval<Number>::emptyInterval() ) {
+			if ( i != j && intervals[i] != createEmptyInterval<Number>() && intervals[j] != createEmptyInterval<Number>() ) {
 				boost::add_edge( i, j, graph );
 			}
 		}
@@ -336,10 +336,10 @@ void addEdgesForRectTrafo( const std::vector<carl::Interval<Number>> &intervals,
 }
 
 template <typename Number>
-void addEdgesForRectMap( const std::map<carl::Variable, carl::Interval<Number>> &map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
-	auto &vpool = VariablePool::getInstance();
-	for ( const auto &keyValPair1 : map ) {
-		for ( const auto &keyValPair2 : map ) {
+void addEdgesForRectMap( const std::map<carl::Variable, carl::Interval<Number>>& map, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph ) {
+	auto& vpool = VariablePool::getInstance();
+	for ( const auto& keyValPair1 : map ) {
+		for ( const auto& keyValPair2 : map ) {
 			if ( keyValPair1.first != keyValPair2.first ) {
 				boost::add_edge( vpool.id( keyValPair1.first ), vpool.id( keyValPair2.first ), graph );
 			}
@@ -348,21 +348,21 @@ void addEdgesForRectMap( const std::map<carl::Variable, carl::Interval<Number>> 
 }
 
 template <typename Number>
-void addEdgesForCondition( const Condition<Number> &condition, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> &graph ) {
+void addEdgesForCondition( const Condition<Number>& condition, boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS>& graph ) {
 	if ( !( condition.size() > 0 ) ) {
-		//empty condition (e.g. location with no invariant) --> do nothing
+		// empty condition (e.g. location with no invariant) --> do nothing
 		return;
 	}
 	matrix_t<Number> tmp( condition.getMatrix() );
 
 	for ( Eigen::Index i = 0; i < tmp.rows(); i++ ) {
-		//pairwise comparison of the row entries
+		// pairwise comparison of the row entries
 		for ( Eigen::Index j = 0; j < tmp.cols(); j++ ) {
 			for ( Eigen::Index k = 0; k < tmp.cols(); k++ ) {
-				//Example:
-				// row i: 0,0,2,0,0,-4
-				//            j      k
-				// => j and k are dependent
+				// Example:
+				//  row i: 0,0,2,0,0,-4
+				//             j      k
+				//  => j and k are dependent
 				if ( tmp( i, j ) != 0 && tmp( i, k ) != 0 ) {
 					boost::add_edge( j, k, graph );
 				}
@@ -373,23 +373,23 @@ void addEdgesForCondition( const Condition<Number> &condition, boost::adjacency_
 
 template <typename Number>
 Condition<Number> addVarToCondition( Condition<Number> cond, std::size_t subspace ) {
-    if ( cond.empty() ) {
-        return cond;
-    }
-    auto matrix = cond.getMatrix( subspace );
-    matrix_t<Number> newConditionMatrix( matrix.rows(), matrix.cols() + 1 );
-    newConditionMatrix.leftCols( matrix.cols() ) = matrix;
-    for ( Eigen::Index i = 0; i < newConditionMatrix.rows(); ++i ) {
-        newConditionMatrix( i, newConditionMatrix.cols() - 1 ) = 0;
-    }
-    cond.setMatrix( newConditionMatrix, subspace );
-    return cond;
+	if ( cond.empty() ) {
+		return cond;
+	}
+	auto matrix = cond.getMatrix( subspace );
+	matrix_t<Number> newConditionMatrix( matrix.rows(), matrix.cols() + 1 );
+	newConditionMatrix.leftCols( matrix.cols() ) = matrix;
+	for ( Eigen::Index i = 0; i < newConditionMatrix.rows(); ++i ) {
+		newConditionMatrix( i, newConditionMatrix.cols() - 1 ) = 0;
+	}
+	cond.setMatrix( newConditionMatrix, subspace );
+	return cond;
 }
 
 }  // namespace detail
 
 template <typename Number>
-std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomaton<Number> &automaton ) {
+std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomaton<Number>& automaton ) {
 	if ( checkDecomposed( automaton ) ) {
 		// return empty decomposition
 		return std::vector<std::vector<std::size_t>>();
@@ -397,14 +397,14 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 	typedef boost::adjacency_list<boost::vecS, boost::vecS, boost::undirectedS> Graph;
 	Graph G( automaton.dimension() );
 
-	//check flow and invariant of locations
+	// check flow and invariant of locations
 	for ( auto locPtr : automaton.getLocations() ) {
 		// Automaton is not decomposed so every location should have exactly one flow
 		if ( locPtr->getNumberSubspaces() != 1 ) {
 			std::cout << "Number subspaces: " << locPtr->getNumberSubspaces() << "\n";
 		}
 		assert( locPtr->getNumberSubspaces() == 1 && "Subspace decomposition called on decomposed automaton" );
-		switch ( locPtr->getFlowTypes()[ 0 ] ) {
+		switch ( locPtr->getFlowTypes()[0] ) {
 			case DynamicType::discrete:
 				[[fallthrough]];
 			case DynamicType::timed:
@@ -418,7 +418,7 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 				break;
 			case DynamicType::rectangular:
 				// Rectangular flows do not introduce dependencies
-				//detail::addEdgesForRectMap( locPtr->getRectangularFlow().getFlowIntervals(), G );
+				// detail::addEdgesForRectMap( locPtr->getRectangularFlow().getFlowIntervals(), G );
 				break;
 			default:
 				assert( false && "Decompososition for flow type not implemented yet." );
@@ -427,20 +427,20 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 		detail::addEdgesForCondition( locPtr->getInvariant(), G );
 	}
 
-	//check reset and guards of transitions
-	for ( const auto &transition : automaton.getTransitions() ) {
+	// check reset and guards of transitions
+	for ( const auto& transition : automaton.getTransitions() ) {
 		detail::addEdgesForLinTrafo( transition->getReset().getMatrix(), G );
 		// Resets to intervals do not introduce dependencies
-		//detail::addEdgesForRectTrafo( transition->getReset().getIntervals(), G );
+		// detail::addEdgesForRectTrafo( transition->getReset().getIntervals(), G );
 		detail::addEdgesForCondition( transition->getGuard(), G );
 	}
 
-	//check local bad states
-	for ( const auto &locConditionPair : automaton.getLocalBadStates() ) {
+	// check local bad states
+	for ( const auto& locConditionPair : automaton.getLocalBadStates() ) {
 		detail::addEdgesForCondition( locConditionPair.second, G );
 	}
-	//check global bad states
-	for ( const auto &condition : automaton.getGlobalBadStates() ) {
+	// check global bad states
+	for ( const auto& condition : automaton.getGlobalBadStates() ) {
 		detail::addEdgesForCondition( condition, G );
 	}
 
@@ -458,21 +458,21 @@ std::vector<std::vector<std::size_t>> getSubspacePartition( const HybridAutomato
 }
 
 inline std::pair<std::size_t, std::size_t> getSubspaceIndexOfDimension( std::size_t dimension, const Decomposition& decomposition ) {
-    std::size_t accumulatedDimensions = 0;
-    std::size_t subspaceSize;
-    for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
-        subspaceSize = decomposition.subspaces[ subspace ].size();
-        if ( accumulatedDimensions + subspaceSize > dimension ) {
-            return std::make_pair( subspace, dimension - accumulatedDimensions );
-        }
-        accumulatedDimensions += subspaceSize;
-    }
-    assert ( false && "Dimension not found in decomposition (dimension too large)" );
-    return std::make_pair( 0, 0 );
+	std::size_t accumulatedDimensions = 0;
+	std::size_t subspaceSize;
+	for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
+		subspaceSize = decomposition.subspaces[subspace].size();
+		if ( accumulatedDimensions + subspaceSize > dimension ) {
+			return std::make_pair( subspace, dimension - accumulatedDimensions );
+		}
+		accumulatedDimensions += subspaceSize;
+	}
+	assert( false && "Dimension not found in decomposition (dimension too large)" );
+	return std::make_pair( 0, 0 );
 }
 
 template <typename Number>
-std::pair<HybridAutomaton<Number>, Decomposition> decomposeAutomaton( const HybridAutomaton<Number> &automaton ) {
+std::pair<HybridAutomaton<Number>, Decomposition> decomposeAutomaton( const HybridAutomaton<Number>& automaton ) {
 	// compute decomposition
 	auto partition = getSubspacePartition( automaton );
 
@@ -541,30 +541,30 @@ std::vector<DynamicType> refineSubspaceDynamicTypes( const HybridAutomaton<Numbe
 
 template <typename Number>
 void addClocksToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, std::size_t clockCount ) {
-    for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
-    	addVarToAutomaton( ha, subspace, Number( 1 ) );
-    	// initially zero
-    	std::map<const Location<Number>*, Condition<Number>> newInitialStates;
-    	for ( auto& [loc, cond] : ha.getInitialStates() ) {
-    		Condition<Number> newCond = cond;
-    		auto condMatrix = cond.getMatrix( subspace );
+	for ( std::size_t clockIndex = 0; clockIndex < clockCount; ++clockIndex ) {
+		addVarToAutomaton( ha, subspace, Number( 1 ) );
+		// initially zero
+		std::map<const Location<Number>*, Condition<Number>> newInitialStates;
+		for ( auto& [loc, cond] : ha.getInitialStates() ) {
+			Condition<Number> newCond = cond;
+			auto condMatrix = cond.getMatrix( subspace );
 			auto condVector = cond.getVector( subspace );
 			condMatrix.conservativeResize( condMatrix.rows() + 2, condMatrix.cols() );
 			condVector.conservativeResize( condVector.rows() + 2 );
-			for( Eigen::Index i = 0; i < condMatrix.cols() - 1; ++i ) {
+			for ( Eigen::Index i = 0; i < condMatrix.cols() - 1; ++i ) {
 				condMatrix( condMatrix.rows() - 2, i ) = 0;
 				condMatrix( condMatrix.rows() - 1, i ) = 0;
 			}
 			condMatrix( condMatrix.rows() - 2, condMatrix.cols() - 1 ) = 1;
 			condMatrix( condMatrix.rows() - 1, condMatrix.cols() - 1 ) = -1;
 			condVector( condVector.rows() - 2 ) = 0;
-			condVector( condVector.rows() - 1 ) = 0;			
+			condVector( condVector.rows() - 1 ) = 0;
 			newCond.setMatrix( condMatrix, subspace );
 			newCond.setVector( condVector, subspace );
-			newInitialStates[ loc ] = newCond;
-    	}
-    	ha.setInitialStates( newInitialStates );
-    }
+			newInitialStates[loc] = newCond;
+		}
+		ha.setInitialStates( newInitialStates );
+	}
 }
 
 template <typename Number>
@@ -580,7 +580,7 @@ void addInitialVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace
 			auto condVector = cond.getVector( subspace );
 			condMatrix.conservativeResize( condMatrix.rows() + 2, condMatrix.cols() );
 			condVector.conservativeResize( condVector.rows() + 2 );
-			for( Eigen::Index i = 0; i < condMatrix.cols() - 1; ++i ) {
+			for ( Eigen::Index i = 0; i < condMatrix.cols() - 1; ++i ) {
 				condMatrix( condMatrix.rows() - 2, i ) = 0;
 				condMatrix( condMatrix.rows() - 1, i ) = 0;
 			}
@@ -590,83 +590,83 @@ void addInitialVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace
 			condVector( condVector.rows() - 1 ) = 0;
 			newCond.setMatrix( condMatrix, subspace );
 			newCond.setVector( condVector, subspace );
-			newInitialStates[ loc ] = newCond;
+			newInitialStates[loc] = newCond;
 		}
 		ha.setInitialStates( newInitialStates );
-   	}
+	}
 }
 
 template <typename Number>
 void addVarToAutomaton( HybridAutomaton<Number>& ha, std::size_t subspace, Number flow ) {
-    for ( auto& loc : ha.getLocations() ) {
-        if ( loc->getFlowTypes()[ subspace ] == DynamicType::rectangular ) {
-            // rectangular flow
-            auto clockVariable = VariablePool::getInstance().newCarlVariable();
-            auto locFlow = loc->getRectangularFlow( subspace );
-            locFlow.setFlowIntervalForDimension( carl::Interval<Number>( flow ), clockVariable );
-        } else {
-            // linear flow types
-            auto flowMatrix = loc->getLinearFlow( subspace ).getFlowMatrix();
-            std::size_t dim = flowMatrix.rows() - 1;
-            // add var as last variable (second to last row/col, since last row/col is affine)
-            matrix_t<Number> newFlowMatrix( flowMatrix.rows() + 1, flowMatrix.cols() + 1 );
-            // flow for variables doesn't change
-            newFlowMatrix.topLeftCorner( dim, dim ) = flowMatrix.topLeftCorner( dim, dim );
-            for ( std::size_t i = 0; i < dim; ++i ) {
-                // no variable depends on the var
-                newFlowMatrix( i, dim ) = 0;
-                // old affine coefficients
-                newFlowMatrix( i, dim + 1 ) = flowMatrix( i, dim );
-            }
-            // bottom 2 rows for var + affine
-            newFlowMatrix.bottomRows( 2 ) = matrix_t<Number>::Zero( 2, dim + 2 );
-            newFlowMatrix( dim, dim + 1 ) = flow;
-            loc->setFlow( newFlowMatrix, subspace );
-        }
-        // invariant
-        loc->setInvariant( detail::addVarToCondition( loc->getInvariant(), subspace ) );
-    }
-    // local bad states
-    std::map<const Location<Number>*, Condition<Number>> newLocalBadStates;
-    for ( auto& [loc, cond] : ha.getLocalBadStates() ) {
-        newLocalBadStates[ loc ] = detail::addVarToCondition( cond, subspace );
-    }
-    ha.setLocalBadStates( newLocalBadStates );
-    // global bad states
-    std::vector<Condition<Number>> newGlobalBadStates;
-    for ( auto& badState : ha.getGlobalBadStates() ) {
-        newGlobalBadStates.push_back( detail::addVarToCondition( badState, subspace ) );
-    }
-    ha.setGlobalBadStates( newGlobalBadStates );
-    // initial states
-    std::map<const Location<Number>*, Condition<Number>> newInitialStates;
-    for ( auto& [loc, cond] : ha.getInitialStates() ) {
-        newInitialStates[ loc ] = detail::addVarToCondition( cond, subspace );
-    }
-    ha.setInitialStates( newInitialStates );
-    // transitions
-    for ( auto& trans : ha.getTransitions() ) {
-        // guards
-        trans->setGuard( detail::addVarToCondition( trans->getGuard(), subspace ) );
-        // resets
-        auto reset = trans->getReset();
-        if ( reset.size() > subspace ) {
-            auto resetMatrix = reset.getMatrix( subspace );
-            auto resetVec = reset.getVector( subspace );
-            auto resetIntervals = reset.getIntervals( subspace );
-            resetMatrix.conservativeResize( resetMatrix.rows() + 1, resetMatrix.cols() + 1 );
-            resetMatrix.bottomRows( 1 ) = matrix_t<Number>::Zero( 1, resetMatrix.cols() );
-            resetMatrix.rightCols( 1 ) = matrix_t<Number>::Zero( resetMatrix.rows(), 1 );
-            resetMatrix( resetMatrix.rows() - 1, resetMatrix.cols() - 1 ) = 1;
-            resetVec.conservativeResize( resetVec.rows() + 1 );
-            resetVec( resetVec.rows() - 1 ) = 0;
-            resetIntervals.push_back( carl::Interval<Number>() );
-            reset.setMatrix( resetMatrix, subspace );
-            reset.setVector( resetVec, subspace );
-            reset.setIntervals( resetIntervals, subspace );
-            trans->setReset( reset );
-        }
-    }
+	for ( auto& loc : ha.getLocations() ) {
+		if ( loc->getFlowTypes()[subspace] == DynamicType::rectangular ) {
+			// rectangular flow
+			auto clockVariable = VariablePool::getInstance().newCarlVariable();
+			auto locFlow = loc->getRectangularFlow( subspace );
+			locFlow.setFlowIntervalForDimension( carl::Interval<Number>( flow ), clockVariable );
+		} else {
+			// linear flow types
+			auto flowMatrix = loc->getLinearFlow( subspace ).getFlowMatrix();
+			std::size_t dim = flowMatrix.rows() - 1;
+			// add var as last variable (second to last row/col, since last row/col is affine)
+			matrix_t<Number> newFlowMatrix( flowMatrix.rows() + 1, flowMatrix.cols() + 1 );
+			// flow for variables doesn't change
+			newFlowMatrix.topLeftCorner( dim, dim ) = flowMatrix.topLeftCorner( dim, dim );
+			for ( std::size_t i = 0; i < dim; ++i ) {
+				// no variable depends on the var
+				newFlowMatrix( i, dim ) = 0;
+				// old affine coefficients
+				newFlowMatrix( i, dim + 1 ) = flowMatrix( i, dim );
+			}
+			// bottom 2 rows for var + affine
+			newFlowMatrix.bottomRows( 2 ) = matrix_t<Number>::Zero( 2, dim + 2 );
+			newFlowMatrix( dim, dim + 1 ) = flow;
+			loc->setFlow( newFlowMatrix, subspace );
+		}
+		// invariant
+		loc->setInvariant( detail::addVarToCondition( loc->getInvariant(), subspace ) );
+	}
+	// local bad states
+	std::map<const Location<Number>*, Condition<Number>> newLocalBadStates;
+	for ( auto& [loc, cond] : ha.getLocalBadStates() ) {
+		newLocalBadStates[loc] = detail::addVarToCondition( cond, subspace );
+	}
+	ha.setLocalBadStates( newLocalBadStates );
+	// global bad states
+	std::vector<Condition<Number>> newGlobalBadStates;
+	for ( auto& badState : ha.getGlobalBadStates() ) {
+		newGlobalBadStates.push_back( detail::addVarToCondition( badState, subspace ) );
+	}
+	ha.setGlobalBadStates( newGlobalBadStates );
+	// initial states
+	std::map<const Location<Number>*, Condition<Number>> newInitialStates;
+	for ( auto& [loc, cond] : ha.getInitialStates() ) {
+		newInitialStates[loc] = detail::addVarToCondition( cond, subspace );
+	}
+	ha.setInitialStates( newInitialStates );
+	// transitions
+	for ( auto& trans : ha.getTransitions() ) {
+		// guards
+		trans->setGuard( detail::addVarToCondition( trans->getGuard(), subspace ) );
+		// resets
+		auto reset = trans->getReset();
+		if ( reset.size() > subspace ) {
+			auto resetMatrix = reset.getMatrix( subspace );
+			auto resetVec = reset.getVector( subspace );
+			auto resetIntervals = reset.getIntervals( subspace );
+			resetMatrix.conservativeResize( resetMatrix.rows() + 1, resetMatrix.cols() + 1 );
+			resetMatrix.bottomRows( 1 ) = matrix_t<Number>::Zero( 1, resetMatrix.cols() );
+			resetMatrix.rightCols( 1 ) = matrix_t<Number>::Zero( resetMatrix.rows(), 1 );
+			resetMatrix( resetMatrix.rows() - 1, resetMatrix.cols() - 1 ) = 1;
+			resetVec.conservativeResize( resetVec.rows() + 1 );
+			resetVec( resetVec.rows() - 1 ) = 0;
+			resetIntervals.push_back( carl::Interval<Number>() );
+			reset.setMatrix( resetMatrix, subspace );
+			reset.setVector( resetVec, subspace );
+			reset.setIntervals( resetIntervals, subspace );
+			trans->setReset( reset );
+		}
+	}
 }
 
 }  // namespace hypro
