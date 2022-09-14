@@ -1,7 +1,6 @@
 #pragma once
 #include "../../types.h"
 
-#include <carl/interval/Interval.h>
 #include <tuple>
 
 namespace hypro {
@@ -21,7 +20,7 @@ std::tuple<bool, std::vector<carl::Interval<Number>>> isBox( const matrix_t<Numb
 		return std::tuple<bool, std::vector<carl::Interval<Number>>>( false, {} );
 	}
 	Eigen::Index dimension = constraints.cols();
-	std::vector<carl::Interval<Number>> boundsDefined = std::vector<carl::Interval<Number>>( dimension, carl::Interval<Number>::unboundedInterval() );
+	std::vector<carl::Interval<Number>> boundsDefined = std::vector<carl::Interval<Number>>( dimension, createUnboundedInterval<Number>() );
 	using optionalPair = std::pair<std::optional<Number>, std::optional<Number>>;
 	std::vector<optionalPair> boundsPairs = std::vector<optionalPair>( dimension, std::pair<std::optional<Number>, std::optional<Number>>() );
 

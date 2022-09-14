@@ -10,6 +10,7 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/datastructures/Point.h>
 #include <hypro/datastructures/Vertex.h>
@@ -18,10 +19,6 @@
 #include <hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h>
 #include <hypro/types.h>
 #include <hypro/util/VariablePool.h>
-
-#include <carl/core/Variable.h>
-#include <carl/core/VariablePool.h>
-#include <carl/interval/Interval.h>
 #include <map>
 
 using namespace hypro;

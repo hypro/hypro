@@ -15,7 +15,6 @@
 #include "HybridAutomatonLexer.h"
 #include "HybridAutomatonParser.h"
 #include "boost/lexical_cast.hpp"
-#include <carl/interval/Interval.h>
 #include <memory>
 #include <string>
 

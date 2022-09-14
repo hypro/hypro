@@ -812,7 +812,7 @@ ZonotopeT<Number, Converter, Setting> intersectNDProjection( const ZonotopeT<Num
 		// Upon projection, the Halfspace now has a d vector of [1;0] but retains
 		// its e scalar
 		Eigen::Matrix<double, 2, 1> lgDVector( 1, 0 );
-		Halfspace<double> lg( lgDVector, carl::toDouble( hp.offset() ) );
+		Halfspace<double> lg( lgDVector, toDouble( hp.offset() ) );
 
 		//        matrix_t<Number> dummyMinMax;
 		tempResZonotope = intersectZonotopeHalfspaceDSearch( projZonotope, lg );

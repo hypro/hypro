@@ -309,13 +309,13 @@ void Plotter<Number>::writeGnuplot() const {
 		// extend ranges
 		std::map<unsigned, carl::Interval<double>> ranges;
 		for ( unsigned d = 0; d < min.rows(); ++d ) {
-			double rangeExt = carl::toDouble( ( carl::toDouble( max( d ) ) - carl::toDouble( min( d ) ) ) * 0.05 );
+			double rangeExt = toDouble( ( toDouble( max( d ) ) - toDouble( min( d ) ) ) * 0.05 );
 			if ( rangeExt > 0.00001 ) {
-				ranges[d] = carl::Interval<double>( carl::toDouble( min( d ) ) - rangeExt, carl::toDouble( max( d ) ) + rangeExt );
+				ranges[d] = carl::Interval<double>( toDouble( min( d ) ) - rangeExt, toDouble( max( d ) ) + rangeExt );
 			} else {
-				rangeExt = carl::toDouble( carl::toDouble( min( d ) ) * 0.05 );
-				double leftBound = carl::toDouble( min( d ) ) - rangeExt;
-				double rightBound = carl::toDouble( max( d ) ) + rangeExt;
+				rangeExt = toDouble( toDouble( min( d ) ) * 0.05 );
+				double leftBound = toDouble( min( d ) ) - rangeExt;
+				double rightBound = toDouble( max( d ) ) + rangeExt;
 				// if both bounds are zero, add a slight margin left and right so range is not empty
 				if ( leftBound == rightBound == 0 ) {
 					leftBound -= 0.01;
@@ -352,12 +352,12 @@ void Plotter<Number>::writeGnuplot() const {
 			mOutfile << "unset border\nunset xtics\nunset ytics\n";
 		}
 
-		if ( !mSettings.xPlotInterval.isEmpty() ) {
+		if ( !isEmpty( mSettings.xPlotInterval ) ) {
 			mOutfile << "set xrange [" << mSettings.xPlotInterval.lower() << ":" << mSettings.xPlotInterval.upper() << "] \n";
 		} else {
 			mOutfile << "set xrange [" << ranges[0].lower() << ":" << ranges[0].upper() << "] \n";
 		}
-		if ( !mSettings.yPlotInterval.isEmpty() ) {
+		if ( !isEmpty( mSettings.yPlotInterval ) ) {
 			mOutfile << "set yrange [" << mSettings.yPlotInterval.lower() << ":" << mSettings.yPlotInterval.upper() << "] \n";
 		} else {
 			mOutfile << "set yrange [" << ranges[1].lower() << ":" << ranges[1].upper() << "] \n";
@@ -379,9 +379,9 @@ void Plotter<Number>::writeGnuplot() const {
 				if ( plotObject.vertices.size() == 1 ) {
 					mOutfile << "set object " << std::dec << objectCount << " circle at first \\\n";
 					assert( plotObject.vertices[0].dimension() == 2 );
-					mOutfile << "  " << carl::toDouble( plotObject.vertices[0].at( 0 ) );
+					mOutfile << "  " << toDouble( plotObject.vertices[0].at( 0 ) );
 					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
-						mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
+						mOutfile << ", " << toDouble( plotObject.vertices[0].at( d ) );
 					}
 					mOutfile << " radius " << pointRadius;
 				} else {
@@ -391,17 +391,17 @@ void Plotter<Number>::writeGnuplot() const {
 						if ( vertex.dimension() == 0 ) {
 							continue;
 						}
-						mOutfile << "  " << carl::toDouble( vertex.at( 0 ) );
+						mOutfile << "  " << toDouble( vertex.at( 0 ) );
 						for ( unsigned d = 1; d < vertex.dimension(); ++d ) {
-							mOutfile << ", " << carl::toDouble( vertex.at( d ) );
+							mOutfile << ", " << toDouble( vertex.at( d ) );
 						}
 						mOutfile << " to \\\n";
 					}
 					// assert(objectIt->objectIt->size()-1].dimension() <= 2); // TODO:
 					// Project to 2d	TODO: REINSERT ASSERTION
-					mOutfile << "  " << carl::toDouble( plotObject.vertices[0].at( 0 ) );
+					mOutfile << "  " << toDouble( plotObject.vertices[0].at( 0 ) );
 					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
-						mOutfile << ", " << carl::toDouble( plotObject.vertices[0].at( d ) );
+						mOutfile << ", " << toDouble( plotObject.vertices[0].at( d ) );
 					}
 				}
 
@@ -474,10 +474,10 @@ void Plotter<Number>::writeGnuplot() const {
 					vector_t<Number> normal = plane.normal();
 
 					if ( normal( 1 ) == Number( 0 ) ) {
-						mOutfile << "set arrow from " << carl::toDouble( Number( plane.offset() / normal( 0 ) ) ) << ",graph(0,0) to " << carl::toDouble( Number( plane.offset() / normal( 0 ) ) ) << ",graph(1,1) nohead\n";
+						mOutfile << "set arrow from " << toDouble( Number( plane.offset() / normal( 0 ) ) ) << ",graph(0,0) to " << toDouble( Number( plane.offset() / normal( 0 ) ) ) << ",graph(1,1) nohead\n";
 					} else {
-						mOutfile << "f_" << index << "(x) = " << carl::toDouble( Number( -normal( 0 ) / normal( 1 ) ) ) << "*x";
-						double off = carl::toDouble( Number( plane.offset() / normal( 1 ) ) );
+						mOutfile << "f_" << index << "(x) = " << toDouble( Number( -normal( 0 ) / normal( 1 ) ) ) << "*x";
+						double off = toDouble( Number( plane.offset() / normal( 1 ) ) );
 						if ( off >= 0 )
 							mOutfile << "+";
 						mOutfile << off << "\n";
@@ -535,7 +535,7 @@ void Plotter<Number>::writeGnuplot() const {
 			}
 			for ( const auto& pObj : mPoints ) {
 				auto col = pObj.color ? pObj.color.value() : plotting::colors[plotting::blue];
-				mOutfile << "plot '+' us (" << carl::toDouble( pObj.vertices.front().at( 0 ) ) << "):(" << carl::toDouble( pObj.vertices.front().at( 1 ) ) << ") w p ls " << styles_definitions_calls[col].first << "\n";
+				mOutfile << "plot '+' us (" << toDouble( pObj.vertices.front().at( 0 ) ) << "):(" << toDouble( pObj.vertices.front().at( 1 ) ) << ") w p ls " << styles_definitions_calls[col].first << "\n";
 			}
 		}
 		mOutfile << "\n";
@@ -576,15 +576,15 @@ void Plotter<Number>::writeGen() const {
 					if ( plotObject.vertices[pointIndex].dimension() == 0 ) {
 						continue;
 					}
-					mOutfile << carl::toDouble( plotObject.vertices[pointIndex].at( 0 ) );
+					mOutfile << toDouble( plotObject.vertices[pointIndex].at( 0 ) );
 					for ( unsigned d = 1; d < plotObject.vertices[pointIndex].dimension(); ++d ) {
-						mOutfile << " " << carl::toDouble( plotObject.vertices[pointIndex].at( d ) );
+						mOutfile << " " << toDouble( plotObject.vertices[pointIndex].at( d ) );
 					}
 					mOutfile << "\n";
 				}
-				mOutfile << carl::toDouble( plotObject.vertices[0].at( 0 ) );
+				mOutfile << toDouble( plotObject.vertices[0].at( 0 ) );
 				for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
-					mOutfile << " " << carl::toDouble( plotObject.vertices[0].at( d ) );
+					mOutfile << " " << toDouble( plotObject.vertices[0].at( d ) );
 				}
 				mOutfile << "\n";
 			}

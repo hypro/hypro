@@ -8,13 +8,13 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <bits/c++config.h>
-#include <carl/interval/Interval.h>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/ReachTreev2.h>
-#include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/datastructures/reachability/ReachTreev2Heuristics.h>
+#include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/types.h>
 
 namespace test::detail {

@@ -30,7 +30,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include <map>
 #include <queue>
 
-//#define PPOLYTOPESUPPORTFUNCTION_VERBOSE
+// #define PPOLYTOPESUPPORTFUNCTION_VERBOSE
 #define PPOLYTOPESUPPORTFUNCTION_VERIFY
 
 namespace hypro {
@@ -136,15 +136,15 @@ class PolytopeSupportFunction : private GeometricObjectBase {
 		for ( unsigned rowIndex = 0; rowIndex < rhs.mConstraints.rows() - 1; ++rowIndex ) {
 			lhs << "  ";
 			for ( unsigned d = 0; d < rhs.mConstraints.cols(); ++d ) {
-				lhs << carl::toDouble( rhs.mConstraints( rowIndex, d ) ) << " ";
+				lhs << toDouble( rhs.mConstraints( rowIndex, d ) ) << " ";
 			}
-			lhs << "<= " << carl::toDouble( rhs.mConstraintConstants( rowIndex ) ) << std::endl;
+			lhs << "<= " << toDouble( rhs.mConstraintConstants( rowIndex ) ) << std::endl;
 		}
 		lhs << "  ";
 		for ( unsigned d = 0; d < rhs.mConstraints.cols(); ++d ) {
-			lhs << carl::toDouble( rhs.mConstraints( rhs.mConstraints.rows() - 1, d ) ) << " ";
+			lhs << toDouble( rhs.mConstraints( rhs.mConstraints.rows() - 1, d ) ) << " ";
 		}
-		lhs << "<= " << carl::toDouble( rhs.mConstraintConstants( rhs.mConstraints.rows() - 1 ) ) << " ]" << std::endl;
+		lhs << "<= " << toDouble( rhs.mConstraintConstants( rhs.mConstraints.rows() - 1 ) ) << " ]" << std::endl;
 		return lhs;
 	}
 

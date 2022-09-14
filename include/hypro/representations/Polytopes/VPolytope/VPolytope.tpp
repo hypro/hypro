@@ -637,7 +637,7 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 		// create mapping of variables (lambdas') to vertices.
 		std::map<Point<Number>, carl::Variable> lambdas;
 		for ( const auto& vertex : mVertices ) {
-			carl::Variable lambda = carl::freshRealVariable();
+			carl::Variable lambda = freshRealVariable();
 			lambdas.insert( std::make_pair( vertex, lambda ) );
 			// std::cout << "Assigned " << lambdas.find(vertex)->second << " to " << lambdas.find(vertex)->first << std::endl;
 		}

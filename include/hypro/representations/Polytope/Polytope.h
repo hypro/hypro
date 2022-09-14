@@ -16,6 +16,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../datastructures/Ridge.h"
+#include "../../types.h"
 #include "../../util/VariablePool.h"
 #include "../../util/convexHull.h"
 #include "../GeometricObjectBase.h"
@@ -32,7 +33,6 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 CLANG_WARNING_DISABLE( "-Wunused-local-typedef" )
 #include <ppl.hh>
 CLANG_WARNING_RESET
-#include <carl/core/Variable.h>
 
 namespace hypro {
 

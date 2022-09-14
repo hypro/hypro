@@ -17,18 +17,21 @@ ExternalProject_Add(
         # Force separate output paths for debug and release builds to allow easy
         # identification of correct lib in subsequent TARGET_LINK_LIBRARIES
         #CMAKE_ARGS ${cmake_command}
-        GIT_TAG "release-1.7.0"
+        GIT_TAG "release-1.12.1"
         INSTALL_COMMAND "")
 
 # Specify include dir
 ExternalProject_Get_Property(googletest source_dir)
 ExternalProject_Get_Property(googletest binary_dir)
 
-add_imported_library(HYPRO_GTESTCORE STATIC "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}" "${source_dir}/include")
-add_imported_library(HYPRO_GTESTMAIN STATIC "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_STATIC_LIBRARY_SUFFIX}" "${source_dir}/include")
+message(STATUS "Gtest source dir: ${source_dir}")
+message(STATUS "Gtest binary dir: ${binary_dir}")
+
+add_imported_library(HYPRO_GTESTCORE STATIC "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}" "${source_dir}/googletest/include")
+add_imported_library(HYPRO_GTESTMAIN STATIC "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_STATIC_LIBRARY_SUFFIX}" "${source_dir}/googletest/include")
 
 # required for testing.
-set(GTEST_INCLUDE_DIR "${source_dir}/include" PARENT_SCOPE)
-set(GTEST_LIBRARIES "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}" "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_STATIC_LIBRARY_SUFFIX}" pthread dl PARENT_SCOPE)
+set(GTEST_INCLUDE_DIR "${source_dir}/googletest/include" PARENT_SCOPE)
+set(GTEST_LIBRARIES "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}" "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_STATIC_LIBRARY_SUFFIX}" pthread dl PARENT_SCOPE)
 
 add_dependencies(hypro_resources googletest)

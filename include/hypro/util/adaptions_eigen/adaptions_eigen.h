@@ -15,7 +15,6 @@
 #include "queries.h"
 #include "transformation.h"
 
-#include <carl/numbers/numbers.h>
 #include <eigen3/Eigen/Eigenvalues>
 #include <functional>
 #include <iosfwd>
@@ -363,9 +362,9 @@ vector_t<Number> reduceNumberRepresentation( const vector_t<Number>& in ) {
 	vector_t<Number> res = in;
 	if ( in.rows() > 1 ) {
 		// collect common denominator to obtain integer vector
-		Number commonDenominator = carl::getDenom( in( 0 ) );
+		Number commonDenominator = getDenominator( in( 0 ) );
 		for ( unsigned i = 1; i < in.rows(); ++i ) {
-			commonDenominator *= carl::getDenom( in( i ) );
+			commonDenominator *= getDenominator( in( i ) );
 		}
 		// make the vector integer
 		res *= commonDenominator;

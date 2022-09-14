@@ -14,7 +14,8 @@
 #ifndef HYPRO_MPQ_SERIALIZATION_H
 #define HYPRO_MPQ_SERIALIZATION_H
 
-#include <carl/numbers/numbers.h>
+#include "../../types.h"
+
 #include <cereal/types/string.hpp>
 
 namespace cereal {

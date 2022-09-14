@@ -35,30 +35,30 @@ class UrgencyCEGARWorker {
 		, mTrafoCache( trafoCache ) {}
 
 	/**
-     * @brief Computes the states reachable by letting time elapse up to the given time horizon.
-     * @param task Used to access the the location, initial set and refinement levels of urgent transitions.
-     * @param timeHorizion Number of segments to compute.
-     * @param pruneUrgentSegments If true, ignore segments that are contained in urgent jump enabling sets,
-     * regardless of their refinement level.
-     * @return Safety after time elapse.
-     */
+	 * @brief Computes the states reachable by letting time elapse up to the given time horizon.
+	 * @param task Used to access the the location, initial set and refinement levels of urgent transitions.
+	 * @param timeHorizion Number of segments to compute.
+	 * @param pruneUrgentSegments If true, ignore segments that are contained in urgent jump enabling sets,
+	 * regardless of their refinement level.
+	 * @return Safety after time elapse.
+	 */
 	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon, bool pruneUrgentSegments = true );
 	/**
-     * @brief Computes the states reachable by letting time elapse. Time horizon is given by the settings.
-     * @param task Used to access the the location, initial set and refinement levels of urgent transitions.
-     * @param pruneUrgentSegments If true, ignore segments that are contained in urgent jump enabling sets,
-     * regardless of their refinement level.
-     * @return Safety after time elapse.
-     */
+	 * @brief Computes the states reachable by letting time elapse. Time horizon is given by the settings.
+	 * @param task Used to access the the location, initial set and refinement levels of urgent transitions.
+	 * @param pruneUrgentSegments If true, ignore segments that are contained in urgent jump enabling sets,
+	 * regardless of their refinement level.
+	 * @return Safety after time elapse.
+	 */
 	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, bool pruneUrgentSegments = true ) {
 		return computeTimeSuccessors( task, mNumSegments, pruneUrgentSegments );
 	}
 	/**
-     * @brief Getter function for the computed flowpipe.
-     * @details The flowpipe is stored as pairs of valuation set and segment index,
-     *          since set difference computation can split segments.
-     * @return Pairs of flowpipe segments and their timing index.
-     */
+	 * @brief Getter function for the computed flowpipe.
+	 * @details The flowpipe is stored as pairs of valuation set and segment index,
+	 *          since set difference computation can split segments.
+	 * @return Pairs of flowpipe segments and their timing index.
+	 */
 	const Flowpipe& getFlowpipe() const { return mFlowpipe; }
 	/**
 	 * @brief Writes the computed flowpipe in a reach tree node.
@@ -68,22 +68,22 @@ class UrgencyCEGARWorker {
 	void insertFlowpipe( ReachTreeNode<Representation>& node ) const;
 
 	/**
-     * @brief Computes the states reachable by taking some discrete transition in a time interval.
-     * @details Performs aggregation and applies the reset.
-     * @param task Used to access the location.
-     * @param transition The transition to take.
-     * @param timeOfJump Only jumps taken in this time interval will be considered.
-     */
+	 * @brief Computes the states reachable by taking some discrete transition in a time interval.
+	 * @details Performs aggregation and applies the reset.
+	 * @param task Used to access the location.
+	 * @param transition The transition to take.
+	 * @param timeOfJump Only jumps taken in this time interval will be considered.
+	 */
 	std::vector<TimedValuationSet<Representation>> computeJumpSuccessors(
 		  const ReachTreeNode<Representation>& task,
 		  const Transition<Number>* transition,
-		  const carl::Interval<SegmentInd>& timeOfJump = carl::Interval<SegmentInd>::unboundedInterval() );
+		  const carl::Interval<SegmentInd>& timeOfJump = createUnboundedInterval<SegmentInd>() );
 
 	/**
-     * @brief Computes the states reachable by taking any discrete transition.
-     * @details Iterates over all transitions, performs aggregation and applies the reset.
-     * @param task Used to access the location.
-     */
+	 * @brief Computes the states reachable by taking any discrete transition.
+	 * @details Iterates over all transitions, performs aggregation and applies the reset.
+	 * @param task Used to access the location.
+	 */
 	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( const ReachTreeNode<Representation>& task );
 
 	/**
@@ -96,16 +96,16 @@ class UrgencyCEGARWorker {
 
   private:
 	/**
-     * @brief Performs operations on the segment obtained by letting time elapse.
-     * @details Applies intersection with the invariant, set difference with urgent guards
-     *          and intersection with bad states and adds the result to the flowpipe.
-     * @param task The current task, used to access the location.
-     * @param segment The current segment computed by letting time elapse.
-     * @param timing The time offset of the segment.
-     * @param pruneUrgentSegments If true, ignore segments that are contained in urgent jump enabling sets,
-     * regardless of their refinement level.
-     * @return Safety of the segment.
-     */
+	 * @brief Performs operations on the segment obtained by letting time elapse.
+	 * @details Applies intersection with the invariant, set difference with urgent guards
+	 *          and intersection with bad states and adds the result to the flowpipe.
+	 * @param task The current task, used to access the location.
+	 * @param segment The current segment computed by letting time elapse.
+	 * @param timing The time offset of the segment.
+	 * @param pruneUrgentSegments If true, ignore segments that are contained in urgent jump enabling sets,
+	 * regardless of their refinement level.
+	 * @return Safety of the segment.
+	 */
 	REACHABILITY_RESULT handleSegment(
 		  const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing, bool pruneUrgentSegments );
 	/**

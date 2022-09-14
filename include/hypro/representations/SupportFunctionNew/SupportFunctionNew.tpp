@@ -547,7 +547,7 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 		//  the actual object will be limited by the new plane
 		limiting = true;
 		// //std::cout << "evaluate(" << convert<Number,double>(-(_mat.row(rowI))) << ") <=  " << -(_vec(rowI)) << ": " << this->evaluate(-(_mat.row(rowI))).supportValue << " <= " << -(_vec(rowI)) << std::endl;
-		// //std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << carl::toDouble(_vec(rowI)) << std::endl;
+		// //std::cout << __func__ <<  ": Limiting plane " << convert<Number,double>(_mat.row(rowI)).transpose() << " <= " << toDouble(_vec(rowI)) << std::endl;
 		if ( this->evaluate( -( rhs.normal() ), false ).supportValue < -( rhs.offset() ) ) {
 			// the object lies fully outside one of the planes -> return false
 			// std::cout << "SFN::satisfiesHalfspace, fullyOutside " << std::endl;
@@ -604,7 +604,7 @@ std::pair<CONTAINMENT, SupportFunctionNewT<Number, Converter, Setting>> SupportF
 			limitingPlanes.push_back( rowI );
 			Number invDirVal = this->evaluate( -( _mat.row( rowI ) ), true ).supportValue;
 			// TRACE("hypro.representations.supportFunctionNew", "evaluate(" << -(_mat.row(rowI)) << ") <=  " << -(_vec(rowI)) << ": " << invDirVal << " <= " << -(_vec(rowI)));
-			// TRACE("hypro.representations.supportFunctionNew", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << carl::toDouble(_vec(rowI)));
+			// TRACE("hypro.representations.supportFunctionNew", ": Limiting plane " << _mat.row(rowI).transpose() << " <= " << toDouble(_vec(rowI)));
 			if ( -invDirVal > _vec( rowI ) ) {
 				return std::make_pair( CONTAINMENT::NO, this->intersectHalfspaces( _mat, _vec ) );
 			}

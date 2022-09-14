@@ -8,9 +8,9 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <bits/c++config.h>
-#include <carl/interval/Interval.h>
 #include <fstream>
 #include <hypro/datastructures/HybridAutomaton/Condition.h>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
@@ -20,7 +20,6 @@
 #include <hypro/representations/conversion/typedefs.h>
 #include <hypro/types.h>
 #include <iostream>
-
 #include <unistd.h>	 //getcwd()
 
 // using namespace antlr4;
@@ -57,11 +56,11 @@ TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 		hypro::Location<TypeParam>* loc1 = automaton.getLocations().back();
 		EXPECT_EQ( std::size_t( 0 ), loc0->getTransitions().size() );
 		EXPECT_EQ( std::size_t( 0 ), loc1->getTransitions().size() );
-		if(loc0->getName() == "rod1") {
+		if ( loc0->getName() == "rod1" ) {
 			EXPECT_EQ( "rod2", loc1->getName() );
 			EXPECT_FALSE( loc0->isUrgent() );
 			EXPECT_TRUE( loc1->isUrgent() );
-		} else if (loc0->getName() == "rod2") {
+		} else if ( loc0->getName() == "rod2" ) {
 			EXPECT_EQ( "rod1", loc1->getName() );
 			EXPECT_FALSE( loc1->isUrgent() );
 			EXPECT_TRUE( loc0->isUrgent() );
@@ -162,7 +161,7 @@ TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
 		EXPECT_EQ( invariant, loc->getInvariant() );
 		EXPECT_FALSE( automaton.getLocalBadStates().empty() );
 		EXPECT_EQ( hypro::Condition<TypeParam>(), automaton.getLocalBadStates().at( loc1 ) );
-		EXPECT_EQ( hypro::Condition<TypeParam>( { carl::Interval<TypeParam>::unboundedInterval(),
+		EXPECT_EQ( hypro::Condition<TypeParam>( { createUnboundedInterval<TypeParam>(),
 												  carl::Interval<TypeParam>( TypeParam{ -2.5 }, TypeParam{ 0.0 } ) } ),
 				   automaton.getLocalBadStates().at( loc2 ) );
 		EXPECT_TRUE( automaton.getGlobalBadStates().size() == 4 );

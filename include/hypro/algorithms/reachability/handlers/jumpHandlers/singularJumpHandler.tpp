@@ -56,7 +56,7 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 				if ( reset.getMatrix( subspace ).row( rowIndex ) == zeroRow ) {
 					// add interval for constant reset
 					Number constant = reset.getVector( subspace )( rowIndex );
-					assert( intervalReset.getIntervals()[rowIndex].isEmpty() && "Reset has both affine and interval assignment" );
+					assert( isEmpty( intervalReset.getIntervals()[rowIndex] ) && "Reset has both affine and interval assignment" );
 					intervalReset.setInterval( carl::Interval<Number>( constant, constant ), rowIndex );
 				}
 			}
@@ -68,9 +68,9 @@ void singularJumpHandler<Representation>::applyReset( Representation& stateSet, 
 			auto transformedSet2 = applyResetFindZeroConstraints( stateSet, intervalReset );
 			auto transformedSet3 = applyResetProjectAndExpand( stateSet, intervalReset );
 			assert( transformedSet1.contains( transformedSet2 ) );
-			//assert( transformedSet2.contains( transformedSet1 ) ); // TODO there is a bug in this approach
+			// assert( transformedSet2.contains( transformedSet1 ) ); // TODO there is a bug in this approach
 			assert( transformedSet1.contains( transformedSet3 ) );
-			//assert( transformedSet3.contains( transformedSet1 ) ); // TODO there might be a bug here as well
+			// assert( transformedSet3.contains( transformedSet1 ) ); // TODO there might be a bug here as well
 #endif
 			convert( transformedSet1, stateSet );
 			TRACE( "hypro.reachability", "Resulting state set " << stateSet );
@@ -85,7 +85,7 @@ HPolytope<Number> applyResetFM( Representation& stateSet, IntervalAssignment<Num
 	HPolytope<Number> projectedSet = Converter<Number>::toHPolytope( stateSet );
 	std::vector<Halfspace<Number>> newConstraints;
 	for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
-		if ( !intervalReset.mIntervals[i].isEmpty() ) {
+		if ( !isEmpty( intervalReset.mIntervals[i] ) ) {
 			// non-empty intervals represent some reset different from identity -> project out dimension, memorize new interval bounds
 			projectOutDimensions.push_back( i );
 			// create and store new interval bounds
@@ -113,7 +113,7 @@ HPolytope<Number> applyResetFindZeroConstraints( Representation& stateSet, Inter
 	VPolytope<Number> projectedSet = Converter<Number>::toVPolytope( stateSet );
 	std::vector<Halfspace<Number>> newConstraints;
 	for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
-		if ( !intervalReset.mIntervals[i].isEmpty() ) {
+		if ( !isEmpty( intervalReset.mIntervals[i] ) ) {
 			if ( intervalReset.mIntervals[i].lower() == 0 && intervalReset.mIntervals[i].upper() == 0 ) {
 				// reset to zero: solve via linear transformation
 				resetToZeroDimensions.insert( i );
@@ -170,7 +170,7 @@ HPolytope<Number> applyResetProjectAndExpand( Representation& stateSet, Interval
 	std::vector<std::size_t> resetToNonZeroDimensions;
 	std::vector<Halfspace<Number>> newConstraints;
 	for ( std::size_t i = 0; i < intervalReset.size(); ++i ) {
-		if ( !intervalReset.mIntervals[i].isEmpty() ) {
+		if ( !isEmpty( intervalReset.mIntervals[i] ) ) {
 			resetDimensions.push_back( i );
 			if ( intervalReset.mIntervals[i].lower() != 0 || intervalReset.mIntervals[i].upper() != 0 ) {
 				// reset to zero is solved via linear transformation
@@ -241,7 +241,7 @@ auto singularJumpHandler<Representation>::applyReverseJump( const TransitionStat
 		for ( const auto& state : statesVec ) {
 			// copy state - as there is no aggregation, the containing set and timestamp is already valid
 			// TODO: Why copy?
-			assert( !state.getTimestamp().isEmpty() );
+			assert( !isEmpty( state.getTimestamp() ) );
 			Representation newState( state );
 
 			// apply guard function

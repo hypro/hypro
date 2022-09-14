@@ -15,7 +15,7 @@ template <typename Number>
 Reset<Number>::Reset( const matrix_t<Number>& mat, const vector_t<Number>& vec ) {
 	assert( mat.rows() == mat.cols() );
 	mAffineResets.emplace_back( mat, vec );
-	mIntervalResets.emplace_back( std::vector<carl::Interval<Number>>( mat.rows(), carl::Interval<Number>::emptyInterval() ) );
+	mIntervalResets.emplace_back( std::vector<carl::Interval<Number>>( mat.rows(), createEmptyInterval<Number>() ) );
 }
 
 template <typename Number>
@@ -241,7 +241,7 @@ Reset<Number> combine(
 		// newVec = combine(lhs.getVector(), rhs.getVector());
 	}
 
-//	std::cout << "Combined resets: " << newMat << ", " << newVec << std::endl;
+	//	std::cout << "Combined resets: " << newMat << ", " << newVec << std::endl;
 
 	return Reset<Number>{ newMat, newVec };
 }

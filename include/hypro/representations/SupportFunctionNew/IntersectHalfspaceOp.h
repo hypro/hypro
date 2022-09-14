@@ -140,8 +140,8 @@ class IntersectHalfspaceOp : public RootGrowNode<Number, Converter, Setting> {
 		// Wiggle vector and wiggle angle
 		Number wiggleAngle = 0.0;
 		vector_t<Number> wiggleVec = vector_t<Number>::Zero( 2 );
-		wiggleVec( 0 ) = Number( std::cos( carl::toDouble( wiggleAngle ) ) );
-		wiggleVec( 1 ) = Number( std::sin( carl::toDouble( wiggleAngle ) ) );
+		wiggleVec( 0 ) = Number( std::cos( toDouble( wiggleAngle ) ) );
+		wiggleVec( 1 ) = Number( std::sin( toDouble( wiggleAngle ) ) );
 
 		// Golden section search for the value f
 		Number maximumAngle = PI_UP;
@@ -162,18 +162,18 @@ class IntersectHalfspaceOp : public RootGrowNode<Number, Converter, Setting> {
 			COUNT( "IntersectHalfspaceOp::wobbleIterations" );
 
 			// Compute evaluation value for upper bound
-			wiggleVec( 0 ) = Number( std::cos( carl::toDouble( upper ) ) );
-			wiggleVec( 1 ) = Number( std::sin( carl::toDouble( upper ) ) );
+			wiggleVec( 0 ) = Number( std::cos( toDouble( upper ) ) );
+			wiggleVec( 1 ) = Number( std::sin( toDouble( upper ) ) );
 			evalInProjectedWiggleDir = childSF.evaluate( projMat * wiggleVec, true );
 			COUNT( "IntersectHalfspaceOp::leGuernic::evaluate" );
-			Number heightOfUpper = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( carl::toDouble( upper ) ) ) ) / Number( std::sin( carl::toDouble( upper ) ) );
+			Number heightOfUpper = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( toDouble( upper ) ) ) ) / Number( std::sin( toDouble( upper ) ) );
 
 			// Compute evaluation value for lower bound
-			wiggleVec( 0 ) = Number( std::cos( carl::toDouble( lower ) ) );
-			wiggleVec( 1 ) = Number( std::sin( carl::toDouble( lower ) ) );
+			wiggleVec( 0 ) = Number( std::cos( toDouble( lower ) ) );
+			wiggleVec( 1 ) = Number( std::sin( toDouble( lower ) ) );
 			evalInProjectedWiggleDir = childSF.evaluate( projMat * wiggleVec, true );
 			COUNT( "IntersectHalfspaceOp::leGuernic::evaluate" );
-			Number heightOfLower = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( carl::toDouble( lower ) ) ) ) / Number( std::sin( carl::toDouble( lower ) ) );
+			Number heightOfLower = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( toDouble( lower ) ) ) ) / Number( std::sin( toDouble( lower ) ) );
 
 			// Reduce search space to where minimum of evaluation values seems to be
 			if ( heightOfLower < heightOfUpper ) {
@@ -193,11 +193,11 @@ class IntersectHalfspaceOp : public RootGrowNode<Number, Converter, Setting> {
 		// Resulting angle is the average of maximumAngle and wiggleAngle
 		Number resultAngle = ( maximumAngle + wiggleAngle ) / 2;
 		assert( 0 <= resultAngle && resultAngle <= PI_UP );
-		wiggleVec( 0 ) = Number( std::cos( carl::toDouble( resultAngle ) ) );
-		wiggleVec( 1 ) = Number( std::sin( carl::toDouble( resultAngle ) ) );
+		wiggleVec( 0 ) = Number( std::cos( toDouble( resultAngle ) ) );
+		wiggleVec( 1 ) = Number( std::sin( toDouble( resultAngle ) ) );
 		evalInProjectedWiggleDir = childSF.evaluate( projMat * wiggleVec, true );
 		COUNT( "IntersectHalfspaceOp::leGuernic::evaluate" );
-		Number heightOfResult = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( carl::toDouble( resultAngle ) ) ) ) / Number( std::sin( carl::toDouble( resultAngle ) ) );
+		Number heightOfResult = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( toDouble( resultAngle ) ) ) ) / Number( std::sin( toDouble( resultAngle ) ) );
 		// NOTE: This evaluation result does not return an optimal value
 		return EvaluationResult<Number>( heightOfResult, SOLUTION::FEAS );
 	}
@@ -229,7 +229,7 @@ class IntersectHalfspaceOp : public RootGrowNode<Number, Converter, Setting> {
 		Number h = PI_UP;
 
 		// Compute steps needed to acquire tolerance
-		unsigned steps = static_cast<unsigned>( carl::ceil( std::log( carl::toDouble( tolerance ) / carl::toDouble( h ) ) / std::log( carl::toDouble( goldenRatioInv ) ) ) );
+		unsigned steps = static_cast<unsigned>( carl::ceil( std::log( toDouble( tolerance ) / toDouble( h ) ) / std::log( toDouble( goldenRatioInv ) ) ) );
 
 		// Compute upper (c) and lower bound (d)
 		Number upper = resInterval.lower() + goldenRatioInv2 * h;
@@ -238,44 +238,44 @@ class IntersectHalfspaceOp : public RootGrowNode<Number, Converter, Setting> {
 		// Compute upper height yc
 		EvaluationResult<Number> evalInProjectedWiggleDir;
 		SupportFunctionNewT<Number, Converter, Setting> childSF( this->getChildren().at( 0 ) );
-		wiggleVec( 0 ) = Number( std::cos( carl::toDouble( upper ) ) );
-		wiggleVec( 1 ) = Number( std::sin( carl::toDouble( upper ) ) );
+		wiggleVec( 0 ) = Number( std::cos( toDouble( upper ) ) );
+		wiggleVec( 1 ) = Number( std::sin( toDouble( upper ) ) );
 		evalInProjectedWiggleDir = childSF.evaluate( projMat * wiggleVec, true );
 		COUNT( "IntersectHalfspaceOp::leGuernic::evaluate" );
-		Number heightOfUpper = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( carl::toDouble( upper ) ) ) ) / Number( std::sin( carl::toDouble( upper ) ) );
+		Number heightOfUpper = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( toDouble( upper ) ) ) ) / Number( std::sin( toDouble( upper ) ) );
 
 		// Compute lower height yd
-		wiggleVec( 0 ) = Number( std::cos( carl::toDouble( lower ) ) );
-		wiggleVec( 1 ) = Number( std::sin( carl::toDouble( lower ) ) );
+		wiggleVec( 0 ) = Number( std::cos( toDouble( lower ) ) );
+		wiggleVec( 1 ) = Number( std::sin( toDouble( lower ) ) );
 		evalInProjectedWiggleDir = childSF.evaluate( projMat * wiggleVec, true );
 		COUNT( "IntersectHalfspaceOp::leGuernic::evaluate" );
-		Number heightOfLower = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( carl::toDouble( lower ) ) ) ) / Number( std::sin( carl::toDouble( lower ) ) );
+		Number heightOfLower = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( toDouble( lower ) ) ) ) / Number( std::sin( toDouble( lower ) ) );
 
 		// Update interval
 		for ( unsigned i = 0; i < steps; ++i ) {
 			COUNT( "IntersectHalfspaceOp::wobbleIterations" );
 			if ( heightOfUpper < heightOfLower ) {
-				resInterval.setUpper( lower );
+				setUpperBound( resInterval, lower );
 				lower = upper;
 				heightOfLower = heightOfUpper;
 				h = goldenRatioInv * h;
 				upper = resInterval.lower() + goldenRatioInv2 * h;
-				wiggleVec( 0 ) = Number( std::cos( carl::toDouble( upper ) ) );
-				wiggleVec( 1 ) = Number( std::sin( carl::toDouble( upper ) ) );
+				wiggleVec( 0 ) = Number( std::cos( toDouble( upper ) ) );
+				wiggleVec( 1 ) = Number( std::sin( toDouble( upper ) ) );
 				evalInProjectedWiggleDir = childSF.evaluate( projMat * wiggleVec, true );
 				COUNT( "IntersectHalfspaceOp::leGuernic::evaluate" );
-				heightOfUpper = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( carl::toDouble( upper ) ) ) ) / Number( std::sin( carl::toDouble( upper ) ) );
+				heightOfUpper = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( toDouble( upper ) ) ) ) / Number( std::sin( toDouble( upper ) ) );
 			} else {
-				resInterval.setLower( upper );
+				setLowerBound( resInterval, upper );
 				upper = lower;
 				heightOfUpper = heightOfLower;
 				h = goldenRatioInv * h;
 				lower = resInterval.lower() + goldenRatioInv * h;
-				wiggleVec( 0 ) = Number( std::cos( carl::toDouble( lower ) ) );
-				wiggleVec( 1 ) = Number( std::sin( carl::toDouble( lower ) ) );
+				wiggleVec( 0 ) = Number( std::cos( toDouble( lower ) ) );
+				wiggleVec( 1 ) = Number( std::sin( toDouble( lower ) ) );
 				evalInProjectedWiggleDir = childSF.evaluate( projMat * wiggleVec, true );
 				COUNT( "IntersectHalfspaceOp::leGuernic::evaluate" );
-				heightOfLower = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( carl::toDouble( lower ) ) ) ) / Number( std::sin( carl::toDouble( lower ) ) );
+				heightOfLower = ( evalInProjectedWiggleDir.supportValue - hspace.offset() * Number( std::cos( toDouble( lower ) ) ) ) / Number( std::sin( toDouble( lower ) ) );
 			}
 		}
 

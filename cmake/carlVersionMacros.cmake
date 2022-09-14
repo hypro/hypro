@@ -1,8 +1,8 @@
-#if(${carl_VERSION} VERSION_LESS_EQUAL "18.10" )
-#	message(STATUS "Using carl less than 18.10")
-#	set(CARL_OLD_INTERVALS "True" )
-#	set(CARL_OLD_STRUCTURE "True" )
-#endif()
+if (TARGET carl-shared)
+    set(CARL_OLD_STRUCTURE "True")
+else ()
+    set(CARL_OLD_STRUCTURE "False")
+endif ()
 
 
 if (NOT EXISTS "${carl_abs_include_path}/carl/core/polynomialfunctions/Substitution.h")

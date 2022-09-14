@@ -33,7 +33,7 @@ struct RefinementSetting {
 	State initialSet;
 
 	EventTimingContainer<Number> mTimings;
-	carl::Interval<tNumber> entryTimestamp = carl::Interval<tNumber>::emptyInterval();	// The (local) timestamp of entry. TODO: Isn't the semantics like "time spent"?
+	carl::Interval<tNumber> entryTimestamp = createEmptyInterval<tNumber>();  // The (local) timestamp of entry. TODO: Isn't the semantics like "time spent"?
 	bool fullyComputed = false;
 	bool isDummy = true;  // Used in case we skip a certain strategy setting to fill the gaps. This means that the initial
 						  // set is not yet set. TODO: Do we actually need this? Only in case we can overstep certain settings, right?

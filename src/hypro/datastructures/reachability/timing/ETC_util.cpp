@@ -18,7 +18,11 @@ std::vector<carl::Interval<tNumber>> getEnabledTimings( const HierarchicalInterv
 		if ( eventIt != in.begin() ) {
 			// consecutive interval
 			if ( static_cast<int>( eventIt->type ) > 0 && static_cast<int>( std::prev( eventIt )->type ) > 0 ) {
+#ifdef CARL_OLD_STRUCTURE
 				res[res.size() - 1] = res[res.size() - 1].convexHull( carl::Interval<tNumber>( std::prev( eventIt )->timePoint, eventIt->timePoint ) );
+#else
+				res[res.size() - 1] = res[res.size() - 1].convex_hull( carl::Interval<tNumber>( std::prev( eventIt )->timePoint, eventIt->timePoint ) );
+#endif
 				TRACE( "hypro.datastructures.etc", "Extended interval " << res.back() );
 			} else if ( static_cast<int>( eventIt->type ) > 0 ) {
 				// add new interval

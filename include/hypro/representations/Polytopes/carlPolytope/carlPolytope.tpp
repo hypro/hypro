@@ -54,8 +54,8 @@ CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setti
 
 	// collect constraints
 	std::vector<ConstraintT<tNumber>> newConstraints;
-	mFormula.getConstraints( newConstraints );
-	rhs.getFormula().getConstraints( newConstraints );
+	getConstraints( mFormula, newConstraints );
+	getConstraints( rhs.getFormula(), newConstraints );
 
 	return CarlPolytopeT<Number, Converter, Setting>( FormulaT<tNumber>( carl::FormulaType::AND, constraintsToFormulas( newConstraints ) ) );
 }
@@ -122,7 +122,7 @@ CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setti
 
 			// substitute variables back
 			for ( std::size_t i = 0; i < dim; ++i ) {
-				result = result.substitute( VariablePool::getInstance().carlVarByIndex( dim + i ), FormulaT<tNumber>::PolynomialType( VariablePool::getInstance().carlVarByIndex( i ) ) );
+				result = substitute( result, VariablePool::getInstance().carlVarByIndex( dim + i ), FormulaT<tNumber>::PolynomialType( VariablePool::getInstance().carlVarByIndex( i ) ) );
 			}
 			return CarlPolytopeT{ result, dim };
 		}
@@ -162,7 +162,7 @@ CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setti
 
 	// substitute variables back
 	for ( std::size_t i = 0; i < dim; ++i ) {
-		result = result.substitute( VariablePool::getInstance().carlVarByIndex( dim + i ), PolyT<tNumber>( VariablePool::getInstance().carlVarByIndex( i ) ) );
+		result = substitute( result, VariablePool::getInstance().carlVarByIndex( dim + i ), PolyT<tNumber>( VariablePool::getInstance().carlVarByIndex( i ) ) );
 	}
 	return CarlPolytopeT{ result, dim };
 }
@@ -217,7 +217,7 @@ template <typename Number, typename Converter, typename Setting>
 std::vector<carl::Interval<Number>> CarlPolytopeT<Number, Converter, Setting>::getIntervals() const {
 	if ( this->empty() ) {
 		std::vector<carl::Interval<Number>> res;
-		res.emplace_back( carl::Interval<Number>::emptyInterval() );
+		res.emplace_back( createEmptyInterval<Number>() );
 		return res;
 	}
 	// Note: Alternatively use FM-elimination.
@@ -251,7 +251,7 @@ void CarlPolytopeT<Number, Converter, Setting>::addConstraint( const ConstraintT
 	}
 	// add constraint to formula
 	std::vector<ConstraintT<tNumber>> constraints;
-	mFormula.getConstraints( constraints );
+	getConstraints( mFormula, constraints );
 	constraints.push_back( constraint );
 	mFormula = FormulaT<tNumber>( carl::FormulaType::AND, constraintsToFormulas( constraints ) );
 	detectDimension();
@@ -270,7 +270,7 @@ void CarlPolytopeT<Number, Converter, Setting>::addIntervalConstraints( const ca
 	ConstraintsT<tNumber> newConstraints;
 	for ( const auto& f : tmp ) {
 		ConstraintsT<tNumber> tmpConstraints;
-		f.getConstraints( tmpConstraints );
+		getConstraints( f, tmpConstraints );
 		for ( const auto& c : tmpConstraints ) {
 			newConstraints.emplace_back( c );
 			TRACE( "hypro.representations.carlPolytope", "Add new interval constraint " << c );
@@ -287,7 +287,7 @@ void CarlPolytopeT<Number, Converter, Setting>::substituteVariable( carl::Variab
 	// reset half-space cache
 	mHalfspaces.clear();
 	// substitute
-	mFormula = mFormula.substitute( oldVar, PolyT<tNumber>( newVar ) );
+	mFormula = substitute( mFormula, oldVar, PolyT<tNumber>( newVar ) );
 	TRACE( "hypro.representations.carlPolytope", "After substituting " << oldVar << " by " << newVar << ": " << *this );
 	detectDimension();
 }
@@ -350,14 +350,14 @@ std::vector<Point<Number>> CarlPolytopeT<Number, Converter, Setting>::vertices()
 
 template <typename Number, typename Converter, typename Setting>
 matrix_t<Number> CarlPolytopeT<Number, Converter, Setting>::matrix() const {
-	if ( mFormula.isFalse() ) {
+	if ( isFalse( mFormula ) ) {
 		return matrix_t<Number>( 0, 0 );
 	}
 	// assert(dimensionWasCorrectlySet());
 	detectDimension();
 	matrix_t<Number> res = matrix_t<Number>( mFormula.size(), dimension() );
 	std::vector<ConstraintT<tNumber>> constraints;
-	mFormula.getConstraints( constraints );
+	getConstraints( mFormula, constraints );
 	std::size_t i = 0;
 	for ( const auto& c : constraints ) {
 		res.row( i ) = constraintNormal<tNumber, Number>( c, dimension() );
@@ -374,14 +374,14 @@ matrix_t<Number> CarlPolytopeT<Number, Converter, Setting>::matrix() const {
 
 template <typename Number, typename Converter, typename Setting>
 vector_t<Number> CarlPolytopeT<Number, Converter, Setting>::vector() const {
-	if ( mFormula.isFalse() ) {
+	if ( isFalse( mFormula ) ) {
 		return vector_t<Number>( 0 );
 	}
 	// assert(dimensionWasCorrectlySet());
 	detectDimension();
 	vector_t<Number> res = vector_t<Number>( mFormula.size() );
 	std::vector<ConstraintT<tNumber>> constraints;
-	mFormula.getConstraints( constraints );
+	getConstraints( mFormula, constraints );
 	std::size_t i = 0;
 	for ( const auto& c : constraints ) {
 		// widening: check if origin contained. If so, increase abs of offset, else, reduce abs. value.
@@ -399,7 +399,7 @@ vector_t<Number> CarlPolytopeT<Number, Converter, Setting>::vector() const {
 template <typename Number, typename Converter, typename Setting>
 bool CarlPolytopeT<Number, Converter, Setting>::empty() const {
 	if ( mEmptyState == SETSTATE::UNKNOWN ) {
-		if ( mFormula.isFalse() ) {
+		if ( isFalse( mFormula ) ) {
 			mEmptyState = SETSTATE::EMPTY;
 			return true;
 		}
@@ -442,7 +442,7 @@ void CarlPolytopeT<Number, Converter, Setting>::removeRedundancy() {
 	}
 	Optimizer<Number> opt = Optimizer<Number>( this->matrix(), this->vector() );
 	std::vector<ConstraintT<tNumber>> constraints;
-	mFormula.getConstraints( constraints );
+	getConstraints( mFormula, constraints );
 	auto redundantConstraints = opt.redundantConstraints();
 	for ( auto it = redundantConstraints.rbegin(); it != redundantConstraints.rend(); ++it ) {
 		constraints.erase( constraints.begin() + *it );

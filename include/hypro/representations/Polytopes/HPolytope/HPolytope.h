@@ -347,7 +347,7 @@ class HPolytopeT : private GeometricObjectBase {
 
 	template <typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
 	void reduceNumberRepresentation( const std::vector<Point<Number>>& _vertices = std::vector<Point<Number>>(), unsigned limit = fReach_DENOMINATOR ) const {
-		//#ifdef REDUCE_NUMBERS
+		// #ifdef REDUCE_NUMBERS
 		if ( Setting::REDUCE_NUMBERS == true ) {
 			TRACE( "hypro.hPolytope", "Attempt to reduce numbers." );
 			std::vector<Point<Number>> originalVertices;
@@ -388,7 +388,7 @@ class HPolytopeT : private GeometricObjectBase {
 						for ( unsigned i = 0; i < mDimension; ++i ) {
 							newNormal( i ) = carl::floor( Number( ( mHPlanes.at( planeIndex ).normal()( i ) / largest ) * Number( limit ) ) );
 							assert( carl::abs( Number( mHPlanes.at( planeIndex ).normal()( i ) / largest ) ) <= Number( 1 ) );
-							assert( carl::isInteger( newNormal( i ) ) );
+							assert( isInteger( newNormal( i ) ) );
 							assert( newNormal( i ) <= Number( limit ) );
 						}
 						mHPlanes.at( planeIndex ).setNormal( newNormal );
@@ -404,7 +404,7 @@ class HPolytopeT : private GeometricObjectBase {
 						}
 						newOffset = carl::ceil( newOffset );
 #ifdef HPOLY_DEBUG_MSG
-						std::cout << "Reduced to " << convert<Number, double>( newNormal ).transpose() << " <= " << carl::toDouble( newOffset ) << std::endl;
+						std::cout << "Reduced to " << convert<Number, double>( newNormal ).transpose() << " <= " << toDouble( newOffset ) << std::endl;
 #endif
 						mHPlanes.at( planeIndex ).setOffset( newOffset );
 					}
@@ -417,7 +417,7 @@ class HPolytopeT : private GeometricObjectBase {
 #endif
 			}
 		}
-		//#endif
+		// #endif
 	}
 
 	/**

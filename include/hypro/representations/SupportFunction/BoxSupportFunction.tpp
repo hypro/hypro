@@ -23,7 +23,11 @@ BoxSupportFunction<Number, Setting>::BoxSupportFunction( const std::vector<Point
 	++pIt;
 	for ( ; pIt != _points.end(); ++pIt ) {
 		for ( int d = 0; d < pIt->dimension(); ++d ) {
+#ifdef CARL_OLD_STRUCTURE
 			mBox[d] = mBox[d].convexHull( carl::Interval<Number>( pIt->rawCoordinates()( d ) ) );
+#else
+			mBox[d] = mBox[d].convex_hull( carl::Interval<Number>( pIt->rawCoordinates()( d ) ) );
+#endif
 		}
 	}
 }
@@ -87,14 +91,14 @@ std::vector<Point<Number>> BoxSupportFunction<Number, Setting>::vertices() const
 		for ( std::size_t dimension = 0; dimension < this->dimension(); ++dimension ) {
 			std::size_t pos = ( 1 << dimension );
 			if ( bitCount & pos ) {
-				if ( mBox[dimension].upperBoundType() != carl::BoundType::INFTY ) {
+				if ( upperBoundType( mBox[dimension] ) != carl::BoundType::INFTY ) {
 					coord( dimension ) = mBox[dimension].upper();
 				} else {
 					isVertex = false;
 					break;
 				}
 			} else {
-				if ( mBox[dimension].lowerBoundType() != carl::BoundType::INFTY ) {
+				if ( lowerBoundType( mBox[dimension] ) != carl::BoundType::INFTY ) {
 					coord( dimension ) = mBox[dimension].lower();
 				} else {
 					isVertex = false;
@@ -132,13 +136,13 @@ EvaluationResult<Number> BoxSupportFunction<Number, Setting>::evaluate( const ve
 	vector_t<Number> furthestPoint = vector_t<Number>::Zero( this->dimension() );
 	for ( Eigen::Index i = 0; i < furthestPoint.rows(); ++i ) {
 		if ( l( i ) > 0 ) {
-			if ( mBox[i].upperBoundType() == carl::BoundType::INFTY ) {
+			if ( upperBoundType( mBox[i] ) == carl::BoundType::INFTY ) {
 				return EvaluationResult<Number>( 0, furthestPoint, SOLUTION::INFTY );
 			} else {
 				furthestPoint( i ) = mBox[i].upper();
 			}
 		} else if ( l( i ) < 0 ) {
-			if ( mBox[i].lowerBoundType() == carl::BoundType::INFTY ) {
+			if ( lowerBoundType( mBox[i] ) == carl::BoundType::INFTY ) {
 				return EvaluationResult<Number>( 0, furthestPoint, SOLUTION::INFTY );
 			} else {
 				furthestPoint( i ) = mBox[i].lower();
@@ -188,7 +192,7 @@ template <typename Number, typename Setting>
 bool BoxSupportFunction<Number, Setting>::empty() const {
 	if ( mEmptyState == SETSTATE::UNKNOWN ) {
 		for ( Eigen::Index i = 0; i < Eigen::Index( this->dimension() ); ++i ) {
-			if ( mBox[i].isEmpty() ) {
+			if ( isEmpty( mBox[i] ) ) {
 				TRACE( "hypro.representations.supportFunction", "is empty." );
 				mEmptyState = SETSTATE::EMPTY;
 			}

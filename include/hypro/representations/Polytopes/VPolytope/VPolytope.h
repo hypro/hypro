@@ -14,8 +14,8 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../../util/sequenceGeneration/SequenceGenerator.h"
 #include "../../../util/statistics/statistics.h"
 #include "../../../util/typetraits.h"
-#include "../redundantPoints.h"
 #include "../Cone.h"
+#include "../redundantPoints.h"
 #include "VPolytopeSetting.h"
 #include "util.h"
 
@@ -315,7 +315,7 @@ class VPolytopeT : private GeometricObjectBase {
 
 	void removeRedundancy();
 
-	template <typename N = Number, carl::DisableIf<carl::is_float<N>> = carl::dummy>
+	template <typename N = Number, carl::DisableIf<is_float<N>> = carl::dummy>
 	void reduceNumberRepresentation( std::size_t limit = fReach_DENOMINATOR ) const {
 		if ( !mVertices.empty() ) {
 			// determine barycenter to set rounding directions
@@ -330,8 +330,8 @@ class VPolytopeT : private GeometricObjectBase {
 				for ( std::size_t d = 0; d < dimension; ++d ) {
 					assert( d < vertex.dimension() );
 					// determine, which is larger: numerator or denominator
-					Number denom = carl::getDenom( vertex.at( d ) );
-					Number num = carl::getNum( vertex.at( d ) );
+					Number denom = getDenominator( vertex.at( d ) );
+					Number num = getNumerator( vertex.at( d ) );
 					if ( denom > limit && carl::abs( num ) > limit ) {
 						if ( denom > num ) {
 							Number newNum = num / denom * limit;
@@ -360,7 +360,7 @@ class VPolytopeT : private GeometricObjectBase {
 		}
 	}
 
-	template <typename N = Number, carl::EnableIf<carl::is_float<N>> = carl::dummy>
+	template <typename N = Number, carl::EnableIf<is_float<N>> = carl::dummy>
 	void reduceNumberRepresentation( unsigned = fReach_DENOMINATOR ) const {}
 
 	void updateNeighbors();

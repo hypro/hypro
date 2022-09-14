@@ -1,9 +1,9 @@
 #pragma once
 
-//#define USE_PRESOLUTION
+// #define USE_PRESOLUTION
 #define RECREATE_SOLVER
-//#define VERIFY_RESULT
-//#define DEBUG_MSG
+// #define VERIFY_RESULT
+// #define DEBUG_MSG
 
 #include "../../datastructures/Point.h"
 #include "../../types.h"
@@ -24,11 +24,10 @@
 #include "clp/adaptions_clp.h"
 #endif
 
+#include "../../types.h"
 #include "glpk/adaptions_glpk.h"
 #include "glpk_context.h"
 
-#include <carl/core/Relation.h>
-#include <carl/util/Singleton.h>
 #include <glpk.h>
 #include <mutex>
 #include <thread>
@@ -109,7 +108,7 @@ class Optimizer {
 		fileCounter = cnt;
 #endif
 #if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3 && !defined HYPRO_USE_SOPLEX
-		if ( !Optimizer<Number>::warnInexact && carl::is_rational<Number>().value ) {
+		if ( !Optimizer<Number>::warnInexact && is_rational<Number>().value ) {
 			// only warn once
 			Optimizer<Number>::warnInexact = true;
 			WARN( "hypro.optimizer", "Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend)." );
