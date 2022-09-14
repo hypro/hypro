@@ -24,7 +24,7 @@ using Vector = vector_t<Number>;
 TEST( BoundednessTest, Boxes ) {
 	EXPECT_TRUE( isBounded( Box<Number>( IV{ I{ 1, 2 }, I{ 3, 4 } } ) ) );
 	EXPECT_FALSE( isBounded( Box<Number>( IV{ I{ 1, carl::BoundType::WEAK, 2, carl::BoundType::INFTY }, I{ 3, 4 } } ) ) );
-	EXPECT_FALSE( isBounded( Box<Number>( IV{ I::unboundedInterval() } ) ) );
+	EXPECT_FALSE( isBounded( Box<Number>( IV{ createUnboundedInterval<Number>() } ) ) );
 	EXPECT_TRUE( isBounded( Box<Number>::Empty() ) );
 	EXPECT_TRUE( isBounded( Box<Number>() ) );
 }

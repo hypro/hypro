@@ -27,13 +27,13 @@ Condition<Number>::Condition( const std::vector<carl::Interval<Number>>& interva
 	std::vector<Number> constants;
 	std::size_t dim = intervals.size();
 	for ( std::size_t i = 0; i < dim; ++i ) {
-		if ( intervals[i].lowerBoundType() == carl::BoundType::WEAK ) {
+		if ( lowerBoundType( intervals[i] ) == carl::BoundType::WEAK ) {
 			vector_t<Number> r = vector_t<Number>::Zero( dim );
 			r( i ) = Number( -1 );
 			constants.emplace_back( -intervals[i].lower() );
 			rows.emplace_back( std::move( r ) );
 		}
-		if ( intervals[i].upperBoundType() == carl::BoundType::WEAK ) {
+		if ( upperBoundType( intervals[i] ) == carl::BoundType::WEAK ) {
 			vector_t<Number> r = vector_t<Number>::Zero( dim );
 			r( i ) = Number( 1 );
 			constants.emplace_back( intervals[i].upper() );
@@ -174,13 +174,13 @@ Condition<Number> conditionFromIntervals( const std::vector<carl::Interval<Numbe
 	std::vector<Number> constants;
 	std::size_t dim = intervals.size();
 	for ( std::size_t i = 0; i < dim; ++i ) {
-		if ( intervals[i].lowerBoundType() == carl::BoundType::WEAK ) {
+		if ( lowerBoundType( intervals[i] ) == carl::BoundType::WEAK ) {
 			vector_t<Number> r = vector_t<Number>::Zero( dim );
 			r( i ) = Number( -1 );
 			constants.emplace_back( -intervals[i].lower() );
 			rows.emplace_back( std::move( r ) );
 		}
-		if ( intervals[i].upperBoundType() == carl::BoundType::WEAK ) {
+		if ( upperBoundType( intervals[i] ) == carl::BoundType::WEAK ) {
 			vector_t<Number> r = vector_t<Number>::Zero( dim );
 			r( i ) = Number( 1 );
 			constants.emplace_back( intervals[i].upper() );
@@ -193,10 +193,10 @@ Condition<Number> conditionFromIntervals( const std::vector<carl::Interval<Numbe
 template <typename Number>
 void Condition<Number>::decompose( const std::vector<std::vector<std::size_t>>& partition ) {
 	if ( mConstraints.size() > 1 ) {
-		//already decomposed/empty constraints
+		// already decomposed/empty constraints
 		return;
 	} else if ( mConstraints.size() == 0 && partition.size() > 0 ) {
-		//fill mConstaints with empty constraint sets
+		// fill mConstaints with empty constraint sets
 		std::vector<ConstraintSetT<Number>> newCset;
 		for ( std::size_t i = 0; i < partition.size(); i++ ) {
 			ConstraintSetT<Number> res = ConstraintSetT<Number>();
@@ -232,7 +232,7 @@ void Condition<Number>::decompose( const std::vector<std::vector<std::size_t>>& 
 			bool containsVar = false;
 			for ( Eigen::Index j = 0; j < constraintsOld.cols(); j++ ) {
 				if ( constraintsOld( i, j ) != 0 && std::find( set.begin(), set.end(), j ) != set.end() ) {
-					//set contains variable j, which is also contained in this constraint
+					// set contains variable j, which is also contained in this constraint
 					containsVar = true;
 					break;
 				}
@@ -303,13 +303,13 @@ bool Condition<Number>::cacheIsSane() const {
 }
 #endif
 
-//template<typename Number>
-//template<typename Representation, typename ...Rargs>
-//std::pair<bool,State<Number,Representation, Rargs...>> Condition<Number>::isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const {
-//#ifdef HYDRA_USE_LOGGING
+// template<typename Number>
+// template<typename Representation, typename ...Rargs>
+// std::pair<bool,State<Number,Representation, Rargs...>> Condition<Number>::isSatisfiedBy(const State<Number,Representation, Rargs...>& inState) const {
+// #ifdef HYDRA_USE_LOGGING
 //	DEBUG("hydra.datastructures","Checking condition.");
 //	DEBUG("hydra.datastructures","State: " << inState);
-//#endif
+// #endif
 //
 //	// TODO: Overthink order here - it would be nice to test clocks first, then discrete assignments and continuous sets last.
 //	State<Number,Representation> res(inState);
@@ -334,6 +334,6 @@ bool Condition<Number>::cacheIsSane() const {
 //
 //	//DEBUG("hydra.datastructures","Condition is satisfied: " << !empty);
 //	return std::make_pair(!empty, res);
-//}
+// }
 
 }  // namespace hypro

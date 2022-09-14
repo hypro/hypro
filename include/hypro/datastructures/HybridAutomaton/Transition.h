@@ -21,14 +21,13 @@
 static_assert( false, "This file may only be included indirectly by Location.h" );
 #endif
 
+#include "../../types.h"
 #include "Condition.h"
 #include "HybridAutomaton.h"
 #include "Label.h"
 #include "Location.h"
 #include "Reset.h"
 #include "decomposition/Decomposition.h"
-
-#include <carl/interval/Interval.h>
 
 namespace hypro {
 enum Aggregation { none = 0,

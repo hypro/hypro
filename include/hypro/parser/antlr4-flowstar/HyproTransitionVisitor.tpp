@@ -213,7 +213,7 @@ namespace hypro {
 
 		matrix_t<Number> resetMatrix = matrix_t<Number>::Identity(vars.size(), vars.size());
 		vector_t<Number> resetVector = vector_t<Number>::Zero(vars.size());
-		std::vector<carl::Interval<Number>> intervalResets = std::vector<carl::Interval<Number>>(vars.size(), carl::Interval<Number>::emptyInterval());
+                std::vector<carl::Interval<Number>> intervalResets = std::vector<carl::Interval<Number>>(vars.size(), createEmptyInterval<Number>());
 		std::size_t affineAssignmentCnt = 0;
 		std::size_t intervalAssignmentCnt = 0;
 		for(unsigned i=0; i < ctx->allocation().size(); i++){
@@ -228,7 +228,7 @@ namespace hypro {
 				//1.2.Find out into which row according to vars we have to place the row
 				resetMatrix.row(valuesNPos.second) = assignment.head(vars.size());
 				resetVector(valuesNPos.second) = assignment(rowNumber-1);
-				intervalResets[valuesNPos.second] = carl::Interval<Number>::emptyInterval(); // not really neccessary
+                                intervalResets[valuesNPos.second] = createEmptyInterval<Number>();
 				++affineAssignmentCnt;
 			} else {
 				assert(valuesNPos.first.index() == 1);

@@ -4,14 +4,14 @@ namespace hypro {
 
 template <>
 EvaluationResult<double> glpkOptimizeLinear( glpk_context& context, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>&, bool useExact ) {
-	//std::cout << __func__ << " in direction " << _direction.transpose() << std::endl;
-	//std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "Glpk Problem: " << std::endl;
-	//printProblem(glpkProblem);
+	// std::cout << __func__ << " in direction " << _direction.transpose() << std::endl;
+	// std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "Glpk Problem: " << std::endl;
+	// printProblem(glpkProblem);
 
 	// setup glpk
 	for ( int i = 0; i < constraints.cols(); i++ ) {
 		glp_set_col_bnds( context.lp, i + 1, GLP_FR, 0.0, 0.0 );
-		glp_set_obj_coef( context.lp, i + 1, carl::toDouble( _direction( i ) ) );
+		glp_set_obj_coef( context.lp, i + 1, toDouble( _direction( i ) ) );
 	}
 
 	// scale problem to improve its stability
@@ -123,17 +123,17 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 					//( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
 				case carl::Relation::LEQ:
 					// set upper bounds, lb-values (here 0.0) are ignored.
-					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_UP, 0.0, carl::toDouble( constants( constraintIndex ) ) );
+					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_UP, 0.0, toDouble( constants( constraintIndex ) ) );
 					break;
 				case carl::Relation::GREATER:
 					// WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
 				case carl::Relation::GEQ:
 					// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_LO, carl::toDouble( constants( constraintIndex ) ), 0.0 );
+					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_LO, toDouble( constants( constraintIndex ) ), 0.0 );
 					break;
 				case carl::Relation::EQ:
 					// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_FX, carl::toDouble( constants( constraintIndex ) ), 0.0 );
+					glp_set_row_bnds( context.lp, int( constraintIndex ) + 1, GLP_FX, toDouble( constants( constraintIndex ) ), 0.0 );
 					break;
 				default:
 					// glpk cannot handle strict inequalities.
@@ -153,17 +153,17 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 				// WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
 			case carl::Relation::LEQ:
 				// set upper bounds, lb-values (here 0.0) are ignored.
-				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_UP, 0.0, carl::toDouble( constants( idx ) ) );
+				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_UP, 0.0, toDouble( constants( idx ) ) );
 				break;
 			case carl::Relation::GREATER:
 				// WARN( hypro, "ATTENTION, glpk cannot handle strict inequalities, results will be based on weak inequalities" );
 			case carl::Relation::GEQ:
 				// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_LO, carl::toDouble( constants( idx ) ), 0.0 );
+				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_LO, toDouble( constants( idx ) ), 0.0 );
 				break;
 			case carl::Relation::EQ:
 				// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_FX, carl::toDouble( constants( idx ) ), 0.0 );
+				glp_set_row_bnds( context.lp, int( idx + 1 ), GLP_FX, toDouble( constants( idx ) ), 0.0 );
 				break;
 			default:
 				// glpk cannot handle strict inequalities.

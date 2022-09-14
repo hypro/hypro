@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include <carl/util/Singleton.h>
+#include "../../types.h"
+
 #include <hypro/flags.h>
 
 #define PRINT_STATS()

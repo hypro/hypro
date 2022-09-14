@@ -14,9 +14,8 @@
 #ifndef HYPRO_INTERVAL_SERIALIZATION_H
 #define HYPRO_INTERVAL_SERIALIZATION_H
 
+#include "../../types.h"
 #include "mpq_serialization.h"
-
-#include <carl/interval/Interval.h>
 
 namespace cereal {
 
@@ -29,7 +28,7 @@ namespace cereal {
 template <class Archive>
 void save( Archive& archive,
 		   carl::Interval<double> const& intv ) {
-	archive( intv.lower(), intv.lowerBoundType(), intv.upper(), intv.upperBoundType() );
+	archive( intv.lower(), hypro::lowerBoundType( intv ), intv.upper(), hypro::upperBoundType( intv ) );
 }
 
 template <class Archive>
@@ -44,7 +43,7 @@ void load( Archive& archive,
 template <class Archive>
 void save( Archive& archive,
 		   carl::Interval<mpq_class> const& intv ) {
-	archive( intv.lower(), intv.lowerBoundType(), intv.upper(), intv.upperBoundType() );
+	archive( intv.lower(), hypro::lowerBoundType( intv ), intv.upper(), hypro::upperBoundType( intv ) );
 }
 
 template <class Archive>

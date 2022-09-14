@@ -8,8 +8,8 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
-#include <carl/core/VariablePool.h>
 #include <cstdio>
 #include <hypro/datastructures/VertexContainer.h>
 

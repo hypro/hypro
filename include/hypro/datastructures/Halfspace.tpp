@@ -408,7 +408,7 @@ vector_t<Number> Halfspace<Number>::computePlaneNormal( const std::vector<vector
 				ia[pos] = i;
 				ja[pos] = j;
 				vector_t<Number> tmpVec = pointSet.at( i - 1 );
-				ar[pos] = carl::toDouble( tmpVec( j - 1 ) );
+				ar[pos] = toDouble( tmpVec( j - 1 ) );
 				++pos;
 			}
 		}

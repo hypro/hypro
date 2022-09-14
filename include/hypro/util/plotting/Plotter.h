@@ -20,14 +20,13 @@
 #include "../../config.h"
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
+#include "../../types.h"
 #include "../logging/Logger.h"
 #include "../type_handling/plottype_enums.h"
 #include "Colors.h"
 #include "GnuplotSettings.h"
 #include "PlotterUtil.h"
 
-#include <carl/interval/Interval.h>
-#include <carl/util/Singleton.h>
 #include <fstream>
 #include <stack>
 #include <string>

@@ -1,8 +1,7 @@
 #pragma once
+#include "../../../types.h"
 #include "../../../util/sequenceGeneration/SequenceGenerator.h"
 
-#include <carl/core/Variable.h>
-#include <carl/interval/Interval.h>
 #include <iosfwd>
 #include <map>
 
@@ -94,7 +93,11 @@ class rectangularFlow {
 
 	bool isSingular() const {
 		for ( const auto& [_, interval] : mFlowIntervals ) {
+#ifdef CARL_OLD_STRUCTURE
 			if ( !interval.isPointInterval() ) {
+#else
+			if ( !interval.is_point_interval() ) {
+#endif
 				return false;
 			}
 		}
@@ -102,7 +105,11 @@ class rectangularFlow {
 	}
 
 	bool isSingular( std::size_t varIndex ) const {
+#ifdef CARL_OLD_STRUCTURE
 		return mFlowIntervals.at( VariablePool::getInstance().carlVarByIndex( varIndex ) ).isPointInterval();
+#else
+		return mFlowIntervals.at( VariablePool::getInstance().carlVarByIndex( varIndex ) ).is_point_interval();
+#endif
 	}
 
 	friend bool operator==( const rectangularFlow<Number>& lhs, const rectangularFlow<Number>& rhs ) {

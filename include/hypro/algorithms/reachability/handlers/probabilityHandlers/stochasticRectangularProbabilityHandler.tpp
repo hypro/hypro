@@ -9,7 +9,7 @@ void stochasticRectangularProbabilityHandler<State, Number>::calculateProbabilit
 	Number currentProb = 0;
 	bool isUnbounded = false;
 	for ( auto interval : mStateInterval ) {
-		if ( interval.lowerBoundType() == carl::BoundType::INFTY || interval.upperBoundType() == carl::BoundType::INFTY ) {
+		if ( lowerBoundType( interval ) == carl::BoundType::INFTY || upperBoundType( interval ) == carl::BoundType::INFTY ) {
 			isUnbounded = true;
 		}
 	}
@@ -280,13 +280,13 @@ void stochasticRectangularProbabilityHandler<State, Number>::intervalCalculation
 					if ( lower_current < lower_tmp ) {
 						// std::cout << " lower_current < lower_tmp " << std::endl;
 						lower_tmp = lower_current;
-						tmp->setLower( lower_tmp );
+						setLowerBound( tmp, lower_tmp );
 					}
 
 					if ( upper_tmp < upper_current ) {
 						// std::cout << " upper_tmp < upper_current " << std::endl;
-						interval.setLower( lower_tmp );
-						interval.setUpper( upper_current );
+						setLowerBound( interval, lower_tmp );
+						setUpperBound( interval, upper_current );
 						mStateInterval.erase( i );
 						mStateInterval.emplace( i, interval );
 						// std::cout << " current interval value is: " << interval << std::endl;
@@ -435,10 +435,10 @@ void stochasticRectangularProbabilityHandler<State, Number>::calculateDisjointIn
 
 template <typename State, typename Number>
 std::vector<carl::Interval<Number>> stochasticRectangularProbabilityHandler<State, Number>::calculateComplement( carl::Interval<Number> lhs, carl::Interval<Number> rhs ) {
-	auto lhsLowerType = lhs.lowerBoundType();
-	auto lhsUpperType = lhs.upperBoundType();
-	auto rhsLowerType = rhs.lowerBoundType();
-	auto rhsUpperType = rhs.upperBoundType();
+	auto lhsLowerType = lowerBoundType( lhs );
+	auto lhsUpperType = upperBoundType( lhs );
+	auto rhsLowerType = lowerBoundType( rhs );
+	auto rhsUpperType = upperBoundType( rhs );
 	auto lhsLower = lhs.lower();
 	auto lhsUpper = lhs.upper();
 	auto rhsLower = rhs.lower();

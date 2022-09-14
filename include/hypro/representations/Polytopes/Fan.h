@@ -1,10 +1,10 @@
 #pragma once
 
 #include "../../datastructures/Point.h"
+#include "../../types.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "Cone.h"
 
-#include <carl/formula/Constraint.h>
 #include <cassert>
 
 namespace hypro {

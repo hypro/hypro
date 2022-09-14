@@ -12,7 +12,6 @@
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 
 #include <bits/c++config.h>
-#include <carl/interval/Interval.h>
 #include <vector>
 
 namespace hypro {
@@ -155,7 +154,7 @@ struct IntervalAssignment {
 	std::size_t size() const { return mIntervals.size(); }
 
 	bool isIdentity() const {
-		return std::all_of( mIntervals.begin(), mIntervals.end(), []( const auto& i ) { return i.isEmpty(); } );
+		return std::all_of( mIntervals.begin(), mIntervals.end(), []( const auto& i ) { return isEmpty( i ); } );
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const IntervalAssignment<Number>& in ) {

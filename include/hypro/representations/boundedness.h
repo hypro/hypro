@@ -39,7 +39,7 @@ bool isBounded( const BoxT<Number, Converter, Setting>& in ) {
 	if ( in.empty() ) {
 		return true;
 	}
-	return std::none_of( std::begin( in.intervals() ), std::end( in.intervals() ), []( const auto& intv ) { return intv.isUnbounded(); } );
+	return std::none_of( std::begin( in.intervals() ), std::end( in.intervals() ), []( const auto& intv ) { return isUnbounded( intv ); } );
 }
 
 /**

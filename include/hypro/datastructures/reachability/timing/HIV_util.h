@@ -80,7 +80,7 @@ template <typename T, typename N>
 static std::optional<std::size_t> smallestFullCover( const std::vector<HierarchicalIntervalVector<T, N>>& hivs, const carl::Interval<N>& intv, T type ) {
 	bool hasFullCover = false;
 	std::size_t res = 0;
-	carl::Interval<N> smallest = carl::Interval<N>::unboundedInterval();
+	carl::Interval<N> smallest = createUnboundedInterval<N>();
 	for ( std::size_t i = 0; i < hivs.size(); ++i ) {
 		// get all intervals that satisfy bot criteria: Intersection interval-wise and correct type.
 		auto intervals = hivs[i].getIntersectingIntervals( intv, type );

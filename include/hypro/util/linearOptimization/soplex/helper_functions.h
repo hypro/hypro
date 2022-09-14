@@ -1,8 +1,7 @@
 #pragma once
 #ifdef HYPRO_USE_SOPLEX
+#include "../../../types.h"
 #include "soplex_hypro.h"
-
-#include <carl/core/Relation.h>
 
 namespace hypro {
 namespace detail {

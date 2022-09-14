@@ -5,7 +5,7 @@ namespace reachability {
 
 template <typename Number, typename ReacherSettings, typename State>
 bool Reach<Number, ReacherSettings, State>::intersectBadStates( const State& _state ) const {
-	assert( !_state.getTimestamp().isUnbounded() );
+	assert( !isUnbounded( _state.getTimestamp() ) );
 	// check local bad states TODO: Note, we currently allow only one bad state per location -> allow multiple bad states!
 	auto badStateIterator = mAutomaton.getLocalBadStates().find( _state.getLocation() );
 	if ( badStateIterator != mAutomaton.getLocalBadStates().end() ) {

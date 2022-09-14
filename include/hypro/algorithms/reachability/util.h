@@ -4,8 +4,6 @@
 #include "../../representations/GeometricObjectBase.h"
 #include "TrafoParameters.h"
 
-#include <carl/util/SFINAE.h>
-
 namespace hypro {
 
 template <typename Number, typename Representation, carl::DisableIf<std::is_same<Representation, SupportFunction<Number>>> = carl::dummy>
@@ -62,7 +60,7 @@ Number hausdorffError( const Number& delta, const matrix_t<Number>& matrix, cons
 	// Number tmp = delta * t;
 	Number tmp = delta * norm;
 
-	double tmpExp = std::exp( carl::toDouble( tmp ) );
+	double tmpExp = std::exp( toDouble( tmp ) );
 	result = carl::rationalize<Number>( tmpExp );
 
 	// tmp.exp( result );

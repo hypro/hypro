@@ -141,7 +141,7 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 						assert( !boundsSet[colIndex].second );
 						TRACE( "hypro.representations", "Add upper bound " << results[rowIndex].supportValue );
 						if ( boundsSet[colIndex].first ) {
-							mLimits[colIndex].setUpper( results[rowIndex].supportValue );
+							setUpperBound( mLimits[colIndex], results[rowIndex].supportValue );
 						} else {
 							// set to point value, if lower bound has not been set yet.
 							mLimits[colIndex].set( results[rowIndex].supportValue, results[rowIndex].supportValue );
@@ -153,7 +153,7 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 						assert( !boundsSet[colIndex].first );
 						TRACE( "hypro.representations", "Add lower bound " << -results[rowIndex].supportValue );
 						if ( boundsSet[colIndex].second ) {
-							mLimits[colIndex].setLower( -results[rowIndex].supportValue );
+							setLowerBound( mLimits[colIndex], Number( -results[rowIndex].supportValue ) );
 						} else {
 							// set to point value, if upper bound has not been set yet.
 							mLimits[colIndex].set( -results[rowIndex].supportValue, -results[rowIndex].supportValue );
@@ -310,13 +310,13 @@ EvaluationResult<Number> BoxT<Number, Converter, Setting>::evaluate( const vecto
 	for ( Eigen::Index i = 0; i < furthestPoint.rows(); ++i ) {
 		if ( _direction( i ) >= 0 ) {
 			// Unboundedness check
-			if ( mLimits[i].upperBoundType() == carl::BoundType::INFTY ) {
+			if ( upperBoundType( mLimits[i] ) == carl::BoundType::INFTY ) {
 				return EvaluationResult<Number>( 0, furthestPoint, SOLUTION::INFTY );
 			}
 			furthestPoint( i ) = mLimits[i].upper();
 		} else {
 			// Unboundedness check
-			if ( mLimits[i].lowerBoundType() == carl::BoundType::INFTY ) {
+			if ( lowerBoundType( mLimits[i] ) == carl::BoundType::INFTY ) {
 				return EvaluationResult<Number>( 0, furthestPoint, SOLUTION::INFTY );
 			}
 			furthestPoint( i ) = mLimits[i].lower();
@@ -632,9 +632,9 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::intersectHalf
 				while ( hspace.normal()( nonZeroDim ) == 0 ) ++nonZeroDim;
 
 				if ( hspace.normal()( nonZeroDim ) > 0 ) {
-					boxcopy.rInterval( nonZeroDim ).setUpper( hspace.offset() / hspace.normal()( nonZeroDim ) );
+					setUpperBound( boxcopy.rInterval( nonZeroDim ), Number( hspace.offset() / hspace.normal()( nonZeroDim ) ) );
 				} else {
-					boxcopy.rInterval( nonZeroDim ).setLower( hspace.offset() / hspace.normal()( nonZeroDim ) );
+					setLowerBound( boxcopy.rInterval( nonZeroDim ), Number( hspace.offset() / hspace.normal()( nonZeroDim ) ) );
 				}
 				return boxcopy;
 			}
@@ -802,8 +802,8 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 			if ( minus.at( i ).lower() <= box.at( i ).lower() ) {
 				if ( minus.at( i ).upper() < box.at( i ).lower() ) {
 					unchanged = true;
-				}else if ( minus.at( i ).upper() == box.at( i ).lower() ) {
-					if (box.at(i).lower()!=box.at(i).upper()){
+				} else if ( minus.at( i ).upper() == box.at( i ).lower() ) {
+					if ( box.at( i ).lower() != box.at( i ).upper() ) {
 						unchanged = true;
 					}
 				}
@@ -819,50 +819,50 @@ std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::
 		}
 		if ( unchanged ) {
 			// result.push_back(this);
-            BoxT <Number, Converter, Setting> workbox(box);
-            result.push_back(workbox);
-            return result;
-        }
-        if (empty) {
-            // BoxT<Number, Converter, Setting> workbox = BoxT();
-            // result.push_back( workbox );
-            return result;
-        }
+			BoxT<Number, Converter, Setting> workbox( box );
+			result.push_back( workbox );
+			return result;
+		}
+		if ( empty ) {
+			// BoxT<Number, Converter, Setting> workbox = BoxT();
+			// result.push_back( workbox );
+			return result;
+		}
 
-        //------------- calculate difference -------------
-        long unsigned int i = minus.size();
-        while (i > 0) {
-            i--;
-            std::vector<carl::Interval<Number>> box2 = box;     // lower
-            std::vector<carl::Interval<Number>> box3 = box;     // upper
-            box2.at(i).setUpper(minus.at(i).lower());
-            box3.at(i).setLower(minus.at(i).upper());
-            // check if the lower box (box2) is not empty
-            if (box2.at(i).lower() < box2.at(i).upper()) {
-                BoxT <Number, Converter, Setting> workbox(box2);
-                if (!workbox.empty()) {
-                    result.push_back(workbox);
-                }
-                // carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
-                carl::Interval<Number> tmp(box2.at(i).upper(), box.at(i).upper());
-                // std::cout << tmp << std::endl;
-                box.at(i) = tmp;
-            }
-            // check if the upper box (box3) is not empty
-            if (box3.at(i).lower() < box3.at(i).upper()) {
-                BoxT <Number, Converter, Setting> workbox(box3);
-                if (!workbox.empty()) {
-                    result.push_back(workbox);
-                }
-                // carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
-                carl::Interval<Number> tmp2(box.at(i).lower(), box3.at(i).lower());
-                // std::cout << tmp2 << std::endl;
-                box.at(i) = tmp2;
-            }
-        }
-        return result;
-    }
-    // return result;
+		//------------- calculate difference -------------
+		long unsigned int i = minus.size();
+		while ( i > 0 ) {
+			i--;
+			std::vector<carl::Interval<Number>> box2 = box;	 // lower
+			std::vector<carl::Interval<Number>> box3 = box;	 // upper
+			setUpperBound( box2.at( i ), minus.at( i ).lower() );
+			setLowerBound( box3.at( i ), minus.at( i ).upper() );
+			// check if the lower box (box2) is not empty
+			if ( box2.at( i ).lower() < box2.at( i ).upper() ) {
+				BoxT<Number, Converter, Setting> workbox( box2 );
+				if ( !workbox.empty() ) {
+					result.push_back( workbox );
+				}
+				// carl::Interval<Number> tmp( box2.at( i ).upperBound(), box.at( i ).upperBound() );
+				carl::Interval<Number> tmp( box2.at( i ).upper(), box.at( i ).upper() );
+				// std::cout << tmp << std::endl;
+				box.at( i ) = tmp;
+			}
+			// check if the upper box (box3) is not empty
+			if ( box3.at( i ).lower() < box3.at( i ).upper() ) {
+				BoxT<Number, Converter, Setting> workbox( box3 );
+				if ( !workbox.empty() ) {
+					result.push_back( workbox );
+				}
+				// carl::Interval<Number> tmp2( box.at( i ).lowerBound(), box3.at( i ).lowerBound() );
+				carl::Interval<Number> tmp2( box.at( i ).lower(), box3.at( i ).lower() );
+				// std::cout << tmp2 << std::endl;
+				box.at( i ) = tmp2;
+			}
+		}
+		return result;
+	}
+	// return result;
 }
 
 template <typename Number, typename Converter, class Setting>
@@ -1023,7 +1023,11 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::unite( const 
 
 	std::vector<carl::Interval<Number>> newIntervals;
 	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
+#ifdef CARL_OLD_STRUCTURE
 		newIntervals.emplace_back( mLimits[i].convexHull( rhs.interval( i ) ) );
+#else
+		newIntervals.emplace_back( mLimits[i].convex_hull( rhs.interval( i ) ) );
+#endif
 	}
 	return BoxT<Number, Converter, Setting>( newIntervals );
 }

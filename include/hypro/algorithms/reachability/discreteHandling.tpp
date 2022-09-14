@@ -4,7 +4,7 @@ namespace reachability {
 template <typename Number, typename ReacherSettings, typename State>
 bool Reach<Number, ReacherSettings, State>::intersectGuard( Transition<Number>* _trans, const State& _state,
 															State& result ) const {
-	assert( !_state.getTimestamp().isUnbounded() );
+	assert( !isUnbounded( _state.getTimestamp() ) );
 	result = _state;
 
 	// check for continuous set guard intersection
@@ -37,7 +37,7 @@ void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std:
 			TRACE( "hypro.reacher", "No aggregation." );
 			// copy state - as there is no aggregation, the containing set and timestamp is already valid
 			State s = stateSet;
-			assert( !s.getTimestamp().isUnbounded() );
+			assert( !isUnbounded( s.getTimestamp() ) );
 			s.setLocation( transition->getTarget() );
 
 			s = applyReset( s, transition->getReset() );
@@ -90,7 +90,7 @@ void Reach<Number, ReacherSettings, State>::processDiscreteBehaviour( const std:
 #endif
 			for ( std::size_t segmentIdx = 1; segmentIdx < segmentsPerCluster[clusterIdx]; ++segmentIdx, ++segmentCount ) {
 				assert( segmentCount != stateSetVector.size() );
-				assert( !stateSetVector[segmentCount].getTimestamp().isUnbounded() );
+				assert( !isUnbounded( stateSetVector[segmentCount].getTimestamp() ) );
 				aggregatedTimestamp = aggregatedTimestamp.convexHull( stateSetVector[segmentCount].getTimestamp() );
 				collectedSets = collectedSets.unite( stateSetVector[segmentCount] );
 #ifdef HYPRO_LOGGING
@@ -152,7 +152,7 @@ bool Reach<Number, ReacherSettings, State>::checkTransitions( const State& state
 			INFO( "hypro.reacher", "hybrid transition enabled" );
 			assert( guardSatisfyingState.getTimestamp() == state.getTimestamp() );
 			// when a guard is satisfied here, as we do not have dynamic behaviour, avoid calculation of flowpipe
-			assert( !guardSatisfyingState.getTimestamp().isUnbounded() );
+			assert( !isUnbounded( guardSatisfyingState.getTimestamp() ) );
 #ifdef USE_FORCE_REDUCTION
 			applyReduction( guardSatisfyingState );
 #endif

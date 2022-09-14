@@ -15,8 +15,8 @@ namespace hypro {
  */
 template <typename Number, typename tNumber = hypro::tNumber>
 struct TPathElement {
-	Transition<Number>* transition = nullptr;											  /// Pointer to a transition in case of a discrete step.
-	carl::Interval<tNumber> timeInterval = carl::Interval<tNumber>::unboundedInterval();  /// Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled.
+	Transition<Number>* transition = nullptr;									/// Pointer to a transition in case of a discrete step.
+	carl::Interval<tNumber> timeInterval = createUnboundedInterval<tNumber>();	/// Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled.
 
 	/**
 	 * @brief      Constructor for a discrete step element.

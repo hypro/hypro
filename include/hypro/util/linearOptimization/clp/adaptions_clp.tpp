@@ -14,14 +14,14 @@ EvaluationResult<Number> clpOptimizeLinearPostSolve( clp_context& context, const
 	double rowLowerBound;
 	double rowUpperBound;
 	for ( int i = 0; i < constraints.cols(); ++i ) {
-		rowValues[i] = carl::toDouble( _direction( i ) );
+		rowValues[i] = toDouble( _direction( i ) );
 		rowIndices[i] = i;
 	}
 	if ( context.lp.optimizationDirection() == -1 ) {
 		rowUpperBound = COIN_DBL_MAX;
-		rowLowerBound = carl::toDouble( preSolution.supportValue );
+		rowLowerBound = toDouble( preSolution.supportValue );
 	} else {
-		rowUpperBound = carl::toDouble( preSolution.supportValue );
+		rowUpperBound = toDouble( preSolution.supportValue );
 		rowLowerBound = -COIN_DBL_MAX;
 	}
 	context.lp.addRow( constraints.cols(), rowIndices, rowValues, rowLowerBound, rowUpperBound );
@@ -45,7 +45,7 @@ EvaluationResult<Number> clpOptimizeLinear( clp_context& context, const vector_t
 	double* objective = new double[constraints.cols()];
 	// set objective
 	for ( int i = 0; i < constraints.cols(); ++i ) {
-		objective[i] = carl::toDouble( _direction( i ) );
+		objective[i] = toDouble( _direction( i ) );
 	}
 	// remove bounds on columns
 	for ( int i = 0; i < constraints.cols(); ++i ) {
@@ -89,8 +89,8 @@ bool clpCheckPoint( clp_context& context, const matrix_t<Number>& constraints, c
 
 	// set column lower and upper bounds
 	for ( int i = 0; i < constraints.cols(); ++i ) {
-		context.mColumnLowerBounds[i] = carl::toDouble( _point.rawCoordinates()( i ) );
-		context.mColumnUpperBounds[i] = carl::toDouble( _point.rawCoordinates()( i ) );
+		context.mColumnLowerBounds[i] = toDouble( _point.rawCoordinates()( i ) );
+		context.mColumnUpperBounds[i] = toDouble( _point.rawCoordinates()( i ) );
 	}
 
 	// load problem with fixed column and without objective
@@ -152,10 +152,10 @@ std::vector<std::size_t> clpRedundantConstraints( clp_context& context, const ma
 			res.push_back( constraintIndex );
 		} else {
 			if ( relation == carl::Relation::LEQ || relation == carl::Relation::EQ ) {
-				context.lp.setRowUpper( constraintIndex, carl::toDouble( constants( constraintIndex ) ) );
+				context.lp.setRowUpper( constraintIndex, toDouble( constants( constraintIndex ) ) );
 			}
 			if ( relation == carl::Relation::GEQ || relation == carl::Relation::EQ ) {
-				context.lp.setRowLower( constraintIndex, carl::toDouble( constants( constraintIndex ) ) );
+				context.lp.setRowLower( constraintIndex, toDouble( constants( constraintIndex ) ) );
 			}
 		}
 

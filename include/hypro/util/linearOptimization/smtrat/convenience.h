@@ -3,11 +3,11 @@
  */
 #pragma once
 #include "../../../flags.h"
+#include "../../../types.h"
 #ifdef HYPRO_USE_SMTRAT
 #include "../../../datastructures/Point.h"
 #include "../../VariablePool.h"
 
-#include <carl/interval/Interval.h>
 #include <fstream>
 
 namespace hypro {
@@ -39,7 +39,7 @@ static std::unordered_map<smtrat::FormulaT, std::size_t> createFormula( const st
 	std::unordered_map<smtrat::FormulaT, std::size_t> constraints;
 	for ( unsigned intervalIndex = 0; intervalIndex < _intervals.size(); ++intervalIndex ) {
 		carl::MultivariatePolynomial<smtrat::Rational> lower;
-		switch ( _intervals[intervalIndex].lowerBoundType() ) {
+		switch ( lowerBoundType( _intervals[intervalIndex] ) ) {
 			case carl::BoundType::STRICT: {
 				lower += pool.carlVarByIndex( intervalIndex ) - carl::convert<Number, smtrat::Rational>( _intervals[intervalIndex].lower() );
 				constraints.insert( std::make_pair( smtrat::FormulaT( lower, carl::Relation::GREATER ), intervalIndex ) );
@@ -55,7 +55,7 @@ static std::unordered_map<smtrat::FormulaT, std::size_t> createFormula( const st
 			}
 		}
 		carl::MultivariatePolynomial<smtrat::Rational> upper;
-		switch ( _intervals[intervalIndex].upperBoundType() ) {
+		switch ( upperBoundType( _intervals[intervalIndex] ) ) {
 			case carl::BoundType::STRICT: {
 				upper += pool.carlVarByIndex( intervalIndex ) - carl::convert<Number, smtrat::Rational>( _intervals[intervalIndex].lower() );
 				constraints.insert( std::make_pair( smtrat::FormulaT( upper, carl::Relation::LESS ), intervalIndex ) );

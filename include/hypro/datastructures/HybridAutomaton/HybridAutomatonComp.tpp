@@ -67,7 +67,9 @@ const typename HybridAutomatonComp<Number>::conditionVector& HybridAutomatonComp
 }
 
 template <typename Number>
-unsigned HybridAutomatonComp<Number>::dimension() const {}
+unsigned HybridAutomatonComp<Number>::dimension() const {
+	throw NotImplemented();
+}
 
 template <typename Number>
 const std::vector<std::string>& HybridAutomatonComp<Number>::getVariables() const {
@@ -109,6 +111,8 @@ const std::vector<std::string>& HybridAutomatonComp<Number>::getVariables() cons
 }
 
 template <typename Number>
-const std::set<Label> HybridAutomatonComp<Number>::getLabels() const {}
+const std::set<Label> HybridAutomatonComp<Number>::getLabels() const {
+	throw NotImplemented();
+}
 
 }  // namespace hypro
