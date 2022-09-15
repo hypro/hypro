@@ -57,7 +57,11 @@ class CarlPolytopeT : private GeometricObjectBase {
 		: mFormula( formula )
 		, mHalfspaces()
 		, mDimension( dimension ) {
+#ifdef CARL_OLD_STRUCTURE
 		assert( formula.isRealConstraintConjunction() );
+#else
+		assert( formula.is_real_constraint_conjunction() );
+#endif
 		if ( dimension == 0 ) {
 			detectDimension();
 		}

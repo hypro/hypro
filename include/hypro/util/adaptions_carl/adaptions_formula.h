@@ -62,6 +62,24 @@ bool isNary( const FormulaT<Number>& in ) {
 }
 
 template <typename Number>
+bool isNumber( const PolyT<Number>& in ) {
+#ifdef CARL_OLD_STRUCTURE
+	return in.isNumber();
+#else
+	return in.is_number();
+#endif
+}
+
+template <typename Number>
+bool isLinear( const PolyT<Number>& in ) {
+#ifdef CARL_OLD_STRUCTURE
+	return in.isLinear();
+#else
+	return in.is_linear();
+#endif
+}
+
+template <typename Number>
 carl::FormulaType getType( const FormulaT<Number>& in ) {
 #ifdef CARL_OLD_STRUCTURE
 	return in.getType();
@@ -85,6 +103,15 @@ bool isFalse( const FormulaT<Number>& formula ) {
 	return formula.isFalse();
 #else
 	return formula.is_false();
+#endif
+}
+
+template <typename Number>
+bool isTrue( const FormulaT<Number>& formula ) {
+#ifdef CARL_OLD_STRUCTURE
+	return formula.isTrue();
+#else
+	return formula.is_true();
 #endif
 }
 

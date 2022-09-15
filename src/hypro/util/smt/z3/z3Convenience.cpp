@@ -31,7 +31,7 @@ z3::expr toZ3( const FormulaT<tNumber>& inFormula, z3Context& c, std::map<std::s
 			auto& pool = VariablePool::getInstance();
 			const auto& constraint = inFormula.constraint();
 			const auto& pol = constraint.lhs();
-			assert( pol.isLinear() );
+			assert( isLinear( pol ) );
 			auto vars = variables( pol );
 			z3::expr poly = c.real_val( constantPart( pol ) );
 			for ( const auto& v : vars ) {
