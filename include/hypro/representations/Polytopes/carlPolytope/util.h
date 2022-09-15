@@ -10,6 +10,7 @@
 #pragma once
 #include "../../../carlTypes.h"
 #include "../../../datastructures/Halfspace.h"
+#include "../../../types.h"
 #include "../../../util/VariablePool.h"
 #include "../../../util/adaptions_carl/adaptions_formula.h"
 
@@ -96,8 +97,8 @@ vector_t<D> constraintNormal( const ConstraintT<N>& c, std::size_t dim ) {
 	vector_t<D> normal = vector_t<D>::Zero( dim );
 	for ( const auto& var : c.variables() ) {
 		assert( VariablePool::getInstance().hasDimension( getVar( var ) ) );
-		assert( c.lhs().isLinear() );
-		assert( c.lhs().coeff( getVar( var ), 1 ).isNumber() );
+		assert( isLinear( c.lhs() ) );
+		assert( isNumber( c.lhs().coeff( getVar( var ), 1 ) ) );
 		TRACE( "hypro.representations.carlPolytope",
 			   "Variable " << getVar( var ) << " with dimension "
 						   << VariablePool::getInstance().id( getVar( var ) ) );
@@ -145,7 +146,11 @@ std::vector<Halfspace<D>> constraintToHalfspace( const ConstraintT<N>& constrain
 
 template <typename N, typename D>
 std::vector<Halfspace<D>> computeHalfspaces( const FormulaT<N>& formula, std::size_t dim ) {
+#ifdef CARL_OLD_STRUCTURE
 	assert( formula.isConstraintConjunction() );
+#else
+	assert( formula.is_constraint_conjunction() );
+#endif
 
 	std::vector<Halfspace<D>> res;
 	std::vector<ConstraintT<N>> constraints;

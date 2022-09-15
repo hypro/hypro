@@ -59,7 +59,7 @@ typename FourierMotzkinQE<Number>::FormulaPartition FourierMotzkinQE<Number>::fi
 	// corner-cases
 	if ( !isNary( mFormula ) && getType( mFormula ) != carl::FormulaType::CONSTRAINT ) {
 		// if any other case happens, this should not be
-		assert( mFormula.isFalse() || mFormula.isTrue() );
+		assert( isFalse( mFormula ) || isTrue( mFormula ) );
 		return res;
 	}
 
@@ -147,11 +147,11 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 		substitutes.push_back( FormulaT<Number>( bounds[2].front() ) );
 	} else {
 		for ( auto f = bounds[2].begin(); f != bounds[2].end(); ++f ) {
-			assert( f->getType() == carl::FormulaType::CONSTRAINT );
+			assert( getType( *f ) == carl::FormulaType::CONSTRAINT );
 			assert( f->constraint().relation() == carl::Relation::EQ );
 
 			for ( auto g = std::next( f ); g != bounds[2].end(); ++g ) {
-				assert( g->getType() == carl::FormulaType::CONSTRAINT );
+				assert( getType( *g ) == carl::FormulaType::CONSTRAINT );
 				assert( g->constraint().relation() == carl::Relation::EQ );
 				FormulaT<Number> newEq =
 					  FormulaT<Number>( f->constraint().lhs() - g->constraint().lhs(), carl::Relation::EQ );
@@ -225,7 +225,7 @@ PolyT<Number> FourierMotzkinQE<Number>::getRemainder( const ConstraintT<Number>&
 template <typename Number>
 bool FourierMotzkinQE<Number>::isLinearLowerBound( const ConstraintT<Number>& c, carl::Variable v ) {
 	assert( hasVariable( c, v ) );
-	assert( c.coefficient( v, 1 ).isNumber() );
+	assert( isNumber( c.coefficient( v, 1 ) ) );
 
 	// is linear lower bound when the coefficient is > 0 and the relation is LEQ or LESS, or if the coefficient is < 0
 	// and the relation is GEQ or GREATER.
