@@ -242,8 +242,8 @@ std::vector<const Transition<typename Set::NumberType, Loc>*> getZenoTransitions
 	return result;
 }
 
-template <class... Ts>
-bool isZenoCycle( const Path<Ts...>& path ) {
+template <typename Number, class... Ts>
+bool isZenoCycle( const Path<Number, Ts...>& path ) {
 	// check, whether the locations match
 	if ( path.elements.front().second->getSource() != path.elements.back().second->getTarget() ) {
 		return false;
