@@ -93,11 +93,11 @@ class Halfspace {
 			}
 
 			mScalar = mScalar * scaling;
-			assert( isInteger( mScalar ) );
+			assert( hypro::isInteger( mScalar ) );
 
 			for ( unsigned i = 0; i < mNormal.rows(); ++i ) {
 				mNormal( i ) = mNormal( i ) * scaling;
-				assert( isInteger( mNormal( i ) ) );
+				assert( hypro::isInteger( mNormal( i ) ) );
 			}
 		}
 	}
