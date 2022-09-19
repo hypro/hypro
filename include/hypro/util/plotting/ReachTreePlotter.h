@@ -93,7 +93,17 @@ class ReachTreePlotter {
 		name += "}";
 		name += " | { fp |" + to_string( node->hasFixedPoint() ) + " }";
 		name += " | { tl |";
-		name += node->hasTimelock() ? "y" : "n";
+		switch ( node->hasTimelock() ) {
+			case TRIBOOL::TRUE:
+				name += "y";
+				break;
+			case TRIBOOL::FALSE:
+				name += "n";
+				break;
+			case TRIBOOL::NSET:
+				name += "?";
+				break;
+		}
 		name += " }";
 		name += "}";
 		return name;

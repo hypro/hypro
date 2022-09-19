@@ -36,7 +36,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;									   ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
 	ReachTreeNode<Representation, Location>* mFixedPointReason = nullptr;	   ///< points to the node which is the reason for fixed-point detection
 	bool mIsOnZenoCycle = false;											   ///< true, if the node is the end of a Zeno-Cycle
-	bool mFinishesWithTimelock = false;										   ///< true, if the node exhibits a timelock
+	TRIBOOL mFinishesWithTimelock = TRIBOOL::NSET;							   ///< true, if the node exhibits a timelock
 	bool mPotentiallyUnsafe = false;										   ///< true, if the analysis has found a non-empty intersection with the set of bad states
 	std::map<TransitionT*, UrgencyRefinementLevel> mUrgRefinementLevels{};	   ///< refinement level for outgoing urgent transitions
 	std::vector<SegmentInd> mFpTimings{};									   ///< timing information for simultaneous segments (urgency)
@@ -157,7 +157,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	bool isOnZenoCycle() const { return mIsOnZenoCycle; }
 
 	/// Setter for a flag indicating, that the node exhibits a timelock
-	void flagTimelock( bool timelock = true ) { mFinishesWithTimelock = timelock; }
+	void flagTimelock( TRIBOOL timelock = TRIBOOL::NSET ) { mFinishesWithTimelock = timelock; }
 
 	/// Getter for the unsafe-status of this node
 	bool intersectedUnsafeRegion() const { return mPotentiallyUnsafe; }
@@ -166,7 +166,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	void flagUnsafe( bool unsafe = true ) { mPotentiallyUnsafe = unsafe; }
 
 	/// Getter for the timelock-status of this node, i.e., whether a timelock has been detected during analysis
-	bool hasTimelock() const { return mFinishesWithTimelock; }
+	TRIBOOL hasTimelock() const { return mFinishesWithTimelock; }
 };
 
 template <typename Representation, typename Location>
