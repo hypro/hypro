@@ -196,6 +196,7 @@ class HybridAutomatonComp {
 				 Count };
 
   public:
+	using NumberType = Number;
 	using LocationType = ComposedLocation<Number>;
 	using Locations = std::list<LocationType>;
 	using TransitionType = Transition<Number, LocationType>;

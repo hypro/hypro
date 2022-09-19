@@ -49,6 +49,7 @@ namespace hypro {
 template <typename Number>
 class HybridAutomaton {
   public:
+	using NumberType = Number;
 	using LocationType = Location<Number>;
 	using Locations = std::vector<std::unique_ptr<LocationType>>;
 	using TransitionType = Transition<Number, LocationType>;
