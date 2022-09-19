@@ -387,7 +387,7 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 		return std::make_pair( CONTAINMENT::NO, *this );
 	}
 
-	assert( this->dimension() == unsigned( _mat.cols() ) );
+	assert( this->dimension() == unsigned( _mat.cols() ) && "Dimensions of this (box) and the passed half-spaces for intersection do not match." );
 	std::vector<unsigned> limitingPlanes;
 
 	for ( unsigned rowIndex = 0; rowIndex < _mat.rows(); ++rowIndex ) {
