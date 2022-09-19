@@ -612,7 +612,17 @@ template <typename Number>
 const typename HybridAutomatonComp<Number>::conditionVector& HybridAutomatonComp<Number>::getGlobalBadStates() const {
 	if ( !mCachesValid[CACHE::GLOBALBADSTATES] ) {
 		for ( std::size_t automatonIdx = 0; automatonIdx < mAutomata.size(); ++automatonIdx ) {
-			mGlobalBadStates.insert( std::end( mGlobalBadStates ), std::begin( mAutomata[automatonIdx].getGlobalBadStates() ), std::end( mAutomata[automatonIdx].getGlobalBadStates() ) );
+			for ( const auto& badStateCondition : mAutomata[automatonIdx].getGlobalBadStates() ) {
+				matrix_t<Number> constraints = matrix_t<Number>::Zero( badStateCondition.getMatrix().rows(), this->dimension() );
+				vector_t<Number> constants = vector_t<Number>::Zero( badStateCondition.getMatrix().rows() );
+				for ( Eigen::Index row = 0; row < badStateCondition.getMatrix().rows(); ++row ) {
+					for ( Eigen::Index col = 0; col < badStateCondition.getMatrix().cols(); ++col ) {
+						constraints( row, mLocalToGlobalVars.at( std::make_pair( automatonIdx, col ) ) ) = badStateCondition.getMatrix()( row, col );
+					}
+					constants( row ) = badStateCondition.getVector()( row );
+				}
+				mGlobalBadStates.emplace_back( constraints, constants );
+			}
 		}
 		mCachesValid[CACHE::GLOBALBADSTATES] = true;
 	}
