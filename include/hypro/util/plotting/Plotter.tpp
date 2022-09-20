@@ -62,7 +62,7 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 			mOutfile << "set title \"" << mSettings.name << "\"\n";
 		}
 		if ( mSettings.keepAspectRatio ) {
-			mOutfile << "set size square\n";
+			mOutfile << "set size ratio -1\n";
 		}
 
 		switch ( outformat ) {
@@ -77,7 +77,7 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 				mOutfile << "set terminal postscript eps  enhanced color font 'Helvetica,20' linewidth 2\n";
 				break;
 			case PLOTTYPE::png:
-				mOutfile << "set terminal png size 1280,800\n";
+				mOutfile << "set terminal png size " << mSettings.resolution.first << "," << mSettings.resolution.second << "\n";
 				break;
 			default:
 				break;
@@ -329,7 +329,6 @@ void Plotter<Number>::writeGnuplot() const {
 		double pointRadius = std::min( ranges[0].diameter(), ranges[1].diameter() ) * 0.01;
 
 		// preamble
-
 		mOutfile << "set xtics autofreq\n";
 		mOutfile << "set ytics autofreq\n";
 		mOutfile << "set bmargin 2\n";
