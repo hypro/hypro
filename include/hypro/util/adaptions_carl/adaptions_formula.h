@@ -8,11 +8,11 @@ namespace hypro {
 
 template <typename Polynomial, typename Variable, typename Substitute>
 Polynomial substitute( const Polynomial& poly, const Variable& v, const Substitute& substitute ) {
-#ifdef CARL_OLD_STRUCTURE
-	return poly.substitute( v, substitute );
-#else
+	/*#ifdef CARL_OLD_STRUCTURE
+		return poly.substitute( v, substitute );
+	#else*/
 	return carl::substitute( poly, v, substitute );
-#endif
+	// #endif
 }
 
 template <typename Number>
