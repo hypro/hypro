@@ -29,7 +29,7 @@ jobs:
       - name: Download Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && sudo apt install libeigen3-dev uuid-dev libboost-system1.71-dev libboost-program-options1.71-dev libboost-test1.71-dev libboost-timer1.71-dev libboost-chrono1.71-dev libboost-serialization1.71-dev libbliss-dev
+        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && sudo apt install libeigen3-dev uuid-dev libboost-system1.71-dev libboost-program-options1.71-dev libboost-test1.71-dev libboost-timer1.71-dev libboost-chrono1.71-dev libboost-serialization1.71-dev libbliss-dev gcovr
 
       - name: Cache Dependencies
         id: cache-dependencies
