@@ -89,3 +89,8 @@ entries:
             url: /git.html
             output: web, pdf
             type: homepage
+
+          - title: coding
+            url: /coding.html
+            output: web, pdf
+            type: homepage
