@@ -260,6 +260,24 @@ class HybridAutomatonComp {
 		}
 	}
 
+	/**
+	 * Makes the passed component master in all locations for the given variable (overrides previous settings).
+	 * @param componentIndex The index of the component.
+	 * @param variableName The name of the variable.
+	 */
+	void makeComponentMasterForVariable( std::size_t componentIndex, const std::string& variableName ) {
+		auto variables = mAutomata.at( componentIndex ).getVariables();
+		mMasters[variableName] = std::vector<std::pair<std::size_t, std::size_t>>();
+		for ( std::size_t locationIndex = 0; locationIndex < mAutomata[componentIndex].getNumberLocations(); ++locationIndex ) {
+			mMasters[variableName].emplace_back( componentIndex, locationIndex );
+		}
+	}
+
+	/**
+	 * Allows to set masters for components, variables, and locations
+	 * @param componentIndex The component that is to be declared master
+	 * @param masters A mapping from variable name to local location indices in which the component is master
+	 */
 	void addMasterLocations( std::size_t componentIndex, const std::map<std::string, std::vector<std::size_t>>& masters ) {
 		invalidateCaches();
 		for ( const auto& [var, locationIndices] : masters ) {
