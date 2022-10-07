@@ -413,10 +413,23 @@ void Plotter<Number>::writeGnuplot() const {
 					color = plotObject.color.value();
 				}
 
-				if ( mSettings.fill || ( plotObject.settings.has_value() && plotObject.settings.value().fill ) )
-					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
-				else
-					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
+				if ( mSettings.fill || ( plotObject.settings.has_value() && plotObject.settings.value().fill ) ) {
+					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' ";
+					if ( !mSettings.border || ( plotObject.settings.has_value() && !plotObject.settings.value().border ) ) {
+						mOutfile << "lw " << mSettings.linewidth << "\n";
+					} else {
+						mOutfile << "lw " << mSettings.linewidth << "lc rgb '#BF" << std::hex << color << "'"
+								 << "\n";
+					}
+				} else {
+					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' ";
+					if ( !mSettings.border || ( plotObject.settings.has_value() && !plotObject.settings.value().border ) ) {
+						mOutfile << "lw " << mSettings.linewidth << "\n";
+					} else {
+						mOutfile << "lw " << mSettings.linewidth << "lc rgb '#BF" << std::hex << color << "'"
+								 << "\n";
+					}
+				}
 
 				if ( mSettings.key ) {
 					mOutfile << "set style line " << std::dec << objectCount << " lc rgb '#" << std::hex << color << std::dec << "' lt 1 lw 5\n";

@@ -33,6 +33,7 @@ struct gnuplotSettings {
 	bool grid = true;				   //< plot grid
 	bool title = false;				   //< plot title
 	bool key = false;				   //> plot key/legend
+	bool border = true;				   //> plot set border
 	double pointSize = 0.2;			   //< pointsize
 	double linewidth = 0.1;			   //< linewidth
 	carl::Interval<double> xPlotInterval = createEmptyInterval<double>();
