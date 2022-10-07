@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /**
@@ -55,7 +55,6 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 			std::vector<std::size_t> permutation;
 			while ( !permutator.end() ) {
 				permutation = permutator();
-#pragma omp parallel for
 				for ( std::size_t i = 0; i < permutation.size(); ++i ) {
 					assert( i < _constraints.cols() );
 					intersection.row( i ) = _constraints.row( permutation[i] );
@@ -75,11 +74,9 @@ BoxT<Number, Converter, Setting>::BoxT( const matrix_t<Number>& _constraints, co
 				// check if vertices are true vertices (i.e. they fulfill all constraints)
 				std::vector<typename std::set<vector_t<Number>>::iterator> toDelete;
 				for ( auto vertex = possibleVertices.begin(); vertex != possibleVertices.end(); ++vertex ) {
-#pragma omp parallel for
 					for ( unsigned rowIndex = 0; rowIndex < _constraints.rows(); ++rowIndex ) {
 						Number res = vertex->dot( _constraints.row( rowIndex ) );
 						if ( res > _constants( rowIndex ) ) {
-#pragma omp critical
 							{
 								toDelete.emplace_back( vertex );
 							}
@@ -220,7 +217,6 @@ BoxT<Number, Converter, Setting>::BoxT( const std::vector<Point<Number>>& _point
 template <typename Number, typename Converter, class Setting>
 matrix_t<Number> BoxT<Number, Converter, Setting>::matrix() const {
 	matrix_t<Number> res = matrix_t<Number>::Zero( 2 * this->dimension(), this->dimension() );
-#pragma omp parallel for
 	for ( unsigned i = 0; i < this->dimension(); ++i ) {
 		res( 2 * i, i ) = 1;
 		res( 2 * i + 1, i ) = -1;
@@ -231,7 +227,6 @@ matrix_t<Number> BoxT<Number, Converter, Setting>::matrix() const {
 template <typename Number, typename Converter, class Setting>
 vector_t<Number> BoxT<Number, Converter, Setting>::vector() const {
 	vector_t<Number> res = vector_t<Number>::Zero( 2 * this->dimension() );
-#pragma omp parallel for
 	for ( unsigned i = 0; i < this->dimension(); ++i ) {
 		res( 2 * i ) = mLimits[i].upper();
 		res( 2 * i + 1 ) = -mLimits[i].lower();
@@ -282,7 +277,6 @@ std::vector<Point<Number>> BoxT<Number, Converter, Setting>::vertices( const mat
 	result.reserve( limit );
 	result = std::vector<Point<Number>>{ limit, Point<Number>{ vector_t<Number>{ d } } };
 
-#pragma omp parallel for collapse( 2 )
 	for ( std::size_t bitCount = 0; bitCount < limit; ++bitCount ) {
 		for ( std::size_t dimension = 0; dimension < d; ++dimension ) {
 			std::size_t pos = ( 1 << dimension );
@@ -519,7 +513,6 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransfo
 	}
 	TRACE( "hypro.representations.box", "This: " << *this << ", A: " << A << "b: " << b );
 	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>( this->dimension() );
-#pragma omp parallel for
 	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
 		newIntervals[i] = carl::Interval<Number>{ b( i ) };
 		for ( std::size_t j = 0; j < this->dimension(); ++j ) {
