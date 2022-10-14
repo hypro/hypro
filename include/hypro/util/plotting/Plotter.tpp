@@ -414,19 +414,19 @@ void Plotter<Number>::writeGnuplot() const {
 				}
 
 				if ( mSettings.fill || ( plotObject.settings.has_value() && plotObject.settings.value().fill ) ) {
-					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' ";
+					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << std::dec << "' ";
 					if ( !mSettings.border || ( plotObject.settings.has_value() && !plotObject.settings.value().border ) ) {
 						mOutfile << "lw " << mSettings.linewidth << "\n";
 					} else {
-						mOutfile << "lw " << mSettings.linewidth << "lc rgb '#BF" << std::hex << color << "'"
+						mOutfile << "lw " << mSettings.linewidth << "lc rgb '#BF" << std::hex << color << std::dec << "'"
 								 << "\n";
 					}
 				} else {
-					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' ";
+					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << std::dec << "' ";
 					if ( !mSettings.border || ( plotObject.settings.has_value() && !plotObject.settings.value().border ) ) {
 						mOutfile << "lw " << mSettings.linewidth << "\n";
 					} else {
-						mOutfile << "lw " << mSettings.linewidth << "lc rgb '#BF" << std::hex << color << "'"
+						mOutfile << "lw " << mSettings.linewidth << "lc rgb '#BF" << std::hex << color << std::dec << "'"
 								 << "\n";
 					}
 				}
@@ -462,9 +462,9 @@ void Plotter<Number>::writeGnuplot() const {
 					auto next = std::next( lineIdx );
 					std::stringstream ss;
 					if ( lineObj.color.has_value() ) {
-						ss << std::hex << lineObj.color.value();
+						ss << std::hex << lineObj.color.value() << std::dec;
 					} else {
-						ss << std::hex << mSettings.color;
+						ss << std::hex << mSettings.color << std::dec;
 					}
 					mOutfile << "set arrow " << std::dec << segmentIdx++ << " from \\\n";
 					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
@@ -509,9 +509,9 @@ void Plotter<Number>::writeGnuplot() const {
 					auto next = std::next( lineIdx );
 					std::stringstream ss;
 					if ( lineObj.color.has_value() ) {
-						ss << std::hex << lineObj.color.value();
+						ss << std::hex << lineObj.color.value() << std::dec;
 					} else {
-						ss << std::hex << mSettings.color;
+						ss << std::hex << mSettings.color << std::dec;
 					}
 					mOutfile << "set arrow " << std::dec << segmentIdx++ << " from \\\n";
 					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
@@ -524,14 +524,14 @@ void Plotter<Number>::writeGnuplot() const {
 			std::map<std::size_t, std::pair<std::string, std::string>> styles_definitions_calls;
 			std::size_t style_index = 1;
 			std::stringstream ss;
-			ss << std::hex << plotting::colors[plotting::blue];
+			ss << std::hex << plotting::colors[plotting::blue] << std::dec;
 			styles_definitions_calls[plotting::colors[plotting::blue]] = std::make_pair( std::to_string( style_index ), "set style line " + std::to_string( style_index ) + " lc rgb '#" + ss.str() + "' pt 7" );
 			ss.str( std::string() );
 			++style_index;
 			for ( const plotting::PlotObject<Number>& p : mPoints ) {
 				if ( p.color ) {
 					if ( styles_definitions_calls.find( p.color.value() ) == std::end( styles_definitions_calls ) ) {
-						ss << std::hex << p.color.value();
+						ss << std::hex << p.color.value() << std::dec;
 						styles_definitions_calls[p.color.value()] = std::make_pair( std::to_string( style_index ), "set style line " + std::to_string( style_index ) + " lc rgb '#" + ss.str() + "' pt 7" );
 						ss.str( std::string() );
 						++style_index;
@@ -560,7 +560,7 @@ void Plotter<Number>::writeGnuplot() const {
 			}
 			// plot all planes
 			auto color = mSettings.color;
-			mOutfile << "set style line 1 linecolor rgb '#" << std::hex << color << "' \n";
+			mOutfile << "set style line 1 linecolor rgb '#" << std::hex << color << std::dec << "' \n";
 			while ( index > 1 ) {
 				--index;
 				mOutfile << "plot f_" << index << "(x) with lines linestyle 1\n";
