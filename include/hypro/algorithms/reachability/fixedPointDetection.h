@@ -213,9 +213,9 @@ bool is_covered( const Set&, const std::vector<Set>& ) {
  * @return A vector of transitions that are Zeno
  */
 template <typename Set, typename Loc>
-std::vector<const Transition<typename Set::NumberType, Loc>*> getZenoTransitions( const ReachTreeNode<Set, Loc>* child ) {
+std::vector<const Transition<Loc>*> getZenoTransitions( const ReachTreeNode<Set, Loc>* child ) {
 	using N = typename Set::NumberType;
-	std::vector<const Transition<N, Loc>*> result;
+	std::vector<const Transition<Loc>*> result;
 	// search in the path to the root for a zeno-cycle
 	auto* parent = child->getParent();
 	// collect cummulative reset

@@ -25,7 +25,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
   private:
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation, Location>>;
-	using TransitionT = Transition<Number, Location>;
+	using TransitionT = Transition<Location>;
 
 	Location const* mLocation = nullptr;									   ///< location in which the flowpipe was computed
 	TransitionT const* mTransition{};										   ///< the transition which lead here. nullptr for roots

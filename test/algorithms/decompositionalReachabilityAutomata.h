@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
@@ -176,8 +176,8 @@ HybridAutomaton<Number> singularJumpSuccessorsHa1() {
 	Condition<Number> guard = Condition<Number>( transConstraint, transConstants );
 	Reset<Number> reset = Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
 	// Set initial state x = [0,1], y = [0,1]
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -236,8 +236,8 @@ HybridAutomaton<Number> singularJumpSuccessorsHa2() {
 	Condition<Number> guard = Condition<Number>( transConstraint, transConstants );
 	Reset<Number> reset = Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
 	// Set initial state x = [0,1], y = [0,1]
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -290,8 +290,8 @@ HybridAutomaton<Number> singularJumpSuccessorsHa3() {
 	// l0 -> l1 with no guard and no reset
 	Reset<Number> reset = Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
 
 	// Set initial state x = [0,1], y = [0,1]
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -352,8 +352,8 @@ HybridAutomaton<Number> singularJumpSuccessorsHa4() {
 	Condition<Number> guard = Condition<Number>( transConstraint, transConstants );
 	Reset<Number> reset = Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
 	// Set initial state x = [0,1], y = [0,1]
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -421,8 +421,8 @@ HybridAutomaton<Number> singularResetsHa1() {
 	Condition<Number> guard = Condition<Number>( transConstraint, transConstants );
 	Reset<Number> reset = Reset<Number>( { carl::Interval<Number>( -1, 0 ), carl::Interval<Number>() } );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
 	// Set initial state x = [0,1], y = [0,1]
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -477,8 +477,8 @@ HybridAutomaton<Number> singularResetsHa2() {
 	// l0 -> l1 with no guard, reset x to [0, 0], y to [0,0]
 	Reset<Number> reset = Reset<Number>( { carl::Interval<Number>( 0, 0 ), carl::Interval<Number>( 0, 0 ) } );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
 
 	// Set initial state x = [0,1], y = [0,1]
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -554,8 +554,8 @@ HybridAutomaton<Number> singularMultipleJumps1() {
 	Condition<Number> guard = Condition<Number>( transConstraint, transConstants );
 	Reset<Number> reset = Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+	std::unique_ptr<Transition< Location<Number>>> trans0 =
+		  std::make_unique<Transition< Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
 	// l1 -> l2 with guard
 
@@ -623,8 +623,8 @@ HybridAutomaton<Number> singularWithJumpsHa() {
 	Condition<Number> guard( transConstraint, transConstants );
 	Reset<Number> reset{ { carl::Interval<Number>{ 0, 0 }, carl::Interval<Number>{} } };
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
 
 	// l0 -> l1 with guard y <= -2 and no reset
 	transConstraint = Matrix::Zero( 1, 2 );
@@ -633,8 +633,8 @@ HybridAutomaton<Number> singularWithJumpsHa() {
 	guard = Condition<Number>( transConstraint, transConstants );
 	reset = Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans1 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+	std::unique_ptr<Transition<Location<Number>>> trans1 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
 	// Set initial state x = 0, y = 0
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -742,8 +742,8 @@ HybridAutomaton<Number> mixedDynamicsWithJumpsHa() {
 	resetMat( 2, 2 ) = 1;
 	Reset<Number> reset( resetMat, resetVec );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
 
 	// l0 -> l1 with guard y <= 0.1 and z <= 0.4 and no reset
 	transConstraint = Matrix::Zero( 2, 3 );
@@ -754,8 +754,8 @@ HybridAutomaton<Number> mixedDynamicsWithJumpsHa() {
 	guard = Condition<Number>( transConstraint, transConstants );
 	reset = Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans1 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+	std::unique_ptr<Transition<Location<Number>>> trans1 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
 	// Set initial state x = 0.7, y = 1, z = 0
 	Matrix initialConstraints = Matrix::Zero( 6, 3 );
@@ -810,8 +810,8 @@ HybridAutomaton<Number> singularSingleJumpHa() {
 	// l0 -> l1 with no guards or resets
 	Reset<Number> reset{ { {}, {} } };
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
 
 	// Set initial state x = 0, y = 0
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -863,8 +863,8 @@ HybridAutomaton<Number> singularSingleJumpHa2() {
 	// l0 -> l1 with no guards or resets
 	Reset<Number> reset{ { {}, {} } };
 
-	std::unique_ptr<Transition<Number, Location<Number>>> trans0 =
-		  std::make_unique<Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
+	std::unique_ptr<Transition<Location<Number>>> trans0 =
+		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
 
 	// Set initial state x = 0, y = 0
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );

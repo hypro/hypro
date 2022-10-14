@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "DiscreteWorker.h"
@@ -35,8 +35,8 @@ REACHABILITY_RESULT DiscreteWorker<Representation, Automaton>::computeTimeSucces
 
 template <typename Representation, typename Automaton>
 auto DiscreteWorker<Representation, Automaton>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, LocationT const* loc ) const
-	  -> std::map<Transition<Number, LocationT>*, Representation> {
-	std::map<Transition<Number, LocationT>*, Representation> enabledSegments;
+	  -> std::map<Transition<LocationT>*, Representation> {
+	std::map<Transition<LocationT>*, Representation> enabledSegments;
 
 	assert( flowpipe.size() <= 1 );
 	if ( flowpipe.size() == 0 ) {
@@ -51,7 +51,7 @@ auto DiscreteWorker<Representation, Automaton>::computeJumpSuccessors( std::vect
 	}
 
 	// apply reset and intersect with target invariant
-	std::map<Transition<Number, LocationT>*, Representation> successors;
+	std::map<Transition<LocationT>*, Representation> successors;
 	for ( const auto& enabled : enabledSegments ) {
 		auto [containment, successor] = computeJumpSuccessorsForGuardEnabled( enabled.second, enabled.first );
 		if ( containment != CONTAINMENT::NO ) {
@@ -63,7 +63,7 @@ auto DiscreteWorker<Representation, Automaton>::computeJumpSuccessors( std::vect
 }
 
 template <typename Representation, typename Automaton>
-std::pair<CONTAINMENT, Representation> DiscreteWorker<Representation, Automaton>::computeJumpSuccessorsForGuardEnabled( const Representation& enabledSet, Transition<Number, LocationT> const* transition ) const {
+std::pair<CONTAINMENT, Representation> DiscreteWorker<Representation, Automaton>::computeJumpSuccessorsForGuardEnabled( const Representation& enabledSet, Transition<LocationT> const* transition ) const {
 	auto successor = applyReset( enabledSet, transition->getReset(), mSubspace );
 	return intersect( successor, transition->getTarget()->getInvariant(), mSubspace );
 }

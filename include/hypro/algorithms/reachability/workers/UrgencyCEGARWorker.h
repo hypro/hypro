@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #pragma once
@@ -86,7 +86,7 @@ class UrgencyCEGARWorker {
 	 */
 	std::vector<TimedValuationSet<Representation>> computeJumpSuccessors(
 		  const ReachTreeNode<Representation, LocationT>& task,
-		  const Transition<Number, LocationT>* transition,
+		  const Transition<LocationT>* transition,
 		  const carl::Interval<SegmentInd>& timeOfJump = createUnboundedInterval<SegmentInd>() );
 
 	/**
@@ -132,12 +132,12 @@ class UrgencyCEGARWorker {
 	void addSegment( const std::vector<Representation>& segment, SegmentInd timing );
 
   protected:
-	const Automaton& mHybridAutomaton;																					 ///< hybrid automaton to analyze
-	const AnalysisParameters& mSettings;																				 ///< analysis settings
-	tNumber mLocalTimeHorizon;																							 ///< local time horizon
-	TimeTransformationCache<LocationT>& mTrafoCache;																	 ///< cache for matrix exponential
-	Flowpipe mFlowpipe;																									 ///< Storage of computed time successors
-	std::map<const Transition<Number, LocationT>*, std::vector<IndexedValuationSet<Representation>>> mJumpPredecessors;	 ///< Cache jump predecessors
+	const Automaton& mHybridAutomaton;																			 ///< hybrid automaton to analyze
+	const AnalysisParameters& mSettings;																		 ///< analysis settings
+	tNumber mLocalTimeHorizon;																					 ///< local time horizon
+	TimeTransformationCache<LocationT>& mTrafoCache;															 ///< cache for matrix exponential
+	Flowpipe mFlowpipe;																							 ///< Storage of computed time successors
+	std::map<const Transition<LocationT>*, std::vector<IndexedValuationSet<Representation>>> mJumpPredecessors;	 ///< Cache jump predecessors
 
 	size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
 };

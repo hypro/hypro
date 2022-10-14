@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "test/algorithms/automata/automataCreation.h"
@@ -164,8 +164,8 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 	hypro::Condition<Number> guard( transConstraint, transConstants );
 	hypro::Reset<Number> reset{ { carl::Interval<Number>{ 0, 0 }, carl::Interval<Number>{ 0, 0 } } };
 
-	std::unique_ptr<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>> trans0 =
-		  std::make_unique<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
+	std::unique_ptr<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>> trans0 =
+		  std::make_unique<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>>( uniqueLoc0.get(), uniqueLoc0.get(), guard, reset );
 
 	// l0 -> l1 with guard y <= -2 and no reset
 	transConstraint = Matrix::Zero( 1, 2 );
@@ -174,8 +174,8 @@ hypro::HybridAutomaton<Number> createSingularHA3() {
 	guard = hypro::Condition<Number>( transConstraint, transConstants );
 	reset = hypro::Reset<Number>( { carl::Interval<Number>(), carl::Interval<Number>() } );
 
-	std::unique_ptr<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>> trans1 =
-		  std::make_unique<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+	std::unique_ptr<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>> trans1 =
+		  std::make_unique<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 
 	// Set initial state x = 0, y = 0, aff = 1
 	Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -221,12 +221,12 @@ hypro::HybridAutomaton<Number> createSingularHA4() {
 	hypro::Condition<Number> guard( transConstraint, transConstants );
 	hypro::Reset<Number> reset{ { carl::Interval<Number>{ 1, 1 } } };
 
-	std::unique_ptr<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>> trans0 =
-		  std::make_unique<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>>( loc.get(), loc.get(), guard, reset );
+	std::unique_ptr<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>> trans0 =
+		  std::make_unique<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>>( loc.get(), loc.get(), guard, reset );
 
 	reset = hypro::Reset<Number>{ { carl::Interval<Number>{ -1, -1 } } };
-	std::unique_ptr<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>> trans1 =
-		  std::make_unique<hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>>( loc.get(), loc.get(), guard, reset );
+	std::unique_ptr<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>> trans1 =
+		  std::make_unique<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>>( loc.get(), loc.get(), guard, reset );
 
 	loc->addTransition( std::move( trans0 ) );
 	loc->addTransition( std::move( trans1 ) );
@@ -589,7 +589,7 @@ TEST( SingularRechabilityTest, ReservoirCaseStudy ) {
 	M guardConstraints = M::Zero( 1, 3 );
 	V guardConstants = V::Zero( 1 );
 	{
-		hypro::Transition<Number, typename hypro::HybridAutomaton<Number>::LocationType>* t = l0->createTransition( l1 );
+		hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>* t = l0->createTransition( l1 );
 		guardConstraints( 0, c ) = Number( -1 );
 		guardConstants( 0 ) = Number( -2 );
 		t->setGuard( { guardConstraints, guardConstants } );

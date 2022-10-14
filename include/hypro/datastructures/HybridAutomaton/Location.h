@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /*
@@ -34,10 +34,10 @@ static_assert( false, "This file may only be included indirectly by HybridAutoma
 namespace hypro {
 using namespace std::string_literals;
 
-template <typename Number, typename LocationType>
+template <typename LocationType>
 class Transition;
 
-template <typename Number, typename LocationType>
+template <typename LocationType>
 class StochasticTransition;
 
 template <typename Number>
@@ -51,7 +51,7 @@ using flowVariant = std::variant<linearFlow<Number>, affineFlow<Number>, rectang
 template <typename Number>
 class Location {
   public:
-	using transitionVector = std::vector<std::unique_ptr<Transition<Number, Location<Number>>>>;
+	using transitionVector = std::vector<std::unique_ptr<Transition<Location<Number>>>>;
 	using NumberType = Number;
 
   private:
@@ -155,16 +155,16 @@ class Location {
 	/// setter for vector of outgoing transitions (move)
 	void setTransitions( transitionVector&& trans );
 	/// adds outgoing transitions
-	void addTransition( std::unique_ptr<Transition<Number, Location<Number>>>&& trans );
-	void removeTransition( Transition<Number, Location<Number>>* transitionPtr ) {
+	void addTransition( std::unique_ptr<Transition<Location<Number>>>&& trans );
+	void removeTransition( Transition<Location<Number>>* transitionPtr ) {
 		mTransitions.erase( std::find_if( std::begin( mTransitions ), std::end( mTransitions ), [&]( auto& uPtr ) {
 			return uPtr.get() == transitionPtr;
 		} ) );
 	}
 	/// creates a transition from this location to the target
-	Transition<Number, Location<Number>>* createTransition( Location<Number>* target );
+	Transition<Location<Number>>* createTransition( Location<Number>* target );
 	/// adds a copy of the passed transition with the source being this location
-	Transition<Number, Location<Number>>* createTransition( Transition<Number, Location<Number>>* target );
+	Transition<Location<Number>>* createTransition( Transition<Location<Number>>* target );
 	/// setter for external input/disturbance
 	void setExtInput( const std::vector<carl::Interval<Number>>& b );
 	/// returns hash value of the location
@@ -218,6 +218,7 @@ class Location {
 		}
 		for ( std::size_t i = 0; i < mFlows.size(); ++i ) {
 			if ( mFlowTypes[i] != rhs.getFlowTypes()[i] ) {
+				TRACE( "hypro.datastructures", "Flow Types not equal." );
 				return false;
 			}
 			switch ( mFlowTypes[i] ) {
@@ -361,7 +362,7 @@ struct hash<hypro::Location<Number>> {
 		carl::hash_add( seed, std::hash<std::string>()( loc.getName() ) );
 		// Transitions
 		for ( const auto& t : loc.getTransitions() ) {
-			seed += std::hash<hypro::Transition<Number, hypro::Location<Number>>*>()( t.get() );
+			seed += std::hash<hypro::Transition<hypro::Location<Number>>*>()( t.get() );
 		}
 		// Invariant
 		carl::hash_add( seed, loc.getInvariant().hash() );

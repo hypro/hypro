@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "singularJumpHandler.h"
@@ -48,7 +48,7 @@ auto singularJumpHandler<Representation, Location>::applyJump( const TransitionS
 }
 
 template <typename Representation, typename Location>
-void singularJumpHandler<Representation, Location>::applyReset( Representation& stateSet, Transition<Number, Location>* transitionPtr, std::size_t subspace ) const {
+void singularJumpHandler<Representation, Location>::applyReset( Representation& stateSet, Transition<Location>* transitionPtr, std::size_t subspace ) const {
 	// We have 3 different implementations for applying resets and want to check that they all give the same result.
 	// Note: applyResetFM is the one that definitely works.
 	// Todo: Decide for one implementation and remove other 2
@@ -226,7 +226,7 @@ HPolytope<Number> applyResetProjectAndExpand( Representation& stateSet, Interval
 }
 
 template <typename Representation, typename Location>
-auto singularJumpHandler<Representation, Location>::applyReverseJump( const TransitionStateMap& states, Transition<Number, Location>* transition ) -> TransitionStateMap {
+auto singularJumpHandler<Representation, Location>::applyReverseJump( const TransitionStateMap& states, Transition<Location>* transition ) -> TransitionStateMap {
 	// holds a mapping of transitions to states which need to be aggregated
 	TransitionStateMap toAggregate;
 	// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant

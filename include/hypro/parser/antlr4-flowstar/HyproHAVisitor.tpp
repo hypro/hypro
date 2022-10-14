@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "HyproHAVisitor.h"
@@ -55,7 +55,7 @@ namespace hypro {
 		//4.Calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, locSet);
-		std::set<Transition<Number,Location<Number>>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number,Location<Number>>*>>();
+		std::set<Transition<Location<Number>>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Location<Number>>*>>();
 
 		//4.1.Make a set of unique ptrs to transitions
 		for(auto t : tSet){
@@ -63,13 +63,13 @@ namespace hypro {
 			for(auto& l : uniquePtrLocSet){
 				assert(t != nullptr);
 				if(t->getSource() == l.get()) {
-					StochasticTransition<Number,Location<Number>>* stoTrans = dynamic_cast<StochasticTransition<Number,Location<Number>>*>( t );
+					StochasticTransition<Location<Number>>* stoTrans = dynamic_cast<StochasticTransition<Location<Number>>*>( t );
 					if ( !stoTrans ) {
 						l->addTransition(std::move
-(std::unique_ptr<Transition<Number,Location<Number>>>(t)));
+(std::unique_ptr<Transition<Location<Number>>>(t)));
 					} else {
 						l->addTransition(std::move
-(std::unique_ptr<StochasticTransition<Number,Location<Number>>>( stoTrans )));
+(std::unique_ptr<StochasticTransition<Location<Number>>>( stoTrans )));
 					}
 					break;
 				}

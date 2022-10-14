@@ -17,7 +17,7 @@ namespace hypro {
 template <class Number, class Location>
 struct Path {
 	Location const* rootLocation{};
-	std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number, Location> const*>> elements{};	 ///< Path in pairs of time and discrete steps. Intervals holds the information when the transition was taken.
+	std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Location> const*>> elements{};	 ///< Path in pairs of time and discrete steps. Intervals holds the information when the transition was taken.
 
 	Path() = default;
 	Path( size_t numElements )
@@ -33,7 +33,7 @@ struct Path {
 			res.elements = {};
 			res.rootLocation = rootLocation;
 		} else {
-			res.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number, Location> const*>>(
+			res.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Location> const*>>(
 				  elements.begin(), elements.begin() + n );
 			res.rootLocation = rootLocation;
 		}
@@ -50,7 +50,7 @@ struct Path {
 			res.elements = {};
 			res.rootLocation = elements.at( elements.size() - 1 ).second->getTarget();
 		} else {
-			res.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Number, Location> const*>>(
+			res.elements = std::vector<std::pair<carl::Interval<SegmentInd>, Transition<Location> const*>>(
 				  elements.end() - n, elements.end() );
 			res.rootLocation = elements.at( elements.size() - ( n + 1 ) ).second->getTarget();
 		}

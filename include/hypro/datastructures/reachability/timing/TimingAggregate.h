@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 #include "../../../util/logging/Logger.h"
 #include "../../HybridAutomaton/Transition.h"
@@ -23,12 +32,12 @@ struct ChildTimingInformation {
 template <typename Number>
 class TimingAggregate {
   private:
-	std::map<const Transition<Number, Location<Number>>*, ChildTimingInformation<Number>> mChildTimings;
+	std::map<const Transition<Location<Number>>*, ChildTimingInformation<Number>> mChildTimings;
 
   public:
 	TimingAggregate() = default;
 
-	TimingAggregate( const Transition<Number, Location<Number>>* t, const std::vector<EventTimingNode<Number>*>& nodes ) {
+	TimingAggregate( const Transition<Location<Number>>* t, const std::vector<EventTimingNode<Number>*>& nodes ) {
 		mChildTimings[t] = ChildTimingInformation<Number>();
 		for ( const auto p : nodes ) {
 			// assert(mChildTimings[t].empty() || mChildTimings[t].begin()->first->getParent() == p->getParent());
@@ -42,7 +51,7 @@ class TimingAggregate {
 	 * @param t
 	 * @param nodes
 	 */
-	void addTransition( const Transition<Number, Location<Number>>* t, const std::vector<EventTimingNode<Number>*>& nodes ) {
+	void addTransition( const Transition<Location<Number>>* t, const std::vector<EventTimingNode<Number>*>& nodes ) {
 		TRACE( "hypro.datastructures.timing", "Add " << nodes.size() << " for transition " << t );
 		mChildTimings[t] = ChildTimingInformation<Number>();
 		for ( const auto p : nodes ) {
@@ -57,7 +66,7 @@ class TimingAggregate {
 	 * @param t
 	 * @param node
 	 */
-	void markCompleted( const Transition<Number, Location<Number>>* t, EventTimingNode<Number>* node ) {
+	void markCompleted( const Transition<Location<Number>>* t, EventTimingNode<Number>* node ) {
 		TRACE( "hypro.datastructures.timing", "Mark node " << node << " as complete for transition " << t );
 		if ( mChildTimings.find( t ) != mChildTimings.end() ) {
 			if ( mChildTimings[t].timingInformation.find( node ) != mChildTimings[t].timingInformation.end() ) {
@@ -72,7 +81,7 @@ class TimingAggregate {
 	 * @param t
 	 * @return std::size_t
 	 */
-	std::size_t getSuccessorCount( const Transition<Number, Location<Number>>* t ) const {
+	std::size_t getSuccessorCount( const Transition<Location<Number>>* t ) const {
 		if ( mChildTimings.find( t ) == mChildTimings.end() ) {
 			return 0;
 		} else {
@@ -86,7 +95,7 @@ class TimingAggregate {
 	 * @param t
 	 * @return std::size_t
 	 */
-	std::size_t getOpenSuccessorCount( const Transition<Number, Location<Number>>* t ) const {
+	std::size_t getOpenSuccessorCount( const Transition<Location<Number>>* t ) const {
 		if ( mChildTimings.find( t ) == mChildTimings.end() ) {
 			return 0;
 		} else {
@@ -103,7 +112,7 @@ class TimingAggregate {
 	 * @param t
 	 * @return std::vector<EventTimingNode<Number>*>
 	 */
-	std::vector<EventTimingNode<Number>*> getSuccessorNodes( const Transition<Number, Location<Number>>* t ) {
+	std::vector<EventTimingNode<Number>*> getSuccessorNodes( const Transition<Location<Number>>* t ) {
 		std::vector<EventTimingNode<Number>*> res;
 		if ( mChildTimings.find( t ) != mChildTimings.end() ) {
 			for ( auto& pair : mChildTimings[t].timingInformation ) {

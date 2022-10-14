@@ -11,16 +11,16 @@
 
 namespace hypro {
 
-template <typename Number, typename LocationType>
-std::size_t Transition<Number, LocationType>::hash() const {
+template <typename LocationType>
+std::size_t Transition<LocationType>::hash() const {
 	if ( mHash == 0 ) {
-		mHash = std::hash<Transition<Number, LocationType>>()( *this );
+		mHash = std::hash<Transition<LocationType>>()( *this );
 	}
 	return mHash;
 }
 
-template <typename Number, typename LocationType>
-std::string Transition<Number, LocationType>::getDotRepresentation( const std::vector<std::string>& vars ) const {
+template <typename LocationType>
+std::string Transition<LocationType>::getDotRepresentation( const std::vector<std::string>& vars ) const {
 	std::stringstream o;
 	o << this->getSource()->hash() << " -> " << this->getTarget()->hash();
 	if ( getLabels().size() != 0 || ( mReset.size() > 0 && !mReset.isIdentity() ) || mGuard.size() != 0 ) {
@@ -57,8 +57,8 @@ std::string Transition<Number, LocationType>::getDotRepresentation( const std::v
 	return o.str();
 }
 
-template <typename Number, typename LocationType>
-bool Transition<Number, LocationType>::isComposedOf( const Transition<Number, LocationType>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const {
+template <typename LocationType>
+bool Transition<LocationType>::isComposedOf( const Transition<LocationType>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const {
 	// compare source and target location
 	if ( this->getSource()->getName().find( rhs.getSource()->getName() ) == std::string::npos ||
 		 this->getTarget()->getName().find( rhs.getTarget()->getName() ) == std::string::npos ) {
@@ -150,8 +150,8 @@ bool Transition<Number, LocationType>::isComposedOf( const Transition<Number, Lo
 	return true;
 }
 
-template <typename Number, typename LocationType>
-Condition<Number> Transition<Number, LocationType>::getJumpEnablingSet() {
+template <typename LocationType>
+Condition<typename Transition<LocationType>::Number> Transition<LocationType>::getJumpEnablingSet() {
 	if ( mJumpEnablingSet ) {
 		return mJumpEnablingSet.value();
 	}
@@ -210,16 +210,16 @@ Condition<Number> Transition<Number, LocationType>::getJumpEnablingSet() {
 }
 
 template <typename Number, typename LocationType>
-std::unique_ptr<Transition<Number, LocationType>> parallelCompose( const Transition<Number, LocationType>* lhsT, const Transition<Number, LocationType>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<LocationType*>>& masters ) {
+std::unique_ptr<Transition<LocationType>> parallelCompose( const Transition<LocationType>* lhsT, const Transition<LocationType>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<LocationType*>>& masters ) {
 	assert( haVar.size() >= lhsVar.size() );
 	assert( haVar.size() >= rhsVar.size() );
 
 	TRACE( "hypro.datastructures", "Parallel composition of " << *lhsT << "\n\n and \n\n"
 															  << *rhsT );
 
-	// Transition<Number,LocationType>* t = new Transition<Number,LocationType>();
-	// std::unique_ptr<Transition<Number,LocationType>> t = new Transition<Number,LocationType>()
-	std::unique_ptr<Transition<Number, LocationType>> t = std::make_unique<Transition<Number, LocationType>>();
+	// Transition<LocationType>* t = new Transition<LocationType>();
+	// std::unique_ptr<Transition<LocationType>> t = new Transition<LocationType>()
+	std::unique_ptr<Transition<LocationType>> t = std::make_unique<Transition<LocationType>>();
 
 	// set target and source. If they do not exist, this means that the combined location was not admissible for some reason and thus, the transition also cannot be added.
 	// TODO: returning nullptr in case the locations do not exist seems like a hotfix for now, as it indicates that something went wrong elsewhere.
@@ -321,12 +321,12 @@ std::unique_ptr<Transition<Number, LocationType>> parallelCompose( const Transit
 	}
 
 	// set guard
-	Condition<Number> haGuard = combine( lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar );
+	auto haGuard = combine( lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar );
 	t->setGuard( haGuard );
 
 	// set reset
 	// std::cout << "Reset, combine matrices: " << std::endl;
-	Reset<Number> haReset = combine( lhsT->getReset(), rhsT->getReset(), haVar, reset_lhsvars, reset_rhsvars );
+	auto haReset = combine( lhsT->getReset(), rhsT->getReset(), haVar, reset_lhsvars, reset_rhsvars );
 	// std::cout << "New reset function: " << haReset << std::endl;
 
 	t->setReset( haReset );

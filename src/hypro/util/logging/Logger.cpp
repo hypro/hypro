@@ -14,7 +14,7 @@ namespace hypro {
 
 int initializeLogging( int& i ) {
 	carl::logging::logger().configure( "logfile_hypro", "hypro.log" );
-	carl::logging::logger().filter( "logfile_hypro" )( "hypro", carl::logging::LogLevel::LVL_INFO )( "hypro.casestudies", carl::logging::LogLevel::LVL_INFO )( "hypro.reachability",
+	carl::logging::logger().filter( "logfile_hypro" )( "hypro", carl::logging::LogLevel::LVL_INFO )( "hypro.casestudies", carl::logging::LogLevel::LVL_INFO )( "hypro.datastructures",
 																																							   carl::logging::LogLevel::LVL_TRACE );
 
 	carl::logging::logger().configure( "pathfile_hypro", "unfinished_paths.log" );

@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 
 #include "../../types.h"
@@ -15,7 +24,7 @@ namespace hypro {
  */
 template <typename Number, typename tNumber = hypro::tNumber>
 struct TPathElement {
-	Transition<Number, Location<Number>>* transition = nullptr;					/// Pointer to a transition in case of a discrete step.
+	Transition<Location<Number>>* transition = nullptr;							/// Pointer to a transition in case of a discrete step.
 	carl::Interval<tNumber> timeInterval = createUnboundedInterval<tNumber>();	/// Time interval holding either the size of the time step or the local time in which the transition for the discrete step was enabled.
 
 	/**
@@ -23,7 +32,7 @@ struct TPathElement {
 	 * @param      t            The transition.
 	 * @param[in]  enabledTime  The enabled time.
 	 */
-	TPathElement( Transition<Number, Location<Number>>* t, const carl::Interval<tNumber>& enabledTime )
+	TPathElement( Transition<Location<Number>>* t, const carl::Interval<tNumber>& enabledTime )
 		: transition( t )
 		, timeInterval( enabledTime ) {}
 
@@ -47,7 +56,7 @@ struct TPathElement {
 		return timeInterval;
 	}
 
-	Transition<Number, Location<Number>>* getTransition() const {
+	Transition<Location<Number>>* getTransition() const {
 		return transition;
 	}
 
@@ -120,9 +129,9 @@ class Path {
 	};
 
 	void add( const TPathElement<Number, tNumber>& elem );
-	void addTransition( Transition<Number, Location<Number>>* t, const carl::Interval<tNumber>& enabledTime );
+	void addTransition( Transition<Location<Number>>* t, const carl::Interval<tNumber>& enabledTime );
 	void addTimeStep( const carl::Interval<tNumber>& timeStep );
-	std::pair<Transition<Number, Location<Number>>*, carl::Interval<tNumber>> getTransitionToJumpDepth( unsigned depth ) const;
+	std::pair<Transition<Location<Number>>*, carl::Interval<tNumber>> getTransitionToJumpDepth( unsigned depth ) const;
 
 	Path& deleteAfterPos( std::size_t cutpos );
 	Path& deleteBeforePos( std::size_t cutpos );
@@ -136,8 +145,8 @@ class Path {
 	tNumber maximalTimeSpan( typename std::deque<TPathElement<Number, tNumber>>::const_iterator start, typename std::deque<TPathElement<Number, tNumber>>::const_iterator end ) const;
 
 	std::size_t getNumberDiscreteJumps() const;
-	std::vector<Transition<Number, Location<Number>>*> getTransitionSequence( typename std::deque<TPathElement<Number, tNumber>>::const_iterator start, typename std::deque<TPathElement<Number, tNumber>>::const_iterator end ) const;
-	std::vector<Transition<Number, Location<Number>>*> getTransitionSequence() const { return this->getTransitionSequence( mPath.begin(), mPath.end() ); }
+	std::vector<Transition<Location<Number>>*> getTransitionSequence( typename std::deque<TPathElement<Number, tNumber>>::const_iterator start, typename std::deque<TPathElement<Number, tNumber>>::const_iterator end ) const;
+	std::vector<Transition<Location<Number>>*> getTransitionSequence() const { return this->getTransitionSequence( mPath.begin(), mPath.end() ); }
 	bool hasChatteringZeno() const;
 
 	// comparison - read as "is longer than"

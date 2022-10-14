@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "gtest/gtest.h"
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/HybridAutomaton/decomposition/DecompositionMethods.h>
@@ -368,7 +377,7 @@ HybridAutomaton<Number> resetHa() {
 		  { carl::Interval<Number>{ 0, 2 }, carl::Interval<Number>{}, carl::Interval<Number>{ 0, 0 } } };
 
 	auto trans0 =
-		  std::make_unique<hypro::Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+		  std::make_unique<hypro::Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 	uniqueLoc0->addTransition( std::move( trans0 ) );
 
 	// Set initial state x = 0, y = 0, z = 0 in loc0
@@ -422,7 +431,7 @@ HybridAutomaton<Number> affineResetHa() {
 	hypro::Reset<Number> reset( resetMat, resetVec );
 
 	auto trans0 =
-		  std::make_unique<hypro::Transition<Number, Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
+		  std::make_unique<hypro::Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), guard, reset );
 	uniqueLoc0->addTransition( std::move( trans0 ) );
 
 	// Set initial state x = 0, y = 0, z = 0 in loc0
@@ -724,7 +733,7 @@ TEST( DecompositionMethodsTest, decomposeAutomaton7 ) {
 	expectedReset.setIntervals( { carl::Interval<Number>{ 0, 2 } }, 0 );
 	expectedReset.setIntervals( { carl::Interval<Number>{}, carl::Interval<Number>{ 0, 0 } }, 1 );
 
-	Transition<Number, Location<Number>> expectedTrans( loc0, loc1, expectedGuard, expectedReset );
+	Transition<Location<Number>> expectedTrans( loc0, loc1, expectedGuard, expectedReset );
 
 	EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
 	EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );
@@ -763,7 +772,7 @@ TEST( DecompositionMethodsTest, decomposeAutomaton8 ) {
 	expectedReset.setVector( Vector::Ones( 1 ), 1 );
 	expectedReset.setIntervals( { {}, {} }, 0 );
 	expectedReset.setIntervals( { {} }, 1 );
-	Transition<Number, Location<Number>> expectedTrans( loc0, loc1, expectedGuard, expectedReset );
+	Transition<Location<Number>> expectedTrans( loc0, loc1, expectedGuard, expectedReset );
 
 	EXPECT_EQ( expectedDecomposition.subspaces, decomposition.subspaces );
 	EXPECT_EQ( expectedDecomposition.subspaceTypes, decomposition.subspaceTypes );

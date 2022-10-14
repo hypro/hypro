@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "HybridAutomatonComp.h"
@@ -134,7 +134,7 @@ void ComposedLocation<Number>::validate() const {
 	// build stumps of transitions, idea: for non-synchronizing jumps, only one component changes its location,
 	// for synchronizing jumps, all components change their location. Thus, separate synchronizing and non-synchronizing jumps,
 	// handle separately
-	using TransitionT = Transition<Number, Location<Number>>;
+	using TransitionT = Transition<Location<Number>>;
 	std::multimap<std::size_t, TransitionT*> nonSynchronizedJumps;
 	std::map<std::vector<Label>, std::vector<std::vector<TransitionT*>>> synchronizedJumps;
 	// collect synchronized and non-synchronized jumps
@@ -610,6 +610,9 @@ const typename HybridAutomatonComp<Number>::locationConditionMap& HybridAutomato
 
 template <typename Number>
 const typename HybridAutomatonComp<Number>::conditionVector& HybridAutomatonComp<Number>::getGlobalBadStates() const {
+	if ( !mCachesValid[CACHE::VARIABLES] ) {
+		setVariableMapping();
+	}
 	if ( !mCachesValid[CACHE::GLOBALBADSTATES] ) {
 		for ( std::size_t automatonIdx = 0; automatonIdx < mAutomata.size(); ++automatonIdx ) {
 			for ( const auto& badStateCondition : mAutomata[automatonIdx].getGlobalBadStates() ) {
@@ -617,7 +620,13 @@ const typename HybridAutomatonComp<Number>::conditionVector& HybridAutomatonComp
 				vector_t<Number> constants = vector_t<Number>::Zero( badStateCondition.getMatrix().rows() );
 				for ( Eigen::Index row = 0; row < badStateCondition.getMatrix().rows(); ++row ) {
 					for ( Eigen::Index col = 0; col < badStateCondition.getMatrix().cols(); ++col ) {
-						constraints( row, mLocalToGlobalVars.at( std::make_pair( automatonIdx, col ) ) ) = badStateCondition.getMatrix()( row, col );
+						// if the automaton does not have these variables, we assume it knows the global indices already
+						bool hasVariable = mLocalToGlobalVars.find( std::make_pair( automatonIdx, col ) ) != mLocalToGlobalVars.end();
+						if ( hasVariable ) {
+							constraints( row, mLocalToGlobalVars.at( std::make_pair( automatonIdx, col ) ) ) = badStateCondition.getMatrix()( row, col );
+						} else {
+							constraints( row, col ) = badStateCondition.getMatrix()( row, col );
+						}
 					}
 					constants( row ) = badStateCondition.getVector()( row );
 				}

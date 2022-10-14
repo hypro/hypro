@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "LTIWorker.h"
@@ -77,7 +77,7 @@ REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSucce
 }
 
 template <typename Representation, typename HybridAutomaton>
-auto LTIWorker<Representation, HybridAutomaton>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number, LocationT> const* transition ) const -> JumpSuccessorGen {
+auto LTIWorker<Representation, HybridAutomaton>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<LocationT> const* transition ) const -> JumpSuccessorGen {
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {
@@ -97,10 +97,10 @@ auto LTIWorker<Representation, HybridAutomaton>::getJumpSuccessors( std::vector<
 template <typename Representation, typename HybridAutomaton>
 struct LTIWorker<Representation, HybridAutomaton>::EnabledSegmentsGen {
 	std::vector<Representation> const* flowpipe;
-	Transition<Number, LocationT> const* transition;
+	Transition<LocationT> const* transition;
 	std::size_t current = 0;
 
-	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<Number, LocationT> const* transition )
+	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<LocationT> const* transition )
 		: flowpipe( flowpipe )
 		, transition( transition ) {}
 
@@ -163,13 +163,13 @@ struct LTIWorker<Representation, HybridAutomaton>::JumpSuccessorGen {
 	std::optional<std::pair<std::vector<Representation>, SegmentInd>> mEnabledRange = std::pair<std::vector<Representation>, SegmentInd>{};
 
 	size_t mSegmentsPerBlock{};
-	Transition<Number, LocationT> const* mTransition;
+	Transition<LocationT> const* mTransition;
 
 	EnabledSegmentsGen mEnabled;
 	AggregatedGen mAggregated;
 
   public:
-	JumpSuccessorGen( std::vector<Representation> const& flowpipe, Transition<Number, LocationT> const* transition, size_t segmentsPerBlock )
+	JumpSuccessorGen( std::vector<Representation> const& flowpipe, Transition<LocationT> const* transition, size_t segmentsPerBlock )
 		: mSegmentsPerBlock( segmentsPerBlock )
 		, mTransition( transition )
 		, mEnabled( &flowpipe, transition )
@@ -314,7 +314,7 @@ std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType
 }
 
 template <typename Representation, typename HybridAutomaton>
-std::vector<TimedValuationSet<Representation>> LTIWorker<Representation, HybridAutomaton>::computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<Number, LocationT> const* transition ) const {
+std::vector<TimedValuationSet<Representation>> LTIWorker<Representation, HybridAutomaton>::computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<LocationT> const* transition ) const {
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {

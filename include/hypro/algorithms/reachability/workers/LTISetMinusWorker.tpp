@@ -19,7 +19,7 @@ REACHABILITY_RESULT LTISetMinusWorker<Representation, Automaton>::computeTimeSuc
 	// vector for result of setminus
 	std::vector<Representation> result;
 	// vector of urgent transitions in current location
-	std::vector<const Transition<Number, LocationT>*> urgent_trans;
+	std::vector<const Transition<LocationT>*> urgent_trans;
 	// vector of flowpipe segments
 	std::vector<Representation> segments;
 	// variables used to keep track of the computation
@@ -176,7 +176,7 @@ REACHABILITY_RESULT LTISetMinusWorker<Representation, Automaton>::computeTimeSuc
 }
 
 template <typename Representation, typename Automaton>
-auto LTISetMinusWorker<Representation, Automaton>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<Number, LocationT> const* transition ) const -> JumpSuccessorGen {
+auto LTISetMinusWorker<Representation, Automaton>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<LocationT> const* transition ) const -> JumpSuccessorGen {
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {
@@ -196,10 +196,10 @@ auto LTISetMinusWorker<Representation, Automaton>::getJumpSuccessors( std::vecto
 template <typename Representation, typename Automaton>
 struct LTISetMinusWorker<Representation, Automaton>::EnabledSegmentsGen {
 	std::vector<Representation> const* flowpipe;
-	Transition<Number, LocationT> const* transition;
+	Transition<LocationT> const* transition;
 	std::size_t current = 0;
 
-	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<Number, LocationT> const* transition )
+	EnabledSegmentsGen( std::vector<Representation> const* flowpipe, Transition<LocationT> const* transition )
 		: flowpipe( flowpipe )
 		, transition( transition ) {}
 
@@ -262,13 +262,13 @@ struct LTISetMinusWorker<Representation, Automaton>::JumpSuccessorGen {
 	std::optional<std::pair<std::vector<Representation>, SegmentInd>> mEnabledRange = std::pair<std::vector<Representation>, SegmentInd>{};
 
 	size_t mSegmentsPerBlock{};
-	Transition<Number, LocationT> const* mTransition;
+	Transition<LocationT> const* mTransition;
 
 	EnabledSegmentsGen mEnabled;
 	AggregatedGen mAggregated;
 
   public:
-	JumpSuccessorGen( std::vector<Representation> const& flowpipe, Transition<Number, LocationT> const* transition, size_t segmentsPerBlock )
+	JumpSuccessorGen( std::vector<Representation> const& flowpipe, Transition<LocationT> const* transition, size_t segmentsPerBlock )
 		: mSegmentsPerBlock( segmentsPerBlock )
 		, mTransition( transition )
 		, mEnabled( &flowpipe, transition )

@@ -1,10 +1,19 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 #include "../../../types.h"
 #include "HierarchicalIntervalVector.h"
 
 namespace hypro {
 
-template <typename N, typename L>
+template <typename L>
 class Transition;
 
 template <typename N>
@@ -15,7 +24,7 @@ class EventTimingContainer {
   private:
 	// Timing storage
 	HierarchicalIntervalVector<CONTAINMENT, tNumber> mInvariantEvents;
-	std::map<Transition<Number, Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>> mTransitionEvents;
+	std::map<Transition<Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>> mTransitionEvents;
 	HierarchicalIntervalVector<CONTAINMENT, tNumber> mBadStateEvents;
 
 	mutable std::mutex mutex;
@@ -50,23 +59,23 @@ class EventTimingContainer {
 
 	void merge( const EventTimingContainer& snapshot );
 
-	void setTransitionTimings( const std::map<Transition<Number, Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& timings ) { mTransitionEvents = timings; }
-	void setTransitionTimings( Transition<Number, Location<Number>>* t, const HierarchicalIntervalVector<CONTAINMENT, tNumber>& timings ) { mTransitionEvents.insert_or_assign( t, timings ); }
+	void setTransitionTimings( const std::map<Transition<Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& timings ) { mTransitionEvents = timings; }
+	void setTransitionTimings( Transition<Location<Number>>* t, const HierarchicalIntervalVector<CONTAINMENT, tNumber>& timings ) { mTransitionEvents.insert_or_assign( t, timings ); }
 	void setInvariantTimings( const HierarchicalIntervalVector<CONTAINMENT, tNumber>& timings ) { mInvariantEvents = timings; }
 	void setBadStateTimings( const HierarchicalIntervalVector<CONTAINMENT, tNumber>& timings ) { mBadStateEvents = timings; }
 
-	const std::map<Transition<Number, Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& getTransitionTimings() const;
-	std::map<Transition<Number, Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& rGetTransitionTimings();
-	const HierarchicalIntervalVector<CONTAINMENT, tNumber>& getTransitionTimings( Transition<Number, Location<Number>>* transition ) const;
+	const std::map<Transition<Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& getTransitionTimings() const;
+	std::map<Transition<Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& rGetTransitionTimings();
+	const HierarchicalIntervalVector<CONTAINMENT, tNumber>& getTransitionTimings( Transition<Location<Number>>* transition ) const;
 	const HierarchicalIntervalVector<CONTAINMENT, tNumber>& getInvariantTimings() const;
 	HierarchicalIntervalVector<CONTAINMENT, tNumber>& rGetInvariantTimings() { return mInvariantEvents; }
 	// const std::vector<carl::Interval<Number>>& getInvariantTimings(CONTAINMENT type) const;
 	const HierarchicalIntervalVector<CONTAINMENT, tNumber>& getBadStateTimings() const;
 
-	bool hasTransitionEvent( Transition<Number, Location<Number>>* transition ) const;
-	bool hasTransitionEvent( const carl::Interval<tNumber>& timeInterval, Transition<Number, Location<Number>>* transition ) const;
-	bool hasTransitionInformation( const carl::Interval<tNumber>& timeInterval, Transition<Number, Location<Number>>* transition ) const;
-	bool hasTransition( Transition<Number, Location<Number>>* t ) const { return mTransitionEvents.find( t ) != mTransitionEvents.end(); }
+	bool hasTransitionEvent( Transition<Location<Number>>* transition ) const;
+	bool hasTransitionEvent( const carl::Interval<tNumber>& timeInterval, Transition<Location<Number>>* transition ) const;
+	bool hasTransitionInformation( const carl::Interval<tNumber>& timeInterval, Transition<Location<Number>>* transition ) const;
+	bool hasTransition( Transition<Location<Number>>* t ) const { return mTransitionEvents.find( t ) != mTransitionEvents.end(); }
 
 	bool hasInvariantEvent( CONTAINMENT type ) const;
 	bool satisfiedInvariant( const carl::Interval<tNumber>& timeInterval ) const;
@@ -76,7 +85,7 @@ class EventTimingContainer {
 	bool hasBadStateEvent( const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) const;
 	bool hasPositiveBadStateEvent( const carl::Interval<tNumber>& timeInterval ) const;
 
-	void insertTransition( Transition<Number, Location<Number>>* transition, const carl::Interval<tNumber>& timeInterval, CONTAINMENT type );
+	void insertTransition( Transition<Location<Number>>* transition, const carl::Interval<tNumber>& timeInterval, CONTAINMENT type );
 	void insertInvariant( const carl::Interval<tNumber>& timeInterval, CONTAINMENT type );
 	void insertBadState( const carl::Interval<tNumber>& timeInterval, CONTAINMENT type );
 

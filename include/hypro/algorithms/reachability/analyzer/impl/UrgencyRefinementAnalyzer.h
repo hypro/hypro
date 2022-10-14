@@ -80,7 +80,7 @@ class UrgencyRefinementAnalyzer {
 	 */
 	struct RefinementCandidate {
 		ReachTreeNode<Representation, LocationT>* node = nullptr;
-		Transition<Number, LocationT>* transition = nullptr;
+		Transition<LocationT>* transition = nullptr;
 		UrgencyRefinementLevel level = UrgencyRefinementLevel::SETDIFF;
 	};
 
@@ -175,14 +175,14 @@ class UrgencyRefinementAnalyzer {
 	 * @param node The candidate node.
 	 * @return A value dependent on the heuristic given in the settings. Can be used to compare transitions.
 	 */
-	std::size_t evaluateHeuristic( Transition<Number, LocationT>* t, ReachTreeNode<Representation, LocationT>* node );
+	std::size_t evaluateHeuristic( Transition<LocationT>* t, ReachTreeNode<Representation, LocationT>* node );
 
 	/**
 	 * @brief Called after a transition has been chosen for refinement. Depending on the heuristic,
 	 * the function may clear the cache or increase a counter for the given transition.
 	 * @param The transition that was chosen for refinement.
 	 */
-	void updateHeuristics( Transition<Number, LocationT>* t );
+	void updateHeuristics( Transition<LocationT>* t );
 
   protected:
 	std::deque<ReachTreeNode<Representation, LocationT>*> mWorkQueue;  ///< Queue for nodes in the tree which require processing
@@ -194,8 +194,8 @@ class UrgencyRefinementAnalyzer {
 	ReachTreeNode<Representation, LocationT>* mFailureNode;			   ///< The initial failure node
 	std::list<ReachTreeNode<Representation, LocationT>>* mRoots;	   ///< The roots of the reach tree
 	size_t const mMaxSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.localTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::max() ) ) );
-	std::map<Transition<Number, LocationT>*, std::size_t> mHeuristicCache;	///< Cache for heuristic values
-	Transition<Number, LocationT>* mLastRefine;								///< The transition that was most recently refined. Used for heuristic evaluation
+	std::map<Transition<LocationT>*, std::size_t> mHeuristicCache;	///< Cache for heuristic values
+	Transition<LocationT>* mLastRefine;								///< The transition that was most recently refined. Used for heuristic evaluation
 };
 
 }  // namespace hypro

@@ -74,7 +74,7 @@ struct UrgencyRefinementAnalyzer<Representation, Automaton>::ChildNodeGen {
 	using LocationT = typename Automaton::LocationType;
 	std::vector<TimedValuationSet<Representation>> successors;
 	ReachTreeNode<Representation, LocationT>* parentNode;
-	const Transition<typename Representation::NumberType, LocationT>* transition;
+	const Transition<LocationT>* transition;
 	int timeStepFactor;
 	UrgencyCEGARSettings refinementSettings;
 	std::size_t successorIndex = 0;	 // index for iterating over successor segments
@@ -314,7 +314,7 @@ auto UrgencyRefinementAnalyzer<Representation, Automaton>::findRefinementCandida
 template <typename Representation, typename Automaton>
 ReachTreeNode<Representation, typename Automaton::LocationType>* UrgencyRefinementAnalyzer<Representation, Automaton>::createRefinedNode( const RefinementCandidate& refine ) {
 	auto parent = refine.node->getParent();
-	std::map<Transition<Number, LocationT>*, UrgencyRefinementLevel> urgentTransitions( refine.node->getUrgencyRefinementLevels() );
+	std::map<Transition<LocationT>*, UrgencyRefinementLevel> urgentTransitions( refine.node->getUrgencyRefinementLevels() );
 	urgentTransitions[refine.transition] = refine.level;
 	// check if refined node already exists
 	if ( parent == nullptr ) {
@@ -473,7 +473,7 @@ bool UrgencyRefinementAnalyzer<Representation, Automaton>::isPathUnsafe( ReachTr
 }
 
 template <typename Representation, typename Automaton>
-std::size_t UrgencyRefinementAnalyzer<Representation, Automaton>::evaluateHeuristic( Transition<Number, LocationT>* t, ReachTreeNode<Representation, LocationT>* node ) {
+std::size_t UrgencyRefinementAnalyzer<Representation, Automaton>::evaluateHeuristic( Transition<LocationT>* t, ReachTreeNode<Representation, LocationT>* node ) {
 	if ( mHeuristicCache.count( t ) == 0 ) {
 		switch ( mRefinementSettings.heuristic ) {
 			case UrgencyRefinementHeuristic::CONSTRAINT_COUNT: {
@@ -519,7 +519,7 @@ std::size_t UrgencyRefinementAnalyzer<Representation, Automaton>::evaluateHeuris
 }
 
 template <typename Representation, typename Automaton>
-void UrgencyRefinementAnalyzer<Representation, Automaton>::updateHeuristics( Transition<Number, LocationT>* t ) {
+void UrgencyRefinementAnalyzer<Representation, Automaton>::updateHeuristics( Transition<LocationT>* t ) {
 	if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::COUNT ) {
 		mHeuristicCache[t] += 1;
 	} else if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::VOLUME ) {

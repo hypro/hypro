@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "EventTimingContainer.h"
 
 namespace hypro {
@@ -55,7 +64,7 @@ void EventTimingContainer<Number>::merge( const EventTimingContainer<Number>& sn
 }
 
 template <typename Number>
-bool EventTimingContainer<Number>::hasTransitionEvent( Transition<Number, Location<Number>>* transition ) const {
+bool EventTimingContainer<Number>::hasTransitionEvent( Transition<Location<Number>>* transition ) const {
 	return ( mTransitionEvents.find( transition ) != mTransitionEvents.end() &&
 			 ( mTransitionEvents.at( transition ).size() > 1 ||
 			   ( mTransitionEvents.at( transition ).back().type != CONTAINMENT::BOT &&
@@ -63,7 +72,7 @@ bool EventTimingContainer<Number>::hasTransitionEvent( Transition<Number, Locati
 }
 
 template <typename Number>
-bool EventTimingContainer<Number>::hasTransitionEvent( const carl::Interval<tNumber>& timeInterval, Transition<Number, Location<Number>>* transition ) const {
+bool EventTimingContainer<Number>::hasTransitionEvent( const carl::Interval<tNumber>& timeInterval, Transition<Location<Number>>* transition ) const {
 	if ( mTransitionEvents.find( transition ) == mTransitionEvents.end() ) {
 		return false;
 	}
@@ -73,7 +82,7 @@ bool EventTimingContainer<Number>::hasTransitionEvent( const carl::Interval<tNum
 }
 
 template <typename Number>
-bool EventTimingContainer<Number>::hasTransitionInformation( const carl::Interval<tNumber>& timeInterval, Transition<Number, Location<Number>>* transition ) const {
+bool EventTimingContainer<Number>::hasTransitionInformation( const carl::Interval<tNumber>& timeInterval, Transition<Location<Number>>* transition ) const {
 	if ( mTransitionEvents.find( transition ) == mTransitionEvents.end() ) {
 		return false;
 	}
@@ -120,7 +129,7 @@ bool EventTimingContainer<Number>::hasPositiveBadStateEvent( const carl::Interva
 }
 
 template <typename Number>
-void EventTimingContainer<Number>::insertTransition( Transition<Number, Location<Number>>* transition, const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) {
+void EventTimingContainer<Number>::insertTransition( Transition<Location<Number>>* transition, const carl::Interval<tNumber>& timeInterval, CONTAINMENT type ) {
 	// #ifdef HYPRO_LOGGING
 	//	auto tmp = carl::convert<tNumber, double>( timeInterval );
 	//	TRACE( "hypro.datastructures.etc", "In " << this << ": Transition: " << transition->getSource()->hash() << " -> " << transition->getTarget()->hash//() << " in time " << tmp );
@@ -136,17 +145,17 @@ void EventTimingContainer<Number>::insertTransition( Transition<Number, Location
 }
 
 template <typename Number>
-const std::map<Transition<Number, Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& EventTimingContainer<Number>::getTransitionTimings() const {
+const std::map<Transition<Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& EventTimingContainer<Number>::getTransitionTimings() const {
 	return mTransitionEvents;
 }
 
 template <typename Number>
-std::map<Transition<Number, Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& EventTimingContainer<Number>::rGetTransitionTimings() {
+std::map<Transition<Location<Number>>*, HierarchicalIntervalVector<CONTAINMENT, tNumber>>& EventTimingContainer<Number>::rGetTransitionTimings() {
 	return mTransitionEvents;
 }
 
 template <typename Number>
-const HierarchicalIntervalVector<CONTAINMENT, tNumber>& EventTimingContainer<Number>::getTransitionTimings( Transition<Number, Location<Number>>* transition ) const {
+const HierarchicalIntervalVector<CONTAINMENT, tNumber>& EventTimingContainer<Number>::getTransitionTimings( Transition<Location<Number>>* transition ) const {
 	return mTransitionEvents.at( transition );
 }
 

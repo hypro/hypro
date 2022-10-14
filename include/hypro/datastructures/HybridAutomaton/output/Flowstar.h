@@ -82,13 +82,19 @@ std::string toFlowstarFormat( const Condition<Number>& in,
 						res << in.getMatrix()( rowI, colI ) << "*";
 					}
 				} else if ( in.getMatrix()( rowI, colI ) < 0 ) {
+					if ( first ) {
+						first = false;
+					}
 					res << " " << in.getMatrix()( rowI, colI ) << "*";
 				}
 				if ( in.getMatrix()( rowI, colI ) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > std::size_t( colI ) ) {
 					res << varNameMap.at( colI );
 				}
 			}
-			res << " <= " << in.getVector()( rowI );
+			// if first is still true, this was a zero-row, which should be skipped
+			if ( !first ) {
+				res << " <= " << in.getVector()( rowI );
+			}
 		}
 		res << std::scientific;
 	}
@@ -210,9 +216,9 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 		}
 		res << "\n\t}\n";
 
+		// transitions
+		res << "\tjumps\n\t{";
 		if ( !in.getTransitions().empty() ) {
-			// transitions
-			res << "\tjumps\n\t{";
 			for ( const auto transPtr : in.getTransitions() ) {
 				res << "\n\t\t" << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName();
 				if ( transPtr->isUrgent() )
@@ -252,8 +258,8 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 				}
 				res << "\n";
 			}
-			res << "\n\t}\n";
 		}
+		res << "\n\t}\n";
 
 		// initial states
 		res << "\tinit\n\t{";
