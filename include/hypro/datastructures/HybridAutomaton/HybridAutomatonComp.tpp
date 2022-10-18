@@ -459,6 +459,8 @@ void ComposedLocation<Number>::validateName() const {
 			ss << ( mAutomaton.mAutomata[componentIdx].getLocationByIndex( mCompositionals[componentIdx] ) )->getName();
 			castawayConst().setName( ss.str() );
 		}
+		// register location name in lookup-table
+		mAutomaton.mLocationNames[Location<Number>::mName] = const_cast<typename HybridAutomatonComp<Number>::LocationType*>( this );
 		mIsValid[VALIDITY::NAME] = true;
 	}
 }
@@ -490,12 +492,12 @@ typename HybridAutomatonComp<Number>::LocationType* HybridAutomatonComp<Number>:
 
 template <typename Number>
 typename HybridAutomatonComp<Number>::LocationType* HybridAutomatonComp<Number>::getLocation( const std::string& name ) const {
-	for ( const auto& l : mLocations ) {
-		if ( l->getName() == name ) {
-			return &l;
-		}
+	auto res = mLocationNames.find( name );
+	if ( res != std::end( mLocationNames ) ) {
+		return res->second;
+	} else {
+		return nullptr;
 	}
-	return nullptr;
 }
 
 template <typename Number>
@@ -701,6 +703,7 @@ void HybridAutomatonComp<Number>::setVariableMapping() const {
 template <typename Number>
 void HybridAutomatonComp<Number>::invalidateCaches() const {
 	mLocations.clear();
+	mLocationNames.clear();
 	mInitialStates.clear();
 	mLocalBadStates.clear();
 	mGlobalBadStates.clear();

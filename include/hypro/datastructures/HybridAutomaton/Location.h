@@ -54,7 +54,7 @@ class Location {
 	using transitionVector = std::vector<std::unique_ptr<Transition<Location<Number>>>>;
 	using NumberType = Number;
 
-  private:
+  protected:
 	std::vector<flowVariant<Number>> mFlows;			 ///< Dynamics
 	std::vector<DynamicType> mFlowTypes;				 ///< Types of dynamics
 	std::vector<carl::Interval<Number>> mExternalInput;	 ///< External input/disturbance

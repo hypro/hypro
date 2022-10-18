@@ -206,12 +206,13 @@ class HybridAutomatonComp {
 
   private:
 	bool fullLazy = false;
-	std::vector<HybridAutomaton<Number>> mAutomata;	 /// The set of hybrid automata that is composed.
-	mutable Locations mLocations;					 /// Cache for the locations of the hybrid automaton already discovered.
-	mutable locationConditionMap mInitialStates;	 /// The set of initial states.
-	mutable locationConditionMap mLocalBadStates;	 /// The set of bad states which are bound to locations.
-	mutable conditionVector mGlobalBadStates;		 /// The set of bad states which are not bound to any location.
-	mutable std::vector<std::string> mVariables;	 /// Cache for the variables of the composed automata.
+	std::vector<HybridAutomaton<Number>> mAutomata;							/// The set of hybrid automata that is composed.
+	mutable Locations mLocations;											/// Cache for the locations of the hybrid automaton already discovered.
+	mutable std::unordered_map<std::string, LocationType*> mLocationNames;	/// Maintains a map from names to locations for faster lookup
+	mutable locationConditionMap mInitialStates;							/// The set of initial states.
+	mutable locationConditionMap mLocalBadStates;							/// The set of bad states which are bound to locations.
+	mutable conditionVector mGlobalBadStates;								/// The set of bad states which are not bound to any location.
+	mutable std::vector<std::string> mVariables;							/// Cache for the variables of the composed automata.
 	mutable std::map<unsigned, std::vector<unsigned>> mSharedVars;
 	mutable std::vector<bool> mCachesValid = std::vector<bool>( CACHE::Count, false );				 ///< Set of flags used to indicate cache validity
 	mutable std::map<std::size_t, std::vector<long int>> mGlobalToLocalVars;						 ///< Mapping from global var idx to local ones
