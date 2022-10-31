@@ -180,6 +180,9 @@ class ComposedLocation : public Location<Number> {
 	void validateName() const;
 };
 
+template <typename N>
+struct is_location_type<ComposedLocation<N>> : std::true_type {};
+
 /**
  * @brief      Class for linear hybrid automata with components.
  * @tparam     Number  Number type.

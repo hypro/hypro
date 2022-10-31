@@ -21,6 +21,7 @@ static_assert( false, "This file may only be included indirectly by HybridAutoma
 #endif
 
 #include "../../types.h"
+#include "../../util/typetraits.h"
 #include "Condition.h"
 #include "decomposition/Decomposition.h"
 #include "flow/operations.h"
@@ -341,6 +342,9 @@ struct locPtrComp {
 
 template <typename Number>
 std::unique_ptr<Location<Number>> parallelCompose( const Location<Number>* lhs, const Location<Number>* rhs, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const std::map<std::string, std::vector<Location<Number>*>>& masters = {} );
+
+template <typename N>
+struct is_location_type<Location<N>> : std::true_type {};
 
 }  // namespace hypro
 

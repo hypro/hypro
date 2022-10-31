@@ -22,6 +22,7 @@ static_assert( false, "This file may only be included indirectly by Location.h" 
 #endif
 
 #include "../../types.h"
+#include "../../util/typetraits.h"
 #include "Condition.h"
 #include "HybridAutomaton.h"
 #include "Label.h"
@@ -46,6 +47,7 @@ class Location;
  */
 template <typename LocationType>
 class Transition {
+	static_assert( is_location_type<LocationType>() );
 	using Number = typename LocationType::NumberType;
 
   private:
