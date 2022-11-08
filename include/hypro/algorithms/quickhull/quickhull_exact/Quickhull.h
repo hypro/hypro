@@ -4,7 +4,7 @@
 #include "../../../util/typetraits.h"
 
 #include <boost/dynamic_bitset.hpp>
-#include <carl/numbers/numbers.h>
+#include <util/adaptions_carl/adaptions_includes.h>
 #include <vector>
 
 namespace hypro {

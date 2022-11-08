@@ -20,6 +20,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
+#include "../../types.h"
 #include "../../util/linearOptimization/Optimizer.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/sequenceGeneration/SequenceGenerator.h"
@@ -28,8 +29,6 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "BoxSetting.h"
 #include "intervalMethods.h"
 
-#include <carl/interval/Interval.h>
-#include <carl/interval/set_theory.h>
 #include <cassert>
 #include <map>
 #include <queue>
@@ -118,9 +117,9 @@ class BoxT : private GeometricObjectBase {
 	 */
 	explicit BoxT( const carl::Interval<Number>& val ) {
 		mLimits.push_back( val );
-		if ( val.isEmpty() )
+		if ( isEmpty( val ) )
 			mEmptyState = SETSTATE::EMPTY;
-		else if ( val.isUnbounded() )
+		else if ( isUnbounded( val ) )
 			mEmptyState = SETSTATE::UNIVERSAL;
 		else
 			mEmptyState = SETSTATE::NONEMPTY;
@@ -137,7 +136,7 @@ class BoxT : private GeometricObjectBase {
 		mEmptyState = limits.first.dimension() > 0 ? SETSTATE::NONEMPTY : SETSTATE::EMPTY;
 		for ( std::size_t i = 0; i < limits.first.dimension(); ++i ) {
 			mLimits.emplace_back( carl::Interval<Number>( limits.first[i], limits.second[i] ) );
-			mEmptyState = mLimits.back().isEmpty() ? SETSTATE::EMPTY : mEmptyState;
+			mEmptyState = isEmpty( mLimits.back() ) ? SETSTATE::EMPTY : mEmptyState;
 		}
 	}
 
@@ -151,10 +150,7 @@ class BoxT : private GeometricObjectBase {
 		, mLimits( _intervals ) {
 		for ( const auto& i : mLimits ) {
 			TRACE( "hypro.representations", "Add interval: " << i );
-			if ( i.isUnbounded() ) {
-				mEmptyState = SETSTATE::EMPTY;
-			}
-			if ( i.isEmpty() ) {
+			if ( isEmpty( i ) ) {
 				mEmptyState = SETSTATE::EMPTY;
 				break;
 			}
@@ -253,11 +249,11 @@ class BoxT : private GeometricObjectBase {
 	 */
 	void insert( const carl::Interval<Number>& val ) {
 		mLimits.push_back( val );
-		if ( mLimits.back().isEmpty() ) {
+		if ( isEmpty( mLimits.back() ) ) {
 			mEmptyState = SETSTATE::EMPTY;
 		} else if ( mLimits.size() == 1 ) {	 // the new interval was the first and it is not empty.
-			mEmptyState = mLimits.front().isUnbounded() ? SETSTATE::UNIVERSAL : SETSTATE::NONEMPTY;
-		} else if ( val.isUnbounded() ) {
+			mEmptyState = isUnbounded( mLimits.front() ) ? SETSTATE::UNIVERSAL : SETSTATE::NONEMPTY;
+		} else if ( isUnbounded( val ) ) {
 			mEmptyState = SETSTATE::UNIVERSAL;
 		}
 		// otherise do not modify mEmptyState - if it was true before it stays true, otherwise nothing happens.
@@ -309,7 +305,7 @@ class BoxT : private GeometricObjectBase {
 			return true;
 		}
 		for ( std::size_t d = 0; d < mLimits.size(); ++d ) {
-			if ( !( -mLimits[d].lower() == mLimits[d].upper() && mLimits[d].lowerBoundType() == mLimits[d].upperBoundType() ) ) {
+			if ( !( -mLimits[d].lower() == mLimits[d].upper() && lowerBoundType( mLimits[d] ) == upperBoundType( mLimits[d] ) ) ) {
 				return false;
 			}
 		}

@@ -109,12 +109,13 @@ SupportFunctionNewT<Number, Converter<Number>, SFNSetting> Converter<Number>::to
 //	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>(_source.matrix(), _source.vector());
 // }
 
-  // namespace hypro
-/*
-template<typename Number>
-template<typename SFNSetting, typename inSetting>
-SupportFunctionT<Number,Converter<Number>,SFNSetting> Converter<Number>::toSupportFunction( const StarsetT<Number,Converter<Number>,inSetting>& source, const CONV_MODE ) {
-	return SupportFunctionNewT<Number,Converter<Number>,SFNSetting>();
-}*/
+// namespace hypro
 
+template <typename Number>
+template <typename SFNSetting, typename inSetting>
+SupportFunctionNewT<Number, Converter<Number>, SFNSetting> Converter<Number>::toSupportFunctionNew( const StarsetT<Number, Converter<Number>, inSetting>& source, const CONV_MODE ) {
+	throw NotImplemented();
+	return SupportFunctionNewT<Number, Converter<Number>, SFNSetting>();
 }
+
+}  // namespace hypro

@@ -7,6 +7,7 @@
 #pragma once
 
 #include "util.h"
+
 #include "gtest/gtest.h"
 #include <hypro/config.h>
 #include <hypro/representations/GeometricObjectBase.h>
@@ -41,7 +42,7 @@ typedef ::testing::Types<
 #ifdef HYPRO_USE_PPL
 	  hypro::Polytope<mpq_class>,
 #endif
-	  hypro::VPolytope<mpq_class>, hypro::HPolytope<mpq_class>, hypro::CarlPolytope<mpq_class> >
+	  hypro::VPolytope<mpq_class>, hypro::HPolytope<mpq_class>, hypro::CarlPolytope<mpq_class>>
 	  polyhedralTypes;
 
 typedef ::testing::Types<hypro::Box<double>, hypro::Box<mpq_class>> boxTypes;
@@ -58,7 +59,7 @@ TYPED_TEST_CASE( UrgencyCEGARReachabilityTest, boxTypes );
 TYPED_TEST_CASE( VertexEnumerationTest, allTypes );
 
 // Benchmark
-TYPED_TEST_CASE( Benchmark, allTypes );
+TYPED_TEST_SUITE( Benchmark, allTypes );
 
 // Core
 TYPED_TEST_CASE( AntlrParserTest, allTypes );

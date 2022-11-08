@@ -36,6 +36,10 @@ int main( int argc, char const* argv[] ) {
 	// combine parsed settings and cli flags
 	auto settings = hydra::processSettings( reachSettings, options );
 
+	settings.rStrategy().front().detectContinuousFixedPointsLocally = false;
+	settings.rStrategy().front().detectFixedPointsByCoverage = false;
+	settings.rStrategy().front().detectJumpFixedPoints = false;
+
 	EVALUATE_BENCHMARK_RESULT( "Parsing" );
 
 	// perform preprocessing
@@ -64,8 +68,7 @@ int main( int argc, char const* argv[] ) {
 		for ( auto& segment : result.plotData ) {
 			if ( true || segmentCount % 100 == 0 ) std::cout << "\r" << segmentCount << "/" << result.plotData.size() << "..." << std::flush;
 			segmentCount += 1;
-			std::vector<hypro::Point<Number>> vertices;
-			vertices = reduceToDimensions<Number>( segment.sets.vertices(), plotSettings.plotDimensions[pic] );
+			auto vertices = segment.sets.projectOn( plotSettings.plotDimensions[pic] ).vertices();
 			if ( vertices.front().dimension() != 2 ) {
 				INFO( "hypro.plotter", "broken vertices:\n"
 											 << vertices )
@@ -78,7 +81,7 @@ int main( int argc, char const* argv[] ) {
 		std::cout << "\r" << segmentCount << "/" << result.plotData.size() << "..."
 				  << "\n";
 
-		plt.plot2d( plotSettings.plottingFileType );  // writes to .plt file for pdf creation
+		plt.plot2d( plotSettings.plottingFileType, true );	// writes to .plt file for pdf creation
 	}
 	EVALUATE_BENCHMARK_RESULT( "Plotting" );
 

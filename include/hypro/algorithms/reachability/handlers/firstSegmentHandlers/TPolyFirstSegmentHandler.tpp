@@ -133,7 +133,7 @@ void TPolyFirstSegmentHandler<State>::handle() {
 		// if(TPolyType::Settings::DIRECTLY_COMPUTE_ROOTS){
 		if ( TemplatePolyhedron<Number>::Settings::DIRECTLY_COMPUTE_ROOTS ) {
 			// Compute derivative of polynom
-			carl::Variable var = carl::freshRealVariable( "t" );
+			carl::Variable var = freshRealVariable( "t" );
 			carl::UnivariatePolynomial<tNumber> polynom( var, polynomCoeffs );
 			// Compute roots that lie in interval and check for maximal value there
 			tNumber max = maxValueAtRoots( polynom, carl::Interval<tNumber>( tNumber( 0 ), this->mTimeStep ) );
@@ -151,7 +151,7 @@ void TPolyFirstSegmentHandler<State>::handle() {
 		} else {
 			// Check approximately whether interval is monotonically in-/decreasing
 			// Check some values in [0,mTimeStep] and whether they in-/decrease throughoutly.
-			carl::Variable var = carl::freshRealVariable( "t" );
+			carl::Variable var = freshRealVariable( "t" );
 			carl::UnivariatePolynomial<Number> polynom( var, polynomCoeffsAsNumber );
 			std::vector<Number> values;
 			bool increasing = true;
@@ -174,7 +174,7 @@ void TPolyFirstSegmentHandler<State>::handle() {
 					}
 				}
 			}
-			// std::cout << "TPolyFirstSegmentHandler::handle, timestep: " << carl::toDouble(this->mTimeStep) << std::endl;
+			// std::cout << "TPolyFirstSegmentHandler::handle, timestep: " << toDouble(this->mTimeStep) << std::endl;
 			// std::cout << "TPolyFirstSegmentHandler::handle, increasing? " << increasing << " decreasig? " << decreasing << std::endl;
 			assert( values.size() <= tpoly.getSettings().MONOTONICITY_GRANULARITY + 1 );
 			if ( !increasing && !decreasing ) {

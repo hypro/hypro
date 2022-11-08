@@ -189,19 +189,19 @@ class linearFlow {
 		bool firstRow = true;
 		const matrix_t<Number>& fMat{ in.mFlowMatrix };
 		if ( fMat.rows() > 0 ) {
-			for ( Eigen::Index row = 0; row < fMat.rows(); ++row ) {
-                if (!firstRow) {
-                    out << "\n";
-                } else {
-                    firstRow = false;
-                }
-                out << "x" << row << "' = ";
-                if (in.hasNoFlow(std::size_t(row))) {
-                    out << "0";
-                } else {
-                    out << to_string<Number>(fMat.row(row));
-                }
-            }
+			for ( Eigen::Index row = 0; row < fMat.rows() - 1; ++row ) {
+				if ( !firstRow ) {
+					out << "\n";
+				} else {
+					firstRow = false;
+				}
+				out << "x" << row << "' = ";
+				if ( in.hasNoFlow( std::size_t( row ) ) ) {
+					out << "0";
+				} else {
+					out << to_string<Number>( fMat.row( row ) );
+				}
+			}
 		}
 		return out;
 	}

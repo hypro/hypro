@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 
 #ifndef INCL_FROM_GOHEADER
@@ -41,11 +50,18 @@ class CarlPolytopeT : private GeometricObjectBase {
 		: mFormula()
 		, mHalfspaces() {}
 
+	CarlPolytopeT( const CarlPolytopeT& in ) = default;
+	CarlPolytopeT( CarlPolytopeT&& in ) = default;
+
 	CarlPolytopeT( const FormulaT<tNumber>& formula, std::size_t dimension = 0 )
 		: mFormula( formula )
 		, mHalfspaces()
 		, mDimension( dimension ) {
+#ifdef CARL_OLD_STRUCTURE
 		assert( formula.isRealConstraintConjunction() );
+#else
+		assert( formula.is_real_constraint_conjunction() );
+#endif
 		if ( dimension == 0 ) {
 			detectDimension();
 		}
@@ -79,10 +95,7 @@ class CarlPolytopeT : private GeometricObjectBase {
 		return CarlPolytopeT();
 	}
 
-	CarlPolytopeT affineTransformation( const matrix_t<Number>&, const vector_t<Number>& ) const {
-		assert( false && "NOT IMPLEMENTED" );
-		return CarlPolytopeT();
-	}
+	CarlPolytopeT affineTransformation( const matrix_t<Number>&, const vector_t<Number>& ) const;
 
 	std::pair<CONTAINMENT, CarlPolytopeT> satisfiesHalfspaces( const matrix_t<Number>& _mat, const vector_t<Number>& _vec ) const;
 
@@ -148,6 +161,20 @@ class CarlPolytopeT : private GeometricObjectBase {
 
 	friend bool operator!=( const CarlPolytopeT<Number, Converter, Setting>& lhs, const CarlPolytopeT<Number, Converter, Setting>& rhs ) {
 		return !( lhs.mFormula == rhs.mFormula );
+	}
+
+	CarlPolytopeT& operator=( const CarlPolytopeT& in ) {
+		this->mFormula = in.mFormula;
+		this->mDimension = in.mDimension;
+		this->mSpaceDimensionSet = in.mSpaceDimensionSet;
+		return *this;
+	}
+
+	CarlPolytopeT& operator=( CarlPolytopeT&& in ) {
+		this->mFormula = std::move( in.mFormula );
+		this->mDimension = in.mDimension;
+		this->mSpaceDimensionSet = in.mSpaceDimensionSet;
+		return *this;
 	}
 
   private:

@@ -25,7 +25,11 @@ class FourierMotzkinQE {
 	FourierMotzkinQE( const FormulaT<Number>& qfree, const QEQuery& quantifiers )
 		: mQuery( quantifiers )
 		, mFormula( qfree ) {
-		assert( qfree.getType() == carl::FormulaType::CONSTRAINT || qfree.isRealConstraintConjunction() );
+#ifdef CARL_OLD_STRUCTURE
+		assert( getType( qfree ) == carl::FormulaType::CONSTRAINT || qfree.isRealConstraintConjunction() );
+#else
+		assert( getType( qfree ) == carl::FormulaType::CONSTRAINT || qfree.is_real_constraint_conjunction() );
+#endif
 	}
 
 	FormulaT<Number> eliminateQuantifiers();

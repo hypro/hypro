@@ -1,7 +1,7 @@
 #include "test/algorithms/automata/automataCreation.h"
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
-#include <carl/interval/Interval.h>
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/algorithms/reachability/analyzer/SingularAnalyzer.h>
 #include <hypro/algorithms/reachability/workers/SingularWorker.h>
@@ -597,10 +597,10 @@ TEST( SingularRechabilityTest, ReservoirCaseStudy ) {
 	// l0 -> l2
 	std::vector<carl::Interval<Number>> resets;
 	// identity resets are indicated by empty intervals
-	resets.emplace_back( carl::Interval<Number>::emptyInterval() );
-	resets.emplace_back( carl::Interval<Number>::emptyInterval() );
+	resets.emplace_back( hypro::createEmptyInterval<Number>() );
+	resets.emplace_back( hypro::createEmptyInterval<Number>() );
 	// resets.emplace_back( carl::Interval<Number>( Number( 0 ) ) );
-	resets.emplace_back( carl::Interval<Number>::emptyInterval() );
+	resets.emplace_back( hypro::createEmptyInterval<Number>() );
 	{
 		auto* t = l0->createTransition( l2 );
 		t->setReset( { resets } );

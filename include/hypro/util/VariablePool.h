@@ -19,10 +19,9 @@
 
 #pragma once
 
+#include "../types.h"
+
 #include <algorithm>
-#include <carl/core/Variable.h>
-#include <carl/core/VariablePool.h>
-#include <carl/util/Singleton.h>
 #include <cassert>
 #include <hypro/flags.h>
 #include <map>
@@ -95,7 +94,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 		assert( mPplVariables.size() == mPplId );
 		if ( _index >= mPplId ) {
 			for ( std::size_t curr = mPplId; curr <= _index; ++curr ) {
-				carl::Variable cVar = carl::freshRealVariable();
+				carl::Variable cVar = freshRealVariable();
 				Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 				mCarlVariables.push_back( cVar );
 				mPplVariables.push_back( pVar );
@@ -114,7 +113,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 #endif
 		if ( _index >= mPplId ) {
 			for ( std::size_t curr = mPplId; curr <= _index; ++curr ) {
-				carl::Variable cVar = carl::freshRealVariable( prefix + "_" + std::to_string( curr ) );
+				carl::Variable cVar = freshRealVariable( prefix + "_" + std::to_string( curr ) );
 				mCarlVariables.push_back( cVar );
 #ifdef HYPRO_USE_PPL
 				Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
@@ -142,13 +141,16 @@ class VariablePool : public carl::Singleton<VariablePool> {
 				newCarlVariable();
 			}
 			// set / update variable with the correct name at the correct position
-			mCarlVariables[index.value()] = carl::freshRealVariable( _name );
+			mCarlVariables[index.value()] = freshRealVariable( _name );
 			return mCarlVariables[index.value()];
 		}
-
+#ifdef CARL_OLD_STRUCTURE
 		carl::Variable cVar = carl::VariablePool::getInstance().findVariableWithName( _name );
+#else
+		carl::Variable cVar = carl::VariablePool::getInstance().find_variable_with_name( _name );
+#endif
 		if ( cVar == carl::Variable::NO_VARIABLE ) {
-			cVar = carl::freshRealVariable( _name );
+			cVar = freshRealVariable( _name );
 		}
 		mCarlVariables.push_back( cVar );
 #ifdef HYPRO_USE_PPL
@@ -188,7 +190,7 @@ class VariablePool : public carl::Singleton<VariablePool> {
 #ifdef HYPRO_USE_PPL
 		assert( mPplVariables.size() == mPplId );
 #endif
-		carl::Variable cVar = carl::freshRealVariable();
+		carl::Variable cVar = freshRealVariable();
 		Parma_Polyhedra_Library::Variable pVar = Parma_Polyhedra_Library::Variable( mPplId++ );
 		mCarlVariables.push_back( cVar );
 		mPplVariables.push_back( pVar );

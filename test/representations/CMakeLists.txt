@@ -2,6 +2,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     # reduce compiler optimization for tests
     set(representation_test_sources
+            BoundednessTest.cpp
             BoxTest.cpp
             CarlPolytopeTest.cpp
             ConverterTest.cpp
@@ -38,7 +39,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     target_link_libraries(runRepresentationTests PUBLIC
             ${GTEST_LIBRARIES}
-            ${PROJECT_NAME}-static
+            ${PROJECT_NAME}-shared
             )
 
     cotire(runRepresentationTests)

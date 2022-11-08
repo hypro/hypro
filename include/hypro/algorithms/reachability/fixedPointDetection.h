@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 /*
  * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 09.09.21.
@@ -13,6 +13,8 @@
 #pragma once
 #include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../representations/GeometricObjectBase.h"
+#include "../../representations/Polytopes/carlPolytope/util.h"
+#include "../../representations/equivalence.h"
 #include "FlowpipeConstructionConvenience.h"
 
 namespace hypro {
@@ -216,28 +218,58 @@ std::vector<const Transition<typename Set::NumberType>*> getZenoTransitions( con
 	std::vector<const Transition<N>*> result;
 	// search in the path to the root for a zeno-cycle
 	auto* parent = child->getParent();
-	// structural check: if the reset from the parent to the child is non-identity, this cannot be a Zeno transition
-	if ( !child->getTransition()->getReset().isIdentity() ) {
-		return result;
-	}
+	// collect cummulative reset
+	Reset cummulative = child->getTransition()->getReset();
 	while ( parent != nullptr ) {
 		// simple check: if the initial set fully satisfies the guard back to the parent and no variable is reset, we know (since the initial set already fully satisfies the guard from the parent to the child), that this is a Zeno loop.
 		for ( auto& transition : child->getLocation()->getTransitions() ) {
 			// TODO this check is very conservative - here we check, whether the initial set is fully contained, while we could also check for partial coverage
 			// and only consider this part.
-			if ( transition->getTarget() == parent->getLocation() && transition->getReset().isIdentity() && intersect( child->getInitialSet(), transition->getGuard() ).first == CONTAINMENT::FULL ) {
+			if ( transition->getTarget() == parent->getLocation() && ( cummulative + transition->getReset() ).isIdentity() && intersect( child->getInitialSet(), transition->getGuard() ).first == CONTAINMENT::FULL ) {
 				DEBUG( "hypro.reachability", "Detected Zeno-transition from " << transition->getSource()->getName() << " to " << transition->getTarget()->getName() << " with set " << child->getInitialSet() )
 				result.push_back( transition.get() );
 			}
 		}
-		// if the incoming transition to the parent is non-identity, the cycle cannot be declared Zeno (we ignore cases where the resets add up to identity)
-		if ( parent->getParent() != nullptr && !parent->getTransition()->getReset().isIdentity() ) {
-			return result;
+		// update the cummulative reset, if possible
+		if ( parent->getTransition() != nullptr ) {
+			cummulative = cummulative + parent->getTransition()->getReset();
 		}
-		// ascend, if the parent can be part of a Zeno cycle
+		assert( parent->getTransition() != nullptr || parent->getParent() == nullptr );
+		// ascend, to checkk if the parent can be part of a Zeno cycle
 		parent = parent->getParent();
 	}
 	return result;
+}
+
+template <typename Number>
+bool isZenoCycle( const Path<Number>& path ) {
+	// check, whether the locations match
+	if ( path.elements.front().second->getSource() != path.elements.back().second->getTarget() ) {
+		return false;
+	}
+#ifdef HYPRO_HAVE_SMT
+	// keep first guard set
+	auto initialGuardCondition = CarlPolytope<Number>( path.elements.front().second->getGuard().getMatrix(), path.elements.front().second->getGuard().getVector() );
+	// manually set dimension as the guard-condition may be "true" and hides the state space dimension
+	initialGuardCondition.setDimension( path.elements.front().second->getSource()->dimension() );
+	//  collect expression for all guards and resets
+	auto currentSet = initialGuardCondition;
+	for ( const std::pair<carl::Interval<SegmentInd>, Transition<Number> const*>& element : path.elements ) {
+		auto& guardCondition = element.second->getGuard();
+		auto& reset = element.second->getReset();
+		//  non-trivial guard -> dimensions must be equal
+		assert( ( guardCondition.isTrue() || guardCondition.isFalse() ) || currentSet.dimension() == guardCondition.dimension() );
+		auto guardConstraints = halfspacesToConstraints<mpq_class, Number>( guardCondition.getMatrix(), guardCondition.getVector() );
+		// apply guard - conjunction
+		currentSet.addConstraints( guardConstraints );
+		currentSet.setDimension( initialGuardCondition.dimension() );
+		if ( !reset.isIdentity() ) {
+			currentSet = currentSet.affineTransformation( reset.getMatrix(), reset.getVector() );
+		}
+	}
+	return symbolicEquivalence( currentSet, initialGuardCondition );
+#endif
+	return false;
 }
 
 /**

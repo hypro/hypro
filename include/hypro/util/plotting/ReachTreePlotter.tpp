@@ -66,10 +66,22 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 		}
 	}
 
+	// determine filename
+	std::size_t cnt = 0;
+	std::string filename = mSettings.filename;
+	if ( !mSettings.overwriteFiles ) {
+		while ( file_exists( filename + ".png" ) || file_exists( filename + ".dot" ) ) {
+			std::stringstream ss;
+			ss << mSettings.filename << "-" << cnt;
+			filename = ss.str();
+			++cnt;
+		}
+	}
+
 	// drawing
 	gvLayoutJobs( gvc, graph );
-	gvRenderFilename( gvc, graph, "png", "rt_out.png" );
-	gvRenderFilename( gvc, graph, "dot", "rt_out.dot" );
+	gvRenderFilename( gvc, graph, "png", ( filename + ".png" ).c_str() );
+	gvRenderFilename( gvc, graph, "dot", ( filename + ".dot" ).c_str() );
 	gvFreeLayout( gvc, graph );
 
 	// cleanup
@@ -137,10 +149,22 @@ void ReachTreePlotter<Representation>::plotPath( const ReachTreeNode<Representat
 		}
 	}
 
+	// determine filename
+	std::size_t cnt = 0;
+	std::string filename = mSettings.filename;
+	if ( !mSettings.overwriteFiles ) {
+		while ( file_exists( filename + ".png" ) || file_exists( filename + ".dot" ) ) {
+			std::stringstream ss;
+			ss << mSettings.filename << "-" << cnt;
+			filename = ss.str();
+			++cnt;
+		}
+	}
+
 	// drawing
 	gvLayoutJobs( gvc, graph );
-	gvRenderFilename( gvc, graph, "png", "rp_out.png" );
-	gvRenderFilename( gvc, graph, "dot", "rp_out.dot" );
+	gvRenderFilename( gvc, graph, "png", ( filename + ".png" ).c_str() );
+	gvRenderFilename( gvc, graph, "dot", ( filename + ".dot" ).c_str() );
 	gvFreeLayout( gvc, graph );
 
 	// cleanup

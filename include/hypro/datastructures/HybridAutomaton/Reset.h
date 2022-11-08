@@ -72,14 +72,22 @@ class Reset {
 	const std::vector<carl::Interval<Number>>& getIntervals( std::size_t I = 0 ) const;
 	std::vector<carl::Interval<Number>>& rGetIntervals( std::size_t I = 0 );
 
-	const AffineTransformation<Number>& getAffineReset( std::size_t I = 0 ) const { return mAffineResets[I]; }
+	const AffineTransformation<Number>& getAffineReset( std::size_t I = 0 ) const {
+		assert( I < mAffineResets.size() );
+		return mAffineResets[I];
+	}
 	const std::vector<AffineTransformation<Number>>& getAffineResets() const { return mAffineResets; }
-	const IntervalAssignment<Number>& getIntervalReset( std::size_t I = 0 ) const { return mIntervalResets[I]; }
+	const IntervalAssignment<Number>& getIntervalReset( std::size_t I = 0 ) const {
+		assert( I < mIntervalResets.size() );
+		return mIntervalResets[I];
+	}
 	const std::vector<IntervalAssignment<Number>>& getIntervalResets() const { return mIntervalResets; }
 
 	void setVector( const vector_t<Number>& in, std::size_t I = 0 );
 	void setMatrix( const matrix_t<Number>& in, std::size_t I = 0 );
 	void setIntervals( const std::vector<carl::Interval<Number>>& intervals, std::size_t I = 0 );
+
+	void addResetTransformation( const AffineTransformation<Number> trafo );
 
 	bool isAffineIdentity() const;
 	bool isIntervalIdentity() const;
@@ -134,6 +142,9 @@ template <typename Number>
 Reset<Number> combine(
 	  const Reset<Number>& lhs, const Reset<Number>& rhs,
 	  const std::vector<std::string> haVar, const std::vector<std::string> lhsVar, const std::vector<std::string> rhsVar );
+
+template <typename Number>
+Reset<Number> operator+( const Reset<Number>& lhs, const Reset<Number>& rhs );
 
 }  // namespace hypro
 

@@ -10,8 +10,8 @@
 #pragma once
 
 #include "../../datastructures/HybridAutomaton/Condition.h"
-#include "../../datastructures/reachability/ReachTreev2.h"
 #include "../../datastructures/HybridAutomaton/State.h"
+#include "../../datastructures/reachability/ReachTreev2.h"
 #include "types.h"
 
 #include <utility>
@@ -87,7 +87,7 @@ Representation applyTimeEvolution( Representation const& valuationSet, matrix_t<
 template <class Representation, class Number>
 Representation applyReset( Representation const& valuationSet, Reset<Number> const& reset, std::size_t subspace = 0 ) {
 	if ( !reset.isIntervalIdentity() && std::any_of( reset.getIntervalReset( subspace ).getIntervals().begin(), reset.getIntervalReset( subspace ).getIntervals().end(),
-													 []( const auto& interval ) { return !interval.isEmpty(); } ) ) {
+													 []( const auto& interval ) { return !isEmpty( interval ); } ) ) {
 		assert( false && "lti analyzer does not currently support interval assignments on reset" );
 		WARN( "hypro.reachability", "lti analyzer does not currently support interval assignments on reset" );
 	}
@@ -129,7 +129,6 @@ Box<typename Representation::NumberType> computeBoundingBox( const std::vector<R
 	}
 	return box;
 }
-
 
 /**
  * @brief Computes the set difference of a state set with a condition.

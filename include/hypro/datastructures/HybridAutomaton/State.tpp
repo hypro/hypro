@@ -59,12 +59,12 @@ void State<Number, Representation, Rargs...>::setSet( const State<Number, Repres
 template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::addTimeToClocks( tNumber t ) {
 	TRACE( "hypro.datastructures", "Add timestep of size " << t << " to clocks." );
-	//if(mHasClocks) {
+	// if(mHasClocks) {
 	//	matrix_t<Number> identity = matrix_t<Number>::Identity(mClockAssignment.dimension(), mClockAssignment.dimension());
 	//	vector_t<Number> clockShift = vector_t<Number>::Ones(mClockAssignment.dimension());
 	//	clockShift = clockShift * t;
 	//	mClockAssignment = mClockAssignment.affineTransformation(identity,clockShift);
-	//}
+	// }
 	assert( checkConsistency() );
 	mTimestamp += t;
 }
@@ -88,7 +88,11 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 
 	TRACE( "hypro.datastructures", "Done union." );
 
+#ifdef CARL_OLD_STRUCTURE
 	res.setTimestamp( mTimestamp.convexHull( in.getTimestamp() ) );
+#else
+	res.setTimestamp( mTimestamp.convex_hull( in.getTimestamp() ) );
+#endif
 	return res;
 }
 
@@ -117,8 +121,8 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 
 template <typename Number, typename Representation, typename... Rargs>
 std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Representation, Rargs...>::satisfies( const Condition<Number>& in ) const {
-	//DEBUG("hypro.datastructures","this rep name: " << mSetRepresentationName << " vs " << in.getSetRepresentation());
-	//assert(mSetRepresentationName == in.getSetRepresentation());
+	// DEBUG("hypro.datastructures","this rep name: " << mSetRepresentationName << " vs " << in.getSetRepresentation());
+	// assert(mSetRepresentationName == in.getSetRepresentation());
 
 	assert( checkConsistency() );
 
@@ -139,13 +143,13 @@ std::pair<CONTAINMENT, State<Number, Representation, Rargs...>> State<Number, Re
 
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
 		// check each substateset agains its invariant subset
-		//DEBUG("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix(i) << std::endl << "Vector: " << std::endl << in.getVector(i));
-		//DEBUG("hypro.datastructures", "Before genericSatisfiesHalfspacesVisitor. mSets.at(" << i << ") is: "<< std::endl << mSets.at(i));
+		// DEBUG("hypro.datastructures","Condition matrix: " << std::endl << in.getMatrix(i) << std::endl << "Vector: " << std::endl << in.getVector(i));
+		// DEBUG("hypro.datastructures", "Before genericSatisfiesHalfspacesVisitor. mSets.at(" << i << ") is: "<< std::endl << mSets.at(i));
 		auto resultPair = std::visit( genericSatisfiesHalfspacesVisitor<repVariant, Number>( in.getMatrix( i ), in.getVector( i ) ), mSets.at( i ) );
-		//DEBUG("hypro.datastructures", "After genericSatisfiesHalfspacesVisitor.");
+		// DEBUG("hypro.datastructures", "After genericSatisfiesHalfspacesVisitor.");
 
 		res.setSetDirect( resultPair.second, i );
-		//DEBUG("hypro.datastructures", "i is:" << i << "After setSetDirect.");
+		// DEBUG("hypro.datastructures", "i is:" << i << "After setSetDirect.");
 
 		if ( resultPair.first == CONTAINMENT::NO ) {
 			DEBUG( "hypro.datastructures", "State set " << i << "(type " << mTypes.at( i ) << ") failed the condition - return empty." );
@@ -224,12 +228,11 @@ EvaluationResult<Number> State<Number, Representation, Rargs...>::evaluate( cons
 	return res;
 }
 
-
 template <typename Number, typename Representation, typename... Rargs>
 State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::applyTimeStep( const std::vector<std::pair<const matrix_t<Number>&, const vector_t<Number>&>>& flows, tNumber timeStepSize ) const {
 	State<Number, Representation, Rargs...> res( *this );
 	TRACE( "hypro.datastructures", "Apply timestep of size " << timeStepSize );
-	//res.setSet(mSet.affineTransformation(trafoMatrix,trafoVector));
+	// res.setSet(mSet.affineTransformation(trafoMatrix,trafoVector));
 	assert( flows.size() == mSets.size() );
 	assert( checkConsistency() );
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
@@ -410,11 +413,11 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 
 template <typename Number, typename Representation, typename... Rargs>
 State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>::minkowskiSum( const State<Number, Representation, Rargs...>& rhs ) const {
-	//If only one representation given: avoid visitor
-	//if(mTypes.size() == 1){
+	// If only one representation given: avoid visitor
+	// if(mTypes.size() == 1){
 	//	return std::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
-	//}
-	//For more representations: use visitor
+	// }
+	// For more representations: use visitor
 	State<Number, Representation, Rargs...> res( *this );
 	assert( mSets.size() == rhs.getSets().size() );
 	assert( checkConsistency() );
@@ -432,11 +435,11 @@ State<Number, Representation, Rargs...> State<Number, Representation, Rargs...>:
 	assert( I < mSets.size() );
 	assert( I < rhs.getSets().size() );
 	assert( checkConsistency() );
-	//If only one representation given: avoid visitor
-	//if(mTypes.size() == 1){
+	// If only one representation given: avoid visitor
+	// if(mTypes.size() == 1){
 	//	return std::get<Representation>(mSets.at(0)).minkowskiSum(rhs);
-	//}
-	//For more representations avaiable: use visitor
+	// }
+	// For more representations avaiable: use visitor
 	State<Number, Representation, Rargs...> res( *this );
 	res.setSetDirect( std::visit( genericMinkowskiSumVisitor<repVariant>(), mSets.at( I ), rhs.getSet( I ) ), I );
 	if ( rhs.getEmptyStates()[I] == TRIBOOL::TRUE || this->getEmptyStates()[I] == TRIBOOL::TRUE ) {
@@ -516,21 +519,21 @@ template <typename Number, typename Representation, typename... Rargs>
 Number State<Number, Representation, Rargs...>::getSupremum( std::size_t I ) const {
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
-	//If only one representation given: avoid visitor
-	//if(mTypes.size() == 1){
+	// If only one representation given: avoid visitor
+	// if(mTypes.size() == 1){
 	//	return std::get<Representation>(mSets.at(0)).supremum();
-	//}
-	//For more representations avaiable: use visitor
+	// }
+	// For more representations avaiable: use visitor
 	return std::visit( genericSupremumVisitor<Number>(), mSets.at( I ) );
 }
 
 template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::removeRedundancy() {
-	//If only one representation given: avoid visitor
-	//if(mTypes.size() == 1){
+	// If only one representation given: avoid visitor
+	// if(mTypes.size() == 1){
 	//	return std::get<Representation>(mSets.at(0)).removeRedundancy();
-	//}
-	//For more representations avaiable: use visitor
+	// }
+	// For more representations avaiable: use visitor
 	assert( checkConsistency() );
 	State<Number, Representation, Rargs...> res( *this );
 	for ( std::size_t i = 0; i < mSets.size(); i++ ) {
@@ -542,11 +545,11 @@ template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::partiallyRemoveRedundancy( std::size_t I ) {
 	assert( I < mSets.size() );
 	assert( checkConsistency() );
-	//If only one representation given: avoid visitor
-	//if(mTypes.size() == 1){
+	// If only one representation given: avoid visitor
+	// if(mTypes.size() == 1){
 	//	return std::get<Representation>(mSets.at(0)).removeRedundancy();
-	//}
-	//For more representations avaiable: use visitor
+	// }
+	// For more representations avaiable: use visitor
 	mSets[I] = std::visit( genericRedundancyVisitor<repVariant, Number>(), mSets[I] );
 }
 
@@ -576,7 +579,7 @@ bool State<Number, Representation, Rargs...>::checkConsistency() const {
 			std::cout << "Types do not match (expected: " << mTypes.at( i ) << ", is: " << std::visit( genericTypeVisitor(), mSets.at( i ) ) << ")" << std::endl;
 			return false;
 			//} else {
-			//std::cout << "Types matched, in mTypes: " << mTypes.at(i) << " actual type in mSets is:" << std::visit(genericTypeVisitor(), mSets.at(i)) << std::endl;
+			// std::cout << "Types matched, in mTypes: " << mTypes.at(i) << " actual type in mSets is:" << std::visit(genericTypeVisitor(), mSets.at(i)) << std::endl;
 		}
 	}
 	return true;
@@ -584,7 +587,9 @@ bool State<Number, Representation, Rargs...>::checkConsistency() const {
 
 template <typename Number, typename Representation, typename... Rargs>
 bool State<Number, Representation, Rargs...>::isEmpty() const {
-	if ( mSets.size() == 0 ) { return true; }
+	if ( mSets.size() == 0 ) {
+		return true;
+	}
 	for ( std::size_t i = 0; i < mSets.size(); ++i ) {
 		// TODO: do not ignore cache!
 		bool localEmpty = std::visit( genericEmptyVisitor(), mSets.at( i ) );
@@ -605,7 +610,7 @@ void State<Number, Representation, Rargs...>::setSets( const std::vector<std::va
 template <typename Number, typename Representation, typename... Rargs>
 void State<Number, Representation, Rargs...>::setSetsSave( const std::vector<std::variant<Representation, Rargs...>>& sets ) {
 	assert( checkConsistency() );
-	//std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl;
+	// std::cout << "mSets.size(): " << mSets.size() << " mTypes.size(): " << mTypes.size() << " sets.size(): " << sets.size() << std::endl;
 	for ( std::size_t i = 0; i < sets.size(); i++ ) {
 		setSetType( std::visit( genericTypeVisitor(), sets.at( i ) ), i );
 	}
@@ -642,7 +647,7 @@ void State<Number, Representation, Rargs...>::decompose( const std::vector<std::
 			for ( int j = 0; j < row.rows(); j++ ) {
 				if ( row( j, 0 ) != 0 ) {
 					if ( std::find( decomp.begin(), decomp.end(), j ) != decomp.end() ) {
-						//set contains variable j, which is also contained in this constraint
+						// set contains variable j, which is also contained in this constraint
 						containsVar = true;
 						break;
 					}
@@ -699,7 +704,7 @@ void State<Number, Representation, Rargs...>::setAndConvertType( std::size_t I )
 
 	// convert set to type
 
-	//this->setSet( std::visit( genericInternalConversionVisitor<typename State::repVariant, To>( this->getSet( I ) ), this->getSet( I ) ), I );
+	// this->setSet( std::visit( genericInternalConversionVisitor<typename State::repVariant, To>( this->getSet( I ) ), this->getSet( I ) ), I );
 
 	this->setSet( std::visit( genericConversionVisitor<typename State::repVariant, To>(),
 							  this->getSet( I ) ),

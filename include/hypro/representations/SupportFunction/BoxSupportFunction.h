@@ -6,12 +6,12 @@
 
 #pragma once
 
+#include "../../types.h"
 #include "../../util/logging/Logger.h"
 #include "../../util/sequenceGeneration/SequenceGenerator.h"
 #include "../../util/statistics/statistics.h"
 #include "util.h"
 
-#include <carl/interval/Interval.h>
 #include <map>
 
 namespace hypro {

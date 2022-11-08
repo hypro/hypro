@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "Reset.h"
 
 namespace hypro {
@@ -6,7 +15,7 @@ template <typename Number>
 Reset<Number>::Reset( const matrix_t<Number>& mat, const vector_t<Number>& vec ) {
 	assert( mat.rows() == mat.cols() );
 	mAffineResets.emplace_back( mat, vec );
-	mIntervalResets.emplace_back( std::vector<carl::Interval<Number>>( mat.rows(), carl::Interval<Number>::emptyInterval() ) );
+	mIntervalResets.emplace_back( std::vector<carl::Interval<Number>>( mat.rows(), createEmptyInterval<Number>() ) );
 }
 
 template <typename Number>
@@ -83,6 +92,12 @@ void Reset<Number>::setIntervals( const std::vector<carl::Interval<Number>>& int
 }
 
 template <typename Number>
+void Reset<Number>::addResetTransformation( const AffineTransformation<Number> trafo ) {
+	mAffineResets.push_back( trafo );
+	mIntervalResets.emplace_back( IntervalAssignment<Number>() );
+}
+
+template <typename Number>
 bool Reset<Number>::isAffineIdentity() const {
 	return mAffineResets.empty() || std::all_of( mAffineResets.begin(), mAffineResets.end(), []( const auto& affineReset ) { return affineReset.isIdentity(); } );
 }
@@ -131,20 +146,22 @@ Reset<Number> combine(
 	matrix_t<Number> newMat;
 	vector_t<Number> newVec;
 
-	if ( lhs.size() == 0 && rhs.size() != 0 ) {
+	if ( lhs.isIdentity() && !rhs.isIdentity() ) {
 		// std::cout << "take rhs" << std::endl;
 		newMat = combine( matrix_t<Number>( 0, 0 ), rhs.getMatrix(), haVar, lhsVar, rhsVar );
 		newVec = combine( vector_t<Number>( 0 ), rhs.getVector() );
-	} else if ( lhs.size() != 0 && rhs.size() == 0 ) {
+	} else if ( !lhs.isIdentity() && rhs.isIdentity() ) {
 		// std::cout << "take lhs" << std::endl;
 		newMat = combine( lhs.getMatrix(), matrix_t<Number>( 0, 0 ), haVar, lhsVar, rhsVar );
 		newVec = combine( lhs.getVector(), vector_t<Number>( 0 ) );
-	} else if ( lhs.size() == 0 && rhs.size() == 0 ) {
+	} else if ( lhs.isIdentity() && rhs.isIdentity() ) {
 		// std::cout << "both empty" << std::endl;
 		return Reset<Number>();
 	} else {
 		assert( lhs.size() != 0 );
 		assert( rhs.size() != 0 );
+		assert( !lhs.isIdentity() );
+		assert( !rhs.isIdentity() );
 		// std::cout << "Default." << std::endl;
 		// std::cout << "Combine: " << lhs.getMatrix() << " and " << rhs.getMatrix() << std::endl;
 		// std::cout << "LhsVAR:";
@@ -161,7 +178,7 @@ Reset<Number> combine(
 		std::size_t lhsIC = 0;
 		std::size_t rhsIR = 0;
 		std::size_t rhsIC = 0;
-		bool admissible = true;	 // flag used to denote a non-admissible flow, i.e. shared variables with different flow.
+		bool admissible = true;	 // flag used to denote a non-admissible reset, i.e. shared variables with different reset.
 		// iterate over all rows
 		for ( std::size_t rowI = 0; rowI != haVar.size(); ++rowI ) {
 			// std::cout << "Consider composed row " << rowI << " for var " << haVar[rowI] << std::endl;
@@ -224,11 +241,9 @@ Reset<Number> combine(
 		// newVec = combine(lhs.getVector(), rhs.getVector());
 	}
 
-	Reset<Number> re;
-	re.setMatrix( newMat );
-	re.setVector( newVec );
+	//	std::cout << "Combined resets: " << newMat << ", " << newVec << std::endl;
 
-	return re;
+	return Reset<Number>{ newMat, newVec };
 }
 
 template <typename Number>
@@ -294,4 +309,28 @@ void Reset<Number>::decompose( const std::vector<std::vector<std::size_t>>& part
 	mDecomposed = true;
 	mHash = 0;
 }
+
+template <typename Number>
+Reset<Number> operator+( const Reset<Number>& lhs, const Reset<Number>& rhs ) {
+	if ( !lhs.isIntervalIdentity() || !rhs.isIntervalIdentity() ) {
+		throw std::logic_error( "Operator + is not yet implemented for interval resets." );
+	}
+
+	// since no reset also indicates identity, add shortcuts here
+	if ( lhs.getAffineResets().size() == 0 ) {
+		return rhs;
+	}
+	if ( rhs.getAffineResets().size() == 0 ) {
+		return lhs;
+	}
+	// if both have defined some resets over subspaces, those need to be of similar size
+	assert( lhs.getAffineResets().size() == rhs.getAffineResets().size() );
+
+	Reset<Number> res;
+	for ( std::size_t i = 0; i < lhs.getAffineResets().size(); ++i ) {
+		res.addResetTransformation( lhs.getAffineReset( i ) + rhs.getAffineReset( i ) );
+	}
+	return res;
+}
+
 }  // namespace hypro

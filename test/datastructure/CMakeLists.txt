@@ -11,6 +11,7 @@ set(datastructure_test_sources
         VertexTest.cpp
         VertexContainerTest.cpp
         RangeTest.cpp
+        ReachabilitySettingsTest.cpp
         ReachTreeTest.cpp
         StateTest.cpp
         StateVisitorTest.cpp
@@ -19,7 +20,7 @@ set(datastructure_test_sources
         HybridAutomataTest.cpp
         #HybridAutomataOutputTest.cpp
         WorkQueueTest.cpp
-        ##HybridAutomataParallelCompositionTest.cpp
+        HybridAutomataParallelCompositionTest.cpp
         )
 
 SET_SOURCE_FILES_PROPERTIES(${datastructure_test_sources} PROPERTIES COMPILE_FLAGS -O0)
@@ -36,7 +37,7 @@ add_dependencies(runDatastructureTests hypro_resources)
 target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
 
 target_link_libraries(runDatastructureTests PUBLIC
-        ${PROJECT_NAME}-static
+        ${PROJECT_NAME}-shared
         ${GTEST_LIBRARIES}
         cereal::cereal
         )

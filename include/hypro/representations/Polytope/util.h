@@ -11,9 +11,9 @@
 #ifdef HYPRO_USE_PPL
 #include "datastructures/Halfspace.h"
 #include "representations/Polytopes/Cone.h"
+#include "types.h"
 #include "util/VariablePool.h"
 
-#include <carl/core/Variable.h>
 CLANG_WARNING_DISABLE( "-Wunused-local-typedef" )
 #include <ppl.hh>
 CLANG_WARNING_RESET
@@ -83,7 +83,7 @@ static inline Parma_Polyhedra_Library::Generator pointToGenerator( const vector_
 	double tmpValue;
 	Parma_Polyhedra_Library::Linear_Expression ls;
 	for ( unsigned i = 0; i < point.rows(); ++i ) {
-		tmpValue = carl::toDouble( point( i ) ) * fReach_DENOMINATOR;
+		tmpValue = toDouble( point( i ) ) * fReach_DENOMINATOR;
 		Parma_Polyhedra_Library::Linear_Expression tmp = tmpValue * VariablePool::getInstance().pplVarByIndex( i );
 		ls += tmp;
 	}

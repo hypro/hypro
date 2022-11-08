@@ -1,9 +1,6 @@
 #pragma once
 #include "../../datastructures/Halfspace.h"
-
-#include <carl/interval/Interval.h>
-#include <carl/interval/IntervalEvaluation.h>
-#include <carl/interval/set_theory.h>
+#include "../../types.h"
 
 namespace hypro {
 
@@ -35,7 +32,7 @@ bool icpIntersectHalfspace( std::vector<carl::Interval<Number>>& intervals, cons
 			}
 			newIntv /= Number( -hsp.normal()( cVar ) );
 			intervals[cVar] = set_intersection( intervals[cVar], newIntv );
-			if ( intervals[cVar].isEmpty() ) {
+			if ( isEmpty( intervals[cVar] ) ) {
 				return true;
 			}
 		}

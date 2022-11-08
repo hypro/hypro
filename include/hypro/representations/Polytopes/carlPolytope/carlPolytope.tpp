@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "carlPolytope.h"
 
 namespace hypro {
@@ -45,8 +54,8 @@ CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setti
 
 	// collect constraints
 	std::vector<ConstraintT<tNumber>> newConstraints;
-	mFormula.getConstraints( newConstraints );
-	rhs.getFormula().getConstraints( newConstraints );
+	getConstraints( mFormula, newConstraints );
+	getConstraints( rhs.getFormula(), newConstraints );
 
 	return CarlPolytopeT<Number, Converter, Setting>( FormulaT<tNumber>( carl::FormulaType::AND, constraintsToFormulas( newConstraints ) ) );
 }
@@ -90,15 +99,72 @@ CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setti
 			assert( ( CarlPolytopeT<Number, Converter, Setting>( constraints * A.inverse(), constants ).size() == this->size() ) );
 			return CarlPolytopeT<Number, Converter, Setting>( constraints * A.inverse(), constants );
 		} else {
-			TRACE( "hypro.representations.carlPolytope", "Use V-Conversion for linear transformation." );
-			auto intermediate = Converter::toVPolytope( *this );
-			intermediate = intermediate.linearTransformation( A );
-			auto res = Converter::toCarlPolytope( intermediate );
-			return res;
+			TRACE( "hypro.representations.carlPolytope", "Use Fourier-Motzkin elimination for linear transformation." );
+			auto problem_description = mFormula;
+			std::size_t dim = this->dimension();
+			matrix_t<Number> trafo = matrix_t<Number>::Zero( dim, dim * 2 );
+			trafo.block( 0, 0, dim, dim ) = A;
+			trafo.block( 0, dim, dim, dim ) = -matrix_t<Number>::Identity( dim, dim );
+			FormulasT<tNumber> single_translations;
+			for ( Eigen::Index row = 0; row < dim; ++row ) {
+				single_translations.push_back( FormulaT<tNumber>{ rowToConstraint<tNumber, Number>( vector_t<Number>( trafo.row( row ) ), Number( 0 ), carl::Relation::EQ ) } );
+			}
+			FormulaT<tNumber> translation_formula{ carl::FormulaType::AND, single_translations };
+			problem_description = FormulaT<tNumber>( carl::FormulaType::AND, problem_description, translation_formula );
+			// assemble variables
+			std::vector<carl::Variable> variables;
+			for ( std::size_t i = 0; i < dim; ++i ) {
+				variables.push_back( VariablePool::getInstance().carlVarByIndex( i ) );
+			}
+
+			FourierMotzkinQE<tNumber> qe_method{ problem_description, QEQuery{ { QuantifierType::EXISTS, variables } } };
+			auto result = qe_method.eliminateQuantifiers();
+
+			// substitute variables back
+			for ( std::size_t i = 0; i < dim; ++i ) {
+				result = substitute( result, VariablePool::getInstance().carlVarByIndex( dim + i ), FormulaT<tNumber>::PolynomialType( VariablePool::getInstance().carlVarByIndex( i ) ) );
+			}
+			return CarlPolytopeT{ result, dim };
 		}
 	} else {
 		return *this;
 	}
+}
+
+template <typename Number, typename Converter, typename Setting>
+CarlPolytopeT<Number, Converter, Setting> CarlPolytopeT<Number, Converter, Setting>::affineTransformation( const matrix_t<Number>& A, const vector_t<Number>& b ) const {
+	TRACE( "hypro.representations.carlPolytope", "Use Fourier-Motzkin elimination for affine transformation." );
+	auto problem_description = mFormula;
+	std::size_t dim = this->dimension();
+	std::size_t rows = dim;
+	std::size_t cols = dim * 2;
+	std::size_t arows = A.rows();
+	assert( A.rows() == dim );
+	assert( A.cols() == dim );
+	matrix_t<tNumber> trafo = matrix_t<tNumber>::Zero( rows, cols );
+	trafo.block( 0, 0, rows, dim ) = convert<Number, tNumber>( A );
+	trafo.block( 0, dim, dim, dim ) = -matrix_t<tNumber>::Identity( dim, dim );
+	FormulasT<tNumber> single_translations;
+	for ( Eigen::Index row = 0; row < dim; ++row ) {
+		single_translations.push_back( FormulaT<tNumber>{ rowToConstraint<tNumber>( vector_t<tNumber>( trafo.row( row ) ), carl::convert<Number, tNumber>( -b( row ) ), carl::Relation::EQ ) } );
+		TRACE( "hypro.representations.carlPolytope", "Add translation constraint " << single_translations.back() << " originating from " << vector_t<tNumber>( trafo.row( row ) ) << " and " << b( row ) );
+	}
+	FormulaT<tNumber> translation_formula{ carl::FormulaType::AND, single_translations };
+	problem_description = FormulaT<tNumber>( carl::FormulaType::AND, problem_description, translation_formula );
+	// assemble variables
+	std::vector<carl::Variable> variables;
+	for ( std::size_t i = 0; i < dim; ++i ) {
+		variables.push_back( VariablePool::getInstance().carlVarByIndex( i ) );
+	}
+
+	FourierMotzkinQE<tNumber> qe_method{ problem_description, QEQuery{ { QuantifierType::EXISTS, variables } } };
+	auto result = qe_method.eliminateQuantifiers();
+
+	// substitute variables back
+	for ( std::size_t i = 0; i < dim; ++i ) {
+		result = substitute( result, VariablePool::getInstance().carlVarByIndex( dim + i ), PolyT<tNumber>( VariablePool::getInstance().carlVarByIndex( i ) ) );
+	}
+	return CarlPolytopeT{ result, dim };
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -151,7 +217,7 @@ template <typename Number, typename Converter, typename Setting>
 std::vector<carl::Interval<Number>> CarlPolytopeT<Number, Converter, Setting>::getIntervals() const {
 	if ( this->empty() ) {
 		std::vector<carl::Interval<Number>> res;
-		res.emplace_back( carl::Interval<Number>::emptyInterval() );
+		res.emplace_back( createEmptyInterval<Number>() );
 		return res;
 	}
 	// Note: Alternatively use FM-elimination.
@@ -185,31 +251,16 @@ void CarlPolytopeT<Number, Converter, Setting>::addConstraint( const ConstraintT
 	}
 	// add constraint to formula
 	std::vector<ConstraintT<tNumber>> constraints;
-	mFormula.getConstraints( constraints );
+	getConstraints( mFormula, constraints );
 	constraints.push_back( constraint );
 	mFormula = FormulaT<tNumber>( carl::FormulaType::AND, constraintsToFormulas( constraints ) );
-	TRACE( "hypro.representations.carlPolytope", "After adding a constraint " << *this );
-	mSpaceDimensionSet = false;
 	detectDimension();
+	TRACE( "hypro.representations.carlPolytope", "After adding a constraint " << *this );
 }
 
 template <typename Number, typename Converter, typename Setting>
 void CarlPolytopeT<Number, Converter, Setting>::addConstraints( const std::vector<ConstraintT<tNumber>>& constraints ) {
-	// reset Half-space cache
-	mHalfspaces.clear();
-	// if not empty, reset cache
-	if ( mEmptyState != SETSTATE::EMPTY ) {
-		mEmptyState = SETSTATE::UNKNOWN;
-	} else {
-		return;
-	}
-	// add constraints to formula
-	auto cCopy = constraints;
-	mFormula.getConstraints( cCopy );
-	mFormula = FormulaT<tNumber>( carl::FormulaType::AND, constraintsToFormulas( cCopy ) );
-	TRACE( "hypro.representations.carlPolytope", "After adding constraints " << *this );
-	mSpaceDimensionSet = false;
-	detectDimension();
+	std::for_each( std::begin( constraints ), std::end( constraints ), [&]( const auto& c ) { this->addConstraint( c ); } );
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -219,7 +270,7 @@ void CarlPolytopeT<Number, Converter, Setting>::addIntervalConstraints( const ca
 	ConstraintsT<tNumber> newConstraints;
 	for ( const auto& f : tmp ) {
 		ConstraintsT<tNumber> tmpConstraints;
-		f.getConstraints( tmpConstraints );
+		getConstraints( f, tmpConstraints );
 		for ( const auto& c : tmpConstraints ) {
 			newConstraints.emplace_back( c );
 			TRACE( "hypro.representations.carlPolytope", "Add new interval constraint " << c );
@@ -236,7 +287,7 @@ void CarlPolytopeT<Number, Converter, Setting>::substituteVariable( carl::Variab
 	// reset half-space cache
 	mHalfspaces.clear();
 	// substitute
-	mFormula = mFormula.substitute( oldVar, PolyT<tNumber>( newVar ) );
+	mFormula = substitute( mFormula, oldVar, PolyT<tNumber>( newVar ) );
 	TRACE( "hypro.representations.carlPolytope", "After substituting " << oldVar << " by " << newVar << ": " << *this );
 	detectDimension();
 }
@@ -299,14 +350,14 @@ std::vector<Point<Number>> CarlPolytopeT<Number, Converter, Setting>::vertices()
 
 template <typename Number, typename Converter, typename Setting>
 matrix_t<Number> CarlPolytopeT<Number, Converter, Setting>::matrix() const {
-	if ( mFormula.isFalse() ) {
+	if ( isFalse( mFormula ) ) {
 		return matrix_t<Number>( 0, 0 );
 	}
 	// assert(dimensionWasCorrectlySet());
 	detectDimension();
 	matrix_t<Number> res = matrix_t<Number>( mFormula.size(), dimension() );
 	std::vector<ConstraintT<tNumber>> constraints;
-	mFormula.getConstraints( constraints );
+	getConstraints( mFormula, constraints );
 	std::size_t i = 0;
 	for ( const auto& c : constraints ) {
 		res.row( i ) = constraintNormal<tNumber, Number>( c, dimension() );
@@ -323,14 +374,14 @@ matrix_t<Number> CarlPolytopeT<Number, Converter, Setting>::matrix() const {
 
 template <typename Number, typename Converter, typename Setting>
 vector_t<Number> CarlPolytopeT<Number, Converter, Setting>::vector() const {
-	if ( mFormula.isFalse() ) {
+	if ( isFalse( mFormula ) ) {
 		return vector_t<Number>( 0 );
 	}
 	// assert(dimensionWasCorrectlySet());
 	detectDimension();
 	vector_t<Number> res = vector_t<Number>( mFormula.size() );
 	std::vector<ConstraintT<tNumber>> constraints;
-	mFormula.getConstraints( constraints );
+	getConstraints( mFormula, constraints );
 	std::size_t i = 0;
 	for ( const auto& c : constraints ) {
 		// widening: check if origin contained. If so, increase abs of offset, else, reduce abs. value.
@@ -348,7 +399,7 @@ vector_t<Number> CarlPolytopeT<Number, Converter, Setting>::vector() const {
 template <typename Number, typename Converter, typename Setting>
 bool CarlPolytopeT<Number, Converter, Setting>::empty() const {
 	if ( mEmptyState == SETSTATE::UNKNOWN ) {
-		if ( mFormula.isFalse() ) {
+		if ( isFalse( mFormula ) ) {
 			mEmptyState = SETSTATE::EMPTY;
 			return true;
 		}
@@ -391,7 +442,7 @@ void CarlPolytopeT<Number, Converter, Setting>::removeRedundancy() {
 	}
 	Optimizer<Number> opt = Optimizer<Number>( this->matrix(), this->vector() );
 	std::vector<ConstraintT<tNumber>> constraints;
-	mFormula.getConstraints( constraints );
+	getConstraints( mFormula, constraints );
 	auto redundantConstraints = opt.redundantConstraints();
 	for ( auto it = redundantConstraints.rbegin(); it != redundantConstraints.rend(); ++it ) {
 		constraints.erase( constraints.begin() + *it );

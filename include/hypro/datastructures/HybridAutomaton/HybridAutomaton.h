@@ -146,14 +146,16 @@ class HybridAutomaton {
 #endif
 		mLocalBadStates.emplace( std::make_pair( loc, condition ) );
 	}
-	void addGlobalBadStates( const Condition<Number>& state ) { mGlobalBadStates.push_back( state ); }
+	void addGlobalBadStates( const Condition<Number>& state ) {
+		mGlobalBadStates.push_back( state );
+	}
 	///@}
 	void removeTransition( Transition<Number>* transitionPtr ) {
 		transitionPtr->getSource()->removeTransition( transitionPtr );
 	}
 
 	/// adds a fresh location to this automaton
-	Location<Number>* createLocation();
+	Location<Number>* createLocation( const std::string& name = "" );
 	/// adds a copy of the passed location to this automaton
 	Location<Number>* createLocation( Location<Number>* original );
 
@@ -274,6 +276,7 @@ class HybridAutomaton {
 	// Num represents Number and Stat represents State
 	template <typename Num>
 	friend HybridAutomaton<Num> operator||( const HybridAutomaton<Num>& lhs, const HybridAutomaton<Num>& rhs );
+
 	/**
 	 * @brief      Combination Operator.
 	 * @param[in]  lhs   The left hand side.
@@ -310,6 +313,9 @@ class HybridAutomaton {
 		return true;
 	}
 };
+
+template <typename Number>
+HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs, const std::map<std::string, std::vector<Location<Number>*>>& masters = {} );
 
 }  // namespace hypro
 

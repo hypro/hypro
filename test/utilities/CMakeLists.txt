@@ -14,6 +14,9 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runUtilityTests ${utility_test_sources})
 
+    message(STATUS "GTEST INCLUDE DIR IN UTIL_TEST: ${GTEST_INCLUDE_DIR}")
+    message(STATUS "GTEST LIBRARIES IN UTIL_TEST: ${GTEST_LIBRARIES}")
+
     add_dependencies(runUtilityTests hypro_resources)
     target_include_directories(runUtilityTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/
             ${cereal_INCLUDE_DIR})

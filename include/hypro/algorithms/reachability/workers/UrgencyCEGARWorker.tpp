@@ -140,7 +140,7 @@ auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeN
 	if ( mJumpPredecessors.find( transition ) == mJumpPredecessors.end() ) {
 		mJumpPredecessors[transition] = std::vector<IndexedValuationSet<Representation>>();
 		for ( std::size_t i = 0; i < task.getFlowpipe().size(); ++i ) {
-			if ( timeOfJump.isUnbounded() ||
+			if ( isUnbounded( timeOfJump ) ||
 				 ( task.getTimings().lower() + task.getFpTimings()[i] <= timeOfJump.upper() && task.getTimings().upper() + task.getFpTimings()[i] >= timeOfJump.lower() ) ) {
 				auto [containment, intersected] = intersect( task.getFlowpipe()[i], transition->getGuard() );
 				if ( containment != CONTAINMENT::NO ) {
@@ -156,14 +156,14 @@ auto UrgencyCEGARWorker<Representation>::computeJumpSuccessors( const ReachTreeN
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {
-			blockSize = ( mJumpPredecessors[transition].size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
+			blockSize = ( mJumpPredecessors[transition].size() + mSettings.clustering ) / mSettings.clustering;	 // division rounding up
 		} else {
 			blockSize = mJumpPredecessors[transition].size();
 		}
 
 	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
 		if ( transition->getAggregation() == Aggregation::clustering ) {
-			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
+			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 		}
 	}
 

@@ -14,7 +14,6 @@
 #include "../../util/linearOptimization/Optimizer.h"
 #include "decomposition/Decomposition.h"
 
-#include <carl/interval/Interval.h>
 #include <iosfwd>
 #include <numeric>
 #include <variant>

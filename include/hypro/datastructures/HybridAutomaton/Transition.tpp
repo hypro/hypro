@@ -201,7 +201,7 @@ Condition<Number> Transition<Number>::getJumpEnablingSet() {
 }
 
 template <typename Number>
-std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* lhsT, const Transition<Number>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels ) {
+std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* lhsT, const Transition<Number>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<Location<Number>*>>& masters ) {
 	assert( haVar.size() >= lhsVar.size() );
 	assert( haVar.size() >= rhsVar.size() );
 
@@ -211,6 +211,17 @@ std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* l
 	// Transition<Number>* t = new Transition<Number>();
 	// std::unique_ptr<Transition<Number>> t = new Transition<Number>()
 	std::unique_ptr<Transition<Number>> t = std::make_unique<Transition<Number>>();
+
+	// set target and source. If they do not exist, this means that the combined location was not admissible for some reason and thus, the transition also cannot be added.
+	// TODO: returning nullptr in case the locations do not exist seems like a hotfix for now, as it indicates that something went wrong elsewhere.
+	Location<Number>* source = ha.getLocation( lhsT->getSource()->getName() + '_' + rhsT->getSource()->getName() );
+	Location<Number>* target = ha.getLocation( lhsT->getTarget()->getName() + '_' + rhsT->getTarget()->getName() );
+	if ( source != nullptr && target != nullptr ) {
+		t->setTarget( target );
+		t->setSource( source );
+	} else {
+		return nullptr;
+	}
 
 	// set label
 	if ( lhsT->getLabels() == rhsT->getLabels() ) {
@@ -244,31 +255,57 @@ std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* l
 		}
 		++idx;
 	}
+	// quick check for incompatible resets on variables that are reset but do not have a master
 	for ( const auto& varTuple : sharedVars ) {
 		for ( const auto& other : sharedVars ) {
-			assert( lhsT->getReset().size() != 0 );
-			assert( rhsT->getReset().size() != 0 );
-			// std::cout << "Compare resets: " << lhsT->getReset().getMatrix() << " and " << rhsT->getReset().getMatrix() << std::endl;
-			// std::cout << "Compare resets: " << lhsT->getReset().getVector() << " and " << rhsT->getReset().getVector() << std::endl;
-			if ( lhsT->getReset().getMatrix()( varTuple.second.first, other.second.first ) != rhsT->getReset().getMatrix()( varTuple.second.second, other.second.second ) || lhsT->getReset().getVector()( varTuple.second.first ) != rhsT->getReset().getVector()( varTuple.second.second ) ) {
-				// std::cout << "Delete." << std::endl;
-				// delete t;
-				return nullptr;
+			if ( masters.count( haVar[varTuple.first] ) == 0 && lhsT->getReset().size() != 0 && rhsT->getReset().size() != 0 ) {
+				// std::cout << "Compare resets: " << lhsT->getReset().getMatrix() << " and " << rhsT->getReset().getMatrix() << std::endl;
+				// std::cout << "Compare resets: " << lhsT->getReset().getVector() << " and " << rhsT->getReset().getVector() << std::endl;
+				if ( lhsT->getReset().getMatrix()( varTuple.second.first, other.second.first ) != rhsT->getReset().getMatrix()( varTuple.second.second, other.second.second ) || lhsT->getReset().getVector()( varTuple.second.first ) != rhsT->getReset().getVector()( varTuple.second.second ) ) {
+					// std::cout << "Delete." << std::endl;
+					// delete t;
+					return nullptr;
+				}
 			}
 		}
 	}
 
-	// set target and source
-	Location<Number>* source = ha.getLocation( lhsT->getSource()->getName() + '_' + rhsT->getSource()->getName() );
-	Location<Number>* target = ha.getLocation( lhsT->getTarget()->getName() + '_' + rhsT->getTarget()->getName() );
-	assert( source != nullptr );
-	assert( target != nullptr );
-	t->setTarget( target );
-	t->setSource( source );
-
 	// set urgent
 	//  Todo: is it not the case that a composed transition is urgent as soon as one of its participating transitions is urgent?
 	t->setUrgent( lhsT->isUrgent() || rhsT->isUrgent() );
+
+	auto guard_lhsvars = lhsVar;
+	auto guard_rhsvars = rhsVar;
+	auto reset_lhsvars = lhsVar;
+	auto reset_rhsvars = rhsVar;
+	for ( const auto& var : haVar ) {
+		if ( masters.count( var ) > 0 ) {
+			// guard
+			if ( std::find( std::begin( masters.at( var ) ), std::end( masters.at( var ) ), lhsT->getSource() ) != std::end( masters.at( var ) ) ) {
+				auto it = std::find( std::begin( guard_rhsvars ), std::end( guard_rhsvars ), var );
+				if ( it != std::end( guard_rhsvars ) ) {
+					guard_rhsvars.erase( it );
+				}
+			} else if ( std::find( std::begin( masters.at( var ) ), std::end( masters.at( var ) ), rhsT->getSource() ) != std::end( masters.at( var ) ) ) {
+				auto it = std::find( std::begin( guard_lhsvars ), std::end( guard_lhsvars ), var );
+				if ( it != std::end( guard_lhsvars ) ) {
+					guard_lhsvars.erase( it );
+				}
+			}
+			// reset
+			if ( std::find( std::begin( masters.at( var ) ), std::end( masters.at( var ) ), lhsT->getTarget() ) != std::end( masters.at( var ) ) ) {
+				auto it = std::find( std::begin( reset_rhsvars ), std::end( reset_rhsvars ), var );
+				if ( it != std::end( reset_rhsvars ) ) {
+					reset_rhsvars.erase( it );
+				}
+			} else if ( std::find( std::begin( masters.at( var ) ), std::end( masters.at( var ) ), rhsT->getTarget() ) != std::end( masters.at( var ) ) ) {
+				auto it = std::find( std::begin( reset_lhsvars ), std::end( reset_lhsvars ), var );
+				if ( it != std::end( reset_lhsvars ) ) {
+					reset_lhsvars.erase( it );
+				}
+			}
+		}
+	}
 
 	// set guard
 	Condition<Number> haGuard = combine( lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar );
@@ -276,7 +313,7 @@ std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* l
 
 	// set reset
 	// std::cout << "Reset, combine matrices: " << std::endl;
-	Reset<Number> haReset = combine( lhsT->getReset(), rhsT->getReset(), haVar, lhsVar, rhsVar );
+	Reset<Number> haReset = combine( lhsT->getReset(), rhsT->getReset(), haVar, reset_lhsvars, reset_rhsvars );
 	// std::cout << "New reset function: " << haReset << std::endl;
 
 	t->setReset( haReset );

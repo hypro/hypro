@@ -12,7 +12,7 @@
 
 int main() {
   // use rational arithmetic.
-  typedef mpq_class Number;
+  typedef mpq_class Number; // typedef double Number;
 
   // get plotter reference.
   hypro::Plotter<Number> &plotter = hypro::Plotter<Number>::getInstance();

@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * @file   VPolytope.tpp
  * @author Stefan Schupp <stefan.schupp@cs.rwth-aachen.de>
  *
@@ -57,6 +66,26 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const std::vector<vector_t<Number>
 template <typename Number, typename Converter, typename S>
 VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number>& _constraints, const vector_t<Number> _constants ) {
 	if constexpr ( is_exact<Number> ) {
+		// check consistency, i.e., if the polytope potentially is empty
+		// TODO ensure that this is robust
+		{
+			TRACE( "hypro.representations.vpolytope", "Check for emptiness." );
+			auto opt = hypro::Optimizer<Number>( _constraints, _constants );
+			if ( !opt.checkConsistency() ) {
+				TRACE( "hypro.representations.vpolytope", "Construction from matrix and vector produced an empty polytope." );
+				this->mEmptyState = SETSTATE::EMPTY;
+				this->mReduced = true;
+				return;
+			}
+			auto internalPoint = opt.getInternalPoint();
+			if ( internalPoint.errorCode == SOLUTION::INFEAS ) {
+				TRACE( "hypro.representations.vpolytope", "Construction from matrix and vector does not contain any point (INFEAS), create empty polytope." );
+				this->mEmptyState = SETSTATE::EMPTY;
+				this->mReduced = true;
+				return;
+			}
+		}
+
 		auto dimension = _constraints.cols();
 		typename QuickIntersection<Number>::pointVector_t inputHalfspaces;
 
@@ -65,11 +94,16 @@ VPolytopeT<Number, Converter, S>::VPolytopeT( const matrix_t<Number>& _constrain
 			inputHalfspaces.back().head( dimension ) = _constraints.row( i );
 			inputHalfspaces.back()[dimension] = -_constants[i];
 		}
-
+		TRACE( "hypro.representations.vpolytope", "Construct VPolytope from " << _constraints << " <= " << _constants );
 		QuickIntersection<Number> qInt{ inputHalfspaces, (size_t)dimension };
 		qInt.compute();
 
 		for ( auto& facet : qInt.getFacets() ) {
+			if ( facet.mOffset == 0 ) {
+				TRACE( "hypro.representations.vpolytope", "The facet normal was zero, as we understand this yields the empty polytope" );
+				*this = Empty();
+				return;
+			}
 			facet.mNormal /= -facet.mOffset;
 			mVertices.emplace_back( Point( std::move( facet.mNormal ) ) );
 		}
@@ -388,11 +422,8 @@ bool VPolytopeT<Number, Converter, S>::contains( const vector_t<Number>& vec ) c
 
 template <typename Number, typename Converter, typename S>
 bool VPolytopeT<Number, Converter, S>::contains( const VPolytopeT<Number, Converter, S>& _other ) const {
-	// std::cout << *this<< " " << __func__ << " " << _other << std::endl;
 	for ( const auto& vertex : _other.vertices() ) {
-		// std::cout << __func__ << " check vertex " << vertex << std::endl;
 		if ( !this->contains( vertex ) ) {
-			// std::cout << "false" << std::endl;
 			return false;
 		}
 	}
@@ -606,7 +637,7 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 		// create mapping of variables (lambdas') to vertices.
 		std::map<Point<Number>, carl::Variable> lambdas;
 		for ( const auto& vertex : mVertices ) {
-			carl::Variable lambda = carl::freshRealVariable();
+			carl::Variable lambda = freshRealVariable();
 			lambdas.insert( std::make_pair( vertex, lambda ) );
 			// std::cout << "Assigned " << lambdas.find(vertex)->second << " to " << lambdas.find(vertex)->first << std::endl;
 		}
@@ -660,7 +691,7 @@ void VPolytopeT<Number, Converter, S>::removeRedundancy() {
 			simplex.push();
 		}
 #else
-		mVertices = removeRedundantPoints(mVertices);
+		mVertices = removeRedundantPoints( mVertices );
 #endif
 	}
 	mReduced = true;

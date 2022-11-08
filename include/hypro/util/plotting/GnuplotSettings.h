@@ -14,9 +14,9 @@
 #ifndef HYPRO_GNUPLOTSETTINGS_H
 #define HYPRO_GNUPLOTSETTINGS_H
 
+#include "../../types.h"
 #include "Colors.h"
 
-#include <carl/interval/Interval.h>
 #include <string>
 
 namespace hypro::plotting {
@@ -32,11 +32,11 @@ struct gnuplotSettings {
 	bool axes = true;				   //< plot axes
 	bool grid = true;				   //< plot grid
 	bool title = false;				   //< plot title
-	bool key = false; 				   //> plot key/legend
+	bool key = false;				   //> plot key/legend
 	double pointSize = 0.2;			   //< pointsize
 	double linewidth = 0.1;			   //< linewidth
-	carl::Interval<double> xPlotInterval = carl::Interval<double>::emptyInterval();
-	carl::Interval<double> yPlotInterval = carl::Interval<double>::emptyInterval();
+	carl::Interval<double> xPlotInterval = createEmptyInterval<double>();
+	carl::Interval<double> yPlotInterval = createEmptyInterval<double>();
 	bool keepAspectRatio = true;				  //< keep aspect ratio for both axes
 	std::vector<std::size_t> dimensions{ 0, 1 };  //< dimensions to plot
 	bool cummulative = false;					  //< if enabled, plot each new segment in a new plot, only works for gnuplot, not for tex (TODO)

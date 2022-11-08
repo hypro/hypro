@@ -57,7 +57,7 @@ endif ()
 if (HYPRO_COVERAGE)
     include(CodeCoverage)
     APPEND_COVERAGE_COMPILER_FLAGS()
-    setup_target_for_coverage(NAME hypro_coverage EXECUTABLE test DEPENDENCIES ${PROJECT_NAME} allTests)
+    setup_target_for_coverage_gcovr_xml(NAME hypro_coverage EXECUTABLE make test DEPENDENCIES ${PROJECT_NAME} allTests)
 endif ()
 
 # general compiler and linker settings

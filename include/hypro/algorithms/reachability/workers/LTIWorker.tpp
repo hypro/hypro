@@ -20,11 +20,11 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow( mSubspace ), mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ), mSettings.timeStep );
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant(), mSubspace );
-	//If the first segment did not fulfill the invariant of the location, the jump here should not have been made
+	// If the first segment did not fulfill the invariant of the location, the jump here should not have been made
 	if ( containment == CONTAINMENT::NO ) {
-        DEBUG("hypro.reachability", "First segment is not contained in the invariant, abort time successor computation.");
-        return REACHABILITY_RESULT::SAFE;
-    }
+		DEBUG( "hypro.reachability", "First segment is not contained in the invariant, abort time successor computation." );
+		return REACHABILITY_RESULT::SAFE;
+	}
 
 	// insert segment
 	*out = segment;
@@ -41,7 +41,7 @@ REACHABILITY_RESULT LTIWorker<Representation>::computeTimeSuccessors( const Repr
 	}
 
 	// while not done
-	for ( size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount ) {
+	for ( size_t segmentCount = 1; segmentCount < (std::size_t)segmentsToCompute; ++segmentCount ) {
 		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ) );
 #ifdef HYPRO_LOGGING
 		auto tmp = segment;
@@ -228,7 +228,7 @@ std::string print( std::vector<Representation> const& sets ) {
 	std::stringstream str{};
 
 	for ( auto& set : sets ) {
-		str << set << " ";
+		str << set << "; ";
 	}
 	str << "\n";
 	return str.str();
@@ -277,6 +277,7 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 			}
 		}
 		successors.emplace_back( JumpSuccessor<Representation>{ transition, aggregate( blockSize, valuationSets ) } );
+		TRACE( "hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << ", " << transition->getReset() << ": enabledSegments after aggregation: " << print( successors ) );
 	}
 	DEBUG( "hypro.reachability", "enabledSegments after aggregation: " << print( successors ) );
 
@@ -284,7 +285,8 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 	for ( auto& [transition, valuationSets] : successors ) {
 		for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
 			it->valuationSet = applyReset( it->valuationSet, transition->getReset() );
-			TRACE( "hypro.reachability", "Reset is: " << transition->getReset() );
+			TRACE( "hypro.reachability", "Set after reset " << it->valuationSet );
+			TRACE( "hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName() << ": Reset is: " << transition->getReset() );
 			CONTAINMENT containment;
 			std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant() );
 			TRACE( "hypro.reachability", "Set after reset and intersection with invariant " << it->valuationSet );
@@ -300,40 +302,39 @@ std::vector<JumpSuccessor<Representation>> LTIWorker<Representation>::computeJum
 	return successors;
 }
 
-template<typename Representation>
+template <typename Representation>
 std::vector<TimedValuationSet<Representation>> LTIWorker<Representation>::computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<Number> const* transition ) const {
 	std::size_t blockSize = 1;
 	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
 		if ( mSettings.clustering > 0 ) {
-			blockSize = ( predecessors.size() + mSettings.clustering ) / mSettings.clustering;	 //division rounding up
+			blockSize = ( predecessors.size() + mSettings.clustering ) / mSettings.clustering;	// division rounding up
 		} else {
 			blockSize = predecessors.size();
 		}
 
 	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
 		if ( transition->getAggregation() == Aggregation::clustering ) {
-			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
+			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 		}
 	}
 	auto valuationSets = aggregate<Representation>( blockSize, predecessors );
 
 	// applyReset
-	//for ( auto& valuationSets : successors ) {
-		for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
-			it->valuationSet = applyReset( it->valuationSet, transition->getReset(), mSubspace );
-			CONTAINMENT containment;
-			std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant(), mSubspace );
-			if ( containment == CONTAINMENT::NO ) {
-				it = valuationSets.erase( it );
-			} else {
-				it->valuationSet.reduceRepresentation();
-				++it;
-			}
+	// for ( auto& valuationSets : successors ) {
+	for ( auto it = valuationSets.begin(); it != valuationSets.end(); ) {
+		it->valuationSet = applyReset( it->valuationSet, transition->getReset(), mSubspace );
+		CONTAINMENT containment;
+		std::tie( containment, it->valuationSet ) = intersect( it->valuationSet, transition->getTarget()->getInvariant(), mSubspace );
+		if ( containment == CONTAINMENT::NO ) {
+			it = valuationSets.erase( it );
+		} else {
+			it->valuationSet.reduceRepresentation();
+			++it;
 		}
+	}
 	//}
 
 	return valuationSets;
 }
-
 
 }  // namespace hypro

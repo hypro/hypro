@@ -1,20 +1,30 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 #include "../../../carlTypes.h"
 #include "../../../datastructures/Halfspace.h"
+#include "../../../types.h"
 #include "../../../util/VariablePool.h"
 #include "../../../util/adaptions_carl/adaptions_formula.h"
 
 namespace hypro {
 
 template <typename N, typename D>
-inline ConstraintT<N> halfspaceToConstraint( const vector_t<D>& normal, const D& offset ) {
+inline ConstraintT<N> rowToConstraint( const vector_t<D>& normal, const D& offset, carl::Relation rel = carl::Relation::LEQ ) {
 	PolyT<N> p;
 	for ( Eigen::Index col = 0; col < normal.rows(); ++col ) {
 		p += carl::convert<D, N>( normal( col ) ) *
 			 PolyT<N>( VariablePool::getInstance().carlVarByIndex( col ) );
 	}
 	p -= carl::convert<D, N>( offset );
-	return ConstraintT<N>( p, carl::Relation::LEQ );
+	return ConstraintT<N>( p, rel );
 }
 
 template <typename N, typename D>
@@ -22,7 +32,17 @@ inline FormulasT<N> halfspacesToFormulas( const matrix_t<D>& constraints, const 
 	FormulasT<N> newConstraints;
 
 	for ( Eigen::Index row = 0; row < constraints.rows(); ++row ) {
-		newConstraints.emplace_back( FormulaT<N>( halfspaceToConstraint<N, D>( vector_t<D>( constraints.row( row ) ), constants( row ) ) ) );
+		newConstraints.emplace_back( FormulaT<N>( rowToConstraint<N, D>( vector_t<D>( constraints.row( row ) ), constants( row ), carl::Relation::LEQ ) ) );
+	}
+	return newConstraints;
+}
+
+template <typename N, typename D>
+inline FormulasT<N> equationsToFormulas( const matrix_t<D>& constraints, const vector_t<D>& constants ) {
+	FormulasT<N> newConstraints;
+
+	for ( Eigen::Index row = 0; row < constraints.rows(); ++row ) {
+		newConstraints.emplace_back( FormulaT<N>( rowToConstraint<N, D>( vector_t<D>( constraints.row( row ) ), constants( row ), carl::Relation::EQ ) ) );
 	}
 	return newConstraints;
 }
@@ -32,7 +52,17 @@ inline ConstraintsT<N> halfspacesToConstraints( const matrix_t<D>& constraints, 
 	ConstraintsT<N> newConstraints;
 
 	for ( Eigen::Index row = 0; row < constraints.rows(); ++row ) {
-		newConstraints.emplace_back( halfspaceToConstraint<N, D>( constraints.row( row ), constants( row ) ) );
+		newConstraints.emplace_back( rowToConstraint<N, D>( constraints.row( row ), constants( row ), carl::Relation::LEQ ) );
+	}
+	return newConstraints;
+}
+
+template <typename N, typename D>
+inline ConstraintsT<N> equationsToConstraints( const matrix_t<D>& constraints, const vector_t<D>& constants ) {
+	ConstraintsT<N> newConstraints;
+
+	for ( Eigen::Index row = 0; row < constraints.rows(); ++row ) {
+		newConstraints.emplace_back( rowToConstraint<N, D>( constraints.row( row ), constants( row ), carl::Relation::EQ ) );
 	}
 	return newConstraints;
 }
@@ -67,18 +97,18 @@ vector_t<D> constraintNormal( const ConstraintT<N>& c, std::size_t dim ) {
 	vector_t<D> normal = vector_t<D>::Zero( dim );
 	for ( const auto& var : c.variables() ) {
 		assert( VariablePool::getInstance().hasDimension( getVar( var ) ) );
-		assert( c.lhs().isLinear() );
-		assert( c.lhs().coeff( getVar( var ), 1 ).isNumber() );
+		assert( isLinear( c.lhs() ) );
+		assert( isNumber( c.lhs().coeff( getVar( var ), 1 ) ) );
 		TRACE( "hypro.representations.carlPolytope",
 			   "Variable " << getVar( var ) << " with dimension "
 						   << VariablePool::getInstance().id( getVar( var ) ) );
 		if ( c.relation() == carl::Relation::LEQ || c.relation() == carl::Relation::LESS ||
 			 c.relation() == carl::Relation::EQ ) {
 			normal( VariablePool::getInstance().id( getVar( var ) ) ) =
-				  carl::convert<N, D>( c.lhs().coeff( getVar( var ), 1 ).constantPart() );
+				  carl::convert<N, D>( constantPart( c.lhs().coeff( getVar( var ), 1 ) ) );
 		} else {
 			normal( VariablePool::getInstance().id( getVar( var ) ) ) =
-				  -carl::convert<N, D>( c.lhs().coeff( getVar( var ), 1 ).constantPart() );
+				  -carl::convert<N, D>( constantPart( c.lhs().coeff( getVar( var ), 1 ) ) );
 		}
 	}
 	return normal;
@@ -88,9 +118,9 @@ template <typename N, typename D>
 D normalizedOffset( const ConstraintT<N>& c ) {
 	if ( c.relation() == carl::Relation::LEQ || c.relation() == carl::Relation::LESS ||
 		 c.relation() == carl::Relation::EQ ) {
-		return -carl::convert<N, D>( c.lhs().constantPart() );
+		return -carl::convert<N, D>( constantPart( c.lhs() ) );
 	} else {
-		return carl::convert<N, D>( c.lhs().constantPart() );
+		return carl::convert<N, D>( constantPart( c.lhs() ) );
 	}
 }
 
@@ -116,11 +146,15 @@ std::vector<Halfspace<D>> constraintToHalfspace( const ConstraintT<N>& constrain
 
 template <typename N, typename D>
 std::vector<Halfspace<D>> computeHalfspaces( const FormulaT<N>& formula, std::size_t dim ) {
+#ifdef CARL_OLD_STRUCTURE
 	assert( formula.isConstraintConjunction() );
+#else
+	assert( formula.is_constraint_conjunction() );
+#endif
 
 	std::vector<Halfspace<D>> res;
 	std::vector<ConstraintT<N>> constraints;
-	formula.getConstraints( constraints );
+	getConstraints( formula, constraints );
 
 	for ( const auto& c : constraints ) {
 		auto tmp = constraintToHalfspace<N, D>( c, dim );
@@ -132,12 +166,12 @@ std::vector<Halfspace<D>> computeHalfspaces( const FormulaT<N>& formula, std::si
 
 template <typename N, typename D>
 D computeWidening( const ConstraintT<N>& constraint ) {
-	if ( constraint.lhs().constantPart() == carl::constant_zero<N>().get() ) {
+	if ( constantPart( constraint.lhs() ) == carl::constant_zero<N>().get() ) {
 		return 0;
 	}
 
 	// check if origin contained
-	bool originContained = constraint.lhs().constantPart() > 0;
+	bool originContained = constantPart( constraint.lhs() ) > 0;
 	D widening = 0.0001;
 	D normOff = normalizedOffset<N, D>( constraint );
 

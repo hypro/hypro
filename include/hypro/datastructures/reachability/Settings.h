@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #pragma once
@@ -12,7 +12,6 @@
 #include "../../util/type_handling/representation_enums.h"
 #include "../../util/type_handling/settings_enums.h"
 
-#include <carl/numbers/numbers.h>
 #include <iosfwd>
 #include <string>
 
@@ -91,7 +90,10 @@ class Settings {
 		mFixedParameters.fixedTimeStep = mpq_class( numerator_gcd, denominator_lcm );
 
 		for ( AnalysisParameters& params : mStrategy ) {
-			mpq_class timeStepFactor = params.timeStep / mFixedParameters.fixedTimeStep;
+			mpq_class timeStepFactor = (int)1;
+			if ( mFixedParameters.fixedTimeStep != 0 ) {
+				mpq_class timeStepFactor = params.timeStep / mFixedParameters.fixedTimeStep;
+			}
 			assert( timeStepFactor.get_den() == 1 );
 			assert( timeStepFactor.get_num().fits_sint_p() );
 			params.timeStepFactor = int( timeStepFactor.get_num().get_si() );
@@ -191,8 +193,8 @@ struct ReachabilitySettings {
 	 * @return     Reference to the outstream.
 	 */
 	friend std::ostream& operator<<( std::ostream& ostr, const ReachabilitySettings& rhs ) {
-		ostr << "Local time-horizon: " << carl::toDouble( rhs.timeBound ) << std::endl;
-		ostr << "Time-step size: " << carl::toDouble( rhs.timeStep ) << std::endl;
+		ostr << "Local time-horizon: " << toDouble( rhs.timeBound ) << std::endl;
+		ostr << "Time-step size: " << toDouble( rhs.timeStep ) << std::endl;
 		ostr << "Jump-depth: " << rhs.jumpDepth << std::endl;
 		ostr << "Clustering: " << rhs.clustering << std::endl;
 		return ostr;

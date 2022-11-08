@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "HPolytope.h"
@@ -34,14 +34,11 @@ HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HPolytopeT& orig )
 
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting>::HPolytopeT( const HalfspaceVector& planes )
-	: mHPlanes()
+	: mHPlanes( planes )
 	, mDimension( 0 )
 	, mNonRedundant( false ) {
 	if ( !planes.empty() ) {
 		mDimension = planes.begin()->dimension();
-		for ( const auto& plane : planes ) {
-			mHPlanes.push_back( plane );
-		}
 #ifndef NDEBUG
 		bool empty = this->empty();
 #endif
@@ -334,7 +331,6 @@ HPolytopeT<Number, Converter, Setting>::~HPolytopeT() {
 
 template <typename Number, typename Converter, class Setting>
 bool HPolytopeT<Number, Converter, Setting>::empty() const {
-	TRACE( "hypro.representations.HPolytope", __func__ );
 	if ( mEmptyState == SETSTATE::EMPTY ) {
 		TRACE( "hypro.representations.HPolytope", "Already set to true." );
 		return true;
@@ -378,7 +374,8 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::E
 
 template <typename Number, typename Converter, class Setting>
 std::size_t HPolytopeT<Number, Converter, Setting>::dimension() const {
-	if ( mHPlanes.empty() ) return 0;
+	// TODO the empty as well as the universal polytope have dimension 0, this sounds wrong
+	if ( mHPlanes.empty() || mEmptyState == SETSTATE::EMPTY || mEmptyState == SETSTATE::UNIVERSAL ) return 0;
 	return mDimension;
 }
 
@@ -859,24 +856,24 @@ std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number
 
 template <typename Number, typename Converter, class Setting>
 HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::projectOut( const std::vector<std::size_t>& dimensions, bool viaLinearTransformation ) const {
-    TRACE("hypro.representations.HPolytope", "out dimensions " << dimensions);
-    if (dimensions.empty() || size() == 0) {
-        return *this;
-    }
-    if (this->empty()) {
-        WARN("hypro", "Projection of the empty set, do not project.")
-        return *this;
-    }
+	TRACE( "hypro.representations.HPolytope", "out dimensions " << dimensions );
+	if ( dimensions.empty() || size() == 0 ) {
+		return *this;
+	}
+	if ( this->empty() ) {
+		WARN( "hypro", "Projection of the empty set, do not project." )
+		return *this;
+	}
 
-    if (viaLinearTransformation) {
-        // projection by means of a linear transformation
-        matrix_t<Number> projectionMatrix = matrix_t<Number>::Identity(this->dimension(), this->dimension());
-        for (auto i: dimensions) {
-            projectionMatrix(i, i) = 0;
-        }
-        // TODO remove empty cols which were projected out
-        return this->linearTransformation(projectionMatrix);
-    } else {
+	if ( viaLinearTransformation ) {
+		// projection by means of a linear transformation
+		matrix_t<Number> projectionMatrix = matrix_t<Number>::Identity( this->dimension(), this->dimension() );
+		for ( auto i : dimensions ) {
+			projectionMatrix( i, i ) = 0;
+		}
+		// TODO remove empty cols which were projected out
+		return this->linearTransformation( projectionMatrix );
+	} else {
 		auto [newConstraints, newConstants] = eliminateCols( this->matrix(), this->vector(), dimensions, false );
 		return { newConstraints, newConstants };
 	}
@@ -1077,6 +1074,9 @@ bool HPolytopeT<Number, Converter, Setting>::contains( const Point<Number>& poin
 
 template <typename Number, typename Converter, class Setting>
 bool HPolytopeT<Number, Converter, Setting>::contains( const vector_t<Number>& vec ) const {
+	if ( this->empty() ) {
+		return false;
+	}
 	if ( Setting::CACHE_BOUNDING_BOX ) {
 		if ( !mBox ) {
 			// update cache
@@ -1393,12 +1393,12 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 
 template <typename Number, typename Converter, class Setting>
 std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus2( const HPolytopeT<Number, Converter, Setting>& minus ) const {
-	if (this->dimension()!=minus.dimension()){
+	if ( this->dimension() != minus.dimension() ) {
 		std::vector<HPolytopeT<Number, Converter, Setting>> result;
 		// std::cout << this->dimension() << " dimensionsvergleich " << minus.dimension() << std::endl;
 		return result;
 	}
-	
+
 	HPolytopeT<Number, Converter, Setting> minuspoly( minus.matrix(), minus.vector() );
 	minuspoly = minuspoly.removeRedundancy();
 	hypro::matrix_t<Number> matrix = this->matrix();
@@ -1424,7 +1424,7 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 		// create constraints as matrix and vector
 		for ( long int t = 0; t < matrix2.rows(); t++ ) {
 			for ( long int v = 0; v < matrix2.cols(); v++ ) {
-				//std::cout << "x, t, v:" << x << t << v << std::endl;
+				// std::cout << "x, t, v:" << x << t << v << std::endl;
 				checkmatrix( t, v ) = matrix2.row( t )( v );
 			}
 			checkvector( t ) = constants2( t );
@@ -1459,7 +1459,7 @@ std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter
 			result.push_back( workpoly );
 			copy.insert( h );
 		} else {
-			//std::cout << "not helpful" << std::endl;
+			// std::cout << "not helpful" << std::endl;
 		}
 	}
 	return result;

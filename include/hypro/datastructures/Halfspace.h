@@ -87,17 +87,17 @@ class Halfspace {
 	template <typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
 	void makeInteger() {
 		if ( !isInteger() ) {
-			Number scaling = Number( carl::getDenom( mScalar ) );
+			Number scaling = Number( getDenominator( mScalar ) );
 			for ( unsigned i = 0; i < mNormal.rows(); ++i ) {
-				scaling = scaling * Number( carl::getDenom( mNormal( i ) ) );
+				scaling = scaling * Number( getDenominator( mNormal( i ) ) );
 			}
 
 			mScalar = mScalar * scaling;
-			assert( carl::isInteger( mScalar ) );
+			assert( hypro::isInteger( mScalar ) );
 
 			for ( unsigned i = 0; i < mNormal.rows(); ++i ) {
 				mNormal( i ) = mNormal( i ) * scaling;
-				assert( carl::isInteger( mNormal( i ) ) );
+				assert( hypro::isInteger( mNormal( i ) ) );
 			}
 		}
 	}
@@ -113,7 +113,7 @@ class Halfspace {
 	 */
 	bool isInteger() const {
 		for ( int row = 0; row < mNormal.rows(); ++row ) {
-			if ( !carl::isInteger( mNormal[row] ) ) return false;
+			if ( !hypro::isInteger( Number( mNormal[row] ) ) ) return false;
 		}
 		return true;
 	}

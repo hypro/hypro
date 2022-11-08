@@ -8,9 +8,9 @@
  */
 
 #pragma once
+#include "../../types.h"
 #include "../logging/Logger.h"
 
-#include <carl/core/Relation.h>
 #include <glpk.h>
 
 namespace hypro {
@@ -173,15 +173,15 @@ struct glpk_context {
 					switch ( relations[i] ) {
 						case carl::Relation::LEQ:
 							// set upper bounds, lb-values (here 0.0) are ignored.
-							glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, carl::toDouble( constants( i ) ) );
+							glp_set_row_bnds( lp, i + 1, GLP_UP, 0.0, toDouble( constants( i ) ) );
 							break;
 						case carl::Relation::GEQ:
 							// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-							glp_set_row_bnds( lp, i + 1, GLP_LO, carl::toDouble( constants( i ) ), 0.0 );
+							glp_set_row_bnds( lp, i + 1, GLP_LO, toDouble( constants( i ) ), 0.0 );
 							break;
 						case carl::Relation::EQ:
 							// if it is an equality, the value is read from the lb-value, ub.values (here 0.0) are ignored.
-							glp_set_row_bnds( lp, i + 1, GLP_FX, carl::toDouble( constants( i ) ), 0.0 );
+							glp_set_row_bnds( lp, i + 1, GLP_FX, toDouble( constants( i ) ), 0.0 );
 							break;
 						default:
 							// glpk cannot handle strict inequalities.
@@ -204,7 +204,7 @@ struct glpk_context {
 					// std::cout << __func__ << " set ia[" << i+1 << "]= " << ia[i+1];
 					ja[i + 1] = ( int( i % cols ) ) + 1;
 					// std::cout << ", ja[" << i+1 << "]= " << ja[i+1];
-					ar[i + 1] = carl::toDouble( constraints.row( ia[i + 1] - 1 )( ja[i + 1] - 1 ) );
+					ar[i + 1] = toDouble( constraints.row( ia[i + 1] - 1 )( ja[i + 1] - 1 ) );
 					// TODO:: Assuming ColMajor storage alignment.
 					// assert(*(constraints.data()+(ja[i+1]*numberOfConstraints) - ia[i+1]) ==  constraints.row(ia[i + 1] - 1)( ja[i + 1] - 1 ));
 					// std::cout << ", ar[" << i+1 << "]=" << ar[i+1] << std::endl;

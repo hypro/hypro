@@ -107,7 +107,7 @@ bool UrgencyRefinementAnalyzer<Representation>::matchesPathTransition( ReachTree
 
 template <typename Representation>
 auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
-	//Setup settings for flowpipe construction in worker
+	// Setup settings for flowpipe construction in worker
 	TimeTransformationCache<Number> transformationCache;
 	UrgencyCEGARWorker<Representation> worker{
 		  *mHybridAutomaton,
@@ -132,7 +132,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 		// pop node
 		ReachTreeNode<Representation>* currentNode = mWorkQueue.front();
 		mWorkQueue.pop_front();
-		//std::cout << "CEGAR Node at depth " << currentNode->getDepth() << "\n";
+		// std::cout << "CEGAR Node at depth " << currentNode->getDepth() << "\n";
 
 		// skip descendants of refined nodes
 		auto node = currentNode;
@@ -354,16 +354,16 @@ bool UrgencyRefinementAnalyzer<Representation>::isSuitableForRefinement(
 	START_BENCHMARK_OPERATION( "Check refinement candidate" );
 
 	/*
-        + iterate over all segments of the candidate node
-        + if segmentTiming > timeOfFirstJump: moved beyond jump, so further segments are ignored
-        + intersect with jump enabling set of urgent jump
-        + if containment is full and segmentTiming < timeOfFirstJump: suitable, because
-            the jump is not reachable at all
-        + if containment is partial, compute the path starting from the intersection
-    */
+		+ iterate over all segments of the candidate node
+		+ if segmentTiming > timeOfFirstJump: moved beyond jump, so further segments are ignored
+		+ intersect with jump enabling set of urgent jump
+		+ if containment is full and segmentTiming < timeOfFirstJump: suitable, because
+			the jump is not reachable at all
+		+ if containment is partial, compute the path starting from the intersection
+	*/
 
 	// used for aggregation of initial set if demanded
-	TimedValuationSet<Representation> aggregatedInitial{ Representation::Empty(), carl::Interval<SegmentInd>::emptyInterval() };
+	TimedValuationSet<Representation> aggregatedInitial{ Representation::Empty(), createEmptyInterval<SegmentInd>() };
 
 	// path from candidate node to unsafe node
 	auto path = unsafeNode->getPath().tail( unsafeNode->getDepth() - candidate.node->getDepth() );
@@ -391,10 +391,10 @@ bool UrgencyRefinementAnalyzer<Representation>::isSuitableForRefinement(
 		} else {
 			if ( mRefinementSettings.aggregatedRefine ) {
 				aggregatedInitial.valuationSet = aggregatedInitial.valuationSet.unite( initial );
-				if ( aggregatedInitial.time.isEmpty() ) {
+				if ( isEmpty( aggregatedInitial.time ) ) {
 					aggregatedInitial.time = carl::Interval<SegmentInd>( candidateFpTimings[fpIndex] );
 				} else {
-					aggregatedInitial.time.setUpper( candidateFpTimings[fpIndex] );
+					setUpperBound( aggregatedInitial.time, candidateFpTimings[fpIndex] );
 				}
 			} else {
 				// get time horizon for first task

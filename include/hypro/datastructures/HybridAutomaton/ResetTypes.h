@@ -12,7 +12,6 @@
 #include "../../util/adaptions_eigen/adaptions_eigen.h"
 
 #include <bits/c++config.h>
-#include <carl/interval/Interval.h>
 #include <vector>
 
 namespace hypro {
@@ -86,27 +85,48 @@ struct AffineTransformation {
 		}
 		bool firstrow = true;
 		for ( Eigen::Index row = 0; row < in.mTransformation.matrix().rows(); ++row ) {
-            // skip identity resets
-            if (in.isIdentity(std::size_t(row))) {
-                continue;
-            }
-            if (!firstrow) {
-                out << "\n";
-            } else {
-                firstrow = false;
-            }
-            out << "x" << row << " := ";
-            if (in.mTransformation.matrix().row(row) == matrix_t<Number>::Zero(1, in.mTransformation.matrix().cols())) {
-                out << "0";
-            } else {
-                out << to_string<Number>(in.mTransformation.matrix().row(row));
-            }
-        }
+			// skip identity resets
+			if ( in.isIdentity( std::size_t( row ) ) ) {
+				continue;
+			}
+			if ( !firstrow ) {
+				out << "\n";
+			} else {
+				firstrow = false;
+			}
+			out << "x" << row << " := ";
+			bool allZero = false;
+			if ( in.mTransformation.matrix().row( row ) == matrix_t<Number>::Zero( 1, in.mTransformation.matrix().cols() ) ) {
+				allZero = true;
+				if ( in.mTransformation.vector()( row ) == 0 ) {
+					out << "0";
+				}
+			} else {
+				out << to_string<Number>( in.mTransformation.matrix().row( row ) );
+			}
+			if ( in.mTransformation.vector()( row ) != 0 ) {
+				if ( allZero || in.mTransformation.vector()( row ) < 0 ) {
+					out << in.mTransformation.vector()( row );
+				} else {
+					out << " + " << in.mTransformation.vector()( row );
+				}
+			}
+		}
 		return out;
 	}
 
 	friend bool operator==( const AffineTransformation<Number>& lhs, const AffineTransformation<Number>& rhs ) {
 		return lhs.mTransformation == rhs.mTransformation;
+	}
+
+	friend AffineTransformation<Number> operator+( const AffineTransformation<Number>& lhs, const AffineTransformation<Number>& rhs ) {
+		if ( rhs.isIdentity() ) {
+			return lhs;
+		}
+		if ( lhs.isIdentity() ) {
+			return rhs;
+		}
+		return AffineTransformation<Number>{ matrix_t<Number>( lhs.mTransformation.matrix() * ( rhs.mTransformation.matrix() ) ), lhs.mTransformation.vector() + lhs.mTransformation.matrix() * rhs.mTransformation.vector() };
 	}
 };
 
@@ -134,7 +154,7 @@ struct IntervalAssignment {
 	std::size_t size() const { return mIntervals.size(); }
 
 	bool isIdentity() const {
-		return std::all_of( mIntervals.begin(), mIntervals.end(), []( const auto& i ) { return i.isEmpty(); } );
+		return std::all_of( mIntervals.begin(), mIntervals.end(), []( const auto& i ) { return isEmpty( i ); } );
 	}
 
 	friend std::ostream& operator<<( std::ostream& out, const IntervalAssignment<Number>& in ) {

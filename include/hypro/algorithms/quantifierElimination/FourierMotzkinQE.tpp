@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "FourierMotzkinQE.h"
 
 namespace hypro {
@@ -26,13 +35,13 @@ FormulaT<Number> FourierMotzkinQE<Number>::eliminateQuantifiers() {
 
 			// add all constraints which are not containing var to newConstraints
 			for ( const auto formulaIt : bounds[3] ) {
-				assert( ( formulaIt ).getType() == carl::FormulaType::CONSTRAINT );
+				assert( getType( formulaIt ) == carl::FormulaType::CONSTRAINT );
 				newConstraints.emplace_back( formulaIt );
 			}
 
 			// assemble new formula
 			mFormula = FormulaT<Number>( carl::FormulaType::AND, newConstraints );
-			DEBUG( "hypro.algorithms.qe", "Done elimiating " << var << ", new formula size: " << mFormula.size() );
+			DEBUG( "hypro.algorithms.qe", "Done elimiating " << var << ", new formula size: " << mFormula.size() << ", new formula: " << mFormula );
 		}
 	}
 
@@ -44,12 +53,19 @@ FormulaT<Number> FourierMotzkinQE<Number>::eliminateQuantifiers() {
 template <typename Number>
 typename FourierMotzkinQE<Number>::FormulaPartition FourierMotzkinQE<Number>::findBounds(
 	  const carl::Variable& variable ) {
+	TRACE( "hypro.algorithms.qe", "Find bounds in " << mFormula );
 	// result vector initialized with three subsets
 	typename FourierMotzkinQE<Number>::FormulaPartition res{ 4, std::vector<FormulaT<Number>>() };
+	// corner-cases
+	if ( !isNary( mFormula ) && getType( mFormula ) != carl::FormulaType::CONSTRAINT ) {
+		// if any other case happens, this should not be
+		assert( isFalse( mFormula ) || isTrue( mFormula ) );
+		return res;
+	}
 
 	// if the formula only contains one constraint, check for occurence of the variable.
-	if ( mFormula.getType() == carl::FormulaType::CONSTRAINT ) {
-		if ( !mFormula.constraint().hasVariable( variable ) ) {
+	if ( getType( mFormula ) == carl::FormulaType::CONSTRAINT ) {
+		if ( !hasVariable( mFormula.constraint(), variable ) ) {
 			res[3].push_back( mFormula );
 		} else {
 			if ( mFormula.constraint().relation() == carl::Relation::EQ ) {
@@ -65,8 +81,8 @@ typename FourierMotzkinQE<Number>::FormulaPartition FourierMotzkinQE<Number>::fi
 
 	// More than one constaint: search formula to find bounds
 	for ( auto formulaIt = mFormula.begin(); formulaIt != mFormula.end(); ++formulaIt ) {
-		assert( ( *formulaIt ).getType() == carl::FormulaType::CONSTRAINT );
-		if ( ( *formulaIt ).constraint().hasVariable( variable ) ) {
+		assert( getType( *formulaIt ) == carl::FormulaType::CONSTRAINT );
+		if ( hasVariable( ( *formulaIt ).constraint(), variable ) ) {
 			if ( ( *formulaIt ).constraint().relation() == carl::Relation::EQ ) {
 				res[2].push_back( *formulaIt );
 			} else if ( isLinearLowerBound( ( *formulaIt ).constraint(), variable ) ) {
@@ -131,21 +147,21 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 		substitutes.push_back( FormulaT<Number>( bounds[2].front() ) );
 	} else {
 		for ( auto f = bounds[2].begin(); f != bounds[2].end(); ++f ) {
-			assert( f->getType() == carl::FormulaType::CONSTRAINT );
+			assert( getType( *f ) == carl::FormulaType::CONSTRAINT );
 			assert( f->constraint().relation() == carl::Relation::EQ );
 
 			for ( auto g = std::next( f ); g != bounds[2].end(); ++g ) {
-				assert( g->getType() == carl::FormulaType::CONSTRAINT );
+				assert( getType( *g ) == carl::FormulaType::CONSTRAINT );
 				assert( g->constraint().relation() == carl::Relation::EQ );
 				FormulaT<Number> newEq =
 					  FormulaT<Number>( f->constraint().lhs() - g->constraint().lhs(), carl::Relation::EQ );
 
 				// 1st case: equalities contradict each other - quit substitution.
-				if ( newEq.getType() == carl::FormulaType::FALSE ) {
+				if ( getType( newEq ) == carl::FormulaType::FALSE ) {
 					constraints.clear();
 					constraints.emplace_back( FormulaT<Number>( carl::FormulaType::FALSE ) );
 					return constraints;
-				} else if ( newEq.getType() == carl::FormulaType::TRUE ) {
+				} else if ( getType( newEq ) == carl::FormulaType::TRUE ) {
 					// both equations are completely equal, just take one.
 					substitutes.push_back( FormulaT<Number>( *f ) );
 				} else {
@@ -160,24 +176,25 @@ FormulasT<Number> FourierMotzkinQE<Number>::substituteEquations(
 
 	// substitute
 	for ( const auto& f : substitutes ) {
-		// std::cout << "Substitute: " << f << std::endl;
-		assert( f.getType() == carl::FormulaType::CONSTRAINT );
-		PolyT<Number> substitute = -( f.constraint().lhs() - f.constraint().coefficient( v, 1 ) * v );
+		TRACE( "hypro.algorithms.qe", "Substitute variable " << v << " using: " << f );
+		assert( getType( f ) == carl::FormulaType::CONSTRAINT );
+		PolyT<Number> substitute = -( f.constraint().lhs() - f.constraint().coefficient( v, 1 ) * v ) / f.constraint().coefficient( v, 1 );
+		TRACE( "hypro.algorithms.qe", "Substitution polynomial is: " << substitute );
 		// lower bounds
 		for ( auto fc : bounds[0] ) {
-			assert( fc.getType() == carl::FormulaType::CONSTRAINT );
+			assert( getType( fc ) == carl::FormulaType::CONSTRAINT );
 			constraints.emplace_back( hypro::substitute( fc.constraint().lhs(), v, substitute ),
 									  // constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
 									  fc.constraint().relation() );
-			// std::cout << "substitute lower bound to " << constraints.back() << std::endl;
+			TRACE( "hypro.algorithms.qe", "Substitute lower bound " << fc << " to " << constraints.back() );
 		}
 		// upper bounds
 		for ( auto fc : bounds[1] ) {
-			assert( fc.getType() == carl::FormulaType::CONSTRAINT );
+			assert( getType( fc ) == carl::FormulaType::CONSTRAINT );
 			constraints.emplace_back( hypro::substitute( fc.constraint().lhs(), v, substitute ),
 									  // constraints.emplace_back( fc.constraint().lhs().substitute( v, substitute ),
 									  fc.constraint().relation() );
-			// std::cout << "substitute upper bound to " << constraints.back() << std::endl;
+			TRACE( "hypro.algorithms.qe", "Substitute upper bound " << fc << " to " << constraints.back() );
 		}
 	}
 
@@ -207,8 +224,8 @@ PolyT<Number> FourierMotzkinQE<Number>::getRemainder( const ConstraintT<Number>&
 
 template <typename Number>
 bool FourierMotzkinQE<Number>::isLinearLowerBound( const ConstraintT<Number>& c, carl::Variable v ) {
-	assert( c.hasVariable( v ) );
-	assert( c.coefficient( v, 1 ).isNumber() );
+	assert( hasVariable( c, v ) );
+	assert( isNumber( c.coefficient( v, 1 ) ) );
 
 	// is linear lower bound when the coefficient is > 0 and the relation is LEQ or LESS, or if the coefficient is < 0
 	// and the relation is GEQ or GREATER.
