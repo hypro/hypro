@@ -1,12 +1,11 @@
 #include "hypro/neuralnets/network/NeuralNetwork.h"
-#include "hypro/parser/neuralnets/nnet/NNet.h"
 #include "hypro/neuralnets/reachability/ReachNN.h"
 #include "hypro/neuralnets/reachability_tree/ReachabilityTree.h"
+#include "hypro/parser/neuralnets/nnet/NNet.h"
 #include "hypro/representations/GeometricObjectBase.h"
 // #include "hypro/representations/Starset/Starset.h"
-#include "hypro/util/plotting/Plotter.h"
-
 #include "hypro/parser/representations/parseHPolytope.tpp"
+#include "hypro/util/plotting/Plotter.h"
 
 #include <chrono>
 #include <iomanip>
@@ -100,7 +99,7 @@ int main( int argc, char* argv[] ) {
 		std::cout << "Reading safety specification from: " << argv[4] << std::endl;
 		safe_polys = hypro::readKHpolytopesFromFile<Number>( argv[4] );
 	} else {
-		safe_polys.push_back( hypro::HPolytope<Number>(constr2, limits2) );
+		safe_polys.push_back( hypro::HPolytope<Number>( constr2, limits2 ) );
 	}
 	std::cout << safe_polys << std::endl;
 
@@ -110,7 +109,23 @@ int main( int argc, char* argv[] ) {
 	bool create_plots = true;
 
 	start = std::chrono::steady_clock::now();
-	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( hypro::Starset<Number>(input_poly), method, create_plots );	// old verification implemented for NNet
+	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( hypro::Starset<Number>( input_poly ), method, create_plots );  // old verification implemented for NNet
+
+	auto color = 1;
+	// Plot safe zone
+	for ( const auto& safe_zone : safe_polys ) {
+#pragma omp critical
+		plotter.addObject( safe_zone.vertices(), hypro::plotting::colors[hypro::plotting::petrol] );
+	}
+
+	// Plot output set
+	for ( const auto& set : output_set ) {
+#pragma omp critical
+		plotter.addObject( set.vertices(), hypro::plotting::colors[color] );
+		color = ( color + 1 ) % 8;
+	}
+	plotter.plot2d();
+
 	// std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
 	// std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(method, hypro::SEARCH_STRATEGY::DFS);
 	// bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots );
