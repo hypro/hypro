@@ -1219,7 +1219,8 @@ HPolytopeT<Number, Converter, Setting> HPolytopeT<Number, Converter, Setting>::u
 	// Idea: Use templated evaluation.
 	std::vector<Point<Number>> vertices;
 	for ( const auto& poly : rhs ) {
-		vertices.insert( vertices.end(), poly.vertices().begin(), poly.vertices().end() );
+		const auto poly_vertices = poly.vertices();
+		vertices.insert( vertices.end(), poly_vertices.begin(), poly_vertices.end() );
 	}
 	return HPolytopeT( vertices );
 }
