@@ -126,6 +126,17 @@ int main( int argc, char* argv[] ) {
 	}
 	plotter.plot2d();
 
+	// Combine all individual safe polygons to one safe zone
+	auto safe_polygon = hypro::HPolytope<Number>::unite(safe_polys);
+
+	// Combine all output sets to one polygon
+	auto combined_output_set =hypro::Starset<Number>::unite(output_set);
+
+	// Check if star set is safe, e.g. if it is contained in the safe zone
+	auto is_starSet_safe = safe_polygon.contains(combined_output_set.eqvPolytope());
+	std::cout << std::boolalpha;
+	std::cout << "The output is in the safe zone: " << is_starSet_safe << std::endl;
+
 	// std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
 	// std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(method, hypro::SEARCH_STRATEGY::DFS);
 	// bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots );
