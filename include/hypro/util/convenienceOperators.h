@@ -101,6 +101,9 @@ std::string to_string( const typename matrix_t<N>::ConstRowXpr& row, bool lastIs
 				_out << "x" << col;
 			}
 		} else if ( row( col ) < 0 ) {
+			if ( first ) {
+				first = false;
+			}
 			_out << " - ";
 			if ( row( col ) != N( -1 ) ) {
 				_out << -row( col ) << "·x" << col;
