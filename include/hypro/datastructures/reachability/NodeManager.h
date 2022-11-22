@@ -11,8 +11,8 @@
 #include "../HybridAutomaton/Location.h"
 #include "../HybridAutomaton/State.h"
 #include "../HybridAutomaton/Transition.h"
-#include "ReachTree.h"
-#include "ReachTreeNode.h"
+#include "ReachTreeNodev2.h"
+#include "ReachTreev2.h"
 
 #include <iosfwd>
 

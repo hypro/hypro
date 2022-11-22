@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "HyproFormulaVisitor.h"
 
 namespace hypro {
@@ -233,10 +242,8 @@ namespace hypro {
 		//2.Shorten both vectors by one, save last coeff and save everything in pair
 		Number poly1Back = poly1(poly1.size()-1);
 		poly1.conservativeResize(poly1.size()-1, Eigen::NoChange_t::NoChange);
-		//std::cout << "---- After shortening poly1 is:\n" << poly1 << " and poly1Back is: " << poly1Back << std::endl;
 		Number poly2Back = poly2(poly2.size()-1);
 		poly2.conservativeResize(poly2.size()-1, Eigen::NoChange_t::NoChange);
-		//std::cout << "---- After shortening poly2 is:\n" << poly2 << " and poly2Back is: " << poly2Back << std::endl;
 
 		//2.Use them to calculate constraint vector
 		std::vector<std::pair<vector_t<Number>,Number>> constraintVec;
@@ -384,12 +391,6 @@ namespace hypro {
 					}
 				}
 
-				//Print stuff
-				//std::cout << "---- Received following constraint Vec:" << std::endl;
-				//for(auto v : values){
-				//	std::cout << v.first << "and \n" << v.second << "\n" << std::endl;
-				//}
-
 				//Resize tmpMatrix and tmpVector and initialise them with 0, then write values inside
 				tmpMatrix.conservativeResize(tmpMatrix.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
 				tmpVector.conservativeResize(tmpVector.rows()+values.size()-1, Eigen::NoChange_t::NoChange);
@@ -414,7 +415,7 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproFormulaVisitor<Number>::visitBracketExpression(HybridAutomatonParser::BracketExpressionContext *ctx) {
 		//Get factor left and right outside the expressions
-		assert(0 <= ctx->NUMBER().size() && ctx->NUMBER().size() <= 2);
+		assert(ctx->NUMBER().size() <= 2);
 		Number leftFactor = 1;
 		Number rightFactor = 1;
 		if(ctx->NUMBER().size() != 0){

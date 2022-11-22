@@ -1,8 +1,17 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "rectangularResetHandler.h"
 
 namespace hypro {
-template <typename State>
-void rectangularResetHandler<State>::handle() {
+template <typename State, typename Automaton>
+void rectangularResetHandler<State, Automaton>::handle() {
 	TRACE( "hypro.worker", "Applying Reset trafo for subspace " << mIndex );
 	assert( mState->getSetType( mIndex ) == representation_name::carl_polytope );
 	auto res = mState->partialIntervalAssignment( mIntervalResets, mIndex );
@@ -11,8 +20,8 @@ void rectangularResetHandler<State>::handle() {
 	mState->setSetType( res.getSetType( mIndex ), mIndex );
 }
 
-template <typename State>
-void rectangularResetHandler<State>::rectangularIntersectReset( const State& state, const HybridAutomaton<Number>& automaton ) {
+template <typename State, typename Automaton>
+void rectangularResetHandler<State, Automaton>::rectangularIntersectReset( const State& state, const Automaton& automaton ) {
 	assert( !state.getTimestamp().isEmpty() );
 
 	// TRACE( "hydra.worker.discrete", "Applying handler " << this->handlerName() );

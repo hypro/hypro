@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /*
@@ -20,9 +20,9 @@ namespace hypro {
  * Heuristics which priorizes a high depth of a node, i.e., implements a depth-first approach
  * @tparam R
  */
-template <typename R>
+template <typename R, typename L>
 struct DepthFirst {
-	constexpr bool operator()( const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs ) {
+	constexpr bool operator()( const ReachTreeNode<R, L>* lhs, const ReachTreeNode<R, L>* rhs ) {
 		auto lhsDepth = lhs->getDepth();
 		auto rhsDepth = rhs->getDepth();
 		if ( lhsDepth > rhsDepth ) {
@@ -35,7 +35,7 @@ struct DepthFirst {
 		return lhs < rhs;
 	}
 
-	std::size_t getValue( const ReachTreeNode<R>* in ) {
+	std::size_t getValue( const ReachTreeNode<R, L>* in ) {
 		return in->getDepth();
 	}
 };
@@ -44,9 +44,9 @@ struct DepthFirst {
  * Heuristics which priorizes a low depth of a node, i.e., implements a breadth-first approach
  * @tparam R
  */
-template <typename R>
+template <typename R, typename L>
 struct BreadthFirst {
-	constexpr bool operator()( const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs ) {
+	constexpr bool operator()( const ReachTreeNode<R, L>* lhs, const ReachTreeNode<R, L>* rhs ) {
 		auto lhsDepth = lhs->getDepth();
 		auto rhsDepth = rhs->getDepth();
 		if ( lhsDepth < rhsDepth ) {
@@ -59,7 +59,7 @@ struct BreadthFirst {
 		return lhs < rhs;
 	}
 
-	std::size_t getValue( const ReachTreeNode<R>* in ) {
+	std::size_t getValue( const ReachTreeNode<R, L>* in ) {
 		return in->getDepth();
 	}
 };
@@ -68,7 +68,7 @@ struct BreadthFirst {
  * Heuristics functor which takes the maximum number of repeated locations (excluding the last one) on the path to the node as a metric. The idea is to rate nodes with a lower cycle-count as better to enforce progress instead of looping.
  * @tparam R
  */
-template <typename R>
+template <typename R, typename L>
 struct LeastLocationCycleCount {
 	/**
 	 * Function to compute the largest number of repeated locations on a path to the passed node.
@@ -76,22 +76,22 @@ struct LeastLocationCycleCount {
 	 * @param in The node
 	 * @return The count of the occurrences of the location which appears the most on the path to the node.
 	 */
-	std::size_t largestLocationCycle( const ReachTreeNode<R>* in ) {
+	std::size_t largestLocationCycle( const ReachTreeNode<R, L>* in ) {
 		if ( in->getParent() == nullptr ) {
 			return 0;
 		}
-		std::map<Location<typename R::NumberType>*, std::size_t> counts;
+		std::map<const L*, std::size_t> counts;
 		for ( const auto& intervalTransitionPair : in->getPath().elements ) {
 			counts[intervalTransitionPair.second->getSource()] += 1;
 		}
 		return std::max_element( std::begin( counts ), std::end( counts ), []( const auto& aPair, const auto& bPair ) { return aPair.second < bPair.second; } )->second;
 	}
 
-	std::size_t getValue( const ReachTreeNode<R>* in ) {
+	std::size_t getValue( const ReachTreeNode<R, L>* in ) {
 		return largestLocationCycle( in );
 	}
 
-	constexpr bool operator()( const ReachTreeNode<R>* lhs, const ReachTreeNode<R>* rhs ) {
+	constexpr bool operator()( const ReachTreeNode<R, L>* lhs, const ReachTreeNode<R, L>* rhs ) {
 		auto lhsCycles = largestLocationCycle( lhs );
 		auto rhsCycles = largestLocationCycle( rhs );
 		if ( lhsCycles < rhsCycles ) {

@@ -1,9 +1,18 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "RectangularWorker.h"
 
 namespace hypro {
 
-template <typename State>
-REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( ReachTreeNode<State>& task ) {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularWorker<State, Automaton>::computeForwardReachability( ReachTreeNode<State, LocationT>& task ) {
 	DEBUG( "hypro.reachability.rectangular", "Start forward computation in worker" );
 	if ( computeTimeSuccessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
@@ -12,8 +21,8 @@ REACHABILITY_RESULT RectangularWorker<State>::computeForwardReachability( ReachT
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <typename State>
-REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( ReachTreeNode<State>& task ) {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<State, LocationT>& task ) {
 	State initialSet = task.getInitialSet();
 
 	auto [containment, segment] = rectangularIntersectInvariant( initialSet, task.getLocation() );
@@ -66,10 +75,10 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimeSuccessors( ReachTreeNo
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <typename State>
-void RectangularWorker<State>::computeJumpSuccessors( const Location<Number>* location ) {
+template <typename State, typename Automaton>
+void RectangularWorker<State, Automaton>::computeJumpSuccessors( const LocationT* location ) {
 	// for each transition intersect each computed time successor set with the guard. If the intersection is non-empty, store for post-processing.
-	rectangularGuardHandler<State> guardHandler;
+	rectangularGuardHandler<State, LocationT> guardHandler;
 	for ( auto& state : mFlowpipe ) {
 		guardHandler( state, location );
 	}
@@ -78,14 +87,14 @@ void RectangularWorker<State>::computeJumpSuccessors( const Location<Number>* lo
 	postProcessJumpSuccessors( guardHandler.getGuardSatisfyingStateSets() );
 }
 
-template <typename State>
-void RectangularWorker<State>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {
-	singularJumpHandler<State> jmpHandler;
+template <typename State, typename Automaton>
+void RectangularWorker<State, Automaton>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {
+	singularJumpHandler<State, LocationT> jmpHandler;
 	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets );
 }
 
-template <typename State>
-REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( ReachTreeNode<State>& task ) {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularWorker<State, Automaton>::computeBackwardReachability( ReachTreeNode<State, LocationT>& task ) {
 	if ( computeTimePredecessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
@@ -93,8 +102,8 @@ REACHABILITY_RESULT RectangularWorker<State>::computeBackwardReachability( Reach
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <typename State>
-REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTreeNode<State>& task ) {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularWorker<State, Automaton>::computeTimePredecessors( ReachTreeNode<State, LocationT>& task ) {
 	State badSet = task.getInitialSet();
 	auto [containment, segment] = rectangularIntersectInvariant( badSet, task.getLocation() );
 	if ( containment == CONTAINMENT::NO ) {
@@ -132,8 +141,8 @@ REACHABILITY_RESULT RectangularWorker<State>::computeTimePredecessors( ReachTree
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <typename State>
-REACHABILITY_RESULT RectangularWorker<State>::underapproximateTimePredecessors( ReachTreeNode<State>& task ) {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularWorker<State, Automaton>::underapproximateTimePredecessors( ReachTreeNode<State, LocationT>& task ) {
 	State badSet = task.getInitialSet();
 	auto [containment, segment] = rectangularIntersectInvariant( badSet, task.getLocation() );
 	if ( containment == CONTAINMENT::NO ) {
@@ -172,10 +181,10 @@ REACHABILITY_RESULT RectangularWorker<State>::underapproximateTimePredecessors( 
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <typename State>
-void RectangularWorker<State>::computeJumpPredecessors() {
+template <typename State, typename Automaton>
+void RectangularWorker<State, Automaton>::computeJumpPredecessors() {
 	// for each state: find possible transitions and intersect the set with reset of the transitions
-	rectangularResetHandler<State> resetHandler;
+	rectangularResetHandler<State, LocationT> resetHandler;
 	for ( auto& state : mFlowpipe ) {
 		resetHandler.rectangularIntersectReset( state, mHybridAutomaton );
 	}
@@ -184,14 +193,14 @@ void RectangularWorker<State>::computeJumpPredecessors() {
 	reverseProcessJumpPredecessors( resetHandler.getResetSatisfyingStateSets() );
 }
 
-template <typename State>
-void RectangularWorker<State>::reverseProcessJumpPredecessors( const JumpSuccessors& guardSatisfyingSets ) {
-	rectangularJumpHandler<State> jmpHandler;
+template <typename State, typename Automaton>
+void RectangularWorker<State, Automaton>::reverseProcessJumpPredecessors( const JumpSuccessors& guardSatisfyingSets ) {
+	rectangularJumpHandler<State, LocationT> jmpHandler;
 	mJumpPredecessorSets = jmpHandler.applyReverseJump( guardSatisfyingSets, nullptr, mSettings.strategy().front() );
 }
 
-template <typename State>
-void RectangularWorker<State>::clear() {
+template <typename State, typename Automaton>
+void RectangularWorker<State, Automaton>::clear() {
 	mFlowpipe.clear();
 	mJumpPredecessorSets.clear();
 	mJumpSuccessorSets.clear();

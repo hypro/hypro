@@ -1,4 +1,5 @@
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/datastructures/reachability/TreeNodev2.h>
 #include <hypro/datastructures/reachability/TreeTraversal.h>
@@ -9,7 +10,8 @@ using namespace hypro;
 struct DataNode : public TreeNode<DataNode> {
 	int data;
 
-	explicit DataNode( int i ) : data( i ) {}
+	explicit DataNode( int i )
+		: data( i ) {}
 
 	DataNode& addChild( int d ) { return TreeNode<DataNode>::addChild( d ); }
 };
@@ -33,10 +35,6 @@ TEST( TreeTest, Traversal ) {
 
 	TreeIterator<DataNode> begin{ root };
 	TreeIterator<DataNode> end{};
-	while ( begin != end ) {
-		std::cout << "Content: " << begin->data << std::endl;
-		++begin;
-	}
 	SUCCEED();
 }
 

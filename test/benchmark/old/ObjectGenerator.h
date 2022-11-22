@@ -44,7 +44,6 @@ class ObjectGenerator {
 			vector_t<Number> coordinates( _setup.dimension );
 			for ( unsigned j = 0; j < _setup.dimension; ++j ) {
 				coordinates( j ) = Number( distr( mRand ) );
-				// std::cout << "coordinates(" << j << ") = " << coordinates(j) << std::endl;
 			}
 			pointVector.push_back( Point<Number>( coordinates ) );
 		}

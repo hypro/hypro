@@ -4,10 +4,6 @@ namespace hypro {
 
 template <>
 EvaluationResult<double> glpkOptimizeLinear( glpk_context& context, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>&, bool useExact ) {
-	// std::cout << __func__ << " in direction " << _direction.transpose() << std::endl;
-	// std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "Glpk Problem: " << std::endl;
-	// printProblem(glpkProblem);
-
 	// setup glpk
 	for ( int i = 0; i < constraints.cols(); i++ ) {
 		glp_set_col_bnds( context.lp, i + 1, GLP_FR, 0.0, 0.0 );

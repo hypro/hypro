@@ -17,9 +17,7 @@ project(hypro CXX C)
 
 set(PROJECT_FULLNAME "HyPro")
 set(PROJECT_DESCRIPTION "A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations")
-string(TIMESTAMP hypro_MINORVERSION %m)
-string(TIMESTAMP hypro_MAJORVERSION %y)
-set(hypro_VERSION "${hypro_MAJORVERSION}.${hypro_MINORVERSION}")
+set(hypro_VERSION "2.0.0")
 set(PROJECT_VERSION "${hypro_VERSION}")
 set(hypro_NAME "HyPro")
 set(hypro_DESCRIPTION ${PROJECT_DESCRIPTION})
@@ -36,8 +34,8 @@ include(hypromacros)
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
-option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." ON)
-option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" ON)
+option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
+option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" OFF)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
 option(HYPRO_GSL_INTEGRATION "Link to gsl and provide numerical integration methods" OFF)
 option(HYPRO_BUILD_OFFLINE "Do not attempt to update ressources (work offline)." OFF)
@@ -141,9 +139,6 @@ if (CLANG_TIDY)
     set(CLANG_TIDY_CHECKS "-checks='${CLANG_TIDY_CHECKS}'")
     message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif ()
-
-
-enable_testing()
 
 # # # # # # # # # # # # # # # # # # # # # #
 # D. Invoke subdirectories.
@@ -277,6 +272,8 @@ add_subdirectory(resources)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/flags.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/flags.h @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/paths.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/paths.h
         @ONLY)
+
+enable_testing()
 add_subdirectory(test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
 

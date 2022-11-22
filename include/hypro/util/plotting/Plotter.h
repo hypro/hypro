@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /*
@@ -21,6 +21,7 @@
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
 #include "../../types.h"
+#include "../fileHandling.h"
 #include "../logging/Logger.h"
 #include "../type_handling/plottype_enums.h"
 #include "Colors.h"
@@ -43,6 +44,7 @@ struct PlotObject {
 	std::optional<std::size_t> color = std::nullopt;		 //< set to custom color id
 	std::optional<gnuplotSettings> settings = std::nullopt;	 //< optional custom settings
 	std::string objectTitle = "";							 //< set to custom object title
+	bool isPoints = false;									 //< true, if points should be handled as individual points instead of polygons
 };
 
 }  // namespace plotting
@@ -132,7 +134,7 @@ class Plotter : public carl::Singleton<Plotter<Number>> {
 	 * @param[in]  _color  Optionally color the object.
 	 * @return     A unique id, which allows to reference the object to change its colors.
 	 */
-	unsigned addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> _color = std::nullopt, std::optional<plotting::gnuplotSettings> settings = std::nullopt );
+	unsigned addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> _color = std::nullopt, std::optional<plotting::gnuplotSettings> settings = std::nullopt, bool isPoints = false );
 
 	/**
 	 * @brief      Adds an object represented as a vector of points. Duplicates and points inside will be removed by the plotter,

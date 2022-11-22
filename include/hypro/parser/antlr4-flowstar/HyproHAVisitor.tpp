@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "HyproHAVisitor.h"
@@ -55,27 +55,22 @@ namespace hypro {
 		//4.Calls visit to get transitions
 		//NOTE: the transVisitor will modify locSet as every location has its own set of transitions that must be added here.
 		HyproTransitionVisitor<Number> transVisitor = HyproTransitionVisitor<Number>(varVec, locSet);
-		std::set<Transition<Number>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Number>*>>();
+		std::set<Transition<Location<Number>>*> tSet = transVisitor.visit(ctx->jumps()).template as<std::set<Transition<Location<Number>>*>>();
 
 		//4.1.Make a set of unique ptrs to transitions
 		for(auto t : tSet){
 			assert(t != nullptr);
-			//std::cout << "Transition from " << t->getSource() << "("<< t->getSource()->getName() << ")" << " to " << t->getTarget() << "(" << t->getTarget()->getName() << ")"<< std::endl;
-			//std::cout << "Reset is " << t->getReset() << std::endl;
 			for(auto& l : uniquePtrLocSet){
-				//std::cout << "Location raw: " << l.get() <<  "(" << l->getName() << ")" << std::endl;
 				assert(t != nullptr);
 				if(t->getSource() == l.get()) {
-					// l->addTransition(std::move(std::make_unique<Transition<Number>>(*t)));
-					StochasticTransition<Number>* stoTrans = dynamic_cast<StochasticTransition<Number>*>( t );
+					StochasticTransition<Location<Number>>* stoTrans = dynamic_cast<StochasticTransition<Location<Number>>*>( t );
 					if ( !stoTrans ) {
 						l->addTransition(std::move
-(std::unique_ptr<Transition<Number>>(t)));
+(std::unique_ptr<Transition<Location<Number>>>(t)));
 					} else {
 						l->addTransition(std::move
-(std::unique_ptr<StochasticTransition<Number>>( stoTrans )));
+(std::unique_ptr<StochasticTransition<Location<Number>>>( stoTrans )));
 					}
-					//std::cout << "Added." << std::endl;
 					break;
 				}
 			}
@@ -115,35 +110,6 @@ namespace hypro {
 			gBadStates = bStateVisitor.getGlobalBadStates();
 		}
 
-#ifdef HYPRO_LOGGING
-/*
-		COUT("================================\n");
-		COUT("From the parser\n");
-		COUT("================================\n");
-		COUT("Parsed variables: " << vars << std::endl);
-		COUT("Reachability settings:\n" << reachSettings);
-		COUT("All locations:\n");COUT("Size:"); COUT(locSet.size());
-		for(auto it = locSet.begin(); it != locSet.end(); ++it){
-			COUT(**it);
-		}
-		//COUT("All Transitions:\n");
-		//for(auto it = transSet.begin(); it != transSet.end(); ++it){
-		//	COUT(**it);
-		//}
-		COUT("Initial state:\n");
-		for(auto it = initSet.begin(); it != initSet.end(); ++it){
-			COUT("Initial Location: " << it->first->getName() << " and initial state: " << it->second);
-		}
-		COUT("Local Bad states:\n");
-		for(auto it = lBadStates.begin(); it != lBadStates.end(); ++it){
-			COUT("Bad Location: " << it->first->getName() << " and bad state: " << it->second);
-		}
-		COUT("Global Bad states:\n");
-		for(const auto& g : gBadStates){
-			COUT("Global Bad condition: " << g);
-		}
-*/
-#endif
 		//7.Build HybridAutomaton, return it
 		HybridAutomaton<Number> ha;
 		ha.setLocations(std::move(uniquePtrLocSet));

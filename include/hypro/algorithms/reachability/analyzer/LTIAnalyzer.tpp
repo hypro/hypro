@@ -14,19 +14,20 @@
 
 namespace hypro {
 
-template <typename State, typename Heuristics, typename Multithreading>
-auto LTIAnalyzer<State, Heuristics, Multithreading>::run() -> LTIResult {
+template <typename State, typename Automaton, typename Heuristics, typename Multithreading>
+auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResult {
+	DEBUG( "hypro.reachability", "Start LTI Reachability Analysis." );
 	if ( std::is_same_v<Multithreading, UseMultithreading> ) {
 		mIdle = std::vector( mNumThreads, false );
 		for ( int i = 0; i < mNumThreads; i++ ) {
 			mThreads.push_back( std::thread( [this, i]() {
-				TimeTransformationCache<Number> transformationCache;
-				LTIWorker<State> worker{
+				TimeTransformationCache<LocationT> transformationCache;
+				LTIWorker<State, Automaton> worker{
 					  *mHybridAutomaton,
 					  mParameters,
 					  mFixedParameters.localTimeHorizon,
 					  transformationCache };
-				ReachTreeNode<State>* currentNode;
+				ReachTreeNode<State, LocationT>* currentNode;
 				while ( !mTerminate ) {
 					{
 						std::unique_lock<std::mutex> lock( mQueueMutex );
@@ -59,8 +60,8 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::run() -> LTIResult {
 		// wait();
 		shutdown();
 	} else {
-		TimeTransformationCache<Number> transformationCache;
-		LTIWorker<State> worker{
+		TimeTransformationCache<LocationT> transformationCache;
+		LTIWorker<State, Automaton> worker{
 			  *mHybridAutomaton,
 			  mParameters,
 			  mFixedParameters.localTimeHorizon,
@@ -70,15 +71,17 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::run() -> LTIResult {
 			DEBUG( "hypro.reachability", "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName() << " with path " << currentNode->getTreePath() << " with heursitics value " << Heuristics{}.getValue( currentNode ) )
 			auto result = processNode( worker, currentNode, transformationCache );
 			if ( result.isFailure() ) {
+				DEBUG( "hypro.reachability", "End LTI Reachability Analysis." );
 				return result;
 			}
 		}
+		DEBUG( "hypro.reachability", "End LTI Reachability Analysis." );
 		return { LTISuccess{} };
 	}
 }
 
-template <typename State, typename Heuristics, typename Multithreading>
-auto LTIAnalyzer<State, Heuristics, Multithreading>::processNode( LTIWorker<State>& worker, ReachTreeNode<State>* node, TimeTransformationCache<Number>& transformationCache ) -> LTIResult {
+template <typename State, typename Automaton, typename Heuristics, typename Multithreading>
+auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::processNode( LTIWorker<State, Automaton>& worker, ReachTreeNode<State, LocationT>* node, TimeTransformationCache<LocationT>& transformationCache ) -> LTIResult {
 	REACHABILITY_RESULT safetyResult;
 
 	// set bounding box required for fixed-point test
@@ -90,17 +93,24 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::processNode( LTIWorker<Stat
 	if ( mFixedParameters.globalTimeHorizon > 0 ) {
 		// the number of required segments is the difference of the number of segments required to reach the global time horizon and the minimally current covered number of segments
 		SegmentInd segmentsToCompute = std::ceil( std::nextafter( carl::convert<tNumber, double>( mFixedParameters.globalTimeHorizon / mParameters.timeStep ), std::numeric_limits<double>::infinity() ) ) - node->getTimings().lower();
+		DEBUG( "hypro.reachability", "Start to compute " << segmentsToCompute << " segments." );
+		if ( segmentsToCompute < 0 ) {
+			segmentsToCompute = 0;
+		}
 		safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ), segmentsToCompute );
 	} else {
 		safetyResult = worker.computeTimeSuccessors( node->getInitialSet(), node->getLocation(), std::back_inserter( node->getFlowpipe() ) );
 	}
 
 	// check, whether the full time horizon has been exploited - if not, an invariant has bound the evolution and we might have a timelock
-	bool potentialTimelock = false;
-	bool timelock = true;  // is set to false if there is a transition that is enabled in the last segment
+	bool timeElapseBoundedByModel = false;
+	TRIBOOL timelock = TRIBOOL::NSET;  // is set to false if there is a transition that is enabled in the last segment
 	if ( node->getFlowpipe().size() != worker.maxNumberSegments() ) {
-		DEBUG( "hypro.reachability", "Node has a potential timelock" );
-		potentialTimelock = true;
+		DEBUG( "hypro.reachability", "Node has a potential timelock as the time elapse was bounded by the model" );
+		timeElapseBoundedByModel = true;
+	} else {
+		// we could compute as many segments as requested, but it is unclear, whether a timelock will happen in the future
+		timelock = TRIBOOL::NSET;
 	}
 
 	// test containment of the first n (=2) segments against all other nodes' first m (=12) segments (with the same location)
@@ -126,7 +136,7 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::processNode( LTIWorker<Stat
 	}
 
 	// collect potential Zeno transitions
-	std::vector<const Transition<typename State::NumberType>*> ZenoTransitions{};
+	std::vector<const TransitionT*> ZenoTransitions{};
 	if ( mParameters.detectZenoBehavior && node->getParent() != nullptr ) {
 		// ZenoTransitions = getZenoTransitions( currentNode->getParent(), currentNode );
 		ZenoTransitions = getZenoTransitions( node );
@@ -149,12 +159,12 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::processNode( LTIWorker<Stat
 			carl::Interval<SegmentInd> enabledDuration{ segmentsInterval.lower() * mParameters.timeStepFactor, ( segmentsInterval.upper() + 1 ) * mParameters.timeStepFactor };
 			carl::Interval<TimePoint> globalDuration{ initialSetDuration.lower() + enabledDuration.lower(), initialSetDuration.upper() + enabledDuration.upper() };
 			// if this transition is enabled in the last segment of a flowpipe which is bounded by an invariant, we do not have a timelock
-			if ( potentialTimelock && enabledDuration.upper() == node->getFlowpipe().size() ) {
+			if ( timeElapseBoundedByModel && enabledDuration.upper() == node->getFlowpipe().size() ) {
 				DEBUG( "hypro.reachability", "Node does not have a timelock" );
-				timelock = false;
+				timelock = TRIBOOL::FALSE;
 			}
 			// in any case add node to the search tree
-			ReachTreeNode<State>& childNode = node->addChild( valuationSet, globalDuration, transition );
+			ReachTreeNode<State, LocationT>& childNode = node->addChild( valuationSet, globalDuration, transition );
 			// if desired, try to detect fixed-point
 			bool fixedPointReached = mParameters.detectJumpFixedPoints;
 			auto boundingBox = std::vector<carl::Interval<Number>>{};
@@ -191,6 +201,11 @@ auto LTIAnalyzer<State, Heuristics, Multithreading>::processNode( LTIWorker<Stat
 			}
 		}
 	}
+	// if the time elapse was bounded, but none of the outgoing transitions was enabled at the latest point of the time elapse, we encountered a timelock
+	if ( timeElapseBoundedByModel && timelock == TRIBOOL::NSET ) {
+		timelock = TRIBOOL::TRUE;
+	}
+
 	// set timelock flag
 	node->flagTimelock( timelock );
 	// if node has no children, the node can be flagged as having a fixed point

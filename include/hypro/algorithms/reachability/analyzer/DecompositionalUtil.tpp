@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "DecompositionalUtil.h"
 
 namespace hypro {
@@ -351,13 +360,13 @@ std::vector<Condition<Number>> collectBadStates( const HybridAutomaton<Number>* 
 
 }  // namespace detail
 
-template <typename Representation>
+template <typename Representation, typename Location>
 struct DecompositionalSegmentGen {
 	using Number = typename Representation::NumberType;
-	std::vector<typename boost::iterator_range<TreeIterator<ReachTreeNode<Representation>>>::iterator> nodeIterators;
-	std::vector<typename boost::iterator_range<TreeIterator<ReachTreeNode<Representation>>>::iterator> nodeIteratorEndings;
-	typename boost::iterator_range<TreeIterator<ReachTreeNode<Condition<Number>>>>::iterator dependencyIterator;
-	typename boost::iterator_range<TreeIterator<ReachTreeNode<Condition<Number>>>>::iterator dependencyIteratorEnd;
+	std::vector<typename boost::iterator_range<TreeIterator<ReachTreeNode<Representation, Location>>>::iterator> nodeIterators;
+	std::vector<typename boost::iterator_range<TreeIterator<ReachTreeNode<Representation, Location>>>::iterator> nodeIteratorEndings;
+	typename boost::iterator_range<TreeIterator<ReachTreeNode<Condition<Number>, Location>>>::iterator dependencyIterator;
+	typename boost::iterator_range<TreeIterator<ReachTreeNode<Condition<Number>, Location>>>::iterator dependencyIteratorEnd;
 
 	std::size_t segmentIndex = 0;
 	Decomposition decomposition;
@@ -367,14 +376,14 @@ struct DecompositionalSegmentGen {
 	Decomposition aggregatedDecomp{ { std::vector<std::size_t>(), std::vector<std::size_t>() }, { DynamicType::mixed, DynamicType::discrete } };
 	int discreteSubspace = -1;	// assume a single discrete subspaces (-1 if none)
 
-	DecompositionalSegmentGen( std::vector<std::vector<ReachTreeNode<Representation>>>& roots, std::vector<ReachTreeNode<Condition<Number>>>& depRoots, Decomposition decomp, std::size_t clocks )
+	DecompositionalSegmentGen( std::vector<std::vector<ReachTreeNode<Representation, Location>>>& roots, std::vector<ReachTreeNode<Condition<Number>, Location>>& depRoots, Decomposition decomp, std::size_t clocks )
 		: decomposition( decomp )
 		, clockCount( clocks ) {
 		// initialize iterators for subspace trees
 		nodeIterators.resize( decomposition.subspaces.size() );
 		nodeIteratorEndings.resize( decomposition.subspaces.size() );
 		for ( std::size_t subspace = 0; subspace < decomposition.subspaces.size(); ++subspace ) {
-			std::vector<ReachTreeNode<Representation>*> subspaceRoots;
+			std::vector<ReachTreeNode<Representation, Location>*> subspaceRoots;
 			for ( auto& root : roots ) {
 				subspaceRoots.push_back( &root[subspace] );
 			}

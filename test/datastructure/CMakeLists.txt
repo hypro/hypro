@@ -18,7 +18,7 @@ set(datastructure_test_sources
         TreeTest.cpp
         #StrategyTest.cpp
         HybridAutomataTest.cpp
-        #HybridAutomataOutputTest.cpp
+        HybridAutomataOutputTest.cpp
         WorkQueueTest.cpp
         HybridAutomataParallelCompositionTest.cpp
         )

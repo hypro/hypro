@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /**
@@ -42,15 +42,16 @@ namespace reachability {
  * @tparam     Number          The used number type.
  * @tparam     Representation  The used state set representation type.
  */
-template <typename Representation, typename SearchHeuristic = DepthFirst<Representation>, typename Multithreading = NoMultithreading>
+template <typename Representation, typename Automaton, typename SearchHeuristic = DepthFirst<Representation, typename Automaton::LocationType>, typename Multithreading = NoMultithreading>
 class Reach {
 	using Number = typename Representation::NumberType;
+	using LocationT = typename Automaton::LocationType;
 
   public:
-	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation, LocationT>>;
 
   protected:
-	LTIAnalyzer<Representation, SearchHeuristic, Multithreading> mAnalyzer;
+	LTIAnalyzer<Representation, Automaton, SearchHeuristic, Multithreading> mAnalyzer;
 
   public:
 	/**
@@ -59,7 +60,7 @@ class Reach {
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	Reach( const HybridAutomaton<typename Representation::NumberType>& automaton, const FixedAnalysisParameters& fixedParameters, const AnalysisParameters& parameters, std::vector<ReachTreeNode<Representation>>& roots )
+	Reach( const Automaton& automaton, const FixedAnalysisParameters& fixedParameters, const AnalysisParameters& parameters, std::vector<ReachTreeNode<Representation, LocationT>>& roots )
 		: mAnalyzer( automaton, fixedParameters, parameters, roots ) {}
 
 	/**
@@ -71,16 +72,18 @@ class Reach {
 		return mAnalyzer.run().result();
 	}
 
-	void setCallbacks( const ReachabilityCallbacks<Representation, Location<Number>>& callbacks ) { mAnalyzer.setCallbacks( callbacks ); }
+	void setCallbacks( const ReachabilityCallbacks<Representation, typename Automaton::LocationType>& callbacks ) { mAnalyzer.setCallbacks( callbacks ); }
 };
 
-template <typename Representation>
+template <typename Representation, typename Automaton>
 class ReachUrgency {
+	using LocationT = typename Automaton::LocationType;
+
   public:
-	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation, LocationT>>;
 
   protected:
-	LTISetMinusAnalyzer<Representation> mAnalyzer;
+	LTISetMinusAnalyzer<Representation, Automaton> mAnalyzer;
 
   public:
 	/**
@@ -89,7 +92,7 @@ class ReachUrgency {
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	ReachUrgency( const HybridAutomaton<typename Representation::NumberType>& automaton, const FixedAnalysisParameters& fixedParameters, const AnalysisParameters& parameters, std::vector<ReachTreeNode<Representation>>& roots )
+	ReachUrgency( const Automaton& automaton, const FixedAnalysisParameters& fixedParameters, const AnalysisParameters& parameters, std::vector<ReachTreeNode<Representation, LocationT>>& roots )
 		: mAnalyzer( automaton, fixedParameters, parameters, roots ) {}
 
 	/**
@@ -102,13 +105,15 @@ class ReachUrgency {
 	}
 };
 
-template <typename Representation>
+template <typename Representation, typename Automaton>
 class ReachSingular {
+	using LocationT = typename Automaton::LocationType;
+
   public:
-	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation, LocationT>>;
 
   protected:
-	SingularAnalyzer<Representation> mAnalyzer;
+	SingularAnalyzer<Representation, Automaton> mAnalyzer;
 
   public:
 	/**
@@ -117,7 +122,7 @@ class ReachSingular {
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	ReachSingular( const HybridAutomaton<typename Representation::NumberType>& automaton, const FixedAnalysisParameters& fixedParameters, std::vector<ReachTreeNode<Representation>>& roots )
+	ReachSingular( const Automaton& automaton, const FixedAnalysisParameters& fixedParameters, std::vector<ReachTreeNode<Representation, LocationT>>& roots )
 		: mAnalyzer( automaton, fixedParameters, roots ) {}
 
 	/**
@@ -130,10 +135,12 @@ class ReachSingular {
 	}
 };
 
-template <class Representation, class Method>
+template <class Representation, class Automaton, class Method>
 class ReachBase {
+	using LocationT = typename Automaton::LocationType;
+
   public:
-	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation>>;  ///< return type
+	using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation, LocationT>>;	 ///< return type
 
   protected:
 	Method mAnalyzer;  ///< Analyzer instance
@@ -145,7 +152,7 @@ class ReachBase {
 	 * @param _automaton The analyzed automaton.
 	 * @param _settings The reachability analysis settings.
 	 */
-	ReachBase( const HybridAutomaton<typename Representation::NumberType>& automaton, const Settings& parameters, std::vector<ReachTreeNode<Representation>>& roots )
+	ReachBase( const Automaton& automaton, const Settings& parameters, std::vector<ReachTreeNode<Representation, LocationT>>& roots )
 		: mAnalyzer( automaton, parameters, roots ) {}
 
 	/**
@@ -160,7 +167,3 @@ class ReachBase {
 
 }  // namespace reachability
 }  // namespace hypro
-
-// #include "Reach.tpp"
-// #include "discreteHandling.tpp"
-// #include "terminationHandling.tpp"

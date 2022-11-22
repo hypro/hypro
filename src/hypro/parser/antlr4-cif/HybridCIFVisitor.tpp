@@ -35,13 +35,6 @@ namespace hypro {
 		//optional: initial values, variable declarations, multiple not-so-far handable options like synchronisation etc.
 		visit(ctx->optAutDecls());
 
-		/*
-		std::cout << "Vars are:" << std::endl;
-		for (auto i = vars.begin(); i != vars.end(); ++i)
-    			std::cout << *i << ' ';
-		std::cout << std::endl;
-		*/
-
 		//locations, also containing edge information
 		CIFLocVisitor<Number> locVisitor = CIFLocVisitor<Number>(vars);
 		std::pair< std::vector<Location<Number>*>, std::vector<Transition<Number>*> > result = locVisitor.visit(ctx->locations());

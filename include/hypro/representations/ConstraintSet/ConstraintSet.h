@@ -278,6 +278,12 @@ class ConstraintSetT {
 		mConstants = vector_t<Number>::Zero( 0 );
 		mIsBox = TRIBOOL::NSET;
 	}
+
+	/// Serialization function required by cereal
+	template <typename Archive>
+	void serialize( Archive& ar ) {
+		ar( mConstraints, mConstants, mIsBox );
+	}
 };
 
 /** @} */

@@ -13,19 +13,20 @@
 namespace hypro {
 
 int initializeLogging( int& i ) {
-    carl::logging::logger().configure("logfile_hypro", "hypro.log");
-    carl::logging::logger().filter("logfile_hypro")("hypro", carl::logging::LogLevel::LVL_INFO)("hypro.casestudies", carl::logging::LogLevel::LVL_INFO)("hypro.reachability",
-                                                                                                                                                        carl::logging::LogLevel::LVL_DEBUG);
+	carl::logging::logger().configure( "logfile_hypro", "hypro.log" );
+	carl::logging::logger().filter( "logfile_hypro" )( "hypro", carl::logging::LogLevel::LVL_INFO )( "hypro.casestudies", carl::logging::LogLevel::LVL_INFO )( "hypro.datastructures",
+																																							   carl::logging::LogLevel::LVL_TRACE );
 
-    carl::logging::logger().configure("pathfile_hypro", "unfinished_paths.log");
-    carl::logging::logger().filter("pathfile_hypro")("benchmark.paths", carl::logging::LogLevel::LVL_TRACE);
+	carl::logging::logger().configure( "pathfile_hypro", "unfinished_paths.log" );
+	carl::logging::logger().filter( "pathfile_hypro" )( "benchmark.paths", carl::logging::LogLevel::LVL_TRACE );
 
-    carl::logging::logger().configure("stdout", std::cout);
-    carl::logging::logger().filter("stdout")("hypro", carl::logging::LogLevel::LVL_OFF)
-        //("hypro.representations", carl::logging::LogLevel::LVL_TRACE)
-        //("hypro.datastructures.timing", carl::logging::LogLevel::LVL_TRACE)
-        //("hypro.datastructures.hiv", carl::logging::LogLevel::LVL_TRACE)
-            ;
+	carl::logging::logger().configure( "stdout", std::cout );
+	carl::logging::logger().filter( "stdout" )( "hypro", carl::logging::LogLevel::LVL_OFF )
+		  //( "hypro.datastructures.hybridAutomaton", carl::logging::LogLevel::LVL_TRACE )
+		  //( "hypro.datastructures", carl::logging::LogLevel::LVL_TRACE )
+		  //("hypro.representations", carl::logging::LogLevel::LVL_TRACE)
+		  //("hypro.datastructures.timing", carl::logging::LogLevel::LVL_TRACE)
+		  ;
 
 	carl::logging::logger().resetFormatter();
 

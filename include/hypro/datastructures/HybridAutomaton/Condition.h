@@ -161,6 +161,12 @@ class Condition {
 		return out;
 	}
 
+	/// Serialization function required by cereal
+	template <typename Archive>
+	void serialize( Archive& ar ) {
+		ar( mConstraints, mConditionIsBox, mConditionSetState );
+	}
+
   private:
 	void checkAxisAligned( std::size_t i ) const;
 	void updateSetState() const;

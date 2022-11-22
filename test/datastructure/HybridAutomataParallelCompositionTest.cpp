@@ -1,12 +1,22 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * Testfile for parallel composition of hybrid automata.
  */
 
 #include "../include/test/defines.h"
-#include "datastructures/HybridAutomaton/HybridAutomaton.h"
-#include "util/plotting/HybridAutomatonPlotter.h"
 
 #include "gtest/gtest.h"
+#include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/HybridAutomaton/HybridAutomatonComp.h>
+#include <hypro/util/plotting/HybridAutomatonPlotter.h>
 
 using namespace hypro;
 using namespace carl;
@@ -407,4 +417,355 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, sharedVariables ) {
 	EXPECT_EQ( 1, res.getVariables().size() );
 	ASSERT_EQ( 6, res.getLocations().size() );
 	// TODO Add more assertions
+}
+
+TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSingle ) {
+	using namespace hypro;
+	matrix_t<TypeParam> flow = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow( 1, 1 ) = 0;
+	auto ha1 = HybridAutomaton<TypeParam>();
+	ha1.setVariables( { "a" } );
+	// locations
+	auto* l1 = ha1.createLocation( "l1" );
+	l1->setFlow( flow );
+	auto* l2 = ha1.createLocation( "l2" );
+	l2->setFlow( flow );
+	auto* l3 = ha1.createLocation( "l3" );
+	l3->setFlow( flow );
+	// transitions
+	auto* t12 = l1->createTransition( l2 );
+	auto* t23 = l2->createTransition( l3 );
+	auto* t31 = l3->createTransition( l1 );
+	// initial configuration: l1, a = 1
+	ha1.setInitialStates( { { l1, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
+	auto ha2 = ha1;	 // copy for later
+	{				 // composition
+		auto cmp = HybridAutomatonComp<TypeParam>();
+		cmp.setLazy( true );
+		cmp.addAutomaton( std::move( ha1 ) );
+		EXPECT_EQ( 0, cmp.getLocations().size() );
+		EXPECT_EQ( 1, cmp.getVariables().size() );
+		// access to the initial location should affect the locations size
+		auto initialStates = cmp.getInitialStates();
+		EXPECT_EQ( 1, cmp.getLocations().size() );
+		EXPECT_EQ( "l1", ( std::begin( initialStates )->first )->getName() );
+		EXPECT_EQ( 1, cmp.getLocations().size() );
+		EXPECT_EQ( 1, ( std::begin( initialStates )->first )->getTransitions().size() );
+		// accessing some property, e.g. the name of the target location of the first transition should also add the target location to the location set
+		const auto& name = cmp.getLocations().front()->getTransitions().front()->getTarget()->getName();
+		EXPECT_EQ( 2, cmp.getLocations().size() );
+	}
+	{
+		auto cmp = HybridAutomatonComp<TypeParam>();
+		cmp.setLazy( false );
+		cmp.addAutomaton( std::move( ha2 ) );
+		std::cout << "Start test" << std::endl;
+		EXPECT_EQ( 3, cmp.getLocations().size() );
+		// access to the initial location should affect the locations size
+		auto initialStates = cmp.getInitialStates();
+		EXPECT_EQ( "l1", ( std::begin( initialStates )->first )->getName() );
+		EXPECT_EQ( 1, ( std::begin( initialStates )->first )->getTransitions().size() );
+		// accessing some property, e.g. the name of the target location of the first transition should also add the target location to the location set
+		const auto& name = cmp.getLocations().front()->getTransitions().front()->getTarget()->getName();
+		EXPECT_EQ( 3, cmp.getLocations().size() );
+	}
+}
+
+TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompTwoAutomata ) {
+	using namespace hypro;
+	matrix_t<TypeParam> flow = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow( 1, 1 ) = 0;
+	auto ha1 = HybridAutomaton<TypeParam>();
+	ha1.setVariables( { "a" } );
+	// locations
+	auto* l1 = ha1.createLocation( "l1" );
+	l1->setFlow( flow );
+	auto* l2 = ha1.createLocation( "l2" );
+	l2->setFlow( flow );
+	auto* l3 = ha1.createLocation( "l3" );
+	l3->setFlow( flow );
+	// transitions
+	auto* t12 = l1->createTransition( l2 );
+	t12->addLabel( Label{ "label" } );
+	auto* t23 = l2->createTransition( l3 );
+	auto* t31 = l3->createTransition( l1 );
+	// initial configuration: l1, a = 1
+	ha1.setInitialStates( { { l1, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
+	// second automaton
+	auto ha2 = HybridAutomaton<TypeParam>();
+	ha2.setVariables( { "b" } );
+	// locations
+	auto* l4 = ha2.createLocation( "l4" );
+	l4->setFlow( flow );
+	auto* l5 = ha2.createLocation( "l5" );
+	l5->setFlow( flow );
+	auto* l6 = ha2.createLocation( "l6" );
+	l6->setFlow( flow );
+	// transitions
+	auto* t12_2 = l4->createTransition( l5 );
+	auto* t23_2 = l5->createTransition( l6 );
+	t23_2->addLabel( Label{ "label" } );
+	auto* t31_2 = l6->createTransition( l4 );
+	// initial configuration: l1, a = 1
+	ha2.setInitialStates( { { l4, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
+	// composition
+	auto cmp = HybridAutomatonComp<TypeParam>();
+	cmp.setLazy( true );
+	using Ltype = typename decltype( cmp )::LocationType;
+	cmp.addAutomaton( std::move( ha1 ) );
+	cmp.addAutomaton( std::move( ha2 ) );
+	EXPECT_EQ( 0, cmp.getLocations().size() );
+	EXPECT_EQ( 2, cmp.getVariables().size() );
+	// access to the initial location should affect the locations size
+	auto initialStates = cmp.getInitialStates();
+	EXPECT_EQ( 1, cmp.getLocations().size() );
+	EXPECT_EQ( "l1_l4", ( std::begin( initialStates )->first )->getName() );
+	EXPECT_EQ( 1, cmp.getLocations().size() );
+	auto* l14 = std::begin( initialStates )->first;
+	ASSERT_EQ( 1, l14->getTransitions().size() );
+	// move to next location
+	const auto& transitions = l14->getTransitions();
+	EXPECT_TRUE( transitions.size() == 1 );
+	auto* l15 = l14->getTransitions().front()->getTarget();
+	EXPECT_EQ( "l1_l5", l15->getName() );
+	EXPECT_EQ( 2, cmp.getLocations().size() );
+	ASSERT_EQ( 1, l15->getTransitions().size() );
+	ASSERT_EQ( 1, l15->getTransitions().front()->getLabels().size() );
+	EXPECT_EQ( Label( "label" ), l15->getTransitions().front()->getLabels().front() );
+	//
+	auto* l26 = l15->getTransitions().front()->getTarget();
+	EXPECT_EQ( "l2_l6", l26->getName() );
+	EXPECT_EQ( 3, cmp.getLocations().size() );
+	ASSERT_EQ( 2, l26->getTransitions().size() );
+	//
+	auto* tmp = l26->getTransitions().front()->getTarget();
+	Ltype* l24 = nullptr;
+	Ltype* l36 = nullptr;
+	if ( tmp->getName() == "l2_l4" ) {
+		l24 = tmp;
+		l36 = l26->getTransitions().back()->getTarget();
+	} else {
+		l24 = l26->getTransitions().back()->getTarget();
+		l36 = tmp;
+	}
+	//
+	EXPECT_EQ( "l2_l4", l24->getName() );
+	EXPECT_EQ( 5, cmp.getLocations().size() );
+	ASSERT_EQ( 2, l24->getTransitions().size() );
+	//
+	EXPECT_EQ( "l3_l6", l36->getName() );
+	EXPECT_EQ( 7, cmp.getLocations().size() );
+	ASSERT_EQ( 2, l36->getTransitions().size() );
+	//
+	Ltype* l25 = nullptr;
+	Ltype* l34 = nullptr;
+	tmp = l24->getTransitions().front()->getTarget();
+	if ( tmp->getName() == "l2_l5" ) {
+		l25 = tmp;
+		l34 = l24->getTransitions().back()->getTarget();
+	} else {
+		l25 = l24->getTransitions().back()->getTarget();
+		l34 = tmp;
+	}
+	//
+	EXPECT_EQ( "l2_l5", l25->getName() );
+	EXPECT_EQ( 8, cmp.getLocations().size() );
+	ASSERT_EQ( 1, l25->getTransitions().size() );
+	//
+	EXPECT_EQ( "l3_l4", l34->getName() );
+	EXPECT_EQ( 9, cmp.getLocations().size() );
+	ASSERT_EQ( 2, l36->getTransitions().size() );
+	//
+	auto* l35 = l25->getTransitions().front()->getTarget();
+	EXPECT_EQ( "l3_l5", l35->getName() );
+	EXPECT_EQ( 9, cmp.getLocations().size() );
+	ASSERT_EQ( 1, l35->getTransitions().size() );
+	// l15 is already known, checking for comparison and also checking its properties should not affect the number of locations
+	EXPECT_EQ( l15->getName(), l35->getTransitions().front()->getTarget()->getName() );
+	EXPECT_EQ( 9, cmp.getLocations().size() );
+	//
+	tmp = l34->getTransitions().front()->getTarget();
+	if ( tmp->getName() == "l3_l5" ) {
+		EXPECT_EQ( "l1_l4", l34->getTransitions().back()->getTarget()->getName() );
+	} else {
+		EXPECT_EQ( "l3_l5", l34->getTransitions().back()->getTarget()->getName() );
+		EXPECT_EQ( "l1_l4", l34->getTransitions().front()->getTarget()->getName() );
+	}
+	EXPECT_EQ( 9, cmp.getLocations().size() );
+	//
+	tmp = l36->getTransitions().front()->getTarget();
+	Ltype* l16 = nullptr;
+	if ( tmp->getName() == "l3_l4" ) {
+		l16 = l36->getTransitions().back()->getTarget();
+		EXPECT_EQ( l34->getName(), tmp->getName() );
+	} else {
+		l16 = tmp;
+		EXPECT_EQ( l34->getName(), l36->getTransitions().back()->getTarget()->getName() );
+	}
+	//
+	EXPECT_EQ( "l1_l6", l16->getName() );
+	EXPECT_EQ( 9, cmp.getLocations().size() );
+	ASSERT_EQ( 1, l16->getTransitions().size() );
+	EXPECT_EQ( l14->getName(), l16->getTransitions().front()->getTarget()->getName() );
+}
+
+TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSharedVariables ) {
+	using namespace hypro;
+	matrix_t<TypeParam> flow2 = matrix_t<TypeParam>::Identity( 3, 3 );
+	flow2( 2, 2 ) = 0;
+	flow2( 0, 0 ) = 2;
+	flow2( 0, 2 ) = 3;
+	matrix_t<TypeParam> flow1 = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow1( 1, 1 ) = 0;
+	std::cout << "Flow2: " << flow2 << ", flow1: " << flow1 << std::endl;
+	auto ha1 = HybridAutomaton<TypeParam>();
+	ha1.setVariables( { "a", "b" } );
+	// locations
+	auto* l1 = ha1.createLocation( "l1" );
+	l1->setFlow( flow2 );
+	auto* l2 = ha1.createLocation( "l2" );
+	l2->setFlow( flow2 );
+	// transitions
+	auto* t12 = l1->createTransition( l2 );
+	// guard a >= 0
+	matrix_t<TypeParam> guardConstr = matrix_t<TypeParam>::Zero( 1, 2 );
+	auto guardConst = vector_t<TypeParam>::Zero( 1 );
+	guardConstr( 0, 0 ) = TypeParam( -1 );
+	t12->setGuard( { guardConstr, guardConst } );
+	auto* t23 = l2->createTransition( l1 );
+	t23->addLabel( Label{ "label" } );
+	// guard a <= 1
+	matrix_t<TypeParam> guardConstr1 = matrix_t<TypeParam>::Zero( 1, 2 );
+	vector_t<TypeParam> guardConst1 = vector_t<TypeParam>::Ones( 1 );
+	guardConstr1( 0, 0 ) = 1;
+	t23->setGuard( { guardConstr1, guardConst1 } );
+	// initial configuration: l1, a = 1
+	ha1.setInitialStates( { { l1, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 }, carl::Interval<TypeParam>{ 1 } } ) } } );
+	// second automaton
+	auto ha2 = HybridAutomaton<TypeParam>();
+	ha2.setVariables( { "b" } );
+	// locations
+	auto* l4 = ha2.createLocation( "l4" );
+	l4->setFlow( flow1 );
+	// transitions
+	auto* t11 = l4->createTransition( l4 );
+	t11->addLabel( Label{ "label" } );
+	t11->setUrgent();
+	// guard b >= 2
+	matrix_t<TypeParam> guardConstr2 = matrix_t<TypeParam>::Zero( 1, 1 );
+	vector_t<TypeParam> guardConst2 = vector_t<TypeParam>::Ones( 1 );
+	guardConstr2( 0, 0 ) = -1;
+	guardConst2( 0 ) = -2;
+	t11->setGuard( { guardConstr2, guardConst2 } );
+	// initial configuration: l1, a = 1
+	ha2.setInitialStates( { { l4, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
+	// composition
+	auto cmp = HybridAutomatonComp<TypeParam>();
+	cmp.setLazy( true );
+	using Ltype = typename decltype( cmp )::LocationType;
+	cmp.addAutomaton( std::move( ha1 ) );
+	cmp.addAutomaton( std::move( ha2 ) );
+	//
+	EXPECT_EQ( 2, cmp.getVariables().size() );
+	auto expectedVariables = std::vector<std::string>{ "a", "b" };
+	EXPECT_EQ( expectedVariables, cmp.getVariables() );
+	EXPECT_EQ( 0, cmp.getLocations().size() );
+	//
+	auto initialStates = cmp.getInitialStates();
+	EXPECT_EQ( 1, cmp.getLocations().size() );
+	EXPECT_EQ( "l1_l4", initialStates.begin()->first->getName() );
+	EXPECT_EQ( 1, cmp.getLocations().size() );
+	EXPECT_EQ( flow2, cmp.getLocations().front()->getLinearFlow().getFlowMatrix() );
+	ASSERT_EQ( 1, cmp.getLocations().front()->getTransitions().size() );
+	auto* t1 = cmp.getLocations().front()->getTransitions().front().get();
+	EXPECT_TRUE( t1->getLabels().empty() );
+	EXPECT_FALSE( t1->isUrgent() );
+	EXPECT_EQ( "l2_l4", t1->getTarget()->getName() );
+	auto* loc2 = t1->getTarget();
+	EXPECT_EQ( 2, cmp.getLocations().size() );
+	ASSERT_EQ( 1, loc2->getTransitions().size() );
+	auto* t2 = loc2->getTransitions().front().get();
+	EXPECT_TRUE( t2->isUrgent() );
+	auto expectedLabels = std::vector<Label>{ Label{ "label" } };
+	EXPECT_EQ( expectedLabels, t2->getLabels() );
+	matrix_t<TypeParam> guardConstr3 = matrix_t<TypeParam>::Zero( 2, 2 );
+	vector_t<TypeParam> guardConst3 = vector_t<TypeParam>::Zero( 2 );
+	guardConstr3( 0, 0 ) = 1;
+	guardConst3( 0 ) = 1;
+	guardConstr3( 1, 1 ) = -1;
+	guardConst3( 1 ) = -2;
+	auto expectedGuard = hypro::Condition<TypeParam>{ guardConstr3, guardConst3 };
+	EXPECT_EQ( expectedGuard, t2->getGuard() );
+}
+
+TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompMasterLocations ) {
+	using namespace hypro;
+	matrix_t<TypeParam> flow2 = matrix_t<TypeParam>::Identity( 3, 3 );
+	flow2( 2, 2 ) = 0;
+	flow2( 0, 0 ) = 2;
+	flow2( 1, 1 ) = 2;
+	flow2( 0, 2 ) = 3;
+	matrix_t<TypeParam> flow1 = matrix_t<TypeParam>::Identity( 2, 2 );
+	flow1( 1, 1 ) = 0;
+	auto ha1 = HybridAutomaton<TypeParam>();
+	ha1.setVariables( { "a", "b" } );
+	// locations
+	auto* l1 = ha1.createLocation( "l1" );
+	l1->setFlow( flow2 );
+	auto* l2 = ha1.createLocation( "l2" );
+	l2->setFlow( flow2 );
+	// transitions
+	auto* t12 = l1->createTransition( l2 );
+	auto* t23 = l2->createTransition( l1 );
+	t23->addLabel( Label{ "label" } );
+	// initial configuration: l1, a = 1
+	ha1.setInitialStates( { { l1, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 }, carl::Interval<TypeParam>{ 1 } } ) } } );
+	// second automaton
+	auto ha2 = HybridAutomaton<TypeParam>();
+	ha2.setVariables( { "b" } );
+	// locations
+	auto* l4 = ha2.createLocation( "l4" );
+	l4->setFlow( flow1 );
+	// transitions
+	auto* t11 = l4->createTransition( l4 );
+	t11->addLabel( Label{ "label" } );
+	// initial configuration: l1, a = 1
+	ha2.setInitialStates( { { l4, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
+	// composition
+	auto cmp = HybridAutomatonComp<TypeParam>();
+	cmp.setLazy( true );
+	using Ltype = typename decltype( cmp )::LocationType;
+	cmp.addAutomaton( std::move( ha1 ) );
+	cmp.addAutomaton( std::move( ha2 ) );
+	// set master locations: l1 in component 0 should be master for b. Since l2 has the same flow, the composition should throw an exception once l2_l4 is created
+	cmp.addMasterLocations( 0, { { "b", { 0 } } } );
+	//
+	EXPECT_EQ( 2, cmp.getVariables().size() );
+	auto expectedVariables = std::vector<std::string>{ "a", "b" };
+	EXPECT_EQ( expectedVariables, cmp.getVariables() );
+	EXPECT_EQ( 0, cmp.getLocations().size() );
+	//
+	auto initialStates = cmp.getInitialStates();
+	EXPECT_EQ( 1, cmp.getLocations().size() );
+	EXPECT_EQ( "l1_l4", initialStates.begin()->first->getName() );
+	EXPECT_EQ( 1, cmp.getLocations().size() );
+	auto* loc = cmp.getLocations().front();
+	EXPECT_EQ( flow2, loc->getLinearFlow().getFlowMatrix() );
+	ASSERT_EQ( 1, initialStates.begin()->first->getTransitions().size() );
+	//
+	// EXPECT_THROW( initialStates.begin()->first->getTransitions().front()->getTarget()->getName(), std::logic_error );
+	// add second master, things should work then
+	cmp.addMasterLocations( 0, { { "b", { 1 } } } );
+	//
+	EXPECT_EQ( 0, cmp.getLocations().size() );
+	//
+	initialStates = cmp.getInitialStates();
+	EXPECT_EQ( 1, cmp.getLocations().size() );
+	EXPECT_EQ( "l1_l4", initialStates.begin()->first->getName() );
+	EXPECT_EQ( 1, cmp.getLocations().size() );
+	loc = cmp.getLocations().front();
+	EXPECT_EQ( flow2, loc->getLinearFlow().getFlowMatrix() );
+	ASSERT_EQ( 1, initialStates.begin()->first->getTransitions().size() );
+	//
+	EXPECT_NO_THROW( initialStates.begin()->first->getTransitions().front()->getTarget()->getName() );
 }

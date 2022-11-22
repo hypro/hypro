@@ -35,9 +35,7 @@ class AntlrParserTest : public ::testing::Test {
 
 	void cwd() {
 		char cwd[1024];
-		if ( getcwd( cwd, sizeof( cwd ) ) != nullptr )
-			fprintf( stdout, "Current working dir: %s\n", cwd );
-		else
+		if ( getcwd( cwd, sizeof( cwd ) ) == nullptr )
 			std::cerr << "getcwd() error" << std::endl;
 	}
 };
@@ -315,7 +313,6 @@ TYPED_TEST( AntlrParserTest, BracketParsingTest ) {
 		controlMatrix( 12, 1 ) = 3;
 		controlMatrix( 12, 13 ) = 4;
 		if ( std::is_same<TypeParam, double>::value ) {
-			std::cout << loc->getLinearFlow().getFlowMatrix() << std::endl;
 			EXPECT_TRUE( controlMatrix.isApprox( loc->getLinearFlow().getFlowMatrix() ) );
 		} else {
 			SUCCEED();

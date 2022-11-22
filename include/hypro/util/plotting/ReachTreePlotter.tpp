@@ -13,8 +13,8 @@
 
 namespace hypro::plotting {
 
-template <typename Representation>
-void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Representation>*>& highlights ) {
+template <typename Node>
+void ReachTreePlotter<Node>::plot( const std::vector<Node*>& highlights ) {
 	// graph and context variables
 	Agraph_t* graph;
 	GVC_t* gvc;
@@ -31,8 +31,8 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 
 	// insert nodes
 	std::size_t count{ 0 };
-	for ( const ReachTreeNode<Representation>& root : mRoots ) {
-		for ( const ReachTreeNode<Representation>& node : preorder( root ) ) {
+	for ( const Node& root : mRoots ) {
+		for ( const Node& node : preorder( root ) ) {
 			std::string name = "n_" + std::to_string( count++ ) + ": ";
 			if ( node.getParent() == nullptr ) {
 				if ( node.getChildren().empty() ) {
@@ -89,8 +89,8 @@ void ReachTreePlotter<Representation>::plot( const std::vector<ReachTreeNode<Rep
 	gvFreeContext( gvc );
 }
 
-template <typename Representation>
-void ReachTreePlotter<Representation>::plotPath( const ReachTreeNode<Representation>* node, const std::vector<ReachTreeNode<Representation>*>& highlights ) {
+template <typename Node>
+void ReachTreePlotter<Node>::plotPath( const Node* node, const std::vector<Node*>& highlights ) {
 	// graph and context variables
 	Agraph_t* graph;
 	GVC_t* gvc;
@@ -107,7 +107,7 @@ void ReachTreePlotter<Representation>::plotPath( const ReachTreeNode<Representat
 	agattr( graph, AGNODE, std::string( "shape" ).data(), std::string( "record" ).data() );
 
 	// collect nodes in order
-	std::vector<std::pair<ReachTreeNode<Representation> const*, std::vector<ReachTreeNode<Representation> const*>>> pathNodes;
+	std::vector<std::pair<Node const*, std::vector<Node const*>>> pathNodes;
 	auto current = node;
 	while ( current != nullptr ) {
 		pathNodes.push_back( std::make_pair( current, current->getSiblings() ) );

@@ -8,6 +8,7 @@
  */
 
 #include "benchmarkPolytope.h"
+
 #include <valgrind/callgrind.h>
 
 namespace benchmark {
@@ -51,7 +52,6 @@ Results<std::size_t> hPolyContainment( const Settings& settings ) {
 			  hpolyCache{ hpoly };
 
 		auto creationTime = creationTimer.elapsed();
-		std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
 		ress.mCreationTime += creationTime;
 
 		CALLGRIND_START_INSTRUMENTATION;

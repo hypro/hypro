@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -19,6 +19,7 @@
 #include "../config.h"
 #include "../types.h"
 #include "../util/VariablePool.h"
+#include "../util/adaptions_eigen/transformation.h"
 
 #include <set>
 #include <vector>
@@ -119,6 +120,15 @@ class Point {
 	void extend( const Number& val ) {
 		mCoordinates.conservativeResize( mCoordinates.rows() + 1 );
 		mCoordinates( mCoordinates.rows() - 1 ) = val;
+	}
+
+	/**
+	 * @brief Appends the desired number of zeroes at the end of the coordinates lifting the point to a higher dimensional space.
+	 * @param numberZeroes The desired number of zeroes
+	 */
+	Point<Number>& appendZeroes( std::size_t numberZeroes ) {
+		hypro::appendZeroes( mCoordinates, numberZeroes );
+		return *this;
 	}
 
 	/**

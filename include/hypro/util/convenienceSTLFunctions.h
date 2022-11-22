@@ -7,28 +7,34 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
+/*
+ * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 25.07.22.
+ */
+
+#ifndef HYPRO_CONVENIENCESTLFUNCTIONS_H
+#define HYPRO_CONVENIENCESTLFUNCTIONS_H
+
+#include <algorithm>
+#include <vector>
 
 namespace hypro {
 
-template <typename Representation, typename Location>
-class rectangularGuardHandler {
-	using Number = typename Representation::NumberType;
-	using TransitionContainmentMap = std::map<const Transition<Location>*, CONTAINMENT>;
-
-  public:
-	using TransitionStatesMap = std::map<Transition<Location>*, std::vector<Representation> >;
-
-	void operator()( const Representation& stateSet, const Location* loc );
-
-	const TransitionStatesMap& getGuardSatisfyingStateSets() const { return mGuardSatisfyingStates; }
-	const TransitionContainmentMap& getGuardContainment() const { return mGuardContainment; }
-
-  protected:
-	TransitionStatesMap mGuardSatisfyingStates;
-	TransitionContainmentMap mGuardContainment;
-};
+/**
+ * Get the index of an element in a vector
+ * @tparam T Type of elements
+ * @param sequence The vector
+ * @param elem The element to search for
+ * @return The index of the element in the vector or -1 if the element is not contained
+ */
+template <typename T>
+std::size_t getIndex( const std::vector<T>& sequence, T elem ) {
+	auto it = std::find( std::begin( sequence ), std::end( sequence ), std::forward<T>( elem ) );
+	if ( it == std::end( sequence ) ) {
+		return -1;
+	}
+	return ( it - std::begin( sequence ) );
+}
 
 }  // namespace hypro
 
-#include "rectangularGuardHandler.tpp"
+#endif	// HYPRO_CONVENIENCESTLFUNCTIONS_H

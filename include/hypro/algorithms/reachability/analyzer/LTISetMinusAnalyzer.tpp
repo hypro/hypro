@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "LTISetMinusAnalyzer.h"
 
 #include <algorithm>
@@ -5,32 +14,27 @@
 
 namespace hypro {
 
-template <typename State>
-auto LTISetMinusAnalyzer<State>::run() -> LTISetMinusResult {
-	//Setup settings for flowpipe construction in worker
-	TimeTransformationCache<Number> transformationCache;
-	LTISetMinusWorker<State> worker{
+template <typename State, typename Automaton>
+auto LTISetMinusAnalyzer<State, Automaton>::run() -> LTISetMinusResult {
+	// Setup settings for flowpipe construction in worker
+	TimeTransformationCache<LocationT> transformationCache;
+	LTISetMinusWorker<State, Automaton> worker{
 		  *mHybridAutomaton,
 		  mParameters,
 		  mFixedParameters.localTimeHorizon,
 		  transformationCache };
 
 	while ( !mWorkQueue.empty() ) {
-		ReachTreeNode<State>* currentNode = mWorkQueue.back();
+		auto* currentNode = mWorkQueue.back();
 		mWorkQueue.pop_back();
 		REACHABILITY_RESULT safetyResult;
 
-		std::cout << "analyzer vor computetimesucessors" << currentNode->getInitialSet() << std::endl;
 		safetyResult = worker.computeTimeSuccessors( currentNode->getInitialSet(), currentNode->getLocation(), std::back_inserter( currentNode->getFlowpipe() ) );
-		std::cout << "analyzer nach computetimesucessors";
-		for (auto segment : currentNode->getFlowpipe()){
-			std::cout << segment.vertices() << std::endl;
-		}		
 		if ( safetyResult == REACHABILITY_RESULT::UNKNOWN ) {
 			return { Failure{ currentNode } };
 		}
 
-		//Do not perform discrete jump if jump depth was reached
+		// Do not perform discrete jump if jump depth was reached
 		if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) continue;
 
 		// create jump successor tasks
@@ -53,7 +57,7 @@ auto LTISetMinusAnalyzer<State>::run() -> LTISetMinusResult {
 					fixedPointReached = detectFixedPoint( valuationSet, transition->getTarget() );
 				}
 				// in any case add node to the search tree
-				ReachTreeNode<State>& childNode = currentNode->addChild( valuationSet, globalDuration, transition );
+				auto& childNode = currentNode->addChild( valuationSet, globalDuration, transition );
 				// set bounding box to speed up search in case the option is enabled
 				if ( mParameters.detectJumpFixedPoints ) {
 					childNode.setBoundingBox( boundingBox );
@@ -64,14 +68,13 @@ auto LTISetMinusAnalyzer<State>::run() -> LTISetMinusResult {
 				}
 			}
 		}
-		std::cout << "analyzer nach computejumpsucessors, workqueuesize: " << mWorkQueue.size() << std::endl;
 	}
 
 	return { LTISetMinusSuccess{} };
 }
 
-template <typename State>
-bool LTISetMinusAnalyzer<State>::detectFixedPoint( const State& valuationSet, const Location<Number>* loc ) {
+template <typename State, typename Automaton>
+bool LTISetMinusAnalyzer<State, Automaton>::detectFixedPoint( const State& valuationSet, const typename Automaton::LocationType* loc ) {
 	using Number = typename State::NumberType;
 #ifdef HYPRO_STATISTICS
 	START_BENCHMARK_OPERATION( "Fixed-point detection" );
@@ -83,7 +86,6 @@ bool LTISetMinusAnalyzer<State>::detectFixedPoint( const State& valuationSet, co
 			// if the location matches and the bounding boxes contain each other, then also perform the (possibly expensive) full containment test.
 			if ( nodeInitialBoundingBox && node.getLocation() == loc && std::equal( std::begin( boundingBox ), std::end( boundingBox ), std::begin( nodeInitialBoundingBox.value() ), std::end( nodeInitialBoundingBox.value() ), []( const auto& setBoxIntv, const auto& initBoxIntv ) { return initBoxIntv.contains( setBoxIntv ); } ) && node.getInitialSet().contains( valuationSet ) ) {
 				TRACE( "hypro.reachability", "Fixed-point detected." );
-				std::cout << "Fixed point detected." << std::endl;
 #ifdef HYPRO_STATISTICS
 				STOP_BENCHMARK_OPERATION( "Fixed-point detection" );
 #endif

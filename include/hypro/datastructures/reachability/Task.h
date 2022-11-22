@@ -1,6 +1,6 @@
 #pragma once
 #include "../HybridAutomaton/Path.h"
-#include "ReachTreeNode.h"
+#include "ReachTreeNodev2.h"
 
 namespace hypro {
 
