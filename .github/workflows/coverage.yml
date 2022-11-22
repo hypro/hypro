@@ -31,7 +31,7 @@ jobs:
       - name: Download Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && sudo apt install libeigen3-dev libboost-chrono1.71-dev libboost-system1.71-dev libboost-program-options1.71-dev libboost-test1.71-dev libboost-timer1.71-dev libboost-serialization1.71-dev uuid-dev doxygen
+        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && sudo apt install libeigen3-dev libboost-chrono-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-serialization-dev uuid-dev doxygen
 
       - name: Download & Unzip Build-wrapper & scanner
         shell: bash
@@ -85,4 +85,3 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: ${{runner.workspace}}/hypro
         run: ${{runner.workspace}}/dependencies/sonar-scanner-4.5.0.2216-linux/bin/sonar-scanner -X
-
