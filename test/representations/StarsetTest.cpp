@@ -79,11 +79,6 @@ TYPED_TEST(StarsetTest, Constructor){
 
     auto ikincidegismis=this->myStar1.affineTransformation(transmat,offset);
     auto sonucikinci=ikincidegismis.unite(this->myStar1);
-    //hypro::Starset<TypeParam> sonucbirinci=ikincidegismis.unite(this->myStar1);
-    std::cout<<"vertices"<<ikincidegismis.vertices()<<std::endl;
-    std::cout<<"vertices"<<anotherHPolytope2.vertices()<<std::endl;
-
-    //std::cout<<"vertices"<<sonucbirinci.vertices()<<std::endl;
     hypro::Plotter<TypeParam> &plotter = hypro::Plotter<TypeParam>::getInstance();
 
     plotter.setFilename("Unitewhat");
@@ -138,10 +133,6 @@ TYPED_TEST(StarsetTest, Affine){
 
     hypro::Starset<TypeParam> myStar55=myStar3.affineTransformation(transformedgen,offset);
     hypro::HPolytope<TypeParam> anotherHPolytope2=anotherHPolytope.affineTransformation(transformedgen,offset);
-    
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope.affineTransformation(transformedgen,offset).vertices()<<std::endl;
-
 
     //EXPECT_EQ(myStar3.generator(),transformedgen);
     //EXPECT_EQ(myStar3.center(),offset+transmat*this->myStar1.center());
@@ -171,27 +162,15 @@ TYPED_TEST(StarsetTest, HalfspaceIntersection_s){
 
     hypro::Starset<TypeParam> myStar55=myStar3.intersectHalfspace(halff);
     hypro::HPolytope<TypeParam> anotherHPolytope2=anotherHPolytope.intersectHalfspace(halff);
-    std::cout<<"1:"<<std::endl;
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope2.vertices()<<std::endl;
 
     myStar55=myStar3.intersectHalfspace(halff1);
     anotherHPolytope2=anotherHPolytope.intersectHalfspace(halff1);
-    std::cout<<"2:"<<std::endl;
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope2.vertices()<<std::endl;
 
     myStar55=myStar3.intersectHalfspace(halff2);
     anotherHPolytope2=anotherHPolytope.intersectHalfspace(halff2);
-    std::cout<<"3:"<<std::endl;
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope2.vertices()<<std::endl;
 
     myStar55=myStar3.intersectHalfspace(halff3);
     anotherHPolytope2=anotherHPolytope.intersectHalfspace(halff3);
-    std::cout<<"4:"<<std::endl;
-    std::cout<<myStar55.vertices()<<std::endl;
-    std::cout<<anotherHPolytope2.vertices()<<std::endl;
     //EXPECT_EQ(myStar3.shape(),shapecheck);
     //EXPECT_EQ(myStar3.limits(),limitcheck);
     
@@ -200,7 +179,6 @@ TYPED_TEST(StarsetTest, HalfspaceIntersection_s){
 }
 TYPED_TEST(StarsetTest, MinkowskiSum){
     hypro::Starset<TypeParam> myStar3=this->myStar1.minkowskiSum(this->myStar2);
-    std::cout<<myStar3.shape()<<std::endl;
 }
 
 TYPED_TEST(StarsetTest, Containspoint){
@@ -209,25 +187,20 @@ TYPED_TEST(StarsetTest, Containspoint){
 }
 
 TYPED_TEST(StarsetTest, Vertices){
-    std::cout<<this->myStar1.vertices()<<std::endl;
 }
 
 TYPED_TEST(StarsetTest, Empty){
-    std::cout<<this->myStar1.empty()<<std::endl;
     EXPECT_EQ(this->myStar1.empty(),false);
 }
 
 
 TYPED_TEST(StarsetTest, ContainsStar){
-    std::cout<<this->myStar1.contains(this->myStar2)<<std::endl;
 
 }
 
 
 TYPED_TEST(StarsetTest, Union){
     hypro::Starset<TypeParam> myStar3=this->myStar1.unite(this->myStar2);
-    std::cout<<"Generator: "<<myStar3.generator()<<std::endl;
-    std::cout<<"Shape: "<<myStar3.shape()<<std::endl;
 
 }
 */

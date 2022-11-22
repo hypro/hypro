@@ -31,13 +31,13 @@ TEST( ReachtTreeTest, Constructor ) {
 	hypro::Location<int> root_loc;
 	root_loc.setName( "l0" );
 	// root node
-	hypro::ReachTreeNode<test::detail::Representation<int>> root{
+	hypro::ReachTreeNode<test::detail::Representation<int>, hypro::Location<int>> root{
 		  &root_loc, { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 } };
 
 	// transition
 	hypro::Location<int> source;
 	hypro::Location<int> target;
-	hypro::Transition<int> trans{ &source, &target };
+	hypro::Transition<hypro::Location<int>> trans{ &source, &target };
 
 	// add children
 	root.addChild( { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans );
@@ -48,13 +48,13 @@ TEST( ReachtTreeTest, Constructor ) {
 
 TEST( ReachtTreeTest, CountSegments ) {
 	// root node
-	hypro::ReachTreeNode<test::detail::Representation<int>> root{
+	hypro::ReachTreeNode<test::detail::Representation<int>, hypro::Location<int>> root{
 		  nullptr, { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 } };
 
 	// transition
 	hypro::Location<int> source;
 	hypro::Location<int> target;
-	hypro::Transition<int> trans{ &source, &target };
+	hypro::Transition<hypro::Location<int>> trans{ &source, &target };
 
 	// add children
 	auto& ch1 = root.addChild( { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 }, &trans );
@@ -71,7 +71,7 @@ TEST( ReachtTreeTest, CountSegments ) {
 }
 
 TEST( ReachTreeTest, Paths ) {
-	using Node = hypro::ReachTreeNode<test::detail::Representation<int>>;
+	using Node = hypro::ReachTreeNode<test::detail::Representation<int>, hypro::Location<int>>;
 	using Loc = hypro::Location<int>;
 	std::vector<Loc*> locations;
 	Loc l0{ "l0" };
@@ -82,12 +82,12 @@ TEST( ReachTreeTest, Paths ) {
 	locations.push_back( &l2 );
 
 	// root node
-	hypro::ReachTreeNode<test::detail::Representation<int>> root{
+	Node root{
 		  locations[0], { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 } };
 
 	// transition
-	hypro::Transition<int> trans0{ locations[0], locations[1] };
-	hypro::Transition<int> trans1{ locations[0], locations[2] };
+	hypro::Transition<Loc> trans0{ locations[0], locations[1] };
+	hypro::Transition<Loc> trans1{ locations[0], locations[2] };
 
 	// add children
 	root.addChild( { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans0 );
@@ -96,7 +96,7 @@ TEST( ReachTreeTest, Paths ) {
 	Node* leaf1 = *( root.getChildren().begin() );
 
 	// get path
-	hypro::Path<int> path = leaf1->getPath();
+	hypro::Path<int, Loc> path = leaf1->getPath();
 	EXPECT_EQ( std::size_t( 1 ), path.elements.size() );
 
 	// print path
@@ -106,7 +106,7 @@ TEST( ReachTreeTest, Paths ) {
 }
 
 TEST( ReachTreeTest, CycleHeuristics ) {
-	using Node = hypro::ReachTreeNode<test::detail::Representation<int>>;
+	using Node = hypro::ReachTreeNode<test::detail::Representation<int>, hypro::Location<int>>;
 	using Loc = hypro::Location<int>;
 	std::vector<Loc*> locations;
 	Loc l0{ "l0" };
@@ -117,15 +117,15 @@ TEST( ReachTreeTest, CycleHeuristics ) {
 	locations.push_back( &l2 );
 
 	// root node
-	hypro::ReachTreeNode<test::detail::Representation<int>> root{
+	Node root{
 		  locations[0], { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 } };
 
 	// transition
-	hypro::Transition<int> trans0{ locations[0], locations[1] };
-	hypro::Transition<int> trans1{ locations[0], locations[2] };
-	hypro::Transition<int> trans2{ locations[1], locations[0] };
-	hypro::Transition<int> trans3{ locations[2], locations[0] };
-	hypro::Transition<int> trans4{ locations[2], locations[1] };
+	hypro::Transition<Loc> trans0{ locations[0], locations[1] };
+	hypro::Transition<Loc> trans1{ locations[0], locations[2] };
+	hypro::Transition<Loc> trans2{ locations[1], locations[0] };
+	hypro::Transition<Loc> trans3{ locations[2], locations[0] };
+	hypro::Transition<Loc> trans4{ locations[2], locations[1] };
 
 	// add children: 0 -> 2 -> 0 -> 1
 	auto* child = &root.addChild( { 2 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans1 );
@@ -135,7 +135,7 @@ TEST( ReachTreeTest, CycleHeuristics ) {
 	child = &root.addChild( { 2 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans1 );
 	child = &child->addChild( { 3 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans4 );
 	auto leaf2 = &child->addChild( { 3 }, carl::Interval<hypro::SegmentInd>{ 0, 1 }, &trans2 );
-	auto comp = hypro::LeastLocationCycleCount<test::detail::Representation<int>>{};
+	auto comp = hypro::LeastLocationCycleCount<test::detail::Representation<int>, hypro::Location<int>>{};
 	EXPECT_EQ( 2, comp.largestLocationCycle( leaf1 ) );
 	EXPECT_EQ( 1, comp.largestLocationCycle( leaf2 ) );
 	EXPECT_TRUE( comp( leaf2, leaf1 ) );

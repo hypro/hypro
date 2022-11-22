@@ -190,7 +190,7 @@ void Location<Number>::setTransitions( transitionVector&& trans ) {
 }
 
 template <typename Number>
-void Location<Number>::addTransition( std::unique_ptr<Transition<Number>>&& trans ) {
+void Location<Number>::addTransition( std::unique_ptr<Transition<Location<Number>>>&& trans ) {
 	// std::cout << "add transition from " << trans->getSource() << " to " << trans->getTarget() << ", this is " << this << std::endl;
 	assert( trans->getSource() == this );
 	mTransitions.emplace_back( std::move( trans ) );
@@ -198,23 +198,23 @@ void Location<Number>::addTransition( std::unique_ptr<Transition<Number>>&& tran
 }
 
 template <typename Number>
-Transition<Number>* Location<Number>::createTransition( Location<Number>* target ) {
-	auto& res = mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>{ this, target } ) );
+Transition<Location<Number>>* Location<Number>::createTransition( Location<Number>* target ) {
+	auto& res = mTransitions.emplace_back( std::make_unique<Transition<Location<Number>>>( Transition<Location<Number>>{ this, target } ) );
 	mHash = 0;
 	return res.get();
 }
 
 template <typename Number>
-Transition<Number>* Location<Number>::createTransition( Transition<Number>* original ) {
-	StochasticTransition<Number>* stoTrans = dynamic_cast<StochasticTransition<Number>*>( original );
+Transition<Location<Number>>* Location<Number>::createTransition( Transition<Location<Number>>* original ) {
+	StochasticTransition<Location<Number>>* stoTrans = dynamic_cast<StochasticTransition<Location<Number>>*>( original );
 	if ( !stoTrans ) {
-		auto& res = mTransitions.emplace_back( std::make_unique<Transition<Number>>( Transition<Number>( *original ) ) );
+		auto& res = mTransitions.emplace_back( std::make_unique<Transition<Location<Number>>>( Transition<Location<Number>>( *original ) ) );
 		res->setSource( this );
 		assert( res->getTarget() == original->getTarget() );
 		mHash = 0;
 		return res.get();
 	} else {
-		auto& res = mTransitions.emplace_back( std::make_unique<StochasticTransition<Number>>( StochasticTransition<Number>( *stoTrans ) ) );
+		auto& res = mTransitions.emplace_back( std::make_unique<StochasticTransition<Location<Number>>>( StochasticTransition<Location<Number>>( *stoTrans ) ) );
 		res->setSource( this );
 		assert( res->getTarget() == original->getTarget() );
 		mHash = 0;
@@ -224,7 +224,7 @@ Transition<Number>* Location<Number>::createTransition( Transition<Number>* orig
 
 /*
 template<typename Number>
-void Location<Number>::updateTransition(Transition<Number>* original, Transition<Number>* newT) {
+void Location<Number>::updateTransition(Transition<Location<Number>>* original, Transition<Location<Number>>* newT) {
 	assert(newT->getSource() == this);
 	auto tPos = std::find(mTransitions.begin(), mTransitions.end(), original);
 	if( tPos == mTransitions.end()) {

@@ -36,8 +36,11 @@ int main() {
 	// collect the vertices
 	std::vector<Point<Number>> vertices = poly.vertices();
 
-	// pass to plotter.
-	plotter.addObject( vertices );
+	// pass to plotter, set some custom settings, here a color and make the border non-distinguishable from the rest
+	auto customSettings = plotting::gnuplotSettings();
+	customSettings.border = false;
+	customSettings.fill = true;
+	plotter.addObject( vertices, plotting::colors[plotting::violett], customSettings );
 
 	// we can also add half-spaces to be plotted (within a bounding box)
 	plotter.addObject( poly.constraints() );
@@ -65,6 +68,7 @@ int main() {
 	// to also show the description, enable the key setting in the plotter
 	plotter.rSettings().key = true;
 	plotter.rSettings().cummulative = true;
+	plotter.rSettings().resolution = std::make_pair( 1280, 1024 );
 
 	// we can adjust the color of an object, default is blue.
 	plotter.setObjectColor( id, plotting::colors[plotting::green] );
@@ -77,10 +81,10 @@ int main() {
 	// write plot files - gnuplot files with different output terminals are
 	// supported: pdf (plot2d), tex (plotTex), and eps (plotEps). plain gnuplot
 	// files (*.gen) may also be created via plotGen().
-	plotter.plot2d( PLOTTYPE::pdf );
-	plotter.plot2d( PLOTTYPE::png );
-	plotter.plot2d( PLOTTYPE::tex );
-	plotter.plot2d( PLOTTYPE::eps );
+	plotter.plot2d( PLOTTYPE::pdf, true );
+	plotter.plot2d( PLOTTYPE::png, true );
+	plotter.plot2d( PLOTTYPE::tex, true );
+	plotter.plot2d( PLOTTYPE::eps, true );
 
 	// clear the plotter, i.e., remove all stored objects to create a fresh canvas
 	plotter.clear();
@@ -97,7 +101,7 @@ int main() {
 
 	// setup reachability analysis method
 	auto roots = makeRoots<Box>( automaton );
-	auto reacher = reachability::Reach<Box>( automaton, settings.fixedParameters(), settings.strategy().front(), roots );
+	auto reacher = reachability::Reach<Box, HybridAutomaton<Number>>( automaton, settings.fixedParameters(), settings.strategy().front(), roots );
 	auto result = reacher.computeForwardReachability();
 	std::cout << "Reachability result: " << result << std::endl;
 

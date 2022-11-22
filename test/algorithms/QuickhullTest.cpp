@@ -3,6 +3,7 @@
 //
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/algorithms/quickhull/Quickhull.h>
 
@@ -65,10 +66,6 @@ TEST_F( QuickhullTest, SpecificEnumeration ) {
 	qh quickhull{ vertices, 3 };
 	quickhull.compute();
 
-	for ( auto const& facet : quickhull.getFacets() ) {
-		printFacet( facet, 3 );
-	}
-	std::cout << "SpecificEnumeration END" << std::endl;
 	EXPECT_TRUE( nonFancyCheckContainment( vertices, quickhull ) );
 }
 
@@ -83,10 +80,6 @@ TEST_F( QuickhullTest, Degenerate ) {
 	qh quickhull{ vertices, 3 };
 	quickhull.compute();
 
-	for ( auto const& facet : quickhull.getFacets() ) {
-		printFacet( facet, 3 );
-	}
-	std::cout << "Degenerate END" << std::endl;
 	EXPECT_TRUE( nonFancyCheckContainment( vertices, quickhull ) );
 }
 
@@ -98,10 +91,6 @@ TEST_F( QuickhullTest, Degenerate3dLine ) {
 	qh quickhull{ vertices, 3 };
 	quickhull.compute();
 
-	for ( auto const& facet : quickhull.getFacets() ) {
-		printFacet( facet, 3 );
-	}
-	std::cout << "Degenerate3dLine END" << std::endl;
 	EXPECT_TRUE( nonFancyCheckContainment( vertices, quickhull ) );
 }
 
@@ -117,8 +106,6 @@ TEST_F( QuickhullTest, Degenerate6dSurface ) {
 		inputs.emplace_back( qh::point_t::Random( D ) );
 	}
 
-	std::cout << std::setprecision( 23 );
-
 	qh::pointVector_t vertices{};
 	vertices.emplace_back( qh::point_t::Random( 6 ) );
 	vertices.emplace_back( qh::point_t::Random( 6 ) );
@@ -127,10 +114,6 @@ TEST_F( QuickhullTest, Degenerate6dSurface ) {
 	qh quickhull{ vertices, 6 };
 	quickhull.compute();
 
-	for ( auto const& facet : quickhull.getFacets() ) {
-		printFacet( facet, 6 );
-	}
-	std::cout << "Degenerate6dSurface END" << std::endl;
 	EXPECT_TRUE( nonFancyCheckContainment( vertices, quickhull ) );
 }
 
@@ -142,10 +125,6 @@ TEST_F( QuickhullTest, SinglePoint ) {
 	qh quickhull{ vertices, 3 };
 	quickhull.compute();
 
-	for ( auto const& facet : quickhull.getFacets() ) {
-		printFacet( facet, 3 );
-	}
-	std::cout << "SinglePoint END" << std::endl;
 	EXPECT_TRUE( nonFancyCheckContainment( vertices, quickhull ) );
 }
 
@@ -174,10 +153,6 @@ TEST_F( QuickhullTest, RodReactor ) {
 	qh quickhull{ vertices, 3 };
 	quickhull.compute();
 
-	for ( auto const& facet : quickhull.getFacets() ) {
-		printFacet( facet, 3 );
-	}
-	std::cout << "Degenerate END" << std::endl;
 	EXPECT_TRUE( nonFancyCheckContainment( vertices, quickhull ) );
 }
 

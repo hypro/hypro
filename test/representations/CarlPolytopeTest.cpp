@@ -143,7 +143,6 @@ TYPED_TEST( CarlPolytopeTest, Substitution ) {
 	c1.substituteVariable( hypro::VariablePool::getInstance().carlVarByIndex( 0 ),
 						   hypro::VariablePool::getInstance().carlVarByIndex( 2 ) );
 
-	std::cout << "c1: " << c1 << std::endl;
 	EXPECT_EQ( std::size_t( 3 ), c1.dimension() );
 
 	hspVector = c1.getHalfspaces();
@@ -205,13 +204,9 @@ TYPED_TEST( CarlPolytopeTest, TimeElapse ) {
 	c1.addConstraint( Constr( Pol( y ) - Pol( 10 ), carl::Relation::LEQ ) );
 
 	// eliminate ^pre-variables to obtain polytope after having let time pass
-	std::cout << "Before elimination: " << c1 << std::endl;
 	c1.eliminateVariable( xp );
-	std::cout << "After elimination of xpre: " << c1 << std::endl;
 	c1.eliminateVariable( yp );
-	std::cout << "After elimination of ypre: " << c1 << std::endl;
 	c1.eliminateVariable( t );
-	std::cout << "After elimination of t: " << c1 << std::endl;
 
 	EXPECT_EQ( std::size_t( 2 ), c1.dimension() );
 }

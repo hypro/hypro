@@ -1,17 +1,26 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "Transition.h"
 
 namespace hypro {
 
-template <typename Number>
-std::size_t Transition<Number>::hash() const {
+template <typename LocationType>
+std::size_t Transition<LocationType>::hash() const {
 	if ( mHash == 0 ) {
-		mHash = std::hash<Transition<Number>>()( *this );
+		mHash = std::hash<Transition<LocationType>>()( *this );
 	}
 	return mHash;
 }
 
-template <typename Number>
-std::string Transition<Number>::getDotRepresentation( const std::vector<std::string>& vars ) const {
+template <typename LocationType>
+std::string Transition<LocationType>::getDotRepresentation( const std::vector<std::string>& vars ) const {
 	std::stringstream o;
 	o << this->getSource()->hash() << " -> " << this->getTarget()->hash();
 	if ( getLabels().size() != 0 || ( mReset.size() > 0 && !mReset.isIdentity() ) || mGuard.size() != 0 ) {
@@ -48,8 +57,8 @@ std::string Transition<Number>::getDotRepresentation( const std::vector<std::str
 	return o.str();
 }
 
-template <typename Number>
-bool Transition<Number>::isComposedOf( const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const {
+template <typename LocationType>
+bool Transition<LocationType>::isComposedOf( const Transition<LocationType>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const {
 	// compare source and target location
 	if ( this->getSource()->getName().find( rhs.getSource()->getName() ) == std::string::npos ||
 		 this->getTarget()->getName().find( rhs.getTarget()->getName() ) == std::string::npos ) {
@@ -141,8 +150,8 @@ bool Transition<Number>::isComposedOf( const Transition<Number>& rhs, const std:
 	return true;
 }
 
-template <typename Number>
-Condition<Number> Transition<Number>::getJumpEnablingSet() {
+template <typename LocationType>
+Condition<typename Transition<LocationType>::Number> Transition<LocationType>::getJumpEnablingSet() {
 	if ( mJumpEnablingSet ) {
 		return mJumpEnablingSet.value();
 	}
@@ -200,22 +209,22 @@ Condition<Number> Transition<Number>::getJumpEnablingSet() {
 	return mJumpEnablingSet.value();
 }
 
-template <typename Number>
-std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* lhsT, const Transition<Number>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<Location<Number>*>>& masters ) {
+template <typename Number, typename LocationType>
+std::unique_ptr<Transition<LocationType>> parallelCompose( const Transition<LocationType>* lhsT, const Transition<LocationType>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<LocationType*>>& masters ) {
 	assert( haVar.size() >= lhsVar.size() );
 	assert( haVar.size() >= rhsVar.size() );
 
 	TRACE( "hypro.datastructures", "Parallel composition of " << *lhsT << "\n\n and \n\n"
 															  << *rhsT );
 
-	// Transition<Number>* t = new Transition<Number>();
-	// std::unique_ptr<Transition<Number>> t = new Transition<Number>()
-	std::unique_ptr<Transition<Number>> t = std::make_unique<Transition<Number>>();
+	// Transition<LocationType>* t = new Transition<LocationType>();
+	// std::unique_ptr<Transition<LocationType>> t = new Transition<LocationType>()
+	std::unique_ptr<Transition<LocationType>> t = std::make_unique<Transition<LocationType>>();
 
 	// set target and source. If they do not exist, this means that the combined location was not admissible for some reason and thus, the transition also cannot be added.
 	// TODO: returning nullptr in case the locations do not exist seems like a hotfix for now, as it indicates that something went wrong elsewhere.
-	Location<Number>* source = ha.getLocation( lhsT->getSource()->getName() + '_' + rhsT->getSource()->getName() );
-	Location<Number>* target = ha.getLocation( lhsT->getTarget()->getName() + '_' + rhsT->getTarget()->getName() );
+	auto* source = ha.getLocation( lhsT->getSource()->getName() + '_' + rhsT->getSource()->getName() );
+	auto* target = ha.getLocation( lhsT->getTarget()->getName() + '_' + rhsT->getTarget()->getName() );
 	if ( source != nullptr && target != nullptr ) {
 		t->setTarget( target );
 		t->setSource( source );
@@ -223,19 +232,23 @@ std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* l
 		return nullptr;
 	}
 
-	// set label
+	// set labels
 	if ( lhsT->getLabels() == rhsT->getLabels() ) {
-		// std::cout << "a" << std::endl;
+		// transitions agree on their synchronization labels
 		t->setLabels( lhsT->getLabels() );
-	} else if ( !( lhsT->getLabels().empty() ) and rhsLabels.set::count( *( lhsT->getLabels().begin() ) ) == 0 and rhsT->getLabels().empty() ) {
-		// std::cout << "b" << std::endl;
+	}
+	// TODO Stefan: Why did we come up with these cases? If you can find a reason, include them again, but add detailed documentation, because I cannot understand this right now
+	// TODO Stefan, update: This might be, if we have 3 or more automata to synchronize. Idea: Argue only about labels that both automata agree on, keep the rest (unsynchronized).
+	// TODO Stefan, update: The set of labels of an automaton should be a superset of the set of labels it uses on its transitions.
+	/*else if ( !( lhsT->getLabels().empty() ) and rhsLabels.set::count( *( lhsT->getLabels().begin() ) ) == 0 and rhsT->getLabels().empty() ) {
+		//
 		t->setLabels( lhsT->getLabels() );
 	} else if ( !( rhsT->getLabels().empty() ) and lhsLabels.set::count( *( rhsT->getLabels().begin() ) ) == 0 and lhsT->getLabels().empty() ) {
 		// std::cout << "c" << std::endl;
 		t->setLabels( rhsT->getLabels() );
-	} else {
-		// std::cout << "d" << std::endl;
-		// delete t;
+	}*/
+	else {
+		// the label sets do not agree, i.e., they are not both empty or not both the same, delete the transition candidate t
 		return nullptr;
 	}
 
@@ -308,12 +321,12 @@ std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* l
 	}
 
 	// set guard
-	Condition<Number> haGuard = combine( lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar );
+	auto haGuard = combine( lhsT->getGuard(), rhsT->getGuard(), haVar, lhsVar, rhsVar );
 	t->setGuard( haGuard );
 
 	// set reset
 	// std::cout << "Reset, combine matrices: " << std::endl;
-	Reset<Number> haReset = combine( lhsT->getReset(), rhsT->getReset(), haVar, reset_lhsvars, reset_rhsvars );
+	auto haReset = combine( lhsT->getReset(), rhsT->getReset(), haVar, reset_lhsvars, reset_rhsvars );
 	// std::cout << "New reset function: " << haReset << std::endl;
 
 	t->setReset( haReset );

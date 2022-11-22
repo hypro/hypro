@@ -112,8 +112,8 @@ template <typename Number, typename Representation, typename... Rargs>
 Box<Number> computeBoundingBox( const hypro::State<Number, Representation, Rargs...>& set ) {
 	return std::visit( genericConvertAndGetVisitor<Box<Number>>(), set.getSet() );
 }
-template <class Representation>
-Box<typename Representation::NumberType> computeBoundingBox( const ReachTreeNode<Representation>& node ) {
+template <class Representation, class... Ts>
+Box<typename Representation::NumberType> computeBoundingBox( const ReachTreeNode<Representation, Ts...>& node ) {
 	auto box = computeBoundingBox( node.getFlowpipe().front() );
 	for ( const auto& s : getSegments( node ) ) {
 		box = box.unite( computeBoundingBox( s ) );
@@ -121,8 +121,8 @@ Box<typename Representation::NumberType> computeBoundingBox( const ReachTreeNode
 	return box;
 }
 
-template <class Representation>
-Box<typename Representation::NumberType> computeBoundingBox( const std::vector<ReachTreeNode<Representation>>& trees ) {
+template <class Representation, class... Ts>
+Box<typename Representation::NumberType> computeBoundingBox( const std::vector<ReachTreeNode<Representation, Ts...>>& trees ) {
 	auto box = computeBoundingBox( trees.front() );
 	for ( auto treeIt = std::next( std::begin( trees ) ); treeIt != std::end( trees ); ++treeIt ) {
 		box = box.unite( computeBoundingBox( *treeIt ) );

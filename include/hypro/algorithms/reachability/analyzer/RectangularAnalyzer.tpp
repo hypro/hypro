@@ -1,9 +1,18 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "RectangularAnalyzer.h"
 
 namespace hypro {
 
-template <typename State>
-REACHABILITY_RESULT RectangularAnalyzer<State>::run() {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularAnalyzer<State, Automaton>::run() {
 	REACHABILITY_RESULT safetyResult;
 	if ( mAnalysisSettings.strategy().front().reachability_analysis_method == REACH_SETTING::FORWARD ) {
 		// forward analysis
@@ -17,8 +26,8 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::run() {
 	return safetyResult;
 }
 
-template <typename State>
-REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularAnalyzer<State, Automaton>::forwardRun() {
 	DEBUG( "hypro.reachability.rectangular", "Start forward analysis" );
 	// create reachTree if not already present
 	if ( mReachTree.empty() ) {
@@ -31,9 +40,9 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 	}
 	DEBUG( "hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue" );
 
-	RectangularWorker<State> worker{ mHybridAutomaton, mAnalysisSettings };
+	RectangularWorker<State, Automaton> worker{ mHybridAutomaton, mAnalysisSettings };
 	while ( !mWorkQueue.empty() ) {
-		ReachTreeNode<State>* currentNode = mWorkQueue.front();
+		auto* currentNode = mWorkQueue.front();
 		mWorkQueue.pop();
 		REACHABILITY_RESULT safetyResult;
 		TRACE( "hypro.reachability.rectangular", "Analyze node at depth " << currentNode->getDepth() );
@@ -72,8 +81,8 @@ REACHABILITY_RESULT RectangularAnalyzer<State>::forwardRun() {
 }
 
 /*
-template <typename State>
-REACHABILITY_RESULT RectangularAnalyzer<State>::backwardRun() {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularAnalyzer<State,Automaton>::backwardRun() {
 	// initialize queue
 	for ( auto& [location, condition] : mHybridAutomaton.getLocalBadStates() ) {
 		// create local bad state

@@ -34,10 +34,8 @@ TEST( UtilityTest, Permutator ) {
 		++count;
 		EXPECT_TRUE( cur.size() == 2 );
 		for ( const auto val : cur ) {
-			std::cout << val << " ";
 			EXPECT_TRUE( val < 4 );
 		}
-		std::cout << std::endl;
 		tuples.emplace_back( cur );
 	}
 
@@ -57,10 +55,8 @@ TEST( UtilityTest, CombinatorDifferentBounds ) {
 		auto cur = perm();
 		++count;
 		for ( const auto val : cur ) {
-			std::cout << val << " ";
 			EXPECT_TRUE( val < 4 );
 		}
-		std::cout << std::endl;
 		EXPECT_TRUE( cur.size() == 4 );
 		tuples.emplace_back( cur );
 	}
@@ -94,10 +90,6 @@ TEST( UtilityTest, Combinator ) {
 		++count;
 		EXPECT_TRUE( cur.size() == 4 );
 		EXPECT_TRUE( std::all_of( cur.begin(), cur.end(), []( auto val ) { return val == 0 || val == 1; } ) );
-		for ( const auto val : cur ) {
-			std::cout << val << " ";
-		}
-		std::cout << std::endl;
 		tuples.emplace_back( cur );
 	}
 	EXPECT_EQ( std::size_t( 16 ), count );

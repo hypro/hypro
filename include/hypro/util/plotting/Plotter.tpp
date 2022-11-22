@@ -62,7 +62,7 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 			mOutfile << "set title \"" << mSettings.name << "\"\n";
 		}
 		if ( mSettings.keepAspectRatio ) {
-			mOutfile << "set size square\n";
+			mOutfile << "set size ratio -1\n";
 		}
 
 		switch ( outformat ) {
@@ -77,7 +77,7 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 				mOutfile << "set terminal postscript eps  enhanced color font 'Helvetica,20' linewidth 2\n";
 				break;
 			case PLOTTYPE::png:
-				mOutfile << "set terminal png size 1280,800\n";
+				mOutfile << "set terminal png size " << mSettings.resolution.first << "," << mSettings.resolution.second << "\n";
 				break;
 			default:
 				break;
@@ -129,7 +129,7 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 }
 
 template <typename Number>
-unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
+unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, std::string _objectTitle, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings, bool isPoints ) {
 	TRACE( "hypro.plotter", "" );
 	// reduce dimensions
 	if ( !_points.empty() ) {
@@ -138,7 +138,7 @@ unsigned Plotter<Number>::addObject( const std::vector<Point<Number>>& _points, 
 			return 0;
 		}
 		updateLimits( _points );
-		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings, _objectTitle } ) );
+		mObjects.insert( std::make_pair( mId, plotting::PlotObject<Number>{ _points, false, false, _color, settings, _objectTitle, isPoints } ) );
 		mId++;
 		return ( mId - 1 );
 	}
@@ -211,7 +211,7 @@ void Plotter<Number>::addPolyline( const std::vector<Point<Number>>& points, std
 
 template <typename Number>
 unsigned Plotter<Number>::addPoint( const Point<Number>& _point, std::optional<std::size_t> _color, std::optional<plotting::gnuplotSettings> settings ) {
-	return addObject( { _point }, _color, settings );
+	return addObject( { _point }, "", _color, settings, true );
 }
 
 template <typename Number>
@@ -254,6 +254,7 @@ void Plotter<Number>::clear() {
 	mPlanes.clear();
 	mPoints.clear();
 	mVectors.clear();
+	mLines.clear();
 	mObjectColors.clear();
 }
 
@@ -328,7 +329,6 @@ void Plotter<Number>::writeGnuplot() const {
 		double pointRadius = std::min( ranges[0].diameter(), ranges[1].diameter() ) * 0.01;
 
 		// preamble
-
 		mOutfile << "set xtics autofreq\n";
 		mOutfile << "set ytics autofreq\n";
 		mOutfile << "set bmargin 2\n";
@@ -376,14 +376,16 @@ void Plotter<Number>::writeGnuplot() const {
 				INFO( "hypro.plotter", "Plotting object " << tmpId << "/" << ( mObjects.size() + mPoints.size() + mPlanes.size() ) );
 			}
 			if ( plotObject.vertices.size() > 0 ) {
-				if ( plotObject.vertices.size() == 1 ) {
-					mOutfile << "set object " << std::dec << objectCount << " circle at first \\\n";
-					assert( plotObject.vertices[0].dimension() == 2 );
-					mOutfile << "  " << toDouble( plotObject.vertices[0].at( 0 ) );
-					for ( unsigned d = 1; d < plotObject.vertices[0].dimension(); ++d ) {
-						mOutfile << ", " << toDouble( plotObject.vertices[0].at( d ) );
+				if ( plotObject.isPoints ) {
+					for ( const auto& p : plotObject.vertices ) {
+						mOutfile << "set object " << std::dec << objectCount << " circle at first \\\n";
+						assert( p.dimension() == 2 );
+						mOutfile << "  " << toDouble( p.at( 0 ) );
+						for ( unsigned d = 1; d < p.dimension(); ++d ) {
+							mOutfile << ", " << toDouble( p.at( d ) );
+						}
+						mOutfile << " radius " << pointRadius;
 					}
-					mOutfile << " radius " << pointRadius;
 				} else {
 					mOutfile << "set object " << std::dec << objectCount << " polygon from \\\n";
 					for ( const auto vertex : plotObject.vertices ) {
@@ -411,15 +413,27 @@ void Plotter<Number>::writeGnuplot() const {
 					color = plotObject.color.value();
 				}
 
-				if ( mSettings.fill || ( plotObject.settings.has_value() && plotObject.settings.value().fill ) )
-					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
-				else
-					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << "' lw " << mSettings.linewidth << "\n";
+				if ( mSettings.fill || ( plotObject.settings.has_value() && plotObject.settings.value().fill ) ) {
+					mOutfile << " front fs transparent solid 0.75 fc rgb '#" << std::hex << color << std::dec << "' ";
+					if ( !mSettings.border || ( plotObject.settings.has_value() && !plotObject.settings.value().border ) ) {
+						mOutfile << "lw " << mSettings.linewidth << "\n";
+					} else {
+						mOutfile << "lw " << mSettings.linewidth << "lc rgb '#BF" << std::hex << color << std::dec << "'"
+								 << "\n";
+					}
+				} else {
+					mOutfile << " front fs empty border lc rgb '#" << std::hex << color << std::dec << "' ";
+					if ( !mSettings.border || ( plotObject.settings.has_value() && !plotObject.settings.value().border ) ) {
+						mOutfile << "lw " << mSettings.linewidth << "\n";
+					} else {
+						mOutfile << "lw " << mSettings.linewidth << "lc rgb '#BF" << std::hex << color << std::dec << "'"
+								 << "\n";
+					}
+				}
 
 				if ( mSettings.key ) {
 					mOutfile << "set style line " << std::dec << objectCount << " lc rgb '#" << std::hex << color << std::dec << "' lt 1 lw 5\n";
 					keyContent = keyContent + ", NaN ls " + std::to_string( objectCount ) + " title \"" + plotObject.objectTitle + "\"";
-					std::cout << "Key Content: " << keyContent << std::endl;
 				}
 
 				if ( mSettings.cummulative ) {
@@ -448,9 +462,9 @@ void Plotter<Number>::writeGnuplot() const {
 					auto next = std::next( lineIdx );
 					std::stringstream ss;
 					if ( lineObj.color.has_value() ) {
-						ss << std::hex << lineObj.color.value();
+						ss << std::hex << lineObj.color.value() << std::dec;
 					} else {
-						ss << std::hex << mSettings.color;
+						ss << std::hex << mSettings.color << std::dec;
 					}
 					mOutfile << "set arrow " << std::dec << segmentIdx++ << " from \\\n";
 					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
@@ -469,7 +483,6 @@ void Plotter<Number>::writeGnuplot() const {
 			mOutfile << "# plotting Halfspaces\n";
 			for ( const auto& planePair : mPlanes ) {
 				for ( const auto& plane : planePair.second ) {
-					// std::cout << "Plot plane " << plane << std::endl;
 					assert( plane.dimension() == 2 );
 					vector_t<Number> normal = plane.normal();
 
@@ -496,9 +509,9 @@ void Plotter<Number>::writeGnuplot() const {
 					auto next = std::next( lineIdx );
 					std::stringstream ss;
 					if ( lineObj.color.has_value() ) {
-						ss << std::hex << lineObj.color.value();
+						ss << std::hex << lineObj.color.value() << std::dec;
 					} else {
-						ss << std::hex << mSettings.color;
+						ss << std::hex << mSettings.color << std::dec;
 					}
 					mOutfile << "set arrow " << std::dec << segmentIdx++ << " from \\\n";
 					mOutfile << lineIdx->at( 0 ) << "," << lineIdx->at( 1 ) << " to " << next->at( 0 ) << "," << next->at( 1 ) << " linecolor rgb '#" << ss.str() << "' linetype 1 linewidth 2 nohead front\n\n";
@@ -511,14 +524,14 @@ void Plotter<Number>::writeGnuplot() const {
 			std::map<std::size_t, std::pair<std::string, std::string>> styles_definitions_calls;
 			std::size_t style_index = 1;
 			std::stringstream ss;
-			ss << std::hex << plotting::colors[plotting::blue];
+			ss << std::hex << plotting::colors[plotting::blue] << std::dec;
 			styles_definitions_calls[plotting::colors[plotting::blue]] = std::make_pair( std::to_string( style_index ), "set style line " + std::to_string( style_index ) + " lc rgb '#" + ss.str() + "' pt 7" );
 			ss.str( std::string() );
 			++style_index;
 			for ( const plotting::PlotObject<Number>& p : mPoints ) {
 				if ( p.color ) {
 					if ( styles_definitions_calls.find( p.color.value() ) == std::end( styles_definitions_calls ) ) {
-						ss << std::hex << p.color.value();
+						ss << std::hex << p.color.value() << std::dec;
 						styles_definitions_calls[p.color.value()] = std::make_pair( std::to_string( style_index ), "set style line " + std::to_string( style_index ) + " lc rgb '#" + ss.str() + "' pt 7" );
 						ss.str( std::string() );
 						++style_index;
@@ -547,7 +560,7 @@ void Plotter<Number>::writeGnuplot() const {
 			}
 			// plot all planes
 			auto color = mSettings.color;
-			mOutfile << "set style line 1 linecolor rgb '#" << std::hex << color << "' \n";
+			mOutfile << "set style line 1 linecolor rgb '#" << std::hex << color << std::dec << "' \n";
 			while ( index > 1 ) {
 				--index;
 				mOutfile << "plot f_" << index << "(x) with lines linestyle 1\n";

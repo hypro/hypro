@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * Path.cc
  *
  *  Created on: 10.01.2017
@@ -20,7 +29,7 @@ void Path<Number, tNumber>::add( const TPathElement<Number, tNumber>& elem ) {
 }
 
 template <typename Number, typename tNumber>
-void Path<Number, tNumber>::addTransition( Transition<Number>* t, const carl::Interval<tNumber>& enabledTime ) {
+void Path<Number, tNumber>::addTransition( Transition<Location<Number>>* t, const carl::Interval<tNumber>& enabledTime ) {
 	mPath.push_back( TPathElement<Number, tNumber>( t, enabledTime ) );
 	TRACE( "hypro.datastructures", "Add transition " << t << " with timestamp " << enabledTime << " to path." );
 }
@@ -32,7 +41,7 @@ void Path<Number, tNumber>::addTimeStep( const carl::Interval<tNumber>& timeStep
 }
 
 template <typename Number, typename tNumber>
-std::pair<Transition<Number>*, carl::Interval<tNumber>> Path<Number, tNumber>::getTransitionToJumpDepth( unsigned depth ) const {
+std::pair<Transition<Location<Number>>*, carl::Interval<tNumber>> Path<Number, tNumber>::getTransitionToJumpDepth( unsigned depth ) const {
 	TRACE( "hypro.datastructures", "Get transition for depth " << depth << " in path " << *this );
 	if ( depth == 0 ) {
 		return std::make_pair( nullptr, createUnboundedInterval<tNumber>() );
@@ -178,9 +187,9 @@ std::size_t Path<Number, tNumber>::getNumberDiscreteJumps() const {
 }
 
 template <typename Number, typename tNumber>
-std::vector<Transition<Number>*> Path<Number, tNumber>::getTransitionSequence( typename std::deque<TPathElement<Number, tNumber>>::const_iterator start, typename std::deque<TPathElement<Number, tNumber>>::const_iterator end ) const {
+std::vector<Transition<Location<Number>>*> Path<Number, tNumber>::getTransitionSequence( typename std::deque<TPathElement<Number, tNumber>>::const_iterator start, typename std::deque<TPathElement<Number, tNumber>>::const_iterator end ) const {
 	auto currentPos = start;
-	std::vector<Transition<Number>*> res;
+	std::vector<Transition<Location<Number>>*> res;
 	while ( currentPos != mPath.end() && currentPos != end ) {
 		if ( currentPos->isDiscreteStep() ) {
 			res.push_back( currentPos->transition );
@@ -189,7 +198,7 @@ std::vector<Transition<Number>*> Path<Number, tNumber>::getTransitionSequence( t
 	}
 	if ( currentPos == mPath.end() && end != mPath.end() ) {
 		// path end is not part of mPath or lies before start.
-		return std::vector<Transition<Number>*>();
+		return std::vector<Transition<Location<Number>>*>();
 	}
 	return res;
 }
@@ -198,7 +207,7 @@ template <typename Number, typename tNumber>
 bool Path<Number, tNumber>::hasChatteringZeno() const {
 	// find all cycles first and store potential cycles
 	// std::cout << __func__ << ": checking path: " << *this << std::endl;
-	std::vector<std::vector<Transition<Number>*>> potentialCycles;
+	std::vector<std::vector<Transition<Location<Number>>*>> potentialCycles;
 	for ( auto startElemIt = mPath.begin(); startElemIt != mPath.end(); ++startElemIt ) {
 		// start measuring the time from a timestep -> if the startElement is not a timestep, increase it.
 		if ( !startElemIt->isDiscreteStep() ) {
@@ -218,7 +227,7 @@ bool Path<Number, tNumber>::hasChatteringZeno() const {
 			}
 			const Location<Number>* startLoc = ( startElemIt )->transition->getSource();
 			// std::cout << "Dimension: " << (startElemIt)->transition->getReset().getContinuousResetMatrix().cols() << std::endl;
-			std::vector<Transition<Number>*> transitionSequence;
+			std::vector<Transition<Location<Number>>*> transitionSequence;
 			transitionSequence.push_back( ( startElemIt )->transition );
 			// std::cout << __func__ << ": Starting location is " << startLoc->getId() << std::endl;
 			for ( ; nextElem != mPath.end(); ++nextElem ) {

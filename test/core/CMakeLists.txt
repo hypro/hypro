@@ -10,6 +10,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             PlotterTest.cpp
             ReachTreePlotterTest.cpp
             UtilityTest.cpp
+            TypeTraitsTest.cpp
             )
 
     SET_SOURCE_FILES_PROPERTIES(${core_test_sources} PROPERTIES COMPILE_FLAGS -O0)

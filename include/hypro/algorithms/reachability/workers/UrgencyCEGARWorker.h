@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 
 #include "../../../datastructures/reachability/Settings.h"
@@ -21,14 +30,15 @@ namespace hypro {
  * 					in the given task.
  * @tparam Representation   The used state set representation.
  */
-template <typename Representation>
+template <typename Representation, typename Automaton>
 class UrgencyCEGARWorker {
   private:
 	using Number = typename Representation::NumberType;
+	using LocationT = typename Automaton::LocationType;
 	using Flowpipe = std::vector<IndexedValuationSet<Representation>>;
 
   public:
-	UrgencyCEGARWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<Number>& trafoCache )
+	UrgencyCEGARWorker( const Automaton& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<LocationT>& trafoCache )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
 		, mLocalTimeHorizon( localTimeHorizon )
@@ -42,7 +52,7 @@ class UrgencyCEGARWorker {
 	 * regardless of their refinement level.
 	 * @return Safety after time elapse.
 	 */
-	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, std::size_t timeHorizon, bool pruneUrgentSegments = true );
+	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation, LocationT>& task, std::size_t timeHorizon, bool pruneUrgentSegments = true );
 	/**
 	 * @brief Computes the states reachable by letting time elapse. Time horizon is given by the settings.
 	 * @param task Used to access the the location, initial set and refinement levels of urgent transitions.
@@ -50,7 +60,7 @@ class UrgencyCEGARWorker {
 	 * regardless of their refinement level.
 	 * @return Safety after time elapse.
 	 */
-	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation>& task, bool pruneUrgentSegments = true ) {
+	REACHABILITY_RESULT computeTimeSuccessors( const ReachTreeNode<Representation, LocationT>& task, bool pruneUrgentSegments = true ) {
 		return computeTimeSuccessors( task, mNumSegments, pruneUrgentSegments );
 	}
 	/**
@@ -65,7 +75,7 @@ class UrgencyCEGARWorker {
 	 * @details The segments are written to the flowpipe field of the node and the time offsets in the timing field.
 	 * @param node The tree node to write the flowpipe to.
 	 */
-	void insertFlowpipe( ReachTreeNode<Representation>& node ) const;
+	void insertFlowpipe( ReachTreeNode<Representation, LocationT>& node ) const;
 
 	/**
 	 * @brief Computes the states reachable by taking some discrete transition in a time interval.
@@ -75,8 +85,8 @@ class UrgencyCEGARWorker {
 	 * @param timeOfJump Only jumps taken in this time interval will be considered.
 	 */
 	std::vector<TimedValuationSet<Representation>> computeJumpSuccessors(
-		  const ReachTreeNode<Representation>& task,
-		  const Transition<Number>* transition,
+		  const ReachTreeNode<Representation, LocationT>& task,
+		  const Transition<LocationT>* transition,
 		  const carl::Interval<SegmentInd>& timeOfJump = createUnboundedInterval<SegmentInd>() );
 
 	/**
@@ -84,7 +94,7 @@ class UrgencyCEGARWorker {
 	 * @details Iterates over all transitions, performs aggregation and applies the reset.
 	 * @param task Used to access the location.
 	 */
-	std::vector<JumpSuccessor<Representation>> computeJumpSuccessors( const ReachTreeNode<Representation>& task );
+	std::vector<JumpSuccessor<Representation, LocationT>> computeJumpSuccessors( const ReachTreeNode<Representation, LocationT>& task );
 
 	/**
 	 * @brief Clears the flowpipe so the worker can be reused for another task
@@ -107,7 +117,7 @@ class UrgencyCEGARWorker {
 	 * @return Safety of the segment.
 	 */
 	REACHABILITY_RESULT handleSegment(
-		  const ReachTreeNode<Representation>& task, const Representation& segment, SegmentInd timing, bool pruneUrgentSegments );
+		  const ReachTreeNode<Representation, LocationT>& task, const Representation& segment, SegmentInd timing, bool pruneUrgentSegments );
 	/**
 	 * @brief Adds a single segment to the flowpipe object
 	 * @param The computed segment.
@@ -122,12 +132,12 @@ class UrgencyCEGARWorker {
 	void addSegment( const std::vector<Representation>& segment, SegmentInd timing );
 
   protected:
-	const HybridAutomaton<Number>& mHybridAutomaton;														  ///< hybrid automaton to analyze
-	const AnalysisParameters& mSettings;																	  ///< analysis settings
-	tNumber mLocalTimeHorizon;																				  ///< local time horizon
-	TimeTransformationCache<Number>& mTrafoCache;															  ///< cache for matrix exponential
-	Flowpipe mFlowpipe;																						  ///< Storage of computed time successors
-	std::map<const Transition<Number>*, std::vector<IndexedValuationSet<Representation>>> mJumpPredecessors;  ///< Cache jump predecessors
+	const Automaton& mHybridAutomaton;																			 ///< hybrid automaton to analyze
+	const AnalysisParameters& mSettings;																		 ///< analysis settings
+	tNumber mLocalTimeHorizon;																					 ///< local time horizon
+	TimeTransformationCache<LocationT>& mTrafoCache;															 ///< cache for matrix exponential
+	Flowpipe mFlowpipe;																							 ///< Storage of computed time successors
+	std::map<const Transition<LocationT>*, std::vector<IndexedValuationSet<Representation>>> mJumpPredecessors;	 ///< Cache jump predecessors
 
 	size_t const mNumSegments = size_t( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
 };

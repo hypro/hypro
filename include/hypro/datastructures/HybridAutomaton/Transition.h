@@ -22,6 +22,7 @@ static_assert( false, "This file may only be included indirectly by Location.h" 
 #endif
 
 #include "../../types.h"
+#include "../../util/typetraits.h"
 #include "Condition.h"
 #include "HybridAutomaton.h"
 #include "Label.h"
@@ -44,11 +45,14 @@ class Location;
  * @brief      Class for transition.
  * @tparam     Number  The used number type.
  */
-template <typename Number>
+template <typename LocationType>
 class Transition {
+	static_assert( is_location_type<LocationType>() );
+	using Number = typename LocationType::NumberType;
+
   private:
-	Location<Number>* mSource = nullptr;				  /// Pointer to the source location.
-	Location<Number>* mTarget = nullptr;				  /// Pointer to the target location.
+	LocationType* mSource = nullptr;					  /// Pointer to the source location.
+	LocationType* mTarget = nullptr;					  /// Pointer to the target location.
 	Condition<Number> mGuard;							  /// Guard condition enabling the transition if satisfied.
 	Reset<Number> mReset = Reset<Number>();				  /// Reset function.
 	Aggregation mAggregationSetting = Aggregation::none;  /// Aggregation settings.
@@ -69,27 +73,27 @@ class Transition {
 	 * @brief      Copy constructor.
 	 * @param[in]  orig  The original.
 	 */
-	Transition( const Transition<Number>& orig ) = default;
+	Transition( const Transition<LocationType>& orig ) = default;
 
 	/**
 	 * @brief      Move constructor.
 	 * @param[in]  orig  The original.
 	 */
-	Transition( Transition<Number>&& orig ) = default;
+	Transition( Transition<LocationType>&& orig ) = default;
 
 	/**
 	 * @brief      Copy assignment operator.
 	 * @param[in]  orig  The original.
 	 * @return     A copy of the passed transition.
 	 */
-	Transition& operator=( const Transition<Number>& orig ) = default;
+	Transition& operator=( const Transition<LocationType>& orig ) = default;
 
 	/**
 	 * @brief      Move assignment operator.
 	 * @param[in]  orig  The original.
 	 * @return     Result.
 	 */
-	Transition& operator=( Transition<Number>&& orig ) = default;
+	Transition& operator=( Transition<LocationType>&& orig ) = default;
 
 	/**
 	 * @brief      Destroys the object.
@@ -101,7 +105,7 @@ class Transition {
 	 * @param      source  The source
 	 * @param      target  The target
 	 */
-	Transition( Location<Number>* source, Location<Number>* target )
+	Transition( LocationType* source, LocationType* target )
 		: mSource( source )
 		, mTarget( target )
 		, mGuard()
@@ -117,7 +121,7 @@ class Transition {
 	 * @param[in]  guard   The guard.
 	 * @param[in]  reset   The reset.
 	 */
-	Transition( Location<Number>* source, Location<Number>* target, const Condition<Number>& guard, const Reset<Number>& reset )
+	Transition( LocationType* source, LocationType* target, const Condition<Number>& guard, const Reset<Number>& reset )
 		: mSource( source )
 		, mTarget( target )
 		, mGuard( guard )
@@ -126,11 +130,11 @@ class Transition {
 		, mUrgent( false )
 		, mLabels() {}
 
-	Location<Number>* getSource() const {
+	LocationType* getSource() const {
 		assert( mSource != nullptr );
 		return mSource;
 	}
-	Location<Number>* getTarget() const {
+	LocationType* getTarget() const {
 		assert( mTarget != nullptr );
 		return mTarget;
 	}
@@ -145,19 +149,19 @@ class Transition {
 	const std::vector<Label>& getLabels() const { return mLabels; }
 	std::size_t hash() const;
 
-	void setSource( Location<Number>* source ) {
+	void setSource( LocationType* source ) {
 		mSource = source;
 		mHash = 0;
 	}
-	void setTarget( Location<Number>* target ) {
+	void setTarget( LocationType* target ) {
 		mTarget = target;
 		mHash = 0;
 	}
-	void setSource( std::unique_ptr<Location<Number>>& source ) {
+	void setSource( std::unique_ptr<LocationType>& source ) {
 		mSource = source.get();
 		mHash = 0;
 	}
-	void setTarget( std::unique_ptr<Location<Number>>& target ) {
+	void setTarget( std::unique_ptr<LocationType>& target ) {
 		mTarget = target.get();
 		mHash = 0;
 	}
@@ -209,7 +213,7 @@ class Transition {
 	 *
 	 * @return     True if composed of, False otherwise.
 	 */
-	bool isComposedOf( const Transition<Number>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const;
+	bool isComposedOf( const Transition<LocationType>& rhs, const std::vector<std::string>& rhsVars, const std::vector<std::string>& thisVars ) const;
 
 	/**
 	 * decomposes guard  and reset of this transition.
@@ -234,7 +238,7 @@ class Transition {
 	 * @param[in]  t     The transition.
 	 * @return     Reference to the outstream.
 	 */
-	friend std::ostream& operator<<( std::ostream& ostr, const Transition<Number>& t ) {
+	friend std::ostream& operator<<( std::ostream& ostr, const Transition<LocationType>& t ) {
 		ostr << "{ @" << &t << " "
 			 << t.getSource()->getName() << " (@" << t.getSource() << ") -";
 		if ( !t.getLabels().empty() ) {
@@ -271,7 +275,7 @@ class Transition {
 	 * @param[in]  rhs   The right hand side.
 	 * @return     True if both transitions are equal, false otherwise.
 	 */
-	friend bool operator==( const Transition<Number>& lhs, const Transition<Number>& rhs ) {
+	friend bool operator==( const Transition<LocationType>& lhs, const Transition<LocationType>& rhs ) {
 		if ( ( *lhs.mSource != *rhs.mSource ) ||
 			 ( *lhs.mTarget != *rhs.mTarget ) ||
 			 ( lhs.mUrgent != rhs.mUrgent ) ||
@@ -290,7 +294,7 @@ class Transition {
 	 * @param[in]   rhs     The right hand side
 	 * Qreturn      True if both transitions are unequal, false otherwise
 	 */
-	friend bool operator!=( const Transition<Number>& lhs, const Transition<Number>& rhs ) {
+	friend bool operator!=( const Transition<LocationType>& lhs, const Transition<LocationType>& rhs ) {
 		return !( lhs == rhs );
 	}
 
@@ -300,7 +304,7 @@ class Transition {
 	 * @param[in]   lhs     left hand side; first set to compare
 	 * @param[in]   rhs     right hand sid; second set to compare
 	 */
-	friend bool operator==( const std::set<std::unique_ptr<Transition<Number>>>& lhs, const std::set<std::unique_ptr<Transition<Number>>>& rhs ) {
+	friend bool operator==( const std::set<std::unique_ptr<Transition<LocationType>>>& lhs, const std::set<std::unique_ptr<Transition<LocationType>>>& rhs ) {
 		if ( lhs.size() != rhs.size() ) {
 			return false;
 		}
@@ -315,15 +319,15 @@ class Transition {
 	}
 };
 
-template <typename Number>
-std::unique_ptr<Transition<Number>> parallelCompose( const Transition<Number>* lhsT, const Transition<Number>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<Location<Number>*>>& masters = {} );
+template <typename Number, typename LocationType>
+std::unique_ptr<Transition<LocationType>> parallelCompose( const Transition<LocationType>* lhsT, const Transition<LocationType>* rhsT, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar, const std::vector<std::string>& haVar, const HybridAutomaton<Number>& ha, const std::set<Label> lhsLabels, const std::set<Label> rhsLabels, const std::map<std::string, std::vector<LocationType*>>& masters = {} );
 }  // namespace hypro
 
 namespace std {
 
-template <typename Number>
-struct hash<hypro::Transition<Number>> {
-	size_t operator()( const hypro::Transition<Number>& trans ) {
+template <typename LocationType>
+struct hash<hypro::Transition<LocationType>> {
+	size_t operator()( const hypro::Transition<LocationType>& trans ) {
 		size_t seed = 0;
 		// TODO hash over Locations instead over location ptrs
 		carl::hash_add( seed, trans.getSource() );

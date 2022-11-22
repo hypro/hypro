@@ -1,4 +1,5 @@
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/util/adaptions_eigen/adaptions_eigen.h>
 
@@ -25,7 +26,6 @@ TYPED_TEST( EigenAdaptionsTest, reduceNumberRepresentation ) {
 
 TYPED_TEST( EigenAdaptionsTest, createCode ) {
 	std::string out = hypro::createCode( this->matA, 0 );
-	std::cout << out << std::endl;
 }
 
 TYPED_TEST( EigenAdaptionsTest, selectRows ) {

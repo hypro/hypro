@@ -40,7 +40,6 @@ namespace hypro {
 				//1.Get ConstraintSet, build State and add to localStateMap
 				ConstraintSetT<Number> conSet = visit(initStateCtx).template as<ConstraintSetT<Number>>();
 				assert(initialLoc != NULL);
-				//std::cout << "Parsed initial state description: " << conSet.matrix() << " <= " << conSet.vector() << std::endl;
 				initialState.emplace(std::make_pair(initialLoc, Condition<Number>(conSet.matrix(), conSet.vector())));
 			}
 
@@ -112,7 +111,6 @@ namespace hypro {
   		//1.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
 		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
-		//std::cout << "In visit init: " << result.first << " <= " << result.second << std::endl;
 
 		//2.Build ConstraintSet and return it
 		return ConstraintSetT<Number>(result.first, result.second);
@@ -151,17 +149,11 @@ namespace hypro {
   		//1.Call HyproFormulaVisitor and get pair of matrix and vector
 		HyproFormulaVisitor<Number> visitor(vars);
 		std::pair<matrix_t<Number>,vector_t<Number>> result = visitor.visit(ctx->constrset()).template as<std::pair<matrix_t<Number>,vector_t<Number>>>();
-		//std::cout << "In visit init: " << result.first << " <= " << result.second << std::endl;
-		// ConstraintSetT<Number> constraints = ConstraintSetT<Number>(result.first, result.second);
 
 		std::string probString = ctx->NUMBER()[0].getText();
 		// from HyproFormularVisitor::stringToNumber
 		double probInFloat = boost::lexical_cast<double>(probString);
 		Number prob = Number(probInFloat);
-
-		// std::pair<ConstraintSetT<Number>, Number> initProb (constraints, prob);
-		// initProb.first = constraints;
-		// initProb.second = prob;
 
 		//2.Build ConstraintSet and return it
 		return std::make_pair(ConstraintSetT<Number>(result.first, result.second), prob);

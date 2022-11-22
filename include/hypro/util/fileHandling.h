@@ -8,14 +8,22 @@
  */
 
 /*
- * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 18.02.22.
+ * Created by Stefan Schupp <stefan.schupp@tuwien.ac.at> on 18.08.22.
  */
 
-#ifndef HYPRO_SERIALIZATION_H
-#define HYPRO_SERIALIZATION_H
+#ifndef HYPRO_FILEHANDLING_H
+#define HYPRO_FILEHANDLING_H
 
-#include "eigen_serialization.h"
-#include "interval_serialization.h"
-#include "mpq_serialization.h"
+#include <string>
+#include <sys/stat.h>
 
-#endif	// HYPRO_SERIALIZATION_H
+namespace hypro {
+
+inline bool file_exists( const std::string& filename ) {
+	struct stat buffer;
+	return ( stat( filename.c_str(), &buffer ) == 0 );
+}
+
+}  // namespace hypro
+
+#endif	// HYPRO_FILEHANDLING_H

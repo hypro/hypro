@@ -1,9 +1,18 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "rectangularJumpHandler.h"
 
 namespace hypro {
 
-template <typename State>
-auto rectangularJumpHandler<State>::applyJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy, bool reverse ) -> TransitionStateMap {
+template <typename State, typename TransitionT>
+auto rectangularJumpHandler<State, TransitionT>::applyJump( const TransitionStateMap& states, TransitionT* transition, const AnalysisParameters& strategy, bool reverse ) -> TransitionStateMap {
 	// holds a mapping of transitions to states which need to be aggregated
 	TransitionStateMap toAggregate;
 	// holds a mapping of transitions to states which are ready to apply the reset function and the intersection with the invariant
@@ -53,8 +62,8 @@ auto rectangularJumpHandler<State>::applyJump( const TransitionStateMap& states,
 	return processedStates;
 }
 
-template <typename State>
-void rectangularJumpHandler<State>::applyReset( State& state, Transition<Number>* transitionPtr ) const {
+template <typename State, typename TransitionT>
+void rectangularJumpHandler<State, TransitionT>::applyReset( State& state, TransitionT* transitionPtr ) const {
 	if ( !transitionPtr->getReset().empty() ) {
 		if ( transitionPtr->getReset().getMatrix().size() > 0 ) {
 			state = State{ CarlPolytope<typename State::NumberType>{ transitionPtr->getReset().getMatrix(), transitionPtr->getReset().getVector() } };
@@ -67,19 +76,19 @@ void rectangularJumpHandler<State>::applyReset( State& state, Transition<Number>
 	}
 }
 
-template <typename State>
-auto rectangularJumpHandler<State>::applyReverseJump( const TransitionStateMap& states, Transition<Number>* transition, const AnalysisParameters& strategy ) -> TransitionStateMap {
+template <typename State, typename TransitionT>
+auto rectangularJumpHandler<State, TransitionT>::applyReverseJump( const TransitionStateMap& states, TransitionT* transition, const AnalysisParameters& strategy ) -> TransitionStateMap {
 	return applyJump( states, transition, strategy, true );
 }
 
-template <typename State>
-void rectangularJumpHandler<State>::applyGuard( State& state, Transition<Number>* transitionPtr ) const {
+template <typename State, typename TransitionT>
+void rectangularJumpHandler<State, TransitionT>::applyGuard( State& state, TransitionT* transitionPtr ) const {
 	if ( !transitionPtr->getGuard().empty() ) {
 		state.setSet( typename State::template nth_representation<0>{ transitionPtr->getGuard().getMatrix(), transitionPtr->getGuard().getVector() } );
 	}
 }
-template <typename State>
-auto rectangularJumpHandler<State>::filter( const TransitionStateMap& states, Transition<Number>* transition ) const -> TransitionStateMap {
+template <typename State, typename TransitionT>
+auto rectangularJumpHandler<State, TransitionT>::filter( const TransitionStateMap& states, TransitionT* transition ) const -> TransitionStateMap {
 	TransitionStateMap res;
 	for ( const auto& [transitionPtr, statesVec] : states ) {
 		// only handle sets related to the passed transition, in case any is passed.

@@ -44,7 +44,7 @@ Results<std::size_t> unite( const Settings& settings ) {
 			rhsBoxes.emplace_back( std::move( rhsBox ) );
 		}
 		auto creationTime = creationTimer.elapsed();
-		// std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
+		std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
 		ress.mCreationTime += creationTime;
 
 		// run instances
@@ -54,7 +54,7 @@ Results<std::size_t> unite( const Settings& settings ) {
 		}
 		auto runningTime = runTimerHyPro.elapsed();
 		ress.emplace_back( { "union", runningTime / settings.iterations, static_cast<int>( d ) } );
-		// std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+		std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
 		ress.mRunningTime += runningTime;
 	}

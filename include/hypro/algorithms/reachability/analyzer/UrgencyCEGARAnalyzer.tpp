@@ -1,25 +1,34 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "UrgencyCEGARAnalyzer.h"
 
 namespace hypro {
 
-template <typename Representation>
-auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
-	TimeTransformationCache<Number> transformationCache;
-	UrgencyCEGARWorker<Representation> worker{
+template <typename Representation, typename Automaton>
+auto UrgencyCEGARAnalyzer<Representation, Automaton>::run() -> UrgencyCEGARResult {
+	TimeTransformationCache<LocationT> transformationCache;
+	UrgencyCEGARWorker<Representation, Automaton> worker{
 		  *mHybridAutomaton,
 		  mParameters,
 		  mFixedParameters.localTimeHorizon,
 		  transformationCache };
-	UrgencyRefinementAnalyzer<Representation> refinementAnalyzer( mHybridAutomaton, mFixedParameters, mParameters, mRefinementSettings, mRoots );
+	UrgencyRefinementAnalyzer<Representation, Automaton> refinementAnalyzer( mHybridAutomaton, mFixedParameters, mParameters, mRefinementSettings, mRoots );
 
 	while ( !mWorkQueue.empty() ) {
 		COUNT( "Computed flowpipes" );
 		auto currentNode = mWorkQueue.back();
 		mWorkQueue.pop_back();
-		//std::cout << "Node at depth " << currentNode->getDepth() << "\n";
+		// std::cout << "Node at depth " << currentNode->getDepth() << "\n";
 
 		START_BENCHMARK_OPERATION( "Unrefined time successors" );
-		worker.reset(); // delete cached jump predecessors and computed flowpipe
+		worker.reset();	 // delete cached jump predecessors and computed flowpipe
 		auto safetyResult = worker.computeTimeSuccessors( *currentNode, mRefinementSettings.pruneUrgentSegments );
 		worker.insertFlowpipe( *currentNode );
 		currentNode->setSafety( safetyResult );
@@ -38,7 +47,7 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 				return { Failure{ refineResult.failure().conflictNode } };
 			}
 		} else {
-			//Do not perform discrete jump if jump depth was reached
+			// Do not perform discrete jump if jump depth was reached
 			if ( currentNode->getDepth() == mFixedParameters.jumpDepth ) continue;
 			// create jump successor tasks
 			for ( const auto& [transition, timedValuationSets] : worker.computeJumpSuccessors( *currentNode ) ) {
@@ -53,9 +62,9 @@ auto UrgencyCEGARAnalyzer<Representation>::run() -> UrgencyCEGARResult {
 	return { UrgencyCEGARSuccess{} };
 }
 
-template <typename Representation>
-ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createChildNode(
-	  const TimedValuationSet<Representation>& jsucc, const Transition<Number>* transition, ReachTreeNode<Representation>* parent ) {
+template <typename Representation, typename Automaton>
+ReachTreeNode<Representation, typename UrgencyCEGARAnalyzer<Representation, Automaton>::LocationT>* UrgencyCEGARAnalyzer<Representation, Automaton>::createChildNode(
+	  const TimedValuationSet<Representation>& jsucc, const Transition<LocationT>* transition, ReachTreeNode<Representation, LocationT>* parent ) {
 	carl::Interval<SegmentInd> const& initialSetDuration = parent->getTimings();
 	// add one to upper to convert from segment indices to time points
 	// multiply by timeStepFactor to convert from analyzer specific timeStep to fixedTimeStep
@@ -66,7 +75,7 @@ ReachTreeNode<Representation>* UrgencyCEGARAnalyzer<Representation>::createChild
 		  initialSetDuration.lower() + enabledDuration.lower(),
 		  initialSetDuration.upper() + enabledDuration.upper() };
 
-	ReachTreeNode<Representation>& childNode = parent->addChild( jsucc.valuationSet, globalDuration, transition );
+	auto& childNode = parent->addChild( jsucc.valuationSet, globalDuration, transition );
 
 	for ( auto const& trans : childNode.getLocation()->getTransitions() ) {
 		if ( trans->isUrgent() ) {

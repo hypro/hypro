@@ -2,9 +2,9 @@
  * Copyright (c) 2022.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #pragma once
@@ -35,17 +35,19 @@ struct NoMultithreading {
 // indicates that the lti analysis succeeded, i.e. no
 struct LTISuccess {};
 
-template <typename State, typename Heuristics = DepthFirst<State>, typename Multithreading = NoMultithreading>
+template <typename State, typename Automaton, typename Heuristics = DepthFirst<State, typename Automaton::LocationType>, typename Multithreading = NoMultithreading>
 class LTIAnalyzer {
 	using Number = typename State::NumberType;
+	using LocationT = typename Automaton::LocationType;
+	using TransitionT = Transition<LocationT>;
 
   public:
-	using LTIResult = AnalysisResult<LTISuccess, Failure<State>>;
+	using LTIResult = AnalysisResult<LTISuccess, Failure<State, LocationT>>;
 
-	LTIAnalyzer( HybridAutomaton<Number> const& ha,
+	LTIAnalyzer( Automaton const& ha,
 				 FixedAnalysisParameters const& fixedParameters,
 				 AnalysisParameters const& parameters,
-				 std::vector<ReachTreeNode<State>>& roots )
+				 std::vector<ReachTreeNode<State, LocationT>>& roots )
 		: mHybridAutomaton( &ha )
 		, mFixedParameters( fixedParameters )
 		, mParameters( parameters )
@@ -80,7 +82,7 @@ class LTIAnalyzer {
 
 	LTIResult run();
 
-	void addToQueue( ReachTreeNode<State>* node ) {
+	void addToQueue( ReachTreeNode<State, LocationT>* node ) {
 		if ( std::is_same<Multithreading, UseMultithreading>::value ) {
 			{
 				std::unique_lock<std::mutex> lock( mQueueMutex );
@@ -92,7 +94,7 @@ class LTIAnalyzer {
 		}
 	}
 
-	ReachTreeNode<State>* getNodeFromQueue() {
+	ReachTreeNode<State, LocationT>* getNodeFromQueue() {
 		auto res = mWorkQueue.top();
 		mWorkQueue.pop();
 		return res;
@@ -115,30 +117,30 @@ class LTIAnalyzer {
 		mStopped = true;
 	}
 
-	void setCallbacks( const ReachabilityCallbacks<State, Location<Number>>& callbacks ) { mCallbacks = callbacks; };
+	void setCallbacks( const ReachabilityCallbacks<State, LocationT>& callbacks ) { mCallbacks = callbacks; };
 
   private:
 	LTIResult run_impl();
-	LTIResult processNode( LTIWorker<State>& worker, ReachTreeNode<State>* node, TimeTransformationCache<Number>& transformationCache );
-	bool detectFixedPoint( ReachTreeNode<State>& node );
+	LTIResult processNode( LTIWorker<State, Automaton>& worker, ReachTreeNode<State, LocationT>* node, TimeTransformationCache<LocationT>& transformationCache );
+	bool detectFixedPoint( ReachTreeNode<State, LocationT>& node );
 
   protected:
-	std::priority_queue<ReachTreeNode<State>*, std::vector<ReachTreeNode<State>*>, Heuristics> mWorkQueue;	///< queue which holds tasks for time successor computation
-	HybridAutomaton<Number> const* mHybridAutomaton;														///< pointer to the hybrid automaton
-	FixedAnalysisParameters mFixedParameters;																///< parameters which are fixed for the analysis
-	AnalysisParameters mParameters;																			///< parameters which are specific for this call (relevant for CEGAR-refinement)
-	std::vector<ReachTreeNode<State>>& mRoots;																///< reference to the search tree, required for fixed-point detection
-	int mNumThreads = std::thread::hardware_concurrency();													///< number of used threads
-	std::vector<std::thread> mThreads;																		///< vector of threads
-	std::vector<bool> mIdle;																				///< vector of idle threads
-	std::mutex mQueueMutex;																					///< mutex to access the queue
-	std::mutex mThreadPoolMutex;																			///< mutex for the thread pool itself
-	std::condition_variable mQueueNonEmpty;																	///< notification variable to indicate the queue is nonempty
-	std::atomic<bool> mTerminate = false;																	///< indicates termination request
-	std::atomic<bool> mStopped = false;																		///< indicator, whether shutdown was already invoked
+	std::priority_queue<ReachTreeNode<State, LocationT>*, std::vector<ReachTreeNode<State, LocationT>*>, Heuristics> mWorkQueue;  ///< queue which holds tasks for time successor computation
+	Automaton const* mHybridAutomaton;																							  ///< pointer to the hybrid automaton
+	FixedAnalysisParameters mFixedParameters;																					  ///< parameters which are fixed for the analysis
+	AnalysisParameters mParameters;																								  ///< parameters which are specific for this call (relevant for CEGAR-refinement)
+	std::vector<ReachTreeNode<State, LocationT>>& mRoots;																		  ///< reference to the search tree, required for fixed-point detection
+	int mNumThreads = std::thread::hardware_concurrency();																		  ///< number of used threads
+	std::vector<std::thread> mThreads;																							  ///< vector of threads
+	std::vector<bool> mIdle;																									  ///< vector of idle threads
+	std::mutex mQueueMutex;																										  ///< mutex to access the queue
+	std::mutex mThreadPoolMutex;																								  ///< mutex for the thread pool itself
+	std::condition_variable mQueueNonEmpty;																						  ///< notification variable to indicate the queue is nonempty
+	std::atomic<bool> mTerminate = false;																						  ///< indicates termination request
+	std::atomic<bool> mStopped = false;																							  ///< indicator, whether shutdown was already invoked
 	std::mutex mIdleWorkerMutex;
 	std::condition_variable mAllIdle;
-	ReachabilityCallbacks<State, Location<Number>> mCallbacks;	///< collection of callback functions
+	ReachabilityCallbacks<State, LocationT> mCallbacks;	 ///< collection of callback functions
 };
 
 }  // namespace hypro

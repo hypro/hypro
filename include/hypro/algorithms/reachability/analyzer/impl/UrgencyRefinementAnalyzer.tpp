@@ -1,10 +1,19 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "UrgencyRefinementAnalyzer.h"
 
 namespace hypro {
 namespace detail {
 
-template <typename Number>
-UrgencyRefinementLevel getInitialRefinementLevel( Transition<Number>* transition, const UrgencyCEGARSettings& refinementSettings ) {
+template <typename Transition>
+UrgencyRefinementLevel getInitialRefinementLevel( Transition* transition, const UrgencyCEGARSettings& refinementSettings ) {
 	assert( transition->isUrgent() );
 	// refine halfspaces to max level if demanded
 	if ( refinementSettings.refineHalfspaces && getMinRefinementLevel( refinementSettings ) != getMaxRefinementLevel( refinementSettings ) &&
@@ -60,16 +69,17 @@ inline UrgencyRefinementLevel getMaxRefinementLevel( const UrgencyCEGARSettings&
 }
 }  // namespace detail
 
-template <typename Representation>
-struct UrgencyRefinementAnalyzer<Representation>::ChildNodeGen {
+template <typename Representation, typename Automaton>
+struct UrgencyRefinementAnalyzer<Representation, Automaton>::ChildNodeGen {
+	using LocationT = typename Automaton::LocationType;
 	std::vector<TimedValuationSet<Representation>> successors;
-	ReachTreeNode<Representation>* parentNode;
-	const Transition<typename Representation::NumberType>* transition;
+	ReachTreeNode<Representation, LocationT>* parentNode;
+	const Transition<LocationT>* transition;
 	int timeStepFactor;
 	UrgencyCEGARSettings refinementSettings;
 	std::size_t successorIndex = 0;	 // index for iterating over successor segments
 
-	ReachTreeNode<Representation>* next() {
+	ReachTreeNode<Representation, LocationT>* next() {
 		if ( successorIndex >= successors.size() ) {
 			return nullptr;
 		}
@@ -93,31 +103,31 @@ struct UrgencyRefinementAnalyzer<Representation>::ChildNodeGen {
 	}
 };
 
-template <typename Representation>
-bool UrgencyRefinementAnalyzer<Representation>::matchesPathTiming( ReachTreeNode<Representation>* node ) {
+template <typename Representation, typename Automaton>
+bool UrgencyRefinementAnalyzer<Representation, Automaton>::matchesPathTiming( ReachTreeNode<Representation, LocationT>* node ) {
 	auto& timing = mPath.elements.at( node->getDepth() - 1 ).first;
 	return node->getTimings().upper() >= timing.lower() && node->getTimings().lower() <= timing.upper();
 }
 
-template <typename Representation>
-bool UrgencyRefinementAnalyzer<Representation>::matchesPathTransition( ReachTreeNode<Representation>* node ) {
+template <typename Representation, typename Automaton>
+bool UrgencyRefinementAnalyzer<Representation, Automaton>::matchesPathTransition( ReachTreeNode<Representation, LocationT>* node ) {
 	auto const* transition = mPath.elements.at( node->getDepth() - 1 ).second;
 	return ( transition == node->getTransition() );
 }
 
-template <typename Representation>
-auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
+template <typename Representation, typename Automaton>
+auto UrgencyRefinementAnalyzer<Representation, Automaton>::run() -> RefinementResult {
 	// Setup settings for flowpipe construction in worker
-	TimeTransformationCache<Number> transformationCache;
-	UrgencyCEGARWorker<Representation> worker{
+	TimeTransformationCache<LocationT> transformationCache;
+	UrgencyCEGARWorker<Representation, Automaton> worker{
 		  *mHybridAutomaton,
 		  mParameters,
 		  mFixedParameters.localTimeHorizon,
 		  transformationCache };
 	COUNT( "Refinement iteration" );
 
-	std::vector<ReachTreeNode<Representation>*> endOfPath{};	 // potential successor nodes
-	std::vector<ReachTreeNode<Representation>*> refinedNodes{};	 // nodes that were chosen as refinement node
+	std::vector<ReachTreeNode<Representation, LocationT>*> endOfPath{};		// potential successor nodes
+	std::vector<ReachTreeNode<Representation, LocationT>*> refinedNodes{};	// nodes that were chosen as refinement node
 
 	START_BENCHMARK_OPERATION( "Find refinement node" );
 	RefinementCandidate refine = findRefinementCandidate( mFailureNode );
@@ -130,9 +140,8 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 
 	while ( !mWorkQueue.empty() ) {
 		// pop node
-		ReachTreeNode<Representation>* currentNode = mWorkQueue.front();
+		auto* currentNode = mWorkQueue.front();
 		mWorkQueue.pop_front();
-		// std::cout << "CEGAR Node at depth " << currentNode->getDepth() << "\n";
 
 		// skip descendants of refined nodes
 		auto node = currentNode;
@@ -221,7 +230,7 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 
 	// increase counter for most recent refined transition if refinement was successful
 	if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::SUCCESSCOUNT ) mHeuristicCache[mLastRefine] += 1;
-	std::vector<ReachTreeNode<Representation>*> pathSuccessors{};
+	std::vector<ReachTreeNode<Representation, LocationT>*> pathSuccessors{};
 	for ( auto succ : endOfPath ) {
 		// filter out descendants of refinement nodes
 		bool ancestorRefined = false;
@@ -242,8 +251,8 @@ auto UrgencyRefinementAnalyzer<Representation>::run() -> RefinementResult {
 	return { UrgencyRefinementSuccess{ pathSuccessors } };
 }
 
-template <typename Representation>
-auto UrgencyRefinementAnalyzer<Representation>::findRefinementCandidate( ReachTreeNode<Representation>* unsafeNode )
+template <typename Representation, typename Automaton>
+auto UrgencyRefinementAnalyzer<Representation, Automaton>::findRefinementCandidate( ReachTreeNode<Representation, LocationT>* unsafeNode )
 	  -> RefinementCandidate {
 	// get minimal refinement level of nodes on path to unsafe node
 	UrgencyRefinementLevel currentLevel = detail::getMaxRefinementLevel( mRefinementSettings );
@@ -302,10 +311,10 @@ auto UrgencyRefinementAnalyzer<Representation>::findRefinementCandidate( ReachTr
 	return RefinementCandidate{};
 }
 
-template <typename Representation>
-ReachTreeNode<Representation>* UrgencyRefinementAnalyzer<Representation>::createRefinedNode( const RefinementCandidate& refine ) {
+template <typename Representation, typename Automaton>
+ReachTreeNode<Representation, typename Automaton::LocationType>* UrgencyRefinementAnalyzer<Representation, Automaton>::createRefinedNode( const RefinementCandidate& refine ) {
 	auto parent = refine.node->getParent();
-	std::map<Transition<Number>*, UrgencyRefinementLevel> urgentTransitions( refine.node->getUrgencyRefinementLevels() );
+	std::map<Transition<LocationT>*, UrgencyRefinementLevel> urgentTransitions( refine.node->getUrgencyRefinementLevels() );
 	urgentTransitions[refine.transition] = refine.level;
 	// check if refined node already exists
 	if ( parent == nullptr ) {
@@ -332,7 +341,7 @@ ReachTreeNode<Representation>* UrgencyRefinementAnalyzer<Representation>::create
 
 	// refined node does not exist, so it is created
 	if ( parent == nullptr ) {
-		ReachTreeNode<Representation> refinedNode(
+		ReachTreeNode<Representation, LocationT> refinedNode(
 			  refine.node->getLocation(),
 			  refine.node->getInitialSet(),
 			  refine.node->getTimings() );
@@ -340,7 +349,7 @@ ReachTreeNode<Representation>* UrgencyRefinementAnalyzer<Representation>::create
 		mRoots->push_back( std::move( refinedNode ) );
 		return &( mRoots->back() );
 	}
-	ReachTreeNode<Representation>& refinedNode = parent->addChild(
+	ReachTreeNode<Representation, LocationT>& refinedNode = parent->addChild(
 		  refine.node->getInitialSet(),
 		  refine.node->getTimings(),
 		  refine.node->getTransition() );
@@ -348,9 +357,9 @@ ReachTreeNode<Representation>* UrgencyRefinementAnalyzer<Representation>::create
 	return &refinedNode;
 }
 
-template <typename Representation>
-bool UrgencyRefinementAnalyzer<Representation>::isSuitableForRefinement(
-	  const RefinementCandidate& candidate, ReachTreeNode<Representation>* unsafeNode ) {
+template <typename Representation, typename Automaton>
+bool UrgencyRefinementAnalyzer<Representation, Automaton>::isSuitableForRefinement(
+	  const RefinementCandidate& candidate, ReachTreeNode<Representation, LocationT>* unsafeNode ) {
 	START_BENCHMARK_OPERATION( "Check refinement candidate" );
 
 	/*
@@ -372,7 +381,7 @@ bool UrgencyRefinementAnalyzer<Representation>::isSuitableForRefinement(
 	const auto& candidateFpTimings = candidate.node->getFpTimings();
 	auto& candidateFlowpipe = candidate.node->getFlowpipe();
 	// initial time horizon and initial tree node
-	std::vector<std::pair<SegmentInd, ReachTreeNode<Representation>>> tasks;
+	std::vector<std::pair<SegmentInd, ReachTreeNode<Representation, LocationT>>> tasks;
 
 	for ( std::size_t fpIndex = 0; fpIndex < candidateFlowpipe.size(); ++fpIndex ) {
 		// moved beyond first jump:
@@ -401,7 +410,7 @@ bool UrgencyRefinementAnalyzer<Representation>::isSuitableForRefinement(
 				auto timeHorizon = mMaxSegments - candidateFpTimings[fpIndex];
 				// create task node, todo: urgency?
 				carl::Interval<SegmentInd> segmentOffset = candidateTimings.add( carl::Interval<SegmentInd>( candidateFpTimings[fpIndex] ) );
-				ReachTreeNode<Representation> task( candidate.node->getLocation(), initial, segmentOffset );
+				ReachTreeNode<Representation, LocationT> task( candidate.node->getLocation(), initial, segmentOffset );
 				tasks.push_back( std::make_pair( timeHorizon, std::move( task ) ) );
 			}
 		}
@@ -409,9 +418,9 @@ bool UrgencyRefinementAnalyzer<Representation>::isSuitableForRefinement(
 
 	if ( mRefinementSettings.aggregatedRefine ) {
 		if ( !aggregatedInitial.valuationSet.empty() ) {
-			ReachTreeNode<Representation> node( candidate.node->getLocation(),
-												aggregatedInitial.valuationSet,
-												candidateTimings + aggregatedInitial.time );
+			ReachTreeNode<Representation, LocationT> node( candidate.node->getLocation(),
+														   aggregatedInitial.valuationSet,
+														   candidateTimings + aggregatedInitial.time );
 			tasks.push_back( std::make_pair( mMaxSegments, std::move( node ) ) );
 		}
 	}
@@ -425,17 +434,17 @@ bool UrgencyRefinementAnalyzer<Representation>::isSuitableForRefinement(
 	return false;
 }
 
-template <typename Representation>
-bool UrgencyRefinementAnalyzer<Representation>::isPathUnsafe( ReachTreeNode<Representation>* initialNode, Path<Number> path, std::size_t initialTimeHorizon ) {
+template <typename Representation, typename Automaton>
+bool UrgencyRefinementAnalyzer<Representation, Automaton>::isPathUnsafe( ReachTreeNode<Representation, LocationT>* initialNode, Path<Number, LocationT> path, std::size_t initialTimeHorizon ) {
 	// todo: reuse worker or at least transformationCache
-	TimeTransformationCache<Number> transformationCache;
-	UrgencyCEGARWorker<Representation> worker{
+	TimeTransformationCache<LocationT> transformationCache;
+	UrgencyCEGARWorker<Representation, Automaton> worker{
 		  *mHybridAutomaton,
 		  mParameters,
 		  mFixedParameters.localTimeHorizon,
 		  transformationCache };
 
-	std::deque<ReachTreeNode<Representation>*> queue;
+	std::deque<ReachTreeNode<Representation, LocationT>*> queue;
 	queue.push_front( initialNode );
 	while ( !queue.empty() ) {
 		auto node = queue.back();
@@ -463,8 +472,8 @@ bool UrgencyRefinementAnalyzer<Representation>::isPathUnsafe( ReachTreeNode<Repr
 	return false;
 }
 
-template <typename Representation>
-std::size_t UrgencyRefinementAnalyzer<Representation>::evaluateHeuristic( Transition<Number>* t, ReachTreeNode<Representation>* node ) {
+template <typename Representation, typename Automaton>
+std::size_t UrgencyRefinementAnalyzer<Representation, Automaton>::evaluateHeuristic( Transition<LocationT>* t, ReachTreeNode<Representation, LocationT>* node ) {
 	if ( mHeuristicCache.count( t ) == 0 ) {
 		switch ( mRefinementSettings.heuristic ) {
 			case UrgencyRefinementHeuristic::CONSTRAINT_COUNT: {
@@ -509,8 +518,8 @@ std::size_t UrgencyRefinementAnalyzer<Representation>::evaluateHeuristic( Transi
 	return mHeuristicCache[t];
 }
 
-template <typename Representation>
-void UrgencyRefinementAnalyzer<Representation>::updateHeuristics( Transition<Number>* t ) {
+template <typename Representation, typename Automaton>
+void UrgencyRefinementAnalyzer<Representation, Automaton>::updateHeuristics( Transition<LocationT>* t ) {
 	if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::COUNT ) {
 		mHeuristicCache[t] += 1;
 	} else if ( mRefinementSettings.heuristic == UrgencyRefinementHeuristic::VOLUME ) {

@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "HyproTransitionVisitor.h"
 
 namespace hypro {
@@ -19,12 +28,12 @@ namespace hypro {
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitJumps(HybridAutomatonParser::JumpsContext *ctx){
 
 		if(ctx->transition().size() > 0){
-			std::set<Transition<Number>*> trSet;
+			std::set<Transition<Location<Number>>*> trSet;
 			//std::set<std::unique_ptr<Transition<Number>>> trSet;
 			for(auto tr : ctx->transition()){
 				//trSet.insert(visit(tr).antlrcpp::Any::as<Transition<Number>*>());
 				//std::unique_ptr<Transition<Number>> t(std::move(visit(tr).template as<std::unique_ptr<Transition<Number>>>()));
-				Transition<Number>* t = visit(tr).template as<Transition<Number>*>();//.antlrcpp::Any::as<Transition<Number>*>();
+				Transition<Location<Number>>* t = visit(tr).template as<Transition<Location<Number>>*>();//.antlrcpp::Any::as<Transition<Number>*>();
 				//trSet.insert(t);
 				trSet.emplace(t);
 				//(t->getSource())->addTransition(t);
@@ -32,16 +41,16 @@ namespace hypro {
 			return trSet;
 			//return std::move(trSet);
 		} else if(ctx->stochastictransition().size() > 0){
-			std::set<Transition<Number>*> trSet;
+			std::set<Transition<Location<Number>>*> trSet;
 			for(auto tr : ctx->stochastictransition()){
-				std::set<StochasticTransition<Number> *> tSet = visit(tr).template as<std::set<StochasticTransition<Number> *>>();
+				std::set<StochasticTransition<Location<Number>> *> tSet = visit(tr).template as<std::set<StochasticTransition<Location<Number>> *>>();
 				for(auto t : tSet){
 					trSet.emplace(t);
 				}
 			}
 			return trSet;
 		} else {
-			return std::set<Transition<Number>*>();
+			return std::set<Transition<Location<Number>>*>();
 			//return std::move(std::set<std::unique_ptr<Transition<Number>>>());
 		}
 
@@ -50,7 +59,7 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitTransition(HybridAutomatonParser::TransitionContext *ctx){
 
-		Transition<Number>* t = new Transition<Number>();
+		Transition<Location<Number>>* t = new Transition<Location<Number>>();
 
 		//1.Collect start/destination location from visitFromTo
 		std::pair<Location<Number>*,Location<Number>*> fromTo = visit(ctx->fromto()).template as<std::pair<Location<Number>*,Location<Number>*>>();
@@ -117,7 +126,6 @@ namespace hypro {
 		bool foundRight = false;
 		std::pair<Location<Number>*,Location<Number>*> fromTo;
 		for(const auto& loc : locSet){
-			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()[0]->getText()){
 				foundLeft = true;
 				fromTo.first = loc;
@@ -262,11 +270,11 @@ namespace hypro {
 
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitStochastictransition(HybridAutomatonParser::StochastictransitionContext *ctx){
-		std::set<StochasticTransition<Number>*> trSet;
+		std::set<StochasticTransition<Location<Number>>*> trSet;
 
 		if (ctx->probtransition().size() > 0) {
 			for (auto tr : ctx->probtransition()) {
-				StochasticTransition<Number>* t = visit(tr).template as<StochasticTransition<Number>*>();
+				StochasticTransition<Location<Number>>* t = visit(tr).template as<StochasticTransition<Location<Number>>*>();
 				trSet.emplace(t);
 			}
 		}
@@ -320,7 +328,7 @@ namespace hypro {
 	template<typename Number>
 	antlrcpp::Any HyproTransitionVisitor<Number>::visitProbtransition(HybridAutomatonParser::ProbtransitionContext *ctx) {
 
-		StochasticTransition<Number>* t = new StochasticTransition<Number>();
+		StochasticTransition<Location<Number>>* t = new StochasticTransition<Location<Number>>();
 
 		// 1. Collect probability and destination location from visitProbTo
 		std::pair<Number,StochasticLocation<Number>*> probTo = visit(ctx->probto()).template as<std::pair<Number,StochasticLocation<Number>*>>();
@@ -356,7 +364,6 @@ namespace hypro {
 		bool found = false;
 		StochasticLocation<Number>* from;
 		for(const auto& loc : locSet){
-			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()->getText()){
 				found = true;
 				from = dynamic_cast<StochasticLocation<Number>*>( loc );
@@ -379,7 +386,6 @@ namespace hypro {
 		bool found = false;
 		std::pair<Number,StochasticLocation<Number>*> to;
 		for(const auto& loc : locSet){
-			//std::cout << "---- Name of loc: " << loc->getName() << " name of variable 0: " << ctx->VARIABLE()[0]->getText() << " name of variable 1: " << ctx->VARIABLE()[1]->getText() << std::endl;
 			if(loc->getName() == ctx->VARIABLE()->getText()){
 				found = true;
 				to.second = dynamic_cast<StochasticLocation<Number>*>( loc );

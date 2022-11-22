@@ -9,7 +9,6 @@ namespace hypro {
 // specialization for double to get result directly from z3 via Z3_get_numeral_double
 template <>
 EvaluationResult<double> z3OptimizeLinear( bool maximize, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants, const std::vector<carl::Relation>& relations ) {
-	// std::cout << __func__ << " in direction " << convert<double,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
 	EvaluationResult<double> res;
 	z3Context c;
 	z3::optimize z3Optimizer( c );
@@ -27,7 +26,6 @@ EvaluationResult<double> z3OptimizeLinear( bool maximize, const vector_t<double>
 			addPreSolution( z3Optimizer, c, preSolution, _direction, formulaObjectivePair.second );
 		} else if ( preSolution.errorCode == SOLUTION::INFEAS ) {
 			if ( z3Optimizer.check() == z3::unsat ) {
-				//std::cout << "SMTRAT infeas." << std::endl;
 				return preSolution;  // glpk correctly detected infeasibility.
 			}						 // if glpk falsely detected infeasibility, we cope with this case below.
 		} else {					 // if glpk already detected unboundedness we return its result.
@@ -58,11 +56,6 @@ EvaluationResult<double> z3OptimizeLinear( bool maximize, const vector_t<double>
 		} else {
 			// int* enumerator = new int;
 			// Z3_get_numeral_int( c, Z3_get_numerator( c, z3res ), enumerator );
-			// std::cout << "int: " << *enumerator << "\n";
-			// std::cout << "Numerator: " << Z3_get_numeral_string(c, Z3_get_numerator( c, z3res )) << "\n";
-			// std::cout << "Denominator: " << Z3_get_numeral_string(c, Z3_get_denominator( c, z3res )) << "\n";
-			//  std::cout << "Point satisfying res: " << pointCoordinates << std::endl;
-			//  std::cout << "Result numeral string: " << Z3_get_numeral_string(c,z3res) << std::endl;
 			res.supportValue = double( Z3_get_numeral_double( c, z3res ) );
 			vector_t<double> pointCoordinates = vector_t<double>::Zero( constraints.cols() );
 			for ( unsigned i = 0; i < variables.size(); ++i ) {

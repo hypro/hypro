@@ -363,15 +363,9 @@ class HPolytopeT : private GeometricObjectBase {
 			if ( !this->empty() ) {
 				// normal reduction
 				for ( unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex ) {
-#ifdef HPOLY_DEBUG_MSG
-					std::cout << "Original: " << mHPlanes.at( planeIndex ) << std::endl;
-#endif
 					// find maximal value
 					Number largest = Number( 0 );
 					mHPlanes.at( planeIndex ).makeInteger();
-#ifdef HPOLY_DEBUG_MSG
-					std::cout << "As Integer: " << mHPlanes.at( planeIndex ) << std::endl;
-#endif
 					largest = carl::abs( mHPlanes.at( planeIndex ).offset() );
 					for ( unsigned i = 0; i < mDimension; ++i ) {
 						if ( carl::abs( mHPlanes.at( planeIndex ).normal()( i ) ) > largest ) {
@@ -381,9 +375,6 @@ class HPolytopeT : private GeometricObjectBase {
 
 					// reduce, if reduction is required
 					if ( largest > ( limit * limit ) ) {
-#ifdef HPOLY_DEBUG_MSG
-						std::cout << "Actual reduction" << std::endl;
-#endif
 						vector_t<Number> newNormal( mDimension );
 						for ( unsigned i = 0; i < mDimension; ++i ) {
 							newNormal( i ) = carl::floor( Number( ( mHPlanes.at( planeIndex ).normal()( i ) / largest ) * Number( limit ) ) );
@@ -403,18 +394,9 @@ class HPolytopeT : private GeometricObjectBase {
 							assert( Halfspace<Number>( newNormal, newOffset ).contains( vertex ) );
 						}
 						newOffset = carl::ceil( newOffset );
-#ifdef HPOLY_DEBUG_MSG
-						std::cout << "Reduced to " << convert<Number, double>( newNormal ).transpose() << " <= " << toDouble( newOffset ) << std::endl;
-#endif
 						mHPlanes.at( planeIndex ).setOffset( newOffset );
 					}
-#ifdef HPOLY_DEBUG_MSG
-					std::cout << "Reduced: " << mHPlanes.at( planeIndex ) << std::endl;
-#endif
 				}
-#ifdef HPOLY_DEBUG_MSG
-// std::cout << "After Reduction: " << *this << std::endl;
-#endif
 			}
 		}
 		// #endif

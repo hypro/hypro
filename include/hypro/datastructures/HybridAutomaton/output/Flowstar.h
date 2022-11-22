@@ -47,7 +47,7 @@ std::string toFlowstarFormat( const matrix_t<Number>& in,
 				}
 			} else if ( in( 0, colI ) < 0 ) {
 				res << " " << in( 0, colI );
-				if(first) {
+				if ( first ) {
 					first = false;
 				}
 			}
@@ -82,13 +82,19 @@ std::string toFlowstarFormat( const Condition<Number>& in,
 						res << in.getMatrix()( rowI, colI ) << "*";
 					}
 				} else if ( in.getMatrix()( rowI, colI ) < 0 ) {
+					if ( first ) {
+						first = false;
+					}
 					res << " " << in.getMatrix()( rowI, colI ) << "*";
 				}
 				if ( in.getMatrix()( rowI, colI ) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > std::size_t( colI ) ) {
 					res << varNameMap.at( colI );
 				}
 			}
-			res << " <= " << in.getVector()( rowI );
+			// if first is still true, this was a zero-row, which should be skipped
+			if ( !first ) {
+				res << " <= " << in.getVector()( rowI );
+			}
 		}
 		res << std::scientific;
 	}
@@ -210,11 +216,10 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 		}
 		res << "\n\t}\n";
 
+		// transitions
+		res << "\tjumps\n\t{";
 		if ( !in.getTransitions().empty() ) {
-			// transitions
-			res << "\tjumps\n\t{";
 			for ( const auto transPtr : in.getTransitions() ) {
-				// std::cout << "output transition " << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName() << std::endl;
 				res << "\n\t\t" << transPtr->getSource()->getName() << " -> " << transPtr->getTarget()->getName();
 				if ( transPtr->isUrgent() )
 					res << "\n\t\turgent";
@@ -222,7 +227,6 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 				res << toFlowstarFormat( transPtr->getGuard(), vars, " " );
 				res << " }";
 				res << "\n\t\treset {";
-				// std::cout << "output reset " << transPtr->getReset().getMatrix() << std::endl;
 				if ( !transPtr->getReset().empty() ) {
 					for ( Eigen::Index rowI = 0; rowI < transPtr->getReset().getMatrix().rows(); ++rowI ) {
 						if ( !transPtr->getReset().isIdentity( rowI ) ) {
@@ -236,13 +240,26 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 					}
 				}
 				res << " }";
+				if ( !transPtr->getLabels().empty() ) {
+					res << "\n\t\tlabel { ";
+					bool first = true;
+					for ( const auto& label : transPtr->getLabels() ) {
+						if ( first ) {
+							res << label;
+							first = false;
+						} else {
+							res << ", " << label;
+						}
+					}
+					res << " }";
+				}
 				if ( transPtr->getAggregation() ) {
 					res << "\n\t\tparallelotope aggregation {}";
 				}
 				res << "\n";
 			}
-			res << "\n\t}\n";
 		}
+		res << "\n\t}\n";
 
 		// initial states
 		res << "\tinit\n\t{";
@@ -257,9 +274,16 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 		res << "\n\t}\n";
 
 		// bad states
-		if ( in.getLocalBadStates().size() > 0 ) {
+		if ( in.getLocalBadStates().size() > 0 || in.getGlobalBadStates().size() > 0 ) {
 			res << "\n\tunsafe set\n\t{";
-
+			for ( const auto& [loc, cond] : in.getLocalBadStates() ) {
+				res << "\n\t\t" << loc->getName() << "{";
+				res << toFlowstarFormat( cond, vars, "\n\t\t\t" );
+				res << "\n\t\t}";
+			}
+			for ( const auto& cond : in.getGlobalBadStates() ) {
+				res << toFlowstarFormat( cond, vars, "\n\t\t" );
+			}
 			res << "\n\t}\n";
 		}
 	}

@@ -122,8 +122,6 @@ TEST( StateTest, letTimePassLinearFlow ) {
 
 	State s1 = s0.partiallyComputeAndApplyLinearTimeStep( dynamics, tNumber( 1 ) );
 
-	std::cout << s1 << std::endl;
-
 	auto resultIntervals = std::get<Box<N>>( s1.getSet() ).intervals();
 
 	EXPECT_EQ( resultIntervals.at( 0 ).lower(), N( 6121026514868073 ) / N( 2251799813685248 ) );

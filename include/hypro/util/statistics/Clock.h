@@ -11,9 +11,7 @@ class Clock {
 
   public:
 	void start() {
-		if ( running ) {
-			std::cout << "Timer already started." << std::endl;
-		} else {
+		if ( !running ) {
 			startPoint = std::chrono::high_resolution_clock::now();
 			running = true;
 		}

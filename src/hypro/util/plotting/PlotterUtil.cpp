@@ -6,8 +6,7 @@ std::vector<std::size_t> HEXtoRGB( std::size_t color ) {
 	std::size_t r = ( ( color & ( 255 << 16 ) ) >> 16 );  // bitwise and with 16^5 AND 16^4
 	std::size_t g = ( ( color & ( 255 << 8 ) ) >> 8 );
 	std::size_t b = color & 255;
-	//std::cout << "Convert " << color << " to [" << r << ", " << g << ", " << b << "]" << std::endl;
-	return {r, g, b};
+	return { r, g, b };
 }
 
 std::size_t RGBtoHEX( std::vector<std::size_t> color ) {
@@ -19,7 +18,6 @@ std::size_t RGBtoHEX( std::vector<std::size_t> color ) {
 	res += ( color[1] % 16 << 8 );
 	res += ( color[2] / 16 << 4 );
 	res += color[2] % 16;
-	//std::cout << "Convert [" << color[0] << ", " << color[1] << ", " << color[2] << "] to " << res << std::endl;
 	return res;
 }
 
@@ -44,25 +42,25 @@ std::vector<double> RGBtoHSV( const std::vector<std::size_t>& color ) {
 		//// r = g = b = 0        // s = 0, v is undefined
 		s = 0;
 		h = -1;
-		return std::vector<double>( {h, s, 0} );
+		return std::vector<double>( { h, s, 0 } );
 	}
 	if ( 0 == max - scaled.begin() )				// the max element is at position 0
 		h = ( scaled[1] - scaled[2] ) / delta;		// between yellow & magenta
 	else if ( 1 == max - scaled.begin() )			// the max element is at position 1
-		h = 2 + ( scaled[2] - scaled[0] ) / delta;  // between cyan & yellow
+		h = 2 + ( scaled[2] - scaled[0] ) / delta;	// between cyan & yellow
 	else											// the max element is at position 2
-		h = 4 + ( scaled[0] - scaled[1] ) / delta;  // between magenta & cyan
+		h = 4 + ( scaled[0] - scaled[1] ) / delta;	// between magenta & cyan
 
 	h *= 60;  // degrees -> domain of h is [0,360]
 	if ( h < 0 )
 		h += 360;
 	if ( std::isnan( h ) )
 		h = 0;
-	//std::cout << "H: " << h << ", S: " << s << ", V: " << v << std::endl;
+	// std::cout << "H: " << h << ", S: " << s << ", V: " << v << std::endl;
 	assert( 0 <= h && h <= 360 );
 	assert( 0 <= s && s <= 1 );
 	assert( 0 <= v && v <= 1 );
-	return std::vector<double>( {h, s, v} );
+	return std::vector<double>( { h, s, v } );
 }
 
 std::vector<std::size_t> HSVtoRGB( const std::vector<double>& color ) {
@@ -86,7 +84,7 @@ std::vector<std::size_t> HSVtoRGB( const std::vector<double>& color ) {
 		auto resB = std::size_t( b * 255.0 );
 		return std::vector<std::size_t>( { resR, resG, resB } );
 	}
-	h /= 60.0;  // sector 0 to 5
+	h /= 60.0;	// sector 0 to 5
 	i = int( std::floor( h ) );
 	double f = h - i;  // factorial part of h
 	double p = v * ( 1 - s );
