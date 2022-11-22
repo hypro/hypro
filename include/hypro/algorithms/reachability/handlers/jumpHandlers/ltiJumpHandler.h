@@ -1,7 +1,7 @@
 #pragma once
 #include "../../../../datastructures/HybridAutomaton/State.h"
 #include "../../../../datastructures/reachability/NodeManager.h"
-#include "../../../../datastructures/reachability/ReachTreeNode.h"
+#include "../../../../datastructures/reachability/ReachTreeNodev2.h"
 #include "../../../../datastructures/reachability/Task.h"
 #include "../../../../datastructures/reachability/workQueue/WorkQueue.h"
 #include "../../../../flags.h"

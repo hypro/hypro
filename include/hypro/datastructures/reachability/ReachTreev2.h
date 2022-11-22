@@ -22,6 +22,8 @@ namespace hypro {
 
 template <class Representation, class Location>
 class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
+	static_assert( is_location_type<Location>() );
+
   private:
 	using Number = rep_number<Representation>;
 	using Base = TreeNode<ReachTreeNode<Representation, Location>>;
