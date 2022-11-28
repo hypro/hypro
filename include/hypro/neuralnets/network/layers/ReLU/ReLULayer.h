@@ -9,8 +9,8 @@
  *
  */
 #pragma once
-#include "../../activation_functions/ReLU.h"
 #include "../LayerBase.h"
+#include "hypro/neuralnets/network/activation_functions/ReLU/ReLU.h"
 
 namespace hypro {
 

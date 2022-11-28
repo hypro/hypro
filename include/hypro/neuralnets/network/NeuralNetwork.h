@@ -6,10 +6,11 @@
  */
 
 #pragma once
-#include "../../util/logging/Logger.h"
 #include "../../parser/neuralnets/nnet/NNet.h"
+#include "../../util/logging/Logger.h"
 #include "../reachability/ReachNNMethod.h"
 #include "layers/AffineMapping/AffineLayer.h"
+#include "layers/HardTanh/HardTanhLayer.h"
 #include "layers/LayerBase.h"
 #include "layers/ReLU/ReLULayer.h"
 
@@ -194,7 +195,7 @@ std::ostream& operator<<( std::ostream& ostr, const NeuralNetwork<Number>& _rhs 
 	for ( auto layer : _rhs.mLayers ) {
 		ostr << "<------------->" << std::endl;
 		ostr << "Layer index: " << layer->layerIndex() << std::endl;
-		ostr << (*layer);
+		ostr << ( *layer );
 		ostr << "<------------->" << std::endl;
 	}
 	ostr << std::endl;

@@ -34,13 +34,19 @@ class LayerBase {
 	// getter (virtual) for the type of the layer in the form of an enum member
 	virtual const NN_LAYER_TYPE layerType() const = 0;
 
-	// getter for the size of the layer
-	unsigned short int layerSize() const {
+	/**
+	 * @brief Get the size of the layer
+	 * @return The size of the layer
+	 */
+	[[nodiscard]] unsigned short int layerSize() const {
 		return mLayerSize;
 	}
 
-	// getter for the index of the layer
-	unsigned short int layerIndex() const {
+	/**
+	 * @brief Get the index of the layer
+	 * @return The index of the layer
+	 */
+	[[nodiscard]] unsigned short int layerIndex() const {
 		return mLayerIndex;
 	}
 

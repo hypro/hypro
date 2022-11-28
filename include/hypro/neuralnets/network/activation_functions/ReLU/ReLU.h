@@ -5,7 +5,7 @@
  * @date 2022-06-13
  */
 #pragma once
-#include "../../../util/logging/Logger.h"
+#include "hypro/util/logging/Logger.h"
 
 namespace hypro {
 
