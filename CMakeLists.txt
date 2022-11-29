@@ -37,6 +37,7 @@ option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" OFF)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
+option(HYPRO_USE_TINYXML "Use tinyxml to output hybrid automata to SpaceEx format" OFF)
 option(HYPRO_GSL_INTEGRATION "Link to gsl and provide numerical integration methods" OFF)
 option(HYPRO_BUILD_OFFLINE "Do not attempt to update ressources (work offline)." OFF)
 option(HYPRO_LOGGING "Allow logging." OFF)
@@ -155,7 +156,6 @@ target_include_directories(${PROJECT_NAME}-objects
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/hypro>
         )
 
 ########################################################################################
@@ -179,7 +179,6 @@ target_include_directories(${PROJECT_NAME}-static
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/hypro>
         $<INSTALL_INTERFACE:include>
         )
 
@@ -203,7 +202,6 @@ target_include_directories(${PROJECT_NAME}-shared
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/hypro>
         $<INSTALL_INTERFACE:include>
         )
 

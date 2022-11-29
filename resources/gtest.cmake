@@ -24,8 +24,8 @@ ExternalProject_Add(
 ExternalProject_Get_Property(googletest source_dir)
 ExternalProject_Get_Property(googletest binary_dir)
 
-message(STATUS "Gtest source dir: ${source_dir}")
-message(STATUS "Gtest binary dir: ${binary_dir}")
+#message(STATUS "Gtest source dir: ${source_dir}")
+#message(STATUS "Gtest binary dir: ${binary_dir}")
 
 add_imported_library(HYPRO_GTESTCORE STATIC "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}" "${source_dir}/googletest/include")
 add_imported_library(HYPRO_GTESTMAIN STATIC "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_STATIC_LIBRARY_SUFFIX}" "${source_dir}/googletest/include")

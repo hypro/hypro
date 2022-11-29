@@ -213,6 +213,10 @@ if (HYPRO_USE_SMTRAT)
     target_link_libraries(${PROJECT_NAME}-static PUBLIC smtrat-solver-static smtrat-module-LRAModule-static)
 endif ()
 
+if (HYPRO_USE_TINYXML)
+    include(tinyxml.cmake)
+endif ()
+
 if (HYPRO_USE_Z3)
     load_library(${PROJECT_NAME} z3 0)
     if (NOT z3_FOUND)

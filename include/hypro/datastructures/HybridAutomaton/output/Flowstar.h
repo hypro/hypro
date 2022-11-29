@@ -210,7 +210,6 @@ std::string toFlowstarFormat( const HybridAutomaton<Number>& in, const Reachabil
 
 		// locations
 		res << "\tmodes\n\t{\n";
-		// for(std::unique_ptr<Location<Number>>& locPtr : in.getLocations()) {
 		for ( auto& locPtr : in.getLocations() ) {
 			res << toFlowstarFormat( locPtr, vars, "\n\t\t" );
 		}
