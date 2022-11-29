@@ -213,7 +213,7 @@ if (HYPRO_USE_SMTRAT)
     target_link_libraries(${PROJECT_NAME}-static PUBLIC smtrat-solver-static smtrat-module-LRAModule-static)
 endif ()
 
-if (HYPRO_USE_TINYXML)
+if (HYPRO_ENABLE_SPACEEX_OUTPUT)
     include(tinyxml.cmake)
 endif ()
 

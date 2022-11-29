@@ -16,7 +16,7 @@
 
 #include <hypro/flags.h>
 
-#ifdef HYPRO_USE_TINYXML
+#ifdef HYPRO_ENABLE_SPACEEX_OUTPUT
 
 #include "../../../util/exceptions.h"
 #include "../../reachability/Settings.h"
@@ -44,7 +44,7 @@ std::string toSpaceExFormat( const matrix_t<Number>& in,
 			} else {
 				if ( in( 0, colI ) < 0 )
 					res << in( 0, colI );
-				else
+				else if ( in( 0, colI ) > 0 )
 					res << " + " << in( 0, colI );
 			}
 		} else {
@@ -63,8 +63,10 @@ std::string toSpaceExFormat( const matrix_t<Number>& in,
 					first = false;
 				}
 			}
-			if ( in( 0, colI ) != 0 && in( 0, colI ) != 1 ) {
-				res << "*";
+			if ( in( 0, colI ) != 0 ) {
+				if ( in( 0, colI ) != 1 ) {
+					res << "*";
+				}
 				res << varNameMap.at( colI );
 			}
 		}

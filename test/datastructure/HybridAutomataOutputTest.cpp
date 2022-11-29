@@ -233,7 +233,7 @@ TEST( HybridAutomataOutputTest, SingularHybridAutomatonFlowstar ) {
 	SUCCEED();
 }
 
-#ifdef HYPRO_USE_TINYXML
+#ifdef HYPRO_ENABLE_SPACEEX_OUTPUT
 TEST( HybridAutomataOutputTest, SingularHybridAutomatonSpaceEx ) {
 	hypro::LockedFileWriter out{ "tmp.xml" };
 	out.clearFile();
