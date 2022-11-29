@@ -159,36 +159,32 @@ void ReachabilityNode<Number>::setRepresentation( const Starset<Number>& represe
 }
 
 template <typename Number>
-bool ReachabilityNode<Number>::checkSafe( const std::vector<HPolytope<Number>>& safeSets ) const {
-	for ( auto safeSet : safeSets ) {
-		bool safe = true;
-		if ( mIsLeaf ) {
-			// if the node is a leaf, then we check whether the inner representation (star) is safe
-			for ( auto halfspace : safeSet.constraints() ) {
-				vector_t<Number> normal = halfspace.normal();
-				Number offset = halfspace.offset();
-				// intersect the starset with the opposite of the halfspace
-				// if the result is not empty, then we know that the starset contains elements that are not in the safe set
-				Starset<Number> newSet = mRepresentation.intersectHalfspace( Halfspace<Number>( -normal, -offset ) );
-				if ( !newSet.empty() ) {
-					safe = false;
-					break;
-				}
+bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, int i, const std::vector<HPolytope<Number>>& safeSets ) const {
+	if ( i < safeSets.size() ) {
+		for ( auto halfspace : safeSets[i].constraints() ) {
+			vector_t<Number> normal = halfspace.normal();
+			Number offset = halfspace.offset();
+			// intersect the starset with the opposite of the halfspace
+			// if the result is not empty, then we know that the starset contains elements that are not in the safe set
+			Starset<Number> newSet = currentSet.intersectHalfspace( Halfspace<Number>( -normal, -offset ) );
+			if ( !newSet.empty() && !checkSafeRecursive( newSet, i + 1, safeSets ) ) {
+				return false;
 			}
-		} else {
-			// if the node is not a leaf, then it safetiness depends on the childs
-			if ( mHasNegChild )
-				safe &= mNegChild->isSafe();
-			if ( mHasPosChild )
-				safe &= mPosChild->isSafe();
 		}
-
-		// since the safeSets is a disjunction of conjunction of constrains, if any of the conjunctions evaluates to true, then the final result is also true
-		if ( safe )
-			return true;
+		return true;
 	}
-
 	return false;
+}
+
+template <typename Number>
+bool ReachabilityNode<Number>::checkSafe( const std::vector<HPolytope<Number>>& safeSets ) const {
+	if ( mIsLeaf ) {
+		// if the node is a leaf, we should check if the representation is only in the safe region (which is a non-convex set, DNF)
+		return checkSafeRecursive( mRepresentation, 0, safeSets );
+	} else {
+		// if the node is not a leaf, then it safetiness depends on the childs
+		return ( mNegChild->isSafe() ) && ( mPosChild->isSafe() );
+	}
 }
 
 template <typename Number>

@@ -66,7 +66,7 @@ class ReachabilityTree {
 	 */
 	Point<Number> produceCounterExampleCandidate( Starset<Number> set, std::vector<HPolytope<Number>> rejectionSet ) const;
 
-	Starset<Number> getFirstNonEmptyLeaf() const;
+	ReachabilityNode<Number>* getFirstNonEmptyLeaf() const;
 
 	void updateLeaves( ReachabilityNode<Number>* node );
 
@@ -93,6 +93,12 @@ class ReachabilityTree {
 	void plotTree( ReachabilityNode<Number>* current, std::string filename ) const;
 
   private:
+	int sgn(Number val) const;
+	Number min_val(size_t dim) const;
+	Number max_val(size_t dim) const;
+	Number mean_val(size_t dim) const;
+	Number range_val(size_t dim) const;
+
 	Starset<Number> prepareInput( bool normalize ) const;
 	std::vector<HPolytope<Number>> prepareSafeSet( bool normalize ) const;
 	bool isSubResultSafe( const std::vector<Starset<Number>>& subResult, const std::vector<HPolytope<Number>>& safeSet ) const;

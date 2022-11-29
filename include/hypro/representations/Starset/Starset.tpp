@@ -325,25 +325,33 @@ bool StarsetT<Number, Converter, Setting>::containsCached( const Point<Number>& 
 }
 
 // Starset.contains(point) method using SAT checking (y = c + Vx && P(x))
+// template <typename Number, typename Converter, typename Setting>
+// bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
+// 	hypro::matrix_t<Number> shape_mat = mConstraints.matrix();
+// 	hypro::vector_t<Number> limit_vec = mConstraints.vector();
+
+// 	hypro::matrix_t<Number> new_basis_mat = mGenerator;
+// 	hypro::matrix_t<Number> new_center_vec = point.rawCoordinates() - mCenter;
+
+// 	int row_num = 2 * mGenerator.rows() + shape_mat.rows();
+// 	int col_num = shape_mat.cols();
+// 	hypro::matrix_t<Number> final_mat = hypro::matrix_t<Number>( row_num, col_num );
+// 	hypro::vector_t<Number> final_vec = hypro::vector_t<Number>( row_num );
+
+// 	final_mat << shape_mat, new_basis_mat, -new_basis_mat;
+// 	final_vec << limit_vec, new_center_vec, -new_center_vec;
+
+// 	hypro::Optimizer<Number> optimizer( final_mat, final_vec );
+// 	return optimizer.checkConsistency();
+// }
+
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
-	hypro::matrix_t<Number> shape_mat = mConstraints.matrix();
-	hypro::vector_t<Number> limit_vec = mConstraints.vector();
-
-	hypro::matrix_t<Number> new_basis_mat = mGenerator;
-	hypro::matrix_t<Number> new_center_vec = point.rawCoordinates() - mCenter;
-
-	int row_num = 2 * mGenerator.rows() + shape_mat.rows();
-	int col_num = shape_mat.cols();
-	hypro::matrix_t<Number> final_mat = hypro::matrix_t<Number>( row_num, col_num );
-	hypro::vector_t<Number> final_vec = hypro::vector_t<Number>( row_num );
-
-	final_mat << shape_mat, new_basis_mat, -new_basis_mat;
-	final_vec << limit_vec, new_center_vec, -new_center_vec;
-
-	hypro::Optimizer<Number> optimizer( final_mat, final_vec );
-	return optimizer.checkConsistency();
+	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> transformedStar = this->constraints().affineTransformation(mGenerator, mCenter);
+	hypro::Optimizer<Number> optimizer( transformedStar.matrix(), transformedStar.vector() );
+	return optimizer.checkPoint(point);
 }
+
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const StarsetT<Number, Converter, Setting>& Starset ) const {
