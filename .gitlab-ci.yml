@@ -1,24 +1,13 @@
-# This file is a template, and might need editing before it works on your project.
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/C++.gitlab-ci.yml
 
-# use the official gcc image, based on debian
-# can use versions as well, like gcc:5.2
-# see https://hub.docker.com/_/gcc/
-
-image: gcc
+image: ubuntu-20.04
 
 build:
   stage: build
   # instead of calling g++ directly you can also use some build toolkit like make
   # install the necessary build tools when needed
   before_script:
-     - apt install libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
+     - apt update
+     - apt install build-essentials libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
      - git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && mkdir build && cd build && cmake .. && make carl -j`nproc` && cd ../..
   script:
     - mkdir build && cd build && cmake .. && make -j`nproc`
