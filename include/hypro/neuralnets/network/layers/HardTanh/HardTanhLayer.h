@@ -17,8 +17,8 @@ namespace hypro {
 template <typename Number>
 class HardTanhLayer : public LayerBase<Number> {
   private:
-	float mMinValue;
-	float mMaxValue;
+	float mMinValue = -1.0;
+	float mMaxValue = 1.0;
 
 	std::vector<hypro::Starset<Number>> reachHardTanh( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plot_intermediates ) const;
 
@@ -35,7 +35,7 @@ class HardTanhLayer : public LayerBase<Number> {
 	 * @param[in] minValue The minimum value of the linear region range. Default: -1
 	 * @param[in] maxValue The maximum value of the linear region range. Default: 1
 	 */
-	HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue = -1.0, float maxValue = 1.0 );
+	HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue, float maxValue);
 
 	/**
 	 * @brief Default destructor
