@@ -13,23 +13,18 @@
 
 image: gcc
 
-.pre:
-    stage: dependencies
-    script:
-        - sudo apt install libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
-        - git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && mkdir build && cd build && cmake .. && make carl -j`nproc`
-    cache:
-        paths:
-            - carl
-
 build:
   stage: build
   # instead of calling g++ directly you can also use some build toolkit like make
   # install the necessary build tools when needed
-  # before_script:
-  #   - apt update && apt -y install make autoconf
+  before_script:
+     - apt install libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
+     - git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && mkdir build && cd build && cmake .. && make carl -j`nproc` && cd ../..
   script:
     - mkdir build && cd build && cmake .. && make -j`nproc`
+  cache:
+    paths:
+      - carl
   
 
 # run tests using the binary built before
