@@ -62,7 +62,8 @@ class HybridAutomaton {
 	locationConditionMap mInitialStates;   /// The set of initial states.
 	locationConditionMap mLocalBadStates;  /// The set of bad states which are bound to locations.
 	conditionVector mGlobalBadStates;	   /// The set of bad states which are not bound to any location.
-	variableVector mVariables;
+	mutable variableVector mVariables;	   /// The set of string representations of the variables
+	bool mVariablesSet = false;			   /// Flag indicates whether the variable names have been set by the user
 
   public:
 	/**
@@ -122,7 +123,7 @@ class HybridAutomaton {
 	//* @return The state space dimension. */
 	unsigned dimension() const;
 	//* @return The vector of variables. */
-	const variableVector& getVariables() const { return mVariables; }
+	const variableVector& getVariables() const;
 	//* @return The set of all labels. */
 	const std::set<Label> getLabels() const;
 	///@}
@@ -140,7 +141,10 @@ class HybridAutomaton {
 	void setInitialStates( const locationConditionMap& states ) { mInitialStates = states; }
 	void setLocalBadStates( const locationConditionMap& states ) { mLocalBadStates = states; }
 	void setGlobalBadStates( const conditionVector& states ) { mGlobalBadStates = states; }
-	void setVariables( const variableVector& variables ) { mVariables = variables; }
+	void setVariables( const variableVector& variables ) {
+		mVariables = variables;
+		mVariablesSet = true;
+	}
 	///@}
 
 	/**

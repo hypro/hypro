@@ -17,6 +17,8 @@
 #include "gtest/gtest.h"
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/HybridAutomaton/output/Flowstar.h>
+#include <hypro/datastructures/HybridAutomaton/output/SpaceEx.h>
+#include <hypro/flags.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 #include <hypro/paths.h>
 #include <hypro/util/VariablePool.h>
@@ -156,6 +158,8 @@ hypro::HybridAutomaton<Number> createSingularAutomaton() {
 
 	res.addInitialState( locAllOn, { initialConstraints, initialConstants } );
 
+	res.setVariables( { "t", "s", "x" } );
+
 	return res;
 }
 
@@ -201,7 +205,7 @@ hypro::HybridAutomaton<Number> createRectangularAutomaton() {
 /**
  * Hybrid Automaton Test
  */
-TEST( HybridAutomataOutputTest, SingularHybridAutomatonTest ) {
+TEST( HybridAutomataOutputTest, SingularHybridAutomatonFlowstar ) {
 	hypro::LockedFileWriter out{ "tmp.model" };
 	out.clearFile();
 	auto automaton{ createSingularAutomaton<mpq_class>() };
@@ -228,6 +232,20 @@ TEST( HybridAutomataOutputTest, SingularHybridAutomatonTest ) {
 	EXPECT_EQ( automaton, automatonParsed );
 	SUCCEED();
 }
+
+#ifdef HYPRO_ENABLE_SPACEEX_OUTPUT
+TEST( HybridAutomataOutputTest, SingularHybridAutomatonSpaceEx ) {
+	hypro::LockedFileWriter out{ "tmp.xml" };
+	out.clearFile();
+	auto automaton{ createSingularAutomaton<mpq_class>() };
+	std::string tmp = hypro::toSpaceExFormat( automaton, hypro::ReachabilitySettings{ 1, 1, 1 } );
+	std::cout << "Obtained result " << tmp << std::endl;
+	out << tmp;
+
+	SUCCEED();
+}
+#endif
+
 /*
 
 TEST( HybridAutomataOutputTest, LinearHybridAutomatonTest ) {

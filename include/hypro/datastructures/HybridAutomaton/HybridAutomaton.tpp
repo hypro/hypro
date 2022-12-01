@@ -170,6 +170,19 @@ unsigned HybridAutomaton<Number>::dimension() const {
 }
 
 template <typename Number>
+const typename HybridAutomaton<Number>::variableVector& HybridAutomaton<Number>::getVariables() const {
+	if ( !mVariablesSet && mVariables.size() == 0 ) {
+		auto dim = this->dimension();
+		if ( this->dimension() > 0 ) {
+			for ( int i = 0; i < dim; ++i ) {
+				mVariables.push_back( "x" + std::to_string( i ) );
+			}
+		}
+	}
+	return mVariables;
+}
+
+template <typename Number>
 const std::set<Label> HybridAutomaton<Number>::getLabels() const {
 	std::set<Label> labels;
 	for ( const auto& loc : mLocations ) {
