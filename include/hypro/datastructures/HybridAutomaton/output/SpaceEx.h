@@ -29,42 +29,43 @@
 namespace hypro {
 
 template <typename Number>
-std::string toSpaceExFormat( const matrix_t<Number>& in,
+std::string toSpaceExFormat( const matrix_t<Number>& matrix,
 							 const std::map<Eigen::Index, std::string>& varNameMap,
 							 const std::string& prefix ) {
-	assert( in.rows() == 1 );
+	assert( matrix.rows() == 1 );
 	std::stringstream res;
 	res << std::fixed << prefix;
 	bool first = true;
-	for ( Eigen::Index colI = 0; colI < in.cols(); ++colI ) {
+	for ( Eigen::Index colI = 0; colI < matrix.cols(); ++colI ) {
 		// const part
-		if ( colI == in.cols() - 1 ) {
+		if ( colI == matrix.cols() - 1 ) {
 			if ( first ) {
-				res << in( 0, colI );
+				res << matrix( 0, colI );
 			} else {
-				if ( in( 0, colI ) < 0 )
-					res << in( 0, colI );
-				else if ( in( 0, colI ) > 0 )
-					res << " + " << in( 0, colI );
+				if ( matrix( 0, colI ) < 0 ) {
+					res << matrix( 0, colI );
+				} else if ( matrix( 0, colI ) > 0 ) {
+					res << " + " << matrix( 0, colI );
+				}
 			}
 		} else {
-			if ( in( 0, colI ) > 0 ) {
+			if ( matrix( 0, colI ) > 0 ) {
 				if ( !first ) {
 					res << " +";
 				} else {
 					first = false;
 				}
-				if ( in( 0, colI ) != 1 ) {
-					res << in( 0, colI );
+				if ( matrix( 0, colI ) != 1 ) {
+					res << matrix( 0, colI );
 				}
-			} else if ( in( 0, colI ) < 0 ) {
-				res << " " << in( 0, colI );
+			} else if ( matrix( 0, colI ) < 0 ) {
+				res << " " << matrix( 0, colI );
 				if ( first ) {
 					first = false;
 				}
 			}
-			if ( in( 0, colI ) != 0 ) {
-				if ( in( 0, colI ) != 1 ) {
+			if ( matrix( 0, colI ) != 0 ) {
+				if ( matrix( 0, colI ) != 1 ) {
 					res << "*";
 				}
 				res << varNameMap.at( colI );
@@ -76,38 +77,38 @@ std::string toSpaceExFormat( const matrix_t<Number>& in,
 }
 
 template <typename Number>
-std::string toSpaceExFormat( const Condition<Number>& in,
+std::string toSpaceExFormat( const Condition<Number>& condition,
 							 const std::map<Eigen::Index, std::string>& varNameMap ) {
 	std::stringstream res;
-	if ( in.size() > 0 ) {
+	if ( condition.size() > 0 ) {
 		res << std::fixed;
-		for ( Eigen::Index rowI = 0; rowI < in.getMatrix().rows(); ++rowI ) {
+		for ( Eigen::Index rowI = 0; rowI < condition.getMatrix().rows(); ++rowI ) {
 			bool first = true;
-			for ( Eigen::Index colI = 0; colI < in.getMatrix().cols(); ++colI ) {
-				if ( in.getMatrix()( rowI, colI ) > 0 ) {
+			for ( Eigen::Index colI = 0; colI < condition.getMatrix().cols(); ++colI ) {
+				if ( condition.getMatrix()( rowI, colI ) > 0 ) {
 					if ( !first ) {
 						res << " +";
 					} else {
 						first = false;
 					}
-					if ( in.getMatrix()( rowI, colI ) != 1 ) {
-						res << in.getMatrix()( rowI, colI ) << "*";
+					if ( condition.getMatrix()( rowI, colI ) != 1 ) {
+						res << condition.getMatrix()( rowI, colI ) << "*";
 					}
-				} else if ( in.getMatrix()( rowI, colI ) < 0 ) {
+				} else if ( condition.getMatrix()( rowI, colI ) < 0 ) {
 					if ( first ) {
 						first = false;
 					}
-					res << " " << in.getMatrix()( rowI, colI ) << "*";
+					res << " " << condition.getMatrix()( rowI, colI ) << "*";
 				}
-				if ( in.getMatrix()( rowI, colI ) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > std::size_t( colI ) ) {
+				if ( condition.getMatrix()( rowI, colI ) != 0 && colI != condition.getMatrix().cols() && varNameMap.size() > static_cast<std::size_t>( colI ) ) {
 					res << varNameMap.at( colI );
 				}
 			}
 			// if first is still true, this was a zero-row, which should be skipped
 			if ( !first ) {
-				res << " <= " << in.getVector()( rowI );
+				res << " <= " << condition.getVector()( rowI );
 			}
-			bool lastRow = ( rowI == in.getMatrix().rows() - 1 );
+			bool lastRow = ( rowI == condition.getMatrix().rows() - 1 );
 			if ( !lastRow ) {
 				res << " &";
 			}
@@ -118,21 +119,20 @@ std::string toSpaceExFormat( const Condition<Number>& in,
 }
 
 template <typename Number>
-std::string toSpaceExFormat( const ConstraintSetT<Number>& in,
+std::string toSpaceExFormat( const ConstraintSetT<Number>& constraints,
 							 const std::map<Eigen::Index, std::string>& varNameMap ) {
-	return toSpaceExFormat( Condition<Number>( in.matrix(), in.vector() ), varNameMap );
+	return toSpaceExFormat( Condition<Number>( constraints.matrix(), constraints.vector() ), varNameMap );
 }
 
 template <typename Number>
-std::string toSpaceExFormat( const flowVariant<Number>& f,
-							 const std::map<Eigen::Index, std::string>& varNameMap,
-							 tinyxml2::XMLElement* const parent ) {
+std::string toSpaceExFormat( const flowVariant<Number>& flowVariant,
+							 const std::map<Eigen::Index, std::string>& varNameMap ) {
 	std::stringstream out;
-	switch ( getFlowType( f ) ) {
+	switch ( getFlowType( flowVariant ) ) {
 		case DynamicType::timed:
 		case DynamicType::discrete:
 		case DynamicType::linear: {
-			matrix_t<Number> flow = std::get<linearFlow<Number>>( f ).getFlowMatrix();
+			matrix_t<Number> flow = std::get<linearFlow<Number>>( flowVariant ).getFlowMatrix();
 			for ( Eigen::Index rowI = 0; rowI < flow.rows() - 1; ++rowI ) {
 				std::stringstream tmp;
 				tmp << varNameMap.at( rowI ) << "' == ";
@@ -145,8 +145,8 @@ std::string toSpaceExFormat( const flowVariant<Number>& f,
 			break;
 		}
 		case DynamicType::affine: {
-			matrix_t<Number> flow = std::get<affineFlow<Number>>( f ).getFlowMatrix();
-			vector_t<Number> constPart = std::get<affineFlow<Number>>( f ).getTranslation();
+			matrix_t<Number> flow = std::get<affineFlow<Number>>( flowVariant ).getFlowMatrix();
+			vector_t<Number> constPart = std::get<affineFlow<Number>>( flowVariant ).getTranslation();
 			for ( Eigen::Index rowI = 0; rowI < flow.rows(); ++rowI ) {
 				std::stringstream tmp;
 				tmp << varNameMap.at( rowI ) << "' == ";
@@ -162,7 +162,11 @@ std::string toSpaceExFormat( const flowVariant<Number>& f,
 		}
 		case DynamicType::rectangular: {
 			throw NotImplemented();
+			break;
 		}
+		default:
+			throw std::logic_error( "Dynamic type not recognized" );
+			break;
 	}
 	return out.str();
 }
@@ -170,21 +174,21 @@ std::string toSpaceExFormat( const flowVariant<Number>& f,
 template <typename Number>
 void toSpaceExFormat( const Location<Number>* loc,
 					  const std::map<Eigen::Index, std::string>& varNameMap,
-					  std::size_t id,
+					  std::size_t identifier,
 					  tinyxml2::XMLElement* const parent ) {
-	using namespace tinyxml2;
+	using tinyxml2::XMLElement;
 	XMLElement* location = parent->InsertNewChildElement( "location" );
-	location->SetAttribute( "id", id );
+	location->SetAttribute( "id", identifier );
 	location->SetAttribute( "name", loc->getName().c_str() );
 
-	if ( varNameMap.size() > 0 ) {
+	if ( !varNameMap.empty() ) {
 		assert( varNameMap.size() == std::size_t( loc->dimension() ) );
 		// invariant
 		XMLElement* invariant = location->InsertNewChildElement( "invariant" );
 		invariant->SetText( toSpaceExFormat( loc->getInvariant(), varNameMap ).c_str() );
 		// flow
 		XMLElement* flow = location->InsertNewChildElement( "flow" );
-		flow->SetText( toSpaceExFormat( *( loc->getFlows().begin() ), varNameMap, flow ).c_str() );
+		flow->SetText( toSpaceExFormat( *( loc->getFlows().begin() ), varNameMap ).c_str() );
 	}
 }
 
@@ -193,16 +197,19 @@ std::string toSpaceExFormat( const ReachabilitySettings& settings,
 							 const std::string& prefix );
 
 template <typename Number>
-std::string toSpaceExFormat( const HybridAutomaton<Number>& in, const ReachabilitySettings& settings = ReachabilitySettings() ) {
-	using namespace tinyxml2;
+std::pair<std::string, std::string> toSpaceExFormat( const HybridAutomaton<Number>& automaton, const ReachabilitySettings& settings = ReachabilitySettings() ) {
+	using tinyxml2::XMLDocument;
+	using tinyxml2::XMLElement;
+	using tinyxml2::XMLPrinter;
+
 	XMLDocument doc;
 	XMLElement* spaceex = doc.NewElement( "sspaceex" );
 	spaceex->SetAttribute( "math", "SpaceEx" );
 	doc.InsertFirstChild( spaceex );
 
 	std::map<Eigen::Index, std::string> vars;
-	for ( std::size_t i = 0; i < in.getVariables().size(); ++i ) {
-		vars[i] = in.getVariables()[i];
+	for ( std::size_t i = 0; i < automaton.getVariables().size(); ++i ) {
+		vars.emplace( i, automaton.getVariables()[i] );
 	}
 
 	// plant component
@@ -218,14 +225,14 @@ std::string toSpaceExFormat( const HybridAutomaton<Number>& in, const Reachabili
 		param->SetAttribute( "type", "real" );
 	}
 	// locations
-	std::size_t id{ 0 };
+	std::size_t locationIdentifier{ 0 };
 	std::map<std::string, std::size_t> locationIdNameMap;
-	for ( auto locPtr : in.getLocations() ) {
-		locationIdNameMap[locPtr->getName()] = id;
-		toSpaceExFormat( locPtr, vars, id++, plantElement );
+	for ( auto locPtr : automaton.getLocations() ) {
+		locationIdNameMap.emplace( locPtr->getName(), locationIdentifier );
+		toSpaceExFormat( locPtr, vars, locationIdentifier++, plantElement );
 	}
 	// transitions
-	for ( auto locPtr : in.getLocations() ) {
+	for ( auto locPtr : automaton.getLocations() ) {
 		std::size_t sourceId = locationIdNameMap[locPtr->getName()];
 		for ( const auto& transitionPtr : locPtr->getTransitions() ) {
 			XMLElement* transition = plantElement->InsertNewChildElement( "transition" );
@@ -238,14 +245,14 @@ std::string toSpaceExFormat( const HybridAutomaton<Number>& in, const Reachabili
 			if ( !transitionPtr->getReset().isIdentity() ) {
 				XMLElement* reset = transition->InsertNewChildElement( "assignment" );
 				std::stringstream tmp;
-				matrix_t<Number> A = transitionPtr->getReset().getMatrix();
-				vector_t<Number> b = transitionPtr->getReset().getVector();
-				for ( Eigen::Index rowI = 0; rowI < A.rows(); ++rowI ) {
+				matrix_t<Number> constraintMatrix = transitionPtr->getReset().getMatrix();
+				vector_t<Number> constraintVector = transitionPtr->getReset().getVector();
+				for ( Eigen::Index rowI = 0; rowI < constraintMatrix.rows(); ++rowI ) {
 					tmp << vars.at( rowI ) << "' == ";
-					matrix_t<Number> tmpMatrix = matrix_t<Number>( 1, A.cols() + 1 );
-					tmpMatrix << A.row( rowI ), b( rowI );
+					matrix_t<Number> tmpMatrix = matrix_t<Number>( 1, constraintMatrix.cols() + 1 );
+					tmpMatrix << constraintMatrix.row( rowI ), constraintVector( rowI );
 					tmp << toSpaceExFormat( tmpMatrix, vars, "" );
-					bool lastRow = ( rowI == A.rows() - 1 );
+					bool lastRow = ( rowI == constraintMatrix.rows() - 1 );
 					if ( !lastRow ) {
 						tmp << " &\n";
 					}
@@ -281,9 +288,46 @@ std::string toSpaceExFormat( const HybridAutomaton<Number>& in, const Reachabili
 
 	XMLPrinter printer;
 	doc.Print( &printer );
-	std::string res = printer.CStr();
-	std::cout << "Printed document: " << res << std::endl;
-	return res;
+	const std::string automatonXml = printer.CStr();
+
+	std::string settingsString;
+	std::string initialSetString;
+	std::string badStateString;
+
+	for ( const auto& [location, initialCondition] : automaton.getInitialStates() ) {
+		initialSetString += "loc(plant_component_template) == " + location->getName();
+		initialSetString += toSpaceExFormat( initialCondition, vars );
+	}
+	for ( const auto& [location, unsafeCondition] : automaton.getLocalBadStates() ) {
+		badStateString += "loc(plant_component_template) == " + location->getName();
+		badStateString += toSpaceExFormat( unsafeCondition, vars );
+	}
+
+	settingsString += "system = system\n";
+	settingsString += "initially = \"" + initialSetString + "\"\n";
+	settingsString += "forbidden = \"" + badStateString + "\"\n";
+	settingsString +=
+		  "\
+scenario = stc\n\
+directions = oct\n\
+set-aggregation = \"none\"\n\
+sampling-time = " +
+		  std::to_string( carl::convert<tNumber, double>( settings.timeStep ) ) +
+		  "\n\
+flowpipe-tolerance = 0.01\n\
+flowpipe-tolerance-rel = 0\n\
+simu-init-sampling-points = 0\n\
+time-horizon = " +
+		  std::to_string( carl::convert<tNumber, double>( settings.timeBound ) ) +
+		  "\n\
+iter-max = -1\n\
+output-variables = \"x0,x1\"\n\
+output-format = GEN\n\
+verbosity = m\n\
+output-error = 0\n\
+rel-err = 1.0E-12\n\
+abs-err = 1.0E-15\n";
+	return std::make_pair( automatonXml, settingsString );
 }
 
 }  // namespace hypro
