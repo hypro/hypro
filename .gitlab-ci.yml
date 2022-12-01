@@ -10,7 +10,7 @@ build:
      - DEBIAN_FRONTEND=noninteractive apt install -y gcc g++ cmake make git flex bison libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
      - git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && mkdir build && cd build && cmake .. && make carl -j`nproc` && cd ../..
   script:
-    - mkdir build && cd build && cmake .. && make -j`nproc`
+    - mkdir build && cd build && cmake .. && make all -j`nproc`
   cache:
     paths:
       - carl
