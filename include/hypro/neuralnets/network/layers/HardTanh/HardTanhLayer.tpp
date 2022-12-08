@@ -28,7 +28,7 @@ std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::reachHardTanh( const 
 		// iterate over the dimensions of the input star
 		switch ( method ) {
 			case NN_REACH_METHOD::EXACT:
-				resultSet = HardTanh<Number>::exactHardTanh( i, resultSet );
+				resultSet = HardTanh<Number>::exactHardTanh( i, resultSet, mMinValue, mMaxValue );
 				break;
 			case NN_REACH_METHOD::OVERAPPRX:
 				resultSet = HardTanh<Number>::approxHardTanh( i, resultSet );
@@ -41,7 +41,7 @@ std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::reachHardTanh( const 
 }
 
 template <typename Number>
-NN_LAYER_TYPE HardTanhLayer<Number>::layerType() const {
+const NN_LAYER_TYPE HardTanhLayer<Number>::layerType() const {
 	return NN_LAYER_TYPE::HARD_TANH;
 }
 
@@ -67,7 +67,7 @@ std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::forwardPass( const hy
 	resultSet.push_back( inputSet );
 	switch ( method ) {
 		case NN_REACH_METHOD::EXACT:
-			resultSet = HardTanh<Number>::exactHardTanh( index, resultSet );
+			resultSet = HardTanh<Number>::exactHardTanh( index, resultSet, mMinValue, mMaxValue);
 			break;
 		case NN_REACH_METHOD::OVERAPPRX:
 			resultSet = HardTanh<Number>::approxHardTanh( index, resultSet );

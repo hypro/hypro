@@ -20,6 +20,14 @@ class HardTanhLayer : public LayerBase<Number> {
 	float mMinValue = -1.0;
 	float mMaxValue = 1.0;
 
+	/**
+	 * @brief Applies the given reachability method to the input set
+	 *
+	 * @param inputSet THe input set
+	 * @param method he reachability method
+	 * @param[in] plotIntermediates If true, plot the intermediate star sets
+	 * @return The resulting set after applying the reachability method
+	 */
 	std::vector<hypro::Starset<Number>> reachHardTanh( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plot_intermediates ) const;
 
   public:
@@ -30,6 +38,7 @@ class HardTanhLayer : public LayerBase<Number> {
 
 	/**
 	 * @brief Constructs a layer with the given size and index
+	 *
 	 * @param[in] layerSize The layer size
 	 * @param[in] layerIndex The layer index
 	 * @param[in] minValue The minimum value of the linear region range. Default: -1
@@ -46,7 +55,7 @@ class HardTanhLayer : public LayerBase<Number> {
 	 * @brief The type of the layer in the form of an enum member
 	 * @return The type of the layer
 	 */
-	[[nodiscard]] virtual NN_LAYER_TYPE layerType() const;
+	[[nodiscard]] virtual const NN_LAYER_TYPE layerType() const;
 
 	/**
 	 * @brief Applies the Hardtanh function element-wise to the input vector
@@ -72,7 +81,7 @@ class HardTanhLayer : public LayerBase<Number> {
 	 * @param[in] inputSets The input sets
 	 * @param[in] method The reachability method
 	 * @param[in] plotIntermediates If true, plot the intermediate star sets
-	 * @return std::vector<Starset<Number>> the resulting set after applying the reachability method
+	 * @return The resulting set after applying the reachability method
 	 */
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
