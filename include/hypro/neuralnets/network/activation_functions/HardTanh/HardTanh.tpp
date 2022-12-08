@@ -74,6 +74,7 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std:
 		hypro::vector_t<Number> constr_3 = basis_1.row(i) * (-1);
 		hypro::Halfspace<Number> pos_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_3 ), maxValue);
 		polytope_2 = polytope_2.intersectHalfspace( pos_2 );
+
 		hypro::matrix_t<Number> transformationMatrix_1 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 		transformationMatrix_1( i, i ) = 0.0;
 		basis_2 = transformationMatrix_1 * basis_2;
@@ -92,12 +93,13 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std:
 		hypro::vector_t<Number> constr_4 = basis_1.row(i);
 		hypro::Halfspace<Number> neg_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_4 ), minValue);
 		polytope_3 = polytope_3.intersectHalfspace( neg_2 );
+
 		hypro::matrix_t<Number> transformationMatrix_2 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 		transformationMatrix_2( i, i ) = 0.0;
 		basis_3 = transformationMatrix_2 * basis_3;
 		hypro::vector_t<Number> biasVector_2 = hypro::vector_t<Number>(center.rows());
 		biasVector_2(i) = minValue;
-		center_2 = transformationMatrix_2 * center_2 + biasVector_2;
+		center_3 = transformationMatrix_2 * center_3 + biasVector_2;
 		hypro::Starset<Number> star_3 = hypro::Starset<Number>( center_3, basis_3, polytope_3 );
 
 		result.push_back(star_3);
