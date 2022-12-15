@@ -12,6 +12,7 @@
 #include "layers/AffineMapping/AffineLayer.h"
 #include "layers/HardTanh/HardTanhLayer.h"
 #include "layers/LeakyReLU/LeakyReLULayer.h"
+#include "layers/HardSigmoid/HardSigmoidLayer.h"
 #include "layers/LayerBase.h"
 #include "layers/ReLU/ReLULayer.h"
 
