@@ -13,7 +13,7 @@ template<typename Number>
 class LeakyReLU {
   public:
 	static std::vector<hypro::Starset<Number>> exactLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, float negativeSlope);
-	static std::vector<hypro::Starset<Number>> approxLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets );
+	static std::vector<hypro::Starset<Number>> approxLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, float negativeSlope );
 
 };
 } //namespace hypro

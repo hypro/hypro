@@ -1,13 +1,13 @@
 /**
-* @file LeakyReLULayer.tpp
-* @author Hana Masara <hana.masara@rwth-aachen.de>
-* @brief
-* @version 0.1
-* @date 2022-12-07
-*
-* @copyright Copyright (c) 2022
-*
-*/
+ * @file LeakyReLULayer.h
+ * @author Hana Masara <hana.masara@rwth-aachen.de>
+ * @brief
+ * @version 0.1
+ * @date 2022-12-07
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
 #pragma once
 #include "../LayerBase.h"
 #include "hypro/neuralnets/network/activation_functions/LeakyReLU/LeakyReLU.h"
