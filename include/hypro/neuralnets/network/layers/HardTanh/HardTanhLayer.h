@@ -1,5 +1,5 @@
 /**
- * @file HardTanhLayer.tpp
+ * @file HardTanhLayer.h
  * @author Hana Masara <hana.masara@rwth-aachen.de>
  * @brief
  * @version 0.1
