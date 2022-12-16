@@ -44,7 +44,7 @@ class HardTanhLayer : public LayerBase<Number> {
 	 * @param[in] minValue The minimum value of the linear region range. Default: -1
 	 * @param[in] maxValue The maximum value of the linear region range. Default: 1
 	 */
-	HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue, float maxValue);
+	HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue = -1, float maxValue = 1);
 
 	/**
 	 * @brief Default destructor

@@ -31,8 +31,8 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::exactLeakyReLU( int i, st
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
-			hypro::vector_t<Number> biasVector = hypro::vector_t<Number>(center.rows());
-			biasVector(i) = negativeSlope;
+			hypro::vector_t<Number> biasVector = hypro::vector_t<Number>( center.rows() );
+			biasVector( i ) = negativeSlope;
 			center = transformationMatrix * center + biasVector;
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, basis, polytope );
 			result.push_back( res_star );
@@ -51,7 +51,7 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::exactLeakyReLU( int i, st
 
 		result.push_back( star_1 );
 
-		//split the star set into the part less than ~0
+		// split the star set into the part less than ~0
 		hypro::vector_t<Number> center_2 = center;
 		hypro::matrix_t<Number> basis_2 = basis;
 		hypro::HPolytope<Number> polytope_2 = polytope;
@@ -63,8 +63,8 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::exactLeakyReLU( int i, st
 		hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 		transformationMatrix( i, i ) = 0.0;
 		basis_2 = transformationMatrix * basis_2;
-		hypro::vector_t<Number> biasVector = hypro::vector_t<Number>(center.rows());
-		biasVector(i) = negativeSlope;
+		hypro::vector_t<Number> biasVector = hypro::vector_t<Number>( center.rows() );
+		biasVector( i ) = negativeSlope;
 		center_2 = transformationMatrix * center_2 + biasVector;
 		hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, polytope_2 );
 
@@ -75,7 +75,7 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::exactLeakyReLU( int i, st
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, float negativeSlope) {
+std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, float negativeSlope ) {
 	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
 	int k = input_sets.size();
 	for ( int j = 0; j < k; j++ ) {
@@ -102,8 +102,8 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, s
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
-			hypro::vector_t<Number> biasVector = hypro::vector_t<Number>(center.rows());
-			biasVector(i) = negativeSlope;
+			hypro::vector_t<Number> biasVector = hypro::vector_t<Number>( center.rows() );
+			biasVector( i ) = negativeSlope;
 			center = transformationMatrix * center + biasVector;
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
 			result.push_back( res_star );
@@ -115,13 +115,13 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, s
 		shape.col( shape.cols() - 1 ) = hypro::vector_t<Number>::Zero( shape.rows() );
 		limits.conservativeResize( limits.rows() + 3 );
 
-		//first constraint: x_(m+1) >= x_i * negativeSlope
+		// first constraint: x_(m+1) >= x_i * negativeSlope
 		hypro::vector_t<Number> first_constr = basis.row( i );
 		first_constr = first_constr * negativeSlope;
 		first_constr.conservativeResize( first_constr.rows() + 1 );
 		first_constr[first_constr.rows() - 1] = -1;
 		shape.row( shape.rows() - 3 ) = first_constr;
-		limits[limits.rows() - 3] = -( center[i] * negativeSlope);
+		limits[limits.rows() - 3] = -( center[i] * negativeSlope );
 
 		// second constraint: x_(m+1) >= x_i
 		hypro::vector_t<Number> second_constr = basis.row( i );
@@ -150,4 +150,4 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, s
 	return result;
 }
 
-} // namespace hypro
+}  // namespace hypro

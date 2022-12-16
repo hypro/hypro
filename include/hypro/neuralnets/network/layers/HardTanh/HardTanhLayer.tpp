@@ -51,8 +51,7 @@ vector_t<Number> HardTanhLayer<Number>::forwardPass( const vector_t<Number>& inp
 	for ( auto i = 0; i < outputVec.size(); i++ ) {
 		if ( outputVec[i] < this->mMinValue ) {
 			outputVec[i] = mMinValue;
-		}
-		else if ( outputVec[i] > this->mMaxValue ) {
+		} else if ( outputVec[i] > this->mMaxValue ) {
 			outputVec[i] = mMaxValue;
 		} else {
 			// Identity
@@ -67,7 +66,7 @@ std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::forwardPass( const hy
 	resultSet.push_back( inputSet );
 	switch ( method ) {
 		case NN_REACH_METHOD::EXACT:
-			resultSet = HardTanh<Number>::exactHardTanh( index, resultSet, mMinValue, mMaxValue);
+			resultSet = HardTanh<Number>::exactHardTanh( index, resultSet, mMinValue, mMaxValue );
 			break;
 		case NN_REACH_METHOD::OVERAPPRX:
 			resultSet = HardTanh<Number>::approxHardTanh( index, resultSet );
@@ -91,4 +90,8 @@ std::vector<Starset<Number>> HardTanhLayer<Number>::forwardPass( const std::vect
 	return result;
 }
 
+template <typename Number>
+Point<Number> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
+	return Point<Number>();
+}
 }  // namespace hypro
