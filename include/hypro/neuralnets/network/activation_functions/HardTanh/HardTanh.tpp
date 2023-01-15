@@ -25,160 +25,150 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std:
 			result.push_back( res_star );
 			continue;
 		}
-		// if upper bound is less than minValue, we project the set on minValue
+		// if upper bound is less than minValue, we project the input on minValue
 		if ( ub < minValue ) {
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
-			hypro::vector_t<Number> biasVector = hypro::vector_t<Number>( center.rows() );
-			biasVector( i ) = minValue;
-			center = transformationMatrix * center + biasVector;
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, basis, polytope );
+
+			hypro::vector_t<Number> center_1 = center;
+			center_1( i ) = minValue;
+			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, basis, polytope );
 			result.push_back( res_star );
 			continue;
 		}
-		// if lower bound is greater than maxValue, we project the set on maxValue
-		if ( lb > maxValue ) {
+		// if lowe bound is greater than maxValue, we project the input on maxValue
+		if( lb > maxValue){
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
-			hypro::vector_t<Number> biasVector = hypro::vector_t<Number>( center.rows() );
-			biasVector( i ) = maxValue;
-			center = transformationMatrix * center + biasVector;
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, basis, polytope );
+
+			hypro::vector_t<Number> center_1 = center;
+			center_1( i ) = maxValue;
+			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, basis, polytope );
 			result.push_back( res_star );
 			continue;
 		}
 
-		if ( ( lb < minValue ) && ( minValue <= ub ) && ( ub <= maxValue ) ) {
-			// split the star set into the part between minValue and maxValue
+		if ( ( lb < minValue ) && ( ub <= maxValue ) ) {
+			// split the star input into the part that is greater than minValue
+			// this part remain as it is
 			hypro::vector_t<Number> center_1 = center;
 			hypro::matrix_t<Number> basis_1 = basis;
 			hypro::HPolytope<Number> polytope_1 = polytope;
 
-			hypro::vector_t<Number> constr_1 = basis_1.row( i ) * ( -1 );
-			hypro::vector_t<Number> constr_2 = basis_1.row( i );
-			hypro::Halfspace<Number> pos_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_1 ), maxValue - center_1[i] );
-			hypro::Halfspace<Number> neg_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_2 ), minValue - center_1[i] );
-
-			polytope_1 = polytope_1.intersectHalfspace( pos_1 );
-			polytope_1 = polytope_1.intersectHalfspace( neg_1 );
+			hypro::vector_t<Number> constraint_1 = basis_1.row( i ) * ( -1 );
+			hypro::Halfspace<Number> remaining = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_1 ), ( center_1[i] - minValue ) );
+			polytope_1 = polytope_1.intersectHalfspace( remaining );
 			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
 
-			// split the star set into the part less than minValue
+			// split the star input into the part that is less than minValue
+			// this part is projected on minValue
 			hypro::vector_t<Number> center_2 = center;
 			hypro::matrix_t<Number> basis_2 = basis;
 			hypro::HPolytope<Number> polytope_2 = polytope;
 
-			hypro::vector_t<Number> constr_3 = basis_1.row( i );
-			hypro::Halfspace<Number> neg_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_3 ), minValue - center_2[i] );
-			polytope_2 = polytope_2.intersectHalfspace( neg_2 );
+			hypro::vector_t<Number> constraint_2 = basis_2.row( i );
+			hypro::Halfspace<Number> projected_min = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_2 ), ( minValue - center_2[i] ) );
+			polytope_2 = polytope_2.intersectHalfspace( projected_min );
 
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis_2 = transformationMatrix * basis_2;
-			hypro::vector_t<Number> biasVector = hypro::vector_t<Number>( center.rows() );
-			biasVector( i ) = minValue;
-			center_2 = transformationMatrix * center_2 + biasVector;
+			center_2( i ) = minValue;
 			hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, polytope_2 );
 
 			result.push_back( star_1 );
 			result.push_back( star_2 );
-
 			continue;
 		}
 
-		if ( ( ub > maxValue ) && ( minValue <= lb ) && ( lb <= maxValue ) ) {
-			// split the star set into the part between minValue and maxValue
+		if ( ( lb >= minValue ) && ( lb <= maxValue ) && ( ub > maxValue ) ) {
+			// split the star input into the part that is less than maxValue
+			// this part remain as it is
 			hypro::vector_t<Number> center_1 = center;
 			hypro::matrix_t<Number> basis_1 = basis;
 			hypro::HPolytope<Number> polytope_1 = polytope;
 
-			hypro::vector_t<Number> constr_1 = basis_1.row( i ) * ( -1 );
-			hypro::vector_t<Number> constr_2 = basis_1.row( i );
-			hypro::Halfspace<Number> pos_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_1 ), maxValue - center_1[i] );
-			hypro::Halfspace<Number> neg_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_2 ), minValue - center_1[i] );
-
-			polytope_1 = polytope_1.intersectHalfspace( pos_1 );
-			polytope_1 = polytope_1.intersectHalfspace( neg_1 );
+			hypro::vector_t<Number> constraint_1 = basis_1.row( i );
+			hypro::Halfspace<Number> remaining = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_1 ), ( maxValue - center_1[i] ) );
+			polytope_1 = polytope_1.intersectHalfspace( remaining );
 			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
 
-			result.push_back( star_1 );
-
-			// split the star set into the part that is greater than maxValue
+			// split the star input into the part that is greater than maxValue
+			// thia part is projected on maxValue
 			hypro::vector_t<Number> center_2 = center;
 			hypro::matrix_t<Number> basis_2 = basis;
 			hypro::HPolytope<Number> polytope_2 = polytope;
 
-			hypro::vector_t<Number> constr_3 = basis_1.row( i ) * ( -1 );
-			hypro::Halfspace<Number> pos_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_3 ), maxValue - center_2[i] );
-			polytope_2 = polytope_2.intersectHalfspace( pos_2 );
+			hypro::vector_t<Number> constraint_2 = basis_2.row( i ) * ( -1 );
+			hypro::Halfspace<Number> projected_max = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_2 ), ( center_2[i] - maxValue ) );
+			polytope_2 = polytope_2.intersectHalfspace( projected_max );
+
+			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
+			transformationMatrix( i, i ) = 0.0;
+			basis_2 = transformationMatrix * basis_2;
+			center_2( i ) = maxValue;
+			hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, polytope_2 );
+
+			result.push_back( star_1 );
+			result.push_back( star_2 );
+			continue;
+		}
+
+		if ( ( lb < -1 ) && ( ub > 1 ) ) {
+			// split the star input into the part between minValue and maxValue
+			// this part remain as it is
+			hypro::vector_t<Number> center_1 = center;
+			hypro::matrix_t<Number> basis_1 = basis;
+			hypro::HPolytope<Number> polytope_1 = polytope;
+
+			hypro::vector_t<Number> constraint_1 = basis_1.row( i );
+			hypro::vector_t<Number> constraint_2 = basis_1.row( i ) * ( -1 );
+			hypro::Halfspace<Number> remaining_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_1 ), maxValue - center_1[i] );
+			hypro::Halfspace<Number> remainign_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_2 ), center_1[i] - minValue );
+
+			polytope_1 = polytope_1.intersectHalfspace( remaining_1 );
+			polytope_1 = polytope_1.intersectHalfspace( remainign_2 );
+			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
+
+			// split the star input into the part less than minValue
+			// this part is projected on minValue
+			hypro::vector_t<Number> center_2 = center;
+			hypro::matrix_t<Number> basis_2 = basis;
+			hypro::HPolytope<Number> polytope_2 = polytope;
+
+			hypro::vector_t<Number> constraint_3 = basis_2.row( i );
+			hypro::Halfspace<Number> projected_min = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_3 ), minValue - center_2[i] );
+			polytope_2 = polytope_2.intersectHalfspace( projected_min );
+
 
 			hypro::matrix_t<Number> transformationMatrix_1 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix_1( i, i ) = 0.0;
 			basis_2 = transformationMatrix_1 * basis_2;
-			hypro::vector_t<Number> biasVector_1 = hypro::vector_t<Number>( center.rows() );
-			biasVector_1( i ) = maxValue;
-			center_2 = transformationMatrix_1 * center_2 + biasVector_1;
+			center_2( i ) = minValue;
 			hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, polytope_2 );
 
+			// split the star input into the part that is greater than maxValue
+			// this part is projected on maxValue
+			hypro::vector_t<Number> center_3 = center;
+			hypro::matrix_t<Number> basis_3 = basis;
+			hypro::HPolytope<Number> polytope_3 = polytope;
+
+			hypro::vector_t<Number> constraint_4 = basis_1.row( i ) * ( -1 );
+			hypro::Halfspace<Number> projected_max = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_4 ), center_3[i] - maxValue );
+			polytope_3 = polytope_3.intersectHalfspace( projected_max );
+
+			hypro::matrix_t<Number> transformationMatrix_2 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
+			transformationMatrix_2( i, i ) = 0.0;
+			basis_3 = transformationMatrix_2 * basis_3;
+			center_3( i ) = maxValue;
+			hypro::Starset<Number> star_3 = hypro::Starset<Number>( center_3, basis_3, polytope_3 );
+
+			result.push_back( star_1 );
 			result.push_back( star_2 );
-
-			continue;
+			result.push_back( star_3 );
 		}
-		// otherwise split the star set into the part between minValue and maxValue
-		hypro::vector_t<Number> center_1 = center;
-		hypro::matrix_t<Number> basis_1 = basis;
-		hypro::HPolytope<Number> polytope_1 = polytope;
-
-		hypro::vector_t<Number> constr_1 = basis_1.row( i ) * ( -1 );
-		hypro::vector_t<Number> constr_2 = basis_1.row( i );
-		hypro::Halfspace<Number> pos_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_1 ), maxValue - center_1[i] );
-		hypro::Halfspace<Number> neg_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_2 ), minValue - center_1[i] );
-
-		polytope_1 = polytope_1.intersectHalfspace( pos_1 );
-		polytope_1 = polytope_1.intersectHalfspace( neg_1 );
-		hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
-
-		result.push_back( star_1 );
-
-		// split the star set into the part that is greater than maxValue
-		hypro::vector_t<Number> center_2 = center;
-		hypro::matrix_t<Number> basis_2 = basis;
-		hypro::HPolytope<Number> polytope_2 = polytope;
-
-		hypro::vector_t<Number> constr_3 = basis_1.row( i ) * ( -1 );
-		hypro::Halfspace<Number> pos_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_3 ), maxValue - center_2[i] );
-		polytope_2 = polytope_2.intersectHalfspace( pos_2 );
-
-		hypro::matrix_t<Number> transformationMatrix_1 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-		transformationMatrix_1( i, i ) = 0.0;
-		basis_2 = transformationMatrix_1 * basis_2;
-		hypro::vector_t<Number> biasVector_1 = hypro::vector_t<Number>( center.rows() );
-		biasVector_1( i ) = maxValue;
-		center_2 = transformationMatrix_1 * center_2 + biasVector_1;
-		hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, polytope_2 );
-
-		result.push_back( star_2 );
-
-		// split the star set into the part less than minValue
-		hypro::vector_t<Number> center_3 = center;
-		hypro::matrix_t<Number> basis_3 = basis;
-		hypro::HPolytope<Number> polytope_3 = polytope;
-
-		hypro::vector_t<Number> constr_4 = basis_1.row( i );
-		hypro::Halfspace<Number> neg_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constr_4 ), minValue - center_3[i] );
-		polytope_3 = polytope_3.intersectHalfspace( neg_2 );
-
-		hypro::matrix_t<Number> transformationMatrix_2 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-		transformationMatrix_2( i, i ) = 0.0;
-		basis_3 = transformationMatrix_2 * basis_3;
-		hypro::vector_t<Number> biasVector_2 = hypro::vector_t<Number>( center.rows() );
-		biasVector_2( i ) = minValue;
-		center_3 = transformationMatrix_2 * center_3 + biasVector_2;
-		hypro::Starset<Number> star_3 = hypro::Starset<Number>( center_3, basis_3, polytope_3 );
-
-		result.push_back( star_3 );
 	}
 	return result;
 }

@@ -21,9 +21,12 @@ HardTanhLayer<Number>::HardTanhLayer( unsigned short int layerSize, unsigned sho
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::reachHardTanh( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool /*plotIntermediates*/ ) const {
+std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::reachHardTanh( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plotIntermediates ) const {
+	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+
 	auto resultSet = std::vector<hypro::Starset<Number>>();
 	resultSet.push_back( inputSet );
+
 	for ( auto i = 0; i < inputSet.generator().rows(); i++ ) {
 		// iterate over the dimensions of the input star
 		switch ( method ) {
@@ -35,6 +38,14 @@ std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::reachHardTanh( const 
 				break;
 			default:
 				FATAL( "hypro.neuralnets.activation_functions.hardtanh", "Invalid analysis method specified" );
+		}
+		if ( plotIntermediates ) {
+#pragma omp critical
+			for ( int j = 0; j < resultSet.size(); j++ ) {
+				plotter.addObject( resultSet[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
+			}
+			plotter.plot2d();
+			plotter.clear();
 		}
 	}
 	return resultSet;
@@ -83,8 +94,8 @@ std::vector<Starset<Number>> HardTanhLayer<Number>::forwardPass( const std::vect
 
 	for ( const auto& set : inputSets ) {
 		auto resultSets = reachHardTanh( set, method, plotIntermediates );
-
-		result.insert( result.end(), resultSets.begin(), resultSets.end() );
+#pragma omp critical
+		{ result.insert( result.end(), resultSets.begin(), resultSets.end() ); };
 	}
 
 	return result;
