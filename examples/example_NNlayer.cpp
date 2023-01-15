@@ -23,8 +23,8 @@ int main( int argc, char* argv[] ) {
 	settings.fill = true;
 	settings.linewidth = 3.0;
 	settings.keepAspectRatio = true;
-	settings.xPlotInterval = carl::Interval<double>( -2.2, +2.2 );
-	settings.yPlotInterval = carl::Interval<double>( -2.2, +2.2 );
+	settings.xPlotInterval = carl::Interval<double>( -6, +6 );
+	settings.yPlotInterval = carl::Interval<double>( -6, +6 );
 
 	// Get plotter reference.
 	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
@@ -81,23 +81,33 @@ int main( int argc, char* argv[] ) {
 		limits << 2, 2, 2, 2;
 		input_poly = hypro::HPolytope<Number>( constr, limits );
 	}
-	std::cout << input_poly << std::endl;
+
+	hypro::vector_t<Number> center = hypro::vector_t<Number>( 2 );
+	center << 0, 0;
+
+	hypro::matrix_t<Number> basis = hypro::matrix_t<Number>( 2, 2 );
+	basis << 0.7071, -0.7071, 0.7071, 0.7071;
+	// basis << 1.4241, -1.4241, 1.4241, 1.4241;
 
 	// Create star set vector from input polytope
-	auto star_set = hypro::Starset<Number>( input_poly );
+	auto star_set = hypro::Starset<Number>( center, basis, input_poly );
 	std::vector<hypro::Starset<Number>> inputSets;
 	inputSets.push_back( star_set );
 
+	std::cout << inputSets << std::endl;
+
 	// Plot input set
-	plotter.addObject( star_set.vertices(), hypro::plotting::colors[hypro::plotting::petrol] );
+	plotter.addObject( star_set.vertices(), hypro::plotting::colors[hypro::plotting::green] );
+	plotter.plot2d();
+	plotter.clear();
 
 	// Apply forward pass
 	auto output_set = layer->forwardPass( inputSets, method, false );
 
-	// Combine all output sets to one polygon
-	auto combined_output_set = hypro::Starset<Number>::unite( output_set );
-
 	// Plot output set
-	plotter.addObject( combined_output_set.vertices(), hypro::plotting::colors[hypro::plotting::red] );
+	for ( int j = 0; j < output_set.size(); j++ ) {
+		plotter.addObject( output_set[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
+	}
 	plotter.plot2d();
+	plotter.clear();
 }
