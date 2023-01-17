@@ -23,7 +23,9 @@ LeakyReLULayer<Number>::LeakyReLULayer( unsigned short layerSize, unsigned short
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> LeakyReLULayer<Number>::reachLeakyReLU( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool /*plotIntermediates*/ ) const {
+std::vector<hypro::Starset<Number>> LeakyReLULayer<Number>::reachLeakyReLU( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plotIntermediates ) const {
+	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+
 	auto resultSet = std::vector<hypro::Starset<Number>>();
 	resultSet.push_back( inputSet );
 	for ( auto i = 0; i < inputSet.generator().rows(); i++ ) {
@@ -37,6 +39,14 @@ std::vector<hypro::Starset<Number>> LeakyReLULayer<Number>::reachLeakyReLU( cons
 				break;
 			default:
 				FATAL( "hypro.neuralnets.activation_functions.LeakyReLU", "Invalid analysis method specified" );
+		}
+		if ( plotIntermediates ) {
+#pragma omp critical
+			for ( int j = 0; j < resultSet.size(); j++ ) {
+				plotter.addObject( resultSet[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
+			}
+			plotter.plot2d();
+			plotter.clear();
 		}
 	}
 	return resultSet;

@@ -11,6 +11,7 @@
 #pragma once
 #include "../LayerBase.h"
 #include "hypro/neuralnets/network/activation_functions/LeakyReLU/LeakyReLU.h"
+#include "hypro/util/plotting/Plotter.h"
 
 namespace hypro {
 
@@ -26,7 +27,7 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 * @param[in] plotIntermediates If true, plot the intermediate star sets
 	 * @return The resulting set after applying the reachability method
 	 */
-	std::vector<hypro::Starset<Number>> reachLeakyReLU( const hypro::Starset<Number>& input_star, NN_REACH_METHOD method, bool plot_intermediates ) const;
+	std::vector<hypro::Starset<Number>> reachLeakyReLU( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
   public:
 	/**
