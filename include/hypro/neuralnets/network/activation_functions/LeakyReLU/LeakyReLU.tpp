@@ -115,7 +115,7 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, s
 		first_constraint.conservativeResize( first_constraint.rows() + 1 );
 		first_constraint[first_constraint.rows() - 1] = -1;
 		shape.row( shape.rows() - 3 ) = first_constraint;
-		limits[limits.rows() - 3] = -center[i];
+		limits[limits.rows() - 3] = (negativeSlope * center[i]);
 
 		// second constraint: x_(m+1) >= x_i
 		hypro::vector_t<Number> second_constraint = basis.row( i );
