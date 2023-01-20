@@ -34,7 +34,7 @@ std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::reachHardTanh( const 
 				resultSet = HardTanh<Number>::exactHardTanh( i, resultSet, mMinValue, mMaxValue );
 				break;
 			case NN_REACH_METHOD::OVERAPPRX:
-				resultSet = HardTanh<Number>::approxHardTanh( i, resultSet );
+				resultSet = HardTanh<Number>::approxHardTanh( i, resultSet, mMinValue, mMaxValue );
 				break;
 			default:
 				FATAL( "hypro.neuralnets.activation_functions.hardtanh", "Invalid analysis method specified" );
@@ -80,7 +80,7 @@ std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::forwardPass( const hy
 			resultSet = HardTanh<Number>::exactHardTanh( index, resultSet, mMinValue, mMaxValue );
 			break;
 		case NN_REACH_METHOD::OVERAPPRX:
-			resultSet = HardTanh<Number>::approxHardTanh( index, resultSet );
+			resultSet = HardTanh<Number>::approxHardTanh( index, resultSet, mMinValue, mMaxValue );
 			break;
 		default:
 			FATAL( "hypro.neuralnets.activation_functions.hardtanh", "Invalid analysis method specified" );
