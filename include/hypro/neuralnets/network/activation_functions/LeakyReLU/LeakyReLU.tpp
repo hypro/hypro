@@ -115,7 +115,7 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, s
 		first_constraint.conservativeResize( first_constraint.rows() + 1 );
 		first_constraint[first_constraint.rows() - 1] = -1;
 		shape.row( shape.rows() - 3 ) = first_constraint;
-		limits[limits.rows() - 3] = (negativeSlope * center[i]);
+		limits[limits.rows() - 3] = -( negativeSlope * center[i] );
 
 		// second constraint: x_(m+1) >= x_i
 		hypro::vector_t<Number> second_constraint = basis.row( i );
@@ -124,13 +124,13 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, s
 		shape.row( shape.rows() - 2 ) = second_constraint;
 		limits[limits.rows() - 2] = -center[i];
 
-		// third constrain: x_(m+1) <= ( ( ub - ( negativeSlope * lb ) ) / ( ub - lb ) ) * x_i -( ( ( ub * lb ) * ( negativeSlope - 1 ) ) / ( lb - ub ) )
+		// third constrain: x_(m+1) <= ( ( ub - ( negativeSlope * lb ) ) / ( ub - lb ) ) * x_i - ( ( ( ub * lb ) * ( negativeSlope - 1 ) ) / ( ub - lb ) )
 		hypro::vector_t<Number> third_constraint = basis.row( i );
 		third_constraint = third_constraint * ( -( ( ub - ( negativeSlope * lb ) ) / ( ub - lb ) ) );
 		third_constraint.conservativeResize( third_constraint.rows() + 1 );
 		third_constraint( third_constraint.rows() - 1 ) = 1;
 		shape.row( shape.rows() - 1 ) = third_constraint;
-		limits[limits.rows() - 1] = -( ( ( ub * lb ) * ( negativeSlope - 1 ) + center[i] ) / ( lb - ub ) );
+		limits[limits.rows() - 1] = ( ( ub - negativeSlope * lb ) * center[i] + lb * ub * ( negativeSlope - 1 ) ) / ( ub - lb );
 
 		hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 		transformationMatrix( i, i ) = 0.0;
@@ -145,7 +145,6 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, s
 		hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
 		result.push_back( res_star );
 	}
-
 	return result;
 }
 
