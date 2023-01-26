@@ -1,24 +1,27 @@
 /**
-* @file HardSigmoidLayer.h
-* @author Hana Masara <hana.masara@rwth-aachen.de>
-* @brief
-* @version 0.1
-* @date 2022-12-08
-*
-* @copyright Copyright (c) 2022
-*
+ * @file HardSigmoidLayer.h
+ * @author Hana Masara <hana.masara@rwth-aachen.de>
+ * @brief
+ * @version 0.1
+ * @date 2022-12-08
+ *
+ * @copyright Copyright (c) 2022
+ *
  */
 
 #pragma once
 #include "../LayerBase.h"
 #include "hypro/neuralnets/network/activation_functions/HardSigmoid/HardSigmoid.h"
+#include "hypro/util/plotting/Plotter.h"
 
-namespace hypro{
+namespace hypro {
 
 template <typename Number>
-class HardSigmoidLayer : public LayerBase<Number>{
-
+class HardSigmoidLayer : public LayerBase<Number> {
   private:
+	float mMinValue = -3.0;
+	float mMaxValue = 3.0;
+
 	/**
 	 * @brief Applies the given reachability method to the input set
 	 * @param inputSet THe input set
@@ -26,7 +29,7 @@ class HardSigmoidLayer : public LayerBase<Number>{
 	 * @param[in] plotIntermediates If true, plot the intermediate star sets
 	 * @return The resulting set after applying the reachability method
 	 */
-	std::vector<hypro::Starset<Number>> reachHardSigmoid( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plot_intermediates ) const;
+	std::vector<hypro::Starset<Number>> reachHardSigmoid( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
   public:
 	/**
@@ -40,7 +43,7 @@ class HardSigmoidLayer : public LayerBase<Number>{
 	 * @param[in] layerSize The layer size
 	 * @param[in] layerIndex The layer index
 	 */
-	HardSigmoidLayer( unsigned short int layerSize, unsigned short int layerIndex);
+	HardSigmoidLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue = -3.0, float maxValue = 3.0 );
 
 	/**
 	 * @brief Default destructor
@@ -54,7 +57,7 @@ class HardSigmoidLayer : public LayerBase<Number>{
 	[[nodiscard]] virtual const NN_LAYER_TYPE layerType() const;
 
 	/**
-	 * @brief Applies the Hardtanh function element-wise to the input vector
+	 * @brief Applies the HardSigmoid function element-wise to the input vector
 	 *
 	 * @param inputVec
 	 * @return The resulting vector after applying the HardSigmoid function
@@ -91,8 +94,10 @@ class HardSigmoidLayer : public LayerBase<Number>{
 	 */
 	virtual void serialize( std::ostream& os ) const {
 		os << "Layer size: " << LayerBase<Number>::mLayerSize << std::endl;
+		os << "HardSigmoid min value: " << this->mMinValue << std::endl;
+		os << "HardSigmoid max value: " << this->mMaxValue << std::endl;
 	}
 };
-}// namespace hypro
+}  // namespace hypro
 
 #include "HardSigmoidLayer.tpp"
