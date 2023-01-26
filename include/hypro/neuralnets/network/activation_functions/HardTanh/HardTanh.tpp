@@ -30,19 +30,17 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std:
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
-
 			hypro::vector_t<Number> center_1 = center;
 			center_1( i ) = minValue;
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, basis, polytope );
 			result.push_back( res_star );
 			continue;
 		}
-		// if lowe bound is greater than maxValue, we project the input on maxValue
+		// if lower bound is greater than maxValue, we project the input on maxValue
 		if ( lb > maxValue ) {
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
-
 			hypro::vector_t<Number> center_1 = center;
 			center_1( i ) = maxValue;
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, basis, polytope );
@@ -116,7 +114,7 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std:
 			continue;
 		}
 
-		if ( ( lb < -1 ) && ( ub > 1 ) ) {
+		if ( ( lb < minValue ) && ( ub > maxValue ) ) {
 			// split the star input into the part between minValue and maxValue
 			// this part remain as it is
 			hypro::vector_t<Number> center_1 = center;
@@ -240,13 +238,13 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std
 			shape.row( shape.rows() - 2 ) = second_constraint;
 			limits[limits.rows() - 2] = -center[i];
 
-			// third constrain: x_(m+1) <= ( ( ub - min ) / ( ub - lb ) ) * x_i + ( ( ub * ( lb - min ) ) / ( lb - ub ) )
+			// third constrain: x_(m+1) <= ( ( ub - min ) / ( ub - lb ) ) * x_i - ( ( ub * ( lb - minValue ) ) / ( ub - lb ) )
 			hypro::vector_t<Number> third_constraint = basis.row( i );
 			third_constraint = third_constraint * ( -( ( ub - minValue ) / ( ub - lb ) ) );
 			third_constraint.conservativeResize( third_constraint.rows() + 1 );
 			third_constraint( third_constraint.rows() - 1 ) = 1;
 			shape.row( shape.rows() - 1 ) = third_constraint;
-			limits[limits.rows() - 1] = ( ( ub * ( lb - minValue ) - center[i] ) / ( lb - ub ) );
+			limits[limits.rows() - 1] = ( center[i] * ( ub - minValue ) - ub * ( lb - minValue ) ) / ( ub - lb );
 
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
@@ -288,7 +286,7 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std
 			third_constraint.conservativeResize( third_constraint.rows() + 1 );
 			third_constraint( third_constraint.rows() - 1 ) = -1;
 			shape.row( shape.rows() - 1 ) = third_constraint;
-			limits[limits.rows() - 1] = -( ( lb * ( maxValue - ub ) * ( center[i] + lb ) ) / ( lb - ub ) );
+			limits[limits.rows() - 1] = -( ( center[i] * ( lb - maxValue ) + lb * ( maxValue - ub ) ) / ( lb - ub ) );
 
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
@@ -304,7 +302,7 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std
 			result.push_back( res_star );
 		}
 
-		if ( ( lb < -1 ) && ( ub > 1 ) ) {
+		if ( ( lb < minValue ) && ( ub > maxValue ) ) {
 			// Resize the original shape matrix and limits vector, so that they have 3 more constraints and one more variable
 			shape.conservativeResize( shape.rows() + 4, shape.cols() + 1 );
 			shape.col( shape.cols() - 1 ) = hypro::vector_t<Number>::Zero( shape.rows() );
@@ -322,21 +320,21 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std
 			shape.row( shape.rows() - 3 ) = second_constraint;
 			limits[limits.rows() - 3] = -minValue;
 
-			// third constraint: x_(m+1) <= ( ( maxValue - minValue ) / ( maxValue - ( lb + center[i] ) ) ) * x_i -( ( maxValue * ( center[i] + lb - minValue ) ) / ( maxValue - center[i] - lb ) )
+			// third constraint: x_(m+1) <= ( ( maxValue - minValue ) / ( maxValue - lb ) ) * x_i - ( ( maxValue * ( lb - minValue ) ) / ( maxValue - lb ) )
 			hypro::vector_t<Number> third_constraint = basis.row( i );
-			third_constraint = third_constraint * ( -( ( maxValue - minValue ) / ( maxValue - ( lb + center[i] ) ) ) );
+			third_constraint = third_constraint * ( -( ( maxValue - minValue ) / ( maxValue - lb ) ) );
 			third_constraint.conservativeResize( third_constraint.rows() + 1 );
 			third_constraint( third_constraint.rows() - 1 ) = 1;
 			shape.row( shape.rows() - 2 ) = third_constraint;
-			limits[limits.rows() - 2] = -( ( maxValue * ( center[i] + lb - minValue ) ) / ( maxValue - center[i] - lb ) );
+			limits[limits.rows() - 2] = ( center[i] * ( maxValue - minValue ) - maxValue * ( lb - minValue ) ) / ( maxValue - lb );
 
-			// fourth constraint: x_(m+1) >= ( ( minValue - maxValue ) / ( minValue - ( ub + center[i] ) ) * x_i - ( ( minValue * ( maxValue - center[i] - ub ) ) / ( center[i] + ub - minValue ) )
+			// fourth constraint: x_(m+1) >= ( ( minValue - maxValue ) / ( minValue - ub ) ) * x_i - ( ( minValue * ( maxValue - ub ) ) / ( minValue - ub ) )
 			hypro::vector_t<Number> fourth_constraint = basis.row( i );
-			fourth_constraint = fourth_constraint * ( ( minValue - maxValue ) / ( minValue - ( ub + center[i] ) ) );
+			fourth_constraint = fourth_constraint * ( ( minValue - maxValue ) / ( minValue - ub ) );
 			fourth_constraint.conservativeResize( fourth_constraint.rows() + 1 );
 			fourth_constraint( fourth_constraint.rows() - 1 ) = -1;
 			shape.row( shape.rows() - 1 ) = fourth_constraint;
-			limits[limits.rows() - 1] = ( ( minValue * ( maxValue - center[i] - ub ) ) / ( center[i] + ub - minValue ) );
+			limits[limits.rows() - 1] = -( ( center[i] * ( minValue - maxValue ) + minValue * ( maxValue - ub ) ) / ( minValue - ub ) );
 
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
