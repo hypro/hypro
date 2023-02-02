@@ -118,7 +118,7 @@ if (carl_FOUND)
                 endif ()
             endforeach ()
         endforeach ()
-        foreach (item ${carl_sublibraries_shared})
+        foreach (item ${carl_sublibraries_static})
             # getting the include path is required for the macros to work correctly
             get_target_property(carl_abs_include_path ${item} INTERFACE_INCLUDE_DIRECTORIES)
             get_target_property(carl_libs_static ${item} INTERFACE_LINK_LIBRARIES)
