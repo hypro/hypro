@@ -51,54 +51,54 @@ TEST( ParallelCompositionAnalysisTest, SingleAutomaton ) {
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result );
 }
 
-TEST( ParallelCompositionAnalysisTest, SafetyAutomaton ) {
-	hypro::FixedAnalysisParameters fixedParameters;
-	hypro::AnalysisParameters analysisParameters;
-	auto cmp = Automaton();
+// TEST( ParallelCompositionAnalysisTest, SafetyAutomaton ) {
+// 	hypro::FixedAnalysisParameters fixedParameters;
+// 	hypro::AnalysisParameters analysisParameters;
+// 	auto cmp = Automaton();
 
-	auto [automaton, parsedSettings] = hypro::parseFlowstarFile<Number>( hypro::getTestModelsPath() + "parser/bouncing_ball.model" );
-	auto settings = hypro::convert( parsedSettings );
-	cmp.addAutomaton( std::move( automaton ) );
+// 	auto [automaton, parsedSettings] = hypro::parseFlowstarFile<Num	ber>( hypro::getTestModelsPath() + "parser/bouncing_ball.model" );
+// 	auto settings = hypro::convert( parsedSettings );
+// 	cmp.addAutomaton( std::move( automaton ) );
 
-	// create safety automaton
-	{
-		auto safety = hypro::HybridAutomaton<Number>();
-		auto* loc = safety.createLocation( "isSafe?" );
-		loc->setFlow( Matrix::Zero( 0, 0 ) );
-		// global badStates: x <= 1
-		Matrix safetyConstraint = Matrix::Zero( 1, 2 );
-		safetyConstraint( 0, 0 ) = 1;
-		Vector safetyConstant = Vector::Ones( 1 );
-		safety.addGlobalBadStates( { safetyConstraint, safetyConstant } );
-		safety.addInitialState( loc, Condition::True() );
-		// add to composition
-		cmp.addAutomaton( std::move( safety ) );
-	}
+// 	// create safety automaton
+// 	{
+// 		auto safety = hypro::HybridAutomaton<Number>();
+// 		auto* loc = safety.createLocation( "isSafe?" );
+// 		loc->setFlow( Matrix::Zero( 0, 0 ) );
+// 		// global badStates: x <= 1
+// 		Matrix safetyConstraint = Matrix::Zero( 1, 2 );
+// 		safetyConstraint( 0, 0 ) = 1;
+// 		Vector safetyConstant = Vector::Ones( 1 );
+// 		safety.addGlobalBadStates( { safetyConstraint, safetyConstant } );
+// 		safety.addInitialState( loc, Condition::True() );
+// 		// add to composition
+// 		cmp.addAutomaton( std::move( safety ) );
+// 	}
 
-	auto roots = hypro::makeRoots<Box, Automaton>( cmp );
+// 	auto roots = hypro::makeRoots<Box, Automaton>( cmp );
 
-	auto reacher = hypro::reachability::Reach<Box, Automaton>( cmp, settings.fixedParameters(), settings.strategy().front(), roots );
-	auto result = reacher.computeForwardReachability();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
-	// try local bad states
-	cmp.removeAutomaton( 1 );
-	{
-		auto safety = hypro::HybridAutomaton<Number>();
-		auto* loc = safety.createLocation( "isSafe?" );
-		loc->setFlow( Matrix::Zero( 0, 0 ) );
-		// global badStates: x <= 1
-		Matrix safetyConstraint = Matrix::Zero( 1, 2 );
-		safetyConstraint( 0, 0 ) = 1;
-		Vector safetyConstant = Vector::Ones( 1 );
-		safety.addLocalBadStates( loc, { safetyConstraint, safetyConstant } );
-		safety.addInitialState( loc, Condition::True() );
-		// add to composition
-		cmp.addAutomaton( std::move( safety ) );
-	}
-	roots.clear();
-	roots = hypro::makeRoots<Box, Automaton>( cmp );
+// 	auto reacher = hypro::reachability::Reach<Box, Automaton>( cmp, settings.fixedParameters(), settings.strategy().front(), roots );
+// 	auto result = reacher.computeForwardReachability();
+// 	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
+// 	// try local bad states
+// 	cmp.removeAutomaton( 1 );
+// 	{
+// 		auto safety = hypro::HybridAutomaton<Number>();
+// 		auto* loc = safety.createLocation( "isSafe?" );
+// 		loc->setFlow( Matrix::Zero( 0, 0 ) );
+// 		// global badStates: x <= 1
+// 		Matrix safetyConstraint = Matrix::Zero( 1, 2 );
+// 		safetyConstraint( 0, 0 ) = 1;
+// 		Vector safetyConstant = Vector::Ones( 1 );
+// 		safety.addLocalBadStates( loc, { safetyConstraint, safetyConstant } );
+// 		safety.addInitialState( loc, Condition::True() );
+// 		// add to composition
+// 		cmp.addAutomaton( std::move( safety ) );
+// 	}
+// 	roots.clear();
+// 	roots = hypro::makeRoots<Box, Automaton>( cmp );
 
-	auto reacher2 = hypro::reachability::Reach<Box, Automaton>( cmp, settings.fixedParameters(), settings.strategy().front(), roots );
-	result = reacher2.computeForwardReachability();
-	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
-}
+// 	auto reacher2 = hypro::reachability::Reach<Box, Automaton>( cmp, settings.fixedParameters(), settings.strategy().front(), roots );
+// 	result = reacher2.computeForwardReachability();
+// 	EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
+// }

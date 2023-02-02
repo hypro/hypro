@@ -27,7 +27,7 @@ static void computeReachableStates( const std::string& filename,
 	hypro::Settings settings = hypro::convert( parsedSettings );
 	auto roots = hypro::makeRoots<Representation>( automaton );
 
-	hypro::reachability::Reach<Representation> reacher( automaton, settings.fixedParameters(), settings.strategy().front(), roots );
+	hypro::reachability::Reach<Representation, hypro::HybridAutomaton<Number>> reacher( automaton, settings.fixedParameters(), settings.strategy().front(), roots );
 
 	std::cout << "Initiated queues" << std::endl;
 
