@@ -55,9 +55,13 @@ int main( int argc, char* argv[] ) {
 				std::cout << "Using LeakyReLu layer." << std::endl;
 				layer = std::make_shared<hypro::LeakyReLULayer<Number>>( 2, 0 );
 				break;
-			case 'h':
+			case 't':
 				std::cout << "Using HardTanh layer." << std::endl;
 				layer = std::make_shared<hypro::HardTanhLayer<Number>>( 2, 0 );
+				break;
+			case 's':
+				std::cout << "Using HardSigmoid layer." << std::endl;
+				layer = std::make_shared<hypro::HardSigmoidLayer<Number>>( 2, 0 );
 				break;
 			default:
 				std::cout << "Unknown layer argument. Using LeakyReLu layer." << std::endl;
@@ -78,7 +82,7 @@ int main( int argc, char* argv[] ) {
 		hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 4, 2 );
 		hypro::vector_t<Number> limits = hypro::vector_t<Number>( 4 );
 		constr << 1, 0, -1, 0, 0, 1, 0, -1;
-		limits << 2, 2, 2, 2;
+		limits << 2, 1, 1, 1;
 		input_poly = hypro::HPolytope<Number>( constr, limits );
 	}
 
@@ -87,7 +91,6 @@ int main( int argc, char* argv[] ) {
 
 	hypro::matrix_t<Number> basis = hypro::matrix_t<Number>( 2, 2 );
 	basis << 0.7071, -0.7071, 0.7071, 0.7071;
-	// basis << 1.4241, -1.4241, 1.4241, 1.4241;
 
 	// Create star set vector from input polytope
 	auto star_set = hypro::Starset<Number>( center, basis, input_poly );
@@ -102,12 +105,5 @@ int main( int argc, char* argv[] ) {
 	plotter.clear();
 
 	// Apply forward pass
-	auto output_set = layer->forwardPass( inputSets, method, false );
-
-	// Plot output set
-	for ( int j = 0; j < output_set.size(); j++ ) {
-		plotter.addObject( output_set[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
-	}
-	plotter.plot2d();
-	plotter.clear();
+	auto output_set = layer->forwardPass( inputSets, method, true );
 }
