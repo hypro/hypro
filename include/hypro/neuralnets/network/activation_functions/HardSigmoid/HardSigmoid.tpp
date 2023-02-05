@@ -19,16 +19,15 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 		Number lb = -eval_low_result.supportValue + center[i];
 		Number ub = eval_high_result.supportValue + center[i];
 
-		// if lower bound is greater than minValue and upper bound less than maxValue, we ..
+		// if lower bound is greater than minValue and upper bound less than maxValue, this part corresponds to the function: ( 1 / ( maxValue - minValue ) ) x + ( minValue / ( minValue - maxValue ) )
 		if ( ( lb > minValue ) && ( ub < maxValue ) ) {
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = ( 1 / ( maxValue - minValue ) );
 			basis = transformationMatrix * basis;
-			//hypro::vector_t<Number> center_1 = center;
-			//center_1( i ) = ( minValue / ( minValue - maxValue ) );
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, basis, polytope );
+			hypro::vector_t<Number> center_1 = center;
+			center_1( i ) = ( minValue / ( minValue - maxValue ) );
+			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, basis, polytope );
 			result.push_back( res_star );
-			std::cout << "set am ende von exact: "<< set << std::endl;
 			continue;
 		}
 		// if upper bound is less than minValue, we project the input on 0
@@ -69,7 +68,6 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 			basis_1 = transformationMatrix * basis_1;
 			center_1( i ) = ( minValue / ( minValue - maxValue ) );
 			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
-
 
 			// split the star input into the part that is less than minValue
 			// this part is projected on 0
@@ -140,10 +138,9 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 			hypro::vector_t<Number> constraint_1 = basis_1.row( i );
 			hypro::vector_t<Number> constraint_2 = basis_1.row( i ) * ( -1 );
 			hypro::Halfspace<Number> remaining_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_1 ), maxValue - center_1[i] );
-			hypro::Halfspace<Number> remainign_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_2 ), center_1[i] - minValue );
-
+			hypro::Halfspace<Number> remaining_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_2 ), center_1[i] - minValue );
 			polytope_1 = polytope_1.intersectHalfspace( remaining_1 );
-			polytope_1 = polytope_1.intersectHalfspace( remainign_2 );
+			polytope_1 = polytope_1.intersectHalfspace( remaining_2 );
 
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = ( 1 / ( maxValue - minValue ) );
@@ -151,36 +148,36 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 			center_1( i ) = ( minValue / ( minValue - maxValue ) );
 			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
 
-			// split the star input into the part less than minValue
-			// this part is projected on 0
+			// split the star input into the part that is greater than maxValue
+			// this part is projected on 1
 			hypro::vector_t<Number> center_2 = center;
 			hypro::matrix_t<Number> basis_2 = basis;
 			hypro::HPolytope<Number> polytope_2 = polytope;
 
-			hypro::vector_t<Number> constraint_3 = basis_2.row( i );
-			hypro::Halfspace<Number> projected_min = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_3 ), minValue - center_2[i] );
-			polytope_2 = polytope_2.intersectHalfspace( projected_min );
+			hypro::vector_t<Number> constraint_4 = basis_2.row( i ) * ( -1 );
+			hypro::Halfspace<Number> projected_max = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_4 ), center_2[i] - maxValue );
+			polytope_2 = polytope_2.intersectHalfspace( projected_max );
 
-			hypro::matrix_t<Number> transformationMatrix_1 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-			transformationMatrix_1( i, i ) = 0.0;
-			basis_2 = transformationMatrix_1 * basis_2;
-			center_2 = transformationMatrix_1 * center_2;
+			hypro::matrix_t<Number> transformationMatrix_2 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
+			transformationMatrix_2( i, i ) = 0.0;
+			basis_2 = transformationMatrix_2 * basis_2;
+			center_2( i ) = 1.0;
 			hypro::Starset<Number> star_2 = hypro::Starset<Number>( center_2, basis_2, polytope_2 );
 
-			// split the star input into the part that is greater than maxValue
-			// this part is projected on 1
+			// split the star input into the part less than minValue
+			// this part is projected on 0
 			hypro::vector_t<Number> center_3 = center;
 			hypro::matrix_t<Number> basis_3 = basis;
 			hypro::HPolytope<Number> polytope_3 = polytope;
 
-			hypro::vector_t<Number> constraint_4 = basis_1.row( i ) * ( -1 );
-			hypro::Halfspace<Number> projected_max = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_4 ), center_3[i] - maxValue );
-			polytope_3 = polytope_3.intersectHalfspace( projected_max );
+			hypro::vector_t<Number> constraint_3 = basis_3.row( i );
+			hypro::Halfspace<Number> projected_min = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_3 ), minValue - center_3[i] );
+			polytope_3 = polytope_3.intersectHalfspace( projected_min );
 
-			hypro::matrix_t<Number> transformationMatrix_2 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-			transformationMatrix_2( i, i ) = 0.0;
-			basis_3 = transformationMatrix_2 * basis_3;
-			center_3( i ) = 1.0;
+			hypro::matrix_t<Number> transformationMatrix_1 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
+			transformationMatrix_1( i, i ) = 0.0;
+			basis_3 = transformationMatrix_1 * basis_3;
+			center_3 = transformationMatrix_1 * center_3;
 			hypro::Starset<Number> star_3 = hypro::Starset<Number>( center_3, basis_3, polytope_3 );
 
 			result.push_back( star_1 );
@@ -188,6 +185,7 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 			result.push_back( star_3 );
 		}
 	}
+	return result;
 }
 template <typename Number>
 std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue ) {
@@ -209,9 +207,15 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int 
 		Number lb = -eval_low_result.supportValue + center[i];
 		Number ub = eval_high_result.supportValue + center[i];
 
-		// TO DO
-		//  if lower bound is greater than minValue and upper bound less than maxValue, we ..
+		//  if lower bound is greater than minValue and upper bound less than maxValue, this part corresponds to the function: ( 1 / ( maxValue - minValue ) ) x + ( minValue / ( minValue - maxValue ) )
 		if ( ( lb > minValue ) && ( ub < maxValue ) ) {
+			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
+			transformationMatrix( i, i ) = ( 1 / ( maxValue - minValue ) );
+			basis = transformationMatrix * basis;
+			hypro::vector_t<Number> center_1 = center;
+			center_1( i ) = ( minValue / ( minValue - maxValue ) );
+			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, shape, limits, basis );
+			result.push_back( res_star );
 			continue;
 		}
 		// if upper bound is less than minValue, we project the input on 0
@@ -368,5 +372,6 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int 
 			result.push_back( res_star );
 		}
 	}
+	return result;
 }
 }  // namespace hypro

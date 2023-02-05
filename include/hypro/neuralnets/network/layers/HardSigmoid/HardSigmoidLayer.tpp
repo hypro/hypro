@@ -9,8 +9,8 @@
  *
  */
 
-#include "hypro/util/plotting/Plotter.h"
 #include "HardSigmoidLayer.h"
+#include "hypro/util/plotting/Plotter.h"
 
 namespace hypro {
 
@@ -32,7 +32,6 @@ std::vector<hypro::Starset<Number>> HardSigmoidLayer<Number>::reachHardSigmoid( 
 		// iterate over the dimensions of the input star
 		switch ( method ) {
 			case NN_REACH_METHOD::EXACT:
-				std::cout << "durchlauf: " << i << std::endl;
 				resultSet = HardSigmoid<Number>::exactHardSigmoid( i, resultSet, mMinValue, mMaxValue );
 				break;
 			case NN_REACH_METHOD::OVERAPPRX:
