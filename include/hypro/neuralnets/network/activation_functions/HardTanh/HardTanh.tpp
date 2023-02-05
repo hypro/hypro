@@ -124,10 +124,10 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std:
 			hypro::vector_t<Number> constraint_1 = basis_1.row( i );
 			hypro::vector_t<Number> constraint_2 = basis_1.row( i ) * ( -1 );
 			hypro::Halfspace<Number> remaining_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_1 ), maxValue - center_1[i] );
-			hypro::Halfspace<Number> remainign_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_2 ), center_1[i] - minValue );
+			hypro::Halfspace<Number> remaining_2 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_2 ), center_1[i] - minValue );
 
 			polytope_1 = polytope_1.intersectHalfspace( remaining_1 );
-			polytope_1 = polytope_1.intersectHalfspace( remainign_2 );
+			polytope_1 = polytope_1.intersectHalfspace( remaining_2 );
 			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
 
 			// split the star input into the part less than minValue
@@ -152,7 +152,7 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std:
 			hypro::matrix_t<Number> basis_3 = basis;
 			hypro::HPolytope<Number> polytope_3 = polytope;
 
-			hypro::vector_t<Number> constraint_4 = basis_1.row( i ) * ( -1 );
+			hypro::vector_t<Number> constraint_4 = basis_3.row( i ) * ( -1 );
 			hypro::Halfspace<Number> projected_max = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_4 ), center_3[i] - maxValue );
 			polytope_3 = polytope_3.intersectHalfspace( projected_max );
 
