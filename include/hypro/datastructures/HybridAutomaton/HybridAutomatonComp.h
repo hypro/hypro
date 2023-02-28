@@ -429,6 +429,9 @@ class HybridAutomatonComp {
 	void createAllLocations() const;
 };
 
+template <typename N>
+struct [[maybe_unused]] is_automaton_type<HybridAutomatonComp<N>> : std::true_type {};
+
 }  // namespace hypro
 
 #include "HybridAutomatonComp.tpp"

@@ -2,42 +2,42 @@
 #define CEGARANALYZER_TPP
 
 #include "../../../representations/GeometricObjectBase.h"
-#include "../../../util/combine.h"
+// #include "../../../util/combine.h"
 #include "../../../util/typetraits.h"
 #include "CEGARAnalyzer.h"
 
 namespace hypro::detail {
 
-template <class Number, class... Representations>
-struct CEGARAnalyzer_apply<Number, Representations...>::CreateBaseLevel {
+template <class Number, class Automaton, class... Representations>
+struct CEGARAnalyzer_apply<Number, Automaton, Representations...>::CreateBaseLevel {
 	template <class Representation>
 	BaseLevel operator()( HybridAutomaton<Number> const& ha, FixedAnalysisParameters const& fixedParameters, AnalysisParameters const& parameters ) {
 		auto roots = makeRoots<Representation>( ha );
-		auto analyzer = LTIAnalyzer<Representation>{ ha, fixedParameters, parameters, roots };
+		auto analyzer = LTIAnalyzer<Representation, Automaton>{ ha, fixedParameters, parameters, roots };
 
-		return BaseLevel{ ConcreteBaseLevel<Representation>{ { std::move( roots ) }, std::move( analyzer ) } };
+		return BaseLevel{ ConcreteBaseLevel<Representation, Automaton>{ { std::move( roots ) }, std::move( analyzer ) } };
 	}
 };
 
-template <class Number, class... Representations>
-struct CEGARAnalyzer_apply<Number, Representations...>::CreateRefinementLevel {
+template <class Number, class Automaton, class... Representations>
+struct CEGARAnalyzer_apply<Number, Automaton, Representations...>::CreateRefinementLevel {
 	template <class Representation>
-	RefinementLevel operator()( HybridAutomaton<Number> const& ha, FixedAnalysisParameters const& fixedParameters, AnalysisParameters const& parameters ) {
-		auto analyzer = RefinementAnalyzer<Representation>{ ha, fixedParameters, parameters };
-		return RefinementLevel{ ConcreteRefinementLevel<Representation>{ {}, std::move( analyzer ) } };
+	RefinementLevel operator()( Automaton const& ha, FixedAnalysisParameters const& fixedParameters, AnalysisParameters const& parameters ) {
+		auto analyzer = RefinementAnalyzer<Representation, Automaton>{ ha, fixedParameters, parameters };
+		return RefinementLevel{ ConcreteRefinementLevel<Representation, Automaton>{ {}, std::move( analyzer ) } };
 	}
 };
 
-template <class Number, class... Representations>
-auto CEGARAnalyzer_apply<Number, Representations...>::createBaseLevel( HybridAutomaton<Number> const& automaton, Settings const& settings ) -> BaseLevel {
+template <class Number, class Automaton, class... Representations>
+auto CEGARAnalyzer_apply<Number, Automaton, Representations...>::createBaseLevel( Automaton const& automaton, Settings const& settings ) -> BaseLevel {
 	return dispatch<Number, Converter<Number>>( settings.strategy().front().representation_type,
 												settings.strategy().front().representation_setting,
 												CreateBaseLevel{},
 												automaton, settings.fixedParameters(), settings.strategy().front() );
 }
 
-template <class Number, class... Representations>
-auto CEGARAnalyzer_apply<Number, Representations...>::createRefinementLevel( size_t index ) -> RefinementLevel& {
+template <class Number, class Automaton, class... Representations>
+auto CEGARAnalyzer_apply<Number, Automaton, Representations...>::createRefinementLevel( size_t index ) -> RefinementLevel& {
 	// if mLevels[index - 1] exists, return it
 	if ( mLevels.size() >= index ) return mLevels.at( index - 1 );
 	return mLevels.emplace_back(
@@ -47,15 +47,15 @@ auto CEGARAnalyzer_apply<Number, Representations...>::createRefinementLevel( siz
 											   mHybridAutomaton, mSettings.fixedParameters(), mSettings.strategy().at( index ) ) );
 }
 
-template <class Number, class... Representations>
+template <class Number, class Automaton, class... Representations>
 template <class SourceRep, class TargetLevel>
-void CEGARAnalyzer_apply<Number, Representations...>::transferNodes( std::vector<ReachTreeNode<SourceRep>*>& sourceNodes,
-																	 std::variant<Failure<Representations>...> targetFailure,
-																	 TargetLevel& targetLevel ) {
+void CEGARAnalyzer_apply<Number, Automaton, Representations...>::transferNodes( std::vector<ReachTreeNode<SourceRep, LocationType>*>& sourceNodes,
+																				std::variant<Failure<Representations, LocationType>...> targetFailure,
+																				TargetLevel& targetLevel ) {
 	std::visit( [&]( auto& targetLevel_c ) {
 		using TargetRep = analyzer_rep<decltype( targetLevel_c.analyzer )>;
 
-		auto* targetNode_c = std::get<Failure<TargetRep>>( targetFailure ).conflictNode;
+		auto* targetNode_c = std::get<Failure<TargetRep, LocationType>>( targetFailure ).conflictNode;
 		for ( auto* sourceNode : sourceNodes ) {
 			TargetRep initialSet{};
 			convert( sourceNode->getInitialSet(), initialSet );	 // bad syntax. Means: initialSet = convert( node->getInitialSet() );
@@ -68,9 +68,9 @@ void CEGARAnalyzer_apply<Number, Representations...>::transferNodes( std::vector
 				targetLevel.variant );
 }
 
-template <class Number, class... Representations>
+template <class Number, class Automaton, class... Representations>
 template <class Representation>
-void CEGARAnalyzer_apply<Number, Representations...>::handleFailure( ReachTreeNode<Representation>* conflictNode, size_t targetIndex ) {
+void CEGARAnalyzer_apply<Number, Automaton, Representations...>::handleFailure( ReachTreeNode<Representation, LocationType>* conflictNode, size_t targetIndex ) {
 	std::visit( [&]( auto& targetLevel ) {
 		Path path = conflictNode->getPath();
 		auto* targetRoot = &targetLevel.addOrGetRoot( mHybridAutomaton, path.rootLocation );
@@ -79,10 +79,10 @@ void CEGARAnalyzer_apply<Number, Representations...>::handleFailure( ReachTreeNo
 				createRefinementLevel( targetIndex ).variant );
 }
 
-template <class Number, class... Representations>
-REACHABILITY_RESULT CEGARAnalyzer_apply<Number, Representations...>::run() {
+template <class Number, class Automaton, class... Representations>
+REACHABILITY_RESULT CEGARAnalyzer_apply<Number, Automaton, Representations...>::run() {
 	// data persistent through loop cycles
-	std::vector<std::variant<Failure<Representations>...>> results( mSettings.strategy().size() );
+	std::vector<std::variant<Failure<Representations, LocationType>...>> results( mSettings.strategy().size() );
 	size_t levelInd = 0;
 	bool save = true;
 
