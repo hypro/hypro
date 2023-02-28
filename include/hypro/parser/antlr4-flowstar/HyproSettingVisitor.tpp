@@ -103,8 +103,7 @@ namespace hypro {
   		HyproFormulaVisitor<Number> h(vars);
   		Number converted = h.stringToNumber(ctx->NUMBER()->getText());
   		if(converted <= Number(0)){
-  			std::cerr << "ERROR: No numbers below or equal 0 are allowed when defining fixed steps." << std::endl;
-        exit(0);
+                    throw std::logic_error("No numbers below or equal 0 are allowed when defining fixed steps.");
   		}
   		return converted;
   	}
