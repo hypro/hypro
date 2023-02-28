@@ -3,7 +3,7 @@
 FROM stefanschupp/carl:latest
 RUN apt-get update \
     && apt-get install -y \
-    gcc-8-base \
+    gcc \
     openjdk-8-jre \
     uuid-dev \
     pkg-config \
