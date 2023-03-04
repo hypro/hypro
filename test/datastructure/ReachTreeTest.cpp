@@ -11,6 +11,7 @@
 
 #include "gtest/gtest.h"
 #include <bits/c++config.h>
+#include <cereal/archives/binary.hpp>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/ReachTreev2.h>
 #include <hypro/datastructures/reachability/ReachTreev2Heuristics.h>
@@ -23,6 +24,12 @@ struct Representation {
 	using NumberType = N;
 	int content_;
 };
+
+hypro::ReachTreeNode<Representation<int>, hypro::Location<int>>&& buildTree( hypro::Location<int>* root_loc ) {
+	hypro::ReachTreeNode<Representation<int>, hypro::Location<int>> root{ root_loc, { 1 }, carl::Interval<hypro::SegmentInd>{ 0, 0 } };
+
+	return std::move( root );
+}
 
 }  // namespace test::detail
 
@@ -143,3 +150,34 @@ TEST( ReachTreeTest, CycleHeuristics ) {
 	EXPECT_FALSE( comp( leaf1, leaf1 ) );
 	EXPECT_FALSE( comp( leaf2, leaf2 ) );
 }
+
+/*
+TEST( ReachTreeTest, Serialization ) {
+	using Node = hypro::ReachTreeNode<test::detail::Representation<int>, hypro::Location<int>>;
+
+	hypro::Location<int> loc{ "l" };
+	Node root = test::detail::buildTree( &loc );
+	std::stringstream ss;
+	{
+		cereal::BinaryOutputArchive oarchive( ss );	 // Create an output archive
+
+		oarchive( root );  // Write the data to the archive
+	}
+	{
+		cereal::BinaryInputArchive iarchive( ss );	// Create an input archive
+		Node loadedRoot;
+		iarchive( loadedRoot );
+		EXPECT_EQ( root.getDepth(), loadedRoot.getDepth() );
+
+		auto rootIt = preorder( root ).begin();
+		auto loadIt = preorder( loadedRoot ).begin();
+		while ( rootIt != preorder( root ).end() && loadIt != preorder( loadedRoot ).end() ) {
+			// EXPECT_EQ( rootIt->data, loadIt->data );
+			++rootIt;
+			++loadIt;
+		}
+	}
+
+	SUCCEED();
+}
+*/
