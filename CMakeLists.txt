@@ -17,7 +17,7 @@ project(hypro CXX C)
 
 set(PROJECT_FULLNAME "HyPro")
 set(PROJECT_DESCRIPTION "A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations")
-set(hypro_VERSION "2.0.2")
+set(hypro_VERSION "2.0.3")
 set(PROJECT_VERSION "${hypro_VERSION}")
 set(hypro_NAME "HyPro")
 set(hypro_DESCRIPTION ${PROJECT_DESCRIPTION})
