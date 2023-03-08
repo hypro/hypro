@@ -33,9 +33,14 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 						std::unique_lock<std::mutex> lock( mQueueMutex );
 
 						mQueueNonEmpty.wait( lock, [this]() {
+							// TODO I am not sure, whether we need to lock here to access the queue
 							return !mWorkQueue.empty() || mTerminate;
 						} );
 						{
+							if ( mTerminate ) {
+								break;
+							}
+							// TODO I do not think we need the idle lock, since we already have the queue lock
 							std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
 							mIdle[i] = false;
 							std::cout << "Thread " << i << " is not idle." << std::endl;
@@ -46,6 +51,7 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 
 					auto result = processNode( worker, currentNode, transformationCache );
 					if ( result.isFailure() ) {
+						std::cout << "Thread " << i << " declares analysis failed." << std::endl;
 						mTerminate = true;
 						break;
 					}
@@ -56,6 +62,7 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 						mAllIdle.notify_all();
 					}
 				}
+				std::cout << "Thread " << i << " terminates." << std::endl;
 			} ) );
 		}
 		// wait();
