@@ -113,15 +113,18 @@ static void computeReachableStates( const std::string& filename,
 				  hypro::plotting::colors[hypro::plotting::red] );
 		}
 
+		unsigned cnt = 0;
 		// segments plotting
 		for ( const auto& flowpipe : flowpipes ) {
-			unsigned cnt = 0;
+			std::cout << "Flowpipe size " << flowpipe.size() << std::endl;  
 			for ( const auto& segment : flowpipe ) {
 				// std::cout << "Plot segment " << cnt << "/" << flowpipe.size()
 				//   << std::endl;
-				plotter.addObject( segment.projectOn( plottingDimensions ).vertices() );
-				++cnt;
+				// plotter.addObject( segment.projectOn( plottingDimensions ).vertices(), hypro::plotting::colors[cnt%10] );
+				plotter.addObject( segment.projectOn( plottingDimensions ).vertices(), hypro::plotting::colors[cnt%10] );
+				// ++cnt;
 			}
+			++cnt;
 		}
 
 		PRINT_STATS()
