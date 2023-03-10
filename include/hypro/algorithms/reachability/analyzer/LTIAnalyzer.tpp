@@ -19,8 +19,10 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 	DEBUG( "hypro.reachability", "Start LTI Reachability Analysis." );
 	if ( std::is_same_v<Multithreading, UseMultithreading> ) {
 		mIdle = std::vector( mNumThreads, false );
+		std::mutex resultMutex;
+		LTIResult res{ LTISuccess{} };
 		for ( int i = 0; i < mNumThreads; i++ ) {
-			mThreads.push_back( std::thread( [this, i]() {
+			mThreads.push_back( std::thread( [this, i, &resultMutex, &res]() {
 				TimeTransformationCache<LocationT> transformationCache;
 				LTIWorker<State, Automaton> worker{
 					  *mHybridAutomaton,
@@ -43,7 +45,6 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 							// TODO I do not think we need the idle lock, since we already have the queue lock
 							std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
 							mIdle[i] = false;
-							std::cout << "Thread " << i << " is not idle." << std::endl;
 						}
 						currentNode = getNodeFromQueue();
 						DEBUG( "hypro.reachability", "Processing node @" << currentNode << " with path " << currentNode->getPath() );
@@ -51,18 +52,19 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 
 					auto result = processNode( worker, currentNode, transformationCache );
 					if ( result.isFailure() ) {
-						std::cout << "Thread " << i << " declares analysis failed." << std::endl;
 						mTerminate = true;
+						{
+							std::lock_guard<std::mutex> lock{ resultMutex };
+							res = result;
+						}
 						break;
 					}
 					{
 						std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
-						std::cout << "Thread " << i << " is idle." << std::endl;
 						mIdle[i] = true;
 						mAllIdle.notify_all();
 					}
 				}
-				std::cout << "Thread " << i << " terminates." << std::endl;
 			} ) );
 		}
 		// busy wait?
@@ -73,6 +75,7 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 			} );
 		}
 		shutdown();
+		return res;
 	} else {
 		TimeTransformationCache<LocationT> transformationCache;
 		LTIWorker<State, Automaton> worker{

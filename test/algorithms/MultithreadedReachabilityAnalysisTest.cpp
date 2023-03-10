@@ -15,24 +15,25 @@
 #include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 
-TEST( MultithreadedReachabilityAnalysisTest, BouncingBallNoAggregation ) {
+TEST( MultithreadedReachabilityAnalysisTest, LTIBouncingBallNoAggregation ) {
 	using Number = double;
 	using Representation = hypro::Box<Number>;
 	using Automaton = hypro::HybridAutomaton<Number>;
 
 	auto [automaton, reachSettings] = hypro::parseFlowstarFile<Number>( hypro::getTestModelsPath() + "parser/bouncing_ball.model" );
 
-	auto roots = hypro::makeRoots<Representation, Automaton>( automaton );
+	// settings: jump depth 3, local time horizon 5, delta 0.01, no aggregation, clustering 2
+	hypro::FixedAnalysisParameters fixedSettings{ 2, 5, 0.01 };
+	hypro::AnalysisParameters dynamicSettings{ 0.01, hypro::AGG_SETTING::NO_AGG, 2 };
 
-	// settings: jump depth 10, local time horizon 5, delta 0.001, aggregation, clustering 2
-	hypro::FixedAnalysisParameters fixedSettings{ 5, 5, 0.001 };
-	hypro::AnalysisParameters dynamicSettings{ 0.001, hypro::AGG_SETTING::AGG, 2 };
+	auto roots_mt = hypro::makeRoots<Representation, Automaton>( automaton );
+	auto reacher_mt = hypro::reachability::Reach<Representation, Automaton, hypro::DepthFirst<Representation, typename Automaton::LocationType>, hypro::UseMultithreading>( automaton, fixedSettings, dynamicSettings, roots_mt );
+	auto result_mt = reacher_mt.computeForwardReachability();
 
-	auto reacher = hypro::reachability::Reach<Representation, Automaton, hypro::DepthFirst<Representation, typename Automaton::LocationType>, hypro::UseMultithreading>( automaton, fixedSettings, dynamicSettings, roots );
+	auto roots_st = hypro::makeRoots<Representation, Automaton>( automaton );
+	auto reacher_st = hypro::reachability::Reach<Representation, Automaton, hypro::DepthFirst<Representation, typename Automaton::LocationType>, hypro::NoMultithreading>( automaton, fixedSettings, dynamicSettings, roots_st );
+	auto result_st = reacher_st.computeForwardReachability();
 
-	auto result = reacher.computeForwardReachability();
-
-	std::cout << "Have computed " << hypro::getNumberNodes( roots ) << " nodes." << std::endl;
-
-	SUCCEED();
+	EXPECT_EQ( result_mt, result_st );
+	EXPECT_EQ( hypro::getNumberNodes( roots_mt ), hypro::getNumberNodes( roots_st ) );
 }
