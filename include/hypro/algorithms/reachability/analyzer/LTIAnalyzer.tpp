@@ -65,7 +65,13 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 				std::cout << "Thread " << i << " terminates." << std::endl;
 			} ) );
 		}
-		// wait();
+		// busy wait?
+		{
+			std::unique_lock<std::mutex> lock{ mThreadPoolMutex };
+			mAllIdle.wait( lock, [this]() {
+				return mWorkQueue.empty() && std::all_of( std::begin( mIdle ), std::end( mIdle ), []( bool in ) { return in; } );
+			} );
+		}
 		shutdown();
 	} else {
 		TimeTransformationCache<LocationT> transformationCache;

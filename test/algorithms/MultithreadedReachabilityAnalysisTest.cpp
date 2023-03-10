@@ -12,6 +12,7 @@
 #include "gtest/gtest.h"
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
+#include <hypro/datastructures/reachability/ReachTreev2Util.h>
 #include <hypro/parser/antlr4-flowstar/ParserWrapper.h>
 
 TEST( MultithreadedReachabilityAnalysisTest, BouncingBallNoAggregation ) {
@@ -23,12 +24,15 @@ TEST( MultithreadedReachabilityAnalysisTest, BouncingBallNoAggregation ) {
 
 	auto roots = hypro::makeRoots<Representation, Automaton>( automaton );
 
-	// settings: jump depth 5, local time horizon 5, delta 0.001, no aggregation, clustering 2
+	// settings: jump depth 10, local time horizon 5, delta 0.001, aggregation, clustering 2
 	hypro::FixedAnalysisParameters fixedSettings{ 5, 5, 0.001 };
-	hypro::AnalysisParameters dynamicSettings{ 0.001, hypro::AGG_SETTING::NO_AGG, 2 };
+	hypro::AnalysisParameters dynamicSettings{ 0.001, hypro::AGG_SETTING::AGG, 2 };
 
 	auto reacher = hypro::reachability::Reach<Representation, Automaton, hypro::DepthFirst<Representation, typename Automaton::LocationType>, hypro::UseMultithreading>( automaton, fixedSettings, dynamicSettings, roots );
 
 	auto result = reacher.computeForwardReachability();
+
+	std::cout << "Have computed " << hypro::getNumberNodes( roots ) << " nodes." << std::endl;
+
 	SUCCEED();
 }
