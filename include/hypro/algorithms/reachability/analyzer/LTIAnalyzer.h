@@ -26,12 +26,6 @@
 
 namespace hypro {
 
-struct UseMultithreading {
-};
-
-struct NoMultithreading {
-};
-
 // indicates that the lti analysis succeeded, i.e. no
 struct LTISuccess {};
 
