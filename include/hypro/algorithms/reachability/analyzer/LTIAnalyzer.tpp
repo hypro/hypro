@@ -18,7 +18,7 @@ template <typename State, typename Automaton, typename Heuristics, typename Mult
 auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResult {
 	DEBUG( "hypro.reachability", "Start LTI Reachability Analysis." );
 	if ( std::is_same_v<Multithreading, UseMultithreading> ) {
-		mIdle = std::vector( mNumThreads, false );
+		mIdle = std::vector( mNumThreads, true );
 		std::mutex resultMutex;
 		LTIResult res{ LTISuccess{} };
 		for ( int i = 0; i < mNumThreads; i++ ) {
