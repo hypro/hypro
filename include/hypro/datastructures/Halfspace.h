@@ -19,6 +19,10 @@
 
 #include <cassert>
 #include <glpk.h>
+#include <hypro/flags.h>
+#ifdef HYPRO_USE_SERIALIZATION
+#include <cereal/archives/json.hpp>
+#endif
 
 namespace hypro {
 template <typename Number>
@@ -348,6 +352,16 @@ class Halfspace {
 	 * representation name.
 	 */
 	static representation_name type() { return representation_name::constraint_set; }
+
+	/// Serialization function required by cereal
+	template <typename Archive>
+	void serialize( Archive& ar ) {
+#ifdef HYPRO_USE_SERIALIZATION
+		ar( cereal::make_nvp("constraint",mNormal), cereal::make_nvp("constant",mScalar) );
+#else
+		ar( mNormal, mScalar );
+#endif
+	}
 };
 
 /**
