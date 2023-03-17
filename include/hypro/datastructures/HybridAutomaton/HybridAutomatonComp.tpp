@@ -641,7 +641,7 @@ const typename HybridAutomatonComp<Number>::conditionVector& HybridAutomatonComp
 }
 
 template <typename Number>
-unsigned HybridAutomatonComp<Number>::dimension() const {
+std::size_t HybridAutomatonComp<Number>::dimension() const {
 	return getVariables().size();
 }
 

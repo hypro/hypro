@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -119,11 +119,7 @@ REACHABILITY_RESULT LTISetMinusWorker<Representation, Automaton>::computeTimeSuc
 				// for all parts of the current segment
 				for ( int ut = urgentlower; ut < urgentupper; ut++ ) {
 					segment = tmpsegments[ut];
-					if ( !segment.empty() ) {
-						auto [containment, testsegment] = intersect( segment, urgent_trans.at( i )->getGuard() );
-					} else {
-						auto containment = CONTAINMENT::NO;
-					}
+					auto [containment, testsegment] = intersect( segment, urgent_trans.at( i )->getGuard() );
 					// if guard is enabled perform setminus
 					if ( containment != CONTAINMENT::NO ) {
 						Representation guard( urgent_trans.at( i )->getGuard().getMatrix(), urgent_trans.at( i )->getGuard().getVector() );
@@ -325,7 +321,6 @@ std::string print( std::vector<Representation> const& sets ) {
 
 template <typename Representation, typename Automaton>
 std::vector<JumpSuccessor<Representation, typename Automaton::LocationType>> LTISetMinusWorker<Representation, Automaton>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, LocationT const* loc ) const {
-
 	// transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation, typename Automaton::LocationType>> enabledSegments{};
 
