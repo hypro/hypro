@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -14,7 +14,13 @@
 namespace hypro {
 
 template <typename Number>
-Plotter<Number>::~Plotter() {}
+Plotter<Number>::~Plotter() {
+	while ( !gnuplotThreads.empty() ) {
+		auto& oldestTask = gnuplotThreads.front();
+		oldestTask.wait();
+		gnuplotThreads.pop();
+	}
+}
 
 template <typename Number>
 void Plotter<Number>::setFilename( const std::string& _filename ) {
@@ -98,7 +104,13 @@ void Plotter<Number>::plot2d( PLOTTYPE outformat, bool runGnuplot ) const {
 #ifdef GNUPLOT_FOUND
 		std::stringstream ss;
 		ss << "gnuplot " + filename + "_" + plotting::to_string( outformat ) + ".plt";
-		std::async( std::launch::async, [&]() { std::system( ss.str().c_str() ); } );
+		// if there are already many plotting tasks running, wait for the oldest one to finish
+		if ( gnuplotThreads.size() >= std::thread::hardware_concurrency() ) {
+			auto& oldestTask = gnuplotThreads.front();
+			oldestTask.wait();
+			gnuplotThreads.pop();
+		}
+		gnuplotThreads.emplace( std::async( std::launch::async, [&]() { std::system( ss.str().c_str() ); } ) );
 #endif
 	}
 }
@@ -291,7 +303,6 @@ void Plotter<Number>::writeGnuplot() const {
 
 	if ( !mVectors.empty() ) {
 		mOutfile << "# plotting vectors normalized to length 1\n";
-		unsigned arrowIndex = 1;
 		for ( auto& [_, vector] : mVectors ) {
 			mOutfile << "set arrow from " << vector.first( 0 ) << "," << vector.first( 1 ) << " to " << vector.second( 0 ) << "," << vector.second( 1 ) << "\n";
 		}
@@ -318,7 +329,7 @@ void Plotter<Number>::writeGnuplot() const {
 				double leftBound = toDouble( min( d ) ) - rangeExt;
 				double rightBound = toDouble( max( d ) ) + rangeExt;
 				// if both bounds are zero, add a slight margin left and right so range is not empty
-				if ( leftBound == rightBound == 0 ) {
+				if ( ( leftBound == rightBound ) == 0 ) {
 					leftBound -= 0.01;
 					rightBound += 0.01;
 				}
