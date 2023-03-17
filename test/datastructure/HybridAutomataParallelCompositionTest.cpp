@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /**
@@ -459,7 +459,6 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSingle ) {
 		auto cmp = HybridAutomatonComp<TypeParam>();
 		cmp.setLazy( false );
 		cmp.addAutomaton( std::move( ha2 ) );
-		std::cout << "Start test" << std::endl;
 		EXPECT_EQ( 3, cmp.getLocations().size() );
 		// access to the initial location should affect the locations size
 		auto initialStates = cmp.getInitialStates();
@@ -617,7 +616,6 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSharedVariables )
 	flow2( 0, 2 ) = 3;
 	matrix_t<TypeParam> flow1 = matrix_t<TypeParam>::Identity( 2, 2 );
 	flow1( 1, 1 ) = 0;
-	std::cout << "Flow2: " << flow2 << ", flow1: " << flow1 << std::endl;
 	auto ha1 = HybridAutomaton<TypeParam>();
 	ha1.setVariables( { "a", "b" } );
 	// locations
@@ -639,6 +637,12 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSharedVariables )
 	vector_t<TypeParam> guardConst1 = vector_t<TypeParam>::Ones( 1 );
 	guardConstr1( 0, 0 ) = 1;
 	t23->setGuard( { guardConstr1, guardConst1 } );
+	// reset a := 2
+	matrix_t<TypeParam> resetMatrix = matrix_t<TypeParam>::Identity( 2, 2 );
+	vector_t<TypeParam> resetVector = vector_t<TypeParam>::Zero( 2 );
+	resetMatrix( 0, 0 ) = 0;
+	resetVector( 0 ) = 2;
+	t23->setReset( Reset( resetMatrix, resetVector ) );
 	// initial configuration: l1, a = 1
 	ha1.setInitialStates( { { l1, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 }, carl::Interval<TypeParam>{ 1 } } ) } } );
 	// second automaton
@@ -696,6 +700,10 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompSharedVariables )
 	guardConst3( 1 ) = -2;
 	auto expectedGuard = hypro::Condition<TypeParam>{ guardConstr3, guardConst3 };
 	EXPECT_EQ( expectedGuard, t2->getGuard() );
+	EXPECT_FALSE( t2->getReset().isIdentity() );
+	EXPECT_TRUE( t2->getReset().isIdentity( 1 ) );
+	EXPECT_EQ( 0, t2->getReset().getMatrix()( 0, 0 ) );
+	EXPECT_EQ( 2, t2->getReset().getVector()( 0 ) );
 }
 
 TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompMasterLocations ) {
