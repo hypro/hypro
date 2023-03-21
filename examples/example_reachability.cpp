@@ -28,10 +28,20 @@ static void computeReachableStates( const std::string& filename,
 	clock::time_point start = clock::now();
 
 	auto [automaton, parsedSettings] = hypro::parseFlowstarFile<Number>( filename );
+
+	std::cout << parsedSettings << std::endl;
+
 	hypro::Settings settings = hypro::convert( parsedSettings );
 	auto roots = hypro::makeRoots<Representation, Automaton>( automaton );
 
-	hypro::reachability::Reach<Representation, Automaton> reacher( automaton, settings.fixedParameters(), settings.strategy().front(), roots );
+	hypro::AnalysisParameters analysisParams = settings.strategy().front();
+	std::cout << "Analysis params aggregation: " << analysisParams.aggregation._to_string() << std::endl;
+
+	
+	analysisParams.aggregation = hypro::AGG_SETTING::AGG;
+	std::cout << "Analysis params aggregation: " << analysisParams.aggregation._to_string() << std::endl;
+
+	hypro::reachability::Reach<Representation, Automaton> reacher( automaton, settings.fixedParameters(), analysisParams, roots );
 
 	auto result = reacher.computeForwardReachability();
 	auto flowpipes = getFlowpipes( roots );

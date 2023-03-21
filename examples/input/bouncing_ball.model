@@ -39,7 +39,7 @@ hybrid reachability
   l -> l
   guard { x = 0 v <= 0 }
   reset { v' := -0.75*v }
-  parallelotope aggregation {}
+  # parallelotope aggregation {}
  }
 
  init
@@ -55,10 +55,10 @@ hybrid reachability
 
 unsafe set
 {
-  l
-  {
-   x in [4,6]
-   v in [-2.5,0]
-   
-  }
+  #l
+  #{
+   #x in [4,6]
+   #v in [-2.5,0]
+   #
+  #}
 }
