@@ -28,6 +28,9 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../../util/typetraits.h"
 #include "HPolytopeSetting.h"
 
+#ifdef HYPRO_USE_SERIALIZATION
+#include <cereal/archives/json.hpp>
+#endif
 #include <algorithm>
 #include <cassert>
 #include <optional>
@@ -410,6 +413,20 @@ class HPolytopeT : private GeometricObjectBase {
 
 	template <typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
 	void reduceNumberRepresentation( const std::vector<Point<double>>& = std::vector<Point<double>>(), unsigned = fReach_DENOMINATOR ) const {}
+
+
+	/// Serialization function required by cereal
+	template <typename Archive>
+	void serialize( Archive& ar ) {
+#ifdef HYPRO_USE_SERIALIZATION
+		ar( cereal::make_nvp("isEmpty", mEmptyState), cereal::make_nvp("constraints",mHPlanes), cereal::make_nvp("dimension",mDimension), cereal::make_nvp("guaranteedNonRedundant",mNonRedundant) );
+#else
+		ar( mEmptyState, mHPlanes, mDimension, mNonRedundant );
+#endif
+	}
+
+
+
 
   private:
 	/*

@@ -297,7 +297,9 @@ if (HYPRO_USE_OPENMP)
 endif ()
 
 # for serialization
-include(cereal.cmake)
+if (HYPRO_USE_SERIALIZATION)
+    include(cereal.cmake)
+endif()
 
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)
