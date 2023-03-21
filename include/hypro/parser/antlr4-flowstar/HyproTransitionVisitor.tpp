@@ -350,7 +350,7 @@ namespace hypro {
 			exit(0);
 		}
 		if(ctx->aggregation().size() == 1){
-			AGG_SETTING agg = visit(ctx->aggregation()[0]).template as<AGG_SETTING>();
+			AGG_SETTING agg = visit(ctx->aggregation()[0]).template as<AGG_SETTING::_enumerated>();
 			t->setAggregation(agg);
 		}
 		return t;
