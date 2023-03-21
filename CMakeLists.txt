@@ -220,9 +220,9 @@ if (${DEVELOPER})
     target_compile_options(${PROJECT_NAME}-static PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
     target_compile_options(${PROJECT_NAME}-shared PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
 endif ()
-target_link_options(${PROJECT_NAME}-objects PUBLIC LINKER:-no-as-needed)
-target_link_options(${PROJECT_NAME}-static PUBLIC LINKER:-no-as-needed)
-target_link_options(${PROJECT_NAME}-shared PUBLIC LINKER:-no-as-needed)
+#target_link_options(${PROJECT_NAME}-objects PUBLIC LINKER:-no-as-needed)
+#target_link_options(${PROJECT_NAME}-static PUBLIC LINKER:-no-as-needed)
+#target_link_options(${PROJECT_NAME}-shared PUBLIC LINKER:-no-as-needed)
 
 # Meta-target which combines static and shared library
 add_custom_target(${PROJECT_NAME} DEPENDS ${PROJECT_NAME}-shared ${PROJECT_NAME}-static)
