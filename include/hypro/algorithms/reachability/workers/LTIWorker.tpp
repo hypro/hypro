@@ -79,7 +79,7 @@ REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSucce
 template <typename Representation, typename HybridAutomaton>
 auto LTIWorker<Representation, HybridAutomaton>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<LocationT> const* transition ) const -> JumpSuccessorGen {
 	std::size_t blockSize = 1;
-	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+	if ( mSettings.aggregation == AGG_SETTING::AGG || ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() == AGG_SETTING::AGG ) ) {
 		if ( mSettings.clustering > 0 ) {
 			blockSize = ( flowpipe.size() + mSettings.clustering ) / mSettings.clustering;	// division rounding up
 		} else {
@@ -275,7 +275,7 @@ std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType
 	for ( auto& [transition, valuationSets] : enabledSegments ) {
 		// no aggregation
 		std::size_t blockSize = 1;
-		if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+		if ( mSettings.aggregation == AGG_SETTING::AGG || ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() == AGG_SETTING::AGG ) ) {
 			if ( mSettings.clustering > 0 ) {
 				blockSize = ( valuationSets.size() + mSettings.clustering ) / mSettings.clustering;	 // division rounding up
 			} else {
@@ -316,7 +316,7 @@ std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType
 template <typename Representation, typename HybridAutomaton>
 std::vector<TimedValuationSet<Representation>> LTIWorker<Representation, HybridAutomaton>::computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<LocationT> const* transition ) const {
 	std::size_t blockSize = 1;
-	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+	if ( mSettings.aggregation == AGG_SETTING::AGG || ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() == AGG_SETTING::AGG ) ) {
 		if ( mSettings.clustering > 0 ) {
 			blockSize = ( predecessors.size() + mSettings.clustering ) / mSettings.clustering;	// division rounding up
 		} else {
