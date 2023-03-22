@@ -33,10 +33,10 @@ Install most dependencies using a package manager (here: apt, Ubuntu):
 sudo apt install libeigen3-dev uuid-dev libbliss-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev
 ```
 
-Clone and build CArL
+Clone and build CArL, here we use the version tagged with 22.12 on github:
 
 ```bash
-  git clone https://github.com/ths-rwth/carl && cd carl &&  git checkout 3b0c79a68a &&
+  git clone https://github.com/ths-rwth/carl && cd carl &&  git checkout 0c99bd8 &&
   mkdir build && cd build &&
   cmake .. && make carl
   ```
