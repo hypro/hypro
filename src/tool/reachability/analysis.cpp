@@ -26,7 +26,7 @@ using namespace hypro;
 
 std::vector<PlotData<FullState>> cegar_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	CEGARAnalyzer<Number> analyzer{ automaton, setting };
+	CEGARAnalyzer<Number, HybridAutomaton<Number>> analyzer{ automaton, setting };
 
 	REACHABILITY_RESULT result = analyzer.run();
 	if ( result == REACHABILITY_RESULT::UNKNOWN ) {
@@ -68,8 +68,8 @@ std::vector<PlotData<FullState>> decompositional_analyze( HybridAutomaton<Number
 	using SingularRep = hypro::VPolytope<Number>;
 	using DiscreteRep = hypro::Box<Number>;
 	using RectangularRep = hypro::Box<Number>;
-	DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep> analyzer{ decomposedHa, decomposition, clockCount,
-																						setting.fixedParameters(), setting.strategy().front() };
+	DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep, HybridAutomaton<Number>> analyzer{ decomposedHa, decomposition, clockCount,
+																												 setting.fixedParameters(), setting.strategy().front() };
 	auto result = analyzer.run();
 	if ( !setting.fixedParameters().silent ) {
 		if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -97,7 +97,9 @@ std::vector<PlotData<FullState>> decompositional_analyze( HybridAutomaton<Number
 template <typename State>
 std::vector<PlotData<FullState>> urgency_cegar_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
-	UrgencyCEGARAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), setting.urgencySettings() };
+	using LocationType = typename HybridAutomaton<Number>::LocationType;
+
+	UrgencyCEGARAnalyzer<State, HybridAutomaton<Number>> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), setting.urgencySettings() };
 	auto result = analyzer.run();
 
 	if ( result.result() == REACHABILITY_RESULT::UNKNOWN ) {
@@ -112,7 +114,7 @@ std::vector<PlotData<FullState>> urgency_cegar_analyze( HybridAutomaton<Number>&
 	std::vector<PlotData<FullState>> plotData{};
 
 	auto roots = analyzer.getRoots();
-	for ( const auto& node : preorder<ReachTreeNode<State>>( roots ) ) {
+	for ( const auto& node : preorder<ReachTreeNode<State, LocationType>>( roots ) ) {
 		if ( result.result() == REACHABILITY_RESULT::SAFE && node.getSafety() == REACHABILITY_RESULT::UNKNOWN ) continue;
 		std::transform( node.getFlowpipe().begin(), node.getFlowpipe().end(), std::back_inserter( plotData ), []( auto& segment ) {
 			FullState state{};
@@ -127,7 +129,7 @@ template <typename State>
 std::vector<PlotData<FullState>> lti_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
 	auto roots = makeRoots<State>( automaton );
-	LTIAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
+	LTIAnalyzer<State, HybridAutomaton<Number>> analyzer{ automaton, setting.fixedParameters(), setting.strategy().front(), roots };
 	auto result = analyzer.run();
 
 	if ( !setting.fixedParameters().silent ) {
@@ -158,7 +160,7 @@ template <typename State>
 std::vector<PlotData<FullState>> singular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	START_BENCHMARK_OPERATION( "Verification" );
 	auto roots = makeRoots<State>( automaton );
-	SingularAnalyzer<State> analyzer{ automaton, setting.fixedParameters(), roots };
+	SingularAnalyzer<State, HybridAutomaton<Number>> analyzer{ automaton, setting.fixedParameters(), roots };
 	auto result = analyzer.run();
 
 	if ( !setting.fixedParameters().silent ) {
@@ -188,7 +190,7 @@ template <typename State>
 std::vector<PlotData<FullState>> rectangular_analyze( HybridAutomaton<Number>& automaton, Settings setting ) {
 	auto roots = makeRoots<State>( automaton );
 	START_BENCHMARK_OPERATION( "Verification" );
-	RectangularAnalyzer<State> analyzer{ automaton, setting, roots };
+	RectangularAnalyzer<State, HybridAutomaton<Number>> analyzer{ automaton, setting, roots };
 	auto result = analyzer.run();
 
 	if ( !setting.fixedParameters().silent ) {
@@ -302,8 +304,6 @@ AnalysisResult analyze( HybridAutomaton<Number>& automaton, Settings& setting, P
 			} else {
 				return { cegar_analyze( automaton, setting ) };
 			}
-			break;
-			[[fallthrough]];
 			break;
 	}
 	throw std::invalid_argument( "Invalid automaton type." );

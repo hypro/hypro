@@ -8,7 +8,7 @@
  */
 
 #pragma once
-#include <boost/function_output_iterator.hpp>
+#include <boost/iterator/function_output_iterator.hpp>
 #include <hypro/algorithms/reachability/analyzer/DecompositionalUtil.h>
 #include <hypro/algorithms/reachability/analyzer/ReturnTypes.h>
 #include <hypro/algorithms/reachability/types.h>
@@ -149,12 +149,12 @@ class DecompositionalAnalyzer {
 	};
 
 	/**
-     * @brief       Worker-visitor to compute the time successors for the given task.
-     * @tparam      Representation      The used state set representation type.
-     * @param       task                The current task.
-     * @param       clockCount          Number of used clocks
-     * @return      The time intervals where the subspace satisfies the invariant.
-     */
+	 * @brief       Worker-visitor to compute the time successors for the given task.
+	 * @tparam      Representation      The used state set representation type.
+	 * @param       task                The current task.
+	 * @param       clockCount          Number of used clocks
+	 * @return      The time intervals where the subspace satisfies the invariant.
+	 */
 	struct computeTimeSuccessorVisitor {
 		ReachTreeNode<ComposedRep, LocationT>* task;
 		std::size_t clockCount;	 // number of clocks
@@ -218,10 +218,10 @@ class DecompositionalAnalyzer {
 	};
 
 	/**
-     * @brief       Worker-visitor to compute the jump successors for the given task.
-     * @tparam      Representation      The used state set representation type.
-     * @param       task                The current task.
-     */
+	 * @brief       Worker-visitor to compute the jump successors for the given task.
+	 * @tparam      Representation      The used state set representation type.
+	 * @param       task                The current task.
+	 */
 	struct computeSingularJumpSuccessorVisitor {
 		ReachTreeNode<ComposedRep, LocationT>* task;
 		void operator()( SingularWorker<SingularRep, Automaton>& worker ) {
@@ -242,11 +242,11 @@ class DecompositionalAnalyzer {
 	};
 
 	/**
-     * @brief       Worker-visitor to get the jump successors for the given transition in singular subspaces.
-     * @tparam      Representation      The used state set representation type.
-     * @param       transition          The transition for which to get successors.
-     * @return      The jump successor as Representation set.
-     */
+	 * @brief       Worker-visitor to get the jump successors for the given transition in singular subspaces.
+	 * @tparam      Representation      The used state set representation type.
+	 * @param       transition          The transition for which to get successors.
+	 * @return      The jump successor as Representation set.
+	 */
 	struct getJumpSuccessorVisitor {
 		Transition<LocationT>* transition;
 		std::vector<IndexedValuationSet<ComposedRep>> predecessors{};
@@ -337,19 +337,19 @@ class DecompositionalAnalyzer {
 	auto initializeWorkers( std::vector<TimeTransformationCache<LocationT>>& cache ) -> std::vector<WorkerVariant>;
 
 	/**
-     * @brief       Preliminary check that nodes are consistent (e.g. no initial set is empty).
-     * @param       currentNodes    The current reachtree-nodes to analyze.
-     * @return      `true` if all checks pass, `false` otherwise.
-     */
+	 * @brief       Preliminary check that nodes are consistent (e.g. no initial set is empty).
+	 * @param       currentNodes    The current reachtree-nodes to analyze.
+	 * @return      `true` if all checks pass, `false` otherwise.
+	 */
 	bool checkConsistency( NodeVector& currentNodes );
 
 	/**
-     * @brief       Compute time successors in all subspaces.
-     * @detail 		The computed time successors are stored as flowpipes in the nodes.
-     * @param       currentNodes    The current reachtree-nodes to store the successor sets.
-     * @param       workers         The vector of worker variants to use for computation.
-     * @return      The clock intervals where all subspaces satisfy their respective invariants.
-     */
+	 * @brief       Compute time successors in all subspaces.
+	 * @detail 		The computed time successors are stored as flowpipes in the nodes.
+	 * @param       currentNodes    The current reachtree-nodes to store the successor sets.
+	 * @param       workers         The vector of worker variants to use for computation.
+	 * @return      The clock intervals where all subspaces satisfy their respective invariants.
+	 */
 	auto computeTimeSuccessorsGetEnabledTime(
 		  NodeVector& currentNodes,
 		  std::vector<WorkerVariant>& workers,
@@ -357,51 +357,51 @@ class DecompositionalAnalyzer {
 		  -> TimeInformation<Number>;
 
 	/**
-     * @brief       Reset unused clocks to zero.
-     * @param       segment         The segment for which to reset clocks.
-     * @param       clockIndex      The current clockIndex. All clocks with higher index are reset.
-     */
+	 * @brief       Reset unused clocks to zero.
+	 * @param       segment         The segment for which to reset clocks.
+	 * @param       clockIndex      The current clockIndex. All clocks with higher index are reset.
+	 */
 	void resetUnusedClocks( ComposedRep& segment, std::size_t clockIndex );
 
 	/**
-     * @brief       Intersect computed segments with clock values and update flowpipes.
-     * @detail 		The segments are intersected in place.
-     * @param       currentNodes    The current reachtree-nodes where the flowpipes are stored.
-     * @param       clock           The time intervals to intersect with.
-     */
+	 * @brief       Intersect computed segments with clock values and update flowpipes.
+	 * @detail 		The segments are intersected in place.
+	 * @param       currentNodes    The current reachtree-nodes where the flowpipes are stored.
+	 * @param       clock           The time intervals to intersect with.
+	 */
 	void intersectSubspacesWithClock(
 		  NodeVector& currentNodes,
 		  TimeInformation<Number>& clock );
 
 	/**
-     * @brief       Remove segments that are beyond a time horizon reachable in all subspaces for lightweight synchronization.
-     * @details     Get the minimum number of segments that every flowpipe has and in every
-     *              subspace delete segments with a higher index (e.g. if some subspace has
-     *              3 segments then segments 4,5... will be removed in all subspaces.)
-     * @param       currentNodes    Nodes that hold the flowpipe segments
-     */
+	 * @brief       Remove segments that are beyond a time horizon reachable in all subspaces for lightweight synchronization.
+	 * @details     Get the minimum number of segments that every flowpipe has and in every
+	 *              subspace delete segments with a higher index (e.g. if some subspace has
+	 *              3 segments then segments 4,5... will be removed in all subspaces.)
+	 * @param       currentNodes    Nodes that hold the flowpipe segments
+	 */
 	void removeRedundantSegments( NodeVector& currentNodes );
 
 	/**
-     * @brief       Check if intersection with a bad state is empty.
-     * @param       currentNodes            The current reachtree-nodes where the flowpipes are stored.
-     * @param       dependencies            The dependencies on the initial variables.
-     * @param       badState                The bad state condition to check.
-     * @return      `true` if the bad state is not reachable and `false` otherwise.
-     */
+	 * @brief       Check if intersection with a bad state is empty.
+	 * @param       currentNodes            The current reachtree-nodes where the flowpipes are stored.
+	 * @param       dependencies            The dependencies on the initial variables.
+	 * @param       badState                The bad state condition to check.
+	 * @return      `true` if the bad state is not reachable and `false` otherwise.
+	 */
 	bool isSafe(
 		  const NodeVector& currentNodes,
 		  const Condition<Number>& dependencies,
 		  const Condition<Number>& badState );
 
 	/**
-     * @brief       Compute jump successors and reset unused clocks to zero.
-     * @param       nodes           Current nodes
-     * @param       workers         The vector of worker variants to use for computation.
-     * @param       transition      The transition to get successors for.
-     * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
-     * @return      Vector of jump successors as map { subspace (index) : reset jump successor (representation) }
-     */
+	 * @brief       Compute jump successors and reset unused clocks to zero.
+	 * @param       nodes           Current nodes
+	 * @param       workers         The vector of worker variants to use for computation.
+	 * @param       transition      The transition to get successors for.
+	 * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
+	 * @return      Vector of jump successors as map { subspace (index) : reset jump successor (representation) }
+	 */
 	auto getJumpSuccessors(
 		  const NodeVector& nodes,
 		  std::vector<WorkerVariant> workers,
@@ -410,13 +410,13 @@ class DecompositionalAnalyzer {
 		  -> std::vector<SubspaceJumpSuccessors<ComposedRep>>;
 
 	/**
-     * @brief       Get the singular jump successors for a transition and the clock values where all successors satisfy the invariant.
-     * @param       nodes           Current nodes
-     * @param       workers         The vector of worker variants to use for computation.
-     * @param       transition      The transition to get successors for.
-     * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
-     * @return      Pair of clock values where the jump is enabled and the jump successors in the singular subspaces.
-     */
+	 * @brief       Get the singular jump successors for a transition and the clock values where all successors satisfy the invariant.
+	 * @param       nodes           Current nodes
+	 * @param       workers         The vector of worker variants to use for computation.
+	 * @param       transition      The transition to get successors for.
+	 * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
+	 * @return      Pair of clock values where the jump is enabled and the jump successors in the singular subspaces.
+	 */
 	auto getSingularJumpSuccessors(
 		  const NodeVector& nodes,
 		  std::vector<WorkerVariant>& workers,
@@ -424,14 +424,13 @@ class DecompositionalAnalyzer {
 		  std::size_t clockIndex )
 		  -> std::pair<TimeInformation<Number>, SubspaceSets>;
 
-
 	/**
-     * @brief       Get the discrete jump successors for a transition.
-     * @param       nodes           Current nodes
-     * @param       workers         The vector of worker variants to use for computation.
-     * @param       transition      The transition to get successors for.
-     * @return      The jump successors in the discrete subspaces after applying the reset.
-     */
+	 * @brief       Get the discrete jump successors for a transition.
+	 * @param       nodes           Current nodes
+	 * @param       workers         The vector of worker variants to use for computation.
+	 * @param       transition      The transition to get successors for.
+	 * @return      The jump successors in the discrete subspaces after applying the reset.
+	 */
 	auto getDiscreteJumpSuccessors(
 		  const NodeVector& nodes,
 		  std::vector<WorkerVariant>& workers,
@@ -439,13 +438,13 @@ class DecompositionalAnalyzer {
 		  -> SubspaceSets;
 
 	/**
-     * @brief       Get the jump successors in the segmented subspaces for a transition.
-     * @param       nodes           Current nodes
-     * @param       workers         The vector of worker variants to use for computation.
-     * @param       transition      The transition to get successors for.
-     * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
-     * @return      Vector of jump successors as map { subspace (index) : reset jump successor (representation) }
-     */
+	 * @brief       Get the jump successors in the segmented subspaces for a transition.
+	 * @param       nodes           Current nodes
+	 * @param       workers         The vector of worker variants to use for computation.
+	 * @param       transition      The transition to get successors for.
+	 * @param       clockIndex      The currently used clock index. Clocks with higher index are reset after the jump.
+	 * @return      Vector of jump successors as map { subspace (index) : reset jump successor (representation) }
+	 */
 	auto getSegmentedJumpSuccessors(
 		  const NodeVector& nodes,
 		  std::vector<WorkerVariant>& workers,

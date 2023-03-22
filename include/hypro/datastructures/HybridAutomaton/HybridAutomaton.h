@@ -336,6 +336,9 @@ class HybridAutomaton {
 template <typename Number>
 HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, const HybridAutomaton<Number>& rhs, const std::map<std::string, std::vector<Location<Number>*>>& masters = {}, bool reduce = true );
 
+template <typename N>
+struct [[maybe_unused]] is_automaton_type<HybridAutomaton<N>> : std::true_type {};
+
 }  // namespace hypro
 
 #include "HybridAutomaton.tpp"

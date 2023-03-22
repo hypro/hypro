@@ -11,13 +11,14 @@
 
 namespace hypro {
 
-template <typename Representation>
+template <typename Representation, typename Automaton>
 struct ChildNodeGen {
-	typename LTIWorker<Representation>::JumpSuccessorGen* successors;
-	ReachTreeNode<Representation>* parentNode;
+	using LocationType = typename Automaton::LocationType;
+	typename LTIWorker<Representation, Automaton>::JumpSuccessorGen* successors;
+	ReachTreeNode<Representation, LocationType>* parentNode;
 	int timeStepFactor;
 
-	ReachTreeNode<Representation>* next() {
+	ReachTreeNode<Representation, LocationType>* next() {
 		auto succ = successors->next();
 		if ( !succ ) return nullptr;
 		auto& [valuationSet, segmentsInterval] = *succ;
@@ -33,36 +34,36 @@ struct ChildNodeGen {
 		return &parentNode->addChild( valuationSet, globalDuration, successors->mTransition );
 	}
 };
-template <class Gen, class Rep>
-ChildNodeGen( Gen*, ReachTreeNode<Rep>*, int ) -> ChildNodeGen<Rep>;
+template <class Gen, class Rep, class Aut>
+ChildNodeGen( Gen*, ReachTreeNode<Rep, typename Aut::LocationType>*, int ) -> ChildNodeGen<Rep, Aut>;
 
-template <typename Representation>
-bool RefinementAnalyzer<Representation>::matchesPathTiming( ReachTreeNode<Representation>* node ) {
+template <typename Representation, typename Automaton>
+bool RefinementAnalyzer<Representation, Automaton>::matchesPathTiming( ReachTreeNode<Representation, LocationType>* node ) {
 	auto& timing = mPath.elements.at( node->getDepth() - 1 ).first;
 	return node->getTimings().upper() >= timing.lower() && node->getTimings().lower() <= timing.upper();
 }
 
-template <typename Representation>
-bool RefinementAnalyzer<Representation>::matchesPathTransition( ReachTreeNode<Representation>* node ) {
+template <typename Representation, typename Automaton>
+bool RefinementAnalyzer<Representation, Automaton>::matchesPathTransition( ReachTreeNode<Representation, LocationType>* node ) {
 	auto const* transition = mPath.elements.at( node->getDepth() - 1 ).second;
 	return ( transition == node->getTransition() );
 }
 
-template <typename Representation>
-auto RefinementAnalyzer<Representation>::run() -> RefinementResult {
+template <typename Representation, typename Automaton>
+auto RefinementAnalyzer<Representation, Automaton>::run() -> RefinementResult {
 	// Setup settings for flowpipe construction in worker
-	TimeTransformationCache<LocationT> transformationCache;
-	LTIWorker<Representation> worker{
+	TimeTransformationCache<LocationType> transformationCache;
+	LTIWorker<Representation, Automaton> worker{
 		  mHybridAutomaton,
 		  mParameters,
 		  mFixedParameters.localTimeHorizon,
 		  transformationCache };
 
-	std::vector<ReachTreeNode<Representation>*> pathSuccessors{};
+	std::vector<ReachTreeNode<Representation, LocationType>*> pathSuccessors{};
 
 	while ( !mWorkQueue.empty() ) {
 		// pop node
-		ReachTreeNode<Representation>* currentNode = mWorkQueue.back();
+		ReachTreeNode<Representation, LocationType>* currentNode = mWorkQueue.back();
 		mWorkQueue.pop_back();
 
 		// if node is child of last node in path, collect it in return value
@@ -90,7 +91,7 @@ auto RefinementAnalyzer<Representation>::run() -> RefinementResult {
 		if ( currentNode->getDepth() == mPath.elements.size() ) {
 			for ( auto const& transition : currentNode->getLocation()->getTransitions() ) {
 				auto jumpSuccGen = worker.getJumpSuccessors( currentNode->getFlowpipe(), transition.get() );
-				auto childGen = ChildNodeGen{ &jumpSuccGen, currentNode, mParameters.timeStepFactor };
+				auto childGen = ChildNodeGen<Representation, Automaton>{ &jumpSuccGen, currentNode, mParameters.timeStepFactor };
 
 				while ( auto* child = childGen.next() ) {
 					pathSuccessors.push_back( child );
@@ -113,7 +114,7 @@ auto RefinementAnalyzer<Representation>::run() -> RefinementResult {
 
 			if ( !matchedOne ) {
 				auto jumpSuccGen = worker.getJumpSuccessors( currentNode->getFlowpipe(), mPath.elements.at( currentNode->getDepth() ).second );
-				auto childGen = ChildNodeGen{ &jumpSuccGen, currentNode, mParameters.timeStepFactor };
+				auto childGen = ChildNodeGen<Representation, Automaton>{ &jumpSuccGen, currentNode, mParameters.timeStepFactor };
 
 				while ( auto* child = childGen.next() ) {
 					if ( matchesPathTiming( child ) ) {

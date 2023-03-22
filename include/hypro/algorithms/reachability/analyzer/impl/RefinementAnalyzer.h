@@ -9,24 +9,26 @@
 
 namespace hypro {
 
-template <class Representation>
+template <class Representation, class Location>
 struct RefinementSuccess {
-	std::vector<ReachTreeNode<Representation>*> pathSuccessors{};
+	static_assert( is_location_type<Location>() );
+	std::vector<ReachTreeNode<Representation, Location>*> pathSuccessors{};
 };
-template <class Representation>
-RefinementSuccess( std::vector<ReachTreeNode<Representation>*> ) -> RefinementSuccess<Representation>;
+template <class Representation, class Location>
+RefinementSuccess( std::vector<ReachTreeNode<Representation, Location>*> ) -> RefinementSuccess<Representation, Location>;
 
 /**
  * @brief Analyzer implementation for refinement (internal)
  * @tparam Representation
  */
-template <typename Representation>
+template <typename Representation, typename Automaton>
 class RefinementAnalyzer {
   public:
 	using Number = rep_number<Representation>;
-	using RefinementResult = AnalysisResult<RefinementSuccess<Representation>, Failure<Representation>>;
+	using LocationType = typename Automaton::LocationType;
+	using RefinementResult = AnalysisResult<RefinementSuccess<Representation, LocationType>, Failure<Representation, LocationType>>;
 
-	RefinementAnalyzer( HybridAutomaton<Number> const& ha,
+	RefinementAnalyzer( Automaton const& ha,
 						FixedAnalysisParameters const& fixedParameters,
 						AnalysisParameters const& parameters )
 		: mHybridAutomaton( ha )
@@ -38,7 +40,7 @@ class RefinementAnalyzer {
 	 * @param path
 	 * @return REACHABILITY_RESULT
 	 */
-	void setRefinement( ReachTreeNode<Representation>* node, Path<Number> path ) {
+	void setRefinement( ReachTreeNode<Representation, LocationType>* node, Path<Number, LocationType> path ) {
 		assert( mWorkQueue.empty() );
 		mWorkQueue.push_front( node );
 		mPath = std::move( path );
@@ -46,27 +48,27 @@ class RefinementAnalyzer {
 
 	RefinementResult run();
 
-	void addToQueue( ReachTreeNode<Representation>* node ) {
+	void addToQueue( ReachTreeNode<Representation, LocationType>* node ) {
 		// add node if it's past the end of the path or otherwise matches the path
 		if ( node->getDepth() > mPath.elements.size() || ( matchesPathTiming( node ) && matchesPathTransition( node ) ) ) {
 			mWorkQueue.push_front( node );
 		}
 	}
 
-	void addPastPath( ReachTreeNode<Representation>* node ) {
+	void addPastPath( ReachTreeNode<Representation, LocationType>* node ) {
 		mWorkQueue.push_front( node );
 	}
 
   private:
-	bool matchesPathTiming( ReachTreeNode<Representation>* node );
-	bool matchesPathTransition( ReachTreeNode<Representation>* node );
+	bool matchesPathTiming( ReachTreeNode<Representation, LocationType>* node );
+	bool matchesPathTransition( ReachTreeNode<Representation, LocationType>* node );
 
   protected:
-	std::deque<ReachTreeNode<Representation>*> mWorkQueue;	///< Queue for nodes in the tree which require processing
-	const HybridAutomaton<Number>& mHybridAutomaton;		///< Hybrid automaton
+	std::deque<ReachTreeNode<Representation, LocationType>*> mWorkQueue;  ///< Queue for nodes in the tree which require processing
+	const HybridAutomaton<Number>& mHybridAutomaton;					  ///< Hybrid automaton
 	FixedAnalysisParameters mFixedParameters;
 	AnalysisParameters mParameters;	 ///< Used analysis settings
-	Path<Number> mPath{};
+	Path<Number, LocationType> mPath{};
 };
 
 }  // namespace hypro

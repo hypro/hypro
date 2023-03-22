@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -16,7 +16,6 @@
  * @author Phillip Florian
  *
  * @since	2014-04-30
- * @version	2016-06-20
  */
 
 #pragma once
@@ -37,10 +36,11 @@ namespace hypro {
 namespace reachability {
 
 /**
- * @brief      Class implementing a basic reachbility analysis algorithm for linear hybrid automata.
- *
- * @tparam     Number          The used number type.
- * @tparam     Representation  The used state set representation type.
+ * Class implementing a basic reachbility analysis algorithm for linear hybrid automata.
+ * @tparam Representation The used state set representation type.
+ * @tparam Automaton The used automaton type.
+ * @tparam SearchHeuristic The used search heurstics.
+ * @tparam Multithreading Use multithreading?
  */
 template <typename Representation, typename Automaton, typename SearchHeuristic = DepthFirst<Representation, typename Automaton::LocationType>, typename Multithreading = NoMultithreading>
 class Reach {

@@ -20,11 +20,6 @@ set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR})
 # disable update if no network is present
 set(EP_UPDATE_DISCONNECTED)
 
-# Set up glpk.
-# ATTENTION: It is important that this happens *before* CArL is loaded to ensure that the linker first links against
-# glpk and second agains gmp and gmpxx inherited from CArL.
-include(glpk.cmake)
-
 # carl setup which deals with external carl and own carl instance (the later registers itself to cmake)
 find_package(carl)
 if (carl_FOUND)
@@ -118,7 +113,7 @@ if (carl_FOUND)
                 endif ()
             endforeach ()
         endforeach ()
-        foreach (item ${carl_sublibraries_shared})
+        foreach (item ${carl_sublibraries_static})
             # getting the include path is required for the macros to work correctly
             get_target_property(carl_abs_include_path ${item} INTERFACE_INCLUDE_DIRECTORIES)
             get_target_property(carl_libs_static ${item} INTERFACE_LINK_LIBRARIES)
@@ -156,6 +151,11 @@ set(CARL_OLD_INTERVALS ${CARL_OLD_INTERVALS} PARENT_SCOPE)
 set(CARL_OLD_STRUCTURE ${CARL_OLD_STRUCTURE} PARENT_SCOPE)
 set(CARL_POLY_MEMBER_SUBSTITUTE ${CARL_POLY_MEMBER_SUBSTITUTE} PARENT_SCOPE)
 set(CARL_LOGGING_POST_1910 ${CARL_LOGGING_POST_1910} PARENT_SCOPE)
+
+# Set up glpk.
+# ATTENTION: It is important that this happens *before* CArL is loaded to ensure that the linker first links against
+# glpk and second agains gmp and gmpxx inherited from CArL.
+include(glpk.cmake)
 
 # gtest needs to be build in any case, since one should not use system-versions of gtest
 include(gtest.cmake)
@@ -297,7 +297,9 @@ if (HYPRO_USE_OPENMP)
 endif ()
 
 # for serialization
-include(cereal.cmake)
+if (HYPRO_USE_SERIALIZATION)
+    include(cereal.cmake)
+endif()
 
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)

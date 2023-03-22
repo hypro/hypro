@@ -174,7 +174,7 @@ const typename HybridAutomaton<Number>::variableVector& HybridAutomaton<Number>:
 	if ( !mVariablesSet && mVariables.size() == 0 ) {
 		auto dim = this->dimension();
 		if ( this->dimension() > 0 ) {
-			for ( int i = 0; i < dim; ++i ) {
+			for ( std::size_t i = 0; i < dim; ++i ) {
 				mVariables.push_back( "x" + std::to_string( i ) );
 			}
 		}
