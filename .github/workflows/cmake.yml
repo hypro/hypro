@@ -26,10 +26,15 @@ jobs:
         working-directory: ${{runner.workspace}}
         run: cmake -E make_directory ${{runner.workspace}}/dependencies
 
+      - name: Add apt-repositories
+        shell: bash
+        working-directory: ${{runner.workspace}}
+        run: sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+      
       - name: Download Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 0c99bd8 && sudo apt install libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
+        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 0c99bd8 && sudo apt install gcc-11 libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
 
       - name: Cache Dependencies
         id: cache-dependencies
