@@ -35,10 +35,6 @@ static void computeReachableStates( const std::string& filename,
 	auto roots = hypro::makeRoots<Representation, Automaton>( automaton );
 
 	hypro::AnalysisParameters analysisParams = settings.strategy().front();
-	// std::cout << "Analysis params aggregation: " << analysisParams.aggregation._to_string() << std::endl;
-
-	// analysisParams.aggregation = hypro::AGG_SETTING::AGG;
-	// std::cout << "Analysis params aggregation: " << analysisParams.aggregation._to_string() << std::endl;
 
 	hypro::reachability::Reach<Representation, Automaton> reacher( automaton, settings.fixedParameters(), analysisParams, roots );
 
