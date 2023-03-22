@@ -75,6 +75,27 @@ TEST( ParallelCompositionAnalysisTest, SafetyAutomaton ) {
 	}
 
 	auto roots = hypro::makeRoots<Box, Automaton>( cmp );
+	/*
+auto reacher = hypro::reachability::Reach<Box, Automaton>( cmp, settings.fixedParameters(), settings.strategy().front(), roots );
+auto result = reacher.computeForwardReachability();
+EXPECT_EQ( hypro::REACHABILITY_RESULT::UNKNOWN, result );
+// try local bad states
+cmp.removeAutomaton( 1 );
+{
+	auto safety = hypro::HybridAutomaton<Number>();
+	auto* loc = safety.createLocation( "isSafe?" );
+	loc->setFlow( Matrix::Zero( 0, 0 ) );
+	// global badStates: x <= 1
+	Matrix safetyConstraint = Matrix::Zero( 1, 2 );
+	safetyConstraint( 0, 0 ) = 1;
+	Vector safetyConstant = Vector::Ones( 1 );
+	safety.addLocalBadStates( loc, { safetyConstraint, safetyConstant } );
+	safety.addInitialState( loc, Condition::True() );
+	// add to composition
+	cmp.addAutomaton( std::move( safety ) );
+}
+roots.clear();
+roots = hypro::makeRoots<Box, Automaton>( cmp );
 
 	auto reacher = hypro::reachability::Reach<Box, Automaton>( cmp, settings.fixedParameters(), settings.strategy().front(), roots );
 	auto result = reacher.computeForwardReachability();
