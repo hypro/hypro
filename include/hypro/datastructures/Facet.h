@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * @file Facet.h
  */
@@ -21,14 +30,14 @@ class Facet {
 	 * Typedefs
 	 */
 	using pointVector = std::vector<Point<Number>>;
-	using neighborsSet = std::vector<std::shared_ptr<Facet<Number>>>;
+	using neighborsSet = std::vector<std::weak_ptr<Facet<Number>>>;
 
 	/**
 	 * Members
 	 */
   private:
 	pointVector mVertices;
-	neighborsSet mNeighbors;
+	mutable neighborsSet mNeighbors;
 	Halfspace<Number> mHalfspace;
 	pointVector mOutsideSet;
 	vector_t<Number> mNormal;
@@ -122,7 +131,7 @@ class Facet {
 
 	const neighborsSet& neighbors() const { return mNeighbors; }
 
-	void addNeighbor( const std::shared_ptr<Facet<Number>>& facet ) {
+	void addNeighbor( std::weak_ptr<Facet<Number>> facet ) {
 		// std::cout << "Adding " << *facet << " to " << *this << std::endl;
 		if ( !isNeighbor( facet ) ) {
 			mNeighbors.push_back( facet );
@@ -140,7 +149,7 @@ class Facet {
 	 */
 	bool removeNeighbor( const std::shared_ptr<Facet<Number>>& facet ) {
 		for ( unsigned i = 0; i < mNeighbors.size(); i++ ) {
-			if ( *facet == *mNeighbors[i] ) {
+			if ( *facet == mNeighbors[i].lock() ) {
 				mNeighbors.erase( mNeighbors.begin() + i );
 				return true;  // check for multiple entries?
 			}
@@ -150,7 +159,7 @@ class Facet {
 
 	void setPoints( std::vector<Point<Number>>&& points, const Point<Number>& _insidePoint ) {
 		if ( mVertices.empty() ) {
-			std::move( points.begin(), points.end(), std::back_inserter( mVertices ) );
+			mVertices.insert( std::end( mVertices ), std::make_move_iterator( std::begin( points ) ), std::make_move_iterator( std::end( points ) ) );
 
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
@@ -321,7 +330,7 @@ class Facet {
 
 	Number getScalarVector() const { return Number( mNormal.dot( mVertices[0].rawCoordinates() ) ); }
 
-	Halfspace<Number> halfspace() const { return mHalfspace; }
+	const Halfspace<Number>& halfspace() const { return mHalfspace; }
 
 	/*
 	 * Iterators
@@ -365,11 +374,11 @@ class Facet {
 		return Number( temp - mScalar );
 	}
 
-	void addPointToOutsideSet( Point<Number> point ) {
+	void addPointToOutsideSet( const Point<Number>& point ) {
 		mOutsideSet.push_back( point );	 // check double entries?
 	}
 
-	std::vector<Point<Number>> getOutsideSet() const {
+	const std::vector<Point<Number>>& getOutsideSet() const {
 		// std::cout << __func__ << " : " << __LINE__ << mOutsideSet << std::endl;
 		return mOutsideSet;
 	}
@@ -405,11 +414,11 @@ class Facet {
 		}
 	}
 
-	bool isNeighbor( const std::shared_ptr<Facet<Number>>& facet ) const {
+	bool isNeighbor( std::weak_ptr<Facet<Number>> facet ) const {
 		for ( unsigned i = 0; i < mNeighbors.size(); i++ ) {
 			// std::cout << "Compare " << *mNeighbors[i] << " and " << *facet << ": " << (*mNeighbors[i] == *facet) <<
 			// std::endl;
-			if ( *mNeighbors[i] == *facet ) {
+			if ( mNeighbors[i].lock() == facet.lock() ) {
 				return true;
 			}
 		}

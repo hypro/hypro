@@ -30,10 +30,10 @@ namespace hypro {
 using tNumber = mpq_class;
 
 /// Used to designate the index of a segment in a flowpipe
-using SegmentInd = int;
+using SegmentInd = long int;
 
 /// Used to designate time points as multiples of some delta, usually given as a value of type tNumber
-using TimePoint = int;
+using TimePoint = long int;
 
 /// Wrapper for an Eigen::Matrix type with only one column.
 template <typename Number>

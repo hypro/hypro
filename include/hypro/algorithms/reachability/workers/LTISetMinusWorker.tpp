@@ -119,11 +119,7 @@ REACHABILITY_RESULT LTISetMinusWorker<Representation, Automaton>::computeTimeSuc
 				// for all parts of the current segment
 				for ( int ut = urgentlower; ut < urgentupper; ut++ ) {
 					segment = tmpsegments[ut];
-					if ( !segment.empty() ) {
-						auto [containment, testsegment] = intersect( segment, urgent_trans.at( i )->getGuard() );
-					} else {
-						auto containment = CONTAINMENT::NO;
-					}
+					auto [containment, testsegment] = intersect( segment, urgent_trans.at( i )->getGuard() );
 					// if guard is enabled perform setminus
 					if ( containment != CONTAINMENT::NO ) {
 						Representation guard( urgent_trans.at( i )->getGuard().getMatrix(), urgent_trans.at( i )->getGuard().getVector() );
@@ -325,7 +321,6 @@ std::string print( std::vector<Representation> const& sets ) {
 
 template <typename Representation, typename Automaton>
 std::vector<JumpSuccessor<Representation, typename Automaton::LocationType>> LTISetMinusWorker<Representation, Automaton>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, LocationT const* loc ) const {
-
 	// transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation, typename Automaton::LocationType>> enabledSegments{};
 

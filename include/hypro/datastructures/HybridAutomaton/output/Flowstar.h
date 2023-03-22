@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -142,7 +142,18 @@ std::string toFlowstarFormat( const flowVariant<Number>& f,
 			for ( const auto& vFlowPair : flow ) {
 				out << prefix << "\t\t" << vFlowPair.first << "' in " << vFlowPair.second;
 			}
+			break;
 		}
+		case DynamicType::singular: {
+			throw NotImplemented( "Output of singular dynamics not yet implemented." );
+			break;
+		}
+		case DynamicType::mixed: {
+			throw NotImplemented( "Output of mixed dynamics not yet implemented." );
+			break;
+		}
+		default:
+			throw std::logic_error( "Cannot output dynamics of type 'undefined'." );
 	}
 	return out.str();
 }

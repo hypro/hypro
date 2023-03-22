@@ -22,7 +22,8 @@ int main() {
 	// create the discrete structure of the automaton and the automaton itself.
 	HybridAutomaton<Number> bBallAutomaton = HybridAutomaton<Number>();
 	Location<Number>* loc1 = bBallAutomaton.createLocation();
-	Transition<Number>* trans = loc1->createTransition(loc1);
+	// Transition<Number>* trans = loc1->createTransition(loc1);
+	Transition<hypro::Location<Number>>* trans = loc1->createTransition(loc1);
 
 	// matrix defining the flow (note: 3rd dimension for constant parts).
 	matrix_t<Number> flowMatrix = matrix_t<Number>( 3, 3 );
@@ -121,7 +122,7 @@ int main() {
 
 	// set settings
 	hypro::FixedAnalysisParameters fixedParameters;
-	fixedParameters.jumpDepth = 3;
+	fixedParameters.jumpDepth = 1;
 	fixedParameters.localTimeHorizon = 5;
 	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
 
@@ -133,10 +134,10 @@ int main() {
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
 	// initialize reachability tree
-	auto roots = makeRoots<Representation,Number>( bBallAutomaton );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( bBallAutomaton );
 
 	// instanciate reachability analysis class
-	hypro::reachability::Reach<Representation> reacher{ bBallAutomaton, fixedParameters, analysisParameters, roots };
+	hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>> reacher{ bBallAutomaton, fixedParameters, analysisParameters, roots };
 
 	// perform reachability analysis.
 	REACHABILITY_RESULT res = reacher.computeForwardReachability();
@@ -146,8 +147,9 @@ int main() {
 	std::cout << "Start plotting ... ";
 	Plotter<Number>& plotter = Plotter<Number>::getInstance();
 	plotter.setFilename( "bouncingBall" );
+
 	for(const auto& node : preorder(roots)) {
-		for(const auto& state_set : node.getFlowpipe()) {
+		for(const auto& state_set : node.getFlowpipe()) {	// flowpipes
 			plotter.addObject(state_set.projectOn({0,1}).vertices());
 		}
 	}

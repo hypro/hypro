@@ -13,7 +13,7 @@ namespace hypro {
 
 template <typename Representation, typename HybridAutomaton>
 template <typename OutputIt>
-REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out, int segmentsToCompute, bool checkSafety ) const {
+REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out, long int segmentsToCompute, bool checkSafety ) const {
 	if ( segmentsToCompute < 0 ) {
 		segmentsToCompute = mNumSegments;
 	} else if ( segmentsToCompute == 0 ) {

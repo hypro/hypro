@@ -31,7 +31,7 @@ jobs:
       - name: Download Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && sudo apt install libeigen3-dev libboost-chrono-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-serialization-dev uuid-dev doxygen
+        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 0c99bd8 && sudo apt install libeigen3-dev libboost-chrono-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-serialization-dev uuid-dev doxygen
 
       - name: Download & Unzip Build-wrapper & scanner
         shell: bash

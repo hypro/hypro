@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -51,7 +51,7 @@ class EventTimingTest : public ::testing::Test {
 	Transition<Location<double>>* tRaw;
 	Transition<Location<double>>* tRaw2;
 
-	EventTimingNode<double>* initNode;
+	typename EventTimingNode<double>::Node_t initNode;
 };
 
 /**
@@ -76,7 +76,7 @@ TEST_F( EventTimingTest, FindPath1 ) {
 
 	// simulate a transition event:
 	// create timing node
-	EventTimingNode<double>* ch1 = tProvider.addChildToNode( initNode, 10 );
+	auto ch1 = tProvider.addChildToNode( initNode, 10 );
 	// add transition event to parent
 	initNode->rGetTimings().insertTransition( tRaw, carl::Interval<T>( 1, 2 ), CONTAINMENT::YES );
 	// set properties of child
@@ -108,8 +108,8 @@ TEST_F( EventTimingTest, FindPath2 ) {
 
 	// simulate a transition event:
 	// create timing node
-	EventTimingNode<double>* ch1 = tProvider.addChildToNode( initNode, 10 );
-	EventTimingNode<double>* ch2 = tProvider.addChildToNode( initNode, 10 );
+	auto ch1 = tProvider.addChildToNode( initNode, 10 );
+	auto ch2 = tProvider.addChildToNode( initNode, 10 );
 
 	EXPECT_EQ( std::size_t( 2 ), initNode->getChildren().size() );
 	// add transition event to parent
@@ -161,9 +161,9 @@ TEST_F( EventTimingTest, FindPath3 ) {
 
 	// simulate a transition event:
 	// create timing node
-	EventTimingNode<double>* ch1 = tProvider.addChildToNode( initNode, 10 );
-	EventTimingNode<double>* ch2 = tProvider.addChildToNode( initNode, 10 );
-	EventTimingNode<double>* ch3 = tProvider.addChildToNode( initNode, 10 );
+	auto ch1 = tProvider.addChildToNode( initNode, 10 );
+	auto ch2 = tProvider.addChildToNode( initNode, 10 );
+	auto ch3 = tProvider.addChildToNode( initNode, 10 );
 
 	EXPECT_EQ( std::size_t( 3 ), initNode->getChildren().size() );
 	// add transition event to parent

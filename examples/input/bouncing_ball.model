@@ -57,7 +57,8 @@ unsafe set
 {
   l
   {
-   x in [4,6]
-   v in [-2.5,0] 
+   x in [2,4]
+   v in [-2.5,0]
+   
   }
 }
