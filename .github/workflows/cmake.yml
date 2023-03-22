@@ -31,6 +31,11 @@ jobs:
         working-directory: ${{runner.workspace}}/dependencies
         run: git clone --depth 1 --branch 21.05 https://github.com/smtrat/carl carl && sudo apt install libeigen3-dev libboost-chrono1.71-dev libboost-system1.71-dev libboost-program-options1.71-dev libboost-test1.71-dev libboost-timer1.71-dev libboost-serialization1.71-dev uuid-dev doxygen
 
+      - name: Update compiler alternatives to gcc-11
+        shell: bash
+        working-directory: ${{runner.workspace}}
+        run: sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 20 && sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 20 && /usr/bin/gcc gcc /usr/bin/gcc-9 10 && sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-9 10
+      
       - name: Create Build Environment for Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
