@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -28,10 +28,15 @@ static void computeReachableStates( const std::string& filename,
 	clock::time_point start = clock::now();
 
 	auto [automaton, parsedSettings] = hypro::parseFlowstarFile<Number>( filename );
+
+	std::cout << parsedSettings << std::endl;
+
 	hypro::Settings settings = hypro::convert( parsedSettings );
 	auto roots = hypro::makeRoots<Representation, Automaton>( automaton );
 
-	hypro::reachability::Reach<Representation, Automaton> reacher( automaton, settings.fixedParameters(), settings.strategy().front(), roots );
+	hypro::AnalysisParameters analysisParams = settings.strategy().front();
+
+	hypro::reachability::Reach<Representation, Automaton> reacher( automaton, settings.fixedParameters(), analysisParams, roots );
 
 	auto result = reacher.computeForwardReachability();
 	auto flowpipes = getFlowpipes( roots );

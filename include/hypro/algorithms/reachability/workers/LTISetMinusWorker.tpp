@@ -181,8 +181,8 @@ auto LTISetMinusWorker<Representation, Automaton>::getJumpSuccessors( std::vecto
 			blockSize = flowpipe.size();
 		}
 
-	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
-		if ( transition->getAggregation() == Aggregation::clustering ) {
+	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != AGG_SETTING::NO_AGG ) {
+		if ( transition->getAggregation() == AGG_SETTING::CLUSTERING ) {
 			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 		}
 	}
@@ -354,8 +354,8 @@ std::vector<JumpSuccessor<Representation, typename Automaton::LocationType>> LTI
 				// blockSize = valuationSets.size();
 			}
 
-		} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
-			if ( transition->getAggregation() == Aggregation::clustering ) {
+		} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != AGG_SETTING::NO_AGG ) {
+			if ( transition->getAggregation() == AGG_SETTING::CLUSTERING ) {
 				// blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
 			}
 		}

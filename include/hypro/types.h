@@ -122,6 +122,7 @@ enum class DynamicType { linear = 0,
 BETTER_ENUM( AGG_SETTING, int,
 			 MODEL,
 			 AGG,
+			 CLUSTERING,
 			 NO_AGG )
 
 /**
