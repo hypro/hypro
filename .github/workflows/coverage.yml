@@ -7,31 +7,29 @@ name: Coverage
 on:
   push:
     branches:
-      - master
-      - alpha
-      - hypro-sonarcloud
-      - fix/coverage
-      - fix/codeCleanup
-      - maintenance/staticAnalysis
+      - '**'
 
 jobs:
   sonarcloud:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+
     steps:
       - uses: actions/checkout@v2
-        with:
-          # Disabling shallow clone is recommended for improving relevancy of reporting
-          fetch-depth: 0
 
       - name: Create Dependencies Environment
         shell: bash
         working-directory: ${{runner.workspace}}
         run: cmake -E make_directory ${{runner.workspace}}/dependencies
 
+      - name: Add apt-repositories
+        shell: bash
+        working-directory: ${{runner.workspace}}
+        run: sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+      
       - name: Download Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 0c99bd8 && sudo apt install libeigen3-dev libboost-chrono-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-serialization-dev uuid-dev doxygen
+        run: git clone  --branch 22.12 https://github.com/ths-rwth/carl carl && cd carl && git checkout 0c99bd8 && sudo apt install libeigen3-dev libboost-chrono-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-serialization-dev uuid-dev doxygen
 
       - name: Download & Unzip Build-wrapper & scanner
         shell: bash
@@ -61,7 +59,7 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies/carl/build
         #  if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: cmake --build . -j 3 --target carl
+        run: cmake --build . -j 3 --target carl-arith carl-common carl-formula
 
       - name: Configure Project
         working-directory: ${{runner.workspace}}/hypro
