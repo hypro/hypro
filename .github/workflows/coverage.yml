@@ -59,7 +59,7 @@ jobs:
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies/carl/build
         #  if: steps.cache-dependencies.outputs.cache-hit != 'true'
-        run: cmake --build . -j 3 --target carl
+        run: cmake --build . -j 3 --target carl-arith carl-common carl-formula
 
       - name: Configure Project
         working-directory: ${{runner.workspace}}/hypro
