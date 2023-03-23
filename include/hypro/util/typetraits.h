@@ -72,4 +72,7 @@ using EnableIfFloatingpoint = std::enable_if_t<std::is_floating_point_v<Number>>
 template <typename T>
 struct is_location_type : std::false_type {};
 
+template <typename T>
+struct [[maybe_unused]] is_automaton_type : std::false_type {};
+
 }  // namespace hypro

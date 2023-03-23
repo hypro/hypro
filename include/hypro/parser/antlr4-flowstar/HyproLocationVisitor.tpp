@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -248,7 +248,7 @@ namespace hypro {
 				assert(newMat.cols() == currInvMat.cols());
 				std::size_t newMatRowsBefore = newMat.rows();
 				newMat.conservativeResize(newMat.rows()+currInvMat.rows(),newMat.cols());
-				for(int i = newMat.rows()-currInvMat.rows(); i < newMat.rows(); i++){
+				for(Eigen::Index i = newMat.rows()-currInvMat.rows(); i < newMat.rows(); i++){
 					newMat.row(i) = currInvMat.row(i-newMatRowsBefore);
 				}
 
@@ -256,7 +256,7 @@ namespace hypro {
 				vector_t<Number> newVec = inv.getVector();
 				vector_t<Number> currInvVec = currInv.getVector();
 				newVec.conservativeResize(newVec.rows()+currInvVec.rows());
-				for(int i = newVec.rows()-currInvVec.rows(); i < newVec.rows(); i++){
+				for(Eigen::Index i = newVec.rows()-currInvVec.rows(); i < newVec.rows(); i++){
 					newVec(i) = currInvVec(i-newMatRowsBefore);
 				}
 

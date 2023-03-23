@@ -49,7 +49,11 @@
 #include <carl-arith/core/Variable.h>
 #include <carl-arith/core/VariablePool.h>
 #include <carl-arith/interval/Interval.h>
+#ifdef CARL_CAMEL_CASE_HEADERS
 #include <carl-arith/interval/SetTheory.h>
+#elif CARL_SNAKE_CASE_HEADERS
+#include <carl-arith/interval/set_theory.h>
+#endif
 #include <carl-arith/numbers/numbers.h>
 #include <carl-arith/poly/umvpoly/MultivariatePolynomial.h>
 #include <carl-common/memory/Singleton.h>

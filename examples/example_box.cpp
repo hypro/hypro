@@ -6,8 +6,8 @@
  * of the resulting set.
  */
 
-#include "datastructures/Halfspace.h"
-#include "representations/GeometricObjectBase.h"
+#include "hypro/datastructures/Halfspace.h"
+#include "hypro/representations/GeometricObjectBase.h"
 #include "hypro/util/plotting/Plotter.h"
 
 int main() {

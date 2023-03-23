@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -163,7 +163,7 @@ std::vector<Transition<Location<Number>>*> HybridAutomaton<Number>::getTransitio
 }
 
 template <typename Number>
-unsigned HybridAutomaton<Number>::dimension() const {
+std::size_t HybridAutomaton<Number>::dimension() const {
 	if ( !mInitialStates.empty() ) return mInitialStates.begin()->first->dimension();
 	if ( !mLocations.empty() ) return mLocations.front()->dimension();
 	return 0;
@@ -174,7 +174,7 @@ const typename HybridAutomaton<Number>::variableVector& HybridAutomaton<Number>:
 	if ( !mVariablesSet && mVariables.size() == 0 ) {
 		auto dim = this->dimension();
 		if ( this->dimension() > 0 ) {
-			for ( int i = 0; i < dim; ++i ) {
+			for ( std::size_t i = 0; i < dim; ++i ) {
 				mVariables.push_back( "x" + std::to_string( i ) );
 			}
 		}
@@ -358,7 +358,7 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 	using variableVector = std::vector<std::string>;  /// Vector of variables
 	const variableVector& lhsVar = lhs.getVariables();
 	const variableVector& rhsVar = rhs.getVariables();
-	std::map<unsigned, std::pair<unsigned, unsigned>> sharedVars;
+	std::map<std::size_t, std::pair<std::size_t, std::size_t>> sharedVars;
 
 	variableVector haVar;
 	variableVector::size_type i = 0;
@@ -404,14 +404,14 @@ HybridAutomaton<Number> operator||( const HybridAutomaton<Number>& lhs, const Hy
 		bool right = false;
 		std::size_t l = 0;
 		std::size_t r = 0;
-		while ( l != lhsVar.size() ) {
+		while ( std::size_t( l ) != lhsVar.size() ) {
 			if ( lhsVar[l] == haVar[i] ) {
 				left = true;
 				break;
 			}
 			++l;
 		}
-		while ( r != rhsVar.size() ) {
+		while ( std::size_t( r ) != rhsVar.size() ) {
 			if ( rhsVar[r] == haVar[i] ) {
 				right = true;
 				break;
@@ -568,7 +568,7 @@ HybridAutomaton<Number> parallelCompose( const HybridAutomaton<Number>& lhs, con
 	using variableVector = std::vector<std::string>;  /// Vector of variables
 	const variableVector& lhsVar = lhs.getVariables();
 	const variableVector& rhsVar = rhs.getVariables();
-	std::map<unsigned, std::pair<unsigned, unsigned>> sharedVars;
+	std::map<std::size_t, std::pair<std::size_t, std::size_t>> sharedVars;
 
 	variableVector haVar;
 	variableVector::size_type i = 0;

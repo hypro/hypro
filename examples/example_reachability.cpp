@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023-2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  *
  */
@@ -9,27 +18,25 @@
 #include <hypro/representations/GeometricObjectBase.h>
 #include <hypro/util/plotting/Plotter.h>
 #include <hypro/util/statistics/statistics.h>
-// #include <zconf.h>
-// #include <resources/glpk-5.0/src/zlib/zconf.h>
-#ifdef HYPRO_USE_LACE
-#include <lace.h>
-#endif
-//#define PLOT_FLOWPIPE
 
 template <typename Number, typename Representation>
 static void computeReachableStates( const std::string& filename,
 									const hypro::representation_name& type ) {
+	using Automaton = hypro::HybridAutomaton<Number>;
 	using clock = std::chrono::high_resolution_clock;
 	using timeunit = std::chrono::microseconds;
 	clock::time_point start = clock::now();
 
 	auto [automaton, parsedSettings] = hypro::parseFlowstarFile<Number>( filename );
+
+	std::cout << parsedSettings << std::endl;
+
 	hypro::Settings settings = hypro::convert( parsedSettings );
-	auto roots = hypro::makeRoots<Representation>( automaton );
+	auto roots = hypro::makeRoots<Representation, Automaton>( automaton );
 
-	hypro::reachability::Reach<Representation> reacher( automaton, settings.fixedParameters(), settings.strategy().front(), roots );
+	hypro::AnalysisParameters analysisParams = settings.strategy().front();
 
-	std::cout << "Initiated queues" << std::endl;
+	hypro::reachability::Reach<Representation, Automaton> reacher( automaton, settings.fixedParameters(), analysisParams, roots );
 
 	auto result = reacher.computeForwardReachability();
 	auto flowpipes = getFlowpipes( roots );
@@ -89,8 +96,8 @@ static void computeReachableStates( const std::string& filename,
 		plotter.setFilename( extendedFilename );
 		std::vector<std::size_t> plottingDimensions =
 			  settings.plotting().plotDimensions.at( 0 );
-		plotter.rSettings().dimensions.push_back(plottingDimensions.front());
-		plotter.rSettings().dimensions.push_back(plottingDimensions.back());
+		plotter.rSettings().dimensions.push_back( plottingDimensions.front() );
+		plotter.rSettings().dimensions.push_back( plottingDimensions.back() );
 		plotter.rSettings().cummulative = false;
 
 		// bad states plotting
@@ -108,29 +115,29 @@ static void computeReachableStates( const std::string& filename,
 			// 	}
 			// }
 			unsigned bs = plotter.addObject(
-				  Representation( matrix, vector ).projectOn( plottingDimensions )
-						.vertices(),
+				  Representation( matrix, vector ).projectOn( plottingDimensions ).vertices(),
 				  hypro::plotting::colors[hypro::plotting::red] );
 		}
 
+		unsigned cnt = 0;
 		// segments plotting
 		for ( const auto& flowpipe : flowpipes ) {
-			unsigned cnt = 0;
+			std::cout << "Flowpipe size " << flowpipe.size() << std::endl;  
 			for ( const auto& segment : flowpipe ) {
 				// std::cout << "Plot segment " << cnt << "/" << flowpipe.size()
 				//   << std::endl;
-				plotter.addObject( segment.projectOn( plottingDimensions ).vertices() );
-				++cnt;
+				// plotter.addObject( segment.projectOn( plottingDimensions ).vertices(), hypro::plotting::colors[cnt%10] );
+				plotter.addObject( segment.projectOn( plottingDimensions ).vertices(), hypro::plotting::colors[cnt%10] );
+				// ++cnt;
 			}
+			++cnt;
 		}
 
 		PRINT_STATS()
 
 		std::cout << "Write to file." << std::endl;
 
-		plotter.plot2d( hypro::PLOTTYPE::pdf );
-		plotter.plot2d( hypro::PLOTTYPE::tex );
-		plotter.plot2d( hypro::PLOTTYPE::gen );
+		plotter.plot2d( hypro::PLOTTYPE::pdf, true );
 
 		std::cout << "Finished plotting: "
 				  << std::chrono::duration_cast<timeunit>( clock::now() -
@@ -152,7 +159,7 @@ int main( int argc, char** argv ) {
 #ifdef USE_CLN_NUMBERS
 	using Number = cln::cl_RA;
 #else
-	//using Number = mpq_class;
+	// using Number = mpq_class;
 	using Number = double;
 #endif
 

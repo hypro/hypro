@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -13,7 +13,7 @@ namespace hypro {
 
 template <typename Representation, typename HybridAutomaton>
 template <typename OutputIt>
-REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out, int segmentsToCompute, bool checkSafety ) const {
+REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out, long int segmentsToCompute, bool checkSafety ) const {
 	if ( segmentsToCompute < 0 ) {
 		segmentsToCompute = mNumSegments;
 	} else if ( segmentsToCompute == 0 ) {
@@ -79,15 +79,15 @@ REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSucce
 template <typename Representation, typename HybridAutomaton>
 auto LTIWorker<Representation, HybridAutomaton>::getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<LocationT> const* transition ) const -> JumpSuccessorGen {
 	std::size_t blockSize = 1;
-	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+	if ( mSettings.aggregation == AGG_SETTING::AGG || ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() == AGG_SETTING::AGG ) ) {
 		if ( mSettings.clustering > 0 ) {
 			blockSize = ( flowpipe.size() + mSettings.clustering ) / mSettings.clustering;	// division rounding up
 		} else {
 			blockSize = flowpipe.size();
 		}
 
-	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
-		if ( transition->getAggregation() == Aggregation::clustering ) {
+	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != AGG_SETTING::NO_AGG ) {
+		if ( transition->getAggregation() == AGG_SETTING::CLUSTERING ) {
 			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 		}
 	}
@@ -275,15 +275,15 @@ std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType
 	for ( auto& [transition, valuationSets] : enabledSegments ) {
 		// no aggregation
 		std::size_t blockSize = 1;
-		if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+		if ( mSettings.aggregation == AGG_SETTING::AGG || ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() == AGG_SETTING::AGG ) ) {
 			if ( mSettings.clustering > 0 ) {
 				blockSize = ( valuationSets.size() + mSettings.clustering ) / mSettings.clustering;	 // division rounding up
 			} else {
 				blockSize = valuationSets.size();
 			}
 
-		} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
-			if ( transition->getAggregation() == Aggregation::clustering ) {
+		} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != AGG_SETTING::NO_AGG ) {
+			if ( transition->getAggregation() == AGG_SETTING::CLUSTERING ) {
 				blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 			}
 		}
@@ -316,15 +316,15 @@ std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType
 template <typename Representation, typename HybridAutomaton>
 std::vector<TimedValuationSet<Representation>> LTIWorker<Representation, HybridAutomaton>::computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<LocationT> const* transition ) const {
 	std::size_t blockSize = 1;
-	if ( mSettings.aggregation == AGG_SETTING::AGG ) {
+	if ( mSettings.aggregation == AGG_SETTING::AGG || ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() == AGG_SETTING::AGG ) ) {
 		if ( mSettings.clustering > 0 ) {
 			blockSize = ( predecessors.size() + mSettings.clustering ) / mSettings.clustering;	// division rounding up
 		} else {
 			blockSize = predecessors.size();
 		}
 
-	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
-		if ( transition->getAggregation() == Aggregation::clustering ) {
+	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != AGG_SETTING::NO_AGG ) {
+		if ( transition->getAggregation() == AGG_SETTING::CLUSTERING ) {
 			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 		}
 	}

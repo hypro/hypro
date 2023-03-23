@@ -8,6 +8,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             #ForwardReachabilityTest.cpp
             FourierMotzkinQETest.cpp
             #MinkowskiSumTest.cpp
+            #MultithreadedReachabilityAnalysisTest.cpp
             ParallelCompositionReachabilityAnalysisTest.cpp
             QuickhullTest.cpp
             QuickIntersectionTest.cpp
