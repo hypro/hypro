@@ -77,7 +77,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		resetMatrix01( 1, 1 ) = Number( 1 );
 		trans01.setReset( hypro::Reset<Number>( resetMatrix01, resetVector01 ) );
 		// set aggregation settings of transition to full aggregation
-		trans01.setAggregation( hypro::Aggregation::aggregation );
+		trans01.setAggregation( hypro::AGG_SETTING::AGG );
 		// make transition urgent
 		trans01.setUrgent();
 		// assign transition to location
@@ -173,7 +173,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// no assign reset to transition
 		// north_east_north_west.setReset( hypro::Reset<Number>( resetmat_ne_nw, resetoff_ne_nw ) );
 		// no set aggregation settings of transition to full aggregation
-		// north_east_north_west->setAggregation( hypro::Aggregation::aggregation );
+		// north_east_north_west->setAggregation( hypro::AGG_SETTING::AGG );
 		// north_east->addTransition( std::make_unique<hypro::Transition<Number>>( north_east_north_west ) );
 
 		auto* north_west_north_east = north_west->createTransition( north_east );
@@ -192,7 +192,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// north_west_north_east.setReset( hypro::Reset<Number>( resetmat_nw_ne, resetoff_nw_ne ) );
 		// set aggregation settings of transition to full aggregation
-		north_west_north_east->setAggregation( hypro::Aggregation::aggregation );
+		north_west_north_east->setAggregation( hypro::AGG_SETTING::AGG );
 		// north_west->addTransition( std::make_unique<hypro::Transition<Number>>( north_west_north_east ) );
 
 		auto* north_east_south_east = north_east->createTransition( south_east );
@@ -211,7 +211,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// north_east_south_east.setReset( hypro::Reset<Number>( resetmat_ne_se, resetoff_ne_se ) );
 		// set aggregation settings of transition to full aggregation
-		// north_east_south_east->setAggregation( hypro::Aggregation::aggregation );
+		// north_east_south_east->setAggregation( hypro::AGG_SETTING::AGG );
 		// north_east->addTransition( std::make_unique<hypro::Transition<Number>>( north_east_south_east ) );
 
 		auto* south_east_north_east = south_east->createTransition( north_east );
@@ -230,7 +230,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// south_east_north_east.setReset( hypro::Reset<Number>( resetmat_se_ne, resetoff_se_ne ) );
 		// set aggregation settings of transition to full aggregation
-		south_east_north_east->setAggregation( hypro::Aggregation::aggregation );
+		south_east_north_east->setAggregation( hypro::AGG_SETTING::AGG );
 		// south_east->addTransition( std::make_unique<hypro::Transition<Number>>( south_east_north_east ) );
 
 		auto* north_west_south_west = north_west->createTransition( south_west );
@@ -249,7 +249,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// north_west_south_west.setReset( hypro::Reset<Number>( resetmat_nw_sw, resetoff_nw_sw ) );
 		// set aggregation settings of transition to full aggregation
-		north_west_south_west->setAggregation( hypro::Aggregation::aggregation );
+		north_west_south_west->setAggregation( hypro::AGG_SETTING::AGG );
 		// north_west->addTransition( std::make_unique<hypro::Transition<Number>>( north_west_south_west ) );
 
 		auto* south_west_north_west = south_west->createTransition( north_west );
@@ -268,7 +268,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// south_west_north_west.setReset( hypro::Reset<Number>( resetmat_sw_nw, resetoff_sw_nw ) );
 		// set aggregation settings of transition to full aggregation
-		south_west_north_west->setAggregation( hypro::Aggregation::aggregation );
+		south_west_north_west->setAggregation( hypro::AGG_SETTING::AGG );
 		// south_west->addTransition( std::make_unique<hypro::Transition<Number>>( south_west_north_west ) );
 
 		auto* south_east_south_west = south_east->createTransition( south_west );
@@ -287,7 +287,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// south_east_south_west.setReset( hypro::Reset<Number>( resetmat_se_sw, resetoff_se_sw ) );
 		// set aggregation settings of transition to full aggregation
-		south_east_south_west->setAggregation( hypro::Aggregation::aggregation );
+		south_east_south_west->setAggregation( hypro::AGG_SETTING::AGG );
 		// south_east->addTransition( std::make_unique<hypro::Transition<Number>>( south_east_south_west ) );
 
 		auto* south_west_south_east = south_west->createTransition( south_east );
@@ -306,7 +306,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// south_west_south_east.setReset( hypro::Reset<Number>( resetmat_sw_se, resetoff_sw_se ) );
 		// set aggregation settings of transition to full aggregation
-		south_west_south_east->setAggregation( hypro::Aggregation::aggregation );
+		south_west_south_east->setAggregation( hypro::AGG_SETTING::AGG );
 		// south_west->addTransition( std::make_unique<hypro::Transition<Number>>( south_west_south_east ) );
 
 		auto* urgent_ne_nw = north_east->createTransition( north_west );
@@ -331,7 +331,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// urgent_ne_nw.setReset( hypro::Reset<Number>( urgent_resetmat_ne_nw, urgent_resetoff_ne_nw ) );
 		// set aggregation settings of transition to full aggregation
-		urgent_ne_nw->setAggregation( hypro::Aggregation::aggregation );
+		urgent_ne_nw->setAggregation( hypro::AGG_SETTING::AGG );
 		urgent_ne_nw->setUrgent();
 		// north_east->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_ne_nw ) );
 
@@ -346,7 +346,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// urgent_nw_ne.setReset( hypro::Reset<Number>( urgent_resetmat_nw_ne, urgent_resetoff_nw_ne ) );
 		// set aggregation settings of transition to full aggregation
-		urgent_nw_ne->setAggregation( hypro::Aggregation::aggregation );
+		urgent_nw_ne->setAggregation( hypro::AGG_SETTING::AGG );
 		urgent_nw_ne->setUrgent();
 		// north_west->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_nw_ne ) );
 
@@ -371,7 +371,7 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// urgent_ne_se.setReset( hypro::Reset<Number>( urgent_resetmat_ne_se, urgent_resetoff_ne_se ) );
 		// set aggregation settings of transition to full aggregation
-		urgent_ne_se->setAggregation( hypro::Aggregation::aggregation );
+		urgent_ne_se->setAggregation( hypro::AGG_SETTING::AGG );
 		urgent_ne_se->setUrgent();
 		// north_east->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_ne_se ) );
 
@@ -386,35 +386,35 @@ class SetMinusReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		// urgent_se_ne.setReset( hypro::Reset<Number>( urgent_resetmat_se_ne, urgent_resetoff_se_ne ) );
 		// set aggregation settings of transition to full aggregation
-		urgent_se_ne->setAggregation( hypro::Aggregation::aggregation );
+		urgent_se_ne->setAggregation( hypro::AGG_SETTING::AGG );
 		urgent_se_ne->setUrgent();
 		// south_east->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_se_ne ) );
 
 		auto* urgent_nw_sw = north_west->createTransition( south_west );
 		urgent_nw_sw->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// urgent_nw_sw.setReset( hypro::Reset<Number>( urgent_resetmat_se_ne, urgent_resetoff_se_ne ) );
-		urgent_nw_sw->setAggregation( hypro::Aggregation::aggregation );
+		urgent_nw_sw->setAggregation( hypro::AGG_SETTING::AGG );
 		urgent_nw_sw->setUrgent();
 		// north_west->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_nw_sw ) );
 
 		auto* urgent_sw_nw = south_west->createTransition( north_west );
 		urgent_sw_nw->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// urgent_sw_nw.setReset( hypro::Reset<Number>( urgent_resetmat_se_ne, urgent_resetoff_se_ne ) );
-		urgent_sw_nw->setAggregation( hypro::Aggregation::aggregation );
+		urgent_sw_nw->setAggregation( hypro::AGG_SETTING::AGG );
 		urgent_sw_nw->setUrgent();
 		// south_west->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_sw_nw ) );
 
 		auto* urgent_se_sw = south_east->createTransition( south_west );
 		urgent_se_sw->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// urgent_se_sw.setReset( hypro::Reset<Number>( urgent_resetmat_se_ne, urgent_resetoff_se_ne ) );
-		urgent_se_sw->setAggregation( hypro::Aggregation::aggregation );
+		urgent_se_sw->setAggregation( hypro::AGG_SETTING::AGG );
 		urgent_se_sw->setUrgent();
 		// south_east->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_se_sw ) );
 
 		auto* urgent_sw_se = south_west->createTransition( south_east );
 		urgent_sw_se->setGuard( hypro::Condition<Number>( urgent_guard_mat, urgent_guard_off ) );
 		// urgent_sw_se.setReset( hypro::Reset<Number>( urgent_resetmat_se_ne, urgent_resetoff_se_ne ) );
-		urgent_sw_se->setAggregation( hypro::Aggregation::aggregation );
+		urgent_sw_se->setAggregation( hypro::AGG_SETTING::AGG );
 		urgent_sw_se->setUrgent();
 		// south_west->addTransition( std::make_unique<hypro::Transition<Number>>( urgent_sw_se ) );
 
