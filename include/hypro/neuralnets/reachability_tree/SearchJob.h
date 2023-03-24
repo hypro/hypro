@@ -45,6 +45,7 @@ class SearchJob {
 		// std::cout << "mSet: " << mSet << std::endl;
 		// std::cout << "method: " << method << std::endl;
 
+		// std::cout << "mLayerPointer: " << mLayer << std::endl;
 		// std::cout << "mLayer name: " << mLayer->layerType() << std::endl;
 		// std::cout << "mLayer: " << (*mLayer) << std::endl;
 

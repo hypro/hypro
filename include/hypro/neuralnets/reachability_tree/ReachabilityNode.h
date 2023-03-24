@@ -82,6 +82,7 @@ class ReachabilityNode {
 	void setRepresentation( const Starset<Number>& representation );
 
 	// functionalities
+	bool checkSafeRecursive( Starset<Number> currentSet, int i, const std::vector<HPolytope<Number>>& safeSets ) const;
 	bool checkSafe( const std::vector<HPolytope<Number>>& safeSets ) const;
 
 	// utility methods
