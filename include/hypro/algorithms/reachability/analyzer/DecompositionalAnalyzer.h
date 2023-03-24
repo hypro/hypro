@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -158,7 +158,7 @@ class DecompositionalAnalyzer {
 	struct computeTimeSuccessorVisitor {
 		ReachTreeNode<ComposedRep, LocationT>* task;
 		std::size_t clockCount;	 // number of clocks
-		int segmentCount = -1;	 // number of segments to compute in lti worker. if negative, use worker settings to get number of segments
+		long segmentCount = -1;	 // number of segments to compute in lti worker. if negative, use worker settings to get number of segments
 		TimeInformation<Number> operator()( SingularWorker<SingularRep, Automaton>& worker ) {
 			ReachTreeNode<SingularRep, LocationT> singularTask( task->getLocation(), std::visit( genericConvertAndGetVisitor<SingularRep>(), task->getInitialSet().getSet() ), task->getTimings() );
 			worker.computeTimeSuccessors( singularTask, false );
