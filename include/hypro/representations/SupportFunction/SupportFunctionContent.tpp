@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  *	File which holds the implementation of support functions.
  * @file SupportFunctionContent.tpp
@@ -122,20 +131,19 @@ SupportFunctionContent<Number,Setting>::SupportFunctionContent( const SupportFun
 */
 
 template <typename Number, typename Setting>
-SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type ) {
+SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<Number>& _shapeMatrix, SF_TYPE _type )
+	: mDimension( _shapeMatrix.cols() ) {
 	if ( _type == SF_TYPE::ELLIPSOID ) {
 		mEllipsoid = new EllipsoidSupportFunction<Number>( _shapeMatrix );
 		mType = SF_TYPE::ELLIPSOID;
-		mDimension = _shapeMatrix.cols();
-		mDepth = 0;
-		mOperationCount = 1;
 	} else {
 		assert( false );
 	}
 }
 
 template <typename Number, typename Setting>
-SupportFunctionContent<Number, Setting>::SupportFunctionContent( Number _radius, unsigned dimension, SF_TYPE _type ) {
+SupportFunctionContent<Number, Setting>::SupportFunctionContent( Number _radius, unsigned dimension, SF_TYPE _type )
+	: mDimension( dimension ) {
 	switch ( _type ) {
 		case SF_TYPE::INFTY_BALL:
 			[[fallthrough]];
@@ -143,9 +151,6 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( Number _radius,
 			mBall = new BallSupportFunction<Number>( _radius, _type );
 			mType = _type;
 			ball()->setDimension( dimension );
-			mDimension = dimension;
-			mDepth = 0;
-			mOperationCount = 0;
 			break;
 		}
 		default:
@@ -154,7 +159,8 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( Number _radius,
 }
 
 template <typename Number, typename Setting>
-SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances, SF_TYPE _type, bool overrideReduction ) {
+SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<Number>& _directions, const vector_t<Number>& _distances, SF_TYPE _type, bool overrideReduction )
+	: mDimension( _directions.cols() ) {
 	switch ( _type ) {
 		case SF_TYPE::POLY: {
 			if ( !overrideReduction ) {
@@ -175,10 +181,6 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<
 				mPolytope = new PolytopeSupportFunction<Number, Setting>( _directions, _distances );
 				mType = SF_TYPE::POLY;
 			}
-
-			mDimension = std::size_t( _directions.cols() );
-			mDepth = 0;
-			mOperationCount = 0;
 			break;
 		}
 		case SF_TYPE::BOX: {
@@ -195,9 +197,6 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( const matrix_t<
 				mPolytope = new PolytopeSupportFunction<Number, Setting>( _directions, _distances );
 				mType = SF_TYPE::POLY;
 			}
-			mDimension = std::size_t( _directions.cols() );
-			mDepth = 0;
-			mOperationCount = 0;
 			break;
 		}
 		default:
@@ -211,8 +210,6 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::vect
 		mPolytope = new PolytopeSupportFunction<Number, Setting>( _planes );
 		mType = SF_TYPE::POLY;
 		mDimension = polytope()->dimension();
-		mDepth = 0;
-		mOperationCount = 0;
 	} else {
 		assert( false );
 	}
@@ -224,21 +221,17 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::vect
 		mPolytope = new PolytopeSupportFunction<Number, Setting>( _points );
 		mType = SF_TYPE::POLY;
 		mDimension = polytope()->dimension();
-		mDepth = 0;
-		mOperationCount = 0;
 	} else {
 		assert( false );
 	}
 }
 
 template <typename Number, typename Setting>
-SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::vector<carl::Interval<Number>>& _inbox, SF_TYPE _type ) {
+SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::vector<carl::Interval<Number>>& _inbox, SF_TYPE _type )
+	: mDimension( _inbox.size() ) {
 	if ( _type == SF_TYPE::BOX ) {
 		mBox = new BoxSupportFunction<Number, Setting>( _inbox );
 		mType = SF_TYPE::BOX;
-		mDimension = box()->dimension();
-		mDepth = 0;
-		mOperationCount = 0;
 	} else {
 		assert( false );
 	}
@@ -246,45 +239,27 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::vect
 
 template <typename Number, typename Setting>
 SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _lhs,
-																 const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _rhs, SF_TYPE _type ) {
+																 const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _rhs, SF_TYPE _type )
+	: mDimension( _lhs->dimension() )
+	, mOperationCount( _rhs->operationCount() + _lhs->operationCount() + 1 )
+	, mDepth( std::max( _lhs->depth(), _rhs->depth() ) ) {
 	assert( _lhs->checkTreeValidity() );
 	assert( _rhs->checkTreeValidity() );
 	switch ( _type ) {
 		case SF_TYPE::SUM: {
 			mSummands = new sumContent<Number, Setting>( _lhs, _rhs );
 			mType = SF_TYPE::SUM;
-			mDimension = _lhs->dimension();
 			assert( _lhs->type() == summands()->lhs->type() && _rhs->type() == summands()->rhs->type() );
-			if ( _rhs->depth() > _lhs->depth() ) {
-				mDepth = _rhs->depth();
-			} else {
-				mDepth = _lhs->depth();
-			}
-			mOperationCount = _rhs->operationCount() + _lhs->operationCount() + 1;
 			break;
 		}
 		case SF_TYPE::UNITE: {
 			mUnionParameters = new unionContent<Number, Setting>( _lhs, _rhs );
 			mType = SF_TYPE::UNITE;
-			mDimension = _lhs->dimension();
-			if ( _rhs->depth() > _lhs->depth() ) {
-				mDepth = _rhs->depth();
-			} else {
-				mDepth = _lhs->depth();
-			}
-			mOperationCount = _rhs->operationCount() + _lhs->operationCount() + 1;
 			break;
 		}
 		case SF_TYPE::INTERSECT: {
 			mIntersectionParameters = new intersectionContent<Number, Setting>( _lhs, _rhs );
 			mType = SF_TYPE::INTERSECT;
-			mDimension = _lhs->dimension();
-			if ( _rhs->depth() > _lhs->depth() ) {
-				mDepth = _rhs->depth();
-			} else {
-				mDepth = _lhs->depth();
-			}
-			mOperationCount = _rhs->operationCount() + _lhs->operationCount() + 1;
 			break;
 		}
 		default:
@@ -293,15 +268,15 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::shar
 }
 
 template <typename Number, typename Setting>
-SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number, Setting>>>& rhs, SF_TYPE type ) {
+SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::vector<std::shared_ptr<SupportFunctionContent<Number, Setting>>>& rhs, SF_TYPE type )
+	: mDimension( rhs.begin()->dimension() )
+	, mDepth( 0 )
+	, mOperationCount( 1 ) {
 	assert( rhs->checkTreeValidity() );
 	if ( type == SF_TYPE::UNITE ) {
 		assert( !rhs.empty() );
 		mUnionParameters = new unionContent<Number, Setting>( rhs );
 		mType = SF_TYPE::UNITE;
-		mDimension = rhs.begin()->dimension();
-		mDepth = 0;
-		mOperationCount = 1;
 		for ( const auto& sf : rhs ) {
 			assert( sf->checkTreeValidity() );
 			assert( sf->dimension() == mDimension );
@@ -316,14 +291,14 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::vect
 }
 
 template <typename Number, typename Setting>
-SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b, SF_TYPE _type ) {
+SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _origin, const matrix_t<Number>& A, const vector_t<Number>& b, SF_TYPE _type )
+	: mDimension( _origin->dimension() )
+	, mDepth( _origin->depth() + 1 )
+	, mOperationCount( _origin->operationCount() + 1 ) {
 	assert( _origin->checkTreeValidity() );
 	if ( _type == SF_TYPE::LINTRAFO ) {
 		mLinearTrafoParameters = new trafoContent<Number, Setting>( _origin, A, b );
 		mType = SF_TYPE::LINTRAFO;
-		mDimension = _origin->dimension();
-		mDepth = linearTrafoParameters()->origin->depth() + 1;
-		mOperationCount = linearTrafoParameters()->origin->operationCount() + 1;
 	} else {
 		assert( false );
 	}
@@ -331,28 +306,28 @@ SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::shar
 
 template <typename Number, typename Setting>
 SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _origin, const Number& _factor,
-																 SF_TYPE _type ) {
+																 SF_TYPE _type )
+	: mDimension( _origin->dimension() )
+	, mDepth( _origin->depth() + 1 )
+	, mOperationCount( _origin->operationCount() + 1 ) {
 	assert( _origin->checkTreeValidity() );
 	if ( _type == SF_TYPE::SCALE ) {
 		mScaleParameters = new scaleContent<Number, Setting>( _origin, _factor );
 		mType = SF_TYPE::SCALE;
-		mDimension = _origin->dimension();
-		mDepth = _origin->depth() + 1;
-		mOperationCount = _origin->operationCount() + 1;
 	} else {
 		assert( false );
 	}
 }
 
 template <typename Number, typename Setting>
-SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _origin, const std::vector<std::size_t>& dimensions, SF_TYPE _type ) {
+SupportFunctionContent<Number, Setting>::SupportFunctionContent( const std::shared_ptr<SupportFunctionContent<Number, Setting>>& _origin, const std::vector<std::size_t>& dimensions, SF_TYPE _type )
+	: mDimension( _origin->dimension() )
+	, mDepth( _origin->depth() + 1 )
+	, mOperationCount( _origin->operationCount() + 1 ) {
 	assert( _origin->checkTreeValidity() );
 	if ( _type == SF_TYPE::PROJECTION ) {
 		mProjectionParameters = new projectionContent<Number, Setting>( _origin, dimensions );
 		mType = SF_TYPE::PROJECTION;
-		mDimension = _origin->dimension();
-		mDepth = _origin->depth() + 1;
-		mOperationCount = _origin->operationCount() + 1;
 	} else {
 		assert( false );
 	}
@@ -1542,26 +1517,6 @@ bool SupportFunctionContent<Number, Setting>::empty() const {
 				}
 				// Current implementation uses template evaluation.
 				std::vector<vector_t<Number>> directions = computeTemplate<Number>( this->dimension(), defaultTemplateDirectionCount );
-				/*
-				auto posDirectionMatrix = createMatrix( directions );
-				auto posNegDirectionMatrix = matrix_t<Number>( 2 * posDirectionMatrix.rows(), posDirectionMatrix.cols() );
-				posNegDirectionMatrix.block( 0, 0, posDirectionMatrix.rows(), posDirectionMatrix.cols() ) = posDirectionMatrix;
-				posNegDirectionMatrix.block( posDirectionMatrix.rows(), 0, posDirectionMatrix.rows(), posDirectionMatrix.cols() ) = -posDirectionMatrix;
-				auto lhsPosNeg = intersectionParameters()->lhs->multiEvaluate( posNegDirectionMatrix, false );
-				auto rhsPosNeg = intersectionParameters()->lhs->multiEvaluate( posNegDirectionMatrix, false );
-				for ( Eigen::Index i = 0; i < directions.size(); ++i ) {
-					if ( rhsPosNeg[i].supportValue < lhsPosNeg[i + directions.size()].supportValue && rhsPosNeg[i].errorCode != SOLUTION::INFTY && lhsPosNeg[i + directions.size()].errorCode != SOLUTION::INFTY ) {
-						mEmptyState = SETSTATE::EMPTY;
-						return true;
-					}
-					if ( -rhsPosNeg[i + directions.size()].supportValue > lhsPosNeg[i].supportValue && rhsPosNeg[i].errorCode != SOLUTION::INFTY && lhsPosNeg[i + directions.size()].errorCode != SOLUTION::INFTY ) {
-						mEmptyState = SETSTATE::EMPTY;
-						return true;
-					}
-				}
-				mEmptyState = SETSTATE::NONEMPTY;
-				return false;
-				 */
 				for ( const auto& direction : directions ) {
 					auto rhsPosEval = intersectionParameters()->rhs->evaluate( direction, false );
 					auto lhsNegEval = intersectionParameters()->lhs->evaluate( -direction, false );
@@ -1579,21 +1534,6 @@ bool SupportFunctionContent<Number, Setting>::empty() const {
 				mEmptyState = SETSTATE::NONEMPTY;
 			}
 			return ( mEmptyState == SETSTATE::EMPTY );
-			/*
-			for ( const auto& direction : directions ) {
-				auto rhsPosEval = intersectionParameters()->rhs->evaluate( direction, false );
-				auto lhsNegEval = intersectionParameters()->lhs->evaluate( -direction, false );
-				if ( rhsPosEval.supportValue < -lhsNegEval.supportValue && rhsPosEval.errorCode != SOLUTION::INFTY && lhsNegEval.errorCode != SOLUTION::INFTY ) {
-					return true;
-				}
-				auto rhsNegEval = intersectionParameters()->rhs->evaluate( -direction, false );
-				auto lhsPosEval = intersectionParameters()->lhs->evaluate( direction, false );
-				if ( -rhsNegEval.supportValue > lhsPosEval.supportValue && rhsNegEval.errorCode != SOLUTION::INFTY && lhsPosEval.errorCode != SOLUTION::INFTY ) {
-					return true;
-				}
-			}
-			*/
-			return false;
 		}
 		case SF_TYPE::NONE:
 			std::cout << __func__ << ": SF Type not properly initialized!" << std::endl;
