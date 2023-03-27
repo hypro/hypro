@@ -55,7 +55,7 @@ class ComposedLocation : public Location<Number> {
 		: mAutomaton( automaton )
 		, mIsValid( std::vector<bool>( VALIDITY::Count, false ) ) {}
 
-	ComposedLocation( ComposedLocation<Number>&& other )
+	ComposedLocation( ComposedLocation<Number>&& other ) noexcept
 		: mIsValid( std::vector<bool>( VALIDITY::Count, false ) )
 		, mTransitions()
 		, mCompositionals( std::move( other.mCompositionals ) )
@@ -334,7 +334,7 @@ class HybridAutomatonComp {
 	 * @brief 		Move Assignment
 	 * @param[in]	rhs 	The original hybrid automaton
 	 */
-	HybridAutomatonComp& operator=( HybridAutomatonComp<Number>&& rhs );
+	HybridAutomatonComp& operator=( HybridAutomatonComp<Number>&& rhs ) noexcept;
 
 	/**
 	 * @brief      Getter function.
