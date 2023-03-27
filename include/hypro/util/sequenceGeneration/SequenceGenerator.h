@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -68,33 +68,6 @@ class PermutationSequenceGenerator {
 			mCurrent = tuple;
 		}
 		return res;
-
-		/*
-		std::vector<std::size_t> tmp = mCurrent;
-
-		// find pos to iterate
-		std::size_t pos = 0;
-		while ( pos < mCurrent.size() && mCurrent.at( pos ) == max - 1 ) {
-			++pos;
-		}
-
-		// check whether last item has already been enumerated
-		if ( pos == mCurrent.size() ) {
-			mEnd = true;
-			return tmp;
-		}
-
-		// actual increment
-		mCurrent[pos] += 1;
-
-		//
-		while ( pos > 0 ) {
-			--pos;
-			mCurrent[pos] = 0;
-		}
-
-		return tmp;
-		 */
 	}
 
 	/// returns true if the end of the sequence has been reached, false otherwise
