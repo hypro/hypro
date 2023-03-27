@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2022-2023.
+ * Copyright (c) 2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /*
@@ -19,6 +19,8 @@
 #include "Location.h"
 #include "hypro/util/convenienceSTLFunctions.h"
 #include "hypro/util/exceptions.h"
+
+#include <vector>
 
 namespace hypro {
 
@@ -37,6 +39,7 @@ class ComposedLocation : public Location<Number> {
 	using CompTransition = Transition<ComposedLocation<Number>>;
 	using transitionVector = std::vector<std::unique_ptr<CompTransition>>;
 	using NumberType = Number;
+	using TransitionT = Transition<Location<Number>>;
 
   private:
 	mutable std::vector<bool> mIsValid = std::vector<bool>( VALIDITY::Count, false );  ///< Flag indicating whether the location has been initialized
@@ -173,11 +176,41 @@ class ComposedLocation : public Location<Number> {
 		return Location<Number>::printContent();
 	}
 
+	struct transitionStub {
+		std::vector<std::size_t> targetLocationIndices;
+		matrix_t<Number> guardConstraints;
+		vector_t<Number> guardConstants;
+		matrix_t<Number> resetMatrix;
+		vector_t<Number> resetVector;
+		bool urgent = false;
+
+		transitionStub( std::size_t dim ) {
+			guardConstraints = matrix_t<Number>::Zero( 0, dim );
+			guardConstants = vector_t<Number>::Zero( 0 );
+			resetMatrix = matrix_t<Number>::Identity( dim, dim );
+			resetVector = vector_t<Number>::Zero( dim );
+		}
+	};
+
   private:
-	/// hack to be able to modify the base class
+	/// trick to be able to modify the base class
 	Location<Number>& castawayConst() const { return const_cast<ComposedLocation<Number>&>( *this ); }
 	/// validates only the location name
 	void validateName() const;
+	/// collects jumps (synchronized and non-synchronized)
+	void collectJumpComponents( const std::vector<Location<Number>*> locs, std::multimap<std::size_t, TransitionT*>& nonSynchronizedJumps, std::map<std::vector<Label>, std::vector<std::vector<TransitionT*>>>& synchronizedJumps ) const;
+	/// collects content (flow, invariant) of the composed location
+	void composeLocationContent( const std::vector<Location<Number>*> locs, const std::map<std::string, Location<Number>*>& localMasters ) const;
+	/// composes guard conditions for jumps
+	void composeGuard( unsigned long dim, TransitionT* tPtr, transitionStub& stub, size_t automatonIdx ) const;
+	/// composes guard conditions for synchronized jumps
+	void composeSynchronizedGuard( unsigned long dim, std::vector<transitionStub>& targets, size_t automatonIdx, size_t pos, TransitionT* tPtr ) const;
+	/// composes resets for jumps
+	void composeResets( const std::map<std::string, Location<Number>*>& localMasters, TransitionT* tPtr, transitionStub& stub, std::size_t automatonIdx, Location<Number>* lPtr ) const;
+	/// composes resets for synchronized jumps
+	void composeSynchronizedReset( const std::map<std::string, Location<Number>*>& localMasters, std::vector<transitionStub>& targets, size_t automatonIdx, size_t pos, TransitionT* tPtr, Location<Number>* lPtr ) const;
+	/// detects what variable is mastered by what location, if at all
+	std::map<std::string, Location<Number>*> getMasterLocations( const std::vector<Location<Number>*>& locs ) const;
 };
 
 template <typename N>
@@ -238,11 +271,7 @@ class HybridAutomatonComp {
 
 	void removeAutomaton( std::size_t idx ) {
 		if ( idx < mAutomata.size() ) {
-			auto it = std::begin( mAutomata );
-			while ( idx != 0 ) {
-				--idx;
-				++it;
-			}
+			auto it = std::next( std::begin( mAutomata ), idx );
 			mAutomata.erase( it );
 			invalidateCaches();
 		}
@@ -375,25 +404,6 @@ class HybridAutomatonComp {
 	friend bool operator!=( const HybridAutomatonComp<Number>& lhs, const HybridAutomatonComp<Number>& rhs ) {
 		return !( lhs == rhs );
 	}
-
-	/**
-	 * @brief      Parallel Composition Operator.
-	 * @param[in]  lhs   The left hand side.
-	 * @param[in]  rhs   The right hand side.
-	 * @return     Return parallel composition of two Automata.
-	 */
-	// This template is needed or else gcc spits out the warning -Wno-non-template-friend
-	// Num represents Number and Stat represents State
-	/*
-	template <typename Num>
-	friend HybridAutomatonComp<Num> operator||( const HybridAutomatonComp<Num>& lhs, const HybridAutomatonComp<Num>& rhs ) {
-		HybridAutomatonComp<Num> res;
-		res.mAutomata.insert( std::begin( lhs.mAutomata ), std::end( lhs.mAutomata ) );
-		res.mAutomata.insert( std::begin( rhs.mAutomata ), std::end( rhs.mAutomata ) );
-		res.mCachesValid = false;
-		return res;
-	}
-	 */
 
 	inline bool checkConsistency() const {
 		for ( const auto& l : mLocations ) {
