@@ -12,6 +12,7 @@
 #include "../../datastructures/HybridAutomaton/Condition.h"
 #include "../../datastructures/HybridAutomaton/State.h"
 #include "../../datastructures/reachability/ReachTreev2.h"
+#include "../../datastructures/reachability/TimeTransformationCache.h"
 #include "types.h"
 
 #include <utility>
@@ -42,28 +43,6 @@ std::pair<CONTAINMENT, Representation> intersect( Representation const& valuatio
 }
 
 /**
- * @brief Returns only the linear part (matrix) of a matrix describing affine dynamics.
- * @tparam Number The used number type
- * @param timeTrafo The matrix describing affine dynamics
- * @return auto The sub-matrix describing only the linear dynamics.
- */
-template <class Number>
-auto timeTrafoMatrixBlock( matrix_t<Number> const& timeTrafo ) {
-	return timeTrafo.block( 0, 0, timeTrafo.rows() - 1, timeTrafo.cols() - 1 );
-}
-
-/**
- * @brief Returns only the translation vector of a matrix describing affine dynamics.
- * @tparam Number The used number type
- * @param timeTrafo The matrix describing affine dynamics
- * @return auto The sub-vector describing the translational part of the dynamics
- */
-template <class Number>
-auto timeTrafoVectorBlock( matrix_t<Number> const& timeTrafo ) {
-	return timeTrafo.col( timeTrafo.cols() - 1 ).head( timeTrafo.rows() - 1 );
-}
-
-/**
  * @brief Applies LTI-time evolution for a fixed time step, i.e., an affine transformation. *
  * @tparam Representation The representation type
  * @tparam Number The number type
@@ -72,8 +51,8 @@ auto timeTrafoVectorBlock( matrix_t<Number> const& timeTrafo ) {
  * @return Representation The set after time elapse
  */
 template <class Representation, class Number>
-Representation applyTimeEvolution( Representation const& valuationSet, matrix_t<Number> const& timeTransformation ) {
-	return valuationSet.affineTransformation( timeTrafoMatrixBlock( timeTransformation ), timeTrafoVectorBlock( timeTransformation ) );
+Representation applyTimeEvolution( Representation const& valuationSet, LTITimeTransformation<Number> const& transformation ) {
+	return valuationSet.affineTransformation( transformation.matrix, transformation.vector );
 }
 
 /**

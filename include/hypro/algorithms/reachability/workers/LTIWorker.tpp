@@ -20,7 +20,7 @@ REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSucce
 		DEBUG( "hypro.reachability", "No segments to compute (reached global time horizon, segmentsToCompute == 0), return." );
 		return REACHABILITY_RESULT::SAFE;
 	}
-	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow( mSubspace ), mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ), mSettings.timeStep );
+	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow( mSubspace ), mTrafoCache.getTransformation( loc, mSettings.timeStep, mSubspace ).fullMatrix, mSettings.timeStep );
 
 	auto [containment, segment] = intersect( firstSegment, loc->getInvariant(), mSubspace );
 	// If the first segment did not fulfill the invariant of the location, the jump here should not have been made
@@ -45,7 +45,7 @@ REACHABILITY_RESULT LTIWorker<Representation, HybridAutomaton>::computeTimeSucce
 
 	// while not done
 	for ( size_t segmentCount = 1; segmentCount < (std::size_t)segmentsToCompute; ++segmentCount ) {
-		segment = applyTimeEvolution( segment, mTrafoCache.transformationMatrix( loc, mSettings.timeStep, mSubspace ) );
+		segment = applyTimeEvolution( segment, mTrafoCache.getTransformation( loc, mSettings.timeStep, mSubspace ) );
 #ifdef HYPRO_LOGGING
 		auto tmp = segment;
 #endif

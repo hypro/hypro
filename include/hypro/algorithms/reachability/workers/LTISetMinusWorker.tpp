@@ -15,7 +15,7 @@ template <typename Representation, typename Automaton>
 template <typename OutputIt>
 REACHABILITY_RESULT LTISetMinusWorker<Representation, Automaton>::computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out ) const {
 	// constructing the first segment
-	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, mSettings.timeStep ), mSettings.timeStep );
+	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.getTransformation( loc, mSettings.timeStep ).fullMatrix, mSettings.timeStep );
 	// vector for result of setminus
 	std::vector<Representation> result;
 	// vector of urgent transitions in current location
@@ -100,7 +100,7 @@ REACHABILITY_RESULT LTISetMinusWorker<Representation, Automaton>::computeTimeSuc
 		// for all segments of previous timeevolutionstep
 		for ( unsigned long int anz = lower; anz < upper; anz++ ) {
 			// let time elapse
-			segment = applyTimeEvolution( segments[anz], mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
+			segment = applyTimeEvolution( segments[anz], mTrafoCache.getTransformation( loc, mSettings.timeStep ) );
 			result.resize( 0 );
 			// check invariant
 			std::tie( containment, segment ) = intersect( segment, loc->getInvariant() );
