@@ -289,7 +289,7 @@ void ExactQuickhull<Number, Euclidian>::FacetSpace::endModificationPhase() {
 }
 
 template <typename Number, bool Euclidian>
-void ExactQuickhull<Number, Euclidian>::FacetSpace::deleteFacet( facet_ind_t facet_i ) {
+void ExactQuickhull<Number, Euclidian>::FacetSpace::markForDeletion( facet_ind_t facet_i ) {
 	deletedPositions.push_back( facet_i );
 }
 
