@@ -16,6 +16,10 @@
 
 #include "../../types.h"
 
+#ifdef HYPRO_USE_SERIALIZATION
+#include <cereal/archives/json.hpp>
+#endif
+
 namespace cereal {
 
 template <class Archive>
@@ -27,7 +31,11 @@ void save( Archive& archive,
 			values.push_back( matrix( r, c ) );
 		}
 	}
+	#ifdef HYPRO_USE_SERIALIZATION
+	archive( cereal::make_nvp("rows",matrix.rows()), cereal::make_nvp("cols",matrix.cols()), cereal::make_nvp("coefficients",values) );
+	#else
 	archive( matrix.rows(), matrix.cols(), values );
+	#endif
 }
 
 template <class Archive>
@@ -52,7 +60,11 @@ void save( Archive& archive,
 	for ( Eigen::Index r = 0; r < vector.rows(); ++r ) {
 		values.push_back( vector( r ) );
 	}
+	#ifdef HYPRO_USE_SERIALIZATION
+	archive( cereal::make_nvp("rows", vector.rows() ), cereal::make_nvp("coefficients",values));
+	#else
 	archive( vector.rows(), values );
+	#endif
 }
 
 template <class Archive>
@@ -79,7 +91,11 @@ void save( Archive& archive,
 			values.push_back( matrix( r, c ) );
 		}
 	}
+	#ifdef HYPRO_USE_SERIALIZATION
+	archive( cereal::make_nvp("rows",matrix.rows()), cereal::make_nvp("cols",matrix.cols()), cereal::make_nvp("coefficients",values) );
+	#else
 	archive( matrix.rows(), matrix.cols(), values );
+	#endif
 }
 
 template <class Archive>
@@ -104,7 +120,11 @@ void save( Archive& archive,
 	for ( Eigen::Index r = 0; r < vector.rows(); ++r ) {
 		values.push_back( vector( r ) );
 	}
+	#ifdef HYPRO_USE_SERIALIZATION
+	archive( cereal::make_nvp("rows", vector.rows() ), cereal::make_nvp("coefficients",values));
+	#else
 	archive( vector.rows(), values );
+	#endif
 }
 
 template <class Archive>

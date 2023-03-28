@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * Contains utilities to create the convex hull.
  * @file   convexHull.h
  * @author tayfun
@@ -192,7 +201,7 @@ static std::vector<Ridge<Number>> getRidges( std::shared_ptr<Facet<Number>> face
 		for ( auto neighbor : facet->neighbors() ) {
 			// std::cout << "_____________insde getRidges - call of neighbor of " << facet->getNormal() << std::endl;
 
-			Ridge<Number> newRidge( facet, neighbor );
+			Ridge<Number> newRidge( facet, neighbor.lock() );
 			result.push_back( newRidge );
 		}
 	}
@@ -379,7 +388,7 @@ static std::vector<std::shared_ptr<Facet<Number>>> maximizeFacets( std::vector<s
 				if ( newFacet->getDist( point1 ) == 0 ) {
 					newFacet->addPoint( point1 );  // update newFacet - point1 and neighbors of neighbor
 					for ( auto neighborOfneighbor : neighbor->rNeighbors() ) {
-						if ( !newFacet->isNeighbor( neighborOfneighbor ) ) newFacet->addNeighbor( neighborOfneighbor );
+						if ( !newFacet->isNeighbor( neighborOfneighbor.lock() ) ) newFacet->addNeighbor( neighborOfneighbor );
 					}
 
 					facets.erase( facets.begin() + n );	 // remove non-relevant neighbor
@@ -500,7 +509,7 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 		pointsNotContainedInFacets( points, facets, unassignedPoints, assignedPoints );	 // Determine points which belong to a facet
 
 		for ( auto& facet : facets ) {
-			for ( auto point : unassignedPoints ) {
+			for ( const auto& point : unassignedPoints ) {
 				if ( facet->isAbove( point ) ) {  // isAbove
 					facet->addPointToOutsideSet( point );
 				}
@@ -531,9 +540,9 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 				for ( const auto& facet : currentVisibleFacets ) {
 					assert( !facet->neighbors().empty() );
 					for ( const auto& neighbor : facet->neighbors() ) {
-						if ( neighbor->isAbove( currentPoint ) ) {
-							newVisibleFacets.push( neighbor );	// update new visible facets
-							assert( !neighbor->neighbors().empty() );
+						if ( neighbor.lock()->isAbove( currentPoint ) ) {
+							newVisibleFacets.push( neighbor.lock() );  // update new visible facets
+							assert( !neighbor.lock()->neighbors().empty() );
 						}
 					}
 				}
@@ -555,18 +564,18 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			std::vector<std::shared_ptr<Facet<Number>>> newFacets;
 
 			// Create new facets
-			for ( auto facet : currentVisibleFacets ) {
-				for ( auto ridge : getRidges( facet ) ) {
-					for ( auto neighbor : ridge.neighbors() ) {
-						if ( std::find( currentVisibleFacets.begin(), currentVisibleFacets.end(), *neighbor ) == currentVisibleFacets.end() ) {	 // we have a neighbor of this ridge, which is not visible -> horizon
+			for ( auto& facet : currentVisibleFacets ) {
+				for ( auto& ridge : getRidges( facet ) ) {
+					for ( auto& neighbor : ridge.neighbors() ) {
+						if ( std::find( currentVisibleFacets.begin(), currentVisibleFacets.end(), neighbor.lock() ) == currentVisibleFacets.end() ) {  // we have a neighbor of this ridge, which is not visible -> horizon
 							// std::cout << "Found a candidate for a newFacet" << std::endl;
 							//  ridge, create new facet
 							Point<Number> insidePoint = findInsidePoint( ridge, facet );
 
 							std::shared_ptr<Facet<Number>> newFacet = std::make_shared<Facet<Number>>( ridge.vertices(), currentPoint, insidePoint );
 
-							newFacet->addNeighbor( neighbor );
-							neighbor->addNeighbor( newFacet );
+							newFacet->addNeighbor( neighbor.lock() );
+							neighbor.lock()->addNeighbor( newFacet );
 
 							newFacets.emplace_back( std::move( newFacet ) );
 						}

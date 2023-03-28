@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -340,10 +340,10 @@ TYPED_TEST( HybridAutomataTest, TransitionTest ) {
 	std::unique_ptr<Transition<Location<TypeParam>>> t( new Transition<Location<TypeParam>>( this->loc1, this->loc2 ) );
 	EXPECT_EQ( t->getSource(), this->loc1 );
 	EXPECT_EQ( t->getTarget(), this->loc2 );
-	EXPECT_EQ( t->getAggregation(), Aggregation::none );
+	EXPECT_EQ( t->getAggregation(), AGG_SETTING::MODEL );
 	EXPECT_FALSE( t->isTimeTriggered() );
-	t->setAggregation( Aggregation::aggregation );
-	EXPECT_EQ( t->getAggregation(), Aggregation::aggregation );
+	t->setAggregation( hypro::AGG_SETTING::AGG );
+	EXPECT_EQ( t->getAggregation(), hypro::AGG_SETTING::AGG );
 
 	t->setTriggerTime( TypeParam( 1 ) );
 	EXPECT_TRUE( t->isTimeTriggered() );

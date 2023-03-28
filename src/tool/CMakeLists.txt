@@ -8,10 +8,10 @@ target_include_directories(hydra PRIVATE ${CMAKE_SOURCE_DIR}/include/tool)
 # find hypro
 find_package(${PROJECT_NAME} REQUIRED)
 
-if (TARGET Boost_program_options_SHARED)
-    target_link_libraries(hydra ${PROJECT_NAME}-shared Boost_program_options_SHARED)
+if (TARGET Boost_program_options_STATIC)
+    target_link_libraries(hydra ${PROJECT_NAME}-static Boost_program_options_STATIC)
 else ()
     find_package(Boost COMPONENTS program_options REQUIRED)
-    target_link_libraries(hydra ${PROJECT_NAME}-shared Boost::program_options)
+    target_link_libraries(hydra ${PROJECT_NAME}-static Boost::program_options)
 endif ()
 
