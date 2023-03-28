@@ -221,7 +221,7 @@ Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	};
 	std::function<Result( RootGrowNode<Number, Converter, Setting>*, std::vector<Result>&, Parameters<Dummy>& )> aWithParams =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, std::vector<Result>& v, Parameters<Dummy>& ) -> Result {
-		return aggregate( n, std::forward<std::vector<Result>&>( v ) );
+		return aggregate( n, v );
 	};
 	Parameters<Dummy> noInitParams = Parameters<Dummy>( Dummy() );
 	return traverse( std::move( tNotVoid ), std::move( cNotVoid ), std::move( aWithParams ), std::move( noInitParams ) );
@@ -242,7 +242,7 @@ void SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	};
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, std::vector<Parameters<Dummy>>&, Parameters<Rargs...>& )> aNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, std::vector<Parameters<Dummy>>& v, Parameters<Rargs...>& p ) -> Parameters<Dummy> {
-		aggregate( n, std::forward<Parameters<Rargs...>>( p ) );
+		aggregate( n, p );
 		return Parameters<Dummy>( Dummy() );
 	};
 	traverse( std::move( transform ), std::move( cNotVoid ), std::move( aNotVoid ), initParams );
