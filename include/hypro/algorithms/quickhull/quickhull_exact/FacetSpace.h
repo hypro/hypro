@@ -75,7 +75,7 @@ class ExactQuickhull<Number, Euclidian>::FacetSpace {
 	void removeCoplanarFacets();
 	void compressVector();
 	void endModificationPhase();
-	void deleteFacet( facet_ind_t facet_i );
+	void markForDeletion( facet_ind_t facet_i );
 
 	// Debug functions
 
