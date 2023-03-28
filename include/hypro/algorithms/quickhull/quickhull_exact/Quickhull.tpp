@@ -253,38 +253,37 @@ typename ExactQuickhull<Number, Euclidian>::facet_ind_t ExactQuickhull<Number, E
 	} );
 }
 
-template<typename Number, bool Euclidean>
+template <typename Number, bool Euclidean>
 void ExactQuickhull<Number, Euclidean>::buildCone( facet_ind_t currentFacet_i, point_ind_t visiblePoint_i, bitset_t& visited ) {
-/*
-#ifndef NDEBUG
-	auto copiedFacetSpace = fSpace;
-	auto copiedVisited = visited;
-#endif
-*/
-
-	std::queue<facet_ind_t> workingQueue;
-	workingQueue.push(currentFacet_i);
+	/*
+	#ifndef NDEBUG
+		auto copiedFacetSpace = fSpace;
+		auto copiedVisited = visited;
+	#endif
+	*/
+	std::deque<facet_ind_t> workingQueue;
+	workingQueue.push_back( currentFacet_i );
 
 	const point_t& visiblePoint = points[visiblePoint_i];
 
-	while(!workingQueue.empty()) {
-		auto currentFacet = workingQueue.front();
-		workingQueue.pop();
+	while ( !workingQueue.empty() ) {
+		auto currentFacet_i = workingQueue.front();
+		workingQueue.pop_front();
 
-		fSpace.deleteFacet( currentFacet ); // TODO rename function to something like "markForDeletion"
+		fSpace.markForDeletion( currentFacet_i );
 
 		for ( size_t neighbor_pos = 0; neighbor_pos < dimension; ++neighbor_pos ) {
-			facet_ind_t neighbor_i = fSpace.facets[currentFacet].mNeighbors[neighbor_pos];
+			facet_ind_t neighbor_i = fSpace.facets[currentFacet_i].mNeighbors[neighbor_pos];
 			if ( !visited[neighbor_i] ) {
 				// neighbor is "inside" horizon
 				if ( fSpace.facets[neighbor_i].visible( visiblePoint ) ) {
 					visited.set( neighbor_i );
-					workingQueue.push(neighbor_i);
+					workingQueue.push_back( neighbor_i );
 				} else {
 					// this ridge to the neighbor is part of the horizon
 
 					// Find the index of the ridge from the facet outside the horizon (neighbor_i) to the facet inside the horizon (currentFacet_i).
-					size_t ridgeIndex_outer_inner = fSpace.facets[neighbor_i].findNeighborIndex( currentFacet );
+					size_t ridgeIndex_outer_inner = fSpace.facets[neighbor_i].findNeighborIndex( currentFacet_i );
 
 					size_t differentiatingPosition = fSpace.insertConePart( neighbor_i, visiblePoint_i, ridgeIndex_outer_inner );
 
@@ -320,7 +319,7 @@ void ExactQuickhull<Number, Euclidean>::buildCone( facet_ind_t currentFacet_i, p
 
 template <typename Number, bool Euclidian>
 void ExactQuickhull<Number, Euclidian>::buildCone_recursive( facet_ind_t currentFacet_i, point_ind_t visiblePoint_i, bitset_t& visited ) {
-	fSpace.deleteFacet( currentFacet_i ); // TODO rename function to something like "markForDeletion"
+	fSpace.markForDeletion( currentFacet_i );
 
 	const point_t& visiblePoint = points[visiblePoint_i];
 
@@ -331,7 +330,7 @@ void ExactQuickhull<Number, Euclidian>::buildCone_recursive( facet_ind_t current
 			// neighbor is "inside" horizon
 			if ( fSpace.facets[neighbor_i].visible( visiblePoint ) ) {
 				visited.set( neighbor_i );
-				buildCone( neighbor_i, visiblePoint_i, visited );
+				buildCone_recursive( neighbor_i, visiblePoint_i, visited );
 			} else {
 				// this ridge to the neighbor is part of the horizon
 
