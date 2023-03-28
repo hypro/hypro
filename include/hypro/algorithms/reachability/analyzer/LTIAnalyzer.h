@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -26,15 +26,16 @@
 
 namespace hypro {
 
-struct UseMultithreading {
-};
-
-struct NoMultithreading {
-};
-
 // indicates that the lti analysis succeeded, i.e. no
 struct LTISuccess {};
 
+/**
+ * Analyzer for linear hybrid automata
+ * @tparam State state set representation type
+ * @tparam Automaton automaton type
+ * @tparam Heuristics used search heuristics
+ * @tparam Multithreading enable/disable multithreading
+ */
 template <typename State, typename Automaton, typename Heuristics = DepthFirst<State, typename Automaton::LocationType>, typename Multithreading = NoMultithreading>
 class LTIAnalyzer {
 	using Number = typename State::NumberType;
@@ -138,9 +139,9 @@ class LTIAnalyzer {
 	std::condition_variable mQueueNonEmpty;																						  ///< notification variable to indicate the queue is nonempty
 	std::atomic<bool> mTerminate = false;																						  ///< indicates termination request
 	std::atomic<bool> mStopped = false;																							  ///< indicator, whether shutdown was already invoked
-	std::mutex mIdleWorkerMutex;
-	std::condition_variable mAllIdle;
-	ReachabilityCallbacks<State, LocationT> mCallbacks;	 ///< collection of callback functions
+	std::mutex mIdleWorkerMutex;																								  ///< mutex to access the idle-flag array
+	std::condition_variable mAllIdle;																							  ///< notification variable to trigger shutdown of the threadpool
+	ReachabilityCallbacks<State, LocationT> mCallbacks;																			  ///< collection of callback functions
 };
 
 }  // namespace hypro
