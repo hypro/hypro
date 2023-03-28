@@ -27,8 +27,8 @@ namespace hypro {
  * @return The index of the element in the vector or -1 if the element is not contained
  */
 template <typename T>
-std::size_t getIndex( const std::vector<T>& sequence, T&& elem ) {
-	auto it = std::find( std::begin( sequence ), std::end( sequence ), std::forward<T>( elem ) );
+std::size_t getIndex( const std::vector<T>& sequence, const T& elem ) {
+	auto it = std::find( std::begin( sequence ), std::end( sequence ), elem );
 	if ( it == std::end( sequence ) ) {
 		return -1;
 	}
