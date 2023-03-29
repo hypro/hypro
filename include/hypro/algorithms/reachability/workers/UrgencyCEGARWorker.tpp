@@ -32,7 +32,7 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation, Automaton>::computeTimeSu
 	Representation firstSegment = constructFirstSegment(
 		  initialSet,
 		  loc->getLinearFlow(),
-		  mTrafoCache.transformationMatrix( loc, mSettings.timeStep ),
+		  mTrafoCache.getTransformation( loc, mSettings.timeStep ).fullMatrix,
 		  mSettings.timeStep );
 
 	REACHABILITY_RESULT firstSegmentSafety = handleSegment( task, firstSegment, 0, pruneUrgentSegments );
@@ -50,7 +50,7 @@ REACHABILITY_RESULT UrgencyCEGARWorker<Representation, Automaton>::computeTimeSu
 		auto previousSegment = mFlowpipe.at( flowpipeIndex );
 		while ( previousSegment.index == (int)segmentIndex - 1 ) {
 			auto nextSegment = applyTimeEvolution(
-				  previousSegment.valuationSet, mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
+				  previousSegment.valuationSet, mTrafoCache.getTransformation( loc, mSettings.timeStep ) );
 			REACHABILITY_RESULT safety = handleSegment( task, nextSegment, segmentIndex, pruneUrgentSegments );
 			if ( safety != REACHABILITY_RESULT::SAFE ) {
 				STOP_BENCHMARK_OPERATION( "Time successor computation" );

@@ -8,22 +8,53 @@
  */
 
 #pragma once
-#include "../../algorithms/reachability/workers/LTIFlowpipeConstruction.h"
 #include "../HybridAutomaton/Location.h"
 
 #include <unordered_map>
 
 namespace hypro {
+
+/**
+ * @brief Returns only the linear part (matrix) of a matrix describing affine dynamics.
+ * @tparam Number The used number type
+ * @param timeTrafo The matrix describing affine dynamics
+ * @return auto The sub-matrix describing only the linear dynamics.
+ */
+template <class Number>
+auto timeTrafoMatrixBlock( matrix_t<Number> const& timeTrafo ) {
+	return timeTrafo.block( 0, 0, timeTrafo.rows() - 1, timeTrafo.cols() - 1 );
+}
+
+/**
+ * @brief Returns only the translation vector of a matrix describing affine dynamics.
+ * @tparam Number The used number type
+ * @param timeTrafo The matrix describing affine dynamics
+ * @return auto The sub-vector describing the translational part of the dynamics
+ */
+template <class Number>
+auto timeTrafoVectorBlock( matrix_t<Number> const& timeTrafo ) {
+	return timeTrafo.col( timeTrafo.cols() - 1 ).head( timeTrafo.rows() - 1 );
+}
+
+template <typename Number>
+struct LTITimeTransformation {
+	matrix_t<Number> fullMatrix;
+	matrix_t<Number> matrix;
+	vector_t<Number> vector;
+};
+
 template <typename Location>
 class TimeTransformationCache {
-	std::unordered_map<Location const*, matrix_t<typename Location::NumberType>> mMatrices{};
+	using Number = typename Location::NumberType;
+	std::unordered_map<Location const*, LTITimeTransformation<Number>> mMatrices{};
 
   public:
-	matrix_t<typename Location::NumberType> const& transformationMatrix( Location const* loc, tNumber timeStep, std::size_t I = 0 ) {
+	LTITimeTransformation<Number> const& getTransformation( Location const* loc, tNumber timeStep, std::size_t I = 0 ) {
 		auto search = mMatrices.find( loc );
 
 		if ( search == mMatrices.end() ) {
-			std::tie( search, std::ignore ) = mMatrices.emplace( loc, computeTimeTransformation( loc->getLinearFlow( I ), timeStep ) );
+			auto matrix = computeTimeTransformation( loc->getLinearFlow( I ), timeStep );
+			std::tie( search, std::ignore ) = mMatrices.emplace( std::make_pair( loc, LTITimeTransformation<Number>{ matrix, matrix_t<Number>( timeTrafoMatrixBlock( matrix ) ), vector_t<Number>( timeTrafoVectorBlock( matrix ) ) } ) );
 		}
 		return search->second;
 	}

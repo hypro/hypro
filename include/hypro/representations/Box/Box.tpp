@@ -416,7 +416,7 @@ std::pair<CONTAINMENT, BoxT<Number, Converter, Setting>> BoxT<Number, Converter,
 		limitingPlanes.pop_back();
 	}
 	assert( newPlanes.rows() == newDistances.rows() );
-	auto tmp = this->intersectHalfspaces( newPlanes, newDistances );
+	auto tmp = intersectHalfspaces( newPlanes, newDistances );
 	bool empty = tmp.empty();
 	if ( empty ) {
 		return std::make_pair( CONTAINMENT::NO, tmp );
@@ -512,11 +512,11 @@ BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::affineTransfo
 		return *this;
 	}
 	TRACE( "hypro.representations.box", "This: " << *this << ", A: " << A << "b: " << b );
-	std::vector<carl::Interval<Number>> newIntervals = std::vector<carl::Interval<Number>>( this->dimension() );
+	std::vector<carl::Interval<Number>> newIntervals{ this->dimension() };
 	for ( std::size_t i = 0; i < this->dimension(); ++i ) {
 		newIntervals[i] = carl::Interval<Number>{ b( i ) };
 		for ( std::size_t j = 0; j < this->dimension(); ++j ) {
-			newIntervals[i] = newIntervals[i] + A( i, j ) * this->intervals()[j];
+			newIntervals[i] += A( i, j ) * this->intervals()[j];
 		}
 	}
 	return BoxT<Number, Converter, Setting>{ newIntervals };

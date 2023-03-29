@@ -150,6 +150,12 @@ BETTER_ENUM( UrgencyRefinementHeuristic, int,
 			 COUNT,
 			 SUCCESSCOUNT )
 
+struct UseMultithreading {
+};
+
+struct NoMultithreading {
+};
+
 }  // namespace hypro
 
 namespace Eigen {
