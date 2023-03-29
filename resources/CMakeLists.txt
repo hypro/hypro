@@ -17,8 +17,6 @@ endif ()
 # Set default ExternalProject root directory
 set(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources)
 set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR})
-# disable update if no network is present
-set(EP_UPDATE_DISCONNECTED)
 
 # carl setup which deals with external carl and own carl instance (the later registers itself to cmake)
 find_package(carl)
@@ -299,7 +297,7 @@ endif ()
 # for serialization
 if (HYPRO_USE_SERIALIZATION)
     include(cereal.cmake)
-endif()
+endif ()
 
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)
