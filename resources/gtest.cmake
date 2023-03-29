@@ -8,6 +8,8 @@ endif ()
 ExternalProject_Add(
         googletest
         GIT_REPOSITORY http://github.com/google/googletest.git
+        GIT_TAG "v1.13.0"
+        GIT_SHALLOW 1
         DOWNLOAD_NO_PROGRESS 1
         #CONFIGURE_COMMAND ${CMAKE_COMMAND} ../googletest-stamp -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
         BUILD_COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE} --target gtest

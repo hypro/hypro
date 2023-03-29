@@ -48,7 +48,7 @@ endif ()
 ExternalProject_ADD(
         antlr4cpp
         URL https://www.antlr.org/download/antlr4-cpp-runtime-4.9.3-source.zip
-        DOWNLOAD_DIR ${ANTLR4_ROOT}
+        URL_HASH MD5=eafa4fef583e12e963062882773461be
         SOURCE_DIR ${ANTLR4_ROOT}
         SOURCE_SUBDIR runtime/Cpp
         #DOWNLOAD_EXTRACT_TIMESTAMP TRUE

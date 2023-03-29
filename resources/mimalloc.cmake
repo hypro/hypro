@@ -2,7 +2,7 @@
 ExternalProject_Add(
         mimalloc
         GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
-        GIT_SHALLOW ON
+        GIT_SHALLOW 1
         GIT_TAG "v1.6.7"
         DOWNLOAD_NO_PROGRESS 1
         BUILD_COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE}

@@ -2,6 +2,8 @@
 ExternalProject_Add(
         tinyxml
         GIT_REPOSITORY https://github.com/leethomason/tinyxml2.git
+        GIT_TAG "9.0.0"
+        GIT_SHALLOW 1
         DOWNLOAD_NO_PROGRESS 1
         LOG_CONFIGURE ON
         LOG_BUILD ON
