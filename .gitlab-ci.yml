@@ -21,6 +21,7 @@ build:
       - .
     exclude:
       - .git
+      - build/**/*.o
 
 
       # run tests using the binary built before
