@@ -240,7 +240,8 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set_target_properties(${PROJECT_NAME}-shared PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
     set_target_properties(${PROJECT_NAME}-static PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
 endif ()
-set(HYPRO_TARGETS "${PROJECT_NAME}-shared" "${PROJECT_NAME}-static" CACHE STRING INTERNAL FORCE)
+set(HYPRO_TARGETS "${PROJECT_NAME}-shared" "${PROJECT_NAME}-static" "${PROJECT_NAME}-parser" CACHE STRING INTERNAL
+        FORCE)
 
 
 # Options for static linking
