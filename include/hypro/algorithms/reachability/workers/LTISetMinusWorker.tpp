@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -15,7 +15,7 @@ template <typename Representation, typename Automaton>
 template <typename OutputIt>
 REACHABILITY_RESULT LTISetMinusWorker<Representation, Automaton>::computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out ) const {
 	// constructing the first segment
-	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.transformationMatrix( loc, mSettings.timeStep ), mSettings.timeStep );
+	Representation firstSegment = constructFirstSegment( initialSet, loc->getLinearFlow(), mTrafoCache.getTransformation( loc, mSettings.timeStep ).fullMatrix, mSettings.timeStep );
 	// vector for result of setminus
 	std::vector<Representation> result;
 	// vector of urgent transitions in current location
@@ -100,7 +100,7 @@ REACHABILITY_RESULT LTISetMinusWorker<Representation, Automaton>::computeTimeSuc
 		// for all segments of previous timeevolutionstep
 		for ( unsigned long int anz = lower; anz < upper; anz++ ) {
 			// let time elapse
-			segment = applyTimeEvolution( segments[anz], mTrafoCache.transformationMatrix( loc, mSettings.timeStep ) );
+			segment = applyTimeEvolution( segments[anz], mTrafoCache.getTransformation( loc, mSettings.timeStep ) );
 			result.resize( 0 );
 			// check invariant
 			std::tie( containment, segment ) = intersect( segment, loc->getInvariant() );
@@ -119,11 +119,7 @@ REACHABILITY_RESULT LTISetMinusWorker<Representation, Automaton>::computeTimeSuc
 				// for all parts of the current segment
 				for ( int ut = urgentlower; ut < urgentupper; ut++ ) {
 					segment = tmpsegments[ut];
-					if ( !segment.empty() ) {
-						auto [containment, testsegment] = intersect( segment, urgent_trans.at( i )->getGuard() );
-					} else {
-						auto containment = CONTAINMENT::NO;
-					}
+					auto [containment, testsegment] = intersect( segment, urgent_trans.at( i )->getGuard() );
 					// if guard is enabled perform setminus
 					if ( containment != CONTAINMENT::NO ) {
 						Representation guard( urgent_trans.at( i )->getGuard().getMatrix(), urgent_trans.at( i )->getGuard().getVector() );
@@ -185,8 +181,8 @@ auto LTISetMinusWorker<Representation, Automaton>::getJumpSuccessors( std::vecto
 			blockSize = flowpipe.size();
 		}
 
-	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
-		if ( transition->getAggregation() == Aggregation::clustering ) {
+	} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != AGG_SETTING::NO_AGG ) {
+		if ( transition->getAggregation() == AGG_SETTING::CLUSTERING ) {
 			blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	// division rounding up
 		}
 	}
@@ -325,7 +321,6 @@ std::string print( std::vector<Representation> const& sets ) {
 
 template <typename Representation, typename Automaton>
 std::vector<JumpSuccessor<Representation, typename Automaton::LocationType>> LTISetMinusWorker<Representation, Automaton>::computeJumpSuccessors( std::vector<Representation> const& flowpipe, LocationT const* loc ) const {
-
 	// transition x enabled segments, segment ind
 	std::vector<EnabledSets<Representation, typename Automaton::LocationType>> enabledSegments{};
 
@@ -359,8 +354,8 @@ std::vector<JumpSuccessor<Representation, typename Automaton::LocationType>> LTI
 				// blockSize = valuationSets.size();
 			}
 
-		} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != Aggregation::none ) {
-			if ( transition->getAggregation() == Aggregation::clustering ) {
+		} else if ( mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() != AGG_SETTING::NO_AGG ) {
+			if ( transition->getAggregation() == AGG_SETTING::CLUSTERING ) {
 				// blockSize = ( blockSize + transition->getClusterBound() ) / transition->getClusterBound();	//division rounding up
 			}
 		}

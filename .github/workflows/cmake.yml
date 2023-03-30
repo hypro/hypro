@@ -3,8 +3,7 @@ name: CMake
 on:
   push:
     branches:
-      - master
-      - alpha
+      - '**'
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
@@ -16,7 +15,7 @@ jobs:
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v2
@@ -26,10 +25,15 @@ jobs:
         working-directory: ${{runner.workspace}}
         run: cmake -E make_directory ${{runner.workspace}}/dependencies
 
+      - name: Add apt-repositories
+        shell: bash
+        working-directory: ${{runner.workspace}}
+        run: sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+      
       - name: Download Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        run: git clone  --branch master https://github.com/ths-rwth/carl carl && cd carl && git checkout 3b0c79a68a && sudo apt install libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
+        run: git clone  --branch 22.12 https://github.com/ths-rwth/carl carl && cd carl && sudo apt install libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
 
       - name: Cache Dependencies
         id: cache-dependencies
@@ -52,7 +56,7 @@ jobs:
       - name: Build Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies/carl/build
-        run: cmake --build . --config $BUILD_TYPE -j 3 --target carl
+        run: cmake --build . --config $BUILD_TYPE -j 3 --target carl-arith carl-common carl-formula
 
       - name: Create Build Environment
         # Some projects don't allow in-source building, so create a separate build directory

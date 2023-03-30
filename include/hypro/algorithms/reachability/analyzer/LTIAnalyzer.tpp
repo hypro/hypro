@@ -17,10 +17,12 @@ namespace hypro {
 template <typename State, typename Automaton, typename Heuristics, typename Multithreading>
 auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResult {
 	DEBUG( "hypro.reachability", "Start LTI Reachability Analysis." );
-	if ( std::is_same_v<Multithreading, UseMultithreading> ) {
-		mIdle = std::vector( mNumThreads, false );
+	if constexpr ( std::is_same_v<Multithreading, UseMultithreading> ) {
+		mIdle = std::vector( mNumThreads, true );
+		std::mutex resultMutex;
+		LTIResult res{ LTISuccess{} };
 		for ( int i = 0; i < mNumThreads; i++ ) {
-			mThreads.push_back( std::thread( [this, i]() {
+			mThreads.push_back( std::thread( [this, i, &resultMutex, &res]() {
 				TimeTransformationCache<LocationT> transformationCache;
 				LTIWorker<State, Automaton> worker{
 					  *mHybridAutomaton,
@@ -33,12 +35,16 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 						std::unique_lock<std::mutex> lock( mQueueMutex );
 
 						mQueueNonEmpty.wait( lock, [this]() {
+							// TODO I am not sure, whether we need to lock here to access the queue
 							return !mWorkQueue.empty() || mTerminate;
 						} );
 						{
+							if ( mTerminate ) {
+								break;
+							}
+							// TODO I do not think we need the idle lock, since we already have the queue lock
 							std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
 							mIdle[i] = false;
-							std::cout << "Thread " << i << " is not idle." << std::endl;
 						}
 						currentNode = getNodeFromQueue();
 						DEBUG( "hypro.reachability", "Processing node @" << currentNode << " with path " << currentNode->getPath() );
@@ -47,19 +53,29 @@ auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResu
 					auto result = processNode( worker, currentNode, transformationCache );
 					if ( result.isFailure() ) {
 						mTerminate = true;
+						{
+							std::lock_guard<std::mutex> lock{ resultMutex };
+							res = result;
+						}
 						break;
 					}
 					{
 						std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
-						std::cout << "Thread " << i << " is idle." << std::endl;
 						mIdle[i] = true;
 						mAllIdle.notify_all();
 					}
 				}
 			} ) );
 		}
-		// wait();
+		// busy wait?
+		{
+			std::unique_lock<std::mutex> lock{ mThreadPoolMutex };
+			mAllIdle.wait( lock, [this]() {
+				return mWorkQueue.empty() && std::all_of( std::begin( mIdle ), std::end( mIdle ), []( bool in ) { return in; } );
+			} );
+		}
 		shutdown();
+		return res;
 	} else {
 		TimeTransformationCache<LocationT> transformationCache;
 		LTIWorker<State, Automaton> worker{

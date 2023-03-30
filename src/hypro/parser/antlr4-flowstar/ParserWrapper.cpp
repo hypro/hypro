@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "antlr4-flowstar/ParserWrapper.h"
@@ -60,12 +60,12 @@ namespace hypro {
 		openFile(filename,input);
 
 		//Create Error Listener
-		ErrorListener* errListener = new ErrorListener();
+		std::unique_ptr<ErrorListener> errListener = std::make_unique<ErrorListener>();
 
 		//Create a Lexer and feed it with the input
 		HybridAutomatonLexer lexer(&input);
 		lexer.removeErrorListeners();
-		lexer.addErrorListener(errListener);
+		lexer.addErrorListener(errListener.get());
 
 		//Create an empty TokenStream obj
 		CommonTokenStream tokens(&lexer);
@@ -76,7 +76,7 @@ namespace hypro {
 		//Create a parser with error listener
 		HybridAutomatonParser parser(&tokens);
 		parser.removeErrorListeners();
-		parser.addErrorListener(errListener);
+		parser.addErrorListener(errListener.get());
 		tree::ParseTree* tree = parser.start();
 
 		//Create TokenStreamRewriter, needed for constants if defined
@@ -87,7 +87,7 @@ namespace hypro {
 			ANTLRInputStream inputMod(modified);
 			HybridAutomatonLexer lexerMod(&inputMod);
 			lexerMod.removeErrorListeners();
-			lexerMod.addErrorListener(errListener);
+			lexerMod.addErrorListener(errListener.get());
 
 			//Create an empty TokenStream obj
 			CommonTokenStream tokensMod(&lexerMod);
@@ -98,15 +98,13 @@ namespace hypro {
 			//Create a parser with error listener
 			HybridAutomatonParser parserMod(&tokensMod);
 			parserMod.removeErrorListeners();
-			parserMod.addErrorListener(errListener);
+			parserMod.addErrorListener(errListener.get());
 			tree::ParseTree* tree = parserMod.start();
 
 			HyproHAVisitor<mpq_class> visitor;
 
 			//HybridAutomaton<mpq_class> h = (visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class>>();
 			HybridAutomaton<mpq_class> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class>>()) };
-
-			delete errListener;
 
 			//return std::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
@@ -117,8 +115,6 @@ namespace hypro {
 
 			//HybridAutomaton<double> h = std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>());
 			HybridAutomaton<mpq_class> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<mpq_class>>()) };
-
-			delete errListener;
 
 			//return std::tuple<HybridAutomaton<double>&, ReachabilitySettings>(h, visitor.getSettings());
 			return std::make_pair(std::move(h), visitor.getSettings());
@@ -134,12 +130,12 @@ namespace hypro {
 		openFile(filename,input);
 
 		//Create Error Listener
-		ErrorListener* errListener = new ErrorListener();
+		std::unique_ptr<ErrorListener> errListener = std::make_unique<ErrorListener>();
 
 		//Create a Lexer and feed it with the input
 		HybridAutomatonLexer lexer(&input);
 		lexer.removeErrorListeners();
-		lexer.addErrorListener(errListener);
+		lexer.addErrorListener(errListener.get());
 
 		//Create an empty TokenStream obj
 		CommonTokenStream tokens(&lexer);
@@ -150,7 +146,7 @@ namespace hypro {
 		//Create a parser with error listener
 		HybridAutomatonParser parser(&tokens);
 		parser.removeErrorListeners();
-		parser.addErrorListener(errListener);
+		parser.addErrorListener(errListener.get());
 		tree::ParseTree* tree = parser.start();
 
 		//Create TokenStreamRewriter, needed for constants if defined
@@ -161,7 +157,7 @@ namespace hypro {
 			ANTLRInputStream inputMod(modified);
 			HybridAutomatonLexer lexerMod(&inputMod);
 			lexerMod.removeErrorListeners();
-			lexerMod.addErrorListener(errListener);
+			lexerMod.addErrorListener(errListener.get());
 
 			//Create an empty TokenStream obj
 			CommonTokenStream tokensMod(&lexerMod);
@@ -172,14 +168,12 @@ namespace hypro {
 			//Create a parser with error listener
 			HybridAutomatonParser parserMod(&tokensMod);
 			parserMod.removeErrorListeners();
-			parserMod.addErrorListener(errListener);
+			parserMod.addErrorListener(errListener.get());
 			tree::ParseTree* tree = parserMod.start();
 
 			HyproHAVisitor<double> visitor;
 
 			HybridAutomaton<double> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>()) };
-
-			delete errListener;
 
 			return std::make_pair(std::move(h), visitor.getSettings());
 
@@ -188,8 +182,6 @@ namespace hypro {
 			HyproHAVisitor<double> visitor;
 
 			HybridAutomaton<double> h { std::move((visitor.visit(tree)).antlrcpp::Any::as<HybridAutomaton<double>>()) };
-
-			delete errListener;
 
 			return std::make_pair(std::move(h), visitor.getSettings());
 		}

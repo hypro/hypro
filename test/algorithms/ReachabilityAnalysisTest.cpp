@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -59,7 +59,7 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		loop.setReset( hypro::Reset<Number>( resetMatrix, resetVector ) );
 		// set aggregation settings of transition to full aggregation
-		loop.setAggregation( hypro::Aggregation::aggregation );
+		loop.setAggregation( hypro::AGG_SETTING::AGG );
 		// assign transition to location
 		loc->addTransition( std::make_unique<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>>( loop ) );
 

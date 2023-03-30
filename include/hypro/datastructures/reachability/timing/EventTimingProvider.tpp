@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "EventTimingProvider.h"
 
 namespace hypro {
@@ -51,7 +60,7 @@ void EventTimingProvider<Number>::initialize( const Location<Number>* loc, tNumb
 		this->clear();
 	}
 
-	EventTimingNode<Number>* child = new EventTimingNode<Number>( EventTimingContainer<Number>( globalTimeHorizon ) );
+	auto child = std::make_shared<EventTimingNode<Number>>( EventTimingContainer<Number>( globalTimeHorizon ) );
 	child->addParent( mRoot );
 	child->setLocation( loc );
 	child->setEntryTimestamp( carl::Interval<tNumber>( 0 ) );
@@ -64,12 +73,12 @@ void EventTimingProvider<Number>::initialize( const Location<Number>* loc, tNumb
 }
 
 template <typename Number>
-const EventTimingNode<Number>* EventTimingProvider<Number>::getTimingNode( const Path<Number, tNumber>& path, std::size_t level ) const {
+typename EventTimingNode<Number>::Node_t EventTimingProvider<Number>::getTimingNode( const Path<Number, tNumber>& path, std::size_t level ) const {
 	return findNode( path, level );
 }
 
 template <typename Number>
-EventTimingNode<Number>* EventTimingProvider<Number>::rGetNode( const Path<Number, tNumber>& path, std::size_t level ) const {
+typename EventTimingNode<Number>::Node_t& EventTimingProvider<Number>::rGetNode( const Path<Number, tNumber>& path, std::size_t level ) const {
 	return findNode( path, level );
 }
 
@@ -84,16 +93,16 @@ std::optional<EventTimingContainer<Number>> EventTimingProvider<Number>::getTimi
 	}
 
 	// pointers to nodes on the path
-	std::vector<std::set<EventTimingNode<Number>*>> workingSets;
+	std::vector<std::set<std::shared_ptr<hypro::EventTimingNode<double>>>> workingSets;
 	// stores candidates which match the timeStep
-	std::vector<std::set<EventTimingNode<Number>*>> transitionCandidates;
+	std::vector<std::set<std::shared_ptr<hypro::EventTimingNode<double>>>> transitionCandidates;
 
 	// fill working set with initial nodes
 	for ( const auto nPtr : mRoot->getChildren() ) {
-		workingSets.emplace_back( std::set<EventTimingNode<Number>*>{} );
+		workingSets.emplace_back( decltype( workingSets )::value_type{} );
 		workingSets.back().emplace( nPtr );
 		// prepare structure of 2nd set
-		transitionCandidates.emplace_back( std::set<EventTimingNode<Number>*>{} );
+		transitionCandidates.emplace_back( decltype( transitionCandidates )::value_type{} );
 	}
 
 	// iterate over path / follow the path
@@ -255,7 +264,7 @@ void EventTimingProvider<Number>::updateTimings( const Path<Number, tNumber>& pa
 
 template <typename Number>
 typename EventTimingNode<Number>::Node_t EventTimingProvider<Number>::addChildToNode( typename EventTimingNode<Number>::Node_t parent, tNumber timeHorizon ) {
-	typename EventTimingNode<Number>::Node_t newChild = new EventTimingNode<Number>( EventTimingContainer<Number>{ timeHorizon } );
+	typename EventTimingNode<Number>::Node_t newChild = std::make_shared<EventTimingNode<Number>>( EventTimingContainer<Number>{ timeHorizon } );
 	TRACE( "hypro.datastructures.timing", "Add child " << newChild << " to node " << parent );
 
 	// set up tree
@@ -280,7 +289,7 @@ std::string EventTimingProvider<Number>::getDotRepresentation() const {
 }
 
 template <typename Number>
-EventTimingNode<Number>* EventTimingProvider<Number>::findNode( const Path<Number, tNumber>& path, std::size_t level ) const {
+typename EventTimingNode<Number>::Node_t EventTimingProvider<Number>::findNode( const Path<Number, tNumber>& path, std::size_t level ) const {
 	TRACE( "hypro.datastructures.timing", "Get timings for path " << path << ", level " << level );
 
 	// find the first initial node separately, since the root-node is not part of the path
@@ -291,7 +300,7 @@ EventTimingNode<Number>* EventTimingProvider<Number>::findNode( const Path<Numbe
 	}
 
 	// stores the node candidates for the current step.
-	std::vector<EventTimingNode<Number>*> workingSet;
+	std::vector<typename EventTimingNode<Number>::Node_t> workingSet;
 	// initialize working set with nodes from the passed level
 	for ( const auto nPtr : mRoot->getChildren() ) {
 		if ( nPtr->getLevel() == level ) {
@@ -319,7 +328,7 @@ EventTimingNode<Number>* EventTimingProvider<Number>::findNode( const Path<Numbe
 		if ( pathIt != path.end() ) {
 			assert( pathIt->isDiscreteStep() );
 			// discrete step
-			std::vector<EventTimingNode<Number>*> transitionCandidates;
+			std::vector<typename EventTimingNode<Number>::Node_t> transitionCandidates;
 			for ( auto nodeIt = workingSet.begin(); nodeIt != workingSet.end(); ++nodeIt ) {
 				if ( ( *nodeIt )->getTimings().hasTransition( pathIt->transition ) && positiveCover( ( *nodeIt )->getTimings().getTransitionTimings( pathIt->transition ), pathIt->timeInterval ) ) {
 					for ( const auto chPtr : ( *nodeIt )->getChildren() ) {

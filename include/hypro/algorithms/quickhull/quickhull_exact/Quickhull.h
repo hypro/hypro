@@ -90,6 +90,8 @@ class QuickhullAlgorithm<Number, Euclidian, EnableIfExact<Number>> {
 
 	void buildCone( facet_ind_t currentFacet_i, point_ind_t visiblePoint_i, bitset_t& visited );
 
+	void buildCone_recursive( facet_ind_t currentFacet_i, point_ind_t visiblePoint_i, bitset_t& visited );
+
 	void processPoints();
 
 	void constructLowerDimensional();

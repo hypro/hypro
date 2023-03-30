@@ -201,8 +201,8 @@ static std::vector<Ridge<Number>> getRidges( const std::shared_ptr<Facet<Number>
 		for ( const auto& neighbor : facet->neighbors() ) {
 			// std::cout << "_____________insde getRidges - call of neighbor of " << facet->getNormal() << std::endl;
 
-			// Ridge<Number> newRidge( facet, neighbor );
-			result.emplace_back( facet, neighbor );
+			Ridge<Number> newRidge( facet, neighbor.lock() );
+			result.push_back( newRidge );
 		}
 	}
 
@@ -388,7 +388,7 @@ static std::vector<std::shared_ptr<Facet<Number>>> maximizeFacets( std::vector<s
 				if ( newFacet->getDist( point1 ) == 0 ) {
 					newFacet->addPoint( point1 );  // update newFacet - point1 and neighbors of neighbor
 					for ( auto neighborOfneighbor : neighbor->rNeighbors() ) {
-						if ( !newFacet->isNeighbor( neighborOfneighbor ) ) newFacet->addNeighbor( neighborOfneighbor );
+						if ( !newFacet->isNeighbor( neighborOfneighbor.lock() ) ) newFacet->addNeighbor( neighborOfneighbor );
 					}
 
 					facets.erase( facets.begin() + n );	 // remove non-relevant neighbor
@@ -540,9 +540,9 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 				for ( const auto& facet : currentVisibleFacets ) {
 					assert( !facet->neighbors().empty() );
 					for ( const auto& neighbor : facet->neighbors() ) {
-						if ( neighbor->isAbove( currentPoint ) ) {
-							newVisibleFacets.push( neighbor );	// update new visible facets
-							assert( !neighbor->neighbors().empty() );
+						if ( neighbor.lock()->isAbove( currentPoint ) ) {
+							newVisibleFacets.push( neighbor.lock() );  // update new visible facets
+							assert( !neighbor.lock()->neighbors().empty() );
 						}
 					}
 				}
@@ -564,18 +564,18 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			std::vector<std::shared_ptr<Facet<Number>>> newFacets;
 
 			// Create new facets
-			for ( const auto& facet : currentVisibleFacets ) {
-				for ( auto ridge : getRidges( facet ) ) {
-					for ( const auto& neighbor : ridge.neighbors() ) {
-						if ( std::find( currentVisibleFacets.begin(), currentVisibleFacets.end(), *neighbor ) == currentVisibleFacets.end() ) {	 // we have a neighbor of this ridge, which is not visible -> horizon
+			for ( auto& facet : currentVisibleFacets ) {
+				for ( auto& ridge : getRidges( facet ) ) {
+					for ( auto& neighbor : ridge.neighbors() ) {
+						if ( std::find( currentVisibleFacets.begin(), currentVisibleFacets.end(), neighbor.lock() ) == currentVisibleFacets.end() ) {  // we have a neighbor of this ridge, which is not visible -> horizon
 							// std::cout << "Found a candidate for a newFacet" << std::endl;
 							//  ridge, create new facet
 							Point<Number> insidePoint = findInsidePoint( ridge, facet );
 
 							std::shared_ptr<Facet<Number>> newFacet = std::make_shared<Facet<Number>>( ridge.vertices(), currentPoint, insidePoint );
 
-							newFacet->addNeighbor( neighbor );
-							neighbor->addNeighbor( newFacet );
+							newFacet->addNeighbor( neighbor.lock() );
+							neighbor.lock()->addNeighbor( newFacet );
 
 							newFacets.emplace_back( std::move( newFacet ) );
 						}

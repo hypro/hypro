@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -254,10 +254,11 @@ void ComposedLocation<Number>::validate() const {
 								for ( std::size_t localCol = 0; localCol != localResetMatrix.cols(); ++localCol ) {
 									resetMatrix( globalVIdx, mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localResetMatrix( localRow, localCol );
 								}  // loop over local variable idx
-							}	   // if is identity - else
-						}		   // if automaton does have information on this variable
-					}			   // if variable is not mastered
-				}				   // loop over all globally available variables for resets
+								resetVector( globalVIdx ) = localResetVector( localRow );
+							}  // if is identity - else
+						}	   // if automaton does have information on this variable
+					}		   // if variable is not mastered
+				}			   // loop over all globally available variables for resets
 			}
 		}
 
@@ -396,12 +397,13 @@ void ComposedLocation<Number>::validate() const {
 								for ( std::size_t localCol = 0; localCol != localResetMatrix.cols(); ++localCol ) {
 									targets[pos].resetMatrix( globalVIdx, mAutomaton.mLocalToGlobalVars[std::make_pair( automatonIdx, localCol )] ) = localResetMatrix( localRow, localCol );
 								}  // loop over local variable idx
-							}	   // if is identity - else
-						}		   // if automaton does have information on this variable
-					}			   // if variable is not mastered
-				}				   // loop over all globally available variables for resets
-			}					   // loop over created stubs
-		}						   // loop over components
+								targets[pos].resetVector( globalVIdx ) = localResetVector( localRow );
+							}  // if is identity - else
+						}	   // if automaton does have information on this variable
+					}		   // if variable is not mastered
+				}			   // loop over all globally available variables for resets
+			}				   // loop over created stubs
+		}					   // loop over components
 
 		TRACE( "hypro.datastructures.hybridAutomatonComp", "Have " << targets.size() << " transition-stubs" );
 		// at this point we have all guards, all resets, urgency
@@ -641,7 +643,7 @@ const typename HybridAutomatonComp<Number>::conditionVector& HybridAutomatonComp
 }
 
 template <typename Number>
-unsigned HybridAutomatonComp<Number>::dimension() const {
+std::size_t HybridAutomatonComp<Number>::dimension() const {
 	return getVariables().size();
 }
 

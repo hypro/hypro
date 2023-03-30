@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 
 #include "../../../types.h"
@@ -32,26 +41,24 @@ class EventTimingProvider : public carl::Singleton<EventTimingProvider<Number>> 
 	void setName( const std::string& name ) { mName = name; }
 	const std::string& getName() const { return mName; }
 
-	EventTimingNode<Number>* getRoot() { return mRoot; }
+	typename EventTimingNode<Number>::Node_t getRoot() { return mRoot; }
 
 	void clear() {
-		delete mRoot;
-		mRoot = new EventTimingNode<Number>();
+		mRoot = std::make_shared<EventTimingNode<Number>>();
 	}
 
 	~EventTimingProvider() {
-		delete mRoot;
 	}
 
 	/**
 	 * @brief	Find the best suitable node in the timing tree which matches the passed path.
 	 */
-	const EventTimingNode<Number>* getTimingNode( const Path<Number, tNumber>& path, std::size_t level = 0 ) const;
+	typename EventTimingNode<Number>::Node_t getTimingNode( const Path<Number, tNumber>& path, std::size_t level = 0 ) const;
 
 	/**
 	 * @brief	Find the best suitable node in the timing tree which matches the passed path.
 	 */
-	EventTimingNode<Number>* rGetNode( const Path<Number, tNumber>& path, std::size_t level = 0 ) const;
+	typename EventTimingNode<Number>::Node_t& rGetNode( const Path<Number, tNumber>& path, std::size_t level = 0 ) const;
 
 	std::optional<EventTimingContainer<Number>> getTimings( const Path<Number, tNumber>& path ) const;
 
@@ -62,7 +69,7 @@ class EventTimingProvider : public carl::Singleton<EventTimingProvider<Number>> 
 	std::string getDotRepresentation() const;
 
   private:
-	EventTimingNode<Number>* findNode( const Path<Number, tNumber>& path, std::size_t level ) const;
+	typename EventTimingNode<Number>::Node_t findNode( const Path<Number, tNumber>& path, std::size_t level ) const;
 	void writeTree() const;
 
 	// for dbg

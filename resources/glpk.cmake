@@ -3,6 +3,12 @@ set(glpk_version "5.0")
 # get gmp location
 get_target_property(gmp_include_dir GMP_SHARED INTERFACE_INCLUDE_DIRECTORIES)
 get_target_property(gmp_library_dir GMP_SHARED IMPORTED_LOCATION)
+
+# it may happen that the result is not only the path but includes the library as well - strip it then
+if (NOT IS_DIRECTORY ${gmp_library_dir})
+    get_filename_component(gmp_library_dir ${gmp_library_dir} DIRECTORY)
+endif ()
+
 message(STATUS "glpk use gmp at ${gmp_library_dir} with include dir ${gmp_include_dir}")
 
 # create build folder to be able to use it as an include folder

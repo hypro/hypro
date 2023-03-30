@@ -150,6 +150,12 @@ void ExactQuickhull<Number, Euclidian>::FacetSpace::computeNormal( Facet& facet 
 	assert( static_cast<size_t>( lu.rank() ) == dimension );
 	TRACE( "quickhull", "matrix rank " << lu.rank() );
 
+#ifdef HYPRO_LOGGING
+	TRACE( "hypro.quickhull", lu.matrixLU() << std::endl);
+	TRACE( "hypro.quickhull", Eigen::FullPivLU<matrix_t<Number>>(matrix).kernel() << std::endl);
+	TRACE( "hypro.quickhull", lu.kernel() << std::endl);
+#endif
+	
 	point_t result = lu.kernel().col( 0 );
 
 #ifdef HYPRO_LOGGING
@@ -283,7 +289,7 @@ void ExactQuickhull<Number, Euclidian>::FacetSpace::endModificationPhase() {
 }
 
 template <typename Number, bool Euclidian>
-void ExactQuickhull<Number, Euclidian>::FacetSpace::deleteFacet( facet_ind_t facet_i ) {
+void ExactQuickhull<Number, Euclidian>::FacetSpace::markForDeletion( facet_ind_t facet_i ) {
 	deletedPositions.push_back( facet_i );
 }
 

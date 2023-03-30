@@ -35,7 +35,7 @@ class Ridge {
 	 */
   private:
 	vertexSet mVertices;
-	std::vector<std::shared_ptr<Facet<Number>>> mNeighbors;
+	std::vector<std::weak_ptr<Facet<Number>>> mNeighbors;
 	Halfspace<Number> mHalfspace;
 
 	/**
@@ -81,9 +81,9 @@ class Ridge {
 
 	const vertexSet& vertices() const { return mVertices; }
 
-	std::vector<std::shared_ptr<Facet<Number>>>& rNeighbors() { return mNeighbors; }
+	std::vector<std::weak_ptr<Facet<Number>>>& rNeighbors() { return mNeighbors; }
 
-	const std::vector<std::shared_ptr<Facet<Number>>>& neighbors() const { return mNeighbors; }
+	std::vector<std::weak_ptr<Facet<Number>>> neighbors() const { return mNeighbors; }
 
 	Halfspace<Number> halfspace() const { return mHalfspace; }
 };

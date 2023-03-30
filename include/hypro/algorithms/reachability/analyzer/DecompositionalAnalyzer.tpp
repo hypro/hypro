@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -151,7 +151,7 @@ auto DecompositionalAnalyzer<LTIRep, SingularRep, DiscreteRep, RectangularRep, A
 		invariantSatTime = invariantSatTime.intersect( invariantSatTimeSubspace );
 	}
 	// get the number of segments to compute from the time interval in which invariant is satisfied across subspaces
-	int segmentHorizon = -1;  // unbounded
+	long segmentHorizon = -1;  // unbounded
 	if ( mClockCount > 0 ) {
 		std::ceil( carl::convert<tNumber, double>( invariantSatTime.getTimeInterval( clockIndex ).upper() / mParameters.timeStep ) );
 	}

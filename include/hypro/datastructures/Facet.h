@@ -30,14 +30,14 @@ class Facet {
 	 * Typedefs
 	 */
 	using pointVector = std::vector<Point<Number>>;
-	using neighborsSet = std::vector<std::shared_ptr<Facet<Number>>>;
+	using neighborsSet = std::vector<std::weak_ptr<Facet<Number>>>;
 
 	/**
 	 * Members
 	 */
   private:
 	pointVector mVertices;
-	neighborsSet mNeighbors;
+	mutable neighborsSet mNeighbors;
 	Halfspace<Number> mHalfspace;
 	pointVector mOutsideSet;
 	vector_t<Number> mNormal;
@@ -129,7 +129,7 @@ class Facet {
 
 	const neighborsSet& neighbors() const { return mNeighbors; }
 
-	void addNeighbor( const std::shared_ptr<Facet<Number>>& facet ) {
+	void addNeighbor( std::weak_ptr<Facet<Number>> facet ) {
 		// std::cout << "Adding " << *facet << " to " << *this << std::endl;
 		if ( !isNeighbor( facet ) ) {
 			mNeighbors.push_back( facet );
@@ -147,7 +147,7 @@ class Facet {
 	 */
 	bool removeNeighbor( const std::shared_ptr<Facet<Number>>& facet ) {
 		for ( unsigned i = 0; i < mNeighbors.size(); i++ ) {
-			if ( *facet == *mNeighbors[i] ) {
+			if ( *facet == mNeighbors[i].lock() ) {
 				mNeighbors.erase( mNeighbors.begin() + i );
 				return true;  // check for multiple entries?
 			}
@@ -157,7 +157,7 @@ class Facet {
 
 	void setPoints( std::vector<Point<Number>>&& points, const Point<Number>& _insidePoint ) {
 		if ( mVertices.empty() ) {
-			std::move( points.begin(), points.end(), std::back_inserter( mVertices ) );
+			mVertices.insert( std::end( mVertices ), std::make_move_iterator( std::begin( points ) ), std::make_move_iterator( std::end( points ) ) );
 
 			mNormal = getNormalVector();
 			mScalar = getScalarVector();
@@ -328,7 +328,7 @@ class Facet {
 
 	Number getScalarVector() const { return Number( mNormal.dot( mVertices[0].rawCoordinates() ) ); }
 
-	Halfspace<Number> halfspace() const { return mHalfspace; }
+	const Halfspace<Number>& halfspace() const { return mHalfspace; }
 
 	/*
 	 * Iterators
@@ -373,10 +373,10 @@ class Facet {
 	}
 
 	void addPointToOutsideSet( const Point<Number>& point ) {
-		mOutsideSet.emplace_back( point );	// check double entries?
+		mOutsideSet.push_back( point );	 // check double entries?
 	}
 
-	std::vector<Point<Number>> getOutsideSet() const {
+	const std::vector<Point<Number>>& getOutsideSet() const {
 		// std::cout << __func__ << " : " << __LINE__ << mOutsideSet << std::endl;
 		return mOutsideSet;
 	}
@@ -412,11 +412,11 @@ class Facet {
 		}
 	}
 
-	bool isNeighbor( const std::shared_ptr<Facet<Number>>& facet ) const {
+	bool isNeighbor( std::weak_ptr<Facet<Number>> facet ) const {
 		for ( unsigned i = 0; i < mNeighbors.size(); i++ ) {
 			// std::cout << "Compare " << *mNeighbors[i] << " and " << *facet << ": " << (*mNeighbors[i] == *facet) <<
 			// std::endl;
-			if ( *mNeighbors[i] == *facet ) {
+			if ( mNeighbors[i].lock() == facet.lock() ) {
 				return true;
 			}
 		}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -31,9 +31,6 @@ static_assert( false, "This file may only be included indirectly by Location.h" 
 #include "decomposition/Decomposition.h"
 
 namespace hypro {
-enum Aggregation { none = 0,
-				   aggregation,
-				   clustering };
 
 template <typename Number>
 class HybridAutomaton;
@@ -51,14 +48,14 @@ class Transition {
 	using Number = typename LocationType::NumberType;
 
   private:
-	LocationType* mSource = nullptr;					  /// Pointer to the source location.
-	LocationType* mTarget = nullptr;					  /// Pointer to the target location.
-	Condition<Number> mGuard;							  /// Guard condition enabling the transition if satisfied.
-	Reset<Number> mReset = Reset<Number>();				  /// Reset function.
-	Aggregation mAggregationSetting = Aggregation::none;  /// Aggregation settings.
-	std::size_t mClustering = 0;						  /// Clustering: maximal number of discrete successors.
-	bool mUrgent = false;								  /// Flag if transition is urgent.
-	Number mTriggerTime = Number( -1 );					  /// Trigger-time: if positive acts as an additional guard.
+	LocationType* mSource = nullptr;						/// Pointer to the source location.
+	LocationType* mTarget = nullptr;						/// Pointer to the target location.
+	Condition<Number> mGuard;								/// Guard condition enabling the transition if satisfied.
+	Reset<Number> mReset = Reset<Number>();					/// Reset function.
+	AGG_SETTING mAggregationSetting = AGG_SETTING::NO_AGG;	/// Aggregation settings.
+	std::size_t mClustering = 0;							/// Clustering: maximal number of discrete successors.
+	bool mUrgent = false;									/// Flag if transition is urgent.
+	Number mTriggerTime = Number( -1 );						/// Trigger-time: if positive acts as an additional guard.
 	std::vector<Label> mLabels = std::vector<Label>();
 	std::optional<Condition<Number>> mJumpEnablingSet;	/// possibly cached jump set
 	mutable std::size_t mHash = 0;
@@ -140,7 +137,7 @@ class Transition {
 	}
 	const Condition<Number>& getGuard() const { return mGuard; }
 	const Reset<Number>& getReset() const { return mReset; }
-	Aggregation getAggregation() const { return mAggregationSetting; }
+	AGG_SETTING getAggregation() const { return mAggregationSetting; }
 	std::size_t getClusterBound() const { return mClustering; }
 	Number getTriggerTime() const { return mTriggerTime; }
 	bool isUrgent() const { return mUrgent; }
@@ -173,9 +170,9 @@ class Transition {
 		mReset = val;
 		mHash = 0;
 	}
-	void setAggregation( Aggregation agg ) {
+	void setAggregation( AGG_SETTING agg ) {
 		mAggregationSetting = agg;
-		if ( agg == Aggregation::aggregation ) {
+		if ( agg == AGG_SETTING::AGG ) {
 			mClustering = 1;
 		}
 		mHash = 0;
