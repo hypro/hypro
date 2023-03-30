@@ -19,9 +19,11 @@ build:
   artifacts:
     paths:
       - .
+    exclude:
+      - .git
 
 
-# run tests using the binary built before
+      # run tests using the binary built before
 test:
   stage: test
   before_script:
