@@ -10,7 +10,7 @@ build:
     - git clone  --depth 1 --branch 22.12 https://github.com/ths-rwth/carl carl && cd carl &&
     - mkdir build && cd build && cmake .. && make -j`nproc` carl-common carl-arith carl-logging carl-formula && cd ../..
   script:
-    - mkdir build && cd build && cmake .. && make -j`nproc`
+    - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && make -j`nproc`
   cache:
     paths:
       - carl
