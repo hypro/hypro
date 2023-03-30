@@ -115,8 +115,6 @@ class Facet {
 		}
 	}
 
-	~Facet() {}
-
 	/**
 	 * Getters and Setters
 	 */

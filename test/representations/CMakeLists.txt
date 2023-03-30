@@ -34,7 +34,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runRepresentationTests ${representation_test_sources})
 
-    add_dependencies(runRepresentationTests hypro_resources)
+    add_dependencies(runRepresentationTests ${PROJECT_NAME}-resources)
     target_include_directories(runRepresentationTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
 
     target_link_libraries(runRepresentationTests PUBLIC

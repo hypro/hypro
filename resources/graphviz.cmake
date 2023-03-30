@@ -11,7 +11,7 @@ if (${GRAPHVIZ_FOUND})
             "${GRAPHVIZ_GVC_LIBRARY}"
             "${GRAPHVIZ_INCLUDE_DIRS}")
 
-    add_dependencies(hypro_resources CGRAPH_SHARED GVC_SHARED)
+    add_dependencies(${PROJECT_NAME}-resources CGRAPH_SHARED GVC_SHARED)
 
     target_link_libraries(${PROJECT_NAME}-shared PUBLIC CGRAPH_SHARED GVC_SHARED)
     target_link_libraries(${PROJECT_NAME}-static PUBLIC CGRAPH_SHARED GVC_SHARED)
