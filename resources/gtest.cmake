@@ -19,7 +19,6 @@ ExternalProject_Add(
         # Force separate output paths for debug and release builds to allow easy
         # identification of correct lib in subsequent TARGET_LINK_LIBRARIES
         #CMAKE_ARGS ${cmake_command}
-        GIT_TAG "release-1.12.1"
         INSTALL_COMMAND "")
 
 # Specify include dir
