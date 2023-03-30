@@ -31,4 +31,7 @@ test:
     - DEBIAN_FRONTEND=noninteractive apt-get update
     - DEBIAN_FRONTEND=noninteractive apt install -y gcc g++ cmake make git flex bison libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
   script:
-    - cd build && make test
+    - ctest --test-dir build --output-junit junit.xml
+  artifacts:
+    reports:
+      junit: build/junit.xml
