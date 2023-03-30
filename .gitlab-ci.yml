@@ -16,6 +16,9 @@ build:
     - cd ../..
   script:
     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && make -j`nproc`
+  cache:
+    paths:
+      - carl/
   artifacts:
     paths:
       - .
