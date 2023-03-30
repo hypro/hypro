@@ -17,7 +17,7 @@ set(cereal_INCLUDE_DIR ${cereal_SOURCE_DIR}/include)
 
 #message(STATUS "Cereal source dir: ${cereal_SOURCE_DIR}")
 #message(STATUS "Cereal include dir: ${cereal_INCLUDE_DIR}")
-add_dependencies(${PROJECT_NAME}_resources cereal::cereal)
+add_dependencies(${PROJECT_NAME}-resources cereal::cereal)
 
 target_link_libraries(${PROJECT_NAME}-objects INTERFACE cereal::cereal)
 target_link_libraries(${PROJECT_NAME}-shared PRIVATE $<BUILD_INTERFACE:cereal::cereal>)

@@ -36,7 +36,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             ${algorithm_test_sources}
             )
 
-    add_dependencies(runAlgorithmTests hypro_resources hypro-parser)
+    add_dependencies(runAlgorithmTests ${PROJECT_NAME}-resources ${PROJECT_NAME}-parser)
     target_include_directories(runAlgorithmTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
 
     target_link_libraries(runAlgorithmTests PUBLIC

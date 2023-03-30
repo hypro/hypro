@@ -23,7 +23,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             ${core_test_sources}
             )
 
-    add_dependencies(runCoreTests hypro_resources hypro-parser)
+    add_dependencies(runCoreTests ${PROJECT_NAME}-resources ${PROJECT_NAME}-parser)
     target_include_directories(runCoreTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
 
     target_link_libraries(runCoreTests PUBLIC
@@ -45,7 +45,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             AntlrParserTest.cpp
             #AntlrParserCIFTest.cpp
             )
-    add_dependencies(runParserTests hypro_resources antlr4cpp hypro-parser)
+    add_dependencies(runParserTests ${PROJECT_NAME}-resources antlr4cpp ${PROJECT_NAME}-parser)
     target_include_directories(runParserTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
     target_link_libraries(runParserTests ${PROJECT_NAME}-shared ${PROJECT_NAME}-parser ${GTEST_LIBRARIES})
     #message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})

@@ -10,5 +10,5 @@ RUN apt-get update \
     libboost-dev
 COPY / /root/hypro/
 RUN cd /root/hypro && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DHYPRO_LOGGING=OFF -DHYPRO_STATISTICS=ON ..
-RUN cd /root/hypro/build && make hypro_resources -j`nproc`
+RUN cd /root/hypro/build && make ${PROJECT_NAME}-resources -j`nproc`
 RUN cd /root/hypro/build && cmake .. && make hypro -j`nproc`
