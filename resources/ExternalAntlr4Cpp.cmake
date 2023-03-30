@@ -38,17 +38,21 @@ add_dependencies(ANTLR4_STATIC antlr4cpp)
 add_dependencies(ANTLR4_SHARED antlr4cpp)
 add_dependencies(hypro_resources ANTLR4_STATIC ANTLR4_SHARED)
 
-target_link_libraries(${PROJECT_NAME}-shared PUBLIC ANTLR4_SHARED)
-target_link_libraries(${PROJECT_NAME}-static PUBLIC ANTLR4_STATIC)
+#target_link_libraries(${PROJECT_NAME}-shared PUBLIC ANTLR4_SHARED)
+target_link_libraries(${PROJECT_NAME}-parser PUBLIC ANTLR4_SHARED)
+#target_link_libraries(${PROJECT_NAME}-static PUBLIC ANTLR4_STATIC)
 
-target_include_directories(${PROJECT_NAME}-objects
-        PRIVATE ${ANTLR4CPP_INCLUDE_DIRS}
+target_include_directories(${PROJECT_NAME}-parser
+        PUBLIC ${ANTLR4CPP_INCLUDE_DIRS}
         )
-target_include_directories(${PROJECT_NAME}-static
-        PRIVATE ${ANTLR4CPP_INCLUDE_DIRS}
-        )
-target_include_directories(${PROJECT_NAME}-shared
-        PRIVATE ${ANTLR4CPP_INCLUDE_DIRS}
-        )
+#target_include_directories(${PROJECT_NAME}-objects
+#        PRIVATE ${ANTLR4CPP_INCLUDE_DIRS}
+#        )
+#target_include_directories(${PROJECT_NAME}-static
+#        PRIVATE ${ANTLR4CPP_INCLUDE_DIRS}
+#        )
+#target_include_directories(${PROJECT_NAME}-shared
+#        PRIVATE ${ANTLR4CPP_INCLUDE_DIRS}
+#        )
 
 list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${ANTLR4CPP_INCLUDE_DIRS})

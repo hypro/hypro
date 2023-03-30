@@ -205,6 +205,14 @@ target_include_directories(${PROJECT_NAME}-shared
         $<INSTALL_INTERFACE:include>
         )
 
+add_library(${PROJECT_NAME}-parser ${${PROJECT_NAME}_parser_sources})
+add_dependencies(${PROJECT_NAME}-parser hypro_resources ${PROJECT_NAME}-shared)
+target_include_directories(${PROJECT_NAME}-parser
+        PUBLIC
+        ${CMAKE_SOURCE_DIR}/include/hypro/parser/
+        )
+target_link_libraries(${PROJECT_NAME}-parser PUBLIC ${PROJECT_NAME}-shared)
+
 target_compile_features(${PROJECT_NAME}-objects PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-static PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-shared PUBLIC cxx_std_17)

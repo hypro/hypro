@@ -33,11 +33,12 @@ add_executable(runDatastructureTests
         ${datastructure_test_sources}
         )
 
-add_dependencies(runDatastructureTests hypro_resources)
+add_dependencies(runDatastructureTests hypro_resources hypro-parser)
 target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
 
 target_link_libraries(runDatastructureTests PUBLIC
         ${PROJECT_NAME}-shared
+        ${PROJECT_NAME}-parser
         ${GTEST_LIBRARIES}
         cereal::cereal
         )
