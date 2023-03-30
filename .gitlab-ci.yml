@@ -7,10 +7,13 @@ build:
   before_script:
     - DEBIAN_FRONTEND=noninteractive apt-get update
     - DEBIAN_FRONTEND=noninteractive apt install -y gcc g++ cmake make git flex bison libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
-    - git clone  --depth 1 --branch 22.12 https://github.com/ths-rwth/carl carl && cd carl &&
-    - mkdir build && cd build && cmake .. -DUSE_LIBPOLY=OFF && make -j`nproc` carl-common carl-arith carl-logging
-    - carl-formula && cd .
-    - ./..
+    - git clone  --depth 1 --branch 22.12 https://github.com/ths-rwth/carl carl && cd carl
+    - mkdir build && cd build && cmake .. -DUSE_LIBPOLY=OFF
+    - make -j`nproc` carl-common
+    - make -j`nproc` carl-arith
+    - make -j`nproc` carl-logging
+    - make -j`nproc` carl-formula
+    - cd ../..
   script:
     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && make -j`nproc`
   artifacts:
