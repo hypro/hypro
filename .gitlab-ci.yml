@@ -11,13 +11,13 @@ build:
     - mkdir build && cd build && cmake .. && make -j`nproc` carl-common carl-arith carl-logging carl-formula && cd ../..
   script:
     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && make -j`nproc`
-  cache:
+  artifacts:
     paths:
-      - carl
+      - .
 
 
 # run tests using the binary built before
 test:
   stage: test
   script:
-    - make test
+    - cd build && make test
