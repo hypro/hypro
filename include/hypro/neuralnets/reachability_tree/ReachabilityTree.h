@@ -29,11 +29,11 @@ class ReachabilityTree {
 	std::vector<ReachabilityNode<Number>*> mLeaves;	 // the leaves of the reachability tree
 	unsigned short int mDepth;						 // depth of the reachability tree
 
-	NeuralNetwork<Number> mNetwork;	 // the analized neural network
-	HPolytope<Number> mInputSet;	 // the input set of the network
-	std::vector<HPolytope<Number>> mSafeSets;		 // the safe set specified in the form of a vector of HPolytopes
-	bool mIsSafe;					 // true if the reachability tree is safe
-	bool mIsComplete;				 // true if the  computation of the reachability tree finished
+	NeuralNetwork<Number> mNetwork;			   // the analized neural network
+	HPolytope<Number> mInputSet;			   // the input set of the network
+	std::vector<HPolytope<Number>> mSafeSets;  // the safe set specified in the form of a vector of HPolytopes
+	bool mIsSafe;							   // true if the reachability tree is safe
+	bool mIsComplete;						   // true if the  computation of the reachability tree finished
 
 	hypro::Plotter<Number>& mPlotter;
 
@@ -77,7 +77,7 @@ class ReachabilityTree {
 	 * @param[in] leaf: the reachability tree leaf from which we start the search
 	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <candidate, node> which indicates the source neuron of the countereaxmple, return <candidate, nullptr> if it is a true countereaxmple
 	 */
-	std::pair<Point<Number>, ReachabilityNode<Number>*> identifyCounterExampleSource( const Point<Number>& candidate, ReachabilityNode<Number>* leaf ) const;
+	std::pair<Point<Number>, ReachabilityNode<Number>*> identifyCounterExampleSource( const Point<Number>& candidate, ReachabilityNode<Number>* node ) const;
 
 	/**
 	 * @brief Calculates the corresponding point from the previous set such that applying the previous nodes computations on it we would get back the counterexample candidate
@@ -92,15 +92,16 @@ class ReachabilityTree {
 
 	void plotTree( ReachabilityNode<Number>* current, std::string filename ) const;
 
-  private:
-	int sgn(Number val) const;
-	Number min_val(size_t dim) const;
-	Number max_val(size_t dim) const;
-	Number mean_val(size_t dim) const;
-	Number range_val(size_t dim) const;
-
 	Starset<Number> prepareInput( bool normalize ) const;
 	std::vector<HPolytope<Number>> prepareSafeSet( bool normalize ) const;
+
+  private:
+	int sgn( Number val ) const;
+	Number min_val( size_t dim ) const;
+	Number max_val( size_t dim ) const;
+	Number mean_val( size_t dim ) const;
+	Number range_val( size_t dim ) const;
+
 	bool isSubResultSafe( const std::vector<Starset<Number>>& subResult, const std::vector<HPolytope<Number>>& safeSet ) const;
 };
 
