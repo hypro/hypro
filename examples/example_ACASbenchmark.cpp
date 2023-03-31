@@ -89,7 +89,7 @@ int main( int argc, char* argv[] ) {
 	hypro::reachability::ReachabilityNode node = hypro::reachability::ReachabilityNode<Number>( input_starset, method, 0, 0 );
 
 	start = std::chrono::steady_clock::now();
-	bool isSafe = node.checkSafeRecursive( input_starset, 1, safe_set );
+	bool isSafe = node.checkSafeRecursive( input_starset, 0, safe_set );
 	end = std::chrono::steady_clock::now();
 	std::cout << std::boolalpha;
 	std::cout << "The output is in the safe zone: " << isSafe << std::endl;
