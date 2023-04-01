@@ -29,6 +29,12 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_
 # Include own macros.
 include(hypromacros)
 
+
+include(FindProtobuf)
+find_package(Protobuf REQUIRED)
+include_directories(${PROTOBUF_INCLUDE_DIR})
+include_directories(${Protobuf_INCLUDE_DIRS})
+
 # # # # # # # # # # # # # # # # # # # # # #
 # B. Options
 # # # # # # # # # # # # # # # # # # # # # #
@@ -177,7 +183,7 @@ set_target_properties(${PROJECT_NAME}-static PROPERTIES
         )
 
 #target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
-target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
+target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread ${PROTOBUF_LIBRARY})
 
 target_include_directories(${PROJECT_NAME}-static
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
@@ -201,7 +207,7 @@ set_target_properties(${PROJECT_NAME}-shared PROPERTIES
         )
 
 #target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
-target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread)
+target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread ${PROTOBUF_LIBRARY})
 
 target_include_directories(${PROJECT_NAME}-shared
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
