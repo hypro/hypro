@@ -54,6 +54,7 @@ int main( int argc, char* argv[] ) {
 	// Read and build neural network
 	hypro::NNet<Number> nn_NNet = hypro::NNet<Number>( filename );
 	hypro::NeuralNetwork<Number> neuralNetwork = hypro::NeuralNetwork<Number>( nn_NNet );
+	// std::cout << "The NN network is: " << neuralNetwork << std::endl;
 
 	// Read input polytope
 	hypro::HPolytope<Number> inputPoly;
@@ -76,7 +77,9 @@ int main( int argc, char* argv[] ) {
 	// Transform input and safe polytopes to star set
 	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly );
 	hypro::Starset<Number> input_starset = NNtree.prepareInput( true );
+	std::cout << "Normalized input set: " << input_starset << std::endl;
 	std::vector<hypro::HPolytope<Number>> safe_set = NNtree.prepareSafeSet( true );
+	std::cout << "Normalized safe set: " << safe_set << std::endl;
 
 	// Apply the reachability analysis to the input star set and measure the required time
 	auto start = std::chrono::steady_clock::now();
@@ -85,14 +88,18 @@ int main( int argc, char* argv[] ) {
 	auto analysisTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
 	std::cout << "Total time elapsed during NN reachability analysis: " << analysisTime << " ms" << std::endl;
 
-	// Check if star set is safe, e.g. if it is contained in the safe zone
-	hypro::reachability::ReachabilityNode node = hypro::reachability::ReachabilityNode<Number>( input_starset, method, 0, 0 );
 
+	// Check if all output star set is safe, e.g. if it is contained in the safe zone
 	start = std::chrono::steady_clock::now();
-	bool isSafe = node.checkSafeRecursive( input_starset, 0, safe_set );
+	bool all_safe = true;
+	for(int k = 0; k < output.size(); ++k) {
+		hypro::reachability::ReachabilityNode node = hypro::reachability::ReachabilityNode<Number>( output[k], method, 0, 0 );
+		bool isCurrentSafe = node.checkSafeRecursive( output[k], 0, safe_set );
+		all_safe &= isCurrentSafe;
+	}
 	end = std::chrono::steady_clock::now();
 	std::cout << std::boolalpha;
-	std::cout << "The output is in the safe zone: " << isSafe << std::endl;
+	std::cout << "The output is in the safe zone: " << all_safe << std::endl;
 	auto safetyCheckTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
 	std::cout << "Total time elapsed during safety check: " << safetyCheckTime << " ms" << std::endl;
 

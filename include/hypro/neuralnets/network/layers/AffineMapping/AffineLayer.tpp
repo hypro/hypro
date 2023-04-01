@@ -57,17 +57,17 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
 	int N = inputSets.size();  // number of input stars
 
-	// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
-	// 	for ( int i = 0; i < N; ++i ) {
-	// 		Starset<Number> temp = inputSets[i].affineTransformation( mWeights, mBias );
-	// 		{
-	// #pragma omp critical
-	// 			result.push_back( temp );
-	// 		}
-	// 	}
+#pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
 	for ( int i = 0; i < N; ++i ) {
-		result.push_back( inputSets[i].affineTransformation( mWeights, mBias ) );
+		Starset<Number> temp = inputSets[i].affineTransformation( mWeights, mBias );
+		{
+#pragma omp critical
+			result.push_back( temp );
+		}
 	}
+	// for ( int i = 0; i < N; ++i ) {
+	// 	result.push_back( inputSets[i].affineTransformation( mWeights, mBias ) );
+	// }
 	return result;
 }
 
