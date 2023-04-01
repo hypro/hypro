@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * This file containts the implementation of support functions. It requires the concrete
  * implementation of set representations as support functions for a successful evaluation
  * as it implements the chain of operations created during reachability analysis.
@@ -54,7 +63,8 @@ struct trafoContent {
 		, parameters( std::make_shared<const lintrafoParameters<Number>>( A, b ) ) {
 		// Determine, if we need to create new parameters or if this matrix and vector pair has already been used (recursive).
 		// in case this transformation has already been performed, parameters will be updated.
-		auto trafoInDepth = _origin->hasTrafo( parameters, A, b, 0 );  // returns a pair of bool and depth in which the node was found -> this saves some comparisons later, as we know if the second value is 1, we can reduce.
+		// returns a pair of bool and depth in which the node was found -> this saves some comparisons later, as we know if the second value is 1, we can reduce.
+		auto trafoInDepth = _origin->hasTrafo( parameters, A, b, 0 );
 		assert( trafoInDepth.second != 1 || ( ( origin->type() == SF_TYPE::LINTRAFO ) && ( *origin->linearTrafoParameters()->parameters == *parameters ) && trafoInDepth.first ) );
 		if ( Setting::USE_LIN_TRANS_REDUCTION ) {
 			DEBUG( "hypro.representations.supportFunction", "Reduction of sf with depth: " << origin->depth() + 1 );
@@ -71,11 +81,12 @@ struct trafoContent {
 				if ( successiveTransformations == unsigned( carl::pow( 2, parameters->power ) - 1 ) ) {
 					TRACE( "hypro.representations.supportFunction", "Update origin pointer as a result of lintrafo reduction." );
 					reduced = true;
+					// update exponent
 					currentExponent = currentExponent * ( carl::pow( 2, parameters->power ) );
+					// move pointer
 					for ( std::size_t i = 0; i < unsigned( carl::pow( 2, parameters->power ) - 1 ); i++ ) {
 						origin = origin->linearTrafoParameters()->origin;
 					}
-
 					// update information whether another trafo follows/is the origin.
 					// TODO: If the next operation is not a linTrafo we can directly quit.
 					trafoInDepth = origin->hasTrafo( parameters, A, b, 0 );
@@ -89,21 +100,6 @@ struct trafoContent {
 	}
 
 	std::size_t originCount() const { return 1; }
-
-	std::pair<matrix_t<Number>, vector_t<Number>> reduceLinTrans( const matrix_t<Number>& _a, const vector_t<Number>& _b, std::size_t _power ) {
-		std::size_t powerOfTwo = carl::pow( 2, _power );
-		// first compute the new b
-		vector_t<Number> bTrans = _b;
-		matrix_t<Number> aTrans = _a;
-		for ( std::size_t i = 1; i < powerOfTwo; i++ ) {
-			bTrans = _a * bTrans + _b;
-		}
-		// now compute a^i efficiently
-		for ( std::size_t i = 0; i < _power; i++ ) {
-			aTrans = aTrans * aTrans;
-		}
-		return std::make_pair( aTrans, bTrans );
-	}
 };
 
 template <typename Number, typename Setting>
@@ -169,8 +165,8 @@ class SupportFunctionContent : private GeometricObjectBase {
 	friend trafoContent<Number, Setting>;
 
 	SF_TYPE mType = SF_TYPE::NONE;
-	unsigned mDepth;
-	unsigned mOperationCount;
+	unsigned mDepth = 0;
+	unsigned mOperationCount = 0;
 	std::size_t mDimension;
 	bool mContainsProjection;
 	union {
@@ -662,6 +658,7 @@ class SupportFunctionContent : private GeometricObjectBase {
 		}
 	}
 
+	/// returns a pair of bool and depth in which the transformation according to A and b was first found
 	std::pair<bool, std::size_t> hasTrafo( std::shared_ptr<const lintrafoParameters<Number>>& resNode, const matrix_t<Number>& A, const vector_t<Number>& b, std::size_t depth ) const {
 		switch ( mType ) {
 			case SF_TYPE::SUM: {

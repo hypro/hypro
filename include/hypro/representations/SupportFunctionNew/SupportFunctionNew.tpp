@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 
 #include "SupportFunctionNew.h"
@@ -191,7 +200,7 @@ void SupportFunctionNewT<Number, Converter, Setting>::traverse(
 		return Parameters<Dummy>( Dummy() );
 	};
 	Parameters<Dummy> noInitParams = Parameters<Dummy>( Dummy() );
-	traverse( std::move( tNotVoid ), std::move( cNotVoid ), std::move( aNotVoid ), std::forward<Parameters<Dummy>>( noInitParams ) );
+	traverse( std::move( tNotVoid ), std::move( cNotVoid ), std::move( aNotVoid ), noInitParams );
 }
 
 // When Param type = void, but Result type not
@@ -203,19 +212,19 @@ Result SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	  std::function<Result( RootGrowNode<Number, Converter, Setting>*, std::vector<Result>& )>&& aggregate ) const {
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, Parameters<Dummy>& )> tNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, Parameters<Dummy>& ) -> Parameters<Dummy> {
-		transform( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		transform( n );
 		return Parameters<Dummy>( Dummy() );
 	};
 	std::function<Result( RootGrowNode<Number, Converter, Setting>*, Parameters<Dummy>& )> cNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, Parameters<Dummy>& ) -> Result {
-		return compute( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ) );
+		return compute( n );
 	};
 	std::function<Result( RootGrowNode<Number, Converter, Setting>*, std::vector<Result>&, Parameters<Dummy>& )> aWithParams =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, std::vector<Result>& v, Parameters<Dummy>& ) -> Result {
-		return aggregate( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ), std::forward<std::vector<Result>&>( v ) );
+		return aggregate( n, v );
 	};
 	Parameters<Dummy> noInitParams = Parameters<Dummy>( Dummy() );
-	return traverse( std::move( tNotVoid ), std::move( cNotVoid ), std::move( aWithParams ), std::forward<Parameters<Dummy>>( noInitParams ) );
+	return traverse( std::move( tNotVoid ), std::move( cNotVoid ), std::move( aWithParams ), std::move( noInitParams ) );
 }
 
 // When Result type = void, but Param type not
@@ -228,15 +237,15 @@ void SupportFunctionNewT<Number, Converter, Setting>::traverse(
 	  Parameters<Rargs...>&& initParams ) const {
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, Parameters<Rargs...>& )> cNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, Parameters<Rargs...>& p ) -> Parameters<Dummy> {
-		compute( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ), std::forward<Parameters<Rargs...>>( p ) );
+		compute( n, p );
 		return Parameters<Dummy>( Dummy() );
 	};
 	std::function<Parameters<Dummy>( RootGrowNode<Number, Converter, Setting>*, std::vector<Parameters<Dummy>>&, Parameters<Rargs...>& )> aNotVoid =
 		  [&]( RootGrowNode<Number, Converter, Setting>* n, std::vector<Parameters<Dummy>>& v, Parameters<Rargs...>& p ) -> Parameters<Dummy> {
-		aggregate( std::forward<RootGrowNode<Number, Converter, Setting>*>( n ), std::forward<Parameters<Rargs...>>( p ) );
+		aggregate( n, p );
 		return Parameters<Dummy>( Dummy() );
 	};
-	traverse( std::move( transform ), std::move( cNotVoid ), std::move( aNotVoid ), std::forward<Parameters<Rargs...>>( initParams ) );
+	traverse( std::move( transform ), std::move( cNotVoid ), std::move( aNotVoid ), initParams );
 }
 
 // Actual traverse function. Result type and Param type not void

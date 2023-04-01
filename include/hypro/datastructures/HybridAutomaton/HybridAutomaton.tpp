@@ -88,7 +88,7 @@ HybridAutomaton<Number>& HybridAutomaton<Number>::operator=( const HybridAutomat
 
 // Move Assignment
 template <typename Number>
-HybridAutomaton<Number>& HybridAutomaton<Number>::operator=( HybridAutomaton<Number>&& rhs ) {
+HybridAutomaton<Number>& HybridAutomaton<Number>::operator=( HybridAutomaton<Number>&& rhs ) noexcept {
 	if ( this != &rhs ) {
 #ifndef NDEBUG
 		std::size_t oldLocationSize = rhs.getLocations().size();
