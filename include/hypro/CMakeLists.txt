@@ -16,6 +16,7 @@ target_include_directories(${PROJECT_NAME}-objects
         $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
         )
 
+find_package(Protobuf REQUIRED)
 ########################################################################################
 # Create static and shared libraries
 
