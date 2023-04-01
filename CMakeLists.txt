@@ -33,6 +33,7 @@ include(hypromacros)
 
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
+option(HYPRO_CICD "Set to true to indicate build on CI/CD runner where certain commands do not work." OFF)
 option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" OFF)
@@ -274,8 +275,11 @@ install(TARGETS ${PROJECT_NAME}-shared
         COMPONENT ${PROJECT_NAME}_Development
         )
 
+if (NOT HYPRO_CICD)
+    # the ping command does not work on github actions https://github.com/actions/runner-images/issues/1519
+    include(checkConnection)
+endif ()
 
-include(checkConnection)
 add_subdirectory(resources)
 # Create config.h by adding cmake defines dependent on option switches
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/flags.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/flags.h @ONLY)
