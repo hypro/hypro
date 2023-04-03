@@ -1,5 +1,9 @@
 image: ubuntu:22.04
 
+variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+
 build:
   stage: build
   # instead of calling g++ directly you can also use some build toolkit like make
@@ -41,10 +45,7 @@ test:
       junit: build/junit.xml
   
 sonarcloud:
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  sonarcloud-check:
+  stage: build
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
