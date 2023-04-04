@@ -55,11 +55,11 @@ get-sonar-binaries:
 build:
   stage: build
   # install the necessary build tools when needed
-  before_script:
-     - apt update && apt -y install cmake
+  # before_script:
+  #    - apt update && apt -y install cmake
   script:
     # prepare the build tree
-    - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && make -j`nproc`
+    - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && make -j`nproc` && cd ..
     # - cmake -S . -B build
     # run the build inside the build wrapper
     - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release
