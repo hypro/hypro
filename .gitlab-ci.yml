@@ -73,7 +73,7 @@ build:
     paths:
       - build-wrapper/
       - sonar-scanner/
-      - "${BUILD_WRAPPER_OUT_DIR}"/
+      - "${BUILD_WRAPPER_OUT_DIR}/"
       - build/
       
 
