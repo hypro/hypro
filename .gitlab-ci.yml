@@ -1,5 +1,4 @@
-image: ubuntu:22.04
-
+image: gcc
 
 variables:
 
