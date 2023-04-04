@@ -1,9 +1,9 @@
-image: gcc
+image: ubuntu:22.04
 
 variables:
 
   SONAR_SERVER_URL: https://sonarcloud.io
-  SONAR_SCANNER_VERSION: 4.8 
+  SONAR_SCANNER_VERSION: 4.6.1.2450  
   BUILD_WRAPPER_OUT_DIR: bw-output # Directory where build-wrapper output will be placed
   
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -86,7 +86,7 @@ sonarqube-check:
       - "${BUILD_WRAPPER_OUT_DIR}"
       - build/
   script:
-    - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" --define sonar.cfamily.build-wrapper-output="${BUILD_WRAPPER_OUT_DIR}" -Dsonar.token="${SONAR_TOKEN}"
+    - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
   # only:
   #   - merge_requests
   #   - main
