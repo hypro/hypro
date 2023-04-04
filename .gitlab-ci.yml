@@ -3,9 +3,9 @@ image: ubuntu:22.04
 
 variables:
 
-  SONAR_SERVER_URL: https://sonarcloud.io
-  SONAR_SCANNER_VERSION: 4.6.1.2450  
-  BUILD_WRAPPER_OUT_DIR: bw-output # Directory where build-wrapper output will be placed
+  # SONAR_SERVER_URL: https://sonarcloud.io
+  # SONAR_SCANNER_VERSION: 4.6.1.2450  
+  # BUILD_WRAPPER_OUT_DIR: bw-output # Directory where build-wrapper output will be placed
   
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
   GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
@@ -63,7 +63,7 @@ build:
     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && make -j`nproc` && cd ..
     # - cmake -S . -B build
     # run the build inside the build wrapper
-    - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release
+    - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release 
   artifacts:
     paths:
       - build/sonar_scanner_example
@@ -73,8 +73,8 @@ build:
     paths:
       - build-wrapper/
       - sonar-scanner/
-      - "${BUILD_WRAPPER_OUT_DIR}"
-      - carl/
+      - "${BUILD_WRAPPER_OUT_DIR}"/
+      - build/
       
 
 sonarqube-check:
@@ -85,8 +85,9 @@ sonarqube-check:
     paths:
       - sonar-scanner/
       - "${BUILD_WRAPPER_OUT_DIR}"
+      - build/
   script:
-    - sonar-scanner/bin/sonar-scanner --define sonar.host.url="${SONAR_SERVER_URL}" --define sonar.cfamily.build-wrapper-output="${BUILD_WRAPPER_OUT_DIR}"
+    - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" --define sonar.cfamily.build-wrapper-output="${BUILD_WRAPPER_OUT_DIR}" -Dsonar.token="${SONAR_TOKEN}"
   # only:
   #   - merge_requests
   #   - main
