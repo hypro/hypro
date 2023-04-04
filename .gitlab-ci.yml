@@ -35,7 +35,7 @@ get-sonar-binaries:
     paths:
       - build-wrapper/ # to share the build-wrapper between jobs
       - sonar-scanner/ # to share the sonar-scanner between jobs
-      - carl/
+
   # artifacts:
   #   paths:
   #     - .
