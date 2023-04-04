@@ -5,7 +5,7 @@ variables:
 
   SONAR_SERVER_URL: https://sonarcloud.io
   SONAR_SCANNER_VERSION: 4.6.1.2450  
-  BUILD_WRAPPER_OUT_DIR: output # Directory where build-wrapper output will be placed
+  BUILD_WRAPPER_OUT_DIR: bw-output # Directory where build-wrapper output will be placed
   
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
   GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
