@@ -64,6 +64,7 @@ build:
     # - cmake -S . -B build
     # run the build inside the build wrapper
     - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release
+    - pwd && ls
   artifacts:
     paths:
       - build/sonar_scanner_example
@@ -74,6 +75,7 @@ build:
       - build-wrapper/
       - sonar-scanner/
       - "${BUILD_WRAPPER_OUT_DIR}"
+      -carl/
       
 
 sonarqube-check:
