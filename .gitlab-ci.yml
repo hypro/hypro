@@ -75,7 +75,7 @@ build:
       - build-wrapper/
       - sonar-scanner/
       - "${BUILD_WRAPPER_OUT_DIR}"
-      -carl/
+      - carl/
       
 
 sonarqube-check:
