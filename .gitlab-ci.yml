@@ -3,7 +3,7 @@ image: ubuntu:22.04
 
 variables:
 
-  SONAR_SERVER_URL: http://localhost:9000  
+  SONAR_SERVER_URL: https://example.com:9000
   SONAR_SCANNER_VERSION: 4.6.1.2450  
   BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
   
