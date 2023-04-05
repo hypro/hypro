@@ -295,5 +295,8 @@ endif ()
 # for serialization
 include(cereal.cmake)
 
+if (HYPRO_USE_PROTOBUF)
+    include(protobuf.cmake)
+endif ()
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)
