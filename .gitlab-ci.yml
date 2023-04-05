@@ -10,6 +10,12 @@ variables:
   GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
   # note that SONAR_TOKEN is transmitted to the environment through Gitlab CI
 
+stages:
+  - .pre
+  - build
+  - .post
+
+
 get-sonar-binaries:
   # this job download and unpacks the build-wrapper and the sonar-scanner
   # in this example it is done for every build.
@@ -34,6 +40,7 @@ get-sonar-binaries:
     paths:
       - build-wrapper/ # to share the build-wrapper between jobs
       - sonar-scanner/ # to share the sonar-scanner between jobs
+      - bw-output/
 
   # artifacts:
   #   paths:
