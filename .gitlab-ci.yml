@@ -13,7 +13,7 @@ variables:
 stages:
   - .pre
   - build
-  - .post
+  # - .post
 
 
 get-sonar-binaries:
@@ -65,10 +65,11 @@ build:
     - cd ../..
   script:
     # prepare the build tree
-    - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && make -j`nproc` && cd ..
+    - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && cd ..
     # - cmake -S . -B build
     # run the build inside the build wrapper
     - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release 
+    - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
     paths:
       - .
@@ -86,16 +87,16 @@ build:
       - build/
       
 
-sonarqube-check:
-  stage: .post
-  cache:
-    policy: pull
-    key: "${CI_COMMIT_SHORT_SHA}"
-    paths:
-      - sonar-scanner/
-      - build/
-  script:
-    - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
+# sonarqube-check:
+#   stage: .post
+#   cache:
+#     policy: pull
+#     key: "${CI_COMMIT_SHORT_SHA}"
+#     paths:
+#       - sonar-scanner/
+#       - build/
+#   script:
+    
   # only:
   #   - merge_requests
   #   - main
