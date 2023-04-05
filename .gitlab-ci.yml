@@ -13,7 +13,6 @@ variables:
 stages:
   - .pre
   - build
-  # - .post
 
 
 get-sonar-binaries:
@@ -41,15 +40,6 @@ get-sonar-binaries:
       - build-wrapper/ # to share the build-wrapper between jobs
       - sonar-scanner/ # to share the sonar-scanner between jobs
 
-  # artifacts:
-  #   paths:
-  #     - .
-  #   exclude:
-  #     - .git
-  #     - .git/**/*
-  #     - build/**/*.o
-
-
 build:
   stage: build
   # install the necessary build tools when needed
@@ -66,7 +56,6 @@ build:
   script:
     # prepare the build tree
     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && cd ..
-    # - cmake -S . -B build
     # run the build inside the build wrapper
     - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release 
     - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
@@ -85,81 +74,3 @@ build:
       - build-wrapper/
       - sonar-scanner/
       - build/
-      
-
-# sonarqube-check:
-#   stage: .post
-#   cache:
-#     policy: pull
-#     key: "${CI_COMMIT_SHORT_SHA}"
-#     paths:
-#       - sonar-scanner/
-#       - build/
-#   script:
-    
-  # only:
-  #   - merge_requests
-  #   - main
-  #   - develop
-
-
-
-
-
-
-
-# build:
-#   stage: build
-#   # instead of calling g++ directly you can also use some build toolkit like make
-#   # install the necessary build tools when needed
-#   before_script:
-#     - DEBIAN_FRONTEND=noninteractive apt-get update
-#     - DEBIAN_FRONTEND=noninteractive apt install -y gcc g++ cmake make git flex bison libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
-#     - git clone  --depth 1 --branch 22.12 https://github.com/ths-rwth/carl carl && cd carl
-#     - mkdir build && cd build && cmake .. -DUSE_LIBPOLY=OFF
-#     - make -j`nproc` carl-common
-#     - make -j`nproc` carl-arith
-#     - make -j`nproc` carl-logging
-#     - make -j`nproc` carl-formula
-#     - cd ../..
-#   script:
-#     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && make -j`nproc`
-#   cache:
-#     key: $CI_COMMIT_REF_SLUG
-#     paths:
-#       - carl/
-#   artifacts:
-#     paths:
-#       - .
-#     exclude:
-#       - .git
-#       - .git/**/*
-#       - build/**/*.o
-
-# sonarcloud:
-#   stage: build
-#   image:
-#     name: sonarsource/sonar-scanner-cli:latest
-#     entrypoint: [""]
-#   cache:
-#     key: "${CI_JOB_NAME}"
-#     paths:
-#       - .sonar/cache
-#   script:
-#     - sonar-scanner
-#   # rules:
-#   #     - if: $CI_COMMIT_REF_NAME == 'main' || $CI_PIPELINE_SOURCE == 'merge_request_event'
-
-
-#       # run tests using the binary built before
-# test:
-#   stage: test
-#   before_script:
-#     - DEBIAN_FRONTEND=noninteractive apt-get update
-#     - DEBIAN_FRONTEND=noninteractive apt install -y gcc g++ cmake make git flex bison libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr
-#   script:
-#     - ctest --test-dir build --output-junit junit.xml
-#   artifacts:
-#     reports:
-#       junit: build/junit.xml
-  
