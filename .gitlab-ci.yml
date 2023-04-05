@@ -40,7 +40,6 @@ get-sonar-binaries:
     paths:
       - build-wrapper/ # to share the build-wrapper between jobs
       - sonar-scanner/ # to share the sonar-scanner between jobs
-      - bw-output/
 
   # artifacts:
   #   paths:
@@ -72,14 +71,18 @@ build:
     - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release 
   artifacts:
     paths:
-      - build/sonar_scanner_example
+      - .
+    exclude:
+      - .git
+      - .git/**/*
+      - build/**/*.o
+
   cache:
     policy: pull-push
     key: "${CI_COMMIT_SHORT_SHA}"
     paths:
       - build-wrapper/
       - sonar-scanner/
-      - "${BUILD_WRAPPER_OUT_DIR}/"
       - build/
       
 
@@ -90,7 +93,6 @@ sonarqube-check:
     key: "${CI_COMMIT_SHORT_SHA}"
     paths:
       - sonar-scanner/
-      - "${BUILD_WRAPPER_OUT_DIR}"
       - build/
   script:
     - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
