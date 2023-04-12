@@ -54,7 +54,6 @@ int main( int argc, char* argv[] ) {
 	// Read and build neural network
 	hypro::NNet<Number> nn_NNet = hypro::NNet<Number>( filename );
 	hypro::NeuralNetwork<Number> neuralNetwork = hypro::NeuralNetwork<Number>( nn_NNet );
-	// std::cout << "The NN network is: " << neuralNetwork << std::endl;
 
 	// Read input polytope
 	hypro::HPolytope<Number> inputPoly;
@@ -92,7 +91,7 @@ int main( int argc, char* argv[] ) {
 	// Check if all output star set is safe, e.g. if it is contained in the safe zone
 	start = std::chrono::steady_clock::now();
 	bool all_safe = true;
-	for(int k = 0; k < output.size(); ++k) {
+	for(int k = 0; k < output.size(); k++) {
 		hypro::reachability::ReachabilityNode node = hypro::reachability::ReachabilityNode<Number>( output[k], method, 0, 0 );
 		bool isCurrentSafe = node.checkSafeRecursive( output[k], 0, safe_set );
 		all_safe &= isCurrentSafe;
@@ -104,5 +103,5 @@ int main( int argc, char* argv[] ) {
 	std::cout << "Total time elapsed during safety check: " << safetyCheckTime << " ms" << std::endl;
 
 	std::cout << "Total time of NN reachability analysis and safety check: " << analysisTime + safetyCheckTime << "ms" << std::endl;
-
+	std::cout << "Number of star set output: " << output.size() << std::endl;
 }
