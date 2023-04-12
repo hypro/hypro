@@ -1,5 +1,5 @@
 /**
-* @file HardTanh.h
+* @file LeakyReLU.h
 * @author Hana Masara <hana.masara@rwth-aachen.de>
 * @brief
 * @date 2022-12-07
