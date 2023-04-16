@@ -78,4 +78,3 @@ build:
     paths:
       - build-wrapper/
       - sonar-scanner/
-      - build/
