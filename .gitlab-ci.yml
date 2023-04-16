@@ -57,7 +57,12 @@ build:
     # prepare the build tree
     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && cd ..
     # run the build inside the build wrapper
-    - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release 
+    - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release
+    # execute tests - required to get coverage reports
+    - cd build && make test
+    # collect coverage and write it to coverage.xml, which will be collected by the scanner
+    - gcovr --sonarqube ../coverage.xml && cd ..
+    # run the scanner to collect and upload all information on static analysis and coverage
     - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
     paths:

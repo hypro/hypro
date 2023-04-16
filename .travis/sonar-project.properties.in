@@ -22,7 +22,7 @@ sonar.cfamily.threads=2
 sonar.sourceEncoding=UTF-8
 
 sonar.cfamily.build-wrapper-output=bw-output
+sonar.coverageReportPaths=coverage.xml
 #sonar.cfamily.gcov.reportsPath=${relBinaryDir}/hypro_coverage.info
 #sonar.cfamily.llvm-cov.reportPath=${PROJECTrelBinaryDir_BINARY_DIR}/hypro_coverage.info
 #sonar.cfamily.llvm-cov.reportPath=hypro_coverage.info
-
