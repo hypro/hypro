@@ -33,11 +33,6 @@ class StepFunctionLayer : public LayerBase<Number> {
 
   public:
 	/**
-	 * @brief Default constructor
-	 */
-	StepFunctionLayer();
-
-	/**
 	 * @brief Constructs a layer with the given size and index
 	 *
 	 * @param[in] layerSize The layer size
@@ -48,11 +43,6 @@ class StepFunctionLayer : public LayerBase<Number> {
 	 *
 	 */
 	StepFunctionLayer( unsigned short int layerSize, unsigned short int layerIndex, float value = 0, float minValue = 0, float maxValue = 1 );
-
-	/**
-	 * @brief Default destructor
-	 */
-	~StepFunctionLayer();
 
 	/**
 	 * @brief The type of the layer in the form of an enum member

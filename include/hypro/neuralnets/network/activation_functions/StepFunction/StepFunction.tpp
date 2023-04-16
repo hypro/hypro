@@ -42,12 +42,13 @@ std::vector<hypro::Starset<Number>> StepFunction<Number>::exactStepFunction( int
 			continue;
 		}
 
+		// Split the star input into the part that is greater than step value
 		hypro::vector_t<Number> center_1 = center;
 		hypro::matrix_t<Number> basis_1 = basis;
 		hypro::HPolytope<Number> polytope_1 = polytope;
 
 		hypro::vector_t<Number> constraint_1 = basis_1.row( i ) * ( -1 );
-		hypro::Halfspace<Number> pos_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_1 ), center_1[i] );
+		hypro::Halfspace<Number> pos_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_1 ), center_1[i] - value );
 		polytope_1 = polytope_1.intersectHalfspace( pos_1 );
 
 		hypro::matrix_t<Number> transformationMatrix_1 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
@@ -56,13 +57,13 @@ std::vector<hypro::Starset<Number>> StepFunction<Number>::exactStepFunction( int
 		center_1( i ) = maxValue;
 		hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
 
-		// x_i < 0
+		// Split the star input into the part that is less than step value
 		hypro::vector_t<Number> center_2 = center;
 		hypro::matrix_t<Number> basis_2 = basis;
 		hypro::HPolytope<Number> polytope_2 = polytope;
 
 		hypro::vector_t<Number> constraint_2 = basis_2.row( i );
-		hypro::Halfspace<Number> neg_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_2 ), -center_2[i] );
+		hypro::Halfspace<Number> neg_1 = hypro::Halfspace<Number>( hypro::Point<Number>( constraint_2 ), value - center_2[i] );
 		polytope_2 = polytope_2.intersectHalfspace( neg_1 );
 
 		hypro::matrix_t<Number> transformationMatrix_2 = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
