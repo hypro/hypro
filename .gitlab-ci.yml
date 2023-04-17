@@ -3,7 +3,7 @@ image: ubuntu:22.04
 variables:
 
   SONAR_SERVER_URL: https://sonarcloud.io
-  SONAR_SCANNER_VERSION: 4.6.1.2450  
+  SONAR_SCANNER_VERSION: 4.6.1.2450
   BUILD_WRAPPER_OUT_DIR: bw-output # Directory where build-wrapper output will be placed
   
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -27,10 +27,10 @@ get-sonar-binaries:
   script:
     # Download sonar-scanner
     - curl -sSLo sonar-scanner.zip "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip"
-    - unzip -o sonar-scanner.zip 
+    - unzip -o sonar-scanner.zip
     - mv sonar-scanner-${SONAR_SCANNER_VERSION}-linux sonar-scanner
     # Download build-wrapper
-    - curl -sSLo build-wrapper.zip "${SONAR_SERVER_URL}/static/cpp/build-wrapper-linux-x86.zip" 
+    - curl -sSLo build-wrapper.zip "${SONAR_SERVER_URL}/static/cpp/build-wrapper-linux-x86.zip"
     - unzip -o build-wrapper.zip
     - mv build-wrapper-linux-x86 build-wrapper
   cache:
@@ -61,7 +61,7 @@ build:
     # execute tests - required to get coverage reports
     - cd build && make test
     # collect coverage and write it to coverage.xml, which will be collected by the scanner
-    - gcovr --sonarqube ../coverage.xml && cd ..
+    - gcovr -r ../ --sonarqube ../coverage.xml && cd ..
     # run the scanner to collect and upload all information on static analysis and coverage
     - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
