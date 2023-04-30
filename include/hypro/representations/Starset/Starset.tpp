@@ -99,6 +99,16 @@ bool StarsetT<Number, Converter, Setting>::empty() const {
 }
 
 template <typename Number, typename Converter, typename Setting>
+void StarsetT<Number, Converter, Setting>::setCenter( const vector_t<Number>& center ) {
+	mCenter = center;
+}
+
+template <typename Number, typename Converter, typename Setting>
+void StarsetT<Number, Converter, Setting>::setGenerators( const matrix_t<Number>& generators ) {
+	mGenerator = generators;
+}
+
+template <typename Number, typename Converter, typename Setting>
 Number StarsetT<Number, Converter, Setting>::supremum() const {
 }
 

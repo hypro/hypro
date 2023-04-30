@@ -1,10 +1,12 @@
+#include "hypro/datastructures/Point.h"
 #include "hypro/neuralnets/network/NeuralNetwork.h"
 #include "hypro/neuralnets/reachability/ReachNN.h"
 #include "hypro/neuralnets/reachability_tree/ReachabilityTree.h"
 #include "hypro/parser/neuralnets/nnet/NNet.h"
-#include "hypro/representations/GeometricObjectBase.h"
-// #include "hypro/representations/Starset/Starset.h"
 #include "hypro/parser/representations/parseHPolytope.tpp"
+#include "hypro/representations/GeometricObjectBase.h"
+#include "hypro/representations/Starset/Starset.h"
+#include "hypro/representations/sampling/sampling.h"
 
 #include <chrono>
 #include <iomanip>
@@ -54,6 +56,7 @@ int main( int argc, char* argv[] ) {
 	hypro::NeuralNetwork<Number> neuralNetwork = hypro::NeuralNetwork<Number>( nn_NNet );
 
 	/*
+	// Thermostat verification using an input temperature and control mode
 	// read an input vector
 	auto inputVector = hypro::vector_t<Number>(2);
 	Number inputTemp;
@@ -86,8 +89,9 @@ int main( int argc, char* argv[] ) {
 	} else {
 		std::cout << "ON" << std::endl;
 	}
-
 	*/
+
+	// Thermostat verification using an input poly which represent temperature and control mode
 	// read an input set
 	hypro::HPolytope<Number> inputPoly;
 	if ( argc > 3 ) {
@@ -97,22 +101,63 @@ int main( int argc, char* argv[] ) {
 	std::cout << "The input polytope:\n"
 			  << inputPoly << std::endl;
 
+	// apply forwardpass method + measure the time
 	auto start = std::chrono::steady_clock::now();
 	std::vector<hypro::Starset<Number>> output = neuralNetwork.forwardPass( hypro::Starset<Number>( inputPoly ), method, false );
 	auto end = std::chrono::steady_clock::now();
 	auto analysisTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
 	std::cout << "Total time elapsed during NN reachability analysis: " << analysisTime << " ms" << std::endl;
 
-	std::shared_ptr<hypro::LayerBase<Number>> layer = std::make_shared<hypro::StepFunctionLayer<Number>>( 2, 0, 7.5, 2, 15 );
+	// apply stepFunction to the output of forwardPass
+	std::shared_ptr<hypro::LayerBase<Number>> layer = std::make_shared<hypro::StepFunctionLayer<Number>>( 1, 0, 7.5, 0, 15 );
 	auto result = layer->forwardPass( output, method, false );
 
-	for ( const auto& o : output ) {
-		std::cout << "Output before stepfunction: " << o << std::endl;
-		std::cout << "Vertices before stepfunction: " << o.vertices() << std::endl;
-	}
-
 	for ( const auto& o : result ) {
-		std::cout << "Output after stepfunction: " << o << std::endl;
 		std::cout << "Vertices after stepfunction: " << o.vertices() << std::endl;
 	}
+
+	// counter example
+	std::vector<hypro::Starset<Number>> counterSet;
+	auto inputCenter = hypro::Starset<Number>( inputPoly ).center();
+	auto inputBasis = hypro::Starset<Number>( inputPoly ).generator();
+	for ( auto& o : result ) {
+		if ( ( o.vertices().size() == 1 ) && ( o.vertices()[0].coordinate( 0 ) == 15 ) ) {
+			o.setCenter( inputCenter );
+			o.setGenerators( inputBasis );
+			counterSet.push_back( o );
+		}
+	}
+
+	for ( int i = 0; i < counterSet.size(); i++ ) {
+		auto pointSet = uniform_sampling( counterSet[i], 1 );
+		if (pointSet.empty()) continue;
+		auto point = *pointSet.begin();
+		auto pointVector = hypro::vector_t<Number>( 2 );
+		pointVector << point.coordinate( 0 ), point.coordinate( 1 );
+
+		hypro::vector_t<Number> counterExample = neuralNetwork.forwardPass( pointVector );
+		std::cout << "Value before stepfunction: " << counterExample << std::endl;
+
+		auto resultSF = layer->forwardPass( counterExample );
+
+		std::cout << "Counter example value " << i << ": " << pointVector << std::endl;
+		std::cout << "Output value " << i << ": " << resultSF << std::endl;
+	}
+
+	/*
+	// take only one counter example of the counterSet
+	std::set<hypro::Point<Number>> x = uniform_sampling( counterSet.at( 0 ), 1 );
+
+	auto point = *x.begin();
+	auto inputVector = hypro::vector_t<Number>( 2 );
+	inputVector << point.coordinate( 0 ), point.coordinate( 1 );
+
+	hypro::vector_t<Number> counterExample = neuralNetwork.forwardPass( inputVector );
+	std::cout << "Value before stepfunction: " << counterOutput << std::endl;
+
+	std::shared_ptr<hypro::LayerBase<Number>> layerSF = std::make_shared<hypro::StepFunctionLayer<Number>>( 1, 0, 7.5, 0, 15 );
+	auto resultSF = layer->forwardPass( counterOutput );
+
+	std::cout << "Output value: " << result SF<< std::endl;
+	 */
 }
