@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -15,6 +15,13 @@
 namespace hypro {
 
     namespace detail {
+        /**
+         * Applies heuristics to quickly identify points that are definitely vertices.
+         * @details Currently, this function searches for extremal points per dimension.
+         * @tparam Number The used number type
+         * @param points The set of points to be searched
+         * @param nonRedundantVertices A reference to a set of indices which identify definitive vertices
+         */
         template<typename Number>
         void heuristicSearchNonredundantPoints(const std::vector<Point<Number>> &points,
                                                std::set<std::size_t> &nonRedundantVertices) {
@@ -52,8 +59,17 @@ namespace hypro {
                               [&nonRedundantVertices](auto idx) { nonRedundantVertices.insert(idx); });
             }
         }
-    }
+    } // namespace detail
 
+    /**
+     * Searches and removes redundant points in the passed point set.
+     * @details A point is redundant, if it is not an extreme point/vertex. This property can be checked by validating,
+     * whether said point can be represented as a convex combination of all other points. If this is the case, the point
+     * is not a vertex.
+     * @tparam Number The used number type
+     * @param points The list of points to be checked for redundancy
+     * @return A list of points that is redundancy-free
+     */
     template<typename Number>
     std::vector<Point<Number>> removeRedundantPoints(const std::vector<Point<Number>> &points) {
         if (!points.empty()) {
