@@ -9,6 +9,11 @@ if (HYPRO_BENCHMARK)
     target_include_directories(benchmark_hyperoctree PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
     add_dependencies(benchmark_hyperoctree ${PROJECT_NAME}-resources)
 
+    add_executable(benchmark_redundant_points_heuristic benchmark_redundantPointHeuristics.cpp)
+    target_link_libraries(benchmark_redundant_points_heuristic ${PROJECT_NAME}-shared ${GBENCHMARK_LIBRARIES})
+    target_include_directories(benchmark_redundant_points_heuristic PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
+    add_dependencies(benchmark_redundant_points_heuristic ${PROJECT_NAME}-resources)
+
     add_executable(benchmark_template_linear_optimization benchmark_template_linear_optimization.cpp)
     target_link_libraries(benchmark_template_linear_optimization ${PROJECT_NAME}-shared ${GBENCHMARK_LIBRARIES})
     target_include_directories(benchmark_template_linear_optimization PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
