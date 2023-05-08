@@ -24,10 +24,10 @@ namespace hypro {
         void heuristicSearchNonredundantPoints(const std::vector<Point<Number>> &points,
                                                std::set<std::size_t> &nonRedundantVertices) {
             // find extremal points per dimension
-            std::vector<std::vector<std::size_t>> minIndices{points.front().dimension(),
-                                                             std::vector<std::size_t>{1, 1}};
-            std::vector<std::vector<std::size_t>> maxIndices{points.front().dimension(),
-                                                             std::vector<std::size_t>{1, 1}};
+            std::vector<std::vector<std::size_t>> minIndices(points.front().dimension(),
+                                                             std::vector<std::size_t>(1, 0));
+            std::vector<std::vector<std::size_t>> maxIndices(points.front().dimension(),
+                                                             std::vector<std::size_t>(1, 0));
             std::size_t dim = points.front().dimension();
             for (std::size_t pointIndex = 1; pointIndex < points.size(); ++pointIndex) {
                 for (std::size_t d = 0; d < dim; ++d) {
