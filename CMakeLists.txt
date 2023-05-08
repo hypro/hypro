@@ -82,7 +82,7 @@ if (HYPRO_BUILD_OFFLINE)
 endif ()
 
 file(RELATIVE_PATH relBinaryDir ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR})
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties.in ${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties.in ${CMAKE_CURRENT_SOURCE_DIR}/sonar-project.properties)
 
 ###########################################################################################
 #### EXPORT SETTINGS

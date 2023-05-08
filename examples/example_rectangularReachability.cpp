@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * @brief Example file which shows how to instanciate a concrete worker out of
  * context handlers.
@@ -10,7 +19,8 @@
 int main() {
 	// typedefs
 	using Number = double;
-	using State = hypro::State<Number, hypro::CarlPolytope<Number>>;
+	using Representation = hypro::HPolytope<Number>;
+	using State = hypro::State<Number, Representation>;
 	using Matrix = hypro::matrix_t<Number>;
 	using Vector = hypro::vector_t<Number>;
 
@@ -29,16 +39,15 @@ int main() {
 	hypro::HybridAutomaton<Number> ha;
 
 	// create locations with rectangular flow
-	hypro::Location<Number> loc1;
+	hypro::Location<Number>* loc1 = ha.createLocation();
 	hypro::rectangularFlow<Number> flow( dynamics );
-	loc1.setRectangularFlow( flow );
-	hypro::Location<Number> loc2;
+	loc1->setRectangularFlow( flow );
+	hypro::Location<Number>* loc2 = ha.createLocation();
 	hypro::rectangularFlow<Number> flow2( dynamics2 );
-	loc2.setRectangularFlow( flow2 );
+	loc2->setRectangularFlow( flow2 );
 
 	// create transitions
-	std::unique_ptr<hypro::Transition<Number>> trans =
-		  std::make_unique<hypro::Transition<Number>>();
+	hypro::Transition<hypro::Location<Number>>* trans = loc1->createTransition( loc2 );
 	// guard
 	hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>( 4, 2 );
 	guardConstraints << 1, 0, -1, 0, 0, 0, 0, 0;
@@ -64,40 +73,23 @@ int main() {
 
 	// setup transition
 	trans->setGuard( guard );
-	trans->setSource( &loc1 );
-	trans->setTarget( &loc2 );
 	trans->setReset( reset );
-
-	// add defined transition to location
-	loc1.addTransition( std::move( trans ) );
-
-	// add location
-	std::map<const hypro::Location<Number>*, std::size_t> locationMapping;
-	ha.addLocation( loc1 );
-	locationMapping[&loc1] = ha.getLocations().size() - 1;
-	ha.addLocation( loc2 );
-	locationMapping[&loc2] = ha.getLocations().size() - 1;
 
 	// initial set is a unit box
 	hypro::matrix_t<Number> constraints = hypro::matrix_t<Number>( 4, 2 );
 	constraints << 1, 0, -1, 0, 0, 1, 0, -1;
 	hypro::vector_t<Number> constants = hypro::vector_t<Number>( 4 );
 	constants << 1, 1, 1, 1;
-	// hypro::matrix_t<Number> constraints2 = hypro::matrix_t<Number>( 4, 2 );
-	// constraints2 << 1, 0, -1, 0, 0, 1, 0, -1;
-	// hypro::vector_t<Number> constants2 = hypro::vector_t<Number>( 4 );
-	// constants2 << 2, 2, 2, 2;
 
 	// create and add initial state
-	ha.addInitialState( ha.getLocations()[locationMapping[&loc1]], hypro::Condition<Number>( constraints, constants ) );
-	// ha.addInitialState( ha.getLocations()[locationMapping[&loc2]], hypro::Condition<Number>( constraints2, constants2 ) );
+	ha.addInitialState( loc1, hypro::Condition<Number>( constraints, constants ) );
 
 	// setup local bad state
 	hypro::matrix_t<Number> localBadConstraints = hypro::matrix_t<Number>( 4, 2 );
 	localBadConstraints << 1, 0, 0, 0, 0, 0, 0, 0;
 	hypro::vector_t<Number> localBadConstants = hypro::vector_t<Number>( 4 );
 	localBadConstants << -10, 0, 0, 0;
-	ha.addLocalBadStates( ha.getLocations()[locationMapping[&loc2]], hypro::Condition<Number>( localBadConstraints, localBadConstants ) );
+	ha.addLocalBadStates( loc2, hypro::Condition<Number>( localBadConstraints, localBadConstants ) );
 
 	// setup global bad state
 	hypro::matrix_t<Number> globalBadConstraints = hypro::matrix_t<Number>( 4, 2 );
@@ -110,12 +102,13 @@ int main() {
 
 	// create settings
 	std::vector<hypro::AnalysisParameters> strategy;
-	strategy.emplace_back( hypro::AnalysisParameters{ mpq_class( 1 ) / mpq_class( 100 ), hypro::AGG_SETTING::AGG, -1, hypro::representation_name::carl_polytope, 0, false, 0, hypro::REACH_SETTING::BACKWARD } );
+	strategy.emplace_back( hypro::AnalysisParameters{ mpq_class( 1 ) / mpq_class( 100 ), hypro::AGG_SETTING::AGG, -1, hypro::representation_name::carl_polytope, 0, false, hypro::REACH_SETTING::FORWARD } );
 	hypro::Settings settings;
 	settings.setStrategy( strategy );
 
 	// call to analysis core
-	hypro::RectangularAnalyzer<State> analyzer{ ha, settings };
+	auto roots = hypro::makeRoots<Representation>( ha );
+	hypro::RectangularAnalyzer<Representation, hypro::HybridAutomaton<Number>> analyzer{ ha, settings, roots };
 	auto result = analyzer.run();
 
 	if ( result == hypro::REACHABILITY_RESULT::UNKNOWN ) {
