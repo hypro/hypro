@@ -30,4 +30,4 @@ set(GBENCHMARK_LIBRARIES "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}benchm
         "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}benchmark_main${CMAKE_STATIC_LIBRARY_SUFFIX}"
         PARENT_SCOPE)
 
-add_dependencies(hypro_resources google-benchmark)
+add_dependencies(${PROJECT_NAME}-resources google-benchmark)

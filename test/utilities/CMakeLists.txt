@@ -14,7 +14,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runUtilityTests ${utility_test_sources})
 
-    add_dependencies(runUtilityTests hypro_resources)
+    add_dependencies(runUtilityTests ${PROJECT_NAME}-resources)
     target_include_directories(runUtilityTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/
             ${cereal_INCLUDE_DIR})
 

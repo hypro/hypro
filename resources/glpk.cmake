@@ -36,7 +36,7 @@ set(GLPK_LIBRARIES "${CMAKE_BINARY_DIR}/resources/src/glpk-build/lib/${CMAKE_FIN
 add_imported_library(GLPK STATIC "${GLPK_LIBRARIES}" "${GLPK_INCLUDE_DIR}")
 
 add_dependencies(GLPK_STATIC glpk)
-add_dependencies(hypro_resources GLPK_STATIC)
+add_dependencies(${PROJECT_NAME}-resources GLPK_STATIC)
 
 target_link_libraries(${PROJECT_NAME}-objects PUBLIC GLPK_STATIC)
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC GLPK_STATIC)

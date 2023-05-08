@@ -150,7 +150,7 @@ endif ()
 add_subdirectory(src)
 
 add_library(${PROJECT_NAME}-objects OBJECT ${${PROJECT_NAME}_sources})
-add_dependencies(${PROJECT_NAME}-objects hypro_resources)
+add_dependencies(${PROJECT_NAME}-objects ${PROJECT_NAME}-resources)
 build_target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC GLPK_STATIC ANTLR4_SHARED clp_STATIC coinUtils_STATIC z3_SHARED)
 target_include_directories(${PROJECT_NAME}-objects
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
@@ -207,6 +207,14 @@ target_include_directories(${PROJECT_NAME}-shared
         $<INSTALL_INTERFACE:include>
         )
 
+add_library(${PROJECT_NAME}-parser ${${PROJECT_NAME}_parser_sources})
+add_dependencies(${PROJECT_NAME}-parser ${PROJECT_NAME}-resources ${PROJECT_NAME}-shared)
+target_include_directories(${PROJECT_NAME}-parser
+        PUBLIC
+        ${CMAKE_SOURCE_DIR}/include/hypro/parser/
+        )
+target_link_libraries(${PROJECT_NAME}-parser PUBLIC ${PROJECT_NAME}-shared)
+
 target_compile_features(${PROJECT_NAME}-objects PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-static PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-shared PUBLIC cxx_std_17)
@@ -234,7 +242,8 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set_target_properties(${PROJECT_NAME}-shared PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
     set_target_properties(${PROJECT_NAME}-static PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
 endif ()
-set(HYPRO_TARGETS "${PROJECT_NAME}-shared" "${PROJECT_NAME}-static" CACHE STRING INTERNAL FORCE)
+set(HYPRO_TARGETS "${PROJECT_NAME}-shared" "${PROJECT_NAME}-static" "${PROJECT_NAME}-parser" CACHE STRING INTERNAL
+        FORCE)
 
 
 # Options for static linking

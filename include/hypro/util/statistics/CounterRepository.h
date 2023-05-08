@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -30,7 +30,7 @@ namespace statistics {
  */
 class CounterRepository {
   private:
-	using CounterMapType = std::map<std::string, OperationCounter*>;
+	using CounterMapType = std::map<std::string, std::unique_ptr<OperationCounter>>;
 
 	mutable std::mutex mtx;		///< lock to enable mutable exclusive access to counters
 	CounterMapType counterMap;	///< stored counters
@@ -40,7 +40,7 @@ class CounterRepository {
 	void add( std::string name ) {
 		ScopedLock<std::mutex>( this->mtx );
 		if ( counterMap.find( name ) == counterMap.end() ) {
-			counterMap[name] = new OperationCounter();
+			counterMap.emplace( std::make_pair( name, std::make_unique<OperationCounter>() ) );
 		}
 	}
 
@@ -55,9 +55,9 @@ class CounterRepository {
 		ScopedLock<std::mutex>( this->mtx );
 		auto counterIt = counterMap.find( name );
 		if ( counterIt == counterMap.end() ) {
-			counterIt = counterMap.insert( std::make_pair( name, new OperationCounter() ) ).first;
+			counterIt = counterMap.emplace( std::make_pair( name, std::make_unique<OperationCounter>() ) ).first;
 		}
-		return *( counterIt->second );
+		return *( counterIt->second.get() );
 	}
 
 	/// returns number of stored counters
@@ -69,7 +69,7 @@ class CounterRepository {
 	/// outstream operator outputs all current counter values
 	friend std::ostream& operator<<( std::ostream& ostr, const CounterRepository& repo ) {
 		for ( const auto& counterPair : repo.counterMap ) {
-			ostr << counterPair.first << ": " << *counterPair.second << std::endl;
+			ostr << counterPair.first << ": " << *( counterPair.second.get() ) << std::endl;
 		}
 		return ostr;
 	}
@@ -77,4 +77,3 @@ class CounterRepository {
 
 }  // namespace statistics
 }  // namespace hypro
-

@@ -79,7 +79,7 @@ class Ridge {
 
 	vertexSet& rVertices() { return mVertices; }
 
-	vertexSet vertices() const { return mVertices; }
+	const vertexSet& vertices() const { return mVertices; }
 
 	std::vector<std::weak_ptr<Facet<Number>>>& rNeighbors() { return mNeighbors; }
 

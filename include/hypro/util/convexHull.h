@@ -90,9 +90,9 @@ static void initConvexHull( const std::vector<Point<Number>>& points, std::vecto
 			index++;
 		}
 
-		// inti facets
+		// init facets
 		for ( unsigned i = 0; i < dimension + 1; i++ ) {
-			facets.emplace_back( std::make_shared<Facet<Number>>( Facet<Number>() ) );
+			facets.emplace_back( std::make_shared<Facet<Number>>() );
 		}
 		for ( unsigned i = 0; i < dimension + 1; ++i ) {
 			std::vector<Point<Number>> points_for_facet;
@@ -129,14 +129,14 @@ static void pointsNotContainedInFacets( const std::vector<Point<Number>>& points
 	unassignedPoints.clear();
 	std::vector<Point<Number>> pointsInFacets;
 
-	for ( std::shared_ptr<Facet<Number>> facet : facets ) {
-		for ( Point<Number> p : facet->vertices() ) {
+	for ( const auto& facet : facets ) {
+		for ( const auto& p : facet->vertices() ) {
 			pointsInFacets.push_back( p );
 		}
 	}
 	// Stefan: pointsInFacets holds all generating points of the given facets.
 
-	for ( Point<Number> point : points ) {
+	for ( const auto& point : points ) {
 		if ( std::find( pointsInFacets.begin(), pointsInFacets.end(), point ) != pointsInFacets.end() ) {
 			assignedPoints.push_back( point );
 		} else {
@@ -156,8 +156,8 @@ static std::vector<std::shared_ptr<Facet<Number>>> getFacetsNeighbors( const std
 	std::vector<std::shared_ptr<Facet<Number>>> result;
 
 	if ( !facets.empty() ) {
-		for ( auto facet : facets ) {  // get 'all' neighbors
-			for ( auto neighbor : facet->neighbors() ) {
+		for ( const auto& facet : facets ) {  // get 'all' neighbors
+			for ( const auto& neighbor : facet->neighbors() ) {
 				if ( std::find( result.begin(), result.end(), neighbor ) == result.end() && std::find( facets.begin(), facets.end(), neighbor ) == facets.end() ) {
 					result.push_back( neighbor );  // insert if it's a new neighbor and it isn't one of the given facets
 				}
@@ -178,8 +178,8 @@ static std::vector<Ridge<Number>> getRidges( const std::vector<std::shared_ptr<F
 
 	if ( !facets.empty() ) {
 		std::vector<std::shared_ptr<Facet<Number>>> neighbors = getFacetsNeighbors( facets );
-		for ( auto facet : facets ) {
-			for ( auto neighbor : neighbors ) {
+		for ( const auto& facet : facets ) {
+			for ( const auto& neighbor : neighbors ) {
 				if ( facet->isNeighbor( neighbor ) ) {
 					Ridge<Number> newRidge( facet, neighbor );
 					result.push_back( newRidge );
@@ -192,13 +192,13 @@ static std::vector<Ridge<Number>> getRidges( const std::vector<std::shared_ptr<F
 }
 
 template <typename Number>
-static std::vector<Ridge<Number>> getRidges( std::shared_ptr<Facet<Number>> facet ) {
+static std::vector<Ridge<Number>> getRidges( const std::shared_ptr<Facet<Number>>& facet ) {
 	// std::cout << __func__ << std::endl;
 	std::vector<Ridge<Number>> result;
 
 	if ( !facet->empty() ) {
 		// std::cout << "_____________insde getRidges - Amount of neighbors is " << facet->neighbors().size() << std::endl;
-		for ( auto neighbor : facet->neighbors() ) {
+		for ( const auto& neighbor : facet->neighbors() ) {
 			// std::cout << "_____________insde getRidges - call of neighbor of " << facet->getNormal() << std::endl;
 
 			Ridge<Number> newRidge( facet, neighbor.lock() );
@@ -265,13 +265,13 @@ static void removeBorderFacets( std::vector<std::shared_ptr<Facet<Number>>>& fac
  * Checks if two facets are neighbors by determining the number of points they share
  */
 template <typename Number>
-static bool neighborCheck( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr<Facet<Number>> facet2 ) {
+static bool neighborCheck( const std::shared_ptr<Facet<Number>>& facet1, const std::shared_ptr<Facet<Number>>& facet2 ) {
 	// std::cout << __func__ << std::endl;
 	int checkValue = facet1->vertices().at( 0 ).dimension() - 1;  // number of points they have to share to be neighbors
 	int currentValue = 0;										  // number of points that are confirmed to be shared
 
-	for ( auto vertex1 : facet1->vertices() ) {
-		for ( auto vertex2 : facet2->vertices() ) {
+	for ( const auto& vertex1 : facet1->vertices() ) {
+		for ( const auto& vertex2 : facet2->vertices() ) {
 			if ( vertex1 == vertex2 ) {
 				currentValue++;
 			}
@@ -288,8 +288,8 @@ static bool neighborCheck( std::shared_ptr<Facet<Number>> facet1, std::shared_pt
 template <typename Number>
 static void determineNeighbors( std::vector<std::shared_ptr<Facet<Number>>>& facets ) {
 	// std::cout << __func__ << std::endl;
-	for ( auto facet : facets ) {
-		for ( auto facet2 : facets ) {
+	for ( auto& facet : facets ) {
+		for ( auto& facet2 : facets ) {
 			if ( neighborCheck( facet, facet2 ) ) {	 // check all pairs of new facets if they are neighbors
 				facet->addNeighbor( facet2 );
 				facet2->addNeighbor( facet );
@@ -304,9 +304,9 @@ static void determineNeighbors( std::vector<std::shared_ptr<Facet<Number>>>& fac
 template <typename Number>
 static Point<Number> findInsidePoint( const Ridge<Number>& ridge, const std::shared_ptr<Facet<Number>>& _facet ) {
 	// std::cout << __func__ << std::endl;
-	for ( Point<Number> point1 : _facet->vertices() ) {
+	for ( const Point<Number>& point1 : _facet->vertices() ) {
 		bool found = true;
-		for ( Point<Number> point2 : ridge.vertices() ) {
+		for ( const Point<Number>& point2 : ridge.vertices() ) {
 			if ( point1 == point2 ) {
 				found = false;
 				break;
@@ -329,8 +329,8 @@ static bool includeFacet( std::shared_ptr<Facet<Number>> facet1, std::shared_ptr
 		std::size_t checkValue = ( facet2->vertices().size() < facet1->vertices().size() ) ? facet2->vertices().size() : facet1->vertices().size();
 
 		std::size_t currentValue = 0;
-		for ( auto vertex1 : facet1->vertices() ) {
-			for ( auto vertex2 : facet2->vertices() ) {
+		for ( const auto& vertex1 : facet1->vertices() ) {
+			for ( const auto& vertex2 : facet2->vertices() ) {
 				if ( vertex1 == vertex2 ) {
 					currentValue++;
 				}
@@ -606,8 +606,8 @@ convexHull( const std::vector<Point<Number>>& pts ) {
 			}
 
 			// update outside sets of the new facets.
-			for ( auto facet : newFacets ) {
-				for ( auto point : unassignedPoints ) {
+			for ( const auto& facet : newFacets ) {
+				for ( const auto& point : unassignedPoints ) {
 					if ( facet->isAbove( point ) ) {
 						facet->addPointToOutsideSet( point );
 					}

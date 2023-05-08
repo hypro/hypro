@@ -35,4 +35,4 @@ add_imported_library(HYPRO_GTESTMAIN STATIC "${binary_dir}/lib/${CMAKE_FIND_LIBR
 set(GTEST_INCLUDE_DIR "${source_dir}/googletest/include" PARENT_SCOPE)
 set(GTEST_LIBRARIES "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${CMAKE_STATIC_LIBRARY_SUFFIX}" "${binary_dir}/lib/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${CMAKE_STATIC_LIBRARY_SUFFIX}" pthread dl PARENT_SCOPE)
 
-add_dependencies(hypro_resources googletest)
+add_dependencies(${PROJECT_NAME}-resources googletest)

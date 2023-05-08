@@ -18,7 +18,7 @@ ExternalProject_Get_Property(tinyxml binary_dir)
 
 add_imported_library(HYPRO_TINYXML STATIC "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}tinyxml2${CMAKE_STATIC_LIBRARY_SUFFIX}" "${source_dir}")
 
-add_dependencies(${PROJECT_NAME}_resources tinyxml)
+add_dependencies(${PROJECT_NAME}-resources tinyxml)
 
 target_link_libraries(${PROJECT_NAME}-objects INTERFACE HYPRO_TINYXML_STATIC)
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC $<BUILD_INTERFACE:HYPRO_TINYXML_STATIC>)
