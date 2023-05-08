@@ -15,6 +15,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             SupportFunctionTest.cpp
             #TaylorModelTest.cpp
             VPolytopeTest.cpp
+            VPolytopeUtilTest.cpp
             #ZonotopeTest.cpp
             SupportFunctionNewTest.cpp
             TemplatePolyhedronTest.cpp

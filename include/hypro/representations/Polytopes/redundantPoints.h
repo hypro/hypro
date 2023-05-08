@@ -10,8 +10,6 @@
 #include "../../types.h"
 #include "../../util/linearOptimization/Optimizer.h"
 
-#include <hypro/flags.h>
-
 namespace hypro {
 
     namespace detail {
@@ -70,7 +68,7 @@ namespace hypro {
      * @param points The list of points to be checked for redundancy
      * @return A list of points that is redundancy-free
      */
-    template<typename Number>
+    template<typename Number, bool useHeuristics = true>
     std::vector<Point<Number>> removeRedundantPoints(const std::vector<Point<Number>> &points) {
         if (!points.empty()) {
             // Find redundant vertices by checking whether a vertex can be represented as convex combination of the other vertices
@@ -80,20 +78,21 @@ namespace hypro {
             // indices of points which are definitely vertices according to some fast heuristic
             std::set<std::size_t> nonRedundantVertices{};
             // apply fast heuristics
-#ifdef HYPRO_REDUNDANCY_HEURISTICS
-            detail::heuristicSearchNonredundantPoints(points, nonRedundantVertices);
-#endif
+            if constexpr (useHeuristics) {
+                detail::heuristicSearchNonredundantPoints(points, nonRedundantVertices);
+            }
+
             for (std::size_t vertexIndex = 0; vertexIndex < vertexCount; ++vertexIndex) {
                 if (vertexCount - redundantVertices.size() == 1) {
                     // Only one vertex remaining
                     break;
                 }
                 // if vertex can be excluded due to some heuristics, skip it
-#ifdef HYPRO_REDUNDANCY_HEURISTICS
-                if (nonRedundantVertices.find(vertexIndex) != std::end(nonRedundantVertices)) {
-                    continue;
+                if constexpr (useHeuristics) {
+                    if (nonRedundantVertices.find(vertexIndex) != std::end(nonRedundantVertices)) {
+                        continue;
+                    }
                 }
-#endif
 
                 // set up lp-problem
                 matrix_t<Number> A = matrix_t<Number>(points[0].dimension(),
