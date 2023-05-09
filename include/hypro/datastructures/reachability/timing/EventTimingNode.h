@@ -8,6 +8,7 @@
  */
 
 #pragma once
+
 #include "../../../util/logging/Logger.h"
 #include "../DAGNode.h"
 #include "EventTimingContainer.h"
@@ -17,48 +18,59 @@
 
 namespace hypro {
 
-template <typename Number>
-class EventTimingNode : public DAGNode<EventTimingNode<Number>> {
-  protected:
-	EventTimingContainer<Number> mTimings;
-	const Location<Number>* mLocation = nullptr;
-	const Transition<Location<Number>>* mEntryTransition = nullptr;
-	carl::Interval<tNumber> mEntryTimestamp;
-	TimingAggregate<Number> mTimingAggregate;
-	std::size_t mLevel = 0;
+    template<typename Number>
+    class EventTimingNode : public DAGNode<EventTimingNode<Number>> {
+    protected:
+        EventTimingContainer<Number> mTimings;
+        const Location<Number> *mLocation = nullptr;
+        const Transition<Location<Number>> *mEntryTransition = nullptr;
+        carl::Interval<tNumber> mEntryTimestamp;
+        TimingAggregate<Number> mTimingAggregate;
+        std::size_t mLevel = 0;
 
-  public:
-	using Node_t = typename DAGNode<EventTimingNode<Number>>::Node_t;
-	using NodeList_t = typename DAGNode<EventTimingNode<Number>>::NodeList_t;
+    public:
+        using Node_t = typename DAGNode<EventTimingNode<Number>>::Node_t;
+        using NodeList_t = typename DAGNode<EventTimingNode<Number>>::NodeList_t;
 
-	EventTimingNode() {}
-	EventTimingNode( const EventTimingContainer<Number>& in )
-		: mTimings( in ) {}
+        EventTimingNode() {}
 
-	const EventTimingContainer<Number>& getTimings() const;
-	EventTimingContainer<Number>& rGetTimings();
-	const Location<Number>* getLocation() const;
-	const Transition<Location<Number>>* getEntryTransition() const;
-	const carl::Interval<tNumber>& getEntryTimestamp() const;
-	TimingAggregate<Number>& rGetTimingAggregate();
+        EventTimingNode(const EventTimingContainer<Number> &in)
+                : mTimings(in) {}
 
-	void setLevel( std::size_t l );
-	std::size_t getLevel() const;
+        const EventTimingContainer<Number> &getTimings() const;
 
-	void setTimings( const EventTimingContainer<Number>& timings );
-	void setLocation( const Location<Number>* loc );
-	void setEntryTimestamp( const carl::Interval<tNumber>& t );
-	void extendEntryTimestamp( const carl::Interval<tNumber>& t );
-	void setEntryTransition( const Transition<Location<Number>>* trans );
+        EventTimingContainer<Number> &rGetTimings();
 
-	friend std::ostream& operator<<( std::ostream& out, const EventTimingNode<Number>& in ) {
-		out << "lvl. " << in.getLevel() << ", content: ";
-		out << in.getTimings();
-		return out;
-	}
+        const Location<Number> *getLocation() const;
 
-	std::size_t getDotRepresentation( std::size_t id, std::string& nodes, std::string& transitions ) const;
-};
+        const Transition<Location<Number>> *getEntryTransition() const;
+
+        const carl::Interval<tNumber> &getEntryTimestamp() const;
+
+        TimingAggregate<Number> &rGetTimingAggregate();
+
+        void setLevel(std::size_t l);
+
+        std::size_t getLevel() const;
+
+        void setTimings(const EventTimingContainer<Number> &timings);
+
+        void setLocation(const Location<Number> *loc);
+
+        void setEntryTimestamp(const carl::Interval<tNumber> &t);
+
+        void extendEntryTimestamp(const carl::Interval<tNumber> &t);
+
+        void setEntryTransition(const Transition<Location<Number>> *trans);
+
+        friend std::ostream &operator<<(std::ostream &out, const EventTimingNode<Number> &in) {
+            out << "lvl. " << in.getLevel() << ", content: ";
+            out << in.getTimings();
+            return out;
+        }
+
+        std::size_t getDotRepresentation(std::size_t id, std::string &nodes, std::string &transitions) const;
+    };
 
 }  // namespace hypro
 
