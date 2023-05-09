@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -49,25 +49,33 @@ namespace hypro {
                 : mHybridAutomaton(ha), mSettings(settings) {}
 
         /// computes a time transition followed by a discrete transition
-        void computeForwardReachability(const ReachTreeNode<State> &task);
+        void
+        computeForwardReachability(
+                const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task);
 
         /// computes a time transition
-        void computeTimeSuccessors(const ReachTreeNode<State> &task);
+        void computeTimeSuccessors(
+                const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task);
 
         /// computes a discrete transition. Requires available time successors.
         void computeJumpSuccessors();
 
         /// getter for discrete jump successor sets
-        void computeBackwardReachability(State badSet, const ReachTreeNode<State> &task,
+        void computeBackwardReachability(State badSet,
+                                         const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task,
                                          StochasticTransition<Number> *transition, Number pro, State preStateSet);
 
-        void computeBackwardReachabilityProb(const ReachTreeNode<State> &task, Number pro);
+        void computeBackwardReachabilityProb(
+                const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task, Number pro);
 
         State computeTimePredecessors(const State &badSet);
 
         void computeJumpPredecessors();
 
-        State computeTimePredecessorsProb(const ReachTreeNode<State> &task, Number prob);
+        State
+        computeTimePredecessorsProb(
+                const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task,
+                Number prob);
 
         void computeJumpPredecessorsProb();
 

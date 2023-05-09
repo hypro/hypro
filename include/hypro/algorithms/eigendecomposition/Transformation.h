@@ -15,7 +15,8 @@
 
 #include "../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../datastructures/reachability/Settings.h"
-#include "../../representations/conversion/Converter.h"
+#include "../../datastructures/HybridAutomaton/State.h"
+#include "../../representations/GeometricObjectBase.h"
 
 #include <eigen3/Eigen/Core>
 #include <eigen3/Eigen/Dense>
@@ -73,9 +74,9 @@ namespace hypro {
     template<typename Number>
     class Transformation {
     public:
-        using Location = Location<Number>;
-        using locationVector = std::vector<Location *>;
-        using transitionVector = std::vector<Transition<Location> *>;
+        using Loc = Location<Number>;
+        using locationVector = std::vector<Loc *>;
+        using transitionVector = std::vector<Transition<Loc> *>;
         using locationStateMap = typename HybridAutomaton<Number>::locationStateMap;
         using locationConditionMap = std::map<Location<Number> *, Condition<Number>, locPtrComp<Number>>;
         using conditionVector = std::vector<Condition<Number>>;     /// Vector of conditions.

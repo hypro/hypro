@@ -137,7 +137,7 @@ namespace hypro {
 
                 // timestamp handling
                 assert(!(*stateIt).getTimestamp().isEmpty());
-                aggregatedTimestamp = aggregatedTimestamp.convexHull((*stateIt).getTimestamp());
+                aggregatedTimestamp = aggregatedTimestamp.convex_hull((*stateIt).getTimestamp());
 
                 leftovers = true;
                 ++setCnt;

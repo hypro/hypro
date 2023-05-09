@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "../HybridAutomaton/Path.h"
-#include "ReachTreeNodev2.h"
+#include "../HybridAutomaton/Pathv2.h"
+#include "ReachTreev2.h"
 
 namespace hypro {
 
@@ -47,41 +47,41 @@ namespace hypro {
         }
     };
 
-    template<typename State>
+    template<typename RTNode>
     struct Task {
-        using Number = typename State::NumberType;
+        using Number = typename RTNode::NumberType;
 
-        ReachTreeNode <State> *treeNode = nullptr;
+        RTNode *treeNode = nullptr;
         TBacktrackingInfo<Number> btInfo = TBacktrackingInfo<Number>();
 
-        Task(ReachTreeNode <State> *node)
+        Task(RTNode *node)
                 : treeNode(node), btInfo() {
             assert(btInfo.btPath.size() <= 0 || btInfo.btLevel > 0);
         }
 
-        Task(ReachTreeNode <State> *node, const TBacktrackingInfo<Number> &btI)
+        Task(RTNode *node, const TBacktrackingInfo<Number> &btI)
                 : treeNode(node), btInfo(btI) {}
 
-        const State &getInitialStateSet() {
+        const typename RTNode::Rep &getInitialRTNodeSet() {
             assert(treeNode != nullptr);
             return treeNode->getState();
         }
 
-        friend std::ostream &operator<<(std::ostream &out, const Task<State> &task) {
+        friend std::ostream &operator<<(std::ostream &out, const Task<RTNode> &task) {
             // out << *task.treeNode;
             out << task.treeNode;
             return out;
         }
 
-        friend bool operator==(const Task<State> &lhs, const Task<State> &rhs) {
+        friend bool operator==(const Task<RTNode> &lhs, const Task<RTNode> &rhs) {
             return (lhs.treeNode == rhs.treeNode && lhs.btInfo == rhs.btInfo);
         }
 
-        friend bool operator!=(const Task<State> &lhs, const Task<State> &rhs) {
+        friend bool operator!=(const Task<RTNode> &lhs, const Task<RTNode> &rhs) {
             return !(lhs == rhs);
         }
 
-        friend bool operator<(const Task<State> &lhs, const Task<State> &rhs) {
+        friend bool operator<(const Task<RTNode> &lhs, const Task<RTNode> &rhs) {
             DEBUG("hypro.workQueue", "Compare " << lhs << " and " << rhs << ": ");
             if (lhs == rhs) {     // strict weak ordering requires this, thus rhs is inserted before lhs.
                 // however, this should never happen(?)
@@ -116,8 +116,8 @@ namespace hypro {
         }
     };
 
-    template<typename Number, typename State>
-    bool operator==(const std::shared_ptr<Task<State>> &lhs, const std::shared_ptr<Task<State>> &rhs) {
+    template<typename Number, typename RTNode>
+    bool operator==(const std::shared_ptr<Task<RTNode>> &lhs, const std::shared_ptr<Task<RTNode>> &rhs) {
         return *lhs == *rhs;
     }
 

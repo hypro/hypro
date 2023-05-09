@@ -47,6 +47,7 @@ namespace hypro {
     public:
         // Exposition types
         using Rep = Representation;
+        using NumberType = Number;
 
         // Forwarding from base
         using Base::getChildren;

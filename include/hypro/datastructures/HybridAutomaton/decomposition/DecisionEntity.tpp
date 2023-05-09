@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -301,7 +301,7 @@ namespace hypro {
     template<typename Number>
     void DecisionEntity<Number>::addEdgesForRectTrafo(const std::vector<carl::Interval < Number>>
 
-    & intervals,
+    &intervals,
     boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS> &graph
     ) {
     for (
@@ -310,15 +310,15 @@ namespace hypro {
 
     size();
 
-    i++ ) {
+    i++) {
     for (
     size_t j = 0;
     j<intervals.
 
     size();
 
-    j++ ) {
-    if ( i !=
+    j++) {
+    if (i !=
     j &&intervals[i]
     !=
 
@@ -329,7 +329,7 @@ namespace hypro {
     createEmptyInterval<Number>()
 
     ) {
-    boost::add_edge( i, j, graph
+    boost::add_edge(i, j, graph
     );
 }
 }
@@ -339,23 +339,23 @@ namespace hypro {
 template<typename Number>
 void DecisionEntity<Number>::addEdgesForRectMap(const std::map<carl::Variable, carl::Interval < Number>>
 
-& map,
+&map,
 boost::adjacency_list <boost::vecS, boost::vecS, boost::undirectedS> &graph
 ) {
 auto &vpool = VariablePool::getInstance();
 for (
 const auto &keyValPair1
-: map ) {
+: map) {
 for (
 const auto &keyValPair2
-: map ) {
-if ( keyValPair1.first != keyValPair2.first ) {
-boost::add_edge( vpool
+: map) {
+if (keyValPair1.first != keyValPair2.first) {
+boost::add_edge(vpool
 .
-id( keyValPair1
-.first ), vpool.
-id( keyValPair2
-.first ), graph );
+id(keyValPair1
+.first), vpool.
+id(keyValPair2
+.first), graph);
 }
 }
 }
@@ -389,7 +389,7 @@ void DecisionEntity<Number>::addEdgesForCondition(Condition < Number > condition
 template<typename Number>
 void DecisionEntity<Number>::printDecomposition(const Decomposition &decomposition) {
     int i = 0;
-    for (auto bucket: decomposition) {
+    for (const auto &bucket: decomposition.subspaces) {
         std::cout << "Decomposition " << i << ": " << std::endl;
         TRACE("hypro.decisionEntity", "Decomposition " << i << ":");
         for (auto var: bucket) {
@@ -445,10 +445,10 @@ Decomposition DecisionEntity<Number>::getSubspaceDecomposition(const HybridAutom
     // we parse this to a vector of vectors. each vector contains the variable indices for one component
     // and can consequently can be given to project.
     Decomposition res;
-    res.mDecomposition = std::vector<std::vector<size_t>>(num);
+    res.subspaces = std::vector<std::vector<size_t>>(num);
     std::vector<size_t>::size_type i;
     for (i = 0; i != component.size(); i++) {
-        res.mDecomposition[component[i]].push_back(i);
+        res.subspaces[component[i]].push_back(i);
     }
     return res;
 }
@@ -459,7 +459,7 @@ std::pair<HybridAutomaton < Number>, Decomposition>
 DecisionEntity<Number>::decomposeAutomaton(const HybridAutomaton <Number> &automaton) {
     Decomposition decomposition = getSubspaceDecomposition(automaton);
     // SettingsProvider<State>::getInstance().setSubspaceDecomposition(decomposition);
-    if (decomposition.size() <= 1) {
+    if (decomposition.subspaces.size() <= 1) {
         // decomposing failed/was already done(0-case) or decomposition is all variables (1 case)
         return std::make_pair(automaton, decomposition);
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -12,13 +12,15 @@
 namespace hypro {
 
     template<typename State>
-    void StochasticRectangularWorker<State>::computeForwardReachability(const ReachTreeNode<State> &task) {
+    void StochasticRectangularWorker<State>::computeForwardReachability(
+            const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task) {
         computeTimeSuccessors(task);
         computeJumpSuccessors();
     }
 
     template<typename State>
-    void StochasticRectangularWorker<State>::computeTimeSuccessors(const ReachTreeNode<State> &task) {
+    void StochasticRectangularWorker<State>::computeTimeSuccessors(
+            const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task) {
         State initialSet = task.getInitialSet();
 
         // compute time successor states
@@ -103,7 +105,8 @@ namespace hypro {
     }
 
     template<typename State>
-    void StochasticRectangularWorker<State>::computeBackwardReachability(State badSet, const ReachTreeNode<State> &task,
+    void StochasticRectangularWorker<State>::computeBackwardReachability(State badSet,
+                                                                         const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task,
                                                                          StochasticTransition<Number> *transition,
                                                                          Number prob, State preStateSet) {
         // if ( computeTimePredecessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
@@ -190,7 +193,8 @@ namespace hypro {
 
     template<typename State>
     void
-    StochasticRectangularWorker<State>::computeBackwardReachabilityProb(const ReachTreeNode<State> &task, Number prob) {
+    StochasticRectangularWorker<State>::computeBackwardReachabilityProb(
+            const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task, Number prob) {
         State badSet = task.getInitialSet();
 
         State timePreState = computeTimePredecessorsProb(task, prob);
@@ -233,7 +237,8 @@ namespace hypro {
 
     template<typename State>
     State
-    StochasticRectangularWorker<State>::computeTimePredecessorsProb(const ReachTreeNode<State> &task, Number prob) {
+    StochasticRectangularWorker<State>::computeTimePredecessorsProb(
+            const ReachTreeNode<State, typename StochasticHybridAutomaton<Number>::LocationType> &task, Number prob) {
         State badSet = task.getInitialSet();
         auto [containment, segment] = rectangularIntersectInvariant(badSet);
         if (containment == CONTAINMENT::NO) {

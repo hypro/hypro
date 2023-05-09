@@ -29,7 +29,6 @@ namespace hypro {
         Vector<Number> b_tr;  // later transformed (b + taking linear terms into account)
         Matrix<Number> A_nonlinear;
         Vector<Number> b_nonlinear;
-        LocationManager <Number> &locationManager = LocationManager<Number>::getInstance();
         typename HybridAutomaton<Number>::Locations locations;
         Location<Number> *PtrtoNewLoc;
         mTransformedHA = HybridAutomaton<Number>();
@@ -147,7 +146,7 @@ namespace hypro {
         // TRANSITIONS
         typename HybridAutomaton<Number>::transitionVector transitions;
         for (auto *TransPtr: _hybrid.getTransitions()) {
-            auto NewTransPtr = std::make_unique<Transition<HybridAutomaton<Number>::LocationType>>(*TransPtr);
+            auto NewTransPtr = std::make_unique<Transition<typename HybridAutomaton<Number>::LocationType>>(*TransPtr);
             // TODO transitionManager? transitions not freed, shared_ptr too costly in multithreaded context
             // POINTER
             Location<Number> *NewSourceLocPtr = mLocationPtrsMap[TransPtr->getSource()];
@@ -189,7 +188,7 @@ namespace hypro {
         for (typename locationStateMap::const_iterator it = _hybrid.getInitialStates().begin();
              it != _hybrid.getInitialStates().end(); ++it) {
             Location<Number> *NewLocPtr = mLocationPtrsMap[it->first];
-            State_t <Number> state1NEW = State_t<Number>(it->second);
+            auto state1NEW = State_t<Number>(it->second);
             state1NEW.setTimestamp(carl::Interval<Number>(0));
             state1NEW.setLocation(NewLocPtr);
             mTransformedHA.addInitialState(state1NEW);
