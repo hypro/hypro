@@ -18,6 +18,7 @@ namespace hypro::benchmark {
     public:
 
         static const std::vector<hypro::Point<double>> &getPoints(std::size_t dim, std::size_t numberPoints) {
+            static std::map<std::pair<std::size_t, std::size_t>, std::vector<hypro::Point<double>>> points;
             auto mapIt = points.find(std::make_pair(dim, numberPoints));
             if (mapIt == std::end(points)) {
                 mapIt = points.insert(
@@ -29,14 +30,14 @@ namespace hypro::benchmark {
                     for (std::size_t i = 0; i < dim; ++i) {
                         coordinates.emplace_back(dist(generator));
                     }
-                    points[std::make_pair(dim, numberPoints)].emplace_back(coordinates);
+                    mapIt->second.emplace_back(coordinates);
                 }
             }
             return mapIt->second;
         }
 
     private:
-        static std::map<std::pair<std::size_t, std::size_t>, std::vector<hypro::Point<double>>> points;
+
     };
 
 
@@ -60,9 +61,38 @@ namespace hypro::benchmark {
         st.counters["reduction"] = ::benchmark::Counter(reduction);
     }
 
+    static void Comparison(::benchmark::State &st) {
+        std::size_t reduction = 0;
+        auto points = Fixture::getPoints(st.range(0), st.range(1));
+        for (auto _: st) {
+            auto noHeuristics = hypro::removeRedundantPoints<double, false>(points);
+            auto heuristics = hypro::removeRedundantPoints<double, true>(points);
+            st.PauseTiming();
+            if (noHeuristics != heuristics) {
+                std::cout << "Resulting point sets from reduction are not equal. Original point set: ";
+                for (const auto &p: points) {
+                    std::cout << "\n" << p;
+                }
+                std::cout << "\nReduced set using no heuristics: ";
+                for (const auto &p: noHeuristics) {
+                    std::cout << "\n" << p;
+                }
+                std::cout << "\nReduced set using heuristics: ";
+                for (const auto &p: heuristics) {
+                    std::cout << "\n" << p;
+                }
+                std::cout << "\n";
+            }
+            st.ResumeTiming();
+        }
+        st.counters["reduction"] = ::benchmark::Counter(reduction);
+    }
+
     BENCHMARK(WithHeuristic)->Ranges({{1, 10},
                                       {5, 100}});
     BENCHMARK(WithoutHeuristic)->Ranges({{1, 10},
                                          {5, 100}});
+    BENCHMARK(Comparison)->Ranges({{1, 10},
+                                   {5, 10}});
 
 }  // namespace hypro::benchmark

@@ -33,17 +33,17 @@ namespace hypro {
                 for (std::size_t d = 0; d < dim; ++d) {
                     // Minimum extremal points
                     // if smaller than min, erase current list, replace by new list with only the current vertex index
-                    if (points[pointIndex][d] < minIndices[d].front()) {
-                        minIndices[d] = std::vector<std::size_t>{1, pointIndex};
-                    } else if (points[pointIndex][d] == minIndices[d].front()) {
+                    if (points[pointIndex][d] < points[minIndices[d].front()][d]) {
+                        minIndices[d] = std::vector<std::size_t>(1, pointIndex);
+                    } else if (points[pointIndex][d] == points[minIndices[d].front()][d]) {
                         // append, if equal
                         minIndices[d].push_back(pointIndex);
                     }
                     // Maximum extremal points
                     // if greater than max, erase current list, replace by new list with only the current vertex index
-                    if (points[pointIndex][d] > maxIndices[d].front()) {
-                        maxIndices[d] = std::vector<std::size_t>{1, pointIndex};
-                    } else if (points[pointIndex][d] == maxIndices[d].front()) {
+                    if (points[pointIndex][d] > points[maxIndices[d].front()][d]) {
+                        maxIndices[d] = std::vector<std::size_t>(1, pointIndex);
+                    } else if (points[pointIndex][d] == points[maxIndices[d].front()][d]) {
                         // append, if equal
                         maxIndices[d].push_back(pointIndex);
                     }

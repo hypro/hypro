@@ -151,7 +151,7 @@ add_subdirectory(src)
 
 add_library(${PROJECT_NAME}-objects OBJECT ${${PROJECT_NAME}_sources})
 add_dependencies(${PROJECT_NAME}-objects ${PROJECT_NAME}-resources)
-build_target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC GLPK_STATIC ANTLR4_SHARED clp_STATIC coinUtils_STATIC z3_SHARED)
+build_target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC GLPK_STATIC clp_STATIC coinUtils_STATIC z3_SHARED)
 target_include_directories(${PROJECT_NAME}-objects
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
@@ -209,6 +209,7 @@ target_include_directories(${PROJECT_NAME}-shared
 
 add_library(${PROJECT_NAME}-parser ${${PROJECT_NAME}_parser_sources})
 add_dependencies(${PROJECT_NAME}-parser ${PROJECT_NAME}-resources ${PROJECT_NAME}-shared)
+build_target_include_dirs_from(${PROJECT_NAME}-parser SYSTEM PUBLIC ANTLR4_SHARED)
 target_include_directories(${PROJECT_NAME}-parser
         PUBLIC
         ${CMAKE_SOURCE_DIR}/include/hypro/parser/
@@ -218,17 +219,21 @@ target_link_libraries(${PROJECT_NAME}-parser PUBLIC ${PROJECT_NAME}-shared)
 target_compile_features(${PROJECT_NAME}-objects PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-static PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-shared PUBLIC cxx_std_17)
+target_compile_features(${PROJECT_NAME}-parser PUBLIC cxx_std_17)
 
 target_compile_options(${PROJECT_NAME}-objects PUBLIC -fPIC)
 target_compile_options(${PROJECT_NAME}-static PUBLIC -fPIC)
 target_compile_options(${PROJECT_NAME}-shared PUBLIC -fPIC)
+target_compile_options(${PROJECT_NAME}-parser PUBLIC -fPIC)
 target_compile_options(${PROJECT_NAME}-objects PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
 target_compile_options(${PROJECT_NAME}-static PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
 target_compile_options(${PROJECT_NAME}-shared PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
+target_compile_options(${PROJECT_NAME}-parser PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
 if (${DEVELOPER})
     target_compile_options(${PROJECT_NAME}-objects PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
     target_compile_options(${PROJECT_NAME}-static PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
     target_compile_options(${PROJECT_NAME}-shared PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
+    target_compile_options(${PROJECT_NAME}-parser PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
 endif ()
 #target_link_options(${PROJECT_NAME}-objects PUBLIC LINKER:-no-as-needed)
 #target_link_options(${PROJECT_NAME}-static PUBLIC LINKER:-no-as-needed)
