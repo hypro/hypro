@@ -143,31 +143,11 @@ namespace hypro {
             }
         }
 
-#ifdef HYPRO_LOGGING
-        matrix_t<double> m = convert<mpq_class, double>(matrix);
-        TRACE("quickhull", "matrix" << std::endl
-                                    << m);
-#endif
-
         Eigen::FullPivLU<matrix_t<Number>> lu(matrix);
-
         assert(static_cast<size_t>( lu.rank()) == dimension);
-        TRACE("quickhull", "matrix rank " << lu.rank());
 
-#ifdef HYPRO_LOGGING
-        TRACE("hypro.quickhull", lu.matrixLU() << std::endl);
-        TRACE("hypro.quickhull", Eigen::FullPivLU<matrix_t<Number>>(matrix).kernel() << std::endl);
-        TRACE("hypro.quickhull", lu.kernel() << std::endl);
-#endif
 
         point_t result = lu.kernel().col(0);
-
-#ifdef HYPRO_LOGGING
-        vector_t<double> r = convert<mpq_class, double>(result);
-        TRACE("quickhull", "result" << std::endl
-                                    << r);
-#endif
-
         assert(matrix * result == point_t::Zero(dimension));
 
 #ifndef NDEBUG

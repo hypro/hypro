@@ -36,7 +36,6 @@ namespace hypro {
 
         /// default constructor
         glpk_context() {
-            TRACE("hypro.optimizer", "Create glpk_context " << this);
             std::atexit(cleanupGlpk);
         }
 
@@ -90,7 +89,6 @@ namespace hypro {
 
         /// initializer function for the LP-problem arrays
         void createArrays(unsigned size) {
-            TRACE("hypro.optimizer", "");
             if (arraysCreated) {
                 deleteArrays();
             }
@@ -102,7 +100,6 @@ namespace hypro {
 
         /// cleanup function for the problem arrays
         void deleteArrays() {
-            TRACE("hypro.optimizer", "");
             if (arraysCreated) {
                 delete[] ia;
                 delete[] ja;
@@ -125,8 +122,6 @@ namespace hypro {
                 parm.msg_lev = GLP_MSG_OFF;
                 glp_set_obj_dir(lp, GLP_MAX);
                 glp_term_out(GLP_OFF);
-                TRACE("hypro.optimizer",
-                      "Thread " << std::this_thread::get_id() << " creates its glp instance. (@" << this << ")");
                 mInitialized = true;
                 mConstraintsSet = false;
             }
@@ -134,8 +129,6 @@ namespace hypro {
 
         /// cleanup of lp-instance
         void deleteLPInstance() {
-            TRACE("hypro.optimizer", "Start."
-                    << " instance @" << this);
             if (mInitialized) {
                 assert(lp != nullptr);
                 glp_delete_prob(lp);
@@ -143,8 +136,6 @@ namespace hypro {
                 mConstraintsSet = false;
                 lp = nullptr;
             }
-            TRACE("hypro.optimizer", "Done."
-                    << " instance @" << this);
         }
 
         /**
@@ -239,7 +230,6 @@ namespace hypro {
 
         /// destructor
         ~glpk_context() {
-            TRACE("hypro.optimizer", "Arrays created: " << arraysCreated << " instance @" << this);
             deleteLPInstance();
             //  assume that all fields are set at once so just check one.
             deleteArrays();
