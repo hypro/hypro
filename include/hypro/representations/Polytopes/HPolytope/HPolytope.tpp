@@ -12,7 +12,7 @@
 namespace hypro {
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>::HPolytopeT()
-            : mHPlanes(), mDimension(0), mNonRedundant(true) {
+            : mDimension(0), mNonRedundant(true) {
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer();
         }
@@ -323,21 +323,16 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     bool HPolytopeT<Number, Converter, Setting>::empty() const {
         if (mEmptyState == SETSTATE::EMPTY) {
-            TRACE("hypro.representations.HPolytope", "Already set to true.");
             return true;
         }
         if (mEmptyState == SETSTATE::NONEMPTY || mEmptyState == SETSTATE::UNIVERSAL) {
-            TRACE("hypro.representations.HPolytope", "Already set to false.");
             return false;
         }
 
         if (mHPlanes.empty()) {
-            TRACE("hypro.representations.HPolytope", "Polytope is universe.");
             mEmptyState = SETSTATE::UNIVERSAL;
             return false;
         }
-
-        TRACE("hypro.representations.HPolytope", "Call to Optimizer.");
 
         bool res = false;
         if (Setting::OPTIMIZER_CACHING) {
@@ -351,7 +346,6 @@ namespace hypro {
         }
 
         mEmptyState = (res == true ? SETSTATE::EMPTY : SETSTATE::NONEMPTY);
-        TRACE("hypro.representations.HPolytope", "Optimizer result: " << res);
         return res;
     }
 
@@ -1093,9 +1087,6 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     bool HPolytopeT<Number, Converter, Setting>::contains(const Point<Number> &point) const {
-#ifdef HYPRO_LOGGING
-        TRACE("hypro.representations.HPolytope", point);
-#endif
         return this->contains(point.rawCoordinates());
     }
 
@@ -1118,16 +1109,6 @@ namespace hypro {
             }
         }
 
-#ifdef HYPRO_LOGGING
-        for (const auto &plane: mHPlanes) {
-            // The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
-            if (!carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset()) &&
-                plane.normal().dot(vec) > plane.offset()) {
-                TRACE("hypro.representations.HPolytope", "Point " << vec << " is not contained in plane " << plane);
-                return false;
-            }
-        }
-#endif
         // The 2's complement check for equality is required to ensure double compatibility, for exact numbers it will fallback to checking exact equality.
         return std::all_of(mHPlanes.begin(), mHPlanes.end(), [&vec](const auto &plane) {
             return carl::AlmostEqual2sComplement(plane.normal().dot(vec), plane.offset()) ||
