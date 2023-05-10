@@ -71,6 +71,7 @@ build:
       - .git
       - .git/**/*
       - build/**/*.o
+    expire_in: 3 days
 
   cache:
     policy: pull-push
