@@ -75,19 +75,19 @@ namespace hypro {
 
     template<typename Number>
     typename EventTimingNode<Number>::Node_t
-    EventTimingProvider<Number>::getTimingNode(const Path<Number, tNumber> &path, std::size_t level) const {
+    EventTimingProvider<Number>::getTimingNode(const Path_t &path, std::size_t level) const {
         return findNode(path, level);
     }
 
     template<typename Number>
     typename EventTimingNode<Number>::Node_t &
-    EventTimingProvider<Number>::rGetNode(const Path<Number, tNumber> &path, std::size_t level) const {
+    EventTimingProvider<Number>::rGetNode(const Path_t &path, std::size_t level) const {
         return findNode(path, level);
     }
 
     template<typename Number>
     std::optional<EventTimingContainer<Number>>
-    EventTimingProvider<Number>::getTimings(const Path<Number, tNumber> &path) const {
+    EventTimingProvider<Number>::getTimings(const Path_t &path) const {
         TRACE("hypro.datastructures.timing", "Path: " << path);
 
         // abort if we do not have a tree yet
@@ -268,7 +268,7 @@ namespace hypro {
     }
 
     template<typename Number>
-    void EventTimingProvider<Number>::updateTimings(const Path<Number, tNumber> &path,
+    void EventTimingProvider<Number>::updateTimings(const Path_t &path,
                                                     const EventTimingContainer<Number> &update) {
         auto toUpdate = this->rGetNode(path);
         std::lock_guard<std::mutex> lock(toUpdate->rGetTimings().getMutex());
@@ -309,7 +309,7 @@ namespace hypro {
 
     template<typename Number>
     typename EventTimingNode<Number>::Node_t
-    EventTimingProvider<Number>::findNode(const Path<Number, tNumber> &path, std::size_t level) const {
+    EventTimingProvider<Number>::findNode(const Path_t &path, std::size_t level) const {
         TRACE("hypro.datastructures.timing", "Get timings for path " << path << ", level " << level);
 
         // find the first initial node separately, since the root-node is not part of the path

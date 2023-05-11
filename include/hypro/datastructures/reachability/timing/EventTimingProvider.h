@@ -33,6 +33,7 @@ namespace hypro {
     private:
         typename EventTimingNode<Number>::Node_t mRoot;
         std::string mName = "timingTree";
+        using Path_t = Path<tNumber, Location<Number>>;
 
     public:
         void initialize(const HybridAutomaton<Number> &ha, tNumber globalTimeHorizon);
@@ -56,17 +57,17 @@ namespace hypro {
          * @brief	Find the best suitable node in the timing tree which matches the passed path.
          */
         typename EventTimingNode<Number>::Node_t
-        getTimingNode(const Path<Number, tNumber> &path, std::size_t level = 0) const;
+        getTimingNode(const Path_t &path, std::size_t level = 0) const;
 
         /**
          * @brief	Find the best suitable node in the timing tree which matches the passed path.
          */
         typename EventTimingNode<Number>::Node_t &
-        rGetNode(const Path<Number, tNumber> &path, std::size_t level = 0) const;
+        rGetNode(const Path_t &path, std::size_t level = 0) const;
 
-        std::optional<EventTimingContainer<Number>> getTimings(const Path<Number, tNumber> &path) const;
+        std::optional<EventTimingContainer<Number>> getTimings(const Path_t &path) const;
 
-        void updateTimings(const Path<Number, tNumber> &path, const EventTimingContainer<Number> &update);
+        void updateTimings(const Path_t &path, const EventTimingContainer<Number> &update);
 
         typename EventTimingNode<Number>::Node_t
         addChildToNode(typename EventTimingNode<Number>::Node_t parent, tNumber timeHorizon);
@@ -74,7 +75,7 @@ namespace hypro {
         std::string getDotRepresentation() const;
 
     private:
-        typename EventTimingNode<Number>::Node_t findNode(const Path<Number, tNumber> &path, std::size_t level) const;
+        typename EventTimingNode<Number>::Node_t findNode(const Path_t &path, std::size_t level) const;
 
         void writeTree() const;
 
