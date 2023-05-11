@@ -83,23 +83,12 @@ add_imported_library(ANTLR4 SHARED ${ANTLR4CPP_SHARED_LIBS} ${ANTLR4_INCLUDE_DIR
 
 add_dependencies(ANTLR4_STATIC antlr4cpp)
 add_dependencies(ANTLR4_SHARED antlr4cpp)
-add_dependencies(${PROJECT_NAME}-resources ANTLR4_STATIC ANTLR4_SHARED)
+add_dependencies(${PROJECT_NAME}-parser-resources ANTLR4_STATIC ANTLR4_SHARED)
 
-#target_link_libraries(${PROJECT_NAME}-shared PUBLIC ANTLR4_SHARED)
 target_link_libraries(${PROJECT_NAME}-parser PUBLIC ANTLR4_SHARED)
-#target_link_libraries(${PROJECT_NAME}-static PUBLIC ANTLR4_STATIC)
 
 target_include_directories(${PROJECT_NAME}-parser
-        PUBLIC ${ANTLR4CPP_INCLUDE_DIRS}
+        PUBLIC ${ANTLR4_INCLUDE_DIRS}
         )
-#target_include_directories(${PROJECT_NAME}-objects
-#        PRIVATE ${ANTLR4CPP_INCLUDE_DIRS}
-#        )
-#target_include_directories(${PROJECT_NAME}-static
-#        PRIVATE ${ANTLR4CPP_INCLUDE_DIRS}
-#        )
-#target_include_directories(${PROJECT_NAME}-shared
-#        PRIVATE ${ANTLR4CPP_INCLUDE_DIRS}
-#        )
 
-list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${ANTLR4_INCLUDE_DIRS})
+#list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${ANTLR4_INCLUDE_DIRS})

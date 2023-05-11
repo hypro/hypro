@@ -208,7 +208,7 @@ target_include_directories(${PROJECT_NAME}-shared
         )
 
 add_library(${PROJECT_NAME}-parser ${${PROJECT_NAME}_parser_sources})
-add_dependencies(${PROJECT_NAME}-parser ${PROJECT_NAME}-resources ${PROJECT_NAME}-shared)
+add_dependencies(${PROJECT_NAME}-parser ${PROJECT_NAME}-resources ${PROJECT_NAME}-parser-resources ${PROJECT_NAME}-shared)
 build_target_include_dirs_from(${PROJECT_NAME}-parser SYSTEM PUBLIC ANTLR4_SHARED)
 target_include_directories(${PROJECT_NAME}-parser
         PUBLIC
