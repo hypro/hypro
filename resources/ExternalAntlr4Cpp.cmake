@@ -90,5 +90,3 @@ target_link_libraries(${PROJECT_NAME}-parser PUBLIC ANTLR4_SHARED)
 target_include_directories(${PROJECT_NAME}-parser
         PUBLIC ${ANTLR4_INCLUDE_DIRS}
         )
-
-#list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${ANTLR4_INCLUDE_DIRS})

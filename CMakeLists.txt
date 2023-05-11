@@ -286,10 +286,30 @@ if (NOT HYPRO_CICD)
 endif ()
 
 add_subdirectory(resources)
+# manage include directories colleced in ressources cmake file
+target_include_directories(${PROJECT_NAME}-objects
+        PUBLIC ${${PROJECT_NAME}-include-dirs}
+        PRIVATE ${${PROJECT_NAME}-include-dirs-private}
+        )
+target_include_directories(${PROJECT_NAME}-static
+        PRIVATE ${${PROJECT_NAME}-include-dirs}
+        PRIVATE ${${PROJECT_NAME}-include-dirs-private}
+        )
+target_include_directories(${PROJECT_NAME}-shared
+        PUBLIC ${${PROJECT_NAME}-include-dirs}
+        PRIVATE ${${PROJECT_NAME}-include-dirs-private}
+        )
+
 # Create config.h by adding cmake defines dependent on option switches
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/flags.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/flags.h @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/paths.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/paths.h
         @ONLY)
+
+# cleanup: get interface include directories list, remove duplicates (which we get from our clumsy carl setup) and reset
+# the variable. Currently only relevant for the shared version.
+get_target_property(include_dirs_list ${PROJECT_NAME}-shared INTERFACE_INCLUDE_DIRECTORIES)
+list(REMOVE_DUPLICATES "include_dirs_list")
+set_target_properties(${PROJECT_NAME}-shared PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${include_dirs_list}")
 
 enable_testing()
 add_subdirectory(test)

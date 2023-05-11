@@ -1,6 +1,6 @@
-
 # initialize lists for include directories and library files
-set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
+set(${PROJECT_NAME}-include-dirs "" CACHE STRING "Include directories list")
+set(${PROJECT_NAME}-include-dirs-private "" CACHE STRING "Include directories list (private)")
 
 add_custom_target(${PROJECT_NAME}-resources)
 add_custom_target(${PROJECT_NAME}-parser-resources)
@@ -302,5 +302,7 @@ if (HYPRO_USE_SERIALIZATION)
     include(cereal.cmake)
 endif ()
 
+set(${PROJECT_NAME}-include-dirs "${${PROJECT_NAME}-include-dirs}" PARENT_SCOPE)
+set(${PROJECT_NAME}-include-dirs-private "${${PROJECT_NAME}-include-dirs-private}" PARENT_SCOPE)
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)

@@ -42,14 +42,14 @@ target_link_libraries(${PROJECT_NAME}-objects PUBLIC GLPK_STATIC)
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC GLPK_STATIC)
 target_link_libraries(${PROJECT_NAME}-static PUBLIC GLPK_STATIC)
 
-target_include_directories(${PROJECT_NAME}-objects
-        PRIVATE ${GLPK_INCLUDE_DIR}
-        )
-target_include_directories(${PROJECT_NAME}-static
-        PRIVATE ${GLPK_INCLUDE_DIR}
-        )
-target_include_directories(${PROJECT_NAME}-shared
-        PRIVATE ${GLPK_INCLUDE_DIR}
-        )
+#target_include_directories(${PROJECT_NAME}-objects
+#        PRIVATE ${GLPK_INCLUDE_DIR}
+#        )
+#target_include_directories(${PROJECT_NAME}-static
+#        PRIVATE ${GLPK_INCLUDE_DIR}
+#        )
+#target_include_directories(${PROJECT_NAME}-shared
+#        PRIVATE ${GLPK_INCLUDE_DIR}
+#        )
 
-list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${GLPK_INCLUDE_DIR})
+list(APPEND ${PROJECT_NAME}-include-dirs-private ${GLPK_INCLUDE_DIR})
