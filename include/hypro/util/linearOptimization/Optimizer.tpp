@@ -32,17 +32,16 @@ namespace hypro {
         }
 #endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
-            auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
-            if ( ctxtItClp != mClpContexts.end() ) {
-                TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mClpContexts.size() );
-                TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
-                ctxtItClp->second.deleteLPInstance();
-                TRACE( "hypro.optimizer", "Deleted lp instance." );
-                mClpContexts.erase( ctxtItClp );
-                TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
-            }
+        auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
+        if ( ctxtItClp != mClpContexts.end() ) {
+            TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): " << mClpContexts.size() );
+            TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")" );
+            ctxtItClp->second.deleteLPInstance();
+            TRACE( "hypro.optimizer", "Deleted lp instance." );
+            mClpContexts.erase( ctxtItClp );
+            TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
+        }
 #endif
-        assert(isSane());
     }  // namespace hypro
 
     template<typename Number>
@@ -88,21 +87,21 @@ namespace hypro {
 
     template<typename Number>
     void Optimizer<Number>::setMatrix(const matrix_t<Number> &_matrix) {
-        assert(isSane());
         if (mConstraintMatrix != _matrix) {
             clearCache();
             mConstraintMatrix = _matrix;
             mRelationSymbols = std::vector<carl::Relation>(mConstraintMatrix.rows(), carl::Relation::LEQ);
         }
+        assert(isSane());
     }
 
     template<typename Number>
     void Optimizer<Number>::setVector(const vector_t<Number> &_vector) {
-        assert(isSane());
         if (mConstraintVector != _vector) {
             clearCache();
             mConstraintVector = _vector;
         }
+        assert(isSane());
     }
 
     template<typename Number>
@@ -418,8 +417,11 @@ namespace hypro {
     template<typename Number>
     bool Optimizer<Number>::isSane() const {
 #ifndef NDEBUG
+        if (mConstraintMatrix.rows() == 0 || mConstraintMatrix.cols() == 0 || mConstraintVector.rows() == 0) {
+            return false;
+        }
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
-        // std::lock_guard<std::mutex> lock( mContextLock );
+        std::lock_guard<std::mutex> lock(mContextLock);
         TRACE("hypro.optimizer", "Have " << mGlpkContexts.size() << " instances to check.");
         for (const auto &glpPair: mGlpkContexts) {
             if (glpPair.second.mConstraintsSet && (!glpPair.second.mInitialized || !glpPair.second.arraysCreated))
@@ -443,6 +445,8 @@ namespace hypro {
         mGlpkContexts[std::this_thread::get_id()].createLPInstance();
         assert(mGlpkContexts[std::this_thread::get_id()].mInitialized == true);
         if (mGlpkContexts.find(std::this_thread::get_id()) == mGlpkContexts.end()) {
+            throw std::logic_error(
+                    "This should never happen, as the map access operator creates an object if it is not present yet.");
             std::lock_guard<std::mutex> lock(mContextLock);
             TRACE("hypro.optimizer", "Actual creation.");
 #ifdef HYPRO_STATISTICS
@@ -458,7 +462,6 @@ namespace hypro {
                 mClpContexts.emplace( std::this_thread::get_id(), clp_context() );
             }
 #endif
-
         TRACE("hypro.optimizer", "Done.");
     }
 
@@ -467,6 +470,7 @@ namespace hypro {
         TRACE("hypro.optimizer", "");
         assert(isSane());
         initialize();
+        assert(isSane());
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
         {

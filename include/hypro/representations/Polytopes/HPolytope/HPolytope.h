@@ -243,15 +243,17 @@ namespace hypro {
         /**
          * @brief Inserts an additional bounding halfspace into the polytope.
          * @param plane The plane to add.
+         * @return True, if a plane was added, false, if it was already part of the polytope
          */
-        void insert(const Halfspace<Number> &plane);
+        bool insert(const Halfspace<Number> &plane);
 
         /**
          * @brief Inserts a range of halfspaces into the current polytope.
          * @param iterator Iterator pointing to the start of the range.
          * @param iterator Iterator pointing to the end of the range.
+         * @return True, if a plane was added, false, if it was already part of the polytope
          */
-        void insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end);
+        bool insert(const typename HalfspaceVector::iterator begin, const typename HalfspaceVector::iterator end);
 
         /**
          * @brief Removes the constraint at position index.
@@ -367,6 +369,7 @@ namespace hypro {
                 }
                 lhs << convert<Number, double>(rhs.constraints()[rhs.constraints().size() - 1]) << " ]";
             }
+            lhs << " isEmpty: " << rhs.mEmptyState;
             return lhs;
         }
 

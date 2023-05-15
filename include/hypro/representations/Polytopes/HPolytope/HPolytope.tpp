@@ -110,9 +110,9 @@ namespace hypro {
             return;
         }
 
-        if constexpr (is_exact<Number>) {
-            mDimension = points.front().dimension();
+        mDimension = points.front().dimension();
 
+        if constexpr (is_exact<Number>) {
             // Get raw data for quickhull
             std::vector<vector_t<Number>> inputPoints;
 
@@ -359,8 +359,6 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     std::size_t HPolytopeT<Number, Converter, Setting>::dimension() const {
-        // TODO the empty as well as the universal polytope have dimension 0, this sounds wrong
-        if (mHPlanes.empty() || mEmptyState == SETSTATE::EMPTY || mEmptyState == SETSTATE::UNIVERSAL) return 0;
         return mDimension;
     }
 
@@ -627,13 +625,15 @@ namespace hypro {
 //}
 
     template<typename Number, typename Converter, class Setting>
-    void HPolytopeT<Number, Converter, Setting>::insert(const Halfspace<Number> &plane) {
+    bool HPolytopeT<Number, Converter, Setting>::insert(const Halfspace<Number> &plane) {
         assert(mDimension == 0 || mDimension == plane.dimension());
         if (mDimension == 0) {
             mDimension = plane.dimension();
             mHPlanes.push_back(plane);
             mEmptyState = SETSTATE::NONEMPTY;
             mNonRedundant = true;
+            invalidateCache();
+            return true;
         } else {
             bool found = false;
             for (auto planeIt = mHPlanes.begin(); planeIt != mHPlanes.end(); ++planeIt) {
@@ -647,19 +647,23 @@ namespace hypro {
                 mEmptyState = SETSTATE::UNKNOWN;
                 mNonRedundant = false;
                 mUpdated = false;
+                invalidateCache();
+                return true;
             }
         }
-        invalidateCache();
+        return false;
     }
 
     template<typename Number, typename Converter, class Setting>
-    void HPolytopeT<Number, Converter, Setting>::insert(const typename HalfspaceVector::iterator begin,
+    bool HPolytopeT<Number, Converter, Setting>::insert(const typename HalfspaceVector::iterator begin,
                                                         const typename HalfspaceVector::iterator end) {
         auto it = begin;
+        bool inserted = false;
         while (it != end) {
-            this->insert(*it);
+            inserted = this->insert(*it) | inserted;
             ++it;
         }
+        return inserted;
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -698,13 +702,8 @@ namespace hypro {
                 }
                 redundant = mOptimizer->redundantConstraints();
             } else {
-                Optimizer<Number> opt;
-                opt.setMatrix(this->matrix());
-                opt.setVector(this->vector());
-                redundant = opt.redundantConstraints();
+                redundant = Optimizer<Number>(this->matrix(), this->vector()).redundantConstraints();
             }
-
-            // std::vector<std::size_t> redundant = opt.redundantConstraints();
 
             if (!redundant.empty()) {
                 std::size_t cnt = mHPlanes.size() - 1;
@@ -817,6 +816,10 @@ namespace hypro {
         if (this->empty()) {
             return std::make_pair(CONTAINMENT::NO, *this);
         }
+        if (this->hasConstraint(rhs)) {
+            return std::make_pair(CONTAINMENT::FULL, *this);
+        }
+
         HPolytopeT<Number, Converter, Setting> tmp = this->intersectHalfspace(rhs);
         if (tmp.hasConstraint(rhs)) {
             if (tmp.empty()) {
@@ -848,7 +851,8 @@ namespace hypro {
         }
 
         for (Eigen::Index rowI = 0; rowI < _mat.rows(); ++rowI) {
-            if (tmp.hasConstraint(Halfspace<Number>(_mat.row(rowI), _vec(rowI)))) {
+            auto hsp = Halfspace<Number>(_mat.row(rowI), _vec(rowI));
+            if (!this->hasConstraint(hsp) && tmp.hasConstraint(hsp)) {
                 return std::make_pair(CONTAINMENT::PARTIAL, std::move(tmp));
             }
         }
@@ -1051,6 +1055,7 @@ namespace hypro {
             for (const auto &plane: rhs.constraints()) {
                 res.insert(plane);
             }
+            assert(res.mEmptyState == SETSTATE::NONEMPTY || res.mEmptyState == SETSTATE::UNKNOWN);
             return res;
         }
     }
@@ -1078,10 +1083,13 @@ namespace hypro {
                                                                             << "b: " << _vec);
         assert(_mat.rows() == _vec.rows());
         HPolytopeT<Number, Converter, Setting> res(*this);
+        bool changed = false;
         for (unsigned i = 0; i < _mat.rows(); ++i) {
-            res.insert(Halfspace<Number>(_mat.row(i), _vec(i)));
+            changed = res.insert(Halfspace<Number>(_mat.row(i), _vec(i))) | changed;
         }
-        res.removeRedundancy();
+        if (changed) {
+            res.removeRedundancy();
+        }
         return res;
     }
 
