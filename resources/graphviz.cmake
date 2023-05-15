@@ -16,16 +16,16 @@ if (${GRAPHVIZ_FOUND})
     target_link_libraries(${PROJECT_NAME}-shared PUBLIC CGRAPH_SHARED GVC_SHARED)
     target_link_libraries(${PROJECT_NAME}-static PUBLIC CGRAPH_SHARED GVC_SHARED)
 
-    target_include_directories(${PROJECT_NAME}-objects
-            PRIVATE ${GRAPHVIZ_INCLUDE_DIRS}
-            )
-    target_include_directories(${PROJECT_NAME}-static
-            PRIVATE ${GRAPHVIZ_INCLUDE_DIRS}
-            )
-    target_include_directories(${PROJECT_NAME}-shared
-            PRIVATE ${GRAPHVIZ_INCLUDE_DIRS}
-            )
+    #    target_include_directories(${PROJECT_NAME}-objects
+    #            PRIVATE ${GRAPHVIZ_INCLUDE_DIRS}
+    #            )
+    #    target_include_directories(${PROJECT_NAME}-static
+    #            PRIVATE ${GRAPHVIZ_INCLUDE_DIRS}
+    #            )
+    #    target_include_directories(${PROJECT_NAME}-shared
+    #            PRIVATE ${GRAPHVIZ_INCLUDE_DIRS}
+    #            )
 
-    list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${GRAPHVIZ_INCLUDE_DIRS})
+    list(APPEND ${PROJECT_NAME}-include-dirs-private ${GRAPHVIZ_INCLUDE_DIRS})
     message(STATUS "Found Graphviz, enable plotting of ReachTrees from HyPro")
 endif ()

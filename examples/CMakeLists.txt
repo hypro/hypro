@@ -1,4 +1,4 @@
-file(GLOB EXAMPLES RELATIVE ${CMAKE_CURRENT_LIST_DIR} example_*.cpp)
+file(GLOB_RECURSE EXAMPLES RELATIVE ${CMAKE_CURRENT_LIST_DIR} example_*.cpp)
 
 add_custom_target(allExamples)
 
@@ -9,6 +9,7 @@ endif ()
 
 foreach (example ${EXAMPLES})
     string(REPLACE ".cpp" "" example_name ${example})
+    string(REPLACE "tutorial/" "" example_name ${example_name})
     add_executable(${example_name} EXCLUDE_FROM_ALL ${example})
     if (HYPRO_USE_MIMALLOC)
         get_target_property(mimalloc_library mimalloc_SHARED IMPORTED_LOCATION)

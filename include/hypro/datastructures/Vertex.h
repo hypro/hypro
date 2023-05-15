@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * A vertex is a point with a color assigned. The color determines is needed by
  * some representations e.g. to determine if the vertex is part of the state set.
@@ -18,249 +27,247 @@
 #include <list>
 
 namespace hypro {
-template <typename Number>
-class Vertex;
-template <typename Number>
-using vVec = typename std::vector<Vertex<Number>>;
-template <typename Number>
-using vVecIt = typename std::vector<Vertex<Number>>::iterator;
-template <typename Number>
-using vList = typename std::list<Vertex<Number>>;
-template <typename Number>
-using vListIt = typename std::list<Vertex<Number>>::iterator;
-template <typename Number>
-using vSet = typename std::set<Vertex<Number>>;
-template <typename Number>
-using vSetIt = typename std::set<Vertex<Number>>::iterator;
+    template<typename Number>
+    class Vertex;
 
-template <class Number>
-class Vertex {
-  private:
-	Point<Number> mPoint;
-	bool mColor = false;
+    template<typename Number>
+    using vVec = typename std::vector<Vertex<Number>>;
+    template<typename Number>
+    using vVecIt = typename std::vector<Vertex<Number>>::iterator;
+    template<typename Number>
+    using vList = typename std::list<Vertex<Number>>;
+    template<typename Number>
+    using vListIt = typename std::list<Vertex<Number>>::iterator;
+    template<typename Number>
+    using vSet = typename std::set<Vertex<Number>>;
+    template<typename Number>
+    using vSetIt = typename std::set<Vertex<Number>>::iterator;
 
-  public:
-	/**
-	 *
-	 * @param dimension
-	 * @param color
-	 */
-	explicit Vertex( bool color = false )
-		: mPoint()
-		, mColor( color ) {}
+    template<class Number>
+    class Vertex {
+    private:
+        Point<Number> mPoint;
+        bool mColor = false;
 
-	/**
-	 *
-	 * @param p
-	 * @param color
-	 */
-	Vertex( const Point<Number>& p, bool color = false )
-		: mPoint( p )
-		, mColor( color ) {}
-	Vertex( const vector_t<Number>& p, bool color = false )
-		: mPoint( p )
-		, mColor( color ) {}
+    public:
+        /**
+         *
+         * @param dimension
+         * @param color
+         */
+        explicit Vertex(bool color = false)
+                : mPoint(), mColor(color) {}
 
-	/**
-	 *
-	 * @param v
-	 */
-	Vertex( const Vertex<Number>& v )
-		: mPoint( v.point() )
-		, mColor( v.color() ) {}
+        /**
+         *
+         * @param p
+         * @param color
+         */
+        Vertex(const Point<Number> &p, bool color = false)
+                : mPoint(p), mColor(color) {}
 
-	Vertex( const Vertex<Number>&& v )
-		: mPoint( std::move( v.point() ) )
-		, mColor( v.color() ) {}
+        Vertex(const vector_t<Number> &p, bool color = false)
+                : mPoint(p), mColor(color) {}
 
-	/**
-	 * @brief Destroy the Vertex object
-	 */
-	~Vertex() {}
+        /**
+         *
+         * @param v
+         */
+        Vertex(const Vertex<Number> &v)
+                : mPoint(v.point()), mColor(v.color()) {}
 
-	/**
-	 *
-	 * @return the color of the vertex.
-	 */
-	bool color() const { return mColor; }
+        Vertex(const Vertex<Number> &&v)
+                : mPoint(std::move(v.point())), mColor(v.color()) {}
 
-	/**
-	 *
-	 * @param c the new value for this vertex' color.
-	 */
-	void setColor( bool c = true ) { mColor = c; }
+        /**
+         * @brief Destroy the Vertex object
+         */
+        ~Vertex() {}
 
-	/**
-	 *
-	 * @return the point of the vertex
-	 */
-	Point<Number> point() const { return mPoint; }
+        /**
+         *
+         * @return the color of the vertex.
+         */
+        bool color() const { return mColor; }
 
-	/**
-	 *
-	 * @return the point of the vertex
-	 */
-	Point<Number>& rPoint() { return mPoint; }
+        /**
+         *
+         * @param c the new value for this vertex' color.
+         */
+        void setColor(bool c = true) { mColor = c; }
 
-	/**
-	 *
-	 * @param p the new value for this vertex' point
-	 */
-	void setPoint( const Point<Number>& p ) { mPoint = p; }
+        /**
+         *
+         * @return the point of the vertex
+         */
+        Point<Number> point() const { return mPoint; }
 
-	/**
-	 * Inverts the color.
-	 */
-	void invertColor() { mColor = !mColor; }
+        /**
+         *
+         * @return the point of the vertex
+         */
+        Point<Number> &rPoint() { return mPoint; }
 
-	void swap( Vertex<Number>& _rhs ) {
-		this->mPoint.swap( _rhs.mPoint );
-		std::swap( this->mColor, _rhs.mColor );
-	}
+        /**
+         *
+         * @param p the new value for this vertex' point
+         */
+        void setPoint(const Point<Number> &p) { mPoint = p; }
 
-	/*******************************************************************
-	 * Point shortcuts
-	 *******************************************************************/
+        /**
+         * Inverts the color.
+         */
+        void invertColor() { mColor = !mColor; }
 
-	/**
-	 * @see Point::coordinate
-	 */
-	Number coordinate( const carl::Variable& _var ) const { return mPoint.coordinate( _var ); }
+        void swap(Vertex<Number> &_rhs) {
+            this->mPoint.swap(_rhs.mPoint);
+            std::swap(this->mColor, _rhs.mColor);
+        }
 
-	Number coordinate( std::size_t _dim ) const { return mPoint.coordinate( _dim ); }
+        /*******************************************************************
+         * Point shortcuts
+         *******************************************************************/
 
-	vector_t<Number> rawCoordinates() const { return mPoint.rawCoordinates(); }
+        /**
+         * @see Point::coordinate
+         */
+        Number coordinate(const carl::Variable &_var) const { return mPoint.coordinate(_var); }
 
-	/**
-	 * @see Point::dimension
-	 */
-	std::size_t dimension() const { return mPoint.dimension(); }
+        Number coordinate(std::size_t _dim) const { return mPoint.coordinate(_dim); }
 
-	/**
-	 * @see Point::variables
-	 */
-	std::vector<carl::Variable> variables() const { return mPoint.variables(); }
+        vector_t<Number> rawCoordinates() const { return mPoint.rawCoordinates(); }
 
-	/**
-	 * @see Point::hasDimension
-	 */
-	bool hasDimension( const carl::Variable& _i ) const { return mPoint.hasDimension( _i ); }
+        /**
+         * @see Point::dimension
+         */
+        std::size_t dimension() const { return mPoint.dimension(); }
 
-	/**
-	 * @see Point::hasDimensions
-	 */
-	bool hasDimensions( const std::vector<carl::Variable>& _variables ) const {
-		return mPoint.hasDimensions( _variables );
-	}
+        /**
+         * @see Point::variables
+         */
+        std::vector<carl::Variable> variables() const { return mPoint.variables(); }
 
-	/*******************************************************************
-	 * Operators
-	 *******************************************************************/
+        /**
+         * @see Point::hasDimension
+         */
+        bool hasDimension(const carl::Variable &_i) const { return mPoint.hasDimension(_i); }
 
-	/**
-	 * @brief Copy assignment operator
-	 *
-	 * @param _rhs righthand side
-	 */
-	Vertex<Number>& operator=( const Vertex<Number>& _rhs ) {
-		if ( *this != _rhs ) {
-			Vertex<Number>( _rhs ).swap( *this );
-		}
-		return *this;
-	}
+        /**
+         * @see Point::hasDimensions
+         */
+        bool hasDimensions(const std::vector<carl::Variable> &_variables) const {
+            return mPoint.hasDimensions(_variables);
+        }
 
-	Vertex<Number>& operator=( Vertex<Number>&& _rhs ) {
-		mPoint = std::move( _rhs.point() );
-		mColor = std::move( _rhs.color() );
-		return *this;
-	}
+        /*******************************************************************
+         * Operators
+         *******************************************************************/
 
-	/**
-	 *
-	 * @param v1
-	 * @param v2
-	 * @return true, if they are equal.
-	 */
-	friend bool operator==( const Vertex<Number>& _v1, const Vertex<Number>& _v2 ) {
-		if ( _v1.mColor != _v2.mColor ) {
-			return false;
-		}
-		if ( _v1.mPoint != _v2.mPoint ) {
-			return false;
-		}
-		return true;
-	}
+        /**
+         * @brief Copy assignment operator
+         *
+         * @param _rhs righthand side
+         */
+        Vertex<Number> &operator=(const Vertex<Number> &_rhs) {
+            if (*this != _rhs) {
+                Vertex<Number>(_rhs).swap(*this);
+            }
+            return *this;
+        }
 
-	/**
-	 *
-	 * @param v1
-	 * @param v2
-	 * @return true, if they are not equal.
-	 */
-	friend bool operator!=( const Vertex<Number>& _v1, const Vertex<Number>& _v2 ) { return !( _v1 == _v2 ); }
+        Vertex<Number> &operator=(Vertex<Number> &&_rhs) {
+            mPoint = std::move(_rhs.point());
+            mColor = std::move(_rhs.color());
+            return *this;
+        }
 
-	/**
-	 * Comparison operator for the map.
-	 * Compares the points of both vertices. If both are equal,
-	 * the color is compared while true is greater than false
-	 *
-	 * @param v1
-	 * @param v2
-	 * @return
-	 */
-	friend bool operator<( const Vertex<Number>& _v1, const Vertex<Number>& _v2 ) {
-		if ( _v1.mPoint < _v2.mPoint ) {
-			return true;
-		}
-		if ( _v1.mPoint > _v2.mPoint ) {
-			return false;
-		}
-		if ( !_v1.mColor && _v2.mColor ) {
-			return true;
-		}
-		return false;
-	}
+        /**
+         *
+         * @param v1
+         * @param v2
+         * @return true, if they are equal.
+         */
+        friend bool operator==(const Vertex<Number> &_v1, const Vertex<Number> &_v2) {
+            if (_v1.mColor != _v2.mColor) {
+                return false;
+            }
+            if (_v1.mPoint != _v2.mPoint) {
+                return false;
+            }
+            return true;
+        }
 
-	/**
-	 * Comparison operator for the map.
-	 * Compares the points of both vertices. If both are equal,
-	 * the color is compared while true is greater than false
-	 *return mPoint
-	 * @param v1
-	 * @param v2
-	 * @return
-	 */
-	friend bool operator>( const Vertex<Number>& _v1, const Vertex<Number>& _v2 ) { return _v2 < _v1; }
+        /**
+         *
+         * @param v1
+         * @param v2
+         * @return true, if they are not equal.
+         */
+        friend bool operator!=(const Vertex<Number> &_v1, const Vertex<Number> &_v2) { return !(_v1 == _v2); }
 
-	/**
-	 *
-	 * @param i
-	 * @return
-	 */
-	Number& operator[]( const carl::Variable& _i ) { return mPoint[_i]; }
-	Number& operator[]( std::size_t pos ) { return mPoint[pos]; }
+        /**
+         * Comparison operator for the map.
+         * Compares the points of both vertices. If both are equal,
+         * the color is compared while true is greater than false
+         *
+         * @param v1
+         * @param v2
+         * @return
+         */
+        friend bool operator<(const Vertex<Number> &_v1, const Vertex<Number> &_v2) {
+            if (_v1.mPoint < _v2.mPoint) {
+                return true;
+            }
+            if (_v1.mPoint > _v2.mPoint) {
+                return false;
+            }
+            if (!_v1.mColor && _v2.mColor) {
+                return true;
+            }
+            return false;
+        }
 
-	Number at( const carl::Variable& _i ) const { return mPoint.at( _i ); }
+        /**
+         * Comparison operator for the map.
+         * Compares the points of both vertices. If both are equal,
+         * the color is compared while true is greater than false
+         *return mPoint
+         * @param v1
+         * @param v2
+         * @return
+         */
+        friend bool operator>(const Vertex<Number> &_v1, const Vertex<Number> &_v2) { return _v2 < _v1; }
 
-	Number at( unsigned _i ) const { return mPoint.at( _i ); }
+        /**
+         *
+         * @param i
+         * @return
+         */
+        Number &operator[](const carl::Variable &_i) { return mPoint[_i]; }
 
-	friend std::ostream& operator<<( std::ostream& ostr, const Vertex& v ) {
-		ostr << v.mPoint << " [" << v.mColor << "]";
-		return ostr;
-	}
-};
+        Number &operator[](std::size_t pos) { return mPoint[pos]; }
+
+        Number at(const carl::Variable &_i) const { return mPoint.at(_i); }
+
+        Number at(unsigned _i) const { return mPoint.at(_i); }
+
+        friend std::ostream &operator<<(std::ostream &ostr, const Vertex &v) {
+            ostr << v.mPoint << " [" << v.mColor << "]";
+            return ostr;
+        }
+    };
 }  // namespace hypro
 
 namespace std {
-template <class Number>
-struct hash<hypro::Vertex<Number>> {
-	std::size_t operator()( const hypro::Vertex<Number>& vertex ) {
-		std::hash<hypro::Point<Number>> pointHasher;
-		std::hash<bool> boolHasher;
-		std::size_t seed;
-		seed = pointHasher( vertex.point() );
-		carl::hash_add( seed, boolHasher( vertex.color() ) );
-		return seed;
-	}
-};
+    template<class Number>
+    struct hash<hypro::Vertex<Number>> {
+        std::size_t operator()(const hypro::Vertex<Number> &vertex) {
+            std::hash<hypro::Point<Number>> pointHasher;
+            std::hash<bool> boolHasher;
+            std::size_t seed;
+            seed = pointHasher(vertex.point());
+            carl::hash_add(seed, boolHasher(vertex.color()));
+            return seed;
+        }
+    };
 }  // namespace std

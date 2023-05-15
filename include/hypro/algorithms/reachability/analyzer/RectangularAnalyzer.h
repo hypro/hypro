@@ -8,6 +8,7 @@
  */
 
 #pragma once
+
 #include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../types.h"
 #include "../workers/RectangularWorker.h"
@@ -23,83 +24,87 @@ namespace hypro {
  * @tparam Automaton hybrid automaton type
  * @tparam Multithreading enable/disable multithreading
  */
-template <typename State, typename Automaton, typename Multithreading = NoMultithreading>
-class RectangularAnalyzer {
-	static_assert( std::is_same<typename State::NumberType, typename Automaton::NumberType>() );
-	using Number = typename State::NumberType;
-	using LocationT = typename Automaton::LocationType;
+    template<typename State, typename Automaton, typename Multithreading = NoMultithreading>
+    class RectangularAnalyzer {
+        static_assert(std::is_same<typename State::NumberType, typename Automaton::NumberType>());
+        using Number = typename State::NumberType;
+        using LocationT = typename Automaton::LocationType;
 
-  public:
-	/// default constructor (deleted)
-	RectangularAnalyzer() = delete;
-	/// constructor from automaton and settings with additional reachTree
-	RectangularAnalyzer( const Automaton& ha, const Settings& setting, std::vector<ReachTreeNode<State, LocationT>>& roots )
-		: mHybridAutomaton( ha )
-		, mAnalysisSettings( setting )
-		, mReachTree( roots ) {
-	}
-	/// main method for reachability analysis
-	REACHABILITY_RESULT run();
-	REACHABILITY_RESULT forwardRun();
-	// REACHABILITY_RESULT backwardRun();
-	/// getter for computed flowpipes
-	const std::vector<Flowpipe<State>>& getFlowpipes() const { return mFlowpipes; }
+    public:
+        /// default constructor (deleted)
+        RectangularAnalyzer() = delete;
 
-	void addToQueue( ReachTreeNode<State, LocationT>* node ) {
-		if ( std::is_same_v<Multithreading, UseMultithreading> ) {
-			{
-				std::unique_lock<std::mutex> lock( mQueueMutex );
-				mWorkQueue.push( node );
-			}
-			mQueueNonEmpty.notify_one();
-		} else {
-			mWorkQueue.push( node );
-		}
-	}
+        /// constructor from automaton and settings with additional reachTree
+        RectangularAnalyzer(const Automaton &ha, const Settings &setting,
+                            std::vector<ReachTreeNode<State, LocationT>> &roots)
+                : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots) {
+        }
 
-	ReachTreeNode<State, LocationT>* getNodeFromQueue() {
-		auto* res = mWorkQueue.front();
-		mWorkQueue.pop();
-		return res;
-	}
+        /// main method for reachability analysis
+        REACHABILITY_RESULT run();
 
-	void shutdown() {
-		{
-			std::unique_lock<std::mutex> lock( mThreadPoolMutex );
-			mTerminate = true;	// use this flag in condition.wait
-		}
+        REACHABILITY_RESULT forwardRun();
 
-		mQueueNonEmpty.notify_all();  // wake up all threads.
+        // REACHABILITY_RESULT backwardRun();
+        /// getter for computed flowpipes
+        const std::vector<Flowpipe<State>> &getFlowpipes() const { return mFlowpipes; }
 
-		// Join all threads.
-		for ( std::thread& th : mThreads ) {
-			th.join();
-		}
+        void addToQueue(ReachTreeNode<State, LocationT> *node) {
+            if (std::is_same_v<Multithreading, UseMultithreading>) {
+                {
+                    std::unique_lock<std::mutex> lock(mQueueMutex);
+                    mWorkQueue.push(node);
+                }
+                mQueueNonEmpty.notify_one();
+            } else {
+                mWorkQueue.push(node);
+            }
+        }
 
-		mThreads.clear();
-		mStopped = true;
-	}
+        ReachTreeNode<State, LocationT> *getNodeFromQueue() {
+            auto *res = mWorkQueue.front();
+            mWorkQueue.pop();
+            return res;
+        }
 
-  private:
-	REACHABILITY_RESULT processNode( RectangularWorker<State, Automaton>& worker, ReachTreeNode<State, LocationT>* node );
+        void shutdown() {
+            {
+                std::unique_lock<std::mutex> lock(mThreadPoolMutex);
+                mTerminate = true;    // use this flag in condition.wait
+            }
 
-  protected:
-	std::queue<ReachTreeNode<State, LocationT>*> mWorkQueue;   ///< Queue holds all nodes that require processing
-	std::vector<Flowpipe<State>> mFlowpipes;				   ///< Storage for already computed flowpipes
-	HybridAutomaton<Number> mHybridAutomaton;				   ///< Automaton which is analyzed
-	Settings mAnalysisSettings;								   ///< Settings used for analysis
-	std::vector<ReachTreeNode<State, LocationT>>& mReachTree;  ///< Forest of ReachTrees computed
-	int mNumThreads = std::thread::hardware_concurrency();	   ///< number of used threads
-	std::vector<std::thread> mThreads;						   ///< vector of threads
-	std::vector<bool> mIdle;								   ///< vector of idle threads
-	std::mutex mQueueMutex;									   ///< mutex to access the queue
-	std::mutex mThreadPoolMutex;							   ///< mutex for the thread pool itself
-	std::condition_variable mQueueNonEmpty;					   ///< notification variable to indicate the queue is nonempty
-	std::atomic<bool> mTerminate = false;					   ///< indicates termination request
-	std::atomic<bool> mStopped = false;						   ///< indicator, whether shutdown was already invoked
-	std::mutex mIdleWorkerMutex;							   ///< mutex to access the idle-flag array
-	std::condition_variable mAllIdle;						   ///< notification variable to trigger shutdown of the threadpool
-};
+            mQueueNonEmpty.notify_all();  // wake up all threads.
+
+            // Join all threads.
+            for (std::thread &th: mThreads) {
+                th.join();
+            }
+
+            mThreads.clear();
+            mStopped = true;
+        }
+
+    private:
+        REACHABILITY_RESULT
+        processNode(RectangularWorker<State, Automaton> &worker, ReachTreeNode<State, LocationT> *node);
+
+    protected:
+        std::queue<ReachTreeNode<State, LocationT> *> mWorkQueue;   ///< Queue holds all nodes that require processing
+        std::vector<Flowpipe<State>> mFlowpipes;                   ///< Storage for already computed flowpipes
+        HybridAutomaton<Number> mHybridAutomaton;                   ///< Automaton which is analyzed
+        Settings mAnalysisSettings;                                   ///< Settings used for analysis
+        std::vector<ReachTreeNode<State, LocationT>> &mReachTree;  ///< Forest of ReachTrees computed
+        int mNumThreads = std::thread::hardware_concurrency();       ///< number of used threads
+        std::vector<std::thread> mThreads;                           ///< vector of threads
+        std::vector<bool> mIdle;                                   ///< vector of idle threads
+        std::mutex mQueueMutex;                                       ///< mutex to access the queue
+        std::mutex mThreadPoolMutex;                               ///< mutex for the thread pool itself
+        std::condition_variable mQueueNonEmpty;                       ///< notification variable to indicate the queue is nonempty
+        std::atomic<bool> mTerminate = false;                       ///< indicates termination request
+        std::atomic<bool> mStopped = false;                           ///< indicator, whether shutdown was already invoked
+        std::mutex mIdleWorkerMutex;                               ///< mutex to access the idle-flag array
+        std::condition_variable mAllIdle;                           ///< notification variable to trigger shutdown of the threadpool
+    };
 
 }  // namespace hypro
 

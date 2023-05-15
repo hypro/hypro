@@ -23,48 +23,57 @@
 
 namespace hypro {
 
-template <typename Representation, typename HybridAutomaton>
-class LTIWorker {
-  private:
-	using Number = typename Representation::NumberType;
-	using LocationT = typename HybridAutomaton::LocationType;
+    template<typename Representation, typename HybridAutomaton>
+    class LTIWorker {
+    private:
+        using Number = typename Representation::NumberType;
+        using LocationT = typename HybridAutomaton::LocationType;
 
-	struct EnabledSegmentsGen;
-	struct AggregatedGen;
+        struct EnabledSegmentsGen;
+        struct AggregatedGen;
 
-  public:
-	struct JumpSuccessorGen;
+    public:
+        struct JumpSuccessorGen;
 
-	LTIWorker( const HybridAutomaton& ha, const AnalysisParameters& settings, tNumber localTimeHorizon, TimeTransformationCache<LocationT>& trafoCache, std::size_t subspace = 0 )
-		: mHybridAutomaton( ha )
-		, mSettings( settings )
-		, mLocalTimeHorizon( localTimeHorizon )
-		, mTrafoCache( trafoCache )
-		, mSubspace( subspace ) {}
+        LTIWorker(const HybridAutomaton &ha, const AnalysisParameters &settings, tNumber localTimeHorizon,
+                  TimeTransformationCache<LocationT> &trafoCache, std::size_t subspace = 0)
+                : mHybridAutomaton(ha), mSettings(settings), mLocalTimeHorizon(localTimeHorizon),
+                  mTrafoCache(trafoCache), mSubspace(subspace) {}
 
-	template <typename OutputIt>
-	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out, long segmentsToCompute, bool checkSafety = true ) const;
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  long segmentsToCompute, bool checkSafety = true) const;
 
-	template <typename OutputIt>
-	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, LocationT const* loc, OutputIt out, bool checkSafety = true ) const {
-		return computeTimeSuccessors( initialSet, loc, out, mNumSegments, checkSafety );
-	}
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  bool checkSafety = true) const {
+            return computeTimeSuccessors(initialSet, loc, out, mNumSegments, checkSafety);
+        }
 
-	std::vector<JumpSuccessor<Representation, LocationT>> computeJumpSuccessors( std::vector<Representation> const& flowpipe, LocationT const* loc ) const;
-	JumpSuccessorGen getJumpSuccessors( std::vector<Representation> const& flowpipe, Transition<LocationT> const* transition ) const;
-	SegmentInd maxNumberSegments() const { return mNumSegments; }
-	// Compute jump successors for guard enabling sets
-	std::vector<TimedValuationSet<Representation>> computeJumpSuccessorsForGuardEnabled( std::vector<IndexedValuationSet<Representation>>& predecessors, Transition<LocationT> const* trans ) const;
+        std::vector<JumpSuccessor<Representation, LocationT>>
+        computeJumpSuccessors(std::vector<Representation> const &flowpipe, LocationT const *loc) const;
 
-  protected:
-	const HybridAutomaton& mHybridAutomaton;		  ///< hybrid automaton to analyze
-	const AnalysisParameters& mSettings;			  ///< analysis settings
-	tNumber mLocalTimeHorizon;						  ///< local time horizon
-	TimeTransformationCache<LocationT>& mTrafoCache;  ///< cache for matrix exponential
-	std::size_t mSubspace;
+        JumpSuccessorGen
+        getJumpSuccessors(std::vector<Representation> const &flowpipe, Transition<LocationT> const *transition) const;
 
-	long const mNumSegments = long( std::ceil( std::nextafter( carl::convert<tNumber, double>( mLocalTimeHorizon / mSettings.timeStep ), std::numeric_limits<double>::max() ) ) );
-};
+        SegmentInd maxNumberSegments() const { return mNumSegments; }
+
+        // Compute jump successors for guard enabling sets
+        std::vector<TimedValuationSet<Representation>>
+        computeJumpSuccessorsForGuardEnabled(std::vector<IndexedValuationSet<Representation>> &predecessors,
+                                             Transition<LocationT> const *trans) const;
+
+    protected:
+        const HybridAutomaton &mHybridAutomaton;          ///< hybrid automaton to analyze
+        const AnalysisParameters &mSettings;              ///< analysis settings
+        tNumber mLocalTimeHorizon;                          ///< local time horizon
+        TimeTransformationCache<LocationT> &mTrafoCache;  ///< cache for matrix exponential
+        std::size_t mSubspace;
+
+        long const mNumSegments = long(std::ceil(
+                std::nextafter(carl::convert<tNumber, double>(mLocalTimeHorizon / mSettings.timeStep),
+                               std::numeric_limits<double>::max())));
+    };
 
 }  // namespace hypro
 

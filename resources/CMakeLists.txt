@@ -1,9 +1,12 @@
-
 # initialize lists for include directories and library files
-set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
+set(${PROJECT_NAME}-include-dirs "" CACHE STRING "Include directories list")
+set(${PROJECT_NAME}-include-dirs-private "" CACHE STRING "Include directories list (private)")
 
 add_custom_target(${PROJECT_NAME}-resources)
+add_custom_target(${PROJECT_NAME}-parser-resources)
 add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-resources)
+add_dependencies(${PROJECT_NAME}-parser ${PROJECT_NAME}-parser-resources)
+
 set(RESSOURCES_FLAGS "-std=c++17 -Wno-error ${CMAKE_CXX_FLAGS} -Wno-error")
 #message("Ressoures flags: ${RESSOURCES_FLAGS}")
 
@@ -299,5 +302,7 @@ if (HYPRO_USE_SERIALIZATION)
     include(cereal.cmake)
 endif ()
 
+set(${PROJECT_NAME}-include-dirs "${${PROJECT_NAME}-include-dirs}" PARENT_SCOPE)
+set(${PROJECT_NAME}-include-dirs-private "${${PROJECT_NAME}-include-dirs-private}" PARENT_SCOPE)
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -21,60 +21,63 @@ namespace hypro {
  * @brief      Class for a transition in a stochastic automaton.
  * @tparam     Number  The used number type.
  */
-template <typename LocationType>
-class StochasticTransition : public Transition<LocationType> {
-	using Number = typename LocationType::NumberType;
+    template<typename LocationType>
+    class StochasticTransition : public Transition<LocationType> {
+        using Number = typename LocationType::NumberType;
 
-  private:
-	Number mProbability = 1;
-	Number mTransitionWeight;
-	carl::Interval<Number> mTransitionInterval;
+    private:
+        Number mProbability = 1;
+        Number mTransitionWeight;
+        carl::Interval<Number> mTransitionInterval;
 
-  public:
-	//   StochasticTransition()
-	// 		: Transition<Number>()
-	// 		, mProbability()
-	// 		, mTransitionWeight()
-	// 		, mTransitionInterval() {}
+    public:
+        //   StochasticTransition()
+        // 		: Transition<Number>()
+        // 		, mProbability()
+        // 		, mTransitionWeight()
+        // 		, mTransitionInterval() {}
 
-	// StochasticTransition( const StochasticTransition<Number>& orig )
-	// 		: Transition<Number>( orig )
-	// 		, mProbability()
-	// 		, mTransitionWeight()
-	// 		, mTransitionInterval() {}
+        // StochasticTransition( const StochasticTransition<Number>& orig )
+        // 		: Transition<Number>( orig )
+        // 		, mProbability()
+        // 		, mTransitionWeight()
+        // 		, mTransitionInterval() {}
 
-	//   StochasticTransition( StochasticLocation<Number>* source, StochasticLocation<Number>* target )
-	// 		: Transition<Number>( source, target )
-	// 		, mProbability()
-	// 		, mTransitionWeight()
-	// 		, mTransitionInterval() {}
+        //   StochasticTransition( StochasticLocation<Number>* source, StochasticLocation<Number>* target )
+        // 		: Transition<Number>( source, target )
+        // 		, mProbability()
+        // 		, mTransitionWeight()
+        // 		, mTransitionInterval() {}
 
-	// 	StochasticTransition( StochasticLocation<Number>* source, StochasticLocation<Number>* target, const Condition<Number>& guard, const Reset<Number>& reset )
-	// 		: Transition<Number>( source, target, guard, reset )
-	// 		, mProbability()
-	// 		, mTransitionWeight()
-	// 		, mTransitionInterval() {}
+        // 	StochasticTransition( StochasticLocation<Number>* source, StochasticLocation<Number>* target, const Condition<Number>& guard, const Reset<Number>& reset )
+        // 		: Transition<Number>( source, target, guard, reset )
+        // 		, mProbability()
+        // 		, mTransitionWeight()
+        // 		, mTransitionInterval() {}
 
-	void setProbability( Number probability ) {
-		mProbability = probability;
-	}
-	Number getProbability() {
-		return mProbability;
-	}
+        void setProbability(Number probability) {
+            mProbability = probability;
+        }
 
-	void setTransitionWeight( Number weight ) {
-		mTransitionWeight = weight;
-	}
-	Number getTransitionWeight() {
-		return mTransitionWeight;
-	}
+        Number getProbability() {
+            return mProbability;
+        }
 
-	void setTransitionInterval( Number interval ) {
-		mTransitionInterval = interval;
-	}
-	Number getTransitionInterval() {
-		return mTransitionInterval;
-	}
-};
+        void setTransitionWeight(Number weight) {
+            mTransitionWeight = weight;
+        }
+
+        Number getTransitionWeight() {
+            return mTransitionWeight;
+        }
+
+        void setTransitionInterval(Number interval) {
+            mTransitionInterval = interval;
+        }
+
+        Number getTransitionInterval() {
+            return mTransitionInterval;
+        }
+    };
 
 }  // namespace hypro

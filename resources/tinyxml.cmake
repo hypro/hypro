@@ -24,12 +24,14 @@ target_link_libraries(${PROJECT_NAME}-objects INTERFACE HYPRO_TINYXML_STATIC)
 target_link_libraries(${PROJECT_NAME}-shared PUBLIC $<BUILD_INTERFACE:HYPRO_TINYXML_STATIC>)
 target_link_libraries(${PROJECT_NAME}-static PUBLIC $<BUILD_INTERFACE:HYPRO_TINYXML_STATIC>)
 
-target_include_directories(${PROJECT_NAME}-objects
-        PUBLIC ${tinyxml_INCLUDE_DIR}
-        )
-target_include_directories(${PROJECT_NAME}-static
-        PRIVATE ${tinyxml_INCLUDE_DIR}
-        )
-target_include_directories(${PROJECT_NAME}-shared
-        PUBLIC ${tinyxml_INCLUDE_DIR}
-        )
+#target_include_directories(${PROJECT_NAME}-objects
+#        PUBLIC ${tinyxml_INCLUDE_DIR}
+#        )
+#target_include_directories(${PROJECT_NAME}-static
+#        PRIVATE ${tinyxml_INCLUDE_DIR}
+#        )
+#target_include_directories(${PROJECT_NAME}-shared
+#        PUBLIC ${tinyxml_INCLUDE_DIR}
+#        )
+
+list(APPEND ${PROJECT_NAME}-include-dirs ${tinyxml_INCLUDE_DIR})

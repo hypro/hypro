@@ -11,142 +11,148 @@
 
 namespace hypro {
 
-template <typename State, typename Automaton, typename Multithreading>
-REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::run() {
-	// create reachTree if not already present
-	if ( mReachTree.empty() ) {
-		mReachTree = makeRoots<State>( mHybridAutomaton );
-	}
-	// initialize queue
-	for ( auto& rtNode : mReachTree ) {
-		mWorkQueue.push( &rtNode );
-	}
-	DEBUG( "hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue" );
+    template<typename State, typename Automaton, typename Multithreading>
+    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::run() {
+        // create reachTree if not already present
+        if (mReachTree.empty()) {
+            mReachTree = makeRoots<State>(mHybridAutomaton);
+        }
+        // initialize queue
+        for (auto &rtNode: mReachTree) {
+            mWorkQueue.push(&rtNode);
+        }
+        DEBUG("hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue");
 
-	if ( std::is_same_v<Multithreading, UseMultithreading> ) {
-		mIdle = std::vector( mNumThreads, true );
-		std::mutex resultMutex;
-		REACHABILITY_RESULT res{ REACHABILITY_RESULT::SAFE };
-		for ( int i = 0; i < mNumThreads; i++ ) {
-			mThreads.push_back( std::thread( [this, i, &resultMutex, &res]() {
-				RectangularWorker<State, Automaton> worker{ mHybridAutomaton, mAnalysisSettings };
-				ReachTreeNode<State, LocationT>* currentNode;
-				while ( !mTerminate ) {
-					{
-						std::unique_lock<std::mutex> lock( mQueueMutex );
+        if (std::is_same_v<Multithreading, UseMultithreading>) {
+            mIdle = std::vector(mNumThreads, true);
+            std::mutex resultMutex;
+            REACHABILITY_RESULT res{REACHABILITY_RESULT::SAFE};
+            for (int i = 0; i < mNumThreads; i++) {
+                mThreads.push_back(std::thread([this, i, &resultMutex, &res]() {
+                    RectangularWorker<State, Automaton> worker{mHybridAutomaton, mAnalysisSettings};
+                    ReachTreeNode<State, LocationT> *currentNode;
+                    while (!mTerminate) {
+                        {
+                            std::unique_lock<std::mutex> lock(mQueueMutex);
 
-						mQueueNonEmpty.wait( lock, [this]() {
-							// TODO I am not sure, whether we need to lock here to access the queue
-							return !mWorkQueue.empty() || mTerminate;
-						} );
-						{
-							if ( mTerminate ) {
-								break;
-							}
-							// TODO I do not think we need the idle lock, since we already have the queue lock
-							std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
-							mIdle[i] = false;
-						}
-						currentNode = getNodeFromQueue();
-						DEBUG( "hypro.reachability", "Processing node @" << currentNode << " with path " << currentNode->getPath() );
-					}
+                            mQueueNonEmpty.wait(lock, [this]() {
+                                // TODO I am not sure, whether we need to lock here to access the queue
+                                return !mWorkQueue.empty() || mTerminate;
+                            });
+                            {
+                                if (mTerminate) {
+                                    break;
+                                }
+                                // TODO I do not think we need the idle lock, since we already have the queue lock
+                                std::unique_lock<std::mutex> idleLock{mIdleWorkerMutex};
+                                mIdle[i] = false;
+                            }
+                            currentNode = getNodeFromQueue();
+                            DEBUG("hypro.reachability",
+                                  "Processing node @" << currentNode << " with path " << currentNode->getPath());
+                        }
 
-					auto result = processNode( worker, currentNode );
+                        auto result = processNode(worker, currentNode);
 
-					{
-						std::unique_lock<std::mutex> idleLock{ mIdleWorkerMutex };
-						mIdle[i] = true;
-						mAllIdle.notify_all();
-					}
+                        {
+                            std::unique_lock<std::mutex> idleLock{mIdleWorkerMutex};
+                            mIdle[i] = true;
+                            mAllIdle.notify_all();
+                        }
 
-					if ( result != REACHABILITY_RESULT::SAFE ) {
-						mTerminate = true;
-						{
-							std::lock_guard<std::mutex> lock{ resultMutex };
-							res = result;
-						}
-						break;
-					}
-				}
-			} ) );
-		}
-		// busy wait?
-		{
-			std::unique_lock<std::mutex> lock{ mThreadPoolMutex };
-			mAllIdle.wait( lock, [this]() {
-				return mTerminate || ( mWorkQueue.empty() && std::all_of( std::begin( mIdle ), std::end( mIdle ), []( bool in ) { return in; } ) );
-			} );
-		}
-		shutdown();
-		return res;
-	} else {
-		REACHABILITY_RESULT safetyResult;
-		if ( mAnalysisSettings.strategy().front().reachability_analysis_method == REACH_SETTING::FORWARD ) {
-			// forward analysis
-			safetyResult = forwardRun();
-		}
-		// else {
-		//	// backward analysis
-		//	safetyResult = backwardRun();
-		//}
+                        if (result != REACHABILITY_RESULT::SAFE) {
+                            mTerminate = true;
+                            {
+                                std::lock_guard<std::mutex> lock{resultMutex};
+                                res = result;
+                            }
+                            break;
+                        }
+                    }
+                }));
+            }
+            // busy wait?
+            {
+                std::unique_lock<std::mutex> lock{mThreadPoolMutex};
+                mAllIdle.wait(lock, [this]() {
+                    return mTerminate || (mWorkQueue.empty() &&
+                                          std::all_of(std::begin(mIdle), std::end(mIdle), [](bool in) { return in; }));
+                });
+            }
+            shutdown();
+            return res;
+        } else {
+            REACHABILITY_RESULT safetyResult;
+            if (mAnalysisSettings.strategy().front().reachability_analysis_method == REACH_SETTING::FORWARD) {
+                // forward analysis
+                safetyResult = forwardRun();
+            }
+            // else {
+            //	// backward analysis
+            //	safetyResult = backwardRun();
+            //}
 
-		return safetyResult;
-	}
-}
+            return safetyResult;
+        }
+    }
 
-template <typename State, typename Automaton, typename Multithreading>
-REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::forwardRun() {
-	DEBUG( "hypro.reachability.rectangular", "Start forward analysis" );
+    template<typename State, typename Automaton, typename Multithreading>
+    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::forwardRun() {
+        DEBUG("hypro.reachability.rectangular", "Start forward analysis");
 
-	RectangularWorker<State, Automaton> worker{ mHybridAutomaton, mAnalysisSettings };
-	while ( !mWorkQueue.empty() ) {
-		auto* currentNode = getNodeFromQueue();
-		DEBUG( "hypro.reachability", "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName() << " with path " << currentNode->getTreePath() );
-		auto result = processNode( worker, currentNode );
-		if ( result != REACHABILITY_RESULT::SAFE ) {
-			DEBUG( "hypro.reachability", "End Rectangular Reachability Analysis." );
-			return result;
-		}
-	}
+        RectangularWorker<State, Automaton> worker{mHybridAutomaton, mAnalysisSettings};
+        while (!mWorkQueue.empty()) {
+            auto *currentNode = getNodeFromQueue();
+            DEBUG("hypro.reachability",
+                  "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName()
+                                    << " with path " << currentNode->getTreePath());
+            auto result = processNode(worker, currentNode);
+            if (result != REACHABILITY_RESULT::SAFE) {
+                DEBUG("hypro.reachability", "End Rectangular Reachability Analysis.");
+                return result;
+            }
+        }
 
-	return REACHABILITY_RESULT::SAFE;
-}
+        return REACHABILITY_RESULT::SAFE;
+    }
 
-template <typename State, typename Automaton, typename Multithreading>
-REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::processNode( RectangularWorker<State, Automaton>& worker, ReachTreeNode<State, LocationT>* node ) {
-	REACHABILITY_RESULT safetyResult;
-	TRACE( "hypro.reachability.rectangular", "Analyze node at depth " << node->getDepth() );
+    template<typename State, typename Automaton, typename Multithreading>
+    REACHABILITY_RESULT
+    RectangularAnalyzer<State, Automaton, Multithreading>::processNode(RectangularWorker<State, Automaton> &worker,
+                                                                       ReachTreeNode<State, LocationT> *node) {
+        REACHABILITY_RESULT safetyResult;
+        TRACE("hypro.reachability.rectangular", "Analyze node at depth " << node->getDepth());
 
-	// reset worker state
-	worker.clear();
-	// in case the jump depth is reached, only compute time successors
-	if ( node->getDepth() < mAnalysisSettings.fixedParameters().jumpDepth ) {
-		safetyResult = worker.computeForwardReachability( *node );
-	} else {
-		safetyResult = worker.computeTimeSuccessors( *node );
-	}
+        // reset worker state
+        worker.clear();
+        // in case the jump depth is reached, only compute time successors
+        if (node->getDepth() < mAnalysisSettings.fixedParameters().jumpDepth) {
+            safetyResult = worker.computeForwardReachability(*node);
+        } else {
+            safetyResult = worker.computeTimeSuccessors(*node);
+        }
 
-	// only for plotting
-	mFlowpipes.emplace_back( worker.getFlowpipe() );
+        // only for plotting
+        mFlowpipes.emplace_back(worker.getFlowpipe());
 
-	if ( safetyResult != REACHABILITY_RESULT::SAFE ) {
-		return safetyResult;
-	}
+        if (safetyResult != REACHABILITY_RESULT::SAFE) {
+            return safetyResult;
+        }
 
-	// create jump successor tasks
-	for ( const auto& transitionStatesPair : worker.getJumpSuccessorSets() ) {
-		for ( const auto jmpSucc : transitionStatesPair.second ) {
-			// update reachTree
-			// time is not considered in rectangular analysis so we store a dummy
-			auto& childNode = node->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
-			assert( childNode.getDepth() == node->getDepth() + 1 );
+        // create jump successor tasks
+        for (const auto &transitionStatesPair: worker.getJumpSuccessorSets()) {
+            for (const auto jmpSucc: transitionStatesPair.second) {
+                // update reachTree
+                // time is not considered in rectangular analysis so we store a dummy
+                auto &childNode = node->addChild(jmpSucc, carl::Interval<SegmentInd>(0, 0), transitionStatesPair.first);
+                assert(childNode.getDepth() == node->getDepth() + 1);
 
-			// create Task
-			addToQueue( &childNode );
-		}
-	}
-	return REACHABILITY_RESULT::SAFE;
-}
+                // create Task
+                addToQueue(&childNode);
+            }
+        }
+        return REACHABILITY_RESULT::SAFE;
+    }
 
 /*
 template <typename State, typename Automaton, typename Multithreading>

@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * This file holds the vertex enumeration algorithm presented by Avis and Fukuda.
  * @file vertexEnumeration.h
@@ -22,198 +31,209 @@
 
 namespace hypro {
 
-template <typename Number>
-class Dictionary {
-  private:
-	matrix_t<Number> mDictionary;	   ///< table
-	std::vector<Eigen::Index> mB;	   ///< basis
-	std::vector<Eigen::Index> mN;	   ///< co-basis
-	ConstrainSet<Number> mConstrains;  ///< original constraints
+    template<typename Number>
+    class Dictionary {
+    private:
+        matrix_t <Number> mDictionary;       ///< table
+        std::vector <Eigen::Index> mB;       ///< basis
+        std::vector <Eigen::Index> mN;       ///< co-basis
+        ConstrainSet <Number> mConstrains;  ///< original constraints
 
-  public:
-	Dictionary() = default;
-	Dictionary( const Dictionary& rhs );
-	Dictionary( const matrix_t<Number>& rhs, std::vector<Eigen::Index> base, std::vector<Eigen::Index> cobase );
-	Dictionary( const matrix_t<Number>& rhs, std::vector<Eigen::Index> base, std::vector<Eigen::Index> cobase, ConstrainSet<Number> constrains );
-	Dictionary& operator=( const Dictionary& other ) = default;
+    public:
+        Dictionary() = default;
 
-	/**
-	 * @brief Build a dictionary with mDictionary=rhs, mB=base and mN=cobase.
-	 */
-	Dictionary( const std::vector<Halfspace<Number>>& hsv );
-	/**
-	 * @brief Build a dictionary based on the hyperplane set hsv.
-	 */
+        Dictionary(const Dictionary &rhs);
 
-	std::vector<Eigen::Index> basis() const;
+        Dictionary(const matrix_t <Number> &rhs, std::vector <Eigen::Index> base, std::vector <Eigen::Index> cobase);
 
-	std::vector<Eigen::Index> cobasis() const;
+        Dictionary(const matrix_t <Number> &rhs, std::vector <Eigen::Index> base, std::vector <Eigen::Index> cobase,
+                   ConstrainSet <Number> constrains);
 
-	ConstrainSet<Number> constrainSet() const;
+        Dictionary &operator=(const Dictionary &other) = default;
 
-	matrix_t<Number> tableau() const;
+        /**
+         * @brief Build a dictionary with mDictionary=rhs, mB=base and mN=cobase.
+         */
+        Dictionary(const std::vector <Halfspace<Number>> &hsv);
 
-	/**
-	 * @return the number in the cell (i,j) of mDictionary.
-	 */
-	Number get( Eigen::Index i, Eigen::Index j ) const;
+        /**
+         * @brief Build a dictionary based on the hyperplane set hsv.
+         */
 
-	/**
-	 * @brief set mDicionary(i,j) to val.
-	 */
-	void setValue( Eigen::Index i, Eigen::Index j, Number val );
+        std::vector <Eigen::Index> basis() const;
 
-	void printDictionary() const;
+        std::vector <Eigen::Index> cobasis() const;
 
-	/**
-	 * @brief Pivot expected ‘)’ before ‘<’ tokenthe dictionary, no modification made to mB and mN.
-	 */
-	void pivotDictionary( Eigen::Index i, Eigen::Index j );
+        ConstrainSet <Number> constrainSet() const;
 
-	/**
-	 * @brief The whole pivot.
-	 */
-	void pivot( Eigen::Index i, Eigen::Index j );
+        matrix_t <Number> tableau() const;
 
-	/**
-	 * @brief Selects the next pivot according to CrissCross's rule.
-	 *
-	 * @param i The reference for the proposed row index.
-	 * @param j The reference for the proposed column index.
-	 *
-	 * @return True, if there is a valid pivot.
-	 */
-	bool selectCrissCrossPivot( Eigen::Index& i, Eigen::Index& j );
+        /**
+         * @return the number in the cell (i,j) of mDictionary.
+         */
+        Number get(Eigen::Index i, Eigen::Index j) const;
 
-	/**
-	 * @brief Check for the satisfiability of the dictionary and finds a suitable assignment.
-	 * @details Checks if variables are out of bound. If yes, tries to find a suitable pivot to fix this. If there is none throws exception (empty set).
-	 * If a suitable pivot is found, apply pivot step and update assignment.
-	 * @returns True, if assignment has been updated.
-	 */
-	bool fixOutOfBounds();
+        /**
+         * @brief set mDicionary(i,j) to val.
+         */
+        void setValue(Eigen::Index i, Eigen::Index j, Number val);
 
-	/**
-	 * @brief Puts in i and j the pivot, returns false iff none was sutable.
-	 */
-	bool selectBlandPivot( Eigen::Index& i, Eigen::Index& j ) const;
+        void printDictionary() const;
 
-	/**
-	 * @param available indices is the set of indices the pivot is allowed to pick in.
-	 */
-	bool selectDualBlandPivot( Eigen::Index& i, Eigen::Index& j, const std::vector<Eigen::Index> availableIndices );  //
+        /**
+         * @brief Pivot expected ‘)’ before ‘<’ tokenthe dictionary, no modification made to mB and mN.
+         */
+        void pivotDictionary(Eigen::Index i, Eigen::Index j);
 
-	bool isPrimalFeasible() const;
+        /**
+         * @brief The whole pivot.
+         */
+        void pivot(Eigen::Index i, Eigen::Index j);
 
-	bool isDualFeasible() const;
+        /**
+         * @brief Selects the next pivot according to CrissCross's rule.
+         *
+         * @param i The reference for the proposed row index.
+         * @param j The reference for the proposed column index.
+         *
+         * @return True, if there is a valid pivot.
+         */
+        bool selectCrissCrossPivot(Eigen::Index &i, Eigen::Index &j);
 
-	bool isOptimal() const;
+        /**
+         * @brief Check for the satisfiability of the dictionary and finds a suitable assignment.
+         * @details Checks if variables are out of bound. If yes, tries to find a suitable pivot to fix this. If there is none throws exception (empty set).
+         * If a suitable pivot is found, apply pivot step and update assignment.
+         * @returns True, if assignment has been updated.
+         */
+        bool fixOutOfBounds();
 
-	/**
-	 * @brief is (i,j) the pivot given by the Bland's rule for the dictionary obtained by pivoting around (i,j).
-	 */
-	bool reverse( const Eigen::Index i, const Eigen::Index j );
-	bool reverse_old( const Eigen::Index i, const Eigen::Index j );	 // before optimization
+        /**
+         * @brief Puts in i and j the pivot, returns false iff none was sutable.
+         */
+        bool selectBlandPivot(Eigen::Index &i, Eigen::Index &j) const;
 
-	bool reverseDual( const Eigen::Index i, const Eigen::Index j, const std::vector<Eigen::Index>& availableIndices );
-	bool reverseDual_old( const Eigen::Index i, const Eigen::Index j, const std::vector<Eigen::Index> availableIndices );
+        /**
+         * @param available indices is the set of indices the pivot is allowed to pick in.
+         */
+        bool
+        selectDualBlandPivot(Eigen::Index &i, Eigen::Index &j, const std::vector <Eigen::Index> availableIndices);  //
 
-	bool isLexMin();
+        bool isPrimalFeasible() const;
 
-	Point<Number> toPoint() const;
+        bool isDualFeasible() const;
 
-	/**
-	 * @brief gives the list of the degenerated constrains in the dictionary.
-	 */
-	std::vector<Eigen::Index> findZeros();
+        bool isOptimal() const;
 
-	/**
-	 * @brief put 1 in the last column for the indices provided by @param indices.
-	 */
-	void setOnes( const std::vector<Eigen::Index>& indices );
+        /**
+         * @brief is (i,j) the pivot given by the Bland's rule for the dictionary obtained by pivoting around (i,j).
+         */
+        bool reverse(const Eigen::Index i, const Eigen::Index j);
 
-	void setZeros( const std::vector<Eigen::Index>& indices );
+        bool reverse_old(const Eigen::Index i, const Eigen::Index j);     // before optimization
 
-	/**
-	 * @brief Puts the non slack variable to the basis.
-	 */
-	void nonSlackToBase();
+        bool
+        reverseDual(const Eigen::Index i, const Eigen::Index j, const std::vector <Eigen::Index> &availableIndices);
 
-	void nonSlackToBase( std::vector<vector_t<Number>>& linealtySpace );
+        bool
+        reverseDual_old(const Eigen::Index i, const Eigen::Index j, const std::vector <Eigen::Index> availableIndices);
 
-	/**
-	 * @brief Puts the saturated variable to the cobasis.
-	 */
-	std::set<Eigen::Index> toCobase( const std::set<Eigen::Index>& saturatedIndices );
+        bool isLexMin();
 
-	/**
-	 * @brief Tries to push the corresponding variable to its bound, if another bound is reached before, pivot around the later.
-	 */
-	void pushToBounds( Eigen::Index colIndex );
+        Point <Number> toPoint() const;
 
-	std::set<vector_t<Number>> findCones();
+        /**
+         * @brief gives the list of the degenerated constrains in the dictionary.
+         */
+        std::vector <Eigen::Index> findZeros();
 
-	friend bool operator==( const Dictionary<Number>& lhs, const Dictionary<Number>& rhs ) {
-		if ( lhs.mB != rhs.mB ) {
-			// std::cout << __func__ << " Basis not equal." << std::endl;
-			return false;
-		}
+        /**
+         * @brief put 1 in the last column for the indices provided by @param indices.
+         */
+        void setOnes(const std::vector <Eigen::Index> &indices);
 
-		if ( lhs.mN != rhs.mN ) {
-			// std::cout << __func__ << " CoBasis not equal." << std::endl;
-			return false;
-		}
+        void setZeros(const std::vector <Eigen::Index> &indices);
 
-		if ( lhs.mConstrains != rhs.mConstrains ) {
-			// std::cout << __func__ << " ConstraintSet not equal." << std::endl;
-			return false;
-		}
+        /**
+         * @brief Puts the non slack variable to the basis.
+         */
+        void nonSlackToBase();
 
-		if ( lhs.mDictionary != rhs.mDictionary ) {
-			// std::cout << __func__ << " Tableau not equal." << std::endl;
-			return false;
-		}
+        void nonSlackToBase(std::vector <vector_t<Number>> &linealtySpace);
 
-		return true;
-	}
+        /**
+         * @brief Puts the saturated variable to the cobasis.
+         */
+        std::set <Eigen::Index> toCobase(const std::set <Eigen::Index> &saturatedIndices);
 
-	friend bool operator!=( const Dictionary<Number>& lhs, const Dictionary<Number>& rhs ) {
-		return !( lhs == rhs );
-	}
+        /**
+         * @brief Tries to push the corresponding variable to its bound, if another bound is reached before, pivot around the later.
+         */
+        void pushToBounds(Eigen::Index colIndex);
 
-	friend std::ostream& operator<<( std::ostream& _ostr, const Dictionary<Number>& d ) {
-		uint32_t i, j;
-		_ostr << "\n mB size=";
-		_ostr << d.basis().size();
-		_ostr << "\n mN size=";
-		_ostr << d.cobasis().size();
-		_ostr << "\n mDictionary size=";
-		_ostr << d.tableau().size();
-		_ostr << "\n \n";
+        std::set <vector_t<Number>> findCones();
 
-		_ostr << "mB = ";
-		for ( i = 0; i < d.basis().size(); ++i ) {
-			_ostr << d.basis()[i];
-			_ostr << ";  ";
-		}
-		_ostr << "\nmN = ";
-		for ( j = 0; j < d.cobasis().size(); ++j ) {
-			_ostr << d.cobasis()[j];
-			_ostr << ";  ";
-		}
-		_ostr << "\n \n";
+        friend bool operator==(const Dictionary<Number> &lhs, const Dictionary<Number> &rhs) {
+            if (lhs.mB != rhs.mB) {
+                // std::cout << __func__ << " Basis not equal." << std::endl;
+                return false;
+            }
 
-		for ( i = 0; i < d.basis().size(); ++i ) {
-			for ( j = 0; j < d.cobasis().size(); ++j ) {
-				_ostr << d.tableau()( i, j );
-				_ostr << " ; ";
-			}
-			_ostr << "\n";
-		}
-		_ostr.flush();
-		return _ostr;
-	}
-};
+            if (lhs.mN != rhs.mN) {
+                // std::cout << __func__ << " CoBasis not equal." << std::endl;
+                return false;
+            }
+
+            if (lhs.mConstrains != rhs.mConstrains) {
+                // std::cout << __func__ << " ConstraintSet not equal." << std::endl;
+                return false;
+            }
+
+            if (lhs.mDictionary != rhs.mDictionary) {
+                // std::cout << __func__ << " Tableau not equal." << std::endl;
+                return false;
+            }
+
+            return true;
+        }
+
+        friend bool operator!=(const Dictionary<Number> &lhs, const Dictionary<Number> &rhs) {
+            return !(lhs == rhs);
+        }
+
+        friend std::ostream &operator<<(std::ostream &_ostr, const Dictionary<Number> &d) {
+            uint32_t i, j;
+            _ostr << "\n mB size=";
+            _ostr << d.basis().size();
+            _ostr << "\n mN size=";
+            _ostr << d.cobasis().size();
+            _ostr << "\n mDictionary size=";
+            _ostr << d.tableau().size();
+            _ostr << "\n \n";
+
+            _ostr << "mB = ";
+            for (i = 0; i < d.basis().size(); ++i) {
+                _ostr << d.basis()[i];
+                _ostr << ";  ";
+            }
+            _ostr << "\nmN = ";
+            for (j = 0; j < d.cobasis().size(); ++j) {
+                _ostr << d.cobasis()[j];
+                _ostr << ";  ";
+            }
+            _ostr << "\n \n";
+
+            for (i = 0; i < d.basis().size(); ++i) {
+                for (j = 0; j < d.cobasis().size(); ++j) {
+                    _ostr << d.tableau()(i, j);
+                    _ostr << " ; ";
+                }
+                _ostr << "\n";
+            }
+            _ostr.flush();
+            return _ostr;
+        }
+    };
 
 }  // namespace hypro
 

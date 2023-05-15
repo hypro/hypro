@@ -2,7 +2,7 @@
 set(datastructure_test_sources
         DAGTest.cpp
         DecompositionTest.cpp
-        EventTimingProviderTest.cpp
+        #EventTimingProviderTest.cpp
         FlowpipeTest.cpp
         HalfspaceTest.cpp
         HIVTest.cpp

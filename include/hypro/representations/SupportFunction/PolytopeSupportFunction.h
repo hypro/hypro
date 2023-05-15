@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * This file contains the basic implementation of support functions of polyhedra (template polyhedra) and their
  *evaluation.
  * @file PolytopeSupportFunction.h
@@ -35,123 +44,134 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 namespace hypro {
 
-template <typename N, typename S>
-class SupportFunctionContent;
+    template<typename N, typename S>
+    class SupportFunctionContent;
 
-template <typename N, typename C, typename S>
-class SupportFunctionT;
+    template<typename N, typename C, typename S>
+    class SupportFunctionT;
 
-class GeometricObjectBase;
+    class GeometricObjectBase;
 
 /*
  * This class defines a support Function object representing a polytope (might not be closed)
  * SupportFunctions can be evaluated in a specified direction l and return a correspondent EvaluationResult
  */
-template <typename Number, class Setting>
-class PolytopeSupportFunction : private GeometricObjectBase {
-	friend SupportFunctionContent<Number, Setting>;
-	template <typename N, typename C, typename S>
-	friend class SupportFunctionT;
+    template<typename Number, class Setting>
+    class PolytopeSupportFunction : private GeometricObjectBase {
+        friend SupportFunctionContent<Number, Setting>;
 
-  private:
-	matrix_t<Number> mConstraints;
-	vector_t<Number> mConstraintConstants;
-	mutable Optimizer<Number> mOpt;
-	std::size_t mDimension;
-	std::map<vector_t<Number>, Number> mCache;
+        template<typename N, typename C, typename S>
+        friend
+        class SupportFunctionT;
 
-  public:
-	PolytopeSupportFunction( matrix_t<Number> constraints, vector_t<Number> constraintConstants );
-	PolytopeSupportFunction( const std::vector<Halfspace<Number>>& _planes );
-	PolytopeSupportFunction( const std::vector<Point<Number>>& _points );
-	PolytopeSupportFunction( const PolytopeSupportFunction<Number, Setting>& _origin );
-	~PolytopeSupportFunction();
+    private:
+        matrix_t<Number> mConstraints;
+        vector_t<Number> mConstraintConstants;
+        mutable Optimizer<Number> mOpt;
+        std::size_t mDimension;
+        std::map<vector_t<Number>, Number> mCache;
 
-	PolytopeSupportFunction<Number, Setting>& operator=( const PolytopeSupportFunction& _orig );
+    public:
+        PolytopeSupportFunction(matrix_t<Number> constraints, vector_t<Number> constraintConstants);
 
-	/**
-	 * Returns the dimension of the object.
-	 * @return
-	 */
-	std::size_t dimension() const;
+        PolytopeSupportFunction(const std::vector<Halfspace<Number>> &_planes);
 
-	SF_TYPE type() const;
+        PolytopeSupportFunction(const std::vector<Point<Number>> &_points);
 
-	bool isTemplate() const { return mCache.size() > 0; }
-	matrix_t<Number> constraints() const;
-	vector_t<Number> constants() const;
+        PolytopeSupportFunction(const PolytopeSupportFunction<Number, Setting> &_origin);
 
-	std::vector<Point<Number>> vertices() const;
+        ~PolytopeSupportFunction();
 
-	Point<Number> supremumPoint() const;
+        PolytopeSupportFunction<Number, Setting> &operator=(const PolytopeSupportFunction &_orig);
 
-	/**
-	 * Evaluates the support function in the given direction.
-	 * @param l
-	 * @return
-	 */
-	EvaluationResult<Number> evaluate( const vector_t<Number>& l, bool useExact ) const;
+        /**
+         * Returns the dimension of the object.
+         * @return
+         */
+        std::size_t dimension() const;
 
-	/**
-	 * @brief Evaluates the support function in the directions given in the passed matrix.
-	 * @details Uses the standard evaluate method for multiple directions.
-	 *
-	 * @param _A Matrix holding the directions in which to evaluate.
-	 * @return Vector of support values.
-	 */
-	std::vector<EvaluationResult<Number>> multiEvaluate( const matrix_t<Number>& _A, bool useExact, bool setTemplate = false ) const;
+        SF_TYPE type() const;
 
-	/**
-	 * @brief Check if point is contained in the support function.
-	 * @details To check if the given point is contained in the support function we evaluate it in all its directions
-	 *(uses multiEvaluate).
-	 *
-	 * @param _point The point to check.
-	 * @return True, if the point is inside the support function.
-	 */
-	bool contains( const Point<Number>& _point ) const;
+        bool isTemplate() const { return mCache.size() > 0; }
 
-	/**
-	 * @brief Check if point is contained in the support function.
-	 * @details To check if the given point is contained in the support function we evaluate it in all its directions
-	 *(uses multiEvaluate).
-	 *
-	 * @param _point The point to check.
-	 * @return True, if the point is inside the support function.
-	 */
-	bool contains( const vector_t<Number>& _point ) const;
+        matrix_t<Number> constraints() const;
 
-	bool empty() const;
+        vector_t<Number> constants() const;
 
-	void cleanUp() const;
+        std::vector<Point<Number>> vertices() const;
 
-	void print() const;
+        Point<Number> supremumPoint() const;
 
-	std::string getDotRepresentation() const;
+        /**
+         * Evaluates the support function in the given direction.
+         * @param l
+         * @return
+         */
+        EvaluationResult<Number> evaluate(const vector_t<Number> &l, bool useExact) const;
 
-	std::string createCode( unsigned index = 0 ) const;
+        /**
+         * @brief Evaluates the support function in the directions given in the passed matrix.
+         * @details Uses the standard evaluate method for multiple directions.
+         *
+         * @param _A Matrix holding the directions in which to evaluate.
+         * @return Vector of support values.
+         */
+        std::vector<EvaluationResult<Number>>
+        multiEvaluate(const matrix_t<Number> &_A, bool useExact, bool setTemplate = false) const;
 
-	friend std::ostream& operator<<( std::ostream& lhs, const PolytopeSupportFunction<Number, Setting>& rhs ) {
-		lhs << "[";
-		for ( unsigned rowIndex = 0; rowIndex < rhs.mConstraints.rows() - 1; ++rowIndex ) {
-			lhs << "  ";
-			for ( unsigned d = 0; d < rhs.mConstraints.cols(); ++d ) {
-				lhs << toDouble( rhs.mConstraints( rowIndex, d ) ) << " ";
-			}
-			lhs << "<= " << toDouble( rhs.mConstraintConstants( rowIndex ) ) << std::endl;
-		}
-		lhs << "  ";
-		for ( unsigned d = 0; d < rhs.mConstraints.cols(); ++d ) {
-			lhs << toDouble( rhs.mConstraints( rhs.mConstraints.rows() - 1, d ) ) << " ";
-		}
-		lhs << "<= " << toDouble( rhs.mConstraintConstants( rhs.mConstraints.rows() - 1 ) ) << " ]" << std::endl;
-		return lhs;
-	}
+        /**
+         * @brief Check if point is contained in the support function.
+         * @details To check if the given point is contained in the support function we evaluate it in all its directions
+         *(uses multiEvaluate).
+         *
+         * @param _point The point to check.
+         * @return True, if the point is inside the support function.
+         */
+        bool contains(const Point<Number> &_point) const;
 
-  private:
-	void removeRedundancy();
-	matrix_t<Number>& rMatrix() { return mConstraints; }
-	vector_t<Number>& rVector() { return mConstraintConstants; }
-};
+        /**
+         * @brief Check if point is contained in the support function.
+         * @details To check if the given point is contained in the support function we evaluate it in all its directions
+         *(uses multiEvaluate).
+         *
+         * @param _point The point to check.
+         * @return True, if the point is inside the support function.
+         */
+        bool contains(const vector_t<Number> &_point) const;
+
+        bool empty() const;
+
+        void cleanUp() const;
+
+        void print() const;
+
+        std::string getDotRepresentation() const;
+
+        std::string createCode(unsigned index = 0) const;
+
+        friend std::ostream &operator<<(std::ostream &lhs, const PolytopeSupportFunction<Number, Setting> &rhs) {
+            lhs << "[";
+            for (unsigned rowIndex = 0; rowIndex < rhs.mConstraints.rows() - 1; ++rowIndex) {
+                lhs << "  ";
+                for (unsigned d = 0; d < rhs.mConstraints.cols(); ++d) {
+                    lhs << toDouble(rhs.mConstraints(rowIndex, d)) << " ";
+                }
+                lhs << "<= " << toDouble(rhs.mConstraintConstants(rowIndex)) << std::endl;
+            }
+            lhs << "  ";
+            for (unsigned d = 0; d < rhs.mConstraints.cols(); ++d) {
+                lhs << toDouble(rhs.mConstraints(rhs.mConstraints.rows() - 1, d)) << " ";
+            }
+            lhs << "<= " << toDouble(rhs.mConstraintConstants(rhs.mConstraints.rows() - 1)) << " ]" << std::endl;
+            return lhs;
+        }
+
+    private:
+        void removeRedundancy();
+
+        matrix_t<Number> &rMatrix() { return mConstraints; }
+
+        vector_t<Number> &rVector() { return mConstraintConstants; }
+    };
 }  // namespace hypro
 #include "PolytopeSupportFunction.tpp"

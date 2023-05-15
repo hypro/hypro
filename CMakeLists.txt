@@ -151,7 +151,7 @@ add_subdirectory(src)
 
 add_library(${PROJECT_NAME}-objects OBJECT ${${PROJECT_NAME}_sources})
 add_dependencies(${PROJECT_NAME}-objects ${PROJECT_NAME}-resources)
-build_target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC GLPK_STATIC ANTLR4_SHARED clp_STATIC coinUtils_STATIC z3_SHARED)
+build_target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC GLPK_STATIC clp_STATIC coinUtils_STATIC z3_SHARED)
 target_include_directories(${PROJECT_NAME}-objects
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
@@ -208,7 +208,8 @@ target_include_directories(${PROJECT_NAME}-shared
         )
 
 add_library(${PROJECT_NAME}-parser ${${PROJECT_NAME}_parser_sources})
-add_dependencies(${PROJECT_NAME}-parser ${PROJECT_NAME}-resources ${PROJECT_NAME}-shared)
+add_dependencies(${PROJECT_NAME}-parser ${PROJECT_NAME}-resources ${PROJECT_NAME}-parser-resources ${PROJECT_NAME}-shared)
+build_target_include_dirs_from(${PROJECT_NAME}-parser SYSTEM PUBLIC ANTLR4_SHARED)
 target_include_directories(${PROJECT_NAME}-parser
         PUBLIC
         ${CMAKE_SOURCE_DIR}/include/hypro/parser/
@@ -218,17 +219,21 @@ target_link_libraries(${PROJECT_NAME}-parser PUBLIC ${PROJECT_NAME}-shared)
 target_compile_features(${PROJECT_NAME}-objects PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-static PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-shared PUBLIC cxx_std_17)
+target_compile_features(${PROJECT_NAME}-parser PUBLIC cxx_std_17)
 
 target_compile_options(${PROJECT_NAME}-objects PUBLIC -fPIC)
 target_compile_options(${PROJECT_NAME}-static PUBLIC -fPIC)
 target_compile_options(${PROJECT_NAME}-shared PUBLIC -fPIC)
+target_compile_options(${PROJECT_NAME}-parser PUBLIC -fPIC)
 target_compile_options(${PROJECT_NAME}-objects PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
 target_compile_options(${PROJECT_NAME}-static PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
 target_compile_options(${PROJECT_NAME}-shared PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
+target_compile_options(${PROJECT_NAME}-parser PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
 if (${DEVELOPER})
     target_compile_options(${PROJECT_NAME}-objects PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
     target_compile_options(${PROJECT_NAME}-static PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
     target_compile_options(${PROJECT_NAME}-shared PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
+    target_compile_options(${PROJECT_NAME}-parser PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
 endif ()
 #target_link_options(${PROJECT_NAME}-objects PUBLIC LINKER:-no-as-needed)
 #target_link_options(${PROJECT_NAME}-static PUBLIC LINKER:-no-as-needed)
@@ -281,10 +286,30 @@ if (NOT HYPRO_CICD)
 endif ()
 
 add_subdirectory(resources)
+# manage include directories colleced in ressources cmake file
+target_include_directories(${PROJECT_NAME}-objects
+        PUBLIC ${${PROJECT_NAME}-include-dirs}
+        PRIVATE ${${PROJECT_NAME}-include-dirs-private}
+        )
+target_include_directories(${PROJECT_NAME}-static
+        PRIVATE ${${PROJECT_NAME}-include-dirs}
+        PRIVATE ${${PROJECT_NAME}-include-dirs-private}
+        )
+target_include_directories(${PROJECT_NAME}-shared
+        PUBLIC ${${PROJECT_NAME}-include-dirs}
+        PRIVATE ${${PROJECT_NAME}-include-dirs-private}
+        )
+
 # Create config.h by adding cmake defines dependent on option switches
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/flags.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/flags.h @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/paths.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/paths.h
         @ONLY)
+
+# cleanup: get interface include directories list, remove duplicates (which we get from our clumsy carl setup) and reset
+# the variable. Currently only relevant for the shared version.
+get_target_property(include_dirs_list ${PROJECT_NAME}-shared INTERFACE_INCLUDE_DIRECTORIES)
+list(REMOVE_DUPLICATES "include_dirs_list")
+set_target_properties(${PROJECT_NAME}-shared PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${include_dirs_list}")
 
 enable_testing()
 add_subdirectory(test)
