@@ -31,7 +31,6 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             ${PROJECT_NAME}-parser
             ${GTEST_LIBRARIES}
             )
-    cotire(runCoreTests)
 
     add_test(NAME core COMMAND runCoreTests)
 

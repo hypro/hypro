@@ -15,8 +15,6 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             ${PROJECT_NAME}-shared
             ${GTEST_LIBRARIES})
 
-    cotire(runBenchmark)
-
     #add_test( NAME benchmark COMMAND runBenchmark )
 endif ()
 
@@ -29,5 +27,3 @@ add_executable(benchmark
 target_link_libraries(benchmark PUBLIC
         ${PROJECT_NAME}-shared
         )
-cotire(runBenchmark)
-cotire(benchmark)

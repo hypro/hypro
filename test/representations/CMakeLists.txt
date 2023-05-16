@@ -43,8 +43,6 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             ${PROJECT_NAME}-shared
             )
 
-    cotire(runRepresentationTests)
-
     add_test(NAME representations COMMAND runRepresentationTests)
 
     if (DEVELOPER)

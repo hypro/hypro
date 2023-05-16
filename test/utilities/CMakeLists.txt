@@ -24,8 +24,6 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             cereal::cereal
             )
 
-    cotire(runUtilityTests)
-
     add_test(NAME utility COMMAND runUtilityTests)
 
     if (DEVELOPER)

@@ -45,8 +45,6 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             ${GTEST_LIBRARIES}
             )
 
-    #cotire(runAlgorithmTests)
-
     add_test(NAME algorithms COMMAND runAlgorithmTests)
 
     add_dependencies(allTests runAlgorithmTests)

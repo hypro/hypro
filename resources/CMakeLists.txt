@@ -192,18 +192,6 @@ include(ExternalAntlr4Cpp.cmake)
 # C.2. Optional libraries
 # # # # # # # # # # # # # # # # # # # # # #
 
-if (HYPRO_USE_COTIRE)
-    # We use cotire, simply include it
-    message(STATUS "Use cotire")
-    include(cotire)
-    cotire(${PROJECT_NAME}-shared)
-    cotire(${PROJECT_NAME}-static)
-else ()
-    # We do not use cotire, create dummy function in case cotire is used somewhere
-    function(cotire)
-    endfunction(cotire)
-endif ()
-
 if (HYPRO_USE_PPL)
     load_library(${PROJECT_NAME} PPL 0)
 endif ()
