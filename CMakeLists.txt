@@ -35,6 +35,8 @@ include(hypromacros)
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(HYPRO_CICD "Set to true to indicate build on CI/CD runner where certain commands do not work." OFF)
 option(HYPRO_USE_CLP "Enable usage of the Coin-LP solver." OFF)
+option(HYPRO_CREATE_DOC "Allow creation of a doxygen documentation." OFF)
+option(HYPRO_CREATE_DOC_PDF "Create pdf document for documentation." OFF)
 option(HYPRO_USE_GLPK "Enable usage of the glpk lp-solver." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" OFF)
@@ -52,8 +54,6 @@ option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF
 option(HYPRO_BENCHMARK "Enable usage of the google-benchmark library and the targets in test/case_studies." OFF)
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF)
-option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
-option(DOC_CREATE_PDF "Create pdf document for documentation." OFF)
 option(DEVELOPER "Compile in developer mode, i.e. more warnings." OFF)
 option(EXPORT_TO_CMAKE "Export the project to CMake for easy inclusion" ON)
 option(RESET_REFINEMENT "Return to Level 0 after successful backtracking" ON)
@@ -318,6 +318,7 @@ set_target_properties(${PROJECT_NAME}-shared PROPERTIES INTERFACE_INCLUDE_DIRECT
 enable_testing()
 add_subdirectory(test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
+add_subdirectory(doc)
 
 ##############################################################################
 #### EXPORT SETTINGS
