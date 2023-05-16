@@ -1045,19 +1045,22 @@ namespace hypro {
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::intersect(const HPolytopeT &rhs) const {
         TRACE("hypro.representations.HPolytope", "with " << rhs << std::endl);
-        if (rhs.empty() || this->empty()) {
-            return HPolytopeT<Number, Converter, Setting>::Empty();
-        } else {
-            HPolytopeT<Number, Converter, Setting> res;
-            for (const auto &plane: mHPlanes) {
-                res.insert(plane);
-            }
-            for (const auto &plane: rhs.constraints()) {
-                res.insert(plane);
-            }
-            assert(res.mEmptyState == SETSTATE::NONEMPTY || res.mEmptyState == SETSTATE::UNKNOWN);
-            return res;
+
+        HPolytopeT<Number, Converter, Setting> res;
+        for (const auto &plane: mHPlanes) {
+            res.insert(plane);
         }
+        for (const auto &plane: rhs.constraints()) {
+            res.insert(plane);
+        }
+
+        // lightweight check whether we can easily declare emptiness
+        if (rhs.mEmptyState == SETSTATE::EMPTY || this->mEmptyState == SETSTATE::EMPTY) {
+            res.mEmptyState = SETSTATE::EMPTY;
+        }
+
+        return res;
+
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -1478,8 +1481,8 @@ namespace hypro {
             // GLPK cannot handle strict inequalities and throws error
             // using weak inequalities instead is overapproximating
 #ifndef HYPRO_USE_GLPK
-            for ( long int t = 0; t < matrix.rows(); t++ ) {
-                opt.setRelation( carl::Relation::LESS, t + matrix2.rows() );
+            for (long int t = 0; t < matrix.rows(); t++) {
+                opt.setRelation(carl::Relation::LESS, t + matrix2.rows());
             }
 #endif
             bool check = opt.checkConsistency();

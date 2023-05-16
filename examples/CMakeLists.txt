@@ -29,8 +29,6 @@ foreach (example ${EXAMPLES})
         #target_include_directories( ${example_name} PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../build/locals/antlr4cpp/include/antlr4-runtime" )
     endif ()
     add_dependencies(allExamples ${example_name})
-
-    cotire(${example_name})
 endforeach (example)
 
 if (${STATICLIB_SWITCH} STREQUAL "ON")

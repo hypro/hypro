@@ -43,8 +43,6 @@ target_link_libraries(runDatastructureTests PUBLIC
         cereal::cereal
         )
 
-cotire(runDatastructureTests)
-
 add_test(NAME datastructures COMMAND runDatastructureTests)
 
 if (DEVELOPER)
