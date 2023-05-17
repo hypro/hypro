@@ -43,7 +43,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             ${PROJECT_NAME}-shared
             )
 
-    add_test(NAME representations COMMAND runRepresentationTests)
+    add_test(NAME representations COMMAND runRepresentationTests --gtest_catch_exceptions=0)
 
     if (DEVELOPER)
         set_property(TEST representations PROPERTY

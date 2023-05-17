@@ -45,7 +45,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             ${GTEST_LIBRARIES}
             )
 
-    add_test(NAME algorithms COMMAND runAlgorithmTests)
+    add_test(NAME algorithms COMMAND runAlgorithmTests --gtest_catch_exceptions=0)
 
     add_dependencies(allTests runAlgorithmTests)
 

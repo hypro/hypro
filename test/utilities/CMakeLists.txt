@@ -24,7 +24,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             cereal::cereal
             )
 
-    add_test(NAME utility COMMAND runUtilityTests)
+    add_test(NAME utility COMMAND runUtilityTests --gtest_catch_exceptions=0)
 
     if (DEVELOPER)
         set_property(TEST utility PROPERTY
