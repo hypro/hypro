@@ -9,6 +9,7 @@
 
 #include "../../types.h"
 #include "../../util/linearOptimization/Optimizer.h"
+#include "../../algorithms/convexHull/GrahamScan.h"
 
 namespace hypro {
 
@@ -56,6 +57,17 @@ namespace hypro {
                 std::for_each(std::begin(maxIndices[i]), std::end(maxIndices[i]),
                               [&nonRedundantVertices](auto idx) { nonRedundantVertices.insert(idx); });
             }
+            // perform Graham scan on projection on dimension 0, 1, since vertices in the projected space also correspond to vertices in higher dimensions
+            // Note: dimensions 0, 1 are chosen arbitrarily since it is a heuristic.
+
+            if (points.front().dimension() > 1) {
+                std::vector<Point<Number>> projectedVertices;
+                std::transform(std::begin(points), std::end(points), std::back_inserter(projectedVertices),
+                               [](const auto &p) { return p.projectOn({0, 1}); });
+                auto indices = impl::grahamScan_indices(projectedVertices);
+                nonRedundantVertices.insert(std::begin(indices), std::end(indices));
+            }
+
         }
     } // namespace detail
 
@@ -90,6 +102,7 @@ namespace hypro {
                 // if vertex can be excluded due to some heuristics, skip it
                 if constexpr (useHeuristics) {
                     if (nonRedundantVertices.find(vertexIndex) != std::end(nonRedundantVertices)) {
+                        COUNT("Avoided LP-call");
                         continue;
                     }
                 }
