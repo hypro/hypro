@@ -49,6 +49,8 @@ namespace hypro::benchmark {
             reduction += points.size() - newPoints.size();
         }
         st.counters["reduction"] = ::benchmark::Counter(reduction);
+        st.counters["dimension"] = st.range(0);
+        st.counters["points"] = st.range(1);
     }
 
     static void WithoutHeuristic(::benchmark::State &st) {
@@ -59,6 +61,8 @@ namespace hypro::benchmark {
             reduction += points.size() - newPoints.size();
         }
         st.counters["reduction"] = ::benchmark::Counter(reduction);
+        st.counters["dimension"] = st.range(0);
+        st.counters["points"] = st.range(1);
     }
 
     static void Comparison(::benchmark::State &st) {
@@ -86,12 +90,14 @@ namespace hypro::benchmark {
             st.ResumeTiming();
         }
         st.counters["reduction"] = ::benchmark::Counter(reduction);
+        st.counters["dimension"] = st.range(0);
+        st.counters["points"] = st.range(1);
     }
 
-    BENCHMARK(WithHeuristic)->Ranges({{1, 10},
-                                      {5, 100}});
-    BENCHMARK(WithoutHeuristic)->Ranges({{1, 10},
-                                         {5, 100}});
+    BENCHMARK(WithHeuristic)->Name("WithHeuristic")->Ranges({{1, 10},
+                                                             {5, 100}});
+    BENCHMARK(WithoutHeuristic)->Name("WithoutHeuristic")->Ranges({{1, 10},
+                                                                   {5, 100}});
     BENCHMARK(Comparison)->Ranges({{1, 10},
                                    {5, 10}});
 
