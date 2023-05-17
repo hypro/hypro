@@ -25,6 +25,7 @@ namespace hypro {
         static constexpr bool OPTIMIZER_CACHING = false;
         static constexpr bool NAIVE_ALGORITHMS = false;
         static constexpr bool CACHE_BOUNDING_BOX = false;
+        static constexpr bool SAFE_LP_CALLS = true;
     };
 
 // For usage as leaf in SupportFunctionNew
@@ -35,6 +36,7 @@ namespace hypro {
         static constexpr bool OPTIMIZER_CACHING = true;
         static constexpr bool NAIVE_ALGORITHMS = false;
         static constexpr bool CACHE_BOUNDING_BOX = false;
+        static constexpr bool SAFE_LP_CALLS = true;
     };
 
 // increased caching for faster containment check (improves e.g., Monte Carlo Sampling)
@@ -45,6 +47,7 @@ namespace hypro {
         static constexpr bool OPTIMIZER_CACHING = true;
         static constexpr bool NAIVE_ALGORITHMS = false;
         static constexpr bool CACHE_BOUNDING_BOX = true;
+        static constexpr bool SAFE_LP_CALLS = true;
     };
 
 }  // namespace hypro
