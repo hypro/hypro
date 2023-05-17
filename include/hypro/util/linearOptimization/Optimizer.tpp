@@ -92,7 +92,6 @@ namespace hypro {
             mConstraintMatrix = _matrix;
             mRelationSymbols = std::vector<carl::Relation>(mConstraintMatrix.rows(), carl::Relation::LEQ);
         }
-        assert(isSane());
     }
 
     template<typename Number>
@@ -101,7 +100,6 @@ namespace hypro {
             clearCache();
             mConstraintVector = _vector;
         }
-        assert(isSane());
     }
 
     template<typename Number>
@@ -417,18 +415,19 @@ namespace hypro {
     template<typename Number>
     bool Optimizer<Number>::isSane() const {
 #ifndef NDEBUG
-        if (mConstraintMatrix.rows() == 0 || mConstraintMatrix.cols() == 0 || mConstraintVector.rows() == 0) {
-            return false;
-        }
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
         std::lock_guard<std::mutex> lock(mContextLock);
         TRACE("hypro.optimizer", "Have " << mGlpkContexts.size() << " instances to check.");
         for (const auto &glpPair: mGlpkContexts) {
-            if (glpPair.second.mConstraintsSet && (!glpPair.second.mInitialized || !glpPair.second.arraysCreated))
-                return false;
+            if (glpPair.second.mConstraintsSet && (!glpPair.second.mInitialized || !glpPair.second.arraysCreated)) {
+                throw std::logic_error(
+                        "In glpk-context: Constraints are set but the lp is not set as initialized and the arrays are not constructed yet.");
+            }
             if (glpPair.second.arraysCreated &&
-                (glpPair.second.ia == nullptr || glpPair.second.ja == nullptr || glpPair.second.ar == nullptr))
-                return false;
+                (glpPair.second.ia == nullptr || glpPair.second.ja == nullptr || glpPair.second.ar == nullptr)) {
+                throw std::logic_error(
+                        "In glpk-context: Arrays are marked as created but the data structures point to nullptr.");
+            }
             TRACE("hypro.optimizer", "Instance " << &glpPair.second << " for thread " << glpPair.first << " is sane.");
         }
 #endif
