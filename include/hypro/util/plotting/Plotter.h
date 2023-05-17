@@ -20,6 +20,7 @@
 #include "../../config.h"
 #include "../../datastructures/Halfspace.h"
 #include "../../datastructures/Point.h"
+#include "../../algorithms/convexHull/GrahamScan.h"
 #include "../../types.h"
 #include "../fileHandling.h"
 #include "../logging/Logger.h"

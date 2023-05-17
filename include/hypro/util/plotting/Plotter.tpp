@@ -670,130 +670,6 @@ namespace hypro {
     }
 
     template<typename Number>
-    std::vector<Point<Number>> Plotter<Number>::grahamScan(const std::vector<Point<Number>> &_points) {
-        std::vector<Point<Number>> res;
-        if (_points.size() < 3) {
-            return _points;
-        }
-
-        // initialize -> find minimum Point
-        Point<Number> min = _points[0];
-        std::map<Number, Point<Number>> sortedPoints;
-        for (const auto &point: _points) {
-            assert(point.dimension() == 2);
-            if (point < min) {
-                min = point;
-            }
-        }
-
-        TRACE("hypro", "points: " << _points);
-
-        // sort Points according to polar angle -> we have to insert manually
-        // (because of double imprecision)
-        for (const auto &point: _points) {
-            if (point != min) {
-                Number angle = point.polarCoordinates(min).at(1);
-                if (sortedPoints.empty()) {
-                    sortedPoints.insert(std::make_pair(angle, point));
-                } else {
-                    for (auto pos = sortedPoints.begin(); pos != sortedPoints.end();) {
-                        // if equal, take the one with bigger radial component
-                        Number newAngle = pos->second.polarCoordinates(min).at(1);
-                        // std::cout << newAngle << std::endl;
-                        if (angle == newAngle) {
-                            // if equal, compare radial coordinate (distance)
-                            if (pos->second.polarCoordinates(min)[0] < point.polarCoordinates(min)[0]) {
-                                pos = sortedPoints.erase(pos);
-                                sortedPoints.insert(std::make_pair(angle, point));
-                            }
-                            break;
-                        }
-                            // we assume to be sorted, so check all angles, which are smaller or
-                            // equal for equality -
-                            // afterwards simply insert
-                        else if (angle > newAngle) {    // not equal and smaller -> continue
-                            // search (at end, simply insert)
-                            ++pos;
-                            if (pos == sortedPoints.end()) {
-                                sortedPoints.insert(std::make_pair(angle, point));
-                                break;
-                            }
-                        } else {  // larger and not equal until this point -> simply insert
-                            sortedPoints.insert(std::make_pair(angle, point));
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        // prepare stack -> initialize with 2 points
-        if (sortedPoints.empty()) {
-            res.emplace_back(min);
-            return res;
-        }
-        assert(sortedPoints.size() >= 1);
-        std::stack<Point<Number>> stack;
-        stack.push(min);
-        stack.push(sortedPoints.begin()->second);
-        sortedPoints.erase(sortedPoints.begin());
-        std::size_t i = 0;
-        std::size_t n = sortedPoints.size();
-
-        // main loop -> check the two topmost elements of the stack and one third,
-        // new point
-        while (i < n) {
-            Point<Number> p1 = stack.top();
-            stack.pop();
-            Point<Number> p2 = stack.top();
-            stack.pop();
-            if (isLeftTurn(p2, p1, sortedPoints.begin()->second)) {
-                // reinsert and add new point
-                stack.push(p2);
-                stack.push(p1);
-                stack.push(sortedPoints.begin()->second);
-                sortedPoints.erase(sortedPoints.begin());
-                ++i;
-            } else {
-                // only reinsert second -> equal to removing the topmost object of the
-                // stack
-                stack.push(p2);
-                if (stack.size() < 2) {
-                    // in this case simply insert, as the stack has to contain at least 2
-                    // points
-                    stack.push(sortedPoints.begin()->second);
-                    sortedPoints.erase(sortedPoints.begin());
-                    ++i;
-                }
-            }
-        }
-
-        // write result
-        while (!stack.empty()) {
-            res.push_back(stack.top());
-            stack.pop();
-        }
-
-        return res;
-    }
-
-    template<typename Number>
-    bool Plotter<Number>::isLeftTurn(const Point<Number> &a, const Point<Number> &b, const Point<Number> &c) {
-        assert(a.dimension() == 2);
-        assert(b.dimension() == 2);
-        assert(c.dimension() == 2);
-
-        Number val = ((b.rawCoordinates()(0) - a.rawCoordinates()(0)) *
-                      (c.rawCoordinates()(1) - a.rawCoordinates()(1))) -
-                     ((c.rawCoordinates()(0) - a.rawCoordinates()(0)) *
-                      (b.rawCoordinates()(1) - a.rawCoordinates()(1)));
-        // Number val = c.polarCoordinates(a,false)[1] -
-        // b.polarCoordinates(a,false)[1];
-
-        return (val >= 0);
-    }
-
-    template<typename Number>
     void Plotter<Number>::prepareObjects() const {
         // reduce and sort objects
         if (!mObjects.empty()) {
@@ -802,7 +678,7 @@ namespace hypro {
                 if (!plotObject.isPrepared) {
                     // sort objects
                     TRACE("hypro.plotter", "Sort vertices of object " << id);
-                    plotObject.vertices = grahamScan(plotObject.vertices);
+                    plotObject.vertices = ::hypro::grahamScan(plotObject.vertices);
                     plotObject.isPrepared = true;
                 }
             }
