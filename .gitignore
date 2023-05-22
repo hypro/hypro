@@ -28,3 +28,4 @@ examples/nnet/acasxu
 examples/nnet/coav
 examples/nnet/mnist
 examples/nnet/twin
+examples/onnx

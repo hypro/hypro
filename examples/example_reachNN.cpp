@@ -65,19 +65,19 @@ int main( int argc, char* argv[] ) {
 	const char* filename = "../examples/nnet/fc_2-2-2.nnet";
 	if ( argc > 2 )
 		filename = argv[2];
-	std::cout << "Filename is: " << filename << std::endl;
+	std::cout << "NN input filename is: " << filename << std::endl;
 
 	// read and build neural network + time measurement
 	auto start = std::chrono::steady_clock::now();
 	hypro::NNet<Number> rotate_nn = hypro::NNet<Number>( filename );
-	auto end = std::chrono::steady_clock::now();
-	std::cout << "Total time elapsed during building the network: "
-			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
 	// std::cout << rotate_nn << std::endl;
 
 	hypro::NeuralNetwork<Number> network = hypro::NeuralNetwork<Number>( rotate_nn );
 	// std::cout << network << std::endl;
-
+	auto end = std::chrono::steady_clock::now();
+	std::cout << "Total time elapsed during building the network: "
+			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
+	
 	// a simple rectangle [_]
 	hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 4, 2 );
 	hypro::vector_t<Number> limits = hypro::vector_t<Number>( 4 );
@@ -88,7 +88,7 @@ int main( int argc, char* argv[] ) {
 		std::cout << "Reading input constraints from: " << argv[3] << std::endl;
 		input_poly = hypro::readHpolytopeFromFile<Number>( argv[3] );
 	}
-	std::cout << input_poly << std::endl;
+	std::cout << "The input polytope:\n" << input_poly << std::endl;
 
 	hypro::matrix_t<Number> constr2 = hypro::matrix_t<Number>( 4, 2 );
 	hypro::vector_t<Number> limits2 = hypro::vector_t<Number>( 4 );
@@ -101,7 +101,7 @@ int main( int argc, char* argv[] ) {
 	} else {
 		safe_polys.push_back( hypro::HPolytope<Number>( constr2, limits2 ) );
 	}
-	std::cout << safe_polys << std::endl;
+	std::cout << "The disjunction of safe polytopes:\n" << safe_polys << std::endl;
 
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
 	// hypro::reachability::ReachabilityTree<Number> reach_tree( network, input_poly, safe_polys );
@@ -139,7 +139,7 @@ int main( int argc, char* argv[] ) {
 
 	// std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
 	// std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(method, hypro::SEARCH_STRATEGY::DFS);
-	// bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots );
+	bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, true, true );
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;

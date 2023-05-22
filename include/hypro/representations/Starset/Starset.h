@@ -138,6 +138,18 @@ class StarsetT : private GeometricObjectBase {
 	bool empty() const;
 
 	/**
+	 * Replaces the current center with the parameter center
+	 * @param center a nx1 matrix
+	 */
+	void setCenter( const vector_t<Number>& center );
+
+	/**
+	 * Replaces the current matrix of generators with the parameter generators
+	 * @param new_generators a nxm matrix
+	 */
+	void setGenerators( const matrix_t<Number>& generators );
+
+	/**
 	 * @brief Method returning the supremum point of the Starset, i.e. the
 	 * maximal point.
 	 * @return A point representing the supremum of the current Starset.

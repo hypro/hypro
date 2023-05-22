@@ -135,7 +135,7 @@ hypro::vector_t<Number> NeuralNetwork<Number>::forwardPass( const hypro::vector_
 	}
 
 	for ( auto layer : mLayers ) {
-		outputVec = layer.forwardPass( outputVec );
+		outputVec = layer->forwardPass(outputVec);
 	}
 
 	// Denormalize the output vector
