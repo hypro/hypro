@@ -132,9 +132,6 @@ namespace hypro {
             safetyResult = worker.computeTimeSuccessors(*node);
         }
 
-        // only for plotting
-        mFlowpipes.emplace_back(worker.getFlowpipe());
-
         if (safetyResult != REACHABILITY_RESULT::SAFE) {
             return safetyResult;
         }

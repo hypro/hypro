@@ -46,8 +46,6 @@ namespace hypro {
         REACHABILITY_RESULT forwardRun();
 
         // REACHABILITY_RESULT backwardRun();
-        /// getter for computed flowpipes
-        const std::vector<Flowpipe<State>> &getFlowpipes() const { return mFlowpipes; }
 
         void addToQueue(ReachTreeNode<State, LocationT> *node) {
             if (std::is_same_v<Multithreading, UseMultithreading>) {
@@ -90,9 +88,8 @@ namespace hypro {
 
     protected:
         std::queue<ReachTreeNode<State, LocationT> *> mWorkQueue;   ///< Queue holds all nodes that require processing
-        std::vector<Flowpipe<State>> mFlowpipes;                   ///< Storage for already computed flowpipes
         HybridAutomaton<Number> mHybridAutomaton;                   ///< Automaton which is analyzed
-        Settings mAnalysisSettings;                                   ///< Settings used for analysis
+        const Settings mAnalysisSettings;                                   ///< Settings used for analysis
         std::vector<ReachTreeNode<State, LocationT>> &mReachTree;  ///< Forest of ReachTrees computed
         int mNumThreads = std::thread::hardware_concurrency();       ///< number of used threads
         std::vector<std::thread> mThreads;                           ///< vector of threads

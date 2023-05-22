@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - H-Polytope intersection is more lightweight and does not perform full emptiness checks anymore
 - Duplicate folders for the interface include directories have been removed
 - Move illustrative examples to a 'tutorial' subfolder
+- Remove storage of flowpipe segments from rectangular analyzer as this information is already contained in the
+  reachability tree
 
 ### Fixed
 
