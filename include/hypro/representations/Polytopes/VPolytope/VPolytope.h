@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -391,6 +391,15 @@ namespace hypro {
 
         void updateNeighbors();
 
+        friend std::ostream &operator<<(std::ostream &out, const hypro::VPolytopeT<Number, Converter, S> &lhs) {
+            out << "{ ";
+            for (const auto &vector: lhs) {
+                out << vector << " ";
+            }
+            out << "} isEmpty: " << lhs.mEmptyState;;
+            return out;
+        }
+
     private:
         static bool
         belowPlanes(const vector_t<Number> &vertex, const matrix_t<Number> &normals, const vector_t<Number> &offsets);
@@ -434,16 +443,6 @@ namespace hypro {
     };
 
 /** @} */
-
-    template<typename Number, typename Converter, typename S>
-    std::ostream &operator<<(std::ostream &out, const hypro::VPolytopeT<Number, Converter, S> &lhs) {
-        out << "{ ";
-        for (const auto &vector: lhs) {
-            out << vector << " ";
-        }
-        out << "}";
-        return out;
-    }
 
     template<typename From, typename To, typename Converter, typename S>
     VPolytopeT<To, Converter, S> convert(const VPolytopeT<From, Converter, S> &in) {
