@@ -98,7 +98,6 @@ namespace hypro {
 // facet modification
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::FacetSpace::computeNormal(Facet &facet) {
-        /// TODO Allocate space for matrix once and reuse it
         /// TODO Could also use __restrict__ to get memcpy here (probably).
 #ifdef QUICKHULL_USE_LOW_DIMENSIONAL_IMPROVEMENT
         assert(((Euclidian && (std::size_t) points[facet.mVertices[0]].size() == dimension) ||
@@ -130,20 +129,18 @@ namespace hypro {
         }
 #endif
 
-        matrix_t<Number> matrix(dimension, dimension + 1);
-
         if constexpr (Euclidian) {
             for (size_t i = 0; i < dimension; ++i) {
-                matrix.row(i).head(dimension) = points[facet.mVertices[i]].transpose();
-                matrix.row(i)[dimension] = 1;
+                normalComputationMatrix.row(i).head(dimension) = points[facet.mVertices[i]].transpose();
+                normalComputationMatrix.row(i)[dimension] = 1;
             }
         } else {
             for (size_t i = 0; i < dimension; ++i) {
-                matrix.row(i) = points[facet.mVertices[i]].transpose();
+                normalComputationMatrix.row(i) = points[facet.mVertices[i]].transpose();
             }
         }
 
-        Eigen::FullPivLU<matrix_t<Number>> lu(matrix);
+        Eigen::FullPivLU<matrix_t<Number>> lu(normalComputationMatrix);
         assert(static_cast<size_t>( lu.rank()) == dimension);
 
 
@@ -282,11 +279,15 @@ namespace hypro {
 
     template<typename Number, bool Euclidian>
     std::string ExactQuickhull<Number, Euclidian>::FacetSpace::printAll() {
+#ifdef HYPRO_LOGGING
         std::stringstream out;
         for (auto &facet: facets) {
             out << printFacet(facet);
         }
         return out.str();
+#else
+        return "";
+#endif
     }
 
     template<typename Number, bool Euclidian>
