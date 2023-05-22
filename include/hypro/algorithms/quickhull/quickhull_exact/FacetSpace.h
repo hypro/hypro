@@ -19,6 +19,7 @@ namespace hypro {
     class ExactQuickhull<Number, Euclidian>::FacetSpace {
         pointVector_t &points;
         dimension_t dimension;
+        matrix_t<Number> normalComputationMatrix; //< matrix pre-allocated to reduce running time
 
     public:
         size_t firstInserted;
@@ -28,7 +29,8 @@ namespace hypro {
         facetVector_t facets{};
 
         explicit FacetSpace(pointVector_t &points, dimension_t dimension)
-                : points(points), dimension(dimension) {};
+                : points(points), dimension(dimension),
+                  normalComputationMatrix(matrix_t<Number>(dimension, dimension + 1)) {};
 
         // facet construction
         Facet &insertNew();
