@@ -85,23 +85,22 @@ int main( int argc, char* argv[] ) {
 	std::vector<hypro::Starset<Number>> output = neuralNetwork.forwardPass( input_starset, method, false );
 	auto end = std::chrono::steady_clock::now();
 	auto analysisTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
-	std::cout << "Total time elapsed during NN reachability analysis: " << analysisTime << " ms" << std::endl;
-
+	std::cout << "Reachability Analysis Time (ms): " << analysisTime << std::endl;
 
 	// Check if all output star set is safe, e.g. if it is contained in the safe zone
 	start = std::chrono::steady_clock::now();
 	bool all_safe = true;
-	for(int k = 0; k < output.size(); k++) {
+	for ( int k = 0; k < output.size(); k++ ) {
 		hypro::reachability::ReachabilityNode node = hypro::reachability::ReachabilityNode<Number>( output[k], method, 0, 0 );
 		bool isCurrentSafe = node.checkSafeRecursive( output[k], 0, safe_set );
 		all_safe &= isCurrentSafe;
 	}
 	end = std::chrono::steady_clock::now();
 	std::cout << std::boolalpha;
-	std::cout << "The output is in the safe zone: " << all_safe << std::endl;
+	std::cout << "Safe Zone: " << all_safe << std::endl;
 	auto safetyCheckTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
-	std::cout << "Total time elapsed during safety check: " << safetyCheckTime << " ms" << std::endl;
+	std::cout << "Safety Check Time: " << safetyCheckTime << std::endl;
 
-	std::cout << "Total time of NN reachability analysis and safety check: " << analysisTime + safetyCheckTime << "ms" << std::endl;
-	std::cout << "Number of star set output: " << output.size() << std::endl;
+	std::cout << "Total Time: " << analysisTime + safetyCheckTime << std::endl;
+	std::cout << "Output Star Sets" << output.size() << std::endl;
 }
