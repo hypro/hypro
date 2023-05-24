@@ -17,7 +17,7 @@ common API should define the following member functions:
 
 - Construction: all state set representations are expected to be constructible from:
     - a set of points whose convex hull outlines the set to be represented, and
-    - a pair of a matrix A and a vector b which represent the set of all points x which satisfy $$ A\cdot x \leq b $$ .
+    - a pair of a matrix A and a vector b which represent the set of all points x which satisfy $$A\cdot x \leq b$$ .
 - `static TYPE Empty()`: a function that allows to create an empty set.
 - `bool empty() const`: a function that returns, whether the set is empty.
 - `std::vector<Point<Number>> vertices( const matrix_t<Number>& = matrix_t<Number>::Zero( 0, 0 ) ) const`: a function
