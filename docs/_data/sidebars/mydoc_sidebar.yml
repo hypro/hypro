@@ -47,6 +47,11 @@ entries:
         output: web, pdf
         folderitems:
 
+          - title: State Set Representations
+            url: /stateSetRepresentations.html
+            output: web, pdf
+            type: homepage
+
           - title: Boxes
             url: /boxes.html
             output: web, pdf
