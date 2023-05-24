@@ -102,5 +102,5 @@ int main( int argc, char* argv[] ) {
 	std::cout << "Safety Check Time: " << safetyCheckTime << std::endl;
 
 	std::cout << "Total Time: " << analysisTime + safetyCheckTime << std::endl;
-	std::cout << "Output Star Sets" << output.size() << std::endl;
+	std::cout << "Output Star Sets: " << output.size() << std::endl;
 }
