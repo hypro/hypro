@@ -11,7 +11,12 @@
 
 namespace hypro {
 #ifdef HYPRO_EXTERNALIZE_CLASSES
-    template class Point<double>;
-    template class Point<mpq_class>;
+
+    template
+    class Point<double>;
+
+    template
+    class Point<mpq_class>;
+
 #endif
 }  // namespace hypro

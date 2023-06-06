@@ -492,8 +492,13 @@ namespace hypro {
     }
 
 #ifdef HYPRO_EXTERNALIZE_CLASSES
-    extern template class Halfspace<double>;
-    extern template class Halfspace<mpq_class>;
+
+    extern template
+    class Halfspace<double>;
+
+    extern template
+    class Halfspace<mpq_class>;
+
 #endif
 }  // namespace hypro
 

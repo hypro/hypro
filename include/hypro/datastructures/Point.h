@@ -719,8 +719,13 @@ namespace hypro {
     }
 
 #ifdef HYPRO_EXTERNALIZE_CLASSES
-    extern template class Point<double>;
-    extern template class Point<mpq_class>;
+
+    extern template
+    class Point<double>;
+
+    extern template
+    class Point<mpq_class>;
+
 #endif
 
 }  // namespace hypro
