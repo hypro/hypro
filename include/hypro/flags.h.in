@@ -37,7 +37,7 @@
 #cmakedefine HYPRO_BENCHMARK
 #cmakedefine HYPRO_HAS_GRAPHVIZ
 #cmakedefine USE_CLANG
-#cmakedefine EXTERNALIZE_CLASSES
+#cmakedefine HYPRO_EXTERNALIZE_CLASSES
 #cmakedefine HYPRO_LOGGING
 #cmakedefine HYPRO_STATISTICS
 #cmakedefine FORWARD_REACHABILITY_METHOD_2

@@ -34,6 +34,7 @@ include(hypromacros)
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
 option(HYPRO_CICD "Set to true to indicate build on CI/CD runner where certain commands do not work." OFF)
+option(HYPRO_EXTERNALIZE_CLASSES "Enables explicit instanciation of templates for double and mpq_class to speed up build." ON)
 option(HYPRO_USE_CLP "Enable usage of the Coin-LP solver." OFF)
 option(HYPRO_CREATE_DOC "Allow creation of a doxygen documentation." OFF)
 option(HYPRO_CREATE_DOC_PDF "Create pdf document for documentation." OFF)

@@ -718,7 +718,7 @@ namespace hypro {
         return Point<To>(convert<From, To>(in.rawCoordinates()));
     }
 
-#ifdef EXTERNALIZE_CLASSES
+#ifdef HYPRO_EXTERNALIZE_CLASSES
     extern template class Point<double>;
     extern template class Point<mpq_class>;
 #endif
