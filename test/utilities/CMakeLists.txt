@@ -4,6 +4,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
     set(utility_test_sources
             SerializationTest.cpp
             SequenceGenerationTest.cpp
+            SMTSetEquivalenceTest.cpp
             )
 
     SET_SOURCE_FILES_PROPERTIES(${utility_test_sources} PROPERTIES COMPILE_FLAGS -O0)
