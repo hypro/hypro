@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023.
+ * Copyright (c) 2023-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -148,7 +148,6 @@ namespace hypro {
         unsigned tPos = 0;
         for (std::size_t sPos: _dimensions) {
             assert(sPos < std::size_t(mCoordinates.rows()));
-            assert(sPos >= 0);
             newCoordinates(tPos) = mCoordinates(sPos);
             ++tPos;
         }
@@ -243,7 +242,7 @@ namespace hypro {
         vector_t<Number> projectedCoordinates = vector_t<Number>::Zero(dimensions.size());
 
         for (unsigned i = 0; i < dimensions.size(); ++i) {
-            if (dimensions.at(i) < this->dimension() && dimensions.at(i) >= 0) {
+            if (dimensions.at(i) < this->dimension()) {
                 projectedCoordinates(i) = mCoordinates(dimensions.at(i));
             }
         }
