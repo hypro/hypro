@@ -350,7 +350,7 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int 
 			shape.row( shape.rows() - 2 ) = third_constraint;
 			limits[limits.rows() - 2] = ( center[i] - lb ) / ( maxValue - lb );
 
-			// fourth constraint: x_(m+1) >= ( 1 / ( minValue - ub ) ) * x_i - ( minValue / ( ub - minValue ) )
+			// fourth constraint: x_(m+1) >= ( 1 / ( ub - minValue ) ) * x_i - ( minValue / ( ub - minValue ) )
 			hypro::vector_t<Number> fourth_constraint = basis.row( i );
 			fourth_constraint = fourth_constraint * ( 1 / ( ub - minValue ) );
 			fourth_constraint.conservativeResize( fourth_constraint.rows() + 1 );
