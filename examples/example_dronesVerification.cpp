@@ -86,12 +86,16 @@ int main( int argc, char* argv[] ) {
 	auto analysisTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
 	std::cout << "Total time elapsed during NN reachability analysis: " << analysisTime << " ms" << std::endl;
 
+	start = std::chrono::steady_clock::now();
 	bool all_safe = true;
 	for(int i = 0; i < output.size(); i++) {
 		hypro::reachability::ReachabilityNode node = hypro::reachability::ReachabilityNode<Number>( output[i], method, 0, 0 );
 		bool isCurrentSafe = node.checkSafeRecursive( output[i], 0, safeSet );
 		all_safe &= isCurrentSafe;
 	}
+	end = std::chrono::steady_clock::now();
 	std::cout << std::boolalpha;
 	std::cout << "The output is in the safe zone: " << all_safe << std::endl;
+	auto safetyCheckTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
+	std::cout << "Safety Check Time: " << safetyCheckTime << std::endl;
 }
