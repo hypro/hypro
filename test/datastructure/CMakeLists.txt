@@ -43,7 +43,7 @@ target_link_libraries(runDatastructureTests PUBLIC
         cereal::cereal
         )
 
-add_test(NAME datastructures COMMAND runDatastructureTests)
+add_test(NAME datastructures COMMAND runDatastructureTests --gtest_catch_exceptions=0)
 
 if (DEVELOPER)
     set_property(TEST datastructures PROPERTY

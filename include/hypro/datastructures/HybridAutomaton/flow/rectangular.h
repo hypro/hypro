@@ -35,6 +35,7 @@ namespace hypro {
 
         virtual ~rectangularFlow() {}
 
+        [[nodiscard]]
         static DynamicType type() { return DynamicType::rectangular; }
 
         void setFlowIntervals(const flowMap &in) { mFlowIntervals = in; }
@@ -43,19 +44,43 @@ namespace hypro {
             mFlowIntervals[dim] = intv;
         }
 
+        [[nodiscard]]
         const flowMap &getFlowIntervals() const { return mFlowIntervals; }
 
+        /**
+         * Creates a vector of intervals from the current flow.
+         * @details Attention: For this to work correctly, the VariablePool has to be initialized properly, i.e., for all
+         * used dimensions, a carl::Variable needs to be registered, such that for each i=0,...,d a corresponding carl
+         * variable exists. Furthermore, the flow defined by a variable-interval mapping needs to be aligned to this, which
+         * can be checked with the isConsistent() method.
+         * @return A vector of intervals, ordered according to the ordering defined in the VariablePool
+         */
+        [[nodiscard]]
+        std::vector<carl::Interval<Number>> getOrderedIntervals() const {
+            std::vector<carl::Interval<Number>> result;
+            result.reserve(mFlowIntervals.size());
+            for (std::size_t dim = 0; dim < mFlowIntervals.size(); ++dim) {
+                result.push_back(mFlowIntervals.at(VariablePool::getInstance().carlVarByIndex(dim)));
+            }
+            return result;
+        }
+
+        [[nodiscard]]
         const carl::Interval<Number> &getFlowIntervalForDimension(carl::Variable dim) const {
             assert(mFlowIntervals.find(dim) != mFlowIntervals.end());
             return mFlowIntervals.at(dim);
         }
 
+        [[nodiscard]]
         std::size_t dimension() const { return mFlowIntervals.size(); }
 
+        [[nodiscard]]
         std::size_t size() const { return mFlowIntervals.size(); }
 
+        [[nodiscard]]
         bool empty() const { return mFlowIntervals.empty(); }
 
+        [[nodiscard]]
         DynamicType getDynamicsType() const {
             if (isTimed()) {
                 return DynamicType::timed;
@@ -69,6 +94,7 @@ namespace hypro {
             return DynamicType::rectangular;
         }
 
+        [[nodiscard]]
         DynamicType getDynamicsType(std::size_t varIndex) const {
             if (isTimed(varIndex)) {
                 return DynamicType::timed;
@@ -82,6 +108,7 @@ namespace hypro {
             return DynamicType::rectangular;
         }
 
+        [[nodiscard]]
         bool isTimed() const {
             for (const auto &keyVal: mFlowIntervals) {
                 if (keyVal.second != carl::Interval<Number>(1)) {
@@ -91,10 +118,12 @@ namespace hypro {
             return true;
         }
 
+        [[nodiscard]]
         bool isTimed(std::size_t varIndex) const {
             return mFlowIntervals.at(VariablePool::getInstance().carlVarByIndex(varIndex)) == carl::Interval<Number>(1);
         }
 
+        [[nodiscard]]
         bool isDiscrete() const {
             for (const auto &keyVal: mFlowIntervals) {
                 if (keyVal.second != carl::Interval<Number>(0)) {
@@ -108,6 +137,7 @@ namespace hypro {
             return mFlowIntervals.at(VariablePool::getInstance().carlVarByIndex(varIndex)) == carl::Interval<Number>(0);
         }
 
+        [[nodiscard]]
         bool isSingular() const {
             for (const auto &[_, interval]: mFlowIntervals) {
 #ifdef CARL_OLD_STRUCTURE
@@ -121,6 +151,7 @@ namespace hypro {
             return true;
         }
 
+        [[nodiscard]]
         bool isSingular(std::size_t varIndex) const {
 #ifdef CARL_OLD_STRUCTURE
             return mFlowIntervals.at( VariablePool::getInstance().carlVarByIndex( varIndex ) ).isPointInterval();
@@ -157,6 +188,7 @@ namespace hypro {
             return out;
         }
 
+        [[nodiscard]]
         std::vector<Point<Number>> vertices() const {
             // enumerate all 2^d combinations of interval bounds to obtain all vertices.
             std::size_t dim = this->size();
@@ -176,6 +208,22 @@ namespace hypro {
                 flowVertices.emplace_back(std::move(vertex));
             }
             return flowVertices;
+        }
+
+        /**
+         * Checks, whether the stored variables are initialized in the VariablePool and whether their sequence of
+         * associated indices (dimension indices) is without missing elements.
+         * @return True, if the flow is consistent and complete with respect to the VariablePool
+         */
+        [[nodiscard]]
+        bool isConsistent() const {
+            for (std::size_t i = 0; i < mFlowIntervals.size(); ++i) {
+                if (!VariablePool::getInstance().hasDimension(i) ||
+                    mFlowIntervals.count(VariablePool::getInstance().carlVarByIndex(i)) == 0) {
+                    return false;
+                }
+            }
+            return true;
         }
     };
 

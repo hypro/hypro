@@ -99,6 +99,16 @@ namespace hypro {
     private:
         size_t copyVertices(Facet &facet, Facet const &other, point_ind_t visiblePoint, size_t replaceAt);
     };
+
+#ifdef HYPRO_EXTERNALIZE_CLASSES
+
+    extern template
+    class ExactQuickhull<mpq_class, true>::FacetSpace;
+
+    extern template
+    class ExactQuickhull<mpq_class, false>::FacetSpace;
+
+#endif
 }  // namespace hypro
 
 #include "FacetSpace.tpp"

@@ -1,4 +1,6 @@
 # Collect source files
+# root folder / core
+file(GLOB core_sources RELATIVE ${CMAKE_SOURCE_DIR} *.cpp)
 # algorithms
 file(GLOB_RECURSE algorithm_sources RELATIVE ${CMAKE_SOURCE_DIR} algorithms/*.cpp)
 #message(STATUS "Algorithm sources: ${algorithm_sources}")
@@ -15,7 +17,7 @@ file(GLOB_RECURSE representation_sources RELATIVE ${CMAKE_SOURCE_DIR} representa
 file(GLOB_RECURSE util_sources RELATIVE ${CMAKE_SOURCE_DIR} util/*.cpp)
 #message(STATUS "Util sources: ${util_sources}")
 # unify lists according to needs (here: exclude parser)
-set(sources ${algorithm_sources} ${datastructures_sources} ${representation_sources} ${util_sources})
+set(sources ${core_sources} ${algorithm_sources} ${datastructures_sources} ${representation_sources} ${util_sources})
 #message(STATUS "All sources: ${sources}")
 
 # filter out matlab-bindings

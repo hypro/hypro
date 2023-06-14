@@ -32,7 +32,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             ${GTEST_LIBRARIES}
             )
 
-    add_test(NAME core COMMAND runCoreTests)
+    add_test(NAME core COMMAND runCoreTests --gtest_catch_exceptions=0)
 
     add_dependencies(allTests runCoreTests)
 
@@ -48,7 +48,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
     target_include_directories(runParserTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
     target_link_libraries(runParserTests ${PROJECT_NAME}-shared ${PROJECT_NAME}-parser ${GTEST_LIBRARIES})
     #message("Targeted link libraries: " ${PROJECT_NAME} ${GTEST_LIBRARIES} ${ANTLR4CPP_LIBS})
-    add_test(NAME parser COMMAND runParserTests WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/test/core)
+    add_test(NAME parser COMMAND runParserTests --gtest_catch_exceptions=0 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/test/core)
 
     add_dependencies(allTests runParserTests)
 
