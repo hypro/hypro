@@ -76,13 +76,18 @@ entries:
         output: web, pdf
         folderitems:
 
-          - title: Plotting
-            url: /plotting.html
+          - title: General Utility
+            url: /utility.html
             output: web, pdf
             type: homepage
 
           - title: Linear Optimization
             url: /optimization.html
+            output: web, pdf
+            type: homepage
+
+          - title: Plotting
+            url: /plotting.html
             output: web, pdf
             type: homepage
 

@@ -320,7 +320,7 @@ set_target_properties(${PROJECT_NAME}-shared PROPERTIES INTERFACE_INCLUDE_DIRECT
 enable_testing()
 add_subdirectory(test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
-add_subdirectory(doc)
+#add_subdirectory(doc)
 
 ##############################################################################
 #### EXPORT SETTINGS
