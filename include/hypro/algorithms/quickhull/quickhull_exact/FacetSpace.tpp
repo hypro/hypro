@@ -145,7 +145,7 @@ namespace hypro {
 
 
         point_t result = lu.kernel().col(0);
-        assert(matrix * result == point_t::Zero(dimension));
+        assert(normalComputationMatrix * result == point_t::Zero(dimension));
 
 #ifndef NDEBUG
         // point_t tmp = facet.mNormal;
