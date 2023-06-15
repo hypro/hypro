@@ -14,9 +14,11 @@
 #ifndef HYPRO_EIGEN_SERIALIZATION_H
 #define HYPRO_EIGEN_SERIALIZATION_H
 
-#include "../../types.h"
+#include <hypro/flags.h>
 
 #ifdef HYPRO_USE_SERIALIZATION
+
+#include "../../types.h"
 
 #include <cereal/archives/json.hpp>
 

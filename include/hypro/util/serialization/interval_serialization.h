@@ -14,7 +14,12 @@
 #ifndef HYPRO_INTERVAL_SERIALIZATION_H
 #define HYPRO_INTERVAL_SERIALIZATION_H
 
+#include <hypro/flags.h>
+
+#ifdef HYPRO_USE_SERIALIZATION
+
 #include "../../types.h"
+
 #include "mpq_serialization.h"
 
 namespace cereal {
@@ -56,5 +61,7 @@ namespace cereal {
     }
 
 }  // namespace cereal
+
+#endif
 
 #endif    // HYPRO_INTERVAL_SERIALIZATION_H

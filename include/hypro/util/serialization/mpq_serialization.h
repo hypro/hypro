@@ -14,6 +14,10 @@
 #ifndef HYPRO_MPQ_SERIALIZATION_H
 #define HYPRO_MPQ_SERIALIZATION_H
 
+#include <hypro/flags.h>
+
+#ifdef HYPRO_USE_SERIALIZATION
+
 #include "../../types.h"
 
 #include <cereal/types/string.hpp>
@@ -35,5 +39,7 @@ namespace cereal {
     }
 
 }  // namespace cereal
+
+#endif
 
 #endif    // HYPRO_MPQ_SERIALIZATION_H
