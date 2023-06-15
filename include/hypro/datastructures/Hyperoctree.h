@@ -16,8 +16,11 @@
 #include "../representations/GeometricObjectBase.h"
 #include "../util/serialization/interval_serialization.h"
 
+
+#ifdef HYPRO_USE_SERIALIZATION
 #include <cereal/types/common.hpp>
 #include <cereal/types/vector.hpp>
+#endif
 
 namespace hypro {
 
@@ -355,6 +358,7 @@ namespace hypro {
         return out;
     }
 
+    #ifdef HYPRO_USE_SERIALIZATION
 /// serialization-function
     template<class Archive>
     void serialize(Archive &archive,
@@ -362,9 +366,11 @@ namespace hypro {
         archive(tree.mSplits, tree.mRemainingDepth, tree.mCovered, tree.mContainer, tree.mToBeCovered, tree.mData,
                 tree.mChildren);
     }
+    #endif
 
 }  // namespace hypro
 
+#ifdef HYPRO_USE_SERIALIZATION
 // Specialization for LoadAndConstruct for hyperoctrees
 namespace cereal {
     template<>
@@ -390,3 +396,4 @@ namespace cereal {
         }
     };
 }  // namespace cereal
+#endif
