@@ -48,7 +48,6 @@ else ()
             ${PROJECT_NAME}-shared
             ${PROJECT_NAME}-parser
             ${GTEST_LIBRARIES}
-            cereal::cereal
             )
 endif ()
 
