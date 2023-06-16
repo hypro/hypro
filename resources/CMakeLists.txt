@@ -21,6 +21,11 @@ endif ()
 set(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources)
 set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR})
 
+# Set up glpk.
+# ATTENTION: It is important that this happens *before* CArL is loaded to ensure that the linker first links against
+# glpk and second agains gmp and gmpxx inherited from CArL.
+include(glpk.cmake)
+
 # carl setup which deals with external carl and own carl instance (the later registers itself to cmake)
 find_package(carl)
 if (carl_FOUND)
@@ -153,10 +158,6 @@ set(CARL_OLD_STRUCTURE ${CARL_OLD_STRUCTURE} PARENT_SCOPE)
 set(CARL_POLY_MEMBER_SUBSTITUTE ${CARL_POLY_MEMBER_SUBSTITUTE} PARENT_SCOPE)
 set(CARL_LOGGING_POST_1910 ${CARL_LOGGING_POST_1910} PARENT_SCOPE)
 
-# Set up glpk.
-# ATTENTION: It is important that this happens *before* CArL is loaded to ensure that the linker first links against
-# glpk and second agains gmp and gmpxx inherited from CArL.
-include(glpk.cmake)
 
 # gtest needs to be build in any case, since one should not use system-versions of gtest
 include(gtest.cmake)
