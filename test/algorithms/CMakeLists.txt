@@ -20,10 +20,12 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             #SumPerformanceTest.cpp
             #TemplatePolyhedronContextTest.cpp #BROKEN since LTIContext broken
             TimeEvolutionTest.cpp
+            UnderApproximativeReachabilityAnalyzerTest.cpp
             UrgencyReachabilityTest.cpp
             UtilityTest.cpp
             #VertexEnumerationTest.cpp
             ZenoDetectionTest.cpp
+
             )
 
     SET_SOURCE_FILES_PROPERTIES(${algorithm_test_sources} PROPERTIES COMPILE_FLAGS -O0)
