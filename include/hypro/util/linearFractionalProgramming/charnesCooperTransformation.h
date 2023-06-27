@@ -32,7 +32,7 @@ std::pair<bool,vector_t<number>> charnesCooperTransformation( vector_t<number> n
 
 	Optimizer<number> opt = Optimizer<number>(constraints, optimization_b);
 	EvaluationResult<mpq_class> res = opt.evaluate(numerator,true);
-	if (res.errorCode != SOLUTION::FEAS){
+	if (res.errorCode != SOLUTION::FEAS and res.errorCode != SOLUTION::INFTY){
 		return {false,vector_t<number>()};
 	}
 	number t = res.optimumValue(res.optimumValue.size() -1);

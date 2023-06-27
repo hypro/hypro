@@ -2,16 +2,17 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     # reduce compiler optimization for tests
     if (HYPRO_USE_SERIALIZATION)
-        set(    CharnesCooperTest.cpp
+        set(
                 utility_test_sources
+                CharnesCooperTest.cpp
                 SerializationTest.cpp
                 SequenceGenerationTest.cpp
                 SMTSetEquivalenceTest.cpp
                 )
     else ()
         set(
-                CharnesCooperTest.cpp
                 utility_test_sources
+                CharnesCooperTest.cpp
                 SequenceGenerationTest.cpp
                 SMTSetEquivalenceTest.cpp
                 )

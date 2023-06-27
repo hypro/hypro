@@ -52,3 +52,59 @@ TEST( UnderApproximativeReachabilityAnalyzer, testSimple ) {
 	ASSERT_TRUE(result_b.isApprox(expected_b));
 	SUCCEED();
 }
+
+
+
+TEST( UnderApproximativeReachabilityAnalyzer, test3d ) {
+	using namespace hypro;
+	UnderApproximativeReachabilityAnalyzer<mpq_class> subject = UnderApproximativeReachabilityAnalyzer<mpq_class>();
+
+	// Ax <= b
+	matrix_t<mpq_class> a = matrix_t<mpq_class>::Zero( 6, 3 );
+	vector_t<mpq_class> b = vector_t<mpq_class>::Zero(6);
+
+	a << 1,0,0,-1,0,0,0,1,0,0,-1,-1.5,0,0,-1,0,0,1;
+	b << -10,-10,-8,6,4,-10;
+
+
+	vector_t<carl::Interval<mpq_class>> rates = vector_t<carl::Interval<mpq_class>>(3);
+	rates << carl::Interval<mpq_class>(-1,1), carl::Interval<mpq_class>(-1,1),carl::Interval<mpq_class >(1,2);
+
+	matrix_t<mpq_class> expectedFactors = matrix_t<mpq_class>(14,3);
+	expectedFactors <<1,0,0,
+		             -1,0,0,
+		              0,1,0,
+		              0,0,1,
+		            1,-2,-3,
+		             1,0,-1,
+		              1,0,1,
+		            -1,-2,-3,
+		            -1,0,-1,
+		             -1,0,1,
+		      0,mpq_class(6,10),mpq_class(-6,10),
+		             0,1,-1,
+		              0,1,1,
+		            0,-2,-2;
+
+	vector_t<mpq_class> expected_b = vector_t<mpq_class>(14);
+	expected_b << 10,
+		  10,
+		  8,
+		  10,
+		  -2,
+		  6,
+		  20,
+		  -2,
+		  6,
+		  20,
+		  mpq_class (28,5),
+		  4,
+		  18,
+		  -2;
+
+	auto [result_a, result_b] = subject.solve(a,b, rates);
+	ASSERT_TRUE(result_a.isApprox(expectedFactors));
+	ASSERT_TRUE(result_b.isApprox(expected_b));
+	SUCCEED();
+}
+
