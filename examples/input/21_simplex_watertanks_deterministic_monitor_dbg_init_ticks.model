@@ -9,10 +9,15 @@ hybrid reachability
     # Vars
     state var x1, x2, u, spec_t1, tick
 
+    par {
+        cycle_time = 1.0
+        spec_time = 30.0
+    }
+
     setting
     {
-        fixed steps 0.1
-        time 100
+        fixed steps 0.01
+        time 1000
         remainder estimation 1e-4
         identity precondition
         gnuplot octagon x1,x2
@@ -20,7 +25,7 @@ hybrid reachability
         cutoff 1e-15
         precision 53
         output out
-        max jumps 499
+        max jumps 9999999
         print on
     }
 
@@ -40,7 +45,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 >= 0.12
 
-                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= 1.0
+                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -56,9 +61,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 20.0
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
+                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -76,7 +81,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x1 <= 0.7
 
-                x1 <= 0.2   x2 <= 0.2   tick <= 1.0
+                x1 <= 0.2   x2 <= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -94,7 +99,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 >= 0.12
 
-                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= 1.0
+                x1 <= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -110,9 +115,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 20.0
+                # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
+                x1 <= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -130,7 +135,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 <= 0.2 & x2 >= 0.1
 
-                x1 <= 0.2   x2 <= 0.2   tick <= 1.0
+                x1 <= 0.2   x2 <= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -148,7 +153,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 >= 0.12
 
-                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= 1.0
+                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -164,9 +169,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 20.0
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
+                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -184,7 +189,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x1 <= 0.7
 
-                x1 >= 0.2   x2 >= 0.2   tick <= 1.0
+                x1 >= 0.2   x2 >= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -202,7 +207,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 >= 0.12
 
-                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= 1.0
+                x1 >= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -218,9 +223,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 20.0
+                # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
+                x1 >= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -238,7 +243,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 >= 0.2 & x2 >= 0.1
 
-                x1 >= 0.2   x2 >= 0.2   tick <= 1.0
+                x1 >= 0.2   x2 >= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -256,7 +261,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 >= 0.12
 
-                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= 1.0
+                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -272,9 +277,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 20.0
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
+                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -292,7 +297,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x1 <= 0.7
 
-                x1 <= 0.2   x2 >= 0.2   tick <= 1.0
+                x1 <= 0.2   x2 >= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -310,7 +315,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 >= 0.12
 
-                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= 1.0
+                x1 <= 0.2   x2 >= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -326,9 +331,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 20.0
+                # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
+                x1 <= 0.2   x2 >= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -346,7 +351,7 @@ hybrid reachability
             {
                 # Original invariant: x1 <= 0.2 & x2 >= 0.2 & x2 >= 0.1
 
-                x1 <= 0.2   x2 >= 0.2   tick <= 1.0
+                x1 <= 0.2   x2 >= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -364,7 +369,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 >= 0.12
 
-                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= 1.0
+                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -380,9 +385,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= 20.0
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
+                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -400,7 +405,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x1 <= 0.7
 
-                x1 >= 0.2   x2 <= 0.2   tick <= 1.0
+                x1 >= 0.2   x2 <= 0.2   tick <= cycle_time tick >= 0
             }
         }
 
@@ -418,7 +423,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 >= 0.12
 
-                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= 1.0
+                x1 >= 0.2   x2 <= 0.2   x2 >= 0.12   tick <= cycle_time tick >= 0
             }
         }
 
@@ -434,9 +439,9 @@ hybrid reachability
             }
             inv
             {
-                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= 20.0
+                # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1 & x2 <= 0.3 & spec_t1 <= spec_time
 
-                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= 20.0   tick <= 1.0
+                x1 >= 0.2   x2 <= 0.2   x2 <= 0.3   spec_t1 <= spec_time   tick <= cycle_time tick >= 0
             }
         }
 
@@ -454,7 +459,7 @@ hybrid reachability
             {
                 # Original invariant: x1 >= 0.2 & x2 <= 0.2 & x2 >= 0.1
 
-                x1 >= 0.2   x2 <= 0.2   tick <= 1.0
+                x1 >= 0.2   x2 <= 0.2   tick <= cycle_time tick >= 0
             }
         }
     }
@@ -1330,7 +1335,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1342,7 +1347,7 @@ hybrid reachability
         valve_closed_open_init -> valve_closed_open_init
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1356,7 +1361,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1368,7 +1373,7 @@ hybrid reachability
         valve_closed_open_antecedent -> valve_closed_open_antecedent
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1382,7 +1387,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1394,7 +1399,7 @@ hybrid reachability
         valve_closed_open_bad -> valve_closed_open_bad
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1408,7 +1413,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1420,7 +1425,7 @@ hybrid reachability
         valve_open1_open_init -> valve_open1_open_init
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1434,7 +1439,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1446,7 +1451,7 @@ hybrid reachability
         valve_open1_open_antecedent -> valve_open1_open_antecedent
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1460,7 +1465,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1472,7 +1477,7 @@ hybrid reachability
         valve_open1_open_bad -> valve_open1_open_bad
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1486,7 +1491,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1498,7 +1503,7 @@ hybrid reachability
         valve_open2_open_init -> valve_open2_open_init
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1512,7 +1517,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1524,7 +1529,7 @@ hybrid reachability
         valve_open2_open_antecedent -> valve_open2_open_antecedent
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1538,7 +1543,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1550,7 +1555,7 @@ hybrid reachability
         valve_open2_open_bad -> valve_open2_open_bad
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1564,7 +1569,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1576,7 +1581,7 @@ hybrid reachability
         valve_open3_open_init -> valve_open3_open_init
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1591,7 +1596,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1603,7 +1608,7 @@ hybrid reachability
         valve_open3_open_antecedent -> valve_open3_open_antecedent
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1617,7 +1622,7 @@ hybrid reachability
         {
             # Original guard: x1 >= 0.7
 
-            x1 >= 0.7   tick >= 1.0
+            x1 >= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1629,7 +1634,7 @@ hybrid reachability
         valve_open3_open_bad -> valve_open3_open_bad
         guard
         {
-            x1 <= 0.7   tick >= 1.0
+            x1 <= 0.7   tick >= cycle_time
         }
         reset
         {
@@ -1643,7 +1648,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1655,7 +1660,7 @@ hybrid reachability
         valve_closed_closed_init -> valve_closed_closed_init
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1669,7 +1674,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1681,7 +1686,7 @@ hybrid reachability
         valve_closed_closed_antecedent -> valve_closed_closed_antecedent
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1695,7 +1700,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1707,7 +1712,7 @@ hybrid reachability
         valve_closed_closed_bad -> valve_closed_closed_bad
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1721,7 +1726,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1733,7 +1738,7 @@ hybrid reachability
         valve_open1_closed_init -> valve_open1_closed_init
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1747,7 +1752,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1759,7 +1764,7 @@ hybrid reachability
         valve_open1_closed_antecedent -> valve_open1_closed_antecedent
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1773,7 +1778,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1785,7 +1790,7 @@ hybrid reachability
         valve_open1_closed_bad -> valve_open1_closed_bad
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1799,7 +1804,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1811,7 +1816,7 @@ hybrid reachability
         valve_open2_closed_init -> valve_open2_closed_init
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1825,7 +1830,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1837,7 +1842,7 @@ hybrid reachability
         valve_open2_closed_antecedent -> valve_open2_closed_antecedent
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1851,7 +1856,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1863,7 +1868,7 @@ hybrid reachability
         valve_open2_closed_bad -> valve_open2_closed_bad
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1877,7 +1882,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1889,7 +1894,7 @@ hybrid reachability
         valve_open3_closed_init -> valve_open3_closed_init
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1903,7 +1908,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1915,7 +1920,7 @@ hybrid reachability
         valve_open3_closed_antecedent -> valve_open3_closed_antecedent
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1929,7 +1934,7 @@ hybrid reachability
         {
             # Original guard: x2 <= 0.1
 
-            x2 <= 0.1   tick >= 1.0
+            x2 <= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -1941,7 +1946,7 @@ hybrid reachability
         valve_open3_closed_bad -> valve_open3_closed_bad
         guard
         {
-            x2 >= 0.1   tick >= 1.0
+            x2 >= 0.1   tick >= cycle_time
         }
         reset
         {
@@ -2057,9 +2062,9 @@ hybrid reachability
         valve_closed_open_antecedent -> valve_closed_open_bad
         guard
         {
-            # Original guard: spec_t1 >= 20.0
+            # Original guard: spec_t1 >= spec_time
 
-            spec_t1 >= 20.0
+            spec_t1 >= spec_time
         }
         reset
         {
@@ -2070,9 +2075,9 @@ hybrid reachability
         valve_closed_closed_antecedent -> valve_closed_closed_bad
         guard
         {
-            # Original guard: spec_t1 >= 20.0
+            # Original guard: spec_t1 >= spec_time
 
-            spec_t1 >= 20.0
+            spec_t1 >= spec_time
         }
         reset
         {
@@ -2083,9 +2088,9 @@ hybrid reachability
         valve_open1_open_antecedent -> valve_open1_open_bad
         guard
         {
-            # Original guard: spec_t1 >= 20.0
+            # Original guard: spec_t1 >= spec_time
 
-            spec_t1 >= 20.0
+            spec_t1 >= spec_time
         }
         reset
         {
@@ -2096,9 +2101,9 @@ hybrid reachability
         valve_open1_closed_antecedent -> valve_open1_closed_bad
         guard
         {
-            # Original guard: spec_t1 >= 20.0
+            # Original guard: spec_t1 >= spec_time
 
-            spec_t1 >= 20.0
+            spec_t1 >= spec_time
         }
         reset
         {
@@ -2109,9 +2114,9 @@ hybrid reachability
         valve_open2_open_antecedent -> valve_open2_open_bad
         guard
         {
-            # Original guard: spec_t1 >= 20.0
+            # Original guard: spec_t1 >= spec_time
 
-            spec_t1 >= 20.0
+            spec_t1 >= spec_time
         }
         reset
         {
@@ -2122,9 +2127,9 @@ hybrid reachability
         valve_open2_closed_antecedent -> valve_open2_closed_bad
         guard
         {
-            # Original guard: spec_t1 >= 20.0
+            # Original guard: spec_t1 >= spec_time
 
-            spec_t1 >= 20.0
+            spec_t1 >= spec_time
         }
         reset
         {
@@ -2135,9 +2140,9 @@ hybrid reachability
         valve_open3_open_antecedent -> valve_open3_open_bad
         guard
         {
-            # Original guard: spec_t1 >= 20.0
+            # Original guard: spec_t1 >= spec_time
 
-            spec_t1 >= 20.0
+            spec_t1 >= spec_time
         }
         reset
         {
@@ -2148,9 +2153,9 @@ hybrid reachability
         valve_open3_closed_antecedent -> valve_open3_closed_bad
         guard
         {
-            # Original guard: spec_t1 >= 20.0
+            # Original guard: spec_t1 >= spec_time
 
-            spec_t1 >= 20.0
+            spec_t1 >= spec_time
         }
         reset
         {
@@ -2275,8 +2280,8 @@ hybrid reachability
             u in [0.0, 0.0]
             spec_t1 in [0, 0]
             tick in [0, 0]
-            x1 in [0.21, 0.21]
-            x2 in [0.21, 0.21]
+            x1 in [0.3, 0.3]
+            x2 in [0.4, 0.4]
         }
     }
 }

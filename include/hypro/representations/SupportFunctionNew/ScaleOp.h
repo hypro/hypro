@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * ScaleOp.h
  *
  * A RootGrowNode that represents a scaling operation in the tree of operations representing a SupportFunction.
@@ -15,129 +24,133 @@
 namespace hypro {
 
 // Forward Declaration
-template <typename Number, typename Converter, typename Setting>
-class SupportFunctionNewT;
+    template<typename Number, typename Converter, typename Setting>
+    class SupportFunctionNewT;
 
-template <typename Number, typename Converter, typename Setting>
-class RootGrowNode;
+    template<typename Number, typename Converter, typename Setting>
+    class RootGrowNode;
 
 // A data struct for ScaleOp, containing all needed info to construct a ScaleOp from it. No child info is saved.
-template <typename Number>
-struct ScaleData : public RGNData {
-	Number factor;
-	ScaleData( const Number& fac )
-		: factor( fac ) {}
-};
+    template<typename Number>
+    struct ScaleData : public RGNData {
+        Number factor;
 
-template <typename Number, typename Converter, typename Setting>
-class ScaleOp : public RootGrowNode<Number, Converter, Setting> {
-  private:
-	////// Usings
+        ScaleData(const Number &fac)
+                : factor(fac) {}
+    };
 
-	using PointerVec = typename RootGrowNode<Number, Converter, Setting>::PointerVec;
+    template<typename Number, typename Converter, typename Setting>
+    class ScaleOp : public RootGrowNode<Number, Converter, Setting> {
+    private:
+        ////// Usings
 
-	////// General Interface
+        using PointerVec = typename RootGrowNode<Number, Converter, Setting>::PointerVec;
 
-	SFNEW_TYPE type = SFNEW_TYPE::SCALEOP;
-	unsigned originCount;
-	PointerVec mChildren;
-	std::size_t mDimension;
+        ////// General Interface
 
-	////// Members for this class
+        SFNEW_TYPE type = SFNEW_TYPE::SCALEOP;
+        unsigned originCount;
+        PointerVec mChildren;
+        std::size_t mDimension;
 
-	Number factor;
+        ////// Members for this class
 
-  public:
-	////// Constructors & Destructors
+        Number factor;
 
-	ScaleOp() = delete;
+    public:
+        ////// Constructors & Destructors
 
-	ScaleOp( const SupportFunctionNewT<Number, Converter, Setting>& origin, const Number& scale )
-		: originCount( 1 )
-		, mChildren( PointerVec( 1, nullptr ) )
-		, mDimension( origin.dimension() )
-		, factor( scale ) {
-		origin.addOperation( this );
-	}
+        ScaleOp() = delete;
 
-	ScaleOp( const ScaleData<Number>& d )
-		: originCount( 1 )
-		, mChildren( PointerVec( { 1, nullptr } ) )
-		//, mDimension(d.origin->getDimension())
-		, factor( d.factor ) {}
+        ScaleOp(const SupportFunctionNewT<Number, Converter, Setting> &origin, const Number &scale)
+                : originCount(1), mChildren(PointerVec(1, nullptr)), mDimension(origin.dimension()), factor(scale) {
+            origin.addOperation(this);
+        }
 
-	~ScaleOp() {}
+        ScaleOp(const ScaleData<Number> &d)
+                : originCount(1), mChildren(PointerVec({1, nullptr}))
+                //, mDimension(d.origin->getDimension())
+                , factor(d.factor) {}
 
-	////// Getters & Setters
+        ~ScaleOp() {}
 
-	SFNEW_TYPE getType() const override { return type; }
-	unsigned getOriginCount() const override { return originCount; }
-	std::size_t getDimension() const override { return mDimension; }
-	Number getFactor() const { return factor; }
-	RGNData* getData() const override { return new ScaleData<Number>( factor ); }
-	void setDimension( const std::size_t d ) override { mDimension = d; }
+        ////// Getters & Setters
 
-	////// RootGrowNode Interface
+        SFNEW_TYPE getType() const override { return type; }
 
-	// does nothing
-	matrix_t<Number> transform( const matrix_t<Number>& param ) const override {
-		return param;
-	}
+        unsigned getOriginCount() const override { return originCount; }
 
-	// should not be reachable
-	std::vector<EvaluationResult<Number>> compute( const matrix_t<Number>&, bool ) const override {
-		assert( false && "ScaleOp::compute should not be called" );
-		return std::vector<EvaluationResult<Number>>();
-	}
+        std::size_t getDimension() const override { return mDimension; }
 
-	// Given the results, return vector of evaluation results (here only first place needed, since unary op), here, we also modify
-	std::vector<EvaluationResult<Number>> aggregate( std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const override {
-		TRACE( "hypro.representations.supportFunction", ": SCALE, accumulate results." )
-		assert( resultStackBack.size() == 1 );
+        Number getFactor() const { return factor; }
 
-		// if one result is infeasible, the others will be too -> do not process.
-		if ( resultStackBack.front().begin()->errorCode != SOLUTION::INFEAS ) {
-			for ( auto& singleRes : resultStackBack.front() ) {
-				assert( singleRes.errorCode != SOLUTION::INFEAS );
-				if ( singleRes.errorCode == SOLUTION::FEAS ) {
-					singleRes.supportValue *= factor;
-					// singleRes.optimumValue *= factor;
-				}
-			}
-		}
-		return resultStackBack.front();
-	}
+        RGNData *getData() const override { return new ScaleData<Number>(factor); }
 
-	// Checks emptiness
-	bool empty( const std::vector<bool>& childrenEmpty ) const override {
-		assert( childrenEmpty.size() == 1 );
-		if ( childrenEmpty.front() ) return true;
-		return false;
-	}
+        void setDimension(const std::size_t d) override { mDimension = d; }
 
-	// Multiply supremumPoint by factor
-	Point<Number> supremumPoint( std::vector<Point<Number>>& points ) const override {
-		assert( points.size() == 1 );
-		if ( factor == 0 ) {
-			return Point<Number>::Zero( points.front().dimension() );
-		} else {
-			if ( points.front().dimension() == 0 ) return points.front();
-			return factor * points.front();
-		}
-	}
+        ////// RootGrowNode Interface
 
-	// Parameters are backtransformed into the domain space of the given operation- divide by factor
-	vector_t<Number> reverseOp( const vector_t<Number>& point ) const override {
-		if ( factor == 0 ) return vector_t<Number>::Zero( point.rows() );
-		return point / factor;
-	}
+        // does nothing
+        matrix_t<Number> transform(const matrix_t<Number> &param) const override {
+            return param;
+        }
 
-	// If child contains p, then scaled version will contain it too
-	bool contains( const std::vector<bool>& v, const vector_t<Number>& /*point*/ ) const override {
-		assert( v.size() == 1 );
-		if ( v.front() ) return true;
-		return false;
-	}
-};
+        // should not be reachable
+        std::vector<EvaluationResult<Number>> compute(const matrix_t<Number> &, bool) const override {
+            assert(false && "ScaleOp::compute should not be called");
+            return std::vector<EvaluationResult<Number>>();
+        }
+
+        // Given the results, return vector of evaluation results (here only first place needed, since unary op), here, we also modify
+        std::vector<EvaluationResult<Number>>
+        aggregate(std::vector<std::vector<EvaluationResult<Number>>> &resultStackBack,
+                  const matrix_t<Number> &) const override {
+            TRACE("hypro.representations.supportFunction", ": SCALE, accumulate results.")
+            assert(resultStackBack.size() == 1);
+
+            // if one result is infeasible, the others will be too -> do not process.
+            if (resultStackBack.front().begin()->errorCode != SOLUTION::INFEAS) {
+                for (auto &singleRes: resultStackBack.front()) {
+                    assert(singleRes.errorCode != SOLUTION::INFEAS);
+                    if (singleRes.errorCode == SOLUTION::FEAS) {
+                        singleRes.supportValue *= factor;
+                        // singleRes.optimumValue *= factor;
+                    }
+                }
+            }
+            return resultStackBack.front();
+        }
+
+        // Checks emptiness
+        bool empty(const std::vector<bool> &childrenEmpty) const override {
+            assert(childrenEmpty.size() == 1);
+            if (childrenEmpty.front()) return true;
+            return false;
+        }
+
+        // Multiply supremumPoint by factor
+        Point<Number> supremumPoint(std::vector<Point<Number>> &points) const override {
+            assert(points.size() == 1);
+            if (factor == 0) {
+                return Point<Number>::Zero(points.front().dimension());
+            } else {
+                if (points.front().dimension() == 0) return points.front();
+                return factor * points.front();
+            }
+        }
+
+        // Parameters are backtransformed into the domain space of the given operation- divide by factor
+        vector_t<Number> reverseOp(const vector_t<Number> &point) const override {
+            if (factor == 0) return vector_t<Number>::Zero(point.rows());
+            return point / factor;
+        }
+
+        // If child contains p, then scaled version will contain it too
+        bool contains(const std::vector<bool> &v, const vector_t<Number> & /*point*/ ) const override {
+            assert(v.size() == 1);
+            if (v.front()) return true;
+            return false;
+        }
+    };
 
 }  // namespace hypro

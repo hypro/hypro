@@ -1,0 +1,3 @@
+Flowpipe unten rechts!
+Wieso gibt es die? Wahrscheinlich durch inconsitenten initial Zustand verursacht. (u und open/closed passen nicht zusammen)
+Wieso terminiert dieser Pfad?

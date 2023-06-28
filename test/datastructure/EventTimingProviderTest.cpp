@@ -1,4 +1,14 @@
+/*
+ * Copyright (c) 2022-2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
 #include <hypro/datastructures/reachability/timing/EventTimingProvider.h>
@@ -17,9 +27,9 @@ class EventTimingTest : public ::testing::Test {
 		auto& tProvider = EventTimingProvider<double>::getInstance();
 		// set up location and transition to simulate reachability analysis.
 		loc = new Location<double>();
-		std::unique_ptr<Transition<double>> t = std::make_unique<Transition<double>>( loc, loc );
+		std::unique_ptr<Transition<Location<double>>> t = std::make_unique<Transition<Location<double>>>( loc, loc );
 		loc->addTransition( std::move( t ) );
-		std::unique_ptr<Transition<double>> t2 = std::make_unique<Transition<double>>( loc, loc );
+		std::unique_ptr<Transition<Location<double>>> t2 = std::make_unique<Transition<Location<double>>>( loc, loc );
 		loc->addTransition( std::move( t2 ) );
 		tRaw = loc->getTransitions()[0].get();
 		tRaw2 = loc->getTransitions()[1].get();
@@ -38,10 +48,10 @@ class EventTimingTest : public ::testing::Test {
 	}
 
 	Location<double>* loc;
-	Transition<double>* tRaw;
-	Transition<double>* tRaw2;
+	Transition<Location<double>>* tRaw;
+	Transition<Location<double>>* tRaw2;
 
-	EventTimingNode<double>* initNode;
+	typename EventTimingNode<double>::Node_t initNode;
 };
 
 /**
@@ -61,15 +71,12 @@ TEST_F( EventTimingTest, FindPath1 ) {
 	// EXPECT_EQ(nullptr, tProvider.getTimingNode(p1));
 
 	auto timings = tProvider.getTimings( p1 );
-	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
-	}
 
 	EXPECT_EQ( std::nullopt, timings );
 
 	// simulate a transition event:
 	// create timing node
-	EventTimingNode<double>* ch1 = tProvider.addChildToNode( initNode, 10 );
+	auto ch1 = tProvider.addChildToNode( initNode, 10 );
 	// add transition event to parent
 	initNode->rGetTimings().insertTransition( tRaw, carl::Interval<T>( 1, 2 ), CONTAINMENT::YES );
 	// set properties of child
@@ -101,8 +108,8 @@ TEST_F( EventTimingTest, FindPath2 ) {
 
 	// simulate a transition event:
 	// create timing node
-	EventTimingNode<double>* ch1 = tProvider.addChildToNode( initNode, 10 );
-	EventTimingNode<double>* ch2 = tProvider.addChildToNode( initNode, 10 );
+	auto ch1 = tProvider.addChildToNode( initNode, 10 );
+	auto ch2 = tProvider.addChildToNode( initNode, 10 );
 
 	EXPECT_EQ( std::size_t( 2 ), initNode->getChildren().size() );
 	// add transition event to parent
@@ -125,7 +132,6 @@ TEST_F( EventTimingTest, FindPath2 ) {
 
 	EXPECT_NE( std::nullopt, timings );
 	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
 		EXPECT_TRUE( ( *timings ).satisfiedInvariant( carl::Interval<T>( 1, 5 ) ) );
 	}
 }
@@ -155,9 +161,9 @@ TEST_F( EventTimingTest, FindPath3 ) {
 
 	// simulate a transition event:
 	// create timing node
-	EventTimingNode<double>* ch1 = tProvider.addChildToNode( initNode, 10 );
-	EventTimingNode<double>* ch2 = tProvider.addChildToNode( initNode, 10 );
-	EventTimingNode<double>* ch3 = tProvider.addChildToNode( initNode, 10 );
+	auto ch1 = tProvider.addChildToNode( initNode, 10 );
+	auto ch2 = tProvider.addChildToNode( initNode, 10 );
+	auto ch3 = tProvider.addChildToNode( initNode, 10 );
 
 	EXPECT_EQ( std::size_t( 3 ), initNode->getChildren().size() );
 	// add transition event to parent
@@ -189,7 +195,6 @@ TEST_F( EventTimingTest, FindPath3 ) {
 	// timings should be null, as we do not have information in ch2.
 	EXPECT_NE( std::nullopt, timings );
 	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
 		EXPECT_TRUE( ( *timings ).satisfiedInvariant( carl::Interval<T>( 1, 2 ) ) );
 	}
 }
@@ -247,9 +252,6 @@ TEST_F( EventTimingTest, FindPath4 ) {
 
 	// query using the previously created path
 	auto timings = tProvider.getTimings( p1 );
-	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
-	}
 	EXPECT_NE( std::nullopt, timings );
 }
 
@@ -306,8 +308,5 @@ TEST_F( EventTimingTest, FindPath5 ) {
 
 	// query using the previously created path
 	auto timings = tProvider.getTimings( p1 );
-	if ( timings ) {
-		std::cout << "Obtained timings: " << std::endl << *timings << std::endl;
-	}
 	EXPECT_NE( std::nullopt, timings );
 }

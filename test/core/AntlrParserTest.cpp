@@ -1,16 +1,15 @@
 /*
- * Copyright (c) 2021.
+ * Copyright (c) 2021-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
-#include <bits/c++config.h>
-#include <carl/interval/Interval.h>
 #include <fstream>
 #include <hypro/datastructures/HybridAutomaton/Condition.h>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
@@ -20,7 +19,6 @@
 #include <hypro/representations/conversion/typedefs.h>
 #include <hypro/types.h>
 #include <iostream>
-
 #include <unistd.h>	 //getcwd()
 
 // using namespace antlr4;
@@ -36,9 +34,7 @@ class AntlrParserTest : public ::testing::Test {
 
 	void cwd() {
 		char cwd[1024];
-		if ( getcwd( cwd, sizeof( cwd ) ) != nullptr )
-			fprintf( stdout, "Current working dir: %s\n", cwd );
-		else
+		if ( getcwd( cwd, sizeof( cwd ) ) == nullptr )
 			std::cerr << "getcwd() error" << std::endl;
 	}
 };
@@ -57,11 +53,11 @@ TYPED_TEST( AntlrParserTest, LocationParsingTest ) {
 		hypro::Location<TypeParam>* loc1 = automaton.getLocations().back();
 		EXPECT_EQ( std::size_t( 0 ), loc0->getTransitions().size() );
 		EXPECT_EQ( std::size_t( 0 ), loc1->getTransitions().size() );
-		if(loc0->getName() == "rod1") {
+		if ( loc0->getName() == "rod1" ) {
 			EXPECT_EQ( "rod2", loc1->getName() );
 			EXPECT_FALSE( loc0->isUrgent() );
 			EXPECT_TRUE( loc1->isUrgent() );
-		} else if (loc0->getName() == "rod2") {
+		} else if ( loc0->getName() == "rod2" ) {
 			EXPECT_EQ( "rod1", loc1->getName() );
 			EXPECT_FALSE( loc1->isUrgent() );
 			EXPECT_TRUE( loc0->isUrgent() );
@@ -162,10 +158,16 @@ TYPED_TEST( AntlrParserTest, BadStatesParsing ) {
 		EXPECT_EQ( invariant, loc->getInvariant() );
 		EXPECT_FALSE( automaton.getLocalBadStates().empty() );
 		EXPECT_EQ( hypro::Condition<TypeParam>(), automaton.getLocalBadStates().at( loc1 ) );
-		EXPECT_EQ( hypro::Condition<TypeParam>( { carl::Interval<TypeParam>::unboundedInterval(),
+		EXPECT_EQ( hypro::Condition<TypeParam>( { createUnboundedInterval<TypeParam>(),
 												  carl::Interval<TypeParam>( TypeParam{ -2.5 }, TypeParam{ 0.0 } ) } ),
 				   automaton.getLocalBadStates().at( loc2 ) );
-		EXPECT_TRUE( automaton.getGlobalBadStates().size() > 0 );
+		EXPECT_TRUE( automaton.getGlobalBadStates().size() == 4 );
+		Matrix badSetConstraints = Matrix::Zero( 1, 2 );
+		badSetConstraints( 0, 0 ) = TypeParam( 1 );
+		Vector badSetConstants = Vector( 1 );
+		badSetConstants( 0 ) = TypeParam( 3 );
+		EXPECT_EQ( automaton.getGlobalBadStates()[1], hypro::Condition<TypeParam>( badSetConstraints, badSetConstants ) );
+		EXPECT_EQ( automaton.getGlobalBadStates().back(), hypro::Condition<TypeParam>( badSetConstraints, badSetConstants ) );
 	} catch ( const std::runtime_error& e ) {
 		std::cout << e.what() << std::endl;
 		FAIL();
@@ -310,7 +312,6 @@ TYPED_TEST( AntlrParserTest, BracketParsingTest ) {
 		controlMatrix( 12, 1 ) = 3;
 		controlMatrix( 12, 13 ) = 4;
 		if ( std::is_same<TypeParam, double>::value ) {
-			std::cout << loc->getLinearFlow().getFlowMatrix() << std::endl;
 			EXPECT_TRUE( controlMatrix.isApprox( loc->getLinearFlow().getFlowMatrix() ) );
 		} else {
 			SUCCEED();

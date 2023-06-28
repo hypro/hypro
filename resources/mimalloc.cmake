@@ -2,7 +2,7 @@
 ExternalProject_Add(
         mimalloc
         GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
-        GIT_SHALLOW ON
+        GIT_SHALLOW 1
         GIT_TAG "v1.6.7"
         DOWNLOAD_NO_PROGRESS 1
         BUILD_COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE}
@@ -22,4 +22,4 @@ add_imported_library(mimalloc STATIC "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXE
 set(MIMALLOC_INCLUDE_DIR "${source_dir}/include" PARENT_SCOPE)
 set(MIMALLOC_LIBRARIES "${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}mimalloc${CMAKE_SHARED_LIBRARY_SUFFIX}" PARENT_SCOPE)
 
-add_dependencies(hypro_resources mimalloc)
+add_dependencies(${PROJECT_NAME}-resources mimalloc)

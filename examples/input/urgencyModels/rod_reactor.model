@@ -1,0 +1,138 @@
+# Simplified model of a reactor core found for example in "The Algorithmic Analysis of Hybrid Systems".
+# One of two cooling rods can be inserted to cool down the core. If the temperature gets too high and no rods can be inserted, the system is unsafe.
+# Rods can only be inserted every 20 seconds.
+
+# Adaptions: Insertions of cooling rods are urgent. In order to make the system unsafe if no urgency is respected, the guard of the transition norod -> rod2 has been changed by allowing the rod to be inserted at a tempatature of 510.
+# Additionally, the initial set has been enlarged from [510,520]x[20,20]x[20,20] to [450,520]x[17,20]x[17,20]
+# Since hypro does not support strict inequalities, the unsafe condition x >= 550 c1 < 20 c2 < 20 is approximated by x >= 550 c1 <= 19.9 c2 <= 19.9
+
+hybrid reachability
+{
+ state var x,c1,c2
+
+ setting
+ {
+  fixed steps 0.1
+  time 17
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,c2
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output rod_reactor
+  max jumps 10
+  print on
+ }
+
+ modes
+ {
+  rod1
+  {
+   poly ode 1
+   {
+    x' = 0.1*x + -56
+    c1' = 1
+    c2' = 1
+   }
+
+   inv
+   {
+    x >= 510
+   }
+  }
+
+  rod2
+  {
+   poly ode 1
+   {
+    x' = 0.1*x + -60
+    c1' = 1
+    c2' = 1
+   }
+
+   inv
+   {
+    x >= 510
+   }
+  }
+
+  norod
+  {
+   poly ode 1
+   {
+    x' = 0.1*x + -50
+    c1' = 1
+    c2' = 1
+   }
+
+   inv
+   {
+    x <= 550
+   }
+  }
+
+  shutdown
+  {
+   poly ode 1
+   {
+    x' = 0
+    c1' = 0
+    c2' = 0
+   }
+
+   inv
+   {
+   }
+  }
+ }
+
+ jumps
+ {
+  norod -> rod1
+  guard {x >= 530  c1 >= 20 }
+  reset { }
+  parallelotope aggregation {}
+  urgent
+
+  norod -> rod2
+  guard {x >= 510  c2 >= 20 }
+  reset { }
+  parallelotope aggregation {}
+  urgent
+
+  rod1 -> norod
+  guard {x <= 510 }
+  reset { c1' := 0 }
+  parallelotope aggregation {}
+
+  rod2 -> norod
+  guard {x <= 510 }
+  reset { c2' := 0 }
+  parallelotope aggregation {}
+
+  norod -> shutdown
+  guard {x >= 550 c1 <= 19.9 c2 <= 19.9 }
+  reset {}
+  parallelotope aggregation {}
+ }
+
+ init
+ {
+  norod
+  {
+   x in [450,520]
+   c1 in [17,20]
+   c2 in [17,20]
+  }
+ }
+}
+
+unsafe set
+{
+ shutdown
+ {
+  c1 in [0,20]
+  c2 in [0,20]
+ }
+}

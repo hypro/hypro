@@ -51,7 +51,6 @@ Results<std::size_t> affineTransformation( const Settings& settings ) {
 				vectors.emplace_back( std::move( vector ) );
 			}
 			auto creationTime = creationTimer.elapsed();
-			// std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
 			ress.mCreationTime += creationTime;
 
 			// run instances

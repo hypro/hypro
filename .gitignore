@@ -22,3 +22,9 @@ resources/glpk-5.0/
 *.java
 *.interp
 doc/docpage/_site/
+
+examples/nnet/acasxu
+examples/nnet/coav
+examples/nnet/mnist
+examples/nnet/twin
+/sonar-project.properties

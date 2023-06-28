@@ -1,0 +1,269 @@
+# Fehnker, Ansgar, and Franjo Ivančić. "Benchmarks for hybrid systems verification." International Workshop on Hybrid Systems: Computation and Control. Springer, Berlin, Heidelberg, 2004.
+# Adapted by making the switching of heaters between rooms urgent and adding a bad state when the temparature gets too low in some room.
+# Can be extended by adding more rooms and/or heaters
+
+hybrid reachability
+{
+ state var t1, t2, t3
+
+ setting
+ {
+  fixed steps 0.01
+  time 10
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon t1,t3
+  fixed orders 10
+  cutoff 1e-15
+  precision 128
+  output heating_03
+  max jumps 6
+  print on
+ }
+
+ modes
+ {
+  no_heater
+  {
+   linear ode
+   {
+    t1' = 0.3*(6 - t1) + 0.8*(t2-t1) + 0.6*(t3 -t1)
+    t2' = 0.2*(6 - t2) + 0.8*(t1-t2) + 0.7*(t3 -t2)
+    t3' = 0.3*(6 - t3) + 0.6*(t1-t3) + 0.7*(t2 -t3)
+   }
+
+   inv
+   {
+    t1 >= 18.5
+    t2 >= 18.5
+    t3 >= 18.5
+   }
+  }
+
+  heater_1
+  {
+   linear ode
+   {
+    t1' = 12 +0.3*(6 - t1) + 0.8*(t2-t1) + 0.6*(t3 -t1)
+    t2' = 0.2*(6 - t2) + 0.8*(t1-t2) + 0.7*(t3 -t2)
+    t3' = 0.3*(6 - t3) + 0.6*(t1-t3) + 0.7*(t2 -t3)
+   }
+
+   inv
+   {
+    t1 <= 21
+   }
+  }
+
+  heater_2
+  {
+   linear ode
+   {
+    t1' = 0.3*(6 - t1) + 0.8*(t2-t1) + 0.6*(t3 -t1)
+    t2' = 14 +0.2*(6 - t2) + 0.8*(t1-t2) + 0.7*(t3 -t2)
+    t3' = 0.3*(6 - t3) + 0.6*(t1-t3) + 0.7*(t2 -t3)
+   }
+
+   inv
+   {
+    t2 <= 21
+   }
+  }
+
+  heater_3
+  {
+   linear ode
+   {
+    t1' = 0.3*(6 - t1) + 0.8*(t2-t1) + 0.6*(t3 -t1)
+    t2' = 0.2*(6 - t2) + 0.8*(t1-t2) + 0.7*(t3 -t2)
+    t3' = 12 + 0.3*(6 - t3) + 0.6*(t1-t3) + 0.7*(t2 -t3)
+   }
+
+   inv
+   {
+    t3 <= 21
+   }
+  }
+
+  error
+  {
+    linear ode
+    {
+      t1' = 0
+      t2' = 0
+      t3' = 0
+    }
+    inv
+    {
+    }
+  }
+
+ }
+
+ jumps
+ {
+  no_heater -> heater_1
+  guard { t1 <= 20 }
+  reset {}
+  parallelotope aggregation {}
+
+  no_heater -> heater_2
+  guard { t2 <= 20 }
+  reset {}
+  parallelotope aggregation {}
+
+  no_heater -> heater_3
+  guard { t3 <= 20 }
+  reset {}
+  parallelotope aggregation {}
+
+  heater_1 -> no_heater
+  guard { t1 >= 21 }
+  reset {}
+  parallelotope aggregation {}
+
+  heater_2 -> no_heater
+  guard { t2 >= 21 }
+  reset {}
+  parallelotope aggregation {}
+
+  heater_3 -> no_heater
+  guard { t3 >= 21 }
+  reset {}
+  parallelotope aggregation {}
+
+  heater_1 -> heater_2
+  guard {
+            t2 <= 18
+            t1 - t2 >= 1
+        }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  heater_1 -> heater_3
+  guard {
+            t3 <= 18
+            t1 - t3 >= 1
+        }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  heater_2 -> heater_1
+  guard {
+            t1 <= 18
+            t2 - t1 >= 1
+        }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  heater_2 -> heater_3
+  guard {
+            t3 <= 18
+            t2 - t3 >= 1
+        }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  heater_3-> heater_1
+  guard {
+            t1 <= 18
+            t3 - t1 >= 1
+        }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  heater_3-> heater_2
+  guard {
+            t2 <= 18
+            t3 - t2 >= 1
+        }
+  reset {}
+  parallelotope aggregation {}
+  urgent
+
+  no_heater -> error
+  guard { t1 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+
+  heater_1 -> error
+  guard { t1 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+
+  heater_2 -> error
+  guard { t1 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+
+  heater_3 -> error
+  guard { t1 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+
+  no_heater -> error
+  guard { t3 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+  
+  heater_1 -> error
+  guard { t3 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+  
+  heater_2 -> error
+  guard { t3 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+  
+  heater_3 -> error
+  guard { t3 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+
+  no_heater -> error
+  guard { t2 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+  
+  heater_1 -> error
+  guard { t2 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+  
+  heater_2 -> error
+  guard { t2 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+  
+  heater_3 -> error
+  guard { t2 <= 17.5 }
+  reset {}
+  parallelotope aggregation {}
+
+
+ }
+
+ init
+ {
+  no_heater
+  {
+   t1 in [19,20]
+   t2 in [19,20]
+   t3 in [19,20]
+  }
+ }
+
+}
+
+unsafe set
+{
+  error {}
+}
+ 
+

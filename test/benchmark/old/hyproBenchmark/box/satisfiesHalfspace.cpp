@@ -53,7 +53,7 @@ Results<std::size_t> satisfiesHalfspaces( const Settings& settings ) {
 #endif
 		}
 		auto creationTime = creationTimer.elapsed();
-		// std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
+		std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
 		ress.mCreationTime += creationTime;
 
 		// run instances
@@ -62,7 +62,7 @@ Results<std::size_t> satisfiesHalfspaces( const Settings& settings ) {
 			box.satisfiesHalfspace( hsps[i] );
 		}
 		auto runningTime = runTimerHyPro.elapsed();
-		// std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+		std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
 #ifdef HYPRO_USE_PPL
 		std::chrono::duration<double> pplRT = std::chrono::duration<double>::zero();
@@ -80,7 +80,7 @@ Results<std::size_t> satisfiesHalfspaces( const Settings& settings ) {
 			bool a = b.is_empty();
 			pplRT += runTimerPPL.elapsed();
 		}
-		// std::cout << "Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
+		std::cout << "Dimension " << d << ":  Running took " << pplRT.count() << " sec (PPL)." << std::endl;
 #endif
 
 		ress.mRunningTime += runningTime;

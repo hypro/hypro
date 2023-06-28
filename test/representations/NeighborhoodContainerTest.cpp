@@ -10,8 +10,8 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
-#include <carl/core/VariablePool.h>
 #include <hypro/datastructures/Point.h>
 #include <hypro/datastructures/Vertex.h>
 #include <hypro/representations/OrthogonalPolyhedron/NeighborhoodContainer.h>
