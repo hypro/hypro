@@ -22,6 +22,7 @@ void ComposedLocation<Number>::validate() const {
 	validateName();
 	// make sure caches in the composition are up to date
 	mAutomaton.setVariableMapping();
+	std::cout << "mCompositionals.size() = " + std::to_string( mCompositionals.size() ) + ", mAutomata.size() = " + std::to_string( mAutomaton.mAutomata.size() ) << std::endl;
 	assert( mCompositionals.size() == mAutomaton.mAutomata.size() );
 	// collect all locations taking part in the composition
 	std::vector<Location<Number>*> locs;
@@ -875,6 +876,7 @@ void HybridAutomatonComp<Number>::createAllLocations() const {
 
 template <typename Number>
 std::vector<std::size_t> HybridAutomatonComp<Number>::getIndicesByName( std::string name ) const {
+	std::cout << "Get indices for name " << name << std::endl;
 	std::vector<std::size_t> res;
 	std::size_t position{ 0 };
 	std::size_t automatonIdx{ 0 };
@@ -882,13 +884,21 @@ std::vector<std::size_t> HybridAutomatonComp<Number>::getIndicesByName( std::str
 		if ( automatonIdx >= mAutomata.size() ) {
 			throw std::logic_error( "Too many subnames in passed location name " + name + ", may be maximal " + std::to_string( mAutomata.size() ) );
 		}
-		auto* lPtr = mAutomata[automatonIdx].getLocationByName( name.substr( 0, position ) );
+		auto* lPtr = mAutomata[automatonIdx].getLocation( name.substr( 0, position ) );
 		if ( lPtr == nullptr ) {
 			throw std::logic_error( "Location " + name.substr( 0, position ) + " not present in automaton " + std::to_string( automatonIdx ) );
 		}
 		res.emplace_back( mAutomata[automatonIdx].getLocationIndex( lPtr ) );
+		// advance
+		++automatonIdx;
 		name.erase( 0, position + nameDelimiter.length() );
 	}
+	// handle remaining string manually
+	auto* lPtr = mAutomata[automatonIdx].getLocation( name.substr( 0, position ) );
+	if ( lPtr == nullptr ) {
+		throw std::logic_error( "Location " + name.substr( 0, position ) + " not present in automaton " + std::to_string( automatonIdx ) );
+	}
+	res.emplace_back( mAutomata[automatonIdx].getLocationIndex( lPtr ) );
 	return res;
 }
 

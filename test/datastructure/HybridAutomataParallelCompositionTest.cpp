@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2022-2023.
+ * Copyright (c) 2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /**
@@ -776,4 +776,62 @@ TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompMasterLocations )
 	ASSERT_EQ( 1, initialStates.begin()->first->getTransitions().size() );
 	//
 	EXPECT_NO_THROW( initialStates.begin()->first->getTransitions().front()->getTarget()->getName() );
+}
+
+TYPED_TEST( HybridAutomataParallelCompositionTest, onTheFlyCompLocationOnDemand ) {
+	using namespace hypro;
+	matrix_t<TypeParam> flow2 = matrix_t<TypeParam>::Identity( 3, 3 );
+	matrix_t<TypeParam> flow1 = matrix_t<TypeParam>::Identity( 2, 2 );
+	auto ha1 = HybridAutomaton<TypeParam>();
+	ha1.setVariables( { "a", "b" } );
+	// locations
+	auto* l1 = ha1.createLocation( "l1" );
+	l1->setFlow( flow2 );
+	auto* l2 = ha1.createLocation( "l2" );
+	l2->setFlow( flow2 );
+	// transitions
+	auto* t12 = l1->createTransition( l2 );
+	auto* t23 = l2->createTransition( l1 );
+	// initial configuration: l1, a = 1
+	ha1.setInitialStates( { { l1, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 }, carl::Interval<TypeParam>{ 1 } } ) } } );
+	// second automaton
+	auto ha2 = HybridAutomaton<TypeParam>();
+	ha2.setVariables( { "b" } );
+	// locations
+	auto* l4 = ha2.createLocation( "l4" );
+	l4->setFlow( flow1 );
+	auto* l5 = ha2.createLocation( "l5" );
+	l5->setFlow( flow1 );
+	// transitions
+	l4->createTransition( l5 );
+	l5->createTransition( l4 );
+	// initial configuration: l1, a = 1
+	ha2.setInitialStates( { { l4, conditionFromIntervals( std::vector<carl::Interval<TypeParam>>{ carl::Interval<TypeParam>{ 1 } } ) } } );
+	// composition
+	auto cmp = HybridAutomatonComp<TypeParam>();
+	cmp.setLazy( false );
+	using Ltype = typename decltype( cmp )::LocationType;
+	cmp.addAutomaton( std::move( ha1 ) );
+	cmp.addAutomaton( std::move( ha2 ) );
+	EXPECT_EQ( 2, cmp.getVariables().size() );
+	auto expectedVariables = std::vector<std::string>{ "a", "b" };
+	EXPECT_EQ( expectedVariables, cmp.getVariables() );
+	// query location on demand by name
+	auto undiscoveredLocation = cmp.getLocation( "l2_l5" );
+	cmp.setLazy( true );
+	matrix_t<TypeParam> expectedFlow = matrix_t<TypeParam>::Identity( 3, 3 );
+	expectedFlow( 2, 2 ) = 0;
+	EXPECT_EQ( expectedFlow, undiscoveredLocation->getLinearFlow().getFlowMatrix() );
+	for ( const auto locationPtr : cmp.getLocations() ) {
+		std::cout << "Location " << locationPtr->getName() << std::endl;
+	}
+	EXPECT_EQ( 3, cmp.getLocations().size() );
+	//
+	auto initialStates = cmp.getInitialStates();
+	EXPECT_EQ( 4, cmp.getLocations().size() );
+	EXPECT_EQ( "l1_l4", initialStates.begin()->first->getName() );
+	EXPECT_EQ( 4, cmp.getLocations().size() );
+	auto* loc = cmp.getLocations().front();
+	EXPECT_EQ( expectedFlow, loc->getLinearFlow().getFlowMatrix() );
+	//
 }
