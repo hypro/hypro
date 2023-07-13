@@ -8,6 +8,7 @@
  */
 
 #include "rectangularTimeEvolutionHandler.h"
+#include "hypro/algorithms/reachability/analyzer/UnderApproximativeReachabilityAnalyzer.h"
 
 namespace hypro {
 template <typename State>
@@ -322,6 +323,25 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 
 template <typename Number>
 CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution( const CarlPolytope<Number>& badSet, const rectangularFlow<Number>& flow ) {
+
+
+	UnderApproximativeReachabilityAnalyzer<Number> analyzer = UnderApproximativeReachabilityAnalyzer<Number>();
+	auto vars = badSet.getVariables();
+	vector_t<carl::Interval<Number>> rates = vector_t<carl::Interval<Number>>(vars.size());
+	auto flowMap = flow.getFlowIntervals();
+	int i = 0;
+	for (auto var: vars){
+		rates(i) = flowMap.at(var);
+	}
+
+    auto [matrix, constants] = analyzer.solve(badSet.matrix(), badSet.vector(),rates);
+	CarlPolytope<Number> result = CarlPolytope<Number>(matrix,constants);
+	result.matrix() = matrix;
+	result.vector() = constants;
+	return result;
+
+	//
+
 	auto& vpool = hypro::VariablePool::getInstance();
 	// get bad state
 	CarlPolytope<Number> bad = badSet;

@@ -65,7 +65,7 @@ class UnderApproximativeReachabilityAnalyzer {
 	}
 
   public:
-	std::pair<matrix_t<number>, vector_t<number>> solve(matrix_t<mpq_class>& factors, vector_t<number> b, vector_t<carl::Interval<number>> rates) {
+	std::pair<matrix_t<number>, vector_t<number>> solve(const matrix_t<mpq_class>& factors, const vector_t<number>& b,const vector_t<carl::Interval<number>>& rates) {
 		auto [rate_factors, rate_b] = generate_rate_box(rates);
 		auto [constraints, result_factors, result_b] = generate_cases(factors, b, rates);
 		for (int i = 0; i < constraints.size(); i++) {
@@ -102,7 +102,7 @@ class UnderApproximativeReachabilityAnalyzer {
 	}
 
 
-	std::pair<matrix_t<number>, vector_t<number>> generate_rate_box(vector_t<carl::Interval<number>> rates) {
+	std::pair<matrix_t<number>, vector_t<number>> generate_rate_box(const vector_t<carl::Interval<number>>& rates) {
 		matrix_t<number> rate_factors = matrix_t<number>::Zero(rates.size() * 2, rates.size());
 		vector_t<number> rate_b = vector_t<number>(rates.size() * 2);
 		for (int index = 0; index < rates.size(); index++) {
@@ -114,7 +114,7 @@ class UnderApproximativeReachabilityAnalyzer {
 		}
 		return { rate_factors, rate_b };
 	}
-	std::tuple<vector_t<std::tuple<bool, bool, vector_t<number>, number>>, matrix_t<number>, vector_t<number>> generate_cases(matrix_t<mpq_class>& factors, vector_t<number> b, vector_t<carl::Interval<number>> rates) {
+	std::tuple<vector_t<std::tuple<bool, bool, vector_t<number>, number>>, matrix_t<number>, vector_t<number>> generate_cases(const matrix_t<mpq_class>& factors,const vector_t<number> &b,const vector_t<carl::Interval<number>> &rates) {
 		vector_t<std::tuple<bool, bool, vector_t<number>, number>> constraints;
 		matrix_t<number> result_factors  = matrix_t<number>(0,rates.size());
 		vector_t<number> result_b;
