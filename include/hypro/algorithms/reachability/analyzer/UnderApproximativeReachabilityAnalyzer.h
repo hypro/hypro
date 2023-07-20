@@ -30,7 +30,9 @@ class UnderApproximativeReachabilityAnalyzer {
 
 		auto [found, optimum] = solveOptimization(low, up, opt_factors, opt_b);
 		if (found) {
-			number b = optimum * low_b - up_b;
+
+
+			number b = up_b - optimum * low_b;
 			vector_t<number> factors = vector_t<number>(rate_factors.cols());
 			bool nonZero = false;
 			for (int i = 0; i < rate_factors.cols(); i++) {
@@ -118,7 +120,7 @@ class UnderApproximativeReachabilityAnalyzer {
 		vector_t<std::tuple<bool, bool, vector_t<number>, number>> constraints;
 		matrix_t<number> result_factors  = matrix_t<number>(0,rates.size());
 		vector_t<number> result_b;
-		for (int row_index = 0; row_index < rates.size();row_index++) {
+		for (int row_index = 0; row_index < factors.rows();row_index++) {
 			carl::Interval<number> row_interval{0, 0};
 			for (int rate_index = 0; rate_index < rates.size(); rate_index++) {
 				row_interval += factors(row_index, rate_index ) * rates[rate_index];
@@ -128,7 +130,7 @@ class UnderApproximativeReachabilityAnalyzer {
 
 				result_factors.row(result_factors.rows() - 1) = factors.row(row_index);
 				result_b.conservativeResize(result_b.size() + 1);
-				result_b(result_b.size() - 1) = -b(row_index);
+				result_b(result_b.size() - 1) = b(row_index);
 			}
 
 			if (row_interval.lower() < 0 && 0 <row_interval.upper()) {

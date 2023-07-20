@@ -47,7 +47,7 @@ TEST( UnderApproximativeReachabilityAnalyzer, testSimple ) {
 	expectedFactors << 2 , -1 , mpq_class(-2,5), mpq_class(-1,5);
 
 	vector_t<mpq_class> expected_b = vector_t<mpq_class>(2);
-	expected_b << -2, mpq_class(2,5);
+	expected_b << 2, -mpq_class(2,5);
 
     auto [result_a, result_b] = subject.solve(a,b, rates);
 	ASSERT_TRUE(result_a.isApprox(expectedFactors));
@@ -65,22 +65,19 @@ TEST( UnderApproximativeReachabilityAnalyzer, testWithBox ) {
 	vector_t<mpq_class> b = vector_t<mpq_class>::Zero(4);
 
 	a << 1,0, -1,0 , 0,1, 0,-1;
-	b << 2.5,-1.5, 5.5, - 4.5 ;
+	b << 2.5,-1.5, 5.5,  -4.5 ;
 
 
 	vector_t<carl::Interval<mpq_class>> rates = vector_t<carl::Interval<mpq_class>>(2);
 	rates << carl::Interval<mpq_class>(0,1), carl::Interval<mpq_class>(1,1);
 
-	matrix_t<mpq_class> expectedFactors = matrix_t<mpq_class>(2,2);
-	expectedFactors << 2 , -1 , mpq_class(-2,5), mpq_class(-1,5);
+	matrix_t<mpq_class> expectedFactors = matrix_t<mpq_class>(5,2);
+	expectedFactors <<1,0,-1,0,0,1,1,-1,-1,1;
 
-	vector_t<mpq_class> expected_b = vector_t<mpq_class>(2);
-	expected_b << -2, mpq_class(2,5);
+	vector_t<mpq_class> expected_b = vector_t<mpq_class>(5);
+	expected_b << 2.5, - mpq_class (3,2),mpq_class (11,2),-2,4;
 
 	auto [result_a, result_b] = subject.solve(a,b, rates);
-
-	std:: cout << result_a << std::endl;
-	std:: cout << result_b << std::endl;
 
 	ASSERT_TRUE(result_a.isApprox(expectedFactors));
 	ASSERT_TRUE(result_b.isApprox(expected_b));
