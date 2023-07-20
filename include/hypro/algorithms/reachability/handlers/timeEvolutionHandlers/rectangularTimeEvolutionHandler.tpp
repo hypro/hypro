@@ -324,7 +324,7 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 
 
 template<typename Number, typename Representation>
-CarlPolytope<Representation> rectangularUnderapproximateReverseTimeEvolution( const Representation& badSet, const Location<Number>* loc ) {
+CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution( const Representation& badSet, const Location<Number>* loc ) {
 	auto flow = loc->getRectangularFlow();
 	CarlPolytope<Representation> bad = std::get<CarlPolytope<Representation>>( badSet.getSet() );
 	return rectangularUnderapproximateReverseTimeEvolution( & bad, & flow );
