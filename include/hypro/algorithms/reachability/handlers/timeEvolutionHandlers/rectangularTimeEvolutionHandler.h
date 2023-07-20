@@ -74,7 +74,7 @@ namespace hypro {
 
 
 	template<typename Number, typename Representation>
-	CarlPolytope<Representation> rectangularUnderapproximateReverseTimeEvolution( const Representation& badSet, const Location<Number>* loc ) {
+	CarlPolytope<Representation> rectangularUnderapproximateReverseTimeEvolution( const Representation& badSet, const Location<Number>* loc ) ;
 
     template<typename Number>
     CarlPolytope<Number>
