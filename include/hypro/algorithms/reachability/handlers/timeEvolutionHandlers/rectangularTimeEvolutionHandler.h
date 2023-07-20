@@ -73,9 +73,8 @@ namespace hypro {
     }
 
 
-	template<typename Number, class... Reps>
-	State<Number, Reps...>
-	rectangularUnderapproximateReverseTimeEvolution(const State<Number, Reps...> &badSet, const Location<Number> *loc);
+	template<typename Number, typename Representation>
+	CarlPolytope<Representation> rectangularUnderapproximateReverseTimeEvolution( const Representation& badSet, const Location<Number>* loc ) {
 
     template<typename Number>
     CarlPolytope<Number>
