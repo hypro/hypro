@@ -2,6 +2,8 @@
 // Created by kai on 13.06.23.
 //
 
+#include "hypro/algorithms/reachability/handlers/timeEvolutionHandlers/rectangularTimeEvolutionHandler.h"
+#include "hypro/datastructures/HybridAutomaton/flow/rectangular.h"
 #include "test/defines.h"
 
 #include "gtest/gtest.h"
@@ -107,4 +109,49 @@ TEST( UnderApproximativeReachabilityAnalyzer, test3d ) {
 	ASSERT_TRUE(result_b.isApprox(expected_b));
 	SUCCEED();
 }
+
+
+TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
+	using Number = mpq_class;
+	using Vector = hypro::vector_t<Number>;
+	using Pol = PolyT<mpq_class>;
+	using Constr = ConstraintT<mpq_class>;
+
+
+
+	typename rectangularFlow<Number>::flowMap fMap;
+
+
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+
+	fMap[x] = carl::Interval<Number>{ 1, 2 };
+	fMap[y] = carl::Interval<Number>{ -2, 2 };
+	rectangularFlow<Number> flow = hypro::rectangularFlow<Number>{ fMap };
+
+	Converter<Number>::CarlPolytope bad;
+
+	bad.addConstraint( Constr( -Pol(x), carl::Relation::LEQ ) );
+	bad.addConstraint( Constr( Pol( x ) - Pol( y ) - Pol( 2 ), carl::Relation::LEQ ) );
+	bad.addConstraint( Constr( Pol(-2) * Pol(x ) - Pol( y ) - Pol( 10 ), carl::Relation::LEQ ) );
+
+	auto result = rectangularUnderapproximateReverseTimeEvolution(bad,flow);
+	UnderApproximativeReachabilityAnalyzer<Number> analyzer = UnderApproximativeReachabilityAnalyzer<Number>();
+	auto vars = bad.getVariables();
+	vector_t<carl::Interval<Number>> rates = vector_t<carl::Interval<Number>>(vars.size());
+	auto flowMap = flow.getFlowIntervals();
+	int i = 0;
+	for (auto var: vars){
+		rates(i) = flowMap.at(var);
+	}
+
+    auto [matrix, constants] = analyzer.solve(bad.matrix(), bad.vector(),rates);
+	CarlPolytope<Number> res = CarlPolytope<Number>(matrix,constants);
+	std::cout << res.matrix();
+
+	ASSERT_TRUE(result.matrix() == res.matrix());
+	ASSERT_TRUE(result.vector() == res.vector());
+	SUCCEED();
+}
+
 

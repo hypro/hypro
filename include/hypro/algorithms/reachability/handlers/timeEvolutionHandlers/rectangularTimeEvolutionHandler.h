@@ -15,7 +15,7 @@
 #include "../../../../representations/GeometricObjectBase.h"
 #include "../../../../representations/conversion/conversionHelper.h"
 #include "../../../../util/typetraits.h"
-#include "../IHandler.h"
+
 
 #include <sstream>
 #include <string>

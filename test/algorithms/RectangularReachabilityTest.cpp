@@ -28,7 +28,7 @@ using Vector = hypro::vector_t<Number>;
 using Point = hypro::Point<Number>;
 
 template <typename T>
-class RectangularReachabilityTest : public testing::Test {
+class RectangularReachabilityTest : public ::testing::Test {
   protected:
 	virtual void SetUp() {}
 	virtual void TearDown() {}
@@ -415,6 +415,7 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachability1 ) {
 
 TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumps ) {
 	using Number = typename TypeParam::NumberType;
+	using Point =  typename hypro::Point<Number>;
 
 	auto automaton = createRectangularHA2<Number>();
 	auto roots = hypro::makeRoots<TypeParam, decltype( automaton )>( automaton );
@@ -457,6 +458,7 @@ TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumps ) {
 
 TYPED_TEST( RectangularReachabilityTest, ComputeReachabilityWithJumpsTwoDimensions ) {
 	using Number = typename TypeParam::NumberType;
+	using Point = typename hypro::Point<Number>;
 
 	auto automaton = createRectangularHA3<Number>();
 	auto roots = hypro::makeRoots<TypeParam, decltype( automaton )>( automaton );

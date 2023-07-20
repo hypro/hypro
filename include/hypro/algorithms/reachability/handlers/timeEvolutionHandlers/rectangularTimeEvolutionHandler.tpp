@@ -321,6 +321,17 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	return bad;
 }
 
+
+
+template <typename Number, class... Reps>
+State<Number, Reps...> rectangularUnderapproximateReverseTimeEvolution( const State<Number, Reps...>& badSet, const Location<Number>* loc ) {
+	auto flow = loc->getRectangularFlow();
+	CarlPolytope<Number> bad = std::get<CarlPolytope<Number>>( badSet.getSet() );
+	return rectangularUnderapproximateReverseTimeEvolution( & bad, & flow );
+}
+
+
+
 template <typename Number>
 CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution( const CarlPolytope<Number>& badSet, const rectangularFlow<Number>& flow ) {
 
@@ -339,64 +350,6 @@ CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution( const Carl
 	result.matrix() = matrix;
 	result.vector() = constants;
 	return result;
-
-	//
-
-	auto& vpool = hypro::VariablePool::getInstance();
-	// get bad state
-	CarlPolytope<Number> bad = badSet;
-	// storage to build elimination query
-	std::vector<carl::Variable> variablesToEliminate;
-	// add variable for time elapse
-    carl::Variable t = vpool.newCarlVariable("__t");
-	// add constraint t >= 0
-	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
-
-	TRACE( "hypro.worker", "Added time constraint: " << bad );
-
-	// introduce post variables and substitute
-	for ( const auto& v : bad.getVariables() ) {
-		if ( v != t ) {
-			// create pre var
-			std::stringstream ss;
-			ss << v.name() << "_pre";
-			std::string s = ss.str();
-			auto newV = vpool.newCarlVariable( s );
-			// substitute to create precondition
-			bad.substituteVariable( v, newV );
-			// store var to eliminate later
-			variablesToEliminate.push_back( newV );
-			// add flow conditions for new variables, we use the variable mapping provided by the flow
-			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createUnderapproximativeReverseFlowConstraints<hypro::tNumber, Number>( v, newV, t, flow.getFlowIntervalForDimension( v ) );
-
-#ifdef HYPRO_LOGGING
-			TRACE( "hypro.worker", "Use flow constraints: " );
-			for ( const auto& c : flowConstraints ) {
-				TRACE( "hypro.worker", c );
-			}
-#endif
-
-			bad.addConstraints( flowConstraints );
-		}
-	}
-	TRACE( "hypro.worker", "Full constraint set describing the dynamic behavior: \n"
-								 << bad );
-
-	// add t to eliminate at latest
-	variablesToEliminate.push_back( t );
-
-	// create variables to eliminate
-	QEQuery quOrder;
-	quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
-	// allow for some heuristics on how to eliminate
-	bad.choseOrder( quOrder );
-
-	// eliminate vars
-	bad.eliminateVariables( quOrder );
-
-	DEBUG( "hypro.worker", "State set after reverse time elapse: " << bad );
-
-	return bad;
 }
 
 }  // namespace hypro
