@@ -140,6 +140,36 @@ TEST( UnderApproximativeReachabilityAnalyzer, test3d ) {
 }
 
 
+
+TEST( UnderApproximativeReachabilityAnalyzer, test4d ) {
+	using namespace hypro;
+	UnderApproximativeReachabilityAnalyzer<mpq_class> subject = UnderApproximativeReachabilityAnalyzer<mpq_class>();
+
+	// Ax <= b
+	matrix_t<mpq_class> a = matrix_t<mpq_class>::Zero( 10, 4 );
+	vector_t<mpq_class> b = vector_t<mpq_class>::Zero(10);
+
+	a << -1,1,0,0,0,-1,0,1,1,0,-1,0,0,0,0,-1,-1,0,1,0,-1,0,1,1,0,1,0,0,0,-1,0,0,0,0,1,0,0,0,-1,0;
+	b << 0,0,-1,0,3,4,2.5,-1.5,5.5,-4.5;
+
+
+	vector_t<carl::Interval<mpq_class>> rates = vector_t<carl::Interval<mpq_class>>(4);
+	rates << carl::Interval<mpq_class>(1,1), carl::Interval<mpq_class>(0,1), carl::Interval<mpq_class >(1,1),carl::Interval<mpq_class >(0,0);
+
+	matrix_t<mpq_class> expectedFactors = matrix_t<mpq_class>(15,4);
+	expectedFactors << -1,1,0,0,0,-1,0,1,1,0,-1,0,0,0,0,-1,-1,0,1,0,-1,0,1,1,0,1,0,0,0,-1,0,0,0,0,1,0,0,1,0,0,-1,1,1,0,0,0,0,1,0,-1,1,1,0,1,-1,0,0,-1,1,0;
+
+	vector_t<mpq_class> expected_b = vector_t<mpq_class>(15);
+	expected_b << 0,0,-1,0,3,4,mpq_class (5,2),mpq_class (-3,2),mpq_class (11,2),mpq_class (5,2),mpq_class (11,2),mpq_class (5,2),mpq_class (11,2),-2,4;
+
+	auto [result_a, result_b] = subject.solve(a,b, rates);
+	ASSERT_TRUE(result_a.isApprox(expectedFactors));
+	ASSERT_TRUE(result_b.isApprox(expected_b));
+	SUCCEED();
+}
+
+
+
 TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
 	using Number = mpq_class;
 	using Vector = hypro::vector_t<Number>;
@@ -182,5 +212,3 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
 	ASSERT_TRUE(result.vector() == res.vector());
 	SUCCEED();
 }
-
-
