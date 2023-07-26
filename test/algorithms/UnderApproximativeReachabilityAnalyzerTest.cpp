@@ -179,10 +179,6 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
 
 
 	typename rectangularFlow<Number>::flowMap fMap;
-
-
-
-
 	carl::Variable x = freshRealVariable( "x" );
 	carl::Variable y = freshRealVariable( "y" );
 
@@ -208,6 +204,7 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
 		rates(i) = flowMap.at(var);
 		i++;
 	}
+
 
     auto [matrix, constants] = analyzer.solve(bad.matrix(), bad.vector(),rates);
 
@@ -279,8 +276,10 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolutionWithConstantInp
 	auto result = rectangularUnderapproximateReverseTimeEvolution(bad,flow);
 
 	CarlPolytope<Number> res = CarlPolytope<Number>(matrix,constants);
-	ASSERT_TRUE(result.matrix() == res.matrix());
-	ASSERT_TRUE(result.vector() == res.vector());
+
+	ASSERT_EQ(result.matrix(), res.matrix());
+
+	ASSERT_EQ(result.vector(), res.vector());
 	SUCCEED();
 }
 
