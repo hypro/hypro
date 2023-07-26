@@ -118,20 +118,20 @@ TEST( UnderApproximativeReachabilityAnalyzer, test3d ) {
 		            0,-2,-2;
 
 	vector_t<mpq_class> expected_b = vector_t<mpq_class>(14);
-	expected_b << 10,
-		  10,
-		  8,
-		  10,
-		  -2,
-		  6,
-		  20,
-		  -2,
-		  6,
-		  20,
-		  mpq_class (28,5),
-		  4,
-		  18,
-		  -2;
+	expected_b << -10,
+		  -10,
+		  -8,
+		  -10,
+		  2,
+		  -6,
+		  -20,
+		  2,
+		  -6,
+		  -20,
+		  -mpq_class (28,5),
+		  -4,
+		  -18,
+		  2;
 
 	auto [result_a, result_b] = subject.solve(a,b, rates);
 	ASSERT_TRUE(result_a.isApprox(expectedFactors));
@@ -181,6 +181,8 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
 	typename rectangularFlow<Number>::flowMap fMap;
 
 
+
+
 	carl::Variable x = freshRealVariable( "x" );
 	carl::Variable y = freshRealVariable( "y" );
 
@@ -190,25 +192,96 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
 
 	Converter<Number>::CarlPolytope bad;
 
-	bad.addConstraint( Constr( -Pol(x), carl::Relation::LEQ ) );
-	bad.addConstraint( Constr( Pol( x ) - Pol( y ) - Pol( 2 ), carl::Relation::LEQ ) );
-	bad.addConstraint( Constr( Pol(-2) * Pol(x ) - Pol( y ) - Pol( 10 ), carl::Relation::LEQ ) );
+	bad.addConstraint( Constr( Pol(2) *Pol(x) - Pol(y) - Pol(2) , carl::Relation::LEQ ) );
+	bad.addConstraint( Constr( - Pol(3)*Pol( x ) + Pol( y ) + Pol( 3 ), carl::Relation::LEQ ) );
 
-	auto result = rectangularUnderapproximateReverseTimeEvolution(bad,flow);
 	UnderApproximativeReachabilityAnalyzer<Number> analyzer = UnderApproximativeReachabilityAnalyzer<Number>();
+
+
 	auto vars = bad.getVariables();
+
+
 	vector_t<carl::Interval<Number>> rates = vector_t<carl::Interval<Number>>(vars.size());
 	auto flowMap = flow.getFlowIntervals();
 	int i = 0;
 	for (auto var: vars){
 		rates(i) = flowMap.at(var);
+		i++;
 	}
 
     auto [matrix, constants] = analyzer.solve(bad.matrix(), bad.vector(),rates);
-	CarlPolytope<Number> res = CarlPolytope<Number>(matrix,constants);
-	std::cout << res.matrix();
 
+
+	auto result = rectangularUnderapproximateReverseTimeEvolution(bad,flow);
+
+	CarlPolytope<Number> res = CarlPolytope<Number>(matrix,constants);
 	ASSERT_TRUE(result.matrix() == res.matrix());
 	ASSERT_TRUE(result.vector() == res.vector());
 	SUCCEED();
 }
+
+
+TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolutionWithConstantInput) {
+	using Number = mpq_class;
+	using Vector = hypro::vector_t<Number>;
+	using Pol = PolyT<mpq_class>;
+	using Constr = ConstraintT<mpq_class>;
+
+
+
+	typename rectangularFlow<Number>::flowMap fMap;
+
+
+
+
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+
+	fMap[x] = carl::Interval<Number>{ 1, 2 };
+	fMap[y] = carl::Interval<Number>{ -2, 2 };
+	rectangularFlow<Number> flow = hypro::rectangularFlow<Number>{ fMap };
+
+
+	Converter<Number>::CarlPolytope bad;
+
+	bad.addConstraint( Constr( Pol(2) *Pol(x) - Pol(y) - Pol(2) , carl::Relation::LEQ ) );
+	bad.addConstraint( Constr( - Pol(3)*Pol( x ) + Pol( y ) + Pol( 3 ), carl::Relation::LEQ ) );
+
+
+	// Ax <= b
+	matrix_t<mpq_class> a = matrix_t<mpq_class>::Zero( 2, 2 );
+	vector_t<mpq_class> b = vector_t<mpq_class>::Zero(2);
+
+	a << 2,-1,-3,1;
+	b << 2,-3;
+
+
+	vector_t<carl::Interval<mpq_class>> rates_vector = vector_t<carl::Interval<mpq_class>>(2);
+	rates_vector << carl::Interval<mpq_class>(1,2), carl::Interval<mpq_class>(-2,2);
+
+	UnderApproximativeReachabilityAnalyzer<Number> analyzer = UnderApproximativeReachabilityAnalyzer<Number>();
+
+
+	auto vars = bad.getVariables();
+
+
+	vector_t<carl::Interval<Number>> rates = vector_t<carl::Interval<Number>>(vars.size());
+	auto flowMap = flow.getFlowIntervals();
+	int i = 0;
+	for (auto var: vars){
+		rates(i) = flowMap.at(var);
+		i++;
+	}
+
+	auto [matrix, constants] = analyzer.solve(a, b,rates_vector);
+
+
+	auto result = rectangularUnderapproximateReverseTimeEvolution(bad,flow);
+
+	CarlPolytope<Number> res = CarlPolytope<Number>(matrix,constants);
+	ASSERT_TRUE(result.matrix() == res.matrix());
+	ASSERT_TRUE(result.vector() == res.vector());
+	SUCCEED();
+}
+
+

@@ -326,9 +326,6 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 
 template <typename Number>
 CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution( const CarlPolytope<Number>& badSet, const rectangularFlow<Number>& flow ) {
-
-
-	std::cout << __func__ << ": Set before analysis: " << badSet << std::endl;
 	UnderApproximativeReachabilityAnalyzer<Number> analyzer = UnderApproximativeReachabilityAnalyzer<Number>();
 	auto vars = badSet.getVariables();
 	vector_t<carl::Interval<Number>> rates = vector_t<carl::Interval<Number>>(vars.size());
@@ -336,15 +333,13 @@ CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution( const Carl
 	int i = 0;
 	for (auto var: vars){
 		rates(i) = flowMap.at(var);
+		i++;
 	}
 
     auto [matrix, constants] = analyzer.solve(badSet.matrix(), badSet.vector(),rates);
-	std::cout << __func__ << ": Matrix: " << matrix << std::endl;
-	std::cout << __func__ << ": constants: " << constants << std::endl;
 	CarlPolytope<Number> result = CarlPolytope<Number>(matrix,constants);
 	result.matrix() = matrix;
 	result.vector() = constants;
-	std::cout << __func__ << ": Result: " << result << std::endl;
 	return result;
 }
 

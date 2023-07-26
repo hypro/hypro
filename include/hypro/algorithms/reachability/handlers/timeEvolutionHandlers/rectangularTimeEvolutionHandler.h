@@ -66,14 +66,10 @@ namespace hypro {
     rectangularUnderapproximateReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet,
 													 const Location<Number> *loc) {
 
-		std::cout << __func__ << ": Set before conversion (polyhedral representation): " << badSet << std::endl;
         auto convertedSet = Converter::toCarlPolytope(badSet);
-		std::cout << __func__ << ": Set after conversion (carl polytope): " << convertedSet << std::endl;
         auto convertedResult = rectangularUnderapproximateReverseTimeEvolution(convertedSet, loc->getRectangularFlow());
-		std::cout << __func__ << ": Result before conversion (carl polytope): " << convertedResult << std::endl;
         PolyhedralRepresentation<Number, Converter, Setting> res;
         convert(convertedResult, res);
-		std::cout << __func__ << ": Result after conversion (polyhedral representation): " << res << std::endl;
         return res;
     }
 

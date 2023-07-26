@@ -100,8 +100,6 @@ class UnderApproximativeReachabilityAnalyzer {
 				}
 			}
 		}
-		std::cout << __func__ << ": Matrix: " << result_factors << std::endl;
-		std::cout << __func__ << ": Vector: " << result_b << std::endl;
 		return {result_factors, result_b };
 	}
 
