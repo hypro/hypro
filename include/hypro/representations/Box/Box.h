@@ -209,10 +209,6 @@ namespace hypro {
             return mLimits;
         }
 
-        std::vector<carl::Interval<Number>> &rIntervals() {
-            return mLimits;
-        }
-
         /**
          * @brief Getter for the limiting points.
          * @return A pair of points.
