@@ -25,7 +25,7 @@
 
 namespace hypro::benchmark {
 
-class HyperOctreeFixture : public ::benchmark::Fixture {
+    class HyperOctreeFixture : public ::benchmark::Fixture {
 	using Number = double;
 
   public:

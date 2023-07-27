@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023.
+ * Copyright (c) 2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -194,10 +194,13 @@ namespace hypro {
          * @brief Static method for the construction of an empty box of required dimension.
          * @return Empty box.
          */
-        static BoxT Empty() {
-            auto tmp = BoxT();
-            assert(tmp.empty());
-            return tmp;
+        static BoxT Empty(std::size_t dim = 0) {
+            std::vector<carl::Interval<Number>> intervals(dim, createEmptyInterval<Number>());
+#ifndef NDEBUG
+            assert(BoxT(intervals).empty());
+            assert(BoxT(intervals).dimension() == dim);
+#endif
+            return BoxT(intervals);
         }
 
         /**
@@ -415,11 +418,11 @@ namespace hypro {
          * @return     The scaled box.
          */
         BoxT operator*(const Number &factor) const {
-            BoxT<Number, Converter, Setting> copy{*this};
-            for (auto &i: copy.rIntervals()) {
+            auto newIntervals = this->intervals();
+            for (auto &i: newIntervals) {
                 i *= factor;
             }
-            return copy;
+            return BoxT(newIntervals);
         }
 
         /**
