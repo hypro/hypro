@@ -14,7 +14,7 @@
 //
 
 #pragma once
-#include "../../../../../src/hypro/flags.h"
+#include "hypro/flags.h"
 #include "../../../datastructures/Point.h"
 #include "../../../types.h"
 #include "../EvaluationResult.h"

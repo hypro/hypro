@@ -263,7 +263,7 @@ std::vector<std::size_t> glpkRedundantConstraints( glpk_context& context, matrix
 
 template <typename Number>
 EvaluationResult<Number> glpkGetInternalPoint( glpk_context& context, std::size_t dimension, bool useExact ) {
-	glp_simplex( context.lp, &context.parm );
+	glp_simplex( context.lp, &context.parm );		// QUESTION: if the useExact flag is true, does it make sense to execute the glpk_simplex regardless the flag?
 	if ( useExact ) {
 		glp_exact( context.lp, &context.parm );
 	}

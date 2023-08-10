@@ -32,6 +32,8 @@ int main() {
 	matrix_t<Number> invariantMat = matrix_t<Number>( 1, 2 );
 	vector_t<Number> invariantVec = vector_t<Number>( 1 );
 
+	// x >= 0
+	// -1 * x + 0 * v <= 0
 	invariantVec( 0 ) = Number( 0 );
 
 	invariantMat( 0, 0 ) = Number( -1 );
@@ -53,6 +55,16 @@ int main() {
 	flowMatrix( 2, 1 ) = Number( 0 );
 	flowMatrix( 2, 2 ) = Number( 0 );
 
+	// x' = v
+	// v' = -g
+
+	// x' = 0*x + 1*v + 0 * 1
+	// v' = 0*x + 0*v + (-9.81) * 1
+	// 1' = 0*x + 0*v + 0 * 0
+
+	// 0 1  0
+	// 0 0 -9.81
+	// 0 0  0
 	loc1->setFlow( flowMatrix );
 
 	// setup of the transition.
@@ -72,6 +84,8 @@ int main() {
 	guardMat( 2, 0 ) = Number( 0 );
 	guardMat( 2, 1 ) = Number( 1 );
 
+	// c1 * x1 + c2 * x2 + ... + c_n * x_n <= offset
+	// 1 * x + 0 * v <= 0
 	guard.setMatrix( guardMat );
 	guard.setVector( guardVec );
 

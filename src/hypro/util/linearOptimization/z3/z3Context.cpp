@@ -1,6 +1,6 @@
 #include <hypro/flags.h>
 #ifdef HYPRO_USE_Z3
-#include "z3Context.h"
+#include "hypro/util/linearOptimization/z3/z3Context.h"
 namespace hypro {
 z3::expr z3Context::real_val( mpq_class val ) {
 	//std::cout << "String representation: " << carl::toString(val) << std::endl;

@@ -1,9 +1,9 @@
 #pragma once
 
-//#define USE_PRESOLUTION
+// #define USE_PRESOLUTION
 #define RECREATE_SOLVER
-//#define VERIFY_RESULT
-//#define DEBUG_MSG
+// #define VERIFY_RESULT
+// #define DEBUG_MSG
 
 #include "../../datastructures/Point.h"
 #include "../../types.h"
@@ -270,7 +270,7 @@ class Optimizer {
 	 * @brief      Gets some point being a possible solution.
 	 * @return     The internal point.
 	 */
-	EvaluationResult<Number> getInternalPoint() const;
+	EvaluationResult<Number> getInternalPoint( bool useExactGlpk = false ) const;
 
 	/**
 	 * @brief      Determines the set of redundant constraints.

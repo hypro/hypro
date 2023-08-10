@@ -545,38 +545,75 @@ Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<
 			std::uniform_int_distribution<int> idist( 0, poly.constraints().size() - 1 );  //(inclusive, inclusive)
 			int ind = idist( rgen );													   // CONSIDER: you can pick not only one constraint but a subset of constraints (with each additional constraint the solution space gets smaller)
 			Halfspace<Number> hspace = poly.constraints()[ind];
-			vector_t<Number> normal = -1 * hspace.normal();
-			Number offset = -1 * hspace.offset();
+			vector_t<Number> normal = Number(-1) * hspace.normal();
+			Number offset = Number(-1) * hspace.offset();
 			setCopy = setCopy.intersectHalfspace( Halfspace<Number>( normal, offset ) );
 		}
 
-		std::cout << "set: " << setCopy << std::endl;
-		Optimizer<Number> op( setCopy.shape(), setCopy.limits() );
-		auto res = op.getInternalPoint();
+		// ================= METHOD 1 =================
+		// // std::cout << "set: " << setCopy << std::endl;
+		// Optimizer<Number> op( setCopy.shape(), setCopy.limits() );
+		// auto res = op.getInternalPoint(true);
 
-		if ( res.errorCode == SOLUTION::FEAS ) {
-			std::cout << "res: " << res << std::endl;
-			Point<Number> point( res.optimumValue );
-			bool consistent = op.checkPoint( point );
-			std::cout << "Consistent: " << consistent << std::endl;
-			std::cout << "Point dimension: " << point.dimension() << std::endl;
+		// if ( res.errorCode == SOLUTION::FEAS ) {
+		// 	// std::cout << "res: " << res << std::endl;
+		// 	Point<Number> point( res.optimumValue );
+		// 	bool consistent = op.checkPoint( point );
+		// 	// std::cout << "Consistent: " << consistent << std::endl;
+		// 	// std::cout << "Point dimension: " << point.dimension() << std::endl;
 
-			if ( consistent ) {
-				std::cout << "Sampled point (inner polytope): " << point << std::endl;
-				std::cout << "Sampled point (starset): " << point.affineTransformation( setCopy.generator(), setCopy.center() ) << std::endl;
-				int b;
-				std::cout << "Found a solution!" << std::endl;
-				// std::cin >> b;
+		// 	if ( consistent ) {
+		// 		// std::cout << "Sampled point (inner polytope): " << point << std::endl;
+		// 		// std::cout << "Sampled point (starset): " << point.affineTransformation( setCopy.generator(), setCopy.center() ) << std::endl;
+		// 		int b;
+		// 		std::cout << "Found a solution!" << std::endl;
+		// 		// std::cin >> b;
 
-				std::cout << "Point is contained in polytope: " << HPolytope<Number>( setCopy.shape(), setCopy.limits() ).contains( point ) << std::endl;
-				std::cout << "Point is contained in starset: " << setCopy.contains( point.affineTransformation( setCopy.generator(), setCopy.center() ) ) << std::endl;
+		// 		std::cout << "Point is contained in polytope: " << HPolytope<Number>( setCopy.shape(), setCopy.limits() ).contains( point ) << std::endl;
+		// 		std::cout << "Point is contained in starset: " << setCopy.contains( point.affineTransformation( setCopy.generator(), setCopy.center() ) ) << std::endl;
 
-				return point.affineTransformation( setCopy.generator(), setCopy.center() );
+		// 		return point.affineTransformation( setCopy.generator(), setCopy.center() );
+		// 	}
+		// }
+		// int a;
+		// std::cout << "Could not find a solution now!" << std::endl;
+		// // std::cin >> a;
+		// ============================================
+
+		// ================= METHOD 2 =================
+
+		HPolytope<Number> currentPoly = setCopy.constraints();
+		std::uniform_int_distribution<int> idist( 0, currentPoly.size() - 1 );  //(inclusive, inclusive)
+		for(int tmp = 0; tmp < 10; tmp++) {
+			int ind = idist( rgen );
+			Optimizer<Number> op( setCopy.shape(), setCopy.limits() );
+
+			hypro::vector_t<Number> dir_vect = currentPoly.constraints()[ind].normal();
+			auto eval_low_result = op.evaluate( -1.0 * dir_vect, true );
+			auto eval_high_result = op.evaluate( dir_vect, true );
+
+			std::cout << "eval_low_result: " << eval_low_result << std::endl;
+			std::cout << "eval_high_result: " << eval_high_result << std::endl;
+			
+			Point<Number> midPoint = Point<Number>((eval_low_result.optimumValue + eval_high_result.optimumValue) / 2.0);
+			Point<Number> transformedPoint = midPoint.affineTransformation(setCopy.generator(), setCopy.center());
+			if(setCopy.contains(transformedPoint)) {
+				std::cout << "Solution found: " << transformedPoint << std::endl;
+				int a;
+				std::cin >> a;
+				exit(0);
+				return transformedPoint;
+			}
+			else {
+				std::cout << "transormation was not included in the starset" << std::endl;
+				std::cout << "Midpoint contained in HPoly: " << currentPoly.contains(midPoint) << std::endl;
+				std::cout << "Transformedpoint contained in StarSet: " << setCopy.contains(transformedPoint) << std::endl;
+				int a;
+				std::cin >> a;
 			}
 		}
-		int a;
-		std::cout << "Could not find a solution now!" << std::endl;
-		// std::cin >> a;
+		// ============================================
+
 	}
 
 	// this line means that the sampling failed (should return a pair <bool, point> instead)

@@ -27,7 +27,14 @@ static void computeReachableStates( const std::string& filename,
 	hypro::Settings settings = hypro::convert( parsedSettings );
 	auto roots = hypro::makeRoots<Representation>( automaton );
 
-	hypro::reachability::Reach<Representation> reacher( automaton, settings.fixedParameters(), settings.strategy().front(), roots );
+	hypro::AnalysisParameters analysisParams = settings.strategy().front();
+	analysisParams.aggregation = hypro::AGG_SETTING::AGG;
+
+	std::cout << "Analysis params aggregation: " << analysisParams.aggregation._to_string() << std::endl;
+
+	hypro::reachability::Reach<Representation> reacher( automaton, settings.fixedParameters(), analysisParams, roots );
+
+	
 
 	std::cout << "Initiated queues" << std::endl;
 
@@ -43,7 +50,20 @@ static void computeReachableStates( const std::string& filename,
 	if ( settings.plotting().plotDimensions.size() > 0 ) {
 		clock::time_point startPlotting = clock::now();
 
+		// define plotter settings
+		hypro::plotting::gnuplotSettings plotSettings;
+		// plotSettings.name = "Reachability analysis of FFNN with ReLU activation function";
+		// plotSettings.filename = "FFNN_ReLU_reach";
+		plotSettings.fill = true;
+		plotSettings.linewidth = 0.5;
+		plotSettings.keepAspectRatio = true;
+		plotSettings.xPlotInterval = carl::Interval<double>( -0.3, +2.8);
+		plotSettings.yPlotInterval = carl::Interval<double>( +16.7, +23.3 );
+
 		auto& plotter = hypro::Plotter<Number>::getInstance();
+		plotter.updateSettings( plotSettings );
+		plotter.clear();
+
 		std::string extendedFilename = settings.plotting().plotFileNames.front();
 		switch ( Representation::type() ) {
 			case hypro::representation_name::polytope_t: {
@@ -118,6 +138,37 @@ static void computeReachableStates( const std::string& filename,
 						.vertices(),
 				  hypro::plotting::colors[hypro::plotting::red] );
 		}
+
+		std::vector<hypro::Point<Number>> unsafe1;
+		unsafe1.push_back(hypro::Point<Number>({0.0, 23.0}));
+		unsafe1.push_back(hypro::Point<Number>({0.0, 25.0}));
+		unsafe1.push_back(hypro::Point<Number>({2.8, 23.0}));
+		unsafe1.push_back(hypro::Point<Number>({2.8, 25.0}));
+		plotter.addObject( unsafe1, hypro::plotting::colors[hypro::plotting::red] );
+
+		std::vector<hypro::Point<Number>> unsafe2;
+		unsafe2.push_back(hypro::Point<Number>({0.0, 17.0}));
+		unsafe2.push_back(hypro::Point<Number>({0.0, 15.0}));
+		unsafe2.push_back(hypro::Point<Number>({2.8, 17.0}));
+		unsafe2.push_back(hypro::Point<Number>({2.8, 15.0}));
+		plotter.addObject( unsafe2, hypro::plotting::colors[hypro::plotting::red] );
+
+		std::vector<hypro::Point<Number>> jump_on;
+		jump_on.push_back(hypro::Point<Number>({0.0, 23.0}));
+		jump_on.push_back(hypro::Point<Number>({0.0, 22.0}));
+		jump_on.push_back(hypro::Point<Number>({2.8, 22.0}));
+		jump_on.push_back(hypro::Point<Number>({2.8, 23.0}));
+		plotter.addObject( jump_on, hypro::plotting::colors[hypro::plotting::green] );
+
+		std::vector<hypro::Point<Number>> jump_off;
+		jump_off.push_back(hypro::Point<Number>({0.0, 17.0}));
+		jump_off.push_back(hypro::Point<Number>({0.0, 18.0}));
+		jump_off.push_back(hypro::Point<Number>({2.8, 18.0}));
+		jump_off.push_back(hypro::Point<Number>({2.8, 17.0}));
+		plotter.addObject( jump_off, hypro::plotting::colors[hypro::plotting::green] );
+
+		hypro::Point<Number> initialPoint({0.0, 20.0});
+		plotter.addPoint(initialPoint, hypro::plotting::colors[hypro::plotting::orange]);
 
 		// segments plotting
 		for ( const auto& flowpipe : flowpipes ) {

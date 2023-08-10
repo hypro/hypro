@@ -1,8 +1,8 @@
 #include <hypro/flags.h>
 #ifdef HYPRO_USE_Z3
 
-#include "../Optimizer.h"
-#include "adaptions_z3.h"
+#include "hypro/util/linearOptimization/Optimizer.h"
+#include "hypro/util/linearOptimization/z3/adaptions_z3.h"
 
 namespace hypro {
 

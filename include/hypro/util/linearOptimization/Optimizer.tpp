@@ -346,7 +346,7 @@ bool Optimizer<Number>::checkPoint( const Point<Number>& _point ) const {
 }
 
 template <typename Number>
-EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
+EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk ) const {
 	assert( isSane() );
 	updateConstraints();
 
@@ -367,7 +367,7 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
-	res = glpkGetInternalPoint<Number>( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix.cols(), false );
+	res = glpkGetInternalPoint<Number>( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix.cols(), useExactGlpk );
 	mConsistencyChecked = true;
 	mLastConsistencyAnswer = res.errorCode;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
