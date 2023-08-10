@@ -832,7 +832,6 @@ namespace hypro {
 
 }  // namespace hypro
 
-#include "converterToStarset.tpp"
 #include "typedefs.h"
 // #include "converterToOrthoplex.tpp"
 #include "converterToBox.tpp"

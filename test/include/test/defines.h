@@ -100,7 +100,7 @@ TYPED_TEST_SUITE(SupportFunctionTest, allTypes);
 TYPED_TEST_SUITE(VPolytopeTest, allTypes);
 TYPED_TEST_SUITE(VPolytopeUtilTest, allTypes);
 TYPED_TEST_SUITE(StarsetTest, allTypes);
-
+TYPED_TEST_SUITE(SamplingTest, allTypes);
 TYPED_TEST_SUITE(ZonotopeTest, allTypes);     // problem in carl/src/carl/numbers/adaption_float/FLOAT_T.h:791:37
 TYPED_TEST_SUITE(DifferenceBoundsTest, allTypes);
 TYPED_TEST_SUITE(SupportFunctionNewTest, allTypes);
