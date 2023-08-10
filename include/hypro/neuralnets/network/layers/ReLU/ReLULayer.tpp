@@ -83,12 +83,12 @@ std::vector<Starset<Number>> ReLULayer<Number>::forwardPass( const std::vector<S
 	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
 	int N = inputSets.size();  // number of input stars
 
-	// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
+	#pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
 	for ( int i = 0; i < N; ++i ) {
 		std::vector<hypro::Starset<Number>> resultSets;
 		resultSets = reachReLU( inputSets[i], method, plotIntermediates );
 
-		// #pragma omp critical
+		#pragma omp critical
 		{
 			result.insert( result.end(), resultSets.begin(), resultSets.end() );
 		}
