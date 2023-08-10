@@ -48,14 +48,14 @@ class ConverterTest : public ::testing::Test {
 		center << 2, 2;
 		matrix_t<Number> generators = matrix_t<Number>( 2, 2 );
 		generators << 0, 1, 1, -1;
-		zonotope = Zonotope<Number>( center, generators );
+		zonotope = Zonotope<Number>( center.rows(), center, generators );
 
 		// second zonotope (box)
 		vector_t<Number> center2 = vector_t<Number>( 2 );
 		center2 << 1, 1;
 		matrix_t<Number> generators2 = matrix_t<Number>( 2, 2 );
 		generators2 << 0, 1, 1, 0;
-		zonotope2 = Zonotope<Number>( center2, generators2 );
+		zonotope2 = Zonotope<Number>( center2.rows(), center2, generators2 );
 
 		// first v-polytope (box)
 		vector_t<Number> p1 = vector_t<Number>( 2 );

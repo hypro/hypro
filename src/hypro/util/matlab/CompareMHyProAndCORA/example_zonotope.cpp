@@ -460,9 +460,9 @@ int main() {
             -944, -812, 217, -769, -378, 566, -911, -789, 410, -680,
             149, -318, 164, -251, 479, 700, -578, -834, -639, -919;
 
-    hypro::Zonotope <Number> z1(center1, generators1); // Creates an Zonotope
-    hypro::Zonotope <Number> z2(center2, generators2); // Creates an Zonotope
-    hypro::Zonotope <Number> z3(center3, generators3); // Creates an Zonotope
+    hypro::Zonotope <Number> z1(center1.rows(), center1, generators1); // Creates an Zonotope
+    hypro::Zonotope <Number> z2(center2.rows(), center2, generators2); // Creates an Zonotope
+    hypro::Zonotope <Number> z3(center3.rows(), center3, generators3); // Creates an Zonotope
 
     std::cout << "------------------------------" << std::endl;
     std::cout << "Minkowski sum" << std::endl;
@@ -598,8 +598,8 @@ int main() {
     gen1 << 1, 0, 0, 0, 1, 0, 0, 0, 1;
     hypro::matrix_t <Number> gen2 = hypro::matrix_t<Number>(3, 3);
     gen2 << 10, 0, 0, 0, 10, 0, 0, 0, 10;
-    hypro::Zonotope <Number> z5(cent4, gen1); // Creates an Zonotope
-    hypro::Zonotope <Number> z6(cent4, gen2); // Creates an Zonotope
+    hypro::Zonotope <Number> z5(cent4.rows(), cent4, gen1); // Creates an Zonotope
+    hypro::Zonotope <Number> z6(cent4.rows(), cent4, gen2); // Creates an Zonotope
 
 
     // start timer
@@ -646,7 +646,7 @@ int main() {
     cent11 << 2, 0, 4, 1, 2;
     hypro::matrix_t <Number> gen11 = hypro::matrix_t<Number>(5, 5);
     gen11 << 1, 0, 1, 0, 1, 0, 1, 0, 2, 2, 0, 1, 0, -2, 2, 2, 0, 2, 0, 2, 0, 0, 0, 0, 2;
-    hypro::Zonotope <Number> z11(cent11, gen11);
+    hypro::Zonotope <Number> z11(cent11.rows(), cent11, gen11);
 
     // start timer
     gettimeofday(&t1, NULL);
@@ -669,7 +669,7 @@ int main() {
     cent10 << 3, 4, 5, 1;
     hypro::matrix_t <Number> gen10 = hypro::matrix_t<Number>(4, 3);
     gen10 << 1, 0, 0, 10, -1, 0, 2, 0, 0, 0, 0, 0;
-    hypro::Zonotope <Number> z10(cent10, gen10);
+    hypro::Zonotope <Number> z10(cent10.rows(), cent10, gen10);
 
     // start timer
     gettimeofday(&t1, NULL);
@@ -716,7 +716,7 @@ int main() {
 
     hypro::vector_t <Number> center12 = hypro::vector_t<Number>(4);
     center12 << 1, 0, 5, 1;
-    hypro::Zonotope <Number> z12(center12, generators12);
+    hypro::Zonotope <Number> z12(center12.rows(), center12, generators12);
     // start timer
     gettimeofday(&t1, NULL);
 

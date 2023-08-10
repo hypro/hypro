@@ -65,7 +65,7 @@ int main() {
     generators << 0.0, 1.0, 1.0, -1.0;
 
     // creation of a zonotope from a center vector and a set of generators.
-    Zonotope<double> zono1 = Zonotope<double>(center, generators);
+    Zonotope<double> zono1 = Zonotope<double>(center.rows(), center, generators);
 
     // convert the zonotope to a box.
     res = Converter<double>::toBox(zono1);

@@ -60,7 +60,7 @@ int main() {
     //    vGenerators(2, i) = 0;
     //}
 
-    Zonotope<Number> zonoExample(vCenter, vGenerators); // Creates an Zonotope
+    Zonotope<Number> zonoExample(vCenter.rows(), vCenter, vGenerators); // Creates an Zonotope
 
     // zonoExample = zonoExample.minkowskiSum(zonoExample); // Just debugging the
     // Minkowski Sum

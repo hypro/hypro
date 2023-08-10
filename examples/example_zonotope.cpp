@@ -45,9 +45,9 @@ int main() {
     //    vGenerators(2, i) = 0;
     //}
 
-    hypro::Zonotope<Number> zonoExample(vCenter1,
+    hypro::Zonotope<Number> zonoExample(vCenter1.rows(), vCenter1,
                                         vGenerators); // Creates an Zonotope
-    hypro::Zonotope<Number> zonoExample2(vCenter2,
+    hypro::Zonotope<Number> zonoExample2(vCenter2.rows(), vCenter2,
                                          vGenerators2); // Creates an Zonotope
     hypro::Plotter<Number> &plotter = hypro::Plotter<Number>::getInstance();
 
