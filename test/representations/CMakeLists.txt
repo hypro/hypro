@@ -2,6 +2,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     # reduce compiler optimization for tests
     set(representation_test_sources
+            BoundednessTest.cpp
             BoxTest.cpp
             CarlPolytopeTest.cpp
             ConverterTest.cpp
@@ -18,6 +19,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             #TaylorModelTest.cpp
             TemplatePolyhedronTest.cpp
             VPolytopeTest.cpp
+            VPolytopeUtilTest.cpp
             #ZonotopeTest.cpp
             )
 
@@ -33,17 +35,15 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
 
     add_executable(runRepresentationTests ${representation_test_sources})
 
-    add_dependencies(runRepresentationTests hypro_resources)
+    add_dependencies(runRepresentationTests ${PROJECT_NAME}-resources)
     target_include_directories(runRepresentationTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
 
     target_link_libraries(runRepresentationTests PUBLIC
             ${GTEST_LIBRARIES}
-            ${PROJECT_NAME}-static
+            ${PROJECT_NAME}-shared
             )
 
-    cotire(runRepresentationTests)
-
-    add_test(NAME representations COMMAND runRepresentationTests)
+    add_test(NAME representations COMMAND runRepresentationTests --gtest_catch_exceptions=0)
 
     if (DEVELOPER)
         set_property(TEST representations PROPERTY

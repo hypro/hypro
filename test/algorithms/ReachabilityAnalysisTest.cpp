@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- *   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- *   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 #include "test/defines.h"
@@ -42,7 +42,7 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 		loc->setInvariant( hypro::Condition( invariantConstraints, invariantOffsets ) );
 
 		// create transition
-		hypro::Transition<Number> loop{ loc.get(), loc.get() };
+		hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType> loop{ loc.get(), loc.get() };
 		// create guard
 		Matrix guardConstraints = Matrix::Zero( 3, 2 );
 		Vector guardOffsets = Vector::Zero( 3 );
@@ -59,9 +59,9 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 		// assign reset to transition
 		loop.setReset( hypro::Reset<Number>( resetMatrix, resetVector ) );
 		// set aggregation settings of transition to full aggregation
-		loop.setAggregation( hypro::Aggregation::aggregation );
+		loop.setAggregation( hypro::AGG_SETTING::AGG );
 		// assign transition to location
-		loc->addTransition( std::make_unique<hypro::Transition<Number>>( loop ) );
+		loc->addTransition( std::make_unique<hypro::Transition<typename hypro::HybridAutomaton<Number>::LocationType>>( loop ) );
 
 		// create initial configuration
 		Matrix initialConstraints = Matrix::Zero( 4, 2 );
@@ -93,7 +93,7 @@ class ReachabilityAnalysisTest : public ::testing::Test {
 
 TEST_F( ReachabilityAnalysisTest, ReacherConstruction ) {
 	using tNumber = hypro::tNumber;
-	std::vector<hypro::ReachTreeNode<hypro::HPolytope<Number>>> roots{};
+	std::vector<hypro::ReachTreeNode<hypro::HPolytope<Number>, typename hypro::HybridAutomaton<Number>::LocationType>> roots{};
 	hypro::FixedAnalysisParameters fixedParameters;
 	fixedParameters.jumpDepth = 3;
 	fixedParameters.localTimeHorizon = 5;
@@ -106,15 +106,14 @@ TEST_F( ReachabilityAnalysisTest, ReacherConstruction ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::HPolytope<Number>>( this->bball_ha, settings.fixedParameters(),
-																		 settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::HPolytope<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																										 settings.strategy().front(), roots );
 	SUCCEED();
 }
 
 TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
-		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -131,8 +130,8 @@ TEST_F( ReachabilityAnalysisTest, BoxReachability ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();
@@ -150,7 +149,7 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityUnsafe ) {
 	automaton.addLocalBadStates( automaton.getLocations().front(), hypro::Condition<Number>::True() );
 	EXPECT_TRUE( automaton.getLocalBadStates().at( automaton.getLocations().front() ).isTrue() );
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots = hypro::makeRoots<hypro::Box<Number>>( automaton );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( automaton );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -167,8 +166,8 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityUnsafe ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( automaton, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( automaton, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();
@@ -188,7 +187,7 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityUnsafe2 ) {
 		  hypro::Condition<Number>( hypro::matrix_t<Number>::Zero( 2, 2 ), hypro::vector_t<Number>::Zero( 2 ) ) );
 	EXPECT_TRUE( automaton.getLocalBadStates().at( automaton.getLocations().front() ).isTrue() );
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots = hypro::makeRoots<hypro::Box<Number>>( automaton );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( automaton );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -205,8 +204,8 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityUnsafe2 ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( automaton, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( automaton, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();
@@ -229,8 +228,7 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInit ) {
 	initialStatesMap[this->bball_ha.getLocations().front()] = hypro::conditionFromIntervals( initialSet.intervals() );
 	this->bball_ha.setInitialStates( initialStatesMap );
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
-		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -247,8 +245,8 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInit ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();
@@ -269,8 +267,7 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInvariant ) {
 	// assign new invariant to location
 	this->bball_ha.getLocations().front()->setInvariant( hypro::Condition( invariantConstraints, invariantOffsets ) );
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
-		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -287,8 +284,8 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInvariant ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();
@@ -301,8 +298,7 @@ TEST_F( ReachabilityAnalysisTest, BoxReachabilityInvalidInvariant ) {
 
 TEST_F( ReachabilityAnalysisTest, TrivialFixedPointCallback ) {
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
-		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -320,11 +316,11 @@ TEST_F( ReachabilityAnalysisTest, TrivialFixedPointCallback ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
 
 	// create trivial callback, which always returns true
-	std::function<bool( const hypro::Box<Number>&, const hypro::Location<Number>* )> fixedPointCallback = []( const hypro::Box<Number>&, const hypro::Location<Number>* ) -> bool { std::cout << "Callback" << std::endl; return true; };
+	std::function<bool( const hypro::Box<Number>&, const hypro::Location<Number>* )> fixedPointCallback = []( const hypro::Box<Number>&, const hypro::Location<Number>* ) -> bool { return true; };
 	// test callback
 	hypro::Box<Number> test;
 	EXPECT_TRUE( fixedPointCallback( test, nullptr ) );
@@ -343,8 +339,7 @@ TEST_F( ReachabilityAnalysisTest, TrivialFixedPointCallback ) {
 
 TEST_F( ReachabilityAnalysisTest, SimpleGlobalTimeHorizon ) {
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
-		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -363,8 +358,8 @@ TEST_F( ReachabilityAnalysisTest, SimpleGlobalTimeHorizon ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();
@@ -376,8 +371,7 @@ TEST_F( ReachabilityAnalysisTest, SimpleGlobalTimeHorizon ) {
 
 TEST_F( ReachabilityAnalysisTest, GlobalTimeHorizon ) {
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
-		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -396,8 +390,8 @@ TEST_F( ReachabilityAnalysisTest, GlobalTimeHorizon ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();
@@ -410,8 +404,7 @@ TEST_F( ReachabilityAnalysisTest, GlobalTimeHorizon ) {
 
 TEST_F( ReachabilityAnalysisTest, GlobalTimeHorizonOverrideLocal ) {
 	// create initial states - chose a state set representation, here: boxes
-	std::vector<hypro::ReachTreeNode<hypro::Box<Number>>> roots =
-		  hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
 
 	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
 
@@ -430,8 +423,8 @@ TEST_F( ReachabilityAnalysisTest, GlobalTimeHorizonOverrideLocal ) {
 
 	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
 
-	auto reacher = hypro::reachability::Reach<hypro::Box<Number>>( this->bball_ha, settings.fixedParameters(),
-																   settings.strategy().front(), roots );
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
 
 	// run reacher. Return type explicit to be able to monitor changes
 	auto reachabilityResult = reacher.computeForwardReachability();

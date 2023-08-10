@@ -15,8 +15,8 @@
 
 #include "test/defines.h"
 #include "test/util.h"
+
 #include "gtest/gtest.h"
-#include <carl/interval/Interval.h>
 #include <hypro/datastructures/Point.h>
 #include <hypro/types.h>
 #include <hypro/util/logging/Logger.h>
@@ -347,5 +347,4 @@ TYPED_TEST( PointTest, SortedVector ) {
 	auto pointsSortedTwice = pointsSortedOnce;
 	std::sort( pointsSortedTwice.begin(), pointsSortedTwice.end() );
 	EXPECT_EQ( pointsSortedOnce, pointsSortedTwice );
-
 }

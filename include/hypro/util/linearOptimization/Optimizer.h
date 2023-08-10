@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023-2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 
 // #define USE_PRESOLUTION
@@ -11,6 +20,7 @@
 #include "Strategy.h"
 
 #include <hypro/flags.h>
+
 #ifdef HYPRO_USE_SMTRAT
 #include "smtrat/adaptions_smtrat.h"
 #endif
@@ -24,11 +34,10 @@
 #include "clp/adaptions_clp.h"
 #endif
 
+#include "../../types.h"
 #include "glpk/adaptions_glpk.h"
 #include "glpk_context.h"
 
-#include <carl/core/Relation.h>
-#include <carl/util/Singleton.h>
 #include <glpk.h>
 #include <mutex>
 #include <thread>
@@ -46,134 +55,140 @@ namespace hypro {
  * @brief      Wrapper class for linear optimization.
  * @tparam     Number  The used number type.
  */
-template <typename Number>
-class Optimizer {
-  private:
-	matrix_t<Number> mConstraintMatrix;
-	vector_t<Number> mConstraintVector;
+    template<typename Number>
+    class Optimizer {
+    private:
+        matrix_t<Number> mConstraintMatrix;
+        vector_t<Number> mConstraintVector;
 
 #ifdef HYPRO_STATISTICS
-	mutable statistics::AtomicCounter contextConstructions;
-	mutable statistics::AtomicCounter contextDeletions;
+        mutable statistics::AtomicCounter contextConstructions;
+        mutable statistics::AtomicCounter contextDeletions;
 #endif
 
-	mutable bool mConsistencyChecked = false;
-	mutable SOLUTION mLastConsistencyAnswer = SOLUTION::UNKNOWN;
-	static bool warnInexact;
-	bool maximize = true;
-	mutable std::vector<carl::Relation> mRelationSymbols;
+        mutable bool mConsistencyChecked = false;
+        mutable SOLUTION mLastConsistencyAnswer = SOLUTION::UNKNOWN;
+        static bool warnInexact;
+        bool maximize = true;
+        mutable std::vector<carl::Relation> mRelationSymbols;
 
-	// dependent members, all mutable
-#ifdef HYPRO_USE_SMTRAT
-	mutable smtrat::SimplexSolver mSmtratSolver;
-	mutable smtrat::FormulaT mCurrentFormula;
-	mutable std::unordered_map<smtrat::FormulaT, std::size_t> mFormulaMapping;
+        // dependent members, all mutable
+#if HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
+        mutable smtrat::SimplexSolver mSmtratSolver;
+        mutable smtrat::FormulaT mCurrentFormula;
+        mutable std::unordered_map<smtrat::FormulaT, std::size_t> mFormulaMapping;
 #ifdef VERIFY_RESULT
-	mutable unsigned fileCounter;
-	std::string filenamePrefix = "optimizer_error_out_";
+        mutable unsigned fileCounter;
+        std::string filenamePrefix = "optimizer_error_out_";
 #endif
 #endif
-	mutable std::mutex mContextLock;
-#ifdef HYPRO_USE_GLPK
-	// Glpk as a presolver
-	mutable std::map<std::thread::id, glpk_context> mGlpkContexts;
+        mutable std::mutex mContextLock;
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+        // Glpk as a presolver
+        mutable std::map<std::thread::id, glpk_context> mGlpkContexts;
 #endif
-#ifdef HYPRO_USE_CLP
-	// CLP as a solver
-	mutable std::map<std::thread::id, clp_context> mClpContexts;
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
+        // CLP as a solver
+        mutable std::map<std::thread::id, clp_context> mClpContexts;
 #endif
 
-  public:
-	/**
-	 * @brief      Default constructor.
-	 */
-	explicit Optimizer( bool max = true )
-		: mConstraintMatrix()
-		, mConstraintVector()
-		, mConsistencyChecked( false )
-		, maximize( max )
-		, mRelationSymbols() {
-#ifdef HYPRO_USE_GLPK
-		glp_term_out( GLP_OFF );
+    public:
+        /**
+         * @brief      Default constructor.
+         */
+        explicit Optimizer(bool max = true)
+                : mConstraintMatrix(), mConstraintVector(), mConsistencyChecked(false), maximize(max),
+                  mRelationSymbols() {
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+            glp_term_out(GLP_OFF);
 #endif
 #ifdef VERIFY_RESULT
-		struct stat buffer;
-		unsigned cnt = 0;
-		while ( true ) {
-			std::string name = filenamePrefix + std::to_string( cnt ) + ".smt2";
-			if ( stat( name.c_str(), &buffer ) != 0 ) {
-				break;
-			}
-			++cnt;
-		}
-		fileCounter = cnt;
+            struct stat buffer;
+            unsigned cnt = 0;
+            while ( true ) {
+                std::string name = filenamePrefix + std::to_string( cnt ) + ".smt2";
+                if ( stat( name.c_str(), &buffer ) != 0 ) {
+                    break;
+                }
+                ++cnt;
+            }
+            fileCounter = cnt;
 #endif
 #if !defined HYPRO_USE_SMTRAT && !defined HYPRO_USE_Z3 && !defined HYPRO_USE_SOPLEX
-		if ( !Optimizer<Number>::warnInexact && carl::is_rational<Number>().value ) {
-			// only warn once
-			Optimizer<Number>::warnInexact = true;
-			WARN( "hypro.optimizer", "Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend)." );
-		}
+            if (!Optimizer<Number>::warnInexact && is_rational<Number>().value) {
+                // only warn once
+                Optimizer<Number>::warnInexact = true;
+                WARN("hypro.optimizer",
+                     "Attention, using exact arithmetic with inexact linear optimization setup (glpk only, no exact backend).");
+            }
 #endif
-	}
+        }
 
-	Optimizer( Optimizer<Number>&& orig );
-	Optimizer( const Optimizer<Number>& orig );
+        Optimizer(Optimizer<Number> &&orig);
 
-	/**
-	 * @brief      Constructor which sets the problem.
-	 * @param[in]  constraints  The constraints.
-	 * @param[in]  constants    The constants.
-	 */
-	Optimizer( const matrix_t<Number>& constraints, const vector_t<Number>& constants, bool max = true )
-		: mConstraintMatrix( constraints )
-		, mConstraintVector( constants )
-		, mConsistencyChecked( false )
-		, maximize( max )
-		, mRelationSymbols( std::vector<carl::Relation>( constraints.rows(), carl::Relation::LEQ ) ) {
-#ifdef HYPRO_USE_GLPK
-		glp_term_out( GLP_OFF );
+        Optimizer(const Optimizer<Number> &orig);
+
+        /**
+         * @brief      Constructor which sets the problem.
+         * @param[in]  constraints  The constraints.
+         * @param[in]  constants    The constants.
+         */
+        Optimizer(const matrix_t<Number> &constraints, const vector_t<Number> &constants, bool max = true)
+                : mConstraintMatrix(constraints), mConstraintVector(constants), mConsistencyChecked(false),
+                  maximize(max),
+                  mRelationSymbols(std::vector<carl::Relation>(constraints.rows(), carl::Relation::LEQ)) {
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+            glp_term_out(GLP_OFF);
 #endif
-		assert( constraints.rows() > 0 );
-		assert( constraints.cols() > 0 );
-		assert( constants.rows() > 0 );
-		assert( constraints.rows() == constants.rows() );
-	}
+            assert(constraints.rows() > 0);
+            assert(constraints.cols() > 0);
+            assert(constants.rows() > 0);
+            assert(constraints.rows() == constants.rows());
+        }
 
-	/**
-	 * @brief      Destroys the object.
-	 */
-	~Optimizer() {
-		this->cleanContexts();
-	}
+        /**
+         * @brief      Destroys the object.
+         */
+        ~Optimizer() {
+            this->cleanContexts();
+        }
 
-	void cleanContexts();
+        void cleanContexts();
 
 #ifndef NDEBUG
-	inline SOLUTION getLastConsistencyAnswer() const { return mLastConsistencyAnswer; }
-	inline bool getConsistencyChecked() const { return mConsistencyChecked; }
+
+        inline SOLUTION getLastConsistencyAnswer() const {
+            return mLastConsistencyAnswer;
+        }
+
+        inline bool getConsistencyChecked() const {
+            return mConsistencyChecked;
+        }
+
 #endif
-#ifdef HYPRO_USE_GLPK
-	inline const std::map<std::thread::id, glpk_context>& getGLPContexts() const {
-		return mGlpkContexts;
-	}
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+
+        inline const std::map<std::thread::id, glpk_context> &getGLPContexts() const {
+            return mGlpkContexts;
+        }
+
 #endif
-#ifdef HYPRO_USE_CLP
-	inline const std::map<std::thread::id, clp_context>& getCLPContexts() const {
-		return mClpContexts;
-	}
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
+        inline const std::map<std::thread::id, clp_context>& getCLPContexts() const {
+            return mClpContexts;
+        }
 #endif
 
-	friend void swap( Optimizer<Number>& lhs, Optimizer<Number>& rhs ) {
-		std::swap( lhs.mConstraintMatrix, rhs.mConstraintMatrix );
-		std::swap( lhs.mConstraintVector, rhs.mConstraintVector );
-		std::swap( lhs.mConsistencyChecked, rhs.mConsistencyChecked );
-		std::swap( lhs.mRelationSymbols, rhs.mRelationSymbols );
-#ifdef HYPRO_USE_GLPK
-		std::swap( lhs.mGlpkContexts, rhs.mGlpkContexts );
+        friend void swap(Optimizer<Number> &lhs, Optimizer<Number> &rhs) {
+            std::swap(lhs.mConstraintMatrix, rhs.mConstraintMatrix);
+            std::swap(lhs.mConstraintVector, rhs.mConstraintVector);
+            std::swap(lhs.mConsistencyChecked, rhs.mConsistencyChecked);
+            std::swap(lhs.mRelationSymbols, rhs.mRelationSymbols);
+#if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+            std::swap(lhs.mGlpkContexts, rhs.mGlpkContexts);
 #endif
-#ifdef HYPRO_USE_CLP
-		std::swap( lhs.mClpContexts, rhs.mClpContexts );
+#if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
+            std::swap( lhs.mClpContexts, rhs.mClpContexts );
 #endif
 		std::swap( lhs.mLastConsistencyAnswer, rhs.mLastConsistencyAnswer );
 		std::swap( lhs.maximize, rhs.maximize );
@@ -299,16 +314,20 @@ class Optimizer {
 };
 }  // namespace hypro
 
-template <typename Number>
+template<typename Number>
 bool hypro::Optimizer<Number>::warnInexact = false;
 
 #ifdef USE_CLN_NUMBERS
 #include <cln/cln.h>
 extern template class hypro::Optimizer<cln::cl_RA>;
 #else
+
 #include <gmp.h>
 #include <gmpxx.h>
-extern template class hypro::Optimizer<mpq_class>;
+
+extern template
+class hypro::Optimizer<mpq_class>;
+
 #endif
 
 #include "Optimizer.tpp"

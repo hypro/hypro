@@ -58,8 +58,8 @@ Results<std::size_t> affineTrafoHelper(
 			data.push_back( m );
 			data.push_back( e );
 			ress.emplace_back( { name, runningTime / settings.iterations, static_cast<int>( dimension ), data } );
-			// std::cout << "Dimension " << d << ", m " << m << ", e "<< e << ":  Running took " << runningTime.count()
-			// << " sec." << std::endl;
+			std::cout << "Dimension " << d << ", m " << m << ", e " << e << ":  Running took " << runningTime.count()
+					  << " sec." << std::endl;
 		}
 	}
 	return ress;

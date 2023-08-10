@@ -1,6 +1,4 @@
-
 include(apple-llvm)
-
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGTEST_USE_OWN_TR1_TUPLE=1")
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -50,6 +48,9 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         message(FATAL_ERROR "gcc version should be larger or equal than 7.")
     endif ()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
+    if (HYPRO_CICD OR HYPRO_COVERAGE)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
+    endif ()
 else ()
     message("-- Possibly unsupported compiler")
 endif ()
@@ -57,7 +58,7 @@ endif ()
 if (HYPRO_COVERAGE)
     include(CodeCoverage)
     APPEND_COVERAGE_COMPILER_FLAGS()
-    setup_target_for_coverage(NAME hypro_coverage EXECUTABLE test DEPENDENCIES ${PROJECT_NAME} allTests)
+    setup_target_for_coverage_gcovr_xml(NAME hypro_coverage EXECUTABLE make test DEPENDENCIES ${PROJECT_NAME} allTests)
 endif ()
 
 # general compiler and linker settings

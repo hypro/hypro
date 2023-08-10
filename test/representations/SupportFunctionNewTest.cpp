@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * Tests for new SupportFunctions
  *
@@ -5,6 +14,7 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <cmath>
 #include <hypro/representations/GeometricObjectBase.h>
@@ -581,10 +591,6 @@ TYPED_TEST( SupportFunctionNewTest, Constructors ) {
 	EXPECT_TRUE( sfMove.getRoot()->getChildren().size() == std::size_t( 0 ) );
 	EXPECT_EQ( sfTrafo.getRoot().use_count(), long( 1 ) );
 	EXPECT_EQ( sf.getRoot().use_count(), long( 3 ) );
-	// std::cout << "Address of sf root ptr: " << sf.getRoot() << std::endl;
-	// std::cout << "Address of sfTrafo root ptr: " << sfTrafo.getRoot() << std::endl;
-	// std::cout << "Address of sfCopy root ptr: " << sfCopy.getRoot() << std::endl;
-	// std::cout << "Address of sfMove root ptr: " << sfMove.getRoot() << std::endl;
 
 	// Move assign
 	sfMove = std::move( sfTrafo );
@@ -978,7 +984,7 @@ TYPED_TEST( SupportFunctionNewTest, Supremum ) {
 	// Supremum of empty SF
 	SupportFunctionNew<TypeParam> sf;
 	TypeParam sup = sf.supremum();
-	EXPECT_EQ( sup, std::size_t( 0 ) );
+	EXPECT_EQ( sup, TypeParam( 0 ) );
 
 	// Supremum for Leaf
 	sup = uR.supremum();
@@ -1046,10 +1052,11 @@ TYPED_TEST( SupportFunctionNewTest, StorageSize ) {
 	EXPECT_TRUE( sum.getRoot()->getOriginCount() == sum.getRoot()->getChildren().size() );
 
 	try {
-		std::cout << "Size of sf1: " << sf1.size() << std::endl;
-		std::cout << "Size of sf2: " << sf2.size() << std::endl;
-		std::cout << "Size of sfWithTrafo: " << sfWithTrafo.size() << std::endl;
-		std::cout << "Size of sum: " << sum.size() << std::endl;
+		std::stringstream ss;
+		ss << "Size of sf1: " << sf1.size() << std::endl;
+		ss << "Size of sf2: " << sf2.size() << std::endl;
+		ss << "Size of sfWithTrafo: " << sfWithTrafo.size() << std::endl;
+		ss << "Size of sum: " << sum.size() << std::endl;
 	} catch ( const std::runtime_error& e ) {
 		FAIL();
 	}

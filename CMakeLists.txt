@@ -17,9 +17,7 @@ project(hypro CXX C)
 
 set(PROJECT_FULLNAME "HyPro")
 set(PROJECT_DESCRIPTION "A Toolbox for the Reachability Analysis of Hybrid Systems using Geometric Approximations")
-string(TIMESTAMP hypro_MINORVERSION %m)
-string(TIMESTAMP hypro_MAJORVERSION %y)
-set(hypro_VERSION "${hypro_MAJORVERSION}.${hypro_MINORVERSION}")
+set(hypro_VERSION "2.0.4")
 set(PROJECT_VERSION "${hypro_VERSION}")
 set(hypro_NAME "HyPro")
 set(hypro_DESCRIPTION ${PROJECT_DESCRIPTION})
@@ -35,10 +33,20 @@ include(hypromacros)
 
 # options
 option(STATICLIB_SWITCH "Compile a statically linked version of the library." OFF)
-option(HYPRO_USE_COTIRE "Use the COmpilation TIme REducer." OFF)
-option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." ON)
-option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" ON)
+option(HYPRO_CICD "Set to true to indicate build on CI/CD runner where certain commands do not work." OFF)
+option(HYPRO_EXTERNALIZE_CLASSES "Enables explicit instanciation of templates for double and mpq_class to speed up build." ON)
+option(HYPRO_USE_CLP "Enable usage of the Coin-LP solver." OFF)
+option(HYPRO_CREATE_DOC "Allow creation of a doxygen documentation." OFF)
+option(HYPRO_CREATE_DOC_PDF "Create pdf document for documentation." OFF)
+option(HYPRO_USE_GLPK "Enable usage of the glpk lp-solver." OFF)
+option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
+option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" OFF)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
+option(HYPRO_USE_SERIALIZATION "Enable support for cereal for object serialization" ON)
+option(HYPRO_USE_SOPLEX "Enable usage of the SoPlex lp-solver." OFF)
+option(HYPRO_USE_SMTRAT "Enable usage of the SMT-RAT smt-solver." OFF)
+option(HYPRO_USE_Z3 "Enable usage of the z3 smt-solver." OFF)
+option(HYPRO_ENABLE_SPACEEX_OUTPUT "Allow to output hybrid automata to SpaceEx format" OFF)
 option(HYPRO_GSL_INTEGRATION "Link to gsl and provide numerical integration methods" OFF)
 option(HYPRO_BUILD_OFFLINE "Do not attempt to update ressources (work offline)." OFF)
 option(HYPRO_LOGGING "Allow logging." OFF)
@@ -47,8 +55,6 @@ option(HYPRO_COVERAGE "Enable compiler flags for test coverage diagnostics." OFF
 option(HYPRO_BENCHMARK "Enable usage of the google-benchmark library and the targets in test/case_studies." OFF)
 option(HYPRO_STATISTICS "Create a statistic file." OFF)
 option(CLANG_TIDY "Enable usage of clang-tidy" OFF)
-option(CREATE_DOC "Allow creation of a doxygen documentation." OFF)
-option(DOC_CREATE_PDF "Create pdf document for documentation." OFF)
 option(DEVELOPER "Compile in developer mode, i.e. more warnings." OFF)
 option(EXPORT_TO_CMAKE "Export the project to CMake for easy inclusion" ON)
 option(RESET_REFINEMENT "Return to Level 0 after successful backtracking" ON)
@@ -63,12 +69,16 @@ mark_as_advanced(DEVELOPER)
 mark_as_advanced(RESET_REFINEMENT)
 mark_as_advanced(EXPORT_TO_CMAKE)
 
-include(printCustomOptions)
+# for debugging
+#include(printCustomOptions)
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release" FORCE)
 endif ()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
+
+# policies
+cmake_policy(VERSION 3.15) # sets all policies to NEW that are available in cmake 3.15
 
 # handling of optimization backends
 include(optimization_backends)
@@ -78,7 +88,7 @@ if (HYPRO_BUILD_OFFLINE)
 endif ()
 
 file(RELATIVE_PATH relBinaryDir ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_BINARY_DIR})
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties.in ${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/.travis/sonar-project.properties.in ${CMAKE_CURRENT_SOURCE_DIR}/sonar-project.properties)
 
 ###########################################################################################
 #### EXPORT SETTINGS
@@ -139,9 +149,6 @@ if (CLANG_TIDY)
     message(STATUS "Enabled checks for clang-tidy: ${CLANG_TIDY_CHECKS}")
 endif ()
 
-
-enable_testing()
-
 # # # # # # # # # # # # # # # # # # # # # #
 # D. Invoke subdirectories.
 # # # # # # # # # # # # # # # # # # # # # #
@@ -149,15 +156,14 @@ enable_testing()
 add_subdirectory(src)
 
 add_library(${PROJECT_NAME}-objects OBJECT ${${PROJECT_NAME}_sources})
-add_dependencies(${PROJECT_NAME}-objects hypro_resources)
-build_target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC GLPK_STATIC ANTLR4_SHARED clp_STATIC coinUtils_STATIC z3_SHARED)
+add_dependencies(${PROJECT_NAME}-objects ${PROJECT_NAME}-resources)
+build_target_include_dirs_from(${PROJECT_NAME}-objects SYSTEM PUBLIC GLPK_STATIC clp_STATIC coinUtils_STATIC z3_SHARED)
 target_include_directories(${PROJECT_NAME}-objects
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
         $<INSTALL_INTERFACE:include/${PROJECT_NAME}>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/hypro>
         )
 
 ########################################################################################
@@ -181,7 +187,6 @@ target_include_directories(${PROJECT_NAME}-static
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/hypro>
         $<INSTALL_INTERFACE:include>
         )
 
@@ -205,28 +210,40 @@ target_include_directories(${PROJECT_NAME}-shared
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include/hypro>
         $<INSTALL_INTERFACE:include>
         )
+
+add_library(${PROJECT_NAME}-parser ${${PROJECT_NAME}_parser_sources})
+add_dependencies(${PROJECT_NAME}-parser ${PROJECT_NAME}-resources ${PROJECT_NAME}-parser-resources ${PROJECT_NAME}-shared)
+build_target_include_dirs_from(${PROJECT_NAME}-parser SYSTEM PUBLIC ANTLR4_SHARED)
+target_include_directories(${PROJECT_NAME}-parser
+        PUBLIC
+        ${CMAKE_SOURCE_DIR}/include/hypro/parser/
+        )
+target_link_libraries(${PROJECT_NAME}-parser PUBLIC ${PROJECT_NAME}-shared)
 
 target_compile_features(${PROJECT_NAME}-objects PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-static PUBLIC cxx_std_17)
 target_compile_features(${PROJECT_NAME}-shared PUBLIC cxx_std_17)
+target_compile_features(${PROJECT_NAME}-parser PUBLIC cxx_std_17)
 
 target_compile_options(${PROJECT_NAME}-objects PUBLIC -fPIC)
 target_compile_options(${PROJECT_NAME}-static PUBLIC -fPIC)
 target_compile_options(${PROJECT_NAME}-shared PUBLIC -fPIC)
+target_compile_options(${PROJECT_NAME}-parser PUBLIC -fPIC)
 target_compile_options(${PROJECT_NAME}-objects PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
 target_compile_options(${PROJECT_NAME}-static PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
 target_compile_options(${PROJECT_NAME}-shared PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
+target_compile_options(${PROJECT_NAME}-parser PRIVATE -Wall -Wextra -Wno-attributes -pedantic -ftemplate-backtrace-limit=0 -funroll-loops)
 if (${DEVELOPER})
     target_compile_options(${PROJECT_NAME}-objects PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
     target_compile_options(${PROJECT_NAME}-static PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
     target_compile_options(${PROJECT_NAME}-shared PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
+    target_compile_options(${PROJECT_NAME}-parser PRIVATE -Wswitch -Wno-deprecated-declarations -Wempty-body -Wconversion -Wreturn-type -Wparentheses -Wno-format -Wuninitialized -Wunreachable-code -Wunused-function -Wunused-value -Wunused-variable -fsanitize=address -fstack-protector-strong -g)
 endif ()
-target_link_options(${PROJECT_NAME}-objects PUBLIC LINKER:-no-as-needed)
-target_link_options(${PROJECT_NAME}-static PUBLIC LINKER:-no-as-needed)
-target_link_options(${PROJECT_NAME}-shared PUBLIC LINKER:-no-as-needed)
+#target_link_options(${PROJECT_NAME}-objects PUBLIC LINKER:-no-as-needed)
+#target_link_options(${PROJECT_NAME}-static PUBLIC LINKER:-no-as-needed)
+#target_link_options(${PROJECT_NAME}-shared PUBLIC LINKER:-no-as-needed)
 
 # Meta-target which combines static and shared library
 add_custom_target(${PROJECT_NAME} DEPENDS ${PROJECT_NAME}-shared ${PROJECT_NAME}-static)
@@ -236,7 +253,8 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set_target_properties(${PROJECT_NAME}-shared PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
     set_target_properties(${PROJECT_NAME}-static PROPERTIES LINKER_LANGUAGE CXX INSTALL_RPATH "@loader_path/../lib")
 endif ()
-set(HYPRO_TARGETS "${PROJECT_NAME}-shared" "${PROJECT_NAME}-static" CACHE STRING INTERNAL FORCE)
+set(HYPRO_TARGETS "${PROJECT_NAME}-shared" "${PROJECT_NAME}-static" "${PROJECT_NAME}-parser" CACHE STRING INTERNAL
+        FORCE)
 
 
 # Options for static linking
@@ -268,14 +286,41 @@ install(TARGETS ${PROJECT_NAME}-shared
         COMPONENT ${PROJECT_NAME}_Development
         )
 
+if (NOT HYPRO_CICD)
+    # the ping command does not work on github actions https://github.com/actions/runner-images/issues/1519
+    include(checkConnection)
+endif ()
 
 add_subdirectory(resources)
+# manage include directories colleced in ressources cmake file
+target_include_directories(${PROJECT_NAME}-objects
+        PUBLIC ${${PROJECT_NAME}-include-dirs}
+        PRIVATE ${${PROJECT_NAME}-include-dirs-private}
+        )
+target_include_directories(${PROJECT_NAME}-static
+        PRIVATE ${${PROJECT_NAME}-include-dirs}
+        PRIVATE ${${PROJECT_NAME}-include-dirs-private}
+        )
+target_include_directories(${PROJECT_NAME}-shared
+        PUBLIC ${${PROJECT_NAME}-include-dirs}
+        PRIVATE ${${PROJECT_NAME}-include-dirs-private}
+        )
+
 # Create config.h by adding cmake defines dependent on option switches
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/flags.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/flags.h @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hypro/paths.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/hypro/paths.h
         @ONLY)
+
+# cleanup: get interface include directories list, remove duplicates (which we get from our clumsy carl setup) and reset
+# the variable. Currently only relevant for the shared version.
+get_target_property(include_dirs_list ${PROJECT_NAME}-shared INTERFACE_INCLUDE_DIRECTORIES)
+list(REMOVE_DUPLICATES "include_dirs_list")
+set_target_properties(${PROJECT_NAME}-shared PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${include_dirs_list}")
+
+enable_testing()
 add_subdirectory(test)
 add_subdirectory(examples EXCLUDE_FROM_ALL)
+add_subdirectory(doc)
 
 ##############################################################################
 #### EXPORT SETTINGS

@@ -1,108 +1,124 @@
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "ltiFirstSegmentHandler.h"
 
 namespace hypro {
-template <typename State>
-State ltiFirstSegmentHandler<State>::operator()( State initialStateSet, tNumber timeStep ) {
-	assert( !initialStateSet.getTimestamp().isEmpty() );
-	// check if initial Valuation fulfills Invariant
-	assert( initialStateSet.getLocation() != nullptr );
+    template<typename State>
+    State ltiFirstSegmentHandler<State>::operator()(State initialStateSet, tNumber timeStep) {
+        assert(!initialStateSet.getTimestamp().isEmpty());
+        // check if initial Valuation fulfills Invariant
+        assert(initialStateSet.getLocation() != nullptr);
 
-	mTimeStep = timeStep;
+        mTimeStep = timeStep;
 
-	std::size_t dim = initialStateSet.getLocation()->getLinearFlow().dimension();
+        std::size_t dim = initialStateSet.getLocation()->getLinearFlow().dimension();
 
-	// if the location has no flow, stop computation and exit.
-	if ( initialStateSet.getLocation()->getLinearFlow( 0 ).isDiscrete() ) {
-		// TRACE("Avoid further computation as the flow is zero." << std::endl);
-		mTrafo = matrix_t<Number>::Identity( dim, dim );
-		mTranslation = vector_t<Number>::Zero( dim );
-		return initialStateSet;
-	}
+        // if the location has no flow, stop computation and exit.
+        if (initialStateSet.getLocation()->getLinearFlow(0).isDiscrete()) {
+            // TRACE("Avoid further computation as the flow is zero." << std::endl);
+            mTrafo = matrix_t<Number>::Identity(dim, dim);
+            mTranslation = vector_t<Number>::Zero(dim);
+            return initialStateSet;
+        }
 
-	// approximate R_[0,delta](X0)
-	// R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is unit matrix.
-	matrix_t<Number> trafoMatrix = computeTrafoMatrix( initialStateSet.getLocation() );
+        // approximate R_[0,delta](X0)
+        // R_0(X0) is just the initial Polytope X0, since t=0 -> At is zero matrix -> e^(At) is unit matrix.
+        matrix_t<Number> trafoMatrix = computeTrafoMatrix(initialStateSet.getLocation());
 
-	TRACE( "hypro.worker", "e^(deltaMatrix): " << std::endl );
-	TRACE( "hypro.worker", trafoMatrix << std::endl );
-	TRACE( "hypro.worker", "------" << std::endl );
+        TRACE("hypro.worker", "e^(deltaMatrix): " << std::endl);
+        TRACE("hypro.worker", trafoMatrix << std::endl);
+        TRACE("hypro.worker", "------" << std::endl);
 
-	// e^(At)*X0 = polytope at t=delta
-	Eigen::Index rows = trafoMatrix.rows();
-	Eigen::Index cols = trafoMatrix.cols();
-	vector_t<Number> translation = trafoMatrix.col( cols - 1 );
-	matrix_t<Number> trafoMatrixResized = matrix_t<Number>( rows - 1, cols - 1 );
-	trafoMatrixResized = trafoMatrix.block( 0, 0, rows - 1, cols - 1 );
-	translation.conservativeResize( rows - 1 );
+        // e^(At)*X0 = polytope at t=delta
+        Eigen::Index rows = trafoMatrix.rows();
+        Eigen::Index cols = trafoMatrix.cols();
+        vector_t<Number> translation = trafoMatrix.col(cols - 1);
+        matrix_t<Number> trafoMatrixResized = matrix_t<Number>(rows - 1, cols - 1);
+        trafoMatrixResized = trafoMatrix.block(0, 0, rows - 1, cols - 1);
+        translation.conservativeResize(rows - 1);
 
-	// update flow type
-	mTrafo = trafoMatrixResized;
-	mTranslation = translation;
+        // update flow type
+        mTrafo = trafoMatrixResized;
+        mTranslation = translation;
 
-	State deltaValuation = initialStateSet.partiallyApplyTimeStep( ConstraintSet<Number>( trafoMatrixResized, translation ), mTimeStep, 0 );
+        State deltaValuation = initialStateSet.partiallyApplyTimeStep(
+                ConstraintSet<Number>(trafoMatrixResized, translation), mTimeStep, 0);
 
 #ifdef HYDRA_USE_LOGGING
-	TRACE( "hypro.worker", "Polytope at t=delta: " << deltaValuation );
+        TRACE( "hypro.worker", "Polytope at t=delta: " << deltaValuation );
 #endif
 
-	State firstSegment{ initialStateSet.getLocation() };
-	Box<Number> externalInput( std::make_pair( Point<Number>( vector_t<Number>::Zero( dim ) ),
-											   Point<Number>( vector_t<Number>::Zero( dim ) ) ) );
+        State firstSegment{initialStateSet.getLocation()};
+        Box<Number> externalInput(std::make_pair(Point<Number>(vector_t<Number>::Zero(dim)),
+                                                 Point<Number>(vector_t<Number>::Zero(dim))));
 
-	std::vector<Box<Number>> errorBoxVector =
-		  errorBoxes( carl::convert<tNumber, Number>( mTimeStep ), initialStateSet.getLocation()->getLinearFlow( 0 ), initialStateSet, trafoMatrix, externalInput );
+        std::vector<Box<Number>> errorBoxVector =
+                errorBoxes(carl::convert<tNumber, Number>(mTimeStep), initialStateSet.getLocation()->getLinearFlow(0),
+                           initialStateSet, trafoMatrix, externalInput);
 
-	firstSegment = deltaValuation.unite( initialStateSet );
+        firstSegment = deltaValuation.unite(initialStateSet);
 
-	if ( !errorBoxVector.empty() ) {
-		TRACE( "hypro.worker", "Union of initial set and set after first step: " << firstSegment );
-		TRACE( "hypro.worker", "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension() << " and d: " << initialStateSet.getDimension( 0 ) );
-		TRACE( "hypro.worker", "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension() << " and d: " << initialStateSet.getDimension( 0 ) );
-	}
+        if (!errorBoxVector.empty()) {
+            TRACE("hypro.worker", "Union of initial set and set after first step: " << firstSegment);
+            TRACE("hypro.worker",
+                  "Errorbox X_0: " << errorBoxVector[0] << " with dimension " << errorBoxVector[0].dimension()
+                                   << " and d: " << initialStateSet.getDimension(0));
+            TRACE("hypro.worker",
+                  "Errorbox for bloating: " << errorBoxVector[2] << " with dimension " << errorBoxVector[2].dimension()
+                                            << " and d: " << initialStateSet.getDimension(0));
+        }
 
-	firstSegment = bloatBox( firstSegment, Number( Number( 1 ) / Number( 4 ) ) * errorBoxVector[2], 0 );
+        firstSegment = bloatBox(firstSegment, Number(Number(1) / Number(4)) * errorBoxVector[2], 0);
 
-	TRACE( "hypro.worker", "Epsilon errorbox: " << errorBoxVector[2] );
+        TRACE("hypro.worker", "Epsilon errorbox: " << errorBoxVector[2]);
 
-	TRACE( "hypro.worker", "first Flowpipe Segment (after minkowski Sum): " << firstSegment );
+        TRACE("hypro.worker", "first Flowpipe Segment (after minkowski Sum): " << firstSegment);
 
-	firstSegment.partiallyRemoveRedundancy( 0 );
-	initialStateSet.setSet( firstSegment.getSet( 0 ), 0 );
+        firstSegment.partiallyRemoveRedundancy(0);
+        initialStateSet.setSet(firstSegment.getSet(0), 0);
 
-	return initialStateSet;
-}
+        return initialStateSet;
+    }
 
-template <typename State>
-matrix_t<typename State::NumberType> ltiFirstSegmentHandler<State>::computeTrafoMatrix( const Location<Number>* _loc ) const {
-	matrix_t<Number> deltaMatrix( _loc->getLinearFlow().dimension(), _loc->getLinearFlow().dimension() );
-	deltaMatrix = _loc->getLinearFlow( 0 ).getFlowMatrix() * carl::convert<tNumber, Number>( mTimeStep );
-	TRACE( "hypro.worker", "Flowmatrix:\n"
-								 << _loc->getLinearFlow( 0 ) << "\nmultiplied with time step: " << mTimeStep );
-	TRACE( "hypro.worker", "delta matrix_t<Number>: " << std::endl );
-	TRACE( "hypro.worker", deltaMatrix << std::endl );
-	TRACE( "hypro.worker", "------" << std::endl );
+    template<typename State>
+    matrix_t<typename State::NumberType>
+    ltiFirstSegmentHandler<State>::computeTrafoMatrix(const Location<Number> *_loc) const {
+        matrix_t<Number> deltaMatrix(_loc->getLinearFlow().dimension(), _loc->getLinearFlow().dimension());
+        deltaMatrix = _loc->getLinearFlow(0).getFlowMatrix() * carl::convert<tNumber, Number>(mTimeStep);
+        TRACE("hypro.worker", "Flowmatrix:\n"
+                << _loc->getLinearFlow(0) << "\nmultiplied with time step: " << mTimeStep);
+        TRACE("hypro.worker", "delta matrix_t<Number>: " << std::endl);
+        TRACE("hypro.worker", deltaMatrix << std::endl);
+        TRACE("hypro.worker", "------" << std::endl);
 
-	// e^(At) = resultMatrix
-	matrix_t<Number> resultMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
+        // e^(At) = resultMatrix
+        matrix_t<Number> resultMatrix(deltaMatrix.rows(), deltaMatrix.cols());
 
-	//---
-	// Workaround for:
-	// resultMatrix = deltaMatrix.exp();
-	//-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
-	matrix_t<double> doubleMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
-	matrix_t<double> expMatrix( deltaMatrix.rows(), deltaMatrix.cols() );
-	doubleMatrix = convert<Number, double>( deltaMatrix );
+        //---
+        // Workaround for:
+        // resultMatrix = deltaMatrix.exp();
+        //-> convert FLOAT_T to double, compute .exp(), then convert back to FLOAT_T
+        matrix_t<double> doubleMatrix(deltaMatrix.rows(), deltaMatrix.cols());
+        matrix_t<double> expMatrix(deltaMatrix.rows(), deltaMatrix.cols());
+        doubleMatrix = convert<Number, double>(deltaMatrix);
 
-	TRACE( "hypro.worker", "transformed matrix: " << doubleMatrix );
+        TRACE("hypro.worker", "transformed matrix: " << doubleMatrix);
 
-	expMatrix = doubleMatrix.exp();
+        expMatrix = doubleMatrix.exp();
 
-	TRACE( "hypro.worker", "exp matrix: " << expMatrix );
+        TRACE("hypro.worker", "exp matrix: " << expMatrix);
 
-	resultMatrix = convert<double, Number>( expMatrix );
+        resultMatrix = convert<double, Number>(expMatrix);
 
-	TRACE( "hypro.worker", "transformed matrix: " << resultMatrix );
+        TRACE("hypro.worker", "transformed matrix: " << resultMatrix);
 
-	return resultMatrix;
-}
+        return resultMatrix;
+    }
 }  // namespace hypro

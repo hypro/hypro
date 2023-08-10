@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2023-2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #ifndef CEGARANALYZER_H
 #define CEGARANALYZER_H
 
@@ -18,120 +27,130 @@
 
 namespace hypro {
 
-namespace detail {
+    namespace detail {
 
 /**
  * @brief impl that takes a TypeList, can be aliased to take conventional type pack
  * @tparam T the type list
  */
-template <class T>
-class CEGARAnalyzer_impl;
+        template<class T>
+        class CEGARAnalyzer_impl;
 
 /**
  * specialization to unpack the TypeList
  */
-template <class Number, class... Representations>
-class CEGARAnalyzer_impl<TypeList<Number, Representations...>> {
-	using TreeNodePtrVariant = std::variant<ReachTreeNode<Representations>*...>;
+        template<class Number, class Automaton, class... Representations>
+        class CEGARAnalyzer_impl<TypeList<Number, Automaton, Representations...>> {
+            using LocationType = typename Automaton::LocationType;
+            using TreeNodePtrVariant = std::variant<ReachTreeNode<Representations, LocationType> *...>;
 
-	template <class Representation>
-	struct ConcreteRootsHolder {
-		std::vector<ReachTreeNode<Representation>> roots{};
+            template<class Representation, class Aut>
+            struct ConcreteRootsHolder {
+                std::vector<ReachTreeNode<Representation, typename Aut::LocationType>> roots{};
 
-		ConcreteRootsHolder( ConcreteRootsHolder const& ) = delete;
-		ConcreteRootsHolder& operator=( ConcreteRootsHolder const& ) = delete;
+                ConcreteRootsHolder(ConcreteRootsHolder const &) = delete;
 
-		ConcreteRootsHolder( ConcreteRootsHolder&& ) = default;
-		ConcreteRootsHolder& operator=( ConcreteRootsHolder&& ) = default;
-	};
+                ConcreteRootsHolder &operator=(ConcreteRootsHolder const &) = delete;
 
-	template <class Representation>
-	struct ConcreteRefinementLevel : public ConcreteRootsHolder<Representation> {
-		RefinementAnalyzer<Representation> analyzer;
-		using ConcreteRootsHolder<Representation>::roots;
+                ConcreteRootsHolder(ConcreteRootsHolder &&) = default;
 
-		ReachTreeNode<Representation>& addOrGetRoot( HybridAutomaton<Number> const& automaton, Location<Number> const* loc ) {
-			auto rootIt = std::find_if( roots.begin(), roots.end(), [&]( auto& root ) { return root.getLocation() == loc; } );
-			if ( rootIt == roots.end() ) {
-				auto const& condition = automaton.getInitialStates().at( loc );
-				return roots.emplace_back( loc, Representation{ condition.getMatrix(), condition.getVector() }, carl::Interval{ 0, 0 } );
-			}
-			return *rootIt;
-		}
-	};
+                ConcreteRootsHolder &operator=(ConcreteRootsHolder &&) = default;
+            };
 
-	template <class Representation>
-	struct ConcreteBaseLevel : public ConcreteRootsHolder<Representation> {
-		LTIAnalyzer<Representation> analyzer;
-	};
+            template<class Representation, class Aut>
+            struct ConcreteRefinementLevel : public ConcreteRootsHolder<Representation, Aut> {
+                RefinementAnalyzer<Representation, Aut> analyzer;
+                using ConcreteRootsHolder<Representation, Aut>::roots;
+                using LocationType = typename Aut::LocationType;
 
-	struct RefinementLevel {
-		std::variant<ConcreteRefinementLevel<Representations>...> variant;
-	};
+                ReachTreeNode<Representation, LocationType> &
+                addOrGetRoot(Aut const &automaton, LocationType const *loc) {
+                    auto rootIt = std::find_if(roots.begin(), roots.end(),
+                                               [&](auto &root) { return root.getLocation() == loc; });
+                    if (rootIt == roots.end()) {
+                        auto const &condition = automaton.getInitialStates().at(loc);
+                        return roots.emplace_back(loc, Representation{condition.getMatrix(), condition.getVector()},
+                                                  carl::Interval<SegmentInd>{0, 0});
+                    }
+                    return *rootIt;
+                }
+            };
 
-	struct BaseLevel {
-		std::variant<ConcreteBaseLevel<Representations>...> variant;
-	};
+            template<class Representation, class Aut>
+            struct ConcreteBaseLevel : public ConcreteRootsHolder<Representation, Aut> {
+                LTIAnalyzer<Representation, Aut> analyzer;
+            };
 
-	struct CreateBaseLevel;
-	struct CreateRefinementLevel;
+            struct RefinementLevel {
+                std::variant<ConcreteRefinementLevel<Representations, Automaton>...> variant;
+            };
 
-	static BaseLevel createBaseLevel( HybridAutomaton<Number> const& automaton, Settings const& setting );
-	RefinementLevel& createRefinementLevel( size_t index );
-	template <class SourceRep, class TargetLevel>
-	void transferNodes( std::vector<ReachTreeNode<SourceRep>*>& sourceNodes,
-						std::variant<Failure<Representations>...> targetFailure,
-						TargetLevel& targetLevel );
+            struct BaseLevel {
+                std::variant<ConcreteBaseLevel<Representations, Automaton>...> variant;
+            };
 
-	template <class Representation>
-	void handleFailure( ReachTreeNode<Representation>* conflictNode, size_t targetIndex );
+            struct CreateBaseLevel;
+            struct CreateRefinementLevel;
 
-  public:
-	CEGARAnalyzer_impl() = delete;
+            static BaseLevel createBaseLevel(Automaton const &automaton, Settings const &setting);
 
-	/**
-	 * @brief Construct a new CEGARAnalyzer_impl object.
-	 * @param ha The hybrid automaton to analyze
-	 * @param setting The settings to use
-	 */
-	CEGARAnalyzer_impl( const HybridAutomaton<Number>& ha, const Settings& settings )
-		: mHybridAutomaton( ha )
-		, mSettings( settings )
-		, mBaseLevel( createBaseLevel( mHybridAutomaton, settings ) ) {}  // have to use mHybridAutomaton rather than ha, because mHybridAutomaton is a copy,
-																		  // thus location and transition pointers are different between them.
+            RefinementLevel &createRefinementLevel(size_t index);
 
-	REACHABILITY_RESULT run();
+            template<class SourceRep, class TargetLevel>
+            void transferNodes(std::vector<ReachTreeNode<SourceRep, LocationType> *> &sourceNodes,
+                               std::variant<Failure<Representations, LocationType>...> targetFailure,
+                               TargetLevel &targetLevel);
 
-	using TreePtrVariant = std::variant<ConcreteRootsHolder<Representations>*...>;
+            template<class Representation>
+            void handleFailure(ReachTreeNode<Representation, LocationType> *conflictNode, size_t targetIndex);
 
-	TreePtrVariant getLevel( size_t levelIndex ) {
-		if ( levelIndex == 0 ) {
-			return std::visit( []( auto& baseLevel ) -> TreePtrVariant { return &baseLevel; }, mBaseLevel.variant );
-		} else {
-			return std::visit( []( auto& refinementLevel ) -> TreePtrVariant { return &refinementLevel; }, mLevels[levelIndex - 1].variant );
-		}
-	}
+        public:
+            CEGARAnalyzer_impl() = delete;
 
-	auto getLevels() {
-		return boost::adaptors::transform( boost::counting_range( 0ul, mLevels.size() + 1 ), [&]( size_t ind ) { return getLevel( ind ); } );
-	}
+            /**
+             * @brief Construct a new CEGARAnalyzer_impl object.
+             * @param ha The hybrid automaton to analyze
+             * @param setting The settings to use
+             */
+            CEGARAnalyzer_impl(const Automaton &ha, const Settings &settings)
+                    : mHybridAutomaton(ha), mSettings(settings), mBaseLevel(createBaseLevel(mHybridAutomaton,
+                                                                                            settings)) {}  // have to use mHybridAutomaton rather than ha, because mHybridAutomaton is a copy,
+            // thus location and transition pointers are different between them.
 
-  protected:
-	HybridAutomaton<Number> mHybridAutomaton;
-	Settings mSettings;
-	BaseLevel mBaseLevel;
-	std::vector<RefinementLevel> mLevels{};
-};
+            REACHABILITY_RESULT run();
 
-template <class Number, class... Representations>
-using CEGARAnalyzer_apply = CEGARAnalyzer_impl<TypeList<Number, Representations...>>;
-}  // namespace detail
+            using TreePtrVariant = std::variant<ConcreteRootsHolder<Representations, Automaton> *...>;
+
+            TreePtrVariant getLevel(size_t levelIndex) {
+                if (levelIndex == 0) {
+                    return std::visit([](auto &baseLevel) -> TreePtrVariant { return &baseLevel; }, mBaseLevel.variant);
+                } else {
+                    return std::visit([](auto &refinementLevel) -> TreePtrVariant { return &refinementLevel; },
+                                      mLevels[levelIndex - 1].variant);
+                }
+            }
+
+            auto getLevels() {
+                return boost::adaptors::transform(boost::counting_range(0ul, mLevels.size() + 1),
+                                                  [&](size_t ind) { return getLevel(ind); });
+            }
+
+        protected:
+            Automaton mHybridAutomaton;
+            Settings mSettings;
+            BaseLevel mBaseLevel;
+            std::vector<RefinementLevel> mLevels{};
+        };
+
+        template<class Number, class Automaton, class... Representations>
+        using CEGARAnalyzer_apply = CEGARAnalyzer_impl<TypeList<Number, Automaton, Representations...>>;
+    }  // namespace detail
 
 // extern template class detail::CEGARAnalyzer_impl<concat<TypeList<double>, RepresentationsList<double, Converter<double>>>>;
 // extern template class detail::CEGARAnalyzer_impl<concat<TypeList<mpq_class>, RepresentationsList<mpq_class, Converter<mpq_class>>>>;
 
-template <class Number>
-using CEGARAnalyzer = detail::CEGARAnalyzer_impl<concat<TypeList<Number>, RepresentationsList<Number, Converter<Number>>>>;
+    template<class Number, class Automaton>
+    using CEGARAnalyzer = detail::CEGARAnalyzer_impl<concat<TypeList<Number>, TypeList<Automaton>, RepresentationsList<Number, Converter<Number>>>>;
 
 }  // namespace hypro
 

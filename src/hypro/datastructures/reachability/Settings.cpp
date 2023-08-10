@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2021.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -15,27 +15,28 @@
 
 namespace hypro {
 
-Settings convert( const ReachabilitySettings& r_settings ) {
-	// general settings
-	hypro::FixedAnalysisParameters fixedParameters{};
-	fixedParameters.jumpDepth = static_cast<size_t>( r_settings.jumpDepth );
-	fixedParameters.localTimeHorizon = r_settings.timeBound;
+    Settings convert(const ReachabilitySettings &r_settings) {
+        // general settings
+        hypro::FixedAnalysisParameters fixedParameters{};
+        fixedParameters.jumpDepth = static_cast<size_t>( r_settings.jumpDepth );
+        fixedParameters.localTimeHorizon = r_settings.timeBound;
 
-	// plotting
-	hypro::PlottingSettings plotting{};
-	plotting.plotDimensions = r_settings.plotDimensions;
-	plotting.plotFileNames = std::vector<std::string>( plotting.plotDimensions.size(), r_settings.fileName );
-	plotting.plottingFileType = hypro::PLOTTYPE::nset;
+        // plotting
+        hypro::PlottingSettings plotting{};
+        plotting.plotDimensions = r_settings.plotDimensions;
+        plotting.plotFileNames = std::vector<std::string>(plotting.plotDimensions.size(), r_settings.fileName);
+        plotting.plottingFileType = hypro::PLOTTYPE::nset;
 
-	// analysis parameters
-	hypro::AnalysisParameters parameters{};
-	parameters.timeStep = r_settings.timeStep;
-	parameters.aggregation = hypro::AGG_SETTING::MODEL;
-	parameters.clustering = r_settings.clustering;
-	// parameters.representation_type = cliOptions["representation"].as<hypro::representation_name>();
-	// parameters.representation_setting = hypro::stringToSetting( cliOptions["setting"].as<std::string>() );
+        // analysis parameters
+        hypro::AnalysisParameters parameters{};
+        parameters.timeStep = r_settings.timeStep;
+        parameters.aggregation = hypro::AGG_SETTING::MODEL;
+        parameters.clustering = r_settings.clustering;
+        parameters.uniformBloating = r_settings.uniformBloating;
+        // parameters.representation_type = cliOptions["representation"].as<hypro::representation_name>();
+        // parameters.representation_setting = hypro::stringToSetting( cliOptions["setting"].as<std::string>() );
 
-	return hypro::Settings{ plotting, fixedParameters, { parameters } };
-}
+        return hypro::Settings{plotting, fixedParameters, {parameters}};
+    }
 
 }  // namespace hypro

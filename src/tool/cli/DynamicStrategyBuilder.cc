@@ -1,4 +1,13 @@
 
+/*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 // #include "../../include/cli/DynamicStrategyBuilder.h"
 
 // namespace hydra {
@@ -29,7 +38,7 @@
 //             CERR("Too many arguments for strategy node building via snode option! Please enter only once \n1. The representation name \n2. A representation setting \n3. The time step, and optionally \n4. The aggregation\n5. The clustering\n");
 //             exit(0);
 //         }
-        
+
 //         //Get representation name
 //         if(inputToRep.find(snodeArgs[0]) != inputToRep.end()){
 //             mChosenRep = inputToRep.at(snodeArgs[0]);    
@@ -37,7 +46,7 @@
 //             CERR("No representation found in snode option!\n");
 //             exit(0);
 //         }
-        
+
 //         //Get setting
 //         bool foundSetting = false;
 //         for(unsigned i = 0; i < rep_settings.at(mChosenRep).size(); ++i){
@@ -51,7 +60,7 @@
 //             CERR("No fitting setting found for representaiton in snode option!\n");
 //             exit(0);
 //         }
-        
+
 //         //Get timestep
 //         std::stringstream sstream(snodeArgs[2]);
 //         sstream >> mStratSettings.timeStep;
@@ -125,7 +134,7 @@
 //     //Wait for input
 //     std::string line;
 //     std::getline(std::cin,line);
-    
+
 //     //Get current argc and argv
 //     std::vector<std::string> argvString;
 //     std::istringstream input(line);
@@ -157,7 +166,7 @@
 
 //             std::cout << "Chosen representation: " << mChosenRep << std::endl;
 //             std::cout << "Please select a fitting setting for this representation by typing in the ID in the squared brackets:" << std::endl;
-            
+
 //             //Print out description of each
 //             auto it = rep_settings.find(mChosenRep);
 //             for(unsigned i = 0; i < it->second.size(); ++i){

@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * Formula.g4
  * 
  * @author Phillip Tse @date 22.6.2017
@@ -11,34 +20,44 @@ grammar Formula;
 /////////////////// C++ FOR USAGE ///////////////////////
 
 @lexer::members {
-	bool parsingConstants = false;
+bool parsingConstants = false;
 }
 
 @parser::postinclude {
-	#include <map>
-	#include <string>
+#include <map>
+#include <string>
+
 }
 
 @parser::declarations {
-	std::map<std::string, std::string> constants;
+std::map <std::string, std::string> constants;
 }
 
 @parser::members {
-	inline const std::map<std::string, std::string>& getConstants() const { return constants; }
+inline const std::map <std::string, std::string> &getConstants() const { return constants; }
+
 }
 
-replacedexpr: MINUS? NUMBER EQUALS MINUS? NUMBER;
+replacedexpr: MINUS?
+NUMBER EQUALS
+MINUS?
+NUMBER;
 
 constantexpr:
-	CONSTANT EQUALS MINUS? NUMBER {
-	//std::cout << "In constantexpr! MINUS text is: " << $MINUS.text << std::endl;
-	if($MINUS.text != ""){
-		constants.insert({$CONSTANT.text, $MINUS.text.append($NUMBER.text)});
-		//std::cout << "Constant " << $CONSTANT.text << " with value " << $MINUS.text.append($NUMBER.text) << " was put in map!\n";
-	} else {
-		constants.insert({$CONSTANT.text, $NUMBER.text});
-		//std::cout << "Constant " << $CONSTANT.text << " with value " << $NUMBER.text << " was put in map!\n";
-	}
+CONSTANT EQUALS
+MINUS? NUMBER {
+//std::cout << "In constantexpr! MINUS text is: " << $MINUS.text << std::endl;
+if($MINUS.text != ""){
+constants.insert({
+$CONSTANT.text, $MINUS.text.
+append($NUMBER
+.text)});
+//std::cout << "Constant " << $CONSTANT.text << " with value " << $MINUS.text.append($NUMBER.text) << " was put in map!\n";
+} else {
+constants.insert({
+$CONSTANT.text, $NUMBER.text});
+//std::cout << "Constant " << $CONSTANT.text << " with value " << $NUMBER.text << " was put in map!\n";
+}
 };
 
 /////////////////// JAVA FOR TESTING //////////////////
@@ -60,31 +79,45 @@ constantexpr:
 
 /////////////////// Parser Rules /////////////////////
 
-connector: PLUS | MINUS;
+connector: PLUS |
+MINUS;
 term:
-	MINUS? (NUMBER | VARIABLE) (
-		TIMES connector* (NUMBER | VARIABLE)
-	)*;
+MINUS? (NUMBER | VARIABLE) (
+TIMES connector
+* (NUMBER | VARIABLE)
+)*;
 bracketExpression:
-	(MINUS? NUMBER TIMES)? '(' polynom ')' (
-		(TIMES | DIVIDE) MINUS? NUMBER
-	)?;
+(MINUS?
+NUMBER TIMES
+)? '(' polynom ')' (
+(TIMES | DIVIDE) MINUS? NUMBER
+)?;
 polynom:
-	connector* (term | bracketExpression) (
-		connector+ (term | bracketExpression)
-	)*;
+connector *(term
+| bracketExpression) (
+connector+ (term | bracketExpression)
+)*;
 
 //TODO: Upgrade to newest antlr version to get rid of left-recursiveness of expression grammar. If
 // we do that we can just write expr: expr PLUS expr | expr MINUS expr | ...
 
-expression: polynom;
+expression:
+polynom;
 //| (term TIMES)? '(' expression (connector expression)* ')' ( (TIMES | DIVIDE) term )?;
 
-equation: VARIABLE EQUALS expression (connector interval)?;
-constraint: expression (BOOLRELATION | EQUALS) expression;
+equation:
+VARIABLE EQUALS
+expression (connector
+interval)?;
+constraint:
+expression (BOOLRELATION
+| EQUALS)
+expression;
 interval:
-	'[' MINUS? (NUMBER | VARIABLE) ',' MINUS? (NUMBER | VARIABLE) ']';
-intervalexpr: VARIABLE IN interval;
+'[' MINUS? (NUMBER | VARIABLE) ',' MINUS? (NUMBER | VARIABLE) ']';
+intervalexpr:
+VARIABLE IN
+interval;
 constrset: ((constraint | intervalexpr)+ | TRUE | FALSE);
 
 //constantexpr is above in C++ or in Java
@@ -95,7 +128,9 @@ constrset: ((constraint | intervalexpr)+ | TRUE | FALSE);
 IN: 'in';
 TRUE: 'true';
 FALSE: 'false';
-PAR: 'par' { parsingConstants = true; };
+PAR: 'par' {
+parsingConstants = true;
+};
 
 JUMPS: 'jumps';
 URGENT: 'urgent';
@@ -106,7 +141,8 @@ BOX: 'box aggregation';
 JUMP: '->';
 DEFINE: ':=';
 
-COMMENT: '#' ~[\r\n]* -> skip;
+COMMENT: '#' ~[\r\n]* ->
+skip;
 
 EQUALS: '=';
 BOOLRELATION: '<=' | '>=' | '<' | '>';
@@ -118,25 +154,38 @@ SBOPEN: '[';
 SBCLOSE: ']';
 CBOPEN: '{';
 CBCLOSE:
-	'}' { if(parsingConstants){ parsingConstants = false; } };
+'}' {
+if(parsingConstants){
+parsingConstants = false;
+}};
 RBOPEN: '(';
 RBCLOSE: ')';
 COMMA: ',';
 
-fragment UPPERCASE: [A-Z];
-fragment LOWERCASE: [a-z];
-fragment DIGIT: [0-9];
-fragment SPECIALCHAR: '_' | '\'';
+fragment UPPERCASE
+: [A-Z];
+fragment LOWERCASE
+: [a-z];
+fragment DIGIT
+: [0-9];
+fragment SPECIALCHAR
+: '_' | '\'';
 
 //BEWARE! Numbers itself can now only be positive. A negative number has an odd number of MINUS connectors in front.
 NUMBER: (DIGIT+ ('.' DIGIT+)? | '.' DIGIT+);
-CONSTANT: (UPPERCASE | LOWERCASE) { if(!parsingConstants) { setType(VARIABLE); } };
+CONSTANT: (UPPERCASE | LOWERCASE) {
+if(!parsingConstants) {
+setType(VARIABLE);
+}};
 VARIABLE: (UPPERCASE | LOWERCASE) (
-		UPPERCASE
-		| LOWERCASE
-		| DIGIT
-		| SPECIALCHAR
-	)* { if(parsingConstants){ setType(CONSTANT); } };
+UPPERCASE
+| LOWERCASE
+| DIGIT
+| SPECIALCHAR
+)* {
+if(parsingConstants){
+setType(CONSTANT);
+}};
 
-WS: (' ' | '\t' | '\n' | '\r')+ -> channel(HIDDEN);
-
+WS: (' ' | '\t' | '\n' | '\r')+ ->
+channel(HIDDEN);

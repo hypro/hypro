@@ -7,6 +7,7 @@
  */
 
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/representations/GeometricObjectBase.h>
 #include <hypro/representations/conversion/typedefs.h>
@@ -318,8 +319,6 @@ TYPED_TEST( SupportFunctionTest, intersect ) {
 
 	SupportFunction<TypeParam> result = psf1.intersect( psf2 );
 
-	std::cout << "did intersection." << std::endl;
-
 	vector_t<TypeParam> dir1 = vector_t<TypeParam>::Zero( 2 );
 	dir1 << 1, 0;
 	vector_t<TypeParam> dir2 = vector_t<TypeParam>::Zero( 2 );
@@ -330,13 +329,9 @@ TYPED_TEST( SupportFunctionTest, intersect ) {
 	dir4 << 0, -1;
 
 	EXPECT_EQ( result.evaluate( dir1 ).supportValue, TypeParam( 0 ) );
-	std::cout << "Evaluated 1" << std::endl;
 	EXPECT_EQ( result.evaluate( dir2 ).supportValue, TypeParam( 0 ) );
-	std::cout << "Evaluated 2" << std::endl;
 	EXPECT_EQ( result.evaluate( dir3 ).supportValue, TypeParam( 1 ) );
-	std::cout << "Evaluated 3" << std::endl;
 	EXPECT_EQ( result.evaluate( dir4 ).supportValue, TypeParam( 1 ) );
-	std::cout << "Evaluated 4" << std::endl;
 }
 
 /*

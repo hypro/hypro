@@ -1,0 +1,1 @@
+We added a script inside the docker container. Once it is built, it can be called via "docker run -w "/root/hypro/examples/arch22/" hydra /bin/bash measure_all.sh" and should produce a file "results_hydra.csv" in the folder "/root/hypro/examples/arch22/" on the container which can be copied from the docker container (docker cp ...).

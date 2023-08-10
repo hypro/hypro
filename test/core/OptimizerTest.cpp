@@ -146,20 +146,19 @@ TEST( OptimizerTest, checkConsistency ) {
 	EXPECT_EQ( SOLUTION::FEAS, res.errorCode );
 	EXPECT_NEAR_VECTORS( controlVec, res.optimumValue, 1.0e-8 );
 
-	matrix_t<double> linconstraints = matrix_t<double>::Zero(2,2);
-	linconstraints(0,0) = 1;
-	linconstraints(1,0) = -1;
-	vector_t<double> constants = vector_t<double>::Zero(2);
-	constants << 0,-1;
-	Optimizer<double> op1{linconstraints, constants};
-	EXPECT_FALSE(op1.checkConsistency());
+	matrix_t<double> linconstraints = matrix_t<double>::Zero( 2, 2 );
+	linconstraints( 0, 0 ) = 1;
+	linconstraints( 1, 0 ) = -1;
+	vector_t<double> constants = vector_t<double>::Zero( 2 );
+	constants << 0, -1;
+	Optimizer<double> op1{ linconstraints, constants };
+	EXPECT_FALSE( op1.checkConsistency() );
 }
 
 TEST( OptimizerTest, oneDimensional ) {
 	matrix_t<double> mat = matrix_t<double>::Zero( 2, 1 );
 	mat << 1, -1;
 	vector_t<double> vec = vector_t<double>::Ones( 2 );
-	std::cout << mat << vec << std::endl;
 	Optimizer<double> op( mat, vec );
 	auto res = op.evaluate( vector_t<double>::Ones( 1 ), false );
 	EXPECT_EQ( SOLUTION::FEAS, res.errorCode );
@@ -284,7 +283,7 @@ TEST( OptimizerTest, redundantConstraints_mixedConstraints ) {
 	lineMat << 1, 0, 0, -1, 1, 0, 0, -1, -1, 0, 1, 1;
 	vector_t<double> lineVec = vector_t<double>::Zero( 6 );
 	lineVec << 2, -2, 2, 2, -3, 5;
-	std::vector<carl::Relation> relations = { carl::Relation::EQ,  carl::Relation::GEQ, carl::Relation::LEQ,
+	std::vector<carl::Relation> relations = { carl::Relation::EQ, carl::Relation::GEQ, carl::Relation::LEQ,
 											  carl::Relation::LEQ, carl::Relation::GEQ, carl::Relation::LEQ };
 	Optimizer<double> op( lineMat, lineVec );
 	op.setRelations( relations );
