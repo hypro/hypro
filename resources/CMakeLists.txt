@@ -1,9 +1,12 @@
-
 # initialize lists for include directories and library files
-set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE STRING "Include directories var")
+set(${PROJECT_NAME}-include-dirs "" CACHE STRING "Include directories list")
+set(${PROJECT_NAME}-include-dirs-private "" CACHE STRING "Include directories list (private)")
 
-add_custom_target(${PROJECT_NAME}_resources)
-add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_resources)
+add_custom_target(${PROJECT_NAME}-resources)
+add_custom_target(${PROJECT_NAME}-parser-resources)
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}-resources)
+add_dependencies(${PROJECT_NAME}-parser ${PROJECT_NAME}-parser-resources)
+
 set(RESSOURCES_FLAGS "-std=c++17 -Wno-error ${CMAKE_CXX_FLAGS} -Wno-error")
 #message("Ressoures flags: ${RESSOURCES_FLAGS}")
 
@@ -17,8 +20,6 @@ endif ()
 # Set default ExternalProject root directory
 set(EP_PREFIX_DIR ${CMAKE_BINARY_DIR}/resources)
 set_directory_properties(PROPERTIES EP_PREFIX ${EP_PREFIX_DIR})
-# disable update if no network is present
-set(EP_UPDATE_DISCONNECTED)
 
 # Set up glpk.
 # ATTENTION: It is important that this happens *before* CArL is loaded to ensure that the linker first links against
@@ -32,7 +33,7 @@ if (carl_FOUND)
     # search for carl in config mode to locate the file carlConfig.cmake
     find_package(carl CONFIG)
     include(${carl_DIR}/carlConfig.cmake)
-    message(STATUS "CARL DIR: ${carl_DIR}")
+    #message(STATUS "CARL DIR: ${carl_DIR}")
     include(carlVersionMacros)
     # correct aliasing works only after cmake 3.15, we will use this later
     #add_library(carl_STATIC ALIAS carl-static)
@@ -118,7 +119,7 @@ if (carl_FOUND)
                 endif ()
             endforeach ()
         endforeach ()
-        foreach (item ${carl_sublibraries_shared})
+        foreach (item ${carl_sublibraries_static})
             # getting the include path is required for the macros to work correctly
             get_target_property(carl_abs_include_path ${item} INTERFACE_INCLUDE_DIRECTORIES)
             get_target_property(carl_libs_static ${item} INTERFACE_LINK_LIBRARIES)
@@ -157,6 +158,7 @@ set(CARL_OLD_STRUCTURE ${CARL_OLD_STRUCTURE} PARENT_SCOPE)
 set(CARL_POLY_MEMBER_SUBSTITUTE ${CARL_POLY_MEMBER_SUBSTITUTE} PARENT_SCOPE)
 set(CARL_LOGGING_POST_1910 ${CARL_LOGGING_POST_1910} PARENT_SCOPE)
 
+
 # gtest needs to be build in any case, since one should not use system-versions of gtest
 include(gtest.cmake)
 
@@ -191,18 +193,6 @@ include(ExternalAntlr4Cpp.cmake)
 # C.2. Optional libraries
 # # # # # # # # # # # # # # # # # # # # # #
 
-if (HYPRO_USE_COTIRE)
-    # We use cotire, simply include it
-    message(STATUS "Use cotire")
-    include(cotire)
-    cotire(${PROJECT_NAME}-shared)
-    cotire(${PROJECT_NAME}-static)
-else ()
-    # We do not use cotire, create dummy function in case cotire is used somewhere
-    function(cotire)
-    endfunction(cotire)
-endif ()
-
 if (HYPRO_USE_PPL)
     load_library(${PROJECT_NAME} PPL 0)
 endif ()
@@ -211,6 +201,10 @@ if (HYPRO_USE_SMTRAT)
     find_package(smtrat)
     target_link_libraries(${PROJECT_NAME}-shared PUBLIC smtrat-solver-shared smtrat-module-LRAModule-shared)
     target_link_libraries(${PROJECT_NAME}-static PUBLIC smtrat-solver-static smtrat-module-LRAModule-static)
+endif ()
+
+if (HYPRO_ENABLE_SPACEEX_OUTPUT)
+    include(tinyxml.cmake)
 endif ()
 
 if (HYPRO_USE_Z3)
@@ -275,7 +269,6 @@ if (HYPRO_USE_OPENMP)
         #add_library(OpenMP ALIAS OpenMP::OpenMP_CXX)
         message(STATUS "OpenMP libraries: ${OpenMP_CXX_LIBRARIES}")
         list(GET OpenMP_CXX_LIBRARIES 0 openmp_lib)
-        message(STATUS "List item 0: ${openmp_lib}")
         if ("${CMAKE_FIND_LIBRARY_SUFFIXES}" STREQUAL ".a")
             add_imported_library(OpenMP STATIC "${openmp_lib}" "${${LIBNAME}_INCLUDE_DIR}")
             export_target(DEPENDENT_TARGETS OpenMP_STATIC)
@@ -293,10 +286,14 @@ if (HYPRO_USE_OPENMP)
 endif ()
 
 # for serialization
-include(cereal.cmake)
+if (HYPRO_USE_SERIALIZATION)
+    include(cereal.cmake)
+endif ()
 
 if (HYPRO_USE_PROTOBUF)
     include(protobuf.cmake)
 endif ()
+set(${PROJECT_NAME}-include-dirs "${${PROJECT_NAME}-include-dirs}" PARENT_SCOPE)
+set(${PROJECT_NAME}-include-dirs-private "${${PROJECT_NAME}-include-dirs-private}" PARENT_SCOPE)
 
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)

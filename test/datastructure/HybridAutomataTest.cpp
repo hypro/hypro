@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022-2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 /**
  * Testfile for hybrid automata.
  * Author: ckugler
@@ -12,255 +21,256 @@
 
 using namespace hypro;
 
-template <typename Number>
+template<typename Number>
 using valuation_t = VPolytope<Number>;
 
-template <typename Number>
+template<typename Number>
 class HybridAutomataTest : public ::testing::Test {
-	/**
-	 * Test Setup:
-	 * one hybrid automaton which consists of two locations that are connected by one transition
-	 */
-  protected:
-	virtual void SetUp() {
-		/*
-		 * Location Setup
-		 */
+    /**
+     * Test Setup:
+     * one hybrid automaton which consists of two locations that are connected by one transition
+     */
+protected:
+    virtual void SetUp() {
+        /*
+         * Location Setup
+         */
 
-		loc1 = hybrid.createLocation();
-		loc2 = hybrid.createLocation();
+        loc1 = hybrid.createLocation();
+        loc2 = hybrid.createLocation();
 
-		trans = loc1->createTransition( loc2 );
+        trans = loc1->createTransition(loc2);
 
-		invariantVec( 0 ) = 10;
-		invariantVec( 1 ) = 20;
+        invariantVec(0) = 10;
+        invariantVec(1) = 20;
 
-		invariantMat( 0, 0 ) = 2;
-		invariantMat( 0, 1 ) = 0;
-		invariantMat( 1, 0 ) = 0;
-		invariantMat( 1, 1 ) = 3;
+        invariantMat(0, 0) = 2;
+        invariantMat(0, 1) = 0;
+        invariantMat(1, 0) = 0;
+        invariantMat(1, 1) = 3;
 
-		loc1->setInvariant( Condition<Number>( invariantMat, invariantVec ) );
-		loc1->setName( "Location1" );
+        loc1->setInvariant(Condition<Number>(invariantMat, invariantVec));
+        loc1->setName("Location1");
 
-		inv.setMatrix( invariantMat );
-		inv.setVector( invariantVec );
+        inv.setMatrix(invariantMat);
+        inv.setVector(invariantVec);
 
-		loc2->setInvariant( inv );
-		loc2->setName( "Location2" );
+        loc2->setInvariant(inv);
+        loc2->setName("Location2");
 
-		locationMat( 0, 0 ) = 2;
-		locationMat( 0, 1 ) = 0;
-		locationMat( 1, 0 ) = 0;
-		locationMat( 1, 1 ) = 1;
+        locationMat(0, 0) = 2;
+        locationMat(0, 1) = 0;
+        locationMat(1, 0) = 0;
+        locationMat(1, 1) = 1;
 
-		loc1->setLinearFlow( locationMat );
-		locationMat( 0, 0 ) = 1;
-		locationMat( 0, 1 ) = 1;
-		locationMat( 1, 0 ) = 1;
-		locationMat( 1, 1 ) = 1;
-		loc2->setLinearFlow( locationMat );
+        loc1->setLinearFlow(locationMat);
+        locationMat(0, 0) = 1;
+        locationMat(0, 1) = 1;
+        locationMat(1, 0) = 1;
+        locationMat(1, 1) = 1;
+        loc2->setLinearFlow(locationMat);
 
-		copyOfLoc1 = hybrid.createLocation( loc1 );
-		copyOfLoc2 = hybrid.createLocation( loc2 );
+        copyOfLoc1 = hybrid.createLocation(loc1);
+        copyOfLoc2 = hybrid.createLocation(loc2);
 
-		/*
-		 * Transition Setup
-		 */
-		guard.setMatrix( inv.getMatrix() );
-		guard.setVector( inv.getVector() );
+        /*
+         * Transition Setup
+         */
+        guard.setMatrix(inv.getMatrix());
+        guard.setVector(inv.getVector());
 
-		reset.setMatrix( inv.getMatrix() );
-		reset.setVector( inv.getVector() );
+        reset.setMatrix(inv.getMatrix());
+        reset.setVector(inv.getVector());
 
-		trans->setGuard( guard );
-		trans->setSource( loc1 );
-		trans->setTarget( loc2 );
-		trans->setReset( reset );
+        trans->setGuard(guard);
+        trans->setSource(loc1);
+        trans->setTarget(loc2);
+        trans->setReset(reset);
 
-		copyOfTrans = copyOfLoc1->createTransition( copyOfLoc2 );
-		copyOfTrans->setGuard( guard );
-		copyOfTrans->setReset( reset );
+        copyOfTrans = copyOfLoc1->createTransition(copyOfLoc2);
+        copyOfTrans->setGuard(guard);
+        copyOfTrans->setReset(reset);
 
-		/*
-		 * Hybrid Automaton Setup
-		 */
+        /*
+         * Hybrid Automaton Setup
+         */
 
-		// Polytope for InitialValuation
-		coordinates( 0 ) = 2;
-		coordinates( 1 ) = 3;
-		std::vector<vector_t<Number>> vecSet;
-		vecSet.push_back( coordinates );
-		poly = valuation_t<Number>( vecSet );
-		auto hpoly = Converter<Number>::toHPolytope( poly );
-		hybrid.addInitialState( loc1, Condition<Number>( hpoly.matrix(), hpoly.vector() ) );
+        // Polytope for InitialValuation
+        coordinates(0) = 2;
+        coordinates(1) = 3;
+        std::vector<vector_t<Number>> vecSet;
+        vecSet.push_back(coordinates);
+        poly = valuation_t<Number>(vecSet);
+        auto hpoly = Converter<Number>::toHPolytope(poly);
+        hybrid.addInitialState(loc1, Condition<Number>(hpoly.matrix(), hpoly.vector()));
 
-		// Local bad states: x0 >= 10 in location location2
-		matrix_t<Number> constraints = matrix_t<Number>( 1, 2 );
-		vector_t<Number> constants = vector_t<Number>( 1 );
-		constraints << -1, 0;
-		constants << -10;
-		hybrid.addLocalBadStates( loc2, { constraints, constants } );
-	}
+        // Local bad states: x0 >= 10 in location location2
+        matrix_t<Number> constraints = matrix_t<Number>(1, 2);
+        vector_t<Number> constants = vector_t<Number>(1);
+        constraints << -1, 0;
+        constants << -10;
+        hybrid.addLocalBadStates(loc2, {constraints, constants});
+    }
 
-	virtual void TearDown() {
-		// delete loc1;
-		// delete loc2;
-		// delete trans;
-	}
+    virtual void TearDown() {
+        // delete loc1;
+        // delete loc2;
+        // delete trans;
+    }
 
-	// Hybrid Automaton Objects: Locations, Transitions, Automaton itself
+    // Hybrid Automaton Objects: Locations, Transitions, Automaton itself
 
-	Location<Number>* loc1;
-	Location<Number>* loc2;
-	Location<Number>* copyOfLoc1;
-	Location<Number>* copyOfLoc2;
-	Transition<Number>* trans;
-	Transition<Number>* copyOfTrans;
-	HybridAutomaton<Number> hybrid;
+    Location<Number> *loc1;
+    Location<Number> *loc2;
+    Location<Number> *copyOfLoc1;
+    Location<Number> *copyOfLoc2;
+    Transition<Location<Number>> *trans;
+    Transition<Location<Number>> *copyOfTrans;
+    HybridAutomaton<Number> hybrid;
 
-	// Other Objects: Vectors, Matrices, Guards...
-	vector_t<Number> invariantVec = vector_t<Number>( 2, 1 );
-	matrix_t<Number> invariantMat = matrix_t<Number>( 2, 2 );
-	Condition<Number> inv;
-	matrix_t<Number> locationMat = matrix_t<Number>( 2, 2 );
+    // Other Objects: Vectors, Matrices, Guards...
+    vector_t<Number> invariantVec = vector_t<Number>(2, 1);
+    matrix_t<Number> invariantMat = matrix_t<Number>(2, 2);
+    Condition<Number> inv;
+    matrix_t<Number> locationMat = matrix_t<Number>(2, 2);
 
-	Condition<Number> guard;
+    Condition<Number> guard;
 
-	Reset<Number> reset;
+    Reset<Number> reset;
 
-	std::vector<std::unique_ptr<Location<Number>>> locSet;
+    std::vector<std::unique_ptr<Location<Number>>> locSet;
 
-	std::vector<Location<Number>*> initLocSet;
+    std::vector<Location<Number> *> initLocSet;
 
-	std::vector<std::unique_ptr<Transition<Number>>> transSet;
+    std::vector<std::unique_ptr<Transition<Location<Number>>>> transSet;
 
-	vector_t<Number> coordinates = vector_t<Number>( 2, 1 );
-	valuation_t<Number> poly;
+    vector_t<Number> coordinates = vector_t<Number>(2, 1);
+    valuation_t<Number> poly;
 
-  public:
-	bool find( const Location<Number>* loc, const std::vector<Location<Number>*>& locSet ) const {
-		if ( loc == nullptr || locSet.empty() ) {
-			return false;
-		}
-		for ( auto& ptrToALoc : locSet ) {
-			if ( *ptrToALoc == *( loc ) ) {
-				return true;
-			}
-		}
-		return false;
-	}
+public:
+    bool find(const Location<Number> *loc, const std::vector<Location<Number> *> &locSet) const {
+        if (loc == nullptr || locSet.empty()) {
+            return false;
+        }
+        for (auto &ptrToALoc: locSet) {
+            if (*ptrToALoc == *(loc)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	bool find( const Transition<Number>* trans, const std::vector<Transition<Number>*>& transSet ) const {
-		if ( trans == nullptr || transSet.empty() ) return false;
-		for ( auto& ptrToTrans : transSet ) {
-			if ( *ptrToTrans == *( trans ) ) {
-				return true;
-			}
-		}
-		return false;
-	}
+    bool
+    find(const Transition<Location<Number>> *trans, const std::vector<Transition<Location<Number>> *> &transSet) const {
+        if (trans == nullptr || transSet.empty()) return false;
+        for (auto &ptrToTrans: transSet) {
+            if (*ptrToTrans == *(trans)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	// To test copying
-	HybridAutomaton<Number> dummyCopy( HybridAutomaton<Number> orig ) { return orig; }
+    // To test copying
+    HybridAutomaton<Number> dummyCopy(HybridAutomaton<Number> orig) { return orig; }
 
-	// To test moving
-	HybridAutomaton<Number> dummyMove( HybridAutomaton<Number>&& orig ) { return orig; }
+    // To test moving
+    HybridAutomaton<Number> dummyMove(HybridAutomaton<Number> &&orig) { return orig; }
 };
 
 /**
  * Location Test
  */
-TYPED_TEST( HybridAutomataTest, LocationTest ) {
-	// invariant: vector
-	EXPECT_EQ( this->loc1->getInvariant().getVector(), this->invariantVec );
-	EXPECT_EQ( this->loc2->getInvariant().getVector(), this->invariantVec );
+TYPED_TEST(HybridAutomataTest, LocationTest) {
+    // invariant: vector
+    EXPECT_EQ(this->loc1->getInvariant().getVector(), this->invariantVec);
+    EXPECT_EQ(this->loc2->getInvariant().getVector(), this->invariantVec);
 
-	vector_t<TypeParam> invariantVec2( 2, 1 );
-	invariantVec2( 0 ) = 10;
-	invariantVec2( 1 ) = 10;
-	EXPECT_NE( this->loc1->getInvariant().getVector(), invariantVec2 );
+    vector_t<TypeParam> invariantVec2(2, 1);
+    invariantVec2(0) = 10;
+    invariantVec2(1) = 10;
+    EXPECT_NE(this->loc1->getInvariant().getVector(), invariantVec2);
 
-	// invariant: matrix
-	EXPECT_EQ( this->loc1->getInvariant().getMatrix(), this->invariantMat );
-	EXPECT_EQ( this->loc2->getInvariant().getMatrix(), this->invariantMat );
+    // invariant: matrix
+    EXPECT_EQ(this->loc1->getInvariant().getMatrix(), this->invariantMat);
+    EXPECT_EQ(this->loc2->getInvariant().getMatrix(), this->invariantMat);
 
-	matrix_t<TypeParam> invariantMat2( 2, 2 );
-	invariantMat2( 0, 0 ) = 1;
-	invariantMat2( 0, 1 ) = 0;
-	invariantMat2( 1, 0 ) = 0;
-	invariantMat2( 1, 1 ) = 3;
-	EXPECT_NE( this->loc1->getInvariant().getMatrix(), invariantMat2 );
+    matrix_t<TypeParam> invariantMat2(2, 2);
+    invariantMat2(0, 0) = 1;
+    invariantMat2(0, 1) = 0;
+    invariantMat2(1, 0) = 0;
+    invariantMat2(1, 1) = 3;
+    EXPECT_NE(this->loc1->getInvariant().getMatrix(), invariantMat2);
 
-	// location: matrix
-	matrix_t<TypeParam> locationMat( 2, 2 );
-	locationMat( 0, 0 ) = 2;
-	locationMat( 0, 1 ) = 0;
-	locationMat( 1, 0 ) = 0;
-	locationMat( 1, 1 ) = 1;
-	EXPECT_EQ( this->loc1->getLinearFlow().getFlowMatrix(), locationMat );
+    // location: matrix
+    matrix_t<TypeParam> locationMat(2, 2);
+    locationMat(0, 0) = 2;
+    locationMat(0, 1) = 0;
+    locationMat(1, 0) = 0;
+    locationMat(1, 1) = 1;
+    EXPECT_EQ(this->loc1->getLinearFlow().getFlowMatrix(), locationMat);
 
-	matrix_t<TypeParam> locationMat2( 2, 2 );
-	locationMat2( 0, 0 ) = 1;
-	locationMat2( 0, 1 ) = 1;
-	locationMat2( 1, 0 ) = 1;
-	locationMat2( 1, 1 ) = 1;
-	EXPECT_NE( this->loc1->getLinearFlow().getFlowMatrix(), locationMat2 );
+    matrix_t<TypeParam> locationMat2(2, 2);
+    locationMat2(0, 0) = 1;
+    locationMat2(0, 1) = 1;
+    locationMat2(1, 0) = 1;
+    locationMat2(1, 1) = 1;
+    EXPECT_NE(this->loc1->getLinearFlow().getFlowMatrix(), locationMat2);
 
-	// location: set of outgoing transitions
-	// EXPECT_EQ(this->loc1->getTransitions(), this->ptrSet);
+    // location: set of outgoing transitions
+    // EXPECT_EQ(this->loc1->getTransitions(), this->ptrSet);
 
-	EXPECT_TRUE( *this->loc1 < *this->loc2 || *this->loc2 < *this->loc1 );
-	// EXPECT_FALSE(*this->loc2 < *this->loc1);
+    EXPECT_TRUE(*this->loc1 < *this->loc2 || *this->loc2 < *this->loc1);
+    // EXPECT_FALSE(*this->loc2 < *this->loc1);
 
-	EXPECT_TRUE( locPtrComp<TypeParam>()( this->loc1, this->loc2 ) ||
-				 locPtrComp<TypeParam>()( this->loc2, this->loc1 ) );
+    EXPECT_TRUE(locPtrComp<TypeParam>()(this->loc1, this->loc2) ||
+                locPtrComp<TypeParam>()(this->loc2, this->loc1));
 
-	auto loc = *( this->hybrid.getLocation( "Location1" ) );
-	EXPECT_EQ( std::size_t( 1 ), loc.getTransitions().size() );
-	loc = *( this->hybrid.getLocation( "Location1" ) );
-	EXPECT_EQ( std::size_t( 1 ), loc.getTransitions().size() );
+    auto loc = *(this->hybrid.getLocation("Location1"));
+    EXPECT_EQ(std::size_t(1), loc.getTransitions().size());
+    loc = *(this->hybrid.getLocation("Location1"));
+    EXPECT_EQ(std::size_t(1), loc.getTransitions().size());
 }
 
 /// Flow-types test
-TYPED_TEST( HybridAutomataTest, FlowTest ) {
-	using Interval = carl::Interval<TypeParam>;
+TYPED_TEST(HybridAutomataTest, FlowTest) {
+    using Interval = carl::Interval<TypeParam>;
 
-	typename rectangularFlow<TypeParam>::flowMap fmap;
-	fmap[VariablePool::getInstance().carlVarByIndex( 0 )] = Interval( 0, 1 );
-	rectangularFlow<TypeParam> rectFlow{ fmap };
-	EXPECT_EQ( rectFlow.type(), DynamicType::rectangular );
-	EXPECT_EQ( rectFlow.size(), std::size_t( 1 ) );
-	EXPECT_EQ( rectFlow.dimension(), std::size_t( 1 ) );
+    typename rectangularFlow<TypeParam>::flowMap fmap;
+    fmap[VariablePool::getInstance().carlVarByIndex(0)] = Interval(0, 1);
+    rectangularFlow<TypeParam> rectFlow{fmap};
+    EXPECT_EQ(rectFlow.type(), DynamicType::rectangular);
+    EXPECT_EQ(rectFlow.size(), std::size_t(1));
+    EXPECT_EQ(rectFlow.dimension(), std::size_t(1));
 }
 
 /// Reset-types test
-TYPED_TEST( HybridAutomataTest, ResetTest ) {
-	using M = matrix_t<TypeParam>;
-	using V = vector_t<TypeParam>;
+TYPED_TEST(HybridAutomataTest, ResetTest) {
+    using M = matrix_t<TypeParam>;
+    using V = vector_t<TypeParam>;
 
-	V translation = V::Zero( 2 );
-	translation( 0 ) = TypeParam( 2 );
-	Reset<TypeParam> resetA, resetB;
-	resetA.addResetTransformation( { M::Identity( 2, 2 ), translation } );
-	resetB.addResetTransformation( { M::Identity( 2, 2 ), -translation } );
-	auto res = resetA + resetB;
-	EXPECT_TRUE( res.isIdentity() );
+    V translation = V::Zero(2);
+    translation(0) = TypeParam(2);
+    Reset<TypeParam> resetA, resetB;
+    resetA.addResetTransformation({M::Identity(2, 2), translation});
+    resetB.addResetTransformation({M::Identity(2, 2), -translation});
+    auto res = resetA + resetB;
+    EXPECT_TRUE(res.isIdentity());
 
-	M scaling = M::Identity( 2, 2 );
-	scaling( 0, 0 ) = TypeParam( 2 );
-	scaling( 1, 1 ) = TypeParam( 4 );
-	resetA.rGetMatrix( 0 ) = scaling;
-	res = resetA + resetB;
-	EXPECT_FALSE( res.isIdentity() );
+    M scaling = M::Identity(2, 2);
+    scaling(0, 0) = TypeParam(2);
+    scaling(1, 1) = TypeParam(4);
+    resetA.rGetMatrix(0) = scaling;
+    res = resetA + resetB;
+    EXPECT_FALSE(res.isIdentity());
 
-	scaling( 0, 0 ) = TypeParam( 0.5 );
-	scaling( 1, 1 ) = TypeParam( 0.25 );
-	resetB.rGetMatrix( 0 ) = scaling;
-	V scaledTranslation = -0.5 * resetA.getVector( 0 );
-	resetB.rGetVector( 0 ) = scaledTranslation;
-	res = resetA + resetB;
-	EXPECT_TRUE( res.isIdentity() );
+    scaling(0, 0) = TypeParam(0.5);
+    scaling(1, 1) = TypeParam(0.25);
+    resetB.rGetMatrix(0) = scaling;
+    V scaledTranslation = -0.5 * resetA.getVector(0);
+    resetB.rGetVector(0) = scaledTranslation;
+    res = resetA + resetB;
+    EXPECT_TRUE(res.isIdentity());
 }
 
 /*
@@ -312,179 +322,199 @@ TYPED_TEST(HybridAutomataTest, LocationParallelcompositionTest)
 /**
  * Transition Test
  */
-TYPED_TEST( HybridAutomataTest, TransitionTest ) {
-	// transition: Start Location
-	EXPECT_EQ( this->trans->getSource(), this->loc1 );
+TYPED_TEST(HybridAutomataTest, TransitionTest) {
+    // transition: Start Location
+    EXPECT_EQ(this->trans->getSource(), this->loc1);
 
-	// transition: End Location
-	EXPECT_EQ( this->trans->getTarget(), this->loc2 );
+    // transition: End Location
+    EXPECT_EQ(this->trans->getTarget(), this->loc2);
 
-	// transition: Assignment
-	EXPECT_EQ( this->trans->getReset().getVector(), this->reset.getVector() );
-	EXPECT_EQ( this->trans->getReset().getMatrix(), this->reset.getMatrix() );
+    // transition: Assignment
+    EXPECT_EQ(this->trans->getReset().getVector(), this->reset.getVector());
+    EXPECT_EQ(this->trans->getReset().getMatrix(), this->reset.getMatrix());
 
-	// transition: Guard
-	EXPECT_EQ( this->trans->getGuard().getVector(), this->guard.getVector() );
-	EXPECT_EQ( this->trans->getGuard().getMatrix(), this->guard.getMatrix() );
+    // transition: Guard
+    EXPECT_EQ(this->trans->getGuard().getVector(), this->guard.getVector());
+    EXPECT_EQ(this->trans->getGuard().getMatrix(), this->guard.getMatrix());
 
-	// creation of transitions from source and target
-	std::unique_ptr<Transition<TypeParam>> t( new Transition<TypeParam>( this->loc1, this->loc2 ) );
-	EXPECT_EQ( t->getSource(), this->loc1 );
-	EXPECT_EQ( t->getTarget(), this->loc2 );
-	EXPECT_EQ( t->getAggregation(), Aggregation::none );
-	EXPECT_FALSE( t->isTimeTriggered() );
-	t->setAggregation( Aggregation::aggregation );
-	EXPECT_EQ( t->getAggregation(), Aggregation::aggregation );
+    // creation of transitions from source and target
+    std::unique_ptr<Transition<Location<TypeParam>>> t(new Transition<Location<TypeParam>>(this->loc1, this->loc2));
+    EXPECT_EQ(t->getSource(), this->loc1);
+    EXPECT_EQ(t->getTarget(), this->loc2);
+    EXPECT_EQ(t->getAggregation(), AGG_SETTING::MODEL);
+    EXPECT_FALSE(t->isTimeTriggered());
+    t->setAggregation(hypro::AGG_SETTING::AGG);
+    EXPECT_EQ(t->getAggregation(), hypro::AGG_SETTING::AGG);
 
-	t->setTriggerTime( TypeParam( 1 ) );
-	EXPECT_TRUE( t->isTimeTriggered() );
-	EXPECT_EQ( t->getTriggerTime(), TypeParam( 1 ) );
+    t->setTriggerTime(TypeParam(1));
+    EXPECT_TRUE(t->isTimeTriggered());
+    EXPECT_EQ(t->getTriggerTime(), TypeParam(1));
 
-	Reset<TypeParam> empty{};
-	EXPECT_TRUE( empty.isIdentity() );
-	EXPECT_TRUE( empty.isAffineIdentity() );
-	EXPECT_TRUE( empty.isIntervalIdentity() );
+    Reset<TypeParam> empty{};
+    EXPECT_TRUE(empty.isIdentity());
+    EXPECT_TRUE(empty.isAffineIdentity());
+    EXPECT_TRUE(empty.isIntervalIdentity());
 
-	matrix_t<TypeParam> id = matrix_t<TypeParam>::Identity( 3, 3 );
-	vector_t<TypeParam> zero = vector_t<TypeParam>::Zero( 3 );
-	Reset<TypeParam> identity{ id, zero };
-	EXPECT_TRUE( identity.isIdentity() );
-	EXPECT_TRUE( identity.isAffineIdentity() );
-	EXPECT_TRUE( identity.isIntervalIdentity() );
-	EXPECT_TRUE( identity.isIdentity( 0 ) );
-	EXPECT_TRUE( identity.isIdentity( 1 ) );
-	EXPECT_TRUE( identity.isIdentity( 2 ) );
+    matrix_t<TypeParam> id = matrix_t<TypeParam>::Identity(3, 3);
+    vector_t<TypeParam> zero = vector_t<TypeParam>::Zero(3);
+    Reset<TypeParam> identity{id, zero};
+    EXPECT_TRUE(identity.isIdentity());
+    EXPECT_TRUE(identity.isAffineIdentity());
+    EXPECT_TRUE(identity.isIntervalIdentity());
+    EXPECT_TRUE(identity.isIdentity(0));
+    EXPECT_TRUE(identity.isIdentity(1));
+    EXPECT_TRUE(identity.isIdentity(2));
 
-	matrix_t<TypeParam> mat = matrix_t<TypeParam>::Identity( 3, 3 );
-	vector_t<TypeParam> vec = vector_t<TypeParam>::Zero( 3 );
-	vec( 0 ) = 1;
-	mat( 0, 2 ) = 1;
-	mat( 2, 1 ) = 1;
-	Reset<TypeParam> r{ mat, vec };
-	EXPECT_FALSE( r.isIdentity() );
-	EXPECT_FALSE( r.isAffineIdentity() );
-	EXPECT_TRUE( r.isIntervalIdentity() );
-	EXPECT_FALSE( r.isIdentity( 0 ) );
-	EXPECT_TRUE( r.isIdentity( 1 ) );
-	EXPECT_FALSE( r.isIdentity( 2 ) );
+    matrix_t<TypeParam> mat = matrix_t<TypeParam>::Identity(3, 3);
+    vector_t<TypeParam> vec = vector_t<TypeParam>::Zero(3);
+    vec(0) = 1;
+    mat(0, 2) = 1;
+    mat(2, 1) = 1;
+    Reset<TypeParam> r{mat, vec};
+    EXPECT_FALSE(r.isIdentity());
+    EXPECT_FALSE(r.isAffineIdentity());
+    EXPECT_TRUE(r.isIntervalIdentity());
+    EXPECT_FALSE(r.isIdentity(0));
+    EXPECT_TRUE(r.isIdentity(1));
+    EXPECT_FALSE(r.isIdentity(2));
 }
 
 /**
  * Hybrid Automaton Test
  */
-TYPED_TEST( HybridAutomataTest, HybridAutomatonTest ) {
-	// construct a new hybrid automaton.
-	TRACE( "hypro.datastructures", "START TEST" );
-	HybridAutomaton<TypeParam> h1;
+TYPED_TEST(HybridAutomataTest, HybridAutomatonTest) {
+    // construct a new hybrid automaton.
+    TRACE("hypro.datastructures", "START TEST");
+    HybridAutomaton<TypeParam> h1;
 
-	Location<TypeParam>* anotherCopyOfLoc1 = h1.createLocation( this->loc1 );
-	Location<TypeParam>* anotherCopyOfLoc2 = h1.createLocation( this->loc2 );
-	// clear transitions which were also copied
-	anotherCopyOfLoc1->rGetTransitions().clear();
+    Location<TypeParam> *anotherCopyOfLoc1 = h1.createLocation(this->loc1);
+    Location<TypeParam> *anotherCopyOfLoc2 = h1.createLocation(this->loc2);
+    // clear transitions which were also copied
+    anotherCopyOfLoc1->rGetTransitions().clear();
 
-	// Re-insert correct transition (take guards and resets, update source and target)
-	Transition<TypeParam>* aTrans = anotherCopyOfLoc1->createTransition( this->trans );
-	aTrans->setTarget( anotherCopyOfLoc2 );
-	EXPECT_FALSE( aTrans == nullptr );
+    // Re-insert correct transition (take guards and resets, update source and target)
+    Transition<Location<TypeParam>> *aTrans = anotherCopyOfLoc1->createTransition(this->trans);
+    aTrans->setTarget(anotherCopyOfLoc2);
+    EXPECT_FALSE(aTrans == nullptr);
 
-	EXPECT_EQ( std::size_t( 2 ), h1.getLocations().size() );
-	EXPECT_EQ( this->loc1->getName(), h1.getLocations().front()->getName() );
-	EXPECT_EQ( this->loc1->getLinearFlow(), h1.getLocations().front()->getLinearFlow() );
-	EXPECT_EQ( this->loc1->getInvariant(), h1.getLocations().front()->getInvariant() );
+    EXPECT_EQ(std::size_t(2), h1.getLocations().size());
+    EXPECT_EQ(this->loc1->getName(), h1.getLocations().front()->getName());
+    EXPECT_EQ(this->loc1->getLinearFlow(), h1.getLocations().front()->getLinearFlow());
+    EXPECT_EQ(this->loc1->getInvariant(), h1.getLocations().front()->getInvariant());
 
-	EXPECT_TRUE( *( h1.getLocation( "Location1" ) ) == *( anotherCopyOfLoc1 ) );
-	EXPECT_TRUE( *( h1.getLocation( anotherCopyOfLoc1->hash() ) ) == *( anotherCopyOfLoc1 ) );
-	// Comparison for location 2 works, as it does not have any transitions which would be copied and thus invalidate
-	// equality.
-	EXPECT_TRUE( *( h1.getLocation( "Location2" ) ) == *( anotherCopyOfLoc2 ) );
-	EXPECT_TRUE( *( h1.getLocation( anotherCopyOfLoc2->hash() ) ) == *( anotherCopyOfLoc2 ) );
+    EXPECT_TRUE(*(h1.getLocation("Location1")) == *(anotherCopyOfLoc1));
+    EXPECT_TRUE(*(h1.getLocation(anotherCopyOfLoc1->hash())) == *(anotherCopyOfLoc1));
+    // Comparison for location 2 works, as it does not have any transitions which would be copied and thus invalidate
+    // equality.
+    EXPECT_TRUE(*(h1.getLocation("Location2")) == *(anotherCopyOfLoc2));
+    EXPECT_TRUE(*(h1.getLocation(anotherCopyOfLoc2->hash())) == *(anotherCopyOfLoc2));
 
-	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity( 2, 2 );
-	vector_t<TypeParam> vec = vector_t<TypeParam>( 2 );
-	vec << 1, 2;
+    matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2, 2);
+    vector_t<TypeParam> vec = vector_t<TypeParam>(2);
+    vec << 1, 2;
 
-	h1.addInitialState( anotherCopyOfLoc1, Condition<TypeParam>( matr, vec ) );
+    h1.addInitialState(anotherCopyOfLoc1, Condition<TypeParam>(matr, vec));
 
-	// Copy constructor test
-	EXPECT_TRUE( aTrans->getTarget() == anotherCopyOfLoc2 );
-	EXPECT_EQ( h1, h1 );
-	HybridAutomaton<TypeParam> h0{ h1 };
-	EXPECT_EQ( h0, h1 );
+    // Copy constructor test
+    EXPECT_TRUE(aTrans->getTarget() == anotherCopyOfLoc2);
+    EXPECT_EQ(h1, h1);
+    HybridAutomaton<TypeParam> h0{h1};
+    EXPECT_EQ(h0, h1);
 
-	// Copy assignment operator
-	HybridAutomaton<TypeParam> h2 = h1;
-	EXPECT_EQ( h1, h2 );
-	EXPECT_EQ( h1.getLocations().front()->getName(), h2.getLocations().front()->getName() );
+    // Copy assignment operator
+    HybridAutomaton<TypeParam> h2 = h1;
+    EXPECT_EQ(h1, h2);
+    EXPECT_EQ(h1.getLocations().front()->getName(), h2.getLocations().front()->getName());
 
-	// Move assignment operator
-	HybridAutomaton<TypeParam> h3 = std::move( h1 );
-	EXPECT_EQ( h2, h3 );
+    // Move assignment operator
+    HybridAutomaton<TypeParam> h3 = std::move(h1);
+    EXPECT_EQ(h2, h3);
 
-	HybridAutomaton<TypeParam> h4( std::move( h2 ) );
-	EXPECT_EQ( h3, h4 );
+    HybridAutomaton<TypeParam> h4(std::move(h2));
+    EXPECT_EQ(h3, h4);
 
-	HybridAutomaton<TypeParam> h5 = this->dummyCopy( h3 );
-	EXPECT_EQ( h4, h5 );
+    HybridAutomaton<TypeParam> h5 = this->dummyCopy(h3);
+    EXPECT_EQ(h4, h5);
 
-	HybridAutomaton<TypeParam> h6 = this->dummyMove( std::move( h3 ) );
-	EXPECT_EQ( h4, h6 );
+    HybridAutomaton<TypeParam> h6 = this->dummyMove(std::move(h3));
+    EXPECT_EQ(h4, h6);
 }
 
-TYPED_TEST( HybridAutomataTest, State ) {
-	// Constructors
-	State_t<TypeParam> s1( this->loc1 );
+TYPED_TEST(HybridAutomataTest, State) {
+    // Constructors
+    State_t<TypeParam> s1(this->loc1);
 
-	matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity( 2, 2 );
-	vector_t<TypeParam> vec = vector_t<TypeParam>( 2 );
-	vec << 1, 2;
-	State_t<TypeParam> s2( this->loc1 );
-	s2.setSet( ConstraintSet<TypeParam>( matr, vec ) );
+    matrix_t<TypeParam> matr = matrix_t<TypeParam>::Identity(2, 2);
+    vector_t<TypeParam> vec = vector_t<TypeParam>(2);
+    vec << 1, 2;
+    State_t<TypeParam> s2(this->loc1);
+    s2.setSet(ConstraintSet<TypeParam>(matr, vec));
 
-	EXPECT_EQ( s1.getLocation()->hash(), this->loc1->hash() );
-	EXPECT_EQ( s2.getLocation()->hash(), this->loc1->hash() );
-	EXPECT_EQ( std::get<ConstraintSet<TypeParam>>( s2.getSet() ).matrix(), matr );
-	EXPECT_EQ( std::get<ConstraintSet<TypeParam>>( s2.getSet() ).vector(), vec );
-	EXPECT_EQ( std::get<ConstraintSet<TypeParam>>( s2.getSet( 0 ) ).matrix(), matr );
-	EXPECT_EQ( std::get<ConstraintSet<TypeParam>>( s2.getSet( 0 ) ).vector(), vec );
+    EXPECT_EQ(s1.getLocation()->hash(), this->loc1->hash());
+    EXPECT_EQ(s2.getLocation()->hash(), this->loc1->hash());
+    EXPECT_EQ(std::get<ConstraintSet<TypeParam>>(s2.getSet()).matrix(), matr);
+    EXPECT_EQ(std::get<ConstraintSet<TypeParam>>(s2.getSet()).vector(), vec);
+    EXPECT_EQ(std::get<ConstraintSet<TypeParam>>(s2.getSet(0)).matrix(), matr);
+    EXPECT_EQ(std::get<ConstraintSet<TypeParam>>(s2.getSet(0)).vector(), vec);
 }
 
-TYPED_TEST( HybridAutomataTest, HashTest ) {
-	// Condition
-	Condition<TypeParam> c1;
-	EXPECT_TRUE( c1.hash() == 0 );
-	matrix_t<TypeParam> m = matrix_t<TypeParam>::Identity( 3, 3 );
-	vector_t<TypeParam> v = vector_t<TypeParam>( 3 );
-	v << 1, 2, 3;
-	c1.setMatrix( m );
-	c1.setVector( v );
-	EXPECT_TRUE( c1.hash() != 0 );
-	Condition<TypeParam> c2 = c1;
-	EXPECT_TRUE( c1.hash() == c2.hash() );
+TYPED_TEST(HybridAutomataTest, HashTest) {
+    // Condition
+    Condition<TypeParam> c1;
+    EXPECT_TRUE(c1.hash() == 0);
+    matrix_t<TypeParam> m = matrix_t<TypeParam>::Identity(3, 3);
+    vector_t<TypeParam> v = vector_t<TypeParam>(3);
+    v << 1, 2, 3;
+    c1.setMatrix(m);
+    c1.setVector(v);
+    EXPECT_TRUE(c1.hash() != 0);
+    Condition<TypeParam> c2 = c1;
+    EXPECT_TRUE(c1.hash() == c2.hash());
 
-	// Reset
-	Reset<TypeParam> r1;
-	EXPECT_TRUE( r1.hash() == 0 );
-	r1.setMatrix( m );
-	r1.setVector( v );
-	EXPECT_TRUE( r1.hash() != 0 );
-	Reset<TypeParam> r2 = r1;
-	EXPECT_TRUE( r1.hash() == r2.hash() );
+    // Reset
+    Reset<TypeParam> r1;
+    EXPECT_TRUE(r1.hash() == 0);
+    r1.setMatrix(m);
+    r1.setVector(v);
+    EXPECT_TRUE(r1.hash() != 0);
+    Reset<TypeParam> r2 = r1;
+    EXPECT_TRUE(r1.hash() == r2.hash());
 }
 
-TYPED_TEST( HybridAutomataTest, FlowUtility ) {
-	using Matrix = matrix_t<TypeParam>;
+TYPED_TEST(HybridAutomataTest, FlowUtility) {
+    using Matrix = matrix_t<TypeParam>;
 
-	Matrix flow1 = Matrix::Zero( 3, 3 );
-	linearFlow<TypeParam> f1{ flow1 };
+    Matrix flow1 = Matrix::Zero(3, 3);
+    linearFlow<TypeParam> f1{flow1};
 
-	EXPECT_FALSE( f1.hasFlow( 0 ) );
-	EXPECT_FALSE( f1.hasFlow( 1 ) );
-	EXPECT_FALSE( f1.hasFlow( 2 ) );
+    EXPECT_FALSE(f1.hasFlow(0));
+    EXPECT_FALSE(f1.hasFlow(1));
+    EXPECT_FALSE(f1.hasFlow(2));
 
-	auto flow2 = flow1;
-	flow2( 1, 1 ) = 2;
-	linearFlow<TypeParam> f2{ flow2 };
-	EXPECT_FALSE( f2.hasFlow( 0 ) );
-	EXPECT_TRUE( f2.hasFlow( 1 ) );
-	EXPECT_FALSE( f2.hasFlow( 2 ) );
+    auto flow2 = flow1;
+    flow2(1, 1) = 2;
+    linearFlow<TypeParam> f2{flow2};
+    EXPECT_FALSE(f2.hasFlow(0));
+    EXPECT_TRUE(f2.hasFlow(1));
+    EXPECT_FALSE(f2.hasFlow(2));
+}
+
+TEST(HybridAutomataTest, RectangularFlowConsistencyTest) {
+    using I = carl::Interval<int>;
+
+    {
+        auto flow = rectangularFlow<int>();
+        flow.setFlowIntervalForDimension(I{1, 2}, VariablePool::getInstance().carlVarByIndex(0));
+        flow.setFlowIntervalForDimension(I{1, 2}, VariablePool::getInstance().carlVarByIndex(1));
+        flow.setFlowIntervalForDimension(I{1, 2}, VariablePool::getInstance().carlVarByIndex(2));
+        EXPECT_TRUE(flow.isConsistent());
+        auto expected = std::vector<I>{I{1, 2}, I{1, 2}, I{1, 2}};
+        EXPECT_EQ(expected, flow.getOrderedIntervals());
+    }
+    {
+        auto flow = rectangularFlow<int>();
+        flow.setFlowIntervalForDimension(I{1, 2}, VariablePool::getInstance().carlVarByIndex(0));
+        flow.setFlowIntervalForDimension(I{1, 2}, VariablePool::getInstance().carlVarByIndex(2));
+        EXPECT_FALSE(flow.isConsistent());
+    }
 }

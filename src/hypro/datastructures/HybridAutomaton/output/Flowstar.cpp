@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022.
+ * Copyright (c) 2022-2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -15,28 +15,28 @@
 
 namespace hypro {
 
-std::string toFlowstarFormat( const ReachabilitySettings& settings,
-							  const std::map<Eigen::Index, std::string>&,
-							  const std::string& prefix ) {
-	std::stringstream res;
+    std::string toFlowstarFormat(const ReachabilitySettings &settings,
+                                 const std::map<Eigen::Index, std::string> &,
+                                 const std::string &prefix) {
+        std::stringstream res;
 
-	res << prefix << "setting";
-	res << prefix << "{";
-	res << prefix << "\tfixed steps " << settings.timeStep;
-	res << prefix << "\ttime " << settings.timeBound;
-	/*
-	if ( !settings.plotDimensions.empty() ) {
-		for ( const auto& dims : settings.plotDimensions ) {
-			assert( dims.size() == 2 );
-			res << prefix << "\tgnuplot octagon " << varNameMap.at( dims[0] ) << "," << varNameMap.at( dims[1] );
-		}
-	}
-	*/
-	res << prefix << "\toutput " << settings.fileName;
-	res << prefix << "\tmax jumps " << settings.jumpDepth;
-	res << prefix << "}";
+        res << prefix << "setting";
+        res << prefix << "{";
+        res << prefix << "\tfixed steps " << settings.timeStep;
+        res << prefix << "\ttime " << settings.timeBound;
+        /*
+        if ( !settings.plotDimensions.empty() ) {
+            for ( const auto& dims : settings.plotDimensions ) {
+                assert( dims.size() == 2 );
+                res << prefix << "\tgnuplot octagon " << varNameMap.at( dims[0] ) << "," << varNameMap.at( dims[1] );
+            }
+        }
+        */
+        res << prefix << "\toutput " << settings.fileName;
+        res << prefix << "\tmax jumps " << settings.jumpDepth;
+        res << prefix << "}";
 
-	return res.str();
-}
+        return res.str();
+    }
 
 }  // namespace hypro

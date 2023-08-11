@@ -8,14 +8,12 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             AllBenchmarkTest.cpp
             )
 
-    add_dependencies(runBenchmark hypro_resources)
+    add_dependencies(runBenchmark ${PROJECT_NAME}-resources)
     target_include_directories(runBenchmark PRIVATE ${GTEST_INCLUDE_DIR})
 
     target_link_libraries(runBenchmark
             ${PROJECT_NAME}-shared
             ${GTEST_LIBRARIES})
-
-    cotire(runBenchmark)
 
     #add_test( NAME benchmark COMMAND runBenchmark )
 endif ()
@@ -29,5 +27,3 @@ add_executable(benchmark
 target_link_libraries(benchmark PUBLIC
         ${PROJECT_NAME}-shared
         )
-cotire(runBenchmark)
-cotire(benchmark)

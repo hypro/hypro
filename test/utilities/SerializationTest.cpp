@@ -15,8 +15,9 @@
 
 #include "gtest/gtest.h"
 #include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
 #include <cereal/types/vector.hpp>
-#include <fstream>
+#include <hypro/datastructures/HybridAutomaton/Condition.h>
 #include <hypro/datastructures/Hyperoctree.h>
 #include <hypro/representations/GeometricObjectBase.h>
 #include <hypro/util/serialization/serialization.h>
@@ -63,6 +64,52 @@ TEST( runUtilityTests, IntervalSerialization ) {
 	EXPECT_EQ( i3, i4 );
 }
 
+TEST( runUtilityTests, ConstraintSetSerialization ) {
+	using Matrix = hypro::matrix_t<double>;
+	using Vector = hypro::vector_t<double>;
+	using CS = hypro::ConstraintSet<double>;
+	std::stringstream ss;
+
+	Matrix constraints = Matrix::Identity( 2, 2 );
+	Vector constants = Vector::Ones( 2 );
+	CS in{ constraints, constants };
+	CS out;
+
+	{
+		cereal::BinaryOutputArchive oarchive( ss );	 // Create an output archive
+
+		oarchive( in );	 // Write the data to the archive
+	}
+	{
+		cereal::BinaryInputArchive iarchive( ss );	// Create an input archive
+		iarchive( out );							// Read the data from the archive
+	}
+	EXPECT_EQ( in, out );
+}
+
+TEST( runUtilityTests, ConditionSerialization ) {
+	using Matrix = hypro::matrix_t<double>;
+	using Vector = hypro::vector_t<double>;
+	using Cond = hypro::Condition<double>;
+	std::stringstream ss;
+
+	Matrix constraints = Matrix::Identity( 2, 2 );
+	Vector constants = Vector::Ones( 2 );
+	Cond in{ constraints, constants };
+	Cond out;
+
+	{
+		cereal::BinaryOutputArchive oarchive( ss );	 // Create an output archive
+
+		oarchive( in );	 // Write the data to the archive
+	}
+	{
+		cereal::BinaryInputArchive iarchive( ss );	// Create an input archive
+		iarchive( out );							// Read the data from the archive
+	}
+	EXPECT_EQ( in, out );
+}
+
 TEST( runUtilityTests, BoxSerialization ) {
 	using Interval = carl::Interval<double>;
 	using Box = hypro::Box<double>;
@@ -78,6 +125,38 @@ TEST( runUtilityTests, BoxSerialization ) {
 	}
 	{
 		cereal::BinaryInputArchive iarchive( ss );	// Create an input archive
+		iarchive( out );							// Read the data from the archive
+	}
+	EXPECT_EQ( in, out );
+}
+
+TEST( runUtilityTests, HPolytopeSerialization ) {
+	using Number = mpq_class;
+	using Matrix = hypro::matrix_t<Number>;
+	using Vector = hypro::vector_t<Number>;
+	using Polytope = hypro::HPolytope<Number>;
+	std::stringstream ss;
+	std::ofstream os("out.cereal", std::ios::binary);
+
+	Matrix constraints = Matrix::Zero(3,2);
+	constraints << 1,1,
+					  -1,1,
+		  0,-1;
+	Vector constants = Vector::Zero(3);
+	constants << 1,1,1;
+
+	Polytope in{ constraints, constants };
+	Polytope out;
+
+	{
+		cereal::JSONOutputArchive oarchive( ss );	 // Create an output archive
+		cereal::JSONOutputArchive oarchive_file( os );	 // Create an output archive
+
+		oarchive( in );	 // Write the data to the archive
+		oarchive_file( in );
+	}
+	{
+		cereal::JSONInputArchive iarchive( ss );	// Create an input archive
 		iarchive( out );							// Read the data from the archive
 	}
 	EXPECT_EQ( in, out );

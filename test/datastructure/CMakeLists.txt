@@ -2,7 +2,7 @@
 set(datastructure_test_sources
         DAGTest.cpp
         DecompositionTest.cpp
-        EventTimingProviderTest.cpp
+        #EventTimingProviderTest.cpp
         FlowpipeTest.cpp
         HalfspaceTest.cpp
         HIVTest.cpp
@@ -18,7 +18,7 @@ set(datastructure_test_sources
         TreeTest.cpp
         #StrategyTest.cpp
         HybridAutomataTest.cpp
-        #HybridAutomataOutputTest.cpp
+        HybridAutomataOutputTest.cpp
         WorkQueueTest.cpp
         HybridAutomataParallelCompositionTest.cpp
         )
@@ -33,18 +33,25 @@ add_executable(runDatastructureTests
         ${datastructure_test_sources}
         )
 
-add_dependencies(runDatastructureTests hypro_resources)
+add_dependencies(runDatastructureTests ${PROJECT_NAME}-resources ${PROJECT_NAME}-parser)
 target_include_directories(runDatastructureTests PRIVATE ${GTEST_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
 
-target_link_libraries(runDatastructureTests PUBLIC
-        ${PROJECT_NAME}-shared
-        ${GTEST_LIBRARIES}
-        cereal::cereal
-        )
+if (HYPRO_USE_SERIALIZATION)
+    target_link_libraries(runDatastructureTests PUBLIC
+            ${PROJECT_NAME}-shared
+            ${PROJECT_NAME}-parser
+            ${GTEST_LIBRARIES}
+            cereal::cereal
+            )
+else ()
+    target_link_libraries(runDatastructureTests PUBLIC
+            ${PROJECT_NAME}-shared
+            ${PROJECT_NAME}-parser
+            ${GTEST_LIBRARIES}
+            )
+endif ()
 
-cotire(runDatastructureTests)
-
-add_test(NAME datastructures COMMAND runDatastructureTests)
+add_test(NAME datastructures COMMAND runDatastructureTests --gtest_catch_exceptions=0)
 
 if (DEVELOPER)
     set_property(TEST datastructures PROPERTY

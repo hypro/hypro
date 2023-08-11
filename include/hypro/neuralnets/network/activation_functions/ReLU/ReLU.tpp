@@ -19,12 +19,12 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::stepReLU( int i, std::vector<h
 		Number lb = -eval_low_result.supportValue + center[i];
 		Number ub = eval_high_result.supportValue + center[i];
 
-		if ( lb >= -1e-8 ) {
+		if ( lb >= 0 || carl::AlmostEqual2sComplement(lb, Number(0)) ) {
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, basis, politope );
 			result.push_back( res_star );
 			continue;
 		}
-		if ( ub <= +1e-8 ) {
+		if ( ub <= 0 || carl::AlmostEqual2sComplement(ub, Number(0)) ) {
 			hypro::matrix_t<Number> I_i = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			I_i( i, i ) = 0.0;
 			basis = I_i * basis;
@@ -86,12 +86,12 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, std::ve
 
 		// std::cout << "Star bounds = [" << lb << ", " << ub << "]" << std::endl;
 
-		if ( lb >= -1e-8 ) {
+		if ( lb >= 0 || carl::AlmostEqual2sComplement(lb, Number(0)) ) {
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
 			result.push_back( res_star );
 			continue;
 		}
-		if ( ub <= +1e-8 ) {
+		if ( ub <= 0 || carl::AlmostEqual2sComplement(ub, Number(0)) ) {
 			hypro::matrix_t<Number> I_i = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			I_i( i, i ) = 0.0;
 			basis = I_i * basis;

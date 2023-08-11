@@ -139,7 +139,7 @@ int main( int argc, char* argv[] ) {
 
 	// std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
 	// std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(method, hypro::SEARCH_STRATEGY::DFS);
-	bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, true, true );
+	// bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, true, true );
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;

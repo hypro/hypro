@@ -123,4 +123,4 @@ endforeach ()
 set(DEPENDENT_TARGETS ${DEPENDENT_TARGETS} PARENT_SCOPE)
 
 
-add_dependencies(hypro_resources CArL-EP)
+add_dependencies(${PROJECT_NAME}-resources CArL-EP)

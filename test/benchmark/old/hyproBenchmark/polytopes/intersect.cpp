@@ -74,7 +74,6 @@ Results<std::size_t> intersect( const Settings& settings ) {
 #endif
 		}
 		auto creationTime = creationTimer.elapsed();
-		// std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
 		ress.mCreationTime += creationTime;
 
 		// run instances
@@ -84,7 +83,7 @@ Results<std::size_t> intersect( const Settings& settings ) {
 		}
 		auto runningTime = runTimerHyPro.elapsed();
 		ress.emplace_back( { "intersect", runningTime / settings.iterations, static_cast<int>( d ) } );
-		// std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
+		std::cout << "Dimension " << d << ":  Running took " << runningTime.count() << " sec." << std::endl;
 
 #ifdef HYPRO_USE_PPL
 		Timer runTimerPPL;

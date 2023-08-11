@@ -1,8 +1,9 @@
-
 #include "test/defines.h"
 #include "gtest/gtest.h"
 #include <hypro/representations/GeometricObjectBase.h>
 #include <hypro/representations/sampling/sampling.h>
+
+using namespace hypro;
 
 template <typename Number>
 class SamplingTest : public ::testing::Test {
@@ -22,10 +23,10 @@ class SamplingTest : public ::testing::Test {
         hypro::matrix_t<Number> basis = hypro::matrix_t<Number>(2, 2);
         basis << -2, 0, 0, 1;
 
-        zonotope = hypro::Zonotope<Number>(center, basis);
+        zonotope = hypro::Zonotope<Number>(center.rows(), center, basis);
 
         starset = hypro::StarsetT<Number, hypro::Converter<Number>, hypro::StarsetEqvPolytopeCaching>(center, basis, hPolytope);
-	}
+    }
 
 	virtual void TearDown() {}
 

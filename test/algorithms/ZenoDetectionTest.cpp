@@ -21,10 +21,10 @@ using Vector = hypro::vector_t<Number>;
 using Interval = carl::Interval<Number>;
 using TimeInterval = carl::Interval<hypro::SegmentInd>;
 using Box = hypro::Box<Number>;
-using Node = hypro::ReachTreeNode<Box>;
 using Location = hypro::Location<Number>;
+using Node = hypro::ReachTreeNode<Box, Location>;
 using Reset = hypro::Reset<Number>;
-using Transition = hypro::Transition<Number>;
+using Transition = hypro::Transition<Location>;
 
 TEST( ZenoDetectionTest, SimpleDetection ) {
 	auto ha = hypro::HybridAutomaton<Number>{};

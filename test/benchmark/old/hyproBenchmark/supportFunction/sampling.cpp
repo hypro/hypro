@@ -50,7 +50,6 @@ Results<std::size_t> sample( const Settings& settings ) {
 			directions.emplace_back( std::move( direction ) );
 		}
 		auto creationTime = creationTimer.elapsed();
-		std::cout << "Dimension " << d << ": Creation took " << creationTime.count() << " sec." << std::endl;
 		ress.mCreationTime += creationTime;
 
 		// run instances

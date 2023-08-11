@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2022-2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #pragma once
 
 #include "../../../datastructures/reachability/Settings.h"
@@ -14,31 +23,34 @@
 
 namespace hypro {
 
-template <typename Representation>
-class DiscreteWorker {
-  private:
-	using Number = typename Representation::NumberType;
+    template<typename Representation, typename Automaton>
+    class DiscreteWorker {
+    private:
+        using LocationT = typename Automaton::LocationType;
+        using Number = typename Representation::NumberType;
 
-  public:
-	struct JumpSuccessorGen;
+    public:
+        struct JumpSuccessorGen;
 
-	DiscreteWorker( const HybridAutomaton<Number>& ha, const AnalysisParameters& settings, std::size_t subspace = 0 )
-		: mHybridAutomaton( ha )
-		, mSettings( settings )
-		, mSubspace( subspace ) {}
+        DiscreteWorker(const Automaton &ha, const AnalysisParameters &settings, std::size_t subspace = 0)
+                : mHybridAutomaton(ha), mSettings(settings), mSubspace(subspace) {}
 
-	template <typename OutputIt>
-	REACHABILITY_RESULT computeTimeSuccessors( const Representation& initialSet, Location<Number> const* loc, OutputIt out, bool checkSafety = true ) const;
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  bool checkSafety = true) const;
 
-	std::map<Transition<Number>*, Representation> computeJumpSuccessors( std::vector<Representation> const& flowpipe, Location<Number> const* loc ) const;
-	// Compute jump successors for guard enabling sets
-	std::pair<CONTAINMENT, Representation> computeJumpSuccessorsForGuardEnabled( const Representation& enabledSet, Transition<Number> const* trans ) const;
+        std::map<Transition<LocationT> *, Representation>
+        computeJumpSuccessors(std::vector<Representation> const &flowpipe, LocationT const *loc) const;
 
-  protected:
-	const HybridAutomaton<Number>& mHybridAutomaton;  ///< hybrid automaton to analyze
-	const AnalysisParameters& mSettings;			  ///< analysis settings
-	std::size_t mSubspace;
-};
+        // Compute jump successors for guard enabling sets
+        std::pair<CONTAINMENT, Representation> computeJumpSuccessorsForGuardEnabled(const Representation &enabledSet,
+                                                                                    Transition<LocationT> const *trans) const;
+
+    protected:
+        const Automaton &mHybridAutomaton;      ///< hybrid automaton to analyze
+        const AnalysisParameters &mSettings;  ///< analysis settings
+        std::size_t mSubspace;
+    };
 
 }  // namespace hypro
 
