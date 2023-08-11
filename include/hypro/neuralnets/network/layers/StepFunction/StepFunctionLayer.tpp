@@ -9,7 +9,7 @@
  *
  */
 
-#include "../hypro/util/plotting/Plotter.h"
+#include "hypro/util/plotting/Plotter.h"
 #include "StepFunctionLayer.h"
 
 namespace hypro {

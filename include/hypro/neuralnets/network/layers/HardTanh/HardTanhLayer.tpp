@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include "../hypro/util/plotting/Plotter.h"
+#include "hypro/util/plotting/Plotter.h"
 #include "HardTanhLayer.h"
 
 namespace hypro {
