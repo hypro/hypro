@@ -80,18 +80,18 @@ int main( int argc, char* argv[] ) {
 	std::cout << "Total time elapsed during NN reachability analysis: " << analysisTime << " ms" << std::endl;
 
 
-	for ( const auto& o : output ) {
-		std::cout << "Vertices before hardsigmoid: " << o.vertices() << std::endl;
-	}
+	// for ( const auto& o : output ) {
+	// 	std::cout << "Vertices before hardsigmoid: " << o.vertices() << std::endl;
+	// }
 
-	for ( const auto& o : result1 ) {
-		std::cout << "Vertices after hardsigmoid: " << o.vertices() << std::endl;
-	}
+	// for ( const auto& o : result1 ) {
+	// 	std::cout << "Vertices after hardsigmoid: " << o.vertices() << std::endl;
+	// }
 
 	std::shared_ptr<hypro::LayerBase<Number>> layer2 = std::make_shared<hypro::StepFunctionLayer<Number>>( 1, 0, 0.5, 0, 1 );
 	auto result2 = layer2->forwardPass( result1, hypro::NN_REACH_METHOD::EXACT, false );
 
 	for ( const auto& o : result2 ) {
-		std::cout << "Vertices after stepfunction: " << o.vertices() << std::endl;
+		std::cout << "Classification result: " << (iszero(o.vertices()[0][0]) ? "ROCK" : "MINE") << std::endl;
 	}
 }
