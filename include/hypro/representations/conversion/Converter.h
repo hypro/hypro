@@ -66,6 +66,7 @@ namespace hypro {
 #ifdef HYPRO_USE_PPL
         using Polytope = PolytopeT<Number, Converter, PolytopeSetting>;
 #endif
+        using Starset = StarsetT<Number, Converter, StarsetEqvPolytopeCaching>;
         using SupportFunction = SupportFunctionT<Number, Converter, SupportFunctionSetting>;
         using Zonotope = ZonotopeT<Number, Converter, ZonotopeSetting>;
         using SupportFunctionNew = SupportFunctionNewT<Number, Converter, SupportFunctionNewMorePrecision>;
@@ -682,7 +683,8 @@ namespace hypro {
         static PolytopeT<Number, Converter<Number>, PolytopeSetting> toPolytope( const HPolytopeT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
         template <typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
         static PolytopeT<Number, Converter<Number>, PolytopeSetting> toPolytope( const VPolytopeT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
-        template <typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
+        template <typename if (HYPRO_USE_PROTOBUF)
+    export_target(DEPENDENT_TARGETS PROTOBUF_STATIC)PolytopeSetting = typename Polytope::Settings, typename inSetting>
         static PolytopeT<Number, Converter<Number>, PolytopeSetting> toPolytope( const SupportFunctionT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
         template <typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
         static PolytopeT<Number, Converter<Number>, PolytopeSetting> toPolytope( const ZonotopeT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );

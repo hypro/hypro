@@ -28,11 +28,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake" "${CMAKE_
 include(hypromacros)
 
 
-include(FindProtobuf)
-find_package(Protobuf REQUIRED)
-include_directories(${PROTOBUF_INCLUDE_DIR})
-include_directories(${Protobuf_INCLUDE_DIRS})
-
 # # # # # # # # # # # # # # # # # # # # # #
 # B. Options
 # # # # # # # # # # # # # # # # # # # # # #
@@ -48,7 +43,6 @@ option(HYPRO_USE_GLPK "Enable usage of the glpk lp-solver." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" OFF)
 option(HYPRO_USE_PPL "Use PPl polytope wrapper." OFF)
-option(HYPRO_USE_PROTOBUF "Use the protocol buffer library for serialization of ONNX-files." ON)
 option(HYPRO_USE_SERIALIZATION "Enable support for cereal for object serialization" ON)
 option(HYPRO_USE_SOPLEX "Enable usage of the SoPlex lp-solver." OFF)
 option(HYPRO_USE_SMTRAT "Enable usage of the SMT-RAT smt-solver." OFF)
@@ -187,7 +181,7 @@ set_target_properties(${PROJECT_NAME}-static PROPERTIES
         )
 
 #target_link_libraries(${PROJECT_NAME}-static PUBLIC ${${PROJECT_NAME}_LIBRARIES_STATIC})
-target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread ${PROTOBUF_LIBRARY})
+target_link_libraries(${PROJECT_NAME}-static PUBLIC pthread)
 
 target_include_directories(${PROJECT_NAME}-static
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
@@ -210,7 +204,7 @@ set_target_properties(${PROJECT_NAME}-shared PROPERTIES
         )
 
 #target_link_libraries(${PROJECT_NAME}-shared PUBLIC ${${PROJECT_NAME}_LIBRARIES_DYNAMIC})
-target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread ${PROTOBUF_LIBRARY})
+target_link_libraries(${PROJECT_NAME}-shared PUBLIC pthread)
 
 target_include_directories(${PROJECT_NAME}-shared
         PRIVATE ${${PROJECT_NAME}_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/src
