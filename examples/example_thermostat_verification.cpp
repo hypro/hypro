@@ -112,9 +112,10 @@ int main( int argc, char* argv[] ) {
 	std::shared_ptr<hypro::LayerBase<Number>> layer = std::make_shared<hypro::StepFunctionLayer<Number>>( 1, 0, 7.5, 0, 15 );
 	auto result = layer->forwardPass( output, method, false );
 
-	for ( const auto& o : result ) {
-		std::cout << "Vertices after stepfunction: " << o.vertices() << std::endl;
-	}
+	// Vertices of the resulting star subsets
+	// for ( const auto& o : result ) {
+	// 	std::cout << "Vertices after stepfunction: " << o.vertices() << std::endl;
+	// }
 
 	// counter example
 	std::vector<hypro::Starset<Number>> counterSet;
@@ -128,7 +129,9 @@ int main( int argc, char* argv[] ) {
 		}
 	}
 
+	std::cout << "\nCounterexamples: " << std::endl << std::endl;
 	for ( int i = 0; i < counterSet.size(); i++ ) {
+		std::cout << "Counter-set " << i << std::endl;
 		auto pointSet = uniform_sampling( counterSet[i], 1 );
 		if (pointSet.empty()) continue;
 		auto point = *pointSet.begin();
@@ -136,12 +139,12 @@ int main( int argc, char* argv[] ) {
 		pointVector << point.coordinate( 0 ), point.coordinate( 1 );
 
 		hypro::vector_t<Number> counterExample = neuralNetwork.forwardPass( pointVector );
-		std::cout << "Value before stepfunction: " << counterExample << std::endl;
+		// std::cout << "Value before stepfunction: " << counterExample << std::endl;
 
 		auto resultSF = layer->forwardPass( counterExample );
 
-		std::cout << "Counter example value " << i << ": " << pointVector << std::endl;
-		std::cout << "Output value " << i << ": " << resultSF << std::endl;
+		std::cout << "Counter example candidate: \n" << pointVector;
+		std::cout << "Output value: " << resultSF << std::endl;
 	}
 
 	/*
