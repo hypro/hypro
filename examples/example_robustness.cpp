@@ -92,6 +92,6 @@ int main( int argc, char* argv[] ) {
 	auto result2 = layer2->forwardPass( result1, hypro::NN_REACH_METHOD::EXACT, false );
 
 	for ( const auto& o : result2 ) {
-		std::cout << "Classification result: " << (iszero(o.vertices()[0][0]) ? "ROCK" : "MINE") << std::endl;
+		std::cout << "Classification result: " << (iszero(o.vertices()[0][0]) ? "MINE" : "ROCK") << std::endl;
 	}
 }
