@@ -46,13 +46,13 @@ int main( int argc, char* argv[] ) {
 			  << std::endl;
 
 	// Define NN input file name
-	const char* filename;
+	std::string filename;
 	if ( argc > 2 )
-		filename = argv[2];
+		filename = std::string(argv[2]);
 	std::cout << "NN input filename is: " << filename << std::endl;
 
 	// Read and build neural network
-	hypro::NNet<Number> nn_NNet = hypro::NNet<Number>( filename );
+	hypro::NNet<Number> nn_NNet = hypro::NNet<Number>( filename.c_str() );
 	hypro::NeuralNetwork<Number> neuralNetwork = hypro::NeuralNetwork<Number>( nn_NNet );
 
 	// read an input property
@@ -68,12 +68,9 @@ int main( int argc, char* argv[] ) {
 	auto start = std::chrono::steady_clock::now();
 	std::vector<hypro::Starset<Number>> output = neuralNetwork.forwardPass( hypro::Starset<Number>( inputPoly ) , method, false );
 
-
-
-
+	// apply the hard sigmoid for classification (the output is between [0, 1])
 	std::shared_ptr<hypro::LayerBase<Number>> layer1 = std::make_shared<hypro::HardSigmoidLayer<Number>>( 1, 0, -3, 3 );
 	auto result1 = layer1->forwardPass( output, method, false );
-
 
 	auto end = std::chrono::steady_clock::now();
 	auto analysisTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
@@ -88,10 +85,20 @@ int main( int argc, char* argv[] ) {
 	// 	std::cout << "Vertices after hardsigmoid: " << o.vertices() << std::endl;
 	// }
 
-	std::shared_ptr<hypro::LayerBase<Number>> layer2 = std::make_shared<hypro::StepFunctionLayer<Number>>( 1, 0, 0.5, 0, 1 );
+	std::shared_ptr<hypro::LayerBase<Number>> layer2 = std::make_shared<hypro::StepFunctionLayer<Number>>( 1, 0, 0.33, 0, 1 );
+
+	std::cout << "Size result1: " << result1.size() << std::endl;
+
 	auto result2 = layer2->forwardPass( result1, hypro::NN_REACH_METHOD::EXACT, false );
 
 	for ( const auto& o : result2 ) {
+		// std::cout << "Results: " << std::endl;
+		// std::cout << o << std::endl;
+		std::cout << "Vertices: " << std::endl;
+		std::cout << o.vertices() << std::endl;
+
 		std::cout << "Classification result: " << (iszero(o.vertices()[0][0]) ? "MINE" : "ROCK") << std::endl;
+		std::string prop_name = std::string(argv[3]);
+		std::cout << "The ground truth is: " << (prop_name[prop_name.size() - 4] == 'M' ? "MINE" : "ROCK") << std::endl;
 	}
 }

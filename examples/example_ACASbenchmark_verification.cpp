@@ -97,10 +97,10 @@ int main( int argc, char* argv[] ) {
 	}
 	end = std::chrono::steady_clock::now();
 	std::cout << std::boolalpha;
-	std::cout << "Safe Zone: " << all_safe << std::endl;
+	std::cout << "Reachable Set is Safe: " << all_safe << std::endl;
 	auto safetyCheckTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
-	std::cout << "Safety Check Time: " << safetyCheckTime << std::endl;
+	std::cout << "Safety Check Time (ms): " << safetyCheckTime << std::endl;
 
-	std::cout << "Total Time: " << analysisTime + safetyCheckTime << std::endl;
-	std::cout << "Output Star Sets: " << output.size() << std::endl;
+	std::cout << "Total Time (ms): " << analysisTime + safetyCheckTime << std::endl;
+	std::cout << "Number of Output Star Sets: " << output.size() << std::endl;
 }

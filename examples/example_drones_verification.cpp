@@ -95,7 +95,7 @@ int main( int argc, char* argv[] ) {
 	}
 	end = std::chrono::steady_clock::now();
 	std::cout << std::boolalpha;
-	std::cout << "The output is in the safe zone: " << all_safe << std::endl;
+	std::cout << "The reachable set is safe: " << all_safe << std::endl;
 	auto safetyCheckTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
 	std::cout << "Safety Check Time: " << safetyCheckTime << std::endl;
 }

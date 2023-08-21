@@ -125,6 +125,12 @@ Number StarsetT<Number, Converter, Setting>::supremum() const {
 template <typename Number, typename Converter, typename Setting>
 std::vector<Point<Number>> StarsetT<Number, Converter, Setting>::vertices() const {
 	std::vector<Point<Number>> res;
+
+	if (mGenerator.isZero()) {
+		res.push_back(Point<Number>(mCenter));
+		return res;
+	}
+
 	auto placeholder = mConstraints.vertices();
 	for ( auto point : placeholder ) {
 		point = point.affineTransformation( mGenerator, mCenter );
