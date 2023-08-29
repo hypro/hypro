@@ -69,7 +69,7 @@ int main( int argc, char* argv[] ) {
 	std::vector<hypro::Starset<Number>> output = neuralNetwork.forwardPass( hypro::Starset<Number>( inputPoly ) , method, false );
 
 	// apply the hard sigmoid for classification (the output is between [0, 1])
-	std::shared_ptr<hypro::LayerBase<Number>> layer1 = std::make_shared<hypro::HardSigmoidLayer<Number>>( 1, 0, -3, 3 );
+	std::shared_ptr<hypro::LayerBase<Number>> layer1 = std::make_shared<hypro::HardSigmoidLayer<Number>>( 1, 0, -2.5, 2.5 );
 	auto result1 = layer1->forwardPass( output, method, false );
 
 	auto end = std::chrono::steady_clock::now();
@@ -85,7 +85,7 @@ int main( int argc, char* argv[] ) {
 	// 	std::cout << "Vertices after hardsigmoid: " << o.vertices() << std::endl;
 	// }
 
-	std::shared_ptr<hypro::LayerBase<Number>> layer2 = std::make_shared<hypro::StepFunctionLayer<Number>>( 1, 0, 0.33, 0, 1 );
+	std::shared_ptr<hypro::LayerBase<Number>> layer2 = std::make_shared<hypro::StepFunctionLayer<Number>>( 1, 0, 0.5, 0, 1 );
 
 	std::cout << "Size result1: " << result1.size() << std::endl;
 
