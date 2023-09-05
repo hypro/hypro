@@ -1,165 +1,224 @@
+/*
+ * Copyright (c) 2022-2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "LTIFlowpipeConstruction.h"
 
 namespace hypro {
 
-template <class Number>
-matrix_t<Number> computeTimeTransformation( linearFlow<Number> const& flow, tNumber timeStep ) {
-	matrix_t<Number> deltaMatrix = flow.getFlowMatrix() * carl::convert<tNumber, Number>( timeStep );
+    template<class Number>
+    matrix_t<Number> computeTimeTransformation(linearFlow<Number> const &flow, tNumber timeStep) {
+        matrix_t<Number> deltaMatrix = flow.getFlowMatrix() * carl::convert<tNumber, Number>(timeStep);
 
-	// clang-format off
-	TRACE( "hypro.worker", "timestep: " << std::endl << timeStep );
-	TRACE( "hypro.worker", "flow: " << std::endl << flow.getFlowMatrix() );
-    TRACE( "hypro.worker", "delta matrix: " << std::endl << deltaMatrix );
-	// clang-format on
+        // clang-format off
+        TRACE("hypro.worker", "timestep: " << std::endl << timeStep);
+        TRACE("hypro.worker", "flow: " << std::endl << flow.getFlowMatrix());
+        TRACE("hypro.worker", "delta matrix: " << std::endl << deltaMatrix);
+        // clang-format on
 
-	matrix_t<double> doubleMatrix = convert<Number, double>( deltaMatrix );
-	matrix_t<double> expMatrix = doubleMatrix.exp();
-	matrix_t<Number> resultMatrix = convert<double, Number>( expMatrix );
+        matrix_t<double> doubleMatrix = convert<Number, double>(deltaMatrix);
+        matrix_t<double> expMatrix = doubleMatrix.exp();
+        matrix_t<Number> resultMatrix = convert<double, Number>(expMatrix);
 
-	// clang-format off
-	TRACE( "hypro.worker", "double matrix: " << std::endl << doubleMatrix );
-	TRACE( "hypro.worker", "expMatrix: " << std::endl << expMatrix );
-    TRACE( "hypro.worker", "result matrix: " << std::endl << resultMatrix );
-	// clang-format on
+        // clang-format off
+        TRACE("hypro.worker", "double matrix: " << std::endl << doubleMatrix);
+        TRACE("hypro.worker", "expMatrix: " << std::endl << expMatrix);
+        TRACE("hypro.worker", "result matrix: " << std::endl << resultMatrix);
+        // clang-format on
 
-	return resultMatrix;
-}
+        return resultMatrix;
+    }
 
-template <class Representation, class Number>
-Representation constructFirstSegment( Representation const& initialSet,
-									  linearFlow<Number> const& flow,
-									  matrix_t<Number> const& rawTransformation,
-									  tNumber timeStep ) {
-	// Zero'd dummy external input
-	Box<Number> externalInput{ std::make_pair(
-		  Point<Number>{ vector_t<Number>::Zero( flow.dimension() ) },
-		  Point<Number>{ vector_t<Number>::Zero( flow.dimension() ) } ) };
+    template<class Representation, class Number>
+    Representation constructFirstSegment(Representation const &initialSet,
+                                         linearFlow<Number> const &flow,
+                                         matrix_t<Number> const &rawTransformation,
+                                         tNumber timeStep) {
+        // Zero'd dummy external input
+        Box<Number> externalInput{std::make_pair(
+                Point<Number>{vector_t<Number>::Zero(flow.dimension())},
+                Point<Number>{vector_t<Number>::Zero(flow.dimension())})};
 
-	ErrorBoxes errorBoxes = constructErrorBoxes(
-		  carl::convert<tNumber, Number>( timeStep ),
-		  flow.getFlowMatrix(),
-		  initialSet,
-		  rawTransformation,
-		  externalInput );
+        ErrorBoxes errorBoxes = constructErrorBoxes(
+                carl::convert<tNumber, Number>(timeStep),
+                flow.getFlowMatrix(),
+                initialSet,
+                rawTransformation,
+                externalInput);
 
-	Representation atDelta = initialSet.affineTransformation( timeTrafoMatrixBlock( rawTransformation ), timeTrafoVectorBlock( rawTransformation ) );
+        Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
+                                                                 timeTrafoVectorBlock(rawTransformation));
 
-	Representation firstSegment = atDelta.unite( initialSet );
+        Representation firstSegment = atDelta.unite(initialSet);
 
-	// Horrible interface. Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
-	Representation bloatingSet{};
-	convert( Number( Number( 1 ) / Number( 4 ) ) * errorBoxes.DifferenceBox, bloatingSet );
+        // Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
+        auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
+        Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
 
-	TRACE( "hypro", "atDelta: " << atDelta.vertices() );
-	TRACE( "hypro", "init: " << initialSet.vertices() );
-	TRACE( "hypro", "bloatingSet: " << bloatingSet.vertices() );
+        TRACE("hypro", "atDelta: " << atDelta.vertices());
+        TRACE("hypro", "init: " << initialSet.vertices());
+        TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
-	firstSegment = firstSegment.minkowskiSum( bloatingSet );
-	firstSegment.removeRedundancy();
+        firstSegment = firstSegment.minkowskiSum(bloatingSet);
+        firstSegment.removeRedundancy();
 
-	return firstSegment;
-}
+        return firstSegment;
+    }
 
-template <class Representation, class Number>
-ErrorBoxes<Number> constructErrorBoxes( Number const& delta, matrix_t<Number> const& flowMatrix, Representation const& initialSet, matrix_t<Number> const& trafoMatrix, Box<Number> const& externalInput ) {
-	if ( initialSet.empty() ) return {};
+    template<class Number, class Representation, class... Rargs>
+    Representation constructFirstSegment(State<Number, Representation, Rargs...> const &initialSet,
+                                         linearFlow<Number> const &flow,
+                                         matrix_t<Number> const &rawTransformation,
+                                         tNumber timeStep) {
+        // Zero'd dummy external input
+        Box<Number> externalInput{std::make_pair(
+                Point<Number>{vector_t<Number>::Zero(flow.dimension())},
+                Point<Number>{vector_t<Number>::Zero(flow.dimension())})};
 
-	assert( initialSet.dimension() == externalInput.dimension() );
+        ErrorBoxes errorBoxes = constructErrorBoxes(
+                carl::convert<tNumber, Number>(timeStep),
+                flow.getFlowMatrix(),
+                initialSet,
+                rawTransformation,
+                externalInput);
 
-	size_t dimension = flowMatrix.cols();
-	matrix_t<Number> matrixBlock = matrix_t<Number>::Zero( 3 * dimension, 3 * dimension );
+        auto atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
+                                                       timeTrafoVectorBlock(rawTransformation));
 
-	matrixBlock.block( 0, 0, dimension, dimension ) = flowMatrix.cwiseAbs();												   // Upper left block
-	matrixBlock.block( 0, dimension, dimension, dimension ) = matrix_t<Number>::Identity( dimension, dimension );			   // Upper middle block
-	matrixBlock.block( dimension, 2 * dimension, dimension, dimension ) = matrix_t<Number>::Identity( dimension, dimension );  // Middle right block
+        auto firstSegment = atDelta.unite(initialSet);
 
-	matrixBlock *= delta;
+        // Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
+        auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
+        auto bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
 
-	matrix_t<double> matrixBlockDouble = convert<Number, double>( matrixBlock );
-	matrixBlockDouble = matrixBlockDouble.exp();
-	matrixBlock = convert<double, Number>( matrixBlockDouble );
+        TRACE("hypro", "atDelta: " << atDelta.vertices());
+        TRACE("hypro", "init: " << initialSet.vertices());
+        TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
-	matrix_t<Number> AMatrix = flowMatrix * ( matrix_t<Number>::Identity( dimension, dimension ) - trafoMatrix );
+        firstSegment = firstSegment.minkowskiSum(bloatingSet);
+        firstSegment.removeRedundancy();
 
-	// Transform initial set by AMatrix
-	Representation transformedInitialSetA = initialSet.affineTransformation( AMatrix.block( 0, 0, dimension - 1, dimension - 1 ), AMatrix.block( 0, dimension - 1, dimension - 1, 1 ) );
+        return firstSegment;
+    }
 
-	Box<Number> boundingBoxA = Converter<Number>::template toBox<BoxLinearOptimizationOn>( transformedInitialSetA );
+    template<class Representation, class Number>
+    ErrorBoxes<Number>
+    constructErrorBoxes(Number const &delta, matrix_t<Number> const &flowMatrix, Representation const &initialSet,
+                        matrix_t<Number> const &trafoMatrix, Box<Number> const &externalInput) {
+        if (initialSet.empty()) return {};
 
-	if ( boundingBoxA.empty() ) return {};
+        assert(initialSet.dimension() == externalInput.dimension());
 
-	// Augment box by a dimension for constants
-	boundingBoxA.insert( carl::Interval<Number>{ 1, 1 } );
+        size_t dimension = flowMatrix.cols();
+        matrix_t<Number> matrixBlock = matrix_t<Number>::Zero(3 * dimension, 3 * dimension);
 
-	boundingBoxA = boundingBoxA.makeSymmetric();
-	assert( boundingBoxA.isSymmetric() );
+        matrixBlock.block(0, 0, dimension,
+                          dimension) = flowMatrix.cwiseAbs();                                                   // Upper left block
+        matrixBlock.block(0, dimension, dimension, dimension) = matrix_t<Number>::Identity(dimension,
+                                                                                           dimension);               // Upper middle block
+        matrixBlock.block(dimension, 2 * dimension, dimension, dimension) = matrix_t<Number>::Identity(dimension,
+                                                                                                       dimension);  // Middle right block
 
-	// Transform by upper middle block
-	boundingBoxA = boundingBoxA.linearTransformation( matrixBlock.block( 0, dimension, dimension, dimension ) );
+        matrixBlock *= delta;
 
-	matrix_t<Number> BMatrix = flowMatrix * flowMatrix * trafoMatrix;
+        matrix_t<double> matrixBlockDouble = convert<Number, double>(matrixBlock);
+        matrixBlockDouble = matrixBlockDouble.exp();
+        matrixBlock = convert<double, Number>(matrixBlockDouble);
 
-	Representation transformedInitialSetB = initialSet.affineTransformation( AMatrix.block( 0, 0, dimension - 1, dimension - 1 ), AMatrix.block( 0, dimension - 1, dimension - 1, 1 ) );
+        matrix_t<Number> AMatrix = flowMatrix * (matrix_t<Number>::Identity(dimension, dimension) - trafoMatrix);
 
-	Box<Number> boundingBoxB = Converter<Number>::template toBox<BoxLinearOptimizationOn>( transformedInitialSetB );
+        // Transform initial set by AMatrix
+        Representation transformedInitialSetA = initialSet.affineTransformation(
+                AMatrix.block(0, 0, dimension - 1, dimension - 1), AMatrix.block(0, dimension - 1, dimension - 1, 1));
 
-	// Augment box by a dimension for constants
-	boundingBoxB.insert( carl::Interval<Number>{ 1, 1 } );
+        Box<Number> boundingBoxA = Converter<Number>::template toBox<BoxLinearOptimizationOn>(transformedInitialSetA);
 
-	boundingBoxB = boundingBoxB.makeSymmetric();
-	assert( boundingBoxB.isSymmetric() );
+        if (boundingBoxA.empty()) return {};
 
-	// Transform by upper right block
-	boundingBoxB = boundingBoxB.linearTransformation( matrixBlock.block( 0, 2 * dimension, dimension, dimension ) );
+        // Augment box by a dimension for constants
+        boundingBoxA.insert(carl::Interval<Number>{1, 1});
 
-	Box<Number> errorBoxX0 = boundingBoxA.minkowskiSum( boundingBoxB );
+        boundingBoxA = boundingBoxA.makeSymmetric();
+        assert(boundingBoxA.isSymmetric());
 
-	// Remove augmentation via projection
-	std::vector<size_t> dims( errorBoxX0.dimension() - 1 );
-	std::iota( dims.begin(), dims.end(), 0 );  // fill with 0,1,...
-	errorBoxX0 = errorBoxX0.projectOn( dims );
+        // Transform by upper middle block
+        boundingBoxA = boundingBoxA.linearTransformation(matrixBlock.block(0, dimension, dimension, dimension));
 
-	Box<Number> errorBoxExternalInput = externalInput.linearTransformation( flowMatrix.block( 0, 0, dimension - 1, dimension - 1 ) );
+        matrix_t<Number> BMatrix = flowMatrix * flowMatrix * trafoMatrix;
 
-	errorBoxExternalInput.makeSymmetric();
-	// Transform by upper right block (without last row and col)
-	errorBoxExternalInput = errorBoxExternalInput.linearTransformation( matrixBlock.block( 0, 2 * dimension, dimension - 1, dimension - 1 ) );
+        Representation transformedInitialSetB = initialSet.affineTransformation(
+                AMatrix.block(0, 0, dimension - 1, dimension - 1), AMatrix.block(0, dimension - 1, dimension - 1, 1));
 
-	Box<Number> differenceBox = errorBoxX0.minkowskiDecomposition( errorBoxExternalInput );
+        Box<Number> boundingBoxB = Converter<Number>::template toBox<BoxLinearOptimizationOn>(transformedInitialSetB);
 
-	// empty external input implies that the errorBox should be the same as the differenceBox
-	assert( !externalInput.empty() || errorBoxX0 == differenceBox );
+        // Augment box by a dimension for constants
+        boundingBoxB.insert(carl::Interval<Number>{1, 1});
 
-	return { errorBoxX0, errorBoxExternalInput, differenceBox };
-}
+        boundingBoxB = boundingBoxB.makeSymmetric();
+        assert(boundingBoxB.isSymmetric());
 
-template <class Representation>
-std::vector<TimedValuationSet<Representation>> aggregate( size_t segmentsPerBlock, std::vector<IndexedValuationSet<Representation>>& enabled ) {
-	std::vector<TimedValuationSet<Representation>> aggregated{};
+        // Transform by upper right block
+        boundingBoxB = boundingBoxB.linearTransformation(matrixBlock.block(0, 2 * dimension, dimension, dimension));
 
-	if ( enabled.empty() ) return aggregated;
+        Box<Number> errorBoxX0 = boundingBoxA.minkowskiSum(boundingBoxB);
 
-	size_t blockCount = 0;
-	for ( auto& [set, ind] : enabled ) {
-		if ( blockCount == 0 ) {
-			// beginning of block
-			aggregated.emplace_back( TimedValuationSet<Representation>{ set, carl::Interval{ ind, ind } } );
-		} else {
-			// in a block
-			aggregated.back().valuationSet = aggregated.back().valuationSet.unite( set );
-		}
-		blockCount += 1;
+        // Remove augmentation via projection
+        std::vector<size_t> dims(errorBoxX0.dimension() - 1);
+        std::iota(dims.begin(), dims.end(), 0);  // fill with 0,1,...
+        errorBoxX0 = errorBoxX0.projectOn(dims);
 
-		// block is now full, finish previous and start next one
-		if ( blockCount == segmentsPerBlock ) {
-			aggregated.back().time.setUpper( ind );
-			blockCount = 0;
-		}
-	}
-	// closure of last block which might be incomplete
-	aggregated.back().time.setUpper( enabled.back().index );
+        Box<Number> errorBoxExternalInput = externalInput.linearTransformation(
+                flowMatrix.block(0, 0, dimension - 1, dimension - 1));
 
-	return aggregated;
-}
+        errorBoxExternalInput.makeSymmetric();
+        // Transform by upper right block (without last row and col)
+        errorBoxExternalInput = errorBoxExternalInput.linearTransformation(
+                matrixBlock.block(0, 2 * dimension, dimension - 1, dimension - 1));
+
+        Box<Number> differenceBox = errorBoxX0.minkowskiDecomposition(errorBoxExternalInput);
+
+        // empty external input implies that the errorBox should be the same as the differenceBox
+        assert(!externalInput.empty() || errorBoxX0 == differenceBox);
+
+        return {errorBoxX0, errorBoxExternalInput, differenceBox};
+    }
+
+    template<class Representation>
+    std::vector<TimedValuationSet<Representation>>
+    aggregate(size_t segmentsPerBlock, std::vector<IndexedValuationSet<Representation>> &enabled) {
+        std::vector<TimedValuationSet<Representation>> aggregated{};
+
+        TRACE("hypro.reachability",
+              "Aggregation to " << segmentsPerBlock << " segments per block for a block of size " << enabled.size());
+
+        if (enabled.empty()) return aggregated;
+
+        size_t blockCount = 0;
+        for (auto &[set, ind]: enabled) {
+            if (blockCount == 0) {
+                // beginning of block
+                aggregated.emplace_back(TimedValuationSet<Representation>{set, carl::Interval{ind, ind}});
+            } else {
+                // in a block
+                aggregated.back().valuationSet = aggregated.back().valuationSet.unite(set);
+            }
+            blockCount += 1;
+
+            // block is now full, finish previous and start next one
+            if (blockCount == segmentsPerBlock) {
+                setUpperBound(aggregated.back().time, ind);
+                blockCount = 0;
+            }
+        }
+        // closure of last block which might be incomplete
+        setUpperBound(aggregated.back().time, enabled.back().index);
+
+        return aggregated;
+    }
 
 }  // namespace hypro

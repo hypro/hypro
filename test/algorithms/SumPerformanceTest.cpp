@@ -7,7 +7,6 @@
 #include "../../hypro/datastructures/hybridAutomata/util.h"
 #include "../defines.h"
 #include "gtest/gtest.h"
-#include <carl/core/VariablePool.h>
 #include <chrono>
 
 using namespace hypro;

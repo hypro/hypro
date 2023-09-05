@@ -2,7 +2,7 @@
 ExternalProject_Add(
         google-benchmark
         GIT_REPOSITORY https://github.com/google/benchmark.git
-        GIT_SHALLOW ON
+        GIT_SHALLOW 1
         GIT_TAG "v1.6.0"
         DOWNLOAD_NO_PROGRESS 1
         CONFIGURE_COMMAND ${CMAKE_COMMAND} ../google-benchmark -DCMAKE_BUILD_TYPE=Release -DBENCHMARK_ENABLE_TESTING=OFF
@@ -30,4 +30,4 @@ set(GBENCHMARK_LIBRARIES "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}benchm
         "${binary_dir}/src/${CMAKE_FIND_LIBRARY_PREFIXES}benchmark_main${CMAKE_STATIC_LIBRARY_SUFFIX}"
         PARENT_SCOPE)
 
-add_dependencies(hypro_resources google-benchmark)
+add_dependencies(${PROJECT_NAME}-resources google-benchmark)

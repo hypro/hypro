@@ -12,6 +12,7 @@ int main( ) {
 	// construct state directly with primary representation
 	hypro::State<Number,hypro::Box<Number>,hypro::HPolytope<Number>> my_state{hypro::Box<Number>{carl::Interval<Number>(2,3)}};
 	std::cout << "State set type of my_state is " << my_state.getSetType() << std::endl;
+	std::cout << "State set value: " << my_state << std::endl;
 
 	// construct state from a h-polytope given as a matrix and a vector
 	// set up constraints
@@ -23,6 +24,7 @@ int main( ) {
 	hypro::State<Number,hypro::Box<Number>,hypro::HPolytope<Number>> my_other_state{};
 	my_other_state.setSet(hypro::HPolytope<Number>{ constraints, constants });
 	std::cout << "State set type of my_other_state is " << my_other_state.getSetType() << std::endl;
+	std::cout << "State set value: " << my_other_state << std::endl;
 
 	exit( 0 );
 }

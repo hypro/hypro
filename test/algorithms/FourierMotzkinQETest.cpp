@@ -1,4 +1,5 @@
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
 #include <hypro/algorithms/quantifierElimination/qe.h>
 
@@ -9,9 +10,9 @@ using Constr = ConstraintT<mpq_class>;
 using Form = FormulaT<mpq_class>;
 
 TEST( FourierMotzkinEliminationTest, SingleVariable ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) - Pol( y ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) + Pol( y ) + Pol( -5 ), carl::Relation::LEQ );
@@ -22,8 +23,6 @@ TEST( FourierMotzkinEliminationTest, SingleVariable ) {
 
 	Form inFormula = Form( carl::FormulaType::AND, constraints );
 
-	// std::cout << "Formula: " << inFormula << ", eliminate " << x << std::endl;
-
 	QEQuery query;
 	query.emplace_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{ x } ) );
 
@@ -31,8 +30,8 @@ TEST( FourierMotzkinEliminationTest, SingleVariable ) {
 }
 
 TEST( FourierMotzkinEliminationTest, NoReminder ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
 
 	Constr c1 = Constr( Pol( x ) - Pol( y ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ) + Pol( -5 ), carl::Relation::LEQ );
@@ -43,22 +42,18 @@ TEST( FourierMotzkinEliminationTest, NoReminder ) {
 
 	Form inFormula = Form( carl::FormulaType::AND, constraints );
 
-	std::cout << "Formula: " << inFormula << ", eliminate " << x << std::endl;
-
 	QEQuery query;
 	query.emplace_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{ x } ) );
 
 	auto newFormula = eliminateQuantifiers( inFormula, query );
 
-	std::cout << "New formula: " << newFormula << std::endl;
-
 	EXPECT_EQ( Form( carl::FormulaType::TRUE ), newFormula );
 }
 
 TEST( FourierMotzkinEliminationTest, Reminder ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) - Pol( y ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ) + Pol( -5 ), carl::Relation::LEQ );
@@ -71,22 +66,18 @@ TEST( FourierMotzkinEliminationTest, Reminder ) {
 
 	Form inFormula = Form( carl::FormulaType::AND, constraints );
 
-	std::cout << "Formula: " << inFormula << ", eliminate " << x << std::endl;
-
 	QEQuery query;
 	query.emplace_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{ x } ) );
 
 	auto newFormula = eliminateQuantifiers( inFormula, query );
 
-	std::cout << "New formula: " << newFormula << std::endl;
-
 	EXPECT_EQ( Form( c3 ), newFormula );
 }
 
 TEST( FourierMotzkinEliminationTest, MultipleVariables ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) - Pol( y ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( y ), carl::Relation::GEQ );
@@ -99,20 +90,16 @@ TEST( FourierMotzkinEliminationTest, MultipleVariables ) {
 
 	Form inFormula = Form( carl::FormulaType::AND, constraints );
 
-	std::cout << "Formula: " << inFormula << std::endl;
-
 	QEQuery query;
 	query.emplace_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{ x, y } ) );
 
 	auto newFormula = eliminateQuantifiers( inFormula, query );
-
-	std::cout << "New formula: " << newFormula << std::endl;
 }
 
 TEST( FourierMotzkinEliminationTest, SingleVariableEquation ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ), carl::Relation::LEQ );
@@ -125,14 +112,10 @@ TEST( FourierMotzkinEliminationTest, SingleVariableEquation ) {
 
 	Form inFormula = Form( carl::FormulaType::AND, constraints );
 
-	std::cout << "Formula: " << inFormula << std::endl;
-
 	QEQuery query;
 	query.emplace_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{ x } ) );
 
 	auto newFormula = eliminateQuantifiers( inFormula, query );
-
-	std::cout << "New formula: " << newFormula << std::endl;
 
 	EXPECT_EQ( Form( carl::FormulaType::AND,
 					 FormulasT<mpq_class>{ Form( Constr( Pol( 5 ) - Pol( y ) + Pol( z ), carl::Relation::GEQ ) ),
@@ -141,9 +124,9 @@ TEST( FourierMotzkinEliminationTest, SingleVariableEquation ) {
 }
 
 TEST( FourierMotzkinEliminationTest, SingleVariableEquationInconsistent ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ), carl::Relation::LEQ );
@@ -158,22 +141,18 @@ TEST( FourierMotzkinEliminationTest, SingleVariableEquationInconsistent ) {
 
 	Form inFormula = Form( carl::FormulaType::AND, constraints );
 
-	std::cout << "Formula: " << inFormula << std::endl;
-
 	QEQuery query;
 	query.emplace_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{ x } ) );
 
 	auto newFormula = eliminateQuantifiers( inFormula, query );
 
-	std::cout << "New formula: " << newFormula << std::endl;
-
 	EXPECT_EQ( Form( carl::FormulaType::FALSE ), newFormula );
 }
 
 TEST( FourierMotzkinEliminationTest, SingleVariableEquationInconsistent2 ) {
-	carl::Variable x = carl::freshRealVariable( "x" );
-	carl::Variable y = carl::freshRealVariable( "y" );
-	carl::Variable z = carl::freshRealVariable( "z" );
+	carl::Variable x = freshRealVariable( "x" );
+	carl::Variable y = freshRealVariable( "y" );
+	carl::Variable z = freshRealVariable( "z" );
 
 	Constr c1 = Constr( Pol( x ) + Pol( z ), carl::Relation::GEQ );
 	Constr c2 = Constr( Pol( x ) - Pol( y ), carl::Relation::LEQ );
@@ -188,14 +167,10 @@ TEST( FourierMotzkinEliminationTest, SingleVariableEquationInconsistent2 ) {
 
 	Form inFormula = Form( carl::FormulaType::AND, constraints );
 
-	// std::cout << "Formula: " << inFormula << std::endl;
-
 	QEQuery query;
 	query.emplace_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{ x } ) );
 
 	auto newFormula = eliminateQuantifiers( inFormula, query );
-
-	// std::cout << "New formula: " << newFormula << std::endl;
 
 	EXPECT_EQ( Form( carl::FormulaType::AND,
 					 FormulasT<mpq_class>{ Form( Constr( Pol( y ) - Pol( z ), carl::Relation::LEQ ) ),

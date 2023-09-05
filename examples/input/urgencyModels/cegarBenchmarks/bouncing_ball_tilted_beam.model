@@ -1,0 +1,131 @@
+# 3-dimensional bouncing ball with tilted beam modeled as urgent transition
+# the ball bounces in x and y direction with z coordinates constant between -1 and 1
+# the beam is at z = [-0.5,0.5] which causes splitting everytime the ball bounces on the beam
+
+hybrid reachability
+{
+ state var x,y,z,vy,vx
+
+ setting
+ {
+  fixed steps 0.01 #boxes: 0.001, polytopes: 0.01
+  time 10
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,y
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output bouncingBallTiltedBeam
+  max jumps 9
+  print on
+ }
+
+ modes
+ {
+  falling
+  {
+   poly ode
+   {
+    x' = vx
+    y' = vy
+    vy' = -9.81
+    vx' = 0
+    z' = 0
+   }
+
+   inv
+   {
+    y >= 0
+    x >= 0
+    x <= 2
+    
+   }
+  }
+
+  rising
+  {
+   poly ode
+   {
+    x' = vx
+    y' = vy
+    vy' = -9.81
+    vx' = 0
+    z' = 0
+   }
+
+   inv
+   {
+    y >= 0
+    x >= 0
+    vy >= 0
+    x <= 2
+    
+   }
+  }
+
+
+ }
+
+ jumps
+ {
+  falling -> rising
+  guard { y <= 0  }
+  reset { vy' := -0.75*vy }
+  parallelotope aggregation {}
+
+  falling -> rising
+  guard { -0.5*x + y <= 1 0.5*x - y <= -0.9 z <= 0.5 z >= -0.5 vy <= 0 }
+  reset { vy' := -0.75*vy vx' := vx - 0.1 }
+  parallelotope aggregation {}
+  urgent
+
+  rising -> falling
+  guard { vy <= 0 }
+  reset {}
+  parallelotope aggregation {}
+
+  falling -> falling
+  guard { x <= 0 vx <= 0 }
+  reset { vx' := -0.8 * vx }
+  parallelotope aggregation {}
+
+  falling -> falling
+  guard { x >= 2 -vx <= 0 }
+  reset { vx' := -0.8 * vx}
+  parallelotope aggregation {}
+
+  rising -> rising
+  guard { x <= 0 vx <= 0 }
+  reset { vx' := -0.8 * vx }
+  parallelotope aggregation {}
+
+  rising -> rising
+  guard { x >= 2 -vx <= 0 }
+  reset { vx' := -0.8 * vx}
+  parallelotope aggregation {}
+ }
+
+ init
+ {
+  falling
+  {
+   x in [0,0]
+   y in [5,5]
+   vy in [0,0]
+   z in [-1,1]
+   vx in [1,1]
+  }
+ }
+}
+
+unsafe set
+{
+ falling
+ {
+  x in [1,1.1]
+  y in [0,0]
+  z in [0,0]
+  vy <= 0
+ }
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+  <component id="embrake_template">
+    <param name="I" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="T" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x_e" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x_c" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="L" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="K_P" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="K_I" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="R" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="K" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="d_rot" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="i" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="T_sample" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="j_lower" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="j_upper" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <param name="x_0" type="real" local="false" d1="1" d2="1" dynamics="const" />
+    <location id="1" name="loc" x="249.0" y="326.5" width="481.0" height="152.0">
+      <invariant>T &lt;= T_sample + j_upper</invariant>
+      <flow>I' == 1/L * K_P * x_e + 1/L * K_I * x_c - 1/L * R * I - 1/L * K * K / d_rot * I &amp;
+x' == K / i / d_rot * I &amp;
+T' == 1 &amp;
+x_e' == 0 &amp;
+x_c' == 0</flow>
+    </location>
+    <transition source="1" target="1">
+      <guard>T &gt;= T_sample - j_lower</guard>
+      <assignment>T' == T - T_sample &amp;
+x_e' == x_0 - x &amp;
+x_c' == x_c + T_sample * (x_0 - x)</assignment>
+      <labelposition x="-6.0" y="-100.0" width="176.0" height="104.0" />
+    </transition>
+  </component>
+  <component id="embrake_clock">
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <location id="1" name="loc" x="249.0" y="326.5" width="481.0" height="152.0">
+      <invariant>true</invariant>
+      <flow>t' == 1</flow>
+    </location>
+  </component>
+  <component id="embrake_constant_deterministic">
+    <param name="I" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="T" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x_e" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x_c" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <bind component="embrake_template" as="embrake" x="230.0" y="55.0">
+      <map key="I">I</map>
+      <map key="x">x</map>
+      <map key="T">T</map>
+      <map key="x_e">x_e</map>
+      <map key="x_c">x_c</map>
+      <map key="L">0.001</map>
+      <map key="K_P">10000</map>
+      <map key="K_I">1000</map>
+      <map key="R">0.5</map>
+      <map key="K">0.02</map>
+      <map key="d_rot">0.1</map>
+      <map key="i">113.1167</map>
+      <map key="T_sample">0.0001</map>
+      <map key="j_lower">0</map>
+      <map key="j_upper">0</map>
+      <map key="x_0">0.05</map>
+    </bind>
+    <bind component="embrake_clock" as="clock" x="230.0" y="55.0">
+      <map key="t">t</map>
+    </bind>
+</component>
+  <component id="embrake_constant_nondeterministic">
+    <param name="I" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="T" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x_e" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="x_c" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <param name="t" type="real" local="false" d1="1" d2="1" dynamics="any" />
+    <bind component="embrake_template" as="embrake" x="230.0" y="55.0">
+      <map key="I">I</map>
+      <map key="x">x</map>
+      <map key="T">T</map>
+      <map key="x_e">x_e</map>
+      <map key="x_c">x_c</map>
+      <map key="L">0.001</map>
+      <map key="K_P">10000</map>
+      <map key="K_I">1000</map>
+      <map key="R">0.5</map>
+      <map key="K">0.02</map>
+      <map key="d_rot">0.1</map>
+      <map key="i">113.1167</map>
+      <map key="T_sample">0.0001</map>
+      <map key="j_lower">0.00000001</map>
+      <map key="j_upper">0.0000001</map>
+      <map key="x_0">0.05</map>
+    </bind>
+    <bind component="embrake_clock" as="clock" x="230.0" y="55.0">
+      <map key="t">t</map>
+    </bind>
+</component>
+</sspaceex>

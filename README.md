@@ -63,6 +63,54 @@ The library comes with a selection of case studies which can be used for reprodu
 points for interested users to use HyPro. In the following we shortly describe the content and how to run specific case
 studies.
 
+### Neural Network Verification
+
+HyPro includes four benchmarks that interested users can use to test our reachability analysis algorithm for neural networks with piece-wise linear activation functions. The four benchmarks are: ACAS Xu, drone hovering, thermostat controller, and sonar classifier. In the following section, we list some example commands for running verification on each of these benchmarks. We provide the neural networks in .nnet format and the safety properties in a custom text format. To execute the verification with the corresponding parameters, we offer a convenient script called `nnBenchmarkVerification.sh`, which is located in the root directory of HyPro. To run the script, we assume that the user's current directory is the `build` folder.
+
+#### ACAS Xu
+
+The famous ACAS Xu benchmark consists of 45 neural networks, each following the naming convention ACASXU_experimental_v2a_x_y.nnet, where $1 \leq x \leq 5$ and $1 \leq y \leq 9$. All of the networks have 5 inputs, 5 outputs, 6 hidden layers, each hidden layer with 50 neurons and ReLU activation. The benchmark comes with 10 safety properties, which are described in section VI of the Appendix of [this](https://arxiv.org/pdf/1702.01135.pdf) paper.
+
+To verify a specific property-network combination, you should first compile the corresponding binary file. Then, assuming that the current directory is the `build` folder, running the over-approximate method on network ACASXU_experimental_v2a_2_4 with safety property 4 can be done as follows:
+
+```shell
+$ make example_ACASbenchmark_verification
+$ ../nnBenchmarkVerification.sh acasxu overapprox ACASXU_experimental_v2a_2_4.nnet poly_prop4_input.in poly_prop4_safe.in
+```
+
+#### Drone hovering
+
+First of all, we would like to express our deepest gratitude to Dario Guidotti, Stefano Demarchi, and Armando Tacchella for generously sharing their drone hovering benchmark with us. This benchmark comprises eight neural networks. The first four consist of two hidden layers, and the other four networks consist of three hidden layers, each followed by a ReLU activation function. For each network, two safety properties are provided. 
+
+As an example, to compile the binary and verify the network AC7.nnet using the second safety property, please follow these commands:
+
+```shell
+$ make example_drones_verification
+$ ../nnBenchmarkVerification.sh drones exact AC7.nnet prop_AC7_02.in safe_AC7_02.in
+```
+
+#### Thermostat controller
+
+The benchmark discussed in [this](https://ths.rwth-aachen.de/wp-content/uploads/sites/4/master_thesis_jiang.pdf) Master’s thesis includes a neural network controller that regulates room temperature within the range of 17°C to 23°C using a thermostat. It accomplishes this by activating (mode on) and deactivating (mode off) the heater based on the sensed temperature. The neural network representing the thermostat's controller is a feedforward neural network with three layers. The input comprises two neurons that represent the temperature and the current mode (on or off). Additionally, there are two hidden layers, each with ten neurons. Finally, using the unit step activation function, the output layer predicts whether the heater should turn on or off, generating the corresponding control input.
+
+To compile and test this benchmark, please follow these commands:
+
+```shell
+$ make example_thermostat_verification
+$ ../nnBenchmarkVerification.sh thermostat exact fc_thermostat.nnet poly_thermostat.in
+```
+
+#### Sonar classifier
+
+Using this benchmark, we assess the robustness of a neural network designed for binary classification of a sonar dataset. This dataset characterizes sonar chirp returns reflecting off various objects and comprises 60 input variables representing the strength of the returned beams at different angles. The neural network under examination should demonstrate robust binary classification, distinguishing between rocks and metal cylinders. This neural network consists of two layers, with the first layer utilizing a ReLU activation function and the second layer employing a sigmoid activation function, which we switch to the hard sigmoid. Our goal is to verify the local robustness of this neural network.
+
+The local-robustness properties were generated using $\delta = 0.00001$. However, you can modify this value by changing the delta value in the `examples/nn_benchmarks/properties/sonar/convert_sonar.py` script and then re-run the script to regenerate the input properties. For instance, to evaluate the robustness of input 39, where the ground truth label is "rock" (R), you can follow these steps:
+
+```shell
+$ make example_robustness
+$ ../nnBenchmarkVerification.sh sonar overapprox sonar_detector.nnet sonar_39_R.in
+```
+
 ### Decomposition
 
 The case study consists of three benchmarks which illustrate the benefits of subspace computations. We present results

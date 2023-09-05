@@ -1,33 +1,21 @@
-if (${STATICLIB_SWITCH} STREQUAL "OFF")
+if (HYPRO_BENCHMARK)
+    add_executable(benchmark_boxes benchmark_boxes_openmp.cpp)
+    target_link_libraries(benchmark_boxes ${PROJECT_NAME}-shared ${GBENCHMARK_LIBRARIES})
+    target_include_directories(benchmark_boxes PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
+    add_dependencies(benchmark_boxes ${PROJECT_NAME}-resources)
 
-    ################################
-    # Unit Tests
-    ################################
+    add_executable(benchmark_hyperoctree benchmark_hyperoctree.cpp)
+    target_link_libraries(benchmark_hyperoctree ${PROJECT_NAME}-shared ${GBENCHMARK_LIBRARIES})
+    target_include_directories(benchmark_hyperoctree PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
+    add_dependencies(benchmark_hyperoctree ${PROJECT_NAME}-resources)
 
-    add_executable(runBenchmark
-            AllBenchmarkTest.cpp
-            )
+    add_executable(benchmark_redundant_points_heuristic benchmark_redundantPointHeuristics.cpp)
+    target_link_libraries(benchmark_redundant_points_heuristic ${PROJECT_NAME}-shared ${GBENCHMARK_LIBRARIES})
+    target_include_directories(benchmark_redundant_points_heuristic PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
+    add_dependencies(benchmark_redundant_points_heuristic ${PROJECT_NAME}-resources)
 
-    add_dependencies(runBenchmark hypro_resources)
-    target_include_directories(runBenchmark PRIVATE ${GTEST_INCLUDE_DIR})
-
-    target_link_libraries(runBenchmark
-            ${PROJECT_NAME}-shared
-            ${GTEST_LIBRARIES})
-
-    cotire(runBenchmark)
-
-    #add_test( NAME benchmark COMMAND runBenchmark )
+    add_executable(benchmark_template_linear_optimization benchmark_template_linear_optimization.cpp)
+    target_link_libraries(benchmark_template_linear_optimization ${PROJECT_NAME}-shared ${GBENCHMARK_LIBRARIES})
+    target_include_directories(benchmark_template_linear_optimization PRIVATE ${GBENCHMARK_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/test/include/)
+    add_dependencies(benchmark_template_linear_optimization ${PROJECT_NAME}-resources)
 endif ()
-
-file(GLOB_RECURSE BM_SOURCES ${CMAKE_CURRENT_LIST_DIR}/hyproBenchmark/*.cpp)
-
-# general collection of benchmarks
-add_executable(benchmark
-        ${BM_SOURCES}
-        )
-target_link_libraries(benchmark PUBLIC
-        ${PROJECT_NAME}-shared
-        )
-cotire(runBenchmark)
-cotire(benchmark)

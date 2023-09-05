@@ -1,6 +1,6 @@
 #include "test/defines.h"
+
 #include "gtest/gtest.h"
-#include <carl/interval/Interval.h>
 #include <hypro/datastructures/HybridAutomaton/Visitors.h>
 #include <hypro/representations/GeometricObjectBase.h>
 #include <variant>

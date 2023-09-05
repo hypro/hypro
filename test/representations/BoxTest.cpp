@@ -1,17 +1,10 @@
 /*
- * Copyright (c) 2021.
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
- * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
- * Software.
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
- * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /**
@@ -30,12 +23,12 @@
 #include <hypro/datastructures/Point.h>
 #include <hypro/representations/GeometricObjectBase.h>
 
-template <typename Number>
-hypro::matrix_t<Number> createRotationMatrix( Number angle, std::size_t dimension, std::size_t first,
-											  std::size_t second ) {
-	hypro::matrix_t<Number> rotX = hypro::matrix_t<Number>::Identity( dimension, dimension );
-	rotX( first, first ) = carl::cos( angle );
-	rotX( first, second ) = -carl::sin( angle );
+template<typename Number>
+hypro::matrix_t<Number> createRotationMatrix(Number angle, std::size_t dimension, std::size_t first,
+                                             std::size_t second) {
+    hypro::matrix_t<Number> rotX = hypro::matrix_t<Number>::Identity(dimension, dimension);
+    rotX(first, first) = carl::cos(angle);
+    rotX(first, second) = -carl::sin(angle);
 	rotX( second, first ) = carl::sin( angle );
 	rotX( second, second ) = carl::cos( angle );
 	return rotX;
@@ -139,8 +132,10 @@ TYPED_TEST( BoxTest, Constructor ) {
 	EXPECT_EQ( TypeParam( 2 ), eBox.max().at( 0 ) );
 	EXPECT_EQ( TypeParam( 4 ), eBox.max().at( 1 ) );
 
-	hypro::Box<TypeParam> b = hypro::Box<TypeParam>::Empty();
+    hypro::Box<TypeParam> b = hypro::Box<TypeParam>::Empty(1);
 	EXPECT_TRUE( b.empty() );
+    hypro::Box<TypeParam> c = hypro::Box<TypeParam>::Empty(0);
+    EXPECT_TRUE(c.empty());
 }
 
 TYPED_TEST( BoxTest, Access ) {
@@ -164,7 +159,7 @@ TYPED_TEST( BoxTest, Access ) {
 	EXPECT_NE( this->box2, this->box3 );
 	EXPECT_NE( this->box3, this->box1 );
 
-	hypro::Box<TypeParam> emptyBox = hypro::Box<TypeParam>::Empty();
+    hypro::Box<TypeParam> emptyBox = hypro::Box<TypeParam>::Empty(3);
 	hypro::Box<TypeParam> zeroDimBox;
 	EXPECT_FALSE( this->box1.empty() );
 	EXPECT_TRUE( emptyBox.empty() );
@@ -417,16 +412,16 @@ TYPED_TEST( BoxTest, Intersection ) {
 
 	EXPECT_EQ( hypro::Box<TypeParam>( intervals ), res );
 
-	hypro::Box<TypeParam> empt1 = this->box1.intersect( hypro::Box<TypeParam>::Empty() );
+    hypro::Box<TypeParam> empt1 = this->box1.intersect(hypro::Box<TypeParam>::Empty(2));
 	EXPECT_TRUE( empt1.empty() );
 
-	auto empt2 = hypro::Box<TypeParam>::Empty();
+    auto empt2 = hypro::Box<TypeParam>::Empty(1);
 	EXPECT_TRUE( empt2.empty() );
 
-	auto empt3 = hypro::Box<TypeParam>::Empty().intersect( this->box1 );
+    auto empt3 = hypro::Box<TypeParam>::Empty(2).intersect(this->box1);
 	EXPECT_TRUE( empt3.empty() );
 
-	auto empt4 = hypro::Box<TypeParam>::Empty().intersect( hypro::Box<TypeParam>::Empty() );
+    auto empt4 = hypro::Box<TypeParam>::Empty(3).intersect(hypro::Box<TypeParam>::Empty(3));
 	EXPECT_TRUE( empt4.empty() );
 
 	hypro::Box<TypeParam> reduced = this->box1.intersect( hypro::Box<TypeParam>( carl::Interval<TypeParam>( 3, 4 ) ) );
@@ -491,6 +486,8 @@ TYPED_TEST( BoxTest, IntersectionHalfspace ) {
 TYPED_TEST( BoxTest, Membership ) {
 	hypro::Point<TypeParam> p( { 4, 2 } );
 	EXPECT_TRUE( this->box1.contains( p ) );
+	// self-containment
+	EXPECT_TRUE( this->box1.contains( this->box1 ) );
 }
 
 TYPED_TEST( BoxTest, NumberReduction ) {
@@ -547,7 +544,7 @@ TYPED_TEST( BoxTest, Projection ) {
 
 	EXPECT_EQ( box.projectOn( dims ), hypro::Box<TypeParam>( std::make_pair( hypro::Point<TypeParam>( { 1 } ),
 																			 hypro::Point<TypeParam>( { 2 } ) ) ) );
-	EXPECT_EQ( box.projectOn( std::vector<std::size_t>() ), hypro::Box<TypeParam>::Empty() );
+    EXPECT_EQ(box.projectOn(std::vector<std::size_t>()), hypro::Box<TypeParam>::Empty(0));
 }
 
 TYPED_TEST( BoxTest, SettingsConversion ) {

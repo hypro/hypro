@@ -1,0 +1,132 @@
+# Modified model of a reactor core found for example in "The Algorithmic Analysis of Hybrid Systems".
+# One of two cooling rods can be inserted to cool down the core. If the temperature gets too high and no rods can be inserted, the system is unsafe.
+# Rods can only be inserted every 20 seconds.
+
+# Adaptions: Insertions of cooling rods are urgent. Therefore the guards c1 < 20 and c2 < 20 can be removed from the unsafe condition, which makes
+# handling urgency necessary for verifying safety.
+# The initial set has been modified from [510,520]x[20,20]x[20,20] to [510,510]x[20,20]x[20,20]
+# Since hypro does not support strict inequalities, the unsafe condition x >= 550 c1 < 20 c2 < 20 is approximated by x >= 550.1 in location norod
+
+hybrid reachability
+{
+ state var x,c1,c2
+
+ setting
+ {
+  fixed steps 0.1
+  time 20
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,c1
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output rod_reactor
+  max jumps 5
+  print on
+ }
+
+ modes
+ {
+  rod1
+  {
+   poly ode 1
+   {
+    x' = 0.1*x + -56
+    c1' = 1
+    c2' = 1
+   }
+
+   inv
+   {
+    x >= 510
+   }
+  }
+
+  rod2
+  {
+   poly ode 1
+   {
+    x' = 0.1*x + -60
+    c1' = 1
+    c2' = 1
+   }
+
+   inv
+   {
+    x >= 510
+   }
+  }
+
+  norod
+  {
+   poly ode 1
+   {
+    x' = 0.1*x + -50
+    c1' = 1
+    c2' = 1
+   }
+
+   inv
+   {
+   }
+  }
+
+  shutdown
+  {
+   poly ode 1
+   {
+    x' = 0
+    c1' = 0
+    c2' = 0
+   }
+
+   inv
+   {
+   }
+  }
+ }
+
+ jumps
+ {
+  norod -> rod1
+  guard {x >= 550  c1 >= 20 }
+  reset { }
+  parallelotope aggregation {}
+  urgent
+
+  norod -> rod2
+  guard {x >= 550  c2 >= 20 }
+  reset { }
+  parallelotope aggregation {}
+  urgent
+
+  rod1 -> norod
+  guard {x = 510 }
+  reset { c1' := 0}
+  parallelotope aggregation {}
+
+  rod2 -> norod
+  guard {x = 510 }
+  reset { c2' := 0}
+  parallelotope aggregation {}
+ }
+
+ init
+ {
+  norod
+  {
+   x in [510,510]
+   c1 in [20,20]
+   c2 in [20,20]
+  }
+ }
+}
+
+unsafe set
+{
+ norod
+ {
+ x >= 550.1
+ }
+}

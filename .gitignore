@@ -1,4 +1,5 @@
 .idea
+.editorconfig
 CMakeFiles
 CMakeCache.txt
 nbproject
@@ -22,3 +23,9 @@ resources/glpk-5.0/
 *.java
 *.interp
 doc/docpage/_site/
+
+examples/nnet/coav
+examples/nnet/mnist
+examples/nnet/twin
+examples/onnx
+/sonar-project.properties

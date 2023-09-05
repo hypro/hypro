@@ -25,9 +25,7 @@ class AntlrParserCIFTest : public ::testing::Test {
 
 	void cwd() {
 		char cwd[1024];
-		if ( getcwd( cwd, sizeof( cwd ) ) != NULL )
-			fprintf( stdout, "Current working dir: %s\n", cwd );
-		else
+		if ( getcwd( cwd, sizeof( cwd ) ) == NULL )
 			std::cerr << "getcwd() error" << std::endl;
 	}
 };
@@ -80,8 +78,6 @@ TYPED_TEST( AntlrParserCIFTest, ParseVariables ) {
 	// Let's create a visitor
 	hypro::HybridCIFVisitor<TypeParam> visitor;
 	visitor.visit( tree );
-
-	// std::cout << visitor << std::endl;
 
 	SUCCEED();
 }

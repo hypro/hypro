@@ -1,4 +1,13 @@
 /*
+ * Copyright (c) 2023.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+/*
  * ProjectOp.h
  *
  * A RootGrowNode that represents a projection operation in the tree of operations representing a SupportFunction.
@@ -15,140 +24,144 @@
 namespace hypro {
 
 // Forward Declaration
-template <typename Number, typename Converter, typename Setting>
-class SupportFunctionNewT;
+    template<typename Number, typename Converter, typename Setting>
+    class SupportFunctionNewT;
 
-template <typename Number, typename Converter, typename Setting>
-class RootGrowNode;
+    template<typename Number, typename Converter, typename Setting>
+    class RootGrowNode;
 
 // A data struct for ProjectOp, containing all needed info to construct a ProjectOp from it. No child info is saved.
-struct ProjectData : public RGNData {
-	std::vector<std::size_t> dimensions;
-	ProjectData( const std::vector<std::size_t>& dims )
-		: dimensions( dims ) {}
-};
+    struct ProjectData : public RGNData {
+        std::vector<std::size_t> dimensions;
 
-template <typename Number, typename Converter, typename Setting>
-class ProjectOp : public RootGrowNode<Number, Converter, Setting> {
-  private:
-	////// Usings
+        ProjectData(const std::vector<std::size_t> &dims)
+                : dimensions(dims) {}
+    };
 
-	using PointerVec = typename RootGrowNode<Number, Converter, Setting>::PointerVec;
+    template<typename Number, typename Converter, typename Setting>
+    class ProjectOp : public RootGrowNode<Number, Converter, Setting> {
+    private:
+        ////// Usings
 
-	////// General Interface
+        using PointerVec = typename RootGrowNode<Number, Converter, Setting>::PointerVec;
 
-	SFNEW_TYPE type = SFNEW_TYPE::PROJECTOP;
-	unsigned originCount;
-	PointerVec mChildren;
-	std::size_t mDimension;
+        ////// General Interface
 
-	////// Members for this class
+        SFNEW_TYPE type = SFNEW_TYPE::PROJECTOP;
+        unsigned originCount;
+        PointerVec mChildren;
+        std::size_t mDimension;
 
-	std::vector<std::size_t> dimensions;  // Vector of all indices that should not be projected to 0
+        ////// Members for this class
 
-  public:
-	////// Constructors & Destructors
+        std::vector<std::size_t> dimensions;  // Vector of all indices that should not be projected to 0
 
-	ProjectOp() = delete;
+    public:
+        ////// Constructors & Destructors
 
-	ProjectOp( const SupportFunctionNewT<Number, Converter, Setting>& origin, const std::vector<std::size_t>& dims )
-		: originCount( 1 )
-		, mChildren( PointerVec( 1, nullptr ) )
-		, mDimension( origin.dimension() )
-		, dimensions( dims ) {
-		origin.addOperation( this );
-	}
+        ProjectOp() = delete;
 
-	ProjectOp( const ProjectData& d )
-		: originCount( 1 )
-		, mChildren( PointerVec( { 1, nullptr } ) )
-		//, mDimension(d.origin->getDimension())
-		, dimensions( d.dimensions ) {}
+        ProjectOp(const SupportFunctionNewT<Number, Converter, Setting> &origin, const std::vector<std::size_t> &dims)
+                : originCount(1), mChildren(PointerVec(1, nullptr)), mDimension(origin.dimension()), dimensions(dims) {
+            origin.addOperation(this);
+        }
 
-	~ProjectOp() {}
+        ProjectOp(const ProjectData &d)
+                : originCount(1), mChildren(PointerVec({1, nullptr}))
+                //, mDimension(d.origin->getDimension())
+                , dimensions(d.dimensions) {}
 
-	////// Getters & Setters
+        ~ProjectOp() {}
 
-	SFNEW_TYPE getType() const override { return type; }
-	unsigned getOriginCount() const override { return originCount; }
-	std::size_t getDimension() const override { return mDimension; }
-	std::vector<std::size_t> getDimensions() const { return dimensions; }
-	RGNData* getData() const override { return new ProjectData( dimensions ); }
-	void setDimension( const std::size_t d ) override { mDimension = d; }
+        ////// Getters & Setters
 
-	////// RootGrowNode Interface
+        SFNEW_TYPE getType() const override { return type; }
 
-	// Unwantend dimensions are set to 0, keep all other entries in param
-	matrix_t<Number> transform( const matrix_t<Number>& param ) const override {
-		matrix_t<Number> projectedParameters = matrix_t<Number>::Zero( param.rows(), param.cols() );
-		Eigen::Index entryIndex = 0;
-		for ( const auto& entry : dimensions ) {
-			TRACE( "hypro.representations.supportFunction", "Entry: " << entry )
-			if ( int( entry ) < param.cols() ) {
-				projectedParameters.col( entry ) = param.col( entry );
-				++entryIndex;
-			}
-		}
-		assert( std::size_t( entryIndex ) == dimensions.size() );
-		return projectedParameters;
-	}
+        unsigned getOriginCount() const override { return originCount; }
 
-	// should not be reachable
-	std::vector<EvaluationResult<Number>> compute( const matrix_t<Number>&, bool ) const override {
-		assert( false && "ProjectOp::compute should not be called" );
-		return std::vector<EvaluationResult<Number>>();
-	}
+        std::size_t getDimension() const override { return mDimension; }
 
-	// Given the results, return vector of evaluation results (here only first place needed, since unary op)
-	std::vector<EvaluationResult<Number>> aggregate( std::vector<std::vector<EvaluationResult<Number>>>& resultStackBack, const matrix_t<Number>& ) const override {
-		assert( resultStackBack.size() == 1 );
-		return resultStackBack.front();
-	}
+        std::vector<std::size_t> getDimensions() const { return dimensions; }
 
-	// Checks emptiness
-	bool empty( const std::vector<bool>& childrenEmpty ) const override {
-		assert( childrenEmpty.size() == 1 );
-		if ( dimensions.empty() || childrenEmpty.front() ) return true;
-		return false;
-	}
+        RGNData *getData() const override { return new ProjectData(dimensions); }
 
-	// Set all unwanted dimensions to zero
-	Point<Number> supremumPoint( std::vector<Point<Number>>& points ) const override {
-		assert( points.size() == 1 );
-		vector_t<Number> tmp = vector_t<Number>::Zero( points.front().dimension() );
-		for ( const auto& entry : dimensions ) {
-			if ( entry < points.front().dimension() ) {
-				tmp( entry ) = points.front().at( entry );
-			}
-		}
-		return Point<Number>( tmp );
-	}
+        void setDimension(const std::size_t d) override { mDimension = d; }
 
-	// TODO: if wildcard values in vectors avaiable, then implement smth correct here
-	vector_t<Number> reverseOp( const vector_t<Number>& point ) const override {
-		return point;
-	}
+        ////// RootGrowNode Interface
 
-	// If child contains p, then projected version will contain it too
-	bool contains( const std::vector<bool>& v, const vector_t<Number>& /*point*/ ) const override {
-		assert( v.size() == 1 );
-		if ( v.front() ) return true;
-		return false;
-	}
+        // Unwantend dimensions are set to 0, keep all other entries in param
+        matrix_t<Number> transform(const matrix_t<Number> &param) const override {
+            matrix_t<Number> projectedParameters = matrix_t<Number>::Zero(param.rows(), param.cols());
+            Eigen::Index entryIndex = 0;
+            for (const auto &entry: dimensions) {
+                TRACE("hypro.representations.supportFunction", "Entry: " << entry)
+                if (int(entry) < param.cols()) {
+                    projectedParameters.col(entry) = param.col(entry);
+                    ++entryIndex;
+                }
+            }
+            assert(std::size_t( entryIndex ) == dimensions.size());
+            return projectedParameters;
+        }
 
-	// Return all dimensions that are in "dims" and also in "dimensions"
-	std::vector<std::size_t> intersectDims( const std::vector<std::vector<std::size_t>>& dims ) const override {
-		assert( dims.size() == 1 );
-		std::vector<std::size_t> res;
-		for ( auto& d : dims.front() ) {
-			for ( auto& dimToKeep : dimensions ) {
-				if ( d == dimToKeep ) {
-					res.push_back( d );
-				}
-			}
-		}
-		return res;
-	}
-};
+        // should not be reachable
+        std::vector<EvaluationResult<Number>> compute(const matrix_t<Number> &, bool) const override {
+            assert(false && "ProjectOp::compute should not be called");
+            return std::vector<EvaluationResult<Number>>();
+        }
+
+        // Given the results, return vector of evaluation results (here only first place needed, since unary op)
+        std::vector<EvaluationResult<Number>>
+        aggregate(std::vector<std::vector<EvaluationResult<Number>>> &resultStackBack,
+                  const matrix_t<Number> &) const override {
+            assert(resultStackBack.size() == 1);
+            return resultStackBack.front();
+        }
+
+        // Checks emptiness
+        bool empty(const std::vector<bool> &childrenEmpty) const override {
+            assert(childrenEmpty.size() == 1);
+            if (dimensions.empty() || childrenEmpty.front()) return true;
+            return false;
+        }
+
+        // Set all unwanted dimensions to zero
+        Point<Number> supremumPoint(std::vector<Point<Number>> &points) const override {
+            assert(points.size() == 1);
+            vector_t<Number> tmp = vector_t<Number>::Zero(points.front().dimension());
+            for (const auto &entry: dimensions) {
+                if (entry < points.front().dimension()) {
+                    tmp(entry) = points.front().at(entry);
+                }
+            }
+            return Point<Number>(tmp);
+        }
+
+        // TODO: if wildcard values in vectors avaiable, then implement smth correct here
+        vector_t<Number> reverseOp(const vector_t<Number> &point) const override {
+            return point;
+        }
+
+        // If child contains p, then projected version will contain it too
+        bool contains(const std::vector<bool> &v, const vector_t<Number> & /*point*/ ) const override {
+            assert(v.size() == 1);
+            if (v.front()) return true;
+            return false;
+        }
+
+        // Return all dimensions that are in "dims" and also in "dimensions"
+        std::vector<std::size_t> intersectDims(const std::vector<std::vector<std::size_t>> &dims) const override {
+            assert(dims.size() == 1);
+            std::vector<std::size_t> res;
+            for (auto &d: dims.front()) {
+                for (auto &dimToKeep: dimensions) {
+                    if (d == dimToKeep) {
+                        res.push_back(d);
+                    }
+                }
+            }
+            return res;
+        }
+    };
 
 }  // namespace hypro

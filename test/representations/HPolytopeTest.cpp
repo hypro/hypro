@@ -1,6 +1,23 @@
+/*
+ * Copyright (c) 2021.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+ * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+ * Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+ * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 #include "test/defines.h"
 #include "gtest/gtest.h"
 #include <hypro/representations/GeometricObjectBase.h>
+#include <hypro/representations/sampling/sampling.h>
 
 using namespace hypro;
 
@@ -85,6 +102,11 @@ TYPED_TEST( HPolytopeTest, Access ) {
 	auto [constraints, constants] = hpt1.inequalities();
 	EXPECT_EQ( constraints, hpt1.matrix() );
 	EXPECT_EQ( constants, hpt1.vector() );
+
+	//------war nur um die polytope einmal graphisch darzustellen-----
+	// HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>( this->planes2 );
+	// std::cout << hpt1.vertices() << std::endl;
+	// std::cout << hpt2.vertices() << std::endl;
 }
 
 TYPED_TEST( HPolytopeTest, Swap ) {
@@ -413,6 +435,16 @@ TYPED_TEST( HPolytopeTest, MembershipCached ) {
 	EXPECT_FALSE( cachedPoly.contains( p5 ) );
 }
 
+TYPED_TEST( HPolytopeTest, GetSetOfSamplesAndContains ) {
+	HPolytopeT<TypeParam, Converter<TypeParam>, HPolytopeBoundingBoxCaching> cachedPoly{ this->planes2 };
+
+	int n = 100;
+	std::set<hypro::Point<TypeParam>> setOfSamples = uniform_sampling(cachedPoly, n);
+	for(auto sample : setOfSamples) {
+		EXPECT_TRUE( cachedPoly.contains(sample) );
+	}
+}
+
 TYPED_TEST( HPolytopeTest, MultiEvaluate ) {
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 	matrix_t<TypeParam> dirs = matrix_t<TypeParam>::Identity( 2, 2 );
@@ -486,5 +518,22 @@ TYPED_TEST( HPolytopeTest, OptimizerCaching ) {
 	EXPECT_EQ( hspaces.getOptimizer()->getCLPContexts().size(), std::size_t( 1 ) );
 	EXPECT_TRUE( hspaces.getOptimizer()->getCLPContexts().find( std::this_thread::get_id() ) !=
 				 hspaces.getOptimizer()->getCLPContexts().end() );
+#endif
+}
+
+TYPED_TEST( HPolytopeTest, SetMinus ) {
+	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
+	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>( this->planes2 );
+
+	std::vector<HPolytope<TypeParam>> result1 = hpt1.setMinus2( hpt2 );
+
+	EXPECT_EQ( result1.size(), (unsigned)3 );
+
+	std::vector<HPolytope<TypeParam>> result2 = hpt2.setMinus2( hpt1 );
+#ifndef HYPRO_USE_GLPK
+	EXPECT_TRUE( result2.empty() );
+#else
+	// without strict inequalities, the (redundant) points (2,-1) and (-2,-1) are expected
+	EXPECT_EQ( result2.size(), (unsigned)2 );
 #endif
 }

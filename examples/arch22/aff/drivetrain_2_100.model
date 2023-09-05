@@ -1,0 +1,238 @@
+# Created by Hyst v1.6
+# Hybrid Automaton in Flow*
+# Converted from file: drivetrain/drivetrain_2_100.xml
+# Command Line arguments: -i drivetrain/drivetrain_2_100.xml -o drivetrain_2_100.model -tool flowstar ""
+
+
+hybrid reachability
+{
+    # Vars
+    state var x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, t
+
+    setting
+    {
+        fixed steps 0.0005
+        time 2
+        remainder estimation 1e-4
+        identity precondition
+        gnuplot octagon x1,x3
+        adaptive orders { min 3, max 8 } 
+        cutoff 1e-15
+        precision 53
+        output drivetrain_2_100
+        max jumps 9
+        print on
+    }
+
+    modes
+    {
+        negAngle
+        {
+            nonpoly ode
+            {
+                x1' = 0.08333333333333333 * x7 - x9
+                x2' = (0.5 * (12.0 * x4 - x7) + 0.5 * (12.0 * x3 - 12.0 * (x1 + x8)) + 0.5 * (60.0 - 3.3333333333333335 * (x2 - 833.3333333333333 * (x1 - -0.03))) - x2) / 0.1
+                x3' = x4
+                x4' = 5.0
+                x5' = x6
+                x6' = 0.007142857142857143 * (100000.0 * (x10 - x5) - 5.6 * x6)
+                x7' = 3.3333333333333335 * (x2 - 833.3333333333333 * (x1 - -0.03))
+                x8' = x9
+                x9' = 0.01 * (10000.0 * (x1 - -0.03) - 100000.0 * (x8 - x10) - 1.0 * x9)
+                x10' = x11
+                x11' = 0.01 * (100000.0 * (x8 - x10) - 100000.0 * (x10 - x5) - 1.0 * x11)
+                t' = 1.0
+            }
+            inv
+            {
+                # Original invariant: x1 <= -0.03
+
+                x1 <= -0.03
+            }
+        }
+
+        deadzone
+        {
+            nonpoly ode
+            {
+                x1' = 0.08333333333333333 * x7 - x9
+                x2' = (0.5 * (12.0 * x4 - x7) + 0.5 * (12.0 * x3 - 12.0 * (x1 + x8)) + 0.5 * (60.0 - 3.3333333333333335 * x2) - x2) / 0.1
+                x3' = x4
+                x4' = 5.0
+                x5' = x6
+                x6' = 0.007142857142857143 * (100000.0 * (x10 - x5) - 5.6 * x6)
+                x7' = 3.3333333333333335 * x2
+                x8' = x9
+                x9' = 0.01 * (0.0 - 100000.0 * (x8 - x10) - 1.0 * x9)
+                x10' = x11
+                x11' = 0.01 * (100000.0 * (x8 - x10) - 100000.0 * (x10 - x5) - 1.0 * x11)
+                t' = 1.0
+            }
+            inv
+            {
+                # Original invariant: -0.03 <= x1 & x1 <= 0.03
+
+                -0.03 - x1 <= 0   x1 <= 0.03
+            }
+        }
+
+        posAngle
+        {
+            nonpoly ode
+            {
+                x1' = 0.08333333333333333 * x7 - x9
+                x2' = (0.5 * (12.0 * x4 - x7) + 0.5 * (12.0 * x3 - 12.0 * (x1 + x8)) + 0.5 * (60.0 - 3.3333333333333335 * (x2 - 833.3333333333333 * (x1 - 0.03))) - x2) / 0.1
+                x3' = x4
+                x4' = 5.0
+                x5' = x6
+                x6' = 0.007142857142857143 * (100000.0 * (x10 - x5) - 5.6 * x6)
+                x7' = 3.3333333333333335 * (x2 - 833.3333333333333 * (x1 - 0.03))
+                x8' = x9
+                x9' = 0.01 * (10000.0 * (x1 - 0.03) - 100000.0 * (x8 - x10) - 1.0 * x9)
+                x10' = x11
+                x11' = 0.01 * (100000.0 * (x8 - x10) - 100000.0 * (x10 - x5) - 1.0 * x11)
+                t' = 1.0
+            }
+            inv
+            {
+                # Original invariant: 0.03 <= x1
+
+                0.03 - x1 <= 0
+            }
+        }
+
+        negAngleInit
+        {
+            nonpoly ode
+            {
+                x1' = 0.08333333333333333 * x7 - x9
+                x2' = (0.5 * (12.0 * x4 - x7) + 0.5 * (12.0 * x3 - 12.0 * (x1 + x8)) + 0.5 * (-60.0 - 3.3333333333333335 * (x2 - 833.3333333333333 * (x1 - -0.03))) - x2) / 0.1
+                x3' = x4
+                x4' = -5.0
+                x5' = x6
+                x6' = 0.007142857142857143 * (100000.0 * (x10 - x5) - 5.6 * x6)
+                x7' = 3.3333333333333335 * (x2 - 833.3333333333333 * (x1 - -0.03))
+                x8' = x9
+                x9' = 0.01 * (10000.0 * (x1 - -0.03) - 100000.0 * (x8 - x10) - 1.0 * x9)
+                x10' = x11
+                x11' = 0.01 * (100000.0 * (x8 - x10) - 100000.0 * (x10 - x5) - 1.0 * x11)
+                t' = 1.0
+            }
+            inv
+            {
+                # Original invariant: t <= 0.2
+
+                t <= 0.2
+            }
+        }
+
+        error
+        {
+            lti ode
+            {
+                x1' = 0.0
+                x2' = 0.0
+                x3' = 0.0
+                x4' = 0.0
+                x5' = 0.0
+                x6' = 0.0
+                x7' = 0.0
+                x8' = 0.0
+                x9' = 0.0
+                x10' = 0.0
+                x11' = 0.0
+                t' = 0.0
+            }
+            inv
+            {
+            }
+        }
+    }
+
+    jumps
+    {
+        negAngle -> deadzone
+        guard
+        {
+            # Original guard: x1 >= -0.03
+
+            x1 >= -0.03
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        deadzone -> posAngle
+        guard
+        {
+            # Original guard: x1 >= 0.03
+
+            x1 >= 0.03
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        deadzone -> error
+        guard
+        {
+            # Original guard: x1 <= -0.03
+
+            x1 <= -0.03
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        posAngle -> error
+        guard
+        {
+            # Original guard: x1 <= 0.03
+
+            x1 <= 0.03
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+
+        negAngleInit -> negAngle
+        guard
+        {
+            # Original guard: t >= 0.2
+
+            t >= 0.2
+        }
+        reset
+        {
+        }
+        parallelotope aggregation {}
+    }
+
+    init
+    {
+        negAngleInit
+        {
+            x8 in [-0.00192, -0.00072]
+            x9 in [20, 40]
+            t in [0, 0]
+            x10 in [-0.00192, -0.00072]
+            x1 in [-0.0488, -0.0376]
+            x11 in [20, 40]
+            x2 in [-15.67, -6.336]
+            x3 in [0, 0]
+            x4 in [20, 40]
+            x5 in [0, 0]
+            x6 in [20, 40]
+            x7 in [-240, 0]
+        }
+    }
+}
+
+unsafe
+{
+    error { }
+}

@@ -6,9 +6,9 @@
  * Created on April 20, 2016, 3:43 PM
  */
 
-#include "../src/hypro/config.h"
-#include "../src/hypro/representations/GeometricObjectBase.h"
-#include "../src/hypro/util/plotting/Plotter.h"
+#include "hypro/config.h"
+#include "hypro/representations/GeometricObjectBase.h"
+#include "hypro/util/plotting/Plotter.h"
 #include <chrono>
 
 using namespace hypro;
@@ -145,7 +145,7 @@ int main() {
   points5.push_back(Point<Number>(p22));
   points5.push_back(Point<Number>(p23));
   points5.push_back(Point<Number>(p24));
-  plotter.addPoints(points5);
+  // plotter.addPoints(points5);
   vpolytope5 = VPolytope<Number>(points5);
 
   std::set<long int> results;
@@ -164,7 +164,7 @@ int main() {
     // 1st polytope (triangle)
     clock::time_point start = clock::now();
 
-    result = Converter<Number>::toHPolytope(vpolytope, OVER);
+    result = Converter<Number>::toHPolytope(vpolytope, CONV_MODE::OVER);
 
     std::cout
         << "Total time(triangle): "
@@ -179,7 +179,7 @@ int main() {
     // 2nd polytope (ambiguous box)
     start = clock::now();
 
-    result2 = Converter<Number>::toHPolytope(vpolytope2, OVER);
+    result2 = Converter<Number>::toHPolytope(vpolytope2, CONV_MODE::OVER);
 
     std::cout
         << "Total time(ambiBox): "
@@ -194,7 +194,7 @@ int main() {
     // 3rd polytope (point cloud)
     start = clock::now();
 
-    result3 = Converter<Number>::toHPolytope(vpolytope3, OVER);
+    result3 = Converter<Number>::toHPolytope(vpolytope3, CONV_MODE::OVER);
 
     std::cout
         << "Total time(pointCloud): "
@@ -209,7 +209,7 @@ int main() {
     // 4th polytope (stretched box)
     start = clock::now();
 
-    result4 = Converter<Number>::toHPolytope(vpolytope4, OVER);
+    result4 = Converter<Number>::toHPolytope(vpolytope4, CONV_MODE::OVER);
 
     std::cout
         << "Total time(stretchBox): "
@@ -224,7 +224,7 @@ int main() {
     // 5th polytope (line)
     start = clock::now();
 
-    result5 = Converter<Number>::toHPolytope(vpolytope5, OVER);
+    result5 = Converter<Number>::toHPolytope(vpolytope5, CONV_MODE::OVER);
 
     std::cout
         << "Total time(line): "
@@ -277,7 +277,7 @@ int main() {
   // plotter.addObject(result2.vertices());
   // plotter.addObject(result3.vertices());
   // plotter.addObject(result4.vertices());
-  plotter.addObject(result5.vertices());
+  // plotter.addObject(result5.vertices());
   plotter.plot2d();
   plotter.plotTex();
 

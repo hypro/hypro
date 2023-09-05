@@ -131,9 +131,20 @@ unsafe set
    v in [-2.5,0]
   }
 
+
+  x >= 3
  x >= 15+gabunga
+
  v+2+c >= -v+23
  v-7+8*x >= 33-12*x
+
+ { x <= 3 }
+
+v+2+c >= -v+23
+ v-7+8*x >= 33-12*x
+
+{ x <= 3 }
+
  #-v+2 >= 23 		#Problem: -v connects to polynom in constraint before, more generally: if connector is first symbol of left side in
  			#	in constraint, it will connect to polynom before.
 }

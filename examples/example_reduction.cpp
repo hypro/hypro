@@ -6,10 +6,10 @@
  */
 #include <chrono>
 
-#include "../src/hypro/datastructures/Halfspace.h"
-#include "../src/hypro/representations/GeometricObjectBase.h"
-#include "../src/hypro/representations/volumeApproximation.h"
-#include "../src/hypro/util/plotting/Plotter.h"
+#include "hypro/datastructures/Halfspace.h"
+#include "hypro/representations/GeometricObjectBase.h"
+#include "hypro/representations/volumeApproximation.h"
+#include "hypro/util/plotting/Plotter.h"
 
 using namespace hypro;
 
