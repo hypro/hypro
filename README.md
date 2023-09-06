@@ -25,6 +25,7 @@ To be able to compile HyPro, the following dependencies must be met:
 * [CArL](https://github.com/smtrat/carl)  
 * a Java runtime environment (e.g. openjdk-re)
 * uuid-dev
+* iputils-ping
 
 ### Compiling the library
 
