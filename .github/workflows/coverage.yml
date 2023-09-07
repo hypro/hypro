@@ -67,7 +67,7 @@ jobs:
 
       - name: Copy Sonarcloud Properties File
         working-directory: ${{runner.workspace}}/hypro
-        run: cp .travis/sonar-project.properties .
+        run: cp .travis/sonar-project.properties.in .
 
       - name: Build Project with Build-wrapper
         working-directory: ${{runner.workspace}}/hypro/build
