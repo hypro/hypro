@@ -254,15 +254,15 @@ CarlPolytope<Number> rectangularApplyTimeEvolution( const CarlPolytope<Number>& 
 }
 
 template <typename Number>
-CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number>& badSet, const Location<Number>* loc ) {
+CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant ) {
 	auto& vpool = hypro::VariablePool::getInstance();
-	auto flow = loc->getRectangularFlow();
+
 	// get bad state
 	CarlPolytope<Number> bad = badSet;
 	// storage to build elimination query
 	std::vector<carl::Variable> variablesToEliminate;
 	// add variable for time elapse
-    carl::Variable t = vpool.newCarlVariable("__t");
+	carl::Variable t = vpool.newCarlVariable("__t");
 	// add constraint t <= 0
 	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
 
@@ -279,6 +279,7 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 			// store var to eliminate later
 			variablesToEliminate.push_back( newV );
 			// add flow conditions for new variables, we use the variable mapping provided by the flow
+
 			std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createReverseFlowConstraints<hypro::tNumber, Number>( v, newV, t, flow.getFlowIntervalForDimension( v ) );
 
 #ifdef HYPRO_LOGGING
@@ -292,11 +293,11 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 		}
 	}
 	// add invariant constraints, if the invariant is specified and does not represent the empty set
-	if ( !loc->getInvariant().isTrue() ) {
-		if ( loc->getInvariant().isFalse() ) {
+	if ( !invariant.isTrue() ) {
+		if ( invariant.isFalse() ) {
 			return CarlPolytope<Number>::Empty();
 		} else {
-			auto invariantConstraints = halfspacesToConstraints<Number, hypro::tNumber>( loc->getInvariant().getMatrix(), loc->getInvariant().getVector() );
+			auto invariantConstraints = halfspacesToConstraints<Number, hypro::tNumber>( invariant.getMatrix(), invariant.getVector() );
 			bad.addConstraints( invariantConstraints );
 		}
 	}
@@ -319,6 +320,13 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	DEBUG( "hydra.worker", "State set after reverse time elapse: " << bad );
 
 	return bad;
+}
+
+template <typename Number>
+CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number>& badSet, const Location<Number>* loc ) {
+	auto flow = loc->getRectangularFlow();
+	auto invariant = loc->getInvariant();
+	return rectangularApplyReverseTimeEvolution(badSet, flow, invariant);
 }
 
 

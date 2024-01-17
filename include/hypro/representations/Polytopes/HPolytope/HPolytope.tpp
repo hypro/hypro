@@ -489,7 +489,11 @@ namespace hypro {
 
             // re-transform and convert
             for (auto facet: facetEnumerator.getFacets()) {
-                vertices.emplace_back(this->dimension());
+//				std::cout << "ERROR PREVENTION" << std::endl;
+				vector_t<Number> tmp = vector_t<Number>::Zero(this->dimension());
+
+				vertices.emplace_back(tmp);
+//                vertices.emplace_back(this->dimension());
                 // The resulting points can't be points at infinity
                 // if ( facet.mOffset == 0 ) {
                 // std::cout << "Polytope is unbounded." << std::endl;

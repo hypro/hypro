@@ -394,6 +394,7 @@ namespace hypro {
         template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
         void reduceNumberRepresentation(const std::vector<Point<Number>> &_vertices = std::vector<Point<Number>>(),
                                         unsigned limit = fReach_DENOMINATOR) const {
+			bool ORIGINAL_VERTICES_CORRECTLY_USED = true;
             // #ifdef REDUCE_NUMBERS
             if (Setting::REDUCE_NUMBERS == true) {
                 TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
@@ -401,6 +402,8 @@ namespace hypro {
                 if (_vertices.empty()) {
                     TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
                     originalVertices = this->vertices();
+					ORIGINAL_VERTICES_CORRECTLY_USED = false;
+//					std::cout << "originalVertices: " << originalVertices << std::endl;
                 } else {
                     TRACE("hypro.hPolytope", "Use passed vertices.");
                     originalVertices = _vertices;
@@ -422,6 +425,7 @@ namespace hypro {
 
                         // reduce, if reduction is required
                         if (largest > (limit * limit)) {
+//							assert(ORIGINAL_VERTICES_CORRECTLY_USED);
                             vector_t<Number> newNormal(mDimension);
                             for (unsigned i = 0; i < mDimension; ++i) {
                                 newNormal(i) = carl::floor(
@@ -434,6 +438,7 @@ namespace hypro {
                             Number newOffset = mHPlanes.at(planeIndex).offset();
                             newOffset = carl::ceil(Number((newOffset / largest) * Number(limit)));
                             for (const auto &vertex: originalVertices) {
+								std::cout << "size(): " << newNormal.size() << " , other size: " << vertex.rawCoordinates().size() << std::endl;
                                 Number tmp = newNormal.dot(vertex.rawCoordinates());
                                 if (tmp > newOffset) {
                                     newOffset = newOffset + (tmp - newOffset);
