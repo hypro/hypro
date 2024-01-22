@@ -190,7 +190,7 @@ namespace hypro {
                 } else {
                     first = false;
                 }
-                if (i.isEmpty()) {
+                if (i.is_empty()) {
                     out << "x" << pos << " := x" << pos;
                     ++pos;
                 } else {
