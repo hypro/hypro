@@ -15,7 +15,7 @@ namespace hypro {
     CarlPolytopeT<Number, Converter, Setting>::CarlPolytopeT(const matrix_t<Number> &constraints,
                                                              const vector_t<Number> &constants) {
         TRACE("hypro.representations.carlPolytope", "Construct P from " << constraints << " and " << constants);
-//		std::cout << "constraints: " << constraints << " constants: " << constants << std::endl;
+
         FormulasT<tNumber> newConstraints = halfspacesToFormulas<tNumber, Number>(constraints, constants);
 
 		for(auto& formula : newConstraints) {
@@ -24,7 +24,7 @@ namespace hypro {
 
         mFormula = FormulaT<tNumber>{carl::FormulaType::AND, newConstraints};
 
-//		std::cout << mFormula << std::endl;
+
 
         TRACE("hypro.representations.carlPolytope", "Result formula: " << mFormula);
         detectDimension();
