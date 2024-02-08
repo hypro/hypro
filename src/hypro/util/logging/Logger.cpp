@@ -15,10 +15,7 @@ namespace hypro {
     int initializeLogging(int &i) {
         carl::logging::logger().configure("logfile_hypro", "hypro.log");
 
-//      carl::logging::logger().filter("logfile_hypro")("hypro.reachability", carl::logging::LogLevel::LVL_DEBUG);
-//        carl::logging::logger().filter("logfile_hypro")("hypro.hPolytope", carl::logging::LogLevel::LVL_INFO);
-carl::logging::logger().filter("logfile_hypro")("hypro.hPolytope", carl::logging::LogLevel::LVL_TRACE);
-
+//        carl::logging::logger().filter("logfile_hypro")("hypro.hPolytope", carl::logging::LogLevel::LVL_TRACE);
 
         carl::logging::logger().filter("logfile_hypro")("hypro", carl::logging::LogLevel::LVL_TRACE)(
                 "hypro.casestudies", carl::logging::LogLevel::LVL_INFO)("hypro.datastructures",

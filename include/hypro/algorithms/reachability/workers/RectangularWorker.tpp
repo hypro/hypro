@@ -211,7 +211,6 @@ namespace hypro {
         }
 
         // jump to source location
-		std::cout << "test" << std::endl;
         reverseProcessJumpPredecessors(resetHandler.getResetSatisfyingStateSets());
     }
 

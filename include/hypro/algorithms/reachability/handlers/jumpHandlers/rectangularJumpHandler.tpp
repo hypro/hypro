@@ -52,7 +52,6 @@ namespace hypro {
                 }
 
                 // reduce if possible (Currently only for support functions)
-				std::cout << "dimension: " << stateSet.dimension() << std::endl;
                 stateSet.reduceRepresentation();
 
                 DEBUG("hydra.worker.discrete", "State after reduction: " << stateSet);

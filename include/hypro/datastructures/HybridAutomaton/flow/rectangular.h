@@ -68,7 +68,7 @@ namespace hypro {
         [[nodiscard]]
         const carl::Interval<Number> &getFlowIntervalForDimension(carl::Variable dim) const {
 
-			assert(mFlowIntervals.find(dim) != mFlowIntervals.end());
+            assert(mFlowIntervals.find(dim) != mFlowIntervals.end());
             return mFlowIntervals.at(dim);
         }
 

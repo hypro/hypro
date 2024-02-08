@@ -18,13 +18,7 @@ namespace hypro {
 
         FormulasT<tNumber> newConstraints = halfspacesToFormulas<tNumber, Number>(constraints, constants);
 
-		for(auto& formula : newConstraints) {
-			std::cout << formula << std::endl;
-		}
-
         mFormula = FormulaT<tNumber>{carl::FormulaType::AND, newConstraints};
-
-
 
         TRACE("hypro.representations.carlPolytope", "Result formula: " << mFormula);
         detectDimension();
