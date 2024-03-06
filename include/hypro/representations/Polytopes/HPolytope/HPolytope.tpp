@@ -476,6 +476,25 @@ namespace hypro {
             return vertices;
         } else {  // Use quickhull (exact arithmetic) for vertex-enumeration
 
+#ifdef HYPRO_USE_DD_METHOD
+            matrix_t<Number> _constraints( mHPlanes.size(), mHPlanes[0].normal().size() );
+		vector_t<Number> _constants( mHPlanes.size() );
+
+		for ( std::size_t i = 0; i < mHPlanes.size(); i++ ) {
+			_constraints.row( i ) << mHPlanes[i].normal().transpose();
+			_constants[i] = mHPlanes[i].offset();
+		}
+
+		auto ddPair = DDPair<Number>( _constraints, _constants );
+		ddPair.compute();
+
+		std::vector<Point<Number>> tmpVertices;
+		for ( const auto& v : ddPair.getPoints() ) {
+			tmpVertices.emplace_back( Point( std::move( v ) ) );
+		}
+
+		return tmpVertices;
+#else
             // conversion to mpq_class
             std::vector<vector_t<mpq_class>> halfspaces;
             for (std::size_t i = 0; i < mHPlanes.size(); ++i) {
@@ -489,7 +508,7 @@ namespace hypro {
 
             // re-transform and convert
             for (auto facet: facetEnumerator.getFacets()) {
-				vertices.emplace_back(vector_t<Number>::Zero(this->dimension()));
+                vertices.emplace_back(vector_t<Number>::Zero(this->dimension()));
                 // The resulting points can't be points at infinity
                 // if ( facet.mOffset == 0 ) {
                 // std::cout << "Polytope is unbounded." << std::endl;
@@ -500,6 +519,7 @@ namespace hypro {
                 }
             }
             return vertices;
+#endif
         }
 
         // verify against reverse-search algorithm.

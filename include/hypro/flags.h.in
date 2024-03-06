@@ -21,6 +21,7 @@
 #cmakedefine COMPARE_POLYMAKE
 #cmakedefine GNUPLOT_FOUND
 #cmakedefine HYPRO_USE_CLP
+#cmakedefine HYPRO_USE_DD_METHOD
 #cmakedefine HYPRO_USE_GLPK
 #cmakedefine HYPRO_GSL_INTEGRATION
 #cmakedefine HYPRO_HAS_GRAPHVIZ

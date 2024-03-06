@@ -38,6 +38,7 @@ option(HYPRO_EXTERNALIZE_CLASSES "Enables explicit instanciation of templates fo
 option(HYPRO_USE_CLP "Enable usage of the Coin-LP solver." OFF)
 option(HYPRO_CREATE_DOC "Allow creation of a doxygen documentation." OFF)
 option(HYPRO_CREATE_DOC_PDF "Create pdf document for documentation." OFF)
+option(HYPRO_USE_DD_METHOD "replace quickhull with the double description method" OFF)
 option(HYPRO_USE_GLPK "Enable usage of the glpk lp-solver." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" OFF)
