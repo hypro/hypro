@@ -1,3 +1,6 @@
+//
+// This class was created using the implementation of Malte Gerdes. Some of the comments are taken from his thesis.
+//
 #pragma once
 
 #include <hypro/datastructures/Halfspace.h>
@@ -28,6 +31,13 @@ namespace hypro {
         matrix_t<Number> A;
     };
 
+    /**
+     * This is a constructor. It expects a matrix A and a vector b such that Ax<=b.
+     * The homogenized matrix describing the cone containing that H-polytope is saved as an attribute.
+     * @tparam Number
+     * @param constraints
+     * @param offset
+     */
     template <typename Number>
     DDPair<Number>::DDPair( const matrix_t<Number>& constraints, const vector_t<Number>& offset ) {
         this->A = matrix_t<Number>( constraints.rows() + 1, constraints.cols() + 1 );
@@ -37,6 +47,12 @@ namespace hypro {
         }
     }
 
+    /**
+     * Extracts and returns the points which define the V-polytope from the generator matrix.
+     * Every column is scaled appropriately.
+     * @tparam Number
+     * @return
+     */
     template <typename Number>
     std::vector<vector_t<Number>> DDPair<Number>::getPoints() {
         std::vector<vector_t<Number>> result;
@@ -48,6 +64,12 @@ namespace hypro {
         return result;
     }
 
+    /**
+     * Does a single elimination step of gauss elimination, given a row index to be used as a pivot.
+     * @tparam Number
+     * @param A
+     * @param i
+     */
     template <typename Number>
     void DDPair<Number>::eliminate( matrix_t<Number>& A, Index i ) {
         for ( Index j = i + 1; j < A.rows(); j++ ) {
@@ -58,6 +80,13 @@ namespace hypro {
         }
     }
 
+    /**
+     * Returns the index of the absolute maximum value of the current column.
+     * @tparam Number
+     * @param a
+     * @param i
+     * @return
+     */
     template <typename Number>
     Index DDPair<Number>::select_pivot( const vector_t<Number>& a, Index i ) {
         auto pos = std::max_element( a.begin() + i, a.end(),
@@ -68,6 +97,12 @@ namespace hypro {
         return std::distance( a.begin(), pos );
     }
 
+    /**
+     * Create the zero sets for all rays.
+     * @tparam Number
+     * @param rows
+     * @return
+     */
     template <typename Number>
     std::vector<bitset> DDPair<Number>::create_zerosets( const std::vector<int>& rows ) {
         std::vector<bitset> Z;
@@ -90,6 +125,12 @@ namespace hypro {
         return Z;
     }
 
+    /**
+     * Determines the indices of the rows that make up the maximal linear independent subsystem.
+     * @tparam Number
+     * @param A
+     * @return
+     */
     template <typename Number>
     VectorXi DDPair<Number>::max_independent_rows( matrix_t<Number> A ) {
         VectorXi perms = VectorXi::LinSpaced( A.rows(), 0, A.rows() - 1 );
@@ -108,6 +149,15 @@ namespace hypro {
         return perms.head( A.cols() );
     }
 
+    /**
+     * Does the combinatorial adjacency check.
+     * The implementation is a literal translation of Algorithm 3.2.
+     * @tparam Number
+     * @param Z
+     * @param i
+     * @param j
+     * @return
+     */
     template <typename Number>
     bool DDPair<Number>::is_adjacent( const std::vector<bitset>& Z, bitset::size_type i, bitset::size_type j ) {
         bitset intersection = Z[i] & Z[j];
@@ -121,11 +171,27 @@ namespace hypro {
         return true;
     }
 
+    /**
+     * Literal translation of the equally named function from Algorithm 3.1.
+     * <n,v>w - <n,w>v
+     * where n is row, v and w are a and b, respectively
+     * @tparam Number
+     * @param row
+     * @param a
+     * @param b
+     * @return
+     */
     template <typename Number>
     vector_t<Number> DDPair<Number>::create_ray( const vector_t<Number>& row, const vector_t<Number>& a, const vector_t<Number>& b ) {
         return ( row.dot( a ) * b ) - ( row.dot( b ) * a );
     }
 
+    /**
+     * Literal translation of the equally named function from Algorithm 3.1.
+     * @tparam Number
+     * @param index
+     * @param rows
+     */
     template <typename Number>
     void DDPair<Number>::step( const Index& index, const std::vector<int>& rows ) {
         bitset pos( this->R.cols() );
@@ -134,6 +200,7 @@ namespace hypro {
         TRACE("hypro.doubleDescriptionMethod", "current row of A: \n" << A.row(index));
         TRACE("hypro.doubleDescriptionMethod", "current R: \n" << this->R);
 
+        //We only use J+ and J-, therefore J0 can be ommited.
         std::size_t o = 0;
         for ( const auto& col : this->R.colwise() ) {
             Number x = this->A.row( index ).dot( col );
@@ -180,6 +247,11 @@ namespace hypro {
         this->R = result;
     }
 
+    /**
+     * Initializes all data structures and does the actual iteration.
+     * After this method the generator matrix holds the minimal amount of extreme rays.
+     * @tparam Number
+     */
     template <typename Number>
     void DDPair<Number>::compute() {
         VectorXi rows = max_independent_rows( A );
