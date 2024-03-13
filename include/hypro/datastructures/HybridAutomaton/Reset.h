@@ -64,6 +64,8 @@ namespace hypro {
 
         Reset(const matrix_t<Number> &mat, const vector_t<Number> &vec);
 
+		Reset(const AffineTransformation<Number> &affineTransformation);
+
         Reset(const std::vector<carl::Interval<Number>> &intervals);
 
         ~Reset() {}

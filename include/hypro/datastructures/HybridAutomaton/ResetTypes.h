@@ -116,7 +116,19 @@ namespace hypro {
                         out << "0";
                     }
                 } else {
-                    out << to_string<Number>(in.mTransformation.matrix().row(row));
+					bool firstcol = true;
+					for(Eigen::Index col = 0; col < in.mTransformation.matrix().cols(); ++col) {
+						auto val = in.mTransformation.matrix()(row,col);
+						if(val == 0) {
+							continue;
+						} else if (val < 0 || firstcol) {
+							out << val << "·x" << col;
+							firstcol = false;
+						} else {
+							out << " + " << val << "·x" << col;
+						}
+					}
+
                 }
                 if (in.mTransformation.vector()(row) != 0) {
                     if (allZero || in.mTransformation.vector()(row) < 0) {

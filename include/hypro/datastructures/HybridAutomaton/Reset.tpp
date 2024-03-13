@@ -18,6 +18,13 @@ namespace hypro {
         mIntervalResets.emplace_back(std::vector<carl::Interval<Number>>(mat.rows(), createEmptyInterval<Number>()));
     }
 
+	template<typename Number>
+	Reset<Number>::Reset(const AffineTransformation<Number> &affineTransformation) {
+		assert(affineTransformation.mTransformation.matrix().rows() == affineTransformation.mTransformation.matrix().cols());
+		mAffineResets.push_back(affineTransformation);
+		mIntervalResets.emplace_back(std::vector<carl::Interval<Number>>(affineTransformation.size(), createEmptyInterval<Number>()));
+	}
+
     template<typename Number>
     Reset<Number>::Reset(const std::vector<carl::Interval<Number>> &intervals) {
         mAffineResets.emplace_back(matrix_t<Number>::Identity(intervals.size(), intervals.size()),
