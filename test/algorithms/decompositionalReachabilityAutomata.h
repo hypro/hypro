@@ -808,7 +808,7 @@ HybridAutomaton<Number> singularSingleJumpHa() {
 
 	// Construct transitions
 	// l0 -> l1 with no guards or resets
-	Reset<Number> reset{ { {}, {} } };
+	Reset<Number> reset{ std::vector<carl::Interval<Number>>({ {}, {} }) };
 
 	std::unique_ptr<Transition<Location<Number>>> trans0 =
 		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
@@ -861,7 +861,7 @@ HybridAutomaton<Number> singularSingleJumpHa2() {
 
 	// Construct transitions
 	// l0 -> l1 with no guards or resets
-	Reset<Number> reset{ { {}, {} } };
+	Reset<Number> reset{ std::vector<carl::Interval<Number>>({ {}, {} }) };
 
 	std::unique_ptr<Transition<Location<Number>>> trans0 =
 		  std::make_unique<Transition<Location<Number>>>( uniqueLoc0.get(), uniqueLoc1.get(), Condition<Number>(), reset );
