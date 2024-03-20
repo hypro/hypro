@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2023.
+ * Copyright (c) 2023-2024.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -48,10 +48,7 @@ static void computeReachableStates(const std::vector<std::string> filename,
 
     hypro::AnalysisParameters analysisParams = settings.strategy().front();
 
-    hypro::RectangularAnalyzer<Representation, hypro::HybridAutomaton<Number>> analyzer{automata[0], settings, roots};
-
-    // hypro::reachability::Reach<Representation, Automaton> reacher(automata[0], settings.fixedParameters(), analysisParams,
-    //                                                               roots);
+    hypro::RectangularAnalyzer<Representation, Automaton> analyzer{automata[0], settings, roots};
 
     auto result = analyzer.run();
     auto flowpipes = getFlowpipes(roots);
@@ -62,11 +59,13 @@ static void computeReachableStates(const std::vector<std::string> filename,
                1000.0
             << " ms" << std::endl;
     
+    std::cout << std::endl;
     if (result == hypro::REACHABILITY_RESULT::UNKNOWN) {
         std::cout << "Could not verify safety." << std::endl;
     } else {
         std::cout << "The model is safe." << std::endl;
     }
+    std::cout << std::endl;
 
     // output computed sets
     for (const auto &fp: hypro::getFlowpipes(roots)) {

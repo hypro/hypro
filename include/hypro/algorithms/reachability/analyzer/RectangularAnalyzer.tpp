@@ -15,7 +15,7 @@ namespace hypro {
     REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::run() {
         // create reachTree if not already present
         if (mReachTree.empty()) {
-            mReachTree = makeRoots<State>(mHybridAutomaton);
+            mReachTree = makeRoots<State, Automaton>(*mHybridAutomaton);
         }
         // initialize queue
         for (auto &rtNode: mReachTree) {
@@ -29,7 +29,7 @@ namespace hypro {
             REACHABILITY_RESULT res{REACHABILITY_RESULT::SAFE};
             for (int i = 0; i < mNumThreads; i++) {
                 mThreads.push_back(std::thread([this, i, &resultMutex, &res]() {
-                    RectangularWorker<State, Automaton> worker{mHybridAutomaton, mAnalysisSettings};
+                    RectangularWorker<State, Automaton> worker{*mHybridAutomaton, mAnalysisSettings};
                     ReachTreeNode<State, LocationT> *currentNode;
                     while (!mTerminate) {
                         {
@@ -100,7 +100,7 @@ namespace hypro {
     REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::forwardRun() {
         DEBUG("hypro.reachability.rectangular", "Start forward analysis");
 
-        RectangularWorker<State, Automaton> worker{mHybridAutomaton, mAnalysisSettings};
+        RectangularWorker<State, Automaton> worker{*mHybridAutomaton, mAnalysisSettings};
         while (!mWorkQueue.empty()) {
             auto *currentNode = getNodeFromQueue();
             DEBUG("hypro.reachability",
