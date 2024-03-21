@@ -3,7 +3,7 @@ image: ubuntu:22.04
 variables:
 
   SONAR_SERVER_URL: https://sonarcloud.io
-  SONAR_SCANNER_VERSION: 4.8.1.3023
+  SONAR_SCANNER_VERSION: 5.0.1.3006
   BUILD_WRAPPER_OUT_DIR: bw-output # Directory where build-wrapper output will be placed
   
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -33,7 +33,6 @@ get-sonar-binaries:
     - curl -sSLo build-wrapper.zip "${SONAR_SERVER_URL}/static/cpp/build-wrapper-linux-x86.zip"
     - unzip -o build-wrapper.zip
     - mv build-wrapper-linux-x86 build-wrapper
-    - build-wrapper/build-wrapper-linux-x86-64 java -version
   cache:
     policy: push
     key: "${CI_COMMIT_SHORT_SHA}"
