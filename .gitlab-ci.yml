@@ -33,6 +33,7 @@ get-sonar-binaries:
     - curl -sSLo build-wrapper.zip "${SONAR_SERVER_URL}/static/cpp/build-wrapper-linux-x86.zip"
     - unzip -o build-wrapper.zip
     - mv build-wrapper-linux-x86 build-wrapper
+    - build-wrapper/build-wrapper-linux-x86-64 java -version
   cache:
     policy: push
     key: "${CI_COMMIT_SHORT_SHA}"
