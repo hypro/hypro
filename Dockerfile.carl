@@ -1,0 +1,20 @@
+FROM ubuntu:22.04
+
+WORKDIR /hypro
+
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt install -y gcc g++ cmake make curl git flex bison libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr zip unzip
+
+RUN git clone  --depth 1 --branch 22.12 https://github.com/ths-rwth/carl carl 
+WORKDIR  /hypro/carl
+RUN echo $(ls .)
+
+RUN mkdir build
+
+WORKDIR  /hypro/carl/build
+RUN cmake .. -DUSE_LIBPOLY=OFF
+
+RUN make -j`nproc` carl-common
+RUN make -j`nproc` carl-arith
+RUN make -j`nproc` carl-logging
+RUN make -j`nproc` carl-formula

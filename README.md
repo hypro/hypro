@@ -44,7 +44,7 @@ $ make allTests
 $ make test
 ```
 
-HyPro registers itself to cmake which means that any further cmake-project which depends on HyPro does not neccessarily require a system-installation of HyPro. Instead, it suffices to call `find_package(hypro)` from cmake to locate the local build.
+HyPro registers itself to cmake which means that any further cmake-project which depends on HyPro does not necessarily require a system-installation of HyPro. Instead, it suffices to call `find_package(hypro)` from cmake to locate the local build.
 
 ## Documentation
 
@@ -57,6 +57,22 @@ a [Pdf manual](https://ths.rwth-aachen.de/wp-content/uploads/sites/4/research/Hy
 HyPro comes with some examples shipped, which may give you a hint on how to use the library. All examples are listed in
 the examples folder; all source files in this folder prefixed with `example_` are automatically assigned a corresponding
 target, i.e., the file `example_box.cpp` can be compiled via the target `example_box`.
+
+### Running HyPro in Docker 
+
+Hypro uses a pre-build docker container which contains some of the dependencies (for example the CArL library) in order to make the docker build step faster. We can build this with the docker file  `Dockerfile.carl`. This docker image is already compiled and pushed to  
+<a href="https://hypro.github.io/hypro/html/index.html" target="_blank">docker hub</a>. We use this file also for speeding up the gitlab pipeline.
+
+In order to build and run HyPro inside a docker container you need to run the following commands:
+
+```bash
+$ docker build -t hypro .
+$ docker exec -it hashOfImage bash
+```
+
+The first command will build the docker image. With the second command we can step into the docker container and we can run hypro inside the docker container. In the second command you need the hash of the newly built docker image. You can get this by listing out all the images which are available on your system and then looking for one which is called hypro.
+
+
 
 ## Case Studies
 
