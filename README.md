@@ -60,8 +60,7 @@ target, i.e., the file `example_box.cpp` can be compiled via the target `example
 
 ### Running HyPro in Docker 
 
-Hypro uses a pre-build docker container which contains some of the dependencies (for example the CArL library) in order to make the docker build step faster. We can build this with the docker file  `Dockerfile.carl`. This docker image is already compiled and pushed to  
-<a href="https://hypro.github.io/hypro/html/index.html" target="_blank">docker hub</a>. We use this file also for speeding up the gitlab pipeline.
+Hypro uses a pre-build docker container which contains some of the dependencies (for example the CArL library) in order to make the docker build step faster. We can build this with the docker file  `Dockerfile.carl`. This docker image is already compiled and pushed to <a href="https://hub.docker.com/repository/docker/hyprodockeruser/carl/general" target="_blank">docker hub</a>. We use this file also for speeding up the gitlab pipeline.
 
 In order to build and run HyPro inside a docker container you need to run the following commands:
 
