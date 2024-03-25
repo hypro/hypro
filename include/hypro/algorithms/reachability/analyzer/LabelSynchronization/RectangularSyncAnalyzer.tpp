@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023.
+ * Copyright (c) 2023-2024.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -12,37 +12,32 @@
 namespace hypro {
 
 template <typename State, typename Automaton, typename Multithreading>
-REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::run() {
+REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::run() {
 	// create reachTree if not already present
 	if ( mReachTree.empty() ) {
-		mReachTree = makeRoots<State>( mHybridAutomaton );
+		mReachTree = makeRoots<State, Automaton>( *mHybridAutomaton );
 	}
 	// initialize queue
-	for ( auto& rtNode : mReachTree ) {
+	for ( auto &rtNode : mReachTree ) {
 		mWorkQueue.push( &rtNode );
 	}
 	DEBUG( "hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue" );
 
 	REACHABILITY_RESULT safetyResult;
-	if ( mAnalysisSettings.strategy().front().reachability_analysis_method == REACH_SETTING::FORWARD ) {
-		// forward analysis
-		safetyResult = forwardRun();
-	}
-	// else {
-	//	// backward analysis
-	//	safetyResult = backwardRun();
-	//}
+	assert( mAnalysisSettings.strategy().front().reachability_analysis_method == REACH_SETTING::FORWARD );
+	// forward analysis
+	safetyResult = forwardRun();
 
 	return safetyResult;
 }
 
 template <typename State, typename Automaton, typename Multithreading>
-REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::forwardRun() {
+REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::forwardRun() {
 	DEBUG( "hypro.reachability.rectangular", "Start forward analysis" );
 
-	RectangularWorker<State, Automaton> worker{ mHybridAutomaton, mAnalysisSettings };
+	RectangularWorker<State, Automaton> worker{ *mHybridAutomaton, mAnalysisSettings };
 	while ( !mWorkQueue.empty() ) {
-		auto* currentNode = getNodeFromQueue();
+		auto *currentNode = getNodeFromQueue();
 		DEBUG( "hypro.reachability",
 			   "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName()
 								 << " with path " << currentNode->getTreePath() );
@@ -58,8 +53,8 @@ REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::forwa
 
 template <typename State, typename Automaton, typename Multithreading>
 REACHABILITY_RESULT
-RectangularAnalyzer<State, Automaton, Multithreading>::processNode( RectangularWorker<State, Automaton>& worker,
-																	ReachTreeNode<State, LocationT>* node ) {
+RectangularSyncAnalyzer<State, Automaton, Multithreading>::processNode( RectangularWorker<State, Automaton> &worker,
+																		ReachTreeNode<State, LocationT> *node ) {
 	REACHABILITY_RESULT safetyResult;
 	TRACE( "hypro.reachability.rectangular", "Analyze node at depth " << node->getDepth() );
 
@@ -77,11 +72,11 @@ RectangularAnalyzer<State, Automaton, Multithreading>::processNode( RectangularW
 	}
 
 	// create jump successor tasks
-	for ( const auto& transitionStatesPair : worker.getJumpSuccessorSets() ) {
+	for ( const auto &transitionStatesPair : worker.getJumpSuccessorSets() ) {
 		for ( const auto jmpSucc : transitionStatesPair.second ) {
 			// update reachTree
 			// time is not considered in rectangular analysis so we store a dummy
-			auto& childNode = node->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
+			auto &childNode = node->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
 			assert( childNode.getDepth() == node->getDepth() + 1 );
 
 			// create Task
