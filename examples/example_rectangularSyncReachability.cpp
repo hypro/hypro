@@ -22,6 +22,8 @@
 #include "hypro/util/statistics/statistics.h"
 // #include <hypro/algorithms/reachability/analyzer/LabelSynchronization/RectangularSyncAnalyzer.h>
 
+#include <hypro/util/VariablePool.h>
+
 
 template<typename Number, typename Representation>
 
@@ -38,7 +40,12 @@ static void computeReachableStates(const std::vector<std::string> filename,
         auto [automaton, fileSettings] = hypro::parseFlowstarFile<Number>(filename[i]);
         parsedSettings = fileSettings;
         automata.push_back(automaton);
+
+        hypro::VariablePool::getInstance().changeToPool(i+1);
+        // std::cout << hypro::VariablePool::getInstance().getPoolIndex() << std::endl;
     }
+
+    hypro::VariablePool::getInstance().changeToPool(0);
 
     // parse settings from model files
     std::cout << parsedSettings << std::endl;

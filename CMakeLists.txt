@@ -60,6 +60,7 @@ option(DEVELOPER "Compile in developer mode, i.e. more warnings." OFF)
 option(EXPORT_TO_CMAKE "Export the project to CMake for easy inclusion" ON)
 option(RESET_REFINEMENT "Return to Level 0 after successful backtracking" ON)
 option(QUICKHULL_USE_LOW_DIMENSIONAL_IMPROVEMENT "Use cheap method for computing normal vectors in 2 and 3 dimensions" ON)
+option(HYPRO_ANALIZE_MULTIPLE_AUTOMATON "In case you want to analyze more than on automaton, there is some global information which needs to be dealt differently" ON) # for now this option is only used to change the implementation of the variable pool, so it can deal with multiple variable pools, for now it doesn't work if the HYPRO_USE_PPL option is enabled  
 mark_as_advanced(HYPRO_COVERAGE)
 mark_as_advanced(HYPRO_BENCHMARK)
 mark_as_advanced(HYPRO_BUILD_OFFLINE)
