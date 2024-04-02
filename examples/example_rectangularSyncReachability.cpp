@@ -15,7 +15,8 @@
 #include "hypro/parser/antlr4-flowstar/ParserWrapper.h"
 #include "hypro/representations/GeometricObjectBase.h"
 #include "hypro/util/plotting/Plotter.h"
-#include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
+// #include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
+#include <hypro/algorithms/reachability/analyzer/LabelSynchronization/RectangularSyncAnalyzer.h>
 #include <iostream>
 #include "hypro/algorithms/reachability/Reach.h"
 #include "hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
@@ -38,7 +39,9 @@ static void computeReachableStates(const std::vector<std::string> filename,
     hypro::ReachabilitySettings parsedSettings;
     for (int i=0; i<filename.size(); i++) {
         auto [automaton, fileSettings] = hypro::parseFlowstarFile<Number>(filename[i]);
-        parsedSettings = fileSettings;
+        if (i==0) {
+            parsedSettings = fileSettings;
+        }   
         automata.push_back(automaton);
 
         hypro::VariablePool::getInstance().changeToPool(i+1);
@@ -51,11 +54,17 @@ static void computeReachableStates(const std::vector<std::string> filename,
     std::cout << parsedSettings << std::endl;
     hypro::Settings settings = hypro::convert(parsedSettings);
 
-    auto roots = hypro::makeRoots<Representation, Automaton>(automata[0]);
+    auto roots = hypro::makeSyncRoots<Representation, Automaton>(automata);
+
+    for (auto &root: roots) {
+        root.initializeSyncNodes(automata.size());
+    }
+    // auto roots = hypro::makeRoots<Representation, Automaton>(automata[0]);
 
     hypro::AnalysisParameters analysisParams = settings.strategy().front();
 
-    hypro::RectangularAnalyzer<Representation, Automaton> analyzer{automata[0], settings, roots};
+    // hypro::RectangularSyncAnalyzer<Representation, Automaton> analyzer{automata[0], settings, roots};
+    hypro::RectangularSyncAnalyzer<Representation, Automaton> analyzer{automata, settings, roots};
 
     auto result = analyzer.run();
     auto flowpipes = getFlowpipes(roots);
@@ -91,36 +100,12 @@ static void computeReachableStates(const std::vector<std::string> filename,
                 extendedFilename += "_tpoly";
                 break;
             }
-            case hypro::representation_name::ppl_polytope: {
-                extendedFilename += "_pplpoly";
-                break;
-            }
-            case hypro::representation_name::difference_bounds: {
-                extendedFilename += "_differenceBounds";
-                break;
-            }
-            case hypro::representation_name::zonotope: {
-                extendedFilename += "_zonotope";
-                break;
-            }
-            case hypro::representation_name::support_function: {
-                extendedFilename += "_supportFunction";
-                break;
-            }
             case hypro::representation_name::polytope_v: {
                 extendedFilename += "_vpoly";
                 break;
             }
             case hypro::representation_name::polytope_h: {
                 extendedFilename += "_hpoly";
-                break;
-            }
-            case hypro::representation_name::box: {
-                extendedFilename += "_box";
-                break;
-            }
-            case hypro::representation_name::SFN: {
-                extendedFilename += "_sfn";
                 break;
             }
             default:
