@@ -43,6 +43,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	std::map<TransitionT *, UrgencyRefinementLevel> mUrgRefinementLevels{};	   ///< refinement level for outgoing urgent transitions
 	std::vector<SegmentInd> mFpTimings{};									   ///< timing information for simultaneous segments (urgency)
 	REACHABILITY_RESULT mSafetyResult;										   ///< safety of flowpipe segments
+	std::vector<ReachTreeNode<Representation, Location>*> mSyncNodes{};        ///< vector of pointers to nodes that has synchronized with this node (used in LabelSynchronization analysis)
 
   public:
 	// Exposition types
@@ -185,6 +186,22 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 
 	/// Getter for the timelock-status of this node, i.e., whether a timelock has been detected during analysis
 	TRIBOOL hasTimelock() const { return mFinishesWithTimelock; }
+
+	/// Getter for the SyncNodes
+	const std::vector<ReachTreeNode<Representation, Location>> &getSyncNodes() const { return mSyncNodes; }
+	
+	std::vector<ReachTreeNode<Representation, Location>> &getSyncNodes() { return mSyncNodes; }
+
+	/// Setter for the SyncNodes at index
+	void setSyncNodeAtIndex(ReachTreeNode<Representation, Location>* pointer, size_t index) {
+		assert(index < mSyncNodes.size());
+		mSyncNodes[index] = pointer;
+	}
+
+	// initialize mSyncNodes with nullptrs
+	void initializeSyncNodes(size_t n) {
+		mSyncNodes = std::vector<ReachTreeNode<Representation, Location>*>(n, nullptr);
+	}
 };
 
 template <typename Representation, typename Location>
@@ -223,6 +240,33 @@ std::vector<ReachTreeNode<Representation, typename Automaton::LocationType>> mak
 																								carl::Interval<SegmentInd>{
 																									  0, 0 } };
 					} );
+
+	return roots;
+}
+
+/**
+ * @brief Convenience function to create roots of a search tree from the initial states of the passed vector of hybrid automata.
+ * @tparam Representation The representation type used to represent state sets.
+ * @tparam Automaton The type of hybrid automaton used.
+ * @param automata vector of hybrid automata
+ * @return std::vector<ReachTreeNode<Representation,Location>>
+ */
+template <typename Representation, typename Automaton>
+std::vector<ReachTreeNode<Representation, typename Automaton::LocationType>> makeSyncRoots( std::vector<Automaton> const &automata ) {
+	std::vector<ReachTreeNode<Representation, typename Automaton::LocationType>> roots{};
+
+    for (auto const &ha : automata) {
+        std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ),
+                        []( auto const &locCond ) {
+                            auto const &[location, condition] = locCond;
+                            return ReachTreeNode<Representation, typename Automaton::LocationType>{ location,
+                                                                                                    Representation{
+                                                                                                        condition.getMatrix(),
+                                                                                                        condition.getVector() },
+                                                                                                    carl::Interval<SegmentInd>{
+                                                                                                        0, 0 } };
+                        } );        
+    }
 
 	return roots;
 }
