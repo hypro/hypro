@@ -18,9 +18,16 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::r
 		mReachTree = makeRoots<State, Automaton>( *mHybridAutomaton );
 	}
 	// initialize queue
-	for ( auto &rtNode : mReachTree ) {
-		mWorkQueue.push( &rtNode );
+	for ( auto &automaton : mHybridAutomata ) {
+		for ( auto &rtNode : mAutomatonReachTreeMap[automaton] ) {
+			mWorkQueue.push( std::make_pair( &rtNode, automaton ) );
+			// mPairWorkQueue.push( std::make_pair( &rtNode, automaton ) );
+		}
 	}
+	// maybe we can do with one mReachTree, without the map
+	// for ( auto &rtNode : mReachTree ) {
+	// 	mWorkQueue.push( &rtNode );
+	// }
 	DEBUG( "hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue" );
 
 	REACHABILITY_RESULT safetyResult;
@@ -34,14 +41,31 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::r
 template <typename State, typename Automaton, typename Multithreading>
 REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::forwardRun() {
 	DEBUG( "hypro.reachability.rectangular", "Start forward analysis" );
+	// create a rectangular worker for each automaton
+	std::vector<RectangularWorker<State, Automaton>> workerVector;
+	// for ( auto &automaton : mHybridAutomata ) {
+	// 	workerVector.push_back(RectangularWorker<State, Automaton>{ *automaton, mAnalysisSettings });
+	// }
+	std::map<Automaton const *, RectangularWorker<State, Automaton>> automatonWorkerMap;
+	for ( auto automaton : mHybridAutomata ) {
+		automatonWorkerMap.emplace( std::make_pair( automaton, RectangularWorker<State, Automaton>{ *automaton, mAnalysisSettings } ) );
+	}
+	// RectangularWorker<State, Automaton> worker{ *mHybridAutomaton, mAnalysisSettings };
 
-	RectangularWorker<State, Automaton> worker{ *mHybridAutomaton, mAnalysisSettings };
 	while ( !mWorkQueue.empty() ) {
-		auto *currentNode = getNodeFromQueue();
+		// auto *currentNode = getNodeFromQueue();
+		// DEBUG( "hypro.reachability",
+		// 	   "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName()
+		// 						 << " with path " << currentNode->getTreePath() );
+		
+		// process with sync
+		auto nodeAutoPair = getPairFromQueue();
+		auto *node = nodeAutoPair.first;
+		auto *automaton = nodeAutoPair.second;
 		DEBUG( "hypro.reachability",
-			   "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName()
-								 << " with path " << currentNode->getTreePath() );
-		auto result = processNode( worker, currentNode );
+			   "Process node (@" << node << ") with location " << node->getLocation()->getName()
+								 << " with path " << node->getTreePath() );
+		auto result = processNode( automatonWorkerMap.at(automaton) , node );
 		if ( result != REACHABILITY_RESULT::SAFE ) {
 			DEBUG( "hypro.reachability", "End Rectangular Reachability Analysis." );
 			return result;
@@ -80,7 +104,8 @@ RectangularSyncAnalyzer<State, Automaton, Multithreading>::processNode( Rectangu
 			assert( childNode.getDepth() == node->getDepth() + 1 );
 
 			// create Task
-			addToQueue( &childNode );
+			// TODO: this should add the node and the automaton to the queue
+			// addToQueue( &childNode );
 		}
 	}
 	return REACHABILITY_RESULT::SAFE;

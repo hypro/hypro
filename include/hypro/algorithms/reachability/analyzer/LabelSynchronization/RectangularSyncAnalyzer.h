@@ -42,17 +42,46 @@ class RectangularSyncAnalyzer {
 		, mReachTree( roots ) {
 	}
 
+	/// constructor from automata and settings
+	RectangularSyncAnalyzer( std::vector<Automaton> const &automata, const Settings &setting,
+							 std::vector<ReachTreeNode<State, LocationT>> &roots )
+		: mAnalysisSettings( setting )
+		, mReachTree( roots )
+		, mAutomatonReachTreeMap()
+		, mHybridAutomata() {
+		for ( auto &automaton : automata ) {
+			mHybridAutomata.push_back( &automaton );
+			mAutomatonReachTreeMap.emplace( std::make_pair( &automaton, makeRoots<State, Automaton>( automaton ) ) );
+		}
+		auto count = automata.size();
+		for (typename std::map<Automaton const *, std::vector<ReachTreeNode<State, LocationT>>>::iterator it = mAutomatonReachTreeMap.begin(); it != mAutomatonReachTreeMap.end(); ++it) {
+			for ( auto &rtNode : it->second ) {
+				rtNode.initializeSyncNodes( count );
+			}
+		}
+	}
+
 	/// main method for reachability analysis
 	REACHABILITY_RESULT run();
 
 	REACHABILITY_RESULT forwardRun();
 
-	void addToQueue( ReachTreeNode<State, LocationT> *node ) {
-		mWorkQueue.push( node );
+	// void addToQueue( ReachTreeNode<State, LocationT> *node ) {
+	// 	mWorkQueue.push( node );
+	// }
+
+	// ReachTreeNode<State, LocationT> *getNodeFromQueue() {
+	// 	auto *res = mWorkQueue.front();
+	// 	mWorkQueue.pop();
+	// 	return res;
+	// }
+
+	void addPairToQueue( ReachTreeNode<State, LocationT> *node, Automaton const *automaton ) {
+		mWorkQueue.push( std::make_pair( node, automaton ));
 	}
 
-	ReachTreeNode<State, LocationT> *getNodeFromQueue() {
-		auto *res = mWorkQueue.front();
+	std::pair<ReachTreeNode<State, LocationT> *, Automaton const *> getPairFromQueue() {
+		auto res = mWorkQueue.front();
 		mWorkQueue.pop();
 		return res;
 	}
@@ -62,10 +91,13 @@ class RectangularSyncAnalyzer {
 	processNode( RectangularWorker<State, Automaton> &worker, ReachTreeNode<State, LocationT> *node );
 
   protected:
-	std::queue<ReachTreeNode<State, LocationT> *> mWorkQueue;  ///< Queue holds all nodes that require processing
-	Automaton const *mHybridAutomaton;						   ///< Pointer to the automaton which is analyzed		vector of automata
-	const Settings mAnalysisSettings;						   ///< Settings used for analysis
-	std::vector<ReachTreeNode<State, LocationT>> &mReachTree;  ///< Forest of ReachTrees computed					map (automaton -> reachTree)
+	// std::queue<ReachTreeNode<State, LocationT> *> mWorkQueue;											 ///< Queue holds all nodes that require processing
+	std::queue<std::pair<ReachTreeNode<State, LocationT> *, Automaton const *>> mWorkQueue;			 	 ///< Queue holds pairs <node, automaton> that require processing
+	Automaton const *mHybridAutomaton;																	 ///< Pointer to the automaton which is analyzed		(TODO delete)
+	std::vector<Automaton const *> mHybridAutomata;														 ///< Vector of pointers to the automata which are analyzed
+	const Settings mAnalysisSettings;																	 ///< Settings used for analysis
+	std::vector<ReachTreeNode<State, LocationT>> &mReachTree;											 ///< Forest of ReachTrees computed		(TODO delete)
+	std::map<Automaton const *, std::vector<ReachTreeNode<State, LocationT>>> mAutomatonReachTreeMap{};	 ///< map (*automaton -> reachTree)
 };
 
 }  // namespace hypro
