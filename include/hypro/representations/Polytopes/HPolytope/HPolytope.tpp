@@ -808,6 +808,22 @@ namespace hypro {
         return res;
     }
 
+    template<typename Number, typename Converter, class Setting>
+    void HPolytopeT<Number, Converter, Setting>::offsetAllToNegative(Number offset) {
+
+        for (auto& hPlane : mHPlanes) {
+            hPlane.setOffset(hPlane.offset() - offset);
+        }
+    }
+
+    template<typename Number, typename Converter, class Setting>
+    void HPolytopeT<Number, Converter, Setting>:: normalize() {
+
+        for (auto& hPlane : mHPlanes) {
+            hPlane.normalize();
+        }
+    }
+
 /*
  * General interface
  */
