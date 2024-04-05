@@ -262,7 +262,7 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	// storage to build elimination query
 	std::vector<carl::Variable> variablesToEliminate;
 	// add variable for time elapse
-	carl::Variable t = vpool.newCarlVariable("__t");
+	carl::Variable t = vpool.newCarlVariable( "__t" );
 	// add constraint t <= 0
 	bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
 
@@ -305,7 +305,10 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	TRACE( "hypro.worker", "Full constraint set describing the dynamic behavior: \n"
 								 << bad );
 
-	// add t to eliminate at latest
+    // reverse order to for detectDimension() to work properly.
+    // If ordering of elimination is changed, dimension has to be set manually.
+	std::reverse(variablesToEliminate.begin(),variablesToEliminate.end());
+    // add t to eliminate at latest
 	variablesToEliminate.push_back( t );
 
 	// create variables to eliminate

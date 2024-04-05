@@ -360,10 +360,15 @@ namespace hypro {
         if (this->empty()) {
             return;
         }
-        // std::cout << "Eliminate ... ";
-        mFormula = eliminateQuantifiers(mFormula, vars);
-        // std::cout << "done." << std::endl;
-        detectDimension();
+
+		for (const auto &QuantifierVariablesPair: vars) {  // mQuery
+			for(auto& var : QuantifierVariablesPair.second) {
+				QEQuery quOrder;
+				quOrder.push_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{var} ) );
+				mFormula = eliminateQuantifiers(mFormula, quOrder);
+				removeRedundancy();
+			}
+		}
     }
 
     template<typename Number, typename Converter, typename Setting>
