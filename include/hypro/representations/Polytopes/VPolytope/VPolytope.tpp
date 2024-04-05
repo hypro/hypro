@@ -273,6 +273,23 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename S>
     VPolytopeT<Number, Converter, S>
+    VPolytopeT<Number, Converter, S>::minkowskiDiff(const VPolytopeT<Number, Converter, S> &rhs) const {
+        if (this->empty() || rhs.empty()) {
+            return Empty();
+        }
+        
+        VPolytopeT<Number, Converter, S> result;
+        // subtract each rhs-vertex from each vertex of this polytope.
+        for (auto lhsVertex: mVertices) {
+            for (auto rhsVertex: rhs.mVertices) {
+                result.insert(lhsVertex - rhsVertex);
+            }
+        }
+        return result;
+    }
+
+    template<typename Number, typename Converter, typename S>
+    VPolytopeT<Number, Converter, S>
     VPolytopeT<Number, Converter, S>::intersect(const VPolytopeT<Number, Converter, S> &rhs) const {
         // create a set of possible points via combination of all coordinates
         if (rhs.size() == 0) {

@@ -293,6 +293,12 @@ namespace hypro {
 
         std::vector<Point<Number>> vertexEnumeration() const;
 
+        // function which offsets all the halfspaces with the same number
+        void offsetAllToNegative(Number offset); 
+
+        // function to normalize all halfspaces
+        void normalize();
+
         /*
          * General interface
          */

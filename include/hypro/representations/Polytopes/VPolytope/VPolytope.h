@@ -142,6 +142,11 @@ namespace hypro {
 
         VPolytopeT minkowskiSum(const VPolytopeT &rhs) const;
 
+        /// @brief It computes the Minkowski difference of two V-polytopes and returns the resulting object.
+        /// @param rhs The V-polytope from the right hand side of the operation.
+        /// @return The resulting object. 
+        VPolytopeT minkowskiDiff(const VPolytopeT &rhs) const;
+
         /**
          * @brief      Intersects the polytope with a second polytope.
          * @param[in]  rhs   The right hand side.
