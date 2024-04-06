@@ -18,8 +18,8 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::r
 		mReachTree = makeRoots<State, Automaton>( *mHybridAutomaton );
 	}
 	// initialize queue
-	for ( auto &automaton : mHybridAutomata ) {
-		for ( auto &rtNode : mAutomatonReachTreeMap[automaton] ) {
+	for ( auto& automaton : mHybridAutomata ) {
+		for ( auto& rtNode : mAutomatonReachTreeMap[automaton] ) {
 			mWorkQueue.push( std::make_pair( &rtNode, automaton ) );
 			// mPairWorkQueue.push( std::make_pair( &rtNode, automaton ) );
 		}
@@ -42,13 +42,15 @@ template <typename State, typename Automaton, typename Multithreading>
 REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::forwardRun() {
 	DEBUG( "hypro.reachability.rectangular", "Start forward analysis" );
 	// create a rectangular worker for each automaton
-	std::vector<RectangularWorker<State, Automaton>> workerVector;
+	// std::vector<RectangularWorker<State, Automaton>> workerVector;
 	// for ( auto &automaton : mHybridAutomata ) {
 	// 	workerVector.push_back(RectangularWorker<State, Automaton>{ *automaton, mAnalysisSettings });
 	// }
-	std::map<Automaton const *, RectangularWorker<State, Automaton>> automatonWorkerMap;
+	std::map<Automaton const*, RectangularSyncWorker<State, Automaton>> automatonWorkerMap;
+	int varPoolIndex = 0;
 	for ( auto automaton : mHybridAutomata ) {
-		automatonWorkerMap.emplace( std::make_pair( automaton, RectangularWorker<State, Automaton>{ *automaton, mAnalysisSettings } ) );
+		automatonWorkerMap.emplace( std::make_pair( automaton, RectangularSyncWorker<State, Automaton>{ *automaton, mAnalysisSettings, mLabelAutomatonMap, varPoolIndex } ) );
+		varPoolIndex++;
 	}
 	// RectangularWorker<State, Automaton> worker{ *mHybridAutomaton, mAnalysisSettings };
 
@@ -57,15 +59,15 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::f
 		// DEBUG( "hypro.reachability",
 		// 	   "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName()
 		// 						 << " with path " << currentNode->getTreePath() );
-		
+
 		// process with sync
 		auto nodeAutoPair = getPairFromQueue();
-		auto *node = nodeAutoPair.first;
-		auto *automaton = nodeAutoPair.second;
+		auto* node = nodeAutoPair.first;
+		auto* automaton = nodeAutoPair.second;
 		DEBUG( "hypro.reachability",
 			   "Process node (@" << node << ") with location " << node->getLocation()->getName()
 								 << " with path " << node->getTreePath() );
-		auto result = processNode( automatonWorkerMap.at(automaton) , node );
+		auto result = processNode( automatonWorkerMap.at( automaton ), node, automaton );
 		if ( result != REACHABILITY_RESULT::SAFE ) {
 			DEBUG( "hypro.reachability", "End Rectangular Reachability Analysis." );
 			return result;
@@ -77,8 +79,8 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::f
 
 template <typename State, typename Automaton, typename Multithreading>
 REACHABILITY_RESULT
-RectangularSyncAnalyzer<State, Automaton, Multithreading>::processNode( RectangularWorker<State, Automaton> &worker,
-																		ReachTreeNode<State, LocationT> *node ) {
+RectangularSyncAnalyzer<State, Automaton, Multithreading>::processNode( RectangularSyncWorker<State, Automaton>& worker,
+																		ReachTreeNode<State, LocationT>* node, Automaton const* automaton ) {
 	REACHABILITY_RESULT safetyResult;
 	TRACE( "hypro.reachability.rectangular", "Analyze node at depth " << node->getDepth() );
 
@@ -96,16 +98,15 @@ RectangularSyncAnalyzer<State, Automaton, Multithreading>::processNode( Rectangu
 	}
 
 	// create jump successor tasks
-	for ( const auto &transitionStatesPair : worker.getJumpSuccessorSets() ) {
+	for ( const auto& transitionStatesPair : worker.getJumpSuccessorSets() ) {
 		for ( const auto jmpSucc : transitionStatesPair.second ) {
 			// update reachTree
 			// time is not considered in rectangular analysis so we store a dummy
-			auto &childNode = node->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
+			auto& childNode = node->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
 			assert( childNode.getDepth() == node->getDepth() + 1 );
 
-			// create Task
-			// TODO: this should add the node and the automaton to the queue
-			// addToQueue( &childNode );
+			// create Task for jump successors (local computation)
+			addPairToQueue( &childNode, automaton );
 		}
 	}
 	return REACHABILITY_RESULT::SAFE;
