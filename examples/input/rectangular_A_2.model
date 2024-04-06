@@ -53,6 +53,10 @@ hybrid reachability
     jumps 
     {
         l0 -> l1
+        label 
+        {
+            a
+        }
         guard 
         {
             -1*x1 <= -10
@@ -64,6 +68,10 @@ hybrid reachability
         parallelotope aggregation {}
 
         l1 -> l0
+        label 
+        {
+            b
+        }
         guard
         {
             x1 <= -16
