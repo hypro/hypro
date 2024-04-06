@@ -7,13 +7,15 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "RectangularWorker.h"
+#include "RectangularSyncWorker.h"
 
 namespace hypro {
 
 template <typename State, typename Automaton>
 REACHABILITY_RESULT
 RectangularSyncWorker<State, Automaton>::computeForwardReachability( ReachTreeNode<State, LocationT> &task ) {
+	// change Variable Pool
+	hypro::VariablePool::getInstance().changeToPool( mVariablePoolIndex );
 	DEBUG( "hypro.reachability.rectangular", "Start forward computation in worker" );
 	if ( computeTimeSuccessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
@@ -25,6 +27,8 @@ RectangularSyncWorker<State, Automaton>::computeForwardReachability( ReachTreeNo
 template <typename State, typename Automaton>
 REACHABILITY_RESULT
 RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<State, LocationT> &task ) {
+	// change Variable Pool
+	hypro::VariablePool::getInstance().changeToPool( mVariablePoolIndex );
 	State initialSet = task.getInitialSet();
 
 	auto [containment, segment] = rectangularIntersectInvariant( initialSet, task.getLocation() );
@@ -87,30 +91,22 @@ RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<St
 
 template <typename State, typename Automaton>
 void RectangularSyncWorker<State, Automaton>::computeJumpSuccessors( const LocationT *location ) {
+	// change Variable Pool
+	hypro::VariablePool::getInstance().changeToPool( mVariablePoolIndex );
 	// for each transition intersect each computed time successor set with the guard. If the intersection is non-empty, store for post-processing.
-	rectangularGuardHandler<State, LocationT> guardHandler;
+	rectangularSyncGuardHandler<State, LocationT> guardHandler;
 	for ( auto &state : mFlowpipe ) {
-		guardHandler( state, location );
+		guardHandler( state, location, mNonSyncLabels );
 	}
 
-	// post processing: apply reset on those sets, intersect the sets with the invariant of the target location. If the resulting state set is non-empty, add it to the jump successors set.
-	postProcessJumpSuccessors( guardHandler.getGuardSatisfyingStateSets() );
+	// post process non synchronizing jumps: apply reset on those sets, intersect the sets with the invariant of the target location. If the resulting state set is non-empty, add it to the jump successors set.
+	postProcessJumpSuccessors( guardHandler.getNonSyncGuardSatisfyingStateSets() );
 }
 
 template <typename State, typename Automaton>
 void RectangularSyncWorker<State, Automaton>::postProcessJumpSuccessors( const JumpSuccessors &guardSatisfyingSets ) {
 	singularJumpHandler<State, LocationT> jmpHandler;
 	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets );
-}
-
-template <typename State, typename Automaton>
-REACHABILITY_RESULT
-RectangularSyncWorker<State, Automaton>::computeBackwardReachability( ReachTreeNode<State, LocationT> &task ) {
-	if ( computeTimePredecessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
-		return REACHABILITY_RESULT::UNKNOWN;
-	}
-	computeJumpPredecessors();
-	return REACHABILITY_RESULT::SAFE;
 }
 
 template <typename State, typename Automaton>

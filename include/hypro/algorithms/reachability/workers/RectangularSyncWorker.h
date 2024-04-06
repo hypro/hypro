@@ -9,12 +9,13 @@
 
 #pragma once
 
+#include "../../../datastructures/HybridAutomaton/Label.h"
 #include "../../../datastructures/reachability/Flowpipe.h"
 #include "../../../datastructures/reachability/Settings.h"
 #include "../../../util/logging/Logger.h"
 #include "../../../util/plotting/PlotData.h"
 #include "../handlers/badStateHandlers/rectangularBadStateHandler.h"
-#include "../handlers/guardHandlers/rectangularGuardHandler.h"
+#include "../handlers/guardHandlers/rectangularSyncGuardHandler.h"
 #include "../handlers/invariantHandlers/rectangularInvariantHandler.h"
 #include "../handlers/jumpHandlers/rectangularJumpHandler.h"
 #include "../handlers/jumpHandlers/singularJumpHandler.h"
@@ -36,47 +37,60 @@ class RectangularSyncWorker {
   private:
 	using Number = typename State::NumberType;
 	using LocationT = typename Automaton::LocationType;
-	using JumpSuccessors = typename rectangularGuardHandler<State, LocationT>::TransitionStatesMap;
-	using JumpPredecessors = typename rectangularGuardHandler<State, LocationT>::TransitionStatesMap;
+	using JumpSuccessors = typename rectangularSyncGuardHandler<State, LocationT>::TransitionStatesMap;
+	using JumpPredecessors = typename rectangularSyncGuardHandler<State, LocationT>::TransitionStatesMap;
 
   public:
-	/// constructor from rectangular automaton and settings
-	RectangularSyncWorker( const Automaton &ha, const Settings &settings )
+	/// constructor from rectangular automaton and settings TODO: delete this constructor
+	RectangularSyncWorker( const Automaton& ha, const Settings& settings )
 		: mHybridAutomaton( ha )
 		, mSettings( settings ) {}
 
+	/// constructor from rectangular automaton, settings and synchronization dictionary
+	RectangularSyncWorker( const Automaton& ha, const Settings& settings, std::map<Label, std::set<Automaton const*>>& syncDict, int variablePoolIndex )
+		: mHybridAutomaton( ha )
+		, mSettings( settings )
+		, mSyncDict( syncDict )
+		, mVariablePoolIndex( variablePoolIndex )
+		, mNonSyncLabels() {
+		for ( auto label : mHybridAutomaton.getLabels() ) {
+			if ( syncDict.at( label ).size() == 1 && syncDict.at( label ).count( &mHybridAutomaton ) == 1 ) {
+				mNonSyncLabels.insert( label );
+			}
+		}
+	}
+
 	/// computes a time transition followed by a discrete transition
-	REACHABILITY_RESULT computeForwardReachability( ReachTreeNode<State, LocationT> &task );
+	REACHABILITY_RESULT computeForwardReachability( ReachTreeNode<State, LocationT>& task );
 
 	/// computes a time transition
-	REACHABILITY_RESULT computeTimeSuccessors( ReachTreeNode<State, LocationT> &task );
+	REACHABILITY_RESULT computeTimeSuccessors( ReachTreeNode<State, LocationT>& task );
 
 	/// computes a discrete transition. Requires available time successors.
-	void computeJumpSuccessors( const LocationT *location );
-
-	void computeJumpPredecessors();
+	void computeJumpSuccessors( const LocationT* location );
 
 	/// getter for discrete jump successor sets
-	const JumpSuccessors &getJumpSuccessorSets() const { return mJumpSuccessorSets; }
+	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
 
 	/// getter for time successor sets
-	const Flowpipe<State> &getFlowpipe() const { return mFlowpipe; }
+	const Flowpipe<State>& getFlowpipe() const { return mFlowpipe; }
 
 	/// clear state, i.e., results obtained from computation.
 	void clear();
 
   private:
-	void postProcessJumpSuccessors( const JumpSuccessors &guardSatisfyingSets );
-
-	void reverseProcessJumpPredecessors( const JumpSuccessors &guardSatisfyingSets );
+	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
 
   protected:
-	const Automaton &mHybridAutomaton;	///< Reference to the rectangular automaton
-	const Settings &mSettings;			///< Reference to the used analysis settings
-	JumpSuccessors mJumpSuccessorSets;	///< Storage of computed jump successors
-	Flowpipe<State> mFlowpipe;			///< Storage of computed time successors
+	const Automaton& mHybridAutomaton;						  ///< Reference to the rectangular automaton
+	const Settings& mSettings;								  ///< Reference to the used analysis settings
+	JumpSuccessors mJumpSuccessorSets;						  ///< Storage of computed jump successors
+	Flowpipe<State> mFlowpipe;								  ///< Storage of computed time successors
+	std::map<Label, std::set<Automaton const*>>& mSyncDict{};  ///< map (label -> automata)
+	std::set<Label> mNonSyncLabels{};						  ///< set of labels that are not synchronized, local computation in the subspace
+	int mVariablePoolIndex{ 0 };								  ///< index of the variable pool to use in with this worker
 };
 
 }  // namespace hypro
 
-#include "RectangularWorker.tpp"
+#include "RectangularSyncWorker.tpp"
