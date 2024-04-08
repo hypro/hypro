@@ -59,6 +59,15 @@ namespace hypro {
         std::vector<std::set<unsigned>> mNeighbors;
 
     public:
+
+        /**
+        * @brief      Computation of the set minus operator using crossing points.
+        * @param[in]  polytope  The polytope G.
+        * @param[in]  dimension The dimension of the polytopes.
+        */
+        VpolytopeT setMinusCrossing(const polytopeT, int dimension);
+
+
         /**
          * @brief      Default constructor.
          */

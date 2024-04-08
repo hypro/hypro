@@ -40,6 +40,7 @@ hybrid reachability
   guard { x = 0 v <= 0 }
   reset { v' := -0.75*v }
   parallelotope aggregation {}
+  urgent 
  }
 
  init

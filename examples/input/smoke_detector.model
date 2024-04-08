@@ -69,6 +69,7 @@ hybrid reachability
   guard { }
   reset { x' := 100 }
   parallelotope aggregation {}
+  urgent
 
   normal -> warning
   guard { x = 30 }
@@ -89,6 +90,7 @@ hybrid reachability
   guard { }
   reset { x' := 100 }
   parallelotope aggregation {}
+  urgent
 
  }
 
