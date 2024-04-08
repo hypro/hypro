@@ -54,7 +54,7 @@ static void computeReachableStates(const std::vector<std::string> filename,
     std::cout << parsedSettings << std::endl;
     hypro::Settings settings = hypro::convert(parsedSettings);
 
-    auto roots = hypro::makeSyncRoots<Representation, Automaton>(automata);
+    auto roots = hypro::makeSyncRoots<Representation, Automaton>(automata); // TODO: I don't need this. I can initialize the analyzer with only the automata and settings.
 
     for (auto &root: roots) {
         root.initializeSyncNodes(automata.size());

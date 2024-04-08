@@ -75,6 +75,8 @@ RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<St
 	}
 
 	// add state to flowpipe
+	// TODO: delete std::cout
+	std::cout << constrainedTimeSuccessors << std::endl;
 	mFlowpipe.addState( constrainedTimeSuccessors );
 	task.getFlowpipe().push_back( constrainedTimeSuccessors );
 
