@@ -35,6 +35,12 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #endif
 
+#ifdef HYPRO_USE_DD_METHOD
+
+#include "../../../algorithms/doubledescription/doubleDescription.h"
+
+#endif
+
 #include <algorithm>
 #include <cassert>
 #include <optional>

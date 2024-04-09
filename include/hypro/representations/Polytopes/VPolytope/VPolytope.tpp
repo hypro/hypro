@@ -98,7 +98,14 @@ namespace hypro {
                 }
 #endif
             }
+#ifdef HYPRO_USE_DD_METHOD
+            auto ddPair = DDPair<Number>( _constraints, _constants );
+		ddPair.compute();
 
+		for ( const auto& v : ddPair.getPoints() ) {
+			mVertices.emplace_back( Point( std::move( v ) ) );
+		}
+#else
             auto dimension = _constraints.cols();
             typename QuickIntersection<Number>::pointVector_t inputHalfspaces;
 
@@ -122,6 +129,7 @@ namespace hypro {
                 facet.mNormal /= -facet.mOffset;
                 mVertices.emplace_back(Point(std::move(facet.mNormal)));
             }
+#endif
         } else {
             // calculate all possible Halfspace intersections
             TRACE("hypro.representations.vpolytope", "Construct from " << _constraints << " <= " << _constants);
