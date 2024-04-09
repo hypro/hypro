@@ -308,17 +308,20 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
     // reverse order to for detectDimension() to work properly.
     // If ordering of elimination is changed, dimension has to be set manually.
 	std::reverse(variablesToEliminate.begin(),variablesToEliminate.end());
-    // add t to eliminate at latest
-	variablesToEliminate.push_back( t );
 
 	// create variables to eliminate
 	QEQuery quOrder;
 	quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
-	// allow for some heuristics on how to eliminate
-	bad.choseOrder( quOrder );
+
+    // eliminate vars
+	bad.eliminateVariables( quOrder );
+
+	quOrder.at(0).second = std::vector<carl::Variable>{t};
 
 	// eliminate vars
+	bad.setDimension(bad.dimension());
 	bad.eliminateVariables( quOrder );
+	bad.setDimension(bad.dimension() - 1);
 
 	DEBUG( "hydra.worker", "State set after reverse time elapse: " << bad );
 
