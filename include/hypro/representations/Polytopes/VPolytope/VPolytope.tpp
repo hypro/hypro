@@ -20,6 +20,81 @@
 #include <algorithm>
 
 namespace hypro {
+
+    template<typename Number, typename Converter, typename S>
+    VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::setMinusCrossing(const VPolytopeT &polytopeG) const
+    {
+        std::size_t dim_p = this->dimension();
+        std::size_t dim_g = polytopeG->dimension();
+
+        assert(dim_p == dim_g);
+
+        QuickhullAlgorithm<Number,true> quickhull = QuickhullAlgorithm<Number,true>(this->mVertices,dim_p);
+        
+        quickhull.compute();
+        std::vector<Facet<Number>> facets = quickhull.getFacets();
+
+        for(int i = 0; i < facets.size(); ++i){
+            std::cout << "Facet position: " + i << std::endl;
+            Facet cur_facet = facets[i];
+            for(int j = 0; j < cur_facet.mVertices.size(); ++j){
+                std::cout << "Vertex position: " + j << std::endl;
+                std::cout << "Vertex is: " + cur_facet.mVertices[j] << std::endl;
+            }
+        }
+
+
+        /*
+
+        std::vector<Facet> edgesP = quickhull.getFacets();
+        std::vector<Point<Number>> PnG = {}
+        for (int i : this.mVertices.size()){
+            if (polytopeT.contains(this.mVertices[i])){
+                PnG.insert(this.mVertices[i]);
+            }     
+        }
+
+        for (auto vertex : PnG){
+            BVs = getBorderVertices(vertex, edgesP, PnG);
+            for (auto borderVertex : BVs){
+                if (polytopeT instanceof(VPolytopeT)){
+                    std::vector<Point<Number>> CP = {};
+                    std::vector<Point<Number>> points = polytopeT.mVertices;
+                    
+                    //LP
+
+                    CP.insert(newpoint);
+                }else{
+
+                }
+            }
+
+
+
+        }
+
+        */
+
+    }
+
+    /*
+
+    std::vector<Point<Number>> getBorderVertices(Point<Number> vertex, std::vector<Facet> edgesP, std::vector<Point<Number>> PnG){
+        std::vector<Point<Number>> BVs = {};
+        for (auto edge : edgesP){
+            if (edge.contains(vertex)){
+                borderV = //todo the other one on the edge not the vertex
+                if (std::find(PnG.begin(), PnG.end(), borderV) == PnG.end()){
+                    BVs.insert(borderV);
+                }                
+            }
+        }
+        return BVs;
+    }
+
+    */
+
+
     template<typename Number, typename Converter, typename S>
     VPolytopeT<Number, Converter, S>::VPolytopeT()
             : GeometricObjectBase(SETSTATE::EMPTY), mVertices(), mReduced(true), mNeighbors() {

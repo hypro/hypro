@@ -63,10 +63,8 @@ namespace hypro {
         /**
         * @brief      Computation of the set minus operator using crossing points.
         * @param[in]  polytope  The polytope G.
-        * @param[in]  dimension The dimension of the polytopes.
         */
-        VpolytopeT setMinusCrossing(const polytopeT, int dimension);
-
+        VPolytopeT setMinusCrossing(const VPolytopeT &polytopeG) const;
 
         /**
          * @brief      Default constructor.
