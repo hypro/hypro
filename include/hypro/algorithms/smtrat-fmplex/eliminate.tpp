@@ -126,7 +126,7 @@ Formula<Number> eliminate_variables(const Formula<Number>& f, const std::vector<
 template<typename Number>
 std::pair<EigenMat<Number>, EigenVec<Number>> eliminate_cols(const EigenMat<Number>& constraints,
                                              const EigenVec<Number>& constants,
-                                             const std::vector<std::size_t>& cols) {
+                                             const std::vector<std::size_t>& cols, bool removeZeroCols) {
     // convert to internal matrix type
     Matrix<Number> m(constraints.rows(), constraints.cols() + 2 + constraints.rows());
     std::size_t quantified_cols = cols.size();
@@ -162,6 +162,26 @@ std::pair<EigenMat<Number>, EigenVec<Number>> eliminate_cols(const EigenMat<Numb
             if (e.col_index > constraints.cols()) break;
             res_mat(i, var_idx.var(e.col_index)) = e.value;
         }
+    }
+
+    if (removeZeroCols) {
+        int newCols = res_mat.cols() - cols.size();
+
+        // Create a new matrix without the specified columns
+        EigenMat<Number> res_mat_without_zero_col = EigenMat<Number>::Zero(res_mat.rows(), newCols);
+
+        int newColIdx = 0;
+        for (int colIdx = 0; colIdx < res_mat.cols(); ++colIdx) {
+            // Check if the current column should be deleted
+            if (std::find(cols.begin(), cols.end(), colIdx) == cols.end()) {
+                // If not, copy the column to the new matrix
+                res_mat_without_zero_col.col(newColIdx) = res_mat.col(colIdx);
+                ++newColIdx;
+            }
+        }
+
+        return {res_mat_without_zero_col, res_const};
+
     }
 
     return {res_mat, res_const};

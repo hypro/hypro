@@ -76,10 +76,15 @@ int main(int argc, char* argv[]) {
     }
     std::cout << std::endl;
 
+    
     plotter.addObject(proj_poly.vertices());
+    plotter.setFilename("3d_example");
     plotter.plot2d();
+    plotter.clear();
 
-
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////
 
     hypro::matrix_t<Number> boxC = hypro::matrix_t<Number>(4, 2);
     hypro::vector_t<Number> boxd = hypro::vector_t<Number>(4);
@@ -99,19 +104,20 @@ int main(int argc, char* argv[]) {
     std::cout << "Projected d = " << projectedBox.second << std::endl;  
 
     hypro::HPolytope<Number> result2 = hypro::HPolytope<Number>(projectedBox.first, projectedBox.second);
-    
     std::cout << result2 << std::endl;
 
-    plotter.addObject(result2.vertices());
+    // plotter.addObject(result2.vertices());
     std::cout << "Projected poly vertices = ";
-    for(auto vertex : proj_poly.vertices()) {
+    for(auto vertex : result2.vertices()) {
+        vertex.extend(0);   // extend it so it's now a 2D point
+        // plotter.addPoint(vertex);
         std::cout << vertex << " ";
     }
     std::cout << std::endl;
 
 
-    plotter.setFilename("2d_example");
-    plotter.plot2d();
+    // plotter.setFilename("2d_example");
+    // plotter.plot2d();
 
     return 0;
 }

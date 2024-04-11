@@ -26,7 +26,7 @@ Formula<Number> eliminate_variables(const Formula<Number>& f, const std::vector<
 template<typename Number>
 std::pair<EigenMat<Number>, EigenVec<Number>> eliminate_cols(const EigenMat<Number>& constraints,
                                              const EigenVec<Number>& constants,
-                                             const std::vector<std::size_t>& cols);
+                                             const std::vector<std::size_t>& cols, bool removeZeroCols = true);
 template<typename Number>
 void write_matrix_to_ine(const EigenMat<Number>& constraints, const EigenVec<Number>& constants,
                          const std::vector<std::size_t>& cols, const std::string& filename);
