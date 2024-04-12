@@ -19,6 +19,7 @@ namespace hypro {
 
         carl::logging::logger().filter("logfile_hypro")("hypro", carl::logging::LogLevel::LVL_TRACE)(
                 "hypro.casestudies", carl::logging::LogLevel::LVL_INFO)("hypro.datastructures",
+                                                                        carl::logging::LogLevel::LVL_TRACE);("hypro.doubleDescriptionMethod",
                                                                         carl::logging::LogLevel::LVL_TRACE);
 
         carl::logging::logger().configure("pathfile_hypro", "unfinished_paths.log");

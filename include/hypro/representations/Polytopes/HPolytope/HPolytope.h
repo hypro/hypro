@@ -35,6 +35,12 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #endif
 
+#ifdef HYPRO_USE_DD_METHOD
+
+#include "../../../algorithms/doubledescription/doubleDescription.h"
+
+#endif
+
 #include <algorithm>
 #include <cassert>
 #include <optional>
@@ -292,6 +298,12 @@ namespace hypro {
         std::vector<EvaluationResult<Number>> multiEvaluate(const matrix_t<Number> &_directions, bool useExact) const;
 
         std::vector<Point<Number>> vertexEnumeration() const;
+
+        // function which offsets all the halfspaces with the same number
+        void offsetAllToNegative(Number offset); 
+
+        // function to normalize all halfspaces
+        void normalize();
 
         /*
          * General interface

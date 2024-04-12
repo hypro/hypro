@@ -98,7 +98,52 @@ namespace hypro {
                 }
 #endif
             }
+#ifdef HYPRO_USE_DD_METHOD
+			///roughly check for full rank.
+			using bitset = boost::dynamic_bitset<uint8_t>;
+			bitset seenDim = bitset(_constraints.cols());
 
+			for (size_t i = 0; i < _constraints.rows(); ++i) {
+				for (size_t j = 0; j < _constraints.cols(); ++j) {
+					Number val = _constraints(i,j);
+					if(val != 0) seenDim[j] = true;
+				}
+			}
+
+			if(seenDim.all()) {
+				auto ddPair = DDPair<Number>( _constraints, _constants );
+				ddPair.compute();
+
+				for ( const auto& v : ddPair.getPoints() ) {
+					mVertices.emplace_back( Point( std::move( v ) ) );
+				}
+			}
+			else {
+				auto dimension = _constraints.cols();
+				typename QuickIntersection<Number>::pointVector_t inputHalfspaces;
+
+				for (int i = 0; i < _constraints.rows(); ++i) {
+					inputHalfspaces.emplace_back(dimension + 1);
+					inputHalfspaces.back().head(dimension) = _constraints.row(i);
+					inputHalfspaces.back()[dimension] = -_constants[i];
+				}
+				TRACE("hypro.representations.vpolytope",
+					   "Construct VPolytope from " << _constraints << " <= " << _constants);
+				QuickIntersection<Number> qInt{inputHalfspaces, (size_t) dimension};
+				qInt.compute();
+
+				for (auto &facet: qInt.getFacets()) {
+					if (facet.mOffset == 0) {
+						TRACE("hypro.representations.vpolytope",
+							   "The facet normal was zero, as we understand this yields the empty polytope");
+						*this = Empty();
+						return;
+					}
+					facet.mNormal /= -facet.mOffset;
+					mVertices.emplace_back(Point(std::move(facet.mNormal)));
+				}
+			}
+#else
             auto dimension = _constraints.cols();
             typename QuickIntersection<Number>::pointVector_t inputHalfspaces;
 
@@ -122,6 +167,7 @@ namespace hypro {
                 facet.mNormal /= -facet.mOffset;
                 mVertices.emplace_back(Point(std::move(facet.mNormal)));
             }
+#endif
         } else {
             // calculate all possible Halfspace intersections
             TRACE("hypro.representations.vpolytope", "Construct from " << _constraints << " <= " << _constants);
@@ -266,6 +312,23 @@ namespace hypro {
         for (auto lhsVertex: mVertices) {
             for (auto rhsVertex: rhs.mVertices) {
                 result.insert(lhsVertex + rhsVertex);
+            }
+        }
+        return result;
+    }
+
+    template<typename Number, typename Converter, typename S>
+    VPolytopeT<Number, Converter, S>
+    VPolytopeT<Number, Converter, S>::minkowskiDiff(const VPolytopeT<Number, Converter, S> &rhs) const {
+        if (this->empty() || rhs.empty()) {
+            return Empty();
+        }
+        
+        VPolytopeT<Number, Converter, S> result;
+        // subtract each rhs-vertex from each vertex of this polytope.
+        for (auto lhsVertex: mVertices) {
+            for (auto rhsVertex: rhs.mVertices) {
+                result.insert(lhsVertex - rhsVertex);
             }
         }
         return result;

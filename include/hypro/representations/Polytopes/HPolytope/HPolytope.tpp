@@ -476,6 +476,65 @@ namespace hypro {
             return vertices;
         } else {  // Use quickhull (exact arithmetic) for vertex-enumeration
 
+#ifdef HYPRO_USE_DD_METHOD
+			///roughly check for full rank.
+			using bitset = boost::dynamic_bitset<uint8_t>;
+			bitset seenDim = bitset(mHPlanes.front().normal().rows());
+			for(auto& plane : mHPlanes) {
+				for(Eigen::Index i = 0; i < plane.normal().rows(); ++i) {
+					Number val = plane.normal()(i);
+					if(val != 0) seenDim[i] = true;
+				}
+			}
+
+			if(seenDim.all()) {
+				matrix_t<Number> _constraints( mHPlanes.size(), mHPlanes[0].normal().size() );
+				vector_t<Number> _constants( mHPlanes.size() );
+
+				for ( std::size_t i = 0; i < mHPlanes.size(); i++ ) {
+					_constraints.row( i ) << mHPlanes[i].normal().transpose();
+					_constants[i] = mHPlanes[i].offset();
+				}
+
+				auto ddPair = DDPair<Number>( _constraints, _constants );
+				ddPair.compute();
+
+				std::vector<Point<Number>> tmpVertices;
+				for ( const auto& v : ddPair.getPoints() ) {
+					tmpVertices.emplace_back( Point( std::move( v ) ) );
+				}
+
+				return tmpVertices;
+			}
+			else {
+				// conversion to mpq_class
+				std::vector<vector_t<mpq_class>> halfspaces;
+				for (std::size_t i = 0; i < mHPlanes.size(); ++i) {
+					halfspaces.emplace_back(this->dimension() + 1);
+					halfspaces.back().head(this->dimension()) = convert<Number, mpq_class>(mHPlanes[i].normal());
+					halfspaces.back()[this->dimension()] = carl::convert<Number, mpq_class>(mHPlanes[i].offset());
+				}
+				// compute vertices (dual)
+				QuickIntersection<mpq_class> facetEnumerator{halfspaces, this->dimension()};
+				facetEnumerator.compute();
+
+				// re-transform and convert
+				for (auto facet: facetEnumerator.getFacets()) {
+					vertices.emplace_back(vector_t<Number>::Zero(this->dimension()));
+					// The resulting points can't be points at infinity
+					// if ( facet.mOffset == 0 ) {
+					// std::cout << "Polytope is unbounded." << std::endl;
+					// } else {
+					if (facet.mOffset != 0) {
+						facet.mNormal /= facet.mOffset;
+						vertices.back() = convert<mpq_class, Number>(facet.mNormal);
+					}
+				}
+				return vertices;
+			}
+
+
+#else
             // conversion to mpq_class
             std::vector<vector_t<mpq_class>> halfspaces;
             for (std::size_t i = 0; i < mHPlanes.size(); ++i) {
@@ -489,7 +548,7 @@ namespace hypro {
 
             // re-transform and convert
             for (auto facet: facetEnumerator.getFacets()) {
-				vertices.emplace_back(vector_t<Number>::Zero(this->dimension()));
+                vertices.emplace_back(vector_t<Number>::Zero(this->dimension()));
                 // The resulting points can't be points at infinity
                 // if ( facet.mOffset == 0 ) {
                 // std::cout << "Polytope is unbounded." << std::endl;
@@ -500,6 +559,7 @@ namespace hypro {
                 }
             }
             return vertices;
+#endif
         }
 
         // verify against reverse-search algorithm.
@@ -806,6 +866,22 @@ namespace hypro {
             res.push_back(evaluate(_directions.row(i)));
         }
         return res;
+    }
+
+    template<typename Number, typename Converter, class Setting>
+    void HPolytopeT<Number, Converter, Setting>::offsetAllToNegative(Number offset) {
+
+        for (auto& hPlane : mHPlanes) {
+            hPlane.setOffset(hPlane.offset() - offset);
+        }
+    }
+
+    template<typename Number, typename Converter, class Setting>
+    void HPolytopeT<Number, Converter, Setting>:: normalize() {
+
+        for (auto& hPlane : mHPlanes) {
+            hPlane.normalize();
+        }
     }
 
 /*

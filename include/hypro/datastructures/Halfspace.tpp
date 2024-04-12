@@ -521,4 +521,21 @@ namespace hypro {
         return res;
     }
 
+    template<typename Number>
+    void Halfspace<Number>::normalize() {
+
+        Number scalar = Number(0);
+
+        for (auto coeff : mNormal) {
+            scalar += (coeff * coeff);
+        }
+
+        scalar = carl::sqrt(scalar);
+        for (auto& coeff : mNormal) {
+            coeff /= scalar;
+        }
+
+        mScalar /= scalar;
+    }
+
 }  // namespace hypro

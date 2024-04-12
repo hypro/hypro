@@ -354,6 +354,9 @@ namespace hypro {
         std::vector<EvaluationResult<Number>>
         multiEvaluate(const matrix_t<Number> &_directions, bool /*useExact*/) const;
 
+        // function to normalize a halfspace (divide all the coefficients and the scalar by the Euclidean norm of the sums of square of the coefficients)
+        void normalize();
+
         /**
          * @brief Returns a point representation of the halfspace. which does not exist.
          * @detail Although this function is nonsensical, it is needed in order to use the Halfspace class as a leaf in the
