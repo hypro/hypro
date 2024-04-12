@@ -408,9 +408,7 @@ namespace hypro {
             bool notnull = _rhs.normal()(i) != 0;
             bool printVal = notnull && abs(_rhs.normal()(i)) != 1;
             bool neg = _rhs.normal()(i) < 0;
-            std::string varname = pool.carlVarByIndex(i).name().empty() ? pool.carlVarByIndex(i).name() : "x" +
-                                                                                                          std::to_string(
-                                                                                                                  i);
+            std::string varname = pool.carlVarByIndex(i).name().empty() ? "x" + std::to_string( i) : pool.carlVarByIndex(i).name();
             if (notnull) {
                 if (printVal) {
                     if (first) {
