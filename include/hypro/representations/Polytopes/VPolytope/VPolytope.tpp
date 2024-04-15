@@ -25,74 +25,259 @@ namespace hypro {
     VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::setMinusCrossing(const VPolytopeT &polytopeG) const
     {
         std::size_t dim_p = this->dimension();
-        std::size_t dim_g = polytopeG->dimension();
+        std::size_t dim_g = polytopeG.dimension();
 
         assert(dim_p == dim_g);
 
-        QuickhullAlgorithm<Number,true> quickhull = QuickhullAlgorithm<Number,true>(this->mVertices,dim_p);
-        
-        quickhull.compute();
-        std::vector<Facet<Number>> facets = quickhull.getFacets();
-
-        for(int i = 0; i < facets.size(); ++i){
-            std::cout << "Facet position: " + i << std::endl;
-            Facet cur_facet = facets[i];
-            for(int j = 0; j < cur_facet.mVertices.size(); ++j){
-                std::cout << "Vertex position: " + j << std::endl;
-                std::cout << "Vertex is: " + cur_facet.mVertices[j] << std::endl;
-            }
-        }
-
-
-        /*
-
-        std::vector<Facet> edgesP = quickhull.getFacets();
-        std::vector<Point<Number>> PnG = {}
-        for (int i : this.mVertices.size()){
-            if (polytopeT.contains(this.mVertices[i])){
-                PnG.insert(this.mVertices[i]);
+        std::vector<std::pair<Point<Number>, Point<Number>>> edgesP = this->getConvexEdges();
+        std::vector<Point<Number>> PnG = {};
+        for (auto cur_p : this->mVertices){
+            if (polytopeG.contains(cur_p)){
+                PnG.push_back(cur_p);
             }     
         }
 
-        for (auto vertex : PnG){
-            BVs = getBorderVertices(vertex, edgesP, PnG);
+        for (auto cur_p : PnG){
+            std::vector<Point<Number>> BVs = getBorderVertices(cur_p, edgesP, PnG);
             for (auto borderVertex : BVs){
-                if (polytopeT instanceof(VPolytopeT)){
-                    std::vector<Point<Number>> CP = {};
-                    std::vector<Point<Number>> points = polytopeT.mVertices;
-                    
-                    //LP
 
-                    CP.insert(newpoint);
-                }else{
+                Point<Number> cp = polytopeG.getCrossingPoint(borderVertex, cur_p);
 
-                }
+                std::cout << "Crossing Point: " << cp << std::endl;
             }
 
-
-
-        }
-
-        */
+        }        
+        return VPolytopeT<Number, Converter, Settings>();
 
     }
 
-    /*
 
-    std::vector<Point<Number>> getBorderVertices(Point<Number> vertex, std::vector<Facet> edgesP, std::vector<Point<Number>> PnG){
+    template<typename Number, typename Converter, typename S> 
+    Point<Number> VPolytopeT<Number, Converter, S>::getCrossingPoint(Point<Number> fromPoint, Point<Number> toPoint) const{
+
+        matrix_t<Number> A = matrix_t<Number>(this->dimension(), this->mVertices.size()+1);
+
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            if (i == A.cols() - 1){
+                A.col(i) = vector_t<Number>::Zero(this->dimension()) - (toPoint.rawCoordinates() - fromPoint.rawCoordinates());
+            }else{
+                A.col(i) = mVertices[i].rawCoordinates();
+            }
+        }
+
+        Optimizer<Number> opt(A, fromPoint.rawCoordinates());
+
+        // 3 bound cols
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            vector_t<Number> constraint = vector_t<Number>::Zero(A.cols());
+
+            constraint(i) = 1;
+
+            opt.addConstraint(constraint, 1, carl::Relation::LEQ);
+            opt.addConstraint(constraint, 0, carl::Relation::GEQ);
+        }
+
+        // 4 add constraint that all coefficients add up to 1
+        vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
+        constraint(A.cols() - 1) = 0;
+    
+        opt.addConstraint(constraint, 1, carl::Relation::EQ);
+
+        // Check that the point can be represented (EQ).
+        opt.setRelations(std::vector<carl::Relation>(this->dimension(), carl::Relation::EQ));
+
+        vector_t<Number> direction = vector_t<Number>::Zero(A.cols());
+        direction(A.cols() - 1) = -1;    
+
+        EvaluationResult<Number> result = opt.evaluate(direction, true);
+
+        std::cout << "From: " << fromPoint << std::endl;
+        std::cout << "To: " << toPoint << std::endl; 
+
+        Number invertedValue = -result.supportValue;
+
+        std::cout << "Result: " << invertedValue << std::endl;
+
+        Point<Number> cp = fromPoint + invertedValue * (toPoint - fromPoint);
+        return cp;
+    }
+
+
+    
+    template<typename Number, typename Converter, typename S> 
+    std::vector<Point<Number>> VPolytopeT<Number, Converter, S>::getBorderVertices(Point<Number> point, std::vector<std::pair<Point<Number>, Point<Number>>> edgesP, std::vector<Point<Number>> PnG) const{
         std::vector<Point<Number>> BVs = {};
         for (auto edge : edgesP){
-            if (edge.contains(vertex)){
-                borderV = //todo the other one on the edge not the vertex
-                if (std::find(PnG.begin(), PnG.end(), borderV) == PnG.end()){
-                    BVs.insert(borderV);
+            Point<Number> p1 = edge.first;
+            Point<Number> p2 = edge.second;
+            if (p1 == point){ 
+                if (std::find(PnG.begin(), PnG.end(), p2) == PnG.end()){
+                    BVs.push_back(p2);
                 }                
             }
         }
         return BVs;
     }
 
-    */
+
+    template<typename Number, typename Converter, typename S> 
+    std::vector<Point<Number>> VPolytopeT<Number, Converter, S>::getExtremePoints() const{
+    
+        std::vector<Point<Number>> result;
+
+        for (auto p : this->mVertices){
+            if (isExtremePoint(p)){
+                result.push_back(p);
+            }
+        }    
+
+        return result;       
+
+    }
+
+    template<typename Number, typename Converter, typename S>
+    bool VPolytopeT<Number, Converter, S>::isExtremePoint(Point<Number> point) const{
+        // todo
+
+        matrix_t<Number> A = matrix_t<Number>(this->dimension(), this->mVertices.size());
+
+        Eigen::Index pointPos = 0;
+
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            if (point == mVertices[i]){
+                pointPos = i;
+                break;
+            }
+        }
+
+
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            if (i == pointPos){
+                A.col(i) = vector_t<Number>::Zero(this->dimension());
+            }else{
+                A.col(i) = mVertices[i].rawCoordinates();
+            }
+        }
+
+        Optimizer<Number> opt(A, point.rawCoordinates());
+
+        // 3 bound cols
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            vector_t<Number> constraint = vector_t<Number>::Zero(A.cols());
+
+            if (i != pointPos){
+                constraint(i) = 1;
+            }
+
+            opt.addConstraint(constraint, 1, carl::Relation::LEQ);
+            opt.addConstraint(constraint, 0, carl::Relation::GEQ);
+        }
+
+        // 4 add constraint that all coefficients add up to 1
+        vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
+        constraint(pointPos) = 0;
+    
+        opt.addConstraint(constraint, 1, carl::Relation::EQ);
+
+        // Check that the point can be represented (EQ).
+        opt.setRelations(std::vector<carl::Relation>(this->dimension(), carl::Relation::EQ));
+
+        if (opt.checkConsistency()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    template<typename Number, typename Converter, typename S>
+    std::vector<std::pair<Point<Number>, Point<Number>>> VPolytopeT<Number, Converter, S>::getConvexEdges() const{
+
+        std::vector<std::pair<Point<Number>, Point<Number>>> result;
+        std::vector<Point<Number>> extremePoints = this->getExtremePoints();
+
+        for (auto p1 : extremePoints){
+            for (auto p2 : extremePoints){
+                if (p1 != p2){
+                    if (isPairConvexEdge(p1, p2, extremePoints)){
+                        result.push_back(std::make_pair(p1, p2));
+                    }
+                }  
+            }
+        }
+        return result;
+    }
+
+    template<typename Number, typename Converter, typename S>
+    bool VPolytopeT<Number, Converter, S>::isPairConvexEdge(Point<Number> p1, Point<Number> p2, std::vector<Point<Number>> extremePoints) const{
+        
+        matrix_t<Number> A = matrix_t<Number>(this->dimension(), extremePoints.size());
+
+        Eigen::Index pointPos1 = 0;
+        Eigen::Index pointPos2 = 0;
+
+        bool foundPos1 = false; 
+        bool foundPos2 = false; 
+
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            if (p1 == extremePoints[i]){
+                pointPos1 = i;
+                foundPos1 = true;
+            }
+            if (p2 == extremePoints[i]){
+                pointPos2 = i;
+                foundPos2 = true;
+            }
+        }
+
+        assert(foundPos1);
+        assert(foundPos2);
+        assert(pointPos1 != pointPos2);      
+
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            if (i == pointPos1 || i == pointPos2){
+                A.col(i) = vector_t<Number>::Zero(this->dimension()) - extremePoints[i].rawCoordinates();
+            }else{
+                A.col(i) = extremePoints[i].rawCoordinates();
+            }
+        }
+
+        Optimizer<Number> opt(A, vector_t<Number>::Zero(this->dimension()));
+
+        // 3 bound cols
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            vector_t<Number> constraint = vector_t<Number>::Zero(A.cols());
+
+            constraint(i) = 1;
+
+            opt.addConstraint(constraint, 1, carl::Relation::LEQ);
+            opt.addConstraint(constraint, 0, carl::Relation::GEQ);
+        }
+
+        // 4 add constraint that all coefficients add up to 1 except the two points
+        vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
+        constraint(pointPos1) = 0;
+        constraint(pointPos2) = 0;
+    
+        opt.addConstraint(constraint, 1, carl::Relation::EQ);
+
+        // 4 add constraint that the two points add to 1
+        vector_t<Number> constraint2 = vector_t<Number>::Zero(A.cols());
+        constraint2(pointPos1) = 1;
+        constraint2(pointPos2) = 1;
+    
+        opt.addConstraint(constraint2, 1, carl::Relation::EQ);
+
+        // Check that the point can be represented (EQ).
+        opt.setRelations(std::vector<carl::Relation>(this->dimension(), carl::Relation::EQ));
+
+        if (opt.checkConsistency()){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+
 
 
     template<typename Number, typename Converter, typename S>

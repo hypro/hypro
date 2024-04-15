@@ -32,6 +32,9 @@ static VPolytopeT<Number, Converter, Setting> getPolytopeP() {
     points.push_back(Point<Number>({Number(3), Number(3), Number(3)}));
     points.push_back(Point<Number>({Number(1), Number(1), Number(3)}));
     points.push_back(Point<Number>({Number(3), Number(1), Number(3)}));
+
+    points.push_back(Point<Number>({Number(1.5), Number(1.5), Number(1.5)}));
+    points.push_back(Point<Number>({Number(1.6), Number(1.6), Number(1.6)}));
     
     VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
     return vp;
@@ -43,15 +46,15 @@ static VPolytopeT<Number, Converter, Setting> getPolytopeG() {
     using pointVector = std::vector<Point<Number>>;
 
     pointVector points;
-    points.push_back(Point<Number>({Number(2), Number(2), Number(1)}));
-    points.push_back(Point<Number>({Number(6), Number(2), Number(1)}));
-    points.push_back(Point<Number>({Number(2), Number(5), Number(1)}));
-    points.push_back(Point<Number>({Number(6), Number(5), Number(1)}));
+    points.push_back(Point<Number>({Number(2), Number(2), Number(0)}));
+    points.push_back(Point<Number>({Number(6), Number(2), Number(0)}));
+    points.push_back(Point<Number>({Number(2), Number(5), Number(0)}));
+    points.push_back(Point<Number>({Number(6), Number(5), Number(0)}));
 
-    points.push_back(Point<Number>({Number(2), Number(5), Number(3)}));
-    points.push_back(Point<Number>({Number(6), Number(5), Number(3)}));
-    points.push_back(Point<Number>({Number(6), Number(2), Number(3)}));
-    points.push_back(Point<Number>({Number(2), Number(2), Number(3)}));
+    points.push_back(Point<Number>({Number(2), Number(5), Number(4)}));
+    points.push_back(Point<Number>({Number(6), Number(5), Number(4)}));
+    points.push_back(Point<Number>({Number(6), Number(2), Number(4)}));
+    points.push_back(Point<Number>({Number(2), Number(2), Number(4)}));
     
     VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
     return vp;
@@ -64,14 +67,28 @@ static void calculateConvexSetMinus() {
     VPolytopeT<Number, Converter, Setting> P = getPolytopeP<Number, Converter, Setting>();
     VPolytopeT<Number, Converter, Setting> G = getPolytopeG<Number, Converter, Setting>();
 
-    std::size_t s = P.size();
-    std::cout << "Size of polytope P is " << s << std::endl;
+    //extremePointsPrint(P);
+    //convexEdgesPrint(P);
+    VPolytopeT<Number, Converter, Setting> res = P.setMinusCrossing(G);
+}
 
-    std::size_t d = P.dimension();
-    std::cout << "Dimension of polytope P is " << d << std::endl;
+template<typename Number, typename Converter, typename Setting>
+void convexEdgesPrint(VPolytopeT<Number, Converter, Setting> M){
+    std::cout << "Convex edges of the polytope are " << std::endl;
+    std::vector<std::pair<Point<Number>, Point<Number>>> edges = M.getConvexEdges();
 
-    for (auto point_it = P.begin(); point_it != P.end(); ++point_it) {
-        std::cout << "Point of polytope P is " << *point_it << std::endl;
+    for (auto cur_edge : edges){
+        std::cout << cur_edge.first << " , " << cur_edge.second << std::endl;
+    }
+}
+
+template<typename Number, typename Converter, typename Setting>
+void extremePointsPrint(VPolytopeT<Number, Converter, Setting> M){
+    std::cout << "Extreme points of the polytope are " << std::endl;
+    std::vector<Point<Number>> points = M.getExtremePoints();
+
+    for (auto cur_point : points){
+        std::cout << cur_point << std::endl;
     }
 
 }
