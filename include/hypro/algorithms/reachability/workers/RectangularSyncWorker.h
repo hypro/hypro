@@ -78,6 +78,9 @@ class RectangularSyncWorker {
 	/// clear state, i.e., results obtained from computation.
 	void clear();
 
+	/// change to variable pool that is used in this worker
+	void changeVariablePool() { hypro::VariablePool::getInstance().changeToPool( mVariablePoolIndex ); }
+
   private:
 	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
 

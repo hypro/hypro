@@ -86,6 +86,8 @@ RectangularSyncAnalyzer<State, Automaton, Multithreading>::processNode( Rectangu
 
 	// reset worker state
 	worker.clear();
+	// change the variable pool
+	worker.changeVariablePool();
 	// in case the jump depth is reached, only compute time successors
 	if ( node->getDepth() < mAnalysisSettings.fixedParameters().jumpDepth ) {
 		safetyResult = worker.computeForwardReachability( *node );
