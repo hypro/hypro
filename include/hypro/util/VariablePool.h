@@ -87,6 +87,16 @@ namespace hypro {
             return mCarlVariables[varPoolIndex].at(_index);
         }
 
+        const carl::Variable &getTimeVariable() {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            for ( carl::Variable &cVar : mCarlVariables[varPoolIndex] ) {
+                if ( cVar.name() == "t" ) {
+                    return cVar;
+                }
+            }
+            return carl::Variable::NO_VARIABLE;
+        }
+
         const carl::Variable &newCarlVariable(std::string _name = "", std::optional<std::size_t> index = std::nullopt) {
             assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
             if (index) {

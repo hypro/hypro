@@ -41,7 +41,8 @@ static void computeReachableStates(const std::vector<std::string> filename,
         auto [automaton, fileSettings] = hypro::parseFlowstarFile<Number>(filename[i]);
         if (i==0) {
             parsedSettings = fileSettings;
-        }   
+        }
+        automaton.addTimeVariable();
         automata.push_back(automaton);
 
         hypro::VariablePool::getInstance().changeToPool(i+1);
@@ -56,7 +57,7 @@ static void computeReachableStates(const std::vector<std::string> filename,
 
     auto roots = hypro::makeSyncRoots<Representation, Automaton>(automata); // TODO: I don't need this. I can initialize the analyzer with only the automata and settings.
 
-    for (auto &root: roots) {
+    for (auto &root: roots) { // TODO: initialize sync nodes in the analyzer
         root.initializeSyncNodes(automata.size());
     }
     // auto roots = hypro::makeRoots<Representation, Automaton>(automata[0]);
@@ -83,14 +84,22 @@ static void computeReachableStates(const std::vector<std::string> filename,
     }
     std::cout << std::endl;
 
-    // output computed sets
-    for (const auto &fp: hypro::getFlowpipes(roots)) {
-        for (const auto &segment: fp) {
-            std::cout << segment << std::endl;
-        }
-    }
+    // // TODO: fix the output of flowpipes
+    // // output computed sets
+    // for (const auto &aut : automata) {
+    //     std::cout << "Output Flowpipes for automaton" << aut << std::endl;
+    //     const auto &tree = analyzer.getReachTreeForAutomaton(aut);
+    //     std::cout << "tree" << std::endl;
+    //     for (const auto &fp: hypro::getFlowpipes(tree)) {
+    //         for (const auto &segment: fp) {
+    //             std::cout << segment << std::endl;
+    //         }
+    //     }
+    // }
 
-    if (settings.plotting().plotDimensions.size() > 0) {
+    // TODO: fix plotting remove if (false)
+    // if (settings.plotting().plotDimensions.size() > 0) {
+    if (false) {
         clock::time_point startPlotting = clock::now();
 
         auto &plotter = hypro::Plotter<Number>::getInstance();
@@ -169,9 +178,6 @@ int main(int argc, char **argv) {
         std::cout << "Representation: 2 - HPolytope, 3 - VPolytope, 7 - PPLPolytope, 9 - TemplatePolyhedron" << std::endl;
         exit(1);
     }
-    
-    // for (std::string i: filename)
-    //     std::cout << i << " ";
     
 #ifdef USE_CLN_NUMBERS
     using Number = cln::cl_RA;

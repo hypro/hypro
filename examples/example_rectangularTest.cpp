@@ -136,7 +136,7 @@ static void computeReachableStates(const std::vector<std::string> filename,
 
         std::cout << "Write to file." << std::endl;
 
-        plotter.plot2d(hypro::PLOTTYPE::pdf, true);
+        plotter.plot2d(hypro::PLOTTYPE::pdf, false);
 
         std::cout << "Finished plotting: "
                   << std::chrono::duration_cast<timeunit>(clock::now() -

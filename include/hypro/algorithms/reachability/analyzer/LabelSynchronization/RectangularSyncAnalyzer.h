@@ -101,6 +101,10 @@ class RectangularSyncAnalyzer {
 		return res;
 	}
 
+	const std::vector<ReachTreeNode<State, LocationT>> &getReachTreeForAutomaton( Automaton const &automaton ) {
+		return mAutomatonReachTreeMap.at(&automaton);
+	}
+
   private:
 	REACHABILITY_RESULT
 	processNode( RectangularSyncWorker<State, Automaton> &worker, ReachTreeNode<State, LocationT> *node, Automaton const* automaton );

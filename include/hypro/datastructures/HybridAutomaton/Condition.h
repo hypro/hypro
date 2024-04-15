@@ -199,6 +199,10 @@ namespace hypro {
             ar(mConstraints, mConditionIsBox, mConditionSetState);
         }
 
+        void addTimeToCondition(const std::vector<std::string>& haVar, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar);
+
+        void extendDimension();
+    
     private:
         void checkAxisAligned(std::size_t i) const;
 
@@ -219,6 +223,8 @@ namespace hypro {
 
     template<typename Number>
     Condition<Number> conditionFromIntervals(const std::vector<carl::Interval<Number>> &intervals);
+
+    // template<typename Number>
 
 }  // namespace hypro
 

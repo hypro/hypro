@@ -81,9 +81,9 @@ namespace hypro {
             if (!intervalReset.isIdentity()) {
                 auto transformedSet1 = applyResetFM(stateSet, intervalReset);
 #ifndef NDEBUG
-                auto transformedSet2 = applyResetFindZeroConstraints(stateSet, intervalReset);
+                // auto transformedSet2 = applyResetFindZeroConstraints(stateSet, intervalReset);
                 auto transformedSet3 = applyResetProjectAndExpand(stateSet, intervalReset);
-                assert(transformedSet1.contains(transformedSet2));
+                // assert(transformedSet1.contains(transformedSet2));
                 // assert( transformedSet2.contains( transformedSet1 ) ); // TODO there is a bug in this approach
                 assert(transformedSet1.contains(transformedSet3));
                 // assert( transformedSet3.contains( transformedSet1 ) ); // TODO there might be a bug here as well

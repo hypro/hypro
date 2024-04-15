@@ -287,6 +287,13 @@ namespace hypro {
     }
 
     template<typename Number>
+    void Reset<Number>::extendDimension() {
+        for (auto &IntervalReset : mIntervalResets) {
+            IntervalReset.mIntervals.emplace_back(createEmptyInterval<Number>());
+        }
+    }
+    
+    template<typename Number>
     Reset<Number> operator+(const Reset<Number> &lhs, const Reset<Number> &rhs) {
         if (!lhs.isIntervalIdentity() || !rhs.isIntervalIdentity()) {
             throw std::logic_error("Operator + is not yet implemented for interval resets.");
