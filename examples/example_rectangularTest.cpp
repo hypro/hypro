@@ -136,7 +136,7 @@ static void computeReachableStates(const std::vector<std::string> filename,
 
         std::cout << "Write to file." << std::endl;
 
-        plotter.plot2d(hypro::PLOTTYPE::pdf, false);
+        plotter.plot2d(hypro::PLOTTYPE::pdf, true);
 
         std::cout << "Finished plotting: "
                   << std::chrono::duration_cast<timeunit>(clock::now() -
@@ -168,8 +168,8 @@ int main(int argc, char **argv) {
 #ifdef USE_CLN_NUMBERS
     using Number = cln::cl_RA;
 #else
-    // using Number = mpq_class;
-    using Number = double;
+    using Number = mpq_class;
+    // using Number = double;
 #endif
 
     switch (rep) {

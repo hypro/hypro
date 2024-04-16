@@ -1,0 +1,53 @@
+hybrid reachability 
+{
+    state var y
+    
+    setting 
+    {
+        fixed steps 1
+        time 10
+        gnuplot octagon y
+        max jumps 2
+        output rec_test_model
+        print on
+        remainder estimation 1e-5
+        identity precondition
+        precision 128
+    }
+
+    modes 
+    {
+        l0
+        {
+            poly ode 1
+            {
+                y' in [1,1]
+            }
+        }
+
+    }
+
+    jumps 
+    {
+        l0 -> l0
+        label 
+        {
+            a
+        }
+        guard 
+        {
+            -1*y <= -5
+            y <= 6
+        }
+        parallelotope aggregation {}
+
+    }
+
+    init
+    {
+        l0
+        {
+            y in [0,1]
+        }
+    }
+}

@@ -1,14 +1,14 @@
 hybrid reachability 
 {
-    state var x0, x1
+    state var x, t
     
     setting 
     {
         fixed steps 1
         time 10
-        gnuplot octagon x0, x1
+        gnuplot octagon x, t
         max jumps 2
-        output rectangular_A_2
+        output rec_test_model
         print on
         remainder estimation 1e-5
         identity precondition
@@ -21,15 +21,8 @@ hybrid reachability
         {
             poly ode 1
             {
-                x0' in [0,1]
-                x1' in [1,3]
-            }
-            inv
-            {
-                -1*x0 <= 10
-                x0 <= 10
-                -1*x1 <= 20
-                x1 <= 20
+                x' in [1,1]
+                t' in [1,1]
             }
         }
 
@@ -37,15 +30,8 @@ hybrid reachability
         {
             poly ode 1
             {
-                x0' in [-1, 0]
-                x1' in [-2, -1]
-            }
-            inv
-            {
-                -1*x0 <= 10
-                x0 <= 10
-                -1*x1 <= 20
-                x1 <= 20
+                x' in [2, 2]
+                t' in [1,1]
             }
         }
     }
@@ -59,11 +45,8 @@ hybrid reachability
         }
         guard 
         {
-            -1*x1 <= -10
-        }
-        reset
-        {
-            x1' := [-2, -1]
+            -1*x <= -10
+            x <= 11
         }
         parallelotope aggregation {}
 
@@ -74,11 +57,12 @@ hybrid reachability
         }
         guard
         {
-            x1 <= -16
+            x <= 20
+            -1*x <= -18
         }
         reset
         {
-            x0' := [0, 1]
+            x' := [0, 1]
         }
         parallelotope aggregation {}
     }
@@ -87,17 +71,9 @@ hybrid reachability
     {
         l0
         {
-            x0 in [0,1]
-            x1 in [0,1]
+            x in [0,1]
+            t in [0,0]
         }
     }
 }
 
-unsafe set
-{
-  l1
-  {
-    x0 in [-7,-5]
-    x1 in [-1, 0]
-  }
-}

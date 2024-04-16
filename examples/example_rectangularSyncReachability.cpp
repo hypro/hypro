@@ -182,8 +182,8 @@ int main(int argc, char **argv) {
 #ifdef USE_CLN_NUMBERS
     using Number = cln::cl_RA;
 #else
-    // using Number = mpq_class;
-    using Number = double;
+    using Number = mpq_class;
+    // using Number = double;
 #endif
 
     switch (rep) {
