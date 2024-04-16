@@ -627,7 +627,9 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
             }
             ++I;
         }
-        mInvariant.extendDimension();
+        if (!mInvariant.empty()) {
+            mInvariant.extendDimension();
+        }
         for ( auto &transition : mTransitions ) {
             transition->extendGuardDimension();
             transition->extendResetDimension();
