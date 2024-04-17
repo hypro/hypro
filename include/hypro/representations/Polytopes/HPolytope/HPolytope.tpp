@@ -808,6 +808,75 @@ namespace hypro {
         return res;
     }
 
+    template<typename Number, typename Converter, typename S> 
+    Point<Number> HPolytopeT<Number, Converter, S>::getCrossingPoint(Point<Number> fromPoint, Point<Number> toPoint) const{
+
+        matrix_t<Number> A = matrix_t<Number>(mHPlanes.size(), 1);
+
+        assert(mHPlanes.size() > 0);
+        assert(fromPoint.dimension() == toPoint.dimension());
+        assert(fromPoint.dimension() == mHPlanes.at(0).dimension());
+
+        for (auto hyp : mHPlanes) {
+            std::cout << "Hyperplane: " << hyp << std::endl;
+            for (auto coef: hyp.normal()){
+                std::cout << " coef: " << coef; 
+            }
+            std::cout << std::endl;
+        }
+        
+        std::vector<Number> scalarB = {};
+
+        // Fill the matrix A for each hyperplane
+        for (Eigen::Index i = 0; i < A.rows(); ++i) {
+            // LP left side of the equation
+            Number sum = 0;
+            for (Eigen::Index j = 0; j < fromPoint.dimension(); ++j) {
+                sum += mHPlanes.at(i).normal()[j] * (toPoint.at(j) - fromPoint.at(j));
+            }
+            A.row(i)[0] = sum;
+
+            // LP right side of the equation
+            Number sum2 = mHPlanes.at(i).vector()[0];
+
+            for (Eigen::Index j = 0; j < fromPoint.dimension(); ++j) {
+                sum2 -= mHPlanes.at(i).normal()[j] * fromPoint.at(j);
+            }
+            scalarB.push_back(sum2);
+        }
+        vector_t<Number> vec_tr = vector_t<Number>::Map(scalarB.data(), scalarB.size());
+        Optimizer<Number> opt(A, vec_tr);
+
+        // 3 bound cols    
+        vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
+
+        opt.addConstraint(constraint, 1, carl::Relation::LEQ);
+        opt.addConstraint(constraint, 0, carl::Relation::GEQ);
+        
+
+        // Check that the point can be represented (EQ).
+        opt.setRelations(std::vector<carl::Relation>(mHPlanes.size(), carl::Relation::LEQ));
+
+
+        vector_t<Number> direction = vector_t<Number>::Zero(A.cols());
+        direction(0) = -1;    
+
+        EvaluationResult<Number> result = opt.evaluate(direction, true);
+
+        std::cout << "From: " << fromPoint << std::endl;
+        std::cout << "To: " << toPoint << std::endl; 
+
+        Number invertedValue = -result.supportValue;
+
+        std::cout << "Result: " << invertedValue << std::endl;
+
+        Point<Number> cp = fromPoint + invertedValue * (toPoint - fromPoint);
+
+        std::cout << "Crossing point: " << cp << std::endl;
+
+        return cp;
+    }
+
 /*
  * General interface
  */

@@ -62,13 +62,20 @@ namespace hypro {
 
         /**
         * @brief      Computation of the set minus operator using crossing points.
-        * @param[in]  polytope  The polytope G.
+        * @param[in]  polytope  The VPolytope G.
         */
-        VPolytopeT setMinusCrossing(const VPolytopeT &polytopeG) const;
+        VPolytopeT<Number, Converter, S> setMinusCrossingV(const VPolytopeT<Number, Converter, S> &polytopeG) const;
+
+        /**
+        * @brief      Computation of the set minus operator using crossing points.
+        * @param[in]  polytope  The HPolytope G.
+        */
+        template<typename HConverter, typename HSetting> 
+        VPolytopeT<Number, Converter, S> setMinusCrossingH(const HPolytopeT<Number, HConverter, HSetting> &polytopeG) const;
 
         /**
         * @brief      Returns the extreme points of the polytope.
-        */
+        */ 
         std::vector<Point<Number>> getExtremePoints() const;
 
         /**
@@ -79,8 +86,9 @@ namespace hypro {
 
         /**
         * @brief      Returns the one dimensional faces of a polytope as a pair of convex vertices
+        * @param[in]  extremePoints  The extreme points.
         */
-        std::vector<std::pair<Point<Number>, Point<Number>>> getConvexEdges() const;
+        std::vector<std::pair<Point<Number>, Point<Number>>> getConvexEdges(std::vector<Point<Number>> extremePoints) const;
 
         /**
         * @brief      Returns true if the pair of points is a convex edge of a polytope. 

@@ -20,36 +20,84 @@
 #include <algorithm>
 
 namespace hypro {
-
-    template<typename Number, typename Converter, typename S>
-    VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::setMinusCrossing(const VPolytopeT &polytopeG) const
-    {
+    template<typename Number, typename Converter, typename S> 
+    VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::setMinusCrossingV(const VPolytopeT<Number, Converter, S> &polytopeG) const {
         std::size_t dim_p = this->dimension();
         std::size_t dim_g = polytopeG.dimension();
 
         assert(dim_p == dim_g);
+        
+        std::vector<Point<Number>> extremePoints = this->getExtremePoints();
 
-        std::vector<std::pair<Point<Number>, Point<Number>>> edgesP = this->getConvexEdges();
+        std::vector<std::pair<Point<Number>, Point<Number>>> edgesP = this->getConvexEdges(extremePoints);
+
         std::vector<Point<Number>> PnG = {};
-        for (auto cur_p : this->mVertices){
+        std::vector<Point<Number>> pureP = {};
+        std::vector<Point<Number>> CPs = {};
+
+        for (auto cur_p : extremePoints){
             if (polytopeG.contains(cur_p)){
                 PnG.push_back(cur_p);
+            }else{
+                pureP.push_back(cur_p);
             }     
         }
 
         for (auto cur_p : PnG){
             std::vector<Point<Number>> BVs = getBorderVertices(cur_p, edgesP, PnG);
             for (auto borderVertex : BVs){
-
                 Point<Number> cp = polytopeG.getCrossingPoint(borderVertex, cur_p);
-
-                std::cout << "Crossing Point: " << cp << std::endl;
+                CPs.push_back(cp);
             }
+        }   
 
-        }        
-        return VPolytopeT<Number, Converter, Settings>();
+        std::vector<Point<Number>> result = pureP;
+        result.insert(result.end(), CPs.begin(), CPs.end());
+
+        return VPolytopeT<Number, Converter, Settings>(result);
 
     }
+    
+
+    template<typename Number, typename Converter, typename S> 
+    template<typename HConverter, typename HSetting> 
+    VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::setMinusCrossingH(const HPolytopeT<Number, HConverter, HSetting> &polytopeG) const{
+        std::size_t dim_p = this->dimension();
+        std::size_t dim_g = polytopeG.dimension();
+
+        assert(dim_p == dim_g);
+        
+        std::vector<Point<Number>> extremePoints = this->getExtremePoints();
+
+        std::vector<std::pair<Point<Number>, Point<Number>>> edgesP = this->getConvexEdges(extremePoints);
+
+        std::vector<Point<Number>> PnG = {};
+        std::vector<Point<Number>> pureP = {};
+        std::vector<Point<Number>> CPs = {};
+
+        for (auto cur_p : extremePoints){
+            if (polytopeG.contains(cur_p)){
+                PnG.push_back(cur_p);
+            }else{
+                pureP.push_back(cur_p);
+            }     
+        }
+
+        for (auto cur_p : PnG){
+            std::vector<Point<Number>> BVs = getBorderVertices(cur_p, edgesP, PnG);
+            for (auto borderVertex : BVs){
+                Point<Number> cp = polytopeG.getCrossingPoint(borderVertex, cur_p);
+                CPs.push_back(cp);
+            }
+        }   
+
+        std::vector<Point<Number>> result = pureP;
+        result.insert(result.end(), CPs.begin(), CPs.end());
+
+        return VPolytopeT<Number, Converter, Settings>(result);
+
+    }
+    
 
 
     template<typename Number, typename Converter, typename S> 
@@ -91,12 +139,12 @@ namespace hypro {
 
         EvaluationResult<Number> result = opt.evaluate(direction, true);
 
-        std::cout << "From: " << fromPoint << std::endl;
-        std::cout << "To: " << toPoint << std::endl; 
+        //std::cout << "From: " << fromPoint << std::endl;
+        //std::cout << "To: " << toPoint << std::endl; 
 
         Number invertedValue = -result.supportValue;
 
-        std::cout << "Result: " << invertedValue << std::endl;
+        //std::cout << "Result: " << invertedValue << std::endl;
 
         Point<Number> cp = fromPoint + invertedValue * (toPoint - fromPoint);
         return cp;
@@ -190,10 +238,9 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename S>
-    std::vector<std::pair<Point<Number>, Point<Number>>> VPolytopeT<Number, Converter, S>::getConvexEdges() const{
+    std::vector<std::pair<Point<Number>, Point<Number>>> VPolytopeT<Number, Converter, S>::getConvexEdges(std::vector<Point<Number>> extremePoints) const{
 
         std::vector<std::pair<Point<Number>, Point<Number>>> result;
-        std::vector<Point<Number>> extremePoints = this->getExtremePoints();
 
         for (auto p1 : extremePoints){
             for (auto p2 : extremePoints){

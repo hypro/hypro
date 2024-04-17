@@ -78,7 +78,6 @@ namespace hypro {
         mutable std::optional<Optimizer<Number>> mOptimizer = std::nullopt;                 ///< optional cache (settings-dependent) for an LP instance
         mutable bool mUpdated = false;                                                     ///< cache flag to mark a required update of the optional LP instance
         mutable std::optional<std::vector<carl::Interval<Number>>> mBox = std::nullopt;     ///< cache of the bounding box
-
     public:
         /**
          * @brief Constructor for the universal H-polytope.
@@ -534,6 +533,14 @@ namespace hypro {
         void setUpdated(const bool &b) { mUpdated = b; }
 
         bool getUpdated() const { return mUpdated; }
+
+        /**
+        * @brief      Rertuns the crossing point of an edge (pair of points).
+        * @details    The function is used for the convex set minus of VPolytope P and HPolytope G.
+        * @param[in]  fromPoint  The starting point.
+        * @param[in]  toPoint  The ending point.
+        */
+       Point<Number> getCrossingPoint(Point<Number> fromPoint, Point<Number> toPoint) const; 
     };
 
 /** @} */
