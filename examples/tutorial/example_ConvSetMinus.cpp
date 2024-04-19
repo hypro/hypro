@@ -174,41 +174,88 @@ static VPolytopeT<Number, Converter, Setting> getPolytopeG2D() {
     return vp;
 }
 
+template<typename Number, typename Converter, typename Setting>
+static void printPolytopeV(VPolytopeT<Number, Converter, Setting> P, std::string name) {
+    std::cout << "Polytope " << name << " is:" << std::endl;
+    // for (auto it_point = P.begin(); it_point != P.end(); it_point++){
+    //     std::cout << *it_point << std::endl;
+    // }
+    std::cout << P << std::endl;
+}
 
 template<typename Number, typename Converter, typename Setting>
-static void calculateConvexSetMinus() {
-
-    VPolytopeT<Number, Converter, Setting> P = getPolytopeP3<Number, Converter, Setting>();
-    VPolytopeT<Number, Converter, Setting> G = getPolytopeG3<Number, Converter, Setting>();
-
-    using HSetting = HPolytopeSetting;
-    HPolytopeT<Number, Converter, HSetting> G_H = hypro::Converter<Number>::toHPolytope(G, CONV_MODE::OVER);
-
-    VPolytopeT<Number, Converter, Setting> G_H_V = hypro::Converter<Number>::toVPolytope(G_H, CONV_MODE::OVER);
-
-    //extremePointsPrint(P);
-    //convexEdgesPrint(P);
-
-    VPolytopeT<Number, Converter, Setting> res = P.setMinusCrossingH(G_H);
-
-    VPolytopeT<Number, Converter, Setting> res2 = P.setMinusCrossingV(G);
-
-    VPolytopeT<Number, Converter, Setting> res3 = P.setMinusCrossingV(G_H_V);
+static void printPolytopeH(HPolytopeT<Number, Converter, Setting> P, std::string name) {
+    std::cout << "Polytope " << name << " is:" << std::endl;
+    std::cout << P << std::endl;
+}
 
 
-    std::cout << "Result VPolytope from H is:" << std::endl;
-    for (auto it_point = res.begin(); it_point != res.end(); it_point++){
-        std::cout << *it_point << std::endl;
-    }
+template<typename Number, typename Converter, typename Setting>
+static void calculateConvexSetMinus(int rep) {
+    
+    VPolytopeT<Number, Converter, Setting> P;
+    VPolytopeT<Number, Converter, Setting> G;
+    VPolytopeT<Number, Converter, Setting> res;
 
-    std::cout << "Result VPolytope from V is:" << std::endl;
-    for (auto it_point = res2.begin(); it_point != res2.end(); it_point++){
-        std::cout << *it_point << std::endl;
-    }
 
-    std::cout << "Result VPolytope from V after H is:" << std::endl;
-    for (auto it_point = res3.begin(); it_point != res3.end(); it_point++){
-        std::cout << *it_point << std::endl;
+    switch (rep)
+    {
+        case 1:
+            P = getPolytopeP<Number, Converter, Setting>();
+            G = getPolytopeG<Number, Converter, Setting>();
+            res = P.setMinusCrossingV(G);
+
+            printPolytopeV(P, "P");
+            printPolytopeV(G, "G");
+            printPolytopeV(res, "P - G");
+            break;
+
+        case 2:
+            P = getPolytopeP2<Number, Converter, Setting>();
+            G = getPolytopeG2<Number, Converter, Setting>();
+            res = P.setMinusCrossingV(G);
+
+            printPolytopeV(P, "P");
+            printPolytopeV(G, "G");
+            printPolytopeV(res, "P - G");
+            break;
+        
+        case 3:
+            P = getPolytopeP3<Number, Converter, Setting>();
+            G = getPolytopeG3<Number, Converter, Setting>();
+            res = P.setMinusCrossingV(G);
+
+            printPolytopeV(P, "P");
+            printPolytopeV(G, "G");
+            printPolytopeV(res, "P - G");
+            break;
+
+        case 4:
+            P = getPolytopeP2D<Number, Converter, Setting>();
+            G = getPolytopeG2D<Number, Converter, Setting>();
+            res = P.setMinusCrossingV(G);
+
+            printPolytopeV(P, "P");
+            printPolytopeV(G, "G");
+            printPolytopeV(res, "P - G");
+            break;
+
+        case 5:
+            P = getPolytopeP3<Number, Converter, Setting>();
+            G = getPolytopeG3<Number, Converter, Setting>();
+
+            using HSetting = HPolytopeSetting;
+            HPolytopeT<Number, Converter, HSetting> G_H = hypro::Converter<Number>::toHPolytope(G, CONV_MODE::OVER);
+
+            VPolytopeT<Number, Converter, Setting> res = P.setMinusCrossingH(G_H);
+
+            printPolytopeV(P, "P");
+            printPolytopeV(G, "G");
+            printPolytopeH(G_H, "G_H");
+
+            printPolytopeV(res, "P - G_H");
+            break;
+
     }
 }
 
@@ -234,15 +281,27 @@ void extremePointsPrint(VPolytopeT<Number, Converter, Setting> M){
 }
 
 int main(int argc, char **argv) {
-    std::cout << "Start of the convex set minus" << std::endl;
+
+    int rep = 0;
+    if (argc == 2) {
+        char *p;
+        rep = strtol(argv[1], &p, 10);
+    }else{
+        std::cout << "Please provide a number for example to run:" << std::endl;
+        std::cout << "Options: Numbers 1,2,3 V-Polytope P and V-Polytope G in 3D" << std::endl;
+        std::cout << "Options: Number 4 V-Polytope P and V-Polytope G in 2D" << std::endl;
+        std::cout << "Options: Number 5 V-Polytope P and H-Polytope G in 3D" << std::endl;
+        return 0;
+    }
 
     using Number = double;
     using Converter = Converter<Number>;
 	using Setting = VPolytopeSetting;
 
-    calculateConvexSetMinus<Number, Converter, Setting>();
 
-    std::cout << "End of the convex set minus" << std::endl;
+    std::cout << "Running example " << rep << std::endl;
+    calculateConvexSetMinus<Number, Converter, Setting>(rep);
+
 
     exit(0);
 }
