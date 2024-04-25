@@ -43,6 +43,7 @@ namespace hypro {
             }     
         }
 
+
         for (auto cur_p : PnG){
             std::vector<Point<Number>> BVs = getBorderVertices(cur_p, edgesP, PnG);
             for (auto borderVertex : BVs){
@@ -102,6 +103,26 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename S> 
     Point<Number> VPolytopeT<Number, Converter, S>::getCrossingPoint(Point<Number> fromPoint, Point<Number> toPoint) const{
+        
+        /**
+         * 
+         * fromPoint = ui
+         * toPoint = uj
+         * 
+         *  MATRIX A (at end) consists of:
+         *                                          points
+         *                    v1    ...   vn       lambda'            rel       b 
+         *                    v1.x1 ...   vn.x1    -(uj.x1-ui.x1)     <=        ui.x1
+         * A =                v1.x2 ...   vn.x2    -(uj.x2-ui.x2)     <=        ui.x2
+         *                    .     ...   .        .                  .         .
+         *                    v1.xn ...   vn.xn    -(uj.xn-ui.xn)     <=        ui.xn
+         * lambda sum 1       1     ...   1        0                  =         1
+         * 0 <= lambda                 diagonal matrix                >=        0
+         *      lambda <= 1            diagonal matrix                <=        1   
+        */       
+        
+        std::cout << "From: " << fromPoint << std::endl;
+        std::cout << "To: " << toPoint << std::endl;
 
         matrix_t<Number> A = matrix_t<Number>(this->dimension(), this->mVertices.size()+1);
 
@@ -112,22 +133,22 @@ namespace hypro {
                 A.col(i) = mVertices[i].rawCoordinates();
             }
         }
-
+        
         Optimizer<Number> opt(A, fromPoint.rawCoordinates());
 
         // 3 bound cols
         for (Eigen::Index i = 0; i < A.cols(); ++i) {
             vector_t<Number> constraint = vector_t<Number>::Zero(A.cols());
 
-            constraint(i) = 1;
+            constraint(i) = Number(1);
 
-            opt.addConstraint(constraint, 1, carl::Relation::LEQ);
-            opt.addConstraint(constraint, 0, carl::Relation::GEQ);
+            opt.addConstraint(constraint, Number(1), carl::Relation::LEQ);
+            opt.addConstraint(constraint, Number(0), carl::Relation::GEQ);
         }
 
         // 4 add constraint that all coefficients add up to 1
         vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
-        constraint(A.cols() - 1) = 0;
+        constraint(A.cols() - 1) = Number(0);
     
         opt.addConstraint(constraint, 1, carl::Relation::EQ);
 
@@ -135,18 +156,30 @@ namespace hypro {
         opt.setRelations(std::vector<carl::Relation>(this->dimension(), carl::Relation::EQ));
 
         vector_t<Number> direction = vector_t<Number>::Zero(A.cols());
-        direction(A.cols() - 1) = -1;    
+        direction(A.cols() - 1) = Number(-1);    
+
+        std::cout << "A = " << std::endl << opt.matrix() << std::endl;
+        std::cout << "B = " << std::endl << opt.vector() << std::endl;
 
         EvaluationResult<Number> result = opt.evaluate(direction, true);
 
-        //std::cout << "From: " << fromPoint << std::endl;
-        //std::cout << "To: " << toPoint << std::endl; 
+        std::cout << "Result: " << result << std::endl;
+
+        // std::cout << "From: " << fromPoint << std::endl;
+        // std::cout << "To: " << toPoint << std::endl; 
 
         Number invertedValue = -result.supportValue;
 
-        //std::cout << "Result: " << invertedValue << std::endl;
+        // std::cout << "Result: " << invertedValue << std::endl;
 
         Point<Number> cp = fromPoint + invertedValue * (toPoint - fromPoint);
+
+        // we catch the error, where the crossing point calculation 
+        if (cp == fromPoint){
+            std::cout << "Error VPolytopeT::getCrossingPoint: crossing point calculation" << std::endl;
+            return toPoint;
+        }
+
         return cp;
     }
 
@@ -185,7 +218,23 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename S>
     bool VPolytopeT<Number, Converter, S>::isExtremePoint(Point<Number> point) const{
-        // todo
+
+        /**
+         * 
+         * vi = point
+         * 
+         *  MATRIX A (at end) consists of:
+         *                                         points
+         *                    v1    ... vi-1      vi     vi+1    ...  vn          rel        b 
+         *                    v1.x1 ... vi-1.x1   0      vi+1.x1 ...  vn.x1       <=         vi.x1
+         * A =                v1.x2 ... vi-1.x2   0      vi+1.x2 ...  vn.x2       <=         vi.x2
+         *                    .     ... .          .      .      ...  .           .          .
+         *                    v1.xn ... vi-1.xn   0      vi+1.xn ...  vn.xn       <=         vi.xn
+         * lambda sum 1       1     ... 1         0      1       ...  1           =          1
+         * 0 <= lambda                  diagonal matrix                           >=         0
+         *      lambda <= 1             diagonal matrix                           <=         1   
+        */
+
 
         matrix_t<Number> A = matrix_t<Number>(this->dimension(), this->mVertices.size());
 
@@ -257,6 +306,25 @@ namespace hypro {
     template<typename Number, typename Converter, typename S>
     bool VPolytopeT<Number, Converter, S>::isPairConvexEdge(Point<Number> p1, Point<Number> p2, std::vector<Point<Number>> extremePoints) const{
         
+        /**
+         * 
+         * vi = p1
+         * vj = p2
+         * 
+         *  MATRIX A (at end) consists of:
+         *                                         points
+         *                    v1    ...    vi       vj        ...   vn          rel        b 
+         *                    v1.x1 ...    -vi.x1   -vj.x1    ...   vn.x1       <=         0
+         * A =                v1.x2 ...    -vi.x2   -vj.x2    ...   vn.x2       <=         0
+         *                    .     ...    .        .         ...   .           .          .
+         *                    v1.xn ...    -vi.xn   -vj.xn    ...   vn.xn       <=         0
+         * lambda sum 1       1     ...    0        0         ...   1           =          1
+         * lambda sum 1       0     ...    1        1         ...   0           =          1
+         * 0 <= lambda                  diagonal matrix                         >=         0
+         *      lambda <= 1             diagonal matrix                         <=         1   
+        */
+
+
         matrix_t<Number> A = matrix_t<Number>(this->dimension(), extremePoints.size());
 
         Eigen::Index pointPos1 = 0;

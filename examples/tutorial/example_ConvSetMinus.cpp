@@ -294,7 +294,7 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    using Number = double;
+    using Number = mpq_class; //slower
     using Converter = Converter<Number>;
 	using Setting = VPolytopeSetting;
 

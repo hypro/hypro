@@ -811,19 +811,35 @@ namespace hypro {
     template<typename Number, typename Converter, typename S> 
     Point<Number> HPolytopeT<Number, Converter, S>::getCrossingPoint(Point<Number> fromPoint, Point<Number> toPoint) const{
 
+        /**
+         * 
+         * fromPoint = ui
+         * toPoint = uj
+         * 
+         *  MATRIX A (at end) consists of:
+         *                                         points
+         *                       halfspaces                     rel      b 
+         *                 h1:   sum_i(h1.ai*(uj.xi-ui.xi))     <=       h1.b - sum_i(h1.ai * ui.xi)
+         * A =             h2:   sum_i(h2.ai*(uj.xi-ui.xi))     <=       h2.b - sum_i(h2.ai * ui.xi)
+         *                       .                              .        .
+         *                 hn:   sum_i(hn.ai*(uj.xi-ui.xi))     <=       hn.b - sum_i(hn.ai * ui.xi)
+         * 0 <= lambda                   1                      >=       0
+         *      lambda <= 1              1                      <=       1   
+        */  
+
         matrix_t<Number> A = matrix_t<Number>(mHPlanes.size(), 1);
 
         assert(mHPlanes.size() > 0);
         assert(fromPoint.dimension() == toPoint.dimension());
         assert(fromPoint.dimension() == mHPlanes.at(0).dimension());
 
-        for (auto hyp : mHPlanes) {
+        /*for (auto hyp : mHPlanes) {
             std::cout << "Hyperplane: " << hyp << std::endl;
             for (auto coef: hyp.normal()){
                 std::cout << " coef: " << coef; 
             }
             std::cout << std::endl;
-        }
+        }*/
         
         std::vector<Number> scalarB = {};
 
@@ -873,6 +889,12 @@ namespace hypro {
         Point<Number> cp = fromPoint + invertedValue * (toPoint - fromPoint);
 
         std::cout << "Crossing point: " << cp << std::endl;
+
+        // we catch the error, where the crossing point calculation 
+        if (cp == fromPoint){
+            std::cout << "Error HPolytopeT::getCrossingPoint: crossing point calculation" << std::endl;
+            return toPoint;
+        }
 
         return cp;
     }
