@@ -48,6 +48,7 @@ namespace hypro {
             std::vector<Point<Number>> BVs = getBorderVertices(cur_p, edgesP, PnG);
             for (auto borderVertex : BVs){
                 Point<Number> cp = polytopeG.getCrossingPoint(borderVertex, cur_p);
+                return VPolytopeT<Number, Converter, Settings>();
                 CPs.push_back(cp);
             }
         }   

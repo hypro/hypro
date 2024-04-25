@@ -238,6 +238,9 @@ static void calculateConvexSetMinus(int rep) {
             printPolytopeV(P, "P");
             printPolytopeV(G, "G");
             printPolytopeV(res, "P - G");
+
+
+
             break;
 
         case 5:
@@ -280,6 +283,50 @@ void extremePointsPrint(VPolytopeT<Number, Converter, Setting> M){
 
 }
 
+template<typename Number, typename Converter, typename Setting>
+void minOptimizerWorking(){
+    /**                 
+     *                         B
+     * 
+     *        1   1         == 3
+     *        1   0    x1   <= 4
+     * A =    1   0  * x2   >= 1
+     *        0   1         >= 1
+     *        0   1         <= 4
+    */
+
+    matrix_t<Number> A = matrix_t<Number>(5, 2);
+    vector_t<Number> B = vector_t<Number>(5);
+    A << Number(1), Number(1),
+        Number(1), Number(0),
+        Number(1), Number(0),
+        Number(0), Number(1),
+        Number(0), Number(1);
+    B << Number(3),
+    Number(4),
+    Number(1),
+    Number(1),
+    Number(4);
+
+
+    Optimizer<Number> opt = Optimizer<Number>(A,B);
+    opt.setMaximize(true);
+
+    std::vector<carl::Relation> rels = {carl::Relation::EQ, carl::Relation::LEQ, carl::Relation::GEQ, carl::Relation::GEQ, carl::Relation::LEQ};
+    opt.setRelations(rels);
+
+    std::cout << "A = " << std::endl << opt.matrix() << std::endl;
+    std::cout << "B = " << std::endl << opt.vector() << std::endl;
+
+    vector_t<Number> direction = vector_t<Number>(2);
+    direction << Number(0), Number(1);       
+    
+    std::cout << "Objective function direction = " << std::endl << direction << std::endl;
+
+    EvaluationResult<Number> result = opt.evaluate(direction, false);
+    std::cout << "Result: " << result << std::endl;
+}
+
 int main(int argc, char **argv) {
 
     int rep = 0;
@@ -294,14 +341,18 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    using Number = mpq_class; //slower
-    using Converter = Converter<Number>;
+    //using Number = double; //slower
+    //using Number = mpq_class; //slower
+    //using Converter = Converter<Number>;
 	using Setting = VPolytopeSetting;
 
 
     std::cout << "Running example " << rep << std::endl;
-    calculateConvexSetMinus<Number, Converter, Setting>(rep);
-
+    std::cout << "Running optimizer with Number = double" << std::endl;
+    minOptimizerWorking<double, Converter<double>, Setting>();
+    std::cout << "Running optimizer with Number = mpq_class" << std::endl;
+    minOptimizerWorking<mpq_class, Converter<mpq_class>, Setting>();
+    // calculateConvexSetMinus<Number, Converter, Setting>(rep);
 
     exit(0);
 }
