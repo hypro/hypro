@@ -197,7 +197,6 @@ static void calculateConvexSetMinus(int rep) {
     VPolytopeT<Number, Converter, Setting> G;
     VPolytopeT<Number, Converter, Setting> res;
 
-
     switch (rep)
     {
         case 1:
@@ -238,9 +237,6 @@ static void calculateConvexSetMinus(int rep) {
             printPolytopeV(P, "P");
             printPolytopeV(G, "G");
             printPolytopeV(res, "P - G");
-
-
-
             break;
 
         case 5:
@@ -255,7 +251,6 @@ static void calculateConvexSetMinus(int rep) {
             printPolytopeV(P, "P");
             printPolytopeV(G, "G");
             printPolytopeH(G_H, "G_H");
-
             printPolytopeV(res, "P - G_H");
             break;
 
@@ -264,6 +259,7 @@ static void calculateConvexSetMinus(int rep) {
 
 template<typename Number, typename Converter, typename Setting>
 void convexEdgesPrint(VPolytopeT<Number, Converter, Setting> M){
+
     std::cout << "Convex edges of the polytope are " << std::endl;
     std::vector<std::pair<Point<Number>, Point<Number>>> edges = M.getConvexEdges();
 
@@ -274,6 +270,7 @@ void convexEdgesPrint(VPolytopeT<Number, Converter, Setting> M){
 
 template<typename Number, typename Converter, typename Setting>
 void extremePointsPrint(VPolytopeT<Number, Converter, Setting> M){
+
     std::cout << "Extreme points of the polytope are " << std::endl;
     std::vector<Point<Number>> points = M.getExtremePoints();
 
@@ -285,6 +282,7 @@ void extremePointsPrint(VPolytopeT<Number, Converter, Setting> M){
 
 template<typename Number, typename Converter, typename Setting>
 void minOptimizerWorking(){
+    
     /**                 
      *                         B
      * 
@@ -341,18 +339,19 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    //using Number = double; //slower
+    using Number = double; 
     //using Number = mpq_class; //slower
-    //using Converter = Converter<Number>;
+    using Converter = Converter<Number>;
 	using Setting = VPolytopeSetting;
 
 
     std::cout << "Running example " << rep << std::endl;
-    std::cout << "Running optimizer with Number = double" << std::endl;
-    minOptimizerWorking<double, Converter<double>, Setting>();
-    std::cout << "Running optimizer with Number = mpq_class" << std::endl;
-    minOptimizerWorking<mpq_class, Converter<mpq_class>, Setting>();
-    // calculateConvexSetMinus<Number, Converter, Setting>(rep);
+    // std::cout << "Running optimizer with Number = double" << std::endl;
+    // minOptimizerWorking<double, Converter<double>, Setting>();
+    // std::cout << "Running optimizer with Number = mpq_class" << std::endl;
+    // minOptimizerWorking<mpq_class, Converter<mpq_class>, Setting>();
+
+    calculateConvexSetMinus<Number, Converter, Setting>(rep);
 
     exit(0);
 }

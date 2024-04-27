@@ -866,29 +866,29 @@ namespace hypro {
         // 3 bound cols    
         vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
 
-        opt.addConstraint(constraint, 1, carl::Relation::LEQ);
-        opt.addConstraint(constraint, 0, carl::Relation::GEQ);
+        opt.addConstraint(constraint, Number(1), carl::Relation::LEQ);
+        opt.addConstraint(constraint, Number(0), carl::Relation::GEQ);
         
-
         // Check that the point can be represented (EQ).
         opt.setRelations(std::vector<carl::Relation>(mHPlanes.size(), carl::Relation::LEQ));
 
-
+        // direction : 1 (for lambda)
         vector_t<Number> direction = vector_t<Number>::Zero(A.cols());
-        direction(0) = -1;    
+        direction(0) = Number(1);
+        opt.setMaximize(false);    
 
         EvaluationResult<Number> result = opt.evaluate(direction, true);
 
-        std::cout << "From: " << fromPoint << std::endl;
-        std::cout << "To: " << toPoint << std::endl; 
+        // std::cout << "From: " << fromPoint << std::endl;
+        // std::cout << "To: " << toPoint << std::endl; 
 
-        Number invertedValue = -result.supportValue;
+        Number resultValue = result.supportValue;
 
-        std::cout << "Result: " << invertedValue << std::endl;
+        // std::cout << "Result: " << invertedValue << std::endl;
 
-        Point<Number> cp = fromPoint + invertedValue * (toPoint - fromPoint);
+        Point<Number> cp = fromPoint + resultValue * (toPoint - fromPoint);
 
-        std::cout << "Crossing point: " << cp << std::endl;
+        // std::cout << "Crossing point: " << cp << std::endl;
 
         // we catch the error, where the crossing point calculation 
         if (cp == fromPoint){

@@ -26,11 +26,9 @@ namespace hypro {
         std::size_t dim_g = polytopeG.dimension();
 
         assert(dim_p == dim_g);
-        
+
         std::vector<Point<Number>> extremePoints = this->getExtremePoints();
-
         std::vector<std::pair<Point<Number>, Point<Number>>> edgesP = this->getConvexEdges(extremePoints);
-
         std::vector<Point<Number>> PnG = {};
         std::vector<Point<Number>> pureP = {};
         std::vector<Point<Number>> CPs = {};
@@ -43,12 +41,10 @@ namespace hypro {
             }     
         }
 
-
         for (auto cur_p : PnG){
             std::vector<Point<Number>> BVs = getBorderVertices(cur_p, edgesP, PnG);
             for (auto borderVertex : BVs){
                 Point<Number> cp = polytopeG.getCrossingPoint(borderVertex, cur_p);
-                return VPolytopeT<Number, Converter, Settings>();
                 CPs.push_back(cp);
             }
         }   
@@ -57,7 +53,6 @@ namespace hypro {
         result.insert(result.end(), CPs.begin(), CPs.end());
 
         return VPolytopeT<Number, Converter, Settings>(result);
-
     }
     
 
@@ -70,9 +65,7 @@ namespace hypro {
         assert(dim_p == dim_g);
         
         std::vector<Point<Number>> extremePoints = this->getExtremePoints();
-
         std::vector<std::pair<Point<Number>, Point<Number>>> edgesP = this->getConvexEdges(extremePoints);
-
         std::vector<Point<Number>> PnG = {};
         std::vector<Point<Number>> pureP = {};
         std::vector<Point<Number>> CPs = {};
@@ -97,7 +90,6 @@ namespace hypro {
         result.insert(result.end(), CPs.begin(), CPs.end());
 
         return VPolytopeT<Number, Converter, Settings>(result);
-
     }
     
 
@@ -122,8 +114,8 @@ namespace hypro {
          *      lambda <= 1            diagonal matrix                <=        1   
         */       
         
-        std::cout << "From: " << fromPoint << std::endl;
-        std::cout << "To: " << toPoint << std::endl;
+        // std::cout << "From: " << fromPoint << std::endl;
+        // std::cout << "To: " << toPoint << std::endl;
 
         matrix_t<Number> A = matrix_t<Number>(this->dimension(), this->mVertices.size()+1);
 
@@ -156,24 +148,28 @@ namespace hypro {
         // Check that the point can be represented (EQ).
         opt.setRelations(std::vector<carl::Relation>(this->dimension(), carl::Relation::EQ));
 
+        // direction : 0,0, ..., 0,1  (last element is lambda')
         vector_t<Number> direction = vector_t<Number>::Zero(A.cols());
-        direction(A.cols() - 1) = Number(-1);    
+        direction(A.cols() - 1) = Number(1);    
+        // set it to minimize
+        opt.setMaximize(false);
 
-        std::cout << "A = " << std::endl << opt.matrix() << std::endl;
-        std::cout << "B = " << std::endl << opt.vector() << std::endl;
+        // std::cout << "A = " << std::endl << opt.matrix() << std::endl;
+        // std::cout << "B = " << std::endl << opt.vector() << std::endl;
 
         EvaluationResult<Number> result = opt.evaluate(direction, true);
 
-        std::cout << "Result: " << result << std::endl;
-
+        // std::cout << "Result: " << result << std::endl;
         // std::cout << "From: " << fromPoint << std::endl;
         // std::cout << "To: " << toPoint << std::endl; 
 
-        Number invertedValue = -result.supportValue;
+        Number resultValue = result.supportValue;
 
         // std::cout << "Result: " << invertedValue << std::endl;
 
-        Point<Number> cp = fromPoint + invertedValue * (toPoint - fromPoint);
+        Point<Number> cp = fromPoint + resultValue * (toPoint - fromPoint);
+
+        // std::cout << "CP: " << cp << std::endl;
 
         // we catch the error, where the crossing point calculation 
         if (cp == fromPoint){
@@ -188,7 +184,9 @@ namespace hypro {
     
     template<typename Number, typename Converter, typename S> 
     std::vector<Point<Number>> VPolytopeT<Number, Converter, S>::getBorderVertices(Point<Number> point, std::vector<std::pair<Point<Number>, Point<Number>>> edgesP, std::vector<Point<Number>> PnG) const{
+        
         std::vector<Point<Number>> BVs = {};
+
         for (auto edge : edgesP){
             Point<Number> p1 = edge.first;
             Point<Number> p2 = edge.second;
@@ -198,6 +196,7 @@ namespace hypro {
                 }                
             }
         }
+
         return BVs;
     }
 
@@ -214,7 +213,6 @@ namespace hypro {
         }    
 
         return result;       
-
     }
 
     template<typename Number, typename Converter, typename S>
@@ -238,7 +236,6 @@ namespace hypro {
 
 
         matrix_t<Number> A = matrix_t<Number>(this->dimension(), this->mVertices.size());
-
         Eigen::Index pointPos = 0;
 
         for (Eigen::Index i = 0; i < A.cols(); ++i) {
@@ -247,7 +244,6 @@ namespace hypro {
                 break;
             }
         }
-
 
         for (Eigen::Index i = 0; i < A.cols(); ++i) {
             if (i == pointPos){
@@ -301,6 +297,7 @@ namespace hypro {
                 }  
             }
         }
+
         return result;
     }
 
@@ -393,8 +390,6 @@ namespace hypro {
         }
 
     }
-
-
 
     template<typename Number, typename Converter, typename S>
     VPolytopeT<Number, Converter, S>::VPolytopeT()

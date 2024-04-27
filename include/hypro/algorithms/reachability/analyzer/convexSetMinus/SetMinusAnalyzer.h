@@ -9,6 +9,7 @@
 
 #pragma once
 
+
 #include "../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../datastructures/reachability/Flowpipe.h"
 #include "../../../datastructures/reachability/ReachTreev2.h"
@@ -19,6 +20,7 @@
 #include "../fixedPointDetection.h"
 #include "../workers/LTIWorker.h"
 #include "./ReturnTypes.h"
+
 
 #include <atomic>
 #include <condition_variable>
@@ -139,4 +141,4 @@ namespace hypro {
 
 }  // namespace hypro
 
-#include "LTIAnalyzer.tpp"
+#include "SetMinusAnalyzer.tpp"
