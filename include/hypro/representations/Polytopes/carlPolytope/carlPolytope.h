@@ -140,11 +140,15 @@ namespace hypro {
 
         std::vector<carl::Variable> getVariables() const;
 
+        void eliminateQuantifiersAndUpdate(QEQuery query);
+
         void eliminateVariable(carl::Variable var);
 
         void eliminateVariables(const std::vector<carl::Variable> &vars);
 
         void eliminateVariables(const QEQuery &vars);
+
+		void eliminateVariablesSuccessivelyWithRedundancyCheck(const QEQuery &vars);
 
         std::vector<Point<Number>> vertices() const;
 

@@ -160,6 +160,7 @@ template <template <typename, typename, typename> typename PolyhedralRepresentat
 PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyBoundedTimeEvolution( const PolyhedralRepresentation<Number, Converter, Setting>& initialSet, const rectangularFlow<Number>& flow, tNumber timeBound ) {
 	DEBUG( "hypro.reachability.rectangular", "Compute bounded time successors (polyhedral version)." );
 	VPolytope<Number> initSetPolytope = hypro::Converter<Number>::toVPolytope( initialSet );
+	//TODO initSetPolytope.removeRedundancy(); ?
 	assert( flow.dimension() == initialSet.dimension() );
 
 	VPolytope<Number> flowSetPolytope{ flow.vertices() };
@@ -259,6 +260,7 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 
 	// get bad state
 	CarlPolytope<Number> bad = badSet;
+	auto dim = badSet.dimension();
 	// storage to build elimination query
 	std::vector<carl::Variable> variablesToEliminate;
 	// add variable for time elapse
@@ -313,15 +315,17 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	QEQuery quOrder;
 	quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
 
-    // eliminate vars
-	bad.eliminateVariables( quOrder );
+	bad.setDimension( dim + variablesToEliminate.size() + 1); ///TODO
+    bad.removeRedundancy();
+    bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
 
 	quOrder.at(0).second = std::vector<carl::Variable>{t};
 
-	// eliminate vars
-	bad.setDimension(bad.dimension());
-	bad.eliminateVariables( quOrder );
-	bad.setDimension(bad.dimension() - 1);
+	assert(bad.dimension() == dim + 1);
+
+	bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
+
+	assert(bad.dimension() == dim);
 
 	DEBUG( "hydra.worker", "State set after reverse time elapse: " << bad );
 

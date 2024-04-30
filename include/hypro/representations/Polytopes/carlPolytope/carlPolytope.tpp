@@ -327,6 +327,13 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename Setting>
+    void CarlPolytopeT<Number, Converter, Setting>::eliminateQuantifiersAndUpdate(QEQuery query) {
+        clearCache();
+        mFormula = eliminateQuantifiers(mFormula, query);
+        clearCache();
+    }
+
+    template<typename Number, typename Converter, typename Setting>
     void CarlPolytopeT<Number, Converter, Setting>::eliminateVariable(carl::Variable var) {
         DEBUG("hypro.representations.carlPolytope", "Eliminate variable " << var << " in " << mFormula);
         if (this->empty()) {
@@ -335,7 +342,8 @@ namespace hypro {
         QEQuery query;
         query.emplace_back(std::make_pair(QuantifierType::EXISTS, std::vector<carl::Variable>({var})));
         // std::cout << "Eliminate ... ";
-        mFormula = eliminateQuantifiers(mFormula, query);
+        // mFormula = eliminateQuantifiers(mFormula, query);
+        eliminateQuantifiersAndUpdate(query);
         // std::cout << "done. Remove redundancy ... ";
         // this->removeRedundancy();
         // std::cout << "done." << std::endl;
@@ -354,22 +362,35 @@ namespace hypro {
         detectDimension();
     }
 
-    template<typename Number, typename Converter, typename Setting>
-    void CarlPolytopeT<Number, Converter, Setting>::eliminateVariables(const QEQuery &vars) {
-        DEBUG("hypro.representations.carlPolytope", "Eliminate variables in " << mFormula);
-        if (this->empty()) {
-            return;
-        }
+	template<typename Number, typename Converter, typename Setting>
+	void CarlPolytopeT<Number, Converter, Setting>::eliminateVariablesSuccessivelyWithRedundancyCheck(const QEQuery &vars) {
+		DEBUG("hypro.representations.carlPolytope", "Eliminate variables in " << mFormula);
+		if (this->empty()) {
+			return;
+		}
 
 		for (const auto &QuantifierVariablesPair: vars) {  // mQuery
 			for(auto& var : QuantifierVariablesPair.second) {
 				QEQuery quOrder;
 				quOrder.push_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{var} ) );
 				mFormula = eliminateQuantifiers(mFormula, quOrder);
+				setDimension(dimension() - 1);
 				removeRedundancy();
 			}
 		}
     }
+
+    template<typename Number, typename Converter, typename Setting>
+    void CarlPolytopeT<Number, Converter, Setting>::eliminateVariables(const QEQuery &vars) {
+		DEBUG( "hypro.representations.carlPolytope", "Eliminate variables in " << mFormula );
+		if ( this->empty() ) {
+			return;
+		}
+
+		mFormula = eliminateQuantifiers( mFormula, vars );
+
+		detectDimension();
+	}
 
     template<typename Number, typename Converter, typename Setting>
     std::vector<Point<Number>> CarlPolytopeT<Number, Converter, Setting>::vertices() const {
@@ -478,6 +499,24 @@ namespace hypro {
         std::vector<ConstraintT<tNumber>> constraints;
         getConstraints(mFormula, constraints);
         auto redundantConstraints = opt.redundantConstraints();
+
+		//TODO this is probably given already
+		std::sort( redundantConstraints.begin(), redundantConstraints.end() );
+
+		//preprocess sort of
+		if(!redundantConstraints.empty()) {
+			for (size_t i = constraints.size(); i-- > 0 ;) { //starts with constraints.size()-1
+				if (constraints.at(i).relation() == carl::Relation::EQ) {
+					for (size_t j = redundantConstraints.size(); j-- > 0 ;) { //starts with redundantConstraints.size()-1
+						if(redundantConstraints.at(j) < i) {
+							break;
+						}
+						redundantConstraints.at(j)--;
+					}
+				}
+			}
+		}
+
         for (auto it = redundantConstraints.rbegin(); it != redundantConstraints.rend(); ++it) {
             constraints.erase(constraints.begin() + *it);
         }

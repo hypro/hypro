@@ -61,7 +61,6 @@ namespace hypro {
 			if(col[0] == 0) {
 				result.emplace_back( vector_t<Number>(col.size() - 1));
 			} else {
-				std::cout << col << std::endl;
 				result.emplace_back( col( Eigen::seq( 1, Eigen::last ) ) / col[0] );
 			}
         }
