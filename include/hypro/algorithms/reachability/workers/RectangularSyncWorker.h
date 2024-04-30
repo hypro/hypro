@@ -19,6 +19,7 @@
 #include "../handlers/invariantHandlers/rectangularInvariantHandler.h"
 #include "../handlers/jumpHandlers/rectangularJumpHandler.h"
 #include "../handlers/jumpHandlers/singularJumpHandler.h"
+#include "../handlers/jumpHandlers/rectangularSyncJumpHandler.h"
 #include "../handlers/resetHandlers/rectangularResetHandler.h"
 #include "../handlers/timeEvolutionHandlers/rectangularTimeEvolutionHandler.h"
 
@@ -39,6 +40,7 @@ class RectangularSyncWorker {
 	using LocationT = typename Automaton::LocationType;
 	using JumpSuccessors = typename rectangularSyncGuardHandler<State, LocationT>::TransitionStatesMap;
 	using JumpPredecessors = typename rectangularSyncGuardHandler<State, LocationT>::TransitionStatesMap;
+	// using Transition = typename Transition<LocationT>;
 
   public:
 	/// constructor from rectangular automaton and settings TODO: delete this constructor
@@ -47,18 +49,10 @@ class RectangularSyncWorker {
 		, mSettings( settings ) {}
 
 	/// constructor from rectangular automaton, settings and synchronization dictionary
-	RectangularSyncWorker( const Automaton& ha, const Settings& settings, std::map<Label, std::set<Automaton const*>>& syncDict, int variablePoolIndex )
+	RectangularSyncWorker( const Automaton& ha, const Settings& settings, int variablePoolIndex )
 		: mHybridAutomaton( ha )
 		, mSettings( settings )
-		, mSyncDict( syncDict )
-		, mVariablePoolIndex( variablePoolIndex )
-		, mNonSyncLabels() {
-		for ( auto label : mHybridAutomaton.getLabels() ) {
-			if ( syncDict.at( label ).size() == 1 && syncDict.at( label ).count( &mHybridAutomaton ) == 1 ) {
-				mNonSyncLabels.insert( label );
-			}
-		}
-	}
+		, mVariablePoolIndex( variablePoolIndex ) {}
 
 	/// computes a time transition followed by a discrete transition
 	REACHABILITY_RESULT computeForwardReachability( ReachTreeNode<State, LocationT>& task );
@@ -67,10 +61,13 @@ class RectangularSyncWorker {
 	REACHABILITY_RESULT computeTimeSuccessors( ReachTreeNode<State, LocationT>& task );
 
 	/// computes a discrete transition. Requires available time successors.
-	void computeJumpSuccessors( const LocationT* location );
+	void computeJumpSuccessors( ReachTreeNode<State, LocationT>& task );
 
 	/// getter for discrete jump successor sets
 	const JumpSuccessors& getJumpSuccessorSets() const { return mJumpSuccessorSets; }
+
+	/// getter for discrete synchronizing jump successor sets
+	const std::set<ReachTreeNode<State, LocationT>*> getSyncJumpSuccessorTasks();
 
 	/// getter for time successor sets
 	const Flowpipe<State>& getFlowpipe() const { return mFlowpipe; }
@@ -81,17 +78,34 @@ class RectangularSyncWorker {
 	/// change to variable pool that is used in this worker
 	void changeVariablePool() { hypro::VariablePool::getInstance().changeToPool( mVariablePoolIndex ); }
 
+	/// set the syncDict2
+	void setSyncDict(std::map<Label, std::set<RectangularSyncWorker<State, Automaton>* >>& syncDict2) { mSyncDict = syncDict2; }
+
+	/// initialize the set of labels that do not require synchronization
+	void initNonSyncLabels();
+
+	// getter for VariablePoolIndex
+	int getVariablePoolIndex() const { return mVariablePoolIndex; }
+
   private:
 	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
+
+	void postProcessSyncJumpSuccessors( ReachTreeNode<State, LocationT>& task, const JumpSuccessors& guardSatisfyingSets );
+
+	std::map<ReachTreeNode<State, typename Automaton::LocationType>*, State> findSyncSuccessors( ReachTreeNode<State, LocationT>& task, Transition<LocationT> transition, const std::vector<Label>& label, State syncTime, std::set<RectangularSyncWorker<State, Automaton>*> visitedWorkers );
+
+	std::map<ReachTreeNode<State, LocationT>*, Transition<LocationT>> getCandidateNodes( ReachTreeNode<State, LocationT>& syncNode, const std::vector<Label>& label );
 
   protected:
 	const Automaton& mHybridAutomaton;						  ///< Reference to the rectangular automaton
 	const Settings& mSettings;								  ///< Reference to the used analysis settings
 	JumpSuccessors mJumpSuccessorSets;						  ///< Storage of computed jump successors
+	JumpSuccessors mSyncJumpSuccessorSets;					  ///< Storage of computed jump successors with synchronization
 	Flowpipe<State> mFlowpipe;								  ///< Storage of computed time successors
-	std::map<Label, std::set<Automaton const*>>& mSyncDict{};  ///< map (label -> automata)
 	std::set<Label> mNonSyncLabels{};						  ///< set of labels that are not synchronized, local computation in the subspace
 	int mVariablePoolIndex{ 0 };								  ///< index of the variable pool to use in with this worker
+	std::map<Label, std::set<RectangularSyncWorker<State, Automaton>* >> mSyncDict{};  ///< map (label -> workers)
+	std::set<ReachTreeNode<State, LocationT>*> mSyncChildrenToRemove{}; ///< elements of this set need to be removed from the reach tree, after a synchronizing jump has been computed. 
 };
 
 }  // namespace hypro

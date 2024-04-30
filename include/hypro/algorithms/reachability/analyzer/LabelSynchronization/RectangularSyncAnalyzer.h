@@ -58,20 +58,15 @@ class RectangularSyncAnalyzer {
 			for (auto label : automaton.getLabels()) {
 				mLabelAutomatonMap[label].insert(&automaton);
         	}
-	        // allLabels.insert(automaton.getLabels().begin(), automaton.getLabels().end()); //TODO maybe find out how this would work. 
 		}
-		// // create a map from each label to a set of automata that need to synchronize on this label
-		// for (auto label : allLabels) {
-		// 	for (auto automaton : mHybridAutomata) {
-		// 		if (automaton->getLabels().count(label)) {
-		// 			mLabelAutomatonMap[label].insert(automaton);
-		// 		}
-		// 	}
-		// }
 		auto count = automata.size();
 		for (typename std::map<Automaton const *, std::vector<ReachTreeNode<State, LocationT>>>::iterator it = mAutomatonReachTreeMap.begin(); it != mAutomatonReachTreeMap.end(); ++it) {
 			for ( auto &rtNode : it->second ) {
 				rtNode.initializeSyncNodes( count );
+				for (auto automaton : mHybridAutomata) {
+					int index = std::distance(mHybridAutomata.begin(), std::find(mHybridAutomata.begin(), mHybridAutomata.end(), automaton));
+					rtNode.setSyncNodeAtIndex( &mAutomatonReachTreeMap.at(automaton)[0], index );
+				}
 			}
 		}
 	}
@@ -118,6 +113,7 @@ class RectangularSyncAnalyzer {
 	std::vector<ReachTreeNode<State, LocationT>> &mReachTree;											 ///< Forest of ReachTrees computed		(TODO delete)
 	std::map<Automaton const *, std::vector<ReachTreeNode<State, LocationT>>> mAutomatonReachTreeMap{};	 ///< map (*automaton -> reachTree)
 	std::map<Label, std::set<Automaton const *>> mLabelAutomatonMap{};									 ///< map (label -> automata)
+	std::map<Label, std::set<RectangularSyncWorker<State, Automaton>* >> mLabelWorkerMap{};				 ///< map (label -> set of workers), describes for each labels the automata that require synchronization
 };
 
 }  // namespace hypro

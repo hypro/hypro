@@ -13,18 +13,23 @@ namespace hypro {
 
 template <typename State, typename Automaton>
 REACHABILITY_RESULT
-RectangularSyncWorker<State, Automaton>::computeForwardReachability( ReachTreeNode<State, LocationT> &task ) {
+RectangularSyncWorker<State, Automaton>::computeForwardReachability( ReachTreeNode<State, LocationT>& task ) {
 	DEBUG( "hypro.reachability.rectangular", "Start forward computation in worker" );
 	if ( computeTimeSuccessors( task ) == REACHABILITY_RESULT::UNKNOWN ) {
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
-	computeJumpSuccessors( task.getLocation() );
+	computeJumpSuccessors( task );
 	return REACHABILITY_RESULT::SAFE;
 }
 
 template <typename State, typename Automaton>
 REACHABILITY_RESULT
-RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<State, LocationT> &task ) {
+RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<State, LocationT>& task ) {
+	if ( !task.getFlowpipe().empty() ) {
+		// the time successors of this node has already been computed, because of label synchronization
+		return REACHABILITY_RESULT::SAFE;
+	}
+
 	State initialSet = task.getInitialSet();
 
 	auto [containment, segment] = rectangularIntersectInvariant( initialSet, task.getLocation() );
@@ -72,7 +77,7 @@ RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<St
 
 	// add state to flowpipe
 	// TODO: delete std::cout
-	std::cout << constrainedTimeSuccessors << std::endl;
+	std::cout << "ComputeTimeSuccessors.time successor:" << constrainedTimeSuccessors << std::endl;
 	mFlowpipe.addState( constrainedTimeSuccessors );
 	task.getFlowpipe().push_back( constrainedTimeSuccessors );
 
@@ -88,26 +93,203 @@ RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<St
 }
 
 template <typename State, typename Automaton>
-void RectangularSyncWorker<State, Automaton>::computeJumpSuccessors( const LocationT *location ) {
+void RectangularSyncWorker<State, Automaton>::computeJumpSuccessors( ReachTreeNode<State, LocationT>& task ) {
 	// for each transition intersect each computed time successor set with the guard. If the intersection is non-empty, store for post-processing.
 	rectangularSyncGuardHandler<State, LocationT> guardHandler;
-	for ( auto &state : mFlowpipe ) {
-		guardHandler( state, location, mNonSyncLabels );
+	for ( auto& state : mFlowpipe ) {
+		guardHandler( state, task.getLocation(), mNonSyncLabels );
 	}
 
 	// post process non synchronizing jumps: apply reset on those sets, intersect the sets with the invariant of the target location. If the resulting state set is non-empty, add it to the jump successors set.
 	postProcessJumpSuccessors( guardHandler.getNonSyncGuardSatisfyingStateSets() );
+	// post process synchronizing jumps: for each transition, find nodes in the other automata that can synchronize, intersect their times, and compute their jump successors
+	postProcessSyncJumpSuccessors( task, guardHandler.getSyncGuardSatisfyingStateSets() );
 }
 
 template <typename State, typename Automaton>
-void RectangularSyncWorker<State, Automaton>::postProcessJumpSuccessors( const JumpSuccessors &guardSatisfyingSets ) {
+void RectangularSyncWorker<State, Automaton>::postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets ) {
 	singularJumpHandler<State, LocationT> jmpHandler;
 	mJumpSuccessorSets = jmpHandler.applyJump( guardSatisfyingSets );
+}
+
+template <typename State, typename Automaton>
+void RectangularSyncWorker<State, Automaton>::postProcessSyncJumpSuccessors( ReachTreeNode<State, LocationT>& task, const JumpSuccessors& guardSatisfyingSets ) {
+	// TODO extend to other polyhedral representation, add getTimeProjection() method
+	// if ( !(std::is_same<State, VPolytope<Number>>() || std::is_same<State, HPolytope<Number>>()) ) {
+	if ( !( std::is_same<State, VPolytope<Number>>() ) ) {
+		assert( false && "Label Synchronization is implemented for VPolytopes and HPolytopes only." );
+	}
+	for ( typename JumpSuccessors::const_iterator it = guardSatisfyingSets.begin();
+		  it != guardSatisfyingSets.end(); ++it ) {
+		auto transitionPtr = it->first;
+		auto statesVec = it->second;
+		assert( statesVec.size() == 1 && "Rectangular Flowpipes have only one state in the time successors." );
+		auto& state = statesVec.front();
+		std::cout << "state before projection: " << state << std::endl;	 // TODO remove before push
+		auto time = state.getTimeProjection();							 // time is a polytope not an interval
+		assert( time.dimension() == 1 );
+		std::cout << "state projected on last dimension (time): " << time << std::endl;	 // TODO remove before push
+		auto label = transitionPtr->getLabels();										 // get the vector of labels of the transition //TODO: try to handle transition with multiple labels.
+		std::set<RectangularSyncWorker<State, Automaton>*> visitedWorkers{ this };
+		auto nodeTimePairs = findSyncSuccessors( task, *transitionPtr, label, time, visitedWorkers );
+		for ( auto& [node, syncTime] : nodeTimePairs ) {
+			node->updateTreeWithSyncNodes( std::map<size_t, ReachTreeNode<State, LocationT>*>{ std::make_pair( mVariablePoolIndex, node ) } );
+		}
+		// here we have computed sync successors, added them to the reach Trees, updated the book-keeping of sync nodes in the tree.
+	}
+}
+
+template <typename State, typename Automaton>
+std::map<ReachTreeNode<State, typename Automaton::LocationType>*, State>
+RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State, LocationT>& task,
+															 Transition<LocationT> transition,
+															 const std::vector<Label>& label,
+															 State syncTime,
+															 std::set<RectangularSyncWorker<State, Automaton>*> visitedWorkers ) {
+	assert( label.size() == 1 && "the analyzer assumes that every transition has only one label. It cannot handle models where the transitions can have multiple labels." );
+	if ( visitedWorkers == mSyncDict.at( label.front() ) ) {
+		// check if the synchronizing transition is enabled
+		rectangularSyncGuardHandler<State, LocationT> guardHandler;
+		JumpSuccessors transitionSourceNodeMap = guardHandler.intersectWithGuard( task.getFlowpipe(), &transition );
+		if ( transitionSourceNodeMap.empty() ) {
+			// if the intersection with the guard is empty (i.e. the transition is not enabled), the synchronization is not possible
+			return {};
+		}
+		rectangularSyncJumpHandler<State, LocationT> jmpHandler;
+		std::cout << "syncTime in if branch before applyJump: " << syncTime << std::endl;  // TODO remove before push
+		mSyncJumpSuccessorSets = jmpHandler.applyJump( transitionSourceNodeMap, syncTime );
+		assert( mSyncJumpSuccessorSets.size() == 1 && "findJumpSuccessors applies the jump for one transition." );
+		std::map<ReachTreeNode<State, LocationT>*, State> syncNodeTimeMap{};
+		// update the ReachTree with the new successor nodes
+		for ( const auto& transitionStatesPair : mSyncJumpSuccessorSets ) {
+			assert( transitionStatesPair.second.size() == 1 && "In Rectangular Analysis a jump can only have one successor." );
+			auto& childNode = task.addChild( transitionStatesPair.second.front(), carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
+			assert( childNode.getDepth() == task.getDepth() + 1 );
+			childNode.initializeSyncNodes( task.getSyncNodes().size() );
+			// TODO change name of mSyncChildrenToRemove to mSyncJumpSuccessorSets
+			mSyncChildrenToRemove.insert( &childNode );
+			auto resultTime = transitionStatesPair.second.front().getTimeProjection();
+			syncNodeTimeMap.emplace( std::make_pair( &childNode, resultTime ) );
+		}
+		return syncNodeTimeMap;
+	} else {
+		// get a pointer to the worker, in which we search for synchronizing nodes
+		RectangularSyncWorker<State, Automaton>* ptrToWorker = nullptr;
+		for ( typename std::set<RectangularSyncWorker<State, Automaton>*>::const_iterator it = mSyncDict.at( label.front() ).begin();
+			  it != mSyncDict.at( label.front() ).end(); ++it ) {
+			if ( visitedWorkers.count( *it ) == 0 ) {
+				ptrToWorker = *it;
+				break;
+			}
+		}
+		assert( ptrToWorker != nullptr );  // if we reach this execution branch, mSyncDict\visitedWorkers is not empty
+		visitedWorkers.insert( ptrToWorker );
+		// in this function we misuse mVariablePoolIndex to get the "index of the worker", to access the right syncNode.
+		auto candidateTransitionMap = ptrToWorker->getCandidateNodes( task.getSyncNodeAtIndex( ptrToWorker->getVariablePoolIndex() ), label );
+		std::map<ReachTreeNode<State, LocationT>*, State> syncNodeTimeMap{};
+		for ( auto& nodeTransitionPair : candidateTransitionMap ) {
+			ptrToWorker->changeVariablePool();
+			ptrToWorker->computeTimeSuccessors( *nodeTransitionPair.first );
+			this->changeVariablePool();
+			// compute the time intesection
+			auto timeIntersection = syncTime.intersect( nodeTransitionPair.first->getFlowpipe().front().getTimeProjection() );
+			bool firstSyncCondition = nodeTransitionPair.first->getSyncNodeAtIndex( this->getVariablePoolIndex() ).isAncestorOf( &task );
+			bool secondSyncCondition = true;
+			for ( size_t i = 0; i < task.getSyncNodes().size(); i++ ) {
+				if ( i != this->getVariablePoolIndex() && i != ptrToWorker->getVariablePoolIndex() ) {
+					if ( !nodeTransitionPair.first->getSyncNodeAtIndex( i ).isAncestorOf( &( task.getSyncNodeAtIndex( i ) ) ) &&
+						 !task.getSyncNodeAtIndex( i ).isAncestorOf( &( nodeTransitionPair.first->getSyncNodeAtIndex( i ) ) ) ) {
+						secondSyncCondition = false;
+						break;
+					}
+				}
+			}
+			if ( !timeIntersection.empty() && firstSyncCondition && secondSyncCondition ) {
+				auto nodeTimePairs = ptrToWorker->findSyncSuccessors( *nodeTransitionPair.first, nodeTransitionPair.second, label, timeIntersection, visitedWorkers );
+				for ( auto& [node, syncTime1] : nodeTimePairs ) {
+					// check if the synchronizing transition is enabled
+					rectangularSyncGuardHandler<State, LocationT> guardHandler;
+					JumpSuccessors transitionSourceNodeMap = guardHandler.intersectWithGuard( task.getFlowpipe(), &transition );
+					if ( transitionSourceNodeMap.empty() ) {
+						// if the intersection with the guard is empty (i.e. the transition is not enabled), the synchronization is not possible
+						continue;
+					}
+					std::cout << "syncTime in else branch before applyJump: " << syncTime1 << std::endl;  // TODO remove before push
+					rectangularSyncJumpHandler<State, LocationT> jmpHandler;
+					mSyncJumpSuccessorSets = jmpHandler.applyJump( transitionSourceNodeMap, syncTime1 );
+					assert( mSyncJumpSuccessorSets.size() == 1 && "findJumpSuccessors searches applies the jump for one transition." );
+					// update the ReachTree with the new successor nodes
+					for ( const auto& transitionStatesPair : mSyncJumpSuccessorSets ) {
+						assert( transitionStatesPair.second.size() == 1 && "In Rectangular Analysis a jump can only have one successor." );
+						auto& childNode = task.addChild( transitionStatesPair.second.front(), carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
+						assert( childNode.getDepth() == task.getDepth() + 1 );
+						childNode.initializeSyncNodes( task.getSyncNodes().size() );
+						// set syncNodes pointer to node
+						childNode.setSyncNodeAtIndex( node, ptrToWorker->getVariablePoolIndex() );
+						mSyncChildrenToRemove.insert( &childNode );
+						auto resultTime = transitionStatesPair.second.front().getTimeProjection();
+						syncNodeTimeMap.emplace( std::make_pair( &childNode, resultTime ) );
+					}
+				}
+			}
+		}
+		return syncNodeTimeMap;
+	}
+}
+
+template <typename State, typename Automaton>
+std::map<ReachTreeNode<State, typename Automaton::LocationType>*, Transition<typename Automaton::LocationType>>
+RectangularSyncWorker<State, Automaton>::getCandidateNodes( ReachTreeNode<State, LocationT>& syncNode, const std::vector<Label>& label ) {
+	std::map<ReachTreeNode<State, LocationT>*, Transition<LocationT>> syncCandidates{};
+	for ( auto child : syncNode.getChildren() ) {
+		auto childCandidates = getCandidateNodes( *child, label );
+		syncCandidates.insert( childCandidates.begin(), childCandidates.end() );
+	}
+	for ( auto& transition : syncNode.getLocation()->getTransitions() ) {
+		if ( transition->getLabels() == label ) {
+			// we assume that the two label vectors are the same in order to synchronize. The synchronizing analysis is implemented assuming the label vectors always contain one element.
+			syncCandidates.emplace( std::make_pair( &syncNode, *transition ) );
+		}
+	}
+	return syncCandidates;
+}
+
+template <typename State, typename Automaton>
+void RectangularSyncWorker<State, Automaton>::initNonSyncLabels() {
+	for ( auto label : mHybridAutomaton.getLabels() ) {
+		if ( mSyncDict.at( label ).size() == 1 && mSyncDict.at( label ).count( this ) == 1 ) {
+			mNonSyncLabels.insert( label );
+		}
+	}
+}
+
+template <typename State, typename Automaton>
+const std::set<ReachTreeNode<State, typename Automaton::LocationType>*>
+RectangularSyncWorker<State, Automaton>::getSyncJumpSuccessorTasks() {
+	std::set<ReachTreeNode<State, LocationT>*> syncJumpSuccessorTasks{};
+	for ( auto node : mSyncChildrenToRemove ) {
+		bool isSyncNode = true;
+		for ( auto syncNode : node->getSyncNodes() ) {
+			if ( syncNode == nullptr ) {
+				isSyncNode = false;
+				break;
+			}
+		}
+		if ( isSyncNode ) {
+			syncJumpSuccessorTasks.insert( node );
+		} else {
+			mSyncChildrenToRemove.erase( node );
+			node->getParent()->eraseChild( node );
+		}
+	}
+	return syncJumpSuccessorTasks;
 }
 
 template <typename State, typename Automaton>
 void RectangularSyncWorker<State, Automaton>::clear() {
 	mFlowpipe.clear();
 	mJumpSuccessorSets.clear();
+	mSyncJumpSuccessorSets.clear();
+	mSyncChildrenToRemove.clear();
 }
 }  // namespace hypro

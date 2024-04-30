@@ -42,25 +42,26 @@ template <typename State, typename Automaton, typename Multithreading>
 REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::forwardRun() {
 	DEBUG( "hypro.reachability.rectangular", "Start forward analysis" );
 	// create a rectangular worker for each automaton
-	// std::vector<RectangularWorker<State, Automaton>> workerVector;
-	// for ( auto &automaton : mHybridAutomata ) {
-	// 	workerVector.push_back(RectangularWorker<State, Automaton>{ *automaton, mAnalysisSettings });
-	// }
 	std::map<Automaton const*, RectangularSyncWorker<State, Automaton>> automatonWorkerMap;
 	int varPoolIndex = 0;
 	for ( auto automaton : mHybridAutomata ) {
-		automatonWorkerMap.emplace( std::make_pair( automaton, RectangularSyncWorker<State, Automaton>{ *automaton, mAnalysisSettings, mLabelAutomatonMap, varPoolIndex } ) );
+		automatonWorkerMap.emplace( std::make_pair( automaton, RectangularSyncWorker<State, Automaton>{ *automaton, mAnalysisSettings, varPoolIndex } ) );
 		varPoolIndex++;
 	}
-	// RectangularWorker<State, Automaton> worker{ *mHybridAutomaton, mAnalysisSettings };
+	// initialize the labelWorkerMap and pass it to each of the created workers
+	for ( auto& labelAutomatonPair : mLabelAutomatonMap ) {
+		for ( auto* automaton : labelAutomatonPair.second ) {
+			mLabelWorkerMap[labelAutomatonPair.first].insert( & automatonWorkerMap.at( automaton ) );
+		}
+	}
+	// pass the synchronization dictionary to each worker and initialize the non-sync labels
+	for ( auto automaton : mHybridAutomata ) {
+		automatonWorkerMap.at( automaton ).setSyncDict( mLabelWorkerMap );
+		automatonWorkerMap.at( automaton ).initNonSyncLabels();
+	}
 
 	while ( !mWorkQueue.empty() ) {
-		// auto *currentNode = getNodeFromQueue();
-		// DEBUG( "hypro.reachability",
-		// 	   "Process node (@" << currentNode << ") with location " << currentNode->getLocation()->getName()
-		// 						 << " with path " << currentNode->getTreePath() );
-
-		// process with sync
+		// process next node with sync
 		auto nodeAutoPair = getPairFromQueue();
 		auto* node = nodeAutoPair.first;
 		auto* automaton = nodeAutoPair.second;
@@ -72,8 +73,14 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::f
 			DEBUG( "hypro.reachability", "End Rectangular Reachability Analysis." );
 			return result;
 		}
+		// create sync successor tasks for all the automata
+		for ( auto automaton : mHybridAutomata ) {
+			auto newTasks = automatonWorkerMap.at( automaton ).getSyncJumpSuccessorTasks();
+			for ( auto task : newTasks ) {
+				addPairToQueue( task, automaton );
+			}
+		}
 	}
-
 	return REACHABILITY_RESULT::SAFE;
 }
 
@@ -99,7 +106,7 @@ RectangularSyncAnalyzer<State, Automaton, Multithreading>::processNode( Rectangu
 		return safetyResult;
 	}
 
-	// create jump successor tasks
+	// create local jump successor tasks
 	for ( const auto& transitionStatesPair : worker.getJumpSuccessorSets() ) {
 		for ( const auto jmpSucc : transitionStatesPair.second ) {
 			// update reachTree
