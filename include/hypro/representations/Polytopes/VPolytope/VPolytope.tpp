@@ -21,6 +21,15 @@
 
 namespace hypro {
     template<typename Number, typename Converter, typename S> 
+    std::vector<VPolytopeT<Number, Converter, S>> VPolytopeT<Number, Converter, S>::setMinus2(const VPolytopeT<Number, Converter, S> &minus) const {
+        std::vector<VPolytopeT<Number, Converter, S>> result;
+        VPolytopeT<Number, Converter, S> polytope = this->setMinusCrossingV(minus);
+        result.push_back(polytope);
+        return result;
+    }
+
+
+    template<typename Number, typename Converter, typename S> 
     VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::setMinusCrossingV(const VPolytopeT<Number, Converter, S> &polytopeG) const {
         std::size_t dim_p = this->dimension();
         std::size_t dim_g = polytopeG.dimension();

@@ -61,6 +61,12 @@ namespace hypro {
     public:
 
         /**
+        * @brief      Calculates the set difference of two polytopes.
+        * @param[in]  polytope  The VPolytope G.
+        */
+        std::vector<VPolytopeT<Number, Converter, S>> setMinus2(const VPolytopeT<Number, Converter, S> &minus) const;
+
+        /**
         * @brief      Computation of the set minus operator using crossing points.
         * @param[in]  polytope  The VPolytope G.
         */
