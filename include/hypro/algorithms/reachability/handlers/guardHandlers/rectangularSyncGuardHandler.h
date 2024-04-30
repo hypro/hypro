@@ -25,6 +25,8 @@ namespace hypro {
 
         void operator()(const Representation &stateSet, const Location *loc, const std::set<Label> &nonSyncLabels);
 
+        TransitionStatesMap intersectWithGuard(std::vector<Representation>& flowpipe, Transition<Location>* transitionPtr);
+
         const TransitionStatesMap &getGuardSatisfyingStateSets() const { return mGuardSatisfyingStates; }
 
         const TransitionStatesMap &getSyncGuardSatisfyingStateSets() const { return mSyncGuardSatisfyingStates; }

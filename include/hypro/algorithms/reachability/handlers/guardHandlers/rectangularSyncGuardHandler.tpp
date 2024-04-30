@@ -44,4 +44,23 @@ namespace hypro {
         }
     }
 
+    template<typename Representation, typename Location>
+    typename rectangularSyncGuardHandler<Representation, Location>::TransitionStatesMap
+    rectangularSyncGuardHandler<Representation, Location>::intersectWithGuard(std::vector<Representation>& flowpipe, Transition<Location>* transitionPtr) {
+        TransitionStatesMap result;
+
+        for (auto &state: flowpipe) {   
+            // intersect
+            auto [containmentResult, resultingSet] = intersect(state, transitionPtr->getGuard());
+
+            // reduction
+            resultingSet.removeRedundancy();
+
+            if (containmentResult != CONTAINMENT::NO) {
+                result[transitionPtr].emplace_back(std::move(resultingSet));
+            }
+        }
+        return result;
+    }
+
 }  // namespace hypro
