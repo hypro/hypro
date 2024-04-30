@@ -17,11 +17,18 @@ hybrid reachability
 
     modes 
     {
-        l0
+        s1
         {
             poly ode 1
             {
-                y' in [1,1]
+                y' in [0.5,0.5]
+            }
+        }
+        s2
+        {
+            poly ode 1
+            {
+                y' in [0.5,0.5]
             }
         }
 
@@ -29,15 +36,35 @@ hybrid reachability
 
     jumps 
     {
-        l0 -> l0
+        s1 -> s2
         label 
         {
             a
         }
         guard 
         {
-            -1*y <= -5
-            y <= 6
+            -1*y <= -10
+            y <= 10.5
+        }
+        reset
+        {
+            y' := [8, 9]
+        }
+        parallelotope aggregation {}
+
+        s2 -> s1
+        label 
+        {
+            a
+        }
+        guard 
+        {
+            -1*y <= -9
+            y <= 10
+        }
+        reset
+        {
+            y' := [14, 15]
         }
         parallelotope aggregation {}
 
@@ -45,9 +72,9 @@ hybrid reachability
 
     init
     {
-        l0
+        s1
         {
-            y in [0,1]
+            y in [9,11]
         }
     }
 }

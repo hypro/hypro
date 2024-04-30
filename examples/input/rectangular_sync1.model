@@ -5,10 +5,10 @@ hybrid reachability
     setting 
     {
         fixed steps 1
-        time 10
+        time 5
         gnuplot octagon x
         max jumps 2
-        output rec_test_model
+        output sync_test_model
         print on
         remainder estimation 1e-5
         identity precondition
@@ -36,8 +36,12 @@ hybrid reachability
         }
         guard 
         {
-            -1*x <= -5
-            x <= 6
+            -1*x <= -3
+            x <= 4
+        }
+        reset
+        {
+            x' := [0, 1]
         }
         parallelotope aggregation {}
 
