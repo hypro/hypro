@@ -188,9 +188,19 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	TRIBOOL hasTimelock() const { return mFinishesWithTimelock; }
 
 	/// Getter for the SyncNodes
-	const std::vector<ReachTreeNode<Representation, Location>> &getSyncNodes() const { return mSyncNodes; }
+	const std::vector<ReachTreeNode<Representation, Location>*> getSyncNodes() const { return mSyncNodes; }
 	
-	std::vector<ReachTreeNode<Representation, Location>> &getSyncNodes() { return mSyncNodes; }
+	std::vector<ReachTreeNode<Representation, Location>*> getSyncNodes() { return mSyncNodes; }
+
+	const ReachTreeNode<Representation, Location> &getSyncNodeAtIndex(size_t index) const {
+		assert(index < mSyncNodes.size());
+		return *mSyncNodes[index];
+	}
+
+	ReachTreeNode<Representation, Location> &getSyncNodeAtIndex(size_t index) {
+		assert(index < mSyncNodes.size());
+		return *mSyncNodes[index];
+	}
 
 	/// Setter for the SyncNodes at index
 	void setSyncNodeAtIndex(ReachTreeNode<Representation, Location>* pointer, size_t index) {
@@ -202,6 +212,9 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	void initializeSyncNodes(size_t n) {
 		mSyncNodes = std::vector<ReachTreeNode<Representation, Location>*>(n, nullptr);
 	}
+
+	std::map<size_t, ReachTreeNode<Representation, Location>*> updateTreeWithSyncNodes(std::map<size_t, ReachTreeNode<Representation, Location>*> indexNodeMap);
+
 };
 
 template <typename Representation, typename Location>

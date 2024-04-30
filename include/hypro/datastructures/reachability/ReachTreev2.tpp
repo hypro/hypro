@@ -67,4 +67,45 @@ namespace hypro {
         }
     }
 
+    template<typename Representation, typename Location>
+    std::map<size_t, ReachTreeNode<Representation, Location>*> 
+    ReachTreeNode<Representation, Location>::updateTreeWithSyncNodes(std::map<size_t, ReachTreeNode<Representation, Location>* > indexNodeMap){
+        ReachTreeNode<Representation, Location>* nextNode=nullptr;
+        std::map<size_t, ReachTreeNode<Representation, Location>*> nextMap{ indexNodeMap };
+        for (size_t i=0; i<mSyncNodes.size(); i++){
+            if (mSyncNodes[i]!=nullptr){
+                nextNode = mSyncNodes[i];
+                nextMap.insert(std::make_pair(i, nextNode));
+            }
+        }
+        if (nextNode!=nullptr){
+            auto completeSyncMap = nextNode->updateTreeWithSyncNodes(nextMap);
+            // update syncNodes with completeSyncMap
+            for (auto& indexNodePair : completeSyncMap){
+                mSyncNodes[indexNodePair.first] = indexNodePair.second;
+            }
+            // update remaining nullptrs in mSyncNodes with the pointers from their parent node
+            for (size_t i=0; i<mSyncNodes.size(); i++){
+                if (mSyncNodes[i]==nullptr){
+                    mSyncNodes[i] = &(this->getParent()->getSyncNodeAtIndex(i));
+                }
+            }
+            for (size_t i=0; i<mSyncNodes.size(); i++) assert(mSyncNodes[i]!=nullptr);
+            return completeSyncMap;
+        } else {
+            // update syncNodes with indexNodeMap
+            for (auto& indexNodePair : indexNodeMap){
+                mSyncNodes[indexNodePair.first] = indexNodePair.second;
+            }
+            // update remaining nullptrs in mSyncNodes with the pointers from their parent node
+            for (size_t i=0; i<mSyncNodes.size(); i++){
+                if (mSyncNodes[i]==nullptr){
+                    mSyncNodes[i] = &(this->getParent()->getSyncNodeAtIndex(i));
+                }
+            }
+            for (size_t i=0; i<mSyncNodes.size(); i++) assert(mSyncNodes[i]!=nullptr);
+            return indexNodeMap;
+        }
+    }
+
 }  // namespace hypro
