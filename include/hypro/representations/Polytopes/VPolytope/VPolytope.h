@@ -391,6 +391,8 @@ namespace hypro {
 
         void updateNeighbors();
 
+        VPolytopeT getTimeProjection() const;
+
         friend std::ostream &operator<<(std::ostream &out, const hypro::VPolytopeT<Number, Converter, S> &lhs) {
             out << "{ ";
             for (const auto &vector: lhs) {
