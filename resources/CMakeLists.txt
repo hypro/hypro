@@ -290,6 +290,9 @@ if (HYPRO_USE_SERIALIZATION)
     include(cereal.cmake)
 endif ()
 
+if (HYPRO_USE_PROTOBUF)
+    include(protobuf.cmake)
+endif ()
 set(${PROJECT_NAME}-include-dirs "${${PROJECT_NAME}-include-dirs}" PARENT_SCOPE)
 set(${PROJECT_NAME}-include-dirs-private "${${PROJECT_NAME}-include-dirs-private}" PARENT_SCOPE)
 

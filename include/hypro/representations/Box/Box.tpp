@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022-2023.
+ * Copyright (c) 2023.
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -89,7 +89,7 @@ namespace hypro {
                 }
                 // finish initialization
                 if (possibleVertices.empty()) {
-                    *this = BoxT<Number, Converter, Setting>::Empty();
+                    *this = BoxT<Number, Converter, Setting>::Empty(_constraints.cols());
                     return;
                 } else {
                     vector_t<Number> min = *possibleVertices.begin();
@@ -119,7 +119,7 @@ namespace hypro {
                     results.emplace_back(opt.evaluate(direction, false));
                     if (results.back().errorCode == SOLUTION::INFEAS) {
                         opt.cleanContexts();
-                        *this = BoxT<Number, Converter, Setting>::Empty();
+                        *this = BoxT<Number, Converter, Setting>::Empty(_constraints.cols());
                         return;
                     }
                 }
@@ -400,7 +400,7 @@ namespace hypro {
             }
 
             if (evaluatedBox.lower() > _vec(rowIndex)) {
-                return std::make_pair(CONTAINMENT::NO, Empty());
+                return std::make_pair(CONTAINMENT::NO, Empty(this->dimension()));
             }
 
             if (evaluatedBox.upper() > _vec(rowIndex)) {
@@ -437,9 +437,13 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     BoxT<Number, Converter, Setting>
     BoxT<Number, Converter, Setting>::projectOn(const std::vector<std::size_t> &dimensions) const {
-        if (dimensions.empty() || this->empty()) {
-            return Empty();
+        if (dimensions.empty()) {
+            return Empty(0);
         }
+        if (this->empty()) {
+            return Empty(dimensions.size());
+        }
+
         std::vector<carl::Interval<Number>> newIntervals;
         for (const auto d: dimensions) {
             assert(d < this->dimension());
@@ -568,7 +572,7 @@ namespace hypro {
     BoxT<Number, Converter, Setting>
     BoxT<Number, Converter, Setting>::intersect(const BoxT<Number, Converter, Setting> &rhs) const {
         if (this->empty() || rhs.empty()) {
-            return Empty();
+            return Empty(std::max(this->dimension(), rhs.dimension()));
         }
         std::vector<carl::Interval<Number>> newIntervals;
         std::size_t dim = this->dimension();
@@ -598,7 +602,7 @@ namespace hypro {
                 std::vector<carl::Interval<Number>> intervals = this->intervals();
                 bool empty = icpIntersectHalfspace(intervals, hspace);
                 if (empty) {
-                    return Empty();
+                    return Empty(this->dimension());
                 }
                 return BoxT<Number, Converter, Setting>(intervals);
             } else {  // Do not use interval arithmetic.
@@ -616,7 +620,7 @@ namespace hypro {
                     // from previous checks we know that either the lowest or the highest point is not contained. If both are not
                     // contained and the normal is axis-aligned, the set is empty.
                     if (!holdsMin && !holdsMax) {
-                        return Empty();
+                        return Empty(this->dimension());
                     }
 
                     // find the one, non-zero component
@@ -662,7 +666,7 @@ namespace hypro {
                     return *this;
                 }
                 if (!hspace.contains(farestPointInside.rawCoordinates())) {
-                    return BoxT<Number, Converter, Setting>::Empty();
+                    return BoxT<Number, Converter, Setting>::Empty(this->dimension());
                 }
 
                 // at this point farestPointOutside is outside and farestPointInside is inside - the plane intersects the box somehow.
@@ -727,7 +731,7 @@ namespace hypro {
                 }
             }
         }
-        return Empty();
+        return Empty(this->dimension());
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -854,7 +858,7 @@ namespace hypro {
             return *this;
         }
         if (this->empty()) {
-            return Empty();
+            return *this;
         }
 
         if (Setting::USE_INTERVAL_ARITHMETIC) {
@@ -864,7 +868,7 @@ namespace hypro {
                 bool empty = icpIntersectHalfspace(intervals,
                                                    Halfspace<Number>(_mat.row(planeIndex), _vec(planeIndex)));
                 if (empty) {
-                    return Empty();
+                    return Empty(this->dimension());
                 }
             }
             return BoxT<Number, Converter, Setting>(intervals);
@@ -883,7 +887,7 @@ namespace hypro {
                 }
                 return result;
             }
-            return Empty();
+            return Empty(this->dimension());
         } else {
             // convert box to a set of constraints, add other halfspaces and evaluate in box main directions to get new intervals.
             std::vector<vector_t<Number>> tpl = computeTemplate<Number>(this->dimension(), 4);
@@ -929,7 +933,11 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     bool BoxT<Number, Converter, Setting>::contains(const Point<Number> &point) const {
-        if (this->dimension() > point.dimension()) {
+        if (this->dimension() != point.dimension()) {
+            throw std::logic_error("Cannot check containment if dimensions do not agree.");
+        }
+
+        if (this->empty()) {
             return false;
         }
 
@@ -964,7 +972,7 @@ namespace hypro {
         auto currentContainment{CONTAINMENT::FULL};
         for (unsigned d = 0; d < minDimension; ++d) {
             if (!set_have_intersection(mLimits[d], other.interval(d))) {
-                return std::make_pair(CONTAINMENT::NO, BoxT::Empty());
+                return std::make_pair(CONTAINMENT::NO, BoxT::Empty(this->dimension()));
             }
             if (!carl::set_is_subset(other.interval(d), mLimits[d])) {
                 currentContainment = CONTAINMENT::PARTIAL;
@@ -1022,7 +1030,7 @@ namespace hypro {
     BoxT<Number, Converter, Setting>
     BoxT<Number, Converter, Setting>::unite(const std::vector<BoxT<Number, Converter, Setting>> &boxes) {
         if (boxes.empty()) {
-            return BoxT<Number, Converter, Setting>::Empty();
+            return BoxT<Number, Converter, Setting>::Empty(0);
         }
 
         auto res = boxes[0];
@@ -1034,7 +1042,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     void BoxT<Number, Converter, Setting>::clear() {
-        *this = BoxT<Number, Converter, Setting>::Empty();
+        *this = BoxT<Number, Converter, Setting>::Empty(0);
     }
 
     template<typename Number, typename Converter, class Setting>

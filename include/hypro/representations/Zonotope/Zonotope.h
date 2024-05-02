@@ -29,6 +29,9 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../../util/pca.h"
 #include "ZUtility.h"
 #include "ZonotopeSetting.h"
+#include "../Polytopes/HPolytope/HPolytope.h"
+#include "../conversion/Converter.h"
+
 
 #include <algorithm>
 #include <cmath>
@@ -72,12 +75,21 @@ namespace hypro {
          */
         explicit ZonotopeT(std::size_t dimension);
 
-        /**
-         * Constructs a ZonotopeT with center and generators.
+          /**
+         * Constructs a ZonotopeT with dimension, center and generators.
+         * @param dimension Dimensionality of ZonotopeT (not used, just dummy to be able to distinguish between the constructors)
          * @param center A (nx1) vector
          * @param generators A (nxm) vector
          */
-        ZonotopeT(const vector_t<Number> &center, const matrix_t<Number> &generators);
+        ZonotopeT(std::size_t dimension, const vector_t<Number> &center, const matrix_t<Number> &generators);
+
+
+        /**
+         * Constructs a ZonotopeT with a matrix and a vector (basically a half space).
+         * @param _constraints A (nxm) matrix
+         * @param _constants A (nx1) vector
+         */
+        ZonotopeT(const matrix_t<Number>& _constraints, const vector_t<Number>& _constants);
 
         /**
          * Copy Constructor - constructs a zonotopeT from an existing one.
@@ -128,7 +140,7 @@ namespace hypro {
         bool empty() const;
 
         static ZonotopeT Empty(std::size_t dimension = 1) {
-            auto res = ZonotopeT(vector_t<Number>::Zero(dimension), matrix_t<Number>(dimension, 0));
+            auto res = ZonotopeT(dimension, vector_t<Number>::Zero(dimension), matrix_t<Number>(dimension, 0));
             res.setEmptyState(SETSTATE::EMPTY);
             return res;
         }

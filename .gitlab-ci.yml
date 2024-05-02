@@ -1,9 +1,9 @@
-image: ubuntu:22.04
+image: hyprodockeruser/carl:v1
 
 variables:
 
   SONAR_SERVER_URL: https://sonarcloud.io
-  SONAR_SCANNER_VERSION: 4.6.1.2450
+  SONAR_SCANNER_VERSION: 5.0.1.3006
   BUILD_WRAPPER_OUT_DIR: bw-output # Directory where build-wrapper output will be placed
   
   SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
@@ -46,13 +46,13 @@ build:
   before_script:
     - DEBIAN_FRONTEND=noninteractive apt-get update
     - DEBIAN_FRONTEND=noninteractive apt install -y gcc g++ cmake make curl git flex bison libeigen3-dev uuid-dev libboost-system-dev libboost-program-options-dev libboost-test-dev libboost-timer-dev libboost-chrono-dev libboost-serialization-dev libbliss-dev gcovr zip unzip
-    - git clone  --depth 1 --branch 22.12 https://github.com/ths-rwth/carl carl && cd carl
-    - mkdir build && cd build && cmake .. -DUSE_LIBPOLY=OFF
-    - make -j`nproc` carl-common
-    - make -j`nproc` carl-arith
-    - make -j`nproc` carl-logging
-    - make -j`nproc` carl-formula
-    - cd ../..
+    # - git clone  --depth 1 --branch 22.12 https://github.com/ths-rwth/carl carl && cd carl
+    # - mkdir build && cd build && cmake .. -DUSE_LIBPOLY=OFF
+    # - make -j`nproc` carl-common
+    # - make -j`nproc` carl-arith
+    # - make -j`nproc` carl-logging
+    # - make -j`nproc` carl-formula
+    # - cd ../..
   script:
     # prepare the build tree
     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && cd ..

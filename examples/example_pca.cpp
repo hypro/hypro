@@ -164,7 +164,7 @@ int main() {
     // 1st polytope (triangle)
     clock::time_point start = clock::now();
 
-    result = Converter<Number>::toHPolytope(vpolytope, OVER);
+    result = Converter<Number>::toHPolytope(vpolytope, CONV_MODE::OVER);
 
     std::cout
         << "Total time(triangle): "
@@ -179,7 +179,7 @@ int main() {
     // 2nd polytope (ambiguous box)
     start = clock::now();
 
-    result2 = Converter<Number>::toHPolytope(vpolytope2, OVER);
+    result2 = Converter<Number>::toHPolytope(vpolytope2, CONV_MODE::OVER);
 
     std::cout
         << "Total time(ambiBox): "
@@ -194,7 +194,7 @@ int main() {
     // 3rd polytope (point cloud)
     start = clock::now();
 
-    result3 = Converter<Number>::toHPolytope(vpolytope3, OVER);
+    result3 = Converter<Number>::toHPolytope(vpolytope3, CONV_MODE::OVER);
 
     std::cout
         << "Total time(pointCloud): "
@@ -209,7 +209,7 @@ int main() {
     // 4th polytope (stretched box)
     start = clock::now();
 
-    result4 = Converter<Number>::toHPolytope(vpolytope4, OVER);
+    result4 = Converter<Number>::toHPolytope(vpolytope4, CONV_MODE::OVER);
 
     std::cout
         << "Total time(stretchBox): "
@@ -224,7 +224,7 @@ int main() {
     // 5th polytope (line)
     start = clock::now();
 
-    result5 = Converter<Number>::toHPolytope(vpolytope5, OVER);
+    result5 = Converter<Number>::toHPolytope(vpolytope5, CONV_MODE::OVER);
 
     std::cout
         << "Total time(line): "

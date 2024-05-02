@@ -53,7 +53,7 @@ TYPED_TEST( ZonotopeTest, FullConstructor ) {
 	gen << 2, 3, 6, 4, 1, 5;
 	center << 1, 2;
 
-	Zonotope<TypeParam> z2( center, gen );
+	Zonotope<TypeParam> z2( center.rows(), center, gen );
 	EXPECT_EQ( z2.dimension(), (unsigned)2 );
 	EXPECT_EQ( z2.center(), center );
 	EXPECT_EQ( z2.generators(), gen );
@@ -64,7 +64,7 @@ TYPED_TEST( ZonotopeTest, CopyConstructor ) {
 	Eigen::Matrix<TypeParam, 3, 1> center;
 	center << 1, 5, 2;
 	gen << 1, 2, 2, 8, 9, 1;
-	Zonotope<TypeParam> z1( center, gen );
+	Zonotope<TypeParam> z1( center.rows(), center, gen );
 	Zonotope<TypeParam> z_copy( z1 );
 
 	EXPECT_EQ( z_copy.dimension(), z1.dimension() );
@@ -117,7 +117,7 @@ TYPED_TEST( ZonotopeTest, ZonogoneHPIntersect ) {
 		  carl::rationalize<TypeParam>( -0.0045 );
 
 	hypro::Halfspace<TypeParam> hp( dVec, 0 );
-	hypro::Zonotope<TypeParam> z( center, generators ), res;
+	hypro::Zonotope<TypeParam> z( center.rows(), center, generators ), res;
 	hypro::matrix_t<TypeParam> dummy;
 	res = intersectZonotopeHalfspace( z, hp, dummy );
 }
@@ -211,7 +211,7 @@ TYPED_TEST( ZonotopeTest, IntersectionHalfspace ) {
 	Eigen::Matrix<TypeParam, 2, 1> z_center( 3, -10 );
 	Eigen::Matrix<TypeParam, 2, 2> z_gen;
 	z_gen << 0, 1, 1, 0;
-	hypro::Zonotope<TypeParam> z1( z_center, z_gen ), result( 2 );
+	hypro::Zonotope<TypeParam> z1( z_center.rows(), z_center, z_gen ), result( 2 );
 
 	// Case 1: Zonotope is wholly inside the halfspace
 	result = z1.intersect( hspace );
@@ -253,7 +253,7 @@ TYPED_TEST( ZonotopeTest, IntersectionPolytope ) {
 	Eigen::Matrix<TypeParam, 2, 2> z_gen;
 	z_center << 0, -1;
 	z_gen << 0, 1, 1, 0;
-	hypro::Zonotope<TypeParam> z1( z_center, z_gen ), result_zonotope( 2 );
+	hypro::Zonotope<TypeParam> z1( z_center.rows(), z_center, z_gen ), result_zonotope( 2 );
 
 	Parma_Polyhedra_Library::C_Polyhedron poly1( 2, Parma_Polyhedra_Library::UNIVERSE );
 	Parma_Polyhedra_Library::Variable x( 0 ), y( 1 );
@@ -416,7 +416,7 @@ TYPED_TEST( ZonotopeTest, SatisfiesHalfspaces ) {
 	vector_t<TypeParam> center = vector_t<TypeParam>::Zero( 2 );
 	center( 0 ) = TypeParam( 1 );
 	center( 1 ) = TypeParam( 1 );
-	hypro::Zonotope<TypeParam> zono( center, generators );
+	hypro::Zonotope<TypeParam> zono( center.rows(), center, generators );
 
 	// Tests
 	auto result = zono.satisfiesHalfspaces( boxMat, boxVec );

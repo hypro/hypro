@@ -62,46 +62,37 @@ namespace hypro {
         return res.str();
     }
 
-    template<typename Number>
-    std::string toFlowstarFormat(const Condition<Number> &in,
-                                 const std::map<Eigen::Index, std::string> &varNameMap,
-                                 const std::string &prefix) {
-        std::stringstream res;
-        if (in.size() > 0) {
-            res << std::fixed;
-            for (Eigen::Index rowI = 0; rowI < in.getMatrix().rows(); ++rowI) {
-                res << prefix;
-                bool first = true;
-                for (Eigen::Index colI = 0; colI < in.getMatrix().cols(); ++colI) {
-                    if (in.getMatrix()(rowI, colI) > 0) {
-                        if (!first) {
-                            res << " +";
-                        } else {
-                            first = false;
-                        }
-                        if (in.getMatrix()(rowI, colI) != 1) {
-                            res << in.getMatrix()(rowI, colI) << "*";
-                        }
-                    } else if (in.getMatrix()(rowI, colI) < 0) {
-                        if (first) {
-                            first = false;
-                        }
-                        res << " " << in.getMatrix()(rowI, colI) << "*";
-                    }
-                    if (in.getMatrix()(rowI, colI) != 0 && colI != in.getMatrix().cols() &&
-                        varNameMap.size() > std::size_t(colI)) {
-                        res << varNameMap.at(colI);
-                    }
-                }
-                // if first is still true, this was a zero-row, which should be skipped
-                if (!first) {
-                    res << " <= " << in.getVector()(rowI);
-                }
-            }
-            res << std::scientific;
-        }
-        return res.str();
-    }
+template <typename Number>
+std::string toFlowstarFormat( const Condition<Number>& in,
+							  const std::map<Eigen::Index, std::string>& varNameMap,
+							  const std::string& prefix ) {
+	std::stringstream res;
+	if ( in.size() > 0 ) {
+		for ( Eigen::Index rowI = 0; rowI < in.getMatrix().rows(); ++rowI ) {
+			res << prefix;
+			bool first = true;
+			for ( Eigen::Index colI = 0; colI < in.getMatrix().cols(); ++colI ) {
+				if ( in.getMatrix()( rowI, colI ) > 0 ) {
+					if ( !first ) {
+						res << " +";
+					} else {
+						first = false;
+					}
+					if ( in.getMatrix()( rowI, colI ) != 1 ) {
+						res << in.getMatrix()( rowI, colI ) << "*";
+					}
+				} else if ( in.getMatrix()( rowI, colI ) < 0 ) {
+					res << " " << in.getMatrix()( rowI, colI ) << "*";
+				}
+				if ( in.getMatrix()( rowI, colI ) != 0 && colI != in.getMatrix().cols() && varNameMap.size() > std::size_t( colI ) ) {
+					res << varNameMap.at( colI );
+				}
+			}
+			res << " <= " << in.getVector()( rowI );
+		}
+	}
+	return res.str();
+}
 
     template<typename Number>
     std::string toFlowstarFormat(const ConstraintSetT<Number> &in,

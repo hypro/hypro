@@ -385,7 +385,7 @@ namespace hypro {
 //		intervals.push_back( carl::Interval<Number>( minima( i ), maxima( i ) ) );                                              //create one interval per dimension with the corresponding minimal and maximal values
 //	}
 //
-//     // if(mode == EXACT){                                                                                                              //checks if conversion was exact
+//     // if(mode == CONV_MODE::EXACT){                                                                                                              //checks if conversion was exact
 //     //     bool foundEqual;
 //     //     std::vector<Point<Number>> newVertices = _target.vertices();                                                                //computes vertices from the just newly created box
 //     //     for (const auto& newVertex : newVertices){                                                                                  //for every new vertex (from the box)
@@ -487,7 +487,7 @@ namespace hypro {
         // std::cout<<"amk"<<std::endl;
         // HPolytope temp=Converter::toHPolytope(source.constraintss());
         // temp=temp.removeRedundancy();
-        BoxT<Number, Converter<Number>, BoxSetting> tmp = Converter::toBox(source.constraintss());
+        BoxT<Number, Converter<Number>, BoxSetting> tmp = Converter::toBox(source.constraints());
         return tmp.affineTransformation(source.generator(), source.center());
         /*std::cout<<"point"<<std::endl;
         std::cout<<source.generator()<<std::endl;

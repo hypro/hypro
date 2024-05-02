@@ -8,9 +8,7 @@
  */
 
 #pragma once
-
-#include <hypro/flags.h>
-
+#include "hypro/flags.h"
 #ifdef HYPRO_USE_Z3
 #include "../../../types.h"
 

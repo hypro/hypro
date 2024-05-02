@@ -8,12 +8,13 @@ This is the documentation of HyPro, a C++ library for state set representations 
 Further information about the theoretical background of the library can be found in the section [state set representations](@ref stateSets) and its subpages. There we present the general interface all provided state set representations implement as well as show examples on how to use the library.
 
 Additional features implemented in HyPro are presented in the section [Features](@ref features).
-
 Information about the provided [utility functions](@ref utilFunc) can be found in the corresponding section.
 
-Section [examples](@ref examples) gives a short description about the available examples shipped with HyPro and their intention.
+Section [examples](@ref examples) gives a short description about the available examples shipped with HyPro and their
+intention.
 
-A small (growing) collection of [tutorials](@ref tutorials) shows how to use the library.
+A small (growing) collection of [tutorials](@ref tutorials) shows how to use the library. If you want to participate,
+the [developer's guide](@ref developer) is a good starting point.
 
 ### Contact
 

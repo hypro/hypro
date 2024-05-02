@@ -139,7 +139,7 @@ namespace hypro {
                                2;  // compute the corresponding generator for that dimension by computing the length of the interval and dividing it by 2
         }
 
-        return Zonotope(center, generators);
+        return Zonotope(center.rows(), center, generators);
     }
 
 // conversion from V-Polytope to Zonotope (no differentiation between conversion modes - always OVER)
@@ -235,7 +235,7 @@ namespace hypro {
             generators.col(i) = scaling.second * normal;
         }
 
-        return Zonotope(center, generators);
+        return Zonotope(center.rows(), center, generators);
 
         //}
     }
@@ -442,7 +442,7 @@ namespace hypro {
                 generators.col(i) = scaling.second * normal;
             }
 
-            res = Zonotope(center, generators);
+            res = Zonotope(center.rows(), center, generators);
         }
         return res;
     }
@@ -663,7 +663,7 @@ namespace hypro {
                 // computes generators
                 generators.col(i) = scaling.second * normal;
             }
-            res = Zonotope(center, generators);
+            res = Zonotope(center.rows(), center, generators);
         }
         return res;
     }

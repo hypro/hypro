@@ -55,7 +55,7 @@ int main( int argc, char* argv[] ) {
 	plotter.clear();
 
     // use the overapproximate method to calculate the result starset
-	hypro::reachability::NN_reach_method method = hypro::reachability::NN_reach_method::OVERAPPRX;
+	hypro::reachability::NN_REACH_METHOD method = hypro::reachability::NN_REACH_METHOD::OVERAPPRX;
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
 	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( input_star, method, true );
 
@@ -64,7 +64,7 @@ int main( int argc, char* argv[] ) {
 	for ( int i = 0; i < N; i++ ) {
 		std::cout << output_set[i] << std::endl;
 		std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
-		if ( method == hypro::reachability::NN_reach_method::EXACT && i % 4 == 3 ) {
+		if ( method == hypro::reachability::NN_REACH_METHOD::EXACT && i % 4 == 3 ) {
 			plotter.addPoint( vertices[0] );
 		} else {
 			plotter.addObject( vertices, hypro::plotting::colors[( 2 * i ) % 9] );	// i % 10 is the color of the enum from 9 to 0 (Plotter.h)

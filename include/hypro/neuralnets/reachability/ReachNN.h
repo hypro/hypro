@@ -10,20 +10,16 @@
 #pragma once
 
 #include "../../representations/GeometricObjectBase.h"
-#include "../parser/NNet.h"
-#include "../../util/plotting/Plotter.h"
 #include "../../util/logging/Logger.h"
+#include "../../util/plotting/Plotter.h"
+#include "../../parser/neuralnets/nnet/NNet.h"
+#include "ReachNNMethod.h"
 
 #include <iostream>
 #include <vector>  // change it later to a better container for Star-sets
 
 namespace hypro {
-    namespace reachability {
-
-        enum NN_reach_method {
-            EXACT,
-            OVERAPPRX,
-        };
+namespace reachability {
 
 // TODO: add comments and description/documentation for the different functions
         template<typename Number>
@@ -36,23 +32,13 @@ namespace hypro {
             ReachNN(NNet<Number> nnet)
                     : mNNet(nnet) {}
 
-            // methods
-            std::vector<hypro::Starset<Number>>
-            forwardAnalysis(const hypro::Starset<Number> &input_set, NN_reach_method method,
-                            bool plot_intermediates = false) const;
-
-            std::vector<hypro::Starset<Number>>
-            layerReach(int l, const std::vector<hypro::Starset<Number>> &input_sets, NN_reach_method method,
-                       bool plot_intermediates) const;
-
-            std::vector<hypro::Starset<Number>>
-            reachReLU(const hypro::Starset<Number> &input_star1, NN_reach_method method, bool plot_intermediates) const;
-
-            std::vector<hypro::Starset<Number>> stepReLU(int i, std::vector<hypro::Starset<Number>> &input_sets) const;
-
-            std::vector<hypro::Starset<Number>>
-            approxStepReLU(int i, std::vector<hypro::Starset<Number>> &input_sets) const;
-        };
+	// methods
+	std::vector<hypro::Starset<Number>> forwardAnalysis( const hypro::Starset<Number>& input_set, NN_REACH_METHOD method, bool plot_intermediates = false ) const;
+	std::vector<hypro::Starset<Number>> layerReach( int l, const std::vector<hypro::Starset<Number>>& input_sets, NN_REACH_METHOD method, bool plot_intermediates ) const;
+	std::vector<hypro::Starset<Number>> reachReLU( const hypro::Starset<Number>& input_star1, NN_REACH_METHOD method, bool plot_intermediates ) const;
+	std::vector<hypro::Starset<Number>> stepReLU( int i, std::vector<hypro::Starset<Number>>& input_sets ) const;
+	std::vector<hypro::Starset<Number>> approxStepReLU( int i, std::vector<hypro::Starset<Number>>& input_sets ) const;
+};
 
     }  // namespace reachability
 }  // namespace hypro

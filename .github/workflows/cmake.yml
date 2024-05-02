@@ -45,7 +45,6 @@ jobs:
       - name: Create Build Environment for Dependencies
         shell: bash
         working-directory: ${{runner.workspace}}/dependencies
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: cmake -E make_directory ${{runner.workspace}}/dependencies/carl/build
 
       - name: Configure Dependencies

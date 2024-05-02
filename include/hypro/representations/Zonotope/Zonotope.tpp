@@ -91,8 +91,23 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename Setting>
-    ZonotopeT<Number, Converter, Setting>::ZonotopeT(const vector_t<Number> &center, const matrix_t<Number> &generators)
-            : mDimension(center.rows()), mCenter(center), mGenerators(generators) {
+    ZonotopeT<Number, Converter, Setting>::ZonotopeT(const matrix_t<Number>& _constraints, const vector_t<Number>& _constants) {
+        assert(_constraints.rows() == _constants.rows() && "Matrix and vector have to have same dimensionality.");
+
+        // converts source object into a v-polytope
+        auto temp = VPolytopeT<Number, Converter, Setting>(_constraints, _constants);
+
+        // conversion is from here done just like V -> Zonotope
+        *this = Converter::toZonotope(temp);
+        std::cout << "I was called " << std::endl;
+
+        uniteEqualVectors();
+        removeEmptyGenerators();
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    ZonotopeT<Number, Converter, Setting>::ZonotopeT(std::size_t dimension, const vector_t<Number> &center, const matrix_t<Number> &generators) 
+        : mDimension(dimension), mCenter(center), mGenerators(generators) {
         assert(center.rows() == generators.rows() && "Center and generators have to have same dimensionality.");
         uniteEqualVectors();
         removeEmptyGenerators();
@@ -414,8 +429,10 @@ namespace hypro {
                 }
             }
         }
-        ZonotopeT<Number, Converter, Setting> res = ZonotopeT<Number, Converter, Setting>(
-                hypro::projectOn(mCenter, dimensions), projectedGenerators);
+
+        auto newCenter = hypro::projectOn(mCenter, dimensions);
+        ZonotopeT<Number, Converter, Setting> res = ZonotopeT<Number, Converter, Setting>(newCenter.rows(),
+                newCenter, projectedGenerators);
         res.reduceOrder();
 
         return res;
@@ -651,7 +668,7 @@ namespace hypro {
         Number p2 = intersect2d<Number>(res, hp, 0);
         Eigen::Matrix<Number, 2, 1> p2Vec = {0, p2};
 
-        res = ZonotopeT<Number, Converter, Setting>((p1Vec + p2Vec) / 2, (p1Vec - p2Vec) / 2);
+        res = ZonotopeT<Number, Converter, Setting>(p1Vec.rows(), (p1Vec + p2Vec) / 2, (p1Vec - p2Vec) / 2);
         return res;
     }
 
@@ -757,7 +774,7 @@ namespace hypro {
         // TODO: compute line intersection
         Eigen::Matrix<Number, 2, 1> p2 = computeLineIntersection(ln, lnhp);
 
-        ZonotopeT<Number, Converter, Setting> resZonotope((p1 + p2) / 2, (p1 - p2) / 2);
+        ZonotopeT<Number, Converter, Setting> resZonotope(p1.rows(), (p1 + p2) / 2, (p1 - p2) / 2);
 
         minMaxOfLine.resize(2, 2);
         minMaxOfLine.row(0) = (comparePoint(p1, p2)) ? p1.transpose() : p2.transpose();  // min [x,y] here
@@ -831,7 +848,7 @@ namespace hypro {
             projGenerators.resize(2, dpQg.cols());
             projGenerators << dpQg, kernel.col(i).transpose() * convert<Number, double>(inputZonotope.generators());
 
-            ZonotopeT<double, Converter, Setting> projZonotope(projCenter, projGenerators), tempResZonotope;
+            ZonotopeT<double, Converter, Setting> projZonotope(projCenter.rows(), projCenter, projGenerators), tempResZonotope;
 
             // Upon projection, the Halfspace now has a d vector of [1;0] but retains
             // its e scalar

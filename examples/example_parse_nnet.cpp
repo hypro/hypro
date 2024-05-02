@@ -202,7 +202,7 @@ void test_relu_exact() {
 
 		hypro::vector_t<Number> center = input_star.center();
 		hypro::matrix_t<Number> basis = input_star.generator();
-		hypro::HPolytope<Number> politope = input_star.constraintss();
+		hypro::HPolytope<Number> politope = input_star.constraints();
 
 		// x_1 >= 0
 		hypro::vector_t<Number> center_1 = center;
@@ -390,8 +390,8 @@ void test_relu_overapprx() {
 		hypro::vector_t<Number> limits = input_star.limits();
 
 		hypro::vector_t<Number> dir_vect_0 = basis.row(0);
-		auto eval_low_result_0 = input_star.constraintss().evaluate(-1.0 * dir_vect_0);
-		auto eval_high_result_0 = input_star.constraintss().evaluate(dir_vect_0);
+		auto eval_low_result_0 = input_star.constraints().evaluate(-1.0 * dir_vect_0);
+		auto eval_high_result_0 = input_star.constraints().evaluate(dir_vect_0);
 		// std::cout << dir_vect_0 << std::endl;
 		// std::cout << -1.0 * dir_vect_0 << std::endl;
 		// std::cout << eval_low_result_0 << std::endl;
@@ -457,8 +457,8 @@ void test_relu_overapprx() {
 		plotter.clear();
 
 		hypro::vector_t<Number> dir_vect_1 = basis.row(1);
-		auto eval_low_result_1 = star_1.constraintss().evaluate(-1.0 * dir_vect_1);
-		auto eval_high_result_1 = star_1.constraintss().evaluate(dir_vect_1);
+		auto eval_low_result_1 = star_1.constraints().evaluate(-1.0 * dir_vect_1);
+		auto eval_high_result_1 = star_1.constraints().evaluate(dir_vect_1);
 
 		double lb_2 = -eval_low_result_1.supportValue + center[1];
 		double ub_2 = eval_high_result_1.supportValue + center[1];

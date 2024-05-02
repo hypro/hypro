@@ -286,6 +286,7 @@ namespace hypro {
     }
 
     template<typename Number>
+
     bool Optimizer<Number>::checkConsistency() const {
         // assert((mConsistencyChecked && mLastConsistencyAnswer != SOLUTION::UNKNOWN) || (!mConsistencyChecked && mLastConsistencyAnswer == SOLUTION::UNKNOWN));
         assert(isSane());
@@ -345,33 +346,33 @@ namespace hypro {
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
         return clpCheckPoint( mClpContexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, _point );
 #endif
-    }
+}
 
-    template<typename Number>
-    EvaluationResult<Number> Optimizer<Number>::getInternalPoint() const {
-        assert(isSane());
-        updateConstraints();
+template <typename Number>
+EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk ) const {
+	assert( isSane() );
+	updateConstraints();
 
-        if (mConstraintMatrix.rows() == 0) {
-            mLastConsistencyAnswer = SOLUTION::FEAS;
-            mConsistencyChecked = true;
-            return EvaluationResult<Number>(vector_t<Number>::Zero(1), SOLUTION::FEAS);
-        }
+	if ( mConstraintMatrix.rows() == 0 ) {
+		mLastConsistencyAnswer = SOLUTION::FEAS;
+		mConsistencyChecked = true;
+		return EvaluationResult<Number>( vector_t<Number>::Zero( 1 ), SOLUTION::FEAS );
+	}
 
-        EvaluationResult<Number> res;
+	EvaluationResult<Number> res;
 
-#if HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
-        res = smtratGetInternalPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols );
-        mConsistencyChecked = true;
-        mLastConsistencyAnswer = res.errorCode;
-#elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
-        res = soplexGetInternalPoint<Number>( mConstraintMatrix, mConstraintVector, mRelationSymbols );
-        mConsistencyChecked = true;
-        mLastConsistencyAnswer = res.errorCode;
+#if defined( HYPRO_USE_SMTRAT )
+	res = smtratGetInternalPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+	mConsistencyChecked = true;
+	mLastConsistencyAnswer = res.errorCode;
+#elif defined( HYPRO_USE_SOPLEX )
+	res = soplexGetInternalPoint<Number>( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+	mConsistencyChecked = true;
+	mLastConsistencyAnswer = res.errorCode;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_GLPK
-        res = glpkGetInternalPoint<Number>(mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix.cols(), false);
-        mConsistencyChecked = true;
-        mLastConsistencyAnswer = res.errorCode;
+	res = glpkGetInternalPoint<Number>( mGlpkContexts[std::this_thread::get_id()], mConstraintMatrix.cols(), useExactGlpk );
+	mConsistencyChecked = true;
+	mLastConsistencyAnswer = res.errorCode;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_CLP
         res = clpGetInternalPoint<Number>( mClpContexts[std::this_thread::get_id()] );
         mConsistencyChecked = true;

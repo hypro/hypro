@@ -53,20 +53,20 @@ namespace hypro {
     public:
         /* BEGIN typedefs (do not remove this comment!) */
 
-        using Starset = StarsetT<Number, Converter, StarsetDefault>;
-        // using Orthoplex = OrthoplexT<Number,Converter,OrthoplexDefault>;
-        using TemplatePolyhedron = TemplatePolyhedronT<Number, Converter, TemplatePolyhedronDefault>;
-        using Box = BoxT<Number, Converter, BoxLinearOptimizationOn>;
-        using CarlPolytope = CarlPolytopeT<Number, Converter, CarlPolytopeSetting>;
-        using ConstraintSet = ConstraintSetT<Number, ConstraintSetSettings>;
-        using Ellipsoid = EllipsoidT<Number, Converter>;
-        using HPolytope = HPolytopeT<Number, Converter, HPolytopeSetting>;
-        using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number, Converter, BoxLinearOptimizationOn>;
-        using VPolytope = VPolytopeT<Number, Converter, VPolytopeSetting>;
-        using DifferenceBounds = DifferenceBoundsT<Number, Converter, DifferenceBoundsSetting>;
+	// using Orthoplex = OrthoplexT<Number,Converter,OrthoplexDefault>;
+	using TemplatePolyhedron = TemplatePolyhedronT<Number, Converter, TemplatePolyhedronDefault>;
+	using Box = BoxT<Number, Converter, BoxLinearOptimizationOn>;
+	using CarlPolytope = CarlPolytopeT<Number, Converter, CarlPolytopeSetting>;
+	using ConstraintSet = ConstraintSetT<Number, ConstraintSetSettings>;
+	using Ellipsoid = EllipsoidT<Number, Converter>;
+	using HPolytope = HPolytopeT<Number, Converter, HPolytopeSetting>;
+	using OrthogonalPolyhedron = OrthogonalPolyhedronT<Number, Converter, BoxLinearOptimizationOn>;
+	using VPolytope = VPolytopeT<Number, Converter, VPolytopeSetting>;
+	using DifferenceBounds = DifferenceBoundsT<Number, Converter, DifferenceBoundsSetting>;
 #ifdef HYPRO_USE_PPL
         using Polytope = PolytopeT<Number, Converter, PolytopeSetting>;
 #endif
+        using Starset = StarsetT<Number, Converter, StarsetEqvPolytopeCaching>;
         using SupportFunction = SupportFunctionT<Number, Converter, SupportFunctionSetting>;
         using Zonotope = ZonotopeT<Number, Converter, ZonotopeSetting>;
         using SupportFunctionNew = SupportFunctionNewT<Number, Converter, SupportFunctionNewMorePrecision>;
@@ -683,7 +683,8 @@ namespace hypro {
         static PolytopeT<Number, Converter<Number>, PolytopeSetting> toPolytope( const HPolytopeT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
         template <typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
         static PolytopeT<Number, Converter<Number>, PolytopeSetting> toPolytope( const VPolytopeT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
-        template <typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
+        template <typename if (HYPRO_USE_PROTOBUF)
+    export_target(DEPENDENT_TARGETS PROTOBUF_STATIC)PolytopeSetting = typename Polytope::Settings, typename inSetting>
         static PolytopeT<Number, Converter<Number>, PolytopeSetting> toPolytope( const SupportFunctionT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::OVER, std::size_t numberOfDirections = defaultTemplateDirectionCount );
         template <typename PolytopeSetting = typename Polytope::Settings, typename inSetting>
         static PolytopeT<Number, Converter<Number>, PolytopeSetting> toPolytope( const ZonotopeT<Number, Converter<Number>, inSetting>& source, const CONV_MODE = CONV_MODE::EXACT );
@@ -832,13 +833,13 @@ namespace hypro {
 
 }  // namespace hypro
 
-#include "converterToStarset.tpp"
 #include "typedefs.h"
 // #include "converterToOrthoplex.tpp"
 #include "converterToBox.tpp"
 #include "converterToCarlPolytope.tpp"
 #include "converterToConstraintSet.tpp"
 #include "converterToHPolytope.tpp"
+#include "converterToStarset.tpp"
 #include "converterToSupportFunction.tpp"
 #include "converterToTemplatePolyhedron.tpp"
 #include "converterToVPolytope.tpp"

@@ -190,129 +190,128 @@ namespace hypro {
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
             std::swap( lhs.mClpContexts, rhs.mClpContexts );
 #endif
-            std::swap(lhs.mLastConsistencyAnswer, rhs.mLastConsistencyAnswer);
-            std::swap(lhs.maximize, rhs.maximize);
-            assert(lhs.isSane());
-            assert(rhs.isSane());
-        }
+		std::swap( lhs.mLastConsistencyAnswer, rhs.mLastConsistencyAnswer );
+		std::swap( lhs.maximize, rhs.maximize );
+		assert( lhs.isSane() && rhs.isSane() );
+	}
 
-        /**
-         * @brief      Copy Assign operator.
-         * @param[in]  orig  The right-hand-side object.
-         * @return     A reference to the the current object with the values of orig.
-         */
-        Optimizer<Number> &operator=(const Optimizer<Number> &orig);
+	/**
+	 * @brief      Copy Assign operator.
+	 * @param[in]  orig  The right-hand-side object.
+	 * @return     A reference to the the current object with the values of orig.
+	 */
+	Optimizer<Number>& operator=( const Optimizer<Number>& orig );
 
-        /**
-         * @brief      Returns the problem matrix.
-         * @return     The problem matrix (row-wise constraints).
-         */
-        const matrix_t<Number> &matrix() const;
+	/**
+	 * @brief      Returns the problem matrix.
+	 * @return     The problem matrix (row-wise constraints).
+	 */
+	const matrix_t<Number>& matrix() const;
 
-        /**
-         * @brief      Returns the problem constants as a vector.
-         * @return     The vector of constants.
-         */
-        const vector_t<Number> &vector() const;
+	/**
+	 * @brief      Returns the problem constants as a vector.
+	 * @return     The vector of constants.
+	 */
+	const vector_t<Number>& vector() const;
 
-        /**
-         * @brief      Sets the problem matrix.
-         * @param[in]  _matrix  The matrix.
-         */
-        void setMatrix(const matrix_t<Number> &_matrix);
+	/**
+	 * @brief      Sets the problem matrix.
+	 * @param[in]  _matrix  The matrix.
+	 */
+	void setMatrix( const matrix_t<Number>& _matrix );
 
-        /**
-         * @brief      Sets the problem vector.
-         * @param[in]  _vector  The vector.
-         */
-        void setVector(const vector_t<Number> &_vector);
+	/**
+	 * @brief      Sets the problem vector.
+	 * @param[in]  _vector  The vector.
+	 */
+	void setVector( const vector_t<Number>& _vector );
 
-        /**
-         * @brief Set the Relations for all constraints.
-         *
-         * @param rels
-         */
-        void setRelations(const std::vector<carl::Relation> &rels);
+	/**
+	 * @brief Set the Relations for all constraints.
+	 *
+	 * @param rels
+	 */
+	void setRelations( const std::vector<carl::Relation>& rels );
 
-        /**
-         * @brief Set the Maximize flag to new value to switch between maximizing and minimizing
-         *
-         * @param max The new flag value (true = maximize, false = minimize).
-         */
-        void setMaximize(bool max);
+	/**
+	 * @brief Set the Maximize flag to new value to switch between maximizing and minimizing
+	 *
+	 * @param max The new flag value (true = maximize, false = minimize).
+	 */
+	void setMaximize( bool max );
 
-        /**
-         * @brief 		Add an equality constraint.
-         *
-         * @param constraint
-         * @param constantPart
-         */
-        void addConstraint(const vector_t<Number> &constraint, Number constantPart, carl::Relation rel);
+	/**
+	 * @brief 		Add an equality constraint.
+	 *
+	 * @param constraint
+	 * @param constantPart
+	 */
+	void addConstraint( const vector_t<Number>& constraint, Number constantPart, carl::Relation rel );
 
-        /**
-         * @brief Set the Relation for the constraint at position pos
-         *
-         * @param pos
-         */
-        void setRelation(carl::Relation rel, std::size_t pos);
+	/**
+	 * @brief Set the Relation for the constraint at position pos
+	 *
+	 * @param pos
+	 */
+	void setRelation( carl::Relation rel, std::size_t pos );
 
-        /**
-         * @brief      Clears the problem instance.
-         */
-        void clear();
+	/**
+	 * @brief      Clears the problem instance.
+	 */
+	void clear();
 
-        /**
-         * @brief      Performs linear optimization in the given direction.
-         * @param[in]  _direction    The direction.
-         * @param[in]  useExactGlpk  The use exact glpk property. If set, glpk is used in its exact mode.
-         * @return     A struct holding the linear optimization result.
-         */
-        EvaluationResult<Number> evaluate(const vector_t<Number> &_direction, bool useExactGlpk) const;
+	/**
+	 * @brief      Performs linear optimization in the given direction.
+	 * @param[in]  _direction    The direction.
+	 * @param[in]  useExactGlpk  The use exact glpk property. If set, glpk is used in its exact mode.
+	 * @return     A struct holding the linear optimization result.
+	 */
+	EvaluationResult<Number> evaluate( const vector_t<Number>& _direction, bool useExactGlpk ) const;
 
-        /**
-         * @brief      Checks consistency (i.e. existence of a solution) of the current problem instance.
-         * @return     True, if there exists a solution, false otherwise.
-         */
-        bool checkConsistency() const;
+	/**
+	 * @brief      Checks consistency (i.e. existence of a solution) of the current problem instance.
+	 * @return     True, if there exists a solution, false otherwise.
+	 */
+	bool checkConsistency() const;
 
-        /**
-         * @brief      Checks whether the given point lies inside the satisfiable solution space of the current problem.
-         * @param[in]  _point  The point.
-         * @return     True, if the point satisfies all constraints, false otherwise.
-         */
-        bool checkPoint(const Point<Number> &_point) const;
+	/**
+	 * @brief      Checks whether the given point lies inside the satisfiable solution space of the current problem.
+	 * @param[in]  _point  The point.
+	 * @return     True, if the point satisfies all constraints, false otherwise.
+	 */
+	bool checkPoint( const Point<Number>& _point ) const;
 
-        /**
-         * @brief      Gets some point being a possible solution.
-         * @return     The internal point.
-         */
-        EvaluationResult<Number> getInternalPoint() const;
+	/**
+	 * @brief      Gets some point being a possible solution.
+	 * @return     The internal point.
+	 */
+	EvaluationResult<Number> getInternalPoint( bool useExactGlpk = false ) const;
 
-        /**
-         * @brief      Determines the set of redundant constraints.
-         * @details    A constraint is redundant, whenever the removal of this constraint does not modify the set of possible solutions.
-         * @return     A vector of row-indices which represent redundant constraints.
-         */
-        std::vector<std::size_t> redundantConstraints() const;
+	/**
+	 * @brief      Determines the set of redundant constraints.
+	 * @details    A constraint is redundant, whenever the removal of this constraint does not modify the set of possible solutions.
+	 * @return     A vector of row-indices which represent redundant constraints.
+	 */
+	std::vector<std::size_t> redundantConstraints() const;
 
-    private:
-        bool isSane() const;
+  private:
+	bool isSane() const;
 
-        /**
-         * @brief      Calls required initialization methods.
-         */
-        void initialize() const;
+	/**
+	 * @brief      Calls required initialization methods.
+	 */
+	void initialize() const;
 
-        /**
-         * @brief      Updates problem instances.
-         */
-        void updateConstraints() const;
+	/**
+	 * @brief      Updates problem instances.
+	 */
+	void updateConstraints() const;
 
-        /**
-         * @brief 		clears the cache of computed solutions.
-         */
-        void clearCache() const;
-    };
+	/**
+	 * @brief 		clears the cache of computed solutions.
+	 */
+	void clearCache() const;
+};
 }  // namespace hypro
 
 template<typename Number>

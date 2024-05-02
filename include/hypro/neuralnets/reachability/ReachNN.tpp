@@ -12,29 +12,25 @@
 namespace hypro {
     namespace reachability {
 
-        template<typename Number>
-        std::vector<hypro::Starset<Number>>
-        ReachNN<Number>::forwardAnalysis(const hypro::Starset<Number> &input_set, NN_reach_method method,
-                                         bool plot_intermediates) const {
-            // std::cout << method << std::endl;
-            // std::cout << mNNet << std::endl;
-            // std::cout << input_set.constraintss() << std::endl;
-            std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
-            result.push_back(input_set);
-            for (int l = 0; l < mNNet.numLayers(); l++) {
-                std::cout << "Computing output of layer: " << l << std::endl;
-                result = layerReach(l, result, method, plot_intermediates);
-                std::cout << "Number of stars: " << result.size() << std::endl;
-            }
+template <typename Number>
+std::vector<hypro::Starset<Number>> ReachNN<Number>::forwardAnalysis( const hypro::Starset<Number>& input_set, NN_REACH_METHOD method, bool plot_intermediates ) const {
+	// std::cout << method << std::endl;
+	// std::cout << mNNet << std::endl;
+	// std::cout << input_set.constraints() << std::endl;
+	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
+	result.push_back( input_set );
+	for ( int l = 0; l < mNNet.numLayers(); l++ ) {
+		std::cout << "Computing output of layer: " << l << std::endl;
+		result = layerReach( l, result, method, plot_intermediates );
+		std::cout << "Number of stars: " << result.size() << std::endl;
+	}
 
             return result;
         }
 
-        template<typename Number>
-        std::vector<hypro::Starset<Number>>
-        ReachNN<Number>::layerReach(int l, const std::vector<hypro::Starset<Number>> &input_sets,
-                                    NN_reach_method method, bool plot_intermediates) const {
-            hypro::Plotter<Number> &plotter = hypro::Plotter<Number>::getInstance();
+template <typename Number>
+std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const std::vector<hypro::Starset<Number>>& input_sets, NN_REACH_METHOD method, bool plot_intermediates ) const {
+	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
             std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
             int N = input_sets.size();    // number of input stars
@@ -46,8 +42,8 @@ namespace hypro {
 
 // this for loop could be parallelized
 #pragma omp parallel for
-            for (int i = 0; i < N; i++) {
-                if (plot_intermediates) {
+	for ( int i = 0; i < N; i++ ) {
+		if ( plot_intermediates ) {
 #pragma omp critical
                     plotter.addObject(input_sets[i].vertices(), hypro::plotting::colors[hypro::plotting::red]);
                 }
@@ -81,28 +77,26 @@ namespace hypro {
             return result;    // empty list
         }
 
-        template<typename Number>
-        std::vector<hypro::Starset<Number>>
-        ReachNN<Number>::reachReLU(const hypro::Starset<Number> &input_star1, NN_reach_method method,
-                                   bool plot_intermediates) const {
-            hypro::Plotter<Number> &plotter = hypro::Plotter<Number>::getInstance();
+template <typename Number>
+std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Starset<Number>& input_star1, NN_REACH_METHOD method, bool plot_intermediates ) const {
+	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
 
-            std::vector<hypro::Starset<Number>> I_n = std::vector<hypro::Starset<Number>>();
-            I_n.push_back(input_star1);
-            for (int i = 0; i < input_star1.generator().rows(); i++) {
-                // iterate over the dimensions of the input star
-                switch (method) {
-                    case NN_reach_method::EXACT:
-                        // apply the exact method
-                        // std::cout << "Applying the exact method" << std::endl;
-                        I_n = stepReLU(i, I_n);
-                        break;
-                    case NN_reach_method::OVERAPPRX:
-                        // apply the overapproximate method
-                        // std::cout << "Applying the overapproximate method" << std::endl;
-                        // std::cout << "Applying ReLU on dimension: " << i << std::endl;
-                        I_n = approxStepReLU(i, I_n);
-                        // std::cout << "Inner polytope shape: (num_constrains, dim_constrains) = (" << I_n[I_n.size() - 1].constraintss().size() << ", " << I_n[I_n.size() - 1].constraintss().dimension() << ")" << std::endl;
+	std::vector<hypro::Starset<Number>> I_n = std::vector<hypro::Starset<Number>>();
+	I_n.push_back( input_star1 );
+	for ( int i = 0; i < input_star1.generator().rows(); i++ ) {
+		// iterate over the dimensions of the input star
+		switch ( method ) {
+			case NN_REACH_METHOD::EXACT:
+				// apply the exact method
+				// std::cout << "Applying the exact method" << std::endl;
+				I_n = stepReLU( i, I_n );
+				break;
+			case NN_REACH_METHOD::OVERAPPRX:
+				// apply the overapproximate method
+				// std::cout << "Applying the overapproximate method" << std::endl;
+				// std::cout << "Applying ReLU on dimension: " << i << std::endl;
+				I_n = approxStepReLU( i, I_n );
+				// std::cout << "Inner polytope shape: (num_constrains, dim_constrains) = (" << I_n[I_n.size() - 1].constraints().size() << ", " << I_n[I_n.size() - 1].constraints().dimension() << ")" << std::endl;
 
                         break;
                     default: FATAL("hypro.neuralnets.reachability", "Invalid analysis method specified");
@@ -110,26 +104,26 @@ namespace hypro {
                 }
                 if (plot_intermediates) {
 #pragma omp critical
-                    for (int i = 0; i < I_n.size(); i++) {
-                        plotter.addObject(I_n[i].vertices(), hypro::plotting::colors[(2 * i) % 9]);
-                    }
-                    plotter.plot2d();
-                    plotter.clear();
-                }
-            }
-            return I_n;
-        }
+			for ( int j = 0; j < I_n.size(); j++ ) {
+				plotter.addObject( I_n[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
+			}
+			plotter.plot2d();
+			plotter.clear();
+		}
+	}
+	return I_n;
+}
 
         template<typename Number>
         std::vector<hypro::Starset<Number>>
         ReachNN<Number>::stepReLU(int i, std::vector<hypro::Starset<Number>> &input_sets) const {
             std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
 
-            int k = input_sets.size();
-            for (int j = 0; j < k; j++) {
-                hypro::vector_t<Number> center = input_sets[j].center();
-                hypro::matrix_t<Number> basis = input_sets[j].generator();
-                hypro::HPolytope<Number> politope = input_sets[j].constraintss();
+	int k = input_sets.size();
+	for ( int j = 0; j < k; j++ ) {
+		hypro::vector_t<Number> center = input_sets[j].center();
+		hypro::matrix_t<Number> basis = input_sets[j].generator();
+		hypro::HPolytope<Number> politope = input_sets[j].constraints();
 
                 hypro::vector_t<Number> dir_vect = basis.row(i);
                 auto eval_low_result = politope.evaluate(-1.0 * dir_vect);
@@ -197,9 +191,9 @@ namespace hypro {
                 hypro::matrix_t<Number> shape = input_star.shape();
                 hypro::vector_t<Number> limits = input_star.limits();
 
-                hypro::vector_t<Number> dir_vect = basis.row(i);
-                auto eval_low_result = input_star.constraintss().evaluate(-1.0 * dir_vect);
-                auto eval_high_result = input_star.constraintss().evaluate(dir_vect);
+		hypro::vector_t<Number> dir_vect = basis.row( i );
+		auto eval_low_result = input_star.constraints().evaluate( -1.0 * dir_vect );
+		auto eval_high_result = input_star.constraints().evaluate( dir_vect );
 
                 Number lb = -eval_low_result.supportValue + center[i];
                 Number ub = eval_high_result.supportValue + center[i];

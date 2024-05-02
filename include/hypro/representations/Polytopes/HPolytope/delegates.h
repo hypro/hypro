@@ -23,7 +23,7 @@ namespace hypro::impl {
 
     template<typename N>
     bool isEmptySafe(const matrix_t<N> &constraints, const vector_t<N> &constants) {
-        return !Optimizer(constraints, constants).checkConsistency();
+        return !Optimizer<N>(constraints, constants).checkConsistency();
     }
 
     template<>
@@ -32,7 +32,7 @@ namespace hypro::impl {
         return !z3CheckConsistency(constraints, constants,
                                    std::vector<carl::Relation>(constraints.rows(), carl::Relation::LEQ));
 #else
-        return !Optimizer(constraints, constants).checkConsistency();
+        return !Optimizer<mpq_class>(constraints, constants).checkConsistency();
 #endif
     }
 
