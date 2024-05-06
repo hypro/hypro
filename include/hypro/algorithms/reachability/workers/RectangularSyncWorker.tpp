@@ -114,9 +114,7 @@ void RectangularSyncWorker<State, Automaton>::postProcessJumpSuccessors( const J
 
 template <typename State, typename Automaton>
 void RectangularSyncWorker<State, Automaton>::postProcessSyncJumpSuccessors( ReachTreeNode<State, LocationT>& task, const JumpSuccessors& guardSatisfyingSets ) {
-	// TODO extend to other polyhedral representation, add getTimeProjection() method
-	// if ( !(std::is_same<State, VPolytope<Number>>() || std::is_same<State, HPolytope<Number>>()) ) {
-	if ( !( std::is_same<State, VPolytope<Number>>() ) ) {
+	if ( !(std::is_same<State, VPolytope<Number>>() || std::is_same<State, HPolytope<Number>>()) ) {
 		assert( false && "Label Synchronization is implemented for VPolytopes and HPolytopes only." );
 	}
 	for ( typename JumpSuccessors::const_iterator it = guardSatisfyingSets.begin();
@@ -278,6 +276,7 @@ RectangularSyncWorker<State, Automaton>::getSyncJumpSuccessorTasks() {
 		if ( isSyncNode ) {
 			syncJumpSuccessorTasks.insert( node );
 		} else {
+			// each node with a isSyncNode=false is a node created while looking for synchronization nodes, but it cannot synchronize with the other automata so it needs to be deleted from the tree 
 			mSyncChildrenToRemove.erase( node );
 			node->getParent()->eraseChild( node );
 		}

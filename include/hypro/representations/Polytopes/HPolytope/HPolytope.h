@@ -20,6 +20,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #include "../../../algorithms/quantifierElimination/qe.h"
 #include "../../../algorithms/quickhull/Quickhull.h"
+#include "../../../algorithms/smtrat-fmplex/eliminate.h"
 #include "../../../types.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
@@ -325,6 +326,8 @@ namespace hypro {
         HPolytopeT intersectHalfspace(const Halfspace<Number> &rhs) const;
 
         HPolytopeT intersectHalfspaces(const matrix_t<Number> &_mat, const vector_t<Number> &_vec) const;
+        
+        HPolytopeT getTimeProjection() const;
 
         bool contains(const Point<Number> &point) const;
 
