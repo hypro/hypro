@@ -23,6 +23,7 @@ resources/glpk-5.0/
 *.java
 *.interp
 doc/docpage/_site/
+.gitlab-ci-local/
 
 examples/nnet/coav
 examples/nnet/mnist

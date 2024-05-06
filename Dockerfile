@@ -2,7 +2,7 @@
 #FROM smtrat/carl:latest
 #FROM stefanschupp/carl:hscc23
 #FROM hyprodockeruser/carl:v1
-FROM realyst/carl:latest
+FROM realyst/carl_z3:latest
 
 RUN apt-get update \
     && apt-get install -y \
@@ -14,7 +14,7 @@ RUN apt-get update \
     iputils-ping
 COPY / /root/hypro/
 WORKDIR /root/hypro
-RUN cd /root/hypro && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DHYPRO_LOGGING=OFF -DHYPRO_STATISTICS=ON ..
+RUN cd /root/hypro && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DHYPRO_LOGGING=OFF -DHYPRO_STATISTICS=ON -DHYPRO_USE_Z3=ON ..
 RUN cd /root/hypro/build && make ${PROJECT_NAME}-resources -j`nproc`
 RUN cd /root/hypro/build && cmake .. && make hypro -j`nproc`
 

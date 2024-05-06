@@ -1,4 +1,5 @@
-image: hyprodockeruser/carl:v1
+image: realyst/carl_z3:latest
+#image: hyprodockeruser/carl:v1
 
 variables:
 
