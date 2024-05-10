@@ -24,7 +24,13 @@ namespace hypro {
     std::vector<VPolytopeT<Number, Converter, S>> VPolytopeT<Number, Converter, S>::setMinus2(const VPolytopeT<Number, Converter, S> &minus) const {
         std::vector<VPolytopeT<Number, Converter, S>> result;
         VPolytopeT<Number, Converter, S> polytope = this->setMinusCrossingV(minus);
+
+        std::cout << "P:" << std::endl << *this << std::endl;
+        std::cout << "G:" << std::endl << minus << std::endl;
+        std::cout << "Resulting Polytope is:" << std::endl << polytope << std::endl << std::endl;
+
         result.push_back(polytope);
+
         return result;
     }
 
@@ -174,7 +180,7 @@ namespace hypro {
 
         Number resultValue = result.supportValue;
 
-        // std::cout << "Result: " << invertedValue << std::endl;
+        //std::cout << "Result: " << resultValue << std::endl;
 
         Point<Number> cp = fromPoint + resultValue * (toPoint - fromPoint);
 
