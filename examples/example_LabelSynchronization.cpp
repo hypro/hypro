@@ -8,9 +8,7 @@
  */
 
 /**
- * This is an example on how to perform synchronizing reachaboility analysis on rectangular automata.
- * 
- * PLEASE NOTE: this example only works for two-dimensional rectangular automata. We ignore the plotting dimension reduction, therefore if you have more than two dimensions, the plotting will not work.
+ * This is an example on how to perform reachaboility analysis with label synchronization on multiple rectangular automata.
  * 
  */
 
@@ -25,6 +23,7 @@
 #include "hypro/representations/GeometricObjectBase.h"
 #include <iostream>
 
+
 template<typename Number, typename Representation>
 static void computeReachableStates(const std::vector<std::string> filename,
                                    const hypro::representation_name &type) {
@@ -33,6 +32,7 @@ static void computeReachableStates(const std::vector<std::string> filename,
     using timeunit = std::chrono::microseconds;
     clock::time_point start = clock::now();
 
+    // parse the input files and save them in a vector of automata
     std::vector<Automaton> automata;
     std::vector<hypro::Settings> settings;
     for (int i=0; i<filename.size(); i++) {
@@ -42,12 +42,12 @@ static void computeReachableStates(const std::vector<std::string> filename,
         automata.push_back(automaton);
 
         hypro::VariablePool::getInstance().changeToPool(i+1);
-        // std::cout << hypro::VariablePool::getInstance().getPoolIndex() << std::endl;
     }
 
     hypro::VariablePool::getInstance().changeToPool(0);
 
-    hypro::RectangularSyncAnalyzer<Representation, Automaton> analyzer{automata, settings[0]};
+    // we use the analysis settings from the first file only
+    hypro::RectangularSyncAnalyzer<Representation, Automaton> analyzer{automata, settings[0] };
 
     auto result = analyzer.run();
 
@@ -64,19 +64,6 @@ static void computeReachableStates(const std::vector<std::string> filename,
         std::cout << "The model is safe." << std::endl;
     }
     std::cout << std::endl;
-
-    // // TODO: fix the output of flowpipes
-    // // output computed sets
-    // for (const auto &aut : automata) {
-    //     std::cout << "Output Flowpipes for automaton" << aut << std::endl;
-    //     const auto &tree = analyzer.getReachTreeForAutomaton(aut);
-    //     std::cout << "tree" << std::endl;
-    //     for (const auto &fp: hypro::getFlowpipes(tree)) {
-    //         for (const auto &segment: fp) {
-    //             std::cout << segment << std::endl;
-    //         }
-    //     }
-    // }
 
     if (settings[0].plotting().plotDimensions.size() > 0) {
         clock::time_point startPlotting = clock::now();
@@ -103,7 +90,7 @@ static void computeReachableStates(const std::vector<std::string> filename,
             std::cout << "filename is " << extendedFilename << std::endl;
             plotter.setFilename(extendedFilename);
             // std::vector<std::size_t> plottingDimensions =
-            //         settings.plotting().plotDimensions.at(0);
+            //         settings[i].plotting().plotDimensions.at(0);
             // plotter.rSettings().dimensions.push_back(plottingDimensions.front());
             // plotter.rSettings().dimensions.push_back(plottingDimensions.back());
             plotter.rSettings().cummulative = false;
@@ -148,6 +135,7 @@ static void computeReachableStates(const std::vector<std::string> filename,
     }
 }
 
+
 int main(int argc, char **argv) {
     int rep = 0;
     std::vector<std::string> filename;
@@ -159,7 +147,7 @@ int main(int argc, char **argv) {
         rep = strtol(argv[argc-1], &p, 10);
     } else {
         std::cout << "Usage: " << argv[0] << " <filename1> (<filename2>)* <representation>" << std::endl;
-        std::cout << "Representation: 2 - HPolytope, 3 - VPolytope" << std::endl;
+        std::cout << "Representation: 2 for HPolytope or 3 for VPolytope" << std::endl;
         exit(1);
     }
     
@@ -171,48 +159,6 @@ int main(int argc, char **argv) {
 #endif
 
     switch (rep) {
-        case 9: {
-            // using Representation = hypro::TemplatePolyhedron<Number>;
-            std::cout << "Cannot use template polytope representation. Please choose from 2-HPolytope or 3-VPolytope." << std::endl;
-            // computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_t);
-            break;
-        }
-
-        case 8: {
-            // using Representation = hypro::SupportFunctionNew<Number>;
-            std::cout << "Cannot use generic support function representation. Please choose from 2-HPolytope or 3-VPolytope."
-                      << std::endl;
-            break;
-        }
-
-#ifdef HYPRO_USE_PPL
-            case 7: {
-                using Representation = hypro::Polytope<Number>;
-                std::cout << "Using a ppl-polytope representation." << std::endl;
-                computeReachableStates<Number, Representation>(
-                      filename, hypro::representation_name::ppl_polytope );
-                break;
-            }
-#endif
-
-        case 6: {
-            // using Representation = hypro::DifferenceBounds<Number>;
-            std::cout << "Cannot use a difference bounds representation. Please choose from 2-HPolytope or 3-VPolytope." << std::endl;
-            break;
-        }
-
-        case 5: {
-            // using Representation = hypro::Zonotope<Number>;
-            std::cout << "Cannot use a zonotope representation. Please choose from 2-HPolytope or 3-VPolytope." << std::endl;
-            break;
-        }
-
-        case 4: {
-            // using Representation = hypro::SupportFunction<Number>;
-            std::cout << "Cannot use a support function representation. Please choose from 2-HPolytope or 3-VPolytope." << std::endl;
-            break;
-        }
-
         case 3: {
             using Representation = hypro::VPolytope<Number>;
             std::cout << "Using a v-polytope representation." << std::endl;
@@ -220,19 +166,14 @@ int main(int argc, char **argv) {
                     filename, hypro::representation_name::polytope_v);
             break;
         }
-        // case 2: {
-        //     using Representation = hypro::HPolytope<Number>;
-        //     std::cout << "Using a h-polytope representation." << std::endl;
-        //     computeReachableStates<Number, Representation>(
-        //             filename, hypro::representation_name::polytope_h);
-        //     break;
-        // }
-
-        case 1: {
-            // using Representation = hypro::Box<Number>;
-            std::cout << "Cannot use a box representation. Please choose from 2-HPolytope or 3-VPolytope." << std::endl;
+        case 2: {
+            using Representation = hypro::HPolytope<Number>;
+            std::cout << "Using a h-polytope representation." << std::endl;
+            computeReachableStates<Number, Representation>(
+                    filename, hypro::representation_name::polytope_h);
             break;
         }
+
         default: {
             using Representation = hypro::VPolytope<Number>;
             std::cout << "Using a v-polytope representation." << std::endl;

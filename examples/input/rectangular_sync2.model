@@ -5,10 +5,10 @@ hybrid reachability
     setting 
     {
         fixed steps 1
-        time 10
+        time 5
         gnuplot octagon y
         max jumps 2
-        output rec_test_model
+        output aut_sync2
         print on
         remainder estimation 1e-5
         identity precondition

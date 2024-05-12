@@ -8,7 +8,7 @@ hybrid reachability
         time 5
         gnuplot octagon x
         max jumps 2
-        output sync_test_model
+        output aut_sync1
         print on
         remainder estimation 1e-5
         identity precondition
