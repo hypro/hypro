@@ -36,19 +36,9 @@ class RectangularSyncAnalyzer {
 	/// default constructor (deleted)
 	RectangularSyncAnalyzer() = delete;
 
-	/// constructor from automaton and settings with additional reachTree
-	RectangularSyncAnalyzer( Automaton const &ha, const Settings &setting,
-							 std::vector<ReachTreeNode<State, LocationT>> &roots )
-		: mHybridAutomaton( &ha )
-		, mAnalysisSettings( setting )
-		, mReachTree( roots ) {
-	}
-
 	/// constructor from automata and settings
-	RectangularSyncAnalyzer( std::vector<Automaton> const &automata, const Settings &setting,
-							 std::vector<ReachTreeNode<State, LocationT>> &roots )
+	RectangularSyncAnalyzer( std::vector<Automaton> const &automata, const Settings &setting )
 		: mAnalysisSettings( setting )
-		, mReachTree( roots )
 		, mAutomatonReachTreeMap()
 		, mLabelAutomatonMap()
 		, mHybridAutomata() {
@@ -76,16 +66,6 @@ class RectangularSyncAnalyzer {
 
 	REACHABILITY_RESULT forwardRun();
 
-	// void addToQueue( ReachTreeNode<State, LocationT> *node ) {
-	// 	mWorkQueue.push( node );
-	// }
-
-	// ReachTreeNode<State, LocationT> *getNodeFromQueue() {
-	// 	auto *res = mWorkQueue.front();
-	// 	mWorkQueue.pop();
-	// 	return res;
-	// }
-
 	void addPairToQueue( ReachTreeNode<State, LocationT> *node, Automaton const *automaton ) {
 		mWorkQueue.push( std::make_pair( node, automaton ));
 	}
@@ -105,15 +85,13 @@ class RectangularSyncAnalyzer {
 	processNode( RectangularSyncWorker<State, Automaton> &worker, ReachTreeNode<State, LocationT> *node, Automaton const* automaton );
 
   protected:
-	// std::queue<ReachTreeNode<State, LocationT> *> mWorkQueue;											 ///< Queue holds all nodes that require processing
 	std::queue<std::pair<ReachTreeNode<State, LocationT> *, Automaton const *>> mWorkQueue;			 	 ///< Queue holds pairs <node, automaton> that require processing
 	Automaton const *mHybridAutomaton;																	 ///< Pointer to the automaton which is analyzed		(TODO delete)
 	std::vector<Automaton const *> mHybridAutomata;														 ///< Vector of pointers to the automata which are analyzed
 	const Settings mAnalysisSettings;																	 ///< Settings used for analysis
-	std::vector<ReachTreeNode<State, LocationT>> &mReachTree;											 ///< Forest of ReachTrees computed		(TODO delete)
-	std::map<Automaton const *, std::vector<ReachTreeNode<State, LocationT>>> mAutomatonReachTreeMap{};	 ///< map (*automaton -> reachTree)
-	std::map<Label, std::set<Automaton const *>> mLabelAutomatonMap{};									 ///< map (label -> automata)
-	std::map<Label, std::set<RectangularSyncWorker<State, Automaton>* >> mLabelWorkerMap{};				 ///< map (label -> set of workers), describes for each labels the automata that require synchronization
+	std::map<Automaton const *, std::vector<ReachTreeNode<State, LocationT>>> mAutomatonReachTreeMap{};	 ///< map (*automaton -> reachTree), that maps each automaton to a Forest of ReachTrees
+	std::map<Label, std::set<Automaton const *>> mLabelAutomatonMap{};									 ///< map (label -> automata), that maps each label to the set of automata that have this label
+	std::map<Label, std::set<RectangularSyncWorker<State, Automaton>* >> mLabelWorkerMap{};				 ///< map (label -> set of workers), describes for each label the automata that require synchronization
 };
 
 }  // namespace hypro

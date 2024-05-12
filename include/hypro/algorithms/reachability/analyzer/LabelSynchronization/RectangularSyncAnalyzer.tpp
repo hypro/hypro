@@ -13,21 +13,15 @@ namespace hypro {
 
 template <typename State, typename Automaton, typename Multithreading>
 REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::run() {
-	// create reachTree if not already present
-	if ( mReachTree.empty() ) {
-		mReachTree = makeRoots<State, Automaton>( *mHybridAutomaton );
-	}
+	
 	// initialize queue
 	for ( auto& automaton : mHybridAutomata ) {
+		assert( !mAutomatonReachTreeMap[automaton].empty() && "Automaton reach tree is empty");
 		for ( auto& rtNode : mAutomatonReachTreeMap[automaton] ) {
 			mWorkQueue.push( std::make_pair( &rtNode, automaton ) );
-			// mPairWorkQueue.push( std::make_pair( &rtNode, automaton ) );
 		}
 	}
-	// maybe we can do with one mReachTree, without the map
-	// for ( auto &rtNode : mReachTree ) {
-	// 	mWorkQueue.push( &rtNode );
-	// }
+	
 	DEBUG( "hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue" );
 
 	REACHABILITY_RESULT safetyResult;
