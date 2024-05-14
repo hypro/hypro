@@ -300,14 +300,15 @@ namespace hypro {
 
     template<typename Number>
     void Condition<Number>::extendDimension() {
-        
-        matrix_t<Number> extendedMatrix = getMatrix();
+        if (!empty()) {
+            matrix_t<Number> extendedMatrix = getMatrix();
 
-        // extend the matrix by one zero-column
-        extendedMatrix.conservativeResize(extendedMatrix.rows(), extendedMatrix.cols() + 1);
-        extendedMatrix.col(extendedMatrix.cols() - 1) = vector_t<Number>::Zero(extendedMatrix.rows());
-        
-        setMatrix(extendedMatrix, 0);
+            // extend the matrix by one zero-column
+            extendedMatrix.conservativeResize(extendedMatrix.rows(), extendedMatrix.cols() + 1);
+            extendedMatrix.col(extendedMatrix.cols() - 1) = vector_t<Number>::Zero(extendedMatrix.rows());
+            
+            setMatrix(extendedMatrix, 0);
+        }
     }
 
     template<typename Number>
