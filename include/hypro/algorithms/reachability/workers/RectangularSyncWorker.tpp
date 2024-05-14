@@ -156,7 +156,11 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 		rectangularSyncJumpHandler<State, LocationT> jmpHandler;
 		std::cout << "syncTime in if branch before applyJump: " << syncTime << std::endl;  // TODO remove before push
 		mSyncJumpSuccessorSets = jmpHandler.applyJump( transitionSourceNodeMap, syncTime );
-		assert( mSyncJumpSuccessorSets.size() == 1 && "findJumpSuccessors applies the jump for one transition." );
+		// assert( mSyncJumpSuccessorSets.size() == 1 && "findJumpSuccessors applies the jump for one transition." );
+		if (mSyncJumpSuccessorSets.empty()) {
+			// if the jump succecssors are empty (i.e. intersection of guardSatisfyingSet with common time is empty or intersection with invariant of target location ), the synchronization is not possible
+			return {};
+		}
 		std::map<ReachTreeNode<State, LocationT>*, State> syncNodeTimeMap{};
 		// update the ReachTree with the new successor nodes
 		for ( const auto& transitionStatesPair : mSyncJumpSuccessorSets ) {
@@ -215,7 +219,11 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 					std::cout << "syncTime in else branch before applyJump: " << syncTime1 << std::endl;  // TODO remove before push
 					rectangularSyncJumpHandler<State, LocationT> jmpHandler;
 					mSyncJumpSuccessorSets = jmpHandler.applyJump( transitionSourceNodeMap, syncTime1 );
-					assert( mSyncJumpSuccessorSets.size() == 1 && "findJumpSuccessors searches applies the jump for one transition." );
+					// assert( mSyncJumpSuccessorSets.size() == 1 && "findJumpSuccessors searches applies the jump for one transition." );
+					if (mSyncJumpSuccessorSets.empty()) {
+						// if the jump succecssors are empty (i.e. intersection of guardSatisfyingSet with common time is empty or intersection with invariant of target location ), the synchronization is not possible
+						continue;
+					}
 					// update the ReachTree with the new successor nodes
 					for ( const auto& transitionStatesPair : mSyncJumpSuccessorSets ) {
 						assert( transitionStatesPair.second.size() == 1 && "In Rectangular Analysis a jump can only have one successor." );

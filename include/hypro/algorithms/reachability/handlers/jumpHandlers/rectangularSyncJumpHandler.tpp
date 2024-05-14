@@ -51,6 +51,11 @@ namespace hypro {
                 newState = newState.intersectHalfspace(Halfspace<Number>(secondNormalVec, upperBound.coordinate(0)));
                 std::cout << "newState (after intersection with time interval): " << newState << std::endl;
                 
+                // if the state satisfying the guard, intersected with the common time interval is empty, continue with next state
+                if (newState.empty()) {
+                    continue;
+                }
+
                 // apply reset function
                 applyReset(newState, transitionPtr, subspace);
 
