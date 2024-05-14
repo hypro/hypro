@@ -398,6 +398,11 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     typename std::vector<Point<Number>>
     HPolytopeT<Number, Converter, Setting>::vertices(const matrix_t<Number> &) const {
+		if constexpr (std::is_same_v<Number, double>) {
+            DEBUG("hypro.hPolytope", "Conversion not supported for not exact number type.");
+			return  std::vector<Point<Number>>();
+		};
+
         typename std::vector<Point<Number>> vertices;
         // empty polytope
         if (mHPlanes.empty() || this->empty()) {
@@ -480,6 +485,10 @@ namespace hypro {
 			///roughly check for full rank.
 			using bitset = boost::dynamic_bitset<uint8_t>;
 			bitset seenDim = bitset(mHPlanes.front().normal().rows());
+			bool naive_full_rank;
+			bool verified_full_rank;
+			Eigen::Index rank;
+
 			for(auto& plane : mHPlanes) {
 				for(Eigen::Index i = 0; i < plane.normal().rows(); ++i) {
 					Number val = plane.normal()(i);
@@ -487,7 +496,9 @@ namespace hypro {
 				}
 			}
 
-			if(seenDim.all()) {
+			naive_full_rank = seenDim.all();
+
+			if(naive_full_rank) {
 				matrix_t<Number> _constraints( mHPlanes.size(), mHPlanes[0].normal().size() );
 				vector_t<Number> _constants( mHPlanes.size() );
 
@@ -497,16 +508,29 @@ namespace hypro {
 				}
 
 				auto ddPair = DDPair<Number>( _constraints, _constants );
-				ddPair.compute();
+				rank = ddPair.checkRank();
+				verified_full_rank = rank == (mHPlanes[0].normal().size() + 1);
 
-				std::vector<Point<Number>> tmpVertices;
-				for ( const auto& v : ddPair.getPoints() ) {
-					tmpVertices.emplace_back( Point( std::move( v ) ) );
+				if(verified_full_rank) {
+					DEBUG("hypro.hPolytope", "Conversion on full rank");
+
+					ddPair.compute();
+
+					std::vector<Point<Number>> tmpVertices;
+					for ( const auto& v : ddPair.getPoints() ) {
+						tmpVertices.emplace_back( Point( std::move( v ) ) );
+					}
+
+					return tmpVertices;
 				}
-
-				return tmpVertices;
 			}
-			else {
+
+			if(naive_full_rank == false) {
+				DEBUG("hypro.hPolytope", "Not full rank, using Quickhull");
+			} else {
+				DEBUG("hypro.hPolytope", "Not full rank (is " << rank <<", should be " << (mHPlanes[0].normal().size() + 1) << "), using Quickhull");
+			}
+
 				// conversion to mpq_class
 				std::vector<vector_t<mpq_class>> halfspaces;
 				for (std::size_t i = 0; i < mHPlanes.size(); ++i) {
@@ -531,8 +555,6 @@ namespace hypro {
 					}
 				}
 				return vertices;
-			}
-
 
 #else
             // conversion to mpq_class

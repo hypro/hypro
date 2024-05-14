@@ -16,6 +16,7 @@ namespace hypro {
     public:
         DDPair( const matrix_t<Number>&, const vector_t<Number>& );
         std::vector<vector_t<Number>> getPoints();
+		Eigen::Index checkRank();
         void compute();
 
     private:
@@ -29,6 +30,8 @@ namespace hypro {
 
         matrix_t<Number> R;
         matrix_t<Number> A;
+
+		VectorXi rows;
     };
 
     /**
@@ -251,6 +254,15 @@ namespace hypro {
         this->R = result;
     }
 
+	template <typename Number>
+	Eigen::Index DDPair<Number>::checkRank() {
+		rows = max_independent_rows( A );
+
+		Eigen::FullPivLU<matrix_t<Number>> lu_decomp(A);
+
+		return lu_decomp.rank();
+	}
+
     /**
      * Initializes all data structures and does the actual iteration.
      * After this method the generator matrix holds the minimal amount of extreme rays.
@@ -258,7 +270,10 @@ namespace hypro {
      */
     template <typename Number>
     void DDPair<Number>::compute() {
-        VectorXi rows = max_independent_rows( A );
+        if(rows.size() == 0) {
+            rows = max_independent_rows( A );
+        }
+
         matrix_t<Number> A_inv = this->A( rows, Eigen::all ).inverse();
         TRACE("hypro.doubleDescriptionMethod", 	this->A << "\nA_small\n" << this->A(rows, Eigen::all) << "A_inv:\n" << A_inv << "\n" << rows)
         TRACE("hypro.doubleDescriptionMethod", this->A(rows, Eigen::all) * A_inv)
