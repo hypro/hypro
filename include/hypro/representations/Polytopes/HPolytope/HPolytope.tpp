@@ -1103,6 +1103,7 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::getTimeProjection() const {
+        // TODO add assertion dimension greater equal 2
         if (this->empty()) {
             return *this;
         }

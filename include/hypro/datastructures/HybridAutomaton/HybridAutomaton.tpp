@@ -358,8 +358,8 @@ namespace hypro {
 
     template<typename Number>
     void HybridAutomaton<Number>::addTimeVariable() {
-        //TODO add assertion that time variable is not already in the set of variables.
-        const std::vector<std::string> lhsVariables = mVariables;
+        const std::vector<std::string> lhsVariables = getVariables();
+        assert(std::find(lhsVariables.begin(), lhsVariables.end(), "t") == lhsVariables.end() && "cannot add a time variable to an Automaton that has a variable t");
         const std::vector<std::string> rhsVariables = {"t"};
         hypro::VariablePool::getInstance().newCarlVariable("t");
         mVariables.push_back("t");

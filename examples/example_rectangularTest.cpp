@@ -8,66 +8,167 @@
  */
 
 /**
- * This is an example on how to perform synchronizing reachaboility analysis on rectangular automata.
+ * This is an example on how to perform synchronizing reachability analysis on rectangular automata.
  */
 
 #include "hypro/datastructures/reachability/ReachTreev2Util.h"
-#include "hypro/parser/antlr4-flowstar/ParserWrapper.h"
-#include "hypro/representations/GeometricObjectBase.h"
-#include "hypro/util/plotting/Plotter.h"
-#include <hypro/algorithms/reachability/analyzer/RectangularAnalyzer.h>
-// #include <hypro/algorithms/reachability/analyzer/LabelSynchronization/RectangularSyncAnalyzer.h>
-#include <iostream>
-#include "hypro/algorithms/reachability/Reach.h"
 #include "hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
+#include "hypro/representations/GeometricObjectBase.h"
+#include <hypro/algorithms/reachability/analyzer/LabelSynchronization/RectangularSyncAnalyzer.h>
+#include "hypro/algorithms/reachability/Reach.h"
+#include "hypro/parser/antlr4-flowstar/ParserWrapper.h"
+#include "hypro/util/plotting/Plotter.h"
 #include "hypro/util/statistics/statistics.h"
-
 #include <hypro/util/VariablePool.h>
 
+#include <iostream>
 
-template<typename Number, typename Representation>
+// typedefs
+using Number = mpq_class;
+using Representation = hypro::HPolytope<Number>;
+using State = hypro::State<Number, Representation>;
+using Matrix = hypro::matrix_t<Number>;
+using Vector = hypro::vector_t<Number>;
+using VPoly = hypro::VPolytope<Number>;
+using Interval = carl::Interval<Number>;
+using Point = hypro::Point<Number>;
 
-static void computeReachableStates(const std::vector<std::string> filename,
-                                   const hypro::representation_name &type) {
-    using Automaton = hypro::HybridAutomaton<Number>;
+template <typename Number>
+hypro::HybridAutomaton<Number> createRectangularHA() {
+	// One-dimensional reactangular automaton with one location and a loop
+	hypro::HybridAutomaton<Number> res;
+
+	// Create location
+	auto loc = res.createLocation();
+
+	// Set flow x' = [1,1]
+	Interval flow{ 1, 1 };
+	typename hypro::rectangularFlow<Number>::flowMap fMap;
+	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flow;
+	loc->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
+
+	// Set invariant x <= 10
+	Matrix invariantConstraints = Matrix::Zero( 1, 1 );
+	invariantConstraints( 0, 0 ) = 1;
+	Vector invariantConstants = Vector::Zero( 1 );
+	invariantConstants( 0 ) = 10;
+	loc->setInvariant( { invariantConstraints, invariantConstants } );
+
+	// Add loop transition in first location
+	auto transition = loc->createTransition( loc );
+    transition->addLabel( hypro::Label{"a"} );
+    // add guard x in [3,5]
+    hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>(2, 1);
+    guardConstraints << 1, -1;
+    hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>(2);
+    guardConstants << 5, -3;
+    hypro::Condition<Number> guard(guardConstraints, guardConstants);
+
+    // add reset function x' := 0
+    // interval representation
+    std::vector<carl::Interval<Number>> intervalReset;
+    intervalReset.emplace_back( carl::Interval<Number>( 0, 0 ) );
+    hypro::Reset<Number> reset;
+    reset.setIntervals( intervalReset );
+
+    transition->setGuard( guard );
+    transition->setReset( reset );
+
+	// Set initial state x = [0,1], aff = 1
+	Matrix initialConstraints = Matrix::Zero( 2, 1 );
+	Vector initialConstants = Vector::Zero( 2 );
+	initialConstraints << 1, -1;
+	initialConstants << 1, 0;
+
+	// Create HA
+	res.addInitialState( loc, hypro::Condition<Number>( initialConstraints, initialConstants ) );
+
+	return res;
+}
+
+template <typename Number>
+hypro::HybridAutomaton<Number> createRectangularHA1() {
+	// One-dimensional reactangular automaton with one location and a loop
+	hypro::HybridAutomaton<Number> res;
+
+	// Create location
+	auto loc = res.createLocation();
+
+	// Set flow x' = [1,1]
+	Interval flow{ 1, 1 };
+	typename hypro::rectangularFlow<Number>::flowMap fMap;
+	fMap[hypro::VariablePool::getInstance().carlVarByIndex( 0 )] = flow;
+	loc->setFlow( { hypro::rectangularFlow<Number>{ fMap } } );
+
+	// Set invariant x <= 20
+	Matrix invariantConstraints = Matrix::Zero( 1, 1 );
+	invariantConstraints( 0, 0 ) = 1;
+	Vector invariantConstants = Vector::Zero( 1 );
+	invariantConstants( 0 ) = 20;
+	loc->setInvariant( { invariantConstraints, invariantConstants } );
+
+	// Add loop transition in first location
+	auto transition = loc->createTransition( loc );
+    transition->addLabel( hypro::Label{"a"} );
+    
+    // add guard x in [14,16]
+    hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>(2, 1);
+    guardConstraints << 1, -1;
+    hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>(2);
+    guardConstants << 16, -14;
+    hypro::Condition<Number> guard(guardConstraints, guardConstants);
+
+    // reset function x' := 10
+    // interval representation
+    std::vector<carl::Interval<Number>> intervalReset;
+    intervalReset.emplace_back( carl::Interval<Number>( 10, 10 ) );
+    hypro::Reset<Number> reset;
+    reset.setIntervals( intervalReset );
+
+    transition->setGuard( guard );
+    transition->setReset( reset );
+
+	// Set initial state x = [10,11], aff = 1
+	Matrix initialConstraints = Matrix::Zero( 2, 1 );
+	Vector initialConstants = Vector::Zero( 2 );
+	initialConstraints << 1, -1;
+	initialConstants << 11, -10;
+
+	// Create HA
+	res.addInitialState( loc, hypro::Condition<Number>( initialConstraints, initialConstants ) );
+
+	return res;
+}
+
+int main(int argc, char **argv) {
     using clock = std::chrono::high_resolution_clock;
     using timeunit = std::chrono::microseconds;
-    clock::time_point start = clock::now();
 
-    std::vector<Automaton> automata;
-    hypro::ReachabilitySettings parsedSettings;
-    for (int i=0; i<filename.size(); i++) {
-        auto [automaton, fileSettings] = hypro::parseFlowstarFile<Number>(filename[i]);
-        if (i==0) {
-            parsedSettings = fileSettings;
-        }   
-        automata.push_back(automaton);
+    // create first automaton with variable pool 0
+    auto automaton1 = createRectangularHA<Number>();
+	automaton1.addTimeVariable();
+	// create second automaton with variable pool 1
+	hypro::VariablePool::getInstance().changeToPool(1);
+    auto automaton2 = createRectangularHA1<Number>();
+	automaton2.addTimeVariable();
+	// change back to pool 0
+	hypro::VariablePool::getInstance().changeToPool(0);
 
-        hypro::VariablePool::getInstance().changeToPool(i+1);
-        // std::cout << hypro::VariablePool::getInstance().getPoolIndex() << std::endl;
-    }
+	std::vector<hypro::HybridAutomaton<Number>> automata{ automaton1, automaton2 };
 
-    hypro::VariablePool::getInstance().changeToPool(0);
+    hypro::AnalysisParameters analysisParameters;
+    analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
+    analysisParameters.aggregation = hypro::AGG_SETTING::NO_AGG;
+    analysisParameters.representation_type = hypro::representation_name::polytope_v;
 
-    // parse settings from model files
-    std::cout << parsedSettings << std::endl;
-    hypro::Settings settings = hypro::convert(parsedSettings);
-    auto roots = hypro::makeRoots<Representation, Automaton>(automata[0]);
+    hypro::Settings settings{ {},
+                              hypro::FixedAnalysisParameters{ 1, hypro::tNumber( 9 ), hypro::tNumber( 0.01 ) },
+                              { analysisParameters } };
 
-    hypro::AnalysisParameters analysisParams = settings.strategy().front();
-
-    hypro::RectangularAnalyzer<Representation, Automaton> analyzer{automata[0], settings, roots};
+    auto analyzer = hypro::RectangularSyncAnalyzer<Representation, hypro::HybridAutomaton<Number>>( automata, settings );
 
     auto result = analyzer.run();
-    auto flowpipes = getFlowpipes(roots);
-
-    std::cout
-            << "Finished computation of reachable states: "
-            << std::chrono::duration_cast<timeunit>(clock::now() - start).count() /
-               1000.0
-            << " ms" << std::endl;
     
-    std::cout << std::endl;
     if (result == hypro::REACHABILITY_RESULT::UNKNOWN) {
         std::cout << "Could not verify safety." << std::endl;
     } else {
@@ -75,23 +176,13 @@ static void computeReachableStates(const std::vector<std::string> filename,
     }
     std::cout << std::endl;
 
-    // output computed sets
-    for (const auto &fp: hypro::getFlowpipes(roots)) {
-        for (const auto &segment: fp) {
-            std::cout << segment << std::endl;
-        }
-    }
+    clock::time_point startPlotting = clock::now();
 
-    if (settings.plotting().plotDimensions.size() > 0) {
-        clock::time_point startPlotting = clock::now();
-
+    for (size_t i = 0; i < automata.size(); ++i) {
         auto &plotter = hypro::Plotter<Number>::getInstance();
-        std::string extendedFilename = settings.plotting().plotFileNames.front();
+        plotter.clear();
+        std::string extendedFilename = "testAutomatonSync" + std::to_string(i);
         switch (Representation::type()) {
-            case hypro::representation_name::polytope_t: {
-                extendedFilename += "_tpoly";
-                break;
-            }
             case hypro::representation_name::polytope_v: {
                 extendedFilename += "_vpoly";
                 break;
@@ -105,33 +196,35 @@ static void computeReachableStates(const std::vector<std::string> filename,
         }
         std::cout << "filename is " << extendedFilename << std::endl;
         plotter.setFilename(extendedFilename);
-        std::vector<std::size_t> plottingDimensions =
-                settings.plotting().plotDimensions.at(0);
-        plotter.rSettings().dimensions.push_back(plottingDimensions.front());
-        plotter.rSettings().dimensions.push_back(plottingDimensions.back());
+        // std::vector<std::size_t> plottingDimensions =
+        //         settings[i].plotting().plotDimensions.at(0);
+        // plotter.rSettings().dimensions.push_back(plottingDimensions.front());
+        // plotter.rSettings().dimensions.push_back(plottingDimensions.back());
         plotter.rSettings().cummulative = false;
-
-        // bad states plotting
-        typename hypro::HybridAutomaton<Number>::locationConditionMap
-                badStateMapping = automata[0].getLocalBadStates();
-        for (const auto &state: badStateMapping) {
-            auto matrix = state.second.getMatrix(0);
-            auto vector = state.second.getVector(0);
-            unsigned bs = plotter.addObject(
-                    Representation(matrix, vector).projectOn(plottingDimensions).vertices(),
-                    hypro::plotting::colors[hypro::plotting::red]);
-        }
+        
+        // // bad states plotting
+        // typename hypro::HybridAutomaton<Number>::locationConditionMap
+        //         badStateMapping = automata[i].getLocalBadStates();
+        // for (const auto &state: badStateMapping) {
+        //     auto matrix = state.second.getMatrix(0);
+        //     auto vector = state.second.getVector(0);
+        //     unsigned bs = plotter.addObject(
+        //             Representation(matrix, vector).vertices(),
+        //             hypro::plotting::colors[hypro::plotting::red]);
+        // }
 
         unsigned cnt = 0;
         // segments plotting
+        // auto flowpipes = getFlowpipes(roots);
+        auto flowpipes = getFlowpipes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
         for (const auto &flowpipe: flowpipes) {
             std::cout << "Flowpipe size " << flowpipe.size() << std::endl;
             for (const auto &segment: flowpipe) {
-                plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+                plotter.addObject(segment.vertices(), hypro::plotting::colors[cnt % 10]);
             }
             ++cnt;
         }
-
+    
         PRINT_STATS()
 
         std::cout << "Write to file." << std::endl;
@@ -139,109 +232,12 @@ static void computeReachableStates(const std::vector<std::string> filename,
         plotter.plot2d(hypro::PLOTTYPE::pdf, true);
 
         std::cout << "Finished plotting: "
-                  << std::chrono::duration_cast<timeunit>(clock::now() -
-                                                          startPlotting)
-                             .count() /
-                     1000.0
-                  << " ms" << std::endl;
-    }
-}
-
-int main(int argc, char **argv) {
-    int rep = 0;
-    std::vector<std::string> filename;
-    for (int i = 1; i < argc-1; i++) {
-        filename.push_back(argv[i]);
-    }
-    if (argc > 2) {
-        char *p;
-        rep = strtol(argv[argc-1], &p, 10);
-    } else {
-        std::cout << "Usage: " << argv[0] << " <filename1> (<filename2>)* <representation>" << std::endl;
-        std::cout << "Representation: 2 - HPolytope, 3 - VPolytope, 7 - PPLPolytope, 9 - TemplatePolyhedron" << std::endl;
-        exit(1);
-    }
-    
-    // for (std::string i: filename)
-    //     std::cout << i << " ";
-    
-#ifdef USE_CLN_NUMBERS
-    using Number = cln::cl_RA;
-#else
-    using Number = mpq_class;
-    // using Number = double;
-#endif
-
-    switch (rep) {
-        case 9: {
-            using Representation = hypro::TemplatePolyhedron<Number>;
-            std::cout << "Using a template polytope representation." << std::endl;
-            computeReachableStates<Number, Representation>(filename, hypro::representation_name::polytope_t);
-            break;
-        }
-
-        case 8: {
-            using Representation = hypro::SupportFunctionNew<Number>;
-            std::cout << "Cannot use generic support function representation. Please use a polytope representation."
-                      << std::endl;
-            break;
-        }
-
-#ifdef HYPRO_USE_PPL
-            case 7: {
-                using Representation = hypro::Polytope<Number>;
-                std::cout << "Using a ppl-polytope representation." << std::endl;
-                computeReachableStates<Number, Representation>(
-                      filename, hypro::representation_name::ppl_polytope );
-                break;
-            }
-#endif
-
-        case 6: {
-            using Representation = hypro::DifferenceBounds<Number>;
-            std::cout << "Cannot use a difference bounds representation. Please use a polytope representation." << std::endl;
-            break;
-        }
-
-        case 5: {
-            using Representation = hypro::Zonotope<Number>;
-            std::cout << "Cannot use a zonotope representation. Please use a polytope representation." << std::endl;
-            break;
-        }
-
-        case 4: {
-            using Representation = hypro::SupportFunction<Number>;
-            std::cout << "Cannot use a support function representation. Please use a polytope representation." << std::endl;
-            break;
-        }
-
-        case 3: {
-            using Representation = hypro::VPolytope<Number>;
-            std::cout << "Using a v-polytope representation." << std::endl;
-            computeReachableStates<Number, Representation>(
-                    filename, hypro::representation_name::polytope_v);
-            break;
-        }
-        case 2: {
-            using Representation = hypro::HPolytope<Number>;
-            std::cout << "Using a h-polytope representation." << std::endl;
-            computeReachableStates<Number, Representation>(
-                    filename, hypro::representation_name::polytope_h);
-            break;
-        }
-
-        case 1: {
-            using Representation = hypro::Box<Number>;
-            std::cout << "Cannot use a box representation. Please use a polytope representation." << std::endl;
-            break;
-        }
-        default: {
-            using Representation = hypro::HPolytope<Number>;
-            std::cout << "Using a h-polytope representation." << std::endl;
-            computeReachableStates<Number, Representation>(
-                    filename, hypro::representation_name::polytope_h);
-        }
+                << std::chrono::duration_cast<timeunit>(clock::now() -
+                                                        startPlotting)
+                            .count() /
+                    1000.0
+                << " ms" << std::endl;
     }
 
-    exit(0);
+    return 0;
 }
