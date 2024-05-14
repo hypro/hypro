@@ -56,6 +56,8 @@ typedef ::testing::Types<
         polyhedralTypes;
 
 typedef ::testing::Types<hypro::Box<double>, hypro::Box<mpq_class>> boxTypes;
+
+typedef ::testing::Types<hypro::VPolytope<mpq_class>, hypro::HPolytope<mpq_class>> vhPolyhedralTypes;
 // List tests which should be typed
 
 // Algorithm
@@ -67,6 +69,7 @@ TYPED_TEST_SUITE(QuickhullTest, allTypes);
 TYPED_TEST_SUITE(QuickIntersectionTest, allTypes);
 TYPED_TEST_SUITE(RectangularReachabilityTest, polyhedralTypes);
 TYPED_TEST_SUITE(UrgencyCEGARReachabilityTest, boxTypes);
+TYPED_TEST_SUITE(RectangularLabelSynchronizationTest, vhPolyhedralTypes);
 
 // Benchmark
 TYPED_TEST_SUITE(Benchmark, allTypes);
