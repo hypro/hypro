@@ -70,7 +70,7 @@ void runExample1(){
     // guard
 
     // -x <= -1 
-    // x <= 2 
+    // x <= 1.5 
     // -y <= -2.5
     // y <= 3
 
@@ -79,7 +79,7 @@ void runExample1(){
     vector_t<Number> guardVec = vector_t<Number>(4);
 
     guardVec(0) = Number(-1);
-    guardVec(1) = Number(2);
+    guardVec(1) = Number(carl::rationalize<Number>(1.5));
     guardVec(2) = Number(-2.5);
     guardVec(3) = Number(3);
 
@@ -131,11 +131,11 @@ void runExample1(){
     // set settings
     hypro::FixedAnalysisParameters fixedParameters;
     fixedParameters.jumpDepth = 1;
-    fixedParameters.localTimeHorizon = 0;
-    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(1);
+    fixedParameters.localTimeHorizon = 3;
+    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
 
     hypro::AnalysisParameters analysisParameters;
-    analysisParameters.timeStep = tNumber(1) / tNumber(1);
+    analysisParameters.timeStep = tNumber(1) / tNumber(10);
     analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
 
@@ -275,11 +275,11 @@ void runExample2(){
     // set settings
     hypro::FixedAnalysisParameters fixedParameters;
     fixedParameters.jumpDepth = 1;
-    fixedParameters.localTimeHorizon = 5;
-    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(1);
+    fixedParameters.localTimeHorizon = 3;
+    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
 
     hypro::AnalysisParameters analysisParameters;
-    analysisParameters.timeStep = tNumber(1) / tNumber(1);
+    analysisParameters.timeStep = tNumber(1) / tNumber(10);
     analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
 
@@ -316,7 +316,7 @@ void runExample3(){
 
     // typedefs for simplification.
     using Number = double;
-    using Representation = hypro::VPolytope<Number>;
+    using Representation = hypro::HPolytope<Number>;
 
     // create the discrete structure of the automaton and the automaton itself.
     HybridAutomaton<Number> bBallAutomaton = HybridAutomaton<Number>();
@@ -408,10 +408,10 @@ void runExample3(){
     hypro::FixedAnalysisParameters fixedParameters;
     fixedParameters.jumpDepth = 1;
     fixedParameters.localTimeHorizon = 5;
-    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(1);
+    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
 
     hypro::AnalysisParameters analysisParameters;
-    analysisParameters.timeStep = tNumber(1) / tNumber(1);
+    analysisParameters.timeStep = tNumber(1) / tNumber(10);
     analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
 

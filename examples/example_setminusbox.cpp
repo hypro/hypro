@@ -28,7 +28,7 @@ int main() {
 	hypro::Box<Number> eindimensionalminus( std::make_pair( hypro::Point<Number>( { 1 } ),
 															hypro::Point<Number>( { 2 } ) ) );
 
-	/*std::vector<hypro::Box<Number>> test1= testbox.setMinus(minusbox);
+	/*std::vector<hypro::Box<Number>> test1= testbox.setMinusOld(minusbox);
 	for (long unsigned int i = 0; i < test1.size(); i++){
 		std::cout << test1.at(i) << std::endl;
 	}*/

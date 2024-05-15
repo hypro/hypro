@@ -134,11 +134,11 @@ int main() {
     // set settings
     hypro::FixedAnalysisParameters fixedParameters;
     fixedParameters.jumpDepth = 1;
-    fixedParameters.localTimeHorizon = 0;
-    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(1);
+    fixedParameters.localTimeHorizon = 5;
+    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(100);
 
     hypro::AnalysisParameters analysisParameters;
-    analysisParameters.timeStep = tNumber(1) / tNumber(1);
+    analysisParameters.timeStep = tNumber(1) / tNumber(100);
     analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
 

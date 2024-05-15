@@ -20,20 +20,33 @@
 #include <algorithm>
 
 namespace hypro {
-    template<typename Number, typename Converter, typename S> 
-    std::vector<VPolytopeT<Number, Converter, S>> VPolytopeT<Number, Converter, S>::setMinus2(const VPolytopeT<Number, Converter, S> &minus) const {
-        std::vector<VPolytopeT<Number, Converter, S>> result;
-        VPolytopeT<Number, Converter, S> polytope = this->setMinusCrossingV(minus);
 
-        std::cout << "P:" << std::endl << *this << std::endl;
-        std::cout << "G:" << std::endl << minus << std::endl;
-        std::cout << "Resulting Polytope is:" << std::endl << polytope << std::endl << std::endl;
+    template<typename Number, typename Converter, class Setting>
+    std::vector<VPolytopeT<Number, Converter, Setting>> VPolytopeT<Number, Converter, Setting>::setMinus(const VPolytopeT<Number, Converter, Setting> &minus, int algoUsed) const {
 
-        result.push_back(polytope);
+        std::vector<VPolytopeT<Number, Converter, Setting>> result;
+        VPolytopeT<Number, Converter, Setting> polytope;
 
-        return result;
+        switch (algoUsed){
+            case 0:
+                std::cout << "Error, setMinus2 function not implemented for Representation VPolytope" << std::endl;
+                exit(1);
+                break;
+
+            case 1:
+                polytope = this->setMinusCrossingV(minus);
+                result.push_back(polytope);            
+                break;
+                
+            case 2:
+                std::cout << "Error, setMinusOld function not implemented for Representation VPolytope" << std::endl;
+                exit(1);
+                break;
+        }
+
+        return result; 
+
     }
-
 
     template<typename Number, typename Converter, typename S> 
     VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::setMinusCrossingV(const VPolytopeT<Number, Converter, S> &polytopeG) const {

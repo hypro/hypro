@@ -15,7 +15,7 @@ namespace hypro {
     template<typename OutputIt>
     REACHABILITY_RESULT
     LTISetMinusWorker<Representation, Automaton>::computeTimeSuccessors(const Representation &initialSet,
-                                                                        LocationT const *loc, OutputIt out) const {
+                                                                        LocationT const *loc, OutputIt out, int algoUsed) const {
         // constructing the first segment
         Representation firstSegment = constructFirstSegment(initialSet, loc->getLinearFlow(),
                                                             mTrafoCache.getTransformation(loc,
@@ -58,7 +58,7 @@ namespace hypro {
                 if (!testsegment.empty()) {
                     Representation guard(urgent_trans.at(i)->getGuard().getMatrix(),
                                          urgent_trans.at(i)->getGuard().getVector());
-                    result = segment.setMinus2(guard);
+                    result = segment.setMinus(guard, algoUsed);
                 }
                 // insert segments into flowpipe
                 if (result.size() > 0) {
@@ -130,7 +130,7 @@ namespace hypro {
                         if (containment != CONTAINMENT::NO) {
                             Representation guard(urgent_trans.at(i)->getGuard().getMatrix(),
                                                  urgent_trans.at(i)->getGuard().getVector());
-                            result = segment.setMinus2(guard);
+                            result = segment.setMinus(guard, algoUsed);
                             // insert segment
                             if (result.size() > 0) {
                                 for (unsigned long int i = 0; i < result.size(); i++) {

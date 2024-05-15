@@ -1472,7 +1472,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     std::vector<HPolytopeT<Number, Converter, Setting>>
-    HPolytopeT<Number, Converter, Setting>::setMinus(const HPolytopeT<Number, Converter, Setting> &minus) const {
+    HPolytopeT<Number, Converter, Setting>::setMinusOld(const HPolytopeT<Number, Converter, Setting> &minus) const {
         std::vector<HPolytopeT<Number, Converter, Setting>> result;
         if (this->dimension() != minus.dimension()) {
             return result;
@@ -1519,6 +1519,43 @@ namespace hypro {
         return result;
     }
 
+    template<typename Number, typename Converter, class Setting>
+    std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus(const HPolytopeT<Number, Converter, Setting> &minus, int algoUsed) const {
+
+        std::vector<HPolytopeT<Number, Converter, Setting>> result;
+
+        switch (algoUsed){
+        case 0:
+            result = this->setMinus2(minus);
+            break;
+
+        case 1:
+            result = this->setMinusCrossing(minus);
+            break;
+        case 2:
+            result = this->setMinusOld(minus);
+            break;
+        }
+
+        return result; 
+
+    }
+
+    // new
+    // consider the P polytope is always bounded
+    template<typename Number, typename Converter, class Setting>
+    std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinusCrossing(const HPolytopeT<Number, Converter, Setting> &minus) const {
+        std::vector<HPolytopeT<Number, Converter, Setting>> result;
+        auto P_V = Converter::toVPolytope(*this);
+        auto polytope = P_V.setMinusCrossingH(minus);
+        auto polytope_H = Converter::toHPolytope(polytope);
+
+        result.push_back(polytope_H);
+
+        return result;
+    }
+
+    
     template<typename Number, typename Converter, class Setting>
     std::vector<HPolytopeT<Number, Converter, Setting>>
     HPolytopeT<Number, Converter, Setting>::setMinus2(const HPolytopeT<Number, Converter, Setting> &minus) const {
@@ -1593,5 +1630,6 @@ namespace hypro {
         }
         return result;
     }
+
 
 }  // namespace hypro

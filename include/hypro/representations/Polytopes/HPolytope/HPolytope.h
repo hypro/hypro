@@ -455,8 +455,21 @@ namespace hypro {
         std::vector<HPolytopeT<Number, Converter, Setting>>
         setMinus2(const HPolytopeT<Number, Converter, Setting> &minus) const;
 
+        /**
+         * calculates the set difference of two H-Polytopes with crossing points
+         */
         std::vector<HPolytopeT<Number, Converter, Setting>>
-        setMinus(const HPolytopeT<Number, Converter, Setting> &minus) const;
+        setMinusCrossing(const HPolytopeT<Number, Converter, Setting> &minus) const;
+
+         /**
+         * calculates the set difference of two H-Polytopes
+         * general algorithm which selects the algorithm to be used
+         */
+        std::vector<HPolytopeT<Number, Converter, Setting>>
+        setMinus(const HPolytopeT<Number, Converter, Setting> &minus, int algoUsed) const;
+
+        std::vector<HPolytopeT<Number, Converter, Setting>>
+        setMinusOld(const HPolytopeT<Number, Converter, Setting> &minus) const;
 
         template<typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
         void reduceNumberRepresentation(const std::vector<Point<double>> & = std::vector<Point<double>>(),
