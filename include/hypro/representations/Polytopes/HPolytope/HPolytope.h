@@ -38,6 +38,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include <algorithm>
 #include <cassert>
 #include <optional>
+#include <random>
 
 namespace hypro {
 
@@ -448,6 +449,19 @@ namespace hypro {
             }
             // #endif
         }
+
+        /**
+        * calculates the set difference of two polytopes under-approximation 
+        */    
+        HPolytopeT<Number, Converter, Setting>
+        setMinusUnder(const HPolytopeT<Number, Converter, Setting> &minus) const;
+
+
+        /**
+        * returns an estimation of the polytope volume in double 
+        */    
+        double getVolumeEstimation() const;
+
 
         /**
          * calculates the set difference of two polytopes

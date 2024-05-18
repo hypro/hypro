@@ -34,6 +34,7 @@ namespace hypro {
         std::size_t numberSetsForContinuousCoverage = 0;                      ///< number of sets at the beginning of a flowpipe that are used for coverage tests to detect fixed points within other nodes
         bool detectContinuousFixedPointsLocally = false;                      ///< true if an analyzer should try to find fixed points within the current flowpipe (set-containment)
         bool detectZenoBehavior = true;                                          ///< if true, a lightweight check for Zeno cycles is preformed during analysis
+        int algoUsed = 0;                                                      ///< 0 = use the setMinus2, 1 = use the setMinusCrossing, 2 = use the setMinusOld
     };
 
     struct FixedAnalysisParameters {

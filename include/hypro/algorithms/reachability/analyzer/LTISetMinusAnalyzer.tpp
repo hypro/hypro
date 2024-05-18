@@ -29,10 +29,7 @@ namespace hypro {
             mWorkQueue.pop_back();
             REACHABILITY_RESULT safetyResult;
 
-            // algoUsed = 0: use the setMinus2
-            // algoUsed = 1: use the setMinusCrossing
-            // algoUsed = 2: use the setMinusOld
-            int algoUsed = 0;
+            int algoUsed = this->mParameters.algoUsed;
 
             safetyResult = worker.computeTimeSuccessors(currentNode->getInitialSet(), currentNode->getLocation(),
                                                         std::back_inserter(currentNode->getFlowpipe()), algoUsed);

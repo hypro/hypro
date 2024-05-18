@@ -1018,7 +1018,6 @@ namespace hypro {
         if (dimensions.empty()) {
             return Empty();
         }
-
         // projection by means of a linear transformation
         matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
         for (auto i: dimensions) {
@@ -1554,6 +1553,133 @@ namespace hypro {
 
         return result;
     }
+
+    template<typename Number, typename Converter, class Setting>
+    HPolytopeT<Number, Converter, Setting>
+    HPolytopeT<Number, Converter, Setting>::setMinusUnder(const HPolytopeT<Number, Converter, Setting> &minus) const {
+
+        std::vector<HPolytopeT<Number, Converter, Setting>> vectorPolytopes;
+               
+        HPolytopeT<Number, Converter, Setting> minuspoly(minus.matrix(), minus.vector());
+        std::vector<hypro::Halfspace<Number>> minusconstraints = minuspoly.constraints();
+
+        for (std::size_t i = 0; i < minusconstraints.size(); i++) {
+            hypro::HPolytopeT<Number, Converter, Setting> p_copy(this->matrix(), this->vector());
+            hypro::Halfspace<Number> h = minusconstraints.at(i);
+            h.invert();
+            p_copy.insert(h);
+            vectorPolytopes.push_back(p_copy);
+        }
+
+        hypro::HPolytopeT<Number, Converter, Setting> biggestPolytope;
+        double biggestVolume = 0;
+        double currentVolume = 0;
+
+        for (auto cur_p : vectorPolytopes) {
+            currentVolume = cur_p.getVolumeEstimation();
+            if (currentVolume > biggestVolume) {
+                biggestPolytope = cur_p;
+                biggestVolume = currentVolume;
+            }
+        }
+
+        return biggestPolytope;              
+    }
+
+    template<typename Number, typename Converter, class Setting>
+    double HPolytopeT<Number, Converter, Setting>::getVolumeEstimation() const {
+
+        if (this->empty()) {
+            return 0;
+        }
+
+        if (this->dimension() == 0) {
+            return 0;
+        }
+        
+        // min and max values of each dimension
+        std::vector<std::pair<Number,Number>> bounds;
+
+        // A*x <= b
+        hypro::Optimizer<Number> opt;
+
+        opt.setMatrix(this->matrix());
+        opt.setVector(this->vector());
+
+        for (int i = 0; i < this->dimension(); i++) {
+            // direction : 1,0, ..., 0,0  (ith element is 1)
+            vector_t<Number> direction = vector_t<Number>::Zero(this->dimension());
+            direction(i) = 1;   
+
+            // set it to minimize
+            opt.setMaximize(false);
+            EvaluationResult<Number> result = opt.evaluate(direction, true);
+            Number minValue;
+            if(result.errorCode == SOLUTION::INFEAS){
+                return 0;
+            }
+            if(result.errorCode == SOLUTION::INFTY){
+                minValue = std::numeric_limits<Number>::min();
+            }else{
+                minValue = result.supportValue;
+            }
+
+            // set it to maximize
+            opt.setMaximize(true);
+            result = opt.evaluate(direction, true);
+            Number maxValue ;
+            if(result.errorCode == SOLUTION::INFEAS){
+                return 0;
+            }
+            if(result.errorCode == SOLUTION::INFTY){
+                maxValue = std::numeric_limits<Number>::max();
+            }else{
+                maxValue = result.supportValue;
+            }
+
+            // insert the min and max value of each dimension in the vector bounds
+            bounds.push_back(std::make_pair(minValue, maxValue));            
+        }
+
+        // calculate the volume
+        double estimatedVolume = 1;
+        for (int i = 0; i < this->dimension(); i++) {
+            estimatedVolume *= (bounds[i].second - bounds[i].first);
+        }
+
+        const int numberSamples = 1000;
+        int pointsInside = 0;
+        std::mt19937 generator;
+        std::vector<std::uniform_real_distribution<Number>> dist_vector;
+
+        // generate for every dimension a uniform distribution
+        for(int i = 0; i < this->dimension(); i++){
+            dist_vector.push_back(std::uniform_real_distribution<Number>(bounds[i].first, bounds[i].second));
+        }
+
+        // generate numberSamples points and check if they are inside the polytope
+        for(int i = 0; i < numberSamples; i++){
+            std::vector<Number> point_coordinates;
+
+            // generate a point
+            for(int j = 0; j < this->dimension(); j++){
+                point_coordinates.push_back(dist_vector[j](generator));
+            }
+            Point point(point_coordinates);
+            if(this->contains(point)){
+                pointsInside++;
+            }
+        }
+
+        // calculate the volume
+        double fractionPoints = (double)pointsInside / numberSamples;
+        double volume = fractionPoints * estimatedVolume;
+        return volume;
+    }
+
+
+
+
 
     
     template<typename Number, typename Converter, class Setting>

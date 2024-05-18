@@ -41,6 +41,42 @@ static VPolytopeT<Number, Converter, Setting> getPolytopeP() {
 }
 
 template<typename Number, typename Converter, typename Setting>
+static HPolytopeT<Number, Converter, Setting> getHPolytopeP() {
+    // Create a polytope
+    using HalfspaceVector = std::vector<Halfspace<Number>>;
+
+    HalfspaceVector halfspaces;
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(-1), Number(0), Number(0)}), Number(-1)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(1), Number(0), Number(0)}), Number(4)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(0), Number(-1)}), Number(-2)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(0), Number(1)}), Number(6)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(4), Number(-6), Number(3)}), Number(-8)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(1), Number(0)}), Number(10)));
+    // halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(-4), Number(6), Number(-3)}), Number(8)));
+
+    HPolytopeT<Number, Converter, Setting> hp = HPolytopeT<Number, Converter, Setting>(halfspaces);
+    return hp;
+}
+
+template<typename Number, typename Converter, typename Setting>
+static HPolytopeT<Number, Converter, Setting> getHPolytopeG() {
+    // Create a polytope
+    using HalfspaceVector = std::vector<Halfspace<Number>>;
+
+    HalfspaceVector halfspaces;
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0.09), Number(0.11), Number(0)}), Number(1)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0.4), Number(0), Number(-0.5)}), Number(-1)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(-0.16), Number(0.2), Number(0)}), Number(1)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0.13), Number(0), Number(0.17)}), Number(1)));
+    // halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(-4), Number(6), Number(-3)}), Number(8)));
+
+    HPolytopeT<Number, Converter, Setting> hp = HPolytopeT<Number, Converter, Setting>(halfspaces);
+    return hp;
+}
+
+
+
+template<typename Number, typename Converter, typename Setting>
 static VPolytopeT<Number, Converter, Setting> getPolytopeG() {
     // Create a polytope
     using pointVector = std::vector<Point<Number>>;
@@ -192,10 +228,17 @@ static void printPolytopeH(HPolytopeT<Number, Converter, Setting> P, std::string
 
 template<typename Number, typename Converter, typename Setting>
 static void calculateConvexSetMinus(int rep) {
+
+    using HSetting = HPolytopeSetting;
     
     VPolytopeT<Number, Converter, Setting> P;
     VPolytopeT<Number, Converter, Setting> G;
+    HPolytopeT<Number, Converter, HSetting> G_H;
+    HPolytopeT<Number, Converter, HSetting> P_H;
     VPolytopeT<Number, Converter, Setting> res;
+    HPolytopeT<Number, Converter, HSetting> res_H;
+
+    double size;
 
     switch (rep)
     {
@@ -243,10 +286,9 @@ static void calculateConvexSetMinus(int rep) {
             P = getPolytopeP3<Number, Converter, Setting>();
             G = getPolytopeG3<Number, Converter, Setting>();
 
-            using HSetting = HPolytopeSetting;
-            HPolytopeT<Number, Converter, HSetting> G_H = hypro::Converter<Number>::toHPolytope(G, CONV_MODE::OVER);
+            G_H = hypro::Converter<Number>::toHPolytope(G, CONV_MODE::OVER);
 
-            VPolytopeT<Number, Converter, Setting> res = P.setMinusCrossingH(G_H);
+            res = P.setMinusCrossingH(G_H);
 
             printPolytopeV(P, "P");
             printPolytopeV(G, "G");
@@ -254,6 +296,21 @@ static void calculateConvexSetMinus(int rep) {
             printPolytopeV(res, "P - G_H");
             break;
 
+        case 6: 
+            P_H = getHPolytopeP<Number, Converter, HSetting>();
+            G_H = getHPolytopeG<Number, Converter, HSetting>();
+
+            std::cout << "P_H" << P_H << std::endl;
+            std::cout << "G_H" << G_H << std::endl;
+
+            res_H = P_H.setMinusUnder(G_H);
+
+            std::cout << "P_H - G_H" << res_H << std::endl;
+
+            std::cout << "Volume of P_H: " << P_H.getVolumeEstimation() << std::endl;
+            std::cout << "Volume of G_H: " << G_H.getVolumeEstimation() << std::endl;
+            std::cout << "Volume of P_H - G_H: " << res_H.getVolumeEstimation() << std::endl;
+            break;
     }
 }
 
@@ -336,6 +393,7 @@ int main(int argc, char **argv) {
         std::cout << "Options: Numbers 1,2,3 V-Polytope P and V-Polytope G in 3D" << std::endl;
         std::cout << "Options: Number 4 V-Polytope P and V-Polytope G in 2D" << std::endl;
         std::cout << "Options: Number 5 V-Polytope P and H-Polytope G in 3D" << std::endl;
+        std::cout << "Options: Number 6 H-Polytope P in 2D volume estimation" << std::endl;
         return 0;
     }
 
