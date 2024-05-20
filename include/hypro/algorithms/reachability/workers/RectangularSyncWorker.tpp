@@ -76,8 +76,6 @@ RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<St
 	}
 
 	// add state to flowpipe
-	// TODO: delete std::cout
-	std::cout << "ComputeTimeSuccessors.time successor:" << constrainedTimeSuccessors << std::endl;
 	mFlowpipe.addState( constrainedTimeSuccessors );
 	task.getFlowpipe().push_back( constrainedTimeSuccessors );
 
@@ -123,10 +121,8 @@ void RectangularSyncWorker<State, Automaton>::postProcessSyncJumpSuccessors( Rea
 		auto statesVec = it->second;
 		assert( statesVec.size() == 1 && "Rectangular Flowpipes have only one state in the time successors." );
 		auto& state = statesVec.front();
-		std::cout << "state before projection: " << state << std::endl;	 // TODO remove before push
 		auto time = state.getTimeProjection();							 // time is a polytope not an interval
 		assert( time.dimension() == 1 );
-		std::cout << "state projected on last dimension (time): " << time << std::endl;	 // TODO remove before push
 		auto label = transitionPtr->getLabels();										 // get the vector of labels of the transition //TODO: try to handle transition with multiple labels.
 		std::set<RectangularSyncWorker<State, Automaton>*> visitedWorkers{ this };
 		auto nodeTimePairs = findSyncSuccessors( task, *transitionPtr, label, time, visitedWorkers );
@@ -154,7 +150,6 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 			return {};
 		}
 		rectangularSyncJumpHandler<State, LocationT> jmpHandler;
-		std::cout << "syncTime in if branch before applyJump: " << syncTime << std::endl;  // TODO remove before push
 		mSyncJumpSuccessorSets = jmpHandler.applyJump( transitionSourceNodeMap, syncTime );
 		// assert( mSyncJumpSuccessorSets.size() == 1 && "findJumpSuccessors applies the jump for one transition." );
 		if (mSyncJumpSuccessorSets.empty()) {
@@ -216,7 +211,6 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 						// if the intersection with the guard is empty (i.e. the transition is not enabled), the synchronization is not possible
 						continue;
 					}
-					std::cout << "syncTime in else branch before applyJump: " << syncTime1 << std::endl;  // TODO remove before push
 					rectangularSyncJumpHandler<State, LocationT> jmpHandler;
 					mSyncJumpSuccessorSets = jmpHandler.applyJump( transitionSourceNodeMap, syncTime1 );
 					// assert( mSyncJumpSuccessorSets.size() == 1 && "findJumpSuccessors searches applies the jump for one transition." );
@@ -247,6 +241,7 @@ template <typename State, typename Automaton>
 std::map<ReachTreeNode<State, typename Automaton::LocationType>*, Transition<typename Automaton::LocationType>>
 RectangularSyncWorker<State, Automaton>::getCandidateNodes( ReachTreeNode<State, LocationT>& syncNode, const std::vector<Label>& label ) {
 	std::map<ReachTreeNode<State, LocationT>*, Transition<LocationT>> syncCandidates{};
+	// recursively search for nodes that can synchronize, i.e. have a transition with the same label
 	for ( auto child : syncNode.getChildren() ) {
 		auto childCandidates = getCandidateNodes( *child, label );
 		syncCandidates.insert( childCandidates.begin(), childCandidates.end() );

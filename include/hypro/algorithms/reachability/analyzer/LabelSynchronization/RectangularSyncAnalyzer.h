@@ -11,7 +11,6 @@
 
 #include "../../../../datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "../../../../types.h"
-// #include "../../workers/RectangularWorker.h"
 #include "../../workers/RectangularSyncWorker.h"
 #include "../../../../datastructures/HybridAutomaton/Label.h"
 
@@ -24,7 +23,7 @@ namespace hypro {
  * @details Requires the usage of a suitable state set representation, e.g., carlPolytope.
  * @tparam State state set representation type (must be polyhedral)
  * @tparam Automaton hybrid automaton type
- * @tparam Multithreading enable/disable multithreading
+ * @tparam Multithreading enable/disable multithreading (currently not supported)
  */
 template <typename State, typename Automaton, typename Multithreading = NoMultithreading>
 class RectangularSyncAnalyzer {
@@ -43,12 +42,16 @@ class RectangularSyncAnalyzer {
 		, mLabelAutomatonMap()
 		, mHybridAutomata() {
 		for ( auto &automaton : automata ) {
+			// init a HA vector
 			mHybridAutomata.push_back( &automaton );
+			// insert the automaton's initial states into a reach tree
 			mAutomatonReachTreeMap.emplace( std::make_pair( &automaton, makeRoots<State, Automaton>( automaton ) ) );
+			// init for each label the set of automata that have this label
 			for (auto label : automaton.getLabels()) {
 				mLabelAutomatonMap[label].insert(&automaton);
         	}
 		}
+		// for each of the initial states of each automaton, set the sync nodes to point to the roots of the other automata's search trees (we assume each automaton has only one initial state)
 		auto count = automata.size();
 		for (typename std::map<Automaton const *, std::vector<ReachTreeNode<State, LocationT>>>::iterator it = mAutomatonReachTreeMap.begin(); it != mAutomatonReachTreeMap.end(); ++it) {
 			for ( auto &rtNode : it->second ) {

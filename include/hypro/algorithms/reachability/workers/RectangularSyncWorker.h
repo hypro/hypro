@@ -40,7 +40,6 @@ class RectangularSyncWorker {
 	using LocationT = typename Automaton::LocationType;
 	using JumpSuccessors = typename rectangularSyncGuardHandler<State, LocationT>::TransitionStatesMap;
 	using JumpPredecessors = typename rectangularSyncGuardHandler<State, LocationT>::TransitionStatesMap;
-	// using Transition = typename Transition<LocationT>;
 
   public:
 	/// constructor from rectangular automaton and settings TODO: delete this constructor

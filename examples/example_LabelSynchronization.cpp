@@ -142,7 +142,7 @@ int main(int argc, char **argv) {
     for (int i = 1; i < argc-1; i++) {
         filename.push_back(argv[i]);
     }
-    if (argc > 2) {
+    if (argc > 1) {
         char *p;
         rep = strtol(argv[argc-1], &p, 10);
     } else {
@@ -151,12 +151,8 @@ int main(int argc, char **argv) {
         exit(1);
     }
     
-#ifdef USE_CLN_NUMBERS
-    using Number = cln::cl_RA;
-#else
     using Number = mpq_class;
     // using Number = double;
-#endif
 
     switch (rep) {
         case 3: {

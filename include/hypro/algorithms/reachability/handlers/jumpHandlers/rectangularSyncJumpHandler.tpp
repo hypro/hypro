@@ -113,30 +113,4 @@ namespace hypro {
         }
     }
 
-    // template<typename Representation, typename Number>
-    // HPolytope<Number> applyResetFM(Representation &stateSet, IntervalAssignment<Number> intervalReset) {
-    //     // Apply reset using FM (definitely works, is slow)
-    //     std::vector<std::size_t> projectOutDimensions;
-    //     HPolytope<Number> projectedSet = Converter<Number>::toHPolytope(stateSet);
-    //     std::vector<Halfspace<Number>> newConstraints;
-    //     for (std::size_t i = 0; i < intervalReset.size(); ++i) {
-    //         if (!isEmpty(intervalReset.mIntervals[i])) {
-    //             // non-empty intervals represent some reset different from identity -> project out dimension, memorize new interval bounds
-    //             projectOutDimensions.push_back(i);
-    //             // create and store new interval bounds
-    //             vector_t<Number> normal = vector_t<Number>::Zero(stateSet.dimension());
-    //             normal(i) = Number(1);
-    //             newConstraints.emplace_back(normal, intervalReset.mIntervals[i].upper());
-    //             normal = -normal;
-    //             newConstraints.emplace_back(normal, -intervalReset.mIntervals[i].lower());
-    //         }
-    //     }
-    //     // add interval bounds as new constraints
-    //     projectedSet = projectedSet.projectOutConservative(projectOutDimensions);
-    //     projectedSet.insert(newConstraints.begin(), newConstraints.end());
-
-    //     return projectedSet.removeRedundancy();
-    // }
-
-
 } // namespace hypro

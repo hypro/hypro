@@ -28,10 +28,6 @@ namespace hypro {
 
         void applyReset(Representation &state, Transition<Location> *transitionPtr, std::size_t subspace = 0) const;
 
-        // void applyReduction(Representation &state) const;
-        
-        // void applyGuard(Representation &state, Transition<Location> *transitionPtr) const;
-
     };
 } // namespace hypro
 

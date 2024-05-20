@@ -16,7 +16,7 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::r
 	
 	// initialize queue
 	for ( auto& automaton : mHybridAutomata ) {
-		assert( !mAutomatonReachTreeMap[automaton].empty() && "Automaton reach tree is empty");
+		assert( !mAutomatonReachTreeMap[automaton].empty() && "Automaton reach tree should be initialized with the initial states of the automaton");
 		for ( auto& rtNode : mAutomatonReachTreeMap[automaton] ) {
 			mWorkQueue.push( std::make_pair( &rtNode, automaton ) );
 		}
