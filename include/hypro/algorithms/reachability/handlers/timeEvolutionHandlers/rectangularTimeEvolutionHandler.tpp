@@ -256,6 +256,7 @@ CarlPolytope<Number> rectangularApplyTimeEvolution( const CarlPolytope<Number>& 
 
 template <typename Number>
 CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant ) {
+	constexpr bool REMOVE_REDUNDANDY_IN_QE = false;
 	auto& vpool = hypro::VariablePool::getInstance();
 
 	// get bad state
@@ -307,24 +308,33 @@ CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Nu
 	TRACE( "hypro.worker", "Full constraint set describing the dynamic behavior: \n"
 								 << bad );
 
-    // reverse order to for detectDimension() to work properly.
-    // If ordering of elimination is changed, dimension has to be set manually.
-	std::reverse(variablesToEliminate.begin(),variablesToEliminate.end());
+	if(REMOVE_REDUNDANDY_IN_QE) {
+		// reverse order to for detectDimension() to work properly.
+		// If ordering of elimination is changed, dimension has to be set manually.
+		std::reverse(variablesToEliminate.begin(),variablesToEliminate.end());
 
-	// create variables to eliminate
-	QEQuery quOrder;
-	quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
+		// create variables to eliminate
+		QEQuery quOrder;
+		quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
 
-	bad.setDimension( dim + variablesToEliminate.size() + 1); ///TODO
-    bad.removeRedundancy();
-    bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
+		bad.setDimension( dim + variablesToEliminate.size() + 1); ///TODO
+		bad.removeRedundancy();
+		bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
 
-	quOrder.at(0).second = std::vector<carl::Variable>{t};
+		quOrder.at(0).second = std::vector<carl::Variable>{t};
 
-	assert(bad.dimension() == dim + 1);
+		assert(bad.dimension() == dim + 1);
 
-	bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
+		bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
 
+	} else {
+		// create variables to eliminate
+		variablesToEliminate.push_back(t);
+
+		QEQuery quOrder;
+		quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
+		bad.eliminateVariables( quOrder );
+	}
 	assert(bad.dimension() == dim);
 
 	DEBUG( "hydra.worker", "State set after reverse time elapse: " << bad );

@@ -373,9 +373,16 @@ namespace hypro {
 			for(auto& var : QuantifierVariablesPair.second) {
 				QEQuery quOrder;
 				quOrder.push_back( std::make_pair( QuantifierType::EXISTS, std::vector<carl::Variable>{var} ) );
+
+				size_t current_size = mFormula.size();
 				mFormula = eliminateQuantifiers(mFormula, quOrder);
 				setDimension(dimension() - 1);
-				removeRedundancy();
+
+				if(current_size != mFormula.size())
+					{
+						removeRedundancy();
+						current_size = mFormula.size();
+					}
 			}
 		}
     }
