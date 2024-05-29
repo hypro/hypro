@@ -156,7 +156,6 @@ static void run_comparison_function(const std::string &filename,
     std::vector<timeunit> runtimes;
     for(int iteration = 0; iteration < number_iterations; iteration++) {
         auto [automaton_cur, parsedSettings_cur] = hypro::parseFlowstarFile<Number>(filename);
-        std::cout << parsedSettings_cur << std::endl;
 
         hypro::Settings settings_cur = hypro::convert(parsedSettings_cur);
         hypro::AnalysisParameters analysisParams_cur = settings_cur.strategy().front();
