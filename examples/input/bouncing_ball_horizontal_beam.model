@@ -1,0 +1,120 @@
+hybrid reachability
+{
+ state var x,y,z,vx,vy
+
+ setting 
+ {
+  fixed steps 0.01
+  time 3
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,y
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output bouncing_ball_horizontal_beam
+  max jumps 5
+  print on
+ }
+
+ modes
+	{
+		loc_falling
+		{
+			poly ode 1
+			{
+				x' = vx
+        y' = vy
+        z' = 0
+        vx' = 0
+        vy' = -9.81
+			}
+			inv
+			{
+				x >= 0 
+        x <= 2 
+        y >= 0 
+        vy <= 0
+			}
+		}
+		loc_rising
+		{
+			poly ode 1
+			{
+				x' = vx
+        y' = vy
+        z' = 0
+        vx' = 0
+        vy' = -9.81
+			}
+			inv
+			{
+				x >= 0 
+        x <= 2 
+        y >= 0 
+        vy >= 0
+			}
+		}
+	}
+
+ jumps
+ {
+  loc_falling -> loc_falling
+  guard { x <= 0 }
+  reset { vx' := -0.8*vx }
+  parallelotope aggregation {}
+
+  loc_falling -> loc_falling
+  guard { x >= 2 }
+  reset { vx' := -0.8*vx }
+  parallelotope aggregation {}
+
+  loc_falling -> loc_rising
+  guard { y <= 0 }
+  reset { vy' := -0.75*vy }
+  parallelotope aggregation {}
+
+  loc_falling -> loc_rising
+  guard { y >= 0.9 y <= 1 z >= -0.5 z <= 0.5 }
+  reset { vy' := -0.75*vy vx' := vx - 0.1 }
+  parallelotope aggregation {}
+  urgent 
+
+  loc_rising -> loc_falling
+  guard { vy <= 0 }
+  reset {}
+  parallelotope aggregation {}
+
+  loc_rising -> loc_rising
+  guard { x >= 2 }
+  reset { vx' := -0.8*vx }
+  parallelotope aggregation {}
+
+  loc_rising -> loc_rising
+  guard { x <= 0 }
+  reset { vx' := -0.8*vx }
+  parallelotope aggregation {}
+ }
+
+ init
+ {
+  loc_falling
+  {
+   x in [0,0]
+   y in [5,5]
+   z in [-1,1]
+   vx in [1,1]
+   vy in [0,0]
+  }
+ }
+}
+
+
+unsafe set
+{
+  loc_falling
+  {
+   x in [2,4]
+   y in [-2.5,0]
+  }
+}

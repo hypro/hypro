@@ -573,7 +573,7 @@ namespace hypro {
          */
         std::vector<BoxT<Number, Converter, Setting>> setMinus2(const BoxT<Number, Converter, Setting> &minusbox) const;
 
-        std::vector<BoxT<Number, Converter, Setting>> setMinus(const BoxT<Number, Converter, Setting> &minusbox, int algoUsed) const;
+        std::vector<BoxT<Number, Converter, Setting>> setMinus(const BoxT<Number, Converter, Setting> &minusbox, int setMinusAlgoUsed) const;
 
 
         /**

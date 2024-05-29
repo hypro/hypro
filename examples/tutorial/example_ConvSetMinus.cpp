@@ -14,6 +14,7 @@
 // #include "hypro/representations/Polytopes/VPolytope/VPolytopeSetting.h"
 // #include "hypro/representations/conversion/Converter.h"
 #include <hypro/representations/GeometricObjectBase.h>
+#include "hypro/util/plotting/Plotter.h"
 
 using namespace hypro;
 
@@ -35,6 +36,26 @@ static VPolytopeT<Number, Converter, Setting> getPolytopeP() {
 
     points.push_back(Point<Number>({Number(1.5), Number(1.5), Number(1.5)}));
     points.push_back(Point<Number>({Number(1.6), Number(1.6), Number(1.6)}));
+    
+    VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
+    return vp;
+}
+
+template<typename Number, typename Converter, typename Setting>
+static VPolytopeT<Number, Converter, Setting> getPolytopeG() {
+    // Create a polytope
+    using pointVector = std::vector<Point<Number>>;
+
+    pointVector points;
+    points.push_back(Point<Number>({Number(2), Number(2), Number(0)}));
+    points.push_back(Point<Number>({Number(6), Number(2), Number(0)}));
+    points.push_back(Point<Number>({Number(2), Number(5), Number(0)}));
+    points.push_back(Point<Number>({Number(6), Number(5), Number(0)}));
+
+    points.push_back(Point<Number>({Number(2), Number(5), Number(4)}));
+    points.push_back(Point<Number>({Number(6), Number(5), Number(4)}));
+    points.push_back(Point<Number>({Number(6), Number(2), Number(4)}));
+    points.push_back(Point<Number>({Number(2), Number(2), Number(4)}));
     
     VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
     return vp;
@@ -72,28 +93,6 @@ static HPolytopeT<Number, Converter, Setting> getHPolytopeG() {
 
     HPolytopeT<Number, Converter, Setting> hp = HPolytopeT<Number, Converter, Setting>(halfspaces);
     return hp;
-}
-
-
-
-template<typename Number, typename Converter, typename Setting>
-static VPolytopeT<Number, Converter, Setting> getPolytopeG() {
-    // Create a polytope
-    using pointVector = std::vector<Point<Number>>;
-
-    pointVector points;
-    points.push_back(Point<Number>({Number(2), Number(2), Number(0)}));
-    points.push_back(Point<Number>({Number(6), Number(2), Number(0)}));
-    points.push_back(Point<Number>({Number(2), Number(5), Number(0)}));
-    points.push_back(Point<Number>({Number(6), Number(5), Number(0)}));
-
-    points.push_back(Point<Number>({Number(2), Number(5), Number(4)}));
-    points.push_back(Point<Number>({Number(6), Number(5), Number(4)}));
-    points.push_back(Point<Number>({Number(6), Number(2), Number(4)}));
-    points.push_back(Point<Number>({Number(2), Number(2), Number(4)}));
-    
-    VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
-    return vp;
 }
 
 template<typename Number, typename Converter, typename Setting>
@@ -211,6 +210,37 @@ static VPolytopeT<Number, Converter, Setting> getPolytopeG2D() {
 }
 
 template<typename Number, typename Converter, typename Setting>
+static VPolytopeT<Number, Converter, Setting> getPolytopeP2D_2() {
+    // Create a polytope
+    using pointVector = std::vector<Point<Number>>;
+
+    pointVector points;
+
+    points.push_back(Point<Number>({Number(1), Number(1)}));
+    points.push_back(Point<Number>({Number(1), Number(5)}));
+    points.push_back(Point<Number>({Number(5), Number(5)}));
+    points.push_back(Point<Number>({Number(5), Number(1)}));
+    
+    VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
+    return vp;
+}
+
+template<typename Number, typename Converter, typename Setting>
+static VPolytopeT<Number, Converter, Setting> getPolytopeG2D_2() {
+    // Create a polytope
+    using pointVector = std::vector<Point<Number>>;
+
+    pointVector points;
+
+    points.push_back(Point<Number>({Number(3), Number(2)}));
+    points.push_back(Point<Number>({Number(7), Number(4)}));
+    points.push_back(Point<Number>({Number(7), Number(0.5)}));
+    
+    VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
+    return vp;
+}
+
+template<typename Number, typename Converter, typename Setting>
 static void printPolytopeV(VPolytopeT<Number, Converter, Setting> P, std::string name) {
     std::cout << "Polytope " << name << " is:" << std::endl;
     // for (auto it_point = P.begin(); it_point != P.end(); it_point++){
@@ -311,6 +341,38 @@ static void calculateConvexSetMinus(int rep) {
             std::cout << "Volume of G_H: " << G_H.getVolumeEstimation() << std::endl;
             std::cout << "Volume of P_H - G_H: " << res_H.getVolumeEstimation() << std::endl;
             break;
+
+        case 7:
+
+            P = getPolytopeP2D_2<Number, Converter, Setting>();
+            G = getPolytopeG2D_2<Number, Converter, Setting>();
+
+            P_H = hypro::Converter<Number>::toHPolytope(P, CONV_MODE::OVER);
+            G_H = hypro::Converter<Number>::toHPolytope(G, CONV_MODE::OVER);
+
+            std::cout << "P_H" << P_H << std::endl;
+            std::cout << "G_H" << G_H << std::endl;
+
+            res_H = P_H.setMinusUnder(G_H);
+
+            std::cout << "P_H - G_H" << res_H << std::endl;
+
+            std::cout << "Volume of P_H: " << P_H.getVolumeEstimation() << std::endl;
+            std::cout << "Volume of G_H: " << G_H.getVolumeEstimation() << std::endl;
+            std::cout << "Volume of G_H - P_H: " << res_H.getVolumeEstimation() << std::endl;
+
+            auto &plotter = Plotter<Number>::getInstance();
+            plotter.addObject( P_H.projectOn({0, 1}).vertices(), hypro::plotting::colors[hypro::plotting::green]);
+	        plotter.addObject( G_H.projectOn({0, 1}).vertices(), hypro::plotting::colors[hypro::plotting::red]);
+
+            // create a *.plt file (gnuplot).
+            plotter.setFilename( "mariaTestPlot" );
+            plotter.plot2d(PLOTTYPE::png);
+
+
+
+
+
     }
 }
 
@@ -390,10 +452,11 @@ int main(int argc, char **argv) {
         rep = strtol(argv[1], &p, 10);
     }else{
         std::cout << "Please provide a number for example to run:" << std::endl;
-        std::cout << "Options: Numbers 1,2,3 V-Polytope P and V-Polytope G in 3D" << std::endl;
-        std::cout << "Options: Number 4 V-Polytope P and V-Polytope G in 2D" << std::endl;
-        std::cout << "Options: Number 5 V-Polytope P and H-Polytope G in 3D" << std::endl;
-        std::cout << "Options: Number 6 H-Polytope P in 2D volume estimation" << std::endl;
+        std::cout << "Options: Numbers 1,2,3 V-Polytope P and V-Polytope G in 3D (over-appr)" << std::endl;
+        std::cout << "Options: Number 4 V-Polytope P and V-Polytope G in 2D (over-appr)" << std::endl;
+        std::cout << "Options: Number 5 V-Polytope P and H-Polytope G in 3D (over-appr)" << std::endl;
+        std::cout << "Options: Number 6 H-Polytope P and H-Polytope G in 2D (G unbounded) (under-appr)" << std::endl;
+        std::cout << "Options: Number 7 H-Polytope P and H-Polytope G in 2D (under-appr)" << std::endl;
         return 0;
     }
 

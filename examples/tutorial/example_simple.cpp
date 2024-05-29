@@ -136,7 +136,7 @@ void runExample1(){
     fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
 
     hypro::AnalysisParameters analysisParameters;
-    analysisParameters.algoUsed = 1;
+    analysisParameters.setMinusAlgoUsed = 1;
     analysisParameters.timeStep = tNumber(1) / tNumber(10);
     analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
@@ -287,7 +287,7 @@ void runExample2(){
     fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
 
     hypro::AnalysisParameters analysisParameters;
-    analysisParameters.algoUsed = 1;
+    analysisParameters.setMinusAlgoUsed = 1;
     analysisParameters.timeStep = tNumber(1) / tNumber(10);
     analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
@@ -426,7 +426,7 @@ void runExample3(){
     fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
 
     hypro::AnalysisParameters analysisParameters;
-    analysisParameters.algoUsed = 1;
+    analysisParameters.setMinusAlgoUsed = 1;
     analysisParameters.timeStep = tNumber(1) / tNumber(10);
     analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
@@ -605,7 +605,7 @@ void runExample4(){
     fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
 
     hypro::AnalysisParameters analysisParameters;
-    analysisParameters.algoUsed = 0;
+    analysisParameters.setMinusAlgoUsed = 0;
     analysisParameters.timeStep = tNumber(1) / tNumber(10);
     analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
@@ -629,7 +629,7 @@ void runExample4(){
     std::cout << "Time taken for setMinus2: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds" << std::endl;
 
 
-    analysisParameters.algoUsed = 1;
+    analysisParameters.setMinusAlgoUsed = 1;
     // instanciate reachability analysis class
     hypro::reachability::ReachUrgency<Representation, hypro::HybridAutomaton<Number>> reacher2{bBallAutomaton,fixedParameters,analysisParameters, roots}; 
 

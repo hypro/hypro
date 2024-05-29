@@ -1519,11 +1519,11 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, class Setting>
-    std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus(const HPolytopeT<Number, Converter, Setting> &minus, int algoUsed) const {
+    std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus(const HPolytopeT<Number, Converter, Setting> &minus, int setMinusAlgoUsed) const {
 
         std::vector<HPolytopeT<Number, Converter, Setting>> result;
 
-        switch (algoUsed){
+        switch (setMinusAlgoUsed){
         case 0:
             result = this->setMinus2(minus);
             break;
@@ -1677,11 +1677,6 @@ namespace hypro {
         return volume;
     }
 
-
-
-
-
-    
     template<typename Number, typename Converter, class Setting>
     std::vector<HPolytopeT<Number, Converter, Setting>>
     HPolytopeT<Number, Converter, Setting>::setMinus2(const HPolytopeT<Number, Converter, Setting> &minus) const {

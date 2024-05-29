@@ -480,7 +480,7 @@ namespace hypro {
          * general algorithm which selects the algorithm to be used
          */
         std::vector<HPolytopeT<Number, Converter, Setting>>
-        setMinus(const HPolytopeT<Number, Converter, Setting> &minus, int algoUsed) const;
+        setMinus(const HPolytopeT<Number, Converter, Setting> &minus, int setMinusAlgoUsed) const;
 
         std::vector<HPolytopeT<Number, Converter, Setting>>
         setMinusOld(const HPolytopeT<Number, Converter, Setting> &minus) const;

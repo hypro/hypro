@@ -29,10 +29,10 @@ namespace hypro {
             mWorkQueue.pop_back();
             REACHABILITY_RESULT safetyResult;
 
-            int algoUsed = this->mParameters.algoUsed;
+            int setMinusAlgoUsed = this->mParameters.setMinusAlgoUsed;
 
             safetyResult = worker.computeTimeSuccessors(currentNode->getInitialSet(), currentNode->getLocation(),
-                                                        std::back_inserter(currentNode->getFlowpipe()), algoUsed);
+                                                        std::back_inserter(currentNode->getFlowpipe()), setMinusAlgoUsed);
             if (safetyResult == REACHABILITY_RESULT::UNKNOWN) {
                 return {Failure{currentNode}};
             }

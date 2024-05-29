@@ -851,11 +851,11 @@ namespace hypro {
 
 
     template<typename Number, typename Converter, class Setting>
-    std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::setMinus(const BoxT<Number, Converter, Setting> &minus, int algoUsed) const {
+    std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::setMinus(const BoxT<Number, Converter, Setting> &minus, int setMinusAlgoUsed) const {
 
         std::vector<BoxT<Number, Converter, Setting>> result;
 
-        switch (algoUsed){
+        switch (setMinusAlgoUsed){
         case 0:
             result = this->setMinus2(minus);
             break;

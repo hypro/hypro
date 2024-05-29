@@ -43,7 +43,7 @@ namespace hypro {
         template<typename OutputIt>
         REACHABILITY_RESULT
         computeTimeSuccessors(const Representation &initialSet, typename Automaton::LocationType const *loc,
-                              OutputIt out, int algoUsed) const;
+                              OutputIt out, int setMinusAlgoUsed) const;
 
         std::vector<JumpSuccessor<Representation, typename Automaton::LocationType>>
         computeJumpSuccessors(std::vector<Representation> const &flowpipe,

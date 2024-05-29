@@ -22,12 +22,12 @@
 namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
-    std::vector<VPolytopeT<Number, Converter, Setting>> VPolytopeT<Number, Converter, Setting>::setMinus(const VPolytopeT<Number, Converter, Setting> &minus, int algoUsed) const {
+    std::vector<VPolytopeT<Number, Converter, Setting>> VPolytopeT<Number, Converter, Setting>::setMinus(const VPolytopeT<Number, Converter, Setting> &minus, int setMinusAlgoUsed) const {
 
         std::vector<VPolytopeT<Number, Converter, Setting>> result;
         VPolytopeT<Number, Converter, Setting> polytope;
 
-        switch (algoUsed){
+        switch (setMinusAlgoUsed){
             case 0:
                 std::cout << "Error, setMinus2 function not implemented for Representation VPolytope" << std::endl;
                 exit(1);
