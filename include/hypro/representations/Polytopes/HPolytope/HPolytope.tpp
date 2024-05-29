@@ -1109,7 +1109,7 @@ namespace hypro {
         }
         //create a vector with all but the last column index
         std::vector<std::size_t> cols(this->dimension() - 1);
-        for (std::size_t i = 0; i < cols.size()-1; i++) {
+        for (std::size_t i = 0; i < cols.size(); i++) {
             cols[i] = i;
         }
         std::pair<smtrat::fmplex::EigenMat<Number>, smtrat::fmplex::EigenVec<Number>> result = smtrat::fmplex::eliminate_cols(this->matrix(), this->vector(), cols);

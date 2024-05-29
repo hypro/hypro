@@ -69,41 +69,50 @@ namespace hypro {
 
     template<typename Representation, typename Location>
     std::map<size_t, ReachTreeNode<Representation, Location>*> 
-    ReachTreeNode<Representation, Location>::updateTreeWithSyncNodes(std::map<size_t, ReachTreeNode<Representation, Location>* > indexNodeMap){
+    ReachTreeNode<Representation, Location>::updateTreeWithSyncNodes(std::map<size_t, ReachTreeNode<Representation, Location>* > indexNodeMap,
+                                                                     std::map<size_t, ReachTreeNode<Representation, Location>* > inheritedMap){
         ReachTreeNode<Representation, Location>* nextNode=nullptr;
         std::map<size_t, ReachTreeNode<Representation, Location>*> nextMap{ indexNodeMap };
         for (size_t i=0; i<mSyncNodes.size(); i++){
             if (mSyncNodes[i]!=nullptr){
                 nextNode = mSyncNodes[i];
                 nextMap.insert(std::make_pair(i, nextNode));
+                inheritedMap.erase(i);
             }
         }
         if (nextNode!=nullptr){
-            auto completeSyncMap = nextNode->updateTreeWithSyncNodes(nextMap);
+            for (auto &indexNodePair : inheritedMap){
+                // compare the inherited node with the from the parent of nextNode
+                size_t currIndex = indexNodePair.first;
+                if (indexNodePair.second->getDepth() < nextNode->getParent()->getSyncNodeAtIndex(currIndex).getDepth()) {
+                    inheritedMap[currIndex] = &(nextNode->getParent()->getSyncNodeAtIndex(currIndex));
+                }
+            }
+            auto completeSyncMap = nextNode->updateTreeWithSyncNodes(nextMap, inheritedMap);
             // update syncNodes with completeSyncMap
             for (auto& indexNodePair : completeSyncMap){
                 mSyncNodes[indexNodePair.first] = indexNodePair.second;
             }
-            // update remaining nullptrs in mSyncNodes with the pointers from their parent node
-            for (size_t i=0; i<mSyncNodes.size(); i++){
-                if (mSyncNodes[i]==nullptr){
-                    mSyncNodes[i] = &(this->getParent()->getSyncNodeAtIndex(i));
-                }
-            }
             for (size_t i=0; i<mSyncNodes.size(); i++) assert(mSyncNodes[i]!=nullptr);
             return completeSyncMap;
         } else {
+            // assert that indices in indexNodeMap and inheritedMap are disjoint
+            for (auto &indexNodePair : indexNodeMap){
+                assert(inheritedMap.find(indexNodePair.first)==inheritedMap.end());
+            }
+            // assert that size of indexNodeMap and inheritedMap is equal to size of mSyncNodes
+            assert( (indexNodeMap.size()+inheritedMap.size()) == mSyncNodes.size());
             // update syncNodes with indexNodeMap
             for (auto& indexNodePair : indexNodeMap){
                 mSyncNodes[indexNodePair.first] = indexNodePair.second;
             }
-            // update remaining nullptrs in mSyncNodes with the pointers from their parent node
-            for (size_t i=0; i<mSyncNodes.size(); i++){
-                if (mSyncNodes[i]==nullptr){
-                    mSyncNodes[i] = &(this->getParent()->getSyncNodeAtIndex(i));
-                }
+            // update syncNodes with inheritedMap
+            for (auto& indexNodePair : inheritedMap){
+                mSyncNodes[indexNodePair.first] = indexNodePair.second;
             }
             for (size_t i=0; i<mSyncNodes.size(); i++) assert(mSyncNodes[i]!=nullptr);
+            // join indexNodeMap and inheritedMap
+            indexNodeMap.insert(inheritedMap.begin(), inheritedMap.end());
             return indexNodeMap;
         }
     }

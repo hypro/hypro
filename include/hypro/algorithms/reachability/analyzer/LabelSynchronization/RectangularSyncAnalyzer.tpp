@@ -107,7 +107,14 @@ RectangularSyncAnalyzer<State, Automaton, Multithreading>::processNode( Rectangu
 			// time is not considered in rectangular analysis so we store a dummy
 			auto& childNode = node->addChild( jmpSucc, carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
 			assert( childNode.getDepth() == node->getDepth() + 1 );
-
+			childNode.initializeSyncNodes( node->getSyncNodes().size() );
+			for ( int i = 0; i < node->getSyncNodes().size(); i++ ) {
+				if ( i != worker.getVariablePoolIndex() ) {
+					childNode.setSyncNodeAtIndex( &(node->getSyncNodeAtIndex(i)), i);
+				} else {
+					childNode.setSyncNodeAtIndex( &childNode, i );
+				}
+			}
 			// create Task for jump successors (local computation)
 			addPairToQueue( &childNode, automaton );
 		}

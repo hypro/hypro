@@ -27,6 +27,7 @@ REACHABILITY_RESULT
 RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<State, LocationT>& task ) {
 	if ( !task.getFlowpipe().empty() ) {
 		// the time successors of this node has already been computed, because of label synchronization
+		// TODO check intersection with bad states (i.e intersect each flowpipe segment with the bad states and check if the intersection is empty)
 		return REACHABILITY_RESULT::SAFE;
 	}
 
@@ -127,7 +128,14 @@ void RectangularSyncWorker<State, Automaton>::postProcessSyncJumpSuccessors( Rea
 		std::set<RectangularSyncWorker<State, Automaton>*> visitedWorkers{ this };
 		auto nodeTimePairs = findSyncSuccessors( task, *transitionPtr, label, time, visitedWorkers );
 		for ( auto& [node, syncTime] : nodeTimePairs ) {
-			node->updateTreeWithSyncNodes( std::map<size_t, ReachTreeNode<State, LocationT>*>{ std::make_pair( mVariablePoolIndex, node ) } );
+			std::map<size_t, ReachTreeNode<State, LocationT>* > inheritedMap;
+			// iterate over task.getSyncNodes and insert them in inheritedMap
+			for ( size_t i = 0; i < task.getSyncNodes().size(); i++ ) {
+				if ( i != mVariablePoolIndex ) {
+					inheritedMap.insert( std::make_pair( i, task.getSyncNodes()[i] ) );
+				}
+			}
+			node->updateTreeWithSyncNodes( std::map<size_t, ReachTreeNode<State, LocationT>*>{ std::make_pair( mVariablePoolIndex, node ) }, inheritedMap );
 		}
 		// here we have computed sync successors, added them to the reach Trees, updated the book-keeping of sync nodes in the tree.
 	}
@@ -151,7 +159,6 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 		}
 		rectangularSyncJumpHandler<State, LocationT> jmpHandler;
 		mSyncJumpSuccessorSets = jmpHandler.applyJump( transitionSourceNodeMap, syncTime );
-		// assert( mSyncJumpSuccessorSets.size() == 1 && "findJumpSuccessors applies the jump for one transition." );
 		if (mSyncJumpSuccessorSets.empty()) {
 			// if the jump succecssors are empty (i.e. intersection of guardSatisfyingSet with common time is empty or intersection with invariant of target location ), the synchronization is not possible
 			return {};
@@ -267,6 +274,7 @@ void RectangularSyncWorker<State, Automaton>::initNonSyncLabels() {
 template <typename State, typename Automaton>
 const std::set<ReachTreeNode<State, typename Automaton::LocationType>*>
 RectangularSyncWorker<State, Automaton>::getSyncJumpSuccessorTasks() {
+	// this function deletes nodes that have been created for synchronization, but cannot synchronize with the other automata
 	std::set<ReachTreeNode<State, LocationT>*> syncJumpSuccessorTasks{};
 	for ( auto node : mSyncChildrenToRemove ) {
 		bool isSyncNode = true;
@@ -279,7 +287,8 @@ RectangularSyncWorker<State, Automaton>::getSyncJumpSuccessorTasks() {
 		if ( isSyncNode ) {
 			syncJumpSuccessorTasks.insert( node );
 		} else {
-			// each node with a isSyncNode=false is a node created while looking for synchronization nodes, but it cannot synchronize with the other automata so it needs to be deleted from the tree 
+			/* each node with a isSyncNode=false is a node created while looking for synchronization nodes, 
+				but it cannot synchronize with the other automata so it needs to be deleted from the tree.  */
 			mSyncChildrenToRemove.erase( node );
 			node->getParent()->eraseChild( node );
 		}

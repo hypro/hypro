@@ -213,7 +213,8 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		mSyncNodes = std::vector<ReachTreeNode<Representation, Location>*>(n, nullptr);
 	}
 
-	std::map<size_t, ReachTreeNode<Representation, Location>*> updateTreeWithSyncNodes(std::map<size_t, ReachTreeNode<Representation, Location>*> indexNodeMap);
+	std::map<size_t, ReachTreeNode<Representation, Location>*> updateTreeWithSyncNodes(std::map<size_t, ReachTreeNode<Representation, Location>*> indexNodeMap,
+																						std::map<size_t, ReachTreeNode<Representation, Location>*> inheritedMap);
 
 };
 
