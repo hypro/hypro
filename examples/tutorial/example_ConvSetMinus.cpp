@@ -210,34 +210,34 @@ static VPolytopeT<Number, Converter, Setting> getPolytopeG2D() {
 }
 
 template<typename Number, typename Converter, typename Setting>
-static VPolytopeT<Number, Converter, Setting> getPolytopeP2D_2() {
+static HPolytopeT<Number, Converter, Setting> getHPolytopeP2D() {
     // Create a polytope
-    using pointVector = std::vector<Point<Number>>;
+    using HalfspaceVector = std::vector<Halfspace<Number>>;
 
-    pointVector points;
+    HalfspaceVector halfspaces;
+    // x y constant
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(1)}), Number(8)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(-1)}), Number(-3)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(1), Number(0)}), Number(5)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(-1), Number(0)}), Number(0)));
 
-    points.push_back(Point<Number>({Number(1), Number(1)}));
-    points.push_back(Point<Number>({Number(1), Number(5)}));
-    points.push_back(Point<Number>({Number(5), Number(5)}));
-    points.push_back(Point<Number>({Number(5), Number(1)}));
-    
-    VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
-    return vp;
+    HPolytopeT<Number, Converter, Setting> hp = HPolytopeT<Number, Converter, Setting>(halfspaces);
+    return hp;
 }
 
 template<typename Number, typename Converter, typename Setting>
-static VPolytopeT<Number, Converter, Setting> getPolytopeG2D_2() {
-    // Create a polytope
-    using pointVector = std::vector<Point<Number>>;
+static HPolytopeT<Number, Converter, Setting> getHPolytopeG2D() {
+    // Create a polytope  
+    using HalfspaceVector = std::vector<Halfspace<Number>>;
 
-    pointVector points;
+    HalfspaceVector halfspaces;
+    // x y constant
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(1), Number(0)}), Number(8)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(-0.5), Number(1)}), Number(3)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(-0.5), Number(-1)}), Number(-6)));
 
-    points.push_back(Point<Number>({Number(3), Number(2)}));
-    points.push_back(Point<Number>({Number(7), Number(4)}));
-    points.push_back(Point<Number>({Number(7), Number(0.5)}));
-    
-    VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
-    return vp;
+    HPolytopeT<Number, Converter, Setting> hp = HPolytopeT<Number, Converter, Setting>(halfspaces);
+    return hp;
 }
 
 template<typename Number, typename Converter, typename Setting>
@@ -263,11 +263,10 @@ static void calculateConvexSetMinus(int rep) {
     
     VPolytopeT<Number, Converter, Setting> P;
     VPolytopeT<Number, Converter, Setting> G;
-    HPolytopeT<Number, Converter, HSetting> G_H;
     HPolytopeT<Number, Converter, HSetting> P_H;
+    HPolytopeT<Number, Converter, HSetting> G_H;
     VPolytopeT<Number, Converter, Setting> res;
     HPolytopeT<Number, Converter, HSetting> res_H;
-
     double size;
 
     switch (rep)
@@ -343,12 +342,8 @@ static void calculateConvexSetMinus(int rep) {
             break;
 
         case 7:
-
-            P = getPolytopeP2D_2<Number, Converter, Setting>();
-            G = getPolytopeG2D_2<Number, Converter, Setting>();
-
-            P_H = hypro::Converter<Number>::toHPolytope(P, CONV_MODE::OVER);
-            G_H = hypro::Converter<Number>::toHPolytope(G, CONV_MODE::OVER);
+            P_H = getHPolytopeP2D<Number, Converter, HSetting>();
+            G_H = getHPolytopeG2D<Number, Converter, HSetting>();
 
             std::cout << "P_H" << P_H << std::endl;
             std::cout << "G_H" << G_H << std::endl;
@@ -364,15 +359,12 @@ static void calculateConvexSetMinus(int rep) {
             auto &plotter = Plotter<Number>::getInstance();
             plotter.addObject( P_H.projectOn({0, 1}).vertices(), hypro::plotting::colors[hypro::plotting::green]);
 	        plotter.addObject( G_H.projectOn({0, 1}).vertices(), hypro::plotting::colors[hypro::plotting::red]);
+            //plotter.addObject( res_H.projectOn({0, 1}).vertices(), hypro::plotting::colors[hypro::plotting::blue]);
 
             // create a *.plt file (gnuplot).
-            plotter.setFilename( "mariaTestPlot" );
+            plotter.setFilename( "setMinusUnderH" );
             plotter.plot2d(PLOTTYPE::png);
-
-
-
-
-
+            break;
     }
 }
 

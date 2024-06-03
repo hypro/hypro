@@ -37,6 +37,7 @@ namespace hypro {
         int tmpupper = 1;
         int urgentupper = 1;
         int tmpurgentupper = 1;
+        int numPolytopes = 0;
         // intersect with invariant
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant());
         // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
@@ -59,7 +60,7 @@ namespace hypro {
                     Representation guard(urgent_trans.at(i)->getGuard().getMatrix(),
                                          urgent_trans.at(i)->getGuard().getVector());
                     result = segment.setMinus(guard, setMinusAlgoUsed);
-                    //std::cout << "Result size: " << result.size() << std::endl;
+                    numPolytopes += result.size();
                 }
                 // insert segments into flowpipe
                 if (result.size() > 0) {
@@ -95,6 +96,7 @@ namespace hypro {
             std::tie(containment, std::ignore) = ltiIntersectBadStates(segments[i], loc, mHybridAutomaton);
             if (containment != CONTAINMENT::NO) {
                 // Todo: memorize the intersecting state set and keep state.
+                //std::cout << "Number of Polytopes: " << numPolytopes << std::endl;
                 return REACHABILITY_RESULT::UNKNOWN;
             }
         }
@@ -112,6 +114,7 @@ namespace hypro {
                 // check invariant
                 std::tie(containment, segment) = intersect(segment, loc->getInvariant());
                 if (containment == CONTAINMENT::NO) {
+                    //std::cout << "Number of Polytopes: " << numPolytopes << std::endl;
                     return REACHABILITY_RESULT::SAFE;
                 }
                 tmpsegments.resize(0);
@@ -132,7 +135,7 @@ namespace hypro {
                             Representation guard(urgent_trans.at(i)->getGuard().getMatrix(),
                                                  urgent_trans.at(i)->getGuard().getVector());
                             result = segment.setMinus(guard, setMinusAlgoUsed);
-                            //std::cout << "Result size: " << result.size() << std::endl;
+                            numPolytopes += result.size();
                             // insert segment
                             if (result.size() > 0) {
                                 for (unsigned long int i = 0; i < result.size(); i++) {
@@ -169,6 +172,7 @@ namespace hypro {
                         std::tie(containment, std::ignore) = ltiIntersectBadStates(seg, loc, mHybridAutomaton);
                         if (containment != CONTAINMENT::NO) {
                             // Todo: memorize the intersecting state set and keep state.
+                            //std::cout << "Number of Polytopes: " << numPolytopes << std::endl;
                             return REACHABILITY_RESULT::UNKNOWN;
                         }
                     }
@@ -177,6 +181,7 @@ namespace hypro {
             lower = tmplower;
             upper = tmpupper;
         }
+        //std::cout << "Number of Polytopes: " << numPolytopes << std::endl;
         return REACHABILITY_RESULT::SAFE;
     }
 

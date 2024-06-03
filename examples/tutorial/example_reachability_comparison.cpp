@@ -188,7 +188,7 @@ static void run_comparison_function(const std::string &filename,
     plotResult<Number, Representation>("setMinus2", automaton, flowpipes, settings);
 
     // exit to test only the setMinus2 function
-    exit(0);
+    //exit(0);
 
     runtimes.clear();
     for(int iteration = 0; iteration < number_iterations; iteration++) {
