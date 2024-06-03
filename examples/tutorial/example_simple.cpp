@@ -743,12 +743,12 @@ void runExample5(){
     constantReset(2) = Number(1);
     constantReset(3) = Number(carl::rationalize<Number>(2.5));
 
-    linearReset(0, 0) = Number(0);
+    linearReset(0, 0) = Number(1);
     linearReset(0, 1) = Number(0);
     linearReset(0, 2) = Number(0);
     linearReset(0, 3) = Number(0);
     linearReset(1, 0) = Number(0);
-    linearReset(1, 1) = Number(0);
+    linearReset(1, 1) = Number(1);
     linearReset(1, 2) = Number(0);
     linearReset(1, 3) = Number(0);
     linearReset(2, 0) = Number(0);
@@ -825,6 +825,8 @@ void runExample5(){
 
     // create initial state.
     bBallAutomaton.addInitialState(loc1, Condition<Number>(boxMat, boxVec));
+
+    std::cout << bBallAutomaton << std::endl;
 
     // set settings
     hypro::FixedAnalysisParameters fixedParameters;
