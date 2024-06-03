@@ -91,9 +91,9 @@ class RectangularSyncWorker {
 
 	void postProcessSyncJumpSuccessors( ReachTreeNode<State, LocationT>& task, const JumpSuccessors& guardSatisfyingSets );
 
-	std::map<ReachTreeNode<State, typename Automaton::LocationType>*, State> findSyncSuccessors( ReachTreeNode<State, LocationT>& task, Transition<LocationT> transition, const std::vector<Label>& label, State syncTime, std::set<RectangularSyncWorker<State, Automaton>*> visitedWorkers );
+	std::multimap<ReachTreeNode<State, typename Automaton::LocationType>*, State> findSyncSuccessors( ReachTreeNode<State, LocationT>& task, Transition<LocationT> transition, const std::vector<Label>& label, State syncTime, std::set<RectangularSyncWorker<State, Automaton>*> visitedWorkers );
 
-	std::map<ReachTreeNode<State, LocationT>*, Transition<LocationT>> getCandidateNodes( ReachTreeNode<State, LocationT>& syncNode, const std::vector<Label>& label );
+	std::multimap<ReachTreeNode<State, LocationT>*, Transition<LocationT>> getCandidateNodes( ReachTreeNode<State, LocationT>& syncNode, const std::vector<Label>& label );
 
   protected:
 	const Automaton& mHybridAutomaton;						  ///< Reference to the rectangular automaton

@@ -563,6 +563,179 @@ hypro::HybridAutomaton<Number> createRectangularHA8() {
 	return res;
 }
 
+template <typename Number>
+hypro::HybridAutomaton<Number> createRectangularHA9() {
+	// One-dimensional reactangular automaton
+	hypro::HybridAutomaton<Number> res;
+
+    // variables
+    carl::Variable x = hypro::VariablePool::getInstance().carlVarByIndex(0);
+	
+    // rectangular dynamics
+    std::map<carl::Variable, carl::Interval<Number>> oneDynamics;
+    oneDynamics.emplace(std::make_pair(x, carl::Interval<Number>(1, 1)));
+
+    // Create locations
+	auto loc0 = res.createLocation("l00");
+	auto loc1 = res.createLocation("l01");
+    
+    hypro::rectangularFlow<Number> oneFlow(oneDynamics);
+
+	loc0->setRectangularFlow(oneFlow);
+	loc1->setRectangularFlow(oneFlow);
+
+	// Add transitions
+    // loc0 -> loc1
+	auto transition01 = loc0->createTransition( loc1 );
+    transition01->addLabel( hypro::Label{"a"} );
+    // guard x in [2,3]
+    hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>(2, 1);
+    guardConstraints << 1, -1;
+    hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>(2);
+    guardConstants << 3, -2;
+    hypro::Condition<Number> guard01(guardConstraints, guardConstants);
+    transition01->setGuard( guard01 );
+    // reset x' = 4
+    std::vector<carl::Interval<Number>> intervalReset;
+    intervalReset.emplace_back( carl::Interval<Number>( 4, 4 ) );
+    hypro::Reset<Number> reset01;
+    reset01.setIntervals( intervalReset );
+    transition01->setReset( reset01 );
+
+	// Set initial state x = [0,1]
+	Matrix initialConstraints = Matrix::Zero( 2, 1 );
+	Vector initialConstants = Vector::Zero( 2 );
+	initialConstraints << 1, -1;
+	initialConstants << 1, -0;
+
+	// Create HA
+	res.addInitialState( loc0, hypro::Condition<Number>( initialConstraints, initialConstants ) );
+
+	return res;
+}
+
+template <typename Number>
+hypro::HybridAutomaton<Number> createRectangularHA10() {
+	// One-dimensional reactangular automaton
+	hypro::HybridAutomaton<Number> res;
+
+    // variables
+    carl::Variable y = hypro::VariablePool::getInstance().carlVarByIndex(0);
+	
+    // rectangular dynamics
+    std::map<carl::Variable, carl::Interval<Number>> oneDynamics;
+    oneDynamics.emplace(std::make_pair(y, carl::Interval<Number>(1, 1)));
+    // Flows
+    hypro::rectangularFlow<Number> oneFlow(oneDynamics);
+    
+    // Create locations
+	auto loc0 = res.createLocation("l10");
+	auto loc1 = res.createLocation("l11");
+
+	loc0->setRectangularFlow(oneFlow);
+	loc1->setRectangularFlow(oneFlow);
+
+    // transitions
+    // loc0 -> loc1
+	auto transition01 = loc0->createTransition( loc1 );
+    transition01->addLabel( hypro::Label{"a"} );
+    // guard y in [2,3]
+    hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>(2, 1);
+    guardConstraints << 1, -1;
+    hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>(2);
+    guardConstants << 3, -2;
+    hypro::Condition<Number> guard01(guardConstraints, guardConstants);
+    transition01->setGuard( guard01 );
+    // reset y' = 5
+    std::vector<carl::Interval<Number>> intervalReset;
+    intervalReset.emplace_back( carl::Interval<Number>( 5, 5 ) );
+    hypro::Reset<Number> reset01;
+    reset01.setIntervals( intervalReset );
+    transition01->setReset( reset01 );
+
+	// Set initial state y = [0,1]
+	Matrix initialConstraints = Matrix::Zero( 2, 1 );
+	Vector initialConstants = Vector::Zero( 2 );
+	initialConstraints << 1, -1;
+	initialConstants << 1, -0;
+
+	// Create HA
+	res.addInitialState( loc0, hypro::Condition<Number>( initialConstraints, initialConstants ) );
+
+	return res;
+}
+
+template <typename Number>
+hypro::HybridAutomaton<Number> createRectangularHA11() {
+	// One-dimensional reactangular automaton
+	hypro::HybridAutomaton<Number> res;
+
+    // variables
+    carl::Variable z = hypro::VariablePool::getInstance().carlVarByIndex(0);
+	
+    // rectangular dynamics
+    std::map<carl::Variable, carl::Interval<Number>> oneDynamics;
+    oneDynamics.emplace(std::make_pair(z, carl::Interval<Number>(1, 1)));
+    // Flows
+    hypro::rectangularFlow<Number> oneFlow(oneDynamics);
+    
+    // Create locations
+	auto loc0 = res.createLocation("l20");
+	auto loc1 = res.createLocation("l21");
+	auto loc2 = res.createLocation("l22");    
+
+	loc0->setRectangularFlow(oneFlow);
+	loc1->setRectangularFlow(oneFlow);
+	loc2->setRectangularFlow(oneFlow);
+
+    // transitions
+    // loc0 -> loc1
+	auto transition01 = loc0->createTransition( loc1 );
+    transition01->addLabel( hypro::Label{"a"} );
+    // guard z in [1,2]
+    hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>(2, 1);
+    guardConstraints << 1, -1;
+    hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>(2);
+    guardConstants << 2, -1;
+    hypro::Condition<Number> guard01(guardConstraints, guardConstants);
+    transition01->setGuard( guard01 );
+    // reset z' = 0
+    std::vector<carl::Interval<Number>> intervalReset;
+    intervalReset.emplace_back( carl::Interval<Number>( 0, 0 ) );
+    hypro::Reset<Number> reset01;
+    reset01.setIntervals( intervalReset );
+    transition01->setReset( reset01 );
+
+    // loc0 -> loc2
+	auto transition02 = loc0->createTransition( loc2 );
+    transition02->addLabel( hypro::Label{"a"} );
+    // guard z in [2,3]
+    hypro::matrix_t<Number> guardConstraints12 = hypro::matrix_t<Number>(2, 1);
+    guardConstraints12 << 1, -1;
+    hypro::vector_t<Number> guardConstants12 = hypro::vector_t<Number>(2);
+    guardConstants12 << 3, -2;
+    hypro::Condition<Number> guard12(guardConstraints12, guardConstants12);
+    transition02->setGuard( guard12 );
+    // reset z' = 5
+    std::vector<carl::Interval<Number>> intervalReset12;
+    intervalReset12.emplace_back( carl::Interval<Number>( 5, 5 ) );
+    hypro::Reset<Number> reset12;
+    reset12.setIntervals( intervalReset12 );
+    transition02->setReset( reset12 );
+
+
+	// Set initial state z = [0,1]
+	Matrix initialConstraints = Matrix::Zero( 2, 1 );
+	Vector initialConstants = Vector::Zero( 2 );
+	initialConstraints << 1, -1;
+	initialConstants << 1, -0;
+
+	// Create HA
+	res.addInitialState( loc0, hypro::Condition<Number>( initialConstraints, initialConstants ) );
+
+	return res;
+}
+
 TYPED_TEST( RectangularLabelSynchronizationTest, AnalyzerConstruction ) {
 	
 	// create first automaton with variable pool 0
@@ -988,6 +1161,78 @@ TYPED_TEST ( RectangularLabelSynchronizationTest, ThreeAutomataTransitiveSync ) 
 	EXPECT_FALSE( is_reachable_in( Point{ 4, 3.5 }, flowpipes1 ) );
 	EXPECT_FALSE( is_reachable_in( Point{ 4, 5 }, flowpipes1 ) );
 	EXPECT_FALSE( is_reachable_in( Point{ 4, 7 }, flowpipes1 ) );
+
+	// clear variable pools
+	hypro::VariablePool::getInstance().changeToPool(0);
+	hypro::VariablePool::getInstance().clear();
+	hypro::VariablePool::getInstance().changeToPool(1);
+	hypro::VariablePool::getInstance().clear();
+	hypro::VariablePool::getInstance().changeToPool(2);
+	hypro::VariablePool::getInstance().clear();
+	hypro::VariablePool::getInstance().changeToPool(0);
+}
+
+TYPED_TEST ( RectangularLabelSynchronizationTest, ThreeAutomataMultiSync ) {
+	// create first automaton with variable pool 0
+    auto automaton1 = createRectangularHA9<typename TypeParam::NumberType>();
+	automaton1.addTimeVariable();
+	// create second automaton with variable pool 1
+	hypro::VariablePool::getInstance().changeToPool(1);
+    auto automaton2 = createRectangularHA10<typename TypeParam::NumberType>();
+	automaton2.addTimeVariable();
+    // create third automaton with variable pool 2
+    hypro::VariablePool::getInstance().changeToPool(2);
+    auto automaton3 = createRectangularHA11<typename TypeParam::NumberType>();
+    automaton3.addTimeVariable();
+	// change back to pool 0
+	hypro::VariablePool::getInstance().changeToPool(0);
+
+	std::vector<hypro::HybridAutomaton<typename TypeParam::NumberType>> automata{ automaton1, automaton2, automaton3 };
+
+    hypro::AnalysisParameters analysisParameters;
+    analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
+    analysisParameters.aggregation = hypro::AGG_SETTING::NO_AGG;
+    analysisParameters.representation_type = hypro::representation_name::polytope_v;
+
+    hypro::Settings settings{ {},
+                              hypro::FixedAnalysisParameters{ 2, hypro::tNumber( 3 ), hypro::tNumber( 0.01 ) },
+                              { analysisParameters } };
+
+    auto analyzer = hypro::RectangularSyncAnalyzer<TypeParam, hypro::HybridAutomaton<typename TypeParam::NumberType>>( automata, settings );
+
+    auto result = analyzer.run();
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, result );
+
+	// validate computed flowpipes for automaton 1
+	std::vector<TypeParam> flowpipes1;
+	std::for_each( analyzer.getReachTreeForAutomaton(automata[0]).begin(), analyzer.getReachTreeForAutomaton(automata[0]).end(), [&]( auto& root ) {
+		auto fp = getFlowpipes( root );
+		std::for_each( fp.begin(), fp.end(), [&]( const auto& flowpipe ) {
+			flowpipes1.insert( flowpipes1.end(), flowpipe.begin(), flowpipe.end() );
+		} );
+	} );
+	std::cout << "Flowpipes for automaton 1: " << flowpipes1 << std::endl;
+	EXPECT_EQ( std::size_t( 3 ), flowpipes1.size() );
+
+	// validate computed flowpipes for automaton 2
+	std::vector<TypeParam> flowpipes2;
+	std::for_each( analyzer.getReachTreeForAutomaton(automata[1]).begin(), analyzer.getReachTreeForAutomaton(automata[1]).end(), [&]( auto& root ) {
+		auto fp = getFlowpipes( root );
+		std::for_each( fp.begin(), fp.end(), [&]( const auto& flowpipe ) {
+			flowpipes2.insert( flowpipes2.end(), flowpipe.begin(), flowpipe.end() );
+		} );
+	} );
+	EXPECT_EQ( std::size_t( 3 ), flowpipes2.size() );
+
+	// validate computed flowpipes for automaton 3
+	std::vector<TypeParam> flowpipes3;
+	std::for_each( analyzer.getReachTreeForAutomaton(automata[2]).begin(), analyzer.getReachTreeForAutomaton(automata[2]).end(), [&]( auto& root ) {
+		auto fp = getFlowpipes( root );
+		std::for_each( fp.begin(), fp.end(), [&]( const auto& flowpipe ) {
+			flowpipes3.insert( flowpipes3.end(), flowpipe.begin(), flowpipe.end() );
+		} );
+	} );
+	EXPECT_EQ( std::size_t( 3 ), flowpipes3.size() );
 
 	// clear variable pools
 	hypro::VariablePool::getInstance().changeToPool(0);

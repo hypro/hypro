@@ -142,7 +142,7 @@ void RectangularSyncWorker<State, Automaton>::postProcessSyncJumpSuccessors( Rea
 }
 
 template <typename State, typename Automaton>
-std::map<ReachTreeNode<State, typename Automaton::LocationType>*, State>
+std::multimap<ReachTreeNode<State, typename Automaton::LocationType>*, State>
 RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State, LocationT>& task,
 															 Transition<LocationT> transition,
 															 const std::vector<Label>& label,
@@ -163,7 +163,7 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 			// if the jump succecssors are empty (i.e. intersection of guardSatisfyingSet with common time is empty or intersection with invariant of target location ), the synchronization is not possible
 			return {};
 		}
-		std::map<ReachTreeNode<State, LocationT>*, State> syncNodeTimeMap{};
+		std::multimap<ReachTreeNode<State, LocationT>*, State> syncNodeTimeMap{};
 		// update the ReachTree with the new successor nodes
 		for ( const auto& transitionStatesPair : mSyncJumpSuccessorSets ) {
 			assert( transitionStatesPair.second.size() == 1 && "In Rectangular Analysis a jump can only have one successor." );
@@ -190,7 +190,7 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 		visitedWorkers.insert( ptrToWorker );
 		// in this function we misuse mVariablePoolIndex to get the "index of the worker", to access the right syncNode.
 		auto candidateTransitionMap = ptrToWorker->getCandidateNodes( task.getSyncNodeAtIndex( ptrToWorker->getVariablePoolIndex() ), label );
-		std::map<ReachTreeNode<State, LocationT>*, State> syncNodeTimeMap{};
+		std::multimap<ReachTreeNode<State, LocationT>*, State> syncNodeTimeMap{};
 		for ( auto& nodeTransitionPair : candidateTransitionMap ) {
 			ptrToWorker->changeVariablePool();
 			ptrToWorker->computeTimeSuccessors( *nodeTransitionPair.first );
@@ -245,9 +245,9 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 }
 
 template <typename State, typename Automaton>
-std::map<ReachTreeNode<State, typename Automaton::LocationType>*, Transition<typename Automaton::LocationType>>
+std::multimap<ReachTreeNode<State, typename Automaton::LocationType>*, Transition<typename Automaton::LocationType>>
 RectangularSyncWorker<State, Automaton>::getCandidateNodes( ReachTreeNode<State, LocationT>& syncNode, const std::vector<Label>& label ) {
-	std::map<ReachTreeNode<State, LocationT>*, Transition<LocationT>> syncCandidates{};
+	std::multimap<ReachTreeNode<State, LocationT>*, Transition<LocationT>> syncCandidates{};
 	// recursively search for nodes that can synchronize, i.e. have a transition with the same label
 	for ( auto child : syncNode.getChildren() ) {
 		auto childCandidates = getCandidateNodes( *child, label );
