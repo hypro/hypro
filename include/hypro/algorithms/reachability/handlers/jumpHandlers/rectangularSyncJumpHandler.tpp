@@ -24,8 +24,6 @@ namespace hypro {
             for (const auto &state: statesVec) {
                 // copy state - as there is no aggregation, the containing set and timestamp is already valid
                 Representation newState(state);
-                // TODO remove std::cout statements
-                std::cout << "newState (state intersected with guard): " << newState << std::endl;
                 // create normal n-dimensional vector (0,0,...,-1)
                 vector_t<Number> firstNormalVec = vector_t<Number>::Zero(newState.dimension());
                 firstNormalVec(newState.dimension()-1) = -1;
@@ -49,7 +47,6 @@ namespace hypro {
                 // intersect newState with both halfspaces ( -1*t <= -1*lowerBound and 1*t <= upperBound)
                 newState = newState.intersectHalfspace(Halfspace<Number>(firstNormalVec, -1*lowerBound.coordinate(0)));
                 newState = newState.intersectHalfspace(Halfspace<Number>(secondNormalVec, upperBound.coordinate(0)));
-                std::cout << "newState (after intersection with time interval): " << newState << std::endl;
                 
                 // if the state satisfying the guard, intersected with the common time interval is empty, continue with next state
                 if (newState.empty()) {

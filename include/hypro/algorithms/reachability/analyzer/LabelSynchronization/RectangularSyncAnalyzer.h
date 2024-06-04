@@ -89,7 +89,6 @@ class RectangularSyncAnalyzer {
 
   protected:
 	std::queue<std::pair<ReachTreeNode<State, LocationT> *, Automaton const *>> mWorkQueue;			 	 ///< Queue holds pairs <node, automaton> that require processing
-	Automaton const *mHybridAutomaton;																	 ///< Pointer to the automaton which is analyzed		(TODO delete)
 	std::vector<Automaton const *> mHybridAutomata;														 ///< Vector of pointers to the automata which are analyzed
 	const Settings mAnalysisSettings;																	 ///< Settings used for analysis
 	std::map<Automaton const *, std::vector<ReachTreeNode<State, LocationT>>> mAutomatonReachTreeMap{};	 ///< map (*automaton -> reachTree), that maps each automaton to a Forest of ReachTrees

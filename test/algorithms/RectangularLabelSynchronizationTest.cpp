@@ -939,7 +939,6 @@ TYPED_TEST( RectangularLabelSynchronizationTest, TwoAutomataWithSync ) {
 			flowpipes1.insert( flowpipes1.end(), flowpipe.begin(), flowpipe.end() );
 		} );
 	} );
-	std::cout << "Flowpipes for automaton 1: " << flowpipes1 << std::endl;
 	EXPECT_EQ( std::size_t( 2 ), flowpipes1.size() );
 	EXPECT_TRUE( is_reachable_in( Point{ 0, 0 }, flowpipes1 ) );
 	EXPECT_TRUE( is_reachable_in( Point{ 1, 0 }, flowpipes1 ) );
@@ -972,7 +971,6 @@ TYPED_TEST( RectangularLabelSynchronizationTest, TwoAutomataWithSync ) {
 			flowpipes2.insert( flowpipes2.end(), flowpipe.begin(), flowpipe.end() );
 		} );
 	} );
-	std::cout << "Flowpipes for automaton 2: " << flowpipes2 << std::endl;
 	EXPECT_EQ( std::size_t( 2 ), flowpipes2.size() );
 	EXPECT_TRUE( is_reachable_in( Point{ 10, 0 }, flowpipes2 ) );
 	EXPECT_TRUE( is_reachable_in( Point{ 11, 0 }, flowpipes2 ) );
@@ -1152,7 +1150,6 @@ TYPED_TEST ( RectangularLabelSynchronizationTest, ThreeAutomataTransitiveSync ) 
 			flowpipes1.insert( flowpipes1.end(), flowpipe.begin(), flowpipe.end() );
 		} );
 	} );
-	std::cout << "Flowpipes for automaton 1: " << flowpipes1 << std::endl;
 	EXPECT_EQ( std::size_t( 4 ), flowpipes1.size() );
 	EXPECT_TRUE( is_reachable_in( Point{ -1, 3 }, flowpipes1 ) );
 	EXPECT_TRUE( is_reachable_in( Point{ -1, 5 }, flowpipes1 ) );
@@ -1211,7 +1208,6 @@ TYPED_TEST ( RectangularLabelSynchronizationTest, ThreeAutomataMultiSync ) {
 			flowpipes1.insert( flowpipes1.end(), flowpipe.begin(), flowpipe.end() );
 		} );
 	} );
-	std::cout << "Flowpipes for automaton 1: " << flowpipes1 << std::endl;
 	EXPECT_EQ( std::size_t( 3 ), flowpipes1.size() );
 
 	// validate computed flowpipes for automaton 2
