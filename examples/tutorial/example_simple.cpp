@@ -726,9 +726,9 @@ void runExample5(){
     guardMat(0, 2) = Number(1);
     guardMat(0, 3) = Number(0);
     guardMat(1, 0) = Number(0);
-    guardMat(1, 1) = Number(1);
+    guardMat(1, 1) = Number(-1);
     guardMat(1, 2) = Number(0);
-    guardMat(1, 3) = Number(-1);
+    guardMat(1, 3) = Number(1);
 
     guard.setMatrix(guardMat);
     guard.setVector(guardVec);    
@@ -764,7 +764,7 @@ void runExample5(){
     reset.setMatrix(linearReset);
 
     // setup transition
-    trans->setAggregation(AGG_SETTING::AGG);
+    //trans->setAggregation(AGG_SETTING::AGG);
     trans->setGuard(guard);
     trans->setSource(loc1);
     trans->setTarget(loc1);
@@ -830,14 +830,14 @@ void runExample5(){
 
     // set settings
     hypro::FixedAnalysisParameters fixedParameters;
-    fixedParameters.jumpDepth = 5;
+    fixedParameters.jumpDepth = 6;
     fixedParameters.localTimeHorizon = 3;
-    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
+    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(4);
 
     hypro::AnalysisParameters analysisParameters;
     analysisParameters.setMinusAlgoUsed = 0;
-    analysisParameters.timeStep = tNumber(1) / tNumber(10);
-    analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+    analysisParameters.timeStep = tNumber(1) / tNumber(4);
+    analysisParameters.aggregation = hypro::AGG_SETTING::NO_AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
 
     hypro::Settings settings{{}, fixedParameters, {analysisParameters}};
@@ -867,10 +867,12 @@ void runExample5(){
     plotter1.rSettings().dimensions.push_back(plottingDimensions.back());
     plotter1.rSettings().cummulative = false;
 
+    unsigned cnt1 = 0;
     for (const auto &node: preorder(roots)) {
         for (const auto &state_set: node.getFlowpipe()) {  // flowpipes
-            plotter1.addObject(state_set.projectOut({2, 3}).vertices());
+            plotter1.addObject(state_set.projectOut({2, 3}).vertices(), hypro::plotting::colors[cnt1 % 10]);
         }
+        ++cnt1;
     }
     std::cout << "done." << std::endl;
 
@@ -897,13 +899,15 @@ void runExample5(){
     Plotter<Number> &plotter2 = Plotter<Number>::getInstance();
     plotter2.setFilename("Example_5_setMinusCrossing");
 
+    unsigned cnt2 = 0;
     for (const auto &node: preorder(roots)) {
         for (const auto &state_set: node.getFlowpipe()) {  // flowpipes
             if(state_set.empty()) {
                 continue;
             }
-            plotter2.addObject(state_set.projectOut({2, 3}).vertices());
+            plotter2.addObject(state_set.projectOut({2, 3}).vertices(), hypro::plotting::colors[cnt2 % 10]);
         }
+        ++cnt2;
     }
     std::cout << "done." << std::endl;
 

@@ -186,92 +186,61 @@ static void run_comparison_function(const std::string &filename,
     using clock = std::chrono::high_resolution_clock;
 
     // do the reachability analysis for runtime measurement
-    std::vector<timeunit> runtimes;
-    auto outputFilename = "runtime_" + extractFilenameWithoutExtension(filename) + ".txt";
-    bool run_setMinus2 = false; 
-    if (run_setMinus2) {
-        // calculate runtimes
+
+    auto outputFilename = "runtime_jumpdepth_" + extractFilenameWithoutExtension(filename) + ".txt";
+    writeRuntime(std::vector<timeunit>(), outputFilename, "", true);
+
+    int max_jump_depth = 10;
+    for(int current_jump_depth = 1; current_jump_depth <= max_jump_depth; current_jump_depth++) {
+        std::cout << "Running jump depth: " << current_jump_depth << std::endl;
+        std::vector<timeunit> runtimes;
+        bool run_setMinus2 = true; 
+        if (run_setMinus2) {
+            std::cout << "Running setMinus2" << std::endl;
+            for(int iteration = 0; iteration < number_iterations; iteration++) {
+                auto [automaton_cur, parsedSettings_cur] = hypro::parseFlowstarFile<Number>(filename);
+
+                hypro::Settings settings_cur = hypro::convert(parsedSettings_cur);
+                hypro::AnalysisParameters analysisParams_cur = settings_cur.strategy().front();
+                analysisParams_cur.setMinusAlgoUsed = 0;
+                
+                hypro::FixedAnalysisParameters fixedParameters_cur = settings_cur.fixedParameters();
+                fixedParameters_cur.jumpDepth = current_jump_depth;
+
+                auto roots_cur = hypro::makeRoots<Representation, Automaton>(automaton_cur);
+                hypro::reachability::ReachUrgency<Representation, Automaton> reacher_cur(automaton_cur, fixedParameters_cur, analysisParams_cur, roots_cur); 
+
+                clock::time_point start = clock::now();
+                auto result_cur = reacher_cur.computeForwardReachability();
+                runtimes.push_back(std::chrono::duration_cast<timeunit>(clock::now() - start));
+            }
+            std::cout << "setMinus2 finished" << std::endl;
+        }
+        writeRuntime(runtimes, outputFilename, "setMinus2", false);
+
+
+        runtimes.clear();
+        std::cout << "Running setMinusCrossing" << std::endl;
         for(int iteration = 0; iteration < number_iterations; iteration++) {
             auto [automaton_cur, parsedSettings_cur] = hypro::parseFlowstarFile<Number>(filename);
 
-            hypro::Settings settings_cur = hypro::convert(parsedSettings_cur);
-            hypro::AnalysisParameters analysisParams_cur = settings_cur.strategy().front();
-            analysisParams_cur.setMinusAlgoUsed = 0;
-            auto roots_cur = hypro::makeRoots<Representation, Automaton>(automaton_cur);
-            hypro::reachability::ReachUrgency<Representation, Automaton> reacher_cur(automaton_cur, settings_cur.fixedParameters(),analysisParams_cur, roots_cur); 
-
-            clock::time_point start = clock::now();
-            auto result_cur = reacher_cur.computeForwardReachability();
-            runtimes.push_back(std::chrono::duration_cast<timeunit>(clock::now() - start));
-        }
-
-        std::cout << "Statistic: setMinus2" << std::endl;
-        displayRuntime(runtimes);
-
-        bool plotsetMinus2 = false;
-        if(plotsetMinus2){
-            // do the reachability analysis again for plotting
-            auto [automaton, parsedSettings] = hypro::parseFlowstarFile<Number>(filename);
-            std::cout << parsedSettings << std::endl;
-
-            hypro::Settings settings = hypro::convert(parsedSettings);
-            hypro::AnalysisParameters analysisParams = settings.strategy().front();
-            analysisParams.setMinusAlgoUsed = 0;
-
-            auto roots = hypro::makeRoots<Representation, Automaton>(automaton);
-            hypro::reachability::ReachUrgency<Representation, Automaton> reacher(automaton, settings.fixedParameters(),analysisParams, roots); 
-            auto result = reacher.computeForwardReachability();
-            auto flowpipes = getFlowpipes(roots);
-
-            // plotting
-            plotResult<Number, Representation>("setMinus2", automaton, flowpipes, settings);
-        }
-        
-    }
-    writeRuntime(runtimes, outputFilename, "setMinus2", true);
-
-    // exit to test only the setMinus2 function
-    //exit(0);
-
-    runtimes.clear();
-
-    bool run_setMinusCrossing = true;
-    if (run_setMinusCrossing) {
-        for(int iteration = 0; iteration < number_iterations; iteration++) {
-            auto [automaton_cur, parsedSettings_cur] = hypro::parseFlowstarFile<Number>(filename);
             hypro::Settings settings_cur = hypro::convert(parsedSettings_cur);
             hypro::AnalysisParameters analysisParams_cur = settings_cur.strategy().front();
             analysisParams_cur.setMinusAlgoUsed = 1;
+
+            hypro::FixedAnalysisParameters fixedParameters_cur = settings_cur.fixedParameters();
+            fixedParameters_cur.jumpDepth = current_jump_depth;
+
             auto roots_cur = hypro::makeRoots<Representation, Automaton>(automaton_cur);
-            hypro::reachability::ReachUrgency<Representation, Automaton> reacher_cur(automaton_cur, settings_cur.fixedParameters(),analysisParams_cur, roots_cur); 
+            hypro::reachability::ReachUrgency<Representation, Automaton> reacher_cur(automaton_cur, fixedParameters_cur, analysisParams_cur, roots_cur); 
 
             clock::time_point start = clock::now();
             auto result_cur = reacher_cur.computeForwardReachability();
             runtimes.push_back(std::chrono::duration_cast<timeunit>(clock::now() - start));
         }
-        std::cout << "Statistic: setMinusCrossing" << std::endl;
-        displayRuntime(runtimes);
-
-        bool plotsetMinusCrossing = false;
-        if(plotsetMinusCrossing){
-            // do the reachability analysis again for plotting
-            auto [automaton, parsedSettings] = hypro::parseFlowstarFile<Number>(filename);
-            std::cout << parsedSettings << std::endl;
-
-            hypro::Settings settings = hypro::convert(parsedSettings);
-            hypro::AnalysisParameters analysisParams = settings.strategy().front();
-            analysisParams.setMinusAlgoUsed = 0;
-
-            auto roots = hypro::makeRoots<Representation, Automaton>(automaton);
-            hypro::reachability::ReachUrgency<Representation, Automaton> reacher(automaton, settings.fixedParameters(),analysisParams, roots); 
-            auto result = reacher.computeForwardReachability();
-            auto flowpipes = getFlowpipes(roots);
-
-            // plotting
-            plotResult<Number, Representation>("setMinus2", automaton, flowpipes, settings);
-        }
+        std::cout << "setMinusCrossing finished" << std::endl;
+        writeRuntime(runtimes, outputFilename, "setMinusCrossing", false);
     }
-    writeRuntime(runtimes, outputFilename, "setMinusCrossing", false);
 }
 
 int main(int argc, char **argv) {

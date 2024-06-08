@@ -12,8 +12,8 @@ hybrid reachability
   fixed orders 5
   cutoff 1e-15
   precision 128
-  output bouncing_ball_horizontal_beam
-  max jumps 2
+  output bouncing_ball_tilted_beam
+  max jumps 1
   print on
  }
 
@@ -75,7 +75,7 @@ hybrid reachability
   parallelotope aggregation {}
 
   loc_falling -> loc_rising
-  guard { y >= 0.9 y <= 1 z >= -0.5 z <= 0.5 }
+  guard { -0.5*x + y >= 0.9 -0.5*x + y <= 1 z >= -0.5 z <= 0.5 }
   reset { vy' := -0.75*vy vx' := vx - 0.1 }
   parallelotope aggregation {}
   urgent 

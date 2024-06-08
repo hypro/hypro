@@ -5,7 +5,7 @@ hybrid reachability
  setting 
  {
   fixed steps 0.01
-  time 3
+  time 20
   remainder estimation 1e-5
   identity precondition
   gnuplot octagon x,y
@@ -13,7 +13,7 @@ hybrid reachability
   cutoff 1e-15
   precision 128
   output vehicle_urgent
-  max jumps 5
+  max jumps 500000
   print on
  }
 

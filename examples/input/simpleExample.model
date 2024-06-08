@@ -1,0 +1,65 @@
+hybrid reachability
+{
+ state var x,y,gx,gy
+
+ setting
+ {
+  fixed steps 0.1
+  time 10
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,y
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output simple_example
+  max jumps 2
+  print on
+ }
+
+ modes
+ {
+  loc1
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+    gx' = 0
+    gy' = 0
+   }
+
+  }
+ }
+
+ jumps
+ {
+  loc1 -> loc1
+  guard {gx <= x gy <= y}
+  reset { gx' := gx + 1 gy' := 0.5*gy +2.5 }
+  parallelotope aggregation {}
+  urgent
+
+ }
+
+ init
+ {
+  loc1
+  {
+   x in [1,1]
+   y in [1,5]
+   gx in [2,2]
+   gy in [3,3]
+   
+  }
+ }
+}
+
+unsafe set
+{
+ loc1
+ {
+    x in [-5,0]
+    y in [-5,0]
+ }
+}
