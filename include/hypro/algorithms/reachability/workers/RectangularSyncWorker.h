@@ -42,7 +42,7 @@ class RectangularSyncWorker {
 	using JumpPredecessors = typename rectangularSyncGuardHandler<State, LocationT>::TransitionStatesMap;
 
   public:
-	/// constructor from rectangular automaton and settings TODO: delete this constructor
+	/// constructor from rectangular automaton and settings
 	RectangularSyncWorker( const Automaton& ha, const Settings& settings )
 		: mHybridAutomaton( ha )
 		, mSettings( settings ) {}
