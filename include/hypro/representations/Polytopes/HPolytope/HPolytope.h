@@ -406,18 +406,21 @@ namespace hypro {
         template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
         void reduceNumberRepresentation(const std::vector<Point<Number>> &_vertices = std::vector<Point<Number>>(),
                                         unsigned limit = fReach_DENOMINATOR) const {
-            // #ifdef REDUCE_NUMBERS
+            constexpr bool GET_VERTICES_AFTER_CHECK = false;
+			// #ifdef REDUCE_NUMBERS
             if (Setting::REDUCE_NUMBERS == true) {
-                TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
-                std::vector<Point<Number>> originalVertices;
-                if (_vertices.empty()) {
-                    TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
-                    originalVertices = this->vertices();
-                } else {
-                    TRACE("hypro.hPolytope", "Use passed vertices.");
-                    originalVertices = _vertices;
-                }
-                TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
+				std::vector<Point<Number>> originalVertices;
+				if(!GET_VERTICES_AFTER_CHECK) {
+					TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
+					if (_vertices.empty()) {
+						TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
+						originalVertices = this->vertices();
+					} else {
+						TRACE("hypro.hPolytope", "Use passed vertices.");
+						originalVertices = _vertices;
+					}
+					TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
+				}
 
                 if (!this->empty()) {
                     // normal reduction
@@ -434,6 +437,18 @@ namespace hypro {
 
                         // reduce, if reduction is required
                         if (largest > (limit * limit)) {
+							if(GET_VERTICES_AFTER_CHECK) {
+								TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
+								if (_vertices.empty()) {
+									TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
+									originalVertices = this->vertices();
+								} else {
+									TRACE("hypro.hPolytope", "Use passed vertices.");
+									originalVertices = _vertices;
+								}
+								TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
+							}
+
                             vector_t<Number> newNormal(mDimension);
                             for (unsigned i = 0; i < mDimension; ++i) {
                                 newNormal(i) = carl::floor(
