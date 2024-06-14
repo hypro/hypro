@@ -188,7 +188,7 @@ static void run_comparison_function(const std::string &filename,
     // do the reachability analysis for runtime measurement
     std::vector<timeunit> runtimes;
     auto outputFilename = "runtime_" + extractFilenameWithoutExtension(filename) + ".txt";
-    bool run_setMinus2 = false; 
+    bool run_setMinus2 = true; 
     if (run_setMinus2) {
         // calculate runtimes
         for(int iteration = 0; iteration < number_iterations; iteration++) {

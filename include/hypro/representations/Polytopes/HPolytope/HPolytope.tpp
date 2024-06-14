@@ -21,7 +21,7 @@ namespace hypro {
 // copy constructor
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>::HPolytopeT(const HPolytopeT &orig)
-            : GeometricObjectBase(orig), mHPlanes(orig.constraints()), mDimension(orig.dimension()),
+            : GeometricObjectBase(orig), mHPlanes(orig.constraints()), mDimension(orig.dimension()), mVertices(orig.getExtremeVertices()),
               mNonRedundant(orig.isNonRedundant()) {
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
             setOptimizer(orig.matrix(), orig.vector());
@@ -95,7 +95,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>::HPolytopeT(const std::vector<Point<Number>> &points)
-            : mHPlanes(), mDimension(0), mNonRedundant(true) {
+            : mHPlanes(), mDimension(0), mNonRedundant(true), mVertices(points) {
         mEmptyState = points.empty() ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
         // START_BENCHMARK_OPERATION( "HPoly_vertices_constructor" )
         //  skip
@@ -306,7 +306,7 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     template<typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>>>
     HPolytopeT<Number, Converter, Setting>::HPolytopeT(const HPolytopeT<Number, Converter, SettingRhs> &orig)
-            : mHPlanes(orig.constraints()), mDimension(orig.dimension()), mNonRedundant(orig.isNonRedundant()) {
+            : mHPlanes(orig.constraints()), mDimension(orig.dimension()), mVertices(orig.getExtremeVertices()), mNonRedundant(orig.isNonRedundant()) {
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
             setOptimizer(orig.matrix(), orig.vector());
         }
@@ -636,6 +636,7 @@ namespace hypro {
             mHPlanes.push_back(plane);
             mEmptyState = SETSTATE::NONEMPTY;
             mNonRedundant = true;
+            mVertices.clear();
             invalidateCache();
             return true;
         } else {
@@ -651,6 +652,7 @@ namespace hypro {
                 mEmptyState = SETSTATE::UNKNOWN;
                 mNonRedundant = false;
                 mUpdated = false;
+                mVertices.clear();
                 invalidateCache();
                 return true;
             }
@@ -678,6 +680,7 @@ namespace hypro {
             setEmptyState(SETSTATE::UNKNOWN);
         }
         mUpdated = false;
+        mVertices.clear();
         invalidateCache();
     }
 
@@ -1347,6 +1350,7 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     void HPolytopeT<Number, Converter, Setting>::clear() {
         mHPlanes.clear();
+        mVertices.clear();
         mDimension = 0;
         mEmptyState = SETSTATE::UNIVERSAL;
         mNonRedundant = true;
@@ -1412,6 +1416,7 @@ namespace hypro {
         }
         mDimension = existingDimensions.size() + newDimensions.size();
         mUpdated = false;
+        mVertices.clear();
     }
 
     template<typename Number, typename Converter, class Setting>

@@ -67,6 +67,7 @@ namespace hypro {
         };
 
         using HalfspaceVector = std::vector<Halfspace<Number>>;
+        using pointVector = std::vector<Point<Number>>;
 
         typedef Setting Settings;
         typedef Number NumberType;
@@ -79,6 +80,7 @@ namespace hypro {
         mutable std::optional<Optimizer<Number>> mOptimizer = std::nullopt;                 ///< optional cache (settings-dependent) for an LP instance
         mutable bool mUpdated = false;                                                     ///< cache flag to mark a required update of the optional LP instance
         mutable std::optional<std::vector<carl::Interval<Number>>> mBox = std::nullopt;     ///< cache of the bounding box
+        mutable pointVector mVertices = {}; ///< cache of the extreme points defining the v polytope
     public:
         /**
          * @brief Constructor for the universal H-polytope.
@@ -152,6 +154,18 @@ namespace hypro {
          * @brief Destructor.
          */
         ~HPolytopeT();
+
+        /**
+         * @brief Getter of the extreme points of v polytope
+         * @return extreme vertices as a vector
+         */
+        pointVector getExtremeVertices() const { return mVertices; }
+
+        /**
+         * @brief Setter of the extreme points of v polytope
+         * @param vertices extreme vertices as a vector
+         */
+        void setExtremeVertices(const pointVector &vertices) { mVertices = vertices; }
 
         /**
          * @brief Approximates the storage usage of the current polytope.
@@ -389,6 +403,9 @@ namespace hypro {
             swap(a.mHPlanes, b.mHPlanes);
             a.setUpdated(false);
             b.setUpdated(false);
+            pointVector tmpVertices = a.getExtremeVertices();
+            a.setExtremeVertices(b.getExtremeVertices());
+            b.getExtremeVertices(tmpVertices);
         }
 
         template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
@@ -446,6 +463,7 @@ namespace hypro {
                         }
                     }
                 }
+                mVertices.clear();
             }
             // #endif
         }

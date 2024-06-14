@@ -106,6 +106,8 @@ namespace hypro {
             std::vector<Halfspace<Number>> planes = pca.box();
             target = HPolytope(planes);
         }
+        target.setExtremeVertices(_source.getExtremePoints());
+        //target.setExtremeVertices(_source.vertices());
         return target;
     }
 

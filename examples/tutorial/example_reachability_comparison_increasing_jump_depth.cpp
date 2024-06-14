@@ -190,8 +190,8 @@ static void run_comparison_function(const std::string &filename,
     auto outputFilename = "runtime_jumpdepth_" + extractFilenameWithoutExtension(filename) + ".txt";
     writeRuntime(std::vector<timeunit>(), outputFilename, "", true);
 
-    int max_jump_depth = 10;
-    for(int current_jump_depth = 1; current_jump_depth <= max_jump_depth; current_jump_depth++) {
+    int max_jump_depth = 2;
+    for(int current_jump_depth = 0; current_jump_depth <= max_jump_depth; current_jump_depth++) {
         std::cout << "Running jump depth: " << current_jump_depth << std::endl;
         std::vector<timeunit> runtimes;
         bool run_setMinus2 = true; 
