@@ -32,7 +32,7 @@ namespace hypro {
 
             if (containmentResult != CONTAINMENT::NO) { 
                 //if all transition labels are included in nonSyncLabels add resultingSet to mNonSyncGuardSatisfyingStates
-                // TODO: check how to handle multiple labels for one transition
+                // h.s. TODO: check how to handle multiple labels for one transition
                 if (std::includes(nonSyncLabels.begin(), nonSyncLabels.end(), transitionPtr->getLabels().begin(), transitionPtr->getLabels().end()) || transitionPtr->getLabels().empty()){
                     mNonSyncGuardSatisfyingStates[transitionPtr.get()].emplace_back(std::move(resultingSet));
                 } else {

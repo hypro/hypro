@@ -623,7 +623,7 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
             if ( mFlowTypes[I] == DynamicType::rectangular ) {
                 carl::Variable timeVar = VariablePool::getInstance().getTimeVariable();
                 std::get<rectangularFlow<Number>>(flow).setFlowIntervalForDimension(carl::Interval<Number>(1, 1), timeVar);
-                // TODO add assertions to this function
+                // h.s. TODO add assertions to this function
             }
             ++I;
         }

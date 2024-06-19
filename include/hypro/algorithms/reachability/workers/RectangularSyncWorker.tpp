@@ -149,6 +149,7 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 															 State syncTime,
 															 std::set<RectangularSyncWorker<State, Automaton>*> visitedWorkers ) {
 	assert( label.size() == 1 && "the analyzer assumes that every transition has only one label. It cannot handle models where the transitions can have multiple labels." );
+	this->changeVariablePool();
 	if ( visitedWorkers == mSyncDict.at( label.front() ) ) {
 		// check if the synchronizing transition is enabled
 		rectangularSyncGuardHandler<State, LocationT> guardHandler;
@@ -210,6 +211,7 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 			}
 			if ( !timeIntersection.empty() && firstSyncCondition && secondSyncCondition ) {
 				auto nodeTimePairs = ptrToWorker->findSyncSuccessors( *nodeTransitionPair.first, nodeTransitionPair.second, label, timeIntersection, visitedWorkers );
+				this->changeVariablePool();
 				for ( auto& [node, syncTime1] : nodeTimePairs ) {
 					// check if the synchronizing transition is enabled
 					rectangularSyncGuardHandler<State, LocationT> guardHandler;

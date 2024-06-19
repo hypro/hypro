@@ -8,7 +8,7 @@
  */
 
 /**
- * This is an example of the benchmark Fischer's Mutual Execlusion with synchronizing reachability analysis on rectangular automata.
+ * This is an example of the benchmark Nuclear Reactor System with synchronizing reachability analysis on rectangular automata.
  */
 
 #include "hypro/datastructures/reachability/ReachTreev2Util.h"
@@ -26,8 +26,8 @@
 // typedefs
 // using Number = double;
 using Number = mpq_class;
-using Representation = hypro::HPolytope<Number>;
-// using Representation = hypro::VPolytope<Number>;
+// using Representation = hypro::HPolytope<Number>;
+using Representation = hypro::VPolytope<Number>;
 using State = hypro::State<Number, Representation>;
 using Matrix = hypro::matrix_t<Number>;
 using Vector = hypro::vector_t<Number>;
@@ -36,7 +36,7 @@ using Interval = carl::Interval<Number>;
 using Point = hypro::Point<Number>;
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createProcessAutomaton(int processNumber, Number a, Number b) {
+hypro::HybridAutomaton<Number> createRodAutomaton(int rodNumber) {
 	// One-dimensional reactangular automaton
 	hypro::HybridAutomaton<Number> res;
 
@@ -45,76 +45,61 @@ hypro::HybridAutomaton<Number> createProcessAutomaton(int processNumber, Number 
 	
     // rectangular dynamics
     std::map<carl::Variable, carl::Interval<Number>> dynamics;
-    dynamics.emplace(std::make_pair(x, carl::Interval<Number>(1.1, 2.3)));
+    dynamics.emplace(std::make_pair(x, carl::Interval<Number>(0.9, 1.1)));
     hypro::rectangularFlow<Number> flow(dynamics);
 
     // Create locations
-	auto locS1 = res.createLocation("S1");
-	auto locS2 = res.createLocation("S2");
-	auto locS3 = res.createLocation("S3");
-	auto locS4 = res.createLocation("S4");
+	auto locOut = res.createLocation("out");
+	auto locIn = res.createLocation("in");
+	auto locRecover = res.createLocation("recover");
     
     // add flows
-	locS1->setRectangularFlow(flow);
-	locS2->setRectangularFlow(flow);
-	locS3->setRectangularFlow(flow);
-	locS4->setRectangularFlow(flow);
+	locOut->setRectangularFlow(flow);
+	locIn->setRectangularFlow(flow);
+	locRecover->setRectangularFlow(flow);
 
     // add invariants
-    // locS2 x<=a
+    // locIn x<=10000
 	Matrix invariantConstraints = Matrix::Zero( 1, 1 );
 	invariantConstraints( 0, 0 ) = 1;
 	Vector invariantConstants = Vector::Zero( 1 );
-	invariantConstants( 0 ) = a;
-	locS2->setInvariant( { invariantConstraints, invariantConstants } );
+	invariantConstants( 0 ) = 10000;
+	locIn->setInvariant( { invariantConstraints, invariantConstants } );
+	// locOut x<=10000
+    locOut->setInvariant( { invariantConstraints, invariantConstants } );
+	// locRecover x<=10000
+    locRecover->setInvariant( { invariantConstraints, invariantConstants } );
     
     // transitions
-    // locS1 -> locS2
-    auto transition12 = locS1->createTransition( locS2 );
-    std::string test_0_i = "test_0_" + std::to_string(processNumber);
-    transition12->addLabel( hypro::Label{ test_0_i } );
+    // locOut -> locIn
+    auto transitionOutIn = locOut->createTransition( locIn );
+    std::string add_i = "add_" + std::to_string(rodNumber);
+    transitionOutIn->addLabel( hypro::Label{ add_i } );
+    // guard x >= 1
+    hypro::matrix_t<Number> guardConstraintsOutIn = hypro::matrix_t<Number>(1, 1);
+    guardConstraintsOutIn << -1;
+    hypro::vector_t<Number> guardConstantsOutIn = hypro::vector_t<Number>(1);
+    guardConstantsOutIn << -1;
+    hypro::Condition<Number> guardOutIn(guardConstraintsOutIn, guardConstantsOutIn);
+    transitionOutIn->setGuard( guardOutIn );
     // reset x in [0, 0]
     std::vector<carl::Interval<Number>> intervalReset;
     intervalReset.emplace_back( carl::Interval<Number>( 0, 0 ) );
     hypro::Reset<Number> reset;
     reset.setIntervals( intervalReset );
-    transition12->setReset( reset );
+    transitionOutIn->setReset( reset );
 
-    // locS4 -> locS1
-    auto transition41 = locS4->createTransition( locS1 );
-    std::string set_0_i = "set_0_" + std::to_string(processNumber);
-    transition41->addLabel( hypro::Label{ set_0_i } );
-
-    // locS2 -> locS3
-    auto transition23 = locS2->createTransition( locS3 );
-    std::string set_i_i = "set_" + std::to_string(processNumber) + "_" + std::to_string(processNumber);
-    transition23->addLabel( hypro::Label{ set_i_i } );
+    // locIn -> locRecover
+    auto transitionInRecover = locIn->createTransition( locRecover );
+    std::string remove_i = "remove_" + std::to_string(rodNumber);
+    transitionInRecover->addLabel( hypro::Label{ remove_i } );
     // reset x in [0, 0]
-    transition23->setReset( reset );
+    transitionInRecover->setReset( reset );
 
-    // locS3->locS1
-    auto transition31 = locS3->createTransition( locS1 );
-    std::string test_not_i_i = "test_not_" + std::to_string(processNumber) + "_" + std::to_string(processNumber);
-    transition31->addLabel( hypro::Label{ test_not_i_i } );
-    // guard x in [b, inf]
-    hypro::matrix_t<Number> guardConstraints31 = hypro::matrix_t<Number>(1, 1);
-    guardConstraints31 << -1;
-    hypro::vector_t<Number> guardConstants31 = hypro::vector_t<Number>(1);
-    guardConstants31 << -b;
-    hypro::Condition<Number> guard31(guardConstraints31, guardConstants31);
-    transition31->setGuard( guard31 );
-
-    // locS3->locS4
-    auto transition34 = locS3->createTransition( locS4 );
-    std::string test_i_i = "test_" + std::to_string(processNumber) + "_" + std::to_string(processNumber);
-    transition34->addLabel( hypro::Label{ test_i_i } );
-    // guard x in [b, inf]
-    hypro::matrix_t<Number> guardConstraints34 = hypro::matrix_t<Number>(1, 1);
-    guardConstraints34 << -1;
-    hypro::vector_t<Number> guardConstants34 = hypro::vector_t<Number>(1);
-    guardConstants34 << -b;
-    hypro::Condition<Number> guard34(guardConstraints34, guardConstants34);
-    transition34->setGuard( guard34 );
+    // locRecover -> locOut
+    auto transitionRecoverOut = locRecover->createTransition( locOut );
+    std::string recovery_i = "recovery_" + std::to_string(rodNumber);
+    transitionRecoverOut->addLabel( hypro::Label{ recovery_i } );
 
 	// Set initial state x = [0,0]
 	Matrix initialConstraints = Matrix::Zero( 2, 1 );
@@ -123,15 +108,17 @@ hypro::HybridAutomaton<Number> createProcessAutomaton(int processNumber, Number 
 	initialConstants << 0, 0;
 
 	// Create HA
-	res.addInitialState( locS1, hypro::Condition<Number>( initialConstraints, initialConstants ) );
+	res.addInitialState( locOut, hypro::Condition<Number>( initialConstraints, initialConstants ) );
 
 	return res;
 }
 
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createSharedVariableAutomaton(int processNumber) {
-	// One-dimensional reactangular automaton
+hypro::HybridAutomaton<Number> createControllerAutomaton(int numberOfRods) {
+    assert(numberOfRods > 0);
+
+    // One-dimensional reactangular automaton
 	hypro::HybridAutomaton<Number> res;
 
     // variables
@@ -139,60 +126,68 @@ hypro::HybridAutomaton<Number> createSharedVariableAutomaton(int processNumber) 
 
     // rectangular dynamics
     std::map<carl::Variable, carl::Interval<Number>> dynamics;
-    dynamics.emplace(std::make_pair(x, carl::Interval<Number>(1, 1)));
+    dynamics.emplace(std::make_pair(x, carl::Interval<Number>(0.9, 1.1)));
     hypro::rectangularFlow<Number> flow(dynamics);
 
-    // Create locations
-	// auto loc0 = res.createLocation("loc0");
-    // loc0->setRectangularFlow(flow);
+    // Create numberOfRods+1 locations
     std::vector<hypro::Location<Number> *> locs{};
-    for (int i = 0; i <= processNumber; ++i) {
-        std::string locName = "loc" + std::to_string(i);
+    for (int i = 0; i <= numberOfRods; ++i) {
+        std::string locName = "rod_" + std::to_string(i);
         locs.push_back( res.createLocation(locName) );
         locs[i]->setRectangularFlow(flow);
+
+        // add invariants
+        if(i==0) {
+            // locs[0] x<=16.1
+            Matrix invariantConstraints = Matrix::Zero( 1, 1 );
+            invariantConstraints( 0, 0 ) = 1;
+            Vector invariantConstants = Vector::Zero( 1 );
+            invariantConstants( 0 ) = 16.1;
+            locs[i]->setInvariant( { invariantConstraints, invariantConstants } );            
+        } else {
+            // locs[i] x<=5.9
+            Matrix invariantConstraints = Matrix::Zero( 1, 1 );
+            invariantConstraints( 0, 0 ) = 1;
+            Vector invariantConstants = Vector::Zero( 1 );
+            invariantConstants( 0 ) = 5.9;
+            locs[i]->setInvariant( { invariantConstraints, invariantConstants } );
+        }
     }
     
     // transitions
-    for (int i = 1; i <= processNumber; ++i)
+    for (int i = 1; i <= numberOfRods; ++i)
     {
-        // set_0_i
-        auto transitionSet0i = locs[0]->createTransition( locs[0] );
-        std::string set_0_i = "set_0_" + std::to_string(i);
-        transitionSet0i->addLabel( hypro::Label{ set_0_i } );
-        // test_0_i
-        auto transitionTest0i = locs[0]->createTransition( locs[0] );
-        std::string test_0_i = "test_0_" + std::to_string(i);
-        transitionTest0i->addLabel( hypro::Label{ test_0_i } );
-
-        // set_i_i
-        auto transitionSetii = locs[0]->createTransition( locs[i] );
-        std::string set_i_i = "set_" + std::to_string(i) + "_" + std::to_string(i);
-        transitionSetii->addLabel( hypro::Label{ set_i_i } );
-
-        // set_0_i
-        auto transitionSet0iFromi = locs[i]->createTransition( locs[0] );
-        // std::string set_0_i = "set_0_" + std::to_string(i);
-        transitionSet0iFromi->addLabel( hypro::Label{ set_0_i } );
-
-        // test_i_i
-        auto transitionTestii = locs[i]->createTransition( locs[i] );
-        std::string test_i_i = "test_" + std::to_string(i) + "_" + std::to_string(i);
-        transitionTestii->addLabel( hypro::Label{ test_i_i } );
-
-        for (int j = 1; j <= processNumber; ++j)
-        {
-            if (i != j)
-            {
-                // test_not_j_j
-                auto transitionTestnotjj = locs[i]->createTransition( locs[i] );
-                std::string test_not_j_j = "test_not_" + std::to_string(j) + "_" + std::to_string(j);
-                transitionTestnotjj->addLabel( hypro::Label{ test_not_j_j } );
-                // set_j_j
-                auto transitionSetjj = locs[i]->createTransition( locs[j] );
-                std::string set_j_j = "set_" + std::to_string(j) + "_" + std::to_string(j);
-                transitionSetjj->addLabel( hypro::Label{ set_j_j } );
-            }
-        }
+        // add_i
+        auto transitionAddi = locs[0]->createTransition( locs[i] );
+        std::string add_i = "add_" + std::to_string(i);
+        transitionAddi->addLabel( hypro::Label{ add_i } );
+        // guard x in [16,16.1]
+        hypro::matrix_t<Number> guardConstraintsAddi = hypro::matrix_t<Number>(2, 1);
+        guardConstraintsAddi << 1, -1;
+        hypro::vector_t<Number> guardConstantsAddi = hypro::vector_t<Number>(2);
+        guardConstantsAddi << 16.1, -16;
+        hypro::Condition<Number> guardAddi(guardConstraintsAddi, guardConstantsAddi);
+        transitionAddi->setGuard( guardAddi );
+        // reset x in [0, 0]
+        std::vector<carl::Interval<Number>> intervalReset;
+        intervalReset.emplace_back( carl::Interval<Number>( 0, 0 ) );
+        hypro::Reset<Number> reset;
+        reset.setIntervals( intervalReset );
+        transitionAddi->setReset( reset );
+        
+        // remove_i
+        auto transitionRemovei = locs[i]->createTransition( locs[0] );
+        std::string remove_i = "remove_" + std::to_string(i);
+        transitionRemovei->addLabel( hypro::Label{ remove_i } );
+        // guard x in [5,5.9]
+        hypro::matrix_t<Number> guardConstraintsRemovei = hypro::matrix_t<Number>(2, 1);
+        guardConstraintsRemovei << 1, -1;
+        hypro::vector_t<Number> guardConstantsRemovei = hypro::vector_t<Number>(2);
+        guardConstantsRemovei << 5.9, -5;
+        hypro::Condition<Number> guardRemovei(guardConstraintsRemovei, guardConstantsRemovei);
+        transitionRemovei->setGuard( guardRemovei );
+        // reset x in [0, 0]
+        transitionRemovei->setReset( reset );
     }
     
     // Set initial state x = [0,0]
@@ -208,31 +203,45 @@ hypro::HybridAutomaton<Number> createSharedVariableAutomaton(int processNumber) 
 }
 
 
-
-
 int main(int argc, char **argv) {
     using clock = std::chrono::high_resolution_clock;
     using timeunit = std::chrono::microseconds;
 
-    int numberOfProcesses = 2;
+    int numberOfRods = 5;
 
-    // create 3 process automata and a shared variable automaton
-    std::vector<hypro::HybridAutomaton<Number>> processes{};
-    for (int i = 0; i < numberOfProcesses; ++i)
+    // // create controller automaton
+    // hypro::VariablePool::getInstance().changeToPool(0);
+    // auto controllerAutomaton = createControllerAutomaton<Number>(numberOfRods);
+    // controllerAutomaton.addTimeVariable();
+    // automata.push_back(controllerAutomaton);
+
+    // // create rod automata
+    // for (int i = 1; i <= numberOfRods; ++i)
+    // {
+    //     hypro::VariablePool::getInstance().changeToPool(i);
+    //     auto rodAutomaton = createRodAutomaton<Number>(i);
+    //     rodAutomaton.addTimeVariable();
+    //     automata.push_back( rodAutomaton );
+    // }
+
+    std::vector<hypro::HybridAutomaton<Number>> rods{};
+    for (int i = 0; i < numberOfRods; ++i)
     {
         hypro::VariablePool::getInstance().changeToPool(i);
-        processes.push_back( createProcessAutomaton<Number>(i+1, 2, 3) );
-        processes[i].addTimeVariable();
+        rods.push_back( createRodAutomaton<Number>(i+1) );
+        rods[i].addTimeVariable();
     }
-    hypro::VariablePool::getInstance().changeToPool(numberOfProcesses);
-    auto sharedVariableAutomaton = createSharedVariableAutomaton<Number>(numberOfProcesses);
-    sharedVariableAutomaton.addTimeVariable();
+
+    hypro::VariablePool::getInstance().changeToPool(numberOfRods);
+    auto controllerAutomaton = createControllerAutomaton<Number>(numberOfRods);
+    controllerAutomaton.addTimeVariable();
     
     // change back to pool 0
 	hypro::VariablePool::getInstance().changeToPool(0);
 
-	std::vector<hypro::HybridAutomaton<Number>> automata{ processes };
-    automata.push_back(sharedVariableAutomaton);
+    std::vector<hypro::HybridAutomaton<Number>> automata{ rods };
+    automata.push_back( controllerAutomaton );
+
 
     hypro::AnalysisParameters analysisParameters;
     analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
@@ -240,7 +249,7 @@ int main(int argc, char **argv) {
     analysisParameters.representation_type = hypro::representation_name::polytope_v;
 
     hypro::Settings settings{ {},
-                              hypro::FixedAnalysisParameters{  10 , hypro::tNumber( 4 ), hypro::tNumber( 1 ) },
+                              hypro::FixedAnalysisParameters{  10 , hypro::tNumber( 20 ), hypro::tNumber( 1 ) },
                               { analysisParameters } };
 
     clock::time_point startAnalyzing = clock::now();
@@ -268,12 +277,13 @@ int main(int argc, char **argv) {
     for (size_t i = 0; i < automata.size(); ++i) {
         auto &plotter = hypro::Plotter<Number>::getInstance();
         plotter.clear();
-        std::string extendedFilename = "Fischer_Benchmark_unknown_automaton";
-        if(i==numberOfProcesses){
-            extendedFilename = "Fischer_sharedVariable";
+        std::string extendedFilename = "NR_unknown_automaton";
+        if(i==numberOfRods) {
+            extendedFilename = "NR_controller";
         } else {
-            extendedFilename = "Fischer_process_" + std::to_string(i+1);
+            extendedFilename = "NR_rod_" + std::to_string(i+1);
         }
+
         switch (Representation::type()) {
             case hypro::representation_name::polytope_v: {
                 extendedFilename += "_vpoly";

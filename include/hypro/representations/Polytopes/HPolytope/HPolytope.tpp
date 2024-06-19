@@ -915,7 +915,11 @@ namespace hypro {
             return res;
         } else {
             // Via Fourier-Motzkin variable elimination
+            std::cout << "matrix: " << this->matrix() << std::endl;
+            std::cout << "vector: " << this->vector() << std::endl;
             auto [newConstraints, newConstants] = eliminateCols(this->matrix(), this->vector(), dimensions, true);
+            std::cout << "New constraints: " << newConstraints << std::endl;
+            std::cout << "New constants: " << newConstants << std::endl;
             return {newConstraints, newConstants};
         }
     }
@@ -1103,7 +1107,7 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::getTimeProjection() const {
-        // TODO add assertion dimension greater equal 2
+        // h.s. TODO add assertion dimension greater equal 2
         if (this->empty()) {
             return *this;
         }
@@ -1112,8 +1116,11 @@ namespace hypro {
         for (std::size_t i = 0; i < cols.size(); i++) {
             cols[i] = i;
         }
+        std::cout << "matrix: " << this->matrix() << std::endl;
+        std::cout << "vector: " << this->vector() << std::endl;
         std::pair<smtrat::fmplex::EigenMat<Number>, smtrat::fmplex::EigenVec<Number>> result = smtrat::fmplex::eliminate_cols(this->matrix(), this->vector(), cols);
-
+        std::cout << "result.first: " << result.first << std::endl;
+        std::cout << "result.second: " << result.second << std::endl;
         return HPolytopeT<Number, Converter, Setting>(result.first, result.second);
     }
 
