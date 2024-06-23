@@ -41,16 +41,16 @@ hypro::HybridAutomaton<Number> createTrainAutomaton() {
 
     // variables
     carl::Variable x = hypro::VariablePool::getInstance().carlVarByIndex(0);
-    carl::Variable y = hypro::VariablePool::getInstance().carlVarByIndex(1);
+    // carl::Variable y = hypro::VariablePool::getInstance().carlVarByIndex(1);
 	
     // rectangular dynamics
     std::map<carl::Variable, carl::Interval<Number>> farDynamics;
     farDynamics.emplace(std::make_pair(x, carl::Interval<Number>(-50, -40)));
-    farDynamics.emplace(std::make_pair(y, carl::Interval<Number>(10, 10)));
+    // farDynamics.emplace(std::make_pair(y, carl::Interval<Number>(10, 10)));
     hypro::rectangularFlow<Number> farFlow(farDynamics);
     std::map<carl::Variable, carl::Interval<Number>> nearDynamics;
     nearDynamics.emplace(std::make_pair(x, carl::Interval<Number>(-50, -30)));
-    nearDynamics.emplace(std::make_pair(y, carl::Interval<Number>(10, 10)));
+    // nearDynamics.emplace(std::make_pair(y, carl::Interval<Number>(10, 10)));
     hypro::rectangularFlow<Number> nearFlow(nearDynamics);
     
     // Create locations
@@ -65,19 +65,19 @@ hypro::HybridAutomaton<Number> createTrainAutomaton() {
 
     // add invariants
     // locFar x>=1000
-	Matrix invariantConstraints = Matrix::Zero( 1, 2 );
+	Matrix invariantConstraints = Matrix::Zero( 1, 1 );
 	invariantConstraints( 0, 0 ) = -1;
 	Vector invariantConstants = Vector::Zero( 1 );
 	invariantConstants( 0 ) = -1000;
 	locFar->setInvariant( { invariantConstraints, invariantConstants } );
     // locNear x>=0
-    Matrix invariantConstraintsNear = Matrix::Zero( 1, 2 );
+    Matrix invariantConstraintsNear = Matrix::Zero( 1, 1 );
     invariantConstraintsNear( 0, 0 ) = -1;
     Vector invariantConstantsNear = Vector::Zero( 1 );
     invariantConstantsNear( 0 ) = 0;
     locNear->setInvariant( { invariantConstraintsNear, invariantConstantsNear } );
     // locPast x>=-100
-    Matrix invariantConstraintsPast = Matrix::Zero( 1, 2 );
+    Matrix invariantConstraintsPast = Matrix::Zero( 1, 1 );
     invariantConstraintsPast( 0, 0 ) = -1;
     Vector invariantConstantsPast = Vector::Zero( 1 );
     invariantConstantsPast( 0 ) = 100;
@@ -88,8 +88,8 @@ hypro::HybridAutomaton<Number> createTrainAutomaton() {
     auto transitionFarNear = locFar->createTransition( locNear );
     transitionFarNear->addLabel( hypro::Label{"approach"} );
     // guard x in [1000,1000]
-    hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>(2, 2);
-    guardConstraints << 1, 0, -1, 0;
+    hypro::matrix_t<Number> guardConstraints = hypro::matrix_t<Number>(2, 1);
+    guardConstraints << 1, -1;
     hypro::vector_t<Number> guardConstants = hypro::vector_t<Number>(2);
     guardConstants << 1000, -1000;
     hypro::Condition<Number> guard(guardConstraints, guardConstants);
@@ -99,8 +99,8 @@ hypro::HybridAutomaton<Number> createTrainAutomaton() {
     auto transitionNearPast = locNear->createTransition( locPast );
     transitionNearPast->addLabel( hypro::Label{"pass"} );
     // guard x in [0,0]
-    hypro::matrix_t<Number> guardConstraintsNear = hypro::matrix_t<Number>(2, 2);
-    guardConstraintsNear << 1, 0, -1, 0;
+    hypro::matrix_t<Number> guardConstraintsNear = hypro::matrix_t<Number>(2, 1);
+    guardConstraintsNear << 1, -1;
     hypro::vector_t<Number> guardConstantsNear = hypro::vector_t<Number>(2);
     guardConstantsNear << 0, 0;
     hypro::Condition<Number> guardNear(guardConstraintsNear, guardConstantsNear);
@@ -110,8 +110,8 @@ hypro::HybridAutomaton<Number> createTrainAutomaton() {
     auto transitionPastFar = locPast->createTransition( locFar );
     transitionPastFar->addLabel( hypro::Label{"exit"} );
     // guard x in [-100,-100]
-    hypro::matrix_t<Number> guardConstraintsPast = hypro::matrix_t<Number>(2, 2);
-    guardConstraintsPast << 1, 0, -1, 0;
+    hypro::matrix_t<Number> guardConstraintsPast = hypro::matrix_t<Number>(2, 1);
+    guardConstraintsPast << 1, -1;
     hypro::vector_t<Number> guardConstantsPast = hypro::vector_t<Number>(2);
     guardConstantsPast << -100, 100;
     hypro::Condition<Number> guardPast(guardConstraintsPast, guardConstantsPast);
@@ -123,11 +123,11 @@ hypro::HybridAutomaton<Number> createTrainAutomaton() {
     reset.setIntervals( intervalReset );
     transitionPastFar->setReset( reset );
 
-	// Set initial state x = [1900,5000], y = [0,0]
-	Matrix initialConstraints = Matrix::Zero( 4, 2 );
-	Vector initialConstants = Vector::Zero( 4 );
-	initialConstraints << 1, 0, -1, 0, 0, 1, 0, -1;
-	initialConstants << 5000, -1900, 0, 0;
+	// Set initial state x = [1900,5000]
+	Matrix initialConstraints = Matrix::Zero( 2, 1 );
+	Vector initialConstants = Vector::Zero( 2 );
+	initialConstraints << 1, -1;
+	initialConstants << 5000, -1900;
 
 	// Create HA
 	res.addInitialState( locFar, hypro::Condition<Number>( initialConstraints, initialConstants ) );
@@ -366,7 +366,7 @@ int main(int argc, char **argv) {
     analysisParameters.representation_type = hypro::representation_name::polytope_v;
 
     hypro::Settings settings{ {},
-                              hypro::FixedAnalysisParameters{  10 , hypro::tNumber( 20 ), hypro::tNumber( 1 ) },
+                              hypro::FixedAnalysisParameters{  3 , hypro::tNumber( 25 ), hypro::tNumber( 1 ) },
                               { analysisParameters } };
 
     clock::time_point startAnalyzing = clock::now();
@@ -398,13 +398,13 @@ int main(int argc, char **argv) {
         switch (i)
         {
         case 0:
-            extendedFilename = "TGC_Benchmark_train";
+            extendedFilename = "TGC_train";
             break;
         case 1:
-            extendedFilename = "TGC_Benchmark_controller";
+            extendedFilename = "TGC_controller";
             break;
         case 2:
-            extendedFilename = "TGC_Benchmark_gate";
+            extendedFilename = "TGC_gate";
             break;
         default:
             break;
@@ -423,7 +423,7 @@ int main(int argc, char **argv) {
         }
         std::cout << "filename is " << extendedFilename << std::endl;
         plotter.setFilename(extendedFilename);
-        std::vector<std::size_t> plottingDimensions = std::vector<std::size_t>{0, 1};
+        std::vector<std::size_t> plottingDimensions = std::vector<std::size_t>{1, 0};
         plotter.rSettings().dimensions.push_back(plottingDimensions.front());
         plotter.rSettings().dimensions.push_back(plottingDimensions.back());
         plotter.rSettings().cummulative = false;
@@ -456,7 +456,8 @@ int main(int argc, char **argv) {
 
         std::cout << "Write to file." << std::endl;
 
-        plotter.plot2d(hypro::PLOTTYPE::pdf, true);
+        // plotter.plot2d(hypro::PLOTTYPE::pdf, true);
+        plotter.plot2d(hypro::PLOTTYPE::tex, true);
 
         std::cout << "Finished plotting: "
                 << std::chrono::duration_cast<timeunit>(clock::now() -

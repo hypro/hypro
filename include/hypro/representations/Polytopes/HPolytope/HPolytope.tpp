@@ -915,11 +915,7 @@ namespace hypro {
             return res;
         } else {
             // Via Fourier-Motzkin variable elimination
-            std::cout << "matrix: " << this->matrix() << std::endl;
-            std::cout << "vector: " << this->vector() << std::endl;
             auto [newConstraints, newConstants] = eliminateCols(this->matrix(), this->vector(), dimensions, true);
-            std::cout << "New constraints: " << newConstraints << std::endl;
-            std::cout << "New constants: " << newConstants << std::endl;
             return {newConstraints, newConstants};
         }
     }

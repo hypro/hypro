@@ -25,8 +25,8 @@
 
 // typedefs
 using Number = mpq_class;
-// using Representation = hypro::HPolytope<Number>;
-using Representation = hypro::VPolytope<Number>;
+using Representation = hypro::HPolytope<Number>;
+// using Representation = hypro::VPolytope<Number>;
 using State = hypro::State<Number, Representation>;
 using Matrix = hypro::matrix_t<Number>;
 using Vector = hypro::vector_t<Number>;
@@ -345,7 +345,7 @@ static void displayRuntime(const std::vector<timeunit> &runtimes) {
     double min = 0;
     double max = 0;
     for (auto runtime : runtimes) {
-        std::cout << runtime.count()/1000.0 << " ms, ";
+        std::cout << runtime.count()/1000.0 << ", ";
         if (runtime.count() < min || min == 0) {
             min = runtime.count();
         }
@@ -396,7 +396,7 @@ int main(int argc, char **argv) {
     analysisParameters.representation_type = hypro::representation_name::polytope_v;
 
     hypro::Settings settings{ {},
-                              hypro::FixedAnalysisParameters{  10 , hypro::tNumber( 20 ), hypro::tNumber( 1 ) },
+                              hypro::FixedAnalysisParameters{  10 , hypro::tNumber( 30 ), hypro::tNumber( 1 ) },
                               { analysisParameters } };
 
     std::vector<timeunit> runtimes;

@@ -83,6 +83,9 @@ class RectangularSyncAnalyzer {
 		return mAutomatonReachTreeMap.at(&automaton);
 	}
 
+	// getter for the average size of the search space
+	float getAverageSizeOfSearchSpace() const { return std::accumulate(mAverageSizeOfSearchSpace.begin(), mAverageSizeOfSearchSpace.end(), 0.0)*1.0 / mAverageSizeOfSearchSpace.size(); }
+
   private:
 	REACHABILITY_RESULT
 	processNode( RectangularSyncWorker<State, Automaton> &worker, ReachTreeNode<State, LocationT> *node, Automaton const* automaton );
@@ -94,6 +97,7 @@ class RectangularSyncAnalyzer {
 	std::map<Automaton const *, std::vector<ReachTreeNode<State, LocationT>>> mAutomatonReachTreeMap{};	 ///< map (*automaton -> reachTree), that maps each automaton to a Forest of ReachTrees
 	std::map<Label, std::set<Automaton const *>> mLabelAutomatonMap{};									 ///< map (label -> automata), that maps each label to the set of automata that have this label
 	std::map<Label, std::set<RectangularSyncWorker<State, Automaton>* >> mLabelWorkerMap{};				 ///< map (label -> set of workers), describes for each label the automata that require synchronization
+	std::vector<float> mAverageSizeOfSearchSpace{};
 };
 
 }  // namespace hypro

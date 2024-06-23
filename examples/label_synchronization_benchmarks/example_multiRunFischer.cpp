@@ -8,7 +8,7 @@
  */
 
 /**
- * This is an example of the benchmark Fischer's Mutual Execlusion with synchronizing reachability analysis on rectangular automata.
+ * This is an example of the benchmark Train Gate System with synchronizing reachability analysis on rectangular automata.
  */
 
 #include "hypro/datastructures/reachability/ReachTreev2Util.h"
@@ -24,7 +24,6 @@
 #include <iostream>
 
 // typedefs
-// using Number = double;
 using Number = mpq_class;
 // using Representation = hypro::HPolytope<Number>;
 using Representation = hypro::VPolytope<Number>;
@@ -34,6 +33,7 @@ using Vector = hypro::vector_t<Number>;
 using VPoly = hypro::VPolytope<Number>;
 using Interval = carl::Interval<Number>;
 using Point = hypro::Point<Number>;
+using timeunit = std::chrono::microseconds;
 
 template <typename Number>
 hypro::HybridAutomaton<Number> createProcessAutomaton(int processNumber, Number a, Number b) {
@@ -207,21 +207,48 @@ hypro::HybridAutomaton<Number> createSharedVariableAutomaton(int processNumber) 
     return res;
 }
 
+static void displayRuntime(const std::vector<timeunit> &runtimes) {
+    double sum = 0;
+    double min = 0;
+    double max = 0;
+    for (auto runtime : runtimes) {
+        std::cout << runtime.count()/1000.0 << ", ";
+        if (runtime.count() < min || min == 0) {
+            min = runtime.count();
+        }
+        if (runtime.count() > max) {
+            max = runtime.count();
+        }
+        sum += runtime.count();
+    }
+    std::cout << std::endl;
+    double average = sum / runtimes.size();
+    std::cout << "Average runtime: " << average / 1000.0 << " ms" << std::endl;
+    std::cout << "Max runtime: " << max / 1000.0 << " ms" << std::endl;
+    std::cout << "Min runtime: " << min / 1000.0 << " ms" << std::endl;
 
-
+    // print standard deviation
+    double variance = 0;
+    for (auto runtime : runtimes) {
+        variance += pow(runtime.count() - average, 2);
+    }
+    variance /= runtimes.size();
+    double standardDeviation = sqrt(variance);
+    std::cout << "Standard deviation: " << standardDeviation / 1000.0 << " ms" << std::endl;
+}
 
 int main(int argc, char **argv) {
     using clock = std::chrono::high_resolution_clock;
     using timeunit = std::chrono::microseconds;
 
-    int numberOfProcesses = 8;
+    int numberOfProcesses = 3;
 
     // create 3 process automata and a shared variable automaton
     std::vector<hypro::HybridAutomaton<Number>> processes{};
     for (int i = 0; i < numberOfProcesses; ++i)
     {
         hypro::VariablePool::getInstance().changeToPool(i);
-        processes.push_back( createProcessAutomaton<Number>(i+1, 6, 10) );
+        processes.push_back( createProcessAutomaton<Number>(i+1, 8, 12) );
         processes[i].addTimeVariable();
     }
     hypro::VariablePool::getInstance().changeToPool(numberOfProcesses);
@@ -240,101 +267,117 @@ int main(int argc, char **argv) {
     analysisParameters.representation_type = hypro::representation_name::polytope_v;
 
     hypro::Settings settings{ {},
-                              hypro::FixedAnalysisParameters{  10 , hypro::tNumber( 20 ), hypro::tNumber( 1 ) },
+                              hypro::FixedAnalysisParameters{  10 , hypro::tNumber( 30 ), hypro::tNumber( 1 ) },
                               { analysisParameters } };
 
-    clock::time_point startAnalyzing = clock::now();
+    std::vector<timeunit> runtimes;
+    int number_iterations = 20;
 
-    auto analyzer = hypro::RectangularSyncAnalyzer<Representation, hypro::HybridAutomaton<Number>>( automata, settings );
-
-    auto result = analyzer.run();
-    
-    if (result == hypro::REACHABILITY_RESULT::UNKNOWN) {
-        std::cout << "Could not verify safety." << std::endl;
-    } else {
-        std::cout << "The model is safe." << std::endl;
-    }
-    std::cout << std::endl;
-
-    std::cout << "Finished reachability Analysis: "
-                << std::chrono::duration_cast<timeunit>(clock::now() -
-                                                        startAnalyzing)
-                            .count() /
-                    1000.0
-                << " ms" << std::endl;
-
-    clock::time_point startPlotting = clock::now();
-    long searchForestSize = 0;
-    for (size_t i = 0; i < automata.size(); ++i) {
-        auto &plotter = hypro::Plotter<Number>::getInstance();
-        plotter.clear();
-        std::string extendedFilename = "Fischer_Benchmark_unknown_automaton";
-        if(i==numberOfProcesses){
-            extendedFilename = "Fischer_sharedVariable";
-        } else {
-            extendedFilename = "Fischer_process_" + std::to_string(i+1);
-        }
-        switch (Representation::type()) {
-            case hypro::representation_name::polytope_v: {
-                extendedFilename += "_vpoly";
-                break;
-            }
-            case hypro::representation_name::polytope_h: {
-                extendedFilename += "_hpoly";
-                break;
-            }
-            default:
-                extendedFilename += "_unknownRep";
-        }
-        std::cout << "filename is " << extendedFilename << std::endl;
-        plotter.setFilename(extendedFilename);
-        std::vector<std::size_t> plottingDimensions = std::vector<std::size_t>{0, 1};
-        plotter.rSettings().dimensions.push_back(plottingDimensions.front());
-        plotter.rSettings().dimensions.push_back(plottingDimensions.back());
-        plotter.rSettings().cummulative = false;
+    for(int iteration = 0; iteration < number_iterations; iteration++) {
+         
+        clock::time_point start = clock::now();
         
-        // // bad states plotting
-        // typename hypro::HybridAutomaton<Number>::locationConditionMap
-        //         badStateMapping = automata[i].getLocalBadStates();
-        // for (const auto &state: badStateMapping) {
-        //     auto matrix = state.second.getMatrix(0);
-        //     auto vector = state.second.getVector(0);
-        //     unsigned bs = plotter.addObject(
-        //             Representation(matrix, vector).vertices(),
-        //             hypro::plotting::colors[hypro::plotting::red]);
-        // }
-
-        unsigned cnt = 0;
-        // segments plotting
-        // auto flowpipes = getFlowpipes(roots);
-        searchForestSize += hypro::getNumberNodes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
-        auto flowpipes = getFlowpipes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
-        for (const auto &flowpipe: flowpipes) {
-            // std::cout << "Flowpipe size " << flowpipe.size() << std::endl;
-            for (const auto &segment: flowpipe) {
-                // std::cout << "projected Segment: " << segment.projectOn(plottingDimensions) << std::endl;
-                plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
-            }
-            ++cnt;
-        }
-    
-        PRINT_STATS()
-
-        // std::cout << "Write to file." << std::endl;
-
-        plotter.plot2d(hypro::PLOTTYPE::pdf, false);
-
-        // std::cout << "Finished plotting: "
-        //         << std::chrono::duration_cast<timeunit>(clock::now() -
-        //                                                 startPlotting)
-        //                     .count() /
-        //             1000.0
-        //         << " ms" << std::endl;
+        auto analyzer = hypro::RectangularSyncAnalyzer<Representation, hypro::HybridAutomaton<Number>>( automata, settings );
+        auto result = analyzer.run();
+        
+        runtimes.push_back(std::chrono::duration_cast<timeunit>(clock::now() - start));
     }
 
-    std::cout << "Number of Nodes in Search Forest is: " << searchForestSize << std::endl;
+    std::cout << "Statistic: Fischer's Protocol" << std::endl;
+    
+    displayRuntime(runtimes);
 
-    std::cout << "Average number of nodes searched for synchronization is: " << analyzer.getAverageSizeOfSearchSpace() << std::endl;
+
+    // if (result == hypro::REACHABILITY_RESULT::UNKNOWN) {
+    //     std::cout << "Could not verify safety." << std::endl;
+    // } else {
+    //     std::cout << "The model is safe." << std::endl;
+    // }
+    // std::cout << std::endl;
+
+    // std::cout << "Finished reachability Analysis: "
+    //             << std::chrono::duration_cast<timeunit>(clock::now() -
+    //                                                     startAnalyzing)
+    //                         .count() /
+    //                 1000.0
+    //             << " ms" << std::endl;
+
+    // clock::time_point startPlotting = clock::now();
+
+    // for (size_t i = 0; i < automata.size(); ++i) {
+    //     auto &plotter = hypro::Plotter<Number>::getInstance();
+    //     plotter.clear();
+    //     std::string extendedFilename = "TGC_Benchmark_unknown_automaton";
+    //     switch (i)
+    //     {
+    //     case 0:
+    //         extendedFilename = "TGC_Benchmark_train";
+    //         break;
+    //     case 1:
+    //         extendedFilename = "TGC_Benchmark_controller";
+    //         break;
+    //     case 2:
+    //         extendedFilename = "TGC_Benchmark_gate";
+    //         break;
+    //     default:
+    //         break;
+    //     }
+    //     switch (Representation::type()) {
+    //         case hypro::representation_name::polytope_v: {
+    //             extendedFilename += "_vpoly";
+    //             break;
+    //         }
+    //         case hypro::representation_name::polytope_h: {
+    //             extendedFilename += "_hpoly";
+    //             break;
+    //         }
+    //         default:
+    //             extendedFilename += "_unknownRep";
+    //     }
+    //     std::cout << "filename is " << extendedFilename << std::endl;
+    //     plotter.setFilename(extendedFilename);
+    //     std::vector<std::size_t> plottingDimensions = std::vector<std::size_t>{0, 1};
+    //     plotter.rSettings().dimensions.push_back(plottingDimensions.front());
+    //     plotter.rSettings().dimensions.push_back(plottingDimensions.back());
+    //     plotter.rSettings().cummulative = false;
+        
+    //     // // bad states plotting
+    //     // typename hypro::HybridAutomaton<Number>::locationConditionMap
+    //     //         badStateMapping = automata[i].getLocalBadStates();
+    //     // for (const auto &state: badStateMapping) {
+    //     //     auto matrix = state.second.getMatrix(0);
+    //     //     auto vector = state.second.getVector(0);
+    //     //     unsigned bs = plotter.addObject(
+    //     //             Representation(matrix, vector).vertices(),
+    //     //             hypro::plotting::colors[hypro::plotting::red]);
+    //     // }
+
+    //     unsigned cnt = 0;
+    //     // segments plotting
+    //     // auto flowpipes = getFlowpipes(roots);
+    //     auto flowpipes = getFlowpipes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
+    //     for (const auto &flowpipe: flowpipes) {
+    //         std::cout << "Flowpipe size " << flowpipe.size() << std::endl;
+    //         for (const auto &segment: flowpipe) {
+    //             // std::cout << "projected Segment: " << segment.projectOn(plottingDimensions) << std::endl;
+    //             plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+    //         }
+    //         ++cnt;
+    //     }
+    
+    //     PRINT_STATS()
+
+    //     std::cout << "Write to file." << std::endl;
+
+    //     plotter.plot2d(hypro::PLOTTYPE::pdf, true);
+
+    //     std::cout << "Finished plotting: "
+    //             << std::chrono::duration_cast<timeunit>(clock::now() -
+    //                                                     startPlotting)
+    //                         .count() /
+    //                 1000.0
+    //             << " ms" << std::endl;
+    // }
 
     return 0;
 }

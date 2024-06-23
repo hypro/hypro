@@ -191,6 +191,9 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 		visitedWorkers.insert( ptrToWorker );
 		// in this function we misuse mVariablePoolIndex to get the "index of the worker", to access the right syncNode.
 		auto candidateTransitionMap = ptrToWorker->getCandidateNodes( task.getSyncNodeAtIndex( ptrToWorker->getVariablePoolIndex() ), label );
+		if ( !candidateTransitionMap.empty() ) {
+			mSizeOfSyncSearchSpace.push_back( candidateTransitionMap.size() );
+		}
 		std::multimap<ReachTreeNode<State, LocationT>*, State> syncNodeTimeMap{};
 		for ( auto& nodeTransitionPair : candidateTransitionMap ) {
 			ptrToWorker->changeVariablePool();

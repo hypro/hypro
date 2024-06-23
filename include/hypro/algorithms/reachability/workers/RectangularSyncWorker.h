@@ -86,6 +86,11 @@ class RectangularSyncWorker {
 	// getter for VariablePoolIndex
 	int getVariablePoolIndex() const { return mVariablePoolIndex; }
 
+	// getter for the average size of the search space
+	float getAverageSizeOfSearchSpace() const { return std::accumulate(mSizeOfSyncSearchSpace.begin(), mSizeOfSyncSearchSpace.end(), 0)*1.0 / mSizeOfSyncSearchSpace.size(); }
+
+	bool isSearchSpaceEmpty() const { return mSizeOfSyncSearchSpace.empty(); }
+
   private:
 	void postProcessJumpSuccessors( const JumpSuccessors& guardSatisfyingSets );
 
@@ -105,6 +110,7 @@ class RectangularSyncWorker {
 	int mVariablePoolIndex{ 0 };								  ///< index of the variable pool to use in with this worker
 	std::map<Label, std::set<RectangularSyncWorker<State, Automaton>* >> mSyncDict{};  ///< map (label -> workers)
 	std::set<ReachTreeNode<State, LocationT>*> mSyncChildrenToRemove{}; ///< elements of this set need to be removed from the reach tree, after a synchronizing jump has been computed. 
+	std::vector<int> mSizeOfSyncSearchSpace{};
 };
 
 }  // namespace hypro

@@ -75,6 +75,11 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::f
 			}
 		}
 	}
+	for ( auto automaton : mHybridAutomata ) {
+		if (! automatonWorkerMap.at( automaton ).isSearchSpaceEmpty() ) {
+			mAverageSizeOfSearchSpace.push_back( automatonWorkerMap.at( automaton ).getAverageSizeOfSearchSpace() );
+		}
+	}
 	return REACHABILITY_RESULT::SAFE;
 }
 
