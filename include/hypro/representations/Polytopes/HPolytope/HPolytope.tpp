@@ -1556,6 +1556,13 @@ namespace hypro {
 
         result.push_back(polytope_H);
 
+        std::cout  << "H-P:" << std::endl << *this << std::endl;
+        std::cout  << "V-P:" << std::endl << P_V << std::endl;
+        std::cout  << "H-G:" << std::endl << minus << std::endl;
+        std::cout  << "V-res:" << std::endl << polytope << std::endl;
+        std::cout  << "H-res:" << std::endl << polytope_H << std::endl;
+        exit(0);
+        result.clear();
         return result;
     }
 

@@ -228,7 +228,7 @@ namespace hypro {
             // exact conversion
             return VPolytopeT<Number, Converter<Number>, VPolySetting>(_source.matrix(), _source.vector());
         } else {
-            // exact conversion
+           
             return VPolytopeT<Number, Converter<Number>, VPolySetting>(_source.getExtremeVertices());
         }
     }
