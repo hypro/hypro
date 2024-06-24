@@ -25,8 +25,8 @@
 
 // typedefs
 using Number = mpq_class;
-// using Representation = hypro::HPolytope<Number>;
-using Representation = hypro::VPolytope<Number>;
+using Representation = hypro::HPolytope<Number>;
+// using Representation = hypro::VPolytope<Number>;
 using State = hypro::State<Number, Representation>;
 using Matrix = hypro::matrix_t<Number>;
 using Vector = hypro::vector_t<Number>;

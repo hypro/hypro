@@ -144,7 +144,7 @@ std::pair<EigenMat<Number>, EigenVec<Number>> eliminate_cols(const EigenMat<Numb
             }
         }
         if (!carl::is_zero(constants(i))) row.emplace_back(constraints.cols(), -constants(i));
-        row.emplace_back(constraints.cols() + 1 + i, Number(1)); // TODO: maybe this transformation should be done by fmplex internally?
+        row.emplace_back(constraints.cols() + 2 + i, Number(1)); // TODO: maybe this transformation should be done by fmplex internally?
         m.append_row(row.begin(), row.end());
     }
 

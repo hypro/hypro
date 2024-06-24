@@ -1112,11 +1112,7 @@ namespace hypro {
         for (std::size_t i = 0; i < cols.size(); i++) {
             cols[i] = i;
         }
-        std::cout << "matrix: " << this->matrix() << std::endl;
-        std::cout << "vector: " << this->vector() << std::endl;
         std::pair<smtrat::fmplex::EigenMat<Number>, smtrat::fmplex::EigenVec<Number>> result = smtrat::fmplex::eliminate_cols(this->matrix(), this->vector(), cols);
-        std::cout << "result.first: " << result.first << std::endl;
-        std::cout << "result.second: " << result.second << std::endl;
         return HPolytopeT<Number, Converter, Setting>(result.first, result.second);
     }
 
