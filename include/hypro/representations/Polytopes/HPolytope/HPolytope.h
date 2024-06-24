@@ -357,6 +357,21 @@ namespace hypro {
 
         void print() const;
 
+        std::string printWithGenericVarIdents() {
+            std::stringstream result;
+            if (this->constraints().size() > 0) {
+                result << "[ ";
+                for (unsigned i = 0; i < this->constraints().size() - 1; ++i) {
+                    result << convert<Number, double>(this->constraints()[i]).printWithGenericVarIdents()
+                        << ",\n";
+                }
+                result << convert<Number, double>(this->constraints()[this->constraints().size() - 1]).printWithGenericVarIdents() 
+                    << " ]";
+            }
+            result << " isEmpty: " << this->mEmptyState;
+            return result.str();
+        }
+
         /*
          * Operators
          */

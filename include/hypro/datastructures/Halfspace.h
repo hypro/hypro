@@ -381,6 +381,55 @@ namespace hypro {
             ar( mNormal, mScalar );
 #endif
         }
+
+    std::string printWithGenericVarIdents() {
+        std::stringstream result;
+        result << "( ";
+        bool first = true;
+        for (Eigen::Index i = 0; i < this->mNormal.rows(); ++i) {
+            bool notnull = this->mNormal(i) != 0;
+            bool printVal = notnull && abs(this->mNormal(i)) != 1;
+            bool neg = this->mNormal(i) < 0;
+            std::string varname = "x" + std::to_string(i);
+            if (notnull) {
+                if (printVal) {
+                    if (first) {
+                        first = false;
+                        if (neg) {
+                            result << " - " << -this->mNormal(i);
+                        } else {
+                            result << this->mNormal(i);
+                        }
+                        result << "·" << varname;
+                    } else {
+                        if (neg) {
+                            result << " - " << -this->mNormal(i);
+                        } else {
+                            result << " + " << this->mNormal(i);
+                        }
+                        result << "·" << varname;
+                    }
+                } else {
+                    if (first) {
+                        first = false;
+                        if (neg) {
+                            result << "- ";
+                        }
+                        result << varname;
+                    } else {
+                        if (neg) {
+                            result << " - ";
+                        } else {
+                            result << " + ";
+                        }
+                        result << varname;
+                    }
+                }
+            }
+        }
+        result << " ≤ " << Number(this->mScalar) << " )";
+        return result.str();
+    }
     };
 
 /**
@@ -451,6 +500,7 @@ namespace hypro {
         ostr << " ≤ " << Number(_rhs.offset()) << " )";
         return ostr;
     }
+
 
 /**
  * @brief      Comparison operator.
