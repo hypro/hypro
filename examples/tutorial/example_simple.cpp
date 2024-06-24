@@ -738,10 +738,10 @@ void runExample5(){
     vector_t<Number> constantReset = vector_t<Number>(4, 1);
     matrix_t<Number> linearReset = matrix_t<Number>(4, 4);
 
-    constantReset(0) = Number(0);
-    constantReset(1) = Number(0);
-    constantReset(2) = Number(1);
-    constantReset(3) = Number(carl::rationalize<Number>(2.5));
+    constantReset(0) = Number(1);
+    constantReset(1) = Number(1);
+    constantReset(2) = Number(2);
+    constantReset(3) = Number(carl::rationalize<Number>(3.5));
 
     linearReset(0, 0) = Number(1);
     linearReset(0, 1) = Number(0);
@@ -830,7 +830,7 @@ void runExample5(){
 
     // set settings
     hypro::FixedAnalysisParameters fixedParameters;
-    fixedParameters.jumpDepth = 6;
+    fixedParameters.jumpDepth = 1;
     fixedParameters.localTimeHorizon = 3;
     fixedParameters.fixedTimeStep = tNumber(1) / tNumber(4);
 
@@ -845,36 +845,39 @@ void runExample5(){
     // initialize reachability tree
     auto roots = hypro::makeRoots<Representation>(bBallAutomaton);
 
-    // instanciate reachability analysis class
-    hypro::reachability::ReachUrgency<Representation, hypro::HybridAutomaton<Number>> reacher{bBallAutomaton,fixedParameters,analysisParameters, roots}; 
+    // // instanciate reachability analysis class
+    // hypro::reachability::ReachUrgency<Representation, hypro::HybridAutomaton<Number>> reacher{bBallAutomaton,fixedParameters,analysisParameters, roots}; 
 
-    std::cout << "Start reachability analysis ... " << std::endl;
+    // std::cout << "Start reachability analysis ... " << std::endl;
 
-    auto start = std::chrono::high_resolution_clock::now();
+    // auto start = std::chrono::high_resolution_clock::now();
 
-    // perform reachability analysis.
-    REACHABILITY_RESULT res = reacher.computeForwardReachability();
+    // // perform reachability analysis.
+    // REACHABILITY_RESULT res = reacher.computeForwardReachability();
 
-    auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "Time taken for setMinus2: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds" << std::endl;
+    // auto end = std::chrono::high_resolution_clock::now();
+    // std::cout << "Time taken for setMinus2: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds" << std::endl;
 
-    // plot flowpipes.
-    std::cout << "Start plotting ... ";
+    // // plot flowpipes.
+    // std::cout << "Start plotting ... ";
     Plotter<Number> &plotter1 = Plotter<Number>::getInstance();
-    plotter1.setFilename("Example_5_setMinus2");
+    // plotter1.setFilename("Example_5_setMinus2");
     auto plottingDimensions = std::vector<int>{0, 1};
     plotter1.rSettings().dimensions.push_back(plottingDimensions.front());
     plotter1.rSettings().dimensions.push_back(plottingDimensions.back());
     plotter1.rSettings().cummulative = false;
 
-    unsigned cnt1 = 0;
-    for (const auto &node: preorder(roots)) {
-        for (const auto &state_set: node.getFlowpipe()) {  // flowpipes
-            plotter1.addObject(state_set.projectOut({2, 3}).vertices(), hypro::plotting::colors[cnt1 % 10]);
-        }
-        ++cnt1;
-    }
-    std::cout << "done." << std::endl;
+    // unsigned cnt1 = 3;
+    // for (const auto &node: preorder(roots)) {
+    //     for (const auto &state_set: node.getFlowpipe()) {  // flowpipes
+    //         plotter1.addObject(state_set.projectOut({2, 3}).vertices(), hypro::plotting::colors[cnt1 % 10]);
+    //     }
+    //     ++cnt1;
+    // }
+    // std::cout << "done." << std::endl;
+
+    // initialize reachability tree
+    // roots = hypro::makeRoots<Representation>(bBallAutomaton);
 
     // write output.
     plotter1.plot2d(PLOTTYPE::png);
@@ -899,7 +902,7 @@ void runExample5(){
     Plotter<Number> &plotter2 = Plotter<Number>::getInstance();
     plotter2.setFilename("Example_5_setMinusCrossing");
 
-    unsigned cnt2 = 0;
+    unsigned cnt2 = 2;
     for (const auto &node: preorder(roots)) {
         for (const auto &state_set: node.getFlowpipe()) {  // flowpipes
             if(state_set.empty()) {
