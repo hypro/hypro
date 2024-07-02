@@ -92,6 +92,12 @@ namespace hypro {
         bool isExtremePoint(Point<Number> point, std::vector<Point<Number>> vertices) const;
 
         /**
+        * @brief      Returns true if the point is extreme
+        * @param[in]  point  The point.
+        */
+        bool isExtremePoint(Point<Number> point) const;
+
+        /**
         * @brief      Returns the one dimensional faces of a polytope as a pair of convex vertices
         * @param[in]  extremePoints  The extreme points.
         */

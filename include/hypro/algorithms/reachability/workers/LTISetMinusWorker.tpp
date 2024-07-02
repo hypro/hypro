@@ -129,9 +129,7 @@ namespace hypro {
                     // for all parts of the current segment
                     for (int ut = urgentlower; ut < urgentupper; ut++) {
                         segment = tmpsegments[ut];
-                        std::cout << "calling intersect" << std::endl;
                         auto [containment, testsegment] = intersect(segment, urgent_trans.at(i)->getGuard());
-                        std::cout << "past intersect" << std::endl;
                         // if guard is enabled perform setminus
                         if (containment != CONTAINMENT::NO) {
                             Representation guard(urgent_trans.at(i)->getGuard().getMatrix(),

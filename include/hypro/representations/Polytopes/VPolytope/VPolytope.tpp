@@ -247,6 +247,7 @@ namespace hypro {
         std::vector<Point<Number>> currentPoints = this->mVertices;
         std::vector<Point<Number>> result;
 
+        /**
         int erased = 0;
         for (int i = 0; i < this->mVertices.size(); ++i){
             if (isExtremePoint(this->mVertices[i], currentPoints)){
@@ -257,6 +258,13 @@ namespace hypro {
             }
 
         }   
+         */
+
+        for(auto point : this->mVertices){
+            if (isExtremePoint(point)){
+                result.push_back(point);
+            }
+        }
 
         return result;       
     }
@@ -328,6 +336,76 @@ namespace hypro {
             return true;
         }
     }
+
+
+    template<typename Number, typename Converter, typename S>
+    bool VPolytopeT<Number, Converter, S>::isExtremePoint(Point<Number> point) const{
+
+        /**
+         * 
+         * vi = point
+         * 
+         *  MATRIX A (at end) consists of:
+         *                                         points
+         *                    v1    ... vi-1      vi     vi+1    ...  vn          rel        b 
+         *                    v1.x1 ... vi-1.x1   0      vi+1.x1 ...  vn.x1       <=         vi.x1
+         * A =                v1.x2 ... vi-1.x2   0      vi+1.x2 ...  vn.x2       <=         vi.x2
+         *                    .     ... .          .      .      ...  .           .          .
+         *                    v1.xn ... vi-1.xn   0      vi+1.xn ...  vn.xn       <=         vi.xn
+         * lambda sum 1       1     ... 1         0      1       ...  1           =          1
+         * 0 <= lambda                  diagonal matrix                           >=         0
+         *      lambda <= 1             diagonal matrix                           <=         1   
+        */
+
+
+        matrix_t<Number> A = matrix_t<Number>(this->dimension(), mVertices.size());
+        Eigen::Index pointPos = 0;
+
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            if (point == mVertices[i]){
+                pointPos = i;
+                break;
+            }
+        }
+
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            if (i == pointPos){
+                A.col(i) = vector_t<Number>::Zero(this->dimension());
+            }else{
+                A.col(i) = mVertices[i].rawCoordinates();
+            }
+        }
+
+        Optimizer<Number> opt(A, point.rawCoordinates());
+
+        // 3 bound cols
+        for (Eigen::Index i = 0; i < A.cols(); ++i) {
+            vector_t<Number> constraint = vector_t<Number>::Zero(A.cols());
+
+            if (i != pointPos){
+                constraint(i) = 1;
+            }
+
+            opt.addConstraint(constraint, 1, carl::Relation::LEQ);
+            opt.addConstraint(constraint, 0, carl::Relation::GEQ);
+        }
+
+        // 4 add constraint that all coefficients add up to 1
+        vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
+        constraint(pointPos) = 0;
+    
+        opt.addConstraint(constraint, 1, carl::Relation::EQ);
+
+        // Check that the point can be represented (EQ).
+        opt.setRelations(std::vector<carl::Relation>(this->dimension(), carl::Relation::EQ));
+
+        if (opt.checkConsistency()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 
     template<typename Number, typename Converter, typename S>
     std::vector<std::pair<Point<Number>, Point<Number>>> VPolytopeT<Number, Converter, S>::getConvexEdges(std::vector<Point<Number>> extremePoints) const{
