@@ -15,6 +15,7 @@
  */
 
 #include "hypro/algorithms/reachability/Reach.h"
+#include "hypro/datastructures/reachability/ReachTreev2Util.h"
 #include "hypro/config.h"
 #include "hypro/datastructures/HybridAutomaton/HybridAutomaton.h"
 #include "hypro/datastructures/Point.h"
@@ -714,7 +715,7 @@ void runExample5(){
         // guard
 
         // g_x <= x 
-        // y <= g_y
+        // g_y <= y
 
         Condition<Number> guard;
         matrix_t<Number> guardMat = matrix_t<Number>(2, 4);
@@ -781,7 +782,7 @@ void runExample5(){
         // x in [1,1]
         // y in [1,5]
         // g_x in [2,2] 
-        // g_y in [3,3]
+        // g_y in [3,3.01]
 
         boxVec(0) = Number(1);
         boxVec(1) = Number(-1);
@@ -789,7 +790,7 @@ void runExample5(){
         boxVec(3) = Number(-1);
         boxVec(4) = Number(2);
         boxVec(5) = Number(-2);
-        boxVec(6) = Number(3);
+        boxVec(6) = Number(3.01);
         boxVec(7) = Number(-3);
 
         boxMat(0, 0) = Number(1);
@@ -866,12 +867,15 @@ void runExample5(){
     plotter2.setFilename("Example_5_setMinusCrossing");
 
     unsigned cnt2 = 2;
-    for (const auto &node: preorder(roots)) {
-        for (const auto &state_set: node.getFlowpipe()) {  // flowpipes
-            if(state_set.empty()) {
+    auto flowpipes = getFlowpipes(roots);
+    //for (const auto &node: preorder(roots)) {
+        //for (const auto &state_set: node.getFlowpipe()) {  // flowpipes
+    for (const auto &flowpipe: flowpipes) {
+        for (const auto &segment: flowpipe) {
+            if(segment.empty()) {
                 continue;
             }
-            plotter2.addObject(state_set.projectOut({2, 3}).vertices(), hypro::plotting::colors[cnt2 % 10]);
+            plotter2.addObject(segment.projectOut({2, 3}).vertices(), hypro::plotting::colors[cnt2 % 10]);
         }
         ++cnt2;
     }

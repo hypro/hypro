@@ -87,8 +87,9 @@ namespace hypro {
         /**
         * @brief      Returns true if the point is extreme
         * @param[in]  point  The point.
+        * @param[in]  vertices vector of points representing the polytope
         */
-        bool isExtremePoint(Point<Number> point) const;
+        bool isExtremePoint(Point<Number> point, std::vector<Point<Number>> vertices) const;
 
         /**
         * @brief      Returns the one dimensional faces of a polytope as a pair of convex vertices

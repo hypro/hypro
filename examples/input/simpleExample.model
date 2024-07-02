@@ -36,7 +36,7 @@ hybrid reachability
  {
   loc1 -> loc1
   guard {gx <= x gy <= y}
-  reset { gx' := gx + 1 gy' := 0.5*gy +2.5 }
+  reset { x':= x + 1 gx':= gx + 2 gy':= 0.5*gy +2.5 }
   parallelotope aggregation {}
   urgent
 
@@ -49,7 +49,7 @@ hybrid reachability
    x in [1,1]
    y in [1,5]
    gx in [2,2]
-   gy in [3,3]
+   gy in [3,3.01]
    
   }
  }

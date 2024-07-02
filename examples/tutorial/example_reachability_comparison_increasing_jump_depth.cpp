@@ -21,8 +21,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <filesystem>
 
 using timeunit = std::chrono::microseconds;
+
 
 template<typename Number, typename Representation>
 static void plotResult(std::string plotFileName, const hypro::HybridAutomaton<Number> &automaton,
@@ -36,49 +38,7 @@ static void plotResult(std::string plotFileName, const hypro::HybridAutomaton<Nu
         clock::time_point startPlotting = clock::now();
 
         auto &plotter = hypro::Plotter<Number>::getInstance();
-        std::string extendedFilename = settings.plotting().plotFileNames.front();
-        extendedFilename += "_" + plotFileName;
-        switch (Representation::type()) {
-            case hypro::representation_name::polytope_t: {
-                extendedFilename += "_tpoly";
-                break;
-            }
-            case hypro::representation_name::ppl_polytope: {
-                extendedFilename += "_pplpoly";
-                break;
-            }
-            case hypro::representation_name::difference_bounds: {
-                extendedFilename += "_differenceBounds";
-                break;
-            }
-            case hypro::representation_name::zonotope: {
-                extendedFilename += "_zonotope";
-                break;
-            }
-            case hypro::representation_name::support_function: {
-                extendedFilename += "_supportFunction";
-                break;
-            }
-            case hypro::representation_name::polytope_v: {
-                extendedFilename += "_vpoly";
-                break;
-            }
-            case hypro::representation_name::polytope_h: {
-                extendedFilename += "_hpoly";
-                break;
-            }
-            case hypro::representation_name::box: {
-                extendedFilename += "_box";
-                break;
-            }
-            case hypro::representation_name::SFN: {
-                extendedFilename += "_sfn";
-                break;
-            }
-            default:
-                extendedFilename += "_unknownRep";
-        }
-        std::cout << "filename is " << extendedFilename << std::endl;
+        std::string extendedFilename = plotFileName;
         plotter.setFilename(extendedFilename);
         std::vector<std::size_t> plottingDimensions = settings.plotting().plotDimensions.at(0);
         plotter.rSettings().dimensions.push_back(plottingDimensions.front());
@@ -116,17 +76,8 @@ static void plotResult(std::string plotFileName, const hypro::HybridAutomaton<Nu
         }
 
         PRINT_STATS()
-
-        std::cout << "Write to file." << std::endl;
-
         plotter.plot2d(hypro::PLOTTYPE::pdf, true);
 
-        std::cout << "Finished plotting: "
-                  << std::chrono::duration_cast<timeunit>(clock::now() -
-                                                          startPlotting)
-                             .count() /
-                     1000.0
-                  << " ms" << std::endl;
     }
 
 
@@ -185,61 +136,113 @@ static void run_comparison_function(const std::string &filename,
     using Automaton = hypro::HybridAutomaton<Number>;
     using clock = std::chrono::high_resolution_clock;
 
+    namespace fs = std::filesystem;
+
     // do the reachability analysis for runtime measurement
+
+    fs::remove_all("./JumpDepths");
+    fs::create_directories("./JumpDepths");
 
     auto outputFilename = "runtime_jumpdepth_" + extractFilenameWithoutExtension(filename) + ".txt";
     writeRuntime(std::vector<timeunit>(), outputFilename, "", true);
 
-    int max_jump_depth = 2;
-    for(int current_jump_depth = 0; current_jump_depth <= max_jump_depth; current_jump_depth++) {
+    bool use_model_settings = false;
+
+    int max_jump_depth = 10;
+    for(int current_jump_depth = 4; current_jump_depth <= max_jump_depth; current_jump_depth++) {
         std::cout << "Running jump depth: " << current_jump_depth << std::endl;
+        fs::create_directories("./JumpDepths/Depth" + std::to_string(current_jump_depth));
         std::vector<timeunit> runtimes;
-        bool run_setMinus2 = true; 
+        bool run_setMinus2 = false; 
         if (run_setMinus2) {
             std::cout << "Running setMinus2" << std::endl;
             for(int iteration = 0; iteration < number_iterations; iteration++) {
                 auto [automaton_cur, parsedSettings_cur] = hypro::parseFlowstarFile<Number>(filename);
-
                 hypro::Settings settings_cur = hypro::convert(parsedSettings_cur);
-                hypro::AnalysisParameters analysisParams_cur = settings_cur.strategy().front();
-                analysisParams_cur.setMinusAlgoUsed = 0;
-                
-                hypro::FixedAnalysisParameters fixedParameters_cur = settings_cur.fixedParameters();
-                fixedParameters_cur.jumpDepth = current_jump_depth;
+
+                hypro::FixedAnalysisParameters fixedParameters_cur;
+                hypro::AnalysisParameters analysisParams_cur;
+
+                if(use_model_settings){
+                    analysisParams_cur = settings_cur.strategy().front();
+                    analysisParams_cur.setMinusAlgoUsed = 0;
+                    
+                    fixedParameters_cur = settings_cur.fixedParameters();
+                    fixedParameters_cur.jumpDepth = current_jump_depth;
+                }else{
+                    fixedParameters_cur.jumpDepth = current_jump_depth;
+                    fixedParameters_cur.localTimeHorizon = 2;
+                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(3);
+
+                    analysisParams_cur.setMinusAlgoUsed = 0;
+                    analysisParams_cur.timeStep = Number(1) / Number(3);
+                    analysisParams_cur.aggregation = hypro::AGG_SETTING::NO_AGG;
+                    analysisParams_cur.representation_type = hypro::representation_name::polytope_h;
+                }
 
                 auto roots_cur = hypro::makeRoots<Representation, Automaton>(automaton_cur);
                 hypro::reachability::ReachUrgency<Representation, Automaton> reacher_cur(automaton_cur, fixedParameters_cur, analysisParams_cur, roots_cur); 
 
                 clock::time_point start = clock::now();
                 auto result_cur = reacher_cur.computeForwardReachability();
+
+                
                 runtimes.push_back(std::chrono::duration_cast<timeunit>(clock::now() - start));
+
+                if(iteration == 0){
+                    std::string plotname = "./JumpDepths/Depth" + std::to_string(current_jump_depth) + "/" + "SetMinus2";
+                    //plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
+                }
             }
             std::cout << "setMinus2 finished" << std::endl;
         }
         writeRuntime(runtimes, outputFilename, "setMinus2", false);
+
+        std::cin.get();
 
 
         runtimes.clear();
         std::cout << "Running setMinusCrossing" << std::endl;
         for(int iteration = 0; iteration < number_iterations; iteration++) {
             auto [automaton_cur, parsedSettings_cur] = hypro::parseFlowstarFile<Number>(filename);
+                hypro::Settings settings_cur = hypro::convert(parsedSettings_cur);
+                hypro::FixedAnalysisParameters fixedParameters_cur;
+                hypro::AnalysisParameters analysisParams_cur;
 
-            hypro::Settings settings_cur = hypro::convert(parsedSettings_cur);
-            hypro::AnalysisParameters analysisParams_cur = settings_cur.strategy().front();
-            analysisParams_cur.setMinusAlgoUsed = 1;
+                if(use_model_settings){
+                    analysisParams_cur = settings_cur.strategy().front();
+                    analysisParams_cur.setMinusAlgoUsed = 1;
+                    
+                    fixedParameters_cur = settings_cur.fixedParameters();
+                    fixedParameters_cur.jumpDepth = current_jump_depth;
+                }else{
+                    fixedParameters_cur.jumpDepth = current_jump_depth;
+                    fixedParameters_cur.localTimeHorizon = 2;
+                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(3);
 
-            hypro::FixedAnalysisParameters fixedParameters_cur = settings_cur.fixedParameters();
-            fixedParameters_cur.jumpDepth = current_jump_depth;
+                    analysisParams_cur.setMinusAlgoUsed = 1;
+                    analysisParams_cur.timeStep = Number(1) / Number(3);
+                    analysisParams_cur.aggregation = hypro::AGG_SETTING::NO_AGG;
+                    analysisParams_cur.representation_type = hypro::representation_name::polytope_h;
+                }
 
             auto roots_cur = hypro::makeRoots<Representation, Automaton>(automaton_cur);
             hypro::reachability::ReachUrgency<Representation, Automaton> reacher_cur(automaton_cur, fixedParameters_cur, analysisParams_cur, roots_cur); 
 
             clock::time_point start = clock::now();
             auto result_cur = reacher_cur.computeForwardReachability();
+
             runtimes.push_back(std::chrono::duration_cast<timeunit>(clock::now() - start));
+
+            if(iteration == 0){
+                std::string plotname = "./JumpDepths/Depth" + std::to_string(current_jump_depth) + "/" + "SetMinusCrossing";
+                //plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
+            }
+
         }
         std::cout << "setMinusCrossing finished" << std::endl;
         writeRuntime(runtimes, outputFilename, "setMinusCrossing", false);
+        std::cin.get();
     }
 }
 

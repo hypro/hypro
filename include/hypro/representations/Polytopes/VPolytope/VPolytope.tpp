@@ -87,13 +87,19 @@ namespace hypro {
     template<typename Number, typename Converter, typename S> 
     template<typename HConverter, typename HSetting> 
     VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::setMinusCrossingH(const HPolytopeT<Number, HConverter, HSetting> &polytopeG) const{
+        using clock = std::chrono::high_resolution_clock;
+        using timeunit = std::chrono::milliseconds;
         std::size_t dim_p = this->dimension();
         std::size_t dim_g = polytopeG.dimension();
 
         assert(dim_p == dim_g);
-        
+        clock::time_point time1 = clock::now();
         std::vector<Point<Number>> extremePoints = this->getExtremePoints();
+
+        clock::time_point time2 = clock::now();
         std::vector<std::pair<Point<Number>, Point<Number>>> edgesP = this->getConvexEdges(extremePoints);
+        
+        clock::time_point time3 = clock::now();
         std::vector<Point<Number>> PnG = {};
         std::vector<Point<Number>> pureP = {};
         std::vector<Point<Number>> CPs = {};
@@ -105,7 +111,8 @@ namespace hypro {
                 pureP.push_back(cur_p);
             }     
         }
-
+        
+        clock::time_point time4 = clock::now();
         for (auto cur_p : PnG){
             std::vector<Point<Number>> BVs = getBorderVertices(cur_p, edgesP, PnG);
             for (auto borderVertex : BVs){
@@ -113,6 +120,12 @@ namespace hypro {
                 CPs.push_back(cp);
             }
         }   
+        clock::time_point time5 = clock::now();
+    
+        auto timeGetExtrem = std::chrono::duration_cast<timeunit>(time2 - time1);
+        auto timeGetConvexEdge = std::chrono::duration_cast<timeunit>(time3 - time2);
+        auto timeGetCP = std::chrono::duration_cast<timeunit>(time5 - time4);
+        std::cout << "T-Extrem: " + std::to_string(timeGetExtrem.count()) + " | T-ConvexEdge: " + std::to_string(timeGetConvexEdge.count()) + " | T-CP: " + std::to_string(timeGetCP.count()) << std::endl;
 
         std::vector<Point<Number>> result = pureP;
         result.insert(result.end(), CPs.begin(), CPs.end());
@@ -231,20 +244,25 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename S> 
     std::vector<Point<Number>> VPolytopeT<Number, Converter, S>::getExtremePoints() const{
-    
+        std::vector<Point<Number>> currentPoints = this->mVertices;
         std::vector<Point<Number>> result;
 
-        for (auto p : this->mVertices){
-            if (isExtremePoint(p)){
-                result.push_back(p);
+        int erased = 0;
+        for (int i = 0; i < this->mVertices.size(); ++i){
+            if (isExtremePoint(this->mVertices[i], currentPoints)){
+                result.push_back(this->mVertices[i]);
+            }else{
+                currentPoints.erase(currentPoints.begin() + (i - erased));
+                erased += 1;
             }
-        }    
+
+        }   
 
         return result;       
     }
 
     template<typename Number, typename Converter, typename S>
-    bool VPolytopeT<Number, Converter, S>::isExtremePoint(Point<Number> point) const{
+    bool VPolytopeT<Number, Converter, S>::isExtremePoint(Point<Number> point, std::vector<Point<Number>> vertices) const{
 
         /**
          * 
@@ -263,11 +281,11 @@ namespace hypro {
         */
 
 
-        matrix_t<Number> A = matrix_t<Number>(this->dimension(), this->mVertices.size());
+        matrix_t<Number> A = matrix_t<Number>(this->dimension(), vertices.size());
         Eigen::Index pointPos = 0;
 
         for (Eigen::Index i = 0; i < A.cols(); ++i) {
-            if (point == mVertices[i]){
+            if (point == vertices[i]){
                 pointPos = i;
                 break;
             }
@@ -277,7 +295,7 @@ namespace hypro {
             if (i == pointPos){
                 A.col(i) = vector_t<Number>::Zero(this->dimension());
             }else{
-                A.col(i) = mVertices[i].rawCoordinates();
+                A.col(i) = vertices[i].rawCoordinates();
             }
         }
 

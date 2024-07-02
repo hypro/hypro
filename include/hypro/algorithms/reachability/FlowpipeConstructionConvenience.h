@@ -31,6 +31,7 @@ namespace hypro {
     template<class Representation, class Number>
     std::pair<CONTAINMENT, Representation>
     intersect(Representation const &valuationSet, Condition<Number> const &condition, std::size_t subspace = 0) {
+        // std::cout << " calling intersect here"  << std::endl;
         // shortcut true condition
         if (condition.isTrue()) {
             return std::make_pair(CONTAINMENT::FULL, valuationSet);

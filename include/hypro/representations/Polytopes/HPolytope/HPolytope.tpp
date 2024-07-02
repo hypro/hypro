@@ -1142,7 +1142,6 @@ namespace hypro {
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::intersect(const HPolytopeT &rhs) const {
         TRACE("hypro.representations.HPolytope", "with " << rhs << std::endl);
-
         HPolytopeT<Number, Converter, Setting> res;
         for (const auto &plane: mHPlanes) {
             res.insert(plane);
@@ -1549,20 +1548,27 @@ namespace hypro {
     // consider the P polytope is always bounded
     template<typename Number, typename Converter, class Setting>
     std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinusCrossing(const HPolytopeT<Number, Converter, Setting> &minus) const {
+        using clock = std::chrono::high_resolution_clock;
+        using timeunit = std::chrono::milliseconds;
+
         std::vector<HPolytopeT<Number, Converter, Setting>> result;
+        clock::time_point time1 = clock::now();
+        
         auto P_V = Converter::toVPolytope(*this);
+        clock::time_point time2 = clock::now();
+
         auto polytope = P_V.setMinusCrossingH(minus);
+        clock::time_point time3 = clock::now();
+        
         auto polytope_H = Converter::toHPolytope(polytope);
+        clock::time_point time4 = clock::now();
+
+        auto timeConvP = std::chrono::duration_cast<timeunit>(time2 - time1);
+        auto timeSetMinus = std::chrono::duration_cast<timeunit>(time3 - time2);
+        auto timeConvRes = std::chrono::duration_cast<timeunit>(time4 - time3);
+        std::cout << "T-ConvP: " + std::to_string(timeConvP.count()) + " | T-SetMinus: " + std::to_string(timeSetMinus.count()) + " | T-ConvRes: " + std::to_string(timeConvRes.count()) << std::endl;
 
         result.push_back(polytope_H);
-
-        std::cout  << "H-P:" << std::endl << *this << std::endl;
-        std::cout  << "V-P:" << std::endl << P_V << std::endl;
-        std::cout  << "H-G:" << std::endl << minus << std::endl;
-        std::cout  << "V-res:" << std::endl << polytope << std::endl;
-        std::cout  << "H-res:" << std::endl << polytope_H << std::endl;
-        exit(0);
-        result.clear();
         return result;
     }
 
