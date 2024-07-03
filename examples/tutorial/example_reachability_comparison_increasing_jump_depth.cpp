@@ -148,12 +148,13 @@ static void run_comparison_function(const std::string &filename,
 
     bool use_model_settings = false;
 
-    int max_jump_depth = 10;
-    for(int current_jump_depth = 4; current_jump_depth <= max_jump_depth; current_jump_depth++) {
+    const int max_jump_depth = 10;
+    const int time_horizon = 20;
+    for(int current_jump_depth = 0; current_jump_depth <= max_jump_depth; current_jump_depth++) {
         std::cout << "Running jump depth: " << current_jump_depth << std::endl;
         fs::create_directories("./JumpDepths/Depth" + std::to_string(current_jump_depth));
         std::vector<timeunit> runtimes;
-        bool run_setMinus2 = false; 
+        bool run_setMinus2 = true; 
         if (run_setMinus2) {
             std::cout << "Running setMinus2" << std::endl;
             for(int iteration = 0; iteration < number_iterations; iteration++) {
@@ -169,9 +170,10 @@ static void run_comparison_function(const std::string &filename,
                     
                     fixedParameters_cur = settings_cur.fixedParameters();
                     fixedParameters_cur.jumpDepth = current_jump_depth;
+                    fixedParameters_cur.localTimeHorizon = time_horizon;
                 }else{
                     fixedParameters_cur.jumpDepth = current_jump_depth;
-                    fixedParameters_cur.localTimeHorizon = 2;
+                    fixedParameters_cur.localTimeHorizon = time_horizon;
                     fixedParameters_cur.fixedTimeStep = Number(1) / Number(3);
 
                     analysisParams_cur.setMinusAlgoUsed = 0;
@@ -191,14 +193,14 @@ static void run_comparison_function(const std::string &filename,
 
                 if(iteration == 0){
                     std::string plotname = "./JumpDepths/Depth" + std::to_string(current_jump_depth) + "/" + "SetMinus2";
-                    //plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
+                    // plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
                 }
             }
             std::cout << "setMinus2 finished" << std::endl;
         }
         writeRuntime(runtimes, outputFilename, "setMinus2", false);
 
-        std::cin.get();
+        //std::cin.get();
 
 
         runtimes.clear();
@@ -215,9 +217,10 @@ static void run_comparison_function(const std::string &filename,
                     
                     fixedParameters_cur = settings_cur.fixedParameters();
                     fixedParameters_cur.jumpDepth = current_jump_depth;
+                    fixedParameters_cur.localTimeHorizon = time_horizon;
                 }else{
                     fixedParameters_cur.jumpDepth = current_jump_depth;
-                    fixedParameters_cur.localTimeHorizon = 2;
+                    fixedParameters_cur.localTimeHorizon = time_horizon;
                     fixedParameters_cur.fixedTimeStep = Number(1) / Number(3);
 
                     analysisParams_cur.setMinusAlgoUsed = 1;
@@ -236,13 +239,13 @@ static void run_comparison_function(const std::string &filename,
 
             if(iteration == 0){
                 std::string plotname = "./JumpDepths/Depth" + std::to_string(current_jump_depth) + "/" + "SetMinusCrossing";
-                //plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
+                // plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
             }
 
         }
         std::cout << "setMinusCrossing finished" << std::endl;
         writeRuntime(runtimes, outputFilename, "setMinusCrossing", false);
-        std::cin.get();
+        //std::cin.get();
     }
 }
 

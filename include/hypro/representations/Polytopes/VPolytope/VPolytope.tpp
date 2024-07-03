@@ -125,7 +125,7 @@ namespace hypro {
         auto timeGetExtrem = std::chrono::duration_cast<timeunit>(time2 - time1);
         auto timeGetConvexEdge = std::chrono::duration_cast<timeunit>(time3 - time2);
         auto timeGetCP = std::chrono::duration_cast<timeunit>(time5 - time4);
-        std::cout << "T-Extrem: " + std::to_string(timeGetExtrem.count()) + " | T-ConvexEdge: " + std::to_string(timeGetConvexEdge.count()) + " | T-CP: " + std::to_string(timeGetCP.count()) << std::endl;
+        //std::cout << "T-Extrem: " + std::to_string(timeGetExtrem.count()) + " | T-ConvexEdge: " + std::to_string(timeGetConvexEdge.count()) + " | T-CP: " + std::to_string(timeGetCP.count()) << std::endl;
 
         std::vector<Point<Number>> result = pureP;
         result.insert(result.end(), CPs.begin(), CPs.end());

@@ -134,7 +134,10 @@ namespace hypro {
                         if (containment != CONTAINMENT::NO) {
                             Representation guard(urgent_trans.at(i)->getGuard().getMatrix(),
                                                  urgent_trans.at(i)->getGuard().getVector());
+                            // std::cout << "seg2:" << std::endl << segment << std::endl;
+                            // std::cout << "guard2:" << std::endl << guard << std::endl;
                             result = segment.setMinus(guard, setMinusAlgoUsed);
+                            // std::cout << "res2:" << std::endl << result << std::endl;
                             numPolytopes += result.size();
                             // insert segment
                             if (result.size() > 0) {

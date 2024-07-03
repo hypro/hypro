@@ -23,6 +23,7 @@
 #include "hypro/util/plotting/Plotter.h"
 #include <chrono>
 
+using namespace hypro;
 
 void runExample1(){
     using namespace hypro;
@@ -885,6 +886,93 @@ void runExample5(){
     plotter2.plot2d(PLOTTYPE::png);
 }
 
+
+template<typename Number, typename Converter, typename Setting>
+HPolytopeT<Number, Converter, Setting> getHPolytopeP_Example6() {
+    // Create a polytope
+    using HalfspaceVector = std::vector<Halfspace<Number>>;
+
+    HalfspaceVector halfspaces;
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(-1), Number(0), Number(0), Number(0)}), Number(-2.24154)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(0), Number(0), Number(-1)}), Number(-3)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(-1), Number(0), Number(0)}), Number(-1)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(0), Number(0), Number(1)}), Number(3.01)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(1), Number(0), Number(0), Number(0)}), Number(2.50846)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(1), Number(0.00211589), Number(0), Number(0.423177)}), Number(3.78434)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(1), Number(0.127744), Number(0), Number(0.297549)}), Number(3.78434)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(1), Number(0), Number(0)}), Number(5)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(1), Number(0.133464), Number(0), Number(-25.8464)}), Number(-74.6302)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(1), Number(0.129232), Number(0), Number(0)}), Number(2.89616)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(0), Number(1), Number(0)}), Number(2)));
+
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(0), Number(-1), Number(0)}), Number(-2)));
+
+
+    HPolytopeT<Number, Converter, Setting> hp = HPolytopeT<Number, Converter, Setting>(halfspaces);
+    return hp;
+}
+
+template<typename Number, typename Converter, typename Setting>
+HPolytopeT<Number, Converter, Setting> getHPolytopeG_Example6() {
+    // Create a polytope
+    using HalfspaceVector = std::vector<Halfspace<Number>>;
+
+    HalfspaceVector halfspaces;
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(-1), Number(0), Number(1), Number(0)}), Number(0)));
+    halfspaces.push_back(Halfspace<Number>(Point<Number>({Number(0), Number(-1), Number(0), Number(1)}), Number(0)));
+
+
+    HPolytopeT<Number, Converter, Setting> hp = HPolytopeT<Number, Converter, Setting>(halfspaces);
+    return hp;
+}
+
+
+void runExample6(){
+    using Number = double; 
+    //using Number = mpq_class; //slower
+    using Converter = Converter<Number>;
+	using Setting = HPolytopeSetting;
+
+    HPolytopeT<Number, Converter, Setting> P_H = getHPolytopeP_Example6<Number, Converter, Setting> ();
+    HPolytopeT<Number, Converter, Setting> G_H = getHPolytopeG_Example6<Number, Converter, Setting> ();
+    std::cout << "P_H:" << std::endl << P_H << std::endl;
+    std::cout << "G_H:" << std::endl << G_H << std::endl;
+
+    HPolytopeT<Number, Converter, Setting> res_H = P_H.setMinus(G_H, 1)[0];
+
+    std::cout << "res_H:" << std::endl << res_H << std::endl;
+
+    auto res_V = Converter::toVPolytope(res_H);
+    std::cout << "res_V:" << std::endl << res_V << std::endl;
+
+    auto res_V_projected = res_H.projectOn(plottingDimensions).vertices();
+    std::cout << "res_V_projected:" << std::endl << res_V_projected << std::endl;
+
+    auto &plotter = hypro::Plotter<Number>::getInstance();
+    std::string extendedFilename = "SimpleTestPlot";
+    std::cout << "filename is " << extendedFilename << std::endl;
+
+    plotter.setFilename(extendedFilename);
+    std::vector<std::size_t> plottingDimensions = {0,1};
+    unsigned cnt = 0;
+    // segments plotting
+    plotter.addObject(res_H.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+    std::cout << "Write to file." << std::endl;
+    plotter.plot2d();
+
+
+}
+
 int main(int argc, char **argv) {
     
     int rep = 0;
@@ -893,7 +981,7 @@ int main(int argc, char **argv) {
         rep = strtol(argv[1], &p, 10);
     }else{
         std::cout << "Please provide a number for example: <example_number>" << std::endl;
-        std::cout << "Example numbers available: 1, 2, 3, 4, 5" << std::endl;
+        std::cout << "Example numbers available: 1, 2, 3, 4, 5, 6" << std::endl;
         return 0;
     }
 
@@ -916,6 +1004,9 @@ int main(int argc, char **argv) {
             break;
         case 5:
             runExample5();
+            break;
+        case 6:
+            runExample6();
             break;
     }
     

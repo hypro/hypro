@@ -1558,15 +1558,17 @@ namespace hypro {
         clock::time_point time2 = clock::now();
 
         auto polytope = P_V.setMinusCrossingH(minus);
+        // std::cout << "res_V:" << std::endl << polytope << std::endl;
+
         clock::time_point time3 = clock::now();
-        
+
         auto polytope_H = Converter::toHPolytope(polytope);
         clock::time_point time4 = clock::now();
 
         auto timeConvP = std::chrono::duration_cast<timeunit>(time2 - time1);
         auto timeSetMinus = std::chrono::duration_cast<timeunit>(time3 - time2);
         auto timeConvRes = std::chrono::duration_cast<timeunit>(time4 - time3);
-        std::cout << "T-ConvP: " + std::to_string(timeConvP.count()) + " | T-SetMinus: " + std::to_string(timeSetMinus.count()) + " | T-ConvRes: " + std::to_string(timeConvRes.count()) << std::endl;
+        //std::cout << "T-ConvP: " + std::to_string(timeConvP.count()) + " | T-SetMinus: " + std::to_string(timeSetMinus.count()) + " | T-ConvRes: " + std::to_string(timeConvRes.count()) << std::endl;
 
         result.push_back(polytope_H);
         return result;
