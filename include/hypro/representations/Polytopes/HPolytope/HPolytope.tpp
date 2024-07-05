@@ -277,7 +277,7 @@ namespace hypro {
                         ch.convexHullVertices();
                         mHPlanes = ch.getHsv();
                         */
-
+                    std::cout << "used points for convex hull: " << std::endl << pointsCopy << std::endl;
                     std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(pointsCopy).first;
                     for (auto &facet: facets) {
 #ifndef NDEBUG
@@ -290,6 +290,7 @@ namespace hypro {
 #endif
                         assert(facet->halfspace().contains(pointsCopy));
                         mHPlanes.push_back(facet->halfspace());
+                        std::cout << "planes push_backed" << facet->halfspace() << std::endl;
                     }
                     facets.clear();
 
@@ -1553,7 +1554,7 @@ namespace hypro {
 
         std::vector<HPolytopeT<Number, Converter, Setting>> result;
         clock::time_point time1 = clock::now();
-        
+
         auto P_V = Converter::toVPolytope(*this);
         clock::time_point time2 = clock::now();
 
@@ -1562,7 +1563,26 @@ namespace hypro {
 
         clock::time_point time3 = clock::now();
 
+        std::cout << "Actual flowpipe computation" << std::endl;
         auto polytope_H = Converter::toHPolytope(polytope);
+        // std::cout << "res_H:" << std::endl << polytope_H << std::endl;
+
+        std::cout << "Resulting Problem for plotting" << std::endl;
+        std::cout << "polytope_H.vertices()" << std::endl << polytope_H.vertices() << std::endl;
+
+
+        std::cout << "Comparison example values with convex hull result" << std::endl;
+        std::vector<Point<Number>> points;
+        points.push_back(Point<Number>({Number(11.5987), Number(4)}));
+        points.push_back(Point<Number>({Number(11.5987), Number(5)}));
+        points.push_back(Point<Number>({Number(11.8118), Number(4)}));
+        points.push_back(Point<Number>({Number(11.6127), Number(5)}));
+        points.push_back(Point<Number>({Number(11.8118), Number(5)}));
+        auto hPolytope = HPolytopeT(points);
+        // std::cout << "hPolytope:" << std::endl << hPolytope << std::endl;
+        std::cout << std::endl;
+
+
         clock::time_point time4 = clock::now();
 
         auto timeConvP = std::chrono::duration_cast<timeunit>(time2 - time1);

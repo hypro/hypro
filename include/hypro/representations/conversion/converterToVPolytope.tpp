@@ -224,7 +224,8 @@ namespace hypro {
     VPolytopeT<Number, Converter<Number>, VPolySetting>
     Converter<Number>::toVPolytope(const HPolytopeT<Number, Converter<Number>, inSetting> &_source, const CONV_MODE) {
 
-        if (_source.getExtremeVertices().size() == 0) {
+        // safer to use matrix and vector
+        if (true || _source.getExtremeVertices().size() == 0) {
             // exact conversion
             return VPolytopeT<Number, Converter<Number>, VPolySetting>(_source.matrix(), _source.vector());
         } else {

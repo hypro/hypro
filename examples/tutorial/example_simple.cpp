@@ -955,6 +955,7 @@ void runExample6(){
     auto res_V = Converter::toVPolytope(res_H);
     std::cout << "res_V:" << std::endl << res_V << std::endl;
 
+    std::vector<std::size_t> plottingDimensions = {0,1};
     auto res_V_projected = res_H.projectOn(plottingDimensions).vertices();
     std::cout << "res_V_projected:" << std::endl << res_V_projected << std::endl;
 
@@ -963,7 +964,6 @@ void runExample6(){
     std::cout << "filename is " << extendedFilename << std::endl;
 
     plotter.setFilename(extendedFilename);
-    std::vector<std::size_t> plottingDimensions = {0,1};
     unsigned cnt = 0;
     // segments plotting
     plotter.addObject(res_H.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
@@ -971,6 +971,42 @@ void runExample6(){
     plotter.plot2d();
 
 
+}
+
+template<typename Number, typename Converter, typename Setting>
+VPolytopeT<Number, Converter, Setting> getVPolytopeP_Example7() {
+
+    using pointVector = std::vector<Point<Number>>;
+
+    pointVector points;
+    points.push_back(Point<Number>({Number(11.5987), Number(4)}));
+    points.push_back(Point<Number>({Number(11.5987), Number(5)}));
+    points.push_back(Point<Number>({Number(11.8118), Number(4)}));
+    points.push_back(Point<Number>({Number(11.6127), Number(5)}));
+    points.push_back(Point<Number>({Number(11.8118), Number(5)}));
+    
+    VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
+    return vp;
+
+}
+
+void runExample7(){
+    using Number = double; 
+    //using Number = mpq_class; //slower
+    using Converter = Converter<Number>;
+	using SettingH = HPolytopeSetting;
+    using SettingV = VPolytopeSetting;
+
+    VPolytopeT<Number, Converter, SettingV> P_V = getVPolytopeP_Example7<Number, Converter, SettingV> ();
+    std::cout << "P_V:" << std::endl << P_V << std::endl;
+
+    HPolytopeT<Number, Converter, SettingH> P_H = Converter::toHPolytope(P_V, CONV_MODE::EXACT);
+    std::cout << "P_H:" << std::endl << P_H << std::endl;
+
+    // VPolytopeT<Number, Converter, SettingV> P_V2 = Converter::toVPolytope(P_H);
+    // std::cout << "P_V2:" << std::endl << P_V2 << std::endl;
+
+    std::cout << "P_H.vertices()" << std::endl << P_H.vertices() << std::endl;
 }
 
 int main(int argc, char **argv) {
@@ -981,7 +1017,7 @@ int main(int argc, char **argv) {
         rep = strtol(argv[1], &p, 10);
     }else{
         std::cout << "Please provide a number for example: <example_number>" << std::endl;
-        std::cout << "Example numbers available: 1, 2, 3, 4, 5, 6" << std::endl;
+        std::cout << "Example numbers available: 1, 2, 3, 4, 5, 6, 7" << std::endl;
         return 0;
     }
 
@@ -1007,6 +1043,9 @@ int main(int argc, char **argv) {
             break;
         case 6:
             runExample6();
+            break;
+        case 7:
+            runExample7();
             break;
     }
     

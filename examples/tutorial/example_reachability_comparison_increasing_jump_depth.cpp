@@ -38,6 +38,8 @@ static void plotResult(std::string plotFileName, const hypro::HybridAutomaton<Nu
         clock::time_point startPlotting = clock::now();
 
         auto &plotter = hypro::Plotter<Number>::getInstance();
+        // clear the plotter, i.e., remove all stored objects to create a fresh canvas
+        plotter.clear();
         std::string extendedFilename = plotFileName;
         plotter.setFilename(extendedFilename);
         std::vector<std::size_t> plottingDimensions = settings.plotting().plotDimensions.at(0);
@@ -69,7 +71,19 @@ static void plotResult(std::string plotFileName, const hypro::HybridAutomaton<Nu
                 if(segment.empty()) {
                     continue;
                 }
-                plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+
+                auto vertices = segment.projectOn(plottingDimensions).vertices();
+                for (auto &vertex : vertices) {
+                    if(vertex.dimension() != 2) {
+                        using Converter = hypro::Converter<Number>;
+                        std::cout<< "Vertex size: " << vertex.dimension() << std::endl;
+                        std::cout << "vertices" << std::endl << vertices << std::endl;
+                        std::cout << "projected segment" << std::endl << segment.projectOn(plottingDimensions) << std::endl;
+                        std::cout << "Segment" << std::endl << segment << std::endl;
+                        std::cout << "v-segment" << std::endl << Converter::toVPolytope(segment) << std::endl;
+                    }
+                }
+                plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 8]);
                 //plotter.addObject(segment.projectOut({2, 3}).vertices(), hypro::plotting::colors[cnt % 10]);
             }
             ++cnt;
@@ -149,12 +163,12 @@ static void run_comparison_function(const std::string &filename,
     bool use_model_settings = false;
 
     const int max_jump_depth = 10;
-    const int time_horizon = 20;
-    for(int current_jump_depth = 0; current_jump_depth <= max_jump_depth; current_jump_depth++) {
+    const int time_horizon = 10;
+    for(int current_jump_depth = 4; current_jump_depth <= max_jump_depth; current_jump_depth++) {
         std::cout << "Running jump depth: " << current_jump_depth << std::endl;
         fs::create_directories("./JumpDepths/Depth" + std::to_string(current_jump_depth));
         std::vector<timeunit> runtimes;
-        bool run_setMinus2 = true; 
+        bool run_setMinus2 = false; 
         if (run_setMinus2) {
             std::cout << "Running setMinus2" << std::endl;
             for(int iteration = 0; iteration < number_iterations; iteration++) {
@@ -174,10 +188,10 @@ static void run_comparison_function(const std::string &filename,
                 }else{
                     fixedParameters_cur.jumpDepth = current_jump_depth;
                     fixedParameters_cur.localTimeHorizon = time_horizon;
-                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(3);
+                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(10);
 
                     analysisParams_cur.setMinusAlgoUsed = 0;
-                    analysisParams_cur.timeStep = Number(1) / Number(3);
+                    analysisParams_cur.timeStep = Number(1) / Number(10);
                     analysisParams_cur.aggregation = hypro::AGG_SETTING::NO_AGG;
                     analysisParams_cur.representation_type = hypro::representation_name::polytope_h;
                 }
@@ -193,7 +207,7 @@ static void run_comparison_function(const std::string &filename,
 
                 if(iteration == 0){
                     std::string plotname = "./JumpDepths/Depth" + std::to_string(current_jump_depth) + "/" + "SetMinus2";
-                    // plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
+                    plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
                 }
             }
             std::cout << "setMinus2 finished" << std::endl;
@@ -202,8 +216,10 @@ static void run_comparison_function(const std::string &filename,
 
         //std::cin.get();
 
-
         runtimes.clear();
+        bool run_setMinusCrossing = true; 
+
+        if (run_setMinusCrossing) {
         std::cout << "Running setMinusCrossing" << std::endl;
         for(int iteration = 0; iteration < number_iterations; iteration++) {
             auto [automaton_cur, parsedSettings_cur] = hypro::parseFlowstarFile<Number>(filename);
@@ -221,10 +237,10 @@ static void run_comparison_function(const std::string &filename,
                 }else{
                     fixedParameters_cur.jumpDepth = current_jump_depth;
                     fixedParameters_cur.localTimeHorizon = time_horizon;
-                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(3);
+                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(10);
 
                     analysisParams_cur.setMinusAlgoUsed = 1;
-                    analysisParams_cur.timeStep = Number(1) / Number(3);
+                    analysisParams_cur.timeStep = Number(1) / Number(10);
                     analysisParams_cur.aggregation = hypro::AGG_SETTING::NO_AGG;
                     analysisParams_cur.representation_type = hypro::representation_name::polytope_h;
                 }
@@ -239,11 +255,13 @@ static void run_comparison_function(const std::string &filename,
 
             if(iteration == 0){
                 std::string plotname = "./JumpDepths/Depth" + std::to_string(current_jump_depth) + "/" + "SetMinusCrossing";
-                // plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
+                plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
             }
 
         }
         std::cout << "setMinusCrossing finished" << std::endl;
+
+        }
         writeRuntime(runtimes, outputFilename, "setMinusCrossing", false);
         //std::cin.get();
     }
