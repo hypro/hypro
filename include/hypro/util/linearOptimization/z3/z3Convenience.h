@@ -35,11 +35,13 @@ static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, cons
 
     z3::expr_vector constraints( c );
     z3::expr_vector variables( c );
+    std::stringstream varName;
     // std::cout << "Variables.size() " << variables.size() << std::endl;
     for ( unsigned i = 0; i < _constraints.cols(); ++i ) {
+        varName.clear();
         z3::expr var( c );
-        const char* varName = ( "x_" + std::to_string( i ) ).c_str();
-        var = c.real_const( varName );
+        varName << "x_" << i;
+        var = c.real_const( varName.str().c_str() );
         variables.push_back( var );
     }
 
