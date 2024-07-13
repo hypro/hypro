@@ -21,6 +21,7 @@ namespace hypro {
                                                             mTrafoCache.getTransformation(loc,
                                                                                           mSettings.timeStep).fullMatrix,
                                                             mSettings.timeStep);
+        
         // vector for result of setminus
         std::vector<Representation> result;
         // vector of urgent transitions in current location
@@ -137,14 +138,14 @@ namespace hypro {
                             result = segment.setMinus(guard, setMinusAlgoUsed);
                             numPolytopes += result.size();
 
-                            if (result.size() > 0) {
+                            /**if (result.size() > 0) {
                                 auto cur_vertices2 = result[0].vertices();
                                 for (auto &vertex : cur_vertices2) {
                                     if(vertex.dimension() != 2) {
                                         exit(1);
                                     }
                                 }
-                            }
+                            }*/
 
                             // insert segment
                             if (result.size() > 0) {

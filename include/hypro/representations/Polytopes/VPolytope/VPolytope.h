@@ -510,6 +510,10 @@ namespace hypro {
 
 /** @} */
 
+
+
+
+
     template<typename From, typename To, typename Converter, typename S>
     VPolytopeT<To, Converter, S> convert(const VPolytopeT<From, Converter, S> &in) {
         std::vector<Point<To>> convertedVertices;

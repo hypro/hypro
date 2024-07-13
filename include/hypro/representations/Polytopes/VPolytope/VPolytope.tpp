@@ -87,6 +87,7 @@ namespace hypro {
     template<typename Number, typename Converter, typename S> 
     template<typename HConverter, typename HSetting> 
     VPolytopeT<Number, Converter, S> VPolytopeT<Number, Converter, S>::setMinusCrossingH(const HPolytopeT<Number, HConverter, HSetting> &polytopeG) const{
+
         using clock = std::chrono::high_resolution_clock;
         using timeunit = std::chrono::milliseconds;
         std::size_t dim_p = this->dimension();
@@ -98,7 +99,7 @@ namespace hypro {
 
         clock::time_point time2 = clock::now();
         std::vector<std::pair<Point<Number>, Point<Number>>> edgesP = this->getConvexEdges(extremePoints);
-        
+
         clock::time_point time3 = clock::now();
         std::vector<Point<Number>> PnG = {};
         std::vector<Point<Number>> pureP = {};
@@ -111,6 +112,7 @@ namespace hypro {
                 pureP.push_back(cur_p);
             }     
         }
+
         
         clock::time_point time4 = clock::now();
         for (auto cur_p : PnG){
@@ -245,7 +247,28 @@ namespace hypro {
     template<typename Number, typename Converter, typename S> 
     std::vector<Point<Number>> VPolytopeT<Number, Converter, S>::getExtremePoints() const{
         std::vector<Point<Number>> currentPoints = this->mVertices;
+        std::vector<Point<Number>> uniqueCurrentPoints;
         std::vector<Point<Number>> result;
+
+
+
+        // delete duplicate points in currentPoints
+        for (auto point : currentPoints){
+            bool pointExists = false;
+            for (auto uniquePoint : uniqueCurrentPoints){
+                if(uniquePoint.dimension() != point.dimension()){
+                    std::cout << "Error VPolytopeT::getExtremePoints: dimension of points is not equal" << std::endl;
+                    exit(1);
+                }
+                if(is_approx_equal(uniquePoint.rawCoordinates(), point.rawCoordinates())){
+                    pointExists = true;
+                    break;
+                }
+            }
+            if (!pointExists){
+                uniqueCurrentPoints.push_back(point);
+            }
+        }        
 
         /**
         int erased = 0;
@@ -260,8 +283,8 @@ namespace hypro {
         }   
          */
 
-        for(auto point : this->mVertices){
-            if (isExtremePoint(point)){
+        for(auto point : uniqueCurrentPoints){
+            if (isExtremePoint(point,uniqueCurrentPoints)){
                 result.push_back(point);
             }
         }

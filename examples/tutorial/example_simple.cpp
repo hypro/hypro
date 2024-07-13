@@ -469,426 +469,8 @@ void runExample3(){
     plotter.plot2d(PLOTTYPE::png);
 }
 
-void runExample4(){
-    using namespace hypro;
-
-    // typedefs for simplification.
-    using Number = double;
-    using Representation = hypro::HPolytope<Number>;
-
-    // create the discrete structure of the automaton and the automaton itself.
-    HybridAutomaton<Number> bBallAutomaton = HybridAutomaton<Number>();
-    Location<Number> *loc1 = bBallAutomaton.createLocation();
-
-    // Transition<Number>* trans = loc1->createTrnsition(loc1);
-    Transition<hypro::Location<Number>> *trans = loc1->createTransition(loc1);
-
-    // matrix defining the flow (note: 3rd dimension for constant parts).
-    matrix_t<Number> flowMatrixLoc1 = matrix_t<Number>(4, 4);
-
-    // setup flow matrix (3x3, we add an artificial dimension to cope with
-    // constants).
-    flowMatrixLoc1(0, 0) = Number(0);
-    flowMatrixLoc1(0, 1) = Number(0); // row 0 column 1
-    flowMatrixLoc1(0, 2) = Number(0);
-    flowMatrixLoc1(0, 3) = Number(1);
-    flowMatrixLoc1(1, 0) = Number(0);
-    flowMatrixLoc1(1, 1) = Number(0);
-    flowMatrixLoc1(1, 2) = Number(0);
-    flowMatrixLoc1(1, 3) = Number(1);
-    flowMatrixLoc1(2, 0) = Number(0);
-    flowMatrixLoc1(2, 1) = Number(0);
-    flowMatrixLoc1(2, 2) = Number(0);
-    flowMatrixLoc1(2, 3) = Number(0);
-    flowMatrixLoc1(3, 0) = Number(0);
-    flowMatrixLoc1(3, 1) = Number(0);
-    flowMatrixLoc1(3, 2) = Number(0);
-    flowMatrixLoc1(3, 3) = Number(0);
-
-    loc1->setFlow(flowMatrixLoc1);
-
-    // setup of the transition.
-    // guard
-
-    // z - x <= 0
-    // z - y <= 0  
-
-    Condition<Number> guard;
-    matrix_t<Number> guardMat = matrix_t<Number>(2, 3);
-    vector_t<Number> guardVec = vector_t<Number>(2);
-
-    guardVec(0) = Number(0);
-    guardVec(1) = Number(0);
-
-    guardMat(0, 0) = Number(-1);
-    guardMat(0, 1) = Number(0);
-    guardMat(0, 2) = Number(1);
-    guardMat(1, 0) = Number(0);
-    guardMat(1, 1) = Number(-1);
-    guardMat(1, 2) = Number(1);
-
-    guard.setMatrix(guardMat);
-    guard.setVector(guardVec);    
-
-    // reset function
-    Reset<Number> reset;
-    vector_t<Number> constantReset = vector_t<Number>(3, 1);
-    matrix_t<Number> linearReset = matrix_t<Number>(3, 3);
-
-    constantReset(0) = Number(0);
-    constantReset(1) = Number(0);
-    constantReset(2) = Number(1);
-
-    linearReset(0, 0) = Number(0);
-    linearReset(0, 1) = Number(0);
-    linearReset(0, 2) = Number(0);
-    linearReset(1, 0) = Number(0);
-    linearReset(1, 1) = Number(0);
-    linearReset(1, 2) = Number(0);
-    linearReset(2, 0) = Number(0);
-    linearReset(2, 1) = Number(0);
-    linearReset(2, 2) = Number(1);
-
-    reset.setVector(constantReset);
-    reset.setMatrix(linearReset);
-
-    // setup transition
-    trans->setAggregation(AGG_SETTING::AGG);
-    trans->setGuard(guard);
-    trans->setSource(loc1);
-    trans->setTarget(loc1);
-    trans->setReset(reset);
-
-
-    trans->setUrgent(true); //urgent
-
-    // create Box holding the initial set.
-    matrix_t<Number> boxMat = matrix_t<Number>(6, 3);
-    vector_t<Number> boxVec = vector_t<Number>(6);
-
-    // y in [1,3]
-    // x in [1,3]
-    // z in [2,2]
-
-    boxVec(0) = Number(-1);
-    boxVec(1) = Number(3);
-    boxVec(2) = Number(-1);
-    boxVec(3) = Number(3);
-    boxVec(4) = Number(-2);
-    boxVec(5) = Number(2);
-
-    boxMat(0, 0) = Number(1);
-    boxMat(0, 1) = Number(0);
-    boxMat(0, 2) = Number(0);
-    boxMat(1, 0) = Number(-1);
-    boxMat(1, 1) = Number(0);
-    boxMat(1, 2) = Number(0);
-    boxMat(2, 0) = Number(0);
-    boxMat(2, 1) = Number(1);
-    boxMat(2, 2) = Number(0);
-    boxMat(3, 0) = Number(0);
-    boxMat(3, 1) = Number(-1);
-    boxMat(3, 2) = Number(0);
-    boxMat(4, 0) = Number(0);
-    boxMat(4, 1) = Number(0);
-    boxMat(4, 2) = Number(1);
-    boxMat(5, 0) = Number(0);
-    boxMat(5, 1) = Number(0);
-    boxMat(5, 2) = Number(-1);
-
-
-    // create initial state.
-    bBallAutomaton.addInitialState(loc1, Condition<Number>(boxMat, boxVec));
-
-    // set settings
-    hypro::FixedAnalysisParameters fixedParameters;
-    fixedParameters.jumpDepth = 1;
-    fixedParameters.localTimeHorizon = 5;
-    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
-
-    hypro::AnalysisParameters analysisParameters;
-    analysisParameters.setMinusAlgoUsed = 0;
-    analysisParameters.timeStep = tNumber(1) / tNumber(10);
-    analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
-    analysisParameters.representation_type = hypro::representation_name::polytope_h;
-
-    hypro::Settings settings{{}, fixedParameters, {analysisParameters}};
-
-    // initialize reachability tree
-    auto roots = hypro::makeRoots<Representation>(bBallAutomaton);
-
-    // instanciate reachability analysis class
-    hypro::reachability::ReachUrgency<Representation, hypro::HybridAutomaton<Number>> reacher{bBallAutomaton,fixedParameters,analysisParameters, roots}; 
-
-    std::cout << "Start reachability analysis ... " << std::endl;
-
-    auto start = std::chrono::high_resolution_clock::now();
-
-    // perform reachability analysis.
-    REACHABILITY_RESULT res = reacher.computeForwardReachability();
-
-    auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "Time taken for setMinus2: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " milliseconds" << std::endl;
-
-
-    analysisParameters.setMinusAlgoUsed = 1;
-    // instanciate reachability analysis class
-    hypro::reachability::ReachUrgency<Representation, hypro::HybridAutomaton<Number>> reacher2{bBallAutomaton,fixedParameters,analysisParameters, roots}; 
-
-    auto start2 = std::chrono::high_resolution_clock::now();
-
-    // perform reachability analysis.
-    REACHABILITY_RESULT res2 = reacher2.computeForwardReachability();
-
-    auto end2 = std::chrono::high_resolution_clock::now();
-
-    std::cout << "Time taken for setMinusCrossing: " << std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2).count() << " milliseconds" << std::endl;
-
-
-    std::cout << "Reachability result: " << res << std::endl;
-
-    // plot flowpipes.
-    std::cout << "Start plotting ... ";
-    Plotter<Number> &plotter = Plotter<Number>::getInstance();
-    plotter.setFilename("Example_4");
-
-    for (const auto &node: preorder(roots)) {
-        for (const auto &state_set: node.getFlowpipe()) {  // flowpipes
-            plotter.addObject(state_set.projectOn({0, 1}).vertices());
-        }
-    }
-    std::cout << "done." << std::endl;
-
-    // write output.
-    plotter.plot2d(PLOTTYPE::png);
-}
-
-void runExample5(){
-    using namespace hypro;
-
-    // typedefs for simplification.
-    using Number = double;
-    using Representation = hypro::HPolytope<Number>;
-
-    // create the discrete structure of the automaton and the automaton itself.
-    HybridAutomaton<Number> bBallAutomaton = HybridAutomaton<Number>();
-    Location<Number> *loc1 = bBallAutomaton.createLocation();
-
-    {
-
-        // Transition<Number>* trans = loc1->createTrnsition(loc1);
-        Transition<hypro::Location<Number>> *trans = loc1->createTransition(loc1);
-
-        // matrix defining the flow (note: 5rd dimension for constant parts).
-        matrix_t<Number> flowMatrixLoc1 = matrix_t<Number>(5, 5);
-
-        // setup flow matrix (5x5, we add an artificial dimension to cope with
-        // constants).
-        flowMatrixLoc1(0, 0) = Number(0);
-        flowMatrixLoc1(0, 1) = Number(0); // row 0 column 1
-        flowMatrixLoc1(0, 2) = Number(0);
-        flowMatrixLoc1(0, 3) = Number(0);
-        flowMatrixLoc1(0, 4) = Number(1);
-        flowMatrixLoc1(1, 0) = Number(0);
-        flowMatrixLoc1(1, 1) = Number(0);
-        flowMatrixLoc1(1, 2) = Number(0);
-        flowMatrixLoc1(1, 3) = Number(0);
-        flowMatrixLoc1(1, 4) = Number(0);
-        flowMatrixLoc1(2, 0) = Number(0);
-        flowMatrixLoc1(2, 1) = Number(0);
-        flowMatrixLoc1(2, 2) = Number(0);
-        flowMatrixLoc1(2, 3) = Number(0);
-        flowMatrixLoc1(2, 4) = Number(0);
-        flowMatrixLoc1(3, 0) = Number(0);
-        flowMatrixLoc1(3, 1) = Number(0);
-        flowMatrixLoc1(3, 2) = Number(0);
-        flowMatrixLoc1(3, 3) = Number(0);
-        flowMatrixLoc1(3, 4) = Number(0);
-        flowMatrixLoc1(4, 0) = Number(0);
-        flowMatrixLoc1(4, 1) = Number(0);
-        flowMatrixLoc1(4, 2) = Number(0);
-        flowMatrixLoc1(4, 3) = Number(0);
-        flowMatrixLoc1(4, 4) = Number(0);
-
-        loc1->setFlow(flowMatrixLoc1);
-
-        // setup of the transition.
-        // guard
-
-        // g_x <= x 
-        // g_y <= y
-
-        Condition<Number> guard;
-        matrix_t<Number> guardMat = matrix_t<Number>(2, 4);
-        vector_t<Number> guardVec = vector_t<Number>(2);
-
-        guardVec(0) = Number(0); 
-        guardVec(1) = Number(0);
-
-        guardMat(0, 0) = Number(-1);
-        guardMat(0, 1) = Number(0);
-        guardMat(0, 2) = Number(1);
-        guardMat(0, 3) = Number(0);
-        guardMat(1, 0) = Number(0);
-        guardMat(1, 1) = Number(-1);
-        guardMat(1, 2) = Number(0);
-        guardMat(1, 3) = Number(1);
-
-        guard.setMatrix(guardMat);
-        guard.setVector(guardVec);    
-
-        // reset function
-        Reset<Number> reset;
-        vector_t<Number> constantReset = vector_t<Number>(4, 1);
-        matrix_t<Number> linearReset = matrix_t<Number>(4, 4);
-
-        constantReset(0) = Number(1);
-        constantReset(1) = Number(0);
-        constantReset(2) = Number(2);
-        constantReset(3) = Number(carl::rationalize<Number>(2.5));
-
-        linearReset(0, 0) = Number(1);
-        linearReset(0, 1) = Number(0);
-        linearReset(0, 2) = Number(0);
-        linearReset(0, 3) = Number(0);
-        linearReset(1, 0) = Number(0);
-        linearReset(1, 1) = Number(1);
-        linearReset(1, 2) = Number(0);
-        linearReset(1, 3) = Number(0);
-        linearReset(2, 0) = Number(0);
-        linearReset(2, 1) = Number(0);
-        linearReset(2, 2) = Number(1);
-        linearReset(2, 3) = Number(0);
-        linearReset(3, 0) = Number(0);
-        linearReset(3, 1) = Number(0);
-        linearReset(3, 2) = Number(0);
-        linearReset(3, 3) = Number(carl::rationalize<Number>(0.5));
-
-        reset.setVector(constantReset);
-        reset.setMatrix(linearReset);
-
-        // setup transition
-        //trans->setAggregation(AGG_SETTING::AGG);
-        trans->setGuard(guard);
-        trans->setSource(loc1);
-        trans->setTarget(loc1);
-        trans->setReset(reset);
-
-        trans->setUrgent(true); //urgent
-
-        // create Box holding the initial set.
-        matrix_t<Number> boxMat = matrix_t<Number>(8, 4);
-        vector_t<Number> boxVec = vector_t<Number>(8);
-
-        // x in [1,1]
-        // y in [1,5]
-        // g_x in [2,2] 
-        // g_y in [3,3.01]
-
-        boxVec(0) = Number(1);
-        boxVec(1) = Number(-1);
-        boxVec(2) = Number(5);
-        boxVec(3) = Number(-1);
-        boxVec(4) = Number(2);
-        boxVec(5) = Number(-2);
-        boxVec(6) = Number(3.01);
-        boxVec(7) = Number(-3);
-
-        boxMat(0, 0) = Number(1);
-        boxMat(0, 1) = Number(0);
-        boxMat(0, 2) = Number(0);
-        boxMat(0, 3) = Number(0);
-        boxMat(1, 0) = Number(-1);
-        boxMat(1, 1) = Number(0);
-        boxMat(1, 2) = Number(0);
-        boxMat(1, 3) = Number(0);
-        boxMat(2, 0) = Number(0);
-        boxMat(2, 1) = Number(1);
-        boxMat(2, 2) = Number(0);
-        boxMat(2, 3) = Number(0);
-        boxMat(3, 0) = Number(0);
-        boxMat(3, 1) = Number(-1);
-        boxMat(3, 2) = Number(0);
-        boxMat(3, 3) = Number(0);
-        boxMat(4, 0) = Number(0);
-        boxMat(4, 1) = Number(0);
-        boxMat(4, 2) = Number(1);
-        boxMat(4, 3) = Number(0);
-        boxMat(5, 0) = Number(0);
-        boxMat(5, 1) = Number(0);
-        boxMat(5, 2) = Number(-1);
-        boxMat(5, 3) = Number(0);
-        boxMat(6, 0) = Number(0);
-        boxMat(6, 1) = Number(0);
-        boxMat(6, 2) = Number(0);
-        boxMat(6, 3) = Number(1);
-        boxMat(7, 0) = Number(0);
-        boxMat(7, 1) = Number(0);
-        boxMat(7, 2) = Number(0);
-        boxMat(7, 3) = Number(-1);
-
-        // create initial state.
-        bBallAutomaton.addInitialState(loc1, Condition<Number>(boxMat, boxVec));
-    }
-    std::cout << bBallAutomaton << std::endl;
-
-
-    // set settings
-    hypro::FixedAnalysisParameters fixedParameters;
-    fixedParameters.jumpDepth = 1;
-    fixedParameters.localTimeHorizon = 3;
-    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(4);
-
-    hypro::AnalysisParameters analysisParameters;
-    analysisParameters.setMinusAlgoUsed = 1;
-    analysisParameters.timeStep = tNumber(1) / tNumber(4);
-    analysisParameters.aggregation = hypro::AGG_SETTING::NO_AGG;
-    analysisParameters.representation_type = hypro::representation_name::polytope_h;
-
-    hypro::Settings settings{{}, fixedParameters, {analysisParameters}};
-
-    // initialize reachability tree
-    auto roots = hypro::makeRoots<Representation>(bBallAutomaton);
-
-    // instanciate reachability analysis class
-    hypro::reachability::ReachUrgency<Representation, hypro::HybridAutomaton<Number>> reacher2{bBallAutomaton,fixedParameters,analysisParameters, roots}; 
-
-    auto start2 = std::chrono::high_resolution_clock::now();
-    // perform reachability analysis.
-    REACHABILITY_RESULT res2 = reacher2.computeForwardReachability();
-    auto end2 = std::chrono::high_resolution_clock::now();
-
-    std::cout << "Time taken for setMinusCrossing: " << std::chrono::duration_cast<std::chrono::milliseconds>(end2 - start2).count() << " milliseconds" << std::endl;
-
-    // std::cout << "Reachability result: " << res << std::endl;
-
-    // plot flowpipes.
-    std::cout << "Start plotting ... ";
-    Plotter<Number> &plotter2 = Plotter<Number>::getInstance();
-    plotter2.setFilename("Example_5_setMinusCrossing");
-
-    unsigned cnt2 = 2;
-    auto flowpipes = getFlowpipes(roots);
-    //for (const auto &node: preorder(roots)) {
-        //for (const auto &state_set: node.getFlowpipe()) {  // flowpipes
-    for (const auto &flowpipe: flowpipes) {
-        for (const auto &segment: flowpipe) {
-            if(segment.empty()) {
-                continue;
-            }
-            plotter2.addObject(segment.projectOut({2, 3}).vertices(), hypro::plotting::colors[cnt2 % 10]);
-        }
-        ++cnt2;
-    }
-    std::cout << "done." << std::endl;
-
-    // write output.
-    plotter2.plot2d(PLOTTYPE::png);
-}
-
-
 template<typename Number, typename Converter, typename Setting>
-HPolytopeT<Number, Converter, Setting> getHPolytopeP_Example6() {
+HPolytopeT<Number, Converter, Setting> getHPolytopeP_Test1() {
     // Create a polytope
     using HalfspaceVector = std::vector<Halfspace<Number>>;
 
@@ -923,7 +505,7 @@ HPolytopeT<Number, Converter, Setting> getHPolytopeP_Example6() {
 }
 
 template<typename Number, typename Converter, typename Setting>
-HPolytopeT<Number, Converter, Setting> getHPolytopeG_Example6() {
+HPolytopeT<Number, Converter, Setting> getHPolytopeG_Test1() {
     // Create a polytope
     using HalfspaceVector = std::vector<Halfspace<Number>>;
 
@@ -936,15 +518,14 @@ HPolytopeT<Number, Converter, Setting> getHPolytopeG_Example6() {
     return hp;
 }
 
-
-void runExample6(){
+void runTest1(){
     using Number = double; 
     //using Number = mpq_class; //slower
     using Converter = Converter<Number>;
 	using Setting = HPolytopeSetting;
 
-    HPolytopeT<Number, Converter, Setting> P_H = getHPolytopeP_Example6<Number, Converter, Setting> ();
-    HPolytopeT<Number, Converter, Setting> G_H = getHPolytopeG_Example6<Number, Converter, Setting> ();
+    HPolytopeT<Number, Converter, Setting> P_H = getHPolytopeP_Test1<Number, Converter, Setting> ();
+    HPolytopeT<Number, Converter, Setting> G_H = getHPolytopeG_Test1<Number, Converter, Setting> ();
     std::cout << "P_H:" << std::endl << P_H << std::endl;
     std::cout << "G_H:" << std::endl << G_H << std::endl;
 
@@ -974,7 +555,7 @@ void runExample6(){
 }
 
 template<typename Number, typename Converter, typename Setting>
-VPolytopeT<Number, Converter, Setting> getVPolytopeP_Example7() {
+VPolytopeT<Number, Converter, Setting> getVPolytopeP_Test2() {
 
     using pointVector = std::vector<Point<Number>>;
 
@@ -990,14 +571,14 @@ VPolytopeT<Number, Converter, Setting> getVPolytopeP_Example7() {
 
 }
 
-void runExample7(){
+void runTest2(){
     using Number = double; 
     //using Number = mpq_class; //slower
     using Converter = Converter<Number>;
 	using SettingH = HPolytopeSetting;
     using SettingV = VPolytopeSetting;
 
-    VPolytopeT<Number, Converter, SettingV> P_V = getVPolytopeP_Example7<Number, Converter, SettingV> ();
+    VPolytopeT<Number, Converter, SettingV> P_V = getVPolytopeP_Test2<Number, Converter, SettingV> ();
     std::cout << "P_V:" << std::endl << P_V << std::endl;
 
     HPolytopeT<Number, Converter, SettingH> P_H = Converter::toHPolytope(P_V, CONV_MODE::EXACT);
@@ -1009,6 +590,41 @@ void runExample7(){
     std::cout << "P_H.vertices()" << std::endl << P_H.vertices() << std::endl;
 }
 
+template<typename Number, typename Converter, typename Setting>
+VPolytopeT<Number, Converter, Setting> getVPolytopeP_Test3() {
+
+    using pointVector = std::vector<Point<Number>>;
+
+    pointVector points;
+    points.push_back(Point<Number>({Number(7.59871), Number(4)}));
+    points.push_back(Point<Number>({Number(7.59871), Number(5)}));
+    points.push_back(Point<Number>({Number(7.90517), Number(4)}));
+    points.push_back(Point<Number>({Number(7.90517), Number(5)}));
+    
+    VPolytopeT<Number, Converter, Setting> vp = VPolytopeT<Number, Converter, Setting>(points);
+    return vp;
+
+}
+
+void runTest3(){
+    using Number = double; 
+    //using Number = mpq_class; //slower
+    using Converter = Converter<Number>;
+	using SettingH = HPolytopeSetting;
+    using SettingV = VPolytopeSetting;
+
+    VPolytopeT<Number, Converter, SettingV> P_V = getVPolytopeP_Test3<Number, Converter, SettingV> ();
+    std::cout << "P_V:" << std::endl << P_V << std::endl;
+
+    HPolytopeT<Number, Converter, SettingH> P_H = Converter::toHPolytope(P_V, CONV_MODE::EXACT);
+    std::cout << "P_H:" << std::endl << P_H << std::endl;
+
+    // VPolytopeT<Number, Converter, SettingV> P_V2 = Converter::toVPolytope(P_H);
+    // std::cout << "P_V2:" << std::endl << P_V2 << std::endl;
+
+    // std::cout << "P_H.vertices()" << std::endl << P_H.vertices() << std::endl;
+}
+
 int main(int argc, char **argv) {
     
     int rep = 0;
@@ -1017,7 +633,9 @@ int main(int argc, char **argv) {
         rep = strtol(argv[1], &p, 10);
     }else{
         std::cout << "Please provide a number for example: <example_number>" << std::endl;
-        std::cout << "Example numbers available: 1, 2, 3, 4, 5, 6, 7" << std::endl;
+        std::cout << "Example numbers available: 1, 2, 3" << std::endl;
+        std::cout << "Test numbers available: 4, 5, 6" << std::endl;
+        
         return 0;
     }
 
@@ -1036,16 +654,13 @@ int main(int argc, char **argv) {
             runExample3();
             break;
         case 4:
-            runExample4();
+            runTest1();
             break;
         case 5:
-            runExample5();
+            runTest2();
             break;
         case 6:
-            runExample6();
-            break;
-        case 7:
-            runExample7();
+            runTest3();
             break;
     }
     

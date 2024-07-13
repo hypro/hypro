@@ -268,7 +268,7 @@ static void run_comparison_function(const std::string &filename,
             auto flowpipes = getFlowpipes(roots);
 
             // plotting
-            plotResult<Number, Representation>("setMinus2", automaton, flowpipes, settings);
+            plotResult<Number, Representation>("setMinusCrossing", automaton, flowpipes, settings);
         }
     }
     writeRuntime(runtimes, outputFilename, "setMinusCrossing", false);
