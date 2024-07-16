@@ -892,17 +892,12 @@ namespace hypro {
 
         Number resultValue = result.supportValue;
 
-        // std::cout << "Result: " << invertedValue << std::endl;
+        // std::cout << "Result: " << resultValue << std::endl;
 
         Point<Number> cp = fromPoint + resultValue * (toPoint - fromPoint);
 
         // std::cout << "Crossing point: " << cp << std::endl;
 
-        // we catch the error, where the crossing point calculation 
-        if (cp == fromPoint){
-            std::cout << "Error HPolytopeT::getCrossingPoint: crossing point calculation" << std::endl;
-            return toPoint;
-        }
 
         return cp;
     }
