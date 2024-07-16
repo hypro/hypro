@@ -105,55 +105,55 @@ hybrid reachability
  {
   loc1 -> loc2
   guard {2 <= x 2 <= y}
-  reset { x':= x+1 y':= y+1 }
+  reset { x':= x+1 y':= y }
   parallelotope aggregation {}
   urgent
   
   loc2 -> loc3
   guard {4 <= x 4 <= y}
-  reset { x':= x+1 y':= y+1 }
+  reset { x':= x+1 y':= y }
   parallelotope aggregation {}
   urgent
   
   loc3 -> loc4
   guard {6 <= x 6 <= y}
-  reset { x':= x+1 y':= y+1 }
+  reset { x':= x+1 y':= y }
   parallelotope aggregation {}
   urgent
   
   loc4 -> loc5
   guard {8 <= x 8 <= y}
-  reset { x':= x+1 y':= y+1 }
+  reset { x':= x+1 y':= y }
   parallelotope aggregation {}
   urgent
   
   loc5 -> loc6
   guard {10 <= x 10 <= y}
-  reset { x':= x+1 y':= y+1 }
+  reset { x':= x+1 y':= y }
   parallelotope aggregation {}
   urgent
   
   loc6 -> loc7
   guard {12 <= x 12 <= y}
-  reset { x':= x+1 y':= y+1 }
+  reset { x':= x+1 y':= y }
   parallelotope aggregation {}
   urgent
   
   loc7 -> loc8
   guard {14 <= x 14 <= y}
-  reset { x':= x+1 y':= y+1 }
+  reset { x':= x+1 y':= y }
   parallelotope aggregation {}
   urgent
   
   loc8 -> loc9
   guard {16 <= x 16 <= y}
-  reset { x':= x+1 y':= y+1 }
+  reset { x':= x+1 y':= y }
   parallelotope aggregation {}
   urgent
   
   loc9 -> loc10
   guard {18 <= x 18 <= y}
-  reset { x':= x+1 y':= y+1 }
+  reset { x':= x+1 y':= y }
   parallelotope aggregation {}
   urgent
   
@@ -164,7 +164,7 @@ hybrid reachability
   loc1
   {
    x in [1,1]
-   y in [1,12]
+   y in [1,20]
   }
  }
 }

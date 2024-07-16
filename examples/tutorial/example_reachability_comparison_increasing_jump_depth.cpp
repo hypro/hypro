@@ -164,6 +164,7 @@ static void run_comparison_function(const std::string &filename,
 
     const int max_jump_depth = 10;
     const int time_horizon = 20;
+    const int fixed_time_step = 7;
     for(int current_jump_depth = 0; current_jump_depth <= max_jump_depth; current_jump_depth++) {
         std::cout << "Running jump depth: " << current_jump_depth << std::endl;
         fs::create_directories("./JumpDepths/Depth" + std::to_string(current_jump_depth));
@@ -188,10 +189,10 @@ static void run_comparison_function(const std::string &filename,
                 }else{
                     fixedParameters_cur.jumpDepth = current_jump_depth;
                     fixedParameters_cur.localTimeHorizon = time_horizon;
-                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(3);
+                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(fixed_time_step);
 
                     analysisParams_cur.setMinusAlgoUsed = 0;
-                    analysisParams_cur.timeStep = Number(1) / Number(3);
+                    analysisParams_cur.timeStep = Number(1) / Number(fixed_time_step);
                     analysisParams_cur.aggregation = hypro::AGG_SETTING::NO_AGG;
                     analysisParams_cur.representation_type = hypro::representation_name::polytope_h;
                 }
@@ -207,7 +208,7 @@ static void run_comparison_function(const std::string &filename,
 
                 if(iteration == 0){
                     std::string plotname = "./JumpDepths/Depth" + std::to_string(current_jump_depth) + "/" + "SetMinus2";
-                    plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
+                    //plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
                 }
             }
             std::cout << "setMinus2 finished" << std::endl;
@@ -237,10 +238,10 @@ static void run_comparison_function(const std::string &filename,
                 }else{
                     fixedParameters_cur.jumpDepth = current_jump_depth;
                     fixedParameters_cur.localTimeHorizon = time_horizon;
-                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(3);
+                    fixedParameters_cur.fixedTimeStep = Number(1) / Number(fixed_time_step);
 
                     analysisParams_cur.setMinusAlgoUsed = 1;
-                    analysisParams_cur.timeStep = Number(1) / Number(3);
+                    analysisParams_cur.timeStep = Number(1) / Number(fixed_time_step);
                     analysisParams_cur.aggregation = hypro::AGG_SETTING::NO_AGG;
                     analysisParams_cur.representation_type = hypro::representation_name::polytope_h;
                 }
@@ -255,7 +256,7 @@ static void run_comparison_function(const std::string &filename,
 
             if(iteration == 0){
                 std::string plotname = "./JumpDepths/Depth" + std::to_string(current_jump_depth) + "/" + "SetMinusCrossing";
-                plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
+                //plotResult(plotname, automaton_cur, hypro::getFlowpipes(roots_cur), settings_cur);
             }
 
         }
