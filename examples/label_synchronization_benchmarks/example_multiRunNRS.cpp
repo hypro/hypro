@@ -8,7 +8,7 @@
  */
 
 /**
- * This is an example of the benchmark Train Gate System with synchronizing reachability analysis on rectangular automata.
+ * This is an example of the benchmark Nuclear rod reactor with synchronizing reachability analysis on rectangular automata.
  */
 
 #include "hypro/datastructures/reachability/ReachTreev2Util.h"
