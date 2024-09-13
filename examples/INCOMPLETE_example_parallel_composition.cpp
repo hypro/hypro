@@ -665,7 +665,7 @@ HybridAutomaton<Number> generateLsync1( long componentCount ) {
 
 	std::vector<Label> labels;
 	for ( int i = 0; i < componentCount; ++i ) {
-		labels.emplace_back( "flash"s + std::to_string( i ) );
+		labels.emplace_back( "flash" + std::to_string( i ) );
 	}
 
 	HybridAutomaton<Number> composed_sync_label =

@@ -143,8 +143,6 @@ hypro::HybridAutomaton<Number> createSharedVariableAutomaton(int processNumber) 
     hypro::rectangularFlow<Number> flow(dynamics);
 
     // Create locations
-	// auto loc0 = res.createLocation("loc0");
-    // loc0->setRectangularFlow(flow);
     std::vector<hypro::Location<Number> *> locs{};
     for (int i = 0; i <= processNumber; ++i) {
         std::string locName = "loc" + std::to_string(i);

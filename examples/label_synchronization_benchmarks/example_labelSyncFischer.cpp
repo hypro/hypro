@@ -143,8 +143,6 @@ hypro::HybridAutomaton<Number> createSharedVariableAutomaton(int processNumber) 
     hypro::rectangularFlow<Number> flow(dynamics);
 
     // Create locations
-	// auto loc0 = res.createLocation("loc0");
-    // loc0->setRectangularFlow(flow);
     std::vector<hypro::Location<Number> *> locs{};
     for (int i = 0; i <= processNumber; ++i) {
         std::string locName = "loc" + std::to_string(i);
@@ -306,13 +304,10 @@ int main(int argc, char **argv) {
 
         unsigned cnt = 0;
         // segments plotting
-        // auto flowpipes = getFlowpipes(roots);
         searchForestSize += hypro::getNumberNodes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
         auto flowpipes = getFlowpipes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
         for (const auto &flowpipe: flowpipes) {
-            // std::cout << "Flowpipe size " << flowpipe.size() << std::endl;
             for (const auto &segment: flowpipe) {
-                // std::cout << "projected Segment: " << segment.projectOn(plottingDimensions) << std::endl;
                 plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
             }
             ++cnt;
