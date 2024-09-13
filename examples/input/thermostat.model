@@ -276,14 +276,12 @@ hybrid reachability
 		guard {}
 		reset {}
 		parallelotope aggregation { }
-		urgent
 
 
 		clock__switch_off_in__comm__l1 -> clock__switch_off__cycle__l1
 		guard { Temp >= 23.0 }
 		reset {	low' := 1.0 high' := 1.0 H' := H_plc }
 		parallelotope aggregation { }
-		urgent
 
 
 		clock__switch_off_in__comm__l1 -> clock__switch_off__cycle__l1
