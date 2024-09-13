@@ -57,6 +57,7 @@ hypro::HybridAutomaton<Number> createRectangularHA() {
 
 
 TEST( TimeVariableAdditionTest, AutomatonDimensionDouble ) {
+    hypro::VariablePool::getInstance().clear();
     using Number = double;
     auto automaton = createRectangularHA<Number>();
 
@@ -81,6 +82,7 @@ TEST( TimeVariableAdditionTest, AutomatonDimensionDouble ) {
 }
 
 TEST( TimeVariableAdditionTest, AutomatonDimensionMPQ ) {
+    hypro::VariablePool::getInstance().clear();
     using Number = mpq_class;
     auto automaton = createRectangularHA<Number>();
 
