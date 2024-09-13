@@ -136,14 +136,6 @@ static void computeReachableStates(const std::string &filename,
                   << " ms" << std::endl;
     }
 
-    for(int i = 0; i < automaton.getLocations().size(); i++){
-        for (int j = 0 ; j < automaton.getLocations()[i]->getTransitions().size(); j++){
-            if (automaton.getLocations()[i]->getTransitions()[j]->isUrgent()){
-                std::cout << "Urgent Transition from " << automaton.getLocations()[i]->getName() << " to " << automaton.getLocations()[i]->getTransitions()[j]->getTarget()->getName() << std::endl;
-            }            
-        }
-    }
-
 }
 
 int main(int argc, char **argv) {
@@ -153,7 +145,6 @@ int main(int argc, char **argv) {
         char *p;
         rep = strtol(argv[2], &p, 10);
     }
-
 
 #ifdef USE_CLN_NUMBERS
     using Number = cln::cl_RA;
