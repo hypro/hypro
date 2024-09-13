@@ -59,6 +59,72 @@ namespace hypro {
         std::vector<std::set<unsigned>> mNeighbors;
 
     public:
+
+        /**
+         * calculates the set difference of two H-Polytopes
+         * general algorithm which selects the algorithm to be used
+         */
+        std::vector<VPolytopeT<Number, Converter, S>> setMinus(const VPolytopeT<Number, Converter, S> &minus, int setMinusAlgoUsed) const;
+
+        /**
+        * @brief      Computation of the set minus operator using crossing points.
+        * @param[in]  polytope  The VPolytope G.
+        */
+        VPolytopeT<Number, Converter, S> setMinusCrossingV(const VPolytopeT<Number, Converter, S> &polytopeG) const;
+
+        /**
+        * @brief      Computation of the set minus operator using crossing points.
+        * @param[in]  polytope  The HPolytope G.
+        */
+        template<typename HConverter, typename HSetting> 
+        VPolytopeT<Number, Converter, S> setMinusCrossingH(const HPolytopeT<Number, HConverter, HSetting> &polytopeG) const;
+
+        /**
+        * @brief      Returns the extreme points of the polytope.
+        */ 
+        std::vector<Point<Number>> getExtremePoints() const;
+
+        /**
+        * @brief      Returns true if the point is extreme
+        * @param[in]  point  The point.
+        * @param[in]  vertices vector of points representing the polytope
+        */
+        bool isExtremePoint(Point<Number> point, std::vector<Point<Number>> vertices) const;
+
+        /**
+        * @brief      Returns true if the point is extreme
+        * @param[in]  point  The point.
+        */
+        bool isExtremePoint(Point<Number> point) const;
+
+        /**
+        * @brief      Returns the one dimensional faces of a polytope as a pair of convex vertices
+        * @param[in]  extremePoints  The extreme points.
+        */
+        std::vector<std::pair<Point<Number>, Point<Number>>> getConvexEdges(std::vector<Point<Number>> extremePoints) const;
+
+        /**
+        * @brief      Returns true if the pair of points is a convex edge of a polytope. 
+        *             Requires that points p1,p2 are extreme points.
+        * @param[in]  p1  The point.
+        * @param[in]  p2  The point.
+        * @param[in]  extremePoints  The extreme points.
+        */
+        bool isPairConvexEdge(Point<Number> p1, Point<Number> p2, std::vector<Point<Number>> extremePoints) const;
+
+
+        /**
+        * @brief      Rertuns the crossing point of an edge (pair of points).
+        * @param[in]  fromPoint  The starting point.
+        * @param[in]  toPoint  The ending point.
+        */
+       Point<Number> getCrossingPoint(Point<Number> fromPoint, Point<Number> toPoint) const; 
+
+       
+       std::vector<Point<Number>> getBorderVertices(Point<Number> point, std::vector<std::pair<Point<Number>, Point<Number>>> edgesP, std::vector<Point<Number>> PnG) const;
+
+
+
         /**
          * @brief      Default constructor.
          */
@@ -443,6 +509,10 @@ namespace hypro {
     };
 
 /** @} */
+
+
+
+
 
     template<typename From, typename To, typename Converter, typename S>
     VPolytopeT<To, Converter, S> convert(const VPolytopeT<From, Converter, S> &in) {
