@@ -290,7 +290,7 @@ int main(int argc, char **argv) {
 #endif
 
     switch (rep) {
-        case 2: {
+        case 2: {// V representation doesn't work
             using Representation = hypro::VPolytope<Number>;
             std::cout << "Using a v-polytope representation." << std::endl;
             run_comparison_function<Number, Representation>(

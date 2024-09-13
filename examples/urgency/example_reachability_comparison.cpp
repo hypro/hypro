@@ -291,12 +291,12 @@ int main(int argc, char **argv) {
 #ifdef USE_CLN_NUMBERS
     using Number = cln::cl_RA;
 #else
-    // using Number = mpq_class;
+    // using Number = mpq_class; // it oly works with double
     using Number = double;
 #endif
 
     switch (rep) {
-        case 2: {
+        case 2: {// V representation doesn't work
             using Representation = hypro::VPolytope<Number>;
             std::cout << "Using a v-polytope representation." << std::endl;
             run_comparison_function<Number, Representation>(

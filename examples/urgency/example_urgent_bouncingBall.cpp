@@ -26,7 +26,7 @@ int main() {
 
     // typedefs for simplification.
     using Number = mpq_class;
-    using Representation = hypro::VPolytope<Number>; //new
+    using Representation = hypro::HPolytope<Number>; //new
 
     // create the discrete structure of the automaton and the automaton itself.
     HybridAutomaton<Number> bBallAutomaton = HybridAutomaton<Number>();
@@ -135,11 +135,11 @@ int main() {
     hypro::FixedAnalysisParameters fixedParameters;
     fixedParameters.jumpDepth = 1;
     fixedParameters.localTimeHorizon = 5;
-    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(100);
+    fixedParameters.fixedTimeStep = tNumber(1) / tNumber(10);
 
     hypro::AnalysisParameters analysisParameters;
-    analysisParameters.timeStep = tNumber(1) / tNumber(100);
-    analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+    analysisParameters.timeStep = tNumber(1) / tNumber(10);
+    // analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
     analysisParameters.representation_type = hypro::representation_name::polytope_h;
 
     hypro::Settings settings{{}, fixedParameters, {analysisParameters}};
