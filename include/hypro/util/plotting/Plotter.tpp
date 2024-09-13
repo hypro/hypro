@@ -298,10 +298,6 @@ namespace hypro {
                                     d);
                 }
             } else {
-                std::cout << "points plotted:" << std::endl;
-                for(auto item : points){
-                    std::cout << item << std::endl;
-                }
                 throw std::logic_error("Attempting to plot an object that is not 2-dimensional");
             }
         }

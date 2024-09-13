@@ -277,7 +277,6 @@ namespace hypro {
                         ch.convexHullVertices();
                         mHPlanes = ch.getHsv();
                         */
-                    //std::cout << "used points for convex hull: " << std::endl << pointsCopy << std::endl;
                     std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(pointsCopy).first;
                     for (auto &facet: facets) {
 #ifndef NDEBUG
@@ -290,14 +289,12 @@ namespace hypro {
 #endif
                         assert(facet->halfspace().contains(pointsCopy));
                         mHPlanes.push_back(facet->halfspace());
-                        // std::cout << "planes pushed_back" << facet->halfspace() << std::endl;
                     }
                     facets.clear();
 
                     if (Setting::OPTIMIZER_CACHING) {
                         setOptimizer(this->matrix(), this->vector());
                     }
-
                 }
             }
         }
@@ -702,8 +699,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     const HPolytopeT<Number, Converter, Setting> &HPolytopeT<Number, Converter, Setting>::removeRedundancy() {
-        // std::cout << __func__ << std::endl;
-
+        
         if (!mNonRedundant && mHPlanes.size() > 1) {
             std::vector<std::size_t> redundant;
             if (Setting::OPTIMIZER_CACHING) {
@@ -712,8 +708,6 @@ namespace hypro {
                 }
                 redundant = mOptimizer->redundantConstraints();
             } else {
-                // std::cout << " matrix: " << std::endl << this->matrix() << std::endl;
-                // std::cout << " vector: " << std::endl << this->vector() << std::endl;
                 redundant = Optimizer<Number>(this->matrix(), this->vector()).redundantConstraints();
             }
 
@@ -841,13 +835,6 @@ namespace hypro {
         assert(fromPoint.dimension() == toPoint.dimension());
         assert(fromPoint.dimension() == mHPlanes.at(0).dimension());
 
-        /*for (auto hyp : mHPlanes) {
-            std::cout << "Hyperplane: " << hyp << std::endl;
-            for (auto coef: hyp.normal()){
-                std::cout << " coef: " << coef; 
-            }
-            std::cout << std::endl;
-        }*/
         
         std::vector<Number> scalarB = {};
 
@@ -1564,20 +1551,15 @@ namespace hypro {
 
         clock::time_point time3 = clock::now();
 
-        // std::cout << "P_V:" << std::endl << P_V << std::endl;
-        // std::cout << "G" << std::endl << minus << std::endl;
-        // std::cout << "res_V:" << std::endl << polytope << std::endl;
         auto polytope_H = Converter::toHPolytope(polytope);
 
-        // std::cout << "res_H:" << std::endl << polytope_H << std::endl;
 
         clock::time_point time4 = clock::now();
 
         auto timeConvP = std::chrono::duration_cast<timeunit>(time2 - time1);
         auto timeSetMinus = std::chrono::duration_cast<timeunit>(time3 - time2);
         auto timeConvRes = std::chrono::duration_cast<timeunit>(time4 - time3);
-        //std::cout << "T-ConvP: " + std::to_string(timeConvP.count()) + " | T-SetMinus: " + std::to_string(timeSetMinus.count()) + " | T-ConvRes: " + std::to_string(timeConvRes.count()) << std::endl;
-        // std::cout << "polytope_H in setMinusCrossing:" << polytope_H << std::endl;
+        
         result.push_back(polytope_H);
         return result;
     }

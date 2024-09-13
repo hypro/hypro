@@ -157,8 +157,6 @@ namespace hypro {
          *      lambda <= 1            diagonal matrix                <=        1   
         */       
         
-        // std::cout << "From: " << fromPoint << std::endl;
-        // std::cout << "To: " << toPoint << std::endl;
 
         matrix_t<Number> A = matrix_t<Number>(this->dimension(), this->mVertices.size()+1);
 
@@ -197,22 +195,13 @@ namespace hypro {
         // set it to minimize
         opt.setMaximize(false);
 
-        // std::cout << "A = " << std::endl << opt.matrix() << std::endl;
-        // std::cout << "B = " << std::endl << opt.vector() << std::endl;
 
         EvaluationResult<Number> result = opt.evaluate(direction, true);
 
-        // std::cout << "Result: " << result << std::endl;
-        // std::cout << "From: " << fromPoint << std::endl;
-        // std::cout << "To: " << toPoint << std::endl; 
-
         Number resultValue = result.supportValue;
-
-        //std::cout << "Result: " << resultValue << std::endl;
 
         Point<Number> cp = fromPoint + resultValue * (toPoint - fromPoint);
 
-        // std::cout << "CP: " << cp << std::endl;
 
         // we catch the error, where the crossing point calculation 
         if (cp == fromPoint){
@@ -269,19 +258,6 @@ namespace hypro {
                 uniqueCurrentPoints.push_back(point);
             }
         }        
-
-        /**
-        int erased = 0;
-        for (int i = 0; i < this->mVertices.size(); ++i){
-            if (isExtremePoint(this->mVertices[i], currentPoints)){
-                result.push_back(this->mVertices[i]);
-            }else{
-                currentPoints.erase(currentPoints.begin() + (i - erased));
-                erased += 1;
-            }
-
-        }   
-         */
 
         for(auto point : uniqueCurrentPoints){
             if (isExtremePoint(point,uniqueCurrentPoints)){

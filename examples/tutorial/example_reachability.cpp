@@ -135,7 +135,6 @@ static void computeReachableStates(const std::string &filename,
                      1000.0
                   << " ms" << std::endl;
     }
-
 }
 
 int main(int argc, char **argv) {

@@ -97,7 +97,6 @@ namespace hypro {
             std::tie(containment, std::ignore) = ltiIntersectBadStates(segments[i], loc, mHybridAutomaton);
             if (containment != CONTAINMENT::NO) {
                 // Todo: memorize the intersecting state set and keep state.
-                //std::cout << "Number of Polytopes: " << numPolytopes << std::endl;
                 return REACHABILITY_RESULT::UNKNOWN;
             }
         }
@@ -115,7 +114,6 @@ namespace hypro {
                 // check invariant
                 std::tie(containment, segment) = intersect(segment, loc->getInvariant());
                 if (containment == CONTAINMENT::NO) {
-                    //std::cout << "Number of Polytopes: " << numPolytopes << std::endl;
                     return REACHABILITY_RESULT::SAFE;
                 }
                 tmpsegments.resize(0);
@@ -137,15 +135,6 @@ namespace hypro {
                                                  urgent_trans.at(i)->getGuard().getVector());
                             result = segment.setMinus(guard, setMinusAlgoUsed);
                             numPolytopes += result.size();
-
-                            /**if (result.size() > 0) {
-                                auto cur_vertices2 = result[0].vertices();
-                                for (auto &vertex : cur_vertices2) {
-                                    if(vertex.dimension() != 2) {
-                                        exit(1);
-                                    }
-                                }
-                            }*/
 
                             // insert segment
                             if (result.size() > 0) {
@@ -183,7 +172,6 @@ namespace hypro {
                         std::tie(containment, std::ignore) = ltiIntersectBadStates(seg, loc, mHybridAutomaton);
                         if (containment != CONTAINMENT::NO) {
                             // Todo: memorize the intersecting state set and keep state.
-                            //std::cout << "Number of Polytopes: " << numPolytopes << std::endl;
                             return REACHABILITY_RESULT::UNKNOWN;
                         }
                     }
@@ -192,7 +180,6 @@ namespace hypro {
             lower = tmplower;
             upper = tmpupper;
         }
-        //std::cout << "Number of Polytopes: " << numPolytopes << std::endl;
         return REACHABILITY_RESULT::SAFE;
     }
 
