@@ -41,7 +41,6 @@ RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<St
 
 	std::tie( containment, segment ) = rectangularIntersectBadStates( segment, task.getLocation(), mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
 		DEBUG( "hypro.reachability.rectangular", "Initial set intersects bad states, abort" );
 		// add state to flowpipe
 		mFlowpipe.addState( segment );
@@ -83,7 +82,6 @@ RectangularSyncWorker<State, Automaton>::computeTimeSuccessors( ReachTreeNode<St
 	std::tie( containment, segment ) = rectangularIntersectBadStates( constrainedTimeSuccessors, task.getLocation(),
 																	  mHybridAutomaton );
 	if ( containment != CONTAINMENT::NO ) {
-		// Todo: memorize the intersecting state set and keep state.
 		DEBUG( "hypro.reachability.rectangular", "Time successors intersect bad states, abort" );
 		return REACHABILITY_RESULT::UNKNOWN;
 	}
@@ -171,8 +169,7 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 			auto& childNode = task.addChild( transitionStatesPair.second.front(), carl::Interval<SegmentInd>( 0, 0 ), transitionStatesPair.first );
 			assert( childNode.getDepth() == task.getDepth() + 1 );
 			childNode.initializeSyncNodes( task.getSyncNodes().size() );
-			// TODO change name of mSyncChildrenToRemove to mSyncJumpSuccessorSets
-			mSyncChildrenToRemove.insert( &childNode );
+			mSyncJumpSuccNodes.insert( &childNode );
 			auto resultTime = transitionStatesPair.second.front().getTimeProjection();
 			syncNodeTimeMap.emplace( std::make_pair( &childNode, resultTime ) );
 		}
@@ -238,7 +235,7 @@ RectangularSyncWorker<State, Automaton>::findSyncSuccessors( ReachTreeNode<State
 						childNode.initializeSyncNodes( task.getSyncNodes().size() );
 						// set syncNodes pointer to node
 						childNode.setSyncNodeAtIndex( node, ptrToWorker->getVariablePoolIndex() );
-						mSyncChildrenToRemove.insert( &childNode );
+						mSyncJumpSuccNodes.insert( &childNode );
 						auto resultTime = transitionStatesPair.second.front().getTimeProjection();
 						syncNodeTimeMap.emplace( std::make_pair( &childNode, resultTime ) );
 					}
@@ -281,7 +278,7 @@ const std::set<ReachTreeNode<State, typename Automaton::LocationType>*>
 RectangularSyncWorker<State, Automaton>::getSyncJumpSuccessorTasks() {
 	// this function deletes nodes that have been created for synchronization, but cannot synchronize with the other automata
 	std::set<ReachTreeNode<State, LocationT>*> syncJumpSuccessorTasks{};
-	for ( auto node : mSyncChildrenToRemove ) {
+	for ( auto node : mSyncJumpSuccNodes ) {
 		bool isSyncNode = true;
 		for ( auto syncNode : node->getSyncNodes() ) {
 			if ( syncNode == nullptr ) {
@@ -294,7 +291,7 @@ RectangularSyncWorker<State, Automaton>::getSyncJumpSuccessorTasks() {
 		} else {
 			/* each node with a isSyncNode=false is a node created while looking for synchronization nodes, 
 				but it cannot synchronize with the other automata so it needs to be deleted from the tree.  */
-			mSyncChildrenToRemove.erase( node );
+			mSyncJumpSuccNodes.erase( node );
 			node->getParent()->eraseChild( node );
 		}
 	}
@@ -306,6 +303,6 @@ void RectangularSyncWorker<State, Automaton>::clear() {
 	mFlowpipe.clear();
 	mJumpSuccessorSets.clear();
 	mSyncJumpSuccessorSets.clear();
-	mSyncChildrenToRemove.clear();
+	mSyncJumpSuccNodes.clear();
 }
 }  // namespace hypro

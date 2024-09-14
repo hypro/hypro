@@ -101,15 +101,15 @@ class RectangularSyncWorker {
 	std::multimap<ReachTreeNode<State, LocationT>*, Transition<LocationT>> getCandidateNodes( ReachTreeNode<State, LocationT>& syncNode, const std::vector<Label>& label );
 
   protected:
-	const Automaton& mHybridAutomaton;						  ///< Reference to the rectangular automaton
-	const Settings& mSettings;								  ///< Reference to the used analysis settings
-	JumpSuccessors mJumpSuccessorSets;						  ///< Storage of computed jump successors
-	JumpSuccessors mSyncJumpSuccessorSets;					  ///< Storage of computed jump successors with synchronization
-	Flowpipe<State> mFlowpipe;								  ///< Storage of computed time successors
-	std::set<Label> mNonSyncLabels{};						  ///< set of labels that are not synchronized, local computation in the subspace
-	int mVariablePoolIndex{ 0 };								  ///< index of the variable pool to use in with this worker
-	std::map<Label, std::set<RectangularSyncWorker<State, Automaton>* >> mSyncDict{};  ///< map (label -> workers)
-	std::set<ReachTreeNode<State, LocationT>*> mSyncChildrenToRemove{}; ///< elements of this set need to be removed from the reach tree, after a synchronizing jump has been computed. 
+	const Automaton& mHybridAutomaton;						  						  	///< Reference to the rectangular automaton
+	const Settings& mSettings;								  						  	///< Reference to the used analysis settings
+	JumpSuccessors mJumpSuccessorSets;						  						  	///< Storage of computed jump successors
+	JumpSuccessors mSyncJumpSuccessorSets;					  						  	///< Storage of computed jump successors with synchronization
+	Flowpipe<State> mFlowpipe;								  						  	///< Storage of computed time successors
+	std::set<Label> mNonSyncLabels{};						  						  	///< set of labels that are not synchronized, local computation in the subspace
+	int mVariablePoolIndex{ 0 };													  	///< index of the variable pool to use in with this worker
+	std::map<Label, std::set<RectangularSyncWorker<State, Automaton>* >> mSyncDict{};  	///< map (label -> workers)
+	std::set<ReachTreeNode<State, LocationT>*> mSyncJumpSuccNodes{}; 				///< elements of this set need to be removed from the reach tree, after a synchronizing jump has been computed. 
 	std::vector<int> mSizeOfSyncSearchSpace{};
 };
 

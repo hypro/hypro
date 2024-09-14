@@ -224,8 +224,6 @@ namespace hypro {
     template<typename Number>
     Condition<Number> conditionFromIntervals(const std::vector<carl::Interval<Number>> &intervals);
 
-    // template<typename Number>
-
 }  // namespace hypro
 
 namespace std {

@@ -315,16 +315,16 @@ int main(int argc, char **argv) {
     
         PRINT_STATS()
 
-        // std::cout << "Write to file." << std::endl;
+        std::cout << "Write to file." << std::endl;
 
         plotter.plot2d(hypro::PLOTTYPE::pdf, false);
 
-        // std::cout << "Finished plotting: "
-        //         << std::chrono::duration_cast<timeunit>(clock::now() -
-        //                                                 startPlotting)
-        //                     .count() /
-        //             1000.0
-        //         << " ms" << std::endl;
+        std::cout << "Finished plotting: "
+                << std::chrono::duration_cast<timeunit>(clock::now() -
+                                                        startPlotting)
+                            .count() /
+                    1000.0
+                << " ms" << std::endl;
     }
 
     std::cout << "Number of Nodes in Search Forest is: " << searchForestSize << std::endl;

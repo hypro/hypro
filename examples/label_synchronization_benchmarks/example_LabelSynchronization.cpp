@@ -89,6 +89,7 @@ static void computeReachableStates(const std::vector<std::string> filename,
             }
             std::cout << "filename is " << extendedFilename << std::endl;
             plotter.setFilename(extendedFilename);
+            // uncomment the following to change the plotting dimensions from the default values (0,1)
             // std::vector<std::size_t> plottingDimensions =
             //         settings[i].plotting().plotDimensions.at(0);
             // plotter.rSettings().dimensions.push_back(plottingDimensions.front());
@@ -108,7 +109,6 @@ static void computeReachableStates(const std::vector<std::string> filename,
 
             unsigned cnt = 0;
             // segments plotting
-            // auto flowpipes = getFlowpipes(roots);
             auto flowpipes = getFlowpipes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
             for (const auto &flowpipe: flowpipes) {
                 std::cout << "Flowpipe size " << flowpipe.size() << std::endl;

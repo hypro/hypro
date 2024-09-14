@@ -374,8 +374,6 @@ namespace hypro {
         for ( auto &badState : mLocalBadStates) {
             badState.second.extendDimension();
         }
-        // TODO check if anything needs to be done with global bad states
-        // TODO check if all constraints in conditions need to be changed
     }
 
     template<typename Number>

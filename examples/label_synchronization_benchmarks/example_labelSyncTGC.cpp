@@ -441,12 +441,10 @@ int main(int argc, char **argv) {
 
         unsigned cnt = 0;
         // segments plotting
-        // auto flowpipes = getFlowpipes(roots);
         auto flowpipes = getFlowpipes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
         for (const auto &flowpipe: flowpipes) {
             std::cout << "Flowpipe size " << flowpipe.size() << std::endl;
             for (const auto &segment: flowpipe) {
-                // std::cout << "projected Segment: " << segment.projectOn(plottingDimensions) << std::endl;
                 plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
             }
             ++cnt;
@@ -456,8 +454,7 @@ int main(int argc, char **argv) {
 
         std::cout << "Write to file." << std::endl;
 
-        // plotter.plot2d(hypro::PLOTTYPE::pdf, true);
-        plotter.plot2d(hypro::PLOTTYPE::tex, true);
+        plotter.plot2d(hypro::PLOTTYPE::pdf, true);
 
         std::cout << "Finished plotting: "
                 << std::chrono::duration_cast<timeunit>(clock::now() -

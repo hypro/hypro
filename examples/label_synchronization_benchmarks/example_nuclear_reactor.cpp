@@ -209,21 +209,6 @@ int main(int argc, char **argv) {
 
     int numberOfRods = 40;
 
-    // // create controller automaton
-    // hypro::VariablePool::getInstance().changeToPool(0);
-    // auto controllerAutomaton = createControllerAutomaton<Number>(numberOfRods);
-    // controllerAutomaton.addTimeVariable();
-    // automata.push_back(controllerAutomaton);
-
-    // // create rod automata
-    // for (int i = 1; i <= numberOfRods; ++i)
-    // {
-    //     hypro::VariablePool::getInstance().changeToPool(i);
-    //     auto rodAutomaton = createRodAutomaton<Number>(i);
-    //     rodAutomaton.addTimeVariable();
-    //     automata.push_back( rodAutomaton );
-    // }
-
     std::vector<hypro::HybridAutomaton<Number>> rods{};
     for (int i = 0; i < numberOfRods; ++i)
     {
@@ -316,13 +301,10 @@ int main(int argc, char **argv) {
 
         unsigned cnt = 0;
         // segments plotting
-        // auto flowpipes = getFlowpipes(roots);
         searchForestSize += hypro::getNumberNodes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
         auto flowpipes = getFlowpipes( analyzer.getReachTreeForAutomaton(automata[i]).front() );
         for (const auto &flowpipe: flowpipes) {
-            // std::cout << "Flowpipe size " << flowpipe.size() << std::endl;
             for (const auto &segment: flowpipe) {
-                // std::cout << "projected Segment: " << segment.projectOn(plottingDimensions) << std::endl;
                 plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
             }
             ++cnt;
@@ -330,16 +312,16 @@ int main(int argc, char **argv) {
     
         PRINT_STATS()
 
-        // std::cout << "Write to file." << std::endl;
+        std::cout << "Write to file." << std::endl;
 
         plotter.plot2d(hypro::PLOTTYPE::pdf, false);
 
-        // std::cout << "Finished plotting: "
-        //         << std::chrono::duration_cast<timeunit>(clock::now() -
-        //                                                 startPlotting)
-        //                     .count() /
-        //             1000.0
-        //         << " ms" << std::endl;
+        std::cout << "Finished plotting: "
+                << std::chrono::duration_cast<timeunit>(clock::now() -
+                                                        startPlotting)
+                            .count() /
+                    1000.0
+                << " ms" << std::endl;
     }
 
     std::cout << "Number of Nodes in Search Forest is: " << searchForestSize << std::endl;
