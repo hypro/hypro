@@ -52,7 +52,7 @@ bool is_reachable_in( const hypro::Point<typename Representation::NumberType>& s
 
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA1() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync1() {
 	// One-dimensional reactangular automaton with one location and a loop
 	hypro::HybridAutomaton<Number> res;
 
@@ -89,7 +89,7 @@ hypro::HybridAutomaton<Number> createRectangularHA1() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA2() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync2() {
 	// One-dimensional reactangular automaton with one location and a loop
 	hypro::HybridAutomaton<Number> res;
 
@@ -142,7 +142,7 @@ hypro::HybridAutomaton<Number> createRectangularHA2() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA3() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync3() {
 	// One-dimensional reactangular automaton with one location and a loop
 	hypro::HybridAutomaton<Number> res;
 
@@ -196,7 +196,7 @@ hypro::HybridAutomaton<Number> createRectangularHA3() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA4() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync4() {
 	// One-dimensional reactangular automaton with one location and a loop
 	hypro::HybridAutomaton<Number> res;
 
@@ -250,7 +250,7 @@ hypro::HybridAutomaton<Number> createRectangularHA4() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA5() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync5() {
 	// One-dimensional reactangular automaton with one location and a loop
 	hypro::HybridAutomaton<Number> res;
 
@@ -304,7 +304,7 @@ hypro::HybridAutomaton<Number> createRectangularHA5() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA6() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync6() {
 	// One-dimensional reactangular automaton
 	hypro::HybridAutomaton<Number> res;
 
@@ -416,7 +416,7 @@ hypro::HybridAutomaton<Number> createRectangularHA6() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA7() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync7() {
 	// One-dimensional reactangular automaton
 	hypro::HybridAutomaton<Number> res;
 
@@ -490,7 +490,7 @@ hypro::HybridAutomaton<Number> createRectangularHA7() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA8() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync8() {
 	// One-dimensional reactangular automaton
 	hypro::HybridAutomaton<Number> res;
 
@@ -564,7 +564,7 @@ hypro::HybridAutomaton<Number> createRectangularHA8() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA9() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync9() {
 	// One-dimensional reactangular automaton
 	hypro::HybridAutomaton<Number> res;
 
@@ -615,7 +615,7 @@ hypro::HybridAutomaton<Number> createRectangularHA9() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA10() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync10() {
 	// One-dimensional reactangular automaton
 	hypro::HybridAutomaton<Number> res;
 
@@ -666,7 +666,7 @@ hypro::HybridAutomaton<Number> createRectangularHA10() {
 }
 
 template <typename Number>
-hypro::HybridAutomaton<Number> createRectangularHA11() {
+hypro::HybridAutomaton<Number> createRectangularHAForLabelSync11() {
 	// One-dimensional reactangular automaton
 	hypro::HybridAutomaton<Number> res;
 
@@ -739,11 +739,11 @@ hypro::HybridAutomaton<Number> createRectangularHA11() {
 TYPED_TEST( RectangularLabelSynchronizationTest, AnalyzerConstruction ) {
 	
 	// create first automaton with variable pool 0
-    auto automaton1 = createRectangularHA1<typename TypeParam::NumberType>();
+    auto automaton1 = createRectangularHAForLabelSync1<typename TypeParam::NumberType>();
 	automaton1.addTimeVariable();
 	// create second automaton with variable pool 1
 	hypro::VariablePool::getInstance().changeToPool(1);
-    auto automaton2 = createRectangularHA1<typename TypeParam::NumberType>();
+    auto automaton2 = createRectangularHAForLabelSync1<typename TypeParam::NumberType>();
 	automaton2.addTimeVariable();
 	// change back to pool 0
 	hypro::VariablePool::getInstance().changeToPool(0);
@@ -774,11 +774,11 @@ TYPED_TEST( RectangularLabelSynchronizationTest, AnalyzerConstruction ) {
 TYPED_TEST ( RectangularLabelSynchronizationTest, AnalyzerRun ) {
     
 	// create first automaton with variable pool 0
-    auto automaton1 = createRectangularHA1<typename TypeParam::NumberType>();
+    auto automaton1 = createRectangularHAForLabelSync1<typename TypeParam::NumberType>();
 	automaton1.addTimeVariable();
 	// create second automaton with variable pool 1
 	hypro::VariablePool::getInstance().changeToPool(1);
-    auto automaton2 = createRectangularHA1<typename TypeParam::NumberType>();
+    auto automaton2 = createRectangularHAForLabelSync1<typename TypeParam::NumberType>();
 	automaton2.addTimeVariable();
 	// change back to pool 0
 	hypro::VariablePool::getInstance().changeToPool(0);
@@ -811,11 +811,11 @@ TYPED_TEST ( RectangularLabelSynchronizationTest, AnalyzerRun ) {
 TYPED_TEST (RectangularLabelSynchronizationTest, TwoAutomataNoSync ) {
 	
 	// create first automaton with variable pool 0
-    auto automaton1 = createRectangularHA2<typename TypeParam::NumberType>();
+    auto automaton1 = createRectangularHAForLabelSync2<typename TypeParam::NumberType>();
 	automaton1.addTimeVariable();
 	// create second automaton with variable pool 1
 	hypro::VariablePool::getInstance().changeToPool(1);
-    auto automaton2 = createRectangularHA3<typename TypeParam::NumberType>();
+    auto automaton2 = createRectangularHAForLabelSync3<typename TypeParam::NumberType>();
 	automaton2.addTimeVariable();
 	// change back to pool 0
 	hypro::VariablePool::getInstance().changeToPool(0);
@@ -903,11 +903,11 @@ TYPED_TEST (RectangularLabelSynchronizationTest, TwoAutomataNoSync ) {
 TYPED_TEST( RectangularLabelSynchronizationTest, TwoAutomataWithSync ) {
 	
 	// create first automaton with variable pool 0
-    auto automaton1 = createRectangularHA2<typename TypeParam::NumberType>();
+    auto automaton1 = createRectangularHAForLabelSync2<typename TypeParam::NumberType>();
 	automaton1.addTimeVariable();
 	// create second automaton with variable pool 1
 	hypro::VariablePool::getInstance().changeToPool(1);
-    auto automaton2 = createRectangularHA3<typename TypeParam::NumberType>();
+    auto automaton2 = createRectangularHAForLabelSync3<typename TypeParam::NumberType>();
 	for ( auto& trs : automaton2.getTransitions() ) {
 		trs->setLabels( std::vector<hypro::Label>{hypro::Label{"a"}} );
 	}
@@ -1001,11 +1001,11 @@ TYPED_TEST( RectangularLabelSynchronizationTest, TwoAutomataWithSync ) {
 
 TYPED_TEST ( RectangularLabelSynchronizationTest, TwoAutomataTimeGuardIntersectionEmpty ) {
 	// create first automaton with variable pool 0
-    auto automaton1 = createRectangularHA2<typename TypeParam::NumberType>();
+    auto automaton1 = createRectangularHAForLabelSync2<typename TypeParam::NumberType>();
 	automaton1.addTimeVariable();
 	// create second automaton with variable pool 1
 	hypro::VariablePool::getInstance().changeToPool(1);
-    auto automaton2 = createRectangularHA4<typename TypeParam::NumberType>();
+    auto automaton2 = createRectangularHAForLabelSync4<typename TypeParam::NumberType>();
 	automaton2.addTimeVariable();
 	// change back to pool 0
 	hypro::VariablePool::getInstance().changeToPool(0);
@@ -1057,11 +1057,11 @@ TYPED_TEST ( RectangularLabelSynchronizationTest, TwoAutomataTimeGuardIntersecti
 
 TYPED_TEST ( RectangularLabelSynchronizationTest, TwoAutomataNoCommonTime ) {
 	// create first automaton with variable pool 0
-    auto automaton1 = createRectangularHA2<typename TypeParam::NumberType>();
+    auto automaton1 = createRectangularHAForLabelSync2<typename TypeParam::NumberType>();
 	automaton1.addTimeVariable();
 	// create second automaton with variable pool 1
 	hypro::VariablePool::getInstance().changeToPool(1);
-    auto automaton2 = createRectangularHA5<typename TypeParam::NumberType>();
+    auto automaton2 = createRectangularHAForLabelSync5<typename TypeParam::NumberType>();
 	automaton2.addTimeVariable();
 	// change back to pool 0
 	hypro::VariablePool::getInstance().changeToPool(0);
@@ -1113,15 +1113,15 @@ TYPED_TEST ( RectangularLabelSynchronizationTest, TwoAutomataNoCommonTime ) {
 
 TYPED_TEST ( RectangularLabelSynchronizationTest, ThreeAutomataTransitiveSync ) {
 	// create first automaton with variable pool 0
-    auto automaton1 = createRectangularHA6<typename TypeParam::NumberType>();
+    auto automaton1 = createRectangularHAForLabelSync6<typename TypeParam::NumberType>();
 	automaton1.addTimeVariable();
 	// create second automaton with variable pool 1
 	hypro::VariablePool::getInstance().changeToPool(1);
-    auto automaton2 = createRectangularHA7<typename TypeParam::NumberType>();
+    auto automaton2 = createRectangularHAForLabelSync7<typename TypeParam::NumberType>();
 	automaton2.addTimeVariable();
     // create third automaton with variable pool 2
     hypro::VariablePool::getInstance().changeToPool(2);
-    auto automaton3 = createRectangularHA8<typename TypeParam::NumberType>();
+    auto automaton3 = createRectangularHAForLabelSync8<typename TypeParam::NumberType>();
     automaton3.addTimeVariable();
 	// change back to pool 0
 	hypro::VariablePool::getInstance().changeToPool(0);
@@ -1171,15 +1171,15 @@ TYPED_TEST ( RectangularLabelSynchronizationTest, ThreeAutomataTransitiveSync ) 
 
 TYPED_TEST ( RectangularLabelSynchronizationTest, ThreeAutomataMultiSync ) {
 	// create first automaton with variable pool 0
-    auto automaton1 = createRectangularHA9<typename TypeParam::NumberType>();
+    auto automaton1 = createRectangularHAForLabelSync9<typename TypeParam::NumberType>();
 	automaton1.addTimeVariable();
 	// create second automaton with variable pool 1
 	hypro::VariablePool::getInstance().changeToPool(1);
-    auto automaton2 = createRectangularHA10<typename TypeParam::NumberType>();
+    auto automaton2 = createRectangularHAForLabelSync10<typename TypeParam::NumberType>();
 	automaton2.addTimeVariable();
     // create third automaton with variable pool 2
     hypro::VariablePool::getInstance().changeToPool(2);
-    auto automaton3 = createRectangularHA11<typename TypeParam::NumberType>();
+    auto automaton3 = createRectangularHAForLabelSync11<typename TypeParam::NumberType>();
     automaton3.addTimeVariable();
 	// change back to pool 0
 	hypro::VariablePool::getInstance().changeToPool(0);
