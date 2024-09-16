@@ -357,6 +357,26 @@ namespace hypro {
     }
 
     template<typename Number>
+    void HybridAutomaton<Number>::addTimeVariable() {
+        const std::vector<std::string> lhsVariables = getVariables();
+        assert(std::find(lhsVariables.begin(), lhsVariables.end(), "t") == lhsVariables.end() && "cannot add a time variable to an Automaton that has a variable t");
+        const std::vector<std::string> rhsVariables = {"t"};
+        hypro::VariablePool::getInstance().newCarlVariable("t");
+        mVariables.push_back("t");
+        for ( auto &loc : mLocations) {
+            // update all conditions in the HA to include time
+            loc->addTimeToLocation();
+        }
+        // add time dimension to initial states
+        for ( auto &init : mInitialStates) {
+            init.second.addTimeToCondition(mVariables, lhsVariables, rhsVariables);
+        }
+        for ( auto &badState : mLocalBadStates) {
+            badState.second.extendDimension();
+        }
+    }
+
+    template<typename Number>
     HybridAutomaton<Number> operator||(const HybridAutomaton<Number> &lhs, const HybridAutomaton<Number> &rhs) {
         TRACE("hypro.datastructures.hybridAutomaton", "Parallel composition of " << lhs << "\n\n and \n\n"
                                                                                  << rhs);

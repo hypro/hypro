@@ -13,7 +13,7 @@ namespace hypro {
 
     template<typename Number>
     Reset<Number>::Reset(const matrix_t<Number> &mat, const vector_t<Number> &vec) {
-        assert(mat.rows() == mat.cols());
+        assert(mat.rows() == vec.rows());
         mAffineResets.emplace_back(mat, vec);
         mIntervalResets.emplace_back(std::vector<carl::Interval<Number>>(mat.rows(), createEmptyInterval<Number>()));
     }
@@ -286,6 +286,13 @@ namespace hypro {
         mHash = 0;
     }
 
+    template<typename Number>
+    void Reset<Number>::extendDimension() {
+        for (auto &IntervalReset : mIntervalResets) {
+            IntervalReset.mIntervals.emplace_back(createEmptyInterval<Number>());
+        }
+    }
+    
     template<typename Number>
     Reset<Number> operator+(const Reset<Number> &lhs, const Reset<Number> &rhs) {
         if (!lhs.isIntervalIdentity() || !rhs.isIntervalIdentity()) {

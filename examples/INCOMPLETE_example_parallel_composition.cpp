@@ -7,7 +7,9 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "../src/tool/reachability/analysis.cpp"
+//TODO: mark it as incomplete because it gets killed when the reachability terminates
+
+#include <tool/reachability/analysis.h>
 
 #include <algorithm>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
@@ -17,6 +19,8 @@
 #include <hypro/util/logging/Filewriter.h>
 #include <iostream>
 #include <string>
+
+#include <hypro/representations/GeometricObjectBase.h>
 
 using namespace hypro;
 using namespace std::literals;
@@ -37,8 +41,8 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	using HA = HybridAutomaton<Number>;
 	using M = matrix_t<Number>;
 	using V = vector_t<Number>;
-	using Lpt = Location<Number>*;
-	using Tpt = Transition<Number>*;
+	using Lpt = hypro::Location<Number>*;
+	using Tpt = hypro::Transition<hypro::Location<Number>>*;
 
 	// result automaton
 	HA res;
@@ -114,7 +118,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	resetMat( 2, 2 ) = 0;
 	resetVec( 2 ) = 1;
 	toFlash->setReset( Reset<Number>( resetMat, resetVec ) );
-	toFlash->setAggregation( Aggregation::aggregation );
+	toFlash->setAggregation( AGG_SETTING::AGG );
 	// toFlash->setUrgent();
 
 	// to execFlash
@@ -132,7 +136,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	flashLoop->setReset( Reset<Number>( resetMat, resetVec ) );
 	flashLoop->setUrgent();
 	flashLoop->addLabel( Label{ "sync_1" } );
-	flashLoop->setAggregation( Aggregation::aggregation );
+	flashLoop->setAggregation( AGG_SETTING::AGG );
 
 	// back to wait
 	Tpt reWait = flash->createTransition( wait );
@@ -146,7 +150,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	reWait->setReset( Reset<Number>( resetMat, resetVec ) );
 	reWait->addLabel( Label{ "sync_2" } );
 	reWait->setUrgent();
-	reWait->setAggregation( Aggregation::aggregation );
+	reWait->setAggregation( AGG_SETTING::AGG );
 
 	// to adapt
 	Tpt toAdapt = wait->createTransition( adapt );
@@ -163,7 +167,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	resetVec = V::Zero( dim );
 	toAdapt->setReset( Reset<Number>( resetMat, resetVec ) );
 	toAdapt->addLabel( Label{ "sync_1" } );
-	toAdapt->setAggregation( Aggregation::aggregation );
+	toAdapt->setAggregation( AGG_SETTING::AGG );
 	// toAdapt->setUrgent();
 
 	// from adapt, regular
@@ -178,7 +182,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	resetVec = V::Zero( dim );
 	fromAdaptRegular->setReset( Reset<Number>( resetMat, resetVec ) );
 	fromAdaptRegular->addLabel( Label{ "sync_2" } );
-	fromAdaptRegular->setAggregation( Aggregation::aggregation );
+	fromAdaptRegular->setAggregation( AGG_SETTING::AGG );
 	fromAdaptRegular->setUrgent();
 
 	// from adapt, scale
@@ -193,7 +197,7 @@ HybridAutomaton<Number> createComponent1( size_t i, size_t n ) {
 	resetMat( xi, xi ) = 0;
 	fromAdaptScale->setReset( Reset<Number>( resetMat, resetVec ) );
 	fromAdaptScale->addLabel( Label{ "sync_2" } );
-	fromAdaptScale->setAggregation( Aggregation::aggregation );
+	fromAdaptScale->setAggregation( AGG_SETTING::AGG );
 	fromAdaptScale->setUrgent();
 
 	return res;
@@ -213,7 +217,7 @@ HybridAutomaton<Number> createComponent2( unsigned i, size_t n,
 	using M = matrix_t<Number>;
 	using V = vector_t<Number>;
 	using Lpt = Location<Number>*;
-	using Tpt = Transition<Number>*;
+	using Tpt = Transition<Location<Number>>*;
 
 	// result automaton
 	HA res;
@@ -265,7 +269,7 @@ HybridAutomaton<Number> createComponent2( unsigned i, size_t n,
 	resetMat( 0, 0 ) = 0;
 	flash->addLabel( labels.at( i ) );
 	flash->setReset( Reset<Number>( resetMat, resetVec ) );
-	flash->setAggregation( Aggregation::aggregation );
+	flash->setAggregation( AGG_SETTING::AGG );
 
 	// to adapt
 	for ( unsigned j = 0; j < labels.size(); ++j ) {
@@ -278,7 +282,7 @@ HybridAutomaton<Number> createComponent2( unsigned i, size_t n,
 
 			toAdapt->addLabel( labels.at( j ) );
 
-			toAdapt->setAggregation( Aggregation::aggregation );
+			toAdapt->setAggregation( AGG_SETTING::AGG );
 		}
 	}
 
@@ -293,7 +297,7 @@ HybridAutomaton<Number> createComponent2( unsigned i, size_t n,
 	resetMat = M::Identity( dimension, dimension );
 	resetVec = V::Zero( dimension );
 	fromAdaptRegular->setReset( Reset<Number>( resetMat, resetVec ) );
-	fromAdaptRegular->setAggregation( Aggregation::aggregation );
+	fromAdaptRegular->setAggregation( AGG_SETTING::AGG );
 	fromAdaptRegular->setUrgent();
 
 	// from adapt, scale
@@ -303,7 +307,7 @@ HybridAutomaton<Number> createComponent2( unsigned i, size_t n,
 	guardConstants = V::Zero( 1 );
 	guardConstants << Number( -firingThreshold );
 	fromAdaptScale->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
-	fromAdaptScale->setAggregation( Aggregation::aggregation );
+	fromAdaptScale->setAggregation( AGG_SETTING::AGG );
 	fromAdaptScale->setUrgent();
 
 	resetMat = M::Identity( dimension, dimension );
@@ -326,7 +330,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	using M = matrix_t<Number>;
 	using V = vector_t<Number>;
 	using Lpt = Location<Number>*;
-	using Tpt = Transition<Number>*;
+	using Tpt = Transition<Location<Number>>*;
 
 	// result automaton
 	HA res;
@@ -400,7 +404,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	resetMat( 2, 2 ) = 0;
 	resetVec( 2 ) = 1;
 	toFlash->setReset( Reset<Number>( resetMat, resetVec ) );
-	toFlash->setAggregation( Aggregation::aggregation );
+	toFlash->setAggregation( AGG_SETTING::AGG );
 	// toFlash->setUrgent();
 
 	// to execFlash, z = 1
@@ -418,7 +422,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	flashLoop->setReset( Reset<Number>( resetMat, resetVec ) );
 	flashLoop->setUrgent();
 	flashLoop->addLabel( Label{ "sync_1" } );
-	flashLoop->setAggregation( Aggregation::aggregation );
+	flashLoop->setAggregation( AGG_SETTING::AGG );
 
 	// back to wait
 	/*
@@ -433,7 +437,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
   reWait->addLabel({"return"});
   reWait->setReset(Reset<Number>(resetMat,resetVec));
   reWait->setUrgent();
-  reWait->setAggregation(Aggregation::aggregation);
+  reWait->setAggregation(AGG_SETTING::AGG);
 
   flash->addTransition(reWait);
   res.addTransition(reWait);
@@ -454,7 +458,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	resetVec = V::Zero( dim );
 	toAdapt->setReset( Reset<Number>( resetMat, resetVec ) );
 	toAdapt->addLabel( { Label( "sync_1" ) } );
-	toAdapt->setAggregation( Aggregation::aggregation );
+	toAdapt->setAggregation( AGG_SETTING::AGG );
 
 	// from adapt, regular, x < f, z = 0
 	Tpt fromAdaptRegular = flash->createTransition( wait );
@@ -470,7 +474,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	resetVec = V::Zero( dim );
 	fromAdaptRegular->setReset( Reset<Number>( resetMat, resetVec ) );
 	fromAdaptRegular->addLabel( Label{ "sync_2" } );
-	fromAdaptRegular->setAggregation( Aggregation::aggregation );
+	fromAdaptRegular->setAggregation( AGG_SETTING::AGG );
 	fromAdaptRegular->setUrgent();
 
 	// from adapt, scale, x > f, z = 0
@@ -483,7 +487,7 @@ HybridAutomaton<Number> createComponent3( size_t i, size_t n ) {
 	guardConstants << Number( -firingThreshold ), 0, 0;
 	fromAdaptScale->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
 	fromAdaptScale->addLabel( Label{ "sync_2" } );
-	fromAdaptScale->setAggregation( Aggregation::aggregation );
+	fromAdaptScale->setAggregation( AGG_SETTING::AGG );
 	fromAdaptScale->setUrgent();
 
 	resetMat = M::Identity( dim, dim );
@@ -501,7 +505,7 @@ HybridAutomaton<Number> createComponent4( unsigned i,
 	using M = matrix_t<Number>;
 	using V = vector_t<Number>;
 	using Lpt = Location<Number>*;
-	using Tpt = Transition<Number>*;
+	using Tpt = Transition<Location<Number>>*;
 	std::stringstream st;
 
 	// result automaton
@@ -566,7 +570,7 @@ HybridAutomaton<Number> createComponent4( unsigned i,
 	resetMat( 0, 0 ) = 0;
 	flash->addLabel( labels.at( i ) );
 	flash->setReset( Reset<Number>( resetMat, resetVec ) );
-	flash->setAggregation( Aggregation::aggregation );
+	flash->setAggregation( AGG_SETTING::AGG );
 	// flash->setUrgent();
 
 	// to adapt
@@ -580,7 +584,7 @@ HybridAutomaton<Number> createComponent4( unsigned i,
 
 			toAdapt->addLabel( labels.at( j ) );
 
-			toAdapt->setAggregation( Aggregation::aggregation );
+			toAdapt->setAggregation( AGG_SETTING::AGG );
 			// toAdapt->setUrgent();
 		}
 	}
@@ -596,7 +600,7 @@ HybridAutomaton<Number> createComponent4( unsigned i,
 	resetMat = M::Identity( dim, dim );
 	resetVec = V::Zero( dim );
 	fromAdaptRegular->setReset( Reset<Number>( resetMat, resetVec ) );
-	fromAdaptRegular->setAggregation( Aggregation::aggregation );
+	fromAdaptRegular->setAggregation( AGG_SETTING::AGG );
 	fromAdaptRegular->setUrgent();
 	fromAdaptRegular->addLabel( Label( "return" ) );
 
@@ -607,7 +611,7 @@ HybridAutomaton<Number> createComponent4( unsigned i,
 	guardConstants = V::Zero( 1 );
 	guardConstants << Number( -firingThreshold );
 	fromAdaptScale->setGuard( Condition<Number>{ guardConstraints, guardConstants } );
-	fromAdaptScale->setAggregation( Aggregation::aggregation );
+	fromAdaptScale->setAggregation( AGG_SETTING::AGG );
 	fromAdaptScale->setUrgent();
 	fromAdaptScale->addLabel( Label( "return" ) );
 
@@ -619,11 +623,11 @@ HybridAutomaton<Number> createComponent4( unsigned i,
 	return res;
 }
 
-template <class Number>
+template <typename Number>
 HybridAutomaton<Number> generateShd2( long componentCount ) {
-	cout << "Create parallel composition for synchronization benchmark with "
+	std::cout << "Create parallel composition for synchronization benchmark with "
 		 << componentCount << " components using a reduced version with a shared variable."
-		 << endl;
+		 << std::endl;
 
 	HybridAutomaton<Number> composed_sync_sharedVar_2states = createComponent3<Number>( 1, componentCount );
 	for ( int i = 2; i <= componentCount; ++i ) {
@@ -637,10 +641,10 @@ HybridAutomaton<Number> generateShd2( long componentCount ) {
 	return composed_sync_sharedVar_2states;
 }
 
-template <class Number>
+template <typename Number>
 HybridAutomaton<Number> generateShd1( long componentCount ) {
-	cout << "Create parallel composition for synchronization benchmark with "
-		 << componentCount << " components using a shared variable." << endl;
+	std::cout << "Create parallel composition for synchronization benchmark with "
+		 << componentCount << " components using a shared variable." << std::endl;
 
 	HybridAutomaton<Number> composed_sync_sharedVar = createComponent1<Number>( 1, componentCount );
 	for ( int i = 2; i <= componentCount; ++i ) {
@@ -653,15 +657,15 @@ HybridAutomaton<Number> generateShd1( long componentCount ) {
 	return composed_sync_sharedVar;
 }
 
-template <class Number>
+template <typename Number>
 HybridAutomaton<Number> generateLsync1( long componentCount ) {
-	cout << "Create parallel composition for synchronization benchmark with "
+	std::cout << "Create parallel composition for synchronization benchmark with "
 		 << componentCount << " components using label synchronization."
-		 << endl;
+		 << std::endl;
 
-	vector<Label> labels;
+	std::vector<Label> labels;
 	for ( int i = 0; i < componentCount; ++i ) {
-		labels.emplace_back( "flash"s + to_string( i ) );
+		labels.emplace_back( "flash" + std::to_string( i ) );
 	}
 
 	HybridAutomaton<Number> composed_sync_label =
@@ -675,7 +679,7 @@ HybridAutomaton<Number> generateLsync1( long componentCount ) {
 	return composed_sync_label;
 }
 
-template <class Number>
+template <typename Number>
 void lsync1_to_lsync2( long componentCount, HybridAutomaton<Number>& composed_sync_label ) {
 	std::string stats = composed_sync_label.getStatistics();
 	std::cout << "Automaton stats:\n" << stats << "\n";
@@ -685,12 +689,12 @@ void lsync1_to_lsync2( long componentCount, HybridAutomaton<Number>& composed_sy
 		 << " components using  optimized label synchronization.\n";
 
 	auto transitions = composed_sync_label.getTransitions();
-	vector<Transition<Number>*> toDelete;
+	std::vector<Transition<Location<Number>>*> toDelete;
 	for ( auto transition : transitions ) {
 		if ( transition->getSource()->getName().find( "adapt" ) != std::string::npos &&
 			 transition->getTarget()->getName().find( "adapt" ) != std::string::npos ) {
-			cout << "Remove edge " << transition->getSource()->getName() << " -> "
-				 << transition->getTarget()->getName() << endl;
+			std::cout << "Remove edge " << transition->getSource()->getName() << " -> "
+				 << transition->getTarget()->getName() << std::endl;
 			toDelete.emplace_back( transition );
 		}
 	}
@@ -708,7 +712,7 @@ int main( int argc, char** argv ) {
 	long int componentCount = std::strtol( argv[1], nullptr, 10 );
 
 	std::string file_name{};
-	HybridAutomaton<Number> const composition = [&] {
+	HybridAutomaton<Number> composition = [&] {
 		if ( std::strcmp( argv[2], "lsync1" ) == 0 ) {
 			file_name = "lsync1";
 			return generateLsync1<Number>( componentCount );
@@ -743,9 +747,11 @@ int main( int argc, char** argv ) {
 		  boxSetting_name::BoxAllOff,
 	};
 
+	Settings settings {plottingSettings, fixedParameters, { analysisParameters } };
+
 	START_BENCHMARK_OPERATION( "Verification" );
 	auto result = hydra::reachability::analyze( composition,
-												Settings( plottingSettings, fixedParameters, { analysisParameters } ),
+												settings,
 												preprocessingInformation );
 	EVALUATE_BENCHMARK_RESULT( "Verification" );
 

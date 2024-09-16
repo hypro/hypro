@@ -225,6 +225,11 @@ namespace hypro {
         /// decomposes location into subspaces defined in the passed decomposition
         void decompose(const std::vector<std::vector<std::size_t>> &partition);
 
+        /**
+         * @brief add a rectangular flow in the location for a time variable "t" and update the dimensions of the Invariant and transition guards
+         */
+        void addTimeToLocation();
+
         /// hash-based less operator
         inline bool operator<(const Location<Number> &rhs) const {
             if (this->hash() != rhs.hash()) {

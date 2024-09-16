@@ -1182,6 +1182,22 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, class Setting>
+    HPolytopeT<Number, Converter, Setting>
+    HPolytopeT<Number, Converter, Setting>::getTimeProjection() const {
+        // h.s. TODO add assertion dimension greater equal 2
+        if (this->empty()) {
+            return *this;
+        }
+        //create a vector with all but the last column index
+        std::vector<std::size_t> cols(this->dimension() - 1);
+        for (std::size_t i = 0; i < cols.size(); i++) {
+            cols[i] = i;
+        }
+        std::pair<smtrat::fmplex::EigenMat<Number>, smtrat::fmplex::EigenVec<Number>> result = smtrat::fmplex::eliminate_cols(this->matrix(), this->vector(), cols);
+        return HPolytopeT<Number, Converter, Setting>(result.first, result.second);
+    }
+
+    template<typename Number, typename Converter, class Setting>
     bool HPolytopeT<Number, Converter, Setting>::contains(const Point<Number> &point) const {
         return this->contains(point.rawCoordinates());
     }

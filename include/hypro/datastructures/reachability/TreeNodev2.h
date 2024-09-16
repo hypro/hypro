@@ -99,6 +99,16 @@ namespace hypro {
         }
 
         bool isLeaf() const { return mChildren.empty(); }
+
+        bool isAncestorOf(const DerivedNode *node) const {
+            if (node == nullptr) {
+                return false;
+            }
+            if (node == this) {
+                return true;
+            }
+            return isAncestorOf(node->getParent());
+        }
     };
 
 }  // namespace hypro

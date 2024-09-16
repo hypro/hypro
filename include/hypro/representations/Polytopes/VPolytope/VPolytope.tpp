@@ -1240,6 +1240,18 @@ namespace hypro {
         mReduced = true;
     }
 
+    template<typename Number, typename Converter, typename S>
+    VPolytopeT<Number, Converter, S>
+    VPolytopeT<Number, Converter, S>::getTimeProjection() const {
+        // we assume the last dimension is the time, because the time variable is added automatically at the begining of the analysis and not in the model file.
+        std::vector<std::size_t> dimensions;
+        dimensions.emplace_back(this->dimension()-1);
+        assert(dimensions.size() == 1);
+        auto result = projectOn(dimensions);
+        result.removeRedundancy();
+        return result;
+    }
+
 /***************************************************************************
  * Auxiliary functions
  **************************************************************************/

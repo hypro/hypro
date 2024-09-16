@@ -616,4 +616,24 @@ bool Location<Number>::isComposedOf( const Location<Number>& rhs, const std::vec
         mHash = 0;
     }
 
+    template<typename Number>
+    void Location<Number>::addTimeToLocation() {
+        std::size_t I = 0;
+        for ( auto &flow : mFlows ) {
+            if ( mFlowTypes[I] == DynamicType::rectangular ) {
+                carl::Variable timeVar = VariablePool::getInstance().getTimeVariable();
+                std::get<rectangularFlow<Number>>(flow).setFlowIntervalForDimension(carl::Interval<Number>(1, 1), timeVar);
+                // h.s. TODO add assertions to this function
+            }
+            ++I;
+        }
+        if (!mInvariant.empty()) {
+            mInvariant.extendDimension();
+        }
+        for ( auto &transition : mTransitions ) {
+            transition->extendGuardDimension();
+            transition->extendResetDimension();
+        }
+    }
+
 }  // namespace hypro

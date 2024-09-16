@@ -20,7 +20,7 @@ namespace hypro {
 // For usage as main representation of each segment
     struct HPolytopeSetting {
         static constexpr int type_enum = hPolytopeSetting_name::HPolytopeSetting;
-        static constexpr bool REDUCE_NUMBERS = true;
+        static constexpr bool REDUCE_NUMBERS = false;
         static constexpr bool AVOID_CONVERSION = true;
         static constexpr bool OPTIMIZER_CACHING = false;
         static constexpr bool NAIVE_ALGORITHMS = false;

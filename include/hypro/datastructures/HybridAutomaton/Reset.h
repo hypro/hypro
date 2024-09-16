@@ -122,6 +122,11 @@ namespace hypro {
          */
         void decompose(const std::vector<std::vector<std::size_t>> &partition);
 
+        /**
+         * @brief for all the vectors of intervals in mIntervalResets, add an empty interval
+        */
+        void extendDimension();
+
         friend std::ostream &operator<<(std::ostream &ostr, const Reset<Number> &a) {
             if (a.isIdentity()) {
                 ostr << "Identity";
