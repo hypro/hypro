@@ -39,6 +39,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include <algorithm>
 #include <cassert>
 #include <optional>
+#include <random>
 
 namespace hypro {
 
@@ -67,6 +68,7 @@ namespace hypro {
         };
 
         using HalfspaceVector = std::vector<Halfspace<Number>>;
+        using pointVector = std::vector<Point<Number>>;
 
         typedef Setting Settings;
         typedef Number NumberType;
@@ -79,7 +81,7 @@ namespace hypro {
         mutable std::optional<Optimizer<Number>> mOptimizer = std::nullopt;                 ///< optional cache (settings-dependent) for an LP instance
         mutable bool mUpdated = false;                                                     ///< cache flag to mark a required update of the optional LP instance
         mutable std::optional<std::vector<carl::Interval<Number>>> mBox = std::nullopt;     ///< cache of the bounding box
-
+        mutable pointVector mVertices = {}; ///< cache of the extreme points defining the v polytope
     public:
         /**
          * @brief Constructor for the universal H-polytope.
@@ -153,6 +155,18 @@ namespace hypro {
          * @brief Destructor.
          */
         ~HPolytopeT();
+
+        /**
+         * @brief Getter of the extreme points of v polytope
+         * @return extreme vertices as a vector
+         */
+        pointVector getExtremeVertices() const { return mVertices; }
+
+        /**
+         * @brief Setter of the extreme points of v polytope
+         * @param vertices extreme vertices as a vector
+         */
+        void setExtremeVertices(const pointVector &vertices) { mVertices = vertices; }
 
         /**
          * @brief Approximates the storage usage of the current polytope.
@@ -392,6 +406,9 @@ namespace hypro {
             swap(a.mHPlanes, b.mHPlanes);
             a.setUpdated(false);
             b.setUpdated(false);
+            pointVector tmpVertices = a.getExtremeVertices();
+            a.setExtremeVertices(b.getExtremeVertices());
+            b.getExtremeVertices(tmpVertices);
         }
 
         template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
@@ -449,9 +466,23 @@ namespace hypro {
                         }
                     }
                 }
+                mVertices.clear();
             }
             // #endif
         }
+
+        /**
+        * calculates the set difference of two polytopes under-approximation 
+        */    
+        HPolytopeT<Number, Converter, Setting>
+        setMinusUnder(const HPolytopeT<Number, Converter, Setting> &minus) const;
+
+
+        /**
+        * returns an estimation of the polytope volume in double 
+        */    
+        double getVolumeEstimation() const;
+
 
         /**
          * calculates the set difference of two polytopes
@@ -459,8 +490,21 @@ namespace hypro {
         std::vector<HPolytopeT<Number, Converter, Setting>>
         setMinus2(const HPolytopeT<Number, Converter, Setting> &minus) const;
 
+        /**
+         * calculates the set difference of two H-Polytopes with crossing points
+         */
         std::vector<HPolytopeT<Number, Converter, Setting>>
-        setMinus(const HPolytopeT<Number, Converter, Setting> &minus) const;
+        setMinusCrossing(const HPolytopeT<Number, Converter, Setting> &minus) const;
+
+         /**
+         * calculates the set difference of two H-Polytopes
+         * general algorithm which selects the algorithm to be used
+         */
+        std::vector<HPolytopeT<Number, Converter, Setting>>
+        setMinus(const HPolytopeT<Number, Converter, Setting> &minus, int setMinusAlgoUsed) const;
+
+        std::vector<HPolytopeT<Number, Converter, Setting>>
+        setMinusOld(const HPolytopeT<Number, Converter, Setting> &minus) const;
 
         template<typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
         void reduceNumberRepresentation(const std::vector<Point<double>> & = std::vector<Point<double>>(),
@@ -537,6 +581,14 @@ namespace hypro {
         void setUpdated(const bool &b) { mUpdated = b; }
 
         bool getUpdated() const { return mUpdated; }
+
+        /**
+        * @brief      Rertuns the crossing point of an edge (pair of points).
+        * @details    The function is used for the convex set minus of VPolytope P and HPolytope G.
+        * @param[in]  fromPoint  The starting point.
+        * @param[in]  toPoint  The ending point.
+        */
+       Point<Number> getCrossingPoint(Point<Number> fromPoint, Point<Number> toPoint) const; 
     };
 
 /** @} */

@@ -11,6 +11,8 @@ foreach (example ${EXAMPLES})
     string(REPLACE ".cpp" "" example_name ${example})
     string(REPLACE "tutorial/" "" example_name ${example_name})
     string(REPLACE "label_synchronization_benchmarks/" "" example_name ${example_name})
+    string(REPLACE "urgency/" "" example_name ${example_name})
+
     add_executable(${example_name} EXCLUDE_FROM_ALL ${example})
     if (HYPRO_USE_MIMALLOC)
         get_target_property(mimalloc_library mimalloc_SHARED IMPORTED_LOCATION)
