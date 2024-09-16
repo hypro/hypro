@@ -408,7 +408,7 @@ namespace hypro {
             b.setUpdated(false);
             pointVector tmpVertices = a.getExtremeVertices();
             a.setExtremeVertices(b.getExtremeVertices());
-            b.getExtremeVertices(tmpVertices);
+            b.setExtremeVertices(tmpVertices);
         }
 
         template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
