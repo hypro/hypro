@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Added heuristics to speed up redundant point computation: we identify points that are guaranteed to be vertices (e.g.,
   minima and maxima points per dimension, but also points in the projected convex hull). The performance increase is
   indicated by an accompanied benchmark
+- New implementation for HA analysis with urgent jumps (new method to calculate the set minus operation in an over-approximative manner)
+- New method to calculate the reachable sets of parallely composed automaton without building the actual parallel composition 
 
 ### Changed
 
