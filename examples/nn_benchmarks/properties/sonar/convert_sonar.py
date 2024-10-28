@@ -17,8 +17,8 @@ with open('sonar.csv', 'r') as file:
                 for k in range(len(row[:-1])):
                     line_negative = ['0'] * k + ['-1'] + ['0'] * (59 - k)
                     line_positive = ['0'] * k + ['+1'] + ['0'] * (59 - k)
-                    target.write(' '.join(line_positive) + '\n')
                     target.write(' '.join(line_negative) + '\n')
+                    target.write(' '.join(line_positive) + '\n')
 
                 for k in range(len(row[:-1])):
                     target.write(str((-1 * float(row[k])) + delta) + "\n")
