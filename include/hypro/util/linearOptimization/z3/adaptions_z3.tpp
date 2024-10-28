@@ -170,6 +170,61 @@ namespace hypro {
     }
 
     template<typename Number>
+    bool z3CheckPoint(const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+                      const matrix_t <Number> &linTransform, const vector_t <Number> &offset,
+                      const Point <Number> &point) {
+        z3Context c;
+        z3::solver z3Solver(c);
+
+        // create formula and objective
+        z3::expr formula = createFormula<Number>(point, constraints, constants, linTransform, offset, c);
+
+        // inform and add constraints
+        z3Solver.add(formula);
+
+        // verify and set result
+        return (z3::sat == z3Solver.check());
+    }
+
+    template<typename Number>
+    EvaluationResult <Number> 
+    z3GetInternalPoint( const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+                        const matrix_t <Number> &linTransform, const vector_t <Number> &offset,
+                        const Point <Number> &point ) {
+        z3Context c;
+        EvaluationResult <Number> res;
+        z3::solver z3Solver(c);
+
+        // create formula and objective
+        z3::expr formula = createFormula<Number>(point, constraints, constants, linTransform, offset, c);
+
+        // inform and add constraints
+        z3Solver.add(formula);
+
+        // verify and set result
+        if (z3Solver.check() == z3::sat) {
+            z3::model m = z3Solver.get_model();
+            // std::cout << "Model:\n" << m << std::endl;
+            vector_t <Number> pointCoordinates = vector_t<Number>::Zero(constraints.cols());
+            for (unsigned i = 0; i < constraints.cols(); ++i) {
+                z3::func_decl var = m.get_const_decl(i);
+                // std::cout << var << std::endl;
+                if (Z3_model_get_const_interp(c, m, var) != nullptr) {
+                    // std::cout << "varName: " << var.name() << std::endl;
+                    // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
+                    size_t varIndex = std::stoull(var.name().str().substr(2));
+                    // std::cout << "varIndex: " << varIndex << std::endl;
+                    pointCoordinates(varIndex) = Number(Z3_get_numeral_double(c, m.get_const_interp(var)));
+                }
+            }
+            res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
+        } else {
+            res = EvaluationResult<Number>(SOLUTION::INFEAS);
+        }
+        return res;
+    }
+
+    template<typename Number>
     EvaluationResult <Number>
     z3GetInternalPoint(const matrix_t <Number> &constraints, const vector_t <Number> &constants,
                        const std::vector <carl::Relation> &relations) {
@@ -181,14 +236,21 @@ namespace hypro {
         for (unsigned i = 0; i < constraintsExpression.size(); i++) {
             z3Solver.add(constraintsExpression[i]);
         }
+        // std::cout << "Solver:\n" << z3Solver << std::endl;
 
         if (z3Solver.check() == z3::sat) {
             z3::model m = z3Solver.get_model();
+            // std::cout << "Model:\n" << m << std::endl;
             vector_t <Number> pointCoordinates = vector_t<Number>::Zero(constraints.cols());
             for (unsigned i = 0; i < constraints.cols(); ++i) {
                 z3::func_decl var = m.get_const_decl(i);
+                // std::cout << var << std::endl;
                 if (Z3_model_get_const_interp(c, m, var) != nullptr) {
-                    pointCoordinates(i) = Number(Z3_get_numeral_double(c, m.get_const_interp(var)));
+                    // std::cout << "varName: " << var.name() << std::endl;
+                    // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
+                    size_t varIndex = std::stoull(var.name().str().substr(2));
+                    // std::cout << "varIndex: " << varIndex << std::endl;
+                    pointCoordinates(varIndex) = Number(Z3_get_numeral_double(c, m.get_const_interp(var)));
                 }
             }
             res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);

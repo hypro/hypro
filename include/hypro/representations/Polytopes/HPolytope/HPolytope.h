@@ -394,6 +394,9 @@ namespace hypro {
         template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
         void reduceNumberRepresentation(const std::vector<Point<Number>> &_vertices = std::vector<Point<Number>>(),
                                         unsigned limit = fReach_DENOMINATOR) const {
+
+            std::cout << "Before reduceNumberRepresentation()" << std::endl;
+
             // #ifdef REDUCE_NUMBERS
             if (Setting::REDUCE_NUMBERS == true) {
                 TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
@@ -446,6 +449,8 @@ namespace hypro {
                         }
                     }
                 }
+
+                std::cout << "After reduceNumberRepresentation()" << std::endl;
             }
             // #endif
         }

@@ -193,6 +193,28 @@ TYPED_TEST( StarsetTest, GetSetOfSamplesAndContains ) {
 	}
 }
 
+TYPED_TEST( StarsetTest, ContainsVsFindModel ) {
+	int n = 1000;
+	std::set<hypro::Point<TypeParam>> setOfSamples = uniform_sampling( this->star_2d_triang2, n );
+
+	auto start = std::chrono::steady_clock::now();
+	for ( auto sample : setOfSamples ) {
+		EXPECT_TRUE( this->star_2d_triang2.contains( sample ) );
+	}
+	auto end = std::chrono::steady_clock::now();
+	std::cout << "Total time elapsed with only containment checking: "
+			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
+
+	start = std::chrono::steady_clock::now();
+	for ( auto sample : setOfSamples ) {
+		hypro::EvaluationResult<TypeParam> result = this->star_2d_triang2.modelContains( sample );
+		EXPECT_TRUE( result.errorCode == hypro::SOLUTION::FEAS );
+	}
+	end = std::chrono::steady_clock::now();
+	std::cout << "Total time elapsed with containment checking providing a model: "
+			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
+}
+
 TYPED_TEST( StarsetTest, Vertices ) {
 	std::vector<hypro::Point<TypeParam>> v = this->star_2d_triang2.vertices();
 	hypro::Point<TypeParam> p1( { -6, -2 } );

@@ -41,7 +41,7 @@ std::vector<hypro::Starset<Number>> LeakyReLULayer<Number>::reachLeakyReLU( cons
 				FATAL( "hypro.neuralnets.activation_functions.LeakyReLU", "Invalid analysis method specified" );
 		}
 		if ( plotIntermediates ) {
-#pragma omp critical
+// #pragma omp critical
 			for ( int j = 0; j < resultSet.size(); j++ ) {
 				plotter.addObject( resultSet[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
 			}

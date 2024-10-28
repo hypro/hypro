@@ -371,11 +371,32 @@ bool StarsetT<Number, Converter, Setting>::containsCached( const Point<Number>& 
 // 	return optimizer.checkConsistency();
 // }
 
+template <typename Number, typename Converter, typename Setting> 
+hypro::EvaluationResult<Number> StarsetT<Number, Converter, Setting>::modelContains( const Point<Number>& point ) const {
+	 return hypro::z3GetInternalPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
+}
+
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
-	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> transformedStar = this->constraints().affineTransformation(mGenerator, mCenter);
-	hypro::Optimizer<Number> optimizer( transformedStar.matrix(), transformedStar.vector() );
-	return optimizer.checkPoint(point);
+	// if(this->dimension() == 1) {
+	// 	vector_t<Number> dir_vect = mGenerator.row(0);
+
+	// 	auto eval_low_result = mConstraints.evaluate( -1.0 * dir_vect );
+	// 	auto eval_high_result = mConstraints.evaluate( dir_vect );
+
+	// 	Number lb = -eval_low_result.supportValue + mCenter[0];
+	// 	Number ub = eval_high_result.supportValue + mCenter[0];
+
+	// 	return (lb <= point[0] && point[0] <= ub);
+	// }
+
+	return hypro::z3CheckPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
+
+	// std::cout << "Contains method" << std::endl;
+	// HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> transformedStar = this->constraints().affineTransformation(mGenerator, mCenter);
+	// std::cout << "Star transformed into an H-Polytope" << std::endl;
+	// hypro::Optimizer<Number> optimizer( transformedStar.matrix(), transformedStar.vector() );
+	// return optimizer.checkPoint(point);
 }
 
 

@@ -41,17 +41,17 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const st
             hypro::vector_t<Number> biases = layer_l.second;
 
 // this for loop could be parallelized
-#pragma omp parallel for
+// #pragma omp parallel for
 	for ( int i = 0; i < N; i++ ) {
 		if ( plot_intermediates ) {
-#pragma omp critical
+// #pragma omp critical
                     plotter.addObject(input_sets[i].vertices(), hypro::plotting::colors[hypro::plotting::red]);
                 }
 
                 hypro::Starset<Number> current_star = input_sets[i].affineTransformation(weights, biases);
 
                 if (plot_intermediates) {
-#pragma omp critical
+// #pragma omp critical
                     // std::cout << "Here: " << current_star.vertices() << std::endl;
                     plotter.addObject(current_star.vertices(), hypro::plotting::colors[hypro::plotting::green]);
                     plotter.plot2d();
@@ -68,7 +68,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::layerReach( int l, const st
                     result_stars = std::vector<hypro::Starset<Number>>();
                     result_stars.push_back(current_star);
                 }
-#pragma omp critical
+// #pragma omp critical
                 {
                     result.insert(result.end(), result_stars.begin(), result_stars.end());
                 }
@@ -103,7 +103,7 @@ std::vector<hypro::Starset<Number>> ReachNN<Number>::reachReLU( const hypro::Sta
                         // std::cout << "Invalid analysis method specified" << std::endl;
                 }
                 if (plot_intermediates) {
-#pragma omp critical
+// #pragma omp critical
 			for ( int j = 0; j < I_n.size(); j++ ) {
 				plotter.addObject( I_n[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
 			}

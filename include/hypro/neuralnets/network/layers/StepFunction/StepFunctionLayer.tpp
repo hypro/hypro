@@ -38,7 +38,7 @@ std::vector<hypro::Starset<Number>> StepFunctionLayer<Number>::reachStepFunction
 				FATAL( "hypro.neuralnets.activation_functions.stepFunction", "Invalid analysis method specified" );
 		}
 		if ( plotIntermediates ) {
-#pragma omp critical
+// #pragma omp critical
 			for ( int j = 0; j < resultSet.size(); j++ ) {
 				plotter.addObject( resultSet[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
 			}
@@ -87,7 +87,7 @@ std::vector<Starset<Number>> StepFunctionLayer<Number>::forwardPass( const std::
 
 	for ( const auto& set : inputSets ) {
 		auto resultSets = reachStepFunction( set, method, plotIntermediates );
-#pragma omp critical
+// #pragma omp critical
 		{ result.insert( result.end(), resultSets.begin(), resultSets.end() ); };
 	}
 

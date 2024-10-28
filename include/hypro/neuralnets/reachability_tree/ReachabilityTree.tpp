@@ -137,6 +137,7 @@ Starset<Number> ReachabilityTree<Number>::prepareInput( bool normalize ) const {
 
 		return Starset<Number>( HPolytope<Number>( halfplanes ) );
 
+		// TODO: implement the replacement of an equality constraint in the form of two inequalities (e.g., x >= 5 AND x <= 5 replaced by x = 5)
 		// vector_t<Number> center = vector_t<Number>::Zero( dimension );
 		// matrix_t<Number> generator = matrix_t<Number>::Identity( dimension, dimension );
 		// // eliminate pair of inequalities which would reseult as an equality
@@ -153,31 +154,10 @@ Starset<Number> ReachabilityTree<Number>::prepareInput( bool normalize ) const {
 		// 			halfplanes[i] = halfplanes.back();
 		// 			halfplanes.pop_back();
 
-		// 			std::cout << "what?" << std::endl;
-
 		// 			// how should the basis and center change in order to simulate the mergeing of two inequalities into one equality in the star-set?
-		// 			// TODO: first test if it helps at least...
 		// 		}
 		// 	}
 		// }
-
-		// generator(2, 2) = 0;
-		// generator.block(0,2,5,4-2) = generator.block(0,3,5,4-2);
-		// generator.conservativeResize(5,4);
-
-		// std::vector<Halfspace<Number>> new_halfplanes = std::vector<Halfspace<Number>>();
-		// for( auto halfplane : halfplanes ) {
-		// 	vector_t<Number> normal = halfplane.normal();
-		// 	Number offset = halfplane.offset();
-
-		// 	normal.block(2,0,2,1) = normal.block(3,0,2,1);
-		// 	normal.conservativeResize(4,1);
-		// 	new_halfplanes.push_back(Halfspace<Number>(normal, offset));
-		// }
-
-		// std::cout << "New center: \n" << center << std::endl;
-		// std::cout << "New generator: \n" << generator << std::endl;
-		// std::cout << "New halfplanes: " << new_halfplanes << std::endl;
 
 		// return Starset<Number>( center, generator, HPolytope<Number>( new_halfplanes ) );
 	}
@@ -290,7 +270,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 				// std::cout << newJob.getNode()->layerNumber() << " " << newJob.getNode()->neuronNumber() << std::endl;
 				// std::cout << newJob.getNode()->representation() << std::endl;
 				ReachabilityNode<Number>* leafNode = newJob.getNode();
-				// mLeaves.push_back( leafNode );   // maybe this is not needed
+				mLeaves.push_back( leafNode );   // maybe this is not needed
 
 				if ( !leafNode->checkSafe( safeSets ) ) {
 					leafNode->setSafe( false );
@@ -322,15 +302,15 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 // if the method is not CEGAR than it makes no sense to save the intermediate stars into the search tree
 
 template <typename Number>
-bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots, bool normalizeInput, bool normalizeOutput ) {
+bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots, bool normalizeInput, bool normalizeOutput, size_t max_iter) {
 	Starset<Number> starInput = prepareInput( normalizeInput );
 	std::vector<HPolytope<Number>> safeOutput = prepareSafeSet( normalizeOutput );
 	// let's assume for now that the safeSet could only be a conjunction of halfspaces and it describes the set of all safe output vectors
 	// TODO: later add some generalization to it
 	// TODO: make the safe set an arbitrary number of conjunctions and/or disjunctions of halfspaces, i.e. it is a vector of HPolytopes (DNF)
 
-	std::cout << "Normalized input set: " << starInput << std::endl;
-	std::cout << "Denormalized output set: " << safeOutput << std::endl;
+	std::cout << "Normalized input set:\n" << starInput << std::endl;
+	std::cout << "Denormalized output set:\n" << safeOutput << std::endl;
 
 	mLeaves.clear();
 	mIsSafe = true;
@@ -354,6 +334,7 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 			// then we refine the result of the overapproximate reachability
 			rootNode->setMethod( NN_REACH_METHOD::OVERAPPRX );
 			mRoot = computeReachTree( rootNode, safeOutput, strategy );
+			std::cout << "CEGAR first forward pass finished, the result is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
 			break;
 		default:
 			FATAL( "hypro.neuralnets.reachability_tree", "Invalid analysis method specified" );
@@ -375,7 +356,7 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 
 	// repeat until we either find a real counterexample or we can verify that the network is safe
 	// TODO: introduce a max number of iterations
-	while ( !mIsSafe ) {
+	while ( !mIsSafe && ctx < max_iter ) {
 		mLeaves.clear();  // TODO: do not clear the leaves that are not affected
 		updateLeaves( mRoot );
 		std::cout << "Number of leaves: " << mLeaves.size() << std::endl;
@@ -391,14 +372,15 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 			Point<Number> candidate = produceCounterExampleCandidate( chosenLeaf->representation(), safeOutput );
 			std::cout << "The counterexample candidate is " << candidate << std::endl;
 
-			// ================== FOR TESTING =================
-			std::cout << "Counterexample contained in the reachable set: " << chosenLeaf->representation().contains( candidate ) << std::endl;
-			for ( int i = 0; i < safeOutput.size(); i++ ) {
-				std::cout << "Countexample contained in safe set " << i << ": " << safeOutput[i].contains( candidate ) << std::endl;
-			}
-			// ================================================
+			// // ================== FOR TESTING =================
+			// std::cout << "Counterexample contained in the reachable set: " << chosenLeaf->representation().contains( candidate ) << std::endl;
+			// for ( int i = 0; i < safeOutput.size(); i++ ) {
+			// 	std::cout << "Countexample contained in safe set " << i << ": " << safeOutput[i].contains( candidate ) << std::endl;
+			// }
+			// // ================================================
 
 			// identify the source neuron of the counterexample
+			std::cout << "Identifying the source of the counterexample..." << std::endl;
 			std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( candidate, chosenLeaf );
 
 			// TODO: check if the source is the last neuron we get a segmentation fault
@@ -540,6 +522,9 @@ Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<
 		// then the set needs to be interesected with the negation of the previous set in DNF form
 		// i.e. we intersect with (!c1_1 u !c1_2 u ... u !c1_k1) n (!c2_1 u !c2_2 u ... u !c2_k2) n ... n (!cm_1 u !cm_2 u ... u !cm_km)
 
+		// std::cout << set << std::endl;
+		// std::cout << "Empty:" << set.empty() << std::endl;
+
 		Starset<Number> setCopy( set );
 		for ( HPolytope<Number> poly : rejectionSets ) {
 			std::uniform_int_distribution<int> idist( 0, poly.constraints().size() - 1 );  //(inclusive, inclusive)
@@ -549,6 +534,13 @@ Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<
 			Number offset = Number(-1) * hspace.offset();
 			setCopy = setCopy.intersectHalfspace( Halfspace<Number>( normal, offset ) );
 		}
+
+		bool empty = setCopy.empty();
+		// std::cout << setCopy << std::endl;
+		std::cout << "Empty:" << empty << std::endl;
+		
+		if ( empty )
+			continue;
 
 		// ================= METHOD 1 =================
 		// // std::cout << "set: " << setCopy << std::endl;
@@ -591,17 +583,12 @@ Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<
 			hypro::vector_t<Number> dir_vect = currentPoly.constraints()[ind].normal();
 			auto eval_low_result = op.evaluate( -1.0 * dir_vect, true );
 			auto eval_high_result = op.evaluate( dir_vect, true );
-
-			std::cout << "eval_low_result: " << eval_low_result << std::endl;
-			std::cout << "eval_high_result: " << eval_high_result << std::endl;
 			
 			Point<Number> midPoint = Point<Number>((eval_low_result.optimumValue + eval_high_result.optimumValue) / 2.0);
 			Point<Number> transformedPoint = midPoint.affineTransformation(setCopy.generator(), setCopy.center());
+
 			if(setCopy.contains(transformedPoint)) {
 				std::cout << "Solution found: " << transformedPoint << std::endl;
-				int a;
-				std::cin >> a;
-				exit(0);
 				return transformedPoint;
 			}
 			else {
@@ -662,11 +649,14 @@ std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::id
 
 	// here: should I check if the candidate is contained in the current set or would the backpropagated candidate be in in the parent set?
 	// if ( checkForwardContainment( candidate, parentLayer, parentNeuron, parentSet ) ) {	 // TODO: do not forget to check also the exact result of the relu function
+	std::cout << "Checking containment" << std::endl;
+	std::cout << "Representation is: " << node->representation() << std::endl;
+	std::cout << "Candidate is: " << candidate << std::endl;
 	if ( node->representation().contains( candidate ) ) {
 		// if the counterexample candidate is still included in the current node go back to the previous node
 		ReachabilityNode<Number>* parent = node->getParent();
 		Point<Number> newCandidate = propagateCandidateBack( candidate, parent->layerNumber(), parent->neuronNumber(), parent->representation() );
-		// std::cout << "newCandidate: " << newCandidate << std::endl;
+		std::cout << "newCandidate: " << newCandidate << std::endl;
 		return identifyCounterExampleSource( newCandidate, parent );
 	} else {
 		// std::cout << "Candidate: " << candidate << std::endl;
@@ -679,6 +669,7 @@ std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::id
 
 template <typename Number>
 Point<Number> ReachabilityTree<Number>::propagateCandidateBack( const Point<Number>& candidate, int parentLayer, int parentNeuron, const Starset<Number>& parentSet ) const {
+	std::cout << "Propagating candidate back..." << std::endl;
 	std::shared_ptr<LayerBase<Number>> layer = mNetwork.layers( parentLayer );
 	return layer->propagateCandidateBack( candidate, parentNeuron, parentSet );
 }
