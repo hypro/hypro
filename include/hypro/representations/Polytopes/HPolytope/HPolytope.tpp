@@ -1127,6 +1127,29 @@ namespace hypro {
         return res;
     }
 
+        template<typename Number, typename Converter, class Setting>
+    HPolytopeT<Number, Converter, Setting>
+    HPolytopeT<Number, Converter, Setting>::minkowskiDiff(const HPolytopeT &rhs) const {
+        TRACE("hypro.representations.HPolytope", "P' = P + " << rhs << std::endl);
+        HPolytopeT<Number, Converter, Setting> res;
+        Number result;
+
+        // evaluation of rhs in directions of lhs
+        for (unsigned i = 0; i < mHPlanes.size(); ++i) {
+            EvaluationResult<Number> evalRes = rhs.evaluate(mHPlanes.at(i).normal());
+            if (evalRes.errorCode == SOLUTION::INFTY) {
+                // Do nothing - omit inserting plane.
+            } else if (evalRes.errorCode == SOLUTION::INFEAS) {
+                return Empty();
+            } else {
+                result = mHPlanes.at(i).offset() - evalRes.supportValue;
+                res.insert(Halfspace<Number>(mHPlanes.at(i).normal(), result));
+            }
+        }
+
+        return res;
+    }
+
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::intersect(const HPolytopeT &rhs) const {

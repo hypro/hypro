@@ -335,6 +335,8 @@ namespace hypro {
 
         HPolytopeT minkowskiSum(const HPolytopeT &rhs) const;
 
+        HPolytopeT minkowskiDiff(const HPolytopeT &rhs) const;
+
         HPolytopeT intersect(const HPolytopeT &rhs) const;
 
         HPolytopeT intersectHalfspace(const Halfspace<Number> &rhs) const;
