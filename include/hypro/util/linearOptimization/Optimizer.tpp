@@ -201,6 +201,7 @@ namespace hypro {
         res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
 
+        return res;
 #if !defined( HYPRO_SECONDARY_SOLVER )
         return res;
 #else
