@@ -13,6 +13,9 @@ template <typename Number>
 class StepFunction {
   public:
 	static std::vector<hypro::Starset<Number>> exactStepFunction( int i, std::vector<hypro::Starset<Number>>& input_sets, float value, float minValue, float maxValue );
+  static std::vector<hypro::Starset<Number>> approxStepFunction( int i, std::vector<hypro::Starset<Number>>& input_sets, float value, float minValue, float maxValue );
+
+  static void resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows);
 };
 }  // namespace hypro
 
