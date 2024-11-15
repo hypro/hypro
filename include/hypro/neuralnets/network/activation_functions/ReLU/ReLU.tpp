@@ -201,7 +201,7 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, std::ve
 
 // Resize helper function
 template <typename Number>
-static void ReLU<Number>::resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows) {
+void ReLU<Number>::resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows) {
     shape.conservativeResize(shape.rows() + rows, shape.cols() + 1);
     shape.col(shape.cols() - 1) = hypro::vector_t<Number>::Zero(shape.rows());
     limits.conservativeResize(limits.rows() + rows);

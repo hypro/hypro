@@ -5,14 +5,13 @@ namespace hypro {
 template <typename Number>
 std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue ) {
 	auto result = std::vector<hypro::Starset<Number>>();
-
 	for ( const auto& set : input_sets ) {
 		hypro::vector_t<Number> center = set.center();
 		hypro::matrix_t<Number> basis = set.generator();
 		hypro::HPolytope<Number> polytope = set.constraints();
 
 		hypro::vector_t<Number> dir_vect = basis.row( i );
-		auto eval_low_result = polytope.evaluate( -1.0 * dir_vect );
+		auto eval_low_result = polytope.evaluate( -dir_vect );
 		auto eval_high_result = polytope.evaluate( dir_vect );
 
 		// initialise lower and upper bounds
@@ -187,6 +186,7 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 	}
 	return result;
 }
+
 template <typename Number>
 std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue ) {
 	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();

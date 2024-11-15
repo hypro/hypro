@@ -5,24 +5,31 @@ namespace hypro {
 template <typename Number>
 std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue ) {
 	auto result = std::vector<hypro::Starset<Number>>();
-
 	for ( const auto& set : input_sets ) {
-		hypro::vector_t<Number> center = set.center();
-		hypro::matrix_t<Number> basis = set.generator();
-		hypro::HPolytope<Number> polytope = set.constraints();
+		auto center = set.center();
+		auto basis = set.generator();
+		auto polytope = set.constraints();
 
 		hypro::vector_t<Number> dir_vect = basis.row( i );
-		auto eval_low_result = polytope.evaluate( -1.0 * dir_vect );
+		auto eval_low_result = polytope.evaluate( -dir_vect );
 		auto eval_high_result = polytope.evaluate( dir_vect );
+
+		if ( eval_low_result.errorCode == SOLUTION::INFEAS ||
+			 eval_low_result.errorCode == SOLUTION::UNKNOWN ||
+			 eval_high_result.errorCode == SOLUTION::INFEAS ||
+			 eval_high_result.errorCode == SOLUTION::UNKNOWN ) {
+			continue;
+		}
 
 		// initialise lower and upper bounds
 		Number lb = -eval_low_result.supportValue + center[i];
 		Number ub = eval_high_result.supportValue + center[i];
+		lb = ( eval_low_result.errorCode == SOLUTION::INFTY ) ? Number( INT_MIN ) : lb;
+		ub = ( eval_high_result.errorCode == SOLUTION::INFTY ) ? Number( INT_MAX ) : lb;
 
 		// if lower bound is greater than minValue and upper bound less than maxValue, we leave the star set as it is
 		if ( ( lb >= minValue ) && ( ub <= maxValue ) ) {
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, basis, polytope );
-			result.push_back( res_star );
+			result.emplace_back( center, basis, polytope );
 			continue;
 		}
 		// if upper bound is less than minValue, we project the input on minValue
@@ -173,30 +180,39 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std:
 template <typename Number>
 std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue ) {
 	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
-	int k = input_sets.size();
-	for ( int j = 0; j < k; j++ ) {
-		hypro::Starset<Number> input_star = input_sets[j];
-
-		hypro::vector_t<Number> center = input_star.center();
-		hypro::matrix_t<Number> basis = input_star.generator();
-		hypro::matrix_t<Number> shape = input_star.shape();
-		hypro::vector_t<Number> limits = input_star.limits();
+	for ( auto& input_star : input_sets ) {
+		auto center = input_star.center();
+		auto basis = input_star.generator();
+		auto shape = input_star.shape();
+		auto limits = input_star.limits();
 
 		hypro::vector_t<Number> dir_vect = basis.row( i );
-		auto eval_low_result = input_star.constraints().evaluate( -1.0 * dir_vect );
+		auto eval_low_result = input_star.constraints().evaluate( -dir_vect );
 		auto eval_high_result = input_star.constraints().evaluate( dir_vect );
 
-		Number lb = -eval_low_result.supportValue + center[i];
-		Number ub = eval_high_result.supportValue + center[i];
+		if ( eval_low_result.errorCode == SOLUTION::INFEAS ||
+			 eval_low_result.errorCode == SOLUTION::UNKNOWN ||
+			 eval_high_result.errorCode == SOLUTION::INFEAS ||
+			 eval_high_result.errorCode == SOLUTION::UNKNOWN ) {
+			continue;
+		}
+
+		bool feas_low = ( eval_low_result.errorCode == SOLUTION::FEAS );
+		bool feas_high = ( eval_high_result.errorCode == SOLUTION::FEAS );
+		bool unbounded_low = ( eval_low_result.errorCode == SOLUTION::INFTY );
+		bool unbounded_high = ( eval_high_result.errorCode == SOLUTION::INFTY );
+
+        Number lb = feas_low ? -eval_low_result.supportValue + center[i] : Number(0);
+        Number ub = feas_high ? eval_high_result.supportValue + center[i] : Number(0);
 
 		// if lower bound is greater than minValue and upper bound less than maxValue, we leave the star set as it is
-		if ( ( lb >= minValue ) && ( ub <= maxValue ) ) {
+		if ( feas_low && feas_high && ( lb >= minValue ) && ( ub <= maxValue ) ) {
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
 			result.push_back( res_star );
 			continue;
 		}
 		// if upper bound is less than minValue, we project the input on minValue
-		if ( ub < minValue ) {
+		if ( feas_high && ub < minValue ) {
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
@@ -208,7 +224,7 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std
 			continue;
 		}
 		// if lower bound is greater than maxValue, we project the input on maxValue
-		if ( lb > maxValue ) {
+		if ( feas_low && lb > maxValue ) {
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
@@ -219,11 +235,8 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std
 			result.push_back( res_star );
 			continue;
 		}
-		if ( ( lb < minValue ) && ( ub <= maxValue ) ) {
-			// Resize the original shape matrix and limits vector, so that they have 3 more constraints and one more variable
-			shape.conservativeResize( shape.rows() + 3, shape.cols() + 1 );
-			shape.col( shape.cols() - 1 ) = hypro::vector_t<Number>::Zero( shape.rows() );
-			limits.conservativeResize( limits.rows() + 3 );
+		if ( feas_low && feas_high && ( lb < minValue ) && ( ub <= maxValue ) ) {
+			resizeShapeAndLimits(shape, limits, 3);
 
 			// first constraint: x_(m+1) >= minValue
 			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
@@ -245,26 +258,10 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std
 			third_constraint( third_constraint.rows() - 1 ) = 1;
 			shape.row( shape.rows() - 1 ) = third_constraint;
 			limits[limits.rows() - 1] = ( center[i] * ( ub - minValue ) - ub * ( lb - minValue ) ) / ( ub - lb );
-
-			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-			transformationMatrix( i, i ) = 0.0;
-			basis = transformationMatrix * basis;
-			center = transformationMatrix * center;
-
-			// extend the basis with the standard basis vector as last column and set the actual basis vector to the null-vector
-			basis.conservativeResize( basis.rows(), basis.cols() + 1 );
-			basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
-			basis( i, basis.cols() - 1 ) = 1;
-
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
-			result.push_back( res_star );
 		}
 
-		if ( ( lb >= minValue ) && ( lb <= maxValue ) && ( ub > maxValue ) ) {
-			// Resize the original shape matrix and limits vector, so that they have 3 more constraints and one more variable
-			shape.conservativeResize( shape.rows() + 3, shape.cols() + 1 );
-			shape.col( shape.cols() - 1 ) = hypro::vector_t<Number>::Zero( shape.rows() );
-			limits.conservativeResize( limits.rows() + 3 );
+		if ( feas_low && feas_high && ( lb >= minValue ) && ( lb <= maxValue ) && ( ub > maxValue ) ) {
+			resizeShapeAndLimits(shape, limits, 3);
 
 			// first constraint: x_(m+1) <= maxValue
 			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
@@ -287,26 +284,10 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std
 			third_constraint( third_constraint.rows() - 1 ) = -1;
 			shape.row( shape.rows() - 1 ) = third_constraint;
 			limits[limits.rows() - 1] = -( ( center[i] * ( lb - maxValue ) + lb * ( maxValue - ub ) ) / ( lb - ub ) );
-
-			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-			transformationMatrix( i, i ) = 0.0;
-			basis = transformationMatrix * basis;
-			center = transformationMatrix * center;
-
-			// extend the basis with the standard basis vector as last column and set the actual basis vector to the null-vector
-			basis.conservativeResize( basis.rows(), basis.cols() + 1 );
-			basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
-			basis( i, basis.cols() - 1 ) = 1;
-
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
-			result.push_back( res_star );
 		}
 
-		if ( ( lb < minValue ) && ( ub > maxValue ) ) {
-			// Resize the original shape matrix and limits vector, so that they have 3 more constraints and one more variable
-			shape.conservativeResize( shape.rows() + 4, shape.cols() + 1 );
-			shape.col( shape.cols() - 1 ) = hypro::vector_t<Number>::Zero( shape.rows() );
-			limits.conservativeResize( limits.rows() + 4 );
+		if ( feas_low && feas_high && ( lb < minValue ) && ( ub > maxValue ) ) {
+			resizeShapeAndLimits(shape, limits, 4);
 
 			// first constraint: x_(m+1) <= maxValue
 			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
@@ -335,22 +316,139 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std
 			fourth_constraint( fourth_constraint.rows() - 1 ) = -1;
 			shape.row( shape.rows() - 1 ) = fourth_constraint;
 			limits[limits.rows() - 1] = -( ( center[i] * ( minValue - maxValue ) + minValue * ( maxValue - ub ) ) / ( minValue - ub ) );
-
-			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-			transformationMatrix( i, i ) = 0.0;
-			basis = transformationMatrix * basis;
-			center = transformationMatrix * center;
-
-			// extend the basis with the standard basis vector as last column and set the actual basis vector to the null-vector
-			basis.conservativeResize( basis.rows(), basis.cols() + 1 );
-			basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
-			basis( i, basis.cols() - 1 ) = 1;
-
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
-			result.push_back( res_star );
 		}
+
+		if (unbounded_low && (minValue <= ub && ub <= maxValue)) {
+			resizeShapeAndLimits(shape, limits, 3);
+
+			// first constraint: x_(m+1) >= minValue
+			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			first_constraint[first_constraint.rows() - 1] = -1;
+			shape.row( shape.rows() - 3 ) = first_constraint;
+			limits[limits.rows() - 3] = -minValue;
+
+			// second constraint: x_(m+1) >= x_i
+			hypro::vector_t<Number> second_constraint = basis.row( i );
+			second_constraint.conservativeResize( second_constraint.rows() + 1 );
+			second_constraint[second_constraint.rows() - 1] = -1;
+			shape.row( shape.rows() - 2 ) = second_constraint;
+			limits[limits.rows() - 2] = -center[i];
+
+			// third constraint: x_(m+1) <= ub
+			hypro::vector_t<Number> third_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			third_constraint[third_constraint.rows() - 1] = 1;
+			shape.row( shape.rows() - 1 ) = third_constraint;
+			limits[limits.rows() - 1] = ub;
+		}
+
+		if (unbounded_low && maxValue < ub) {
+			resizeShapeAndLimits(shape, limits, 3);
+
+			// first constraint: x_(m+1) >= minValue
+			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			first_constraint[first_constraint.rows() - 1] = -1;
+			shape.row( shape.rows() - 3 ) = first_constraint;
+			limits[limits.rows() - 3] = -minValue;
+
+			// second constraint: x_(m+1) <= maxValue
+			hypro::vector_t<Number> second_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			second_constraint[second_constraint.rows() - 1] = 1;
+			shape.row( shape.rows() - 2 ) = second_constraint;
+			limits[limits.rows() - 2] = maxValue;
+
+			// third constraint: x_(m+1) >= ( ( minValue - maxValue ) / ( minValue - ub ) ) * x_i - ( ( minValue * ( maxValue - ub ) ) / ( minValue - ub ) )
+			hypro::vector_t<Number> third_constraint = basis.row( i );
+			third_constraint = third_constraint * ( ( minValue - maxValue ) / ( minValue - ub ) );
+			third_constraint.conservativeResize( third_constraint.rows() + 1 );
+			third_constraint( third_constraint.rows() - 1 ) = -1;
+			shape.row( shape.rows() - 1 ) = third_constraint;
+			limits[limits.rows() - 1] = -( ( center[i] * ( minValue - maxValue ) + minValue * ( maxValue - ub ) ) / ( minValue - ub ) );
+		}
+
+		if ((minValue <= lb && lb <= maxValue) && unbounded_high) {
+			resizeShapeAndLimits(shape, limits, 3);
+
+			// first constraint: x_(m+1) <= maxValue
+			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			first_constraint[first_constraint.rows() - 1] = 1;
+			shape.row( shape.rows() - 3 ) = first_constraint;
+			limits[limits.rows() - 3] = maxValue;
+
+			// second constraint: x_(m+1) <= x_i
+			hypro::vector_t<Number> second_constraint = basis.row( i );
+			second_constraint = second_constraint * ( -1 );
+			second_constraint.conservativeResize( second_constraint.rows() + 1 );
+			second_constraint[second_constraint.rows() - 1] = 1;
+			shape.row( shape.rows() - 2 ) = second_constraint;
+			limits[limits.rows() - 2] = center[i];
+
+			// third constraint: x_(m+1) >= lb
+			hypro::vector_t<Number> third_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			third_constraint[third_constraint.rows() - 1] = -1;
+			shape.row( shape.rows() - 1 ) = third_constraint;
+			limits[limits.rows() - 1] = -lb;
+		}
+
+		if (lb < minValue && unbounded_high) {
+			resizeShapeAndLimits(shape, limits, 3);
+
+			// first constraint: x_(m+1) <= maxValue
+			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			first_constraint[first_constraint.rows() - 1] = 1;
+			shape.row( shape.rows() - 3 ) = first_constraint;
+			limits[limits.rows() - 3] = maxValue;
+
+			// second constraint: x_(m+1) >= minValue
+			hypro::vector_t<Number> second_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			second_constraint[second_constraint.rows() - 1] = -1;
+			shape.row( shape.rows() - 2 ) = second_constraint;
+			limits[limits.rows() - 2] = -minValue;
+
+			// third constrain: x_(m+1) <= ( ( maxValue - minValue ) / ( maxValue - lb ) ) * x_i - ( ( maxValue * ( lb - minValue ) ) / ( maxValue - lb ) )
+			hypro::vector_t<Number> third_constraint = basis.row( i );
+			third_constraint = third_constraint * ( -( ( maxValue - minValue ) / ( maxValue - lb ) ) );
+			third_constraint.conservativeResize( third_constraint.rows() + 1 );
+			third_constraint( third_constraint.rows() - 1 ) = 1;
+			shape.row( shape.rows() - 1 ) = third_constraint;
+			limits[limits.rows() - 1] = ( center[i] * ( maxValue - minValue ) - maxValue * ( lb - minValue ) ) / ( maxValue - lb );
+		}
+
+		if (unbounded_low && unbounded_high) {
+			resizeShapeAndLimits(shape, limits, 2);
+
+			// first constraint: x_(m+1) >= minValue
+			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			first_constraint[first_constraint.rows() - 1] = -1;
+			shape.row( shape.rows() - 3 ) = first_constraint;
+			limits[limits.rows() - 3] = -minValue;
+
+			// second constraint: x_(m+1) <= maxValue
+			hypro::vector_t<Number> second_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
+			second_constraint[second_constraint.rows() - 1] = 1;
+			shape.row( shape.rows() - 2 ) = second_constraint;
+			limits[limits.rows() - 2] = maxValue;
+		}
+
+		hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
+		transformationMatrix( i, i ) = 0.0;
+		basis = transformationMatrix * basis;
+		center = transformationMatrix * center;
+
+		// extend the basis with the standard basis vector as last column and set the actual basis vector to the null-vector
+		basis.conservativeResize( basis.rows(), basis.cols() + 1 );
+		basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
+		basis( i, basis.cols() - 1 ) = 1;
+
+		result.push_back( center, shape, limits, basis );
 	}
 	return result;
+}
+
+template <typename Number>
+void HardTanh<Number>::resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows) {
+    shape.conservativeResize(shape.rows() + rows, shape.cols() + 1);
+    shape.col(shape.cols() - 1) = hypro::vector_t<Number>::Zero(shape.rows());
+    limits.conservativeResize(limits.rows() + rows);
 }
 
 }  // namespace hypro

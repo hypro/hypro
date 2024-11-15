@@ -201,7 +201,7 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, s
 }
 
 template <typename Number>
-static void LeakyReLU<Number>::resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows) {
+void LeakyReLU<Number>::resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows) {
     shape.conservativeResize(shape.rows() + rows, shape.cols() + 1);
     shape.col(shape.cols() - 1) = hypro::vector_t<Number>::Zero(shape.rows());
     limits.conservativeResize(limits.rows() + rows);
