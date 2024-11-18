@@ -14,6 +14,8 @@ class HardSigmoid {
   public:
 	static std::vector<hypro::Starset<Number>> exactHardSigmoid( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue );
 	static std::vector<hypro::Starset<Number>> approxHardSigmoid( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue );
+
+	static void resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows);
 };
 }  // namespace hypro
 
