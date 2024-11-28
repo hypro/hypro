@@ -64,6 +64,7 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 	// #pragma omp critical
 				result.push_back( temp );
 			}
+			std::cout << "Number of variables: " << inputSets[i].shape().cols() << std::endl;
 		}
 	// for ( int i = 0; i < N; ++i ) {
 	// 	result.push_back( inputSets[i].affineTransformation( mWeights, mBias ) );

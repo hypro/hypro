@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> ReLU<Number>::stepReLU( int i, std::vector<hypro::Starset<Number>>& input_sets ) {
+std::vector<hypro::Starset<Number>> ReLU<Number>::stepReLU( int i, const std::vector<hypro::Starset<Number>>& input_sets ) {
 	std::vector<hypro::Starset<Number>> result;
 
 	for ( auto& input_set : input_sets ) {
@@ -14,6 +14,13 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::stepReLU( int i, std::vector<h
 		hypro::vector_t<Number> dir_vect = basis.row( i );
 		auto eval_low_result = politope.evaluate( -dir_vect );
 		auto eval_high_result = politope.evaluate( dir_vect );
+
+		if ( eval_low_result.errorCode == SOLUTION::INFEAS ||
+			 eval_low_result.errorCode == SOLUTION::UNKNOWN ||
+			 eval_high_result.errorCode == SOLUTION::INFEAS ||
+			 eval_high_result.errorCode == SOLUTION::UNKNOWN ) {
+			continue;
+		}
 
 		// lower bound is positive
 		if ( eval_low_result.errorCode == SOLUTION::FEAS ) {
@@ -41,12 +48,11 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::stepReLU( int i, std::vector<h
 		politope_1 = politope_1.intersectHalfspace( pos_1 );
 		result.emplace_back( center, basis, politope_1 );
 		
-
 		// x_i < 0
 		auto center_2 = center;
 		auto basis_2 = basis;
 		auto politope_2 = politope;
-		hypro::Halfspace<Number> neg_1 = hypro::Halfspace<Number>( hypro::Point<Number>( basis_2.row( i ) ), -center_2[i] );
+		hypro::Halfspace<Number> neg_1 = hypro::Halfspace<Number>( hypro::Point<Number>( basis.row( i ) ), -center[i] );
 		politope_2 = politope_2.intersectHalfspace( neg_1 );
 		basis_2.row(i).setZero();
 		center_2[i] = 0;
@@ -57,7 +63,7 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::stepReLU( int i, std::vector<h
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, std::vector<hypro::Starset<Number>>& input_sets ) {
+std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, const std::vector<hypro::Starset<Number>>& input_sets ) {
 	std::vector<hypro::Starset<Number>> result;
 	for (auto& input_star : input_sets) {
 		auto center = input_star.center();
@@ -69,13 +75,26 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, std::ve
 		auto eval_low_result = input_star.constraints().evaluate( -dir_vect );
 		auto eval_high_result = input_star.constraints().evaluate( dir_vect );
 
+		// if (eval_low_result.errorCode == SOLUTION::INFTY)
+		// 	std::cout << "At neuron index " << i << " there was no lower bound" << std::endl;
+		// if (eval_high_result.errorCode == SOLUTION::INFTY)
+		// 	std::cout << "At neuron index " << i << " there was no upper bound" << std::endl;
+
+		if ( eval_low_result.errorCode == SOLUTION::INFEAS ||
+			 eval_low_result.errorCode == SOLUTION::UNKNOWN ||
+			 eval_high_result.errorCode == SOLUTION::INFEAS ||
+			 eval_high_result.errorCode == SOLUTION::UNKNOWN ) {
+			std::cout << "Ignoring empty star." << std::endl;
+			continue;
+		}
+
 		bool feas_low = ( eval_low_result.errorCode == SOLUTION::FEAS );
 		bool feas_high = ( eval_high_result.errorCode == SOLUTION::FEAS );
 		bool unbounded_low = ( eval_low_result.errorCode == SOLUTION::INFTY );
 		bool unbounded_high = ( eval_high_result.errorCode == SOLUTION::INFTY );
 
-		Number lb = feas_low ? -eval_low_result.supportValue + center[i] : Number(0);
-        Number ub = feas_high ? eval_high_result.supportValue + center[i] : Number(0);
+		Number lb = feas_low ? -eval_low_result.supportValue + center[i] : Number(DBL_MIN);
+        Number ub = feas_high ? eval_high_result.supportValue + center[i] : Number(DBL_MAX);
 
 		if ( feas_low && ( lb >= 0 || carl::AlmostEqual2sComplement( lb, Number( 0 ) ) ) ) {
 			result.emplace_back( center, shape, limits, basis );
@@ -115,7 +134,6 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, std::ve
 			limits[limits.rows() - 1] = ( ub * ( center[i] - lb ) ) / ( ub - lb );
 		}
 
-
 		// no upper-bound
 		if ( feas_low && unbounded_high ) {
 			resizeShapeAndLimits(shape, limits, 3);
@@ -138,7 +156,7 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, std::ve
 			trd_constr.conservativeResize( trd_constr.rows() + 1 );
 			trd_constr( trd_constr.rows() - 1 ) = 1;
 			shape.row( shape.rows() - 1 ) = trd_constr;
-			limits[limits.rows() - 1] = center[i] + lb;
+			limits[limits.rows() - 1] = center[i] - lb;
 		}
 
 		// no lower-bound
@@ -160,7 +178,6 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, std::ve
 
 			// third constraint: x_(m+1) <= ub
 			hypro::vector_t<Number> trd_constr = hypro::vector_t<Number>::Zero( shape.cols() );
-			trd_constr.conservativeResize( trd_constr.rows() + 1 );
 			trd_constr( trd_constr.rows() - 1 ) = 1;
 			shape.row( shape.rows() - 1 ) = trd_constr;
 			limits[limits.rows() - 1] = ub;

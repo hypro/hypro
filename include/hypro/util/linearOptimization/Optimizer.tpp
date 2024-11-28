@@ -303,8 +303,8 @@ namespace hypro {
         mLastConsistencyAnswer = smtratCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
         mConsistencyChecked = true;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-        mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
-        mConsistencyChecked = true;
+        // mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+        // mConsistencyChecked = true;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
         mLastConsistencyAnswer = soplexCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
         mConsistencyChecked = true;
@@ -337,7 +337,7 @@ namespace hypro {
         }
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-        return z3CheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
+        // return z3CheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
         return smtratCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
@@ -397,7 +397,7 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
         }
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-        res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+        // res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
         res = smtratRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
