@@ -95,10 +95,17 @@ if [ $1 == "thermostat" ]; then
         exit 2
     fi
 
-    INPUT_PROP="../examples/nn_benchmarks/properties/thermostat/$4"
+    INPUT_PROP="../examples/nn_benchmarks/properties/thermostat/properties/$4"
     if ! [[ -f $INPUT_PROP ]]; then
         echo "Not valid input property file: $4"
         echo "Example: $0 $1 $2 $3 poly_thermostat.in"
+        exit 2
+    fi
+
+    SAFETY_PROP="../examples/nn_benchmarks/properties/thermostat/safe_sets/$5"
+    if ! [[ -f $SAFETY_PROP ]]; then
+        echo "Not valid safe set file: $5"
+        echo "Example: $0 $1 $2 $3 $4 safe_AC1_01.in"
         exit 2
     fi
 
@@ -135,6 +142,6 @@ if [ $1 == "sonar" ]; then
         exit 3
     fi
 
-    CMD="$BINARY_FILE $2 $NNET_FILE $INPUT_PROP $SAFETY_PROP"
+    CMD="$BINARY_FILE $2 $NNET_FILE $INPUT_PROP"
     eval "$CMD";
 fi

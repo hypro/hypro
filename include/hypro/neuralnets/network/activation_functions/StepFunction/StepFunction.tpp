@@ -101,7 +101,10 @@ std::vector<hypro::Starset<Number>> StepFunction<Number>::approxStepFunction( in
 		Number lb = feas_low ? -eval_low_result.supportValue + center[i] : Number( 0 );
 		Number ub = feas_high ? eval_high_result.supportValue + center[i] : Number( 0 );
 
-		if ( feas_low && lb >= value ) {
+		// std::cout << "lb = " << lb << std::endl;
+		// std::cout << "ub = " << ub << std::endl;
+
+		if ( feas_low && lb >= (value - 1e-10) ) {
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
@@ -111,7 +114,7 @@ std::vector<hypro::Starset<Number>> StepFunction<Number>::approxStepFunction( in
 			continue;
 		}
 
-		if ( feas_high && ub <= value ) {
+		if ( feas_high && ub <= (value + 1e-10) ) {
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
@@ -122,7 +125,7 @@ std::vector<hypro::Starset<Number>> StepFunction<Number>::approxStepFunction( in
 		}
 
 		if ( feas_low && feas_high ) {
-			resizeShapeAndLimit(shape, limits, 4);
+			resizeShapeAndLimits(shape, limits, 4);
 
 			hypro::vector_t<Number> fst_constr = hypro::vector_t<Number>::Zero(shape.cols());
 			fst_constr[fst_constr.rows() - 1] = -1;
@@ -139,17 +142,18 @@ std::vector<hypro::Starset<Number>> StepFunction<Number>::approxStepFunction( in
             trd_constr.conservativeResize(trd_constr.rows() + 1);
             trd_constr[trd_constr.rows() - 1] = 1;
             shape.row(shape.rows() - 2) = trd_constr;
-            limits[limits.rows() - 2] = center[i] * (maxValue - minValue) / (value - lb) + (value * minValue - lb * maxValue)  / (value - lb);
+            limits[limits.rows() - 2] = minValue + ((center[i] - lb) * ((maxValue - minValue) / (value - lb)));
 
 			hypro::vector_t<Number> frt_constr = basis.row(i);
 			frt_constr *= (maxValue - minValue) / (ub - value);
+			frt_constr.conservativeResize(frt_constr.rows() + 1);
 			frt_constr[frt_constr.rows() - 1] = -1;
             shape.row(shape.rows() - 1) = frt_constr;
-            limits[limits.rows() - 1] = -center[i] * (maxValue - minValue) / (ub - value) - (ub * minValue - value * maxValue) / (ub - value);
+            limits[limits.rows() - 1] = -(minValue + ( (center[i] - value) * ((maxValue - minValue) / (ub - value))));
 		}
 
 		if ( unbounded_low && feas_high ) {
-			resizeShapeAndLimit(shape, limits, 3);
+			resizeShapeAndLimits(shape, limits, 3);
 
 			hypro::vector_t<Number> fst_constr = hypro::vector_t<Number>::Zero(shape.cols());
 			fst_constr[fst_constr.rows() - 1] = -1;
@@ -169,7 +173,7 @@ std::vector<hypro::Starset<Number>> StepFunction<Number>::approxStepFunction( in
 		}
 
 		if ( feas_low && unbounded_high ) {
-			resizeShapeAndLimit(shape, limits, 3);
+			resizeShapeAndLimits(shape, limits, 3);
 
 			hypro::vector_t<Number> fst_constr = hypro::vector_t<Number>::Zero(shape.cols());
 			fst_constr[fst_constr.rows() - 1] = -1;
@@ -190,7 +194,7 @@ std::vector<hypro::Starset<Number>> StepFunction<Number>::approxStepFunction( in
 		}
 
 		if ( unbounded_low && unbounded_high ) {
-			resizeShapeAndLimit(shape, limits, 2);
+			resizeShapeAndLimits(shape, limits, 2);
 
 			hypro::vector_t<Number> fst_constr = hypro::vector_t<Number>::Zero(shape.cols());
 			fst_constr[fst_constr.rows() - 1] = -1;
