@@ -22,7 +22,7 @@ AffineLayer<Number>::AffineLayer( unsigned short int layerSize, unsigned short i
 	, mBias( bias )
 	, mWeights( weights ) {
 	assert( bias.rows() == weights.rows() );
-	assert( bias.rows() == mLayerSize );
+	assert( bias.rows() == LayerBase<Number>::mLayerSize );
 }
 
 template <typename Number>
@@ -73,16 +73,28 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 
 template <typename Number>
 Point<Number> AffineLayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
-	// TODO: implement a smarter way to do this backpropagation which works in all cases
-	matrix_t<Number> weightsInverse = mWeights.completeOrthogonalDecomposition().pseudoInverse();
-	// std::cout << "affine backpropagation" << std::endl;
-	Point<Number> prev_y = Point<Number>(weightsInverse * (y.rawCoordinates() - mBias));
+	matrix_t<Number> currentGenerator = mWeights * inputSet.generator();
+	vector_t<Number> currentCenter = mWeights * inputSet.center() + mBias;
 
-	// std::cout << "Previous y: " << prev_y << std::endl;
-	// std::cout << "Next y: " << y << std::endl;
-	// std::cout << "Transformed prev y: " << mBias + mWeights * prev_y.rawCoordinates() << std::endl;
+	Starset<Number> output( currentCenter, currentGenerator, inputSet.constraints() );
+
+	return propagateCandidateBack( y, neuronNumber, inputSet, output );
+}
+
+template <typename Number>
+Point<Number> AffineLayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet, Starset<Number> currentSet ) const {
+	// Exists x in inputSet such that Wx+b=y
+	// <=>
+	// Exists alpha such that C*alpha <= d && (WV)*alpha + (Wc+b) = y
+
+	EvaluationResult<Number> result = z3GetInternalPoint( currentSet.shape(), currentSet.limits(), currentSet.generator(), currentSet.center(), y );
 	
-	return prev_y;
+	// std::cout << "Affine" << std::endl;
+	
+	//Otherwise, the point is not element of the output star
+	assert(result.errorCode == SOLUTION::FEAS);
+
+	return Point<Number>( inputSet.generator() * result.optimumValue + inputSet.center() );
 }
 
 }  // namespace hypro

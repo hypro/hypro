@@ -65,6 +65,9 @@ class LayerBase {
 	 * @return Point<Number> the backpropagated final result
 	 */
 	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const = 0;
+	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet, Starset<Number> currentSet) const {
+		return propagateCandidateBack(y, neuronNumber, inputSet );
+	};
 
 	// ============= utility functions =============
 

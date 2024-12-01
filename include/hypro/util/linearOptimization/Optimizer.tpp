@@ -204,6 +204,7 @@ namespace hypro {
 #if !defined( HYPRO_SECONDARY_SOLVER )
         return res;
 #else
+        return res;
         // At this point we can check, whether the primary result is already exact and optimal.
         // We do this by inserting the solution into the constraints. The solution is exact,
         // whenever it lies at least on one hyperplane (the respective constraint is saturated). Moreover

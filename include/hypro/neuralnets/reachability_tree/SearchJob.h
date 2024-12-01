@@ -39,17 +39,9 @@ class SearchJob {
 		typename std::list<std::shared_ptr<hypro::LayerBase<Number>>>::iterator it = mAllLayers.begin();
 		std::advance(it, mLayerNum);
 		std::shared_ptr<hypro::LayerBase<Number>> mLayer = (*it);
-		Starset<Number> mSet = mNode->representation();
-
-		// std::cout << "mLayerNum: " << mLayerNum << " index: " << mIndex << std::endl;
-		// std::cout << "mSet: " << mSet << std::endl;
-		// std::cout << "method: " << method << std::endl;
-
-		// std::cout << "mLayerPointer: " << mLayer << std::endl;
-		// std::cout << "mLayer name: " << mLayer->layerType() << std::endl;
-		// std::cout << "mLayer: " << (*mLayer) << std::endl;
-
-		std::vector<Starset<Number>> newSets = mLayer->forwardPass( mSet, mIndex, method );
+		Starset<Number> mSet(mNode->representation().center(),mNode->representation().shape(),mNode->representation().limits(), mNode->representation().generator());
+				
+		std::vector<Starset<Number>> newSets = mLayer->forwardPass( mSet, mIndex, method );		
 		int N = newSets.size();
 
 		// the new jobs produced by calculating the current job

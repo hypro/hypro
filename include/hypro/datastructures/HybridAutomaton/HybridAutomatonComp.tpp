@@ -9,7 +9,7 @@
 
 #include "HybridAutomatonComp.h"
 
-#include <Eigen/src/Core/DenseBase.h>
+#include <eigen3/Eigen/src/Core/DenseBase.h>
 
 namespace hypro {
 

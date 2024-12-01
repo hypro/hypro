@@ -92,7 +92,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     ZonotopeT<Number, Converter, Setting>::ZonotopeT(const matrix_t<Number>& _constraints, const vector_t<Number>& _constants) {
-        assert(matrix.rows() == vector.rows() && "Matrix and vector have to have same dimensionality.");
+        assert(_constraints.rows() == _constants.rows() && "Matrix and vector have to have same dimensionality.");
 
         // converts source object into a v-polytope
         auto temp = VPolytopeT<Number, Converter, Setting>(_constraints, _constants);

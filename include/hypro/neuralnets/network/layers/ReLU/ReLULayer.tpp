@@ -101,17 +101,36 @@ template <typename Number>
 Point<Number> ReLULayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
 	assert( neuronNumber < y.dimension() );
 	assert( y[neuronNumber] >= 0 );
-
-	// std::cout << "relu " << neuronNumber << " backpropagation" << std::endl;
-
-	// if the points coordinate at the corresponding neurons dimension is positive, then the point is not changed
-	if ( y[neuronNumber] > 0 ) {
-		return y;
+	
+	EvaluationResult<Number> result;
+	if ( 0 == y.coordinate( neuronNumber ) ) {
+		// y = ReLU(x) = max(0,x) = 0 -> x <= 0
+		result = hypro::z3GetInternalPoint(inputSet.shape(),inputSet.limits(),inputSet.generator(), inputSet.center(), y, neuronNumber, carl::Relation::LEQ, 0 );
+	} else {
+		// 0 < y && y = ReLU(x) = max(0,x) -> y = x
+		result = hypro::z3GetInternalPoint( inputSet.shape(), inputSet.limits(), inputSet.generator(), inputSet.center(), y );
 	}
 
-	// if it is negative need to apply linear optimization in the inputset (or other algorithm) to find the corresponding point
-	// TODO: implement this
-	return y;
+	// std::cout << "ReLU" << std::endl;
+
+	switch ( result.errorCode ) {
+		case SOLUTION::FEAS:
+			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl; 
+			if (0 == y.coordinate( neuronNumber )){
+				y[neuronNumber] = Point<Number>( inputSet.generator() * result.optimumValue + inputSet.center() )[neuronNumber];
+			}			
+            return y;
+
+		case SOLUTION::INFEAS:
+			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
+            return Point<Number>();
+
+		default:
+			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
+			break;
+	}
+
+	return Point<Number>();
 }
 
 }  // namespace hypro

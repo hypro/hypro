@@ -160,20 +160,16 @@ void ReachabilityNode<Number>::setRepresentation( const Starset<Number>& represe
 
 template <typename Number>
 bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, int i, const std::vector<HPolytope<Number>>& safeSets ) const {
-	if ( i < safeSets.size() ) {
-		for ( auto halfspace : safeSets[i].constraints() ) {
-			vector_t<Number> normal = halfspace.normal();
-			Number offset = halfspace.offset();
-			// intersect the starset with the opposite of the halfspace
-			// if the result is not empty, then we know that the starset contains elements that are not in the safe set
-			Starset<Number> newSet = currentSet.intersectHalfspace( Halfspace<Number>( -normal, -offset ) );
-			if ( !newSet.empty() && !checkSafeRecursive( newSet, i + 1, safeSets ) ) {
-				return false;
-			}
-		}
-		return true;
-	}
-	return false;
+	std::vector<matrix_t<Number>> rejectionMatrices = {};
+    std::vector<vector_t<Number>> rejectionVectors = {};
+    for (unsigned i = 0; i < safeSets.size(); i++){
+    	rejectionMatrices.push_back(safeSets[i].matrix());
+        rejectionVectors.push_back(safeSets[i].vector());
+    }
+
+	EvaluationResult<Number> result = z3GetCounterexample( currentSet.shape(), currentSet.limits(), currentSet.generator(), currentSet.center(), rejectionMatrices, rejectionVectors);
+	std::cout << result.errorCode << std::endl;
+	return result.errorCode == SOLUTION::INFEAS;
 }
 
 template <typename Number>
@@ -183,7 +179,7 @@ bool ReachabilityNode<Number>::checkSafe( const std::vector<HPolytope<Number>>& 
 		return checkSafeRecursive( mRepresentation, 0, safeSets );
 	} else {
 		// if the node is not a leaf, then it safetiness depends on the childs
-		return ( mNegChild->isSafe() ) && ( mPosChild->isSafe() );
+		return ( mNegChild->checkSafe(safeSets) ) && ( mPosChild->checkSafe(safeSets) );
 	}
 }
 

@@ -565,6 +565,10 @@ namespace hypro {
          * @return     A reference to the outstream.
          */
         friend std::ostream &operator<<(std::ostream &_ostr, const Point<Number> &_p) {
+            if (_p.dimension() <= 0){
+                _ostr << "()";
+                return _ostr;
+            }
             _ostr << "( ";
             for (unsigned i = 0; i < _p.rawCoordinates().rows() - 1; ++i) {
                 _ostr << _p.at(i) << "; ";  // << "[" << i << "] , ";

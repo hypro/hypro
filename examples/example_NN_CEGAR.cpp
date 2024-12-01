@@ -68,7 +68,7 @@ int main( int argc, char* argv[] ) {
 			  << std::endl;
 
 	// define input file name
-	const char* filename = "../examples/nnet/fc_2-2-2.nnet";
+	const char* filename = "../examples/nn_benchmarks/networks/nnet/small_examples/fc_2-2-2.nnet";
 	if ( argc > 2 )
 		filename = argv[2];
 	std::cout << "NN input filename is: " << filename << std::endl;
@@ -109,6 +109,17 @@ int main( int argc, char* argv[] ) {
 	}
 	std::cout << "The disjunction of safe polytopes:\n" << safePoly << std::endl;
 
+	// hypro::matrix_t<Number> linTransform = hypro::matrix_t<Number>( 2, 2 );
+	// hypro::vector_t<Number> offset = hypro::vector_t<Number>( 2 );
+	// linTransform << 0.707106781,-0.707106781, 0.707106781,0.707106781;
+	// offset << -0.5,-0.5;
+	
+	// hypro::Starset<Number> inputStar(inputPoly.matrix(),inputPoly.vector());
+	// inputStar = inputStar.affineTransformation(linTransform,offset);
+	// hypro::ReLULayer<Number> r(0,0);
+	// r.reachReLU(inputStar, hypro::NN_REACH_METHOD::OVERAPPRX ,true);
+	// return 0;
+
 	// Transform input and safe polytopes to star set
 	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly );
 	bool create_plots = false;
@@ -116,7 +127,7 @@ int main( int argc, char* argv[] ) {
     bool normalize_output = true;
 
 	start = std::chrono::steady_clock::now();
-    bool isSafe = NNtree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, normalize_input, normalize_output );
+	bool isSafe = NNtree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, normalize_input, normalize_output );
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;

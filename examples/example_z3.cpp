@@ -93,8 +93,11 @@ void H_Polytope_to_CNF(){
     std::cout << "Relations: " << rels << std::endl;
 
     hypro::EvaluationResult<Number> result = hypro::z3GetInternalPoint(A, b, rels);
+    // This is just some satisfying value, not (neccessary) a optimum
     std::cout << "Optimum value:" << result.optimumValue << std::endl;
+    // supportValue is not set by z3GetInternalPoint(A,b,rels) and just returns the default value
     std::cout << "Support value:" << result.supportValue << std::endl;
+    // This is just the result: FEAS, INFEAS, INFTY, or UNKOWN
     std::cout << "Error code:" << result.errorCode << std::endl;
 }
 
@@ -122,6 +125,38 @@ void point_inclusion() {
     // Check consistency
     bool isConsistent = hypro::z3CheckPoint(A, b, rels, hypro::Point<Number>(x));
     std::cout << "The system is: " << (isConsistent ? "consistent" : "inconsistent") << std::endl;
+}
+
+void point_inclusion_ErrorTest() {
+    // Given system Ax <= b, check if it is consistent
+    hypro::matrix_t<Number> A(1, 2);
+    A << 2, 1;
+
+    hypro::vector_t<Number> b(1);
+    b << 0;
+
+    hypro::vector_t<Number> x(2);
+    x << -1, 1; 
+    hypro::vector_t<Number> y(2);
+    y << 1, -1; 
+
+    std::vector <carl::Relation> rels;
+    for (size_t i = 0; i < A.rows(); ++i) {
+        rels.push_back(carl::Relation::LEQ);
+    }
+
+    std::cout << "A = \n" << A << std::endl;
+    std::cout << "b = \n" << b << std::endl;
+    std::cout << "x = \n" << x << std::endl;
+    std::cout << "y = \n" << y << std::endl;
+    std::cout << "Relations: " << rels << std::endl;
+
+    // Check consistency
+    bool isConsistent = hypro::z3CheckPoint(A, b, rels, hypro::Point<Number>(x));
+    std::cout << "The system for x: " << A(0,0)*x(0) + A(0,1)*x(1) << " <= " << b << " is " <<(isConsistent ? "consistent" : "inconsistent") << std::endl;
+
+    isConsistent = hypro::z3CheckPoint(A, b, rels, hypro::Point<Number>(y));
+    std::cout << "The system for y: " << A(0,0)*y(0) + A(0,1)*y(1) << " <= " << b << " is " << (isConsistent ? "consistent" : "inconsistent") << std::endl;
 }
 
 void transformed_point_inclusion() {
@@ -166,7 +201,9 @@ int main() {
     // Own examples, useful for CEGAR
     // H_Polytope_to_CNF();
     // point_inclusion();
-    transformed_point_inclusion();
+    // point_inclusion_ErrorTest();
 
+    transformed_point_inclusion();
+    
     return 0;
 }
