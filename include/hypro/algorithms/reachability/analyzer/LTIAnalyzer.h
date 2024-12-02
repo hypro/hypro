@@ -36,9 +36,8 @@ namespace hypro {
  * @tparam State state set representation type
  * @tparam Automaton automaton type
  * @tparam Heuristics used search heuristics
- * @tparam Multithreading enable/disable multithreading
  */
-    template<typename State, typename Automaton, typename Heuristics = DepthFirst<State, typename Automaton::LocationType>, typename Multithreading = NoMultithreading>
+    template<typename State, typename Automaton, typename Heuristics = DepthFirst<State, typename Automaton::LocationType>>
     class LTIAnalyzer {
         using Number = typename State::NumberType;
         using LocationT = typename Automaton::LocationType;
@@ -66,7 +65,7 @@ namespace hypro {
         }
 
         ~LTIAnalyzer() {
-            if (std::is_same_v<Multithreading, UseMultithreading> && !mStopped) {
+            if (mParameters.useMultithreading && !mStopped) {
                 shutdown();
             }
         }
@@ -74,7 +73,7 @@ namespace hypro {
         LTIResult run();
 
         void addToQueue(ReachTreeNode<State, LocationT> *node) {
-            if (std::is_same<Multithreading, UseMultithreading>::value) {
+            if (mParameters.useMultithreading) {
                 {
                     std::unique_lock<std::mutex> lock(mQueueMutex);
                     mWorkQueue.push(node);

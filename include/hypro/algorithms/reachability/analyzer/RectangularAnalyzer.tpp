@@ -11,8 +11,8 @@
 
 namespace hypro {
 
-    template<typename State, typename Automaton, typename Multithreading>
-    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::run() {
+    template<typename State, typename Automaton>
+    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton>::run() {
         // create reachTree if not already present
         if (mReachTree.empty()) {
             mReachTree = makeRoots<State, Automaton>(*mHybridAutomaton);
@@ -23,7 +23,7 @@ namespace hypro {
         }
         DEBUG("hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue");
 
-        if (std::is_same_v<Multithreading, UseMultithreading>) {
+        if (mAnalysisSettings.strategy().front().useMultithreading) {
             mIdle = std::vector(mNumThreads, true);
             std::mutex resultMutex;
             REACHABILITY_RESULT res{REACHABILITY_RESULT::SAFE};
@@ -96,8 +96,8 @@ namespace hypro {
         }
     }
 
-    template<typename State, typename Automaton, typename Multithreading>
-    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::forwardRun() {
+    template<typename State, typename Automaton>
+    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton>::forwardRun() {
         DEBUG("hypro.reachability.rectangular", "Start forward analysis");
 
         RectangularWorker<State, Automaton> worker{*mHybridAutomaton, mAnalysisSettings};
@@ -116,9 +116,9 @@ namespace hypro {
         return REACHABILITY_RESULT::SAFE;
     }
 
-    template<typename State, typename Automaton, typename Multithreading>
+    template<typename State, typename Automaton>
     REACHABILITY_RESULT
-    RectangularAnalyzer<State, Automaton, Multithreading>::processNode(RectangularWorker<State, Automaton> &worker,
+    RectangularAnalyzer<State, Automaton>::processNode(RectangularWorker<State, Automaton> &worker,
                                                                        ReachTreeNode<State, LocationT> *node) {
         REACHABILITY_RESULT safetyResult;
         TRACE("hypro.reachability.rectangular", "Analyze node at depth " << node->getDepth());

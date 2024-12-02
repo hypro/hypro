@@ -23,9 +23,8 @@ namespace hypro {
  * @details Requires the usage of a suitable state set representation, e.g., carlPolytope.
  * @tparam State state set representation type (must be polyhedral)
  * @tparam Automaton hybrid automaton type
- * @tparam Multithreading enable/disable multithreading (currently not supported)
  */
-template <typename State, typename Automaton, typename Multithreading = NoMultithreading>
+template <typename State, typename Automaton>
 class RectangularSyncAnalyzer {
 	static_assert( std::is_same<typename State::NumberType, typename Automaton::NumberType>() );
 	using Number = typename State::NumberType;

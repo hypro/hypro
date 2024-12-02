@@ -22,9 +22,8 @@ namespace hypro {
  * @details Requires the usage of a suitable state set representation, e.g., carlPolytope.
  * @tparam State state set representation type (must be polyhedral)
  * @tparam Automaton hybrid automaton type
- * @tparam Multithreading enable/disable multithreading
  */
-    template<typename State, typename Automaton, typename Multithreading = NoMultithreading>
+    template<typename State, typename Automaton>
     class RectangularAnalyzer {
         static_assert(std::is_same<typename State::NumberType, typename Automaton::NumberType>());
         using Number = typename State::NumberType;
@@ -48,7 +47,7 @@ namespace hypro {
         // REACHABILITY_RESULT backwardRun();
 
         void addToQueue(ReachTreeNode<State, LocationT> *node) {
-            if (std::is_same_v<Multithreading, UseMultithreading>) {
+            if (mAnalysisSettings.strategy().front().useMultithreading) {
                 {
                     std::unique_lock<std::mutex> lock(mQueueMutex);
                     mWorkQueue.push(node);

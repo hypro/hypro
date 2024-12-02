@@ -11,8 +11,8 @@
 
 namespace hypro {
 
-template <typename State, typename Automaton, typename Multithreading>
-REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::run() {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton>::run() {
 	
 	// initialize queue
 	for ( auto& automaton : mHybridAutomata ) {
@@ -32,8 +32,8 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::r
 	return safetyResult;
 }
 
-template <typename State, typename Automaton, typename Multithreading>
-REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::forwardRun() {
+template <typename State, typename Automaton>
+REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton>::forwardRun() {
 	DEBUG( "hypro.reachability.rectangular", "Start forward analysis" );
 	// create a rectangular worker for each automaton
 	std::map<Automaton const*, RectangularSyncWorker<State, Automaton>> automatonWorkerMap;
@@ -83,9 +83,9 @@ REACHABILITY_RESULT RectangularSyncAnalyzer<State, Automaton, Multithreading>::f
 	return REACHABILITY_RESULT::SAFE;
 }
 
-template <typename State, typename Automaton, typename Multithreading>
+template <typename State, typename Automaton>
 REACHABILITY_RESULT
-RectangularSyncAnalyzer<State, Automaton, Multithreading>::processNode( RectangularSyncWorker<State, Automaton>& worker,
+RectangularSyncAnalyzer<State, Automaton>::processNode( RectangularSyncWorker<State, Automaton>& worker,
 																		ReachTreeNode<State, LocationT>* node, Automaton const* automaton ) {
 	REACHABILITY_RESULT safetyResult;
 	TRACE( "hypro.reachability.rectangular", "Analyze node at depth " << node->getDepth() );
