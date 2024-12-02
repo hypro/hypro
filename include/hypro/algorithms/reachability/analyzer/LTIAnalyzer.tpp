@@ -52,6 +52,9 @@ namespace hypro {
                         }
 
                         auto result = processNode(worker, currentNode, transformationCache);
+                        if (!mParameters.saveReachableSegments) {
+                            currentNode->forgetFlowpipe();
+                        }
                         if (result.isFailure()) {
                             mTerminate = true;
                             {
@@ -95,6 +98,10 @@ namespace hypro {
                 if (result.isFailure()) {
                     DEBUG("hypro.reachability", "End LTI Reachability Analysis.");
                     return result;
+                }
+                // if we should not save the reachable segments in the node, we will delete them at this point
+                if (!mParameters.saveReachableSegments) {
+                    currentNode->forgetFlowpipe();
                 }
             }
             DEBUG("hypro.reachability", "End LTI Reachability Analysis.");

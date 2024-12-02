@@ -13,7 +13,7 @@
 #include <cassert>
 #include <hypro/algorithms/reachability/Reach.h>
 #include <hypro/datastructures/HybridAutomaton/HybridAutomaton.h>
-#include <hypro/datastructures/reachability/TreeUtil.h>
+#include <hypro/datastructures/reachability/ReachTreev2Util.h>
 
 class ReachabilityAnalysisTest : public ::testing::Test {
   protected:
@@ -432,5 +432,36 @@ TEST_F( ReachabilityAnalysisTest, GlobalTimeHorizonOverrideLocal ) {
 	EXPECT_EQ( std::size_t( 2 ), hypro::getNumberNodes( roots.front() ) );
 	EXPECT_LE( roots.front().getFlowpipe().size(), hypro::SegmentInd( 200 ) );
 	EXPECT_LE( ( *roots.front().getChildren().begin() )->getFlowpipe().size(), hypro::SegmentInd( 200 ) );
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
+}
+
+TEST_F( ReachabilityAnalysisTest, ReachabilityDontSaveReachedSegments ) {
+	
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+
+	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
+
+	using tNumber = hypro::tNumber;
+	hypro::FixedAnalysisParameters fixedParameters;
+	fixedParameters.jumpDepth = 3;
+	fixedParameters.localTimeHorizon = 5;
+	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 100 );
+
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 100 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::polytope_h;
+	analysisParameters.saveReachableSegments = false;
+
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
+
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
+
+	// run reacher. Return type explicit to be able to monitor changes
+	auto reachabilityResult = reacher.computeForwardReachability();
+
+	EXPECT_EQ( std::size_t( 4 ), hypro::getNumberNodes( roots.front() ) );
+	EXPECT_EQ( hypro::getNumberSegments(roots), 0 );
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
 }

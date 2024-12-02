@@ -108,6 +108,8 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 
 	void setFlowpipe( const std::vector<Representation> &fp ) { mFlowpipe = fp; }
 
+	void forgetFlowpipe() { mFlowpipe.clear(); }
+
 	const REACHABILITY_RESULT &getSafety() const { return mSafetyResult; }
 
 	void setSafety( REACHABILITY_RESULT result ) { mSafetyResult = result; }

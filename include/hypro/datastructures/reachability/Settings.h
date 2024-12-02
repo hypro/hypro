@@ -37,7 +37,7 @@ namespace hypro {
         int setMinusAlgoUsed = 0;                                                   ///< 0 = use the setMinus2, 1 = use the setMinusCrossing, 2 = use the setMinusOld
 
         bool useMultithreading = false;                                             ///< use multithreading for reachability or not, bool variable introduced in order to get rif of one template parameter 
-        bool saveSegmentsDuringReachability = true;                                 ///< if true the reachable segment will be save in the modes of the reach tree, for example for plotting purposes 
+        bool saveReachableSegments = true;                                 ///< if true the reachable segment will be save in the modes of the reach tree, for example for plotting purposes 
     };
 
     struct FixedAnalysisParameters {
