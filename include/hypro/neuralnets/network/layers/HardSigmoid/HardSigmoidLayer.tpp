@@ -105,6 +105,41 @@ std::vector<Starset<Number>> HardSigmoidLayer<Number>::forwardPass( const std::v
 
 template <typename Number>
 Point<Number> HardSigmoidLayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
+	assert( neuronNumber < y.dimension() );
+	assert( 0 <= y[neuronNumber]  && y[neuronNumber] <= 1 );
+
+	Number y_neuronNumber = y[neuronNumber];
+	carl::Relation rel;
+	if ( y[neuronNumber] == 0 ){
+		rel = carl::Relation::LEQ;
+		y[neuronNumber] = mMinValue;
+	} else if (y[neuronNumber] == 1){
+		rel = carl::Relation::GEQ;
+		y[neuronNumber] = mMaxValue;
+	} else {
+		rel = carl::Relation::EQ;
+		y[neuronNumber] = (mMaxValue - mMinValue) * y[neuronNumber] + mMinValue;
+	}
+
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint(inputSet.shape(),inputSet.limits(),inputSet.generator(), inputSet.center(), y, neuronNumber, rel);
+
+	switch ( result.errorCode ) {
+		case SOLUTION::FEAS:
+			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl;
+			if ( y_neuronNumber == 0 || y_neuronNumber == 1){
+				y[neuronNumber] = Point<Number>( inputSet.generator() * result.optimumValue + inputSet.center() )[neuronNumber];
+			} 
+			return y;
+
+		case SOLUTION::INFEAS:
+			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
+            return Point<Number>();
+
+		default:
+			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
+			break;
+	}
+
 	return Point<Number>();
 }
 }  // namespace hypro

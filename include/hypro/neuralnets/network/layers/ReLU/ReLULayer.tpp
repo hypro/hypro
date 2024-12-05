@@ -105,7 +105,7 @@ Point<Number> ReLULayer<Number>::propagateCandidateBack( Point<Number> y, int ne
 	EvaluationResult<Number> result;
 	if ( 0 == y.coordinate( neuronNumber ) ) {
 		// y = ReLU(x) = max(0,x) = 0 -> x <= 0
-		result = hypro::z3GetInternalPoint(inputSet.shape(),inputSet.limits(),inputSet.generator(), inputSet.center(), y, neuronNumber, carl::Relation::LEQ, 0 );
+		result = hypro::z3GetInternalPoint(inputSet.shape(),inputSet.limits(),inputSet.generator(), inputSet.center(), y, neuronNumber, carl::Relation::LEQ );
 	} else {
 		// 0 < y && y = ReLU(x) = max(0,x) -> y = x
 		result = hypro::z3GetInternalPoint( inputSet.shape(), inputSet.limits(), inputSet.generator(), inputSet.center(), y );

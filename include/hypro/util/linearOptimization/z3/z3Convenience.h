@@ -181,8 +181,7 @@ static z3::expr createFormula(
  const vector_t<Number>& _offset,
  z3Context& c,
  const int &_dimension,
- const carl::Relation &_relation,
- const float &_bound
+ const carl::Relation &_relation 
  ) {
 
     // Build formula for Cx <= d and y = Ax + b, such that y is given and find a satisfying assignment for x (if exists)
@@ -220,9 +219,6 @@ static z3::expr createFormula(
         }
         z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _point.at( i ) ) ) - c.real_val( carl::convert<Number, mpq_class>( _offset( i ) ) );
         if (i == _dimension){
-            if (_bound != 0){
-                constant = constant + c.real_val(carl::convert<double,mpq_class>(_bound));
-            }
             switch ( _relation ) {
                 case carl::Relation::LEQ:
                     formula = formula && (constraint <= constant);
@@ -233,6 +229,12 @@ static z3::expr createFormula(
                 case carl::Relation::EQ:
                    formula = formula && (constraint == constant);
                     break;
+                case carl::Relation::LESS:
+                    formula = formula && (constraint < constant);
+                    break;
+                case carl::Relation::GREATER:
+                    formula = formula && (constraint > constant);
+                    break;                
                 default:
                     assert( false );
             }   

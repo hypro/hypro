@@ -230,15 +230,14 @@ namespace hypro {
                         const matrix_t <Number> &linTransform, const vector_t <Number> &offset,
                         const Point <Number> &point,
                         const int &dimension,
-                        const carl::Relation &relation,
-                        const float &bound 
+                        const carl::Relation &relation
                         ) {
         z3Context c;
         EvaluationResult <Number> res;
         z3::solver z3Solver(c);
 
         // create formula and objective
-        z3::expr formula = createFormula<Number>(point, constraints, constants, linTransform, offset, c, dimension, relation, bound);
+        z3::expr formula = createFormula<Number>(point, constraints, constants, linTransform, offset, c, dimension, relation);
 
         // inform and add constraints
         z3Solver.add(formula);

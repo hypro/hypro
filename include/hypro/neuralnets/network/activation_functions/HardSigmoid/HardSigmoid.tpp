@@ -145,7 +145,7 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = ( 1 / ( maxValue - minValue ) );
 			basis_1 = transformationMatrix * basis_1;
-			center_1( i ) = ( minValue / ( minValue - maxValue ) );
+			center_1( i ) = ( center_1( i ) / ( maxValue - minValue ) )  + ( minValue / ( minValue - maxValue ) );
 			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
 
 			// split the star input into the part that is greater than maxValue

@@ -105,6 +105,29 @@ std::vector<Starset<Number>> LeakyReLULayer<Number>::forwardPass( const std::vec
 
 template <typename Number>
 Point<Number> LeakyReLULayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
+	assert( neuronNumber < y.dimension() );
+	
+	if ( y.coordinate( neuronNumber ) < 0 ) {
+		// y = LeakyReLU(x) = max(mNegativeSlope * x,x) < 0 -> x = (y/mNegativeSlope)
+		y[neuronNumber] =  (1 / mNegativeSlope) * y[neuronNumber];
+	} // Otherwise x = y
+
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint(inputSet.shape(),inputSet.limits(),inputSet.generator(), inputSet.center(), y);
+	// std::cout << "ReLU" << std::endl;
+
+	switch ( result.errorCode ) {
+		case SOLUTION::FEAS:
+			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl; 
+			return y;
+
+		case SOLUTION::INFEAS:
+			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
+            return Point<Number>();
+
+		default:
+			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
+			break;
+	}
 	return Point<Number>();
 }
 
