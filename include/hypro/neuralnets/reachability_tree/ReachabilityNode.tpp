@@ -17,8 +17,7 @@ ReachabilityNode<Number>::ReachabilityNode( Starset<Number> representation, NN_R
 	, mIsSafe( false )
 	, mIsComputed( false )
 	, mHasParent( false )
-	, mHasPosChild( false )
-	, mHasNegChild( false )
+	, mChildren(std::vector<ReachabilityNode<Number>*>())
 	, mPlotter( hypro::Plotter<Number>::getInstance() ) {}
 
 // template <typename Number>
@@ -76,23 +75,13 @@ void ReachabilityNode<Number>::setHasParent( bool hasParent ) {
 }
 
 template <typename Number>
-bool ReachabilityNode<Number>::hasPosChild() const {
-	return mHasPosChild;
+bool ReachabilityNode<Number>::hasChild(int index) const{
+	return 0 <= index && index < mChildren.size();
 }
 
 template <typename Number>
-void ReachabilityNode<Number>::setHasPosChild( bool hasPosChild ) {
-	mHasPosChild = hasPosChild;
-}
-
-template <typename Number>
-bool ReachabilityNode<Number>::hasNegChild() const {
-	return mHasNegChild;
-}
-
-template <typename Number>
-void ReachabilityNode<Number>::setHasNegChild( bool hasNegChild ) {
-	mHasNegChild = hasNegChild;
+int ReachabilityNode<Number>::getNumberOfChildren() const{
+	return mChildren.size();
 }
 
 template <typename Number>
@@ -107,25 +96,25 @@ void ReachabilityNode<Number>::setParent( ReachabilityNode<Number>* parent ) {
 }
 
 template <typename Number>
-ReachabilityNode<Number>* ReachabilityNode<Number>::getPosChild() const {
-	return mPosChild;
+ReachabilityNode<Number>* ReachabilityNode<Number>::getChild(int index) const {
+	assert(0 <= index && index < mChildren.size());
+	return mChildren[index];
 }
 
 template <typename Number>
-void ReachabilityNode<Number>::setPosChild( ReachabilityNode<Number>* posChild ) {
-	mHasPosChild = true;
-	mPosChild = posChild;
+void ReachabilityNode<Number>::setChild( int index, ReachabilityNode<Number>* child ){
+	assert(0 <= index && index < mChildren.size());
+	mChildren[index] = child;
 }
 
 template <typename Number>
-ReachabilityNode<Number>* ReachabilityNode<Number>::getNegChild() const {
-	return mNegChild;
+void ReachabilityNode<Number>::addChild(ReachabilityNode<Number>* child ){
+	mChildren.push_back(child);
 }
 
 template <typename Number>
-void ReachabilityNode<Number>::setNegChild( ReachabilityNode<Number>* negChild ) {
-	mHasNegChild = true;
-	mNegChild = negChild;
+void ReachabilityNode<Number>::removeAllChildren(){
+	mChildren.clear();
 }
 
 template <typename Number>
@@ -168,19 +157,24 @@ bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, i
     }
 
 	EvaluationResult<Number> result = z3GetCounterexample( currentSet.shape(), currentSet.limits(), currentSet.generator(), currentSet.center(), rejectionMatrices, rejectionVectors);
-	std::cout << result.errorCode << std::endl;
 	return result.errorCode == SOLUTION::INFEAS;
 }
 
 template <typename Number>
 bool ReachabilityNode<Number>::checkSafe( const std::vector<HPolytope<Number>>& safeSets ) const {
+	// if the node is a leaf, we should check if the representation is only in the safe region (which is a non-convex set, DNF)
 	if ( mIsLeaf ) {
-		// if the node is a leaf, we should check if the representation is only in the safe region (which is a non-convex set, DNF)
 		return checkSafeRecursive( mRepresentation, 0, safeSets );
-	} else {
-		// if the node is not a leaf, then it safetiness depends on the childs
-		return ( mNegChild->checkSafe(safeSets) ) && ( mPosChild->checkSafe(safeSets) );
+	} 
+
+	// if the node is not a leaf, then it safetiness depends on the children
+	for (ReachabilityNode<Number>* child : mChildren){
+		if(!(child->checkSafe(safeSets))){
+			return false;
+		}
 	}
+
+	return true;
 }
 
 template <typename Number>

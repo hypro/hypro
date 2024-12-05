@@ -45,10 +45,13 @@ std::vector<ReachabilityNode<Number>*> ReachabilityTree<Number>::leaves() const 
 */
 template <typename Number>
 unsigned short int ReachabilityTree<Number>::depth(ReachabilityNode<Number>* node) const {
-	unsigned short int depthChild1 = node->hasPosChild() ? depth(node->getPosChild()) : 0;
-	unsigned short int depthChild2 = node->hasNegChild() ? depth(node->getNegChild()) : 0;
-	
-	return 1 + ((depthChild1 > depthChild2) ? depthChild1 : depthChild2);
+	unsigned short int maxDepth = 0;
+	for (int i = 0; i < node->getNumberOfChildren(); i++){
+		unsigned short int depthChild = depth(node->getChild(i));
+		maxDepth = maxDepth < depthChild ? depthChild : maxDepth; 	
+	}
+		
+	return 1 + maxDepth;
 }
 
 template <typename Number>
@@ -355,37 +358,22 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 		mIsSafe = true;
 		mIsComplete = false;
 
-		// if ( refinedNode->hasPosChild() ) {
-		// 	delete refinedNode->getPosChild();
-		// }
-		// if ( refinedNode->hasNegChild() ) {
-		// 	delete refinedNode->getNegChild();
-		// }
-		refinedNode->setHasPosChild( false );
-		refinedNode->setPosChild( nullptr );
-		refinedNode->setHasNegChild( false );
-		refinedNode->setNegChild( nullptr );
-
-		// calculate the childs of the refined node using exact computation
+		// calculate the childrens of the refined node using exact computation
+		refinedNode->removeAllChildren();
 		std::cout << "Refining the selected node" << std::endl;
 		SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );
 		std::cout << "refinedJob created" << std::endl;
 		std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT );
 		std::cout << "New jobs size: " << newJobs.size() << std::endl;
 
-		// set the childs of the refined node
-		newJobs[0].getNode()->setMethod( NN_REACH_METHOD::OVERAPPRX );
-		newJobs[1].getNode()->setMethod( NN_REACH_METHOD::OVERAPPRX );
-
-		// use the compute reach tree function to compute the subtrees of the childs
-		std::cout << "Computing positive subtree" << std::endl;
-		ReachabilityNode<Number>* posSubTree = computeReachTree( newJobs[0].getNode(), safeOutput, strategy );
-		std::cout << "Computing negative subtree" << std::endl;
-		ReachabilityNode<Number>* negSubTree = computeReachTree( newJobs[1].getNode(), safeOutput, strategy );
-
-		// TODO: are these even necessary?  std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT ); ... should already handle
-		refinedNode->setPosChild( posSubTree );
-		refinedNode->setNegChild( negSubTree );
+		
+		for (int i = 0; i < newJobs.size(); i++){
+			std::cout << "Computing "<< i << ". subtree" << std::endl;
+			// set the children of the refined node
+			newJobs[i].getNode()->setMethod( NN_REACH_METHOD::OVERAPPRX );
+			// use the compute reach tree function to compute the subtrees of the children
+			computeReachTree( newJobs[i].getNode(), safeOutput, strategy );
+		}
 
 		ctx++;
 		if ( createPlots )
@@ -478,11 +466,8 @@ void ReachabilityTree<Number>::updateLeaves( ReachabilityNode<Number>* node ) {
 	if ( node->isLeaf() ) {
 		mLeaves.push_back( node );
 	} else {
-		if ( node->hasPosChild() ) {
-			updateLeaves( node->getPosChild() );
-		}
-		if ( node->hasNegChild() ) {
-			updateLeaves( node->getNegChild() );
+		for (int i = 0; i < node->getNumberOfChildren(); i++){
+			updateLeaves( node->getChild(i) );		
 		}
 	}
 }
@@ -538,11 +523,8 @@ void ReachabilityTree<Number>::plotTree( ReachabilityNode<Number>* current, std:
 	mPlotter.setFilename( filename + "_pdf.plt" );
 	current->plot();
 
-	if ( current->hasPosChild() ) {
-		plotTree( current->getPosChild(), filename + "+" );
-	}
-	if ( current->hasNegChild() ) {
-		plotTree( current->getNegChild(), filename + "-" );
+	for (int i = 0; i < current->getNumberOfChildren(); i++){
+		plotTree( current->getChild(i), filename + "." + std::to_string(i) );
 	}
 }
 

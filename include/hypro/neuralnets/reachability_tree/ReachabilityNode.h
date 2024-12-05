@@ -29,11 +29,8 @@ class ReachabilityNode {
 
 	bool mHasParent;
 	ReachabilityNode<Number>* mParent;
-	bool mHasPosChild;
-	ReachabilityNode<Number>* mPosChild;
-	bool mHasNegChild;
-	ReachabilityNode<Number>* mNegChild;
-
+	std::vector<ReachabilityNode<Number>*> mChildren;
+		
 	int mLayerNumber;	// the number of layer in the original NNet
 	int mNeuronNumber;	// the number of neuron in the current layer
 
@@ -60,18 +57,16 @@ class ReachabilityNode {
 
 	bool hasParent() const;
 	void setHasParent( bool hasParent );
-	bool hasPosChild() const;
-	void setHasPosChild( bool hasPosChild );
-	bool hasNegChild() const;
-	void setHasNegChild( bool hasNegChild );
+	bool hasChild(int index) const;
+	int getNumberOfChildren() const;
 
 	ReachabilityNode<Number>* getParent() const;
 	void setParent( ReachabilityNode<Number>* parent );
-	ReachabilityNode<Number>* getPosChild() const;
-	void setPosChild( ReachabilityNode<Number>* posChild );
-	ReachabilityNode<Number>* getNegChild() const;
-	void setNegChild( ReachabilityNode<Number>* negChild );
-
+	ReachabilityNode<Number>* getChild(int index) const;
+	void setChild( int index, ReachabilityNode<Number>* child );
+	void addChild(ReachabilityNode<Number>* child );
+	void removeAllChildren();
+	
 	int layerNumber() const;
 	int neuronNumber() const;
 

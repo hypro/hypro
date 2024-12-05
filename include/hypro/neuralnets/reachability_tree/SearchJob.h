@@ -47,7 +47,7 @@ class SearchJob {
 		// the new jobs produced by calculating the current job
 		std::vector<SearchJob<Number>> newJobs;
 		mNode->setComputed( true );
-
+		
 		// check if it was the last neuron of the last layer, so this job produces (part of) the final result
 		if ( ( mLayer->layerIndex() == mAllLayers.size() - 1 ) && ( ( mLayer->layerType() == NN_LAYER_TYPE::AFFINE ) ||
 																	( mLayer->layerType() != NN_LAYER_TYPE::AFFINE ) && ( mIndex == mLayer->layerSize() - 1 ) ) ) {
@@ -57,14 +57,7 @@ class SearchJob {
 				leafNode->setParent( mNode );
 				leafNode->setLeaf( true );
 				leafNode->setComputed( true );
-				if ( !mNode->hasPosChild() ) {
-					mNode->setPosChild(leafNode);
-				}
-				else {
-					if ( !mNode->hasNegChild() ) {
-						mNode->setNegChild(leafNode);
-					}
-				}
+				mNode->addChild(leafNode);
 				newJobs.push_back( SearchJob( leafNode, mAllLayers, true ) );
 			}
 			return newJobs;
@@ -84,12 +77,17 @@ class SearchJob {
 					// this for always should iterate only once
 					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
 					nextNode->setParent( mNode );
-					mNode->setPosChild( nextNode );
+					mNode->addChild( nextNode );
 					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
 				break;
+
+				 
 			case NN_LAYER_TYPE::RELU:
 			case NN_LAYER_TYPE::HARD_TANH:
+			case NN_LAYER_TYPE::LEAKY_RELU:
+			case NN_LAYER_TYPE::HARD_SIGMOID:
+			case NN_LAYER_TYPE::STEP_FUNCTION:
 				if ( mIndex < mLayer->layerSize() - 1 ) {
 					// get the next neuron in the current layer
 					newLayerNum = mLayerNum;
@@ -104,15 +102,7 @@ class SearchJob {
 				for ( int i = 0; i < N; ++i ) {
 					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
 					nextNode->setParent( mNode );
-					if ( !mNode->hasPosChild() ) {
-						mNode->setPosChild(nextNode);
-					}
-					else {
-						if ( !mNode->hasNegChild() ) {
-							mNode->setNegChild(nextNode);
-						}
-					}
-
+					mNode->addChild(nextNode);
 					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
 
