@@ -69,7 +69,7 @@ void ReLU(hypro::Starset<Number> input){
     std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,approxStars[0]) << std::endl;
 }
 
-void LeakyReLU(hypro::Starset<Number> input, float slope = 0.01){
+void LeakyReLU(hypro::Starset<Number> input, Number slope = Number(1)/Number(100)){
     std::cout << "\n\n================ LeakyReLU Layer ================\n";
     //Calculate stars
 	hypro::LeakyReLULayer<Number> layer(0, 0, slope);
@@ -80,7 +80,7 @@ void LeakyReLU(hypro::Starset<Number> input, float slope = 0.01){
     hypro::vector_t<Number> inId(2);
     inId << 1,1;
     hypro::vector_t<Number> inZero(2);
-    inZero << 1,-0.01;
+    inZero << 1, -(Number(1)/Number(100));
 
     //Point not in exact
     hypro::vector_t<Number> notIn(2);

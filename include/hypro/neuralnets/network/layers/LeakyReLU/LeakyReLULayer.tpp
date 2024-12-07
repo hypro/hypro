@@ -14,10 +14,10 @@
 namespace hypro {
 
 template <typename Number>
-LeakyReLULayer<Number>::LeakyReLULayer( unsigned short layerSize, unsigned short layerIndex, float negativeSlope )
+LeakyReLULayer<Number>::LeakyReLULayer( unsigned short layerSize, unsigned short layerIndex, Number negativeSlope )
 	: LayerBase<Number>( layerSize, layerIndex )
 	, mNegativeSlope( negativeSlope ) {
-	if ( negativeSlope <= 0 || negativeSlope >= 1 ) {
+	if ( negativeSlope <= Number(0) || negativeSlope >= Number(0) ) {
 		FATAL( "hypro.neuralnets.activation_functions.LeakyReLU", "Invalid value for the negative slope ( 0 < negative slope < 1)" );
 	}
 }

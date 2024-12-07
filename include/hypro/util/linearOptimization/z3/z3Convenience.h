@@ -270,7 +270,6 @@ static z3::expr createFormula(
         std::string name = "x_" + std::to_string( i );
         variables.push_back( c.real_const( name.c_str() ) );
     }
-
     //constrain variables to {variables | _constraints * variables <= _constants }
     for ( unsigned i = 0; i < _constraints.rows(); i++ ) {
         z3::expr constraint( c );
@@ -283,7 +282,6 @@ static z3::expr createFormula(
         z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _constants( i ) ) );
         formula = formula && (constraint <= constant);
     }
-
     // !(C_0*_linTransform*variables <= d_0 - C_0*_offset) && ... && !(C_k*_linTransform*variables <= d_k - C_k*_offset)
     // !(C*_linTransform*variables <= d - C*_offset) <=> (C*_linTransform).row(l)*variables > (d - C*_offset).row(l)
     for (unsigned k = 0; k < _rejectionConstraints.size(); k++){
@@ -369,17 +367,24 @@ static z3::expr createFormula( const ConstraintsT<Number>& constraint_conjunctio
 
 template <typename Number>
 Number z3ResToNumber( z3::context& c, z3::ast& resZ3 ) {
-    int* p = new int;
-    unsigned* q = new unsigned;
-    mpq_t resRational;
+    int64_t* p = new int64_t;
+    uint64_t* q = new uint64_t;
+    
+    Number resNumber;
+    if (Z3_get_numeral_int64(c, Z3_get_numerator(c, resZ3), p) && Z3_get_numeral_uint64(c, Z3_get_denominator(c, resZ3), q)){
+        //Try to fit numerator and denomiator into 64-bit (signed/unsigned) ints
+        mpq_t resRational;
+        mpq_init( resRational );
+        mpq_set_si( resRational, *p, *q);
+        resNumber = carl::convert<mpq_class, Number>( mpq_class( resRational ) );
+        mpq_clear( resRational );
+        
+        
+    } else {
+        //Otherwise use a string of arbitary length
+        resNumber = carl::convert<mpq_class, Number>(mpq_class(Z3_get_numeral_string(c, resZ3)));        
+    }
 
-    Z3_get_numeral_int( c, Z3_get_numerator( c, resZ3 ), p );
-    Z3_get_numeral_uint( c, Z3_get_denominator( c, resZ3 ), q );
-
-    mpq_init( resRational );
-    mpq_set_si( resRational, *p, *q );
-    Number resNumber = carl::convert<mpq_class, Number>( mpq_class( resRational ) );
-    mpq_clear( resRational );
     delete p;
     delete q;
     return resNumber;

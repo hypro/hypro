@@ -427,7 +427,6 @@ Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<
 				Point<Number> counterexample( set.generator() * result.optimumValue + set.center());
 				//TODO: Find a solution to generate a counterexaple as far from the bounds as possible
 				//This is a hack to remove the rounding errors that sometimes appears in computation
-				counterexample = counterexample*Number(0.99);				
 				assert(set.contains(counterexample));
 				return counterexample;
 			}

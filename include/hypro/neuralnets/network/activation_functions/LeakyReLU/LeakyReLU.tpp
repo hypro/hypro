@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> LeakyReLU<Number>::exactLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, float negativeSlope ) {
+std::vector<hypro::Starset<Number>> LeakyReLU<Number>::exactLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, Number negativeSlope ) {
 	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
 
 	int k = input_sets.size();
@@ -71,7 +71,7 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::exactLeakyReLU( int i, st
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, float negativeSlope ) {
+std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, Number negativeSlope ) {
 	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
 	int k = input_sets.size();
 	for ( int j = 0; j < k; j++ ) {

@@ -214,7 +214,8 @@ namespace hypro {
                     // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
                     size_t varIndex = std::stoull(var.name().str().substr(2));
                     // std::cout << "varIndex: " << varIndex << std::endl;
-                    pointCoordinates(varIndex) = Number(Z3_get_numeral_double(c, m.get_const_interp(var)));
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
                 }
             }
             res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
@@ -255,7 +256,8 @@ namespace hypro {
                     // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
                     size_t varIndex = std::stoull(var.name().str().substr(2));
                     // std::cout << "varIndex: " << varIndex << std::endl;
-                    pointCoordinates(varIndex) = Number(Z3_get_numeral_double(c, m.get_const_interp(var)));
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
                 }
             }
             res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
@@ -273,8 +275,7 @@ namespace hypro {
         z3::solver z3Solver(c);
 
         // create formula and objective        
-        z3::expr formula = createFormula<Number>(constraints, constants, linTransform, offset, rejectionMatrices,rejectionVectors, c);
-
+        z3::expr formula = createFormula<Number>(constraints, constants, linTransform, offset, rejectionMatrices, rejectionVectors, c);
         // inform and add constraints
         z3Solver.add(formula);
 
@@ -287,7 +288,8 @@ namespace hypro {
                 if (Z3_model_get_const_interp(c, m, var) != nullptr) {
                     // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
                     size_t varIndex = std::stoull(var.name().str().substr(2));
-                    pointCoordinates(varIndex) = Number(Z3_get_numeral_double(c, m.get_const_interp(var)));
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
                 }
             }
             res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
@@ -323,7 +325,8 @@ namespace hypro {
                     // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
                     size_t varIndex = std::stoull(var.name().str().substr(2));
                     // std::cout << "varIndex: " << varIndex << std::endl;
-                    pointCoordinates(varIndex) = Number(Z3_get_numeral_double(c, m.get_const_interp(var)));
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
                 }
             }
             res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);

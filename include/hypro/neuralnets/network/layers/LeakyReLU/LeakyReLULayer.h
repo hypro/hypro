@@ -18,7 +18,7 @@ namespace hypro {
 template <typename Number>
 class LeakyReLULayer : public LayerBase<Number> {
   private:
-	float mNegativeSlope = 0.01;
+	Number mNegativeSlope = 0.01;
 
 	/**
 	 * @brief Applies the given reachability method to the input set
@@ -42,7 +42,7 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 * @param[in] layerIndex The layer index
 	 * @param[in] negativeSlope The factor for the negative part of LeakyReLU. Default: 0.01
 	 */
-	LeakyReLULayer( unsigned short int layerSize, unsigned short int layerIndex, float negativeSlope = 0.01 );
+	LeakyReLULayer( unsigned short int layerSize, unsigned short int layerIndex, Number negativeSlope = Number(1)/Number(100) );
 
 	/**
 	 * @brief Default destructor
