@@ -10,13 +10,18 @@ template <typename Number>
 GeneralPiecewiseLinearLayer<Number>::GeneralPiecewiseLinearLayer( unsigned short int layerSize, unsigned short int layerIndex, size_t numPieces,
 																  const std::vector<Number>& lowerBounds, const std::vector<Number>& upperBounds,
 																  const std::vector<Number>& slopes, const std::vector<Number>& offsets )
-	: LayerBase<Number>( layerSize, layerIndex ), mNumPieces(numPieces), mLowerBounds(lowerBounds), mUpperBounds(upperBounds), mSlopes(slopes), mOffsets(offsets) {
-        for(int i = 0; i < mNumPieces - 1; ++i) {
-            assert(mLowerBounds[i] < mLowerBounds[i+1]);
-            assert(mUpperBounds[i] < mUpperBounds[i+1]);
-            assert(mLowerBounds[i+1] == mUpperBounds[i]);
-        }
-    }
+	: LayerBase<Number>( layerSize, layerIndex )
+	, mNumPieces( numPieces )
+	, mLowerBounds( lowerBounds )
+	, mUpperBounds( upperBounds )
+	, mSlopes( slopes )
+	, mOffsets( offsets ) {
+	for ( int i = 0; i < mNumPieces - 1; ++i ) {
+		assert( mLowerBounds[i] < mLowerBounds[i + 1] );
+		assert( mUpperBounds[i] < mUpperBounds[i + 1] );
+		assert( mLowerBounds[i + 1] == mUpperBounds[i] );
+	}
+}
 
 template <typename Number>
 const NN_LAYER_TYPE GeneralPiecewiseLinearLayer<Number>::layerType() const {
@@ -26,11 +31,11 @@ const NN_LAYER_TYPE GeneralPiecewiseLinearLayer<Number>::layerType() const {
 template <typename Number>
 vector_t<Number> GeneralPiecewiseLinearLayer<Number>::forwardPass( const vector_t<Number>& inputVec, int i ) const {
 	vector_t<Number> outputVec = inputVec;
-    for(int j = 0; j < mNumPieces; ++j) {
-        if( mLowerBounds[j] <= inputVec[i] && inputVec[i] <= mUpperBounds[j] ) {
-            outputVec[i] = mOffsets[j] + mSlopes[j] * inputVec[i];
-        }
-    }
+	for ( int j = 0; j < mNumPieces; ++j ) {
+		if ( mLowerBounds[j] <= inputVec[i] && inputVec[i] <= mUpperBounds[j] ) {
+			outputVec[i] = mOffsets[j] + mSlopes[j] * inputVec[i];
+		}
+	}
 	return outputVec;
 }
 
@@ -38,20 +43,21 @@ template <typename Number>
 vector_t<Number> GeneralPiecewiseLinearLayer<Number>::forwardPass( const vector_t<Number>& inputVec ) const {
 	vector_t<Number> outputVec = inputVec;
 	for ( int i = 0; i < outputVec.size(); ++i ) {
-        for(int j = 0; j < mNumPieces; ++j) {
-            if( mLowerBounds[j] <= inputVec[i] && inputVec[i] <= mUpperBounds[j] ) {
-                outputVec[i] = mOffsets[j] + mSlopes[j] * inputVec[i];
-            }
-        }
+		for ( int j = 0; j < mNumPieces; ++j ) {
+			if ( mLowerBounds[j] <= inputVec[i] && inputVec[i] <= mUpperBounds[j] ) {
+				outputVec[i] = mOffsets[j] + mSlopes[j] * inputVec[i];
+			}
+		}
 	}
 	return outputVec;
 }
 
 template <typename Number>
 std::vector<hypro::Starset<Number>> GeneralPiecewiseLinearLayer<Number>::reachGeneralPiecewiseLinear( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plotIntermediates ) const {
-	std::vector<hypro::Starset<Number>> I_n = std::vector<hypro::Starset<Number>>();
+	std::vector<hypro::Starset<Number>> I_n;
 	I_n.push_back( inputSet );
-	for ( int i = 0; i < inputSet.generator().rows(); i++ ) {
+    size_t d = inputSet.generator().rows();
+	for ( size_t i = 0; i < d; i++ ) {
 		// std::cout << "Neuron index:" << i << std::endl;
 		// iterate over the dimensions of the input star
 		switch ( method ) {
@@ -59,6 +65,7 @@ std::vector<hypro::Starset<Number>> GeneralPiecewiseLinearLayer<Number>::reachGe
 				I_n = GeneralPiecewiseLinear<Number>::stepGeneralPiecewiseLinear( i, I_n, mNumPieces, mLowerBounds, mUpperBounds, mSlopes, mOffsets );
 				break;
 			case NN_REACH_METHOD::OVERAPPRX:
+                // TODO: method not implemented yet
 				I_n = GeneralPiecewiseLinear<Number>::approxStepGeneralPiecewiseLinear( i, I_n, mNumPieces, mLowerBounds, mUpperBounds, mSlopes, mOffsets );
 				break;
 			default:
@@ -87,14 +94,11 @@ std::vector<hypro::Starset<Number>> GeneralPiecewiseLinearLayer<Number>::forward
 
 template <typename Number>
 std::vector<Starset<Number>> GeneralPiecewiseLinearLayer<Number>::forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const {
-	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
-	int N = inputSets.size();  // number of input stars
-
-#pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
-	for ( int i = 0; i < N; ++i ) {
-		std::vector<hypro::Starset<Number>> resultSets;
-		resultSets = reachGeneralPiecewiseLinear( inputSets[i], method, plotIntermediates );
-
+	std::vector<Starset<Number>> result;
+	size_t N = inputSets.size();  // number of input stars
+#pragma omp parallel for
+	for ( size_t i = 0; i < N; ++i ) {
+		std::vector<hypro::Starset<Number>> resultSets = reachGeneralPiecewiseLinear( inputSets[i], method, plotIntermediates );
 #pragma omp critical
 		{
 			result.insert( result.end(), resultSets.begin(), resultSets.end() );
