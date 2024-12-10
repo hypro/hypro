@@ -54,7 +54,9 @@ vector_t<Number> GeneralPiecewiseLinearLayer<Number>::forwardPass( const vector_
 
 template <typename Number>
 std::vector<hypro::Starset<Number>> GeneralPiecewiseLinearLayer<Number>::reachGeneralPiecewiseLinear( const hypro::Starset<Number>& inputSet, NN_REACH_METHOD method, bool plotIntermediates ) const {
-	std::vector<hypro::Starset<Number>> I_n;
+	hypro::Plotter<Number>& plotter = hypro::Plotter<Number>::getInstance();
+    
+    std::vector<hypro::Starset<Number>> I_n;
 	I_n.push_back( inputSet );
     size_t d = inputSet.generator().rows();
 	for ( size_t i = 0; i < d; i++ ) {
@@ -71,6 +73,21 @@ std::vector<hypro::Starset<Number>> GeneralPiecewiseLinearLayer<Number>::reachGe
 			default:
 				FATAL( "hypro.neuralnets.reachability", "Invalid analysis method specified" );
 		}
+
+        if ( plotIntermediates ) {
+#pragma omp critical
+{
+            plotter.clear();
+            auto color = 1;
+            for ( auto& star : I_n ) {
+                // std::cout << star << std::endl;
+                plotter.addObject(star.vertices(), hypro::plotting::colors[color] );
+                color = ( color + 1 ) % 8;
+            }
+            plotter.plot2d();
+}
+        }
+
 	}
 	return I_n;
 }
@@ -96,7 +113,7 @@ template <typename Number>
 std::vector<Starset<Number>> GeneralPiecewiseLinearLayer<Number>::forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const {
 	std::vector<Starset<Number>> result;
 	size_t N = inputSets.size();  // number of input stars
-#pragma omp parallel for
+// #pragma omp parallel for
 	for ( size_t i = 0; i < N; ++i ) {
 		std::vector<hypro::Starset<Number>> resultSets = reachGeneralPiecewiseLinear( inputSets[i], method, plotIntermediates );
 #pragma omp critical

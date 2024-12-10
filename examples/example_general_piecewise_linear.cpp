@@ -22,13 +22,13 @@ int main(int argc, char* argv[]) {
 	plotter.updateSettings( settings );
 	plotter.clear();
 
-    unsigned short layerSize = 10;
+    unsigned short layerSize = 2;
     unsigned short layerIndex = 0;
     size_t numPieces = 3;
     std::vector<Number> lowerBounds = {DBL_MIN, -1, +1};
     std::vector<Number> upperBounds = {-1, +1, DBL_MAX};
-    std::vector<Number> slopes = {-2, 0, +3};
-    std::vector<Number> offsets = {1, 2, 3};
+    std::vector<Number> slopes = {-0.25, 0, +0.75};
+    std::vector<Number> offsets = {0, 0, 0};
 
 
     // create a general piece-wise linear function

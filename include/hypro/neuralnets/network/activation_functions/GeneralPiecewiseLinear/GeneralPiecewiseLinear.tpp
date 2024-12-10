@@ -8,8 +8,6 @@ std::vector<hypro::Starset<Number>> GeneralPiecewiseLinear<Number>::stepGeneralP
 																  const std::vector<Number>& slopes, const std::vector<Number>& offsets ) {
     std::vector<hypro::Starset<Number>> result;
     for ( auto& input_set : input_sets ) {
-        std::cout << "input set: " << input_set << std::endl;
-
         // get starset components 
         auto center = input_set.center();
         auto basis = input_set.generator();
@@ -59,8 +57,8 @@ std::vector<hypro::Starset<Number>> GeneralPiecewiseLinear<Number>::stepGeneralP
         // if L = U, the input star spans over only one piece of the activation, so it acts as only an affine transformation using f_i  
         if (L == U) {
             basis.row(i) *= slopes[L];
-            center.row(i) *= slopes[L]; 
-            center.row(i) += offsets[L];
+            center[i] *= slopes[L]; 
+            center[i] += offsets[L];
             result.emplace_back(basis, center, polytope);
             continue;
         }
@@ -69,45 +67,45 @@ std::vector<hypro::Starset<Number>> GeneralPiecewiseLinear<Number>::stepGeneralP
         
         // first star and last star are only intersected by 1 constraint, the rest are intersected with two
         auto first_center = center;
-        auto first_basis = center;
-        auto first_polytope = center;
+        auto first_basis = basis;
+        auto first_polytope = polytope;
 
         // x_i < b_l   (x_i is less or equal than the upper bound of the piece with index L)
         hypro::Halfspace<Number> firstUpperBound = hypro::Halfspace<Number>( basis.row(i), upperBounds[L] - center[i] );
         first_polytope = first_polytope.intersectHalfspace(firstUpperBound);
-        first_basis *= slopes[L];
-        first_center *= slopes[L];
-        first_center += offsets[L];
+        first_basis.row(i) *= slopes[L];
+        first_center[i] *= slopes[L];
+        first_center[i] += offsets[L];
         
         result.emplace_back(first_center, first_basis, first_polytope);
 
         auto last_center = center;
-        auto last_basis = center;
-        auto last_polytope = center;
+        auto last_basis = basis;
+        auto last_polytope = polytope;
 
         // x_i > a_l   (x_i is greater or equal than the lower bound of the piece with index U)
         hypro::Halfspace<Number> lastLowerBound = hypro::Halfspace<Number>( -basis.row(i), center[i] - lowerBounds[U] );
-        last_polytope = first_polytope.intersectHalfspace(lastLowerBound);
-        last_basis *= slopes[U];
-        last_center *= slopes[U];
-        last_center += offsets[U];
+        last_polytope = last_polytope.intersectHalfspace(lastLowerBound);
+        last_basis.row(i) *= slopes[U];
+        last_center[i] *= slopes[U];
+        last_center[i] += offsets[U];
 
         result.emplace_back(last_center, last_basis, last_polytope);
 
         for ( size_t j = L + 1; j < U; ++j ) {
             auto tmp_center = center;
-            auto tmp_basis = center;
-            auto tmp_polytope = center;
+            auto tmp_basis = basis;
+            auto tmp_polytope = polytope;
 
             // a_j <= x_i && x_i <= b_j 
-            hypro::Halfspace<Number> tmpLowerBound = hypro::Halfspace<Number>( -basis.row(i), center[i] - lowerBound[j] );
-            hypro::Halfspace<Number> tmpUpperBound = hypro::Halfspace<Number>(  basis.row(i), upperBound[j] - center[u] );
+            hypro::Halfspace<Number> tmpLowerBound = hypro::Halfspace<Number>( -basis.row(i), center[i] - lowerBounds[j] );
+            hypro::Halfspace<Number> tmpUpperBound = hypro::Halfspace<Number>(  basis.row(i), upperBounds[j] - center[i] );
             tmp_polytope = tmp_polytope.intersectHalfspace(tmpLowerBound);
             tmp_polytope = tmp_polytope.intersectHalfspace(tmpUpperBound);
 
-            tmp_basis *= slopes[j];
-            tmp_center *= slopes[j];
-            tmp_center += offsets[j];
+            tmp_basis.row(i) *= slopes[j];
+            tmp_center[i] *= slopes[j];
+            tmp_center[i] += offsets[j];
 
             result.emplace_back(tmp_center, tmp_basis, tmp_polytope);
         }
