@@ -1,4 +1,5 @@
 #include "hypro/neuralnets/network/NeuralNetwork.h"
+#include "hypro/neuralnets/network/layers/GenerealPiecewiseLinear/GeneralPiecewiseLinearLayer.h"
 #include "hypro/neuralnets/reachability/ReachNN.h"
 #include "hypro/neuralnets/reachability_tree/ReachabilityTree.h"
 #include "hypro/parser/neuralnets/nnet/NNet.h"
@@ -54,6 +55,22 @@ int main( int argc, char* argv[] ) {
 	// Read and build neural network
 	hypro::NNet<Number> nn_NNet = hypro::NNet<Number>( filename );
 	hypro::NeuralNetwork<Number> neuralNetwork = hypro::NeuralNetwork<Number>( nn_NNet );
+	std::cout << "Original network: " << neuralNetwork << std::endl;
+	for ( size_t i = 0; i < neuralNetwork.numLayers(); ++i ) {
+		if ( neuralNetwork.layers(i)->layerType() == hypro::NN_LAYER_TYPE::RELU ) {
+			std::cout << "ReLU found at index " << i << ", replacing it with general piece-wise linear activation function..." << std::endl;
+			unsigned short int layerSize = neuralNetwork.layers(i)->layerSize();
+			unsigned short int layerIndex = neuralNetwork.layers(i)->layerIndex();
+			size_t numPieces = 2;
+			std::vector<Number> lowerBounds = {-DBL_MAX, 0};
+			std::vector<Number> upperBounds = {0, +DBL_MAX};
+			std::vector<Number> slopes = {0, 1};
+			std::vector<Number> offsets = {0, 0};
+			neuralNetwork.setLayer(i, std::make_shared<hypro::GeneralPiecewiseLinearLayer<Number>>(layerSize, layerIndex, numPieces, lowerBounds, upperBounds, slopes, offsets));
+			// std::cout << (*neuralNetwork.layers(i)) << std::endl;
+		}
+	}
+	std::cout << "Modified network: " << neuralNetwork << std::endl;
 
 	// Read input polytope
 	hypro::HPolytope<Number> inputPoly;
@@ -80,15 +97,15 @@ int main( int argc, char* argv[] ) {
 	std::vector<hypro::HPolytope<Number>> safe_set = NNtree.prepareSafeSet( true );
 	std::cout << "Normalized safe set: " << safe_set << std::endl;
 
-	std::cout << "Removing upper bound on ownship speed..." << std::endl;
-	hypro::matrix_t<Number> shape = input_starset.shape();
-	hypro::vector_t<Number> limits = input_starset.limits();
-	shape.conservativeResize(shape.rows() - 1, shape.cols());
-	limits.conservativeResize(limits.rows() - 1);
-	hypro::Starset<Number> unbounded_input_starset = hypro::Starset<Number>(input_starset.center(), shape, limits, input_starset.generator());
-	std::cout << "Done" << std::endl;
-	std::cout << "New unbounded star set: " << unbounded_input_starset << std::endl;
-	std::cout << "Set is empty: " << unbounded_input_starset.empty() << std::endl;
+	// std::cout << "Removing upper bound on ownship speed..." << std::endl;
+	// hypro::matrix_t<Number> shape = input_starset.shape();
+	// hypro::vector_t<Number> limits = input_starset.limits();
+	// shape.conservativeResize(shape.rows() - 1, shape.cols());
+	// limits.conservativeResize(limits.rows() - 1);
+	// hypro::Starset<Number> unbounded_input_starset = hypro::Starset<Number>(input_starset.center(), shape, limits, input_starset.generator());
+	// std::cout << "Done" << std::endl;
+	// std::cout << "New unbounded star set: " << unbounded_input_starset << std::endl;
+	// std::cout << "Set is empty: " << unbounded_input_starset.empty() << std::endl;
 
 	// Apply the reachability analysis to the input star set and measure the required time
 	auto start = std::chrono::steady_clock::now();

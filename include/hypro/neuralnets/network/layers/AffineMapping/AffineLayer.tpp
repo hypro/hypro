@@ -56,6 +56,7 @@ template <typename Number>
 std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const {
 	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
 	int N = inputSets.size();  // number of input stars
+	std::cout << "Number of variables: " << inputSets[0].shape().cols() << std::endl;
 
 	// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
 		for ( int i = 0; i < N; ++i ) {
@@ -64,7 +65,6 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 	// #pragma omp critical
 				result.push_back( temp );
 			}
-			std::cout << "Number of variables: " << inputSets[i].shape().cols() << std::endl;
 		}
 	// for ( int i = 0; i < N; ++i ) {
 	// 	result.push_back( inputSets[i].affineTransformation( mWeights, mBias ) );

@@ -113,7 +113,7 @@ template <typename Number>
 std::vector<Starset<Number>> GeneralPiecewiseLinearLayer<Number>::forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const {
 	std::vector<Starset<Number>> result;
 	size_t N = inputSets.size();  // number of input stars
-// #pragma omp parallel for
+#pragma omp parallel for
 	for ( size_t i = 0; i < N; ++i ) {
 		std::vector<hypro::Starset<Number>> resultSets = reachGeneralPiecewiseLinear( inputSets[i], method, plotIntermediates );
 #pragma omp critical

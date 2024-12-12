@@ -116,6 +116,8 @@ class NeuralNetwork {
 	 */
 	std::shared_ptr<LayerBase<Number>> layers( int index ) const;
 
+	void setLayer( int index, std::shared_ptr<LayerBase<Number>> layer );
+
 	// ============= utility functions =============
 	// e.g. printing the network
 	template <typename U>

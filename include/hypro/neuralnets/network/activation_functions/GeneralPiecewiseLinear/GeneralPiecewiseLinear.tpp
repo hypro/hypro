@@ -59,7 +59,7 @@ std::vector<hypro::Starset<Number>> GeneralPiecewiseLinear<Number>::stepGeneralP
             basis.row(i) *= slopes[L];
             center[i] *= slopes[L]; 
             center[i] += offsets[L];
-            result.emplace_back(basis, center, polytope);
+            result.emplace_back(center, basis, polytope);
             continue;
         }
 

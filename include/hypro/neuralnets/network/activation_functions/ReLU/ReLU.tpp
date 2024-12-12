@@ -93,7 +93,7 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, const s
 		bool unbounded_low = ( eval_low_result.errorCode == SOLUTION::INFTY );
 		bool unbounded_high = ( eval_high_result.errorCode == SOLUTION::INFTY );
 
-		Number lb = feas_low ? -eval_low_result.supportValue + center[i] : Number(DBL_MIN);
+		Number lb = feas_low ? -eval_low_result.supportValue + center[i] : Number(-DBL_MAX);
         Number ub = feas_high ? eval_high_result.supportValue + center[i] : Number(DBL_MAX);
 
 		if ( feas_low && ( lb >= 0 || carl::AlmostEqual2sComplement( lb, Number( 0 ) ) ) ) {

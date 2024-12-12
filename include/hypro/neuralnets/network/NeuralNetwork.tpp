@@ -109,6 +109,17 @@ std::shared_ptr<LayerBase<Number>> NeuralNetwork<Number>::layers( int index ) co
 	return ( *layerIter );
 }
 
+template <typename Number>
+void NeuralNetwork<Number>::setLayer( int index, std::shared_ptr<LayerBase<Number>> layer ) {
+	if ( index >= mLayers.size() ) {
+		throw std::out_of_range("Index out of range");
+	}
+
+	auto it = mLayers.begin();
+	std::advance(it, index);
+	*it = layer;
+}
+
 // ============= utility functions =============
 
 // ================== methods ==================
