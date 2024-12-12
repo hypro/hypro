@@ -92,8 +92,8 @@ int main( int argc, char* argv[] ) {
 
 	// Apply the reachability analysis to the input star set and measure the required time
 	auto start = std::chrono::steady_clock::now();
-	std::vector<hypro::Starset<Number>> output = neuralNetwork.forwardPass( input_starset, method, false );
-	// std::vector<hypro::Starset<Number>> output = neuralNetwork.forwardPass( unbounded_input_starset, method, false );
+	// std::vector<hypro::Starset<Number>> output = neuralNetwork.forwardPass( input_starset, method, false );
+	std::vector<hypro::Starset<Number>> output = neuralNetwork.forwardPass( unbounded_input_starset, method, false );
 	auto end = std::chrono::steady_clock::now();
 	auto analysisTime = std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count();
 	std::cout << "Reachability Analysis Time (ms): " << analysisTime << std::endl;
