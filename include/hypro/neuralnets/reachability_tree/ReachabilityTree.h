@@ -32,10 +32,18 @@ class ReachabilityTree {
 	NeuralNetwork<Number> mNetwork;			   // the analized neural network
 	HPolytope<Number> mInputSet;			   // the input set of the network
 	std::vector<HPolytope<Number>> mSafeSets;  // the safe set specified in the form of a vector of HPolytopes
+	std::vector<matrix_t<Number>> mSafeSetMatrices; 
+    std::vector<vector_t<Number>> mSafeSetVectors;
 	bool mIsSafe;							   // true if the reachability tree is safe
 	bool mIsComplete;						   // true if the  computation of the reachability tree finished
 
 	hypro::Plotter<Number>& mPlotter;
+
+	Point<Number> _findCounterExampleRandom(Starset<Number> set, std::vector<HPolytope<Number>> rejectionSets, int iterations) const;
+	Point<Number> _findCounterExampleZ3(Starset<Number> set) const;
+
+	bool _refinementAlwaysFullComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
+	bool _refinementAvoidComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
 
   public:
 	// Default constructor
@@ -56,8 +64,6 @@ class ReachabilityTree {
 	ReachabilityNode<Number>* computeReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy );
 	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots = false, bool normalizeInput = false, bool normalizeOutput = false, size_t max_iter= 100 );
 
-	bool counterExampleIsValid( Point<Number> candidate, ReachabilityNode<Number>* node ) const;
-
 	/**
 	 * @brief A method that produces a counterexample candidate for the current ReachabilityTree using sampling.
 	 *
@@ -68,6 +74,7 @@ class ReachabilityTree {
 	ReachabilityNode<Number>* getFirstNonEmptyLeaf() const;
 
 	void updateLeaves( ReachabilityNode<Number>* node );
+	void updateLeaves( ReachabilityNode<Number>* node, std::vector<ReachabilityNode<Number>*>* notComputedLeaves, std::vector<ReachabilityNode<Number>*>* unsafeLeaves);
 
 	/**
 	 * @brief Find the source neuron of a countereaxmple candidate (if exists).

@@ -195,19 +195,16 @@ std::vector<HPolytope<Number>> ReachabilityTree<Number>::prepareSafeSet( bool no
 			safeSets.push_back( HPolytope<Number>( halfplanes ) );
 		}
 		return safeSets;
-	}
+	}	
 	return mSafeSets;
-}
-
-template <typename Number>
-bool ReachabilityTree<Number>::isSubResultSafe( const std::vector<Starset<Number>>& subResult, const std::vector<HPolytope<Number>>& safeSets ) const {
-	// TODO: implement this method
-	return true;
 }
 
 // This method computes the rechability tree using a specified input starset and an NN_REACH_METHOD starting from a given neuron
 // It can be used just to compute a subtree from the j. neuron of the k.th layer
 // the subtree then could be inserted into the search tree (replacing and deleting the old subtree)
+// Note:
+//	This only computes the reachability tree until an unsafe leaf is found.
+//	This only influences the shape of the tree, if the method is exact and the strategy is DFS
 template <typename Number>
 ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy ) {
 	// create the root_job and add to the queue
@@ -216,24 +213,22 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 	jobQueue.push_back( root_job );
 
 	// perform BFS / DFS until the queue is not empty and the network is still safe
-	while ( !jobQueue.empty() ) {  // TODO: && mIsSafe  do not forget to break the search erlier if tree is not safe
+	while ( !jobQueue.empty() ) {
 		SearchJob<Number> job = jobQueue.front();
-		// std::cout << job.getNode()->layerNumber() << " " << job.getNode()->neuronNumber() << std::endl;
-		// std::cout << job.getNode()->representation() << std::endl;
 		std::vector<SearchJob<Number>> newJobs = job.compute( rootNode->method() );
 		jobQueue.pop_front();
 		for ( auto newJob : newJobs ) {
 			if ( newJob.isFinalResult() ) {
 				// check if the leaf satisfies the safety property
 				// if not then early stop condition is met and the loop can be stopped
-				// std::cout << newJob.getNode()->layerNumber() << " " << newJob.getNode()->neuronNumber() << std::endl;
-				// std::cout << newJob.getNode()->representation() << std::endl;
 				ReachabilityNode<Number>* leafNode = newJob.getNode();
-				mLeaves.push_back( leafNode );   // maybe this is not needed
+				mLeaves.push_back( leafNode );
 
 				if ( !leafNode->checkSafe( safeSets ) ) {
 					leafNode->setSafe( false );
 					mIsSafe = false;
+					mIsComplete = true;
+					return rootNode;
 				} else {
 					leafNode->setSafe( true );
 				}
@@ -256,6 +251,140 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 	return rootNode;
 }
 
+//The refinement loop for CEGAR where each new sub-tree is allways computed fully
+template <typename Number>
+bool ReachabilityTree<Number>::_refinementAlwaysFullComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput){
+	// repeat until we either find a real counterexample or we can verify that the network is safe
+	int ctx = 0;
+	while ( !mIsSafe && ctx < max_iter ) {
+		mLeaves.clear();  // TODO: do not clear the leaves that are not affected
+		updateLeaves( mRoot );
+		std::cout << "Number of leaves: " << mLeaves.size() << std::endl;
+
+		ReachabilityNode<Number>* chosenLeaf = getFirstNonEmptyLeaf();
+			
+		// generate a counterexample
+		Point<Number> candidate = produceCounterExampleCandidate( chosenLeaf->representation(), safeOutput );
+		std::cout << "The counterexample candidate is " << candidate << std::endl;
+		
+		//Otherwise chosenLeaf is safe
+		assert(candidate.dimension() > 0);
+
+		// identify the source neuron of the counterexample
+		std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( candidate, chosenLeaf );
+
+		//If an actual counterexample can be propagated back to the root, the the counterexample is not the result of approximation
+		if ( candidateSource.first.dimension() > 0 && !candidateSource.second->hasParent()  ) {
+			std::cout << "True countereaxmple found, refinement process stops" << std::endl;
+			std::cout << "The true counterexample is: " << candidateSource.first << std::endl;
+			mIsSafe = false;
+			return false;
+		}
+
+		//source of the spurious counterexample
+        ReachabilityNode<Number>* refinedNode = candidateSource.second;
+        std::cout << "The source of the counterexample candidate is: " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
+		
+		// do the refinement step
+		mIsSafe = true;
+		mIsComplete = false;
+
+		// calculate the children of the refined node using exact computation
+		refinedNode->removeAllChildren();
+		std::cout << "Refining the selected node" << std::endl;
+		SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );
+		std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT );
+		std::cout << "New jobs size: " << newJobs.size() << std::endl;
+
+		for (int i = 0; i < newJobs.size(); i++){
+			std::cout << "Computing "<< i << ". subtree" << std::endl;
+			// set the children of the refined node
+			newJobs[i].getNode()->setMethod( NN_REACH_METHOD::OVERAPPRX );
+			// use the compute reach tree function to compute the subtrees of the children
+			computeReachTree( newJobs[i].getNode(), safeOutput, strategy );
+		}
+
+		ctx++;
+		if ( createPlots )
+			plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
+	}
+
+	if( !mIsSafe && ctx >= max_iter ){
+		std::cout << "Reached maximum number of refinment steps. Safty of the NN is not known!" << std::endl;
+		return false;
+	}
+
+	return true;
+
+}
+
+
+//The refinment loop for CEGAR where a subtree is only computed, when its safety is checked
+template <typename Number>
+bool ReachabilityTree<Number>::_refinementAvoidComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput){
+	
+	bool foundResult = false;
+	std::vector<ReachabilityNode<Number>*> notComputedLeaves;
+	std::vector<ReachabilityNode<Number>*> unsafeLeaves;
+	int count = 0;
+	while(!foundResult && count < max_iter){
+		//Update leaves
+		mLeaves.clear();
+		notComputedLeaves.clear();
+		unsafeLeaves.clear();
+		updateLeaves( mRoot,  &notComputedLeaves, &unsafeLeaves);
+		std::cout << "Number of unsafe leaves: " << unsafeLeaves.size()
+				  << "\n"
+				  << "Number of not-computed leaves: " << notComputedLeaves.size()
+				  << "\n"
+				  << "Number of all leaves: " << mLeaves.size() 
+				  << std::endl;
+		
+		if(unsafeLeaves.size() > 0){ // If an unsafe leaf exists
+			count++;
+			// Find a counterexample
+			ReachabilityNode<Number>* chosenLeaf = unsafeLeaves[0];
+			Point<Number> candidate = produceCounterExampleCandidate( chosenLeaf->representation(), safeOutput );
+			std::cout << "The counterexample candidate is " << candidate << std::endl;
+			assert(candidate.dimension() > 0 && "A leaf was falsely called unsafe!");
+
+			// Backpropagate the counterexampl: Identify the source neuron of the counterexample
+			std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( candidate, chosenLeaf );
+
+			// If the counterexample is not spurious then: return false
+			if ( candidateSource.first.dimension() > 0 && !candidateSource.second->hasParent()  ) {
+				std::cout << "True countereaxmple found, refinement process stops" << std::endl;
+				std::cout << "The true counterexample is: " << candidateSource.first << std::endl;
+				mIsSafe = false;
+				foundResult = true;
+				
+			} else {// Split with exact and do NOT compute the children
+				ReachabilityNode<Number>* refinedNode = candidateSource.second;
+    	    	std::cout << "Refining the source of the counterexample candidate: " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
+				refinedNode->removeAllChildren();
+				SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );
+				std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT );
+				std::cout << "New jobs size: " << newJobs.size() << std::endl;
+			}
+			
+		} else if(notComputedLeaves.size() > 0){ // If a not-computed leaf exists
+			// Compute the reachability tree of the not-computed leaf
+			// until an unsafe leaf is found or all leaves are computed
+			bool isSafe = true;
+			for(int i = 0; i < notComputedLeaves.size() && isSafe; i++){
+				std::cout << "Computing new over-approximated subtree...";
+				notComputedLeaves[i]->setMethod( NN_REACH_METHOD::OVERAPPRX );
+				isSafe= computeReachTree( notComputedLeaves[i], safeOutput, strategy )->checkSafe(safeOutput);
+				std::cout << "New subtree is " << (isSafe ? "safe" : "unsafe") << std::endl;
+			}
+		} else { // Otherwise all leaves are safe and computed
+			mIsSafe = true;
+			foundResult = true;
+		}		
+	}
+	return mIsSafe;
+}
+
 // here in the verify method just call the forwardPass method to calculate the EXACT or OVERAPPROXIMATIVE result
 // if it is CEGAR countinue with the refinement, otherwise just stop and verify the "leaves"
 // if the method is not CEGAR than it makes no sense to save the intermediate stars into the search tree
@@ -264,10 +393,12 @@ template <typename Number>
 bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots, bool normalizeInput, bool normalizeOutput, size_t max_iter) {
 	Starset<Number> starInput = prepareInput( normalizeInput );
 	std::vector<HPolytope<Number>> safeOutput = prepareSafeSet( normalizeOutput );
-	// let's assume for now that the safeSet could only be a conjunction of halfspaces and it describes the set of all safe output vectors
-	// TODO: later add some generalization to it
-	// TODO: make the safe set an arbitrary number of conjunctions and/or disjunctions of halfspaces, i.e. it is a vector of HPolytopes (DNF)
-
+	
+	for (unsigned i = 0; i < safeOutput.size(); i++){
+    	mSafeSetMatrices.push_back(safeOutput[i].matrix());
+        mSafeSetVectors.push_back(safeOutput[i].vector());
+    }
+	
 	std::cout << "Normalized input set:\n" << starInput << std::endl;
 	std::cout << "Denormalized output set:\n" << safeOutput << std::endl;
 
@@ -301,7 +432,6 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 
 	if ( mIsSafe ) {
 		// if the method is CEGAR and the reachable sets are all safe then the whole network is safe
-		std::cout << "The neural network is safe" << std::endl;
 		return true;
 	}
 
@@ -309,81 +439,14 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 	std::cout << "Search tree depth: " << depth(mRoot) << std::endl;
 
 	// else we start the refinement
-	int ctx = 0;
 	if ( createPlots )
-		plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
+		plotTree( mRoot, "0-CEGAR_Reach_" );
 
-	// repeat until we either find a real counterexample or we can verify that the network is safe
-	while ( !mIsSafe && ctx < max_iter ) {
-		mLeaves.clear();  // TODO: do not clear the leaves that are not affected
-		updateLeaves( mRoot );
-		std::cout << "Number of leaves: " << mLeaves.size() << std::endl;
-
-		ReachabilityNode<Number>* refinedNode = nullptr;
-
-		bool counterExampleFound = false;
-		while ( !counterExampleFound ) {
-			ReachabilityNode<Number>* chosenLeaf = getFirstNonEmptyLeaf();
-			
-			// generate a potential counterexample candidate
-			std::cout << "Generating a counterexample..." << std::endl;
-			Point<Number> candidate = produceCounterExampleCandidate( chosenLeaf->representation(), safeOutput );
-			std::cout << "The counterexample candidate is " << candidate << std::endl;
-
-			//Otherwise chosenLeaf is safe
-			assert(candidate.dimension() > 0);
-
-			// identify the source neuron of the counterexample
-			std::cout << "Identifying the source of the counterexample..." << std::endl;
-			std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( candidate, chosenLeaf );
-
-			// TODO: check if the source is the last neuron we get a segmentation fault
-
-			// do not forget to test if the backpropagated counterexample candidate is still a valid counterexample !!!
-			if ( counterExampleIsValid( candidateSource.first, candidateSource.second ) ) {
-				if ( candidateSource.first.dimension() > 0 && !candidateSource.second->hasParent()  ) {
-					std::cout << "True countereaxmple found, refinement process stops" << std::endl;
-					std::cout << "The true counterexample is: " << candidateSource.first << std::endl;
-					mIsSafe = false;
-					return false;
-				}
-
-				refinedNode = candidateSource.second;
-				counterExampleFound = true;
-				std::cout << "The source of the counterexample candidate is: " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
-			}
-		}
-
-		// do the refinement step
-		mIsSafe = true;
-		mIsComplete = false;
-
-		// calculate the childrens of the refined node using exact computation
-		refinedNode->removeAllChildren();
-		std::cout << "Refining the selected node" << std::endl;
-		SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );
-		std::cout << "refinedJob created" << std::endl;
-		std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT );
-		std::cout << "New jobs size: " << newJobs.size() << std::endl;
-
-		
-		for (int i = 0; i < newJobs.size(); i++){
-			std::cout << "Computing "<< i << ". subtree" << std::endl;
-			// set the children of the refined node
-			newJobs[i].getNode()->setMethod( NN_REACH_METHOD::OVERAPPRX );
-			// use the compute reach tree function to compute the subtrees of the children
-			computeReachTree( newJobs[i].getNode(), safeOutput, strategy );
-		}
-
-		ctx++;
-		if ( createPlots )
-			plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
-	}
+	// _refinementAlwaysFullComputation(strategy, createPlots, max_iter, safeOutput);
+	_refinementAvoidComputation(strategy, createPlots, max_iter, safeOutput);
 
 	mLeaves.clear();  // TODO: do not clear the leaves that are not affected
 	updateLeaves( mRoot );
-	std::cout << "Number of leaves: " << mLeaves.size() << std::endl;
-
 	// TODO: do not forget to delete the reachability tree when it is not used anymore
 
 	std::cout << "The neural network is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
@@ -392,12 +455,76 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 	return mIsSafe;
 }
 
-//Currently allways returns true
 template <typename Number>
-bool ReachabilityTree<Number>::counterExampleIsValid( Point<Number> candidate, ReachabilityNode<Number>* node ) const {
-	// TODO: consider here using exact arithmetic instead floating point (you can use for this purpose the representation converter class)
+Point<Number> ReachabilityTree<Number>::_findCounterExampleRandom(Starset<Number> set, std::vector<HPolytope<Number>> rejectionSets, int iterations) const {
+	//Try to generate a counterexample
+    std::random_device rdev;
+	std::mt19937 rgen( rdev() );
+	std::cout << "Trying to produce a counterexample for " << iterations << " iterations..." << std::endl;
+	while ( 0 < iterations) {
+        iterations--;
+        //Create a starset of containing potential counterexamples
+        Starset<Number> setCopy( set ); 
+		for ( HPolytope<Number> poly : rejectionSets ) {
+			std::uniform_int_distribution<int> idist( 0, poly.constraints().size() - 1 );
+			int ind = idist( rgen );				
+			Halfspace<Number> hspace = poly.constraints()[ind];
+            //Note:
+            // The border of the Halfspace and the starset is possibly contained in the rejectionSets!
+            // This is not often a problem, because we try to take a center point as a counterexample
+			vector_t<Number> normal = Number(-1) * hspace.normal();
+			Number offset = Number(-1) * hspace.offset();
+			setCopy = setCopy.intersectHalfspace( Halfspace<Number>( normal, offset ) );
+		}
 
-	return true;
+        if ( setCopy.empty() ){
+            continue;
+        }
+
+        //Find a potential counterexample in the generated starset
+		HPolytope<Number> currentPoly = setCopy.constraints();
+		std::uniform_int_distribution<int> idist( 0, currentPoly.size() - 1 );  //(inclusive, inclusive)
+		for(int tmp = 0; tmp < 10; tmp++) {
+			int ind = idist( rgen );
+			Optimizer<Number> op( setCopy.shape(), setCopy.limits() );
+
+			hypro::vector_t<Number> dir_vect = currentPoly.constraints()[ind].normal();
+			auto eval_low_result = op.evaluate( -1.0 * dir_vect, true );
+			auto eval_high_result = op.evaluate( dir_vect, true );
+			
+			Point<Number> midPoint = Point<Number>((eval_low_result.optimumValue + eval_high_result.optimumValue) / 2.0);
+			Point<Number> transformedPoint = midPoint.affineTransformation(setCopy.generator(), setCopy.center());
+
+            //Ensure point is contained in the starset and not contained in any rejectionSet
+            bool isCounterexample = true;
+            for (int i = 0; i < rejectionSets.size() && isCounterexample; i++){
+                vector_t<Number> v = (rejectionSets[i].matrix() * transformedPoint.rawCoordinates());
+                isCounterexample = isCounterexample && !( v <= rejectionSets[i].vector());                    
+            }
+			if(isCounterexample && setCopy.contains(transformedPoint)) {	
+                std::cout << "Found counterexample in iteration " << iterations << std::endl;
+				return transformedPoint;
+			}
+		}
+    }
+	return Point<Number>();
+}
+
+template <typename Number>
+Point<Number> ReachabilityTree<Number>::_findCounterExampleZ3(Starset<Number> set) const { 
+	std::cout << "Producing a counterexample with z3..." << std::endl;
+	
+	// if a counterexample exists, result contains an element in the predicate of set
+	// this predicate corresponds to a point in set that is not element of any HPolytope in rejectionSets
+	EvaluationResult<Number> result = z3GetCounterexample( set.shape(), set.limits(), set.generator(), set.center(), mSafeSetMatrices, mSafeSetVectors);
+
+
+    if (result.errorCode == SOLUTION::FEAS){
+        // A counterexample exists
+        return Point<Number>(set.generator() * result.optimumValue + set.center());
+    }
+    
+	return Point<Number>(); 
 }
 
 
@@ -406,53 +533,28 @@ bool ReachabilityTree<Number>::counterExampleIsValid( Point<Number> candidate, R
 * If no counterexample exists, the empty point is returned
 */
 template <typename Number>
-Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<Number> set, std::vector<HPolytope<Number>> rejectionSets ) const {
-	
-	// prepare rejectionSets for z3
-	std::vector<matrix_t<Number>> rejectionMatrices = {};
-    std::vector<vector_t<Number>> rejectionVectors = {};
-    for (unsigned i = 0; i < rejectionSets.size(); i++){
-    	rejectionMatrices.push_back(rejectionSets[i].matrix());
-        rejectionVectors.push_back(rejectionSets[i].vector());
-    }
-
-	// if a counterexample exists, result contains an element in the predicate of set
-	// this predicate corresponds to a point in set that is not element of any HPolytope in rejectionSets
-	EvaluationResult<Number> result = z3GetCounterexample( set.shape(), set.limits(), set.generator(), set.center(), rejectionMatrices, rejectionVectors);
-
-	switch ( result.errorCode ) {
-		// A counterexample exists
-		case SOLUTION::FEAS:
-			{			
-				Point<Number> counterexample( set.generator() * result.optimumValue + set.center());
-				//TODO: Find a solution to generate a counterexaple as far from the bounds as possible
-				//This is a hack to remove the rounding errors that sometimes appears in computation
-				assert(set.contains(counterexample));
-				return counterexample;
-			}
-			break;	
-		case SOLUTION::INFEAS:
-			//The set is safe
-			std::cout << "produceCounterExampleCandidate was called on a safe set" << std::endl;
-			return Point<Number>(); 
-		default:
-			assert(false && "Counterexample candidate neither found nor confirmed non-existence");
-			break;
+Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<Number> set, std::vector<HPolytope<Number>> rejectionSets) const {
+	//Use the random method to produce a counterexample for iterations
+	int iterations = 10; //TODO: replace this in some way to be an input (for this mehtod or for the class)
+	Point<Number> counterexample = _findCounterExampleRandom(set, rejectionSets, iterations);
+	if(counterexample.dimension() > 0){
+		return counterexample;
 	}
-	// This is not reachable
-	return Point<Number>();
+
+	//Use z3 to produce a counterexample, if it exists (this might return the empty point!)
+    return _findCounterExampleZ3(set);
 }
 
 // Returns the first unsafe leaf (unsafe leaves are non-empty)
 template <typename Number>
 ReachabilityNode<Number>* ReachabilityTree<Number>::getFirstNonEmptyLeaf() const {
 	for ( auto leaf : mLeaves ) {
-		if ( !leaf->representation().empty() && !leaf->isSafe() ) {
+		if ( !leaf->isSafe() ) {
 			return leaf;
 		}
 	}
 	//This should only be called, if the reachtree is not safe
-	assert(false && "all leaves are empty or safe");
+	assert(false && "all leaves are safe");
 	return mLeaves[0];
 }
 
@@ -461,12 +563,31 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::getFirstNonEmptyLeaf() const
 * This does NOT clear the mLeaves vector before adding new leaves!
 */
 template <typename Number>
-void ReachabilityTree<Number>::updateLeaves( ReachabilityNode<Number>* node ) {
-	if ( node->isLeaf() ) {
+void ReachabilityTree<Number>::updateLeaves( ReachabilityNode<Number>* node) {
+	if ( node->isLeaf() || !node->isComputed()) {
 		mLeaves.push_back( node );
 	} else {
 		for (int i = 0; i < node->getNumberOfChildren(); i++){
 			updateLeaves( node->getChild(i) );		
+		}
+	}
+}
+
+template <typename Number>
+void ReachabilityTree<Number>::updateLeaves( ReachabilityNode<Number>* node, std::vector<ReachabilityNode<Number>*>* notComputedLeaves, std::vector<ReachabilityNode<Number>*>* unsafeLeaves) {
+	// std::cout << "updateLeaves" << std::endl;
+	if ( node->isLeaf() || !node->isComputed()) {
+		if (!node->isComputed()){
+			notComputedLeaves->push_back(node);
+		} else if(!node->isSafe()){
+			unsafeLeaves->push_back(node);
+		} else {
+			//nothing; mLeaves always gets a leaf!
+		}
+		mLeaves.push_back( node );
+	} else {
+		for (int i = 0; i < node->getNumberOfChildren(); i++){
+			updateLeaves( node->getChild(i), notComputedLeaves, unsafeLeaves);		
 		}
 	}
 }
@@ -484,19 +605,14 @@ void ReachabilityTree<Number>::updateLeaves( ReachabilityNode<Number>* node ) {
 template <typename Number>
 std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::identifyCounterExampleSource( const Point<Number>& candidate, ReachabilityNode<Number>* node ) const {
 	if ( !node->hasParent() ) {
-		std::cout << "Node does not have parent" << std::endl;
-		std::cout << "Candiate in root:" << candidate << std::endl;
+		std::cout << "Candiate in root" << std::endl;
 		return std::make_pair( candidate, node );  // indicates that the backpropagated counterexample originates from the very first neuron
 	}
 
-	std::cout << "Checking containment" << std::endl;
-	std::cout << "Representation is: " << node->representation() << std::endl;
-	std::cout << "Candidate is: " << candidate << std::endl;
 	if (  candidate.dimension() > 0) {
 		// if the counterexample candidate is still included in the current node go back to the previous node
 		ReachabilityNode<Number>* parent = node->getParent();
 		Point<Number> newCandidate = propagateCandidateBack( candidate, parent->layerNumber(), parent->neuronNumber(), parent->representation(), node->representation());
-		std::cout << "newCandidate: " << newCandidate << std::endl;
 		return identifyCounterExampleSource( newCandidate, parent );
 	} else {
 		// if it is not included the current neuron introduces the counterexample
