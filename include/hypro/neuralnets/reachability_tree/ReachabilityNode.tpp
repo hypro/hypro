@@ -18,7 +18,8 @@ ReachabilityNode<Number>::ReachabilityNode( Starset<Number> representation, NN_R
 	, mIsComputed( false )
 	, mHasParent( false )
 	, mChildren(std::vector<ReachabilityNode<Number>*>())
-	, mPlotter( hypro::Plotter<Number>::getInstance() ) {}
+	, mPlotter( hypro::Plotter<Number>::getInstance() )
+	, mCounterExample(Point<Number>()) {}
 
 // template <typename Number>
 // ReachabilityNode<Number>::~ReachabilityNode() {
@@ -148,28 +149,37 @@ void ReachabilityNode<Number>::setRepresentation( const Starset<Number>& represe
 }
 
 template <typename Number>
-bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, int i, const std::vector<HPolytope<Number>>& safeSets ) const {
-	std::vector<matrix_t<Number>> rejectionMatrices = {};
-    std::vector<vector_t<Number>> rejectionVectors = {};
-    for (unsigned i = 0; i < safeSets.size(); i++){
-    	rejectionMatrices.push_back(safeSets[i].matrix());
-        rejectionVectors.push_back(safeSets[i].vector());
-    }
-
-	EvaluationResult<Number> result = z3GetCounterexample( currentSet.shape(), currentSet.limits(), currentSet.generator(), currentSet.center(), rejectionMatrices, rejectionVectors);
-	return result.errorCode == SOLUTION::INFEAS;
+bool ReachabilityNode<Number>::hasCounterExample() const{
+	return mCounterExample.dimension() > 0;
+} 
+template <typename Number>
+Point<Number> ReachabilityNode<Number>::getCounterExample() const{
+	return mCounterExample;
 }
 
 template <typename Number>
-bool ReachabilityNode<Number>::checkSafe( const std::vector<HPolytope<Number>>& safeSets ) const {
+bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) {
+	EvaluationResult<Number> result = z3GetCounterexample( currentSet.shape(), currentSet.limits(), currentSet.generator(), currentSet.center(), safeSetMatrices, safeSetVectors);
+	
+	if(result.errorCode == SOLUTION::FEAS){
+		mCounterExample = Point<Number>(currentSet.generator() * result.optimumValue + currentSet.center());
+		return false;
+	}
+
+	assert(result.errorCode == SOLUTION::INFEAS && "leaf not safe and not unsafe");
+	return true;
+}
+
+template <typename Number>
+bool ReachabilityNode<Number>::checkSafe( const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) {
 	// if the node is a leaf, we should check if the representation is only in the safe region (which is a non-convex set, DNF)
-	if ( mIsLeaf ) {
-		return checkSafeRecursive( mRepresentation, 0, safeSets );
+	if ( mIsLeaf) {
+		return hasCounterExample() ? false : checkSafeRecursive( mRepresentation, safeSetMatrices, safeSetVectors );
 	} 
 
 	// if the node is not a leaf, then it safetiness depends on the children
 	for (ReachabilityNode<Number>* child : mChildren){
-		if(!(child->checkSafe(safeSets))){
+		if(!(child->checkSafe(safeSetMatrices, safeSetVectors))){
 			return false;
 		}
 	}

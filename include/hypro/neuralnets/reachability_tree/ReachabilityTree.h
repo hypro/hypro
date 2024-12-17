@@ -71,10 +71,10 @@ class ReachabilityTree {
 	 */
 	Point<Number> produceCounterExampleCandidate( Starset<Number> set, std::vector<HPolytope<Number>> rejectionSet ) const;
 
-	ReachabilityNode<Number>* getFirstNonEmptyLeaf() const;
+	ReachabilityNode<Number>* getFirstUnsafeLeaf() const;
 
 	void updateLeaves( ReachabilityNode<Number>* node );
-	void updateLeaves( ReachabilityNode<Number>* node, std::vector<ReachabilityNode<Number>*>* notComputedLeaves, std::vector<ReachabilityNode<Number>*>* unsafeLeaves);
+	void updateLeaves( ReachabilityNode<Number>* node, std::vector<ReachabilityNode<Number>*>* notComputedLeaves);
 
 	/**
 	 * @brief Find the source neuron of a countereaxmple candidate (if exists).

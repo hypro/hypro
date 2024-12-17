@@ -36,8 +36,7 @@ class ReachabilityNode {
 
 	NN_REACH_METHOD mMethod;
 	Starset<Number> mRepresentation;
-	// std::vector<Number> mLowerBounds;  // consider changing this to only lower/upper bound at the given dimension
-	// std::vector<Number> mUpperBounds;
+	Point<Number> mCounterExample; // a counterexample, if node is a leaf and unsafe, the empty point otherwise
 
 	hypro::Plotter<Number>& mPlotter;
 
@@ -54,6 +53,8 @@ class ReachabilityNode {
 	void setSafe( bool isSafe );
 	bool isComputed() const;
 	void setComputed( bool isComputed );
+	bool hasCounterExample() const;
+	Point<Number> getCounterExample() const;
 
 	bool hasParent() const;
 	void setHasParent( bool hasParent );
@@ -77,8 +78,8 @@ class ReachabilityNode {
 	void setRepresentation( const Starset<Number>& representation );
 
 	// functionalities
-	bool checkSafeRecursive( Starset<Number> currentSet, int i, const std::vector<HPolytope<Number>>& safeSets ) const;
-	bool checkSafe( const std::vector<HPolytope<Number>>& safeSets ) const;
+	bool checkSafeRecursive( Starset<Number> currentSet,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors);
+	bool checkSafe(  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors );
 
 	// utility methods
 	void plot( bool holdOn = false, size_t color = 0xCC071E ) const;  // allow to plot only if the representation is two dimensional
