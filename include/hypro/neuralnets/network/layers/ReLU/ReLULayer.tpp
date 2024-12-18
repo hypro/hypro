@@ -133,4 +133,31 @@ Point<Number> ReLULayer<Number>::propagateCandidateBack( Point<Number> y, int ne
 	return Point<Number>();
 }
 
+template <typename Number>
+Point<Number> ReLULayer<Number>::propagateCandidateBack(Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const{
+	std::cout <<"Block ReLU"<<std::endl;
+	std::vector<carl::Relation> relations;
+	for (int i = 0; i < ancestorSet.generator().rows(); i++){
+		if ( upperIndex <= i && i <= lowerIndex && 0 == candidate[i] ) {
+			relations.push_back( carl::Relation::LEQ);
+		} else {
+			relations.push_back( carl::Relation::EQ);	
+		}
+	}
+	
+	assert(relations.size() == ancestorSet.generator().rows());
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint(ancestorSet.shape(),ancestorSet.limits(),ancestorSet.generator(), ancestorSet.center(), candidate, relations);	
+	switch ( result.errorCode ) {
+		case SOLUTION::FEAS:						
+            return Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center());
+		case SOLUTION::INFEAS:
+            return Point<Number>();
+		default:
+			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
+			break;
+	}
+
+	return Point<Number>();
+}
+
 }  // namespace hypro

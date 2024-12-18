@@ -269,6 +269,47 @@ namespace hypro {
 
     template<typename Number>
     EvaluationResult <Number> 
+    z3GetInternalPoint( const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+                        const matrix_t <Number> &linTransform, const vector_t <Number> &offset,
+                        const Point <Number> &point,
+                        const std::vector<carl::Relation> &relations
+                        ) {
+        z3Context c;
+        EvaluationResult <Number> res;
+        z3::solver z3Solver(c);
+
+        // create formula and objective
+        z3::expr formula = createFormula<Number>(point, constraints, constants, linTransform, offset, c, relations);
+
+        // inform and add constraints
+        z3Solver.add(formula);
+
+        // verify and set result
+        if (z3Solver.check() == z3::sat) {
+            z3::model m = z3Solver.get_model();
+            // std::cout << "Model:\n" << m << std::endl;
+            vector_t <Number> pointCoordinates = vector_t<Number>::Zero(constraints.cols());
+            for (unsigned i = 0; i < constraints.cols(); ++i) {
+                z3::func_decl var = m.get_const_decl(i);
+                // std::cout << var << std::endl;
+                if (Z3_model_get_const_interp(c, m, var) != nullptr) {
+                    // std::cout << "varName: " << var.name() << std::endl;
+                    // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
+                    size_t varIndex = std::stoull(var.name().str().substr(2));
+                    // std::cout << "varIndex: " << varIndex << std::endl;
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
+                }
+            }
+            res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
+        } else {
+            res = EvaluationResult<Number>(SOLUTION::INFEAS);
+        }
+        return res;
+    }
+
+    template<typename Number>
+    EvaluationResult <Number> 
     z3GetCounterexample( const matrix_t <Number> &constraints, const vector_t <Number> &constants, const matrix_t <Number> &linTransform, const vector_t <Number> &offset, const std::vector<matrix_t<Number>> rejectionMatrices,  const std::vector<vector_t<Number>> rejectionVectors) {
         z3Context c;
         EvaluationResult <Number> res;

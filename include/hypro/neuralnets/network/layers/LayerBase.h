@@ -68,6 +68,10 @@ class LayerBase {
 	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet, Starset<Number> currentSet) const {
 		return propagateCandidateBack(y, neuronNumber, inputSet );
 	};
+	virtual Point<Number> propagateCandidateBack(Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const {
+		assert(false && "binary backpropagation not possible for this layertype");
+		return Point<Number>();
+	}
 
 	// ============= utility functions =============
 

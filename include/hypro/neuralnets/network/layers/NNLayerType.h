@@ -11,4 +11,8 @@ BETTER_ENUM( NN_LAYER_TYPE, int, DEFAULT,
 			 // here we could have other types of layers (e.g. other piecewise linear activation functions, or convolutional layers etc.)
 );
 
+BETTER_ENUM( BACKPROPAGATION_STRATEGY, int, DEFAULT,
+			 SINGLESTEP, BINARYSEARCH
+);
+
 }  // namespace hypro
