@@ -375,6 +375,113 @@ static z3::expr createFormula(
 }
 
 template <typename Number>
+static std::pair <z3::expr, z3::expr> createFormulaAndObjective(
+ const matrix_t<Number>& _constraints,
+ const vector_t<Number>& _constants, 
+ const matrix_t<Number>& _linTransform,
+ const vector_t<Number>& _offset,
+ const std::vector<matrix_t<Number>> _rejectionConstraints,
+ const std::vector<vector_t<Number>> _rejectionConstants,
+ z3Context& c
+ ) {
+    // Assume starset < _offset, _linTransform, {variables | _constraints * variables <= _constants }>
+    // Find a variable with (_constraints * variables <= _constants), such that for all {x | C*x <= d} \in rejectionSets: !(C*(_offset + _linTransform*variables) <= d) 
+    // <=> !(C*_linTransform*variables <= d - C*_offset)
+
+    z3::expr formula( c );
+    z3::expr objective( c );
+    objective = c.int_val(0);
+    formula = c.bool_val( true );
+    
+    //create variables
+    std::vector<z3::expr> variables;
+    for ( unsigned i = 0; i < _constraints.cols(); i++ ) {
+        std::string index = std::to_string( i );
+        //x = s * (n/d) where s=1,-1 and n >= 0 and d >= 1 (n/d = |x|)
+        //variables.push_back( c.real_const( ("x_" + index).c_str() ) ); 
+        variables.push_back( c.int_const( ("s_" + index).c_str() ) ); 
+        variables.push_back( c.int_const( ("n_" + index).c_str() ) );
+        variables.push_back( c.int_const( ("d_" + index).c_str() ) );
+    }
+       
+    //Set objective = \sum_{i} n_i + d_i
+    //And add constraints for the variables
+    for (unsigned i = 0 ; i < _constraints.cols(); i++){
+        objective = objective + variables[i*3 + 1] +  variables[i*3 + 2];
+        // x=s*(n/d) <=> x * s * d = n
+        // formula = formula && (variables[i*4 + 0] * variables[i*4 + 1] * variables[i*4 + 3] == variables[i*4 + 2]);
+        // s is the sign of x
+        formula = formula && ((variables[i*3] == 1) || (variables[i*3] == -1)); 
+        // n is the numerator of x and should be non-negativ for a meaningful objective (sign only influnced by s)
+        formula = formula && (variables[i*3 + 1] >= 0);
+        // d is the denominator of x and should be positive for a meaningful objective (sign only influnced by s + n/d defined)
+        formula = formula && (variables[i*3 + 2] >= 1);
+    }
+    
+    //Construct formula    
+    //Constrain variables to {variables | _constraints * variables <= _constants }
+    for ( unsigned i = 0; i < _constraints.rows(); i++ ) {
+
+        z3::expr constraint( c );
+        constraint = c.int_val( 0 );
+        z3::expr constant( c );
+        constant = c.real_val( carl::convert<Number, mpq_class>( _constants( i ) ) );
+
+        for ( unsigned j = 0; j < _constraints.cols(); j++ ) {
+            constant = constant * variables.at(j * 3 + 2);
+            if ( _constraints( i, j ) != carl::constant_zero<Number>::get() ) {
+                z3::expr summand( c );
+                summand = ( c.real_val( carl::convert<Number, mpq_class>( _constraints( i, j ) ) ) ) * variables.at( j*3 ) * variables.at( j*3 +1);
+                for (unsigned k = 0; k < _constraints.cols(); k++ ){
+                    if(k != j){
+                        summand = summand * variables.at(k * 3 + 2);
+                    }
+                }
+                constraint = constraint + summand;
+            }
+        }
+       
+        formula = formula && (constraint <= constant);
+    }
+    
+    // !(C_0*_linTransform*variables <= d_0 - C_0*_offset) && ... && !(C_k*_linTransform*variables <= d_k - C_k*_offset)
+    // !(C*_linTransform*variables <= d - C*_offset) <=> (C*_linTransform).row(l)*variables > (d - C*_offset).row(l)
+    for (unsigned index = 0; index < _rejectionConstraints.size(); index++){
+        z3::expr disjunction( c );
+        disjunction = c.bool_val( false );
+        matrix_t<Number> fullLinTransform = _rejectionConstraints[index] * _linTransform;
+        vector_t<Number> fullOffset = _rejectionConstraints[index] * _offset;
+
+        for ( unsigned i = 0; i < fullLinTransform.rows(); i++ ) {
+            z3::expr constraint( c );
+            constraint = c.int_val( 0 );
+            z3::expr constant (c);
+            constant = c.real_val( carl::convert<Number, mpq_class>( _rejectionConstants[index]( i ) ) ) - c.real_val( carl::convert<Number, mpq_class>( fullOffset( i ) ) );
+
+            for ( unsigned j = 0; j < fullLinTransform.cols(); j++ ) {
+                constant = constant * variables.at(j * 3 + 2);
+                if ( fullLinTransform( i, j ) != carl::constant_zero<Number>::get() ) {
+                    z3::expr summand( c );
+                    summand = ( c.real_val( carl::convert<Number, mpq_class>( fullLinTransform( i, j ) ) ) ) * variables.at( j*3 ) * variables.at( j*3 +1);
+                    for (unsigned k = 0; k < _constraints.cols(); k++ ){
+                        if(k != j){
+                            summand = summand * variables.at(k * 3 + 2);
+                        }
+                    }
+                    constraint = constraint + summand;
+                }
+            }
+            
+            disjunction = disjunction || (constraint > constant);   
+        }
+
+        formula = formula && disjunction;
+    }  
+    std::cout << "Forumla: \n" << formula << "\n" << "Objective:\n" << objective << std::endl;
+    return std::make_pair( formula, objective );
+}
+
+template <typename Number>
 static std::pair<z3::expr, z3::expr> createFormula( const matrix_t<Number>& _constraints, const vector_t<Number> _constants, const std::vector<carl::Relation>& relations, const vector_t<Number>& _objective, z3Context& c, std::vector<z3::expr>& variables ) {
     z3::expr formula( c );
     z3::expr objective( c );

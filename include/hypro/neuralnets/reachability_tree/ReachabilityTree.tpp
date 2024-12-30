@@ -17,7 +17,29 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 	: mNetwork( network )
 	, mInputSet( inputSet )
 	, mSafeSets( safeSets )
-	, mPlotter( hypro::Plotter<Number>::getInstance() ) {
+	, mPlotter( hypro::Plotter<Number>::getInstance() )
+	, mCounterExampleStrategy( COUNTEREXAMPLE_STRATEGY::Z3_BASIC )
+	, mRefinmentType( REFINEMENT_TYPE::AVOIDANT )
+	, mBackpropagationStrategy( BACKPROPAGATION_STRATEGY::BINARYSEARCH ) {
+	unsigned short int depth = 1;
+	for ( auto layer : mNetwork.layers() ) {
+		if ( layer->layerType() == NN_LAYER_TYPE::AFFINE )
+			depth = depth + 1;
+		else
+			depth = depth + layer->layerSize();
+	}
+	mDepth = depth;
+}
+
+template <typename Number>
+ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets, const COUNTEREXAMPLE_STRATEGY counterExampleStrategy, const REFINEMENT_TYPE refinementType, const BACKPROPAGATION_STRATEGY backpropagationStrategy)
+	: mNetwork( network )
+	, mInputSet( inputSet )
+	, mSafeSets( safeSets )
+	, mPlotter( hypro::Plotter<Number>::getInstance())
+	, mCounterExampleStrategy( counterExampleStrategy )
+	, mRefinmentType( refinementType ) 
+	, mBackpropagationStrategy( backpropagationStrategy ) {
 	unsigned short int depth = 1;
 	for ( auto layer : mNetwork.layers() ) {
 		if ( layer->layerType() == NN_LAYER_TYPE::AFFINE )
@@ -38,7 +60,6 @@ std::vector<ReachabilityNode<Number>*> ReachabilityTree<Number>::leaves() const 
 	return mLeaves;
 }
 
-
 /*
 * Returns the depth of the ReachabilityTree starting at node
 * depth := longest path to a leaf node
@@ -52,6 +73,7 @@ unsigned short int ReachabilityTree<Number>::depth(ReachabilityNode<Number>* nod
 	}
 		
 	return 1 + maxDepth;
+	// TODO: confirm the following works and remove the other :: return node->getNumberOfChildren() > 0 ? 1 + depth(node.getChild(0)) : 1;
 }
 
 template <typename Number>
@@ -162,7 +184,6 @@ Starset<Number> ReachabilityTree<Number>::prepareInput( bool normalize ) const {
 		// return Starset<Number>( center, generator, HPolytope<Number>( new_halfplanes ) );
 	}
 
-	//causes optimizer errors using the starset constructor with mInputSet as only input
 	return Starset<Number>( mInputSet.matrix(), mInputSet.vector() );
 }
 
@@ -211,6 +232,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 	jobQueue.push_back( root_job );
 
 	// perform BFS / DFS until the queue is not empty and the network is still safe
+	int i = 1;
 	while ( !jobQueue.empty() ) {
 		SearchJob<Number> job = jobQueue.front();
 		std::vector<SearchJob<Number>> newJobs = job.compute( rootNode->method() );
@@ -222,7 +244,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 				ReachabilityNode<Number>* leafNode = newJob.getNode();
 				mLeaves.push_back( leafNode );
 
-				if ( !leafNode->checkSafe( mSafeSetMatrices, mSafeSetVectors ) ) {
+				if ( !leafNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy) ) {
 					leafNode->setSafe( false );
 					mIsSafe = false;
 					mIsComplete = true;
@@ -263,7 +285,6 @@ bool ReachabilityTree<Number>::_refinementAlwaysFullComputation(SEARCH_STRATEGY 
 			
 		// generate a counterexample
 		Point<Number> candidate = chosenLeaf->getCounterExample();
-		//produceCounterExampleCandidate( chosenLeaf->representation(), safeOutput );
 		std::cout << "The counterexample candidate is " << candidate << std::endl;
 		
 		//Otherwise chosenLeaf is safe
@@ -364,7 +385,7 @@ bool ReachabilityTree<Number>::_refinementAvoidComputation(SEARCH_STRATEGY strat
 		for(i = 0; i < notComputedLeaves.size() && !foundUnsafe; i++){
 			std::cout << "Computing new over-approximated subtree...";
 			notComputedLeaves[i]->setMethod( NN_REACH_METHOD::OVERAPPRX );
-			foundUnsafe = !computeReachTree( notComputedLeaves[i], safeOutput, strategy )->checkSafe(mSafeSetMatrices, mSafeSetVectors);
+			foundUnsafe = !computeReachTree( notComputedLeaves[i], safeOutput, strategy )->checkSafe(mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy);
 			std::cout << " New subtree is " << (!foundUnsafe ? "safe" : "unsafe") << std::endl;
 		}
 		
@@ -438,8 +459,17 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 	if ( createPlots )
 		plotTree( mRoot, "0-CEGAR_Reach_" );
 
-	// _refinementAlwaysFullComputation(strategy, createPlots, max_iter, safeOutput);
-	_refinementAvoidComputation(strategy, createPlots, max_iter, safeOutput);
+	switch(mRefinmentType){
+		case REFINEMENT_TYPE::AVOIDANT:
+			_refinementAvoidComputation(strategy, createPlots, max_iter, safeOutput);
+			break;
+		case REFINEMENT_TYPE::FULL:
+			_refinementAlwaysFullComputation(strategy, createPlots, max_iter, safeOutput);
+			break;
+		default:
+			_refinementAvoidComputation(strategy, createPlots, max_iter, safeOutput);
+			break;
+	}
 
 	mLeaves.clear();  // TODO: do not clear the leaves that are not affected
 	updateLeaves( mRoot );
@@ -449,96 +479,6 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 	std::cout << "The number of final sets is " << mLeaves.size() << std::endl;
 
 	return mIsSafe;
-}
-
-template <typename Number>
-Point<Number> ReachabilityTree<Number>::_findCounterExampleRandom(Starset<Number> set, std::vector<HPolytope<Number>> rejectionSets, int iterations) const {
-	//Try to generate a counterexample
-    std::random_device rdev;
-	std::mt19937 rgen( rdev() );
-	std::cout << "Trying to produce a counterexample for " << iterations << " iterations..." << std::endl;
-	while ( 0 < iterations) {
-        iterations--;
-        //Create a starset of containing potential counterexamples
-        Starset<Number> setCopy( set ); 
-		for ( HPolytope<Number> poly : rejectionSets ) {
-			std::uniform_int_distribution<int> idist( 0, poly.constraints().size() - 1 );
-			int ind = idist( rgen );				
-			Halfspace<Number> hspace = poly.constraints()[ind];
-            //Note:
-            // The border of the Halfspace and the starset is possibly contained in the rejectionSets!
-            // This is not often a problem, because we try to take a center point as a counterexample
-			vector_t<Number> normal = Number(-1) * hspace.normal();
-			Number offset = Number(-1) * hspace.offset();
-			setCopy = setCopy.intersectHalfspace( Halfspace<Number>( normal, offset ) );
-		}
-
-        if ( setCopy.empty() ){
-            continue;
-        }
-
-        //Find a potential counterexample in the generated starset
-		HPolytope<Number> currentPoly = setCopy.constraints();
-		std::uniform_int_distribution<int> idist( 0, currentPoly.size() - 1 );  //(inclusive, inclusive)
-		for(int tmp = 0; tmp < 10; tmp++) {
-			int ind = idist( rgen );
-			Optimizer<Number> op( setCopy.shape(), setCopy.limits() );
-
-			hypro::vector_t<Number> dir_vect = currentPoly.constraints()[ind].normal();
-			auto eval_low_result = op.evaluate( -1.0 * dir_vect, true );
-			auto eval_high_result = op.evaluate( dir_vect, true );
-			
-			Point<Number> midPoint = Point<Number>((eval_low_result.optimumValue + eval_high_result.optimumValue) / 2.0);
-			Point<Number> transformedPoint = midPoint.affineTransformation(setCopy.generator(), setCopy.center());
-
-            //Ensure point is contained in the starset and not contained in any rejectionSet
-            bool isCounterexample = true;
-            for (int i = 0; i < rejectionSets.size() && isCounterexample; i++){
-                vector_t<Number> v = (rejectionSets[i].matrix() * transformedPoint.rawCoordinates());
-                isCounterexample = isCounterexample && !( v <= rejectionSets[i].vector());                    
-            }
-			if(isCounterexample && setCopy.contains(transformedPoint)) {	
-                std::cout << "Found counterexample in iteration " << iterations << std::endl;
-				return transformedPoint;
-			}
-		}
-    }
-	return Point<Number>();
-}
-
-template <typename Number>
-Point<Number> ReachabilityTree<Number>::_findCounterExampleZ3(Starset<Number> set) const { 
-	std::cout << "Producing a counterexample with z3..." << std::endl;
-	
-	// if a counterexample exists, result contains an element in the predicate of set
-	// this predicate corresponds to a point in set that is not element of any HPolytope in rejectionSets
-	EvaluationResult<Number> result = z3GetCounterexample( set.shape(), set.limits(), set.generator(), set.center(), mSafeSetMatrices, mSafeSetVectors);
-
-
-    if (result.errorCode == SOLUTION::FEAS){
-        // A counterexample exists
-        return Point<Number>(set.generator() * result.optimumValue + set.center());
-    }
-    
-	return Point<Number>(); 
-}
-
-
-/*
-* Returns a counterexample in set and not in any element of rejectionSets
-* If no counterexample exists, the empty point is returned
-*/
-template <typename Number>
-Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<Number> set, std::vector<HPolytope<Number>> rejectionSets) const {
-	//Use the random method to produce a counterexample for iterations
-	int iterations = 0; //TODO: replace this in some way to be an input (for this mehtod or for the class)
-	Point<Number> counterexample = _findCounterExampleRandom(set, rejectionSets, iterations);
-	if(counterexample.dimension() > 0){
-		return counterexample;
-	}
-
-	//Use z3 to produce a counterexample, if it exists (this might return the empty point!)
-    return _findCounterExampleZ3(set);
 }
 
 // Returns the first unsafe leaf

@@ -14,6 +14,7 @@
 #include "../../util/logging/Logger.h"
 #include "../../util/plotting/Plotter.h"
 #include "../reachability/ReachNNMethod.h"
+#include "ReachabilitySettings.h"
 
 namespace hypro {
 namespace reachability {
@@ -39,6 +40,10 @@ class ReachabilityNode {
 	Point<Number> mCounterExample; // a counterexample, if node is a leaf and unsafe, the empty point otherwise
 
 	hypro::Plotter<Number>& mPlotter;
+
+	Point<Number> _checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
+	Point<Number> _checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
+	Point<Number> _checkSafetyRandom(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, int iterations) const;
 
   public:
 	// constructors and destructor
@@ -78,8 +83,8 @@ class ReachabilityNode {
 	void setRepresentation( const Starset<Number>& representation );
 
 	// functionalities
-	bool checkSafeRecursive( Starset<Number> currentSet,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors);
-	bool checkSafe(  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors );
+	bool checkSafeRecursive( Starset<Number> currentSet,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy);
+	bool checkSafe(  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy = COUNTEREXAMPLE_STRATEGY::Z3_BASIC );
 
 	// utility methods
 	void plot( bool holdOn = false, size_t color = 0xCC071E ) const;  // allow to plot only if the representation is two dimensional

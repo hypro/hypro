@@ -4,6 +4,7 @@
 #include "hypro/representations/GeometricObjectBase.h"
 #include "hypro/parser/representations/parseHPolytope.tpp"
 #include "hypro/util/plotting/Plotter.h"
+#include "hypro/neuralnets/reachability_tree/ReachabilitySettings.h"
 
 #include <chrono>
 #include <iomanip>
@@ -121,7 +122,10 @@ int main( int argc, char* argv[] ) {
 	// return 0;
 
 	// Transform input and safe polytopes to star set
-	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly );
+	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;
+	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::AVOIDANT;
+	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::BINARYSEARCH;
+	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly , counterExampleStrategy, refinementType, backpropagationStrategy);
 	bool create_plots = false;
     bool normalize_input = true;
     bool normalize_output = true;

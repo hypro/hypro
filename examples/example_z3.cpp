@@ -192,6 +192,37 @@ void transformed_point_inclusion() {
     std::cout << "The system is: " << (result.errorCode == hypro::SOLUTION::FEAS ? "consistent" : "inconsistent") << std::endl;
 }
 
+void integer_division(){
+    z3::context c;
+    z3::expr x_1 = c.int_const("x_1");
+    z3::expr y_1 = c.int_const("y_1");
+    z3::expr z_1 = c.int_const("z_1");
+    z3::expr x_2 = c.int_const("x_2");
+    z3::expr y_2 = c.int_const("y_2");
+    z3::expr z_2 = c.int_const("z_2");
+    z3::solver s(c);
+
+    s.add(x_1 == 1);
+    s.add(y_1 == 2);
+    s.add(z_1 == -1);
+    s.add(x_2 == 5);
+    s.add(y_2 == 3);
+    s.add(z_2 == 1);
+    //Formula (-1/2 + 5/3 >= -1) <=> (-1 * 3 + 5 * 2 >= -1 * 2 * 3)
+    //       1  * -1  *  3   +   5  * 1   *  2    >=   2  *  3
+    s.add(((x_1 * z_1 * y_2) + (x_2 * z_2 * y_1)) >= (-1) * (y_1 * y_2));
+    std::cout << s.check() << "\n";
+
+    z3::model m = s.get_model();
+    std::cout << m << "\n";
+    // traversing the model
+    for (unsigned i = 0; i < m.size(); i++) {
+        z3::func_decl v = m[i];
+        // this problem contains only constants
+        assert(v.arity() == 0); 
+        std::cout << v.name() << " = " << m.get_const_interp(v) << "\n";
+    }   
+}
 
 int main() {
     // More examples at: https://github.com/Z3Prover/z3/blob/master/examples/c%2B%2B/example.cpp
@@ -202,8 +233,9 @@ int main() {
     // H_Polytope_to_CNF();
     // point_inclusion();
     // point_inclusion_ErrorTest();
-
-    transformed_point_inclusion();
     
+    // transformed_point_inclusion();
+    
+    integer_division(); 
     return 0;
 }

@@ -158,28 +158,146 @@ Point<Number> ReachabilityNode<Number>::getCounterExample() const{
 }
 
 template <typename Number>
-bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) {
-	EvaluationResult<Number> result = z3GetCounterexample( currentSet.shape(), currentSet.limits(), currentSet.generator(), currentSet.center(), safeSetMatrices, safeSetVectors);
+Point<Number> ReachabilityNode<Number>::_checkSafetyRandom(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, int iterations) const {
+	//Try to generate a counterexample
+    std::random_device rdev;
+	std::mt19937 rgen( rdev() );
+	std::cout << "Trying to produce a counterexample for " << iterations << " iterations..." << std::endl;
+	while ( 0 < iterations) {
+        iterations--;
+        //Create a starset of containing potential counterexamples
+        Starset<Number> setCopy( set ); 
+		// for ( HPolytope<Number> poly : rejectionSets ) {
+		// 	std::uniform_int_distribution<int> idist( 0, poly.constraints().size() - 1 );
+		// 	int ind = idist( rgen );				
+		// 	Halfspace<Number> hspace = poly.constraints()[ind];
+        //     //Note:
+        //     // The border of the Halfspace and the starset is possibly contained in the rejectionSets!
+        //     // This is not often a problem, because we try to take a center point as a counterexample
+		// 	vector_t<Number> normal = Number(-1) * hspace.normal();
+		// 	Number offset = Number(-1) * hspace.offset();
+		// 	setCopy = setCopy.intersectHalfspace( Halfspace<Number>( normal, offset ) );
+		// }
+
+		for (unsigned i = 0; i < safeSetMatrices.size(); i++) {
+			std::uniform_int_distribution<int> idist( 0, safeSetMatrices[i].rows() - 1 );
+			int ind = idist( rgen );				
+            //Note:
+            // The border of the Halfspace and the starset is possibly contained in the rejectionSets!
+            // This is not often a problem, because we try to take a center point as a counterexample
+			vector_t<Number> normal = Number(-1) * safeSetMatrices[i].row( ind );
+			Number offset = Number(-1) * safeSetVectors[i][ind];
+			setCopy = setCopy.intersectHalfspace( Halfspace<Number>( normal, offset ) );
+		}
+
+        if ( setCopy.empty() ){
+            continue;
+        }
+
+        //Find a potential counterexample in the generated starset
+		HPolytope<Number> currentPoly = setCopy.constraints();
+		std::uniform_int_distribution<int> idist( 0, currentPoly.size() - 1 );  //(inclusive, inclusive)
+		for(int tmp = 0; tmp < 10; tmp++) {
+			int ind = idist( rgen );
+			Optimizer<Number> op( setCopy.shape(), setCopy.limits() );
+
+			hypro::vector_t<Number> dir_vect = currentPoly.constraints()[ind].normal();
+			auto eval_low_result = op.evaluate( -1.0 * dir_vect, true );
+			auto eval_high_result = op.evaluate( dir_vect, true );
+			
+			Point<Number> midPoint = Point<Number>((eval_low_result.optimumValue + eval_high_result.optimumValue) / 2.0);
+			Point<Number> transformedPoint = midPoint.affineTransformation(setCopy.generator(), setCopy.center());
+
+            //Ensure point is contained in the starset and not contained in any rejectionSet
+            bool isCounterexample = true;
+            // for (int i = 0; i < rejectionSets.size() && isCounterexample; i++){
+            //     vector_t<Number> v = (rejectionSets[i].matrix() * transformedPoint.rawCoordinates());
+            //     isCounterexample = isCounterexample && !( v <= rejectionSets[i].vector());                    
+            // }
+			for (int i = 0; i < safeSetMatrices.size() && isCounterexample; i++){
+                vector_t<Number> v = (safeSetMatrices[i] * transformedPoint.rawCoordinates());
+                isCounterexample = isCounterexample && !( v <= safeSetVectors[i]);                    
+            }
+			if(isCounterexample && setCopy.contains(transformedPoint)) {	
+                std::cout << "Found counterexample in iteration " << iterations << std::endl;
+				return transformedPoint;
+			}
+		}
+    }
+	return _checkSafetyZ3(set, safeSetMatrices, safeSetVectors);
+}
+ 
+template <typename Number>
+Point<Number> ReachabilityNode<Number>::_checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 
+	std::cout << "Producing a counterexample with z3..." << std::endl;
 	
-	if(result.errorCode == SOLUTION::FEAS){
-		mCounterExample = Point<Number>(currentSet.generator() * result.optimumValue + currentSet.center());
+	// if a counterexample exists, result contains an element in the predicate of set
+	// this predicate corresponds to a point in set that is not element of any HPolytope in rejectionSets
+	EvaluationResult<Number> result = z3GetCounterexample( set.shape(), set.limits(), set.generator(), set.center(), safeSetMatrices, safeSetVectors);
+
+    if (result.errorCode == SOLUTION::FEAS){
+        // A counterexample exists
+        return Point<Number>(set.generator() * result.optimumValue + set.center());
+    }
+    
+	return Point<Number>(); 
+}
+
+template <typename Number>
+Point<Number> ReachabilityNode<Number>::_checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 
+	std::cout << "Producing a counterexample with z3..." << std::endl;
+	
+	// if a counterexample exists, result contains an element in the predicate of set
+	// this predicate corresponds to a point in set that is not element of any HPolytope in rejectionSets
+	EvaluationResult<Number> result = z3GetCounterexampleSmall( set.shape(), set.limits(), set.generator(), set.center(), safeSetMatrices, safeSetVectors);
+	
+	switch(result.errorCode){
+		case SOLUTION::FEAS:	
+			return Point<Number>(set.generator() * result.optimumValue + set.center());
+		case SOLUTION::INFEAS:
+			return Point<Number>();
+		default: //z3GetCounterexampleSmall uses an incomlete method for a mixed integer and rational problem and can thus return UNKOWN
+			return _checkSafetyZ3(set, safeSetMatrices, safeSetVectors);		
+	}
+}
+
+template <typename Number>
+bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy ) {
+	
+	Point<Number> counterexample;
+	switch(strategy){
+		case COUNTEREXAMPLE_STRATEGY::Z3_BASIC: 
+			counterexample = _checkSafetyZ3(currentSet, safeSetMatrices, safeSetVectors);
+			break;
+		case COUNTEREXAMPLE_STRATEGY::RANDOM:
+			counterexample = _checkSafetyRandom(currentSet, safeSetMatrices, safeSetVectors, 10);			
+			break;
+		case COUNTEREXAMPLE_STRATEGY::Z3_SMALL_REPRESENTATION:
+			counterexample = _checkSafetyZ3SmallRepresentation(currentSet, safeSetMatrices, safeSetVectors);
+			break;
+		default:
+			assert(false && "Not a known strategy to find counterexamples");
+			break;
+	}
+	
+	if(counterexample.dimension() > 0){
+		mCounterExample = counterexample;
 		return false;
 	}
 
-	assert(result.errorCode == SOLUTION::INFEAS && "leaf not safe and not unsafe");
 	return true;
 }
 
 template <typename Number>
-bool ReachabilityNode<Number>::checkSafe( const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) {
+bool ReachabilityNode<Number>::checkSafe( const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy) {
 	// if the node is a leaf, we should check if the representation is only in the safe region (which is a non-convex set, DNF)
 	if ( mIsLeaf) {
-		return hasCounterExample() ? false : checkSafeRecursive( mRepresentation, safeSetMatrices, safeSetVectors );
+		return hasCounterExample() ? false : checkSafeRecursive( mRepresentation, safeSetMatrices, safeSetVectors, strategy);
 	} 
 
 	// if the node is not a leaf, then it safetiness depends on the children
 	for (ReachabilityNode<Number>* child : mChildren){
-		if(!(child->checkSafe(safeSetMatrices, safeSetVectors))){
+		if(!(child->checkSafe(safeSetMatrices, safeSetVectors, strategy))){
 			return false;
 		}
 	}

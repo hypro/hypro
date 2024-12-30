@@ -15,6 +15,7 @@
 #include "ReachabilityNode.h"
 #include "SearchJob.h"
 #include "SearchStrategy.h"
+#include "ReachabilitySettings.h"
 
 #include <deque>
 #include <vector>
@@ -39,11 +40,9 @@ class ReachabilityTree {
 
 	hypro::Plotter<Number>& mPlotter;
 
-	Point<Number> _findCounterExampleRandom(Starset<Number> set, std::vector<HPolytope<Number>> rejectionSets, int iterations) const;
-	Point<Number> _findCounterExampleZ3(Starset<Number> set) const;
-
-	bool _refinementAlwaysFullComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
-	bool _refinementAvoidComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
+	BACKPROPAGATION_STRATEGY mBackpropagationStrategy;
+	COUNTEREXAMPLE_STRATEGY mCounterExampleStrategy;
+	REFINEMENT_TYPE mRefinmentType; 
 
   public:
 	// Default constructor
@@ -55,12 +54,14 @@ class ReachabilityTree {
 	// Initializer constructor
 	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets );
 
+	//Initializer constructor with explicit counterexample strategy and refinement type
+	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets, const COUNTEREXAMPLE_STRATEGY counterExampleStrategy, const REFINEMENT_TYPE refinementType, const BACKPROPAGATION_STRATEGY backpropagationStrategy);
+
 	ReachabilityNode<Number>* root() const;
 
 	std::vector<ReachabilityNode<Number>*> leaves() const;
 
 	unsigned short int depth(ReachabilityNode<Number>* node) const;
-
 
 	/**
 	 * @return Ancestor of node with neuron number neuronNumber
@@ -69,13 +70,6 @@ class ReachabilityTree {
 
 	ReachabilityNode<Number>* computeReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy );
 	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots = false, bool normalizeInput = false, bool normalizeOutput = false, size_t max_iter= 100 );
-
-	/**
-	 * @brief A method that produces a counterexample candidate for the current ReachabilityTree using sampling.
-	 *
-	 * @return Return a Point<Number>, the counterexample candidate or the empty point if no counterexample exists
-	 */
-	Point<Number> produceCounterExampleCandidate( Starset<Number> set, std::vector<HPolytope<Number>> rejectionSet ) const;
 
 	ReachabilityNode<Number>* getFirstUnsafeLeaf() const;
 
@@ -138,7 +132,8 @@ class ReachabilityTree {
 	Number mean_val( size_t dim ) const;
 	Number range_val( size_t dim ) const;
 
-	bool isSubResultSafe( const std::vector<Starset<Number>>& subResult, const std::vector<HPolytope<Number>>& safeSet ) const;
+	bool _refinementAlwaysFullComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
+	bool _refinementAvoidComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
 };
 
 }  // namespace reachability

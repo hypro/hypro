@@ -341,6 +341,76 @@ namespace hypro {
     }
 
     template<typename Number>
+    EvaluationResult <Number> 
+    z3GetCounterexampleSmall( const matrix_t <Number> &constraints, const vector_t <Number> &constants, const matrix_t <Number> &linTransform, const vector_t <Number> &offset, const std::vector<matrix_t<Number>> rejectionMatrices,  const std::vector<vector_t<Number>> rejectionVectors) {
+        z3Context c;
+        EvaluationResult <Number> res;
+        z3::optimize z3Optimizer(c);
+
+        // create formula and objective        
+        std::pair <z3::expr, z3::expr> formulaObjectivePair = createFormulaAndObjective<Number>(constraints, constants, linTransform, offset, rejectionMatrices, rejectionVectors, c);
+        std::cout << "Prepared the formula" << std::endl;
+        // inform and add constraints
+        z3Optimizer.add(formulaObjectivePair.first);
+        std::cout << "Added the formula to optimizer" << std::endl;
+        z3Optimizer.push();
+        std::cout << "Pushed the formula" << std::endl;
+        z3::optimize::handle result = z3Optimizer.minimize(formulaObjectivePair.second);
+        std::cout << "Found minimal result" << std::endl;
+
+        // verify and set result
+        std::cout << "Checking forumla";
+        switch(z3Optimizer.check()){
+            case z3::sat:
+                std::cout << std::endl;
+                {
+                    z3::expr z3res = z3Optimizer.lower(result);
+                    assert(z3res.is_arith());
+
+                    z3::model m = z3Optimizer.get_model();
+                    // check whether unbounded
+                    std::stringstream sstr;
+                    sstr << z3res;
+
+                    if (sstr.str() == std::string("oo") || sstr.str() == std::string("(* (- 1) oo)")) {
+                        std::cout << "Got an infinite result ... using the complete method";
+                        res = z3GetCounterexample(constraints, constants, linTransform, offset, rejectionMatrices,  rejectionVectors);
+                        break;
+                    }
+    
+                    res.supportValue = z3ResToNumber<Number>(c,z3res);
+                    vector_t <Number> pointCoordinates = vector_t<Number>::Ones(constraints.cols());
+                    for (unsigned i = 0; i < constraints.cols() * 3; ++i) {
+                        z3::func_decl var = m.get_const_decl(i);
+                        if (Z3_model_get_const_interp(c, m, var) != nullptr) {
+                            std::cout << var.name().str() << std::endl;
+                            size_t varIndex = std::stoull(var.name().str().substr(2));
+                            z3::ast varValue = m.get_const_interp(var);
+                            if(var.name().str().substr(0) == "d"){
+                                pointCoordinates(varIndex) = pointCoordinates(varIndex) / z3ResToNumber<Number>(c, varValue);    
+                            } else {
+                                pointCoordinates(varIndex) = pointCoordinates(varIndex) * z3ResToNumber<Number>(c, varValue);    
+                            }
+                        }
+                    }
+                    res.errorCode = SOLUTION::FEAS;
+                    res.optimumValue = pointCoordinates;
+                    break;
+                }
+            case z3::unsat:
+                std::cout << std::endl;
+                res = EvaluationResult<Number>(SOLUTION::INFEAS);
+                break;
+            default:
+                std::cout << "Neither sat nor unsat ... using the complete method" << std::endl;
+                res = z3GetCounterexample(constraints, constants, linTransform, offset, rejectionMatrices,  rejectionVectors);
+                break;
+        }
+        std::cout << "Found a result"<< std::endl;
+        return res;
+    }
+
+    template<typename Number>
     EvaluationResult <Number>
     z3GetInternalPoint(const matrix_t <Number> &constraints, const vector_t <Number> &constants,
                        const std::vector <carl::Relation> &relations) {
