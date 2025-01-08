@@ -19,8 +19,8 @@ namespace hypro {
 template <typename Number>
 class HardSigmoidLayer : public LayerBase<Number> {
   private:
-	float mMinValue = -3.0;
-	float mMaxValue = 3.0;
+	Number mMinValue = Number(-3);
+	Number mMaxValue = Number(3);
 
 	/**
 	 * @brief Applies the given reachability method to the input set
@@ -43,7 +43,7 @@ class HardSigmoidLayer : public LayerBase<Number> {
 	 * @param[in] layerSize The layer size
 	 * @param[in] layerIndex The layer index
 	 */
-	HardSigmoidLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue = -3.0, float maxValue = 3.0 );
+	HardSigmoidLayer( unsigned short int layerSize, unsigned short int layerIndex, Number minValue = -3, Number maxValue = 3 );
 
 	/**
 	 * @brief Default destructor
@@ -85,6 +85,7 @@ class HardSigmoidLayer : public LayerBase<Number> {
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
 	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const;
+	virtual Point<Number> propagateCandidateBack( Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const;
 
 	/**
 	 * @brief Serialization of the current layer.

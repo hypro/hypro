@@ -15,7 +15,7 @@
 namespace hypro {
 
 template <typename Number>
-HardSigmoidLayer<Number>::HardSigmoidLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue, float maxValue )
+HardSigmoidLayer<Number>::HardSigmoidLayer( unsigned short int layerSize, unsigned short int layerIndex, Number minValue, Number maxValue )
 	: LayerBase<Number>( layerSize, layerIndex )
 	, mMinValue( minValue )
 	, mMaxValue( maxValue ) {
@@ -142,4 +142,43 @@ Point<Number> HardSigmoidLayer<Number>::propagateCandidateBack( Point<Number> y,
 
 	return Point<Number>();
 }
+
+template <typename Number>
+Point<Number> HardSigmoidLayer<Number>::propagateCandidateBack( Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const {
+	std::cout <<"Block HardSigmoid"<<std::endl;
+	std::vector<carl::Relation> relations;
+	for (int i = 0; i < ancestorSet.generator().rows(); i++){
+		if ( upperIndex <= i && i <= lowerIndex) {
+			if (0 == candidate[i]) {
+				candidate[i] = mMinValue;
+				relations.push_back( carl::Relation::LEQ);
+			} else if (1 == candidate[i] ) {
+				candidate[i] = mMaxValue;
+				relations.push_back( carl::Relation::GEQ);
+			} else {
+				candidate[i] = (mMaxValue - mMinValue) * candidate[i] + mMinValue;
+				relations.push_back( carl::Relation::EQ);
+			}	
+		} else {
+			relations.push_back( carl::Relation::EQ);	
+		}
+	}
+
+	assert(relations.size() == ancestorSet.generator().rows());
+	
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint(ancestorSet.shape(), ancestorSet.limits(), ancestorSet.generator(), ancestorSet.center(), candidate, relations);	
+	switch ( result.errorCode ) {
+		case SOLUTION::FEAS:						
+            return Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center());
+		case SOLUTION::INFEAS:
+            return Point<Number>();
+		default:
+			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
+			break;
+	}
+
+	return Point<Number>();
+
+}
+
 }  // namespace hypro

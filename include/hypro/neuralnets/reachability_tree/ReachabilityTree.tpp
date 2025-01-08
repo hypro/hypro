@@ -291,7 +291,7 @@ bool ReachabilityTree<Number>::_refinementAlwaysFullComputation(SEARCH_STRATEGY 
 		assert(candidate.dimension() > 0);
 
 		// identify the source neuron of the counterexample
-		std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( candidate, chosenLeaf, BACKPROPAGATION_STRATEGY::BINARYSEARCH );
+		std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( candidate, chosenLeaf, mBackpropagationStrategy);
 
 		//If an actual counterexample can be propagated back to the root, the the counterexample is not the result of approximation
 		if ( candidateSource.first.dimension() > 0 && !candidateSource.second->hasParent()  ) {
@@ -353,7 +353,7 @@ bool ReachabilityTree<Number>::_refinementAvoidComputation(SEARCH_STRATEGY strat
 		// Split the unsafe leaf exists
 		// Backpropagate the counterexample: Identify the source neuron of the counterexample
 		std::cout << "The counterexample candidate is " << unsafeLeaf->getCounterExample() << std::endl;		
-		std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( unsafeLeaf->getCounterExample(), unsafeLeaf, BACKPROPAGATION_STRATEGY::BINARYSEARCH );
+		std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( unsafeLeaf->getCounterExample(), unsafeLeaf, mBackpropagationStrategy );
 
 		// If the counterexample is not spurious then: return false
 		if ( candidateSource.first.dimension() > 0 && !candidateSource.second->hasParent()  ) {
@@ -547,7 +547,7 @@ std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::id
 	}
 
 	//TODO: Implement this for more than ReLU layers
-	if(	BACKPROPAGATION_STRATEGY::BINARYSEARCH == strategy && NN_LAYER_TYPE::RELU == mNetwork.layers(node->getParent()->layerNumber())->layerType() ){
+	if(	BACKPROPAGATION_STRATEGY::BINARYSEARCH == strategy && NN_LAYER_TYPE::AFFINE != mNetwork.layers(node->getParent()->layerNumber())->layerType() ){
 		std::pair<Point<Number>, ReachabilityNode<Number>*> result = binarySearchBackpropagation(candidate, node, 0, 0);
 		return identifyCounterExampleSource(result.first, result.second, strategy);
 	}
@@ -564,20 +564,23 @@ std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::id
 //Returns a origin of candidate and the node corresponding to the neuron with number 0 OR the source-node of the counterexample and the empty point
 template <typename Number>
 std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::binarySearchBackpropagation(const Point<Number>& candidate, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex ) const {
-    std::cout << "Upper Index: " << upperIndex
-              << "\nNext Index: " << nextIndex
-              << "\nNode Index: "<< node->getParent()->neuronNumber() + 1 <<"\n";
-	    
-	//For very small layers, this method is not useful, therefore the default method is used
+    //For very small layers, this method is not useful, therefore the default method is used
     if(mNetwork.layers( node->getParent()->layerNumber() )->layerSize() <= 2 ){
         return identifyCounterExampleSource(candidate, node, BACKPROPAGATION_STRATEGY::SINGLESTEP);
     }
+
+	std::cout << "Upper Index: " << upperIndex
+              << "\nNext Index: " << nextIndex
+              << "\nNode Index: "<< node->getParent()->neuronNumber() + 1 <<"\n";
+	    
     
     //If backpropagation to the starset in node is possible, but backpropagation to the next one is not possible, the source is identified
     if(node->neuronNumber() == upperIndex + 1) {
         std::cout << "Found source in layer!" << std::endl;
         return std::make_pair(Point<Number>(), getAncestor(node, upperIndex));
-    }
+    } else if(node->getParent()->neuronNumber() == upperIndex) {
+		return std::make_pair(Point<Number>(), node->getParent());
+	}
     
     ReachabilityNode<Number>* ancestorNode = getAncestor(node->getParent(), nextIndex);
     Point<Number> origin = propagateCandidateBack(candidate, node->getParent()->layerNumber() ,node->getParent()->neuronNumber(), nextIndex, ancestorNode->representation());

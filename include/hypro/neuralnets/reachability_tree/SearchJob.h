@@ -105,9 +105,6 @@ class SearchJob {
 					mNode->addChild(nextNode);
 					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
-
-				if ( mLayer->layerType() == NN_LAYER_TYPE::HARD_TANH )
-					TRACE( "hypro.neuralnets.reachability_tree.SearchJob", "HARD_TANH layer type not implemented yet." );
 				break;
 			default:
 				TRACE( "hypro.neuralnets.reachability_tree.SearchJob", "Unknown layer type " << layer->layerType() );

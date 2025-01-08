@@ -30,7 +30,7 @@ class ReLULayer : public LayerBase<Number> {
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
 	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const;
-	virtual Point<Number> propagateCandidateBack(Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const;
+	virtual Point<Number> propagateCandidateBack( Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const;
 
 	virtual void serialize( std::ostream& os ) const {
 		os << "Layer size: " << LayerBase<Number>::mLayerSize << std::endl;
