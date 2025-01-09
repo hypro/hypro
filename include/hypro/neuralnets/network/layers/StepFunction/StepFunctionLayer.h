@@ -17,9 +17,9 @@ namespace hypro {
 template <typename Number>
 class StepFunctionLayer : public LayerBase<Number> {
   private:
-	float mValue;
-	float mMinValue;
-	float mMaxValue;
+	Number mValue;
+	Number mMinValue;
+	Number mMaxValue;
 
 	/**
 	 * @brief Applies the given reachability method to the input set
@@ -42,7 +42,7 @@ class StepFunctionLayer : public LayerBase<Number> {
 	 * @param[in] maxValue The maximum value of the linear region range. Default: 1
 	 *
 	 */
-	StepFunctionLayer( unsigned short int layerSize, unsigned short int layerIndex, float value = 0, float minValue = 0, float maxValue = 1 );
+	StepFunctionLayer( unsigned short int layerSize, unsigned short int layerIndex, Number value = 0, Number minValue = 0, Number maxValue = 1 );
 
 	/**
 	 * @brief The type of the layer in the form of an enum member
@@ -79,6 +79,7 @@ class StepFunctionLayer : public LayerBase<Number> {
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
 	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const;
+	virtual Point<Number> propagateCandidateBack( Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const;
 
 	/**
 	 * @brief Serialization of the current layer.

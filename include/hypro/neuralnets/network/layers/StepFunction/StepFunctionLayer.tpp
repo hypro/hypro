@@ -14,7 +14,7 @@
 
 namespace hypro {
 template <typename Number>
-StepFunctionLayer<Number>::StepFunctionLayer( unsigned short int layerSize, unsigned short int layerIndex, float value, float minValue, float maxValue )
+StepFunctionLayer<Number>::StepFunctionLayer( unsigned short int layerSize, unsigned short int layerIndex, Number value, Number minValue, Number maxValue )
 	: LayerBase<Number>( layerSize, layerIndex )
 	, mValue( value )
 	, mMinValue( minValue )
@@ -34,11 +34,14 @@ std::vector<hypro::Starset<Number>> StepFunctionLayer<Number>::reachStepFunction
 			case NN_REACH_METHOD::EXACT:
 				resultSet = StepFunction<Number>::exactStepFunction( i, resultSet, mValue, mMinValue, mMaxValue );
 				break;
+			case NN_REACH_METHOD::OVERAPPRX:
+				resultSet = StepFunction<Number>::approxStepFunction( i, resultSet, mValue, mMinValue, mMaxValue );
+				break;
 			default:
 				FATAL( "hypro.neuralnets.activation_functions.stepFunction", "Invalid analysis method specified" );
 		}
 		if ( plotIntermediates ) {
-// #pragma omp critical
+			// #pragma omp critical
 			for ( int j = 0; j < resultSet.size(); j++ ) {
 				plotter.addObject( resultSet[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
 			}
@@ -73,7 +76,10 @@ std::vector<hypro::Starset<Number>> StepFunctionLayer<Number>::forwardPass( cons
 	resultSet.push_back( inputSet );
 	switch ( method ) {
 		case NN_REACH_METHOD::EXACT:
-			resultSet = StepFunction<Number>::exactStepFunction( index, resultSet,mValue, mMinValue, mMaxValue );
+			resultSet = StepFunction<Number>::exactStepFunction( index, resultSet, mValue, mMinValue, mMaxValue );
+			break;
+		case NN_REACH_METHOD::OVERAPPRX:
+			resultSet = StepFunction<Number>::approxStepFunction( index, resultSet, mValue, mMinValue, mMaxValue );
 			break;
 		default:
 			FATAL( "hypro.neuralnets.activation_functions.stepfunction", "Invalid analysis method specified" );
@@ -87,7 +93,7 @@ std::vector<Starset<Number>> StepFunctionLayer<Number>::forwardPass( const std::
 
 	for ( const auto& set : inputSets ) {
 		auto resultSets = reachStepFunction( set, method, plotIntermediates );
-// #pragma omp critical
+		// #pragma omp critical
 		{ result.insert( result.end(), resultSets.begin(), resultSets.end() ); };
 	}
 
@@ -99,16 +105,20 @@ Point<Number> StepFunctionLayer<Number>::propagateCandidateBack( Point<Number> y
 	assert( neuronNumber < y.dimension() );
 	
 	carl::Relation rel;
-	if ( mMinValue == y[neuronNumber] || carl::AlmostEqual2sComplement(Number(mMinValue),y[neuronNumber])) {
-		rel = carl::Relation::LESS;
-	} else if ( mMaxValue == y[neuronNumber] || carl::AlmostEqual2sComplement(Number(mMaxValue),y[neuronNumber])) {
+	if ( mMinValue == y[neuronNumber] ) {
+		if ( mMinValue == mMaxValue ) {
+			rel = carl::Relation::NEQ;
+		} else {
+			rel = carl::Relation::LESS;
+		}
+	} else if ( mMaxValue == y[neuronNumber] ) {
 		rel = carl::Relation::GEQ;
 	} else {
 		//If the result of UnitStep is neither of the bounds, it is the result of over-approximation
 		return Point<Number>();
 	}
 	y[neuronNumber] = mValue;
-	EvaluationResult<Number> result = hypro::z3GetInternalPoint(inputSet.shape(),inputSet.limits(),inputSet.generator(), inputSet.center(), y, neuronNumber, rel);
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint( inputSet.shape(), inputSet.limits(), inputSet.generator(), inputSet.center(), y, neuronNumber, rel );
 
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:
@@ -118,13 +128,55 @@ Point<Number> StepFunctionLayer<Number>::propagateCandidateBack( Point<Number> y
 
 		case SOLUTION::INFEAS:
 			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
-            return Point<Number>();
+			return Point<Number>();
 
 		default:
-			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
+			assert( result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS );
 			break;
 	}
 
 	return Point<Number>();
 }
+
+template <typename Number>
+Point<Number> StepFunctionLayer<Number>::propagateCandidateBack( Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const {
+	std::cout << "Block StepFunction" << std::endl;
+	std::vector<carl::Relation> relations;
+
+	for ( int i = 0; i < ancestorSet.generator().rows(); i++ ) {
+		if ( upperIndex <= i && i <= lowerIndex ) {
+			if ( mMinValue == candidate[i] ) {
+				if ( mMinValue == mMaxValue ) {
+					relations.push_back( carl::Relation::NEQ );
+				} else {
+					relations.push_back( carl::Relation::LESS );
+				}
+			} else if ( mMaxValue == candidate[i] ) {
+				relations.push_back( carl::Relation::GEQ );
+			} else {
+				// If the result of UnitStep is neither of the bounds, it is the result of over-approximation
+				return Point<Number>();
+			}
+			candidate[i] = mValue;
+		} else {
+			relations.push_back( carl::Relation::EQ );
+		}
+	}
+
+	assert( relations.size() == ancestorSet.generator().rows() );
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint( ancestorSet.shape(), ancestorSet.limits(), ancestorSet.generator(), ancestorSet.center(), candidate, relations );
+
+	switch ( result.errorCode ) {
+		case SOLUTION::FEAS:
+			return Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center() );
+		case SOLUTION::INFEAS:
+			return Point<Number>();
+		default:
+			assert( result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS );
+			break;
+	}
+
+	return Point<Number>();
+}
+
 }  // namespace hypro

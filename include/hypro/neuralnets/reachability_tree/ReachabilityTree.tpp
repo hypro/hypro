@@ -537,7 +537,7 @@ template <typename Number>
 std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::identifyCounterExampleSource( const Point<Number>& candidate, ReachabilityNode<Number>* node, BACKPROPAGATION_STRATEGY strategy) const {
 	if ( !node->hasParent() ) {
 		// indicates that the backpropagated counterexample originates from the very first neuron
-		std::cout << "Candiate in root" << std::endl;
+		std::cout << "Candidate in root" << std::endl;
 		return std::make_pair( candidate, node );  
 	} 
     

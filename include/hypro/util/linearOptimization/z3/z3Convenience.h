@@ -210,6 +210,12 @@ static z3::expr createFormula(
     }
 
     for ( unsigned i = 0; i < _linTransform.rows(); ++i ) {
+        // NEQ is used to indicate, that no restrictions besides containment should apply to values of dimension _dimension
+        // This is used in the special case of stepFunction-backpropagation where minValue==maxValue
+        if(i == _dimension && _relation == carl::Relation::NEQ){
+            continue;
+        }
+
         z3::expr constraint( c );
         constraint = c.int_val( 0 );
         for ( unsigned j = 0; j < _linTransform.cols(); ++j ) {
@@ -284,6 +290,12 @@ static z3::expr createFormula(
     }
 
     for ( unsigned i = 0; i < _linTransform.rows(); ++i ) {
+        // NEQ is used to indicate, that no restrictions besides containment should apply to values of dimension i
+        // This is used in the special case of stepFunction-backpropagation where minValue==maxValue
+        if(_relations[i] == carl::Relation::NEQ){
+            continue;
+        }
+
         z3::expr constraint( c );
         constraint = c.int_val( 0 );
         for ( unsigned j = 0; j < _linTransform.cols(); ++j ) {
@@ -307,7 +319,7 @@ static z3::expr createFormula(
                 break;
             case carl::Relation::GREATER:
                 formula = formula && (constraint > constant);
-                break;                
+                break;              
             default:
                 assert( false && "Relation type undefined");
             }   

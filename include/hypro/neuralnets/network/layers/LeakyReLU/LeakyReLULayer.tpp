@@ -109,7 +109,7 @@ Point<Number> LeakyReLULayer<Number>::propagateCandidateBack( Point<Number> y, i
 	
 	if ( y.coordinate( neuronNumber ) < 0 ) {
 		// y = LeakyReLU(x) = max(mNegativeSlope * x,x) < 0 -> x = (y/mNegativeSlope)
-		y[neuronNumber] =  (1 / mNegativeSlope) * y[neuronNumber];
+		y[neuronNumber] = (1 / mNegativeSlope) * y[neuronNumber];
 	} // Otherwise x = y
 
 	EvaluationResult<Number> result = hypro::z3GetInternalPoint(inputSet.shape(),inputSet.limits(),inputSet.generator(), inputSet.center(), y);
@@ -128,6 +128,30 @@ Point<Number> LeakyReLULayer<Number>::propagateCandidateBack( Point<Number> y, i
 			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
 			break;
 	}
+	return Point<Number>();
+}
+
+template <typename Number>
+Point<Number> LeakyReLULayer<Number>::propagateCandidateBack(Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const{
+	std::cout <<"Block LeakyReLU"<<std::endl;
+	for (int i = 0; i < ancestorSet.generator().rows(); i++){
+		if ( upperIndex <= i && i <= lowerIndex && candidate[i] < 0 ) {
+			candidate[i] = (1 / mNegativeSlope) * candidate[i];
+		} 
+	}
+	
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint(ancestorSet.shape(),ancestorSet.limits(),ancestorSet.generator(), ancestorSet.center(), candidate);	
+	
+	switch ( result.errorCode ) {
+		case SOLUTION::FEAS:						
+            return candidate;
+		case SOLUTION::INFEAS:
+            return Point<Number>();
+		default:
+			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
+			break;
+	}
+
 	return Point<Number>();
 }
 

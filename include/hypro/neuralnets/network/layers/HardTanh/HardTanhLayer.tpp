@@ -14,7 +14,7 @@
 namespace hypro {
 
 template <typename Number>
-HardTanhLayer<Number>::HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue, float maxValue )
+HardTanhLayer<Number>::HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, Number minValue, Number maxValue )
 	: LayerBase<Number>( layerSize, layerIndex )
 	, mMinValue( minValue )
 	, mMaxValue( maxValue ) {
@@ -108,9 +108,9 @@ Point<Number> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> y, in
 	
 	carl::Relation rel;
 	if ( y[neuronNumber] == mMinValue ){
-		rel = carl::Relation::LESS;
+		rel = carl::Relation::LEQ;
 	} else if (y[neuronNumber] == mMaxValue){
-		rel = carl::Relation::GREATER;
+		rel = carl::Relation::GEQ;
 	} else {
 		rel = carl::Relation::EQ;
 	}
@@ -136,4 +136,40 @@ Point<Number> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> y, in
 
 	return Point<Number>();
 }
+
+template <typename Number>
+Point<Number> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const {
+	std::cout <<"Block HardTanhLayer"<<std::endl;
+	std::vector<carl::Relation> relations;
+	for (int i = 0; i < ancestorSet.generator().rows(); i++){
+		if ( upperIndex <= i && i <= lowerIndex) {
+			if ( candidate[i] == mMinValue ){
+				relations.push_back(carl::Relation::LEQ);
+			} else if (candidate[i] == mMaxValue){
+				relations.push_back(carl::Relation::GEQ);
+			} else {
+				relations.push_back(carl::Relation::EQ);
+			}	
+		} else {
+			relations.push_back( carl::Relation::EQ);	
+		}
+	}
+
+	assert(relations.size() == ancestorSet.generator().rows());
+	
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint(ancestorSet.shape(), ancestorSet.limits(), ancestorSet.generator(), ancestorSet.center(), candidate, relations);	
+	switch ( result.errorCode ) {
+		case SOLUTION::FEAS:						
+            return Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center());
+		case SOLUTION::INFEAS:
+            return Point<Number>();
+		default:
+			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
+			break;
+	}
+
+	return Point<Number>();
+
+}
+
 }  // namespace hypro

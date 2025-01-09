@@ -18,8 +18,8 @@ namespace hypro {
 template <typename Number>
 class HardTanhLayer : public LayerBase<Number> {
   private:
-	float mMinValue = -1.0;
-	float mMaxValue = 1.0;
+	Number mMinValue = -1.0;
+	Number mMaxValue = 1.0;
 
 	/**
 	 * @brief Applies the given reachability method to the input set
@@ -45,7 +45,7 @@ class HardTanhLayer : public LayerBase<Number> {
 	 * @param[in] minValue The minimum value of the linear region range. Default: -1
 	 * @param[in] maxValue The maximum value of the linear region range. Default: 1
 	 */
-	HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue = -1, float maxValue = 1);
+	HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, Number minValue = -1, Number maxValue = 1);
 
 	/**
 	 * @brief Default destructor
@@ -87,7 +87,8 @@ class HardTanhLayer : public LayerBase<Number> {
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
 	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const;
-
+	virtual Point<Number> propagateCandidateBack( Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const;
+	
 	/**
 	 * @brief Serialization of the current layer.
 	 * Prints the layer size and min and max value of the contained hardtanh function to the given output stream
