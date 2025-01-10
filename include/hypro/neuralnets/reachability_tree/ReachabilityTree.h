@@ -74,6 +74,7 @@ class ReachabilityTree {
 	ReachabilityNode<Number>* getAncestor(ReachabilityNode<Number>* node, const int neuronNumber) const;
 
 	ReachabilityNode<Number>* computeReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy );
+	std::pair<ReachabilityNode<Number>*,std::vector<ReachabilityNode<Number>*>> computePartiallyExactReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy );
 	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots = false, bool normalizeInput = false, bool normalizeOutput = false, size_t max_iter= 100 );
 
 	ReachabilityNode<Number>* getFirstUnsafeLeaf() const;
@@ -141,6 +142,7 @@ class ReachabilityTree {
 	bool _refinementAvoidComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
 
 	void rememberCounterexampleSource(int layerNumber, int neuronNumber);
+	bool isPreviousCounterexampleSource(int layerNumber, int neuronNumber );
 };
 
 }  // namespace reachability
