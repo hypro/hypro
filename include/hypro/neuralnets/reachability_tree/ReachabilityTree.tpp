@@ -22,13 +22,16 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 	, mRefinmentType( REFINEMENT_TYPE::AVOIDANT )
 	, mBackpropagationStrategy( BACKPROPAGATION_STRATEGY::BINARYSEARCH ) {
 	unsigned short int depth = 1;
+	mPreviousCounterexampleSources = std::vector<std::list<int>>();
 	for ( auto layer : mNetwork.layers() ) {
+		mPreviousCounterexampleSources.push_back(std::list<int>());
 		if ( layer->layerType() == NN_LAYER_TYPE::AFFINE )
 			depth = depth + 1;
 		else
 			depth = depth + layer->layerSize();
 	}
 	mDepth = depth;
+	assert(mPreviousCounterexampleSources.size() == network.numLayers());
 }
 
 template <typename Number>
@@ -40,14 +43,17 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 	, mCounterExampleStrategy( counterExampleStrategy )
 	, mRefinmentType( refinementType ) 
 	, mBackpropagationStrategy( backpropagationStrategy ) {
+	mPreviousCounterexampleSources = std::vector<std::list<int>>();
 	unsigned short int depth = 1;
 	for ( auto layer : mNetwork.layers() ) {
+		mPreviousCounterexampleSources.push_back(std::list<int>());
 		if ( layer->layerType() == NN_LAYER_TYPE::AFFINE )
 			depth = depth + 1;
 		else
 			depth = depth + layer->layerSize();
 	}
 	mDepth = depth;
+	assert(mPreviousCounterexampleSources.size() == network.numLayers());
 }
 
 template <typename Number>
@@ -220,6 +226,23 @@ std::vector<HPolytope<Number>> ReachabilityTree<Number>::prepareSafeSet( bool no
 	return mSafeSets;
 }
 
+template <typename Number>
+void ReachabilityTree<Number>::rememberCounterexampleSource(int layerNumber, int neuronNumber){
+	if(mPreviousCounterexampleSources[layerNumber].empty()){
+		mPreviousCounterexampleSources[layerNumber].push_back(neuronNumber);
+		return;
+	}
+
+	std::list<int>::iterator it;
+	for ( it = mPreviousCounterexampleSources[layerNumber].begin(); *it <= neuronNumber && it != mPreviousCounterexampleSources[layerNumber].end(); it++){
+		if (*it == neuronNumber){
+			return;
+		}
+	}
+
+	mPreviousCounterexampleSources[layerNumber].insert(it, neuronNumber);
+}
+
 // This method computes the rechability tree using a specified input starset and an NN_REACH_METHOD starting from a given neuron
 // It can be used just to compute a subtree from the j. neuron of the k.th layer
 // the subtree then could be inserted into the search tree (replacing and deleting the old subtree)
@@ -291,6 +314,15 @@ bool ReachabilityTree<Number>::_refinementAlwaysFullComputation(SEARCH_STRATEGY 
 		assert(candidate.dimension() > 0);
 
 		// identify the source neuron of the counterexample
+		std::cout << "Previous counterexample sources: [";
+		for(auto list : mPreviousCounterexampleSources){
+			std::cout << "(";
+			for (int neuron : list){
+				std::cout << neuron << ",";
+			}
+			std::cout << ")";
+		}
+		std::cout << "]. Identifying next source..." << std::endl;
 		std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( candidate, chosenLeaf, mBackpropagationStrategy);
 
 		//If an actual counterexample can be propagated back to the root, the the counterexample is not the result of approximation
@@ -303,6 +335,7 @@ bool ReachabilityTree<Number>::_refinementAlwaysFullComputation(SEARCH_STRATEGY 
 
 		//source of the spurious counterexample
         ReachabilityNode<Number>* refinedNode = candidateSource.second;
+		rememberCounterexampleSource(refinedNode->layerNumber(), refinedNode->neuronNumber());
         std::cout << "The source of the counterexample candidate is: " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
 		
 		// do the refinement step
@@ -365,7 +398,17 @@ bool ReachabilityTree<Number>::_refinementAvoidComputation(SEARCH_STRATEGY strat
 		} 
 		
 		// Split with exact and do NOT compute the children
+		std::cout << "Previous counterexample sources: [";
+		for(auto list : mPreviousCounterexampleSources){
+			std::cout << "(";
+			for (int neuron : list){
+				std::cout << neuron << ",";
+			}
+			std::cout << ")";
+		}
+		std::cout << "]. Identifying next source..." << std::endl;
 		ReachabilityNode<Number>* refinedNode = candidateSource.second;
+		rememberCounterexampleSource(refinedNode->layerNumber(), refinedNode->neuronNumber());
     	std::cout << "Refining the source of the counterexample candidate: " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
 		refinedNode->removeAllChildren();
 		SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );

@@ -19,6 +19,7 @@
 
 #include <deque>
 #include <vector>
+#include <list>
 
 namespace hypro {
 namespace reachability {
@@ -43,6 +44,10 @@ class ReachabilityTree {
 	BACKPROPAGATION_STRATEGY mBackpropagationStrategy;
 	COUNTEREXAMPLE_STRATEGY mCounterExampleStrategy;
 	REFINEMENT_TYPE mRefinmentType; 
+
+	//stores the position of counterexample
+	// mPreviousCounterexampleSources[i] contains a ascending list of all nodes in layer i that were previously a counterexample source
+	std::vector<std::list<int>> mPreviousCounterexampleSources; 
 
   public:
 	// Default constructor
@@ -134,6 +139,8 @@ class ReachabilityTree {
 
 	bool _refinementAlwaysFullComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
 	bool _refinementAvoidComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
+
+	void rememberCounterexampleSource(int layerNumber, int neuronNumber);
 };
 
 }  // namespace reachability
