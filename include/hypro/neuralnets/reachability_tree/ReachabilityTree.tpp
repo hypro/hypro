@@ -677,9 +677,19 @@ std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::id
 		return std::make_pair( candidate, node );
 	}
 
-	if(	BACKPROPAGATION_STRATEGY::SINGLESTEP != strategy && NN_LAYER_TYPE::AFFINE != mNetwork.layers(node->getParent()->layerNumber())->layerType() ){
-		std::pair<Point<Number>, ReachabilityNode<Number>*> result = binarySearchBackpropagation(candidate, node, 0, 0);
-		return identifyCounterExampleSource(result.first, result.second, strategy);
+	std::pair<Point<Number>, ReachabilityNode<Number>*> result;
+	if(NN_LAYER_TYPE::AFFINE != mNetwork.layers(node->getParent()->layerNumber())->layerType()){
+		switch(strategy){
+			case BACKPROPAGATION_STRATEGY::BINARYSEARCH:
+			case BACKPROPAGATION_STRATEGY::EXACT_SOURCES:
+				result = binarySearchBackpropagation(candidate, node, 0, 0);
+				return identifyCounterExampleSource(result.first, result.second, strategy);
+			case BACKPROPAGATION_STRATEGY::REMEMBERING_SEARCH:
+				result = rememberingSearchBackpropagation(candidate, node);
+				return identifyCounterExampleSource(result.first, result.second, strategy);
+			default:
+				break;
+		}
 	}
 
 	ReachabilityNode<Number>* parent = node->getParent();
@@ -728,6 +738,59 @@ std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::bi
         std::cout << "Changing upper index" << std::endl;
         return binarySearchBackpropagation(candidate, node, nextIndex, (nextIndex + node->getParent()->neuronNumber() + 1) / 2); //rounding of integer division is correct
     }
+}
+
+template <typename Number>
+std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::rememberingSearchBackpropagation(const Point<Number>& candidate, ReachabilityNode<Number>* node ) const {
+	std::list<int> previousSources = mPreviousCounterexampleSources[node->getParent()->layerNumber()];
+
+	if(previousSources.empty()){
+		return binarySearchBackpropagation(candidate, node,  0, 0 );
+	}
+
+	//For very small layers, this method is not useful, therefore the default method is used
+    if(mNetwork.layers( node->getParent()->layerNumber() )->layerSize() <= 2 ){
+        return identifyCounterExampleSource(candidate, node, BACKPROPAGATION_STRATEGY::SINGLESTEP);
+    }
+
+	ReachabilityNode<Number>* ancestorNode;
+	Point<Number> origin;
+	int layerNumber = node->getParent()->layerNumber();
+	int nodeNumber = node->getParent()->neuronNumber();
+
+	//If backpropagation to the start of the layer is possible, continue propagating through the other layers
+	ancestorNode = getAncestor(node->getParent(), 0);
+    origin = propagateCandidateBack(candidate, layerNumber , nodeNumber, 0, ancestorNode->representation());
+	if(0 < origin.dimension() ){
+    	std::cout << "Continuing with the next layer..." << std::endl;;
+        return std::make_pair(origin, ancestorNode);
+    }
+	
+	for (std::list<int>::iterator it = previousSources.begin(); it != previousSources.end(); it++ ){
+		ancestorNode = getAncestor(node->getParent(), *it);
+		origin = propagateCandidateBack(candidate, layerNumber, nodeNumber, *it, ancestorNode->representation());
+		//If backpropagation is possible, check if prev(it) is the source
+		if( 0 < origin.dimension() ){
+			if ( it == previousSources.begin()){
+				return binarySearchBackpropagation(origin, ancestorNode, 0, (*it)/2);
+			}
+			ReachabilityNode<Number>* beforeSourceNode = getAncestor(ancestorNode->getParent(), *std::prev(it) + 1);
+			Point<Number> tmpOrigin = propagateCandidateBack(origin, layerNumber, ancestorNode->getParent()->neuronNumber(), *std::prev(it) + 1, beforeSourceNode->representation());
+			if ( 0 < tmpOrigin.dimension() ){
+				return std::make_pair(Point<Number>(), beforeSourceNode->getParent());
+			}
+			return binarySearchBackpropagation(origin, ancestorNode,*std::prev(it) + 1, ((*it) + *std::prev(it) + 1)/2);
+		}
+		if( next(it) == previousSources.end()){
+			ReachabilityNode<Number>* beforeSourceNode = getAncestor(node->getParent(), (*it) + 1);
+			Point<Number> tmpOrigin = propagateCandidateBack(candidate, layerNumber, nodeNumber, (*it) + 1, beforeSourceNode->representation());
+			if ( 0 < tmpOrigin.dimension() ){
+				return std::make_pair(Point<Number>(), ancestorNode);
+			}
+			return binarySearchBackpropagation(candidate, node,(*it) + 1, (nodeNumber + (*it))/2 + 1);
+		}
+	}
+	return binarySearchBackpropagation(candidate, node,  (*previousSources.begin()) + 1, (nodeNumber + (*previousSources.begin()))/2 + 1 );
 }
 
 template <typename Number>

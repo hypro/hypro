@@ -102,6 +102,7 @@ class ReachabilityTree {
 	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <candidate, node> which indicates the source neuron of the countereaxmple, return <candidate, nullptr> if it is a true countereaxmple
 	 */
 	std::pair<Point<Number>, ReachabilityNode<Number>*> binarySearchBackpropagation(const Point<Number>& candidate, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex ) const;
+	std::pair<Point<Number>, ReachabilityNode<Number>*> rememberingSearchBackpropagation(const Point<Number>& candidate, ReachabilityNode<Number>* node ) const;
 
 	/**
 	 * @brief Calculates the corresponding point from the previous set such that applying the previous nodes computations on it we would get back the counterexample candidate

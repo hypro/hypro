@@ -124,7 +124,7 @@ int main( int argc, char* argv[] ) {
 	// Transform input and safe polytopes to star set
 	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;
 	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::AVOIDANT; //FULL , AVOIDANT
-	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::EXACT_SOURCES; //SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, EXACT_SOURCES
+	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::REMEMBERING_SEARCH; //SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, EXACT_SOURCES
 	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly , counterExampleStrategy, refinementType, backpropagationStrategy);
 	bool create_plots = !true;
     bool normalize_input = true;
