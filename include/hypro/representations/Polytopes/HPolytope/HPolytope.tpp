@@ -53,18 +53,27 @@ namespace hypro {
             : mHPlanes(), mDimension(A.cols()), mNonRedundant(false) {
         TRACE("hypro.representations.HPolytope", "construct from Ax <= b," << std::endl
                                                                            << "A: " << A << "b: " << b);
+
+        std::cout << "HPolytope general constructor" << std::endl;
+                                            
         assert(A.rows() == b.rows());
         for (unsigned i = 0; i < A.rows(); ++i) {
             mHPlanes.emplace_back(A.row(i), b(i));
         }
 #ifndef NDEBUG
+        std::cout << "Checking emptiness" << std::endl;
         bool empty = this->empty();
 #endif
         // reduceNumberRepresentation();
+        std::cout << "Assert" << std::endl;
         assert(empty == this->empty());
         if (Setting::OPTIMIZER_CACHING) {
+            std::cout << "Setting optimizer" << std::endl;
             setOptimizer(A, b);
         }
+
+        std::cout << "This matrix: " << this->matrix() << std::endl;
+        std::cout << "This vector: " << this->vector() << std::endl;
     }
 
     template<typename Number, typename Converter, class Setting>

@@ -96,7 +96,7 @@ std::vector<hypro::Starset<Number>> ReLU<Number>::approxStepReLU( int i, const s
 		Number lb = feas_low ? -eval_low_result.supportValue + center[i] : Number(-DBL_MAX);
         Number ub = feas_high ? eval_high_result.supportValue + center[i] : Number(DBL_MAX);
 
-		std::cout << "[lb, ub] = [" << lb << ", " << ub << "]" << std::endl; 
+		// std::cout << "[lb, ub] = [" << lb << ", " << ub << "]" << std::endl; 
 
 		if ( feas_low && ( lb >= 0 || carl::AlmostEqual2sComplement( lb, Number( 0 ) ) ) ) {
 			result.emplace_back( center, shape, limits, basis );

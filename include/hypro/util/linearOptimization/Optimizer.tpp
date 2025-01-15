@@ -17,15 +17,29 @@ namespace hypro {
         TRACE("hypro.optimizer",
               "Thread " << std::this_thread::get_id() << " attempts to erase its context. (@" << this << ")");
 
+        std::cout << "Lock" << std::endl;
+
+        // mContextLock.lock();
+        // mContextLock.unlock();
+        // std::cout << "mutex_(un)locked " << std::endl;
+
         std::lock_guard<std::mutex> lock(mContextLock);
+        std::cout << "Lock successfull" << std::endl;
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+        std::cout << "Finding ID" << std::endl;
+
+        std::cout << "This thread ID: " << std::this_thread::get_id() << std::endl;
+        std::cout << "mGlpkContexts size: " << mGlpkContexts.size() << std::endl;
+
         auto ctxtItGlpk = mGlpkContexts.find(std::this_thread::get_id());
+        std::cout << "Found" << std::endl;
         if (ctxtItGlpk != mGlpkContexts.end()) {
             TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): "
                                                << mGlpkContexts.size());
             TRACE("hypro.optimizer",
                   "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")");
             TRACE("hypro.optimizer", "Deleted lp instance.");
+            std::cout << "Erase..." << std::endl;
             mGlpkContexts.erase(ctxtItGlpk);
             TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): "
                                                << mGlpkContexts.size());
@@ -42,6 +56,7 @@ namespace hypro {
             TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
         }
 #endif
+        std::cout << "Finished" << std::endl;
     }  // namespace hypro
 
     template<typename Number>
