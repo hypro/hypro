@@ -349,22 +349,22 @@ namespace hypro {
          * Operators
          */
         HPolytopeT &operator=(const HPolytopeT<Number, Converter, Setting> &rhs) {
-            std::cout << "Assignment operator" << std::endl;
+            // std::cout << "Assignment operator" << std::endl;
             GeometricObjectBase::operator=(rhs);
             mHPlanes = rhs.constraints();
             mDimension = rhs.dimension();
             mNonRedundant = rhs.isNonRedundant();
 
-            std::cout << "If next" << std::endl;
+            // std::cout << "If next" << std::endl;
 
             if (Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value()) {
-                std::cout << "Cleaning context" << std::endl;
+                // std::cout << "Cleaning context" << std::endl;
                 mOptimizer->cleanContexts();
-                std::cout << "Context cleared" << std::endl;
+                // std::cout << "Context cleared" << std::endl;
                 setOptimizer(rhs.matrix(), rhs.vector());
-                std::cout << "Optimizer set" << std::endl;
+                // std::cout << "Optimizer set" << std::endl;
             }
-            std::cout << "Assert next" << std::endl;
+            // std::cout << "Assert next" << std::endl;
             assert(mEmptyState == rhs.getEmptyState());
             return *this;
         }

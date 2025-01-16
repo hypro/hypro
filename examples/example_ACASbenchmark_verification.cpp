@@ -89,10 +89,10 @@ int main( int argc, char* argv[] ) {
 		// hypro::Starset<Number> dummy = hypro::Starset<Number>(input_starset.center(), shape, limits, input_starset.generator());
 		// std::cout << "Dummy" << std::endl;
 
-		std::cout << "Center:" << input_starset.center() << std::endl;
-		std::cout << "Generator:" << input_starset.generator() << std::endl;
-		std::cout << "Shape:" << shape << std::endl;
-		std::cout << "Limit:" << limits << std::endl;
+		// std::cout << "Center:" << input_starset.center() << std::endl;
+		// std::cout << "Generator:" << input_starset.generator() << std::endl;
+		// std::cout << "Shape:" << shape << std::endl;
+		// std::cout << "Limit:" << limits << std::endl;
 
 		input_starset = hypro::Starset<Number>(input_starset.center(), shape, limits, input_starset.generator());
 		std::cout << "Done" << std::endl;
@@ -100,7 +100,7 @@ int main( int argc, char* argv[] ) {
 		std::cout << "Set is empty: " << input_starset.empty() << std::endl;
 	}
 
-	exit(1);
+	// exit(1);
 
 	// Apply the reachability analysis to the input star set and measure the required time
 	auto start = std::chrono::steady_clock::now();

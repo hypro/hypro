@@ -25,10 +25,10 @@ StarsetT<Number, Converter, Setting>::StarsetT( const vector_t<Number>& center, 
 	: mCenter( center )
 	, mGenerator( generator )
 	, mConstraints( shapematrix, limits ) {
-		std::cout << "Starset general constructor" << std::endl;
-		std::cout << "This center: " << this->center() << std::endl;
-		std::cout << "This generator: " << this->generator() << std::endl;
-		std::cout << "This constraints: " << this->constraints() << std::endl;
+		// std::cout << "Starset general constructor" << std::endl;
+		// std::cout << "This center: " << this->center() << std::endl;
+		// std::cout << "This generator: " << this->generator() << std::endl;
+		// std::cout << "This constraints: " << this->constraints() << std::endl;
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -377,7 +377,11 @@ bool StarsetT<Number, Converter, Setting>::containsCached( const Point<Number>& 
 
 template <typename Number, typename Converter, typename Setting> 
 hypro::EvaluationResult<Number> StarsetT<Number, Converter, Setting>::modelContains( const Point<Number>& point ) const {
-	 return hypro::z3GetInternalPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
+#if defined(HYPRO_USE_Z3) && ( HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE || HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE )
+	return hypro::z3GetInternalPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
+#else
+	return hypro::glpkGetInternalPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
+#endif
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -394,13 +398,17 @@ bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point 
 	// 	return (lb <= point[0] && point[0] <= ub);
 	// }
 
+#if defined(HYPRO_USE_Z3) && ( HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE || HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE )
 	return hypro::z3CheckPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
-
+#else
 	// std::cout << "Contains method" << std::endl;
-	// HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> transformedStar = this->constraints().affineTransformation(mGenerator, mCenter);
-	// std::cout << "Star transformed into an H-Polytope" << std::endl;
-	// hypro::Optimizer<Number> optimizer( transformedStar.matrix(), transformedStar.vector() );
-	// return optimizer.checkPoint(point);
+	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> transformedStar = this->constraints().affineTransformation(mGenerator, mCenter);
+	hypro::Optimizer<Number> optimizer( transformedStar.matrix(), transformedStar.vector() );
+	return optimizer.checkPoint(point);
+#endif
+	
+
+
 }
 
 

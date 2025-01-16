@@ -17,33 +17,30 @@ namespace hypro {
         TRACE("hypro.optimizer",
               "Thread " << std::this_thread::get_id() << " attempts to erase its context. (@" << this << ")");
 
-        std::cout << "Lock" << std::endl;
-
-        // mContextLock.lock();
-        // mContextLock.unlock();
-        // std::cout << "mutex_(un)locked " << std::endl;
-
+        // std::cout << "mutex cleanContexts() Lock" << std::endl;
         std::lock_guard<std::mutex> lock(mContextLock);
-        std::cout << "Lock successfull" << std::endl;
+        // std::cout << "Lock successfull" << std::endl;
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
-        std::cout << "Finding ID" << std::endl;
+        // std::cout << "Finding ID" << std::endl;
 
-        std::cout << "This thread ID: " << std::this_thread::get_id() << std::endl;
-        std::cout << "mGlpkContexts size: " << mGlpkContexts.size() << std::endl;
+        // std::cout << "This thread ID: " << std::this_thread::get_id() << std::endl;
+        // std::cout << "mGlpkContexts size: " << mGlpkContexts.size() << std::endl;
 
         auto ctxtItGlpk = mGlpkContexts.find(std::this_thread::get_id());
-        std::cout << "Found" << std::endl;
+        // std::cout << "Found" << std::endl;
         if (ctxtItGlpk != mGlpkContexts.end()) {
             TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (before erase): "
                                                << mGlpkContexts.size());
             TRACE("hypro.optimizer",
                   "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")");
             TRACE("hypro.optimizer", "Deleted lp instance.");
-            std::cout << "Erase..." << std::endl;
+            // std::cout << "Erase..." << std::endl;
             mGlpkContexts.erase(ctxtItGlpk);
             TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): "
                                                << mGlpkContexts.size());
         }
+
+        // std::cout << "mutex cleanContexts() UnLock" << std::endl;
 #endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
         auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
@@ -56,7 +53,7 @@ namespace hypro {
             TRACE( "hypro.optimizer", "Thread " << std::this_thread::get_id() << " glp instances left (after erase): " << mClpContexts.size() );
         }
 #endif
-        std::cout << "Finished" << std::endl;
+        // std::cout << "Finished" << std::endl;
     }  // namespace hypro
 
     template<typename Number>
@@ -166,6 +163,7 @@ namespace hypro {
         // if(lp != nullptr)
         //	mSmtratSolver.clear();
         //#endif
+        // std::cout << "mutex clear() Lock" << std::endl;
         std::lock_guard<std::mutex> lock(mContextLock);
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
         while (!mGlpkContexts.empty()) {
@@ -178,6 +176,7 @@ namespace hypro {
         }
 #endif
         mConsistencyChecked = false;
+        // std::cout << "mutex clear() UnLock" << std::endl;
     }
 
     template<typename Number>
@@ -457,10 +456,12 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
         assert(isSane());
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+        // std::cout << "mutex initialize() Lock" << std::endl;
         std::lock_guard<std::mutex> lock(mContextLock);
         mGlpkContexts[std::this_thread::get_id()].createLPInstance();
         assert(mGlpkContexts[std::this_thread::get_id()].mInitialized == true);
         if (mGlpkContexts.find(std::this_thread::get_id()) == mGlpkContexts.end()) {
+            std::cout << "Throwing exception" << std::endl;
             throw std::logic_error(
                     "This should never happen, as the map access operator creates an object if it is not present yet.");
             std::lock_guard<std::mutex> lock(mContextLock);
@@ -479,6 +480,7 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
             }
 #endif
         TRACE("hypro.optimizer", "Done.");
+        // std::cout << "mutex initialize() UnLock" << std::endl;
     }
 
     template<typename Number>
@@ -490,9 +492,11 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
         {
+            // std::cout << "mutex updateConstraints() Lock" << std::endl;
             std::lock_guard<std::mutex> lock(mContextLock);
             mGlpkContexts[std::this_thread::get_id()].updateConstraints(mConstraintMatrix, mConstraintVector,
                                                                         mRelationSymbols, maximize);
+            // std::cout << "mutex updateConstraints() UnLock" << std::endl;
         }
 #endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
@@ -540,10 +544,12 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
     void Optimizer<Number>::clearCache() const {
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
         {
+            // std::cout << "mutex clearCache() Lock" << std::endl;
             std::lock_guard<std::mutex> lock(mContextLock);
             for (auto &idContextPair: mGlpkContexts) {
                 idContextPair.second.mConstraintsSet = false;
             }
+            // std::cout << "mutex clearCache() UnLock" << std::endl;
         }
 #endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
