@@ -90,7 +90,12 @@ $ ../nnBenchmarkVerification.sh acasxu exact ACASXU_experimental_v2a_3_5.nnet po
 
 ##### Generalized Activation Function Analysis
 
+Another extension of our tool is that it can verify feed-forward neural networks with general piece-wise linear activation functions. To evaluate our implementation, we reutilize the ACAS Xu benchmark and interpret each ReLU activation function as a general piece-wise linear function. To run experiments with the generalized analysis, please use the following commands, specifying the `generalized` flag:
 
+```shell
+$ make example_ACASbenchmark_verification
+$ ../nnBenchmarkVerification.sh acasxu exact ACASXU_experimental_v2a_2_4.nnet poly_prop3_input.in poly_prop3_safe.in generalized
+```
 
 
 #### Drone hovering
