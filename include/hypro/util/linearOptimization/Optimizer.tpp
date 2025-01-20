@@ -151,6 +151,7 @@ namespace hypro {
         // if(lp != nullptr)
         //	mSmtratSolver.clear();
         //#endif
+        // std::cout << "mutex clear() Lock" << std::endl;
         std::lock_guard<std::mutex> lock(mContextLock);
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
         while (!mGlpkContexts.empty()) {
@@ -163,6 +164,7 @@ namespace hypro {
         }
 #endif
         mConsistencyChecked = false;
+        // std::cout << "mutex clear() UnLock" << std::endl;
     }
 
     template<typename Number>
@@ -201,6 +203,7 @@ namespace hypro {
         res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
 
+        return res;
 #if !defined( HYPRO_SECONDARY_SOLVER )
         return res;
 #else
@@ -302,8 +305,8 @@ namespace hypro {
         mLastConsistencyAnswer = smtratCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
         mConsistencyChecked = true;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-        mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
-        mConsistencyChecked = true;
+        // mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+        // mConsistencyChecked = true;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
         mLastConsistencyAnswer = soplexCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
         mConsistencyChecked = true;
@@ -336,7 +339,7 @@ namespace hypro {
         }
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-        return z3CheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
+        // return z3CheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
         return smtratCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
@@ -396,7 +399,7 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
         }
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-        res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+        // res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
         res = smtratRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
@@ -441,10 +444,12 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
         assert(isSane());
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
+        // std::cout << "mutex initialize() Lock" << std::endl;
         std::lock_guard<std::mutex> lock(mContextLock);
         mGlpkContexts[std::this_thread::get_id()].createLPInstance();
         assert(mGlpkContexts[std::this_thread::get_id()].mInitialized == true);
         if (mGlpkContexts.find(std::this_thread::get_id()) == mGlpkContexts.end()) {
+            std::cout << "Throwing exception" << std::endl;
             throw std::logic_error(
                     "This should never happen, as the map access operator creates an object if it is not present yet.");
             std::lock_guard<std::mutex> lock(mContextLock);
@@ -463,6 +468,7 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
             }
 #endif
         TRACE("hypro.optimizer", "Done.");
+        // std::cout << "mutex initialize() UnLock" << std::endl;
     }
 
     template<typename Number>
@@ -474,9 +480,11 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
         {
+            // std::cout << "mutex updateConstraints() Lock" << std::endl;
             std::lock_guard<std::mutex> lock(mContextLock);
             mGlpkContexts[std::this_thread::get_id()].updateConstraints(mConstraintMatrix, mConstraintVector,
                                                                         mRelationSymbols, maximize);
+            // std::cout << "mutex updateConstraints() UnLock" << std::endl;
         }
 #endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
@@ -524,10 +532,12 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
     void Optimizer<Number>::clearCache() const {
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
         {
+            // std::cout << "mutex clearCache() Lock" << std::endl;
             std::lock_guard<std::mutex> lock(mContextLock);
             for (auto &idContextPair: mGlpkContexts) {
                 idContextPair.second.mConstraintsSet = false;
             }
+            // std::cout << "mutex clearCache() UnLock" << std::endl;
         }
 #endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP

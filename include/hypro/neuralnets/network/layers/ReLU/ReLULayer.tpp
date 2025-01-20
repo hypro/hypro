@@ -46,6 +46,7 @@ std::vector<hypro::Starset<Number>> ReLULayer<Number>::reachReLU( const hypro::S
 	std::vector<hypro::Starset<Number>> I_n = std::vector<hypro::Starset<Number>>();
 	I_n.push_back( inputSet );
 	for ( int i = 0; i < inputSet.generator().rows(); i++ ) {
+		// std::cout << "Neuron index:" << i << std::endl;
 		// iterate over the dimensions of the input star
 		switch ( method ) {
 			case NN_REACH_METHOD::EXACT:

@@ -36,7 +36,7 @@ namespace hypro {
 #ifndef NDEBUG
             bool empty = this->empty();
 #endif
-            reduceNumberRepresentation();
+            // reduceNumberRepresentation();
             assert(empty == this->empty());
             if (Setting::OPTIMIZER_CACHING) {
                 setOptimizer(this->matrix(), this->vector());
@@ -53,6 +53,8 @@ namespace hypro {
             : mHPlanes(), mDimension(A.cols()), mNonRedundant(false) {
         TRACE("hypro.representations.HPolytope", "construct from Ax <= b," << std::endl
                                                                            << "A: " << A << "b: " << b);
+
+                                            
         assert(A.rows() == b.rows());
         for (unsigned i = 0; i < A.rows(); ++i) {
             mHPlanes.emplace_back(A.row(i), b(i));
@@ -60,7 +62,7 @@ namespace hypro {
 #ifndef NDEBUG
         bool empty = this->empty();
 #endif
-        reduceNumberRepresentation();
+        // reduceNumberRepresentation();
         assert(empty == this->empty());
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer(A, b);
@@ -185,7 +187,6 @@ namespace hypro {
                     TRACE("hypro.representations.HPolytope", "Affine dimension: " << effectiveDim);
                     // get common plane
                     std::vector<vector_t<Number>> vectorsInPlane;
-                    // std::cout << "first point: " << *pointsCopy.begin() << std::endl;
                     for (unsigned i = 1; i < pointsCopy.size(); ++i) {
                         vectorsInPlane.emplace_back(pointsCopy[i].rawCoordinates() - pointsCopy[0].rawCoordinates());
                     }
@@ -248,13 +249,10 @@ namespace hypro {
                     }
 
                     HPolytopeT<Number, Converter, Setting> projectedPoly(projectedPoints);
-                    // std::cout << "Projected polytope: " << projectedPoly << std::endl;
                     projectedPoly.insertEmptyDimensions(projectionDimensions, droppedDimensions);
 
                     TRACE("hypro.representations.HPolytope", "After lifting " << projectedPoly);
 
-                    // std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
-                    // std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
                     projectedPoly.insert(Halfspace<Number>(planeNormal, planeOffset));
                     projectedPoly.insert(Halfspace<Number>(-planeNormal, -planeOffset));
 
@@ -415,18 +413,11 @@ namespace hypro {
                     matrix_t<Number> A(dim, dim);
                     vector_t<Number> b(dim);
                     unsigned pos = 0;
-                    // std::cout << "Permute planes ";
                     for (auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
-                        // std::cout << *planeIt << ", ";
                         A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
-                        // std::cout << A.row(pos) << std::endl;
                         b(pos) = mHPlanes.at(*planeIt).offset();
-                        // std::cout << b(pos) << std::endl;
                         ++pos;
                     }
-                    // std::cout << std::endl;
-
-                    // std::cout << "Created first matrix" << std::endl;
 
                     Eigen::FullPivLU<matrix_t<Number>> lu_decomp(A);
                     if (lu_decomp.rank() < A.rows()) {
@@ -444,7 +435,6 @@ namespace hypro {
                         bool skip = false;
                         for (unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
                             if (planePos == permutation.at(permPos)) {
-                                // std::cout << "Skip plane " << planePos << std::endl;
                                 skip = true;
                                 break;
                             }
@@ -1062,9 +1052,30 @@ namespace hypro {
             return HPolytopeT<Number, Converter, Setting>(points);
         }
         if (!this->empty() && !mHPlanes.empty()) {
+            std::cout << "Doing LU decomposition" << std::endl;
             Eigen::FullPivLU<matrix_t<Number>> lu(A);
+
+            // std::cout << "A: " << A << std::endl;
+            // std::cout << "Shape: " << A.rows() << ", " << A.cols() << std::endl;
+            // std::cout << "rank: " << lu.rank() << std::endl;
+            
+            // matrix_t<Number> A_inv = A.inverse();
+            // std::cout << "A_inv: " << A_inv << std::endl;
+            // std::cout << "Shape: " << A_inv.rows() << ", " << A_inv.cols() << std::endl;
+            // std::cout << "Test: " << A_inv * A << std::endl;
+
+            // std::cout << "Computing orthogonal decomposition" << std::endl;
+            // matrix_t<Number> p_inv = A.completeOrthogonalDecomposition().pseudoInverse();
+            // std::cout << "p_inv: " << p_inv << std::endl;
+            // std::cout << "Shape: " << p_inv.rows() << ", " << p_inv.cols() << std::endl;
+            // std::cout << "Test: " << A * p_inv << std::endl;
+
+            // exit(0);
+ 
+
             // if A has full rank, we can simply re-transform, otherwise use v-representation.
             if (lu.rank() == A.rows()) {
+                std::cout << "Full rank matrix" << std::endl;
                 TRACE("hypro.representations.HPolytope", "A has full rank - do not use v-conversion.");
                 std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
                 assert((HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
@@ -1077,10 +1088,14 @@ namespace hypro {
                                                               inequalities.first * A.inverse() * b +
                                                               inequalities.second);
             } else {
+                std::cout << "Converting to V-Polytope" << std::endl;
                 TRACE("hypro.representations.HPolytope", "Use V-Conversion for linear transformation.");
                 auto intermediate = Converter::toVPolytope(*this);
+                std::cout << "Converted" << std::endl;
                 intermediate = intermediate.affineTransformation(A, b);
+                std::cout << "Transforming back" << std::endl;
                 auto res = Converter::toHPolytope(intermediate);
+                std::cout << "Done" << std::endl;
                 // assert(res.size() <= this->size());
                 res.setReduced();
                 return res;

@@ -329,6 +329,13 @@ class StarsetT : private GeometricObjectBase {
 	 */
 	bool contains( const Point<Number>& point ) const;
 
+	/**
+	 * @brief Checks whether the given Point can be included in the Star-set. If yes, it returns an assignment of the predicate which satisfies the constraints.
+	 * 
+	 * @param point  The given Point
+	 * @return hypro::EvaluationResult<Number>: <SAT/UNSAT, support_value, satisfing solution> 
+	 */
+	hypro::EvaluationResult<Number> modelContains( const Point<Number>& point ) const;
 
 	/**
 	 * @brief      Containment check for a Starset.

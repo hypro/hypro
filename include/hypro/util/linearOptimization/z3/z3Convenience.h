@@ -38,8 +38,8 @@ static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, cons
     // std::cout << "Variables.size() " << variables.size() << std::endl;
     for ( unsigned i = 0; i < _constraints.cols(); ++i ) {
         z3::expr var( c );
-        const char* varName = ( "x_" + std::to_string( i ) ).c_str();
-        var = c.real_const( varName );
+        std::string varName = "x_" + std::to_string( i );
+        var = c.real_const(varName.c_str());
         variables.push_back( var );
     }
 
@@ -79,7 +79,8 @@ static z3::expr_vector createFormula( const matrix_t<Number>& _constraints, cons
 }
 
 template <typename Number>
-static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Number>& _constraints, const vector_t<Number> _constants, const std::vector<carl::Relation>& relations, z3Context& c ) {
+static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Number>& _constraints, const vector_t<Number>& _constants, 
+                               const std::vector<carl::Relation>& relations, z3Context& c ) {
     z3::expr formula( c );
     formula = c.bool_val( true );
     z3::expr pointConstraint( c );
@@ -124,6 +125,50 @@ static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Numbe
         formula = formula && constraint;
     }
 
+    return formula;
+}
+
+template <typename Number>
+static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Number>& _constraints, const vector_t<Number>& _constants, 
+                               const matrix_t<Number>& _linTransform, const vector_t<Number>& _offset, z3Context& c ) {
+
+    // Build formula for Cx <= d and y = Ax + b, such that y is given and find a satisfying assignment for x (if exists)
+
+    z3::expr formula( c );
+    formula = c.bool_val( true );
+
+    std::vector<z3::expr> variables;
+    for ( unsigned i = 0; i < _constraints.cols(); ++i ) {
+        std::string name = "x_" + std::to_string( i );
+        variables.push_back( c.real_const( name.c_str() ) );
+    }
+    // std::cout << variables << std::endl;
+
+    for ( unsigned i = 0; i < _constraints.rows(); ++i ) {
+        z3::expr constraint( c );
+        constraint = c.int_val( 0 );
+        for ( unsigned j = 0; j < _constraints.cols(); ++j ) {
+            if ( _constraints( i, j ) != carl::constant_zero<Number>::get() ) {
+                constraint = constraint + variables.at( j ) * ( c.real_val( carl::convert<Number, mpq_class>( _constraints( i, j ) ) ) );
+            }
+        }
+        z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _constants( i ) ) );
+        formula = formula && (constraint <= constant);
+    }
+
+    for ( unsigned i = 0; i < _linTransform.rows(); ++i ) {
+        z3::expr constraint( c );
+        constraint = c.int_val( 0 );
+        for ( unsigned j = 0; j < _linTransform.cols(); ++j ) {
+            if ( _linTransform( i, j ) != carl::constant_zero<Number>::get() ) {
+                constraint = constraint + variables.at( j ) * ( c.real_val( carl::convert<Number, mpq_class>( _linTransform( i, j ) ) ) );
+            }
+        }
+        z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _point.at( i ) ) ) - c.real_val( carl::convert<Number, mpq_class>( _offset( i ) ) );
+        formula = formula && (constraint == constant);
+    }
+
+    // std::cout << "Formula: " << formula << std::endl;
     return formula;
 }
 

@@ -34,11 +34,14 @@ std::vector<hypro::Starset<Number>> StepFunctionLayer<Number>::reachStepFunction
 			case NN_REACH_METHOD::EXACT:
 				resultSet = StepFunction<Number>::exactStepFunction( i, resultSet, mValue, mMinValue, mMaxValue );
 				break;
+			case NN_REACH_METHOD::OVERAPPRX:
+				resultSet = StepFunction<Number>::approxStepFunction( i, resultSet, mValue, mMinValue, mMaxValue );
+				break;
 			default:
 				FATAL( "hypro.neuralnets.activation_functions.stepFunction", "Invalid analysis method specified" );
 		}
 		if ( plotIntermediates ) {
-#pragma omp critical
+// #pragma omp critical
 			for ( int j = 0; j < resultSet.size(); j++ ) {
 				plotter.addObject( resultSet[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
 			}
@@ -75,6 +78,9 @@ std::vector<hypro::Starset<Number>> StepFunctionLayer<Number>::forwardPass( cons
 		case NN_REACH_METHOD::EXACT:
 			resultSet = StepFunction<Number>::exactStepFunction( index, resultSet,mValue, mMinValue, mMaxValue );
 			break;
+		case NN_REACH_METHOD::OVERAPPRX:
+			resultSet = StepFunction<Number>::approxStepFunction( index, resultSet,mValue, mMinValue, mMaxValue );
+			break;
 		default:
 			FATAL( "hypro.neuralnets.activation_functions.stepfunction", "Invalid analysis method specified" );
 	}
@@ -87,7 +93,7 @@ std::vector<Starset<Number>> StepFunctionLayer<Number>::forwardPass( const std::
 
 	for ( const auto& set : inputSets ) {
 		auto resultSets = reachStepFunction( set, method, plotIntermediates );
-#pragma omp critical
+// #pragma omp critical
 		{ result.insert( result.end(), resultSets.begin(), resultSets.end() ); };
 	}
 

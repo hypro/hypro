@@ -12,10 +12,18 @@
 #include <iostream>
 #include <vector>
 
+// Custom square root function for mpq_class numbers
+mpq_class sqrt(const mpq_class& x) {
+    mpf_class x_mpf(x); // Convert mpq_class to mpf_class
+    mpf_sqrt(x_mpf.get_mpf_t(), x_mpf.get_mpf_t()); // Compute square root
+    return mpq_class(x_mpf); // Convert back to mpq_class
+}
+
 // use floating point arithmetic.
-typedef double Number;	// -3090.30109487     <=>      -3090.3   (mpq_class vs double)
+typedef mpq_class Number;	// -3090.30109487     <=>      -3090.3   (mpq_class vs double)
 
 int main( int argc, char* argv[] ) {
+	// print system arguments
 	std::cout << "\nSystem arguments: ";
 	for ( int i = 0; i < argc; i++ ) {
 		std::cout << argv[i] << " ";
@@ -106,105 +114,108 @@ int main( int argc, char* argv[] ) {
 	hypro::reachability::ReachNN<Number> reach_nn = hypro::reachability::ReachNN<Number>( rotate_nn );
 	// hypro::reachability::ReachabilityTree<Number> reach_tree( network, input_poly, safe_polys );
 
-	bool create_plots = true;
+	bool create_plots = false;
 
 	start = std::chrono::steady_clock::now();
 	std::vector<hypro::Starset<Number>> output_set = reach_nn.forwardAnalysis( hypro::Starset<Number>( input_poly ), method, create_plots );  // old verification implemented for NNet
 
-	auto color = 1;
-	// Plot safe zone
-	for ( const auto& safe_zone : safe_polys ) {
-#pragma omp critical
-		plotter.addObject( safe_zone.vertices(), hypro::plotting::colors[hypro::plotting::petrol] );
+
+	if(create_plots) {
+		auto color = 1;
+		// Plot safe zone
+		for ( const auto& safe_zone : safe_polys ) {
+	// #pragma omp critical
+			plotter.addObject( safe_zone.vertices(), hypro::plotting::colors[hypro::plotting::petrol] );
+		}
+
+		// Plot output set
+		for ( const auto& set : output_set ) {
+	// #pragma omp critical
+			plotter.addObject( set.vertices(), hypro::plotting::colors[color] );
+			color = ( color + 1 ) % 8;
+		}
+		plotter.plot2d();
 	}
 
-	// Plot output set
-	for ( const auto& set : output_set ) {
-#pragma omp critical
-		plotter.addObject( set.vertices(), hypro::plotting::colors[color] );
-		color = ( color + 1 ) % 8;
-	}
-	plotter.plot2d();
+	// // Combine all individual safe polygons to one safe zone
+	// auto safe_polygon = hypro::HPolytope<Number>::unite(safe_polys);
 
-	// Combine all individual safe polygons to one safe zone
-	auto safe_polygon = hypro::HPolytope<Number>::unite(safe_polys);
+	// // Combine all output sets to one polygon
+	// auto combined_output_set =hypro::Starset<Number>::unite(output_set);
 
-	// Combine all output sets to one polygon
-	auto combined_output_set =hypro::Starset<Number>::unite(output_set);
+	// // Check if star set is safe, e.g. if it is contained in the safe zone
+	// auto is_starSet_safe = safe_polygon.contains(combined_output_set.eqvPolytope());
+	// std::cout << std::boolalpha;
+	// std::cout << "The output is in the safe zone: " << is_starSet_safe << std::endl;
 
-	// Check if star set is safe, e.g. if it is contained in the safe zone
-	auto is_starSet_safe = safe_polygon.contains(combined_output_set.eqvPolytope());
-	std::cout << std::boolalpha;
-	std::cout << "The output is in the safe zone: " << is_starSet_safe << std::endl;
-
-	// std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
-	// std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(method, hypro::SEARCH_STRATEGY::DFS);
-	// bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, true, true );
+	// // std::vector<hypro::Starset<Number>> output_set = network.forwardPass( input_star, method, create_plots); // new method implemented for general Neural Network wrapper class
+	// // std::vector<hypro::Starset<Number>> output_set = reach_tree.forwardPass(method, hypro::SEARCH_STRATEGY::DFS);
+	// // bool isSafe = reach_tree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, true, true );
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
 
-	// // verificaton (and plotting) of the output sets
-	// int N = output_set.size();
-	// std::cout << "Number of final stars: " << N << std::endl;
-	// int num_not_satisfied = 0;
-	// for ( int i = 0; i < N; i++ ) {
-	// 	// std::cout << output_set[i] << std::endl;
-	// 	std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
-	// 	// std::cout << "Vertices: " << vertices << std::endl;
-	// 	plotter.addObject( vertices, hypro::plotting::colors[( 2 * i ) % 9] );
+	// verificaton (and plotting) of the output sets
+	int N = output_set.size();
+	std::cout << "Number of final stars: " << N << std::endl;
+	int num_not_satisfied = 0;
+	for ( int i = 0; i < N; i++ ) {
+		// std::cout << output_set[i] << std::endl;
+		// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
+		// std::cout << "Vertices: " << vertices << std::endl;
+		// plotter.addObject( vertices, hypro::plotting::colors[( 2 * i ) % 9] );
 
-	// 	hypro::vector_t<Number> center = output_set[i].center();
-	// 	hypro::matrix_t<Number> basis = output_set[i].generator();
-	// 	hypro::matrix_t<Number> shape = output_set[i].shape();
-	// 	hypro::matrix_t<Number> limits = output_set[i].limits();
+		hypro::vector_t<Number> center = output_set[i].center();
+		hypro::matrix_t<Number> basis = output_set[i].generator();
+		hypro::matrix_t<Number> shape = output_set[i].shape();
+		hypro::matrix_t<Number> limits = output_set[i].limits();
 
-	// 	for ( int j = 1; j < output_set[i].dimension(); j++ ) {
-	// 		// std::cout << "Checking output safety constraint: " << j << std::endl;
+		for ( int j = 1; j < output_set[i].dimension(); j++ ) {
+			// std::cout << "Checking output safety constraint: " << j << std::endl;
 
-	// 		shape.conservativeResize( shape.rows() + 1, shape.cols() );
-	// 		limits.conservativeResize( limits.rows() + 1, 1 );
+			shape.conservativeResize( shape.rows() + 1, shape.cols() );
+			limits.conservativeResize( limits.rows() + 1, 1 );
 
-	// 		shape.row( shape.rows() - 1 ) = basis.row( 0 ) - basis.row( j );
-	// 		limits.row( limits.rows() - 1 ) = center.row( j ) - center.row( 0 );
-	// 	}
+			shape.row( shape.rows() - 1 ) = basis.row( 0 ) - basis.row( j );
+			limits.row( limits.rows() - 1 ) = center.row( j ) - center.row( 0 );
+		}
 
-	// 	hypro::Starset<Number> new_star = hypro::Starset<Number>( center, shape, limits, basis );
-	// 	// std::cout << "Checking emptiness" << std::endl;
-	// 	if ( new_star.empty() ) {
-	// 		// std::cout << "Star number " << i << " satisfied property 4" << std::endl;
+		hypro::Starset<Number> new_star = hypro::Starset<Number>( center, shape, limits, basis );
+		// std::cout << "Checking emptiness" << std::endl;
+		if ( new_star.empty() ) {
+			// std::cout << "Star number " << i << " satisfied property 4" << std::endl;
 
-	// 		// std::cout << output_set[i] << std::endl;
-	// 		// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
-	// 		// std::cout << "Vertices: " << vertices << std::endl;
-	// 	} else {
-	// 		std::cout << "Star number " << i << " violates the property" << std::endl;
+			// std::cout << output_set[i] << std::endl;
+			// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
+			// std::cout << "Vertices: " << vertices << std::endl;
+		} else {
+			std::cout << "Star number " << i << " violates the property" << std::endl;
 
-	// 		// std::cout << output_set[i] << std::endl;
-	// 		// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
-	// 		// std::cout << "Vertices: " << vertices << std::endl;
+			// std::cout << output_set[i] << std::endl;
+			// std::vector<hypro::Point<Number>> vertices = output_set[i].vertices();
+			// std::cout << "Vertices: " << vertices << std::endl;
 
-	// 		// std::cout << "The new star: " << std::endl;
-	// 		// std::cout << new_star << std::endl;
-	// 		// std::cout << "New star vertices: " << new_star.vertices() << std::endl;
+			// std::cout << "The new star: " << std::endl;
+			// std::cout << new_star << std::endl;
+			// std::cout << "New star vertices: " << new_star.vertices() << std::endl;
 
-	// 		// std::vector<hypro::Point<Number>> inner_vertices = new_star.constraints().vertices();
-	// 		// hypro::vector_t<Number> new_center = new_star.center();
-	// 		// hypro::matrix_t<Number> new_basis = new_star.generator();
+			// std::vector<hypro::Point<Number>> inner_vertices = new_star.constraints().vertices();
+			// hypro::vector_t<Number> new_center = new_star.center();
+			// hypro::matrix_t<Number> new_basis = new_star.generator();
 
-	// 		// for( auto point : inner_vertices ) {
-	// 		// 	std::cout << "Inner point: " << point << std::endl;
-	// 		// 	hypro::Point<Number> star_point = point.affineTransformation(new_basis, new_center);
-	// 		// 	std::cout << "One new point: " << star_point << std::endl;
-	// 		// }
+			// for( auto point : inner_vertices ) {
+			// 	std::cout << "Inner point: " << point << std::endl;
+			// 	hypro::Point<Number> star_point = point.affineTransformation(new_basis, new_center);
+			// 	std::cout << "One new point: " << star_point << std::endl;
+			// }
 
-	// 		num_not_satisfied++;
-	// 	}
-	// }
+			num_not_satisfied++;
+		}
+	}
 
-	// std::cout << std::fixed;
-	// std::cout << std::setprecision( 2 );
-	// std::cout << "In total " << ( ( (double)num_not_satisfied / N ) * 100.0 ) << "\% of stars violates the property." << std::endl;
+	std::cout << std::fixed;
+	std::cout << std::setprecision( 2 );
+	std::cout << "In total " << ( ( (double)num_not_satisfied / N ) * 100.0 ) << "\% of stars violates the property." << std::endl;
 
 	// plotter.addObject( safe_star.vertices(), hypro::plotting::colors[hypro::plotting::bordeaux] );
 	// plotter.plot2d();

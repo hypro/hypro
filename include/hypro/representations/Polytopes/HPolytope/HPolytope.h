@@ -372,7 +372,8 @@ namespace hypro {
             mNonRedundant = rhs.isNonRedundant();
 
             if (Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value()) {
-                mOptimizer->cleanContexts();
+                if(mOptimizer.has_value())
+                    mOptimizer->cleanContexts();
                 setOptimizer(rhs.matrix(), rhs.vector());
             }
             assert(mEmptyState == rhs.getEmptyState());

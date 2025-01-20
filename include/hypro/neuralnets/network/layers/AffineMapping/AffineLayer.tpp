@@ -56,12 +56,13 @@ template <typename Number>
 std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const {
 	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
 	int N = inputSets.size();  // number of input stars
+	std::cout << "Number of variables: " << inputSets[0].shape().cols() << std::endl;
 
-	#pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
+	// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
 		for ( int i = 0; i < N; ++i ) {
 			Starset<Number> temp = inputSets[i].affineTransformation( mWeights, mBias );
 			{
-	#pragma omp critical
+	// #pragma omp critical
 				result.push_back( temp );
 			}
 		}
@@ -76,7 +77,13 @@ Point<Number> AffineLayer<Number>::propagateCandidateBack( Point<Number> y, int 
 	// TODO: implement a smarter way to do this backpropagation which works in all cases
 	matrix_t<Number> weightsInverse = mWeights.completeOrthogonalDecomposition().pseudoInverse();
 	// std::cout << "affine backpropagation" << std::endl;
-	return Point<Number>(weightsInverse * (y.rawCoordinates() - mBias));
+	Point<Number> prev_y = Point<Number>(weightsInverse * (y.rawCoordinates() - mBias));
+
+	// std::cout << "Previous y: " << prev_y << std::endl;
+	// std::cout << "Next y: " << y << std::endl;
+	// std::cout << "Transformed prev y: " << mBias + mWeights * prev_y.rawCoordinates() << std::endl;
+	
+	return prev_y;
 }
 
 }  // namespace hypro

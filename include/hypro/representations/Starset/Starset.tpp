@@ -371,11 +371,40 @@ bool StarsetT<Number, Converter, Setting>::containsCached( const Point<Number>& 
 // 	return optimizer.checkConsistency();
 // }
 
+template <typename Number, typename Converter, typename Setting> 
+hypro::EvaluationResult<Number> StarsetT<Number, Converter, Setting>::modelContains( const Point<Number>& point ) const {
+#if defined(HYPRO_USE_Z3) && ( HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE || HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE )
+	return hypro::z3GetInternalPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
+#else
+	return hypro::glpkGetInternalPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
+#endif
+}
+
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
+	// if(this->dimension() == 1) {
+	// 	vector_t<Number> dir_vect = mGenerator.row(0);
+
+	// 	auto eval_low_result = mConstraints.evaluate( -1.0 * dir_vect );
+	// 	auto eval_high_result = mConstraints.evaluate( dir_vect );
+
+	// 	Number lb = -eval_low_result.supportValue + mCenter[0];
+	// 	Number ub = eval_high_result.supportValue + mCenter[0];
+
+	// 	return (lb <= point[0] && point[0] <= ub);
+	// }
+
+#if defined(HYPRO_USE_Z3) && ( HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE || HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE )
+	return hypro::z3CheckPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
+#else
+	// std::cout << "Contains method" << std::endl;
 	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> transformedStar = this->constraints().affineTransformation(mGenerator, mCenter);
 	hypro::Optimizer<Number> optimizer( transformedStar.matrix(), transformedStar.vector() );
 	return optimizer.checkPoint(point);
+#endif
+	
+
+
 }
 
 
