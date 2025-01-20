@@ -25,10 +25,6 @@ StarsetT<Number, Converter, Setting>::StarsetT( const vector_t<Number>& center, 
 	: mCenter( center )
 	, mGenerator( generator )
 	, mConstraints( shapematrix, limits ) {
-		// std::cout << "Starset general constructor" << std::endl;
-		// std::cout << "This center: " << this->center() << std::endl;
-		// std::cout << "This generator: " << this->generator() << std::endl;
-		// std::cout << "This constraints: " << this->constraints() << std::endl;
 }
 
 template <typename Number, typename Converter, typename Setting>

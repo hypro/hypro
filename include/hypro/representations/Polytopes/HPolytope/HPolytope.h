@@ -349,22 +349,16 @@ namespace hypro {
          * Operators
          */
         HPolytopeT &operator=(const HPolytopeT<Number, Converter, Setting> &rhs) {
-            // std::cout << "Assignment operator" << std::endl;
             GeometricObjectBase::operator=(rhs);
             mHPlanes = rhs.constraints();
             mDimension = rhs.dimension();
             mNonRedundant = rhs.isNonRedundant();
 
-            // std::cout << "If next" << std::endl;
-
             if (Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value()) {
-                // std::cout << "Cleaning context" << std::endl;
-                mOptimizer->cleanContexts();
-                // std::cout << "Context cleared" << std::endl;
+                if(mOptimizer.has_value())
+                    mOptimizer->cleanContexts();
                 setOptimizer(rhs.matrix(), rhs.vector());
-                // std::cout << "Optimizer set" << std::endl;
             }
-            // std::cout << "Assert next" << std::endl;
             assert(mEmptyState == rhs.getEmptyState());
             return *this;
         }
@@ -401,9 +395,6 @@ namespace hypro {
         template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
         void reduceNumberRepresentation(const std::vector<Point<Number>> &_vertices = std::vector<Point<Number>>(),
                                         unsigned limit = fReach_DENOMINATOR) const {
-
-            std::cout << "Before reduceNumberRepresentation()" << std::endl;
-
             // #ifdef REDUCE_NUMBERS
             if (Setting::REDUCE_NUMBERS == true) {
                 TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
@@ -456,8 +447,6 @@ namespace hypro {
                         }
                     }
                 }
-
-                std::cout << "After reduceNumberRepresentation()" << std::endl;
             }
             // #endif
         }

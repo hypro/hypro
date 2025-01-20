@@ -54,26 +54,19 @@ namespace hypro {
         TRACE("hypro.representations.HPolytope", "construct from Ax <= b," << std::endl
                                                                            << "A: " << A << "b: " << b);
 
-        // std::cout << "HPolytope general constructor" << std::endl;
                                             
         assert(A.rows() == b.rows());
         for (unsigned i = 0; i < A.rows(); ++i) {
             mHPlanes.emplace_back(A.row(i), b(i));
         }
 #ifndef NDEBUG
-        // std::cout << "Checking emptiness" << std::endl;
         bool empty = this->empty();
 #endif
         // reduceNumberRepresentation();
-        // std::cout << "Assert" << std::endl;
         assert(empty == this->empty());
         if (Setting::OPTIMIZER_CACHING) {
-            // std::cout << "Setting optimizer" << std::endl;
             setOptimizer(A, b);
         }
-
-        // std::cout << "This matrix: " << this->matrix() << std::endl;
-        // std::cout << "This vector: " << this->vector() << std::endl;
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -194,7 +187,6 @@ namespace hypro {
                     TRACE("hypro.representations.HPolytope", "Affine dimension: " << effectiveDim);
                     // get common plane
                     std::vector<vector_t<Number>> vectorsInPlane;
-                    // std::cout << "first point: " << *pointsCopy.begin() << std::endl;
                     for (unsigned i = 1; i < pointsCopy.size(); ++i) {
                         vectorsInPlane.emplace_back(pointsCopy[i].rawCoordinates() - pointsCopy[0].rawCoordinates());
                     }
@@ -257,13 +249,10 @@ namespace hypro {
                     }
 
                     HPolytopeT<Number, Converter, Setting> projectedPoly(projectedPoints);
-                    // std::cout << "Projected polytope: " << projectedPoly << std::endl;
                     projectedPoly.insertEmptyDimensions(projectionDimensions, droppedDimensions);
 
                     TRACE("hypro.representations.HPolytope", "After lifting " << projectedPoly);
 
-                    // std::cout << "After inserting empty dimensions: " << projectedPoly << std::endl;
-                    // std::cout << "Poly dimension: " << projectedPoly.dimension() << " and plane dimension : " << planeNormal.rows() << std::endl;
                     projectedPoly.insert(Halfspace<Number>(planeNormal, planeOffset));
                     projectedPoly.insert(Halfspace<Number>(-planeNormal, -planeOffset));
 
@@ -425,18 +414,11 @@ namespace hypro {
                     matrix_t<Number> A(dim, dim);
                     vector_t<Number> b(dim);
                     unsigned pos = 0;
-                    // std::cout << "Permute planes ";
                     for (auto planeIt = permutation.begin(); planeIt != permutation.end(); ++planeIt) {
-                        // std::cout << *planeIt << ", ";
                         A.row(pos) = mHPlanes.at(*planeIt).normal().transpose();
-                        // std::cout << A.row(pos) << std::endl;
                         b(pos) = mHPlanes.at(*planeIt).offset();
-                        // std::cout << b(pos) << std::endl;
                         ++pos;
                     }
-                    // std::cout << std::endl;
-
-                    // std::cout << "Created first matrix" << std::endl;
 
                     Eigen::FullPivLU<matrix_t<Number>> lu_decomp(A);
                     if (lu_decomp.rank() < A.rows()) {
@@ -454,7 +436,6 @@ namespace hypro {
                         bool skip = false;
                         for (unsigned permPos = 0; permPos < permutation.size(); ++permPos) {
                             if (planePos == permutation.at(permPos)) {
-                                // std::cout << "Skip plane " << planePos << std::endl;
                                 skip = true;
                                 break;
                             }
