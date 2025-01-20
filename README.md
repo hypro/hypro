@@ -85,12 +85,12 @@ Our implementation supports the analysis of bounded and unbounded input starsets
 
 ```shell
 $ make example_ACASbenchmark_verification
-$ ../nnBenchmarkVerification.sh acasxu overapprox ACASXU_experimental_v2a_3_5.nnet poly_prop4_input.in poly_prop4_safe.in unbounded
+$ ../nnBenchmarkVerification.sh acasxu exact ACASXU_experimental_v2a_3_5.nnet poly_prop4_input.in poly_prop4_safe.in unbounded
 ```
 
 #### Drone hovering
 
-First of all, we would like to express our deepest gratitude to Dario Guidotti, Stefano Demarchi, and Armando Tacchella for generously sharing their drone hovering benchmark with us. This benchmark comprises eight neural networks. The first four consist of two hidden layers, and the other four networks consist of three hidden layers, each followed by a ReLU activation function. For each network, two safety properties are provided. 
+We would like to express our deepest gratitude to Dario Guidotti, Stefano Demarchi, and Armando Tacchella for generously sharing their drone hovering benchmark with us. This benchmark comprises eight neural networks. The first four consist of two hidden layers, and the other four networks consist of three hidden layers, each followed by a ReLU activation function. For each network, two safety properties are provided. 
 
 As an example, to compile the binary and verify the network AC7.nnet using the second safety property, please follow these commands:
 
@@ -101,13 +101,22 @@ $ ../nnBenchmarkVerification.sh drones exact AC7.nnet prop_AC7_02.in safe_AC7_02
 
 #### Thermostat controller
 
-The benchmark discussed in [this](https://ths.rwth-aachen.de/wp-content/uploads/sites/4/master_thesis_jiang.pdf) Master’s thesis includes a neural network controller that regulates room temperature within the range of 17°C to 23°C using a thermostat. It accomplishes this by activating (mode on) and deactivating (mode off) the heater based on the sensed temperature. The neural network representing the thermostat's controller is a feedforward neural network with three layers. The input comprises two neurons that represent the temperature and the current mode (on or off). Additionally, there are two hidden layers, each with ten neurons. Finally, using the unit step activation function, the output layer predicts whether the heater should turn on or off, generating the corresponding control input.
+The benchmark discussed in [this](https://ths.rwth-aachen.de/wp-content/uploads/sites/4/master_thesis_jiang.pdf) Master’s thesis includes a neural network controller that regulates room temperature within the range of 17°C to 23°C using a thermostat. It accomplishes this by activating (mode on) and deactivating (mode off) the heater based on the sensed temperature. The neural network representing the thermostat's controller is a feedforward neural network with three layers. The input comprises two neurons that represent the temperature and the current mode (on or off). Additionally, there are two hidden layers, each with ten neurons. Finally, using the unit step activation function, the output layer predicts whether the heater should turn on or off, generating the corresponding control input. 
 
-To compile and test this benchmark, please follow these commands:
+We provide two safety properties for this benchmark. The first property $\mathcal{P}_1$ is bounded, while the other property $\mathcal{P}_2$ is unbounded. Since $\mathcal{P}_1$ is inherently unsafe, the construction of the complete counter input set is possible. For $\mathcal{P}_2$ we only verify safety.
+
+To compile and test this benchmark with $\mathcal{P}_1$, please follow these commands:
 
 ```shell
 $ make example_thermostat_verification
-$ ../nnBenchmarkVerification.sh thermostat exact fc_thermostat.nnet poly_thermostat.in
+$ ../nnBenchmarkVerification.sh thermostat exact fc_thermostat.nnet poly_thermostat_OFF.in safe_thermostat_OFF.in
+```
+
+Alternatively, for verifying $\mathcal{P}_2$, please use:
+
+```shell
+$ make example_thermostat_verification
+$ ../nnBenchmarkVerification.sh thermostat overapprox fc_thermostat.nnet poly_thermostat_ON.in safe_thermostat_ON.in
 ```
 
 #### Sonar classifier
