@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased] - 2023-05-22
+## [Released] - 2023-09-06
 
 ### Added
 
@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
   indicated by an accompanied benchmark
 - New implementation for HA analysis with urgent jumps (new method to calculate the set minus operation in an over-approximative manner)
 - New method to calculate the reachable sets of parallely composed automaton without building the actual parallel composition 
+- Reachability analysis method for neural networks using star sets
+- Support for parsing neural networks in .nnet format
+- Exact and over-approximate reachability methods
+- Analysis of a set of piece-wise linear activation functions (ReLU, leaky ReLU, hard tanh, hard sigmoid, unit step activation functions)
+- Include 4 benchmarks (ACAS Xu, drone hovering, thermostat controller, sonar detector) for the neural network verification use case
+- Added convenience script to run the verification of the neural network benchmarks
 
 ### Changed
 
