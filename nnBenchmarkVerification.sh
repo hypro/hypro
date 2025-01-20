@@ -42,11 +42,13 @@ if [ $1 == "acasxu" ]; then
         exit 2
     fi
 
-    IS_UNBOUNDED=""
+    CUSTOM_FLAG=""
     if [ "$#" -gt 5 ] && [ "$6" = "unbounded" ]; then
-        IS_UNBOUNDED="unbounded"
-    else
-        IS_UNBOUNDED=""
+        CUSTOM_FLAG="unbounded"
+    elif [ "$#" -gt 5 ] && [ "$6" = "generalized" ]; then
+        CUSTOM_FLAG="generalized"
+    else 
+        CUSTOM_FLAG=""
     fi
 
     BINARY_FILE="./bin/example_ACASbenchmark_verification"
@@ -56,7 +58,7 @@ if [ $1 == "acasxu" ]; then
         exit 3
     fi
 
-    CMD="$BINARY_FILE $2 $NNET_FILE $INPUT_PROP $SAFETY_PROP $IS_UNBOUNDED"
+    CMD="$BINARY_FILE $2 $NNET_FILE $INPUT_PROP $SAFETY_PROP $CUSTOM_FLAG"
     eval "$CMD";
 
 fi

@@ -88,6 +88,11 @@ $ make example_ACASbenchmark_verification
 $ ../nnBenchmarkVerification.sh acasxu exact ACASXU_experimental_v2a_3_5.nnet poly_prop4_input.in poly_prop4_safe.in unbounded
 ```
 
+##### Generalized Activation Function Analysis
+
+
+
+
 #### Drone hovering
 
 We would like to express our deepest gratitude to Dario Guidotti, Stefano Demarchi, and Armando Tacchella for generously sharing their drone hovering benchmark with us. This benchmark comprises eight neural networks. The first four consist of two hidden layers, and the other four networks consist of three hidden layers, each followed by a ReLU activation function. For each network, two safety properties are provided. 

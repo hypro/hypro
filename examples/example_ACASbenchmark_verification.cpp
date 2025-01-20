@@ -1,4 +1,5 @@
 #include "hypro/neuralnets/network/NeuralNetwork.h"
+#include "hypro/neuralnets/network/layers/GenerealPiecewiseLinear/GeneralPiecewiseLinearLayer.h"
 #include "hypro/neuralnets/reachability/ReachNN.h"
 #include "hypro/neuralnets/reachability_tree/ReachabilityTree.h"
 #include "hypro/parser/neuralnets/nnet/NNet.h"
@@ -90,6 +91,22 @@ int main( int argc, char* argv[] ) {
 		std::cout << "Done" << std::endl;
 		std::cout << "New unbounded star set: " << input_starset << std::endl;
 		std::cout << "Set is empty: " << input_starset.empty() << std::endl;
+	} else if ( (method == hypro::NN_REACH_METHOD::EXACT) && (argc > 5) && (std::string(argv[5]) == "generalized")) {
+		std::cout << "Original network: " << neuralNetwork << std::endl;
+		for ( size_t i = 0; i < neuralNetwork.numLayers(); ++i ) {
+			if ( neuralNetwork.layers(i)->layerType() == hypro::NN_LAYER_TYPE::RELU ) {
+				std::cout << "ReLU found at index " << i << ", replacing it with general piece-wise linear activation function..." << std::endl;
+				unsigned short int layerSize = neuralNetwork.layers(i)->layerSize();
+				unsigned short int layerIndex = neuralNetwork.layers(i)->layerIndex();
+				size_t numPieces = 2;
+				std::vector<Number> lowerBounds = {-DBL_MAX, 0};
+				std::vector<Number> upperBounds = {0, +DBL_MAX};
+				std::vector<Number> slopes = {0, 1};
+				std::vector<Number> offsets = {0, 0};
+				neuralNetwork.setLayer(i, std::make_shared<hypro::GeneralPiecewiseLinearLayer<Number>>(layerSize, layerIndex, numPieces, lowerBounds, upperBounds, slopes, offsets));
+			}
+		}
+		std::cout << "Modified network: " << neuralNetwork << std::endl;
 	}
 
 	// Apply the reachability analysis to the input star set and measure the required time
