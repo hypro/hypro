@@ -22,4 +22,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Bug with mutex deadlock in H-Polytope optimizer contex cleanup
+- Bug with mutex deadlock in H-Polytope optimizer context cleanup
