@@ -42,6 +42,13 @@ if [ $1 == "acasxu" ]; then
         exit 2
     fi
 
+    IS_UNBOUNDED=""
+    if [ "$#" -gt 5 ] && [ "$6" = "unbounded" ]; then
+        IS_UNBOUNDED="unbounded"
+    else
+        IS_UNBOUNDED=""
+    fi
+
     BINARY_FILE="./bin/example_ACASbenchmark_verification"
     if ! [[ -f $BINARY_FILE ]]; then
         echo "Binary file $BINARY_FILE not found"
@@ -49,7 +56,7 @@ if [ $1 == "acasxu" ]; then
         exit 3
     fi
 
-    CMD="$BINARY_FILE $2 $NNET_FILE $INPUT_PROP $SAFETY_PROP"
+    CMD="$BINARY_FILE $2 $NNET_FILE $INPUT_PROP $SAFETY_PROP $IS_UNBOUNDED"
     eval "$CMD";
 
 fi

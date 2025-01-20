@@ -79,6 +79,15 @@ $ make example_ACASbenchmark_verification
 $ ../nnBenchmarkVerification.sh acasxu overapprox ACASXU_experimental_v2a_2_4.nnet poly_prop4_input.in poly_prop4_safe.in
 ```
 
+##### Unbounded ACAS Xu Verification
+
+Our implementation supports the analysis of bounded and unbounded input starsets. We provide an unbounded variant of the ACAS Xu property $\phi_4$, that we refer to as $\overline{\phi}_4$. One can test this unbounded benchmark by specifying the `unbounded` flag as an input to the provided script. For example, to verify the unbounded $\overline{\phi}_4$, on the network ACASXU_experimental_v2a_3_5, use the following commands:
+
+```shell
+$ make example_ACASbenchmark_verification
+$ ../nnBenchmarkVerification.sh acasxu overapprox ACASXU_experimental_v2a_3_5.nnet poly_prop4_input.in poly_prop4_safe.in unbounded
+```
+
 #### Drone hovering
 
 First of all, we would like to express our deepest gratitude to Dario Guidotti, Stefano Demarchi, and Armando Tacchella for generously sharing their drone hovering benchmark with us. This benchmark comprises eight neural networks. The first four consist of two hidden layers, and the other four networks consist of three hidden layers, each followed by a ReLU activation function. For each network, two safety properties are provided. 
