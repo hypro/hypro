@@ -11,7 +11,6 @@ RUN apt-get update \
     pkg-config \
     libboost-dev \
     iputils-ping \
-    python3-distutils python3-dev \
     libz3-dev
 
 COPY / /root/hypro/
