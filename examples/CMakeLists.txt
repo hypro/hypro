@@ -10,6 +10,9 @@ endif ()
 foreach (example ${EXAMPLES})
     string(REPLACE ".cpp" "" example_name ${example})
     string(REPLACE "tutorial/" "" example_name ${example_name})
+    string(REPLACE "label_synchronization_benchmarks/" "" example_name ${example_name})
+    string(REPLACE "urgency/" "" example_name ${example_name})
+
     add_executable(${example_name} EXCLUDE_FROM_ALL ${example})
     if (HYPRO_USE_MIMALLOC)
         get_target_property(mimalloc_library mimalloc_SHARED IMPORTED_LOCATION)
@@ -34,3 +37,19 @@ endforeach (example)
 if (${STATICLIB_SWITCH} STREQUAL "ON")
     set_target_properties(allExamples PROPERTIES LINK_SEARCH_END_STATIC TRUE)
 endif ()
+
+
+list(FIND EXAMPLES example_parallel_composition index)
+if(index GREATER -1)
+    target_sources(example_parallel_composition PRIVATE
+                ${CMAKE_SOURCE_DIR}/src/tool/cli/cli.cpp ${CMAKE_SOURCE_DIR}/src/tool/cli/settingsProcessing.cpp
+                ${CMAKE_SOURCE_DIR}/src/tool/cli/DynamicStrategyBuilder.cc
+                ${CMAKE_SOURCE_DIR}/src/tool/reachability/analysis.cpp
+                ${CMAKE_SOURCE_DIR}/src/tool/preprocessing/preprocessing.cpp)
+
+    find_package(Boost COMPONENTS program_options REQUIRED)
+    target_link_libraries(example_parallel_composition ${PROJECT_NAME}-shared ${PROJECT_NAME}-parser ${GBENCHMARK_LIBRARIES} Boost::program_options)
+
+    target_include_directories(example_parallel_composition PRIVATE ${CMAKE_SOURCE_DIR}/test/include/ ${CMAKE_SOURCE_DIR}/include/tool/)
+    add_dependencies(example_parallel_composition ${PROJECT_NAME}-resources)
+endif()

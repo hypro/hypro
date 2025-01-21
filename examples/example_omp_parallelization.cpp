@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     for(int i = 0; i < m; i++) {
         int N = result.size();
 
-        #pragma omp parallel for
+        // #pragma omp parallel for
         for(int j = 0; j < N; j++) {
             Number current = result[j];
 
@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
                 inner_results.push_back(1 + rand() % 3);
             }
 
-            #pragma omp critical
+            // #pragma omp critical
             {
                 result.insert( result.end(), inner_results.begin(), inner_results.end() );
                 print_vector(result);

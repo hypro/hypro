@@ -736,7 +736,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     std::vector<BoxT<Number, Converter, Setting>>
-    BoxT<Number, Converter, Setting>::setMinus(const BoxT<Number, Converter, Setting> &minusbox) const {
+    BoxT<Number, Converter, Setting>::setMinusOld(const BoxT<Number, Converter, Setting> &minusbox) const {
         std::vector<hypro::BoxT<Number, Converter, Setting>> result;
         if (this->dimension() != minusbox.dimension()) {
             return result;
@@ -847,6 +847,30 @@ namespace hypro {
             return result;
         }
         // return result;
+    }
+
+
+    template<typename Number, typename Converter, class Setting>
+    std::vector<BoxT<Number, Converter, Setting>> BoxT<Number, Converter, Setting>::setMinus(const BoxT<Number, Converter, Setting> &minus, int setMinusAlgoUsed) const {
+
+        std::vector<BoxT<Number, Converter, Setting>> result;
+
+        switch (setMinusAlgoUsed){
+        case 0:
+            result = this->setMinus2(minus);
+            break;
+
+        case 1:
+            std::cout << "Error, setMinusCrossing function not implemented for Representation Box" << std::endl; 
+            exit(1);        
+            break;
+        case 2:
+            result = this->setMinusOld(minus);
+            break;
+        }
+
+        return result; 
+
     }
 
     template<typename Number, typename Converter, class Setting>

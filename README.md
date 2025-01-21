@@ -44,7 +44,7 @@ $ make allTests
 $ make test
 ```
 
-HyPro registers itself to cmake which means that any further cmake-project which depends on HyPro does not neccessarily require a system-installation of HyPro. Instead, it suffices to call `find_package(hypro)` from cmake to locate the local build.
+HyPro registers itself to cmake which means that any further cmake-project which depends on HyPro does not necessarily require a system-installation of HyPro. Instead, it suffices to call `find_package(hypro)` from cmake to locate the local build.
 
 ## Documentation
 
@@ -57,6 +57,21 @@ a [Pdf manual](https://ths.rwth-aachen.de/wp-content/uploads/sites/4/research/Hy
 HyPro comes with some examples shipped, which may give you a hint on how to use the library. All examples are listed in
 the examples folder; all source files in this folder prefixed with `example_` are automatically assigned a corresponding
 target, i.e., the file `example_box.cpp` can be compiled via the target `example_box`.
+
+### Running HyPro in Docker 
+
+Hypro uses a pre-build docker container which contains some of the dependencies (for example the CArL library) in order to make the docker build step faster. We can build this with the docker file  `Dockerfile.carl`. This docker image is already compiled and pushed to <a href="https://hub.docker.com/repository/docker/hyprodockeruser/carl/general" target="_blank">docker hub</a>. We use this file also for speeding up the gitlab pipeline.
+
+In order to build and run HyPro inside a docker container you need to run the following commands:
+
+```bash
+$ docker build -t hypro .
+$ docker run -it <hashOfImage> bash
+```
+
+The first command will build the docker image. With the second command we can step into the docker container and we can run hypro inside the docker container. In the second command you need the hash of the newly built docker image. You can get this by listing out all the images which are available on your system and then looking for one which is called hypro.
+
+
 
 ## Case Studies
 
@@ -79,9 +94,28 @@ $ make example_ACASbenchmark_verification
 $ ../nnBenchmarkVerification.sh acasxu overapprox ACASXU_experimental_v2a_2_4.nnet poly_prop4_input.in poly_prop4_safe.in
 ```
 
+##### Unbounded ACAS Xu Verification
+
+Our implementation supports the analysis of bounded and unbounded input starsets. We provide an unbounded variant of the ACAS Xu property $\phi_4$, that we refer to as $\overline{\phi}_4$. One can test this unbounded benchmark by specifying the `unbounded` flag as an input to the provided script. For example, to verify the unbounded $\overline{\phi}_4$, on the network ACASXU_experimental_v2a_3_5, use the following commands:
+
+```shell
+$ make example_ACASbenchmark_verification
+$ ../nnBenchmarkVerification.sh acasxu exact ACASXU_experimental_v2a_3_5.nnet poly_prop4_input.in poly_prop4_safe.in unbounded
+```
+
+##### Generalized Activation Function Analysis
+
+Another extension of our tool is that it can verify feed-forward neural networks with general piece-wise linear activation functions. To evaluate our implementation, we reutilize the ACAS Xu benchmark and interpret each ReLU activation function as a general piece-wise linear function. To run experiments with the generalized analysis, please use the following commands, specifying the `generalized` flag:
+
+```shell
+$ make example_ACASbenchmark_verification
+$ ../nnBenchmarkVerification.sh acasxu exact ACASXU_experimental_v2a_2_4.nnet poly_prop3_input.in poly_prop3_safe.in generalized
+```
+
+
 #### Drone hovering
 
-First of all, we would like to express our deepest gratitude to Dario Guidotti, Stefano Demarchi, and Armando Tacchella for generously sharing their drone hovering benchmark with us. This benchmark comprises eight neural networks. The first four consist of two hidden layers, and the other four networks consist of three hidden layers, each followed by a ReLU activation function. For each network, two safety properties are provided. 
+We would like to express our deepest gratitude to Dario Guidotti, Stefano Demarchi, and Armando Tacchella for generously sharing their drone hovering benchmark with us. This benchmark comprises eight neural networks. The first four consist of two hidden layers, and the other four networks consist of three hidden layers, each followed by a ReLU activation function. For each network, two safety properties are provided. 
 
 As an example, to compile the binary and verify the network AC7.nnet using the second safety property, please follow these commands:
 
@@ -92,13 +126,22 @@ $ ../nnBenchmarkVerification.sh drones exact AC7.nnet prop_AC7_02.in safe_AC7_02
 
 #### Thermostat controller
 
-The benchmark discussed in [this](https://ths.rwth-aachen.de/wp-content/uploads/sites/4/master_thesis_jiang.pdf) Master’s thesis includes a neural network controller that regulates room temperature within the range of 17°C to 23°C using a thermostat. It accomplishes this by activating (mode on) and deactivating (mode off) the heater based on the sensed temperature. The neural network representing the thermostat's controller is a feedforward neural network with three layers. The input comprises two neurons that represent the temperature and the current mode (on or off). Additionally, there are two hidden layers, each with ten neurons. Finally, using the unit step activation function, the output layer predicts whether the heater should turn on or off, generating the corresponding control input.
+The benchmark discussed in [this](https://ths.rwth-aachen.de/wp-content/uploads/sites/4/master_thesis_jiang.pdf) Master’s thesis includes a neural network controller that regulates room temperature within the range of 17°C to 23°C using a thermostat. It accomplishes this by activating (mode on) and deactivating (mode off) the heater based on the sensed temperature. The neural network representing the thermostat's controller is a feedforward neural network with three layers. The input comprises two neurons that represent the temperature and the current mode (on or off). Additionally, there are two hidden layers, each with ten neurons. Finally, using the unit step activation function, the output layer predicts whether the heater should turn on or off, generating the corresponding control input. 
 
-To compile and test this benchmark, please follow these commands:
+We provide two safety properties for this benchmark. The first property $\mathcal{P}_1$ is bounded, while the other property $\mathcal{P}_2$ is unbounded. Since $\mathcal{P}_1$ is inherently unsafe, the construction of the complete counter input set is possible. For $\mathcal{P}_2$ we only verify safety.
+
+To compile and test this benchmark with $\mathcal{P}_1$, please follow these commands:
 
 ```shell
 $ make example_thermostat_verification
-$ ../nnBenchmarkVerification.sh thermostat exact fc_thermostat.nnet poly_thermostat.in
+$ ../nnBenchmarkVerification.sh thermostat exact fc_thermostat.nnet poly_thermostat_OFF.in safe_thermostat_OFF.in
+```
+
+Alternatively, for verifying $\mathcal{P}_2$, please use:
+
+```shell
+$ make example_thermostat_verification
+$ ../nnBenchmarkVerification.sh thermostat overapprox fc_thermostat.nnet poly_thermostat_ON.in safe_thermostat_ON.in
 ```
 
 #### Sonar classifier

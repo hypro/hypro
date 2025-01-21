@@ -41,7 +41,7 @@ std::vector<hypro::Starset<Number>> HardSigmoidLayer<Number>::reachHardSigmoid( 
 				FATAL( "hypro.neuralnets.activation_functions.HardSigmoid", "Invalid analysis method specified" );
 		}
 		if ( plotIntermediates ) {
-#pragma omp critical
+// #pragma omp critical
 			for ( int j = 0; j < resultSet.size(); j++ ) {
 				plotter.addObject( resultSet[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
 			}
@@ -96,7 +96,7 @@ std::vector<Starset<Number>> HardSigmoidLayer<Number>::forwardPass( const std::v
 	for ( const auto& set : inputSets ) {
 		std::cout << "set in forwardpass:  " << set << std::endl;
 		auto resultSets = reachHardSigmoid( set, method, plotIntermediates );
-#pragma omp critical
+// #pragma omp critical
 		result.insert( result.end(), resultSets.begin(), resultSets.end() );
 	}
 

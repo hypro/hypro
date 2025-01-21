@@ -12,8 +12,10 @@ namespace hypro {
 template <typename Number>
 class ReLU {
   public:
-	static std::vector<hypro::Starset<Number>> stepReLU( int i, std::vector<hypro::Starset<Number>>& input_sets );
-	static std::vector<hypro::Starset<Number>> approxStepReLU( int i, std::vector<hypro::Starset<Number>>& input_sets );
+	static std::vector<hypro::Starset<Number>> stepReLU( int i, const std::vector<hypro::Starset<Number>>& input_sets );
+	static std::vector<hypro::Starset<Number>> approxStepReLU( int i, const std::vector<hypro::Starset<Number>>& input_sets );
+
+	static void resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows);
 
   private:
 	ReLU(){};

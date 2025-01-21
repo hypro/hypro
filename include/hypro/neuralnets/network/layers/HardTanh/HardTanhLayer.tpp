@@ -40,7 +40,7 @@ std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::reachHardTanh( const 
 				FATAL( "hypro.neuralnets.activation_functions.hardtanh", "Invalid analysis method specified" );
 		}
 		if ( plotIntermediates ) {
-#pragma omp critical
+// #pragma omp critical
 			for ( int j = 0; j < resultSet.size(); j++ ) {
 				plotter.addObject( resultSet[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
 			}
@@ -94,7 +94,7 @@ std::vector<Starset<Number>> HardTanhLayer<Number>::forwardPass( const std::vect
 
 	for ( const auto& set : inputSets ) {
 		auto resultSets = reachHardTanh( set, method, plotIntermediates );
-#pragma omp critical
+// #pragma omp critical
 		{ result.insert( result.end(), resultSets.begin(), resultSets.end() ); };
 	}
 

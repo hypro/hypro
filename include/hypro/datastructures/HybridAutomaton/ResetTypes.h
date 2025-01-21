@@ -116,7 +116,7 @@ namespace hypro {
                         out << "0";
                     }
                 } else {
-                    out << to_string<Number>(in.mTransformation.matrix().row(row));
+                    out << to_string<Number>(in.mTransformation.matrix().row(row), false);
                 }
                 if (in.mTransformation.vector()(row) != 0) {
                     if (allZero || in.mTransformation.vector()(row) < 0) {
@@ -190,11 +190,12 @@ namespace hypro {
                 } else {
                     first = false;
                 }
-                if (i.isEmpty()) {
+                if (i.is_empty()) {
                     out << "x" << pos << " := x" << pos;
                     ++pos;
                 } else {
                     out << "x" << pos << " := " << i;
+                    ++pos;
                 }
             }
             return out;

@@ -13,7 +13,15 @@
 #include <iostream>
 #include <vector>
 
-typedef double Number;
+// Custom square root function for mpq_class numbers
+mpq_class sqrt(const mpq_class& x) {
+    mpf_class x_mpf(x); // Convert mpq_class to mpf_class
+    mpf_sqrt(x_mpf.get_mpf_t(), x_mpf.get_mpf_t()); // Compute square root
+    return mpq_class(x_mpf); // Convert back to mpq_class
+}
+
+
+typedef mpq_class Number;
 
 int main( int argc, char* argv[] ) {
 	std::cout << "\nSystem arguments: ";
