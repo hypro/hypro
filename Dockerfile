@@ -9,8 +9,11 @@ RUN apt-get update \
     openjdk-8-jre \
     uuid-dev \
     pkg-config \
-    libboost-dev \ 
-    iputils-ping
+    libboost-dev \
+    iputils-ping \
+    python3-distutils python3-dev \
+    libz3-dev
+
 COPY / /root/hypro/
 WORKDIR /root/hypro
 RUN cd /root/hypro && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DHYPRO_LOGGING=OFF -DHYPRO_STATISTICS=ON ..
