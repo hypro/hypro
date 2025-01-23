@@ -60,7 +60,7 @@ namespace hypro {
         if (mSettings.underapproxReach && outUnderApprox.has_value()) {
             // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
             std::tie (std::ignore, segmentUnder) = intersect(firstSegmentUnder, loc->getInvariant(), mSubspace);
-            (outUnderApprox.value()) = segmentUnder;
+            *(outUnderApprox.value()) = segmentUnder;
             ++(outUnderApprox.value());   
         }
 
@@ -100,7 +100,7 @@ namespace hypro {
                 // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
                 std::tie(std::ignore, segmentUnder) = intersect(segmentUnder, loc->getInvariant(), mSubspace);
                 
-                (outUnderApprox.value()) = segmentUnder;
+                *(outUnderApprox.value()) = segmentUnder;
                 ++(outUnderApprox.value()); 
             }
 

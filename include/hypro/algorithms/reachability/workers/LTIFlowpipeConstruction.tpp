@@ -141,10 +141,15 @@ namespace hypro {
         TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
         Representation firstSegmentOver = firstSegment.minkowskiSum(bloatingSet);
-        Representation firstSegmentUnder = firstSegment.minkowskiDiff(bloatingSet);
-
         firstSegmentOver.removeRedundancy();
-        firstSegmentUnder.removeRedundancy();
+
+        Representation firstSegmentUnder;
+        // minkowski diff is only implemented for HPoly (at least so far)
+        if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
+                firstSegmentUnder = firstSegment.minkowskiDiff(bloatingSet);
+                firstSegmentUnder.removeRedundancy();
+        }
+
 
         return {firstSegmentOver, firstSegmentUnder};
     }

@@ -39,6 +39,8 @@ namespace hypro {
     struct JumpSuccessor {
         const Transition<Location> *transition;
         std::vector<TimedValuationSet<Representation>> valuationSets{};
+        // valuation set for under-approx reach
+        // std::vector<TimedValuationSet<Representation>> valuationSetsUnder{};
     };
 
     template<typename Representation>
