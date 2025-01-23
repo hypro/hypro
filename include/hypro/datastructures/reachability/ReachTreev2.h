@@ -32,6 +32,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	Location const *mLocation = nullptr;									   ///< location in which the flowpipe was computed
 	TransitionT const *mTransition{};										   ///< the transition which lead here. nullptr for roots
 	std::vector<Representation> mFlowpipe{};								   ///< contains computed flowpipe
+	std::vector<Representation> mFlowpipeUnderApprox{};						   ///< contains computed flowpipe for under-approximation  
 	Representation mInitialSet;												   ///< contains initial set for the flowpipe
 	carl::Interval<SegmentInd> mTimings{};									   ///< global time covered by inital set (used as offset)
 	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
@@ -104,11 +105,29 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 
 	std::vector<Representation> const &getFlowpipe() const { return mFlowpipe; }
 
+	/**
+	 * @brief Get access to the flowpipe for the under-approximation
+	 * @return std::vector<Representation>*
+	 */
+	std::vector<Representation> &getFlowpipeUnderApprox() { return mFlowpipeUnderApprox; }
+
+	std::vector<Representation> const &getFlowpipeUnderApprox() const { return mFlowpipeUnderApprox; }
+
+	///////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////
+
 	void setFlowpipe( std::vector<Representation> &&fp ) { mFlowpipe = std::move( fp ); }
 
 	void setFlowpipe( const std::vector<Representation> &fp ) { mFlowpipe = fp; }
 
-	void forgetFlowpipe() { mFlowpipe.clear(); }
+	void setFlowpipeUnderApprox( std::vector<Representation> &&fp ) { mFlowpipeUnderApprox = std::move( fp ); }
+
+	void setFlowpipeUnderApprox( const std::vector<Representation> &fp ) { mFlowpipeUnderApprox = fp; }
+
+	///////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////
+
+	void forgetFlowpipe() { mFlowpipe.clear(); mFlowpipeUnderApprox.clear(); }
 
 	const REACHABILITY_RESULT &getSafety() const { return mSafetyResult; }
 

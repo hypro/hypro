@@ -106,6 +106,49 @@ namespace hypro {
         return firstSegment;
     }
 
+    // it creates the under- and over-approximation of the first segment
+    // it inly work with HPolytope since the Minkowski difference is only implemented for that state set representation
+    template<class Representation, class Number>
+    std::pair<Representation, Representation> constructFirstSegments(Representation const &initialSet,
+                                         linearFlow<Number> const &flow,
+                                         matrix_t<Number> const &rawTransformation,
+                                         tNumber timeStep) {
+
+        TRACE("hypro", " inside constructFirstSegments");
+
+        // Zero'd dummy external input
+        Box<Number> externalInput{std::make_pair(
+                Point<Number>{vector_t<Number>::Zero(flow.dimension())},
+                Point<Number>{vector_t<Number>::Zero(flow.dimension())})};
+
+        ErrorBoxes errorBoxes = constructErrorBoxes(
+                carl::convert<tNumber, Number>(timeStep),
+                flow.getFlowMatrix(),
+                initialSet,
+                rawTransformation,
+                externalInput);
+
+        Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
+                                                                 timeTrafoVectorBlock(rawTransformation));
+
+        Representation firstSegment = atDelta.unite(initialSet);
+
+        auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
+        Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
+
+        TRACE("hypro", "atDelta: " << atDelta.vertices());
+        TRACE("hypro", "init: " << initialSet.vertices());
+        TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
+
+        Representation firstSegmentOver = firstSegment.minkowskiSum(bloatingSet);
+        Representation firstSegmentUnder = firstSegment.minkowskiDiff(bloatingSet);
+
+        firstSegmentOver.removeRedundancy();
+        firstSegmentUnder.removeRedundancy();
+
+        return {firstSegmentOver, firstSegmentUnder};
+    }
+
     template<class Representation, class Number>
     ErrorBoxes<Number>
     constructErrorBoxes(Number const &delta, matrix_t<Number> const &flowMatrix, Representation const &initialSet,

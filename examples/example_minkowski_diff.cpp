@@ -22,55 +22,53 @@
 using Number = mpq_class;
 using Interval = carl::Interval<Number>;
 
-int main() {
+int main(int argc, char ** argv) {
+
+    int exampleNumber = 1;
+
+    if (argc > 1) {
+        exampleNumber = strtol(argv[1], nullptr, 10);
+    }
+
     auto &plotter = hypro::Plotter<Number>::getInstance();
-
-    // typename hypro::VPolytope<Number>::pointVector points;
-    // points.push_back(hypro::Point<Number>({-3, 8}));
-    // points.push_back(hypro::Point<Number>({-5, 4}));
-    // points.push_back(hypro::Point<Number>({3, 4}));
-    // hypro::VPolytope<Number> vpoly1 = hypro::VPolytope<Number>(points);
-
-
-    // std::vector<Interval> intervals;
-    // intervals.push_back(Interval(-0.1, 0.2));
-    // intervals.push_back(Interval(-0.1, 0.2));
-    // hypro::Box<Number> bloatBox{intervals};
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////
-
-
     typename hypro::VPolytope<Number>::pointVector points;
-    points.push_back(hypro::Point<Number>({1, 4}));
-    points.push_back(hypro::Point<Number>({1, 2}));
-    points.push_back(hypro::Point<Number>({3, 2}));
-    points.push_back(hypro::Point<Number>({3, 4}));
-    hypro::VPolytope<Number> vpoly1 = hypro::VPolytope<Number>(points);
-
-
     std::vector<Interval> intervals;
-    intervals.push_back(Interval(3, 4));
-    intervals.push_back(Interval(5, 6));
+
+    switch (exampleNumber)
+    {
+    case 1:
+        points.push_back(hypro::Point<Number>({-3, 8}));
+        points.push_back(hypro::Point<Number>({-5, 4}));
+        points.push_back(hypro::Point<Number>({3, 4}));
+
+        intervals.push_back(Interval(-0.1, 0.2));
+        intervals.push_back(Interval(-0.1, 0.2));
+        break;
+
+    case 2:
+        points.push_back(hypro::Point<Number>({1, 4}));
+        points.push_back(hypro::Point<Number>({1, 2}));
+        points.push_back(hypro::Point<Number>({3, 2}));
+        points.push_back(hypro::Point<Number>({3, 4}));
+
+        intervals.push_back(Interval(3, 4));
+        intervals.push_back(Interval(5, 6));
+        break;
+    case 3:
+        points.push_back(hypro::Point<Number>({-5, 5}));
+        points.push_back(hypro::Point<Number>({3, 8}));
+        points.push_back(hypro::Point<Number>({7, 3}));
+        points.push_back(hypro::Point<Number>({1, -4}));
+        points.push_back(hypro::Point<Number>({-6, -3}));
+
+        intervals.push_back(Interval(-0.1, 0.2));
+        intervals.push_back(Interval(-0.1, 0.2));
+        break;
+    }
+
+    hypro::VPolytope<Number> vpoly1 = hypro::VPolytope<Number>(points);
     hypro::Box<Number> bloatBox{intervals};
 
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////
-
-    // typename hypro::VPolytope<Number>::pointVector points;
-    // points.push_back(hypro::Point<Number>({-5, 5}));
-    // points.push_back(hypro::Point<Number>({3, 8}));
-    // points.push_back(hypro::Point<Number>({7, 3}));
-    // points.push_back(hypro::Point<Number>({1, -4}));
-    // points.push_back(hypro::Point<Number>({-6, -3}));
-
-    // hypro::VPolytope<Number> vpoly1 = hypro::VPolytope<Number>(points);
-
-
-    // std::vector<Interval> intervals;
-    // intervals.push_back(Interval(-0.1, 0.2));
-    // intervals.push_back(Interval(-0.1, 0.2));
-    // hypro::Box<Number> bloatBox{intervals};
 
 
     hypro::HPolytope<Number> stateSetH = hypro::Converter<Number>::toHPolytope(vpoly1);
@@ -80,17 +78,6 @@ int main() {
     auto resultOfMinkDiff = stateSetH.minkowskiDiff(bloatBoxH);
 
     auto maybeOriginal = resultOfMinkSum.minkowskiDiff(bloatBoxH);
-
-
-    // for (auto halfspace : stateSetH.constraints()) {
-    //     hypro::HPolytope<Number> HFromOne({halfspace});
-
-    //     for (auto halfspaceFromOne : HFromOne.minkowskiSum(bloatBoxH)) {
-
-    //         if ()
-
-    //     }
-    // }
 
 
     plotter.setFilename("out");
@@ -106,9 +93,5 @@ int main() {
     plotter.addObject(resultOfMinkSum.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[1]);
     plotter.addObject(resultOfMinkDiff.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[2]);
 
-
-    
-    
-    plotter.plot2d(hypro::PLOTTYPE::pdf, false);
-    
+    plotter.plot2d(hypro::PLOTTYPE::pdf, true);
 }

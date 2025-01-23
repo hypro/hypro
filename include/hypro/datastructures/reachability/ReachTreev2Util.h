@@ -57,6 +57,14 @@ namespace hypro {
     }
 
     template<typename RootType>
+    auto getFlowpipesUnderApprox(
+            RootType &&root) -> std::vector<std::vector<typename detail::UnpackRepresentation<RootType>::Representation>> {
+        std::vector<std::vector<typename detail::UnpackRepresentation<RootType>::Representation>> res;
+        visitPreorder(std::forward<RootType>(root), [&res](auto &node) { res.insert(res.end(), node.getFlowpipeUnderApprox()); });
+        return res;
+    }
+
+    template<typename RootType>
     auto getSegments(RootType &&root) -> std::vector<typename detail::UnpackRepresentation<RootType>::Representation> {
         std::vector<typename detail::UnpackRepresentation<RootType>::Representation> res;
         visitPreorder(std::forward<RootType>(root), [&res](auto &node) {

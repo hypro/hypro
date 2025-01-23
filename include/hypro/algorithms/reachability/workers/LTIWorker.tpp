@@ -17,7 +17,8 @@ namespace hypro {
     LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessors(const Representation &initialSet,
                                                                       LocationT const *loc, OutputIt out,
                                                                       long int segmentsToCompute,
-                                                                      bool checkSafety) const {
+                                                                      bool checkSafety, std::optional<OutputIt> outUnderApprox) const {
+
         if (segmentsToCompute < 0) {
             segmentsToCompute = mNumSegments;
         } else if (segmentsToCompute == 0) {
@@ -25,10 +26,23 @@ namespace hypro {
                   "No segments to compute (reached global time horizon, segmentsToCompute == 0), return.");
             return REACHABILITY_RESULT::SAFE;
         }
-        Representation firstSegment = constructFirstSegment(initialSet, loc->getLinearFlow(mSubspace),
+
+        Representation firstSegment;
+        Representation firstSegmentUnder;
+        if (mSettings.underapproxReach) {
+            auto firstSegmentOverUnder = constructFirstSegments(initialSet, loc->getLinearFlow(mSubspace),
                                                             mTrafoCache.getTransformation(loc, mSettings.timeStep,
                                                                                           mSubspace).fullMatrix,
                                                             mSettings.timeStep);
+            firstSegment = firstSegmentOverUnder.first;
+            firstSegmentUnder = firstSegmentOverUnder.second;
+
+        } else {
+            firstSegment = constructFirstSegment(initialSet, loc->getLinearFlow(mSubspace),
+                                                            mTrafoCache.getTransformation(loc, mSettings.timeStep,
+                                                                                          mSubspace).fullMatrix,
+                                                            mSettings.timeStep);
+        }
 
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
         // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
@@ -37,12 +51,22 @@ namespace hypro {
                   "First segment is not contained in the invariant, abort time successor computation.");
             return REACHABILITY_RESULT::SAFE;
         }
-
         // insert segment
         *out = segment;
         ++out;
 
+        // need the declaration, because it get's assigned inside the if, and after leaving the scope segmentUnder no longer exists
+        Representation segmentUnder;
+        if (mSettings.underapproxReach && outUnderApprox.has_value()) {
+            // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
+            std::tie (std::ignore, segmentUnder) = intersect(firstSegmentUnder, loc->getInvariant(), mSubspace);
+            (outUnderApprox.value()) = segmentUnder;
+            ++(outUnderApprox.value());   
+        }
+
+
         // intersect with badstates
+        // if the over-approximation doesn't intersect the bad state, also the under-approximation will not, so there is no point in checking it
         if (checkSafety) {
             std::tie(containment, std::ignore) = ltiIntersectBadStates(segment, loc, mHybridAutomaton, mSubspace);
             if (containment != CONTAINMENT::NO) {
@@ -70,6 +94,17 @@ namespace hypro {
 
             *out = segment;
             ++out;
+
+            if (mSettings.underapproxReach && outUnderApprox.has_value()) {
+                segmentUnder = applyTimeEvolution(segmentUnder, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
+                // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
+                std::tie(std::ignore, segmentUnder) = intersect(segmentUnder, loc->getInvariant(), mSubspace);
+                
+                (outUnderApprox.value()) = segmentUnder;
+                ++(outUnderApprox.value()); 
+            }
+
+
 
             // intersect with badstates
             if (checkSafety) {

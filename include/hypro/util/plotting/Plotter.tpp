@@ -113,7 +113,10 @@ namespace hypro {
                 oldestTask.wait();
                 gnuplotThreads.pop();
             }
-            gnuplotThreads.emplace(std::async(std::launch::async, [&]() { std::system(ss.str().c_str()); }));
+            
+            //TODO: the async version doesn't work, so calling it directly now. 
+            std::system(ss.str().c_str());
+            // gnuplotThreads.emplace(std::async(std::launch::async, [&]() { std::system(ss.str().c_str()); }));
 #endif
         }
     }

@@ -52,7 +52,7 @@ namespace hypro {
                         }
 
                         auto result = processNode(worker, currentNode, transformationCache);
-                        if (!mParameters.saveReachableSegments) {
+                        if (!mParameters.saveReachableSegments) {  
                             currentNode->forgetFlowpipe();
                         }
                         if (result.isFailure()) {
@@ -130,11 +130,28 @@ namespace hypro {
             if (segmentsToCompute < 0) {
                 segmentsToCompute = 0;
             }
-            safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
-                                                        std::back_inserter(node->getFlowpipe()), segmentsToCompute);
+
+            if (mParameters.underapproxReach) {
+                // start over- and under-approximative time step calculation
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+                                                            std::back_inserter(node->getFlowpipe()), 
+                                                            std::back_inserter(node->getFlowpipeUnderApprox()),
+                                                            segmentsToCompute);
+            } else {
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+                                                            std::back_inserter(node->getFlowpipe()), segmentsToCompute);
+            }
         } else {
-            safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+
+            if (mParameters.underapproxReach) {
+                // start over- and under-approximative time step calculation
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+                                                            std::back_inserter(node->getFlowpipe()), 
+                                                            std::back_inserter(node->getFlowpipeUnderApprox()));
+            } else {
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
                                                         std::back_inserter(node->getFlowpipe()));
+            }
         }
 
         // check, whether the full time horizon has been exploited - if not, an invariant has bound the evolution and we might have a timelock

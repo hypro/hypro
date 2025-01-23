@@ -19,6 +19,8 @@
 #include "../types.h"
 #include "../util.h"
 
+#include <utility>
+
 namespace hypro {
 
     template<class Number>
@@ -33,6 +35,12 @@ namespace hypro {
 
     template<class Representation, class Number>
     Representation constructFirstSegment(Representation const &initialSet,
+                                         linearFlow<Number> const &flow,
+                                         matrix_t<Number> const &rawTransformation,
+                                         tNumber timeStep);
+
+    template<class Representation, class Number>
+    std::pair<Representation, Representation> constructFirstSegments(Representation const &initialSet,
                                          linearFlow<Number> const &flow,
                                          matrix_t<Number> const &rawTransformation,
                                          tNumber timeStep);
