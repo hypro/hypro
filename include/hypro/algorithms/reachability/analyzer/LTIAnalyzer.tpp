@@ -114,7 +114,7 @@ namespace hypro {
                                                                                 ReachTreeNode<State, LocationT> *node,
                                                                                 TimeTransformationCache<LocationT> &transformationCache) -> LTIResult {
         REACHABILITY_RESULT safetyResult;
-
+        std::cout << "process node " << std::endl;   
         // set bounding box required for fixed-point test
         if (mParameters.detectJumpFixedPoints && !node->getInitialBoundingBox()) {
             node->setBoundingBox(Converter<Number>::toBox(node->getInitialSet()).intervals());
@@ -133,7 +133,7 @@ namespace hypro {
 
             if (mParameters.underapproxReach) {
                 // start over- and under-approximative time step calculation
-                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getInitialSetUnderApprox(), node->getLocation(),
                                                             std::back_inserter(node->getFlowpipe()), 
                                                             std::back_inserter(node->getFlowpipeUnderApprox()),
                                                             segmentsToCompute);
@@ -142,10 +142,11 @@ namespace hypro {
                                                             std::back_inserter(node->getFlowpipe()), segmentsToCompute);
             }
         } else {
+            std::cout << "calc time successor " << std::endl;
 
             if (mParameters.underapproxReach) {
                 // start over- and under-approximative time step calculation
-                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getInitialSetUnderApprox(), node->getLocation(),
                                                             std::back_inserter(node->getFlowpipe()), 
                                                             std::back_inserter(node->getFlowpipeUnderApprox()));
             } else {
@@ -195,8 +196,9 @@ namespace hypro {
         }
 
         // create jump successor tasks
-        for (const auto &[transition, timedValuationSets]: worker.computeJumpSuccessors(node->getFlowpipe(),
-                                                                                        node->getLocation())) {
+        for (const auto &[transition, timedValuationSets, timedValuationSetsUnder]: worker.computeJumpSuccessors(node->getFlowpipe(), node->getLocation(), 
+                                                                                        node->getFlowpipeUnderApprox())) {
+            std::cout << "jump successor task" << std::endl;
             // Omit Zeno-transitions
             if (mParameters.detectZenoBehavior &&
                 std::find(std::begin(ZenoTransitions), std::end(ZenoTransitions), transition) !=
@@ -206,6 +208,11 @@ namespace hypro {
                                                        << transition->getTarget()->getName() << " is on a Zeno-cycle");
                 continue;
             }
+
+            std::cout << "before timed valuation sets" << std::endl << std::endl;
+            auto itUnder = timedValuationSetsUnder.begin();
+
+            std::cout << "length of timedValuationSets " << timedValuationSets.size() << std::endl;
 
             for (const auto [valuationSet, segmentsInterval]: timedValuationSets) {
                 // update reachTree
@@ -222,14 +229,26 @@ namespace hypro {
                     DEBUG("hypro.reachability", "Node does not have a timelock");
                     timelock = TRIBOOL::FALSE;
                 }
+                std::cout << "add new child" << std::endl;
+                // auto valSetUnder = (mParameters.underapproxReach) ? itUnder->valuationSet : decltype(valuationSet)() ;
                 // in any case add node to the search tree
-                ReachTreeNode<State, LocationT> &childNode = node->addChild(valuationSet, globalDuration, transition);
+            
+                ReachTreeNode<State, LocationT> *childNode;
+                if (mParameters.underapproxReach) {
+                    childNode = &node->addChild(valuationSet, itUnder->valuationSet, globalDuration, transition);
+                    ++itUnder;
+                } else {
+                    childNode = &node->addChild(valuationSet, globalDuration, transition);
+                }
+                
+                std::cout << "after add new child" << std::endl;
+                
                 // if desired, try to detect fixed-point
                 bool fixedPointReached = mParameters.detectJumpFixedPoints;
                 auto boundingBox = std::vector<carl::Interval<Number>>{};
                 if (mParameters.detectJumpFixedPoints) {
-                    boundingBox = Converter<Number>::toBox(childNode.getInitialSet()).intervals();
-                    fixedPointReached = detectJumpFixedPoint(childNode, mRoots, mCallbacks.fixedPointCallback,
+                    boundingBox = Converter<Number>::toBox(childNode->getInitialSet()).intervals();
+                    fixedPointReached = detectJumpFixedPoint(*childNode, mRoots, mCallbacks.fixedPointCallback,
                                                              mParameters.detectFixedPointsByCoverage,
                                                              mParameters.numberSetsForContinuousCoverage);
                 }
@@ -237,13 +256,13 @@ namespace hypro {
                 // set bounding box to speed up search in case the option is enabled.
                 // IMPORTANT: This has to be done *after* fp-detection to ensure that the node does not consider itself during fp-detection
                 if (mParameters.detectJumpFixedPoints) {
-                    childNode.setBoundingBox(boundingBox);
+                    childNode->setBoundingBox(boundingBox);
                 }
                 // create Task, push only to queue, in case no fixed-point has been detected or detection is disabled
                 if (!fixedPointReached) {
                     DEBUG("hypro.reachability",
-                          "Add node-successor (@ " << &childNode << ") to work-queue, path: " << childNode.getPath());
-                    addToQueue(&childNode);
+                          "Add node-successor (@ " << *childNode << ") to work-queue, path: " << childNode->getPath());
+                    addToQueue(childNode);
                     // mWorkQueue.push_front( &childNode );
                 } else {
                     DEBUG("hypro.reachability", "Fixed point detected in node-successor");

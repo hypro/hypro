@@ -20,8 +20,7 @@
 #include "hypro/util/statistics/statistics.h"
 
 template<typename Number, typename Representation>
-static void computeReachableStates(const std::string &filename,
-                                   const hypro::representation_name &type) {
+static void computeReachableStates(const std::string &filename) {
     using Automaton = hypro::HybridAutomaton<Number>;
     using clock = std::chrono::high_resolution_clock;
     using timeunit = std::chrono::microseconds;
@@ -35,6 +34,7 @@ static void computeReachableStates(const std::string &filename,
     auto roots = hypro::makeRoots<Representation, Automaton>(automaton);
 
     hypro::AnalysisParameters analysisParams = settings.strategy().front();
+    analysisParams.underapproxReach = false;
 
     hypro::reachability::Reach<Representation, Automaton> reacher(automaton, settings.fixedParameters(), analysisParams,
                                                                   roots);
@@ -138,8 +138,7 @@ int main(int argc, char **argv) {
     using Number = double;
 
     using Representation = hypro::HPolytope<Number>;
-    computeReachableStates<Number, Representation>(
-            filename, hypro::representation_name::polytope_h);
+    computeReachableStates<Number, Representation>(filename);
      
 
     exit(0);

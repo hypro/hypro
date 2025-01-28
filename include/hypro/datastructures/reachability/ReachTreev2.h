@@ -34,6 +34,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	std::vector<Representation> mFlowpipe{};								   ///< contains computed flowpipe
 	std::vector<Representation> mFlowpipeUnderApprox{};						   ///< contains computed flowpipe for under-approximation  
 	Representation mInitialSet;												   ///< contains initial set for the flowpipe
+	Representation mInitialSetUnderApprox;									   ///< contains initial set for the flowpipe, for under-approximation
 	carl::Interval<SegmentInd> mTimings{};									   ///< global time covered by inital set (used as offset)
 	std::optional<std::vector<carl::Interval<Number>>> mInitialBoundingBox{};  ///< optional bounding box of the initial set
 	TRIBOOL mHasFixedPoint = TRIBOOL::NSET;									   ///< true, if the initial set of this node is strictly contained in the initial set of another node in the current tree
@@ -64,15 +65,31 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		, mTimings( timings ) {
 	}
 
+	ReachTreeNode( ReachTreeNode *parent, TransitionT const *transition, Location const *loc,
+				   Representation initialSet, Representation initialSetUnder, carl::Interval<SegmentInd> timings )
+		: Base( parent )
+		, mLocation( loc )
+		, mTransition( transition )
+		, mInitialSet( initialSet )
+		, mTimings( timings ) 
+		, mInitialSetUnderApprox(initialSetUnder) {
+	}
+
 	ReachTreeNode( Location const *loc, Representation initialSet, carl::Interval<SegmentInd> timings )
 		: mLocation( loc )
 		, mInitialSet( initialSet )
 		, mTimings( timings ) {
 	}
 
+	ReachTreeNode( Location const *loc, Representation initialSet, Representation initialSetUnder, carl::Interval<SegmentInd> timings )
+		: mLocation( loc )
+		, mInitialSet( initialSet )
+		, mInitialSetUnderApprox( initialSetUnder )
+		, mTimings( timings ) {
+	}
+
 	/**
 	 * @brief Add a child that was reached by a discrete jump
-	 * @param flowpipe The flowpipe in the new location
 	 * @param initialSet The initial set in the location after the jump
 	 * @param timings The time slots which the initial set covers, i.e. during which the transition was enabled
 	 * @param transition The transition taken to the new location
@@ -80,6 +97,18 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	 */
 	ReachTreeNode &
 	addChild( Representation initialSet, carl::Interval<SegmentInd> timings, TransitionT const *transition );
+
+
+	/**
+	 * @brief Add a child that was reached by a discrete jump, used during under-approximation
+	 * @param initialSet The initial set in the location after the jump
+	 * @param initialSet The initial set used during under-approximation in the location after the jump
+	 * @param timings The time slots which the initial set covers, i.e. during which the transition was enabled
+	 * @param transition The transition taken to the new location
+	 * @return A reference to the new child
+	 */
+	ReachTreeNode &
+	addChild( Representation initialSet, Representation initialSetUnderApprox, carl::Interval<SegmentInd> timings, TransitionT const *transition );
 
 	/**
 	 * @brief Get the path to the current node (computed)
@@ -147,6 +176,12 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	 * @return const Representation&
 	 */
 	const Representation &getInitialSet() const { return mInitialSet; }
+
+	/**
+	 * @brief Get the initial set for under-approx
+	 * @return const Representation&
+	 */
+	const Representation &getInitialSetUnderApprox() const { return mInitialSetUnderApprox; }
 
 	[[deprecated( "Use getInitialSet() instead." )]] const Representation &getState() const { return mInitialSet; }
 
@@ -269,6 +304,9 @@ std::vector<ReachTreeNode<Representation, typename Automaton::LocationType>> mak
 					[]( auto const &locCond ) {
 						auto const &[location, condition] = locCond;
 						return ReachTreeNode<Representation, typename Automaton::LocationType>{ location,
+																								Representation{
+																									  condition.getMatrix(),
+																									  condition.getVector() },
 																								Representation{
 																									  condition.getMatrix(),
 																									  condition.getVector() },

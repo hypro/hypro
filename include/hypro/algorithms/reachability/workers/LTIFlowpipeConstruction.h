@@ -40,10 +40,10 @@ namespace hypro {
                                          tNumber timeStep);
 
     template<class Representation, class Number>
-    std::pair<Representation, Representation> constructFirstSegments(Representation const &initialSet,
+    Representation constructFirstSegments(Representation const &initialSet, Representation const &initialSetUnder,
                                          linearFlow<Number> const &flow,
                                          matrix_t<Number> const &rawTransformation,
-                                         tNumber timeStep);
+                                         tNumber timeStep, bool underApproximate=false);
 
     template<class Representation, class Number>
     ErrorBoxes<Number>

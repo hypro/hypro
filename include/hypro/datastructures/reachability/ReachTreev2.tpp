@@ -20,6 +20,15 @@ namespace hypro {
     }
 
     template<typename Representation, typename Location>
+    ReachTreeNode<Representation, Location> &
+    ReachTreeNode<Representation, Location>::addChild(Representation initialSet, Representation initialSetUnderApprox,
+                                                      carl::Interval<SegmentInd> timings,
+                                                      const TransitionT *transition) {
+        return Base::addChild(this, transition, transition->getTarget(), std::move(initialSet), std::move(initialSetUnderApprox), timings);
+    }
+
+
+    template<typename Representation, typename Location>
     auto ReachTreeNode<Representation, Location>::getPath() const -> Path<Number, Location> {
         Path<Number, Location> path{this->mDepth};
 

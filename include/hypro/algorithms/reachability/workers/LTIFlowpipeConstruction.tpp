@@ -109,10 +109,10 @@ namespace hypro {
     // it creates the under- and over-approximation of the first segment
     // it inly work with HPolytope since the Minkowski difference is only implemented for that state set representation
     template<class Representation, class Number>
-    std::pair<Representation, Representation> constructFirstSegments(Representation const &initialSet,
+    Representation constructFirstSegments(Representation const &initialSet,
                                          linearFlow<Number> const &flow,
                                          matrix_t<Number> const &rawTransformation,
-                                         tNumber timeStep) {
+                                         tNumber timeStep, bool underApproximate) {
 
         TRACE("hypro", " inside constructFirstSegments");
 
@@ -140,18 +140,17 @@ namespace hypro {
         TRACE("hypro", "init: " << initialSet.vertices());
         TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
-        Representation firstSegmentOver = firstSegment.minkowskiSum(bloatingSet);
-        firstSegmentOver.removeRedundancy();
-
-        Representation firstSegmentUnder;
-        // minkowski diff is only implemented for HPoly (at least so far)
-        if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
-                firstSegmentUnder = firstSegment.minkowskiDiff(bloatingSet);
-                firstSegmentUnder.removeRedundancy();
+        if (underApproximate) {
+                // had to add it this way, because the representation check has to be a const expression (so it can be evaluated in compile time)
+                if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
+                        firstSegment = firstSegment.minkowskiDiff(bloatingSet);
+                }
+        } else {
+                firstSegment = firstSegment.minkowskiSum(bloatingSet);
         }
+        firstSegment.removeRedundancy();
 
-
-        return {firstSegmentOver, firstSegmentUnder};
+        return firstSegment;
     }
 
     template<class Representation, class Number>

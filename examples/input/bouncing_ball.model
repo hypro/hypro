@@ -4,16 +4,16 @@ hybrid reachability
 
  setting
  {
-  fixed steps 0.1
-  time 1
+  fixed steps 0.05
+  time 5
   remainder estimation 1e-5
   identity precondition
-  gnuplot octagon v,x
+  gnuplot octagon x,v
   fixed orders 5
   cutoff 1e-15
   precision 128
   output bouncing_ball
-  max jumps 1
+  max jumps 2 
   print on
  }
 

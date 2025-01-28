@@ -38,7 +38,7 @@ namespace hypro {
 
         bool useMultithreading = false;                                             ///< use multithreading for reachability or not, bool variable introduced in order to get rif of one template parameter 
         bool saveReachableSegments = true;                                          ///< if true the reachable segment will be save in the modes of the reach tree, for example for plotting purposes 
-        bool underapproxReach = true;                                               ///< used to turn on under-approximative calculations for LTI 
+        bool underapproxReach = false;                                               ///< used to turn on under-approximative calculations for LTI 
     };
 
     struct FixedAnalysisParameters {
