@@ -401,7 +401,8 @@ namespace hypro {
 
         // applyReset
         for (auto &[transition, valuationSets, valuationSetsUnder]: successors) {
-            for (auto it = valuationSets.begin(), itUnder = valuationSetsUnder.begin(); it != valuationSets.end() && itUnder != valuationSetsUnder.end() ;) {
+            auto itUnder = valuationSetsUnder.begin();
+            for (auto it = valuationSets.begin(); it != valuationSets.end() ;) {
 
                 it->valuationSet = applyReset(it->valuationSet, transition->getReset());
                 if (mSettings.underapproxReach) {
@@ -419,13 +420,16 @@ namespace hypro {
                 TRACE("hypro.reachability", "Set after reset and intersection with invariant " << it->valuationSet);
                 if (containment == CONTAINMENT::NO) {
                     it = valuationSets.erase(it);
-                    itUnder = valuationSetsUnder.erase(itUnder);
+                    if (mSettings.underapproxReach) {
+                        itUnder = valuationSetsUnder.erase(itUnder);
+                    }
                 } else {
                     it->valuationSet.reduceRepresentation();
                     ++it;
-
-                    itUnder->valuationSet.reduceRepresentation();
-                    ++itUnder;   
+                    if (mSettings.underapproxReach) {
+                        itUnder->valuationSet.reduceRepresentation();
+                        ++itUnder;   
+                    }
                 }
             }
         }

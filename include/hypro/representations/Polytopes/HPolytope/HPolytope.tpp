@@ -1201,7 +1201,7 @@ namespace hypro {
         }
         if (changed) {
             std::cout << "changed" << std::endl;
-            res.removeRedundancy();
+            // res.removeRedundancy();
             std::cout << "after remove redundancy" << std::endl;
         }
         std::cout << "return from intersect halfspace" << std::endl;
