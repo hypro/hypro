@@ -91,8 +91,8 @@ create-doc:
     - mv  build/doc/html public/
 
   artifacts:
-  paths:
-    - public
+    paths:
+      - public
   
   -only:
     - feature/addDocumentationToGitlabCi  # to be changed
