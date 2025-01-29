@@ -57,10 +57,11 @@ build:
   script:
     # prepare the build tree
     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && cd ..
-    # run the build inside the build wrapper
-    - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release
-    # execute tests - required to get coverage reports
     - cd build && make doxygen-doc
+
+    # run the build inside the build wrapper
+    # - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release
+    # execute tests - required to get coverage reports
     # - cd build && make test
     # # collect coverage and write it to coverage.xml, which will be collected by the scanner
     # - gcovr -r ../ --sonarqube ../coverage.xml && cd ..
