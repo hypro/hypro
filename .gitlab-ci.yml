@@ -90,6 +90,7 @@ pages:
     - DEBIAN_FRONTEND=noninteractive apt-get update
     - DEBIAN_FRONTEND=noninteractive apt install -y doxygen graphviz
   script: 
+    - doxygen --version
     - cd build && make doxygen-doc
     - mv doc/html public 
   artifacts:
