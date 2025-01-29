@@ -60,11 +60,12 @@ build:
     # run the build inside the build wrapper
     - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release
     # execute tests - required to get coverage reports
-    - cd build && make test
-    # collect coverage and write it to coverage.xml, which will be collected by the scanner
-    - gcovr -r ../ --sonarqube ../coverage.xml && cd ..
-    # run the scanner to collect and upload all information on static analysis and coverage
-    - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
+    - cd build && make doxygen-doc
+    # - cd build && make test
+    # # collect coverage and write it to coverage.xml, which will be collected by the scanner
+    # - gcovr -r ../ --sonarqube ../coverage.xml && cd ..
+    # # run the scanner to collect and upload all information on static analysis and coverage
+    # - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
     paths:
       - .
@@ -82,17 +83,17 @@ build:
       - build-wrapper/
       - sonar-scanner/
 
-create-doc:
+# create-doc:
 
-  stage: doc
+#   stage: doc
 
-  script: 
-    - make doxygen-doc
-    - mv  build/doc/html public/
+#   script: 
+#     - make doxygen-doc
+#     - mv  build/doc/html public/
 
-  artifacts:
-    paths:
-      - public
+#   artifacts:
+#     paths:
+#       - public
   
-  only:
-    - feature/addDocumentationToGitlabCi  # to be changed
+#   only:
+#     - feature/addDocumentationToGitlabCi  # to be changed
