@@ -273,7 +273,7 @@ namespace hypro {
     };
 
     template<typename Representation, typename Location>
-    std::string print(std::vector<EnabledSets<Representation, Location>> const &pipes) {
+    std::string print(std::vector<EnabledSetsUnderOver<Representation, Location>> const &pipes) {
         std::stringstream str{};
 
         for (auto &pipe: pipes) {
@@ -324,13 +324,13 @@ namespace hypro {
         // TRACE( "hypro.reachability", "flowpipe: " << print( flowpipe ) );
 
         // transition x enabled segments, segment ind
-        std::vector<EnabledSets<Representation, typename HybridAutomaton::LocationType>> enabledSegments{};
+        std::vector<EnabledSetsUnderOver<Representation, typename HybridAutomaton::LocationType>> enabledSegments{};
 
         TRACE("hypro.reachability", "Find non-empty guard intersections");
         for (const auto &transition: loc->getTransitions()) {
             TRACE("hypro.reachability", "Consider transition " << (*transition.get()));
             auto &currentSucc = enabledSegments.emplace_back(
-                    EnabledSets<Representation, typename HybridAutomaton::LocationType>{transition.get()});
+                    EnabledSetsUnderOver<Representation, typename HybridAutomaton::LocationType>{transition.get()});
 
             SegmentInd cnt = 0;
             auto itUnderApprox = flowpipeUnderApprox.begin();

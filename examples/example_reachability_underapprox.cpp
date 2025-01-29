@@ -34,7 +34,7 @@ static void computeReachableStates(const std::string &filename) {
     auto roots = hypro::makeRoots<Representation, Automaton>(automaton);
 
     hypro::AnalysisParameters analysisParams = settings.strategy().front();
-    analysisParams.underapproxReach = false;
+    analysisParams.underapproxReach = true;
 
     hypro::reachability::Reach<Representation, Automaton> reacher(automaton, settings.fixedParameters(), analysisParams,
                                                                   roots);
@@ -65,6 +65,7 @@ static void computeReachableStates(const std::string &filename) {
         plotter.rSettings().dimensions.push_back(plottingDimensions.front());
         plotter.rSettings().dimensions.push_back(plottingDimensions.back());
         plotter.rSettings().cummulative = false;
+        plotter.rSettings().overwriteFiles = true;
 
         // bad states plotting
         typename hypro::HybridAutomaton<Number>::locationConditionMap
