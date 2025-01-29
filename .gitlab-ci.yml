@@ -94,5 +94,5 @@ create-doc:
     paths:
       - public
   
-  -only:
+  only:
     - feature/addDocumentationToGitlabCi  # to be changed
