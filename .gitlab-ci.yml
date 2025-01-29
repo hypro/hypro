@@ -67,14 +67,14 @@ build:
     # - gcovr -r ../ --sonarqube ../coverage.xml && cd ..
     # # run the scanner to collect and upload all information on static analysis and coverage
     # - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
-  artifacts:
-    paths:
-      - .
-    exclude:
-      - .git
-      - .git/**/*
-      - build/**/*.o
-    expire_in: 3 days
+  # artifacts:
+  #   paths:
+  #     - .
+  #   exclude:
+  #     - .git
+  #     - .git/**/*
+  #     - build/**/*.o
+  #   expire_in: 3 days
 
   cache:
 
