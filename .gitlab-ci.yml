@@ -13,6 +13,7 @@ variables:
 stages:
   - .pre
   - build
+  - doc
 
 
 get-sonar-binaries:
@@ -23,7 +24,7 @@ get-sonar-binaries:
 
   before_script:
     - DEBIAN_FRONTEND=noninteractive apt-get update
-    - DEBIAN_FRONTEND=noninteractive apt install -y curl zip unzip
+    - DEBIAN_FRONTEND=noninteractive apt install -y curl zip unzip doxygen
   script:
     # Download sonar-scanner
     - curl -sSLo sonar-scanner.zip "https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux.zip"
@@ -74,8 +75,24 @@ build:
     expire_in: 3 days
 
   cache:
+
     policy: pull-push
     key: "${CI_COMMIT_SHORT_SHA}"
     paths:
       - build-wrapper/
       - sonar-scanner/
+
+create-doc:
+
+  stage: doc
+
+  script: 
+    - make doxygen-doc
+    - mv  build/doc/html public/
+
+  artifacts:
+  paths:
+    - public
+  
+  -only:
+    - feature/addDocumentationToGitlabCi  # to be changed
