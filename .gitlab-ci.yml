@@ -94,16 +94,3 @@ pages:
     - public
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-
-#   stage: doc
-
-#   script: 
-#     - make doxygen-doc
-#     - mv  build/doc/html public/
-
-#   artifacts:
-#     paths:
-#       - public
-  
-#   only:
-#     - feature/addDocumentationToGitlabCi  # to be changed
