@@ -88,7 +88,7 @@ pages:
   stage: pages
   before_script:
     - DEBIAN_FRONTEND=noninteractive apt-get update
-    - DEBIAN_FRONTEND=noninteractive apt-get install -y doxygen graphviz
+    - DEBIAN_FRONTEND=noninteractive apt install -y doxygen graphviz
   script: 
     - cd build && make doxygen-doc
     - mv doc/html public 
