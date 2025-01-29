@@ -85,7 +85,7 @@ build:
       - sonar-scanner/
 
 pages:
-  state: .post
+  stage: .post
   script: 
     -- cd build && make doxygen-doc
   artifacts:
