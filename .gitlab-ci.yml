@@ -57,7 +57,7 @@ build:
   script:
     # prepare the build tree
     - mkdir build && cd build && cmake .. -DHYPRO_CICD=ON && cd ..
-    - cd build && make doxygen-doc
+
 
     # run the build inside the build wrapper
     # - build-wrapper/build-wrapper-linux-x86-64 --out-dir "${BUILD_WRAPPER_OUT_DIR}" cmake --build build/ --config Release
@@ -70,7 +70,6 @@ build:
   artifacts:
     paths:
       - .
-      - public # update expiration date
     exclude:
       - .git
       - .git/**/*
@@ -85,7 +84,14 @@ build:
       - build-wrapper/
       - sonar-scanner/
 
-# create-doc:
+pages:
+  script: 
+    -- cd build && make doxygen-doc
+  artifacts:
+    paths:
+    - public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
 #   stage: doc
 
