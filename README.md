@@ -2,7 +2,7 @@
 
 # HyPro - A C++ library for the representation of state sets for the reachability analysis of hybrid systems
 
-![CMake](![Pipeline Status](https://gitlab.com/hypro/hypro/badges/alpha/pipeline.svg?) [![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=hypro&metric=alert_status)](https://sonarcloud.io/dashboard?id=hypro)
+![CMake](https://github.com/hypro/hypro/workflows/CMake/badge.svg) [![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=hypro&metric=alert_status)](https://sonarcloud.io/dashboard?id=hypro)
 <!---master: [![Build Status](https://travis-ci.com/hypro/hypro.svg?branch=master)](https://travis-ci.com/hypro/hypro)
 alpha:  [![Build Status](https://travis-ci.com/hypro/hypro.svg?branch=alpha)](https://travis-ci.com/hypro/hypro)-->
 
