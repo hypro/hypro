@@ -67,7 +67,7 @@ namespace hypro {
             return computeTimeSuccessors(initialSet, loc, out, mNumSegments, checkSafety, std::make_optional(outUnderApprox), initialSetUnder);
         }
 
-        std::vector<JumpSuccessor<Representation, LocationT>>
+        std::vector<JumpSuccessorOverUnder<Representation, LocationT>>
         computeJumpSuccessors(std::vector<Representation> const &flowpipe, LocationT const *loc, std::vector<Representation> const &flowpipeUnderApprox = {}) const;
 
         JumpSuccessorGen

@@ -288,6 +288,21 @@ namespace hypro {
     }
 
     template<typename Representation, typename Location>
+    std::string print(std::vector<EnabledSets<Representation, Location>> const &pipes) {
+        std::stringstream str{};
+
+        for (auto &pipe: pipes) {
+            for (auto &indSet: pipe.valuationSets) {
+                str << "[" << indSet.index << "] " << indSet.valuationSet << " ";
+            }
+            str << "\n";
+        }
+        str << "\n";
+
+        return str.str();
+    }
+
+    template<typename Representation, typename Location>
     std::string print(std::vector<JumpSuccessor<Representation, Location>> const &pipes) {
         std::stringstream str{};
 
@@ -318,7 +333,7 @@ namespace hypro {
     }
 
     template<typename Representation, typename HybridAutomaton>
-    std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType>>
+    std::vector<JumpSuccessorOverUnder<Representation, typename HybridAutomaton::LocationType>>
     LTIWorker<Representation, HybridAutomaton>::computeJumpSuccessors(std::vector<Representation> const &flowpipe,
                                                                       LocationT const *loc, std::vector<Representation> const &flowpipeUnderApprox) const {
         // TRACE( "hypro.reachability", "flowpipe: " << print( flowpipe ) );
@@ -361,7 +376,7 @@ namespace hypro {
 
         TRACE("hypro.reachability", "Guard-enabling segments: " << print(enabledSegments));
 
-        std::vector<JumpSuccessor<Representation, typename HybridAutomaton::LocationType>> successors{};
+        std::vector<JumpSuccessorOverUnder<Representation, typename HybridAutomaton::LocationType>> successors{};
 
         // aggregation
         // for each transition
@@ -385,12 +400,12 @@ namespace hypro {
                 }
             }
             if (mSettings.underapproxReach) {
-                successors.emplace_back(JumpSuccessor<Representation, typename HybridAutomaton::LocationType>{transition,
+                successors.emplace_back(JumpSuccessorOverUnder<Representation, typename HybridAutomaton::LocationType>{transition,
                                                                                                             aggregate( blockSize, valuationSets),
                                                                                                             aggregate( blockSize, valuationSetsUnder) 
                                                                                                           });
             } else {
-                successors.emplace_back(JumpSuccessor<Representation, typename HybridAutomaton::LocationType>{transition,
+                successors.emplace_back(JumpSuccessorOverUnder<Representation, typename HybridAutomaton::LocationType>{transition,
                                                                                                             aggregate( blockSize, valuationSets),
                                                                                                             {} 
                                                                                                           });
