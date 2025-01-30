@@ -93,7 +93,7 @@ pages:
     - doxygen --version
     - cd build && make doxygen-doc
     # - mkdir ../public
-    - mv doc/html ../public 
+    - mv doc/html/ ../public 
   artifacts:
     paths:
     - public
