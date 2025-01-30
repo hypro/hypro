@@ -5,8 +5,7 @@
 #    include(FindDoxygen)
 #endif ()
 
-# find_package(Doxygen)
-find_package(Doxygen REQUIRED)
+find_package(Doxygen)
 
 # Configure doxygen settings file
 
