@@ -48,7 +48,7 @@ HyPro registers itself to cmake which means that any further cmake-project which
 
 ## Documentation
 
-Currently we provide an <a href="https://hypro.github.io/hypro/html/index.html" target="_blank">API documentation</a>
+Currently we provide an <a href="https://ths.pages.rwth-aachen.de/hybrid/hypro-main/" target="_blank">API documentation</a>
 created with Doxygen as well as
 a [Pdf manual](https://ths.rwth-aachen.de/wp-content/uploads/sites/4/research/HyPro/manual.pdf).
 
