@@ -22,6 +22,14 @@ jobs:
 
     steps:
 
+      - name: Test Internet Access
+        run: curl -I https://www.google.com
+
+      - name: Test Ping Command
+        shell: bash
+        run: ping www.google.com -n 2 
+        id: test_ping
+
       - name: Check Out Repo
         uses: actions/checkout@v2
 
