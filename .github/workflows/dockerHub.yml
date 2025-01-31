@@ -47,7 +47,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: hypro/hypro:${{ steps.extract_branch.outputs.branch }}
+          tags: hyprodockeruser/hypro:${{ steps.extract_branch.outputs.branch }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
