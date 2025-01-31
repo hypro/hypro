@@ -21,7 +21,6 @@
 #cmakedefine COMPARE_POLYMAKE
 #cmakedefine GNUPLOT_FOUND
 #cmakedefine HYPRO_USE_CLP
-#cmakedefine HYPRO_USE_DD_METHOD
 #cmakedefine HYPRO_USE_GLPK
 #cmakedefine HYPRO_GSL_INTEGRATION
 #cmakedefine HYPRO_HAS_GRAPHVIZ
@@ -49,6 +48,9 @@
 #cmakedefine CARL_POLY_MEMBER_SUBSTITUTE
 #cmakedefine CARL_VARIABLE_VARIANTS
 #cmakedefine CARL_LOGGING_POST_1910
+
+#cmakedefine HYPRO_USE_DD_METHOD_H_TO_V
+#cmakedefine HYPRO_USE_DD_METHOD_V_TO_H
 
 #ifdef HYPRO_USE_SOPLEX
 #define SOPLEX_WITH_GMP

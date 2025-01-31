@@ -15,7 +15,13 @@ namespace hypro {
     int initializeLogging(int &i) {
         carl::logging::logger().configure("logfile_hypro", "hypro.log");
 
+        carl::logging::logger().configure("logfile_fm_qe", "hypro.fm.qe");
+
 //        carl::logging::logger().filter("logfile_hypro")("hypro.hPolytope", carl::logging::LogLevel::LVL_TRACE);
+//        carl::logging::logger().filter("logfile_hypro")("hypro.algorithms.qe", carl::logging::LogLevel::LVL_TRACE);
+//        carl::logging::logger().filter("logfile_hypro")("hypro.quickhull", carl::logging::LogLevel::LVL_OFF);
+//        carl::logging::logger().filter("logfile_hypro")("hypro.representations.carlPolytope", carl::logging::LogLevel::LVL_TRACE);
+//        carl::logging::logger().filter("logfile_hypro")("hypro.hydra.worker", carl::logging::LogLevel::LVL_TRACE);
 
         carl::logging::logger().filter("logfile_hypro")("hypro", carl::logging::LogLevel::LVL_TRACE)(
                 "hypro.casestudies", carl::logging::LogLevel::LVL_INFO)("hypro.datastructures",

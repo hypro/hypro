@@ -113,6 +113,69 @@ namespace hypro {
         mDimension = points.front().dimension();
 
         if constexpr (is_exact<Number>) {
+#ifdef HYPRO_USE_DD_METHOD_V_TO_H
+            constexpr int NUMBER_OF_POINTS_WARNING = 150;
+			assert(points.size() > 0);
+
+			auto dim = points.at(0).dimension();
+
+			std::vector<vector_t<Number>> inputPoints;
+			Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>  pointMatrix = Eigen::Matrix<Number, Eigen::Dynamic, Eigen::Dynamic>(points.size(), dim+1);
+
+			Eigen::Index row_index = 0;
+			for (auto const &point: points) {
+				vector_t<Number> rawCoords = point.rawCoordinates();
+				inputPoints.push_back(rawCoords);
+
+				pointMatrix(row_index,0) = 1;
+				for ( Eigen::Index i = 0; i < rawCoords.size(); i++ ) {
+					pointMatrix(row_index,i+1) = rawCoords(i,0);
+				}
+
+				row_index++;
+			}
+
+			Eigen::Index point_rank = 0;
+			bitset zeroDimensions = bitset(dim);
+
+            if(inputPoints.size() > NUMBER_OF_POINTS_WARNING) WARN("hypro", "NUMBER_OF_POINTS_WARNING: {} points during conversion with DD-method", inputPoints.size());
+
+				Eigen::FullPivLU<hypro::matrix_t<Number>> lu_points(pointMatrix);
+				point_rank = lu_points.rank();
+
+				for(auto& point : points) {
+					for(size_t dim_index = 0; dim_index < dim; dim_index++) {
+						if(point.at(dim_index) != 0) {
+							zeroDimensions[dim_index] = true;
+						}
+					}
+				}
+
+            if(point_rank == zeroDimensions.count() + 1) {
+				auto ddPair = DDPair<Number>( inputPoints );
+				ddPair.compute();
+
+				auto [mat, vec] = ddPair.getMatrixVectorPair();
+
+				for(Eigen::Index i = 0; i < mat.rows(); i++) {
+					mHPlanes.emplace_back(mat.row(i), vec(i));
+				}
+
+			} else {
+				Quickhull<Number> qh{inputPoints, mDimension};
+				qh.compute();
+				for (auto const &facet: qh.getFacets()) {
+					mHPlanes.emplace_back(facet.mNormal, facet.mOffset);
+				}
+
+				// Assert containment
+				assert(std::all_of(mHPlanes.begin(), mHPlanes.end(), [&](auto const &hplane) {
+					return std::all_of(points.begin(), points.end(), [&](auto const &point) {
+						return hplane.contains(point);
+					});
+				}));
+			}
+#else
             // Get raw data for quickhull
             std::vector<vector_t<Number>> inputPoints;
 
@@ -135,6 +198,7 @@ namespace hypro {
                     return hplane.contains(point);
                 });
             }));
+#endif
         } else {
             auto pointsCopy = points;
 
@@ -398,10 +462,10 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     typename std::vector<Point<Number>>
     HPolytopeT<Number, Converter, Setting>::vertices(const matrix_t<Number> &) const {
-		if constexpr (std::is_same_v<Number, double>) {
+        if constexpr (std::is_same_v<Number, double>) {
             DEBUG("hypro.hPolytope", "Conversion not supported for not exact number type.");
-			return  std::vector<Point<Number>>();
-		};
+            return  std::vector<Point<Number>>();
+        };
 
         typename std::vector<Point<Number>> vertices;
         // empty polytope
@@ -481,80 +545,80 @@ namespace hypro {
             return vertices;
         } else {  // Use quickhull (exact arithmetic) for vertex-enumeration
 
-#ifdef HYPRO_USE_DD_METHOD
-			///roughly check for full rank.
-			using bitset = boost::dynamic_bitset<uint8_t>;
-			bitset seenDim = bitset(mHPlanes.front().normal().rows());
-			bool naive_full_rank;
-			bool verified_full_rank;
-			Eigen::Index rank;
+#ifdef HYPRO_USE_DD_METHOD_H_TO_V
+            ///roughly check for full rank.
+            using bitset = boost::dynamic_bitset<uint8_t>;
+            bitset seenDim = bitset(mHPlanes.front().normal().rows());
+            bool naive_full_rank;
+            bool verified_full_rank;
+            Eigen::Index rank;
 
-			for(auto& plane : mHPlanes) {
-				for(Eigen::Index i = 0; i < plane.normal().rows(); ++i) {
-					Number val = plane.normal()(i);
-					if(val != 0) seenDim[i] = true;
-				}
-			}
+            for(auto& plane : mHPlanes) {
+                for(Eigen::Index i = 0; i < plane.normal().rows(); ++i) {
+                    Number val = plane.normal()(i);
+                    if(val != 0) seenDim[i] = true;
+                }
+            }
 
-			naive_full_rank = seenDim.all();
+            naive_full_rank = seenDim.all();
 
-			if(naive_full_rank) {
-				matrix_t<Number> _constraints( mHPlanes.size(), mHPlanes[0].normal().size() );
-				vector_t<Number> _constants( mHPlanes.size() );
+            if(naive_full_rank) {
+                matrix_t<Number> _constraints( mHPlanes.size(), mHPlanes[0].normal().size() );
+                vector_t<Number> _constants( mHPlanes.size() );
 
-				for ( std::size_t i = 0; i < mHPlanes.size(); i++ ) {
-					_constraints.row( i ) << mHPlanes[i].normal().transpose();
-					_constants[i] = mHPlanes[i].offset();
-				}
+                for ( std::size_t i = 0; i < mHPlanes.size(); i++ ) {
+                    _constraints.row( i ) << mHPlanes[i].normal().transpose();
+                    _constants[i] = mHPlanes[i].offset();
+                }
 
-				auto ddPair = DDPair<Number>( _constraints, _constants );
-				rank = ddPair.checkRank();
-				verified_full_rank = rank == (mHPlanes[0].normal().size() + 1);
+                auto ddPair = DDPair<Number>( _constraints, _constants );
+                rank = ddPair.checkRank();
+                verified_full_rank = rank == (mHPlanes[0].normal().size() + 1);
 
-				if(verified_full_rank) {
-					DEBUG("hypro.hPolytope", "Conversion on full rank");
+                if(verified_full_rank) {
+                    DEBUG("hypro.hPolytope", "Conversion on full rank");
 
-					ddPair.compute();
+                    ddPair.compute();
 
-					std::vector<Point<Number>> tmpVertices;
-					for ( const auto& v : ddPair.getPoints() ) {
-						tmpVertices.emplace_back( Point( std::move( v ) ) );
-					}
+                    std::vector<Point<Number>> tmpVertices;
+                    for ( const auto& v : ddPair.getPoints() ) {
+                        tmpVertices.emplace_back( Point( std::move( v ) ) );
+                    }
 
-					return tmpVertices;
-				}
-			}
+                    return tmpVertices;
+                }
+            }
 
-			if(naive_full_rank == false) {
-				DEBUG("hypro.hPolytope", "Not full rank, using Quickhull");
-			} else {
-				DEBUG("hypro.hPolytope", "Not full rank (is " << rank <<", should be " << (mHPlanes[0].normal().size() + 1) << "), using Quickhull");
-			}
+            if(naive_full_rank == false) {
+                DEBUG("hypro.hPolytope", "Not full rank, using Quickhull");
+            } else {
+                DEBUG("hypro.hPolytope", "Not full rank (is " << rank <<", should be " << (mHPlanes[0].normal().size() + 1) << "), using Quickhull");
+            }
 
-				// conversion to mpq_class
-				std::vector<vector_t<mpq_class>> halfspaces;
-				for (std::size_t i = 0; i < mHPlanes.size(); ++i) {
-					halfspaces.emplace_back(this->dimension() + 1);
-					halfspaces.back().head(this->dimension()) = convert<Number, mpq_class>(mHPlanes[i].normal());
-					halfspaces.back()[this->dimension()] = carl::convert<Number, mpq_class>(mHPlanes[i].offset());
-				}
-				// compute vertices (dual)
-				QuickIntersection<mpq_class> facetEnumerator{halfspaces, this->dimension()};
-				facetEnumerator.compute();
+            // conversion to mpq_class
+            std::vector<vector_t<mpq_class>> halfspaces;
+            for (std::size_t i = 0; i < mHPlanes.size(); ++i) {
+                halfspaces.emplace_back(this->dimension() + 1);
+                halfspaces.back().head(this->dimension()) = convert<Number, mpq_class>(mHPlanes[i].normal());
+                halfspaces.back()[this->dimension()] = carl::convert<Number, mpq_class>(mHPlanes[i].offset());
+            }
+            // compute vertices (dual)
+            QuickIntersection<mpq_class> facetEnumerator{halfspaces, this->dimension()};
+            facetEnumerator.compute();
 
-				// re-transform and convert
-				for (auto facet: facetEnumerator.getFacets()) {
-					vertices.emplace_back(vector_t<Number>::Zero(this->dimension()));
-					// The resulting points can't be points at infinity
-					// if ( facet.mOffset == 0 ) {
-					// std::cout << "Polytope is unbounded." << std::endl;
-					// } else {
-					if (facet.mOffset != 0) {
-						facet.mNormal /= facet.mOffset;
-						vertices.back() = convert<mpq_class, Number>(facet.mNormal);
-					}
-				}
-				return vertices;
+            // re-transform and convert
+            for (auto facet: facetEnumerator.getFacets()) {
+                vertices.emplace_back(vector_t<Number>::Zero(this->dimension()));
+                // The resulting points can't be points at infinity
+                // if ( facet.mOffset == 0 ) {
+                // std::cout << "Polytope is unbounded." << std::endl;
+                // } else {
+                if (facet.mOffset != 0) {
+                    facet.mNormal /= facet.mOffset;
+                    vertices.back() = convert<mpq_class, Number>(facet.mNormal);
+                }
+            }
+            return vertices;
 
 #else
             // conversion to mpq_class

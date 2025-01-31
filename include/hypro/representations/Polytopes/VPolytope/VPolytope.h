@@ -348,42 +348,44 @@ namespace hypro {
 
         template<typename N = Number, carl::DisableIf<is_float<N>> = carl::dummy>
         void reduceNumberRepresentation(std::size_t limit = fReach_DENOMINATOR) const {
-            if (!mVertices.empty()) {
-                // determine barycenter to set rounding directions
-                std::size_t dimension = std::size_t(mVertices.begin()->rawCoordinates().rows());
-                vector_t<Number> barycenter = vector_t<Number>::Zero(dimension);
-                for (const auto &vertex: mVertices) {
-                    barycenter = barycenter + (vertex.rawCoordinates() / Number(mVertices.size()));
-                }
-                for (auto &vertex: mVertices) {
-                    // distance vector to the barycenter - each component now determines its own rounding direction.
-                    vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
-                    for (std::size_t d = 0; d < dimension; ++d) {
-                        assert(d < vertex.dimension());
-                        // determine, which is larger: numerator or denominator
-                        Number denom = getDenominator(vertex.at(d));
-                        Number num = getNumerator(vertex.at(d));
-                        if (denom > limit && carl::abs(num) > limit) {
-                            if (denom > num) {
-                                Number newNum = num / denom * limit;
-                                if (roundingDirections(d) >= 0) {  // round up
-                                    newNum = carl::ceil(newNum);
-                                    assert(newNum / limit >= vertex.at(d));
-                                } else {  // round down
-                                    newNum = carl::floor(newNum);
-                                    assert(newNum / limit <= vertex.at(d));
+            if (S::REDUCE_NUMBERS == true) {
+                if (!mVertices.empty()) {
+                    // determine barycenter to set rounding directions
+                    std::size_t dimension = std::size_t(mVertices.begin()->rawCoordinates().rows());
+                    vector_t<Number> barycenter = vector_t<Number>::Zero(dimension);
+                    for (const auto &vertex: mVertices) {
+                        barycenter = barycenter + (vertex.rawCoordinates() / Number(mVertices.size()));
+                    }
+                    for (auto &vertex: mVertices) {
+                        // distance vector to the barycenter - each component now determines its own rounding direction.
+                        vector_t<Number> roundingDirections = vertex.rawCoordinates() - barycenter;
+                        for (std::size_t d = 0; d < dimension; ++d) {
+                            assert(d < vertex.dimension());
+                            // determine, which is larger: numerator or denominator
+                            Number denom = getDenominator(vertex.at(d));
+                            Number num = getNumerator(vertex.at(d));
+                            if (denom > limit && carl::abs(num) > limit) {
+                                if (denom > num) {
+                                    Number newNum = num / denom * limit;
+                                    if (roundingDirections(d) >= 0) {  // round up
+                                        newNum = carl::ceil(newNum);
+                                        assert(newNum / limit >= vertex.at(d));
+                                    } else {  // round down
+                                        newNum = carl::floor(newNum);
+                                        assert(newNum / limit <= vertex.at(d));
+                                    }
+                                    vertex[d] = newNum / limit;
+                                } else {  // num >= denom
+                                    Number newDenom = denom / num * limit;
+                                    if (roundingDirections(d) >= 0) {  // round up
+                                        newDenom = carl::floor(newDenom);
+                                        assert(limit / newDenom >= vertex.at(d));
+                                    } else {  // round down
+                                        newDenom = carl::ceil(newDenom);
+                                        assert(limit / newDenom <= vertex.at(d));
+                                    }
+                                    vertex[d] = limit / newDenom;
                                 }
-                                vertex[d] = newNum / limit;
-                            } else {  // num >= denom
-                                Number newDenom = denom / num * limit;
-                                if (roundingDirections(d) >= 0) {  // round up
-                                    newDenom = carl::floor(newDenom);
-                                    assert(limit / newDenom >= vertex.at(d));
-                                } else {  // round down
-                                    newDenom = carl::ceil(newDenom);
-                                    assert(limit / newDenom <= vertex.at(d));
-                                }
-                                vertex[d] = limit / newDenom;
                             }
                         }
                     }

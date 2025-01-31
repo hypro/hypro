@@ -39,7 +39,8 @@ option(HYPRO_EXTERNALIZE_CLASSES "Enables explicit instanciation of templates fo
 option(HYPRO_USE_CLP "Enable usage of the Coin-LP solver." OFF)
 option(HYPRO_CREATE_DOC "Allow creation of a doxygen documentation." OFF)
 option(HYPRO_CREATE_DOC_PDF "Create pdf document for documentation." OFF)
-option(HYPRO_USE_DD_METHOD "replace quickhull with the double description method" OFF)
+#option(HYPRO_USE_DD_METHOD "replace quickhull with the double description method" OFF)
+set(HYPRO_USE_DD_METHOD OFF CACHE STRING "replace quickhull with the double description method")
 option(HYPRO_USE_GLPK "Enable usage of the glpk lp-solver." OFF)
 option(HYPRO_USE_OPENMP "Use OpenMp for parallelization in Eigen3." OFF)
 option(HYPRO_USE_MIMALLOC "replace standard malloc/realloc/free with mimalloc" OFF)
@@ -78,6 +79,16 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Debug Release" FORCE)
 endif ()
 set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
+set_property(CACHE HYPRO_USE_DD_METHOD PROPERTY STRINGS "BOTH" "VtoH" "HtoV" OFF)
+
+if(HYPRO_USE_DD_METHOD STREQUAL "BOTH")
+    set(HYPRO_USE_DD_METHOD_V_TO_H ON)
+    set(HYPRO_USE_DD_METHOD_H_TO_V ON)
+elseif (HYPRO_USE_DD_METHOD STREQUAL "VtoH")
+    set(HYPRO_USE_DD_METHOD_V_TO_H ON)
+elseif (HYPRO_USE_DD_METHOD STREQUAL "HtoV")
+    set(HYPRO_USE_DD_METHOD_H_TO_V ON)
+endif ()
 
 # policies
 cmake_policy(VERSION 3.15) # sets all policies to NEW that are available in cmake 3.15

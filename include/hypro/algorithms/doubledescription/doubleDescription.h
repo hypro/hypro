@@ -15,8 +15,10 @@ namespace hypro {
     class DDPair {
     public:
         DDPair( const matrix_t<Number>&, const vector_t<Number>& );
+        DDPair( const std::vector<vector_t<Number>>& points );
         std::vector<vector_t<Number>> getPoints();
-		Eigen::Index checkRank();
+        std::pair<matrix_t<Number>, vector_t<Number>> getMatrixVectorPair();
+        Eigen::Index checkRank();
         void compute();
 
     private:
@@ -31,7 +33,10 @@ namespace hypro {
         matrix_t<Number> R;
         matrix_t<Number> A;
 
-		VectorXi rows;
+        VectorXi rows;
+
+        bitset zeroDimensions;
+        bool hToV = true;
     };
 
     /**
@@ -50,7 +55,46 @@ namespace hypro {
         }
     }
 
-    /**
+    template <typename Number>
+    DDPair<Number>::DDPair( const std::vector<vector_t<Number>>& points ) {
+        this->hToV = false;
+        size_t dim = points.at(0).rows();
+        zeroDimensions = bitset(dim);
+        for(auto& point : points) {
+            for(size_t dim_index = 0; dim_index < dim; dim_index++) {
+                if(point(dim_index) != 0) {
+                    zeroDimensions[dim_index] = true;
+                }
+            }
+        }
+
+        auto zeroDimCount = zeroDimensions.size() - zeroDimensions.count();
+
+        this->A = matrix_t<Number>(dim + 1 - zeroDimCount, points.size());
+
+        for( Index col_index = 0; col_index < points.size(); col_index++) {
+            A(0,col_index) = 1;
+        }
+
+        int current_offset = 0;
+        for( Index row_index = 0; row_index < dim; row_index++) {
+//			std::cout << "current A:\n" << A << std::endl;
+
+            if(zeroDimensions[row_index]) {
+                for( Index col_index = 0; col_index < points.size(); col_index++) {
+                    A(1 + row_index - current_offset,col_index) = points.at(col_index)(row_index);
+                }
+
+            } else {
+                current_offset++;
+            }
+        }
+
+        this->A.transposeInPlace();
+    }
+
+
+/**
      * Extracts and returns the points which define the V-polytope from the generator matrix.
      * Every column is scaled appropriately.
      * @tparam Number
@@ -61,15 +105,52 @@ namespace hypro {
         std::vector<vector_t<Number>> result;
 
         for ( const auto& col : this->R.colwise() ) {
-			if(col[0] == 0) {
-				result.emplace_back( vector_t<Number>(col.size() - 1));
-			} else {
-				result.emplace_back( col( Eigen::seq( 1, Eigen::last ) ) / col[0] );
-			}
+            if(col[0] == 0) {
+                result.emplace_back( vector_t<Number>(col.size() - 1));
+            } else {
+                result.emplace_back( col( Eigen::seq( 1, Eigen::last ) ) / col[0] );
+            }
         }
 
         return result;
     }
+
+    template <typename Number>
+    std::pair<matrix_t<Number>, vector_t<Number>> DDPair<Number>::getMatrixVectorPair() {
+        this->R.transposeInPlace();
+
+        auto zeros = this->zeroDimensions.size() - this->zeroDimensions.count();
+        matrix_t<Number> mat = matrix_t<Number>(this->R.rows() + (zeros*2), this->zeroDimensions.size());
+        vector_t<Number> vec = vector_t<Number>(this->R.rows() + (zeros*2));
+
+        for(Eigen::Index current_row = 0; current_row < this->R.rows(); current_row++) {
+            int current_offset = 0;
+            for(Eigen::Index current_col = 0; current_col < this->zeroDimensions.size(); current_col++) {
+
+                if(zeroDimensions[current_col]) {
+                    // TODO think about why i negate here and not e.g. in the constructor
+                    mat(current_row,current_col) = this->R(current_row,1 + current_col - current_offset) * - 1;
+                } else {
+                    mat(current_row,current_col) = 0;
+                    current_offset++;
+                }
+            }
+            vec(current_row) = this->R(current_row, 0);
+        }
+
+        int current_offset = this->R.rows();
+        for(Eigen::Index tmp = 0; tmp < this->zeroDimensions.size(); tmp++) {
+            if(this->zeroDimensions[tmp] == 0) {
+                mat(current_offset,tmp) = 1;
+                mat(current_offset+1,tmp) = -1;
+                vec(current_offset) = 0;
+                vec(current_offset+1) = 0;
+                current_offset += 2;
+            }
+        }
+        return std::make_pair(mat, vec);
+    }
+
 
     /**
      * Does a single elimination step of gauss elimination, given a row index to be used as a pivot.
@@ -254,14 +335,14 @@ namespace hypro {
         this->R = result;
     }
 
-	template <typename Number>
-	Eigen::Index DDPair<Number>::checkRank() {
-		rows = max_independent_rows( A );
+    template <typename Number>
+    Eigen::Index DDPair<Number>::checkRank() {
+        rows = max_independent_rows( A );
 
-		Eigen::FullPivLU<matrix_t<Number>> lu_decomp(A);
+        Eigen::FullPivLU<matrix_t<Number>> lu_decomp(A);
 
-		return lu_decomp.rank();
-	}
+        return lu_decomp.rank();
+    }
 
     /**
      * Initializes all data structures and does the actual iteration.

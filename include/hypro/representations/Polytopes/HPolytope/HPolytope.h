@@ -35,7 +35,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #endif
 
-#ifdef HYPRO_USE_DD_METHOD
+#if defined(HYPRO_USE_DD_METHOD_H_TO_V) || defined(HYPRO_USE_DD_METHOD_V_TO_H)
 
 #include "../../../algorithms/doubledescription/doubleDescription.h"
 
@@ -300,7 +300,7 @@ namespace hypro {
         std::vector<Point<Number>> vertexEnumeration() const;
 
         // function which offsets all the halfspaces with the same number
-        void offsetAllToNegative(Number offset); 
+        void offsetAllToNegative(Number offset);
 
         // function to normalize all halfspaces
         void normalize();
@@ -363,10 +363,10 @@ namespace hypro {
                 result << "[ ";
                 for (unsigned i = 0; i < this->constraints().size() - 1; ++i) {
                     result << convert<Number, double>(this->constraints()[i]).printWithGenericVarIdents()
-                        << ",\n";
+                           << ",\n";
                 }
-                result << convert<Number, double>(this->constraints()[this->constraints().size() - 1]).printWithGenericVarIdents() 
-                    << " ]";
+                result << convert<Number, double>(this->constraints()[this->constraints().size() - 1]).printWithGenericVarIdents()
+                       << " ]";
             }
             result << " isEmpty: " << this->mEmptyState;
             return result.str();
@@ -422,20 +422,20 @@ namespace hypro {
         void reduceNumberRepresentation(const std::vector<Point<Number>> &_vertices = std::vector<Point<Number>>(),
                                         unsigned limit = fReach_DENOMINATOR) const {
             constexpr bool GET_VERTICES_AFTER_CHECK = false;
-			// #ifdef REDUCE_NUMBERS
+            // #ifdef REDUCE_NUMBERS
             if (Setting::REDUCE_NUMBERS == true) {
-				std::vector<Point<Number>> originalVertices;
-				if(!GET_VERTICES_AFTER_CHECK) {
-					TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
-					if (_vertices.empty()) {
-						TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
-						originalVertices = this->vertices();
-					} else {
-						TRACE("hypro.hPolytope", "Use passed vertices.");
-						originalVertices = _vertices;
-					}
-					TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
-				}
+                std::vector<Point<Number>> originalVertices;
+                if(!GET_VERTICES_AFTER_CHECK) {
+                    TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
+                    if (_vertices.empty()) {
+                        TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
+                        originalVertices = this->vertices();
+                    } else {
+                        TRACE("hypro.hPolytope", "Use passed vertices.");
+                        originalVertices = _vertices;
+                    }
+                    TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
+                }
 
                 if (!this->empty()) {
                     // normal reduction
@@ -452,17 +452,17 @@ namespace hypro {
 
                         // reduce, if reduction is required
                         if (largest > (limit * limit)) {
-							if(GET_VERTICES_AFTER_CHECK) {
-								TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
-								if (_vertices.empty()) {
-									TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
-									originalVertices = this->vertices();
-								} else {
-									TRACE("hypro.hPolytope", "Use passed vertices.");
-									originalVertices = _vertices;
-								}
-								TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
-							}
+                            if(GET_VERTICES_AFTER_CHECK) {
+                                TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
+                                if (_vertices.empty()) {
+                                    TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
+                                    originalVertices = this->vertices();
+                                } else {
+                                    TRACE("hypro.hPolytope", "Use passed vertices.");
+                                    originalVertices = _vertices;
+                                }
+                                TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
+                            }
 
                             vector_t<Number> newNormal(mDimension);
                             for (unsigned i = 0; i < mDimension; ++i) {

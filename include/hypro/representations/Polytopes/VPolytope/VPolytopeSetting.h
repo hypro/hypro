@@ -18,6 +18,7 @@ namespace hypro {
         static constexpr int type_enum = vPolytopeSetting_name::VPolytopeSetting;
         static constexpr bool checkVerticesBeforeConversion = true;
         static constexpr bool useLpForPointContainment = true;
+        static constexpr bool REDUCE_NUMBERS = false;
     };
 
 }  // namespace hypro
