@@ -143,7 +143,7 @@ namespace hypro {
         if (underApproximate) {
                 // had to add it this way, because the representation check has to be a const expression (so it can be evaluated in compile time)
                 if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
-                        firstSegment = firstSegment.minkowskiDiff(bloatingSet);
+                        // firstSegment = firstSegment.minkowskiDiff(bloatingSet);
                 }
         } else {
                 firstSegment = firstSegment.minkowskiSum(bloatingSet);

@@ -113,8 +113,7 @@ namespace hypro {
     auto LTIAnalyzer<State, Automaton, Heuristics>::processNode(LTIWorker<State, Automaton> &worker,
                                                                                 ReachTreeNode<State, LocationT> *node,
                                                                                 TimeTransformationCache<LocationT> &transformationCache) -> LTIResult {
-        REACHABILITY_RESULT safetyResult;
-        std::cout << "process node " << std::endl;   
+        REACHABILITY_RESULT safetyResult;   
         // set bounding box required for fixed-point test
         if (mParameters.detectJumpFixedPoints && !node->getInitialBoundingBox()) {
             node->setBoundingBox(Converter<Number>::toBox(node->getInitialSet()).intervals());
@@ -142,7 +141,6 @@ namespace hypro {
                                                             std::back_inserter(node->getFlowpipe()), segmentsToCompute);
             }
         } else {
-            std::cout << "calc time successor " << std::endl;
 
             if (mParameters.underapproxReach) {
                 // start over- and under-approximative time step calculation
@@ -154,6 +152,8 @@ namespace hypro {
                                                         std::back_inserter(node->getFlowpipe()));
             }
         }
+
+        std::cout << "nr time successors = " << node->getFlowpipe().size() << std::endl;
 
         // check, whether the full time horizon has been exploited - if not, an invariant has bound the evolution and we might have a timelock
         bool timeElapseBoundedByModel = false;
@@ -198,7 +198,7 @@ namespace hypro {
         // create jump successor tasks
         for (const auto &[transition, timedValuationSets, timedValuationSetsUnder]: worker.computeJumpSuccessors(node->getFlowpipe(), node->getLocation(), 
                                                                                         node->getFlowpipeUnderApprox())) {
-            std::cout << "jump successor task" << std::endl;
+            
             // Omit Zeno-transitions
             if (mParameters.detectZenoBehavior &&
                 std::find(std::begin(ZenoTransitions), std::end(ZenoTransitions), transition) !=
@@ -209,10 +209,8 @@ namespace hypro {
                 continue;
             }
 
-            std::cout << "before timed valuation sets" << std::endl << std::endl;
             auto itUnder = timedValuationSetsUnder.begin();
 
-            std::cout << "length of timedValuationSets " << timedValuationSets.size() << std::endl;
 
             for (const auto [valuationSet, segmentsInterval]: timedValuationSets) {
                 // update reachTree
@@ -229,7 +227,6 @@ namespace hypro {
                     DEBUG("hypro.reachability", "Node does not have a timelock");
                     timelock = TRIBOOL::FALSE;
                 }
-                std::cout << "add new child" << std::endl;
                 // auto valSetUnder = (mParameters.underapproxReach) ? itUnder->valuationSet : decltype(valuationSet)() ;
                 // in any case add node to the search tree
             
@@ -241,7 +238,6 @@ namespace hypro {
                     childNode = &node->addChild(valuationSet, globalDuration, transition);
                 }
                 
-                std::cout << "after add new child" << std::endl;
                 
                 // if desired, try to detect fixed-point
                 bool fixedPointReached = mParameters.detectJumpFixedPoints;
@@ -293,6 +289,8 @@ namespace hypro {
         if (node->getChildren().empty()) {
             node->setFixedPoint(true);
         }
+
+        std::cout << "nr time successors after tine step = " << node->getFlowpipe().size() << std::endl;
 
         return {LTISuccess{}};
     }

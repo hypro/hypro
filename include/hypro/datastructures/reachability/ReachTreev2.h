@@ -142,6 +142,14 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 
 	std::vector<Representation> const &getFlowpipeUnderApprox() const { return mFlowpipeUnderApprox; }
 
+		/**
+	 * @brief Get access to the flowpipe, depending on the parameter, either under or over-approximative flowpipes
+	 * @return std::vector<Representation>*
+	 */
+	std::vector<Representation> &getFlowpipe(bool overOrUnder) { return overOrUnder ? mFlowpipe : mFlowpipeUnderApprox; }
+
+	std::vector<Representation> const &getFlowpipe(bool overOrUnder) const { return overOrUnder ? mFlowpipe : mFlowpipeUnderApprox; }
+
 	///////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////
 

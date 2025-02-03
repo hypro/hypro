@@ -92,7 +92,7 @@ static void computeReachableStates(const std::string &filename) {
 
         std::cout << "Write to file." << std::endl;
 
-        plotter.plot2d(hypro::PLOTTYPE::pdf, true);
+        plotter.plot2d(hypro::PLOTTYPE::pdf);
 
         std::cout << "Finished plotting: "
                   << std::chrono::duration_cast<timeunit>(clock::now() -
@@ -127,7 +127,7 @@ static void computeReachableStates(const std::string &filename) {
             }
             ++cnt;
         }
-        plotter.plot2d(hypro::PLOTTYPE::pdf, true);
+        plotter.plot2d(hypro::PLOTTYPE::pdf);
     
     }
 }

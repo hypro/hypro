@@ -108,7 +108,7 @@ namespace hypro {
          * @details    The resulting *.plt file can be compiled to a pdf invoking gnuplot.
          * @param outformat Specifies the type of output file generated.
          */
-        void plot2d(PLOTTYPE outformat = PLOTTYPE::pdf, bool runGnuplot = false) const;
+        void plot2d(PLOTTYPE outformat = PLOTTYPE::pdf, bool runGnuplot = true) const;
 
         /**
          * @brief      Creates a LaTeX file of the currently passed objects.

@@ -1194,19 +1194,20 @@ namespace hypro {
                                                                             << "b: " << _vec);
         assert(_mat.rows() == _vec.rows());
         HPolytopeT<Number, Converter, Setting> res(*this);
-        // std::cout << " hy " << std::endl;
         bool changed = false;
         for (unsigned i = 0; i < _mat.rows(); ++i) {
             changed = res.insert(Halfspace<Number>(_mat.row(i), _vec(i))) | changed;
         }
         if (changed) {
-            std::cout << "changed" << std::endl;
-            // res.removeRedundancy();
-            std::cout << "after remove redundancy" << std::endl;
+            res.removeRedundancy();
         }
-        std::cout << "return from intersect halfspace" << std::endl;
         return res;
     }
+
+    
+
+ 
+ 
 
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>

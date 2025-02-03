@@ -46,7 +46,9 @@ namespace hypro {
                                             mSettings.timeStep, true);
             }
 
-
+            std::cout << firstSegment << std::endl;
+            std::cout << firstSegmentUnder << std::endl;
+            std::cout << "hy" << std::endl;
 
 
 
@@ -57,9 +59,6 @@ namespace hypro {
                                                             mSettings.timeStep);
         }
 
-        std::cout << initialSet << std::endl;
-
-        std::cout << "after construct first segment" << firstSegment << std::endl;
 
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
         // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
@@ -78,6 +77,7 @@ namespace hypro {
             // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
             std::tie (std::ignore, segmentUnder) = intersect(firstSegmentUnder, loc->getInvariant(), mSubspace);
             *(outUnderApprox.value()) = segmentUnder;
+            std::cout << segmentUnder << std::endl;
             ++(outUnderApprox.value());   
         }
 
@@ -92,24 +92,15 @@ namespace hypro {
                 return REACHABILITY_RESULT::UNKNOWN;
             }
         }
- 
-        std::cout << "apply linear transform" << std::endl;
-
 
         // while not done
         for (size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount) {
-            std::cout << std::endl << "segmentCount = " << segmentCount << std::endl;
-
+        
             segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
-            std::cout << "After apply time evolution " <<std::endl;
 #ifdef HYPRO_LOGGING
             auto tmp = segment;
 #endif
-            std::cout << "Before intersect " <<std::endl;
-            std::cout << "segment" << segment << std::endl;
-            std::cout << "inv" << loc->getInvariant() << std::endl;
             std::tie(containment, segment) = intersect(segment, loc->getInvariant(), mSubspace);
-            std::cout << "After intersect evolution " << std::endl;
             if (containment == CONTAINMENT::NO) {
 #ifdef HYPRO_LOGGING
                 DEBUG("hypro.reachability",
@@ -119,12 +110,10 @@ namespace hypro {
                 return REACHABILITY_RESULT::SAFE;
             }
 
-            std::cout << "saving segment " << std::endl;
             *out = segment;
             ++out;
 
             if (mSettings.underapproxReach && outUnderApprox.has_value()) {
-                std::cout << "apply time evolution to under-approx"  << std::endl;
                 segmentUnder = applyTimeEvolution(segmentUnder, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
                 // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
                 std::tie(std::ignore, segmentUnder) = intersect(segmentUnder, loc->getInvariant(), mSubspace);
@@ -147,6 +136,7 @@ namespace hypro {
                 }
             }
         }
+ 
         DEBUG("hypro.reachability", "Compute time successor states done.");
         return REACHABILITY_RESULT::SAFE;
     }
@@ -358,6 +348,7 @@ namespace hypro {
 
 
                 if (mSettings.underapproxReach) {
+                    std::cout << "segment = " << *itUnderApprox << std::endl;
                     auto [containment, intersectedUnder] = intersect(*itUnderApprox, transition->getGuard());
 
                     if (containment != CONTAINMENT::NO) {
@@ -381,6 +372,9 @@ namespace hypro {
         // aggregation
         // for each transition
         for (auto &[transition, valuationSets, valuationSetsUnder]: enabledSegments) {
+
+
+            std::cout << valuationSetsUnder[0].valuationSet << std::endl;
             // no aggregation
             std::size_t blockSize = 1;
             if (mSettings.aggregation == AGG_SETTING::AGG ||
@@ -421,6 +415,7 @@ namespace hypro {
 
                 it->valuationSet = applyReset(it->valuationSet, transition->getReset());
                 if (mSettings.underapproxReach) {
+                    std::cout << itUnder->valuationSet << std::endl;
                     itUnder->valuationSet = applyReset(itUnder->valuationSet, transition->getReset());
                 }
 
