@@ -46,12 +46,6 @@ namespace hypro {
                                             mSettings.timeStep, true);
             }
 
-            std::cout << firstSegment << std::endl;
-            std::cout << firstSegmentUnder << std::endl;
-            std::cout << "hy" << std::endl;
-
-
-
         } else {
             firstSegment = constructFirstSegment(initialSet, loc->getLinearFlow(mSubspace),
                                                             mTrafoCache.getTransformation(loc, mSettings.timeStep,
@@ -77,7 +71,6 @@ namespace hypro {
             // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
             std::tie (std::ignore, segmentUnder) = intersect(firstSegmentUnder, loc->getInvariant(), mSubspace);
             *(outUnderApprox.value()) = segmentUnder;
-            std::cout << segmentUnder << std::endl;
             ++(outUnderApprox.value());   
         }
 
@@ -348,7 +341,6 @@ namespace hypro {
 
 
                 if (mSettings.underapproxReach) {
-                    std::cout << "segment = " << *itUnderApprox << std::endl;
                     auto [containment, intersectedUnder] = intersect(*itUnderApprox, transition->getGuard());
 
                     if (containment != CONTAINMENT::NO) {
@@ -372,9 +364,6 @@ namespace hypro {
         // aggregation
         // for each transition
         for (auto &[transition, valuationSets, valuationSetsUnder]: enabledSegments) {
-
-
-            std::cout << valuationSetsUnder[0].valuationSet << std::endl;
             // no aggregation
             std::size_t blockSize = 1;
             if (mSettings.aggregation == AGG_SETTING::AGG ||
@@ -415,7 +404,6 @@ namespace hypro {
 
                 it->valuationSet = applyReset(it->valuationSet, transition->getReset());
                 if (mSettings.underapproxReach) {
-                    std::cout << itUnder->valuationSet << std::endl;
                     itUnder->valuationSet = applyReset(itUnder->valuationSet, transition->getReset());
                 }
 

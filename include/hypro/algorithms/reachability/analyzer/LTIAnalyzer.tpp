@@ -153,7 +153,6 @@ namespace hypro {
             }
         }
 
-        std::cout << "nr time successors = " << node->getFlowpipe().size() << std::endl;
 
         // check, whether the full time horizon has been exploited - if not, an invariant has bound the evolution and we might have a timelock
         bool timeElapseBoundedByModel = false;
@@ -289,8 +288,6 @@ namespace hypro {
         if (node->getChildren().empty()) {
             node->setFixedPoint(true);
         }
-
-        std::cout << "nr time successors after tine step = " << node->getFlowpipe().size() << std::endl;
 
         return {LTISuccess{}};
     }
