@@ -104,7 +104,7 @@ std::vector<Starset<Number>> LeakyReLULayer<Number>::forwardPass( const std::vec
 }
 
 template <typename Number>
-Point<Number> LeakyReLULayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
+std::pair<Point<Number>,Point<Number>>  LeakyReLULayer<Number>::propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const {
 	assert( neuronNumber < y.dimension() );
 	
 	if ( y.coordinate( neuronNumber ) < 0 ) {
@@ -118,21 +118,21 @@ Point<Number> LeakyReLULayer<Number>::propagateCandidateBack( Point<Number> y, i
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:
 			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl; 
-			return y;
+			return make_pair(y, Point<Number>(result.optimumValue));
 
 		case SOLUTION::INFEAS:
 			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
-            return Point<Number>();
+            return make_pair(Point<Number>(), Point<Number>());
 
 		default:
 			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
 			break;
 	}
-	return Point<Number>();
+	return make_pair(Point<Number>(), Point<Number>());
 }
 
 template <typename Number>
-Point<Number> LeakyReLULayer<Number>::propagateCandidateBack(Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const{
+std::pair<Point<Number>,Point<Number>>  LeakyReLULayer<Number>::propagateCandidateBack(Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const{
 	std::cout <<"Block LeakyReLU"<<std::endl;
 	for (int i = 0; i < ancestorSet.generator().rows(); i++){
 		if ( upperIndex <= i && i <= lowerIndex && candidate[i] < 0 ) {
@@ -144,15 +144,15 @@ Point<Number> LeakyReLULayer<Number>::propagateCandidateBack(Point<Number> candi
 	
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:						
-            return candidate;
+          return make_pair(candidate, Point<Number>(result.optimumValue));
 		case SOLUTION::INFEAS:
-            return Point<Number>();
+            return make_pair(Point<Number>(), Point<Number>());
 		default:
 			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
 			break;
 	}
 
-	return Point<Number>();
+	return make_pair(Point<Number>(), Point<Number>());
 }
 
 }  // namespace hypro

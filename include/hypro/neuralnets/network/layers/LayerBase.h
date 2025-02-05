@@ -64,13 +64,13 @@ class LayerBase {
 	 * @param[in] inputSet, the input set which should include the result of the backpropagation
 	 * @return Point<Number> the backpropagated final result
 	 */
-	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const = 0;
-	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet, Starset<Number> currentSet) const {
-		return propagateCandidateBack(y, neuronNumber, inputSet );
+	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const = 0;
+	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet, Starset<Number> currentSet) const {
+		return propagateCandidateBack(y, alpha, neuronNumber, inputSet );
 	};
-	virtual Point<Number> propagateCandidateBack(Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const {
+	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack(Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const {
 		assert(false && "binary backpropagation not possible for this layertype");
-		return Point<Number>();
+		return std::make_pair(Point<Number>(), Point<Number>());
 	}
 
 	// ============= utility functions =============

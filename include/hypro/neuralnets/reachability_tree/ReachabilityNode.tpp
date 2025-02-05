@@ -20,7 +20,10 @@ ReachabilityNode<Number>::ReachabilityNode( Starset<Number> representation, NN_R
 	, mChildren(std::vector<ReachabilityNode<Number>*>())
 	, mPlotter( hypro::Plotter<Number>::getInstance() )
 	, mCounterExample(Point<Number>())
-	, mHasCounterExample(false) {}
+	, mHasCounterExample(false) 
+	, mCounterExampleAlpha(Point<Number>())
+	, mHasCounterExampleAlpha(false) 
+	{}
 
 // template <typename Number>
 // ReachabilityNode<Number>::~ReachabilityNode() {
@@ -157,9 +160,17 @@ template <typename Number>
 Point<Number> ReachabilityNode<Number>::getCounterExample() const{
 	return mCounterExample;
 }
+template <typename Number>
+bool ReachabilityNode<Number>::hasCounterExampleAlpha() const{
+	return mHasCounterExampleAlpha;
+} 
+template <typename Number>
+Point<Number> ReachabilityNode<Number>::getCounterExampleAlpha() const{
+	return mCounterExampleAlpha;
+}
 
 template <typename Number>
-Point<Number> ReachabilityNode<Number>::_checkSafetyRandom(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, int iterations) const {
+std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyRandom(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, int iterations) const {
 	//Try to generate a counterexample
     std::random_device rdev;
 	std::mt19937 rgen( rdev() );
@@ -168,18 +179,6 @@ Point<Number> ReachabilityNode<Number>::_checkSafetyRandom(Starset<Number> set, 
         iterations--;
         //Create a starset of containing potential counterexamples
         Starset<Number> setCopy( set ); 
-		// for ( HPolytope<Number> poly : rejectionSets ) {
-		// 	std::uniform_int_distribution<int> idist( 0, poly.constraints().size() - 1 );
-		// 	int ind = idist( rgen );				
-		// 	Halfspace<Number> hspace = poly.constraints()[ind];
-        //     //Note:
-        //     // The border of the Halfspace and the starset is possibly contained in the rejectionSets!
-        //     // This is not often a problem, because we try to take a center point as a counterexample
-		// 	vector_t<Number> normal = Number(-1) * hspace.normal();
-		// 	Number offset = Number(-1) * hspace.offset();
-		// 	setCopy = setCopy.intersectHalfspace( Halfspace<Number>( normal, offset ) );
-		// }
-
 		for (unsigned i = 0; i < safeSetMatrices.size(); i++) {
 			std::uniform_int_distribution<int> idist( 0, safeSetMatrices[i].rows() - 1 );
 			int ind = idist( rgen );				
@@ -211,17 +210,13 @@ Point<Number> ReachabilityNode<Number>::_checkSafetyRandom(Starset<Number> set, 
 
             //Ensure point is contained in the starset and not contained in any rejectionSet
             bool isCounterexample = true;
-            // for (int i = 0; i < rejectionSets.size() && isCounterexample; i++){
-            //     vector_t<Number> v = (rejectionSets[i].matrix() * transformedPoint.rawCoordinates());
-            //     isCounterexample = isCounterexample && !( v <= rejectionSets[i].vector());                    
-            // }
 			for (int i = 0; i < safeSetMatrices.size() && isCounterexample; i++){
                 vector_t<Number> v = (safeSetMatrices[i] * transformedPoint.rawCoordinates());
                 isCounterexample = isCounterexample && !( v <= safeSetVectors[i]);                    
             }
 			if(isCounterexample && setCopy.contains(transformedPoint)) {	
                 std::cout << "Found counterexample in iteration " << iterations << std::endl;
-				return transformedPoint;
+				return std::make_pair(transformedPoint, Point<Number>(midPoint));
 			}
 		}
     }
@@ -229,7 +224,7 @@ Point<Number> ReachabilityNode<Number>::_checkSafetyRandom(Starset<Number> set, 
 }
  
 template <typename Number>
-Point<Number> ReachabilityNode<Number>::_checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 
+std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 
 	std::cout << "Producing a counterexample with z3..." << std::endl;
 	
 	// if a counterexample exists, result contains an element in the predicate of set
@@ -238,14 +233,14 @@ Point<Number> ReachabilityNode<Number>::_checkSafetyZ3(Starset<Number> set, cons
 
     if (result.errorCode == SOLUTION::FEAS){
         // A counterexample exists
-        return Point<Number>(set.generator() * result.optimumValue + set.center());
+        return std::make_pair(Point<Number>(set.generator() * result.optimumValue + set.center()), Point<Number>(result.optimumValue));
     }
     
-	return Point<Number>(); 
+	return std::make_pair(Point<Number>(),Point<Number>()); 
 }
 
 template <typename Number>
-Point<Number> ReachabilityNode<Number>::_checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 
+std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 
 	std::cout << "Producing a counterexample with z3..." << std::endl;
 	
 	// if a counterexample exists, result contains an element in the predicate of set
@@ -254,9 +249,9 @@ Point<Number> ReachabilityNode<Number>::_checkSafetyZ3SmallRepresentation(Starse
 	
 	switch(result.errorCode){
 		case SOLUTION::FEAS:	
-			return Point<Number>(set.generator() * result.optimumValue + set.center());
+			return std::make_pair(Point<Number>(set.generator() * result.optimumValue + set.center()),Point<Number>(result.optimumValue) ); 
 		case SOLUTION::INFEAS:
-			return Point<Number>();
+			return std::make_pair(Point<Number>(),Point<Number>()); 
 		default: //z3GetCounterexampleSmall uses an incomlete method for a mixed integer and rational problem and can thus return UNKOWN
 			return _checkSafetyZ3(set, safeSetMatrices, safeSetVectors);		
 	}
@@ -267,22 +262,29 @@ bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, c
 	
 	assert(mIsLeaf);
 
+	std::pair<Point<Number>,Point<Number>> result;
+
 	switch(strategy){
 		case COUNTEREXAMPLE_STRATEGY::Z3_BASIC: 
-			mCounterExample = _checkSafetyZ3(currentSet, safeSetMatrices, safeSetVectors);
+			result = _checkSafetyZ3(currentSet, safeSetMatrices, safeSetVectors);
 			break;
 		case COUNTEREXAMPLE_STRATEGY::RANDOM:
-			mCounterExample = _checkSafetyRandom(currentSet, safeSetMatrices, safeSetVectors, 10);			
+			result = _checkSafetyRandom(currentSet, safeSetMatrices, safeSetVectors, 10);			
 			break;
 		case COUNTEREXAMPLE_STRATEGY::Z3_SMALL_REPRESENTATION:
-			mCounterExample = _checkSafetyZ3SmallRepresentation(currentSet, safeSetMatrices, safeSetVectors);
+			result = _checkSafetyZ3SmallRepresentation(currentSet, safeSetMatrices, safeSetVectors);
 			break;
 		default:
 			assert(false && "Not a known strategy to find counterexamples");
 			break;
 	}
 
+	
 	mHasCounterExample = true;
+	mCounterExample = result.first;
+	mHasCounterExampleAlpha = true;
+	mCounterExampleAlpha = result.second;
+	
 	mIsSafe = !(mCounterExample.dimension() > 0);
 		
 	return mIsSafe;

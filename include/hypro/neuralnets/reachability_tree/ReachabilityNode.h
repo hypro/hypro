@@ -26,7 +26,7 @@ class ReachabilityNode {
   private:
 	bool mIsLeaf;	   // data holder to fast check if a node is a leaf node
 	bool mIsSafe;	   // data holder to check if a node is a safe node
-	bool mIsComputed;  // data holder to check the computation of the node is finished (i.e. it has all its childs)
+	bool mIsComputed;  // data holder to check the computation of the node is finished (i.e. it has all its children)
 
 	bool mHasParent;
 	ReachabilityNode<Number>* mParent;
@@ -38,13 +38,16 @@ class ReachabilityNode {
 	NN_REACH_METHOD mMethod;
 	Starset<Number> mRepresentation;
 	bool mHasCounterExample;
+	bool mHasCounterExampleAlpha;
 	Point<Number> mCounterExample; // a counterexample, if node is a leaf and unsafe, the empty point otherwise
-
+	Point<Number> mCounterExampleAlpha; // the predicate value corresponding to the counterexample
 	hypro::Plotter<Number>& mPlotter;
 
-	Point<Number> _checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
-	Point<Number> _checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
-	Point<Number> _checkSafetyRandom(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, int iterations) const;
+
+	// Returns a pair (x,alpha) where x is an counterexample (or the empty point if it does not exist) and alpha is the corresponding predicate value (if it is calculated and the empty point otherwise)
+	std::pair<Point<Number>,Point<Number>> _checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
+	std::pair<Point<Number>,Point<Number>> _checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
+	std::pair<Point<Number>,Point<Number>> _checkSafetyRandom(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, int iterations) const;
 
   public:
 	// constructors and destructor
@@ -61,6 +64,8 @@ class ReachabilityNode {
 	void setComputed( bool isComputed );
 	bool hasCounterExample() const;
 	Point<Number> getCounterExample() const;
+	bool hasCounterExampleAlpha() const;
+	Point<Number> getCounterExampleAlpha() const;
 
 	bool hasParent() const;
 	void setHasParent( bool hasParent );

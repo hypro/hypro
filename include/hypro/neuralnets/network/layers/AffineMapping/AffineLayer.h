@@ -32,7 +32,7 @@ class AffineLayer : public LayerBase<Number> {
 	virtual std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const;
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
-	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const;
+	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const;
 	/**
 	 * @brief Propagates back y to the previous neuron in the layer. I.e. given y, y = f(x), x \in I, return x
 	 * 
@@ -42,7 +42,7 @@ class AffineLayer : public LayerBase<Number> {
 	 * @param[in] currentSet, the set which includes the point y
 	 * @return Point<Number> the backpropagated final result
 	 */
-	Point<Number> propagateCandidateBack( hypro::Point<Number> y, int neuronNumber, hypro::Starset<Number> inputSet, hypro::Starset<Number> currentSet ) const;
+	std::pair<Point<Number>,Point<Number>>  propagateCandidateBack( hypro::Point<Number> y, Point<Number> alpha, int neuronNumber, hypro::Starset<Number> inputSet, hypro::Starset<Number> currentSet ) const;
 
 	virtual void serialize( std::ostream& os ) const {
 		os << "Layer size: " << LayerBase<Number>::mLayerSize << std::endl;

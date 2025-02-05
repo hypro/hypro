@@ -102,7 +102,7 @@ std::vector<Starset<Number>> HardTanhLayer<Number>::forwardPass( const std::vect
 }
 
 template <typename Number>
-Point<Number> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
+std::pair<Point<Number>,Point<Number>> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const {
 	assert( neuronNumber < y.dimension() );
 	assert( mMinValue <= y[neuronNumber] && y[neuronNumber] <= mMaxValue );
 	
@@ -123,22 +123,22 @@ Point<Number> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> y, in
 			if ( y[neuronNumber] == mMinValue || y[neuronNumber] == mMaxValue){
 				y[neuronNumber] = Point<Number>( inputSet.generator() * result.optimumValue + inputSet.center() )[neuronNumber];
 			}
-			return y;
+			return make_pair(y,Point<Number>(result.optimumValue));
 
 		case SOLUTION::INFEAS:
 			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
-            return Point<Number>();
+            return make_pair(Point<Number>(),Point<Number>());
 
 		default:
 			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
 			break;
 	}
 
-	return Point<Number>();
+	return make_pair(Point<Number>(),Point<Number>());
 }
 
 template <typename Number>
-Point<Number> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const {
+std::pair<Point<Number>,Point<Number>> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const {
 	std::cout <<"Block HardTanhLayer"<<std::endl;
 	std::vector<carl::Relation> relations;
 	for (int i = 0; i < ancestorSet.generator().rows(); i++){
@@ -160,16 +160,16 @@ Point<Number> HardTanhLayer<Number>::propagateCandidateBack( Point<Number> candi
 	EvaluationResult<Number> result = hypro::z3GetInternalPoint(ancestorSet.shape(), ancestorSet.limits(), ancestorSet.generator(), ancestorSet.center(), candidate, relations);	
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:						
-            return Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center());
+			return make_pair(Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center()),Point<Number>(result.optimumValue));
+
 		case SOLUTION::INFEAS:
-            return Point<Number>();
+            return make_pair(Point<Number>(),Point<Number>());
 		default:
 			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
 			break;
 	}
 
-	return Point<Number>();
-
+	return make_pair(Point<Number>(),Point<Number>());
 }
 
 }  // namespace hypro

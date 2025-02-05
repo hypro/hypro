@@ -86,8 +86,8 @@ class HardTanhLayer : public LayerBase<Number> {
 	 */
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
-	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const;
-	virtual Point<Number> propagateCandidateBack( Point<Number> candidate, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const;
+	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const;
+	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const;
 	
 	/**
 	 * @brief Serialization of the current layer.

@@ -90,7 +90,7 @@ class ReachabilityTree {
 	 * @param[in] strategy: Strategy used for finding the origin of candidate
 	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <EmptyPoint, node> which indicates the source neuron of the countereaxmple, return <source, root> if it is a true countereaxmple
 	 */
-	std::pair<Point<Number>, ReachabilityNode<Number>*> identifyCounterExampleSource( const Point<Number>& candidate, ReachabilityNode<Number>* node, BACKPROPAGATION_STRATEGY strategy) const;
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> identifyCounterExampleSource( const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node, BACKPROPAGATION_STRATEGY strategy) const;
 
 	/**
 	 * @brief Find the source neuron of a countereaxmple candidate inside a activation function layer or allow further backpropagation
@@ -101,8 +101,8 @@ class ReachabilityTree {
 	 * @param[in] nextIndex: The index of the neuron to which backpropagation is tried next
 	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <candidate, node> which indicates the source neuron of the countereaxmple, return <candidate, nullptr> if it is a true countereaxmple
 	 */
-	std::pair<Point<Number>, ReachabilityNode<Number>*> binarySearchBackpropagation(const Point<Number>& candidate, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex ) const;
-	std::pair<Point<Number>, ReachabilityNode<Number>*> rememberingSearchBackpropagation(const Point<Number>& candidate, ReachabilityNode<Number>* node ) const;
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  binarySearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex ) const;
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  rememberingSearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node ) const;
 
 	/**
 	 * @brief Calculates the corresponding point from the previous set such that applying the previous nodes computations on it we would get back the counterexample candidate
@@ -113,7 +113,7 @@ class ReachabilityTree {
 	 * @param[in] parentSet, the representation of the previous node
 	 * @return Point<Number> the corresponding point
 	 */
-	Point<Number> propagateCandidateBack( const Point<Number>& candidate, int parentLayer, int parentNeuron, const Starset<Number>& parentSet, const Starset<Number>& currentSet ) const;
+	std::pair<Point<Number>,Point<Number>> propagateCandidateBack( const Point<Number>& candidate, const Point<Number>& candidateAlpha, int parentLayer, int parentNeuron, const Starset<Number>& parentSet, const Starset<Number>& currentSet ) const;
 	
 	/**
 	 * @brief Calculates a point in ancestorSet which results in candidate after passing it through to the neuron with lowerIndex. Only works inside an activation-function layer
@@ -125,7 +125,7 @@ class ReachabilityTree {
 	 * @param[in] ancestorSet the representation of the ancestor node
 	 * @return Point<Number> the corresponding point if possible, and the empty point otherwise
 	 */
-	Point<Number> propagateCandidateBack( const Point<Number>& candidate, int layerNumber, int lowerIndex, int upperIndex, const Starset<Number>& ancestorSet ) const;
+	std::pair<Point<Number>,Point<Number>> propagateCandidateBack( const Point<Number>& candidate, const Point<Number>& candidateAlpha, int layerNumber, int lowerIndex, int upperIndex, const Starset<Number>& ancestorSet ) const;
 
 	void plotTree( ReachabilityNode<Number>* current, std::string filename ) const;
 
