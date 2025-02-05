@@ -37,6 +37,7 @@ class ReachabilityNode {
 
 	NN_REACH_METHOD mMethod;
 	Starset<Number> mRepresentation;
+	bool mHasCounterExample;
 	Point<Number> mCounterExample; // a counterexample, if node is a leaf and unsafe, the empty point otherwise
 
 	hypro::Plotter<Number>& mPlotter;

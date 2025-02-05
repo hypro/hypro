@@ -19,7 +19,8 @@ ReachabilityNode<Number>::ReachabilityNode( Starset<Number> representation, NN_R
 	, mHasParent( false )
 	, mChildren(std::vector<ReachabilityNode<Number>*>())
 	, mPlotter( hypro::Plotter<Number>::getInstance() )
-	, mCounterExample(Point<Number>()) {}
+	, mCounterExample(Point<Number>())
+	, mHasCounterExample(false) {}
 
 // template <typename Number>
 // ReachabilityNode<Number>::~ReachabilityNode() {
@@ -150,7 +151,7 @@ void ReachabilityNode<Number>::setRepresentation( const Starset<Number>& represe
 
 template <typename Number>
 bool ReachabilityNode<Number>::hasCounterExample() const{
-	return mCounterExample.dimension() > 0;
+	return mHasCounterExample;
 } 
 template <typename Number>
 Point<Number> ReachabilityNode<Number>::getCounterExample() const{
@@ -264,35 +265,34 @@ Point<Number> ReachabilityNode<Number>::_checkSafetyZ3SmallRepresentation(Starse
 template <typename Number>
 bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy ) {
 	
-	Point<Number> counterexample;
+	assert(mIsLeaf);
+
 	switch(strategy){
 		case COUNTEREXAMPLE_STRATEGY::Z3_BASIC: 
-			counterexample = _checkSafetyZ3(currentSet, safeSetMatrices, safeSetVectors);
+			mCounterExample = _checkSafetyZ3(currentSet, safeSetMatrices, safeSetVectors);
 			break;
 		case COUNTEREXAMPLE_STRATEGY::RANDOM:
-			counterexample = _checkSafetyRandom(currentSet, safeSetMatrices, safeSetVectors, 10);			
+			mCounterExample = _checkSafetyRandom(currentSet, safeSetMatrices, safeSetVectors, 10);			
 			break;
 		case COUNTEREXAMPLE_STRATEGY::Z3_SMALL_REPRESENTATION:
-			counterexample = _checkSafetyZ3SmallRepresentation(currentSet, safeSetMatrices, safeSetVectors);
+			mCounterExample = _checkSafetyZ3SmallRepresentation(currentSet, safeSetMatrices, safeSetVectors);
 			break;
 		default:
 			assert(false && "Not a known strategy to find counterexamples");
 			break;
 	}
-	
-	if(counterexample.dimension() > 0){
-		mCounterExample = counterexample;
-		return false;
-	}
 
-	return true;
+	mHasCounterExample = true;
+	mIsSafe = !(mCounterExample.dimension() > 0);
+		
+	return mIsSafe;
 }
 
 template <typename Number>
 bool ReachabilityNode<Number>::checkSafe( const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy) {
 	// if the node is a leaf, we should check if the representation is only in the safe region (which is a non-convex set, DNF)
 	if ( mIsLeaf) {
-		return hasCounterExample() ? false : checkSafeRecursive( mRepresentation, safeSetMatrices, safeSetVectors, strategy);
+		return hasCounterExample() ? mIsSafe : checkSafeRecursive( mRepresentation, safeSetMatrices, safeSetVectors, strategy);
 	} 
 
 	// if the node is not a leaf, then it safetiness depends on the children

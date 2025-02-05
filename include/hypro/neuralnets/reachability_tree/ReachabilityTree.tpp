@@ -190,7 +190,7 @@ Starset<Number> ReachabilityTree<Number>::prepareInput( bool normalize ) const {
 		// return Starset<Number>( center, generator, HPolytope<Number>( new_halfplanes ) );
 	}
 
-	return Starset<Number>( mInputSet.matrix(), mInputSet.vector() );
+	return Starset<Number>( mInputSet );
 }
 
 template <typename Number>
@@ -295,14 +295,11 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 				mLeaves.push_back( leafNode );
 
 				if ( !leafNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy) ) {
-					leafNode->setSafe( false );
 					mIsSafe = false;
-					if(BACKPROPAGATION_STRATEGY::EXACT_SOURCES != mBackpropagationStrategy){
+					if(BACKPROPAGATION_STRATEGY::EXACT_SOURCES != mBackpropagationStrategy || rootMethod == NN_REACH_METHOD::EXACT){
 						mIsComplete = true;
 						return rootNode;
 					}
-				} else {
-					leafNode->setSafe( true );
 				}
 			} else {
 				switch ( strategy ) {
@@ -345,11 +342,8 @@ std::pair<ReachabilityNode<Number>*,std::vector<ReachabilityNode<Number>*>> Reac
 	ReachabilityNode<Number>* leafNode = job.getNode();
 	mLeaves.push_back( leafNode );
 	if ( !leafNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy) ) {
-		leafNode->setSafe( false );
 		mIsSafe = false;
-	} else {
-		leafNode->setSafe( true );
-	}
+	} 
 	mIsComplete = true;
 	return std::make_pair(leafNode, notComputedNodes);
 }
@@ -766,6 +760,8 @@ std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::re
         return std::make_pair(origin, ancestorNode);
     }
 	
+	//TODO: Figure out why an error with getAncestor could occure here (found with drones->c_1_1)
+	//		Think about subsequent neurons in the previous sources list (e.g.: [..., x,x+1,...])
 	for (std::list<int>::iterator it = previousSources.begin(); it != previousSources.end(); it++ ){
 		ancestorNode = getAncestor(node->getParent(), *it);
 		origin = propagateCandidateBack(candidate, layerNumber, nodeNumber, *it, ancestorNode->representation());
@@ -774,7 +770,7 @@ std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::re
 			if ( it == previousSources.begin()){
 				return binarySearchBackpropagation(origin, ancestorNode, 0, (*it)/2);
 			}
-			ReachabilityNode<Number>* beforeSourceNode = getAncestor(ancestorNode->getParent(), *std::prev(it) + 1);
+			ReachabilityNode<Number>* beforeSourceNode = getAncestor(ancestorNode, *std::prev(it) + 1);
 			Point<Number> tmpOrigin = propagateCandidateBack(origin, layerNumber, ancestorNode->getParent()->neuronNumber(), *std::prev(it) + 1, beforeSourceNode->representation());
 			if ( 0 < tmpOrigin.dimension() ){
 				return std::make_pair(Point<Number>(), beforeSourceNode->getParent());

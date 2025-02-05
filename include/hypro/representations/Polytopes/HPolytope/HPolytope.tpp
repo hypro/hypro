@@ -309,6 +309,8 @@ namespace hypro {
             : mHPlanes(orig.constraints()), mDimension(orig.dimension()), mNonRedundant(orig.isNonRedundant()) {
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
             setOptimizer(orig.matrix(), orig.vector());
+        } else if(Setting::OPTIMIZER_CACHING && !SettingRhs::OPTIMIZER_CACHING){
+            setOptimizer(orig.matrix(), orig.vector());
         }
     }
 

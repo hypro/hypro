@@ -325,7 +325,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 	// we allocate n new entries in the shape and limit matrices for the new constraints
 	shape.conservativeResize( shape.rows() + _mat.rows(), shape.cols() );
-	limits.conservativeResize( shape.rows() + _mat.rows(), 1 );
+	limits.conservativeResize( shape.rows(), 1 );
 
 	// this loop could be executed in parallel
 	// #pragma omp parallel for

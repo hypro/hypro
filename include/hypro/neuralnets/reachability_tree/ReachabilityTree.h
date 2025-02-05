@@ -132,6 +132,8 @@ class ReachabilityTree {
 	Starset<Number> prepareInput( bool normalize ) const;
 	std::vector<HPolytope<Number>> prepareSafeSet( bool normalize ) const;
 
+
+	void rememberCounterexampleSource(int layerNumber, int neuronNumber);
   private:
 	int sgn( Number val ) const;
 	Number min_val( size_t dim ) const;
@@ -142,7 +144,7 @@ class ReachabilityTree {
 	bool _refinementAlwaysFullComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
 	bool _refinementAvoidComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
 
-	void rememberCounterexampleSource(int layerNumber, int neuronNumber);
+	
 	bool isPreviousCounterexampleSource(int layerNumber, int neuronNumber );
 };
 
