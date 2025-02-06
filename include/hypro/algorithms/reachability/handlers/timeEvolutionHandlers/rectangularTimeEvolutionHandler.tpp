@@ -256,7 +256,12 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 
     template <typename Number>
     CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant ) {
+#ifdef QUANTIFIER_ELIMINATION_REDUNDANCY_CHECKS
         constexpr bool REMOVE_REDUNDANDY_IN_QE = true;
+#else
+        constexpr bool REMOVE_REDUNDANDY_IN_QE = false;
+#endif
+
         auto& vpool = hypro::VariablePool::getInstance();
 
         // get bad state
