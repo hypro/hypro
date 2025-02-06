@@ -17,7 +17,7 @@ ReachabilityNode<Number>::ReachabilityNode( Starset<Number> representation, NN_R
 	, mIsSafe( false )
 	, mIsComputed( false )
 	, mHasParent( false )
-	, mChildren(std::vector<ReachabilityNode<Number>*>())
+	, mChildren(std::list<ReachabilityNode<Number>*>())
 	, mPlotter( hypro::Plotter<Number>::getInstance() )
 	, mCounterExample(Point<Number>())
 	, mHasCounterExample(false) 
@@ -103,13 +103,17 @@ void ReachabilityNode<Number>::setParent( ReachabilityNode<Number>* parent ) {
 template <typename Number>
 ReachabilityNode<Number>* ReachabilityNode<Number>::getChild(int index) const {
 	assert(0 <= index && index < mChildren.size());
-	return mChildren[index];
+	auto it = mChildren.cbegin();
+	std::advance(it, index);
+	return *it;
 }
 
 template <typename Number>
 void ReachabilityNode<Number>::setChild( int index, ReachabilityNode<Number>* child ){
 	assert(0 <= index && index < mChildren.size());
-	mChildren[index] = child;
+	auto it = mChildren.begin();
+	std::advance(it, index);
+	*it = child;
 }
 
 template <typename Number>

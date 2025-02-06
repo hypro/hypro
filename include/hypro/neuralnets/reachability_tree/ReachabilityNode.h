@@ -30,7 +30,7 @@ class ReachabilityNode {
 
 	bool mHasParent;
 	ReachabilityNode<Number>* mParent;
-	std::vector<ReachabilityNode<Number>*> mChildren;
+	std::list<ReachabilityNode<Number>*> mChildren;
 		
 	int mLayerNumber;	// the number of layer in the original NNet
 	int mNeuronNumber;	// the number of neuron in the current layer
