@@ -314,7 +314,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
                 << bad );
 
         if(REMOVE_REDUNDANDY_IN_QE) {
-            TRACE("hypro.fm.qe", "number of constraints during elimination: ");
+            TRACE("qe.redundancy_check", "number of constraints during elimination: ");
             // reverse order to for detectDimension() to work properly.
             // If ordering of elimination is changed, dimension has to be set manually.
             std::reverse(variablesToEliminate.begin(),variablesToEliminate.end());
@@ -332,16 +332,16 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
             assert(bad.dimension() == dim + 1);
 
             bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
-            TRACE("hypro.fm.qe", "\n");
+            TRACE("qe.redundancy_check", "\n");
         } else {
-            TRACE("hypro.fm.qe", "number of constraints during elimination: ");
+            TRACE("qe.redundancy_check", "number of constraints during elimination: ");
             // create variables to eliminate
             variablesToEliminate.push_back(t);
 
             QEQuery quOrder;
             quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
             bad.eliminateVariables( quOrder );
-            TRACE("hypro.fm.qe", "\n");
+            TRACE("qe.redundancy_check", "\n");
         }
         assert(bad.dimension() == dim);
 

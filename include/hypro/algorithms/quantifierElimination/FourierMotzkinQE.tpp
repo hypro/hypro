@@ -46,6 +46,7 @@ namespace hypro {
                                          << mFormula);
             }
         }
+        TRACE("qe.redundancy_check", mFormula.size() << ",");
 
         DEBUG("hypro.algorithms.qe", "Formula after elimination: " << mFormula);
 
