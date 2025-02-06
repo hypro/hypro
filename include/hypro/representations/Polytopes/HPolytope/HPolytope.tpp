@@ -138,7 +138,11 @@ namespace hypro {
 			Eigen::Index point_rank = 0;
 			bitset zeroDimensions = bitset(dim);
 
-            if(inputPoints.size() > NUMBER_OF_POINTS_WARNING) WARN("hypro", "NUMBER_OF_POINTS_WARNING: {} points during conversion with DD-method", inputPoints.size());
+            if(inputPoints.size() > NUMBER_OF_POINTS_WARNING) {
+                 std::stringstream ss;
+                 ss << "NUMBER_OF_POINTS_WARNING: " << inputPoints.size() << " points during conversion with DD-method";
+                WARN("hypro", ss.str());
+                }
 
 				Eigen::FullPivLU<hypro::matrix_t<Number>> lu_points(pointMatrix);
 				point_rank = lu_points.rank();
