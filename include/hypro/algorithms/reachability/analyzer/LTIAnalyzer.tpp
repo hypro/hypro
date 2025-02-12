@@ -130,7 +130,7 @@ namespace hypro {
                 segmentsToCompute = 0;
             }
 
-            if (mParameters.underapproxReach) {
+            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty() && !node->getInitialSetUnderApprox().universal()) {
                 // start over- and under-approximative time step calculation
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getInitialSetUnderApprox(), node->getLocation(),
                                                             std::back_inserter(node->getFlowpipe()), 
@@ -142,7 +142,7 @@ namespace hypro {
             }
         } else {
 
-            if (mParameters.underapproxReach) {
+            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty() && !node->getInitialSetUnderApprox().universal()) {
                 // start over- and under-approximative time step calculation
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getInitialSetUnderApprox(), node->getLocation(),
                                                             std::back_inserter(node->getFlowpipe()), 
@@ -230,7 +230,7 @@ namespace hypro {
                 // in any case add node to the search tree
             
                 ReachTreeNode<State, LocationT> *childNode;
-                if (mParameters.underapproxReach) {
+                if (mParameters.underapproxReach && itUnder != timedValuationSetsUnder.end()) {
                     childNode = &node->addChild(valuationSet, itUnder->valuationSet, globalDuration, transition);
                     ++itUnder;
                 } else {

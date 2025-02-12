@@ -30,7 +30,7 @@ namespace hypro {
 
         Representation firstSegment;
         Representation firstSegmentUnder;
-        if (mSettings.underapproxReach) {
+        if (mSettings.underapproxReach && outUnderApprox.has_value()) {
             
             firstSegment = constructFirstSegments(initialSet, loc->getLinearFlow(mSubspace),
                                                             mTrafoCache.getTransformation(loc, mSettings.timeStep,
@@ -88,11 +88,12 @@ namespace hypro {
 
         // while not done
         for (size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount) {
-        
+            std::cout << "before apply time evolution "<< std::endl;
             segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
 #ifdef HYPRO_LOGGING
             auto tmp = segment;
 #endif
+            std::cout << "before intersect " << std::endl;
             std::tie(containment, segment) = intersect(segment, loc->getInvariant(), mSubspace);
             if (containment == CONTAINMENT::NO) {
 #ifdef HYPRO_LOGGING
@@ -100,17 +101,24 @@ namespace hypro {
                       "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.");
                 DEBUG("hypro.reachability", "Compute time successor states done.");
 #endif
+                std::cout << "intersect containment is empty" << std::endl;
                 return REACHABILITY_RESULT::SAFE;
             }
-
+            std::cout << "segmentCount = " << segmentCount << std::endl;
             *out = segment;
             ++out;
 
             if (mSettings.underapproxReach && outUnderApprox.has_value()) {
+                std::cout << "apply time evolution segment under" << std::endl;
                 segmentUnder = applyTimeEvolution(segmentUnder, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
+
+                std::cout << "after apply time evolution segment under" << std::endl;
+
                 // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
                 std::tie(std::ignore, segmentUnder) = intersect(segmentUnder, loc->getInvariant(), mSubspace);
                 
+                std::cout << "after intersect  evolution segment under" << std::endl;
+
                 *(outUnderApprox.value()) = segmentUnder;
                 ++(outUnderApprox.value()); 
             }
@@ -340,18 +348,15 @@ namespace hypro {
                 }
 
 
-                if (mSettings.underapproxReach) {
+                if (mSettings.underapproxReach && itUnderApprox != flowpipeUnderApprox.end()) {
+                    
                     auto [containment, intersectedUnder] = intersect(*itUnderApprox, transition->getGuard());
 
                     if (containment != CONTAINMENT::NO) {
                         currentSucc.valuationSetsUnder.push_back({intersectedUnder, cnt});
                     }
                     ++itUnderApprox;
-                } else {
-                    // if we don't do under-approximation then the rest of the code will work with empty objects
-                    currentSucc.valuationSetsUnder.push_back({});
                 }
-
                 ++cnt;
 
             }
@@ -363,7 +368,7 @@ namespace hypro {
 
         // aggregation
         // for each transition
-        for (auto &[transition, valuationSets, valuationSetsUnder]: enabledSegments) {
+        for (auto &[transition, valuationSets, valuationSetsUnder]: enabledSegments) {         
             // no aggregation
             std::size_t blockSize = 1;
             if (mSettings.aggregation == AGG_SETTING::AGG ||
@@ -382,7 +387,7 @@ namespace hypro {
                                 transition->getClusterBound();    // division rounding up
                 }
             }
-            if (mSettings.underapproxReach) {
+            if (mSettings.underapproxReach && !valuationSetsUnder.empty()) {
                 successors.emplace_back(JumpSuccessorOverUnder<Representation, typename HybridAutomaton::LocationType>{transition,
                                                                                                             aggregate( blockSize, valuationSets),
                                                                                                             aggregate( blockSize, valuationSetsUnder) 
@@ -403,7 +408,7 @@ namespace hypro {
             for (auto it = valuationSets.begin(); it != valuationSets.end() ;) {
 
                 it->valuationSet = applyReset(it->valuationSet, transition->getReset());
-                if (mSettings.underapproxReach) {
+                if (mSettings.underapproxReach && itUnder != valuationSetsUnder.end() && !itUnder->valuationSet.empty()) {
                     itUnder->valuationSet = applyReset(itUnder->valuationSet, transition->getReset());
                 }
 
@@ -424,7 +429,7 @@ namespace hypro {
                 } else {
                     it->valuationSet.reduceRepresentation();
                     ++it;
-                    if (mSettings.underapproxReach) {
+                    if (mSettings.underapproxReach && itUnder != valuationSetsUnder.end()) {
                         itUnder->valuationSet.reduceRepresentation();
                         ++itUnder;   
                     }

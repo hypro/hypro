@@ -135,8 +135,8 @@ static void computeReachableStates(const std::string &filename) {
 int main(int argc, char **argv) {
     std::string filename = argv[1];
     
-    // using Number = mpq_class;
-    using Number = double;
+    using Number = mpq_class;
+    // using Number = double; // with double it gets stuck in HPolytope->satisfiesHalfspaces
 
     using Representation = hypro::HPolytope<Number>;
     computeReachableStates<Number, Representation>(filename);

@@ -184,6 +184,8 @@ namespace hypro {
          */
         bool empty() const;
 
+        bool universal() const;
+
         /**
          * @brief Static method for construction of an empty H-polytope.
          * @details An empty H-polytope is constructed by creating two hyperplanes which falsify each other.

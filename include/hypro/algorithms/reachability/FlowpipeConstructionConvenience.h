@@ -35,10 +35,12 @@ namespace hypro {
         if (condition.isTrue()) {
             return std::make_pair(CONTAINMENT::FULL, valuationSet);
         }
+        std::cout << "inside intersect3" << std::endl;
         // shortcut false condition
         if (condition.isFalse() || valuationSet.empty()) {
             return std::make_pair(CONTAINMENT::NO, Representation::Empty());
         }
+        std::cout << "inside intersect3_2" << std::endl;
         // assert( valuationSet.dimension() == condition.dimension() );
         return valuationSet.satisfiesHalfspaces(condition.getMatrix(subspace), condition.getVector(subspace));
     }

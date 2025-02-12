@@ -21,8 +21,13 @@ namespace hypro {
 // copy constructor
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>::HPolytopeT(const HPolytopeT &orig)
-            : GeometricObjectBase(orig), mHPlanes(orig.constraints()), mDimension(orig.dimension()), mVertices(orig.getExtremeVertices()),
-              mNonRedundant(orig.isNonRedundant()) {
+            : GeometricObjectBase(orig) {
+
+        mHPlanes = orig.constraints(); 
+        mDimension = orig.dimension(); 
+        mVertices = orig.getExtremeVertices();
+        mNonRedundant = orig.isNonRedundant();
+
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
             setOptimizer(orig.matrix(), orig.vector());
         }
@@ -350,6 +355,16 @@ namespace hypro {
 
         mEmptyState = (res == true ? SETSTATE::EMPTY : SETSTATE::NONEMPTY);
         return res;
+    }
+
+    template<typename Number, typename Converter, class Setting>
+    bool HPolytopeT<Number, Converter, Setting>::universal() const {
+        if (mEmptyState == SETSTATE::UNIVERSAL) {
+            return true;
+        }
+
+        return false;
+
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -922,6 +937,8 @@ namespace hypro {
     HPolytopeT<Number, Converter, Setting>::satisfiesHalfspaces(const matrix_t<Number> &_mat,
                                                                 const vector_t<Number> &_vec) const {
         
+
+        std::cout << *this << std::endl;
         TRACE("hypro.representations.HPolytope", "(P AND Ax <= b) == emptyset?, A: " << _mat << "b: " << _vec);
         assert(_mat.rows() == _vec.rows());
 
@@ -1154,14 +1171,19 @@ namespace hypro {
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::intersect(const HPolytopeT &rhs) const {
         TRACE("hypro.representations.HPolytope", "with " << rhs << std::endl);
+        std::cout << "inside intersect 2" << std::endl;
         HPolytopeT<Number, Converter, Setting> res;
+        std::cout << "inside intersect 2" << std::endl;
         for (const auto &plane: mHPlanes) {
             res.insert(plane);
+            std::cout << "insert plane " << std::endl;
         }
+        std::cout << "after insert planes of this " << std::endl;
         for (const auto &plane: rhs.constraints()) {
             res.insert(plane);
         }
 
+        std::cout << "after insert planes of ths " << std::endl;
         // lightweight check whether we can easily declare emptiness
         if (rhs.mEmptyState == SETSTATE::EMPTY || this->mEmptyState == SETSTATE::EMPTY) {
             res.mEmptyState = SETSTATE::EMPTY;
