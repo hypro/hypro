@@ -130,21 +130,21 @@ namespace hypro {
                 segmentsToCompute = 0;
             }
 
-            if (!node->getInitialSetUnderApprox().empty() && !node->getInitialSetUnderApprox().universal()) {
+            if (!node->getInitialSetUnderApprox().empty()) {
                 safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
                                                                 std::back_inserter(node->getFlowpipeUnderApprox()), segmentsToCompute);
             }
-            if (!node->getInitialSet().empty() && !node->getInitialSet().universal()) {
+            if (!node->getInitialSet().empty()) {
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
                                             std::back_inserter(node->getFlowpipe()), segmentsToCompute);
             }
         } else {
 
-            if (!node->getInitialSetUnderApprox().empty() && !node->getInitialSetUnderApprox().universal()) {
+            if (!node->getInitialSetUnderApprox().empty()) {
                 safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
                                                             std::back_inserter(node->getFlowpipeUnderApprox()));
             }
-            if (!node->getInitialSet().empty() && !node->getInitialSet().universal()) {
+            if (!node->getInitialSet().empty()) {
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
                                                         std::back_inserter(node->getFlowpipe()));
             }
