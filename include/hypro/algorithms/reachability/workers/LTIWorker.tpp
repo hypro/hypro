@@ -17,8 +17,9 @@ namespace hypro {
     LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessors(const Representation &initialSet,
                                                                       LocationT const *loc, OutputIt out,
                                                                       long int segmentsToCompute,
-                                                                      bool checkSafety, std::optional<OutputIt> outUnderApprox, 
-                                                                      const Representation & initialSetUnder ) const {
+                                                                      bool checkSafety) const {
+                                                                
+        DEBUG("hypro.reachability", "inside computeTimeSuccessors");            
 
         if (segmentsToCompute < 0) {
             segmentsToCompute = mNumSegments;
@@ -27,32 +28,10 @@ namespace hypro {
                   "No segments to compute (reached global time horizon, segmentsToCompute == 0), return.");
             return REACHABILITY_RESULT::SAFE;
         }
-
-        Representation firstSegment;
-        Representation firstSegmentUnder;
-        if (mSettings.underapproxReach && outUnderApprox.has_value()) {
-            
-            firstSegment = constructFirstSegments(initialSet, loc->getLinearFlow(mSubspace),
-                                                            mTrafoCache.getTransformation(loc, mSettings.timeStep,
-                                                                                          mSubspace).fullMatrix,
-                                                            mSettings.timeStep, false);
-
-
-            // minkowski diff is only implemented for HPoly (at least so far)
-            if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
-                firstSegmentUnder = constructFirstSegments(initialSetUnder, loc->getLinearFlow(mSubspace),
-                                            mTrafoCache.getTransformation(loc, mSettings.timeStep,
-                                                                            mSubspace).fullMatrix,
-                                            mSettings.timeStep, true);
-            }
-
-        } else {
-            firstSegment = constructFirstSegment(initialSet, loc->getLinearFlow(mSubspace),
+        Representation firstSegment = constructFirstSegment(initialSet, loc->getLinearFlow(mSubspace),
                                                             mTrafoCache.getTransformation(loc, mSettings.timeStep,
                                                                                           mSubspace).fullMatrix,
                                                             mSettings.timeStep);
-        }
-
 
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
         // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
@@ -61,22 +40,12 @@ namespace hypro {
                   "First segment is not contained in the invariant, abort time successor computation.");
             return REACHABILITY_RESULT::SAFE;
         }
+
         // insert segment
         *out = segment;
         ++out;
 
-        // need the declaration, because it get's assigned inside the if, and after leaving the scope segmentUnder no longer exists
-        Representation segmentUnder;
-        if (mSettings.underapproxReach && outUnderApprox.has_value()) {
-            // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
-            std::tie (std::ignore, segmentUnder) = intersect(firstSegmentUnder, loc->getInvariant(), mSubspace);
-            *(outUnderApprox.value()) = segmentUnder;
-            ++(outUnderApprox.value());   
-        }
-
-
         // intersect with badstates
-        // if the over-approximation doesn't intersect the bad state, also the under-approximation will not, so there is no point in checking it
         if (checkSafety) {
             std::tie(containment, std::ignore) = ltiIntersectBadStates(segment, loc, mHybridAutomaton, mSubspace);
             if (containment != CONTAINMENT::NO) {
@@ -101,20 +70,9 @@ namespace hypro {
 #endif
                 return REACHABILITY_RESULT::SAFE;
             }
+
             *out = segment;
             ++out;
-
-            if (mSettings.underapproxReach && outUnderApprox.has_value()) {
-                segmentUnder = applyTimeEvolution(segmentUnder, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
-
-                // if the over-approximation of the segment is in the invariant, than the under-approximation should be also there
-                std::tie(std::ignore, segmentUnder) = intersect(segmentUnder, loc->getInvariant(), mSubspace);
-
-                *(outUnderApprox.value()) = segmentUnder;
-                ++(outUnderApprox.value()); 
-            }
-
-
 
             // intersect with badstates
             if (checkSafety) {
@@ -128,7 +86,88 @@ namespace hypro {
                 }
             }
         }
- 
+        DEBUG("hypro.reachability", "Compute time successor states done.");
+        return REACHABILITY_RESULT::SAFE;
+    }
+
+    template<typename Representation, typename HybridAutomaton>
+    template<typename OutputIt>
+    REACHABILITY_RESULT
+    LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessorsUnder(const Representation &initialSetUnder,
+                                                                            LocationT const *loc, OutputIt out,
+                                                                            long int segmentsToCompute,
+                                                                            bool checkSafety) const {
+
+
+        DEBUG("hypro.reachability", "inside computeTimeSuccessorsUnder");
+
+        if (segmentsToCompute < 0) {
+            segmentsToCompute = mNumSegments;
+        } else if (segmentsToCompute == 0) {
+            DEBUG("hypro.reachability",
+                    "No segments to compute (reached global time horizon, segmentsToCompute == 0), return.");
+            return REACHABILITY_RESULT::SAFE;
+        }
+
+        Representation firstSegment;
+        if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
+            firstSegment = constructFirstSegmentUnder(initialSetUnder, loc->getLinearFlow(mSubspace),
+                                        mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace).fullMatrix,mSettings.timeStep);
+        }
+
+        auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
+        // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
+        if (containment == CONTAINMENT::NO) {
+            DEBUG("hypro.reachability",
+                    "First segment is not contained in the invariant, abort time successor computation.");
+            return REACHABILITY_RESULT::SAFE;
+        }
+
+        // insert segment
+        *out = segment;
+        ++out;
+
+        // intersect with badstates
+        if (checkSafety) {
+            std::tie(containment, std::ignore) = ltiIntersectBadStates(segment, loc, mHybridAutomaton, mSubspace);
+            if (containment != CONTAINMENT::NO) {
+                // Todo: memorize the intersecting state set and keep state.
+                DEBUG("hypro.reachability", "First segment intersects the set of bad states, terminate.");
+                return REACHABILITY_RESULT::UNKNOWN;
+            }
+        }
+
+        // while not done
+        for (size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount) {
+            segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
+#ifdef HYPRO_LOGGING
+            auto tmp = segment;
+#endif
+            std::tie(containment, segment) = intersect(segment, loc->getInvariant(), mSubspace);
+            if (containment == CONTAINMENT::NO) {
+#ifdef HYPRO_LOGGING
+                DEBUG("hypro.reachability",
+                        "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.");
+                DEBUG("hypro.reachability", "Compute time successor states done.");
+#endif
+                return REACHABILITY_RESULT::SAFE;
+            }
+
+            *out = segment;
+            ++out;
+
+            // intersect with badstates
+            if (checkSafety) {
+                std::tie(containment, std::ignore) = ltiIntersectBadStates(segment, loc, mHybridAutomaton, mSubspace);
+                if (containment != CONTAINMENT::NO) {
+                    // Todo: memorize the intersecting state set and keep state.
+                    DEBUG("hypro.reachability",
+                            "Segment " << segment << " intersects the set of bad states, terminate.");
+                    DEBUG("hypro.reachability", "Compute time successor states done.");
+                    return REACHABILITY_RESULT::UNKNOWN;
+                }
+            }
+        }
         DEBUG("hypro.reachability", "Compute time successor states done.");
         return REACHABILITY_RESULT::SAFE;
     }
@@ -329,28 +368,29 @@ namespace hypro {
             auto &currentSucc = enabledSegments.emplace_back(
                     EnabledSetsUnderOver<Representation, typename HybridAutomaton::LocationType>{transition.get()});
 
-            SegmentInd cnt = 0;
-            auto itUnderApprox = flowpipeUnderApprox.begin();
 
+            SegmentInd cnt = 0;
             for (auto const &valuationSet: flowpipe) {
                 auto [containment, intersected] = intersect(valuationSet, transition->getGuard());
+
                 if (containment != CONTAINMENT::NO) {
                     currentSucc.valuationSets.push_back({intersected, cnt});
                 }
+                ++cnt;
+            }
+
+            cnt = 0;
+            for (auto const &valuationSet: flowpipeUnderApprox) {
 
 
-                if (mSettings.underapproxReach && itUnderApprox != flowpipeUnderApprox.end()) {
-                    
-                    auto [containment, intersectedUnder] = intersect(*itUnderApprox, transition->getGuard());
+                auto [containment, intersected] = intersect(valuationSet, transition->getGuard());
 
-                    if (containment != CONTAINMENT::NO) {
-                        currentSucc.valuationSetsUnder.push_back({intersectedUnder, cnt});
-                    }
-                    ++itUnderApprox;
+                if (containment != CONTAINMENT::NO) {
+                    currentSucc.valuationSetsUnder.push_back({intersected, cnt});
                 }
                 ++cnt;
-
             }
+
         }
 
         TRACE("hypro.reachability", "Guard-enabling segments: " << print(enabledSegments));
@@ -395,37 +435,48 @@ namespace hypro {
 
         // applyReset
         for (auto &[transition, valuationSets, valuationSetsUnder]: successors) {
-            auto itUnder = valuationSetsUnder.begin();
-            for (auto it = valuationSets.begin(); it != valuationSets.end() ;) {
 
+            for (auto it = valuationSets.begin(); it != valuationSets.end();) {
                 it->valuationSet = applyReset(it->valuationSet, transition->getReset());
-                if (mSettings.underapproxReach && itUnder != valuationSetsUnder.end() && !itUnder->valuationSet.empty()) {
-                    itUnder->valuationSet = applyReset(itUnder->valuationSet, transition->getReset());
-                }
 
                 TRACE("hypro.reachability", "Set after reset " << it->valuationSet);
-                TRACE("hypro.reachability",
-                      transition->getSource()->getName() << " -> " << transition->getTarget()->getName()
+                TRACE("hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName()
                                                          << ": Reset is: " << transition->getReset());
+
                 CONTAINMENT containment;
-                // if the over-approximative set is inside the invariant, then so is the under-approximative 
-                std::tie(containment, it->valuationSet) = intersect(it->valuationSet,
-                                                                    transition->getTarget()->getInvariant());
+                std::tie(containment, it->valuationSet) = intersect(it->valuationSet, transition->getTarget()->getInvariant());
+
                 TRACE("hypro.reachability", "Set after reset and intersection with invariant " << it->valuationSet);
+
                 if (containment == CONTAINMENT::NO) {
                     it = valuationSets.erase(it);
-                    if (mSettings.underapproxReach) {
-                        itUnder = valuationSetsUnder.erase(itUnder);
-                    }
                 } else {
                     it->valuationSet.reduceRepresentation();
                     ++it;
-                    if (mSettings.underapproxReach && itUnder != valuationSetsUnder.end()) {
-                        itUnder->valuationSet.reduceRepresentation();
-                        ++itUnder;   
-                    }
                 }
             }
+
+            // now the same for the under-approx
+            for (auto it = valuationSetsUnder.begin(); it != valuationSetsUnder.end();) {
+                it->valuationSet = applyReset(it->valuationSet, transition->getReset());
+
+                TRACE("hypro.reachability", "Set after reset " << it->valuationSet);
+                TRACE("hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName()
+                                                         << ": Reset is: " << transition->getReset());
+
+                CONTAINMENT containment;
+                std::tie(containment, it->valuationSet) = intersect(it->valuationSet, transition->getTarget()->getInvariant());
+
+                TRACE("hypro.reachability", "Set after reset and intersection with invariant " << it->valuationSet);
+                
+                if (containment == CONTAINMENT::NO) {
+                    it = valuationSetsUnder.erase(it);
+                } else {
+                    it->valuationSet.reduceRepresentation();
+                    ++it;
+                }
+            }
+
         }
 
         return successors;

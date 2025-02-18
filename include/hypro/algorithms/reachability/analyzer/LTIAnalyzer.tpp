@@ -130,29 +130,25 @@ namespace hypro {
                 segmentsToCompute = 0;
             }
 
-            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty() && !node->getInitialSetUnderApprox().universal()) {
-                // start over- and under-approximative time step calculation
-                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getInitialSetUnderApprox(), node->getLocation(),
-                                                            std::back_inserter(node->getFlowpipe()), 
-                                                            std::back_inserter(node->getFlowpipeUnderApprox()),
-                                                            segmentsToCompute);
-            } else {
+            if (!node->getInitialSetUnderApprox().empty() && !node->getInitialSetUnderApprox().universal()) {
+                safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
+                                                                std::back_inserter(node->getFlowpipeUnderApprox()), segmentsToCompute);
+            }
+            if (!node->getInitialSet().empty() && !node->getInitialSet().universal()) {
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
-                                                            std::back_inserter(node->getFlowpipe()), segmentsToCompute);
+                                            std::back_inserter(node->getFlowpipe()), segmentsToCompute);
             }
         } else {
 
-            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty() && !node->getInitialSetUnderApprox().universal()) {
-                // start over- and under-approximative time step calculation
-                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getInitialSetUnderApprox(), node->getLocation(),
-                                                            std::back_inserter(node->getFlowpipe()), 
+            if (!node->getInitialSetUnderApprox().empty() && !node->getInitialSetUnderApprox().universal()) {
+                safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
                                                             std::back_inserter(node->getFlowpipeUnderApprox()));
-            } else {
+            }
+            if (!node->getInitialSet().empty() && !node->getInitialSet().universal()) {
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
                                                         std::back_inserter(node->getFlowpipe()));
             }
         }
-
 
         // check, whether the full time horizon has been exploited - if not, an invariant has bound the evolution and we might have a timelock
         bool timeElapseBoundedByModel = false;
@@ -209,16 +205,21 @@ namespace hypro {
             }
 
             auto itUnder = timedValuationSetsUnder.begin();
+            auto it = timedValuationSets.begin();
 
+            while (itUnder != timedValuationSetsUnder.end() || it != timedValuationSets.end()) {
 
-            for (const auto [valuationSet, segmentsInterval]: timedValuationSets) {
+            // for (const auto [valuationSet, segmentsInterval]: timedValuationSets) {
                 // update reachTree
                 // convert local time to global time
                 carl::Interval<SegmentInd> const &initialSetDuration = node->getTimings();
+
+                auto lower = (it != timedValuationSets.end()) ? it->time.lower() : itUnder->time.lower();
+                auto upper = (it != timedValuationSets.end()) ? it->time.upper() : itUnder->time.upper();
                 // add one to upper to convert from segment indices to time points
                 // multiply by timeStepFactor to convert from analyzer specific timeStep to fixedTimeStep
-                carl::Interval<SegmentInd> enabledDuration{segmentsInterval.lower() * mParameters.timeStepFactor,
-                                                           (segmentsInterval.upper() + 1) * mParameters.timeStepFactor};
+                carl::Interval<SegmentInd> enabledDuration{lower * mParameters.timeStepFactor,
+                                                           (upper + 1) * mParameters.timeStepFactor};
                 carl::Interval<TimePoint> globalDuration{initialSetDuration.lower() + enabledDuration.lower(),
                                                          initialSetDuration.upper() + enabledDuration.upper()};
                 // if this transition is enabled in the last segment of a flowpipe which is bounded by an invariant, we do not have a timelock
@@ -230,11 +231,22 @@ namespace hypro {
                 // in any case add node to the search tree
             
                 ReachTreeNode<State, LocationT> *childNode;
-                if (mParameters.underapproxReach && itUnder != timedValuationSetsUnder.end()) {
-                    childNode = &node->addChild(valuationSet, itUnder->valuationSet, globalDuration, transition);
-                    ++itUnder;
+
+                if (mParameters.underapproxReach) { 
+                    if (it != timedValuationSets.end() && itUnder != timedValuationSetsUnder.end() ) {
+                        childNode = &node->addChild(it->valuationSet, itUnder->valuationSet, globalDuration, transition);
+                        ++itUnder;
+                        it++;
+                    } else if (it != timedValuationSets.end()) {
+                        childNode = &node->addChild(it->valuationSet, globalDuration, transition);
+                        ++it;
+                    } else  { // itUnder != timedValuationSetsUnder.end()
+                        childNode = &node->addChild(itUnder->valuationSet, globalDuration, transition, true);
+                        ++itUnder;
+                    }
                 } else {
-                    childNode = &node->addChild(valuationSet, globalDuration, transition);
+                    childNode = &node->addChild(it->valuationSet, globalDuration, transition);
+                    it++;
                 }
                 
                 

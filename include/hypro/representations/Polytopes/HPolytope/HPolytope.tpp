@@ -1172,7 +1172,6 @@ namespace hypro {
         HPolytopeT<Number, Converter, Setting> res;
         for (const auto &plane: mHPlanes) {
             res.insert(plane);
-            std::cout << "insert plane " << std::endl;
         }
         for (const auto &plane: rhs.constraints()) {
             res.insert(plane);

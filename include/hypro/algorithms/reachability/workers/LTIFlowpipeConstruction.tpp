@@ -109,12 +109,12 @@ namespace hypro {
     // it creates the under- and over-approximation of the first segment
     // it inly work with HPolytope since the Minkowski difference is only implemented for that state set representation
     template<class Representation, class Number>
-    Representation constructFirstSegments(Representation const &initialSet,
+    Representation constructFirstSegmentUnder(Representation const &initialSet,
                                          linearFlow<Number> const &flow,
                                          matrix_t<Number> const &rawTransformation,
-                                         tNumber timeStep, bool underApproximate) {
+                                         tNumber timeStep) {
 
-        TRACE("hypro", " inside constructFirstSegments");
+        TRACE("hypro", " inside constructFirstSegmentUnder");
 
         // Zero'd dummy external input
         Box<Number> externalInput{std::make_pair(
@@ -140,14 +140,11 @@ namespace hypro {
         TRACE("hypro", "init: " << initialSet.vertices());
         TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
-        if (underApproximate) {
-                // had to add it this way, because the representation check has to be a const expression (so it can be evaluated in compile time)
-                if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
-                        // firstSegment = firstSegment.minkowskiDiff(bloatingSet);
-                }
-        } else {
-                firstSegment = firstSegment.minkowskiSum(bloatingSet);
+        // had to add it this way, because the representation check has to be a const expression (so it can be evaluated in compile time)
+        if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
+                firstSegment = firstSegment.minkowskiDiff(bloatingSet);
         }
+
         firstSegment.removeRedundancy();
 
         return firstSegment;

@@ -65,6 +65,16 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		, mTimings( timings ) {
 	}
 
+	// it will create a node only with the under-approximative sets  
+	ReachTreeNode( ReachTreeNode *parent, TransitionT const *transition, Location const *loc,
+		carl::Interval<SegmentInd> timings, Representation initialSet )
+		: Base( parent )
+		, mLocation( loc )
+		, mTransition( transition )
+		, mInitialSetUnderApprox( initialSet )
+		, mTimings( timings ) {
+		}
+
 	ReachTreeNode( ReachTreeNode *parent, TransitionT const *transition, Location const *loc,
 				   Representation initialSet, Representation initialSetUnder, carl::Interval<SegmentInd> timings )
 		: Base( parent )
@@ -96,7 +106,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	 * @return A reference to the new child
 	 */
 	ReachTreeNode &
-	addChild( Representation initialSet, carl::Interval<SegmentInd> timings, TransitionT const *transition );
+	addChild( Representation initialSet, carl::Interval<SegmentInd> timings, TransitionT const *transition, bool under = false );
 
 
 	/**

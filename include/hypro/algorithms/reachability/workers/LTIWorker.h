@@ -42,30 +42,24 @@ namespace hypro {
 
         template<typename OutputIt>
         REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, LocationT const *loc, OutputIt out,
-                                                  long segmentsToCompute, bool checkSafety = true, 
-                                                  std::optional<OutputIt> outUnderApprox = std::nullopt, 
-                                                  const Representation & initialSetUnder = {}) const;
+                                                long int segmentsToCompute, bool checkSafety = true) const;
 
         template<typename OutputIt>
         REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, LocationT const *loc, OutputIt out,
-                                                  bool checkSafety = true) const {
+                                                bool checkSafety = true) const {
             return computeTimeSuccessors(initialSet, loc, out, mNumSegments, checkSafety);
         }
-
-        // wrapper function, used for under-approximative calculations
+          
         template<typename OutputIt>
-        REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, Representation & initialSetUnder, LocationT const *loc, OutputIt out, OutputIt outUnderApprox, 
-                                                long segmentsToCompute, bool checkSafety = true) const {
-            
-            return computeTimeSuccessors(initialSet, loc, out, segmentsToCompute, checkSafety, std::make_optional(outUnderApprox), initialSetUnder);
+        REACHABILITY_RESULT computeTimeSuccessorsUnder(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  long int segmentsToCompute, bool checkSafety = true) const;
+
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsUnder(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  bool checkSafety = true) const {
+            return computeTimeSuccessorsUnder(initialSet, loc, out, mNumSegments, checkSafety);
         }
 
-        // wrapper function, used for under-approximative calculations
-        template<typename OutputIt>
-        REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, const Representation & initialSetUnder, LocationT const *loc, OutputIt out, OutputIt outUnderApprox, 
-                                                    bool checkSafety = true) const {
-            return computeTimeSuccessors(initialSet, loc, out, mNumSegments, checkSafety, std::make_optional(outUnderApprox), initialSetUnder);
-        }
 
         std::vector<JumpSuccessorOverUnder<Representation, LocationT>>
         computeJumpSuccessors(std::vector<Representation> const &flowpipe, LocationT const *loc, std::vector<Representation> const &flowpipeUnderApprox = {}) const;
