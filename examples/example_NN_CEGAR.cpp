@@ -1,33 +1,42 @@
-#include "hypro/parser/neuralnets/nnet/NNet.h"
 #include "hypro/neuralnets/network/NeuralNetwork.h"
-#include "hypro/neuralnets/reachability_tree/ReachabilityTree.h"
-#include "hypro/representations/GeometricObjectBase.h"
-#include "hypro/parser/representations/parseHPolytope.tpp"
-#include "hypro/util/plotting/Plotter.h"
 #include "hypro/neuralnets/reachability_tree/ReachabilitySettings.h"
+#include "hypro/neuralnets/reachability_tree/ReachabilityTree.h"
+#include "hypro/parser/neuralnets/nnet/NNet.h"
+#include "hypro/parser/representations/parseHPolytope.tpp"
+#include "hypro/representations/GeometricObjectBase.h"
+#include "hypro/util/plotting/Plotter.h"
 
 #include <chrono>
 #include <iomanip>
 #include <iostream>
 #include <vector>
 
+using namespace std;
+
 // Custom square root function for mpq_class numbers
-mpq_class sqrt(const mpq_class& x) {
-    mpf_class x_mpf(x); // Convert mpq_class to mpf_class
-    mpf_sqrt(x_mpf.get_mpf_t(), x_mpf.get_mpf_t()); // Compute square root
-    return mpq_class(x_mpf); // Convert back to mpq_class
+mpq_class sqrt( const mpq_class& x ) {
+	mpf_class x_mpf( x );							   // Convert mpq_class to mpf_class
+	mpf_sqrt( x_mpf.get_mpf_t(), x_mpf.get_mpf_t() );  // Compute square root
+	return mpq_class( x_mpf );						   // Convert back to mpq_class
 }
 
 // use exact arithmetic.
-typedef mpq_class Number;	// -3090.30109487     <=>      -3090.3   (mpq_class vs double)
+typedef mpq_class Number;  // -3090.30109487     <=>      -3090.3   (mpq_class vs double)
 
 int main( int argc, char* argv[] ) {
 	// print system arguments
+	ofstream outfile;
+	if ( argc == 5 ) {
+		outfile.open( "benchmark_output.txt", ios::app );
+		outfile << "\n\n";
+	}
 	std::cout << "\nSystem arguments: ";
 	for ( int i = 0; i < argc; i++ ) {
 		std::cout << argv[i] << " ";
+		outfile << argv[i] << " ";
 	}
 	std::cout << "\n\n";
+	outfile << "\n";
 
 	// define plotter settings
 	hypro::plotting::gnuplotSettings settings;
@@ -84,7 +93,7 @@ int main( int argc, char* argv[] ) {
 	auto end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during building the network: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
-	
+
 	// a simple rectangle [_]
 	hypro::matrix_t<Number> constr = hypro::matrix_t<Number>( 4, 2 );
 	hypro::vector_t<Number> limits = hypro::vector_t<Number>( 4 );
@@ -95,7 +104,8 @@ int main( int argc, char* argv[] ) {
 		std::cout << "Reading input constraints from: " << argv[3] << std::endl;
 		inputPoly = hypro::readHpolytopeFromFile<Number>( argv[3] );
 	}
-	std::cout << "The input polytope:\n" << inputPoly << std::endl;
+	std::cout << "The input polytope:\n"
+			  << inputPoly << std::endl;
 
 	hypro::matrix_t<Number> constr2 = hypro::matrix_t<Number>( 4, 2 );
 	hypro::vector_t<Number> limits2 = hypro::vector_t<Number>( 4 );
@@ -108,13 +118,14 @@ int main( int argc, char* argv[] ) {
 	} else {
 		safePoly.push_back( hypro::HPolytope<Number>( constr2, limits2 ) );
 	}
-	std::cout << "The disjunction of safe polytopes:\n" << safePoly << std::endl;
+	std::cout << "The disjunction of safe polytopes:\n"
+			  << safePoly << std::endl;
 
 	// hypro::matrix_t<Number> linTransform = hypro::matrix_t<Number>( 2, 2 );
 	// hypro::vector_t<Number> offset = hypro::vector_t<Number>( 2 );
 	// linTransform << 0.707106781,-0.707106781, 0.707106781,0.707106781;
 	// offset << -0.5,-0.5;
-	
+
 	// hypro::Starset<Number> inputStar(inputPoly.matrix(),inputPoly.vector());
 	// inputStar = inputStar.affineTransformation(linTransform,offset);
 	// hypro::ReLULayer<Number> r(0,0);
@@ -122,20 +133,35 @@ int main( int argc, char* argv[] ) {
 	// return 0;
 
 	// Transform input and safe polytopes to star set
-	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;
-	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::AVOIDANT; //FULL , AVOIDANT
-	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::EXACT_SOURCES; //SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, EXACT_SOURCES
-	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly , counterExampleStrategy, refinementType, backpropagationStrategy);
+	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::REMEMBERING_COUNTEREXAMPLES;			//Z3_BASIC, RANDOM, Z3_SMALL_REPRESENTATION, REMEMBERING_COUNTEREXAMPLES
+	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::AVOIDANT;						// AVOIDANT, FULL, EXACT_SOURCES, REMEMBERING_SOURCES
+	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::REMEMBERING_SEARCH;	// SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH
+	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy );
+	bool bothSearchStrategy = !true;
 	bool create_plots = !true;
-    bool normalize_input = true;
-    bool normalize_output = true;
-
+	bool normalize_input = true;
+	bool normalize_output = true;
 	start = std::chrono::steady_clock::now();
-	bool isSafe = NNtree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, normalize_input, normalize_output );
+	bool isSafe = NNtree.verify( method, hypro::SEARCH_STRATEGY::BFS, create_plots, normalize_input, normalize_output );
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
+	outfile << "Total time elapsed during NN reachability analysis: "
+			<< std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
 
+	if ( bothSearchStrategy && method == hypro::NN_REACH_METHOD::EXACT ) {
+		hypro::reachability::ReachabilityTree NNtree2 = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy );
+		start = std::chrono::steady_clock::now();
+		bool isSafe = NNtree2.verify( method, hypro::SEARCH_STRATEGY::BFS, create_plots, normalize_input, normalize_output );
+		end = std::chrono::steady_clock::now();
+		std::cout << "Total time elapsed during NN reachability analysis: "
+				  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
+		outfile << "Total time elapsed during NN reachability analysis: "
+				<< std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
+	}
+	if (argc == 5) {
+		outfile.close();
+	}
 	std::cout << "Program finished successfully." << std::endl;
 
 	return 0;

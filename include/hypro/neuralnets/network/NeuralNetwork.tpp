@@ -109,6 +109,24 @@ std::shared_ptr<LayerBase<Number>> NeuralNetwork<Number>::layers( int index ) co
 	return ( *layerIter );
 }
 
+template <typename Number>
+void NeuralNetwork<Number>::appendLayer(std::shared_ptr<LayerBase<Number>> layer){
+	// Update number of layers in the network
+	mNumLayers++;
+
+	// Update number of outputs of the network, if they change
+	if(layer->layerType() == NN_LAYER_TYPE::AFFINE){
+		mOutputSize = layer->layerSize();	
+	}	
+
+	// Update the maximum size of a layer in the network
+	if (mMaxLayerSize < mOutputSize){
+		mMaxLayerSize = mOutputSize;
+	}
+
+	mLayers.push_back(layer);	
+}
+
 // ============= utility functions =============
 
 // ================== methods ==================

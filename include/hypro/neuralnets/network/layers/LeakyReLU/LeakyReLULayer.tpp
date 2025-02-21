@@ -118,17 +118,17 @@ std::pair<Point<Number>,Point<Number>>  LeakyReLULayer<Number>::propagateCandida
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:
 			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl; 
-			return make_pair(y, Point<Number>(result.optimumValue));
+			return std::make_pair(y, Point<Number>(result.optimumValue));
 
 		case SOLUTION::INFEAS:
 			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
-            return make_pair(Point<Number>(), Point<Number>());
+            return std::make_pair(Point<Number>(), Point<Number>());
 
 		default:
 			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
 			break;
 	}
-	return make_pair(Point<Number>(), Point<Number>());
+	return std::make_pair(Point<Number>(), Point<Number>());
 }
 
 template <typename Number>
@@ -144,15 +144,15 @@ std::pair<Point<Number>,Point<Number>>  LeakyReLULayer<Number>::propagateCandida
 	
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:						
-          return make_pair(candidate, Point<Number>(result.optimumValue));
+          return std::make_pair(candidate, Point<Number>(result.optimumValue));
 		case SOLUTION::INFEAS:
-            return make_pair(Point<Number>(), Point<Number>());
+            return std::make_pair(Point<Number>(), Point<Number>());
 		default:
 			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
 			break;
 	}
 
-	return make_pair(Point<Number>(), Point<Number>());
+	return std::make_pair(Point<Number>(), Point<Number>());
 }
 
 }  // namespace hypro

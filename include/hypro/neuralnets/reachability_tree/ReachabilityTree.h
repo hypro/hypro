@@ -20,6 +20,8 @@
 #include <deque>
 #include <vector>
 #include <list>
+#include <map>
+#include <set>
 
 namespace hypro {
 namespace reachability {
@@ -29,7 +31,7 @@ class ReachabilityTree {
   private:
 	ReachabilityNode<Number>* mRoot;				 // root node of the reachability analysis tree
 	std::vector<ReachabilityNode<Number>*> mLeaves;	 // the leaves of the reachability tree
-	unsigned short int mDepth;						 // depth of the reachability tree (actually the depth of the NN)
+	unsigned short int mDepth;						 // depth of the reachability tree
 
 	NeuralNetwork<Number> mNetwork;			   // the analized neural network
 	HPolytope<Number> mInputSet;			   // the input set of the network
@@ -48,6 +50,9 @@ class ReachabilityTree {
 	//stores the position of counterexample
 	// mPreviousCounterexampleSources[i] contains a ascending list of all nodes in layer i that were previously a counterexample source
 	std::vector<std::list<int>> mPreviousCounterexampleSources; 
+	// mPreviousCounterexamples: For key (layer, neuron) the reachability node (layer, neuron+1) or (layer+1,0) 
+	// contains the value (counterexample or source) corresponding to the key
+	std::map<std::pair<int,int>, std::set<Point<Number>>> mPreviousCounterexamples;
 
   public:
 	// Default constructor
@@ -74,7 +79,7 @@ class ReachabilityTree {
 	ReachabilityNode<Number>* getAncestor(ReachabilityNode<Number>* node, const int neuronNumber) const;
 
 	ReachabilityNode<Number>* computeReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy );
-	std::pair<ReachabilityNode<Number>*,std::vector<ReachabilityNode<Number>*>> computePartiallyExactReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy );
+	std::pair<ReachabilityNode<Number>*,std::vector<ReachabilityNode<Number>*>> computePartiallyExactReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets );
 	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots = false, bool normalizeInput = false, bool normalizeOutput = false, size_t max_iter= 100 );
 
 	ReachabilityNode<Number>* getFirstUnsafeLeaf() const;
@@ -90,7 +95,7 @@ class ReachabilityTree {
 	 * @param[in] strategy: Strategy used for finding the origin of candidate
 	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <EmptyPoint, node> which indicates the source neuron of the countereaxmple, return <source, root> if it is a true countereaxmple
 	 */
-	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> identifyCounterExampleSource( const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node, BACKPROPAGATION_STRATEGY strategy) const;
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> identifyCounterExampleSource( const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node, BACKPROPAGATION_STRATEGY strategy);
 
 	/**
 	 * @brief Find the source neuron of a countereaxmple candidate inside a activation function layer or allow further backpropagation
@@ -101,8 +106,8 @@ class ReachabilityTree {
 	 * @param[in] nextIndex: The index of the neuron to which backpropagation is tried next
 	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <candidate, node> which indicates the source neuron of the countereaxmple, return <candidate, nullptr> if it is a true countereaxmple
 	 */
-	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  binarySearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex ) const;
-	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  rememberingSearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node ) const;
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  binarySearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex );
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  rememberingSearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node );
 
 	/**
 	 * @brief Calculates the corresponding point from the previous set such that applying the previous nodes computations on it we would get back the counterexample candidate

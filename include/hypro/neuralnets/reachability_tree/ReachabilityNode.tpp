@@ -262,8 +262,23 @@ std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyZ3S
 }
 
 template <typename Number>
-bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy ) {
-	
+std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyRemembering(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, std::set<Point<Number>> previousCounterexamples) const{
+	EvaluationResult<Number> result;
+	for (Point<Number> z : previousCounterexamples ){
+		result = z3GetInternalPoint(set.shape(), set.limits(), set.generator(), set.center(),z);
+		std::cout << "The previous counterexample is " << (result.errorCode == SOLUTION::FEAS ? "" : "not ") << "contained!" << std::endl;
+		if (result.errorCode == SOLUTION::FEAS){
+			return std::make_pair(z, Point<Number>(result.optimumValue)); 
+		}
+	}
+	return _checkSafetyZ3(set, safeSetMatrices, safeSetVectors);
+}
+
+template <typename Number>
+bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy,  const std::set<Point<Number>> previousCounterexamples) {
+
+	std::cout<<previousCounterexamples.size()<<std::endl;
+
 	assert(mIsLeaf);
 
 	std::pair<Point<Number>,Point<Number>> result;
@@ -277,6 +292,9 @@ bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, c
 			break;
 		case COUNTEREXAMPLE_STRATEGY::Z3_SMALL_REPRESENTATION:
 			result = _checkSafetyZ3SmallRepresentation(currentSet, safeSetMatrices, safeSetVectors);
+			break;
+		case COUNTEREXAMPLE_STRATEGY::REMEMBERING_COUNTEREXAMPLES:
+			result = _checkSafetyRemembering(currentSet, safeSetMatrices, safeSetVectors, previousCounterexamples);
 			break;
 		default:
 			assert(false && "Not a known strategy to find counterexamples");
@@ -295,15 +313,15 @@ bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, c
 }
 
 template <typename Number>
-bool ReachabilityNode<Number>::checkSafe( const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy) {
+bool ReachabilityNode<Number>::checkSafe( const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy,  const std::set<Point<Number>> previousCounterexamples) {
 	// if the node is a leaf, we should check if the representation is only in the safe region (which is a non-convex set, DNF)
 	if ( mIsLeaf) {
-		return hasCounterExample() ? mIsSafe : checkSafeRecursive( mRepresentation, safeSetMatrices, safeSetVectors, strategy);
+		return hasCounterExample() ? mIsSafe : checkSafeRecursive( mRepresentation, safeSetMatrices, safeSetVectors, strategy, previousCounterexamples);
 	} 
 
 	// if the node is not a leaf, then it safetiness depends on the children
 	for (ReachabilityNode<Number>* child : mChildren){
-		if(!(child->checkSafe(safeSetMatrices, safeSetVectors, strategy))){
+		if(!(child->checkSafe(safeSetMatrices, safeSetVectors, strategy, previousCounterexamples))){
 			return false;
 		}
 	}

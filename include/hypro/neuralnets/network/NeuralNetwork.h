@@ -116,6 +116,12 @@ class NeuralNetwork {
 	 */
 	std::shared_ptr<LayerBase<Number>> layers( int index ) const;
 
+	/**
+	 * @brief Appends the specified layer to the Neural Network
+	 * @param[in] layer - the layer to append
+	 */
+	void appendLayer(std::shared_ptr<LayerBase<Number>> layer);
+
 	// ============= utility functions =============
 	// e.g. printing the network
 	template <typename U>

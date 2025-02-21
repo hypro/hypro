@@ -48,6 +48,7 @@ class ReachabilityNode {
 	std::pair<Point<Number>,Point<Number>> _checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
 	std::pair<Point<Number>,Point<Number>> _checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
 	std::pair<Point<Number>,Point<Number>> _checkSafetyRandom(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, int iterations) const;
+	std::pair<Point<Number>,Point<Number>> _checkSafetyRemembering(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, const std::set<Point<Number>> previousCounterexamples) const;
 
   public:
 	// constructors and destructor
@@ -89,8 +90,8 @@ class ReachabilityNode {
 	void setRepresentation( const Starset<Number>& representation );
 
 	// functionalities
-	bool checkSafeRecursive( Starset<Number> currentSet,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy);
-	bool checkSafe(  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy = COUNTEREXAMPLE_STRATEGY::Z3_BASIC );
+	bool checkSafeRecursive( Starset<Number> currentSet,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy, const std::set<Point<Number>> previousCounterexamples = std::set<Point<Number>>());
+	bool checkSafe(  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy = COUNTEREXAMPLE_STRATEGY::Z3_BASIC, const std::set<Point<Number>> previousCounterexamples = std::set<Point<Number>>());
 
 	// utility methods
 	void plot( bool holdOn = false, size_t color = 0xCC071E ) const;  // allow to plot only if the representation is two dimensional

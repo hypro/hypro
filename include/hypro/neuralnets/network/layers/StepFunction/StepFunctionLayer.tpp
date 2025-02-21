@@ -115,7 +115,7 @@ std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::propagateCandi
 		rel = carl::Relation::GEQ;
 	} else {
 		//If the result of UnitStep is neither of the bounds, it is the result of over-approximation
-		return make_pair(Point<Number>(), Point<Number>());
+		return std::make_pair(Point<Number>(), Point<Number>());
 	}
 	y[neuronNumber] = mValue;
 	EvaluationResult<Number> result = hypro::z3GetInternalPoint( inputSet.shape(), inputSet.limits(), inputSet.generator(), inputSet.center(), y, neuronNumber, rel );
@@ -124,18 +124,18 @@ std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::propagateCandi
 		case SOLUTION::FEAS:
 			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl;
 			y[neuronNumber] = Point<Number>( inputSet.generator() * result.optimumValue + inputSet.center() )[neuronNumber];
-			return make_pair(y, Point<Number>(result.optimumValue));
+			return std::make_pair(y, Point<Number>(result.optimumValue));
 
 		case SOLUTION::INFEAS:
 			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
-			return make_pair(Point<Number>(), Point<Number>());
+			return std::make_pair(Point<Number>(), Point<Number>());
 
 		default:
 			assert( result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS );
 			break;
 	}
 
-	return make_pair(Point<Number>(), Point<Number>());
+	return std::make_pair(Point<Number>(), Point<Number>());
 }
 
 template <typename Number>
@@ -155,7 +155,7 @@ std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::propagateCandi
 				relations.push_back( carl::Relation::GEQ );
 			} else {
 				// If the result of UnitStep is neither of the bounds, it is the result of over-approximation
-				return make_pair(Point<Number>(), Point<Number>());
+				return std::make_pair(Point<Number>(), Point<Number>());
 			}
 			candidate[i] = mValue;
 		} else {
@@ -168,15 +168,15 @@ std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::propagateCandi
 
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:
-			return make_pair(Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center() ), Point<Number>(result.optimumValue));
+			return std::make_pair(Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center() ), Point<Number>(result.optimumValue));
 		case SOLUTION::INFEAS:
-			return make_pair(Point<Number>(), Point<Number>());
+			return std::make_pair(Point<Number>(), Point<Number>());
 		default:
 			assert( result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS );
 			break;
 	}
 
-	return make_pair(Point<Number>(), Point<Number>());
+	return std::make_pair(Point<Number>(), Point<Number>());
 }
 
 }  // namespace hypro
