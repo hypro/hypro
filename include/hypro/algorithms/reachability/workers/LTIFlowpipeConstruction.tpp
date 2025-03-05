@@ -39,32 +39,37 @@ namespace hypro {
                                          linearFlow<Number> const &flow,
                                          matrix_t<Number> const &rawTransformation,
                                          tNumber timeStep) {
-        // Zero'd dummy external input
-        Box<Number> externalInput{std::make_pair(
-                Point<Number>{vector_t<Number>::Zero(flow.dimension())},
-                Point<Number>{vector_t<Number>::Zero(flow.dimension())})};
-
-        ErrorBoxes errorBoxes = constructErrorBoxes(
-                carl::convert<tNumber, Number>(timeStep),
-                flow.getFlowMatrix(),
-                initialSet,
-                rawTransformation,
-                externalInput);
+        
 
         Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
                                                                  timeTrafoVectorBlock(rawTransformation));
-
         Representation firstSegment = atDelta.unite(initialSet);
-
-        // Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
-        auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
-        Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
 
         TRACE("hypro", "atDelta: " << atDelta.vertices());
         TRACE("hypro", "init: " << initialSet.vertices());
-        TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
-        firstSegment = firstSegment.minkowskiSum(bloatingSet);
+
+        bool isFlowIdentity = rawTransformation.block(0, 0, rawTransformation.rows() - 1, rawTransformation.cols() - 1).isApprox(matrix_t<Number>::Identity(rawTransformation.rows()-1, rawTransformation.cols()-1));
+        if (!isFlowIdentity) {
+                // Zero'd dummy external input
+                Box<Number> externalInput{std::make_pair(
+                        Point<Number>{vector_t<Number>::Zero(flow.dimension())},
+                        Point<Number>{vector_t<Number>::Zero(flow.dimension())})};
+
+                ErrorBoxes errorBoxes = constructErrorBoxes(
+                        carl::convert<tNumber, Number>(timeStep),
+                        flow.getFlowMatrix(),
+                        initialSet,
+                        rawTransformation,
+                        externalInput);
+                // Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
+                auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
+                Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
+
+                TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
+
+                firstSegment = firstSegment.minkowskiSum(bloatingSet);
+        }
         firstSegment.removeRedundancy();
 
         return firstSegment;
@@ -75,32 +80,37 @@ namespace hypro {
                                          linearFlow<Number> const &flow,
                                          matrix_t<Number> const &rawTransformation,
                                          tNumber timeStep) {
-        // Zero'd dummy external input
-        Box<Number> externalInput{std::make_pair(
-                Point<Number>{vector_t<Number>::Zero(flow.dimension())},
-                Point<Number>{vector_t<Number>::Zero(flow.dimension())})};
-
-        ErrorBoxes errorBoxes = constructErrorBoxes(
-                carl::convert<tNumber, Number>(timeStep),
-                flow.getFlowMatrix(),
-                initialSet,
-                rawTransformation,
-                externalInput);
+        
 
         auto atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
                                                        timeTrafoVectorBlock(rawTransformation));
-
         auto firstSegment = atDelta.unite(initialSet);
-
-        // Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
-        auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
-        auto bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
 
         TRACE("hypro", "atDelta: " << atDelta.vertices());
         TRACE("hypro", "init: " << initialSet.vertices());
-        TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
-        firstSegment = firstSegment.minkowskiSum(bloatingSet);
+        bool isFlowIdentity = rawTransformation.block(0, 0, rawTransformation.rows() - 1, rawTransformation.cols() - 1).isApprox(matrix_t<Number>::Identity(rawTransformation.rows()-1, rawTransformation.cols()-1));
+        if (!isFlowIdentity) {
+                // Zero'd dummy external input
+                Box<Number> externalInput{std::make_pair(
+                        Point<Number>{vector_t<Number>::Zero(flow.dimension())},
+                        Point<Number>{vector_t<Number>::Zero(flow.dimension())})};
+
+                ErrorBoxes errorBoxes = constructErrorBoxes(
+                        carl::convert<tNumber, Number>(timeStep),
+                        flow.getFlowMatrix(),
+                        initialSet,
+                        rawTransformation,
+                        externalInput);
+                // Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
+                auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
+                auto bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
+
+                TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
+
+                firstSegment = firstSegment.minkowskiSum(bloatingSet);
+        }
+
         firstSegment.removeRedundancy();
 
         return firstSegment;
@@ -116,33 +126,34 @@ namespace hypro {
 
         TRACE("hypro", " inside constructFirstSegmentUnder");
 
-        // Zero'd dummy external input
-        Box<Number> externalInput{std::make_pair(
-                Point<Number>{vector_t<Number>::Zero(flow.dimension())},
-                Point<Number>{vector_t<Number>::Zero(flow.dimension())})};
-
-        ErrorBoxes errorBoxes = constructErrorBoxes(
-                carl::convert<tNumber, Number>(timeStep),
-                flow.getFlowMatrix(),
-                initialSet,
-                rawTransformation,
-                externalInput);
-
         Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
                                                                  timeTrafoVectorBlock(rawTransformation));
-
         Representation firstSegment = atDelta.unite(initialSet);
-
-        auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
-        Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
 
         TRACE("hypro", "atDelta: " << atDelta.vertices());
         TRACE("hypro", "init: " << initialSet.vertices());
-        TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
+        bool isFlowIdentity = rawTransformation.block(0, 0, rawTransformation.rows() - 1, rawTransformation.cols() - 1).isApprox(matrix_t<Number>::Identity(rawTransformation.rows()-1, rawTransformation.cols()-1));
         // had to add it this way, because the representation check has to be a const expression (so it can be evaluated in compile time)
         if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
-                firstSegment = firstSegment.minkowskiDiff(bloatingSet);
+                if (!isFlowIdentity) { //cannot combine the two if-s because this one is not a constant expression
+                        // Zero'd dummy external input
+                        Box<Number> externalInput{std::make_pair(
+                                Point<Number>{vector_t<Number>::Zero(flow.dimension())},
+                                Point<Number>{vector_t<Number>::Zero(flow.dimension())})};
+
+                        ErrorBoxes errorBoxes = constructErrorBoxes(
+                                carl::convert<tNumber, Number>(timeStep),
+                                flow.getFlowMatrix(),
+                                initialSet,
+                                rawTransformation,
+                                externalInput);
+                        auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
+                        Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
+                        TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
+
+                        firstSegment = firstSegment.minkowskiDiff(bloatingSet);
+                }
         }
 
         firstSegment.removeRedundancy();

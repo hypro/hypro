@@ -139,10 +139,15 @@ static void computeReachableStates(const std::string &filename,
 
 int main(int argc, char **argv) {
     int rep = 0;
-    std::string filename = argv[1];
+    std::string filename;
+
     if (argc > 2) {
+        filename = argv[1];
         char *p;
         rep = strtol(argv[2], &p, 10);
+    } else {
+        std::cout << "usage: ./example_reachability model_file.model representation_index" << std::endl;
+        return 0;
     }
 
 #ifdef USE_CLN_NUMBERS

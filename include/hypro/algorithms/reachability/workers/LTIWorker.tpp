@@ -111,6 +111,9 @@ namespace hypro {
 
         Representation firstSegment;
         if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
+            if (initialSetUnder.universal()) { // in case the initial set is universal the minkowski diff will fail, this is to avoid that happening
+                return REACHABILITY_RESULT::SAFE;
+            }
             firstSegment = constructFirstSegmentUnder(initialSetUnder, loc->getLinearFlow(mSubspace),
                                         mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace).fullMatrix,mSettings.timeStep);
         }
