@@ -160,4 +160,41 @@ std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::propagateCandidateBack
 	return std::make_pair(Point<Number>(), Point<Number>());
 }
 
+template <typename Number>
+std::tuple<int, Point<Number>, Point<Number>>  ReLULayer<Number>::traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const{
+	std::vector<carl::Relation> relations;
+	for (int i = 0; i < newSourceSet.generator().rows(); i++){
+		if ( upperIndex <= i && i <= lowerIndex && 0 == knownSource[i] ) {
+			relations.push_back( carl::Relation::LEQ);
+		} else {
+			relations.push_back( carl::Relation::EQ);	
+		}
+	}
+	
+	assert(relations.size() == newSourceSet.generator().rows());
+	std::pair<EvaluationResult <Number>, std::vector<int>> result = hypro::z3GetInternalPointWithCore(newSourceSet.shape(),newSourceSet.limits(),newSourceSet.generator(), newSourceSet.center(), knownSource, relations);	
+	switch ( result.first.errorCode ) {
+		case SOLUTION::FEAS:						
+            return std::make_tuple(-1, Point<Number>( newSourceSet.generator() * result.first.optimumValue + newSourceSet.center()), Point<Number>(result.first.optimumValue));
+		case SOLUTION::INFEAS:{
+			std::vector<int> unsatCore = result.second;
+			int next = -1;
+			for (int i : unsatCore){
+				if ( next < i && upperIndex < i && i < lowerIndex ){
+					next = i;
+				}	
+			}
+			// If the unsable part of the unsatCore is empty, default to binary search 
+			if (next == -1){ 
+				next = upperIndex + 1;
+			}
+            return std::make_tuple(next, Point<Number>(), Point<Number>());
+		}
+		default:
+			assert(result.first.errorCode == SOLUTION::FEAS || result.first.errorCode == SOLUTION::INFEAS);
+			break;
+	}
+	return std::make_tuple(-1, Point<Number>(), Point<Number>());
+}
+
 }  // namespace hypro

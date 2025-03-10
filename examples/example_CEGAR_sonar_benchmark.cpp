@@ -73,15 +73,20 @@ int main( int argc, char* argv[] ) {
 	// Read and build neural network
 	hypro::NNet<Number> nn_NNet = hypro::NNet<Number>( filename );    
 	hypro::NeuralNetwork<Number> neuralNetwork = hypro::NeuralNetwork<Number>( nn_NNet );
-    std::shared_ptr<hypro::LayerBase<Number>> layer = std::make_shared<hypro::HardSigmoidLayer<Number>>(1, 3, 3, -3);
-    neuralNetwork.appendLayer(layer);
+	//append hard sigmoid layer
+	neuralNetwork.appendLayer(std::make_shared<hypro::HardSigmoidLayer<Number>>(1, 3, -2.5, 2.5));
+	//append step function layer
+    neuralNetwork.appendLayer(std::make_shared<hypro::StepFunctionLayer<Number>>(1, 4, 0.5, 0, 1));
 
     std::cout << neuralNetwork << std::endl;
 	
 	// Thermostat verification using an input poly which represent temperature and control mode
 	hypro::HPolytope<Number> inputPoly;
+	std::string prop_name;
 	if ( argc > 3 ) {
 		std::cout << "Reading input constraints from: " << argv[3] << std::endl;
+		prop_name = std::string(argv[3]);
+		assert((prop_name[prop_name.size() - 4] == 'M') ||  (prop_name[prop_name.size() - 4] == 'R'));
 		inputPoly = hypro::readHpolytopeFromFile<Number>( argv[3] );
 	} else {
         std::cout << "Expected a file location for the input polytope. Aborting..." << std::endl;
@@ -89,28 +94,8 @@ int main( int argc, char* argv[] ) {
     }
 	std::cout << "The input polytope:\n" << inputPoly << std::endl;
 
-    // Read the safety specification
-    int safeValue;
-    if ( argc > 4) {
-
-        switch (argv[4][0])
-        {
-        case 'r':
-        case  'R':
-            safeValue = 1;
-            break;
-        case 'm':
-        case 'M':
-            safeValue = 0;
-            break;
-        default:
-            std::cout << "Expected input m/M or r/R. Aborting..." << std::endl;
-            return -1;
-        }
-    } else {
-        std::cout << "Expected a rock (R) or metal (M) specification. Aborting..." << std::endl;
-        return -1;
-    }
+    // Extract the safety specification
+    int safeValue = prop_name[prop_name.size() - 4] == 'M' ? 0 : 1; 
     std::vector<hypro::HPolytope<Number>> safePoly = std::vector<hypro::HPolytope<Number>>();
     matrix_t<Number> C(2,1);
     C << 1,-1;
@@ -121,8 +106,8 @@ int main( int argc, char* argv[] ) {
 
     // Settings for verification
 	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;
-	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::AVOIDANT;								   // FULL , AVOIDANT
-	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::EXACT_SOURCES;  // SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, EXACT_SOURCES
+	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::EXACT_SOURCES;							  // FULL , AVOIDANT, EXACT_SOURCES
+	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::BINARYSEARCH;  // SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, 
 	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy );
 	bool create_plots = !true;
 	bool normalize_input = true;

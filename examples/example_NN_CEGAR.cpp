@@ -133,9 +133,9 @@ int main( int argc, char* argv[] ) {
 	// return 0;
 
 	// Transform input and safe polytopes to star set
-	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::REMEMBERING_COUNTEREXAMPLES;			//Z3_BASIC, RANDOM, Z3_SMALL_REPRESENTATION, REMEMBERING_COUNTEREXAMPLES
-	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::AVOIDANT;						// AVOIDANT, FULL, EXACT_SOURCES, REMEMBERING_SOURCES
-	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::REMEMBERING_SEARCH;	// SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH
+	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;			//Z3_BASIC, RANDOM, Z3_SMALL_REPRESENTATION, REMEMBERING_COUNTEREXAMPLES
+	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::EXACT_SOURCES;						// AVOIDANT, FULL, EXACT_SOURCES, REMEMBERING_SOURCES
+	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::UNSAT_CORE;	// SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH
 	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy );
 	bool bothSearchStrategy = !true;
 	bool create_plots = !true;

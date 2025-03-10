@@ -327,6 +327,84 @@ static z3::expr createFormula(
     return formula;
 }
 
+template <typename Number>
+static std::vector<z3::expr> createFormulas(
+ const Point<Number>& _point,
+ const matrix_t<Number>& _constraints,
+ const vector_t<Number>& _constants, 
+ const matrix_t<Number>& _linTransform,
+ const vector_t<Number>& _offset,
+ z3Context& c,
+ const std::vector<carl::Relation> &_relations 
+ ) {
+
+    // Build formula for Cx <= d and y = Ax + b, such that y is given and find a satisfying assignment for x (if exists)
+    // Optional parameters change y = Ax+b for a single dimension i and bound v, such that Ax + b <=/==/>= y + v 
+
+    std::vector<z3::expr> formulas;
+    std::vector<z3::expr> variables;
+    for ( unsigned i = 0; i < _constraints.cols(); ++i ) {
+        std::string name = "x_" + std::to_string( i );
+        variables.push_back( c.real_const( name.c_str() ) );
+    }
+    
+    for ( unsigned i = 0; i < _constraints.rows(); ++i ) {
+        z3::expr constraint( c );
+        constraint = c.int_val( 0 );
+        for ( unsigned j = 0; j < _constraints.cols(); ++j ) {
+            if ( _constraints( i, j ) != carl::constant_zero<Number>::get() ) {
+                constraint = constraint + variables.at( j ) * ( c.real_val( carl::convert<Number, mpq_class>( _constraints( i, j ) ) ) );
+            }
+        }
+        z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _constants( i ) ) );
+        z3::expr formula(c);
+        formula = c.bool_val( true );
+        formula = (constraint <= constant);
+        formulas.push_back(formula);
+    }
+    
+
+    for ( unsigned i = 0; i < _linTransform.rows(); ++i ) {
+        // NEQ is used to indicate, that no restrictions besides containment should apply to values of dimension i
+        // This is used in the special case of stepFunction-backpropagation where minValue==maxValue
+        if(_relations[i] == carl::Relation::NEQ){
+            continue;
+        }
+
+        z3::expr constraint( c );
+        constraint = c.int_val( 0 );
+        for ( unsigned j = 0; j < _linTransform.cols(); ++j ) {
+            if ( _linTransform( i, j ) != carl::constant_zero<Number>::get() ) {
+                constraint = constraint + variables.at( j ) * ( c.real_val( carl::convert<Number, mpq_class>( _linTransform( i, j ) ) ) );
+            }
+        }
+        z3::expr constant = c.real_val( carl::convert<Number, mpq_class>( _point.at( i ) ) ) - c.real_val( carl::convert<Number, mpq_class>( _offset( i ) ) );
+        z3::expr formula(c);
+        formula = c.bool_val( true );
+        switch ( _relations[i] ) {
+            case carl::Relation::LEQ:
+                formula = (constraint <= constant);
+                break;
+            case carl::Relation::GEQ:
+                formula = (constraint >= constant);
+                break;
+            case carl::Relation::EQ:
+                formula = (constraint == constant);
+                break;
+            case carl::Relation::LESS:
+                formula = (constraint < constant);
+                break;
+            case carl::Relation::GREATER:
+                formula = (constraint > constant);
+                break;              
+            default:
+                assert( false && "Relation type undefined");
+        }
+        formulas.push_back(formula);   
+    }
+    return formulas;
+}
+
 
 template <typename Number>
 static z3::expr createFormula(

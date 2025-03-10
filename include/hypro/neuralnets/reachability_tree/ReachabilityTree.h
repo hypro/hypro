@@ -106,9 +106,9 @@ class ReachabilityTree {
 	 * @param[in] nextIndex: The index of the neuron to which backpropagation is tried next
 	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <candidate, node> which indicates the source neuron of the countereaxmple, return <candidate, nullptr> if it is a true countereaxmple
 	 */
-	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  binarySearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex );
-	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  rememberingSearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node );
-
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> binarySearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex );
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> rememberingSearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node );
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> unsatCoreTracing(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node);
 	/**
 	 * @brief Calculates the corresponding point from the previous set such that applying the previous nodes computations on it we would get back the counterexample candidate
 	 *

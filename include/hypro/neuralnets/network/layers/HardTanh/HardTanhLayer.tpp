@@ -107,7 +107,9 @@ std::pair<Point<Number>,Point<Number>> HardTanhLayer<Number>::propagateCandidate
 	assert( mMinValue <= y[neuronNumber] && y[neuronNumber] <= mMaxValue );
 	
 	carl::Relation rel;
-	if ( y[neuronNumber] == mMinValue ){
+	if(mMinValue == mMaxValue){
+		rel = carl::Relation::NEQ;
+	} else if ( y[neuronNumber] == mMinValue ){
 		rel = carl::Relation::LEQ;
 	} else if (y[neuronNumber] == mMaxValue){
 		rel = carl::Relation::GEQ;
@@ -143,7 +145,9 @@ std::pair<Point<Number>,Point<Number>> HardTanhLayer<Number>::propagateCandidate
 	std::vector<carl::Relation> relations;
 	for (int i = 0; i < ancestorSet.generator().rows(); i++){
 		if ( upperIndex <= i && i <= lowerIndex) {
-			if ( candidate[i] == mMinValue ){
+			if (mMinValue == mMaxValue){
+				relations.push_back(carl::Relation::NEQ);
+			} else if ( candidate[i] == mMinValue ){
 				relations.push_back(carl::Relation::LEQ);
 			} else if (candidate[i] == mMaxValue){
 				relations.push_back(carl::Relation::GEQ);
@@ -160,7 +164,7 @@ std::pair<Point<Number>,Point<Number>> HardTanhLayer<Number>::propagateCandidate
 	EvaluationResult<Number> result = hypro::z3GetInternalPoint(ancestorSet.shape(), ancestorSet.limits(), ancestorSet.generator(), ancestorSet.center(), candidate, relations);	
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:						
-			return std::make_pair(Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center()),Point<Number>(result.optimumValue));
+			return std::make_pair(Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center()), Point<Number>(result.optimumValue));
 
 		case SOLUTION::INFEAS:
             return std::make_pair(Point<Number>(),Point<Number>());
@@ -170,6 +174,51 @@ std::pair<Point<Number>,Point<Number>> HardTanhLayer<Number>::propagateCandidate
 	}
 
 	return std::make_pair(Point<Number>(),Point<Number>());
+}
+
+template <typename Number>
+std::tuple<int, Point<Number>, Point<Number>>  HardTanhLayer<Number>::traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const{
+	std::vector<carl::Relation> relations;
+	for (int i = 0; i < newSourceSet.generator().rows(); i++){
+		if ( upperIndex <= i && i <= lowerIndex) {
+			if (mMinValue == mMaxValue){
+				relations.push_back(carl::Relation::NEQ);
+			} else if ( knownSource[i] == mMinValue ){
+				relations.push_back(carl::Relation::LEQ);
+			} else if (knownSource[i] == mMaxValue){
+				relations.push_back(carl::Relation::GEQ);
+			} else {
+				relations.push_back(carl::Relation::EQ);
+			}	
+		} else {
+			relations.push_back( carl::Relation::EQ);	
+		}
+	}
+	
+	assert(relations.size() == newSourceSet.generator().rows());
+	std::pair<EvaluationResult <Number>, std::vector<int>> result = hypro::z3GetInternalPointWithCore(newSourceSet.shape(),newSourceSet.limits(),newSourceSet.generator(), newSourceSet.center(), knownSource, relations);	
+	switch ( result.first.errorCode ) {
+		case SOLUTION::FEAS:						
+            return std::make_tuple(-1, Point<Number>( newSourceSet.generator() * result.first.optimumValue + newSourceSet.center()), Point<Number>(result.first.optimumValue));
+		case SOLUTION::INFEAS:{
+			std::vector<int> unsatCore = result.second;
+			int next = -1;
+			for (int i : unsatCore){
+				if ( next < i && upperIndex < i && i < lowerIndex ){
+					next = i;
+				}	
+			}
+			// If the unsable part of the unsatCore is empty, default to binary search 
+			if (next == -1){ 
+				next = upperIndex + 1;
+			}
+            return std::make_tuple(next, Point<Number>(), Point<Number>());
+		}
+		default:
+			assert(result.first.errorCode == SOLUTION::FEAS || result.first.errorCode == SOLUTION::INFEAS);
+			break;
+	}
+	return std::make_tuple(-1, Point<Number>(), Point<Number>());
 }
 
 }  // namespace hypro

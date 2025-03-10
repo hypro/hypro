@@ -44,6 +44,18 @@ class AffineLayer : public LayerBase<Number> {
 	 */
 	std::pair<Point<Number>,Point<Number>>  propagateCandidateBack( hypro::Point<Number> y, Point<Number> alpha, int neuronNumber, hypro::Starset<Number> inputSet, hypro::Starset<Number> currentSet ) const;
 
+	/**
+	 * @brief Attempts to trace counterexample to a potential source neuron
+	 * 
+	 * @param[in] knownSource the counterexample or known source to trace to the new source
+	 * @param[in] alpha the predicate value for the known source
+	 * @param[in] lowerIndex the number of the neuron knownSource was obtained from
+	 * @param[in] upperIndex the number of the neuron for the newSourceSet
+	 * @param[in] newSourceSet the set that should include the new source
+	 * @return tuple<int, Point<Number>, Point<Number>> were the first number indicates the next neuron to attempt tracing or is -1 and the Points contain the new source and predicate value of it
+	 */
+	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const;
+	
 	virtual void serialize( std::ostream& os ) const {
 		os << "Layer size: " << LayerBase<Number>::mLayerSize << std::endl;
 		os << "weights size: " << mWeights.rows() << " × " << mWeights.cols() << std::endl;

@@ -720,6 +720,9 @@ std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> Reachability
 			case BACKPROPAGATION_STRATEGY::REMEMBERING_SEARCH:
 				result = rememberingSearchBackpropagation(candidate, candidateAlpha, node);
 				return identifyCounterExampleSource(std::get<0>(result), std::get<1>(result), std::get<2>(result), strategy);
+			case BACKPROPAGATION_STRATEGY::UNSAT_CORE:
+				result = unsatCoreTracing(candidate, candidateAlpha, node);
+				return identifyCounterExampleSource(std::get<0>(result), std::get<1>(result), std::get<2>(result), strategy);
 			default:
 				break;
 		}
@@ -851,6 +854,50 @@ std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  Reachabilit
 }
 
 template <typename Number>
+std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*>  ReachabilityTree<Number>::unsatCoreTracing(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node) {
+	
+	if(    (node->neuronNumber() == 0 && mNetwork.layers( node->getParent()->layerNumber() )->layerSize() <= 2) 
+		|| (node->neuronNumber() > 0 && mNetwork.layers( node->layerNumber() )->layerSize() <= 2)){
+        return identifyCounterExampleSource(candidate, candidateAlpha, node, BACKPROPAGATION_STRATEGY::SINGLESTEP);
+    }
+
+	//attempt to trace through the whole layer
+	std::shared_ptr<LayerBase<Number>> layer = mNetwork.layers( node->getParent()->layerNumber() );
+	ReachabilityNode<Number>* newSourceNode = getAncestor(node->getParent(), 0);
+	std::tuple<int, Point<Number>,Point<Number>> result = layer->traceUnsatCore(candidate, candidateAlpha, node->getParent()->neuronNumber() + 1, 0, newSourceNode->representation());
+	if(std::get<0>(result) < 0){
+		return std::make_tuple(std::get<1>(result), std::get<2>(result), newSourceNode);
+	}
+	
+	//use unsat cores to find an origin in the activation function sequence
+	int upper = 0;
+	int next = std::get<0>(result);
+	Point<Number> newCandidate = candidate;
+	Point<Number> newCandidateAlpha = candidateAlpha;
+	assert(node->getParent()->neuronNumber() + 1 > next && next >= upper);
+	while (node->getParent()->neuronNumber() + 1 > upper){
+		std::cout << "Tracing from " << node->getParent()->neuronNumber() + 1 << " to " <<  next << std::endl;
+		newSourceNode = getAncestor(node->getParent(), next);
+		result = layer->traceUnsatCore(newCandidate, newCandidateAlpha, node->getParent()->neuronNumber() + 1, next, newSourceNode->representation());
+		if (std::get<0>(result) < 0){
+			node = newSourceNode;
+			next = upper;
+			newCandidate = std::get<1>(result);
+			newCandidateAlpha = std::get<2>(result);
+		} else if (node->getParent()->neuronNumber() == next) {
+			std::pair<int,int> key = std::make_pair(node->getParent()->layerNumber(), next);
+			mPreviousCounterexamples[key].insert(newCandidate);
+			return std::make_tuple(Point<Number>(), Point<Number>(), newSourceNode);
+		} else {
+			upper = next;
+			next = std::get<0>(result);
+		}
+	}
+	
+	return std::make_tuple(Point<Number>(), Point<Number>(), newSourceNode);
+}
+
+template <typename Number>
 ReachabilityNode<Number>* ReachabilityTree<Number>::getAncestor(ReachabilityNode<Number>* node, const int neuronNumber) const {
     if (node->neuronNumber() == neuronNumber){
         return node;
@@ -868,7 +915,6 @@ std::pair<Point<Number>,Point<Number>>  ReachabilityTree<Number>::propagateCandi
 	if (layer->layerType() ==  NN_LAYER_TYPE::AFFINE){
 		return layer->propagateCandidateBack( candidate, candidateAlpha, parentNeuron, parentSet, currentSet);	
 	}
-
 	return layer->propagateCandidateBack( candidate, candidateAlpha, parentNeuron, parentSet );
 }
 

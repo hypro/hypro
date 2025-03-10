@@ -75,26 +75,17 @@ template <typename Number>
 std::pair<Point<Number>,Point<Number>> AffineLayer<Number>::propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const {
 	
 	return std::make_pair(Point<Number>(inputSet.generator() * alpha.rawCoordinates() + inputSet.center()), alpha);
-
-	// matrix_t<Number> currentGenerator = mWeights * inputSet.generator();
-	// vector_t<Number> currentCenter = mWeights * inputSet.center() + mBias;
-	// Starset<Number> output( currentCenter, currentGenerator, inputSet.constraints() );
-	// return propagateCandidateBack( y, alpha, neuronNumber, inputSet, output );
 }
 
 template <typename Number>
 std::pair<Point<Number>,Point<Number>> AffineLayer<Number>::propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet, Starset<Number> currentSet ) const {
 	
 	return std::make_pair(Point<Number>(inputSet.generator() * alpha.rawCoordinates() + inputSet.center()), alpha);
+}
 
-	// Exists x in inputSet such that Wx+b=y
-	// <=>
-	// Exists alpha such that C*alpha <= d && (WV)*alpha + (Wc+b) = y
-	// EvaluationResult<Number> result = z3GetInternalPoint( currentSet.shape(), currentSet.limits(), currentSet.generator(), currentSet.center(), y );
-	// std::cout << "Affine" << std::endl;
-	//Otherwise, the point is not element of the output star
-	// assert(result.errorCode == SOLUTION::FEAS);
-	// return std::make_pair(Point<Number>( inputSet.generator() * result.optimumValue + inputSet.center() ), Point<Number>(result.optimumValue));
+template <typename Number>
+std::tuple<int, Point<Number>, Point<Number>> AffineLayer<Number>::traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const {
+	return std::make_tuple(-1, Point<Number>(newSourceSet.generator() * alpha.rawCoordinates() + newSourceSet.center()), alpha);
 }
 
 }  // namespace hypro
