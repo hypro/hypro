@@ -135,14 +135,15 @@ int main( int argc, char* argv[] ) {
 	// Transform input and safe polytopes to star set
 	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;			//Z3_BASIC, RANDOM, Z3_SMALL_REPRESENTATION, REMEMBERING_COUNTEREXAMPLES
 	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::EXACT_SOURCES;						// AVOIDANT, FULL, EXACT_SOURCES, REMEMBERING_SOURCES
-	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::UNSAT_CORE;	// SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH
-	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy );
+	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::UNSAT_CORE;	// SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, UNSAT_CORE
+	bool removeSafeSubtrees = true;
+	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy, removeSafeSubtrees);
 	bool bothSearchStrategy = !true;
 	bool create_plots = !true;
 	bool normalize_input = true;
 	bool normalize_output = true;
 	start = std::chrono::steady_clock::now();
-	bool isSafe = NNtree.verify( method, hypro::SEARCH_STRATEGY::BFS, create_plots, normalize_input, normalize_output );
+	bool isSafe = NNtree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, normalize_input, normalize_output );
 	end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: "
 			  << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;

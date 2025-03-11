@@ -9,7 +9,8 @@ ReachabilityTree<Number>::ReachabilityTree()
 
 template <typename Number>
 ReachabilityTree<Number>::~ReachabilityTree() {
-	// TODO: deallocate all nodes recursively from the root to the leafs
+	mLeaves.clear();
+	delete mRoot;
 }
 
 template <typename Number>
@@ -20,7 +21,8 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 	, mPlotter( hypro::Plotter<Number>::getInstance() )
 	, mCounterExampleStrategy( COUNTEREXAMPLE_STRATEGY::Z3_BASIC )
 	, mRefinmentType( REFINEMENT_TYPE::EXACT_SOURCES )
-	, mBackpropagationStrategy( BACKPROPAGATION_STRATEGY::BINARYSEARCH ) {
+	, mBackpropagationStrategy( BACKPROPAGATION_STRATEGY::BINARYSEARCH )
+	, mRemoveSafeSubtrees( false ) {
 	unsigned short int depth = 1;
 	for ( auto layer : mNetwork.layers() ) {
 		if ( layer->layerType() == NN_LAYER_TYPE::AFFINE )
@@ -32,14 +34,15 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 }
 
 template <typename Number>
-ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets, const COUNTEREXAMPLE_STRATEGY counterExampleStrategy, const REFINEMENT_TYPE refinementType, const BACKPROPAGATION_STRATEGY backpropagationStrategy)
+ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets, const COUNTEREXAMPLE_STRATEGY counterExampleStrategy, const REFINEMENT_TYPE refinementType, const BACKPROPAGATION_STRATEGY backpropagationStrategy, const bool removeSafeSubtrees)
 	: mNetwork( network )
 	, mInputSet( inputSet )
 	, mSafeSets( safeSets )
 	, mPlotter( hypro::Plotter<Number>::getInstance())
 	, mCounterExampleStrategy( counterExampleStrategy )
 	, mRefinmentType( refinementType ) 
-	, mBackpropagationStrategy( backpropagationStrategy ) {
+	, mBackpropagationStrategy( backpropagationStrategy )
+	, mRemoveSafeSubtrees( removeSafeSubtrees ) {
 	mPreviousCounterexampleSources = std::vector<std::list<int>>();
 	unsigned short int depth = 1;
 	for ( auto layer : mNetwork.layers() ) {
@@ -244,6 +247,8 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 		if ( !rootNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)]) ) {
 			mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)].insert(rootNode->getCounterExample());
 			mIsSafe = false;
+		} else if (mRemoveSafeSubtrees) {
+			removeSafeSubtree(rootNode);
 		}
 		mIsComplete = true;
 		return rootNode;
@@ -251,7 +256,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 	
 	// create the root_job and add to the queue
 	SearchJob<Number> root_job( rootNode, mNetwork.layers() );
-	NN_REACH_METHOD rootMethod = rootNode->method();
+	NN_REACH_METHOD rootMethod = mRoot->method();
 	std::deque<SearchJob<Number>> jobQueue;
 	jobQueue.push_back( root_job );
 
@@ -267,23 +272,21 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 		jobQueue.pop_front();
 
 		for ( auto newJob : newJobs ) {
-			if(REFINEMENT_TYPE::EXACT_SOURCES == mRefinmentType && rootMethod != NN_REACH_METHOD::EXACT){
-				newJob.getNode()->setMethod(NN_REACH_METHOD::OVERAPPRX);
-			}
-
 			if ( newJob.isFinalResult() ) {
 				// check if the leaf satisfies the safety property
 				// if not then early stop condition is met and the loop can be stopped
 				ReachabilityNode<Number>* leafNode = newJob.getNode();
-				mLeaves.push_back( leafNode );
-
 				if ( !leafNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)]) ) {
 					mIsSafe = false;
 					mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)].insert(leafNode->getCounterExample());
-					if(REFINEMENT_TYPE::EXACT_SOURCES != mRefinmentType || rootMethod == NN_REACH_METHOD::EXACT){
+					if(rootMethod == NN_REACH_METHOD::EXACT){
 						mIsComplete = true;
 						return rootNode;
 					}
+					mLeaves.push_back( leafNode );
+				} else if (mRemoveSafeSubtrees) {
+					newJob.setNode(nullptr);
+					removeSafeSubtree(leafNode);
 				}
 			} else {
 				switch ( strategy ) {
@@ -304,11 +307,57 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 	return rootNode;
 }
 
+template<typename Number>
+void ReachabilityTree<Number>::removeSafeSubtree(ReachabilityNode<Number>* safeLeaf){
+	if ( !mRemoveSafeSubtrees ) {
+		return;
+	}
+
+	ReachabilityNode<Number>* node = safeLeaf;
+
+	while(true){
+		node->setSafe(true);
+		switch(node->method()){
+			case NN_REACH_METHOD::OVERAPPRX:
+				if ( node->hasParent() ){
+					node = node->getParent();
+				} else {
+					return; //root has been reached and is thus safe
+				}
+				break;
+			case NN_REACH_METHOD::EXACT:{
+				if ( node->hasParent() ){
+					ReachabilityNode<Number>* parent = node->getParent();
+					
+					// This could add save sets for a safe history implemenation
+					// std::pair<int,int> key = std::make_pair(parent->layerNumber(), parent->neuronNumber());
+					// mPreviousSaveSets[key].push_back(node->representation());
+
+					for (int i = 0; i < parent->getNumberOfChildren(); i++){
+						if(!parent->getChild(i)->isSafe()){
+							parent->removeChild(node);
+							return; // the parent is the root of an "uncomputed" subtree
+						}
+					}
+					node = node->getParent();
+					break;
+				} else {
+					return; //root has been reached and is thus safe
+				}
+			}
+			case NN_REACH_METHOD::CEGAR: //nodes can only be computed via EXACT or OVERAPPRX activation function application
+			default:
+				assert(false && "This should not be reachable!");
+				break;
+		}
+	}
+}
+
 template <typename Number>
 std::pair<ReachabilityNode<Number>*,std::vector<ReachabilityNode<Number>*>> ReachabilityTree<Number>::computePartiallyExactReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets ) {
 	std::vector<ReachabilityNode<Number>*> notComputedNodes;
 	
-	// This is a special case, where an activation function is computed exactly producing final leaves
+	// This is a special case, where an activation function is computed producing final leaves
 	if(rootNode->isLeaf()){
 		if ( !rootNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)]) ) {
 			mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)].insert(rootNode->getCounterExample());
@@ -324,37 +373,55 @@ std::pair<ReachabilityNode<Number>*,std::vector<ReachabilityNode<Number>*>> Reac
 	while (!job.isFinalResult() ) {
 		std::vector<SearchJob<Number>> newJobs;
 		if(isPreviousCounterexampleSource(job.getNode()->layerNumber(),job.getNode()->neuronNumber())){
-			switch (mRefinmentType)
-			{
-			
-			case REFINEMENT_TYPE::EXACT_SOURCES:
-				newJobs = job.compute( NN_REACH_METHOD::EXACT );
-				break;
-			case REFINEMENT_TYPE::REMEMBERING_SOURCES:
-			{
-				newJobs = job.compute(NN_REACH_METHOD::OVERAPPRX);
-				assert(newJobs.size() == 1);
-				bool useExact = false;
-				for(Point<Number> prevCounterexample : mPreviousCounterexamples[std::make_pair(job.getNode()->layerNumber(),job.getNode()->neuronNumber())]){
-					if(newJobs[0].getNode()->representation().contains(prevCounterexample)){
-						useExact = true;
-						break;
+			switch (mRefinmentType){
+				case REFINEMENT_TYPE::EXACT_SOURCES:
+					newJobs = job.compute( NN_REACH_METHOD::EXACT );
+					break;
+				case REFINEMENT_TYPE::REMEMBERING_SOURCES:{
+					newJobs = job.compute(NN_REACH_METHOD::OVERAPPRX);
+					assert(newJobs.size() == 1);
+					bool useExact = false;
+					for(Point<Number> prevCounterexample : mPreviousCounterexamples[std::make_pair(job.getNode()->layerNumber(),job.getNode()->neuronNumber())]){
+						if(newJobs[0].getNode()->representation().contains(prevCounterexample)){
+							useExact = true;
+							break;
+						}
 					}
-				}
-				if (useExact){
-					newJobs = job.compute(NN_REACH_METHOD::EXACT);
-				}				
-				break;
-			}			
-			default: // This defaults to EXACT_SOURCES and should not be reachable
-				newJobs = job.compute( NN_REACH_METHOD::EXACT );
-				break;
+					if (useExact){
+						newJobs = job.compute(NN_REACH_METHOD::EXACT);
+					}				
+					break;
+				}			
+				default: // This defaults to EXACT_SOURCES and should not be reachable
+					newJobs = job.compute( NN_REACH_METHOD::EXACT );
+					break;
 			}
+			/* Part of the unsuable implementation for safe history: The containment checks take segnificantly to long
+				if(mUseSafeHistory){
+					std::vector<SearchJob<Number>> tmp;
+					for (int i = 0; i < newJobs.size(); i++){
+						ReachabilityNode<Number>* newNode = newJobs[i].getNode();
+						std::pair<int,int> key = std::make_pair(newNode->getParent()->layerNumber(), newNode->getParent()->neuronNumber());
+						for (Starset<Number> safeSet : mPreviousSaveSets[key]){
+							std::cout << "Checking safe history"<< std::endl;
+							if ( safeSet.contains(newNode->representation()) ) {
+								std::cout << "Safe history helped!" << std::endl;
+								newJobs[i].setNode(nullptr);
+								newNode->getParent()->removeChild(newNode);
+								break;
+							}
+						}
+						if ( newJobs[i].getNode() != nullptr ){
+							tmp.push_back(newJobs[i]);
+						}
+					}
+					newJobs = tmp;
+			}
+			*/
 		} else {
-			newJobs = job.compute( rootNode->method() );
+			newJobs = job.compute( mRoot->method() );
 		}
 		for ( int i = 1; i < newJobs.size(); i++) {
-			newJobs[i].getNode()->setMethod(NN_REACH_METHOD::OVERAPPRX);
 			notComputedNodes.push_back(newJobs[i].getNode());	
 		}		
 		job = newJobs[0];
@@ -385,34 +452,15 @@ bool ReachabilityTree<Number>::_refinementAlwaysFullComputation(SEARCH_STRATEGY 
 		// generate a counterexample
 		Point<Number> candidate = chosenLeaf->getCounterExample();
 		Point<Number> candidateAlpha = chosenLeaf->getCounterExampleAlpha();
-		std::cout << "The counterexample candidate is " << candidate 
-				//   << " and corresponds to the predicate value " << candidateAlpha 
-				  << std::endl;
+		std::cout << "The counterexample candidate is " << candidate << std::endl;
 		
 		//Otherwise chosenLeaf is safe
 		assert(candidate.dimension() > 0);
-
-		// identify the source neuron of the counterexample
-		std::cout << "Previous counterexample sources: [";
-		for(auto list : mPreviousCounterexampleSources){
-			std::cout << "(";
-			for (int neuron : list){
-				std::cout << neuron << ",";
-			}
-			std::cout << ")";
-		}
-		std::cout << "]. Identifying next source..." << std::endl;
 		std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( candidate, candidateAlpha , chosenLeaf, mBackpropagationStrategy);
-		std::cout << "Current remembered counterexamples:\n";
-		for (auto remembered : mPreviousCounterexamples){
-			std::cout << "In layer " << remembered.first.first << " at neuron " << remembered.first.second << ": " << remembered.second.size();
-			std::cout << std::endl;
-		}
-
+		
 		//If an actual counterexample can be propagated back to the root, the the counterexample is not the result of approximation
 		if ( std::get<0>(candidateSource).dimension() > 0 && !(std::get<2>(candidateSource)->hasParent())  ) {
-			std::cout << "True countereaxmple found, refinement process stops" << std::endl;
-			std::cout << "The true counterexample is: " << std::get<0>(candidateSource) << std::endl;
+			std::cout << "Counter input identified, refinement process stops" << std::endl;
 			mIsSafe = false;
 			return false;
 		}
@@ -420,16 +468,7 @@ bool ReachabilityTree<Number>::_refinementAlwaysFullComputation(SEARCH_STRATEGY 
 		//source of the spurious counterexample
         ReachabilityNode<Number>* refinedNode = std::get<2>(candidateSource);
 		rememberCounterexampleSource(refinedNode->layerNumber(), refinedNode->neuronNumber());
-		std::cout << "Known counterexample sources: [";
-		for(auto list : mPreviousCounterexampleSources){
-			std::cout << "(";
-			for (int neuron : list){
-				std::cout << neuron << ",";
-			}
-			std::cout << ")";
-		}
-		std::cout << "]" << std::endl;
-        std::cout << "The source of newest counterexample candidate is: " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
+		std::cout << "The node of the source of newest counterexample candidate is: " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
 		
 		// do the refinement step
 		mIsSafe = true;
@@ -444,8 +483,6 @@ bool ReachabilityTree<Number>::_refinementAlwaysFullComputation(SEARCH_STRATEGY 
 
 		for (int i = 0; i < newJobs.size(); i++){
 			std::cout << "Computing "<< i << ". subtree" << std::endl;
-			// set the children of the refined node
-			newJobs[i].getNode()->setMethod( NN_REACH_METHOD::OVERAPPRX );
 			// use the compute reach tree function to compute the subtrees of the children
 			computeReachTree( newJobs[i].getNode(), safeOutput, strategy );
 		}
@@ -480,12 +517,7 @@ bool ReachabilityTree<Number>::_refinementAvoidComputation(SEARCH_STRATEGY strat
 		// Backpropagate the counterexample: Identify the source neuron of the counterexample
 		std::cout << "The counterexample candidate is " << unsafeLeaf->getCounterExample() << std::endl;	
 		std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( unsafeLeaf->getCounterExample(), unsafeLeaf->getCounterExampleAlpha(), unsafeLeaf, mBackpropagationStrategy );
-		std::cout << "Current remembered counterexamples:\n";
-		for (auto remembered : mPreviousCounterexamples){
-			std::cout << "In layer " << remembered.first.first << " at neuron " << remembered.first.second << ": " << remembered.second.size();
-			std::cout << std::endl;
-		}
-
+		
 		// If the counterexample is not spurious then: return false
 		if ( std::get<0>(candidateSource).dimension() > 0 && !(std::get<2>(candidateSource)->hasParent() ) ) {
 			std::cout << "True countereaxmple found, refinement process stops" << std::endl;
@@ -498,15 +530,6 @@ bool ReachabilityTree<Number>::_refinementAvoidComputation(SEARCH_STRATEGY strat
 		// Split with exact and do NOT compute the children
 		ReachabilityNode<Number>* refinedNode = std::get<2>(candidateSource);
 		rememberCounterexampleSource(refinedNode->layerNumber(), refinedNode->neuronNumber());
-		std::cout << "Known counterexample sources: [";
-		for(auto list : mPreviousCounterexampleSources){
-			std::cout << "(";
-			for (int neuron : list){
-				std::cout << neuron << ",";
-			}
-			std::cout << ")";
-		}
-		std::cout << "]" << std::endl;
     	std::cout << "Refining the source of the counterexample candidate: " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
 		refinedNode->removeAllChildren();
 		SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );
@@ -524,32 +547,34 @@ bool ReachabilityTree<Number>::_refinementAvoidComputation(SEARCH_STRATEGY strat
 		// Compute the reachability tree of the not-computed leaves, until an unsafe leaf is found or all leaves are computed
 		int i;
 		for(i = 0; i < notComputedLeaves.size() && !foundUnsafe; i++){
-			std::cout << "Computing new over-approximated subtree..." << std::endl;
-			notComputedLeaves[i]->setMethod( NN_REACH_METHOD::OVERAPPRX );
+			std::cout << "New over-approximated subtree ...";
 			switch (mRefinmentType){
-			case REFINEMENT_TYPE::REMEMBERING_SOURCES:
-			case REFINEMENT_TYPE::EXACT_SOURCES:{
-				std::pair<ReachabilityNode<Number>*,std::vector<ReachabilityNode<Number>*>> tmp = computePartiallyExactReachTree( notComputedLeaves[i], safeOutput);
-				foundUnsafe = !(tmp.first->checkSafe(mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)]));
-				if(!foundUnsafe){
-					for (ReachabilityNode<Number>* notComputedLeaf : tmp.second){
-						notComputedLeaves.push_back(notComputedLeaf);
+				case REFINEMENT_TYPE::REMEMBERING_SOURCES:
+				case REFINEMENT_TYPE::EXACT_SOURCES:{
+					std::pair<ReachabilityNode<Number>*,std::vector<ReachabilityNode<Number>*>> tmp = computePartiallyExactReachTree( notComputedLeaves[i], safeOutput);
+					foundUnsafe = !(tmp.first->checkSafe(mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)]));
+					if(!foundUnsafe){
+						for (ReachabilityNode<Number>* notComputedLeaf : tmp.second){
+							notComputedLeaves.push_back(notComputedLeaf);
+						}
+						removeSafeSubtree(tmp.first);
+					} else {
+						mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)].insert(tmp.first->getCounterExample());
 					}
-				} else {
-					mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)].insert(tmp.first->getCounterExample());
+					break;				
 				}
-				break;				
-			}
-			default:{
-				ReachabilityNode<Number>* leaf = computeReachTree( notComputedLeaves[i], safeOutput, strategy );
-			    foundUnsafe = !leaf->checkSafe(mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)]);
-				if(foundUnsafe){
-					mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)].insert(leaf->getCounterExample());
+				default:{
+					ReachabilityNode<Number>* leaf = computeReachTree( notComputedLeaves[i], safeOutput, strategy );
+					foundUnsafe = !leaf->checkSafe(mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)]);
+					if(foundUnsafe){
+						mPreviousCounterexamples[std::make_pair(mPreviousCounterexampleSources.size()-1, 0)].insert(leaf->getCounterExample());
+					} else {
+						removeSafeSubtree(leaf);
+					}
+					break;
 				}
-				break;
 			}
-			}
-			std::cout << " New subtree is " << (!foundUnsafe ? "safe" : "unsafe") << std::endl;
+			std::cout << " is " << (!foundUnsafe ? "safe" : "unsafe") << std::endl;
 		}
 		
 		if(foundUnsafe){ //set the unsafeLeaf
@@ -587,13 +612,13 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 	mIsComplete = false;
 
 	// create the root node of the reachability tree
-	ReachabilityNode<Number>* rootNode = new ReachabilityNode<Number>( starInput, method, 0, 0 );
+	mRoot = new ReachabilityNode<Number>( starInput, method, 0, 0 );
 	switch ( method ) {
 		case NN_REACH_METHOD::EXACT:
 		case NN_REACH_METHOD::OVERAPPRX:
 			// if we apply the EXACT or OVERAPPROX method, regardless if the computation of the reachability tree is complete or not
 			// we can surely return the answer
-			mRoot = computeReachTree( rootNode, safeOutput, strategy );
+			computeReachTree( mRoot, safeOutput, strategy );
 			if ( createPlots )
 				plotTree( mRoot, method._to_string() );
 			std::cout << "The neural network is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
@@ -602,8 +627,8 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 		case NN_REACH_METHOD::CEGAR:
 			// for the CEGAR mehtod we start with a fully overapproximate reachability analysis
 			// then we refine the result of the overapproximate reachability
-			rootNode->setMethod( NN_REACH_METHOD::OVERAPPRX );
-			mRoot = computeReachTree( rootNode, safeOutput, strategy );
+			mRoot->setMethod( NN_REACH_METHOD::OVERAPPRX );
+			computeReachTree( mRoot, safeOutput, strategy );
 			std::cout << "CEGAR first forward pass finished, the result is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
 			break;
 		default:
@@ -611,7 +636,7 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 	}
 
 	if ( mIsSafe ) {
-		// if the method is CEGAR and the reachable sets are all safe then the whole network is safe
+		// if the method is CEGAR and the reachable set is safe then the whole network is safe
 		return true;
 	}
 
@@ -636,10 +661,9 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 			
 	}
 
-	mLeaves.clear();  // TODO: do not clear the leaves that are not affected
+	mLeaves.clear();  
 	updateLeaves( mRoot );
-	// TODO: do not forget to delete the reachability tree when it is not used anymore
-
+	
 	std::cout << "The neural network is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
 	std::cout << "The number of final sets is " << mLeaves.size() << std::endl;
 

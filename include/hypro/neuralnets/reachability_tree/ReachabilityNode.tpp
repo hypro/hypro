@@ -25,19 +25,13 @@ ReachabilityNode<Number>::ReachabilityNode( Starset<Number> representation, NN_R
 	, mHasCounterExampleAlpha(false) 
 	{}
 
-// template <typename Number>
-// ReachabilityNode<Number>::~ReachabilityNode() {
-// 	if ( !mIsLeaf ) {
-// 		if ( mHasPosChild ) {
-// 			mHasPosChild = false;
-// 			delete mPosChild;
-// 		}
-// 		if ( mHasNegChild ) {
-// 			mHasNegChild = false;
-// 			delete mNegChild;
-// 		}
-// 	}
-// }
+template <typename Number>
+ReachabilityNode<Number>::~ReachabilityNode() {
+	for (ReachabilityNode<Number>* child : mChildren){
+		delete child;	
+	}
+	mChildren.clear();	
+}
 
 template <typename Number>
 bool ReachabilityNode<Number>::isLeaf() const {
@@ -122,7 +116,17 @@ void ReachabilityNode<Number>::addChild(ReachabilityNode<Number>* child ){
 }
 
 template <typename Number>
+void ReachabilityNode<Number>::removeChild(ReachabilityNode<Number>* child ){
+	mChildren.remove(child);
+	delete child;
+}
+
+
+template <typename Number>
 void ReachabilityNode<Number>::removeAllChildren(){
+	for (ReachabilityNode<Number>* child : mChildren){
+		delete child;
+	}
 	mChildren.clear();
 }
 
@@ -277,8 +281,6 @@ std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyRem
 template <typename Number>
 bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy,  const std::set<Point<Number>> previousCounterexamples) {
 
-	std::cout<<previousCounterexamples.size()<<std::endl;
-
 	assert(mIsLeaf);
 
 	std::pair<Point<Number>,Point<Number>> result;
@@ -325,8 +327,9 @@ bool ReachabilityNode<Number>::checkSafe( const std::vector<matrix_t<Number>> sa
 			return false;
 		}
 	}
-
-	return true;
+	
+	// non-final leaves are not safe!
+	return mChildren.size() != 0;
 }
 
 template <typename Number>

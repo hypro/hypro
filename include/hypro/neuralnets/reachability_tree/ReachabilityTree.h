@@ -46,13 +46,18 @@ class ReachabilityTree {
 	BACKPROPAGATION_STRATEGY mBackpropagationStrategy;
 	COUNTEREXAMPLE_STRATEGY mCounterExampleStrategy;
 	REFINEMENT_TYPE mRefinmentType; 
+	bool mRemoveSafeSubtrees;
 
 	//stores the position of counterexample
 	// mPreviousCounterexampleSources[i] contains a ascending list of all nodes in layer i that were previously a counterexample source
 	std::vector<std::list<int>> mPreviousCounterexampleSources; 
+
 	// mPreviousCounterexamples: For key (layer, neuron) the reachability node (layer, neuron+1) or (layer+1,0) 
 	// contains the value (counterexample or source) corresponding to the key
 	std::map<std::pair<int,int>, std::set<Point<Number>>> mPreviousCounterexamples;
+	
+	// Could be used for safe histories
+	// std::map<std::pair<int,int>, std::list<Starset<Number>>> mPreviousSaveSets;
 
   public:
 	// Default constructor
@@ -65,7 +70,7 @@ class ReachabilityTree {
 	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets );
 
 	//Initializer constructor with explicit counterexample strategy and refinement type
-	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets, const COUNTEREXAMPLE_STRATEGY counterExampleStrategy, const REFINEMENT_TYPE refinementType, const BACKPROPAGATION_STRATEGY backpropagationStrategy);
+	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets, const COUNTEREXAMPLE_STRATEGY counterExampleStrategy, const REFINEMENT_TYPE refinementType, const BACKPROPAGATION_STRATEGY backpropagationStrategy, const bool removeSafeSubtrees = false);
 
 	ReachabilityNode<Number>* root() const;
 
@@ -146,6 +151,7 @@ class ReachabilityTree {
 	Number mean_val( size_t dim ) const;
 	Number range_val( size_t dim ) const;
 
+	void removeSafeSubtree(ReachabilityNode<Number>* safeLeaf);
 	bool _refinementAlwaysFullComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
 	bool _refinementAvoidComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
 

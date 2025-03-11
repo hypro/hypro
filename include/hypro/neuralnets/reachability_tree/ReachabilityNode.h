@@ -35,7 +35,7 @@ class ReachabilityNode {
 	int mLayerNumber;	// the number of layer in the original NNet
 	int mNeuronNumber;	// the number of neuron in the current layer
 
-	NN_REACH_METHOD mMethod;
+	NN_REACH_METHOD mMethod; // method by which mRepresentation was computed (for roots this is the input method or OVERAPPRX for CEGAR)
 	Starset<Number> mRepresentation;
 	bool mHasCounterExample;
 	bool mHasCounterExampleAlpha;
@@ -54,7 +54,7 @@ class ReachabilityNode {
 	// constructors and destructor
 	ReachabilityNode();
 	ReachabilityNode( Starset<Number> representation, NN_REACH_METHOD method, int layerNumber, int neuronNumber );
-	// ~ReachabilityNode();
+	~ReachabilityNode();
 
 	// getter and setter methods
 	bool isLeaf() const;
@@ -78,6 +78,7 @@ class ReachabilityNode {
 	ReachabilityNode<Number>* getChild(int index) const;
 	void setChild( int index, ReachabilityNode<Number>* child );
 	void addChild(ReachabilityNode<Number>* child );
+	void removeChild(ReachabilityNode<Number>* child );
 	void removeAllChildren();
 	
 	int layerNumber() const;

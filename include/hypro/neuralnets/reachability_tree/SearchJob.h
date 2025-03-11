@@ -118,6 +118,10 @@ class SearchJob {
 	ReachabilityNode<Number>* getNode() const {
 		return mNode;
 	}
+
+	void setNode(ReachabilityNode<Number>* newNode) {
+		mNode = newNode;
+	}
 };
 
 }  // namespace reachability
