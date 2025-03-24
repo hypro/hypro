@@ -22,14 +22,14 @@ void affine(hypro::matrix_t<Number> W, hypro::vector_t<Number> b, hypro::Starset
     hypro::AffineLayer<Number> affineLayer(b.rows(),0,b,W);
 
     std::cout << "Results of backpropagation through an affine layer \n";
-	hypro::vector_t<Number> p1 = affineLayer.propagateCandidateBack( hypro::Point<Number>( point ), 0, input ).rawCoordinates();
+	hypro::vector_t<Number> p1 = affineLayer.traceSourceBack( hypro::Point<Number>( point ), 0, input ).rawCoordinates();
 	std::cout << "Only providing the input star set for the affine layer:\n"
               <<  p1 
               << "\nCorresponding element of the input:\n"
               << W * p1 + b
               << "\n";
 	std::cout << "Providing the input star set and output star set of the layer:\n" 
-              << affineLayer.propagateCandidateBack( hypro::Point<Number>( point ), 0, input, output ) << std::endl;
+              << affineLayer.traceSourceBack( hypro::Point<Number>( point ), 0, input, output ) << std::endl;
 }
 
 void ReLU(hypro::Starset<Number> input){
@@ -53,20 +53,20 @@ void ReLU(hypro::Starset<Number> input){
 
     //Backpropagation
     std::cout << "The following backpropagation attempts should work returning a value resulting in the input\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inId),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inId),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass:\n" << layer.forwardPass(p.rawCoordinates(),1) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inId),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inId),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << layer.forwardPass(p.rawCoordinates(),1) << "\n";
     
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inZero),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inZero),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: \n" << layer.forwardPass(p.rawCoordinates(),1) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inZero),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inZero),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << layer.forwardPass(p.rawCoordinates(),1) << "\n";
     
     //expected output: ()
     std::cout << "The following backpropagation attempts should not work returning the empty point \"()\" (notIn)"<< "\n";
-    std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,exactStars[0]) << "\n";
-    std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,approxStars[0]) << std::endl;
+    std::cout << layer.traceSourceBack(hypro::Point<Number>(notIn),1,exactStars[0]) << "\n";
+    std::cout << layer.traceSourceBack(hypro::Point<Number>(notIn),1,approxStars[0]) << std::endl;
 }
 
 void LeakyReLU(hypro::Starset<Number> input, Number slope = Number(1)/Number(100)){
@@ -90,20 +90,20 @@ void LeakyReLU(hypro::Starset<Number> input, Number slope = Number(1)/Number(100
 
     //Backpropagation
     std::cout << "The following backpropagation attempts should work returning a value resulting in the input\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inId),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inId),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: \n" << layer.forwardPass(p.rawCoordinates(),1) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inId),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inId),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << layer.forwardPass(p.rawCoordinates(),1) << "\n";
     
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inZero),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inZero),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: \n" << layer.forwardPass(p.rawCoordinates(),1) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inZero),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inZero),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << layer.forwardPass(p.rawCoordinates(),1) << "\n";
     
     //expected output: ()
     std::cout << "The following backpropagation attempts should not work returning the empty point \"()\" (notIn)"<< "\n";
-    std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,exactStars[0]) << "\n";
-    std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,approxStars[0]) << std::endl;
+    std::cout << layer.traceSourceBack(hypro::Point<Number>(notIn),1,exactStars[0]) << "\n";
+    std::cout << layer.traceSourceBack(hypro::Point<Number>(notIn),1,approxStars[0]) << std::endl;
 }
 
 hypro::Point<Number> UnitStepForwardPass(hypro::Point<Number> p, int dim, float val, float min, float max){
@@ -131,15 +131,15 @@ void UnitStep(hypro::Starset<Number> input, float val = 0, float min = -1, float
 
     //Backpropagation
     std::cout << "The following backpropagation attempts should work returning a value resulting in the input\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inId),1 ,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inId),1 ,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: " << UnitStepForwardPass(p,1, val, min, max) << "\n";
       
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inZero),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inZero),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: " << UnitStepForwardPass(p,1, val, min, max) << "\n";
     
     //expected: ()
     std::cout << "The following backpropagation attempt should not work returning the empty point \"()\" (notIn)"<< "\n";
-    std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,exactStars[0]) << std::endl;
+    std::cout << layer.traceSourceBack(hypro::Point<Number>(notIn),1,exactStars[0]) << std::endl;
 }
 
 hypro::Point<Number> HardTahnForwardPass(hypro::Point<Number> inputVec, int i, float min, float max){
@@ -176,25 +176,25 @@ void HardTanh(hypro::Starset<Number> input, float min = -1, float max = 1){
 
     //Backpropagation
     std::cout << "The following backpropagation attempts should work returning a value resulting in the input\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inId),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inId),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: \n" << HardTahnForwardPass(p,1,min,max) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inId),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inId),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << HardTahnForwardPass(p,1,min,max) << "\n";
     
-    p = layer.propagateCandidateBack(hypro::Point<Number>(pMax),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(pMax),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: \n" << HardTahnForwardPass(p,1,min,max) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(pMax),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(pMax),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << HardTahnForwardPass(p,1,min,max) << "\n";
 
-    p = layer.propagateCandidateBack(hypro::Point<Number>(pMin),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(pMin),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: \n" << HardTahnForwardPass(p,1,min,max) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(pMin),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(pMin),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << HardTahnForwardPass(p,1,min,max) << "\n";
     
     //expected output: ()
     std::cout << "The following backpropagation attempts should not work returning the empty point \"()\" (notIn)"<< "\n";
-    std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,exactStars[0]) << "\n";
-    std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,approxStars[0]) << std::endl;
+    std::cout << layer.traceSourceBack(hypro::Point<Number>(notIn),1,exactStars[0]) << "\n";
+    std::cout << layer.traceSourceBack(hypro::Point<Number>(notIn),1,approxStars[0]) << std::endl;
 }
 
 hypro::Point<Number> HardSigmoidForwardPass(hypro::Point<Number> inputVec, int i, float min, float max){
@@ -243,25 +243,25 @@ void HardSigmoid(hypro::Starset<Number> input, float min = -2, float max = 2){
 
     //Backpropagation
     std::cout << "The following backpropagation attempts should work returning a value resulting in the input\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inId),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inId),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: \n" << HardSigmoidForwardPass(p,1,min,max) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(inId),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(inId),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << HardSigmoidForwardPass(p,1,min,max) << "\n";
     
-    p = layer.propagateCandidateBack(hypro::Point<Number>(pMax),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(pMax),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: \n" << HardSigmoidForwardPass(p,1,min,max) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(pMax),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(pMax),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << HardSigmoidForwardPass(p,1,min,max) << "\n";
 
-    p = layer.propagateCandidateBack(hypro::Point<Number>(pMin),1,exactStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(pMin),1,exactStars[0]);
     std::cout << "Backpropagated in exact:" << p << " - forwardpass: \n" << HardSigmoidForwardPass(p,1,min,max) << "\n";
-    p = layer.propagateCandidateBack(hypro::Point<Number>(pMin),1,approxStars[0]);
+    p = layer.traceSourceBack(hypro::Point<Number>(pMin),1,approxStars[0]);
     std::cout << "Backpropagated in approx:" << p << " - forwardpass: \n" << HardSigmoidForwardPass(p,1,min,max) << "\n";
     
     //expected output: ()
     std::cout << "The following backpropagation attempts should not work returning the empty point \"()\" (notIn)"<< "\n";
-    std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,exactStars[0]) << "\n";
-    std::cout << layer.propagateCandidateBack(hypro::Point<Number>(notIn),1,approxStars[0]) << std::endl;
+    std::cout << layer.traceSourceBack(hypro::Point<Number>(notIn),1,exactStars[0]) << "\n";
+    std::cout << layer.traceSourceBack(hypro::Point<Number>(notIn),1,approxStars[0]) << std::endl;
 }
 
 int main() {

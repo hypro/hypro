@@ -8,8 +8,8 @@
  * @copyright Copyright (c) 2022
  *
  */
-#include "hypro/util/plotting/Plotter.h"
 #include "LeakyReLULayer.h"
+#include "hypro/util/plotting/Plotter.h"
 
 namespace hypro {
 
@@ -17,7 +17,7 @@ template <typename Number>
 LeakyReLULayer<Number>::LeakyReLULayer( unsigned short layerSize, unsigned short layerIndex, Number negativeSlope )
 	: LayerBase<Number>( layerSize, layerIndex )
 	, mNegativeSlope( negativeSlope ) {
-	if ( negativeSlope <= Number(0) || negativeSlope >= Number(0) ) {
+	if ( negativeSlope <= Number( 0 ) || negativeSlope >= Number( 0 ) ) {
 		FATAL( "hypro.neuralnets.activation_functions.LeakyReLU", "Invalid value for the negative slope ( 0 < negative slope < 1)" );
 	}
 }
@@ -41,7 +41,7 @@ std::vector<hypro::Starset<Number>> LeakyReLULayer<Number>::reachLeakyReLU( cons
 				FATAL( "hypro.neuralnets.activation_functions.LeakyReLU", "Invalid analysis method specified" );
 		}
 		if ( plotIntermediates ) {
-// #pragma omp critical
+			// #pragma omp critical
 			for ( int j = 0; j < resultSet.size(); j++ ) {
 				plotter.addObject( resultSet[j].vertices(), hypro::plotting::colors[( 2 * j ) % 9] );
 			}
@@ -104,92 +104,91 @@ std::vector<Starset<Number>> LeakyReLULayer<Number>::forwardPass( const std::vec
 }
 
 template <typename Number>
-std::pair<Point<Number>,Point<Number>>  LeakyReLULayer<Number>::propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const {
-	assert( neuronNumber < y.dimension() );
-	
-	if ( y.coordinate( neuronNumber ) < 0 ) {
-		// y = LeakyReLU(x) = max(mNegativeSlope * x,x) < 0 -> x = (y/mNegativeSlope)
-		y[neuronNumber] = (1 / mNegativeSlope) * y[neuronNumber];
-	} // Otherwise x = y
+std::pair<Point<Number>, Point<Number>> LeakyReLULayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const {
+	assert( neuronNumber < knownSource.dimension() );
 
-	EvaluationResult<Number> result = hypro::z3GetInternalPoint(inputSet.shape(),inputSet.limits(),inputSet.generator(), inputSet.center(), y);
+	if ( knownSource.coordinate( neuronNumber ) < 0 ) {
+		// knownSource = LeakyReLU(x) = max(mNegativeSlope * x,x) < 0 -> x = (knownSource/mNegativeSlope)
+		knownSource[neuronNumber] = ( 1 / mNegativeSlope ) * knownSource[neuronNumber];
+	}  // Otherwise x = y
+
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint( newSourceSet.shape(), newSourceSet.limits(), newSourceSet.generator(), newSourceSet.center(), knownSource );
 	// std::cout << "ReLU" << std::endl;
 
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:
-			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl; 
-			return std::make_pair(y, Point<Number>(result.optimumValue));
+			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl;
+			return std::make_pair( knownSource, Point<Number>( result.optimumValue ) );
 
 		case SOLUTION::INFEAS:
 			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
-            return std::make_pair(Point<Number>(), Point<Number>());
+			return std::make_pair( Point<Number>(), Point<Number>() );
 
 		default:
-			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
+			assert( result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS );
 			break;
 	}
-	return std::make_pair(Point<Number>(), Point<Number>());
+	return std::make_pair( Point<Number>(), Point<Number>() );
 }
 
 template <typename Number>
-std::pair<Point<Number>,Point<Number>>  LeakyReLULayer<Number>::propagateCandidateBack(Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const{
-	std::cout <<"Block LeakyReLU"<<std::endl;
-	for (int i = 0; i < ancestorSet.generator().rows(); i++){
-		if ( upperIndex <= i && i <= lowerIndex && candidate[i] < 0 ) {
-			candidate[i] = (1 / mNegativeSlope) * candidate[i];
-		} 
-	}
-	
-	EvaluationResult<Number> result = hypro::z3GetInternalPoint(ancestorSet.shape(),ancestorSet.limits(),ancestorSet.generator(), ancestorSet.center(), candidate);	
-	
-	switch ( result.errorCode ) {
-		case SOLUTION::FEAS:						
-          return std::make_pair(candidate, Point<Number>(result.optimumValue));
-		case SOLUTION::INFEAS:
-            return std::make_pair(Point<Number>(), Point<Number>());
-		default:
-			assert(result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS);
-			break;
-	}
-
-	return std::make_pair(Point<Number>(), Point<Number>());
-}
-
-template <typename Number>
-std::tuple<int, Point<Number>, Point<Number>>  LeakyReLULayer<Number>::traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const{
-	std::vector<carl::Relation> relations;
-	for (int i = 0; i < newSourceSet.generator().rows(); i++){
+std::pair<Point<Number>, Point<Number>> LeakyReLULayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const {
+	for ( int i = 0; i < newSourceSet.generator().rows(); i++ ) {
 		if ( upperIndex <= i && i <= lowerIndex && knownSource[i] < 0 ) {
-			knownSource[i] = (1 / mNegativeSlope) * knownSource[i];
+			knownSource[i] = ( 1 / mNegativeSlope ) * knownSource[i];
 		}
-		relations.push_back( carl::Relation::LEQ);
 	}
-	
-	assert(relations.size() == newSourceSet.generator().rows());
-	
-	std::pair<EvaluationResult <Number>, std::vector<int>> result = hypro::z3GetInternalPointWithCore(newSourceSet.shape(),newSourceSet.limits(),newSourceSet.generator(), newSourceSet.center(), knownSource, relations);	
+
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint( newSourceSet.shape(), newSourceSet.limits(), newSourceSet.generator(), newSourceSet.center(), knownSource );
+
+	switch ( result.errorCode ) {
+		case SOLUTION::FEAS:
+			return std::make_pair( knownSource, Point<Number>( result.optimumValue ) );
+		case SOLUTION::INFEAS:
+			return std::make_pair( Point<Number>(), Point<Number>() );
+		default:
+			assert( result.errorCode == SOLUTION::FEAS || result.errorCode == SOLUTION::INFEAS );
+			break;
+	}
+
+	return std::make_pair( Point<Number>(), Point<Number>() );
+}
+
+template <typename Number>
+std::tuple<int, Point<Number>, Point<Number>> LeakyReLULayer<Number>::traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const {
+	std::vector<carl::Relation> relations;
+	for ( int i = 0; i < newSourceSet.generator().rows(); i++ ) {
+		if ( upperIndex <= i && i <= lowerIndex && knownSource[i] < 0 ) {
+			knownSource[i] = ( 1 / mNegativeSlope ) * knownSource[i];
+		}
+		relations.push_back( carl::Relation::LEQ );
+	}
+
+	assert( relations.size() == newSourceSet.generator().rows() );
+
+	std::pair<EvaluationResult<Number>, std::vector<int>> result = hypro::z3GetInternalPointWithCore( newSourceSet.shape(), newSourceSet.limits(), newSourceSet.generator(), newSourceSet.center(), knownSource, relations );
 	switch ( result.first.errorCode ) {
-		case SOLUTION::FEAS:						
-            return std::make_tuple(-1, Point<Number>( newSourceSet.generator() * result.first.optimumValue + newSourceSet.center()), Point<Number>(result.first.optimumValue));
-		case SOLUTION::INFEAS:{
+		case SOLUTION::FEAS:
+			return std::make_tuple( -1, Point<Number>( newSourceSet.generator() * result.first.optimumValue + newSourceSet.center() ), Point<Number>( result.first.optimumValue ) );
+		case SOLUTION::INFEAS: {
 			std::vector<int> unsatCore = result.second;
 			int next = -1;
-			for (int i : unsatCore){
-				if ( next < i && upperIndex < i && i < lowerIndex ){
+			for ( int i : unsatCore ) {
+				if ( next < i && upperIndex < i && i < lowerIndex ) {
 					next = i;
-				}	
+				}
 			}
-			// If the unsable part of the unsatCore is empty, default to binary search 
-			if (next == -1){ 
+			// If the unsable part of the unsatCore is empty, default to binary search
+			if ( next == -1 ) {
 				next = upperIndex + 1;
 			}
-            return std::make_tuple(next, Point<Number>(), Point<Number>());
+			return std::make_tuple( next, Point<Number>(), Point<Number>() );
 		}
 		default:
-			assert(result.first.errorCode == SOLUTION::FEAS || result.first.errorCode == SOLUTION::INFEAS);
+			assert( result.first.errorCode == SOLUTION::FEAS || result.first.errorCode == SOLUTION::INFEAS );
 			break;
 	}
-	return std::make_tuple(-1, Point<Number>(), Point<Number>());
+	return std::make_tuple( -1, Point<Number>(), Point<Number>() );
 }
 
 }  // namespace hypro

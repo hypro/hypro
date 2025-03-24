@@ -101,30 +101,30 @@ std::vector<Starset<Number>> StepFunctionLayer<Number>::forwardPass( const std::
 }
 
 template <typename Number>
-std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const {
-	assert( neuronNumber < y.dimension() );
+std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const {
+	assert( neuronNumber < knownSource.dimension() );
 	
 	carl::Relation rel;
-	if ( mMinValue == y[neuronNumber] ) {
+	if ( mMinValue == knownSource[neuronNumber] ) {
 		if ( mMinValue == mMaxValue ) {
 			rel = carl::Relation::NEQ;
 		} else {
 			rel = carl::Relation::LESS;
 		}
-	} else if ( mMaxValue == y[neuronNumber] ) {
+	} else if ( mMaxValue == knownSource[neuronNumber] ) {
 		rel = carl::Relation::GEQ;
 	} else {
 		//If the result of UnitStep is neither of the bounds, it is the result of over-approximation
 		return std::make_pair(Point<Number>(), Point<Number>());
 	}
-	y[neuronNumber] = mValue;
-	EvaluationResult<Number> result = hypro::z3GetInternalPoint( inputSet.shape(), inputSet.limits(), inputSet.generator(), inputSet.center(), y, neuronNumber, rel );
+	knownSource[neuronNumber] = mValue;
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint( newSourceSet.shape(), newSourceSet.limits(), newSourceSet.generator(), newSourceSet.center(), knownSource, neuronNumber, rel );
 
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:
 			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl;
-			y[neuronNumber] = Point<Number>( inputSet.generator() * result.optimumValue + inputSet.center() )[neuronNumber];
-			return std::make_pair(y, Point<Number>(result.optimumValue));
+			knownSource[neuronNumber] = Point<Number>( newSourceSet.generator() * result.optimumValue + newSourceSet.center() )[neuronNumber];
+			return std::make_pair(knownSource, Point<Number>(result.optimumValue));
 
 		case SOLUTION::INFEAS:
 			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
@@ -139,36 +139,35 @@ std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::propagateCandi
 }
 
 template <typename Number>
-std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::propagateCandidateBack( Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const {
-	std::cout << "Block StepFunction" << std::endl;
+std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const {
 	std::vector<carl::Relation> relations;
 
-	for ( int i = 0; i < ancestorSet.generator().rows(); i++ ) {
+	for ( int i = 0; i < newSourceSet.generator().rows(); i++ ) {
 		if ( upperIndex <= i && i <= lowerIndex ) {
-			if ( mMinValue == candidate[i] ) {
+			if ( mMinValue == knownSource[i] ) {
 				if ( mMinValue == mMaxValue ) {
 					relations.push_back( carl::Relation::NEQ );
 				} else {
 					relations.push_back( carl::Relation::LESS );
 				}
-			} else if ( mMaxValue == candidate[i] ) {
+			} else if ( mMaxValue == knownSource[i] ) {
 				relations.push_back( carl::Relation::GEQ );
 			} else {
 				// If the result of UnitStep is neither of the bounds, it is the result of over-approximation
 				return std::make_pair(Point<Number>(), Point<Number>());
 			}
-			candidate[i] = mValue;
+			knownSource[i] = mValue;
 		} else {
 			relations.push_back( carl::Relation::EQ );
 		}
 	}
 
-	assert( relations.size() == ancestorSet.generator().rows() );
-	EvaluationResult<Number> result = hypro::z3GetInternalPoint( ancestorSet.shape(), ancestorSet.limits(), ancestorSet.generator(), ancestorSet.center(), candidate, relations );
+	assert( relations.size() == newSourceSet.generator().rows() );
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint( newSourceSet.shape(), newSourceSet.limits(), newSourceSet.generator(), newSourceSet.center(), knownSource, relations );
 
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:
-			return std::make_pair(Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center() ), Point<Number>(result.optimumValue));
+			return std::make_pair(Point<Number>( newSourceSet.generator() * result.optimumValue + newSourceSet.center() ), Point<Number>(result.optimumValue));
 		case SOLUTION::INFEAS:
 			return std::make_pair(Point<Number>(), Point<Number>());
 		default:
@@ -180,7 +179,7 @@ std::pair<Point<Number>,Point<Number>> StepFunctionLayer<Number>::propagateCandi
 }
 
 template <typename Number>
-std::tuple<int, Point<Number>, Point<Number>>  StepFunctionLayer<Number>::traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const{
+std::tuple<int, Point<Number>, Point<Number>>  StepFunctionLayer<Number>::traceUnsatCore(Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const{
 	std::vector<carl::Relation> relations;
 	for (int i = 0; i < newSourceSet.generator().rows(); i++){
 		if ( upperIndex <= i && i <= lowerIndex ) {
@@ -194,7 +193,7 @@ std::tuple<int, Point<Number>, Point<Number>>  StepFunctionLayer<Number>::traceU
 				relations.push_back( carl::Relation::GEQ );
 			} else {
 				// If the result of UnitStep is neither of the bounds, it is the result of over-approximation
-				return std::make_pair(Point<Number>(), Point<Number>());
+				return std::make_tuple(upperIndex + 1, Point<Number>(), Point<Number>());
 			}
 			knownSource[i] = mValue;
 		} else {

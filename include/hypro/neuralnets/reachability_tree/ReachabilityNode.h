@@ -39,7 +39,7 @@ class ReachabilityNode {
 	Starset<Number> mRepresentation;
 	bool mHasCounterExample;
 	bool mHasCounterExampleAlpha;
-	Point<Number> mCounterExample; // a counterexample, if node is a leaf and unsafe, the empty point otherwise
+	Point<Number> mCounterExample; 		// a counterexample, if node is a leaf and unsafe, the empty point otherwise
 	Point<Number> mCounterExampleAlpha; // the predicate value corresponding to the counterexample
 	hypro::Plotter<Number>& mPlotter;
 

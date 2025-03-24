@@ -58,13 +58,13 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 	int N = inputSets.size();  // number of input stars
 
 	// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
-		for ( int i = 0; i < N; ++i ) {
-			Starset<Number> temp = inputSets[i].affineTransformation( mWeights, mBias );
-			{
-	// #pragma omp critical
-				result.push_back( temp );
-			}
+	for ( int i = 0; i < N; ++i ) {
+		Starset<Number> temp = inputSets[i].affineTransformation( mWeights, mBias );
+		{
+			// #pragma omp critical
+			result.push_back( temp );
 		}
+	}
 	// for ( int i = 0; i < N; ++i ) {
 	// 	result.push_back( inputSets[i].affineTransformation( mWeights, mBias ) );
 	// }
@@ -72,20 +72,18 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 }
 
 template <typename Number>
-std::pair<Point<Number>,Point<Number>> AffineLayer<Number>::propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const {
-	
-	return std::make_pair(Point<Number>(inputSet.generator() * alpha.rawCoordinates() + inputSet.center()), alpha);
+std::pair<Point<Number>, Point<Number>> AffineLayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const {
+	return std::make_pair( Point<Number>( newSourceSet.generator() * knownSourceAlpha.rawCoordinates() + newSourceSet.center() ), knownSourceAlpha );
 }
 
 template <typename Number>
-std::pair<Point<Number>,Point<Number>> AffineLayer<Number>::propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet, Starset<Number> currentSet ) const {
-	
-	return std::make_pair(Point<Number>(inputSet.generator() * alpha.rawCoordinates() + inputSet.center()), alpha);
+std::pair<Point<Number>, Point<Number>> AffineLayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet, Starset<Number> knownSourceSet ) const {
+	return std::make_pair( Point<Number>( newSourceSet.generator() * knownSourceAlpha.rawCoordinates() + newSourceSet.center() ), knownSourceAlpha );
 }
 
 template <typename Number>
-std::tuple<int, Point<Number>, Point<Number>> AffineLayer<Number>::traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const {
-	return std::make_tuple(-1, Point<Number>(newSourceSet.generator() * alpha.rawCoordinates() + newSourceSet.center()), alpha);
+std::tuple<int, Point<Number>, Point<Number>> AffineLayer<Number>::traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const {
+	return std::make_tuple( -1, Point<Number>( newSourceSet.generator() * knownSourceAlpha.rawCoordinates() + newSourceSet.center() ), knownSourceAlpha );
 }
 
 }  // namespace hypro

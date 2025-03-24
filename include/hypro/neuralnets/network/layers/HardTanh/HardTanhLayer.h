@@ -45,7 +45,7 @@ class HardTanhLayer : public LayerBase<Number> {
 	 * @param[in] minValue The minimum value of the linear region range. Default: -1
 	 * @param[in] maxValue The maximum value of the linear region range. Default: 1
 	 */
-	HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, Number minValue = -1, Number maxValue = 1);
+	HardTanhLayer( unsigned short int layerSize, unsigned short int layerIndex, Number minValue = -1, Number maxValue = 1 );
 
 	/**
 	 * @brief Default destructor
@@ -86,12 +86,12 @@ class HardTanhLayer : public LayerBase<Number> {
 	 */
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
-	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const;
-	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const;
-	
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const;
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
+
 	/**
 	 * @brief Attempts to trace counterexample to a potential source neuron
-	 * 
+	 *
 	 * @param[in] knownSource the counterexample or known source to trace to the new source
 	 * @param[in] alpha the predicate value for the known source
 	 * @param[in] lowerIndex the number of the neuron knownSource was obtained from
@@ -99,7 +99,7 @@ class HardTanhLayer : public LayerBase<Number> {
 	 * @param[in] newSourceSet the set that should include the new source
 	 * @return tuple<int, Point<Number>, Point<Number>> were the first number indicates the next neuron to attempt tracing or is -1 and the Points contain the new source and predicate value of it
 	 */
-	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const;
+	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
 
 	/**
 	 * @brief Serialization of the current layer.

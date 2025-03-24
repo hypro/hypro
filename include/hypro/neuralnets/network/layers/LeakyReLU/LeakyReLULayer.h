@@ -42,7 +42,7 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 * @param[in] layerIndex The layer index
 	 * @param[in] negativeSlope The factor for the negative part of LeakyReLU. Default: 0.01
 	 */
-	LeakyReLULayer( unsigned short int layerSize, unsigned short int layerIndex, Number negativeSlope = Number(1)/Number(100) );
+	LeakyReLULayer( unsigned short int layerSize, unsigned short int layerIndex, Number negativeSlope = Number( 1 ) / Number( 100 ) );
 
 	/**
 	 * @brief Default destructor
@@ -92,12 +92,12 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 */
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
-	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const;
-	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet ) const;
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const;
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
 
 	/**
 	 * @brief Attempts to trace counterexample to a potential source neuron
-	 * 
+	 *
 	 * @param[in] knownSource the counterexample or known source to trace to the new source
 	 * @param[in] alpha the predicate value for the known source
 	 * @param[in] lowerIndex the number of the neuron knownSource was obtained from
@@ -105,7 +105,7 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 * @param[in] newSourceSet the set that should include the new source
 	 * @return tuple<int, Point<Number>, Point<Number>> were the first number indicates the next neuron to attempt tracing or is -1 and the Points contain the new source and predicate value of it
 	 */
-	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const;
+	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
 
 	/**
 	 * @brief Serialization of the current layer.

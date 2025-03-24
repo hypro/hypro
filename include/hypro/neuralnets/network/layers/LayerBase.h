@@ -10,9 +10,9 @@
  */
 
 #pragma once
-#include "../../../util/logging/Logger.h"
-#include "../../../types.h"
 #include "../../../representations/GeometricObjectBase.h"
+#include "../../../types.h"
+#include "../../../util/logging/Logger.h"
 #include "NNLayerType.h"
 
 namespace hypro {
@@ -58,23 +58,23 @@ class LayerBase {
 
 	/**
 	 * @brief Propagates back y to the previous neuron in the layer. I.e. given y, y = f(x), x \in I, return x
-	 * 
-	 * @param[in] y, the counterexample candidate to propagate back 
+	 *
+	 * @param[in] y, the counterexample candidate to propagate back
 	 * @param[in] neuronNumber, the number of the neuron at which we apply the backpropagation
 	 * @param[in] inputSet, the input set which should include the result of the backpropagation
 	 * @return Point<Number> the backpropagated final result
 	 */
-	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const = 0;
-	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet, Starset<Number> currentSet) const {
-		return propagateCandidateBack(y, alpha, neuronNumber, inputSet );
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const = 0;
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet, Starset<Number> knownSourceSet ) const {
+		return traceSourceBack( knownSource, knownSourceAlpha, neuronNumber, newSourceSet );
 	};
-	virtual std::pair<Point<Number>,Point<Number>> propagateCandidateBack(Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const {
-		assert(false && "binary backpropagation not possible for this layertype");
-		return std::make_pair(Point<Number>(), Point<Number>());
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const {
+		assert( false && "binary backpropagation not possible for this layertype" );
+		return std::make_pair( Point<Number>(), Point<Number>() );
 	}
 	/**
 	 * @brief Attempts to trace counterexample to a potential source neuron
-	 * 
+	 *
 	 * @param[in] knownSource the counterexample or known source to trace to the new source
 	 * @param[in] alpha the predicate value for the known source
 	 * @param[in] lowerIndex the number of the neuron knownSource was obtained from
@@ -82,9 +82,9 @@ class LayerBase {
 	 * @param[in] newSourceSet the set that should include the new source
 	 * @return tuple<int, Point<Number>, Point<Number>> were the first number indicates the next neuron to attempt tracing or is -1 and the Points contain the new source and predicate value of it
 	 */
-	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const{
-		assert(false && "unsat core tracing not implemented for this layertype");
-		return std::make_tuple(-1, Point<Number>(), Point<Number>());
+	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const {
+		assert( false && "unsat core tracing not implemented for this layertype" );
+		return std::make_tuple( -1, Point<Number>(), Point<Number>() );
 	}
 
 	// ============= utility functions =============

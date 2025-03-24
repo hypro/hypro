@@ -78,7 +78,7 @@ int main( int argc, char* argv[] ) {
 	//append step function layer
     neuralNetwork.appendLayer(std::make_shared<hypro::StepFunctionLayer<Number>>(1, 4, 0.5, 0, 1));
 
-    std::cout << neuralNetwork << std::endl;
+    // std::cout << neuralNetwork << std::endl;
 	
 	// Thermostat verification using an input poly which represent temperature and control mode
 	hypro::HPolytope<Number> inputPoly;
@@ -92,7 +92,7 @@ int main( int argc, char* argv[] ) {
         std::cout << "Expected a file location for the input polytope. Aborting..." << std::endl;
         return -1;
     }
-	std::cout << "The input polytope:\n" << inputPoly << std::endl;
+	// std::cout << "The input polytope:\n" << inputPoly << std::endl;
 
     // Extract the safety specification
     int safeValue = prop_name[prop_name.size() - 4] == 'M' ? 0 : 1; 
@@ -102,20 +102,20 @@ int main( int argc, char* argv[] ) {
     vector_t<Number> d(2);
     d << safeValue,-safeValue;
     safePoly.push_back(HPolytope<Number>(C,d));
-	std::cout << "The disjunction of safe polytopes:\n" << safePoly << std::endl;
+	// std::cout << "The disjunction of safe polytopes:\n" << safePoly << std::endl;
 
     // Settings for verification
 	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;
 	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::EXACT_SOURCES;							  // FULL , AVOIDANT, EXACT_SOURCES
-	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::BINARYSEARCH;  // SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, 
-	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy );
+	hypro::TRACING_STRATEGY backpropagationStrategy = hypro::TRACING_STRATEGY::UNSAT_CORE;  // SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, 
+	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy, false);
 	bool create_plots = !true;
 	bool normalize_input = true;
 	bool normalize_output = true;
 
     // Verify
 	auto start = std::chrono::steady_clock::now();
-	bool isSafe = NNtree.verify( method, hypro::SEARCH_STRATEGY::BFS, create_plots, normalize_input, normalize_output );
+	bool isSafe = NNtree.verify( method, hypro::SEARCH_STRATEGY::DFS, create_plots, normalize_input, normalize_output );
 	auto end = std::chrono::steady_clock::now();
 	std::cout << "Total time elapsed during NN reachability analysis: " << std::chrono::duration_cast<std::chrono::milliseconds>( end - start ).count() << " ms" << std::endl;
     

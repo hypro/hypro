@@ -43,7 +43,7 @@ class ReachabilityTree {
 
 	hypro::Plotter<Number>& mPlotter;
 
-	BACKPROPAGATION_STRATEGY mBackpropagationStrategy;
+	TRACING_STRATEGY mTracingStrategy;
 	COUNTEREXAMPLE_STRATEGY mCounterExampleStrategy;
 	REFINEMENT_TYPE mRefinmentType; 
 	bool mRemoveSafeSubtrees;
@@ -56,8 +56,7 @@ class ReachabilityTree {
 	// contains the value (counterexample or source) corresponding to the key
 	std::map<std::pair<int,int>, std::set<Point<Number>>> mPreviousCounterexamples;
 	
-	// Could be used for safe histories
-	// std::map<std::pair<int,int>, std::list<Starset<Number>>> mPreviousSaveSets;
+	int mNumberOfTracings;
 
   public:
 	// Default constructor
@@ -70,7 +69,7 @@ class ReachabilityTree {
 	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets );
 
 	//Initializer constructor with explicit counterexample strategy and refinement type
-	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets, const COUNTEREXAMPLE_STRATEGY counterExampleStrategy, const REFINEMENT_TYPE refinementType, const BACKPROPAGATION_STRATEGY backpropagationStrategy, const bool removeSafeSubtrees = false);
+	ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets, const COUNTEREXAMPLE_STRATEGY counterExampleStrategy, const REFINEMENT_TYPE refinementType, const TRACING_STRATEGY backpropagationStrategy, const bool removeSafeSubtrees = false);
 
 	ReachabilityNode<Number>* root() const;
 
@@ -93,49 +92,49 @@ class ReachabilityTree {
 	void updateLeaves( ReachabilityNode<Number>* node, std::vector<ReachabilityNode<Number>*>* notComputedLeaves);
 
 	/**
-	 * @brief Find the source neuron of a countereaxmple candidate (if exists).
+	 * @brief Find the neuron containing a source of a countereaxmple (if exists).
 	 *
-	 * @param[in] candidate: a counter example candidate Point<Number>
+	 * @param[in] source: a counter example Point<Number>
 	 * @param[in] node: the reachability tree leaf from which we start the search
-	 * @param[in] strategy: Strategy used for finding the origin of candidate
+	 * @param[in] strategy: Strategy used for finding the origin of source
 	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <EmptyPoint, node> which indicates the source neuron of the countereaxmple, return <source, root> if it is a true countereaxmple
 	 */
-	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> identifyCounterExampleSource( const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node, BACKPROPAGATION_STRATEGY strategy);
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> identifyCounterExampleOrigin( const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node, TRACING_STRATEGY strategy);
 
 	/**
-	 * @brief Find the source neuron of a countereaxmple candidate inside a activation function layer or allow further backpropagation
+	 * @brief Find the source neuron of a countereaxmple source inside a activation function layer or allow further backpropagation
 	 *
-	 * @param[in] candidate: a counter example candidate Point<Number>
+	 * @param[in] source: a counter example source Point<Number>
 	 * @param[in] node: the reachability tree leaf from which we start the search
 	 * @param[in] upperIndex: The highest index (lowest number) that is known not to be the source of the counterexample or the start of the layer
 	 * @param[in] nextIndex: The index of the neuron to which backpropagation is tried next
-	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <candidate, node> which indicates the source neuron of the countereaxmple, return <candidate, nullptr> if it is a true countereaxmple
+	 * @return std::pair<Point, ReachabilityNode*>: returns a pair <source, node> which indicates the source neuron of the countereaxmple, return <source, nullptr> if it is a true countereaxmple
 	 */
-	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> binarySearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex );
-	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> rememberingSearchBackpropagation(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node );
-	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> unsatCoreTracing(const Point<Number>& candidate, const Point<Number>& candidateAlpha, ReachabilityNode<Number>* node);
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> binarySearchTracing(const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node,  const int upperIndex, const int nextIndex );
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> rememberingSearchTracing(const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node );
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> unsatCoreTracing(const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node);
 	/**
-	 * @brief Calculates the corresponding point from the previous set such that applying the previous nodes computations on it we would get back the counterexample candidate
+	 * @brief Calculates the corresponding point from the previous set such that applying the previous nodes computations on it we would get back the counterexample source
 	 *
-	 * @param[in] candidate, the candidate for which we try to find the correspodning point from the previous node
+	 * @param[in] source, the source for which we try to find the correspodning point from the previous node
 	 * @param[in] parentLayer, layer of the previous node
 	 * @param[in] parentNeuron, neuron number of the previous node
 	 * @param[in] parentSet, the representation of the previous node
 	 * @return Point<Number> the corresponding point
 	 */
-	std::pair<Point<Number>,Point<Number>> propagateCandidateBack( const Point<Number>& candidate, const Point<Number>& candidateAlpha, int parentLayer, int parentNeuron, const Starset<Number>& parentSet, const Starset<Number>& currentSet ) const;
+	std::pair<Point<Number>,Point<Number>> traceSourceBack( const Point<Number>& source, const Point<Number>& sourceAlpha, int parentLayer, int parentNeuron, const Starset<Number>& parentSet, const Starset<Number>& currentSet );
 	
 	/**
-	 * @brief Calculates a point in ancestorSet which results in candidate after passing it through to the neuron with lowerIndex. Only works inside an activation-function layer
+	 * @brief Calculates a point in ancestorSet which results in source after passing it through to the neuron with lowerIndex. Only works inside an activation-function layer
 	 *
-	 * @param[in] candidate the candidate for which we try to find a origin
+	 * @param[in] source the source for which we try to find a origin
 	 * @param[in] layerNumber the number of the current layer
 	 * @param[in] lowerIndex start of backpropagation
 	 * @param[in] upperIndex end of backpropagation; corresponds to the node of ancestorSet
 	 * @param[in] ancestorSet the representation of the ancestor node
 	 * @return Point<Number> the corresponding point if possible, and the empty point otherwise
 	 */
-	std::pair<Point<Number>,Point<Number>> propagateCandidateBack( const Point<Number>& candidate, const Point<Number>& candidateAlpha, int layerNumber, int lowerIndex, int upperIndex, const Starset<Number>& ancestorSet ) const;
+	std::pair<Point<Number>,Point<Number>> traceSourceBack( const Point<Number>& source, const Point<Number>& sourceAlpha, int layerNumber, int lowerIndex, int upperIndex, const Starset<Number>& ancestorSet );
 
 	void plotTree( ReachabilityNode<Number>* current, std::string filename ) const;
 
@@ -152,8 +151,8 @@ class ReachabilityTree {
 	Number range_val( size_t dim ) const;
 
 	void removeSafeSubtree(ReachabilityNode<Number>* safeLeaf);
-	bool _refinementAlwaysFullComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
-	bool _refinementAvoidComputation(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
+	bool fullRefinement(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
+	bool avoidentRefinement(SEARCH_STRATEGY strategy,  bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput);
 
 	
 	bool isPreviousCounterexampleSource(int layerNumber, int neuronNumber );

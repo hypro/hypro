@@ -102,9 +102,9 @@ int main( int argc, char* argv[] ) {
 
     // Settings for verification
 	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;
-	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::AVOIDANT;								   // FULL , AVOIDANT
-	hypro::BACKPROPAGATION_STRATEGY backpropagationStrategy = hypro::BACKPROPAGATION_STRATEGY::EXACT_SOURCES;  // SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, EXACT_SOURCES
-	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy );
+	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::EXACT_SOURCES;								   // FULL , AVOIDANT
+	hypro::TRACING_STRATEGY backpropagationStrategy = hypro::TRACING_STRATEGY::UNSAT_CORE;  // SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH, EXACT_SOURCES
+	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy, false );
 	bool create_plots = !true;
 	bool normalize_input = true;
 	bool normalize_output = true;

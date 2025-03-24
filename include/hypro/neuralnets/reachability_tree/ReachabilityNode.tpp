@@ -182,7 +182,6 @@ std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyRan
 	//Try to generate a counterexample
     std::random_device rdev;
 	std::mt19937 rgen( rdev() );
-	std::cout << "Trying to produce a counterexample for " << iterations << " iterations..." << std::endl;
 	while ( 0 < iterations) {
         iterations--;
         //Create a starset of containing potential counterexamples
@@ -223,7 +222,6 @@ std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyRan
                 isCounterexample = isCounterexample && !( v <= safeSetVectors[i]);                    
             }
 			if(isCounterexample && setCopy.contains(transformedPoint)) {	
-                std::cout << "Found counterexample in iteration " << iterations << std::endl;
 				return std::make_pair(transformedPoint, Point<Number>(midPoint));
 			}
 		}
@@ -232,9 +230,7 @@ std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyRan
 }
  
 template <typename Number>
-std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 
-	std::cout << "Producing a counterexample with z3..." << std::endl;
-	
+std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 	
 	// if a counterexample exists, result contains an element in the predicate of set
 	// this predicate corresponds to a point in set that is not element of any HPolytope in rejectionSets
 	EvaluationResult<Number> result = z3GetCounterexample( set.shape(), set.limits(), set.generator(), set.center(), safeSetMatrices, safeSetVectors);
@@ -248,9 +244,7 @@ std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyZ3(
 }
 
 template <typename Number>
-std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 
-	std::cout << "Producing a counterexample with z3..." << std::endl;
-	
+std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const { 	
 	// if a counterexample exists, result contains an element in the predicate of set
 	// this predicate corresponds to a point in set that is not element of any HPolytope in rejectionSets
 	EvaluationResult<Number> result = z3GetCounterexampleSmall( set.shape(), set.limits(), set.generator(), set.center(), safeSetMatrices, safeSetVectors);
@@ -270,7 +264,6 @@ std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyRem
 	EvaluationResult<Number> result;
 	for (Point<Number> z : previousCounterexamples ){
 		result = z3GetInternalPoint(set.shape(), set.limits(), set.generator(), set.center(),z);
-		std::cout << "The previous counterexample is " << (result.errorCode == SOLUTION::FEAS ? "" : "not ") << "contained!" << std::endl;
 		if (result.errorCode == SOLUTION::FEAS){
 			return std::make_pair(z, Point<Number>(result.optimumValue)); 
 		}
@@ -280,6 +273,8 @@ std::pair<Point<Number>,Point<Number>> ReachabilityNode<Number>::_checkSafetyRem
 
 template <typename Number>
 bool ReachabilityNode<Number>::checkSafeRecursive( Starset<Number> currentSet, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy,  const std::set<Point<Number>> previousCounterexamples) {
+
+	std::cout << "Size of reachable set: (n, m, p) = (" << currentSet.generator().rows() << ", " << currentSet.generator().cols() << ", " << currentSet.shape().rows() << " )" << std::endl;
 
 	assert(mIsLeaf);
 

@@ -98,17 +98,17 @@ std::vector<Starset<Number>> ReLULayer<Number>::forwardPass( const std::vector<S
 }
 
 template <typename Number>
-std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::propagateCandidateBack( Point<Number> y, Point<Number> alpha, int neuronNumber, Starset<Number> inputSet ) const {
-	assert( neuronNumber < y.dimension() );
-	assert( y[neuronNumber] >= 0 );
+std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const {
+	assert( neuronNumber < knownSource.dimension() );
+	assert( knownSource[neuronNumber] >= 0 );
 	
 	EvaluationResult<Number> result;
-	if ( 0 == y.coordinate( neuronNumber ) ) {
-		// y = ReLU(x) = max(0,x) = 0 -> x <= 0
-		result = hypro::z3GetInternalPoint(inputSet.shape(),inputSet.limits(),inputSet.generator(), inputSet.center(), y, neuronNumber, carl::Relation::LEQ );
+	if ( 0 == knownSource.coordinate( neuronNumber ) ) {
+		// knownSource = ReLU(x) = max(0,x) = 0 -> x <= 0
+		result = hypro::z3GetInternalPoint(newSourceSet.shape(),newSourceSet.limits(),newSourceSet.generator(), newSourceSet.center(), knownSource, neuronNumber, carl::Relation::LEQ );
 	} else {
-		// 0 < y && y = ReLU(x) = max(0,x) -> y = x
-		result = hypro::z3GetInternalPoint( inputSet.shape(), inputSet.limits(), inputSet.generator(), inputSet.center(), y );
+		// 0 < knownSource && knownSource = ReLU(x) = max(0,x) -> knownSource = x
+		result = hypro::z3GetInternalPoint( newSourceSet.shape(), newSourceSet.limits(), newSourceSet.generator(), newSourceSet.center(), knownSource );
 	}
 
 	// std::cout << "ReLU" << std::endl;
@@ -116,10 +116,10 @@ std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::propagateCandidateBack
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:
 			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl; 
-			if (0 == y.coordinate( neuronNumber )){
-				y[neuronNumber] = Point<Number>( inputSet.generator() * result.optimumValue + inputSet.center() )[neuronNumber];
+			if (0 == knownSource.coordinate( neuronNumber )){
+				knownSource[neuronNumber] = Point<Number>( newSourceSet.generator() * result.optimumValue + newSourceSet.center() )[neuronNumber];
 			}			
-            return std::make_pair(y, Point<Number>(result.optimumValue));
+            return std::make_pair(knownSource, Point<Number>(result.optimumValue));
 
 		case SOLUTION::INFEAS:
 			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
@@ -134,22 +134,21 @@ std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::propagateCandidateBack
 }
 
 template <typename Number>
-std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::propagateCandidateBack(Point<Number> candidate, Point<Number> candidateAlpha, int lowerIndex, int upperIndex, Starset<Number> ancestorSet) const{
-	std::cout <<"Block ReLU"<<std::endl;
+std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::traceSourceBack(Point<Number> newSource, Point<Number> newSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const{
 	std::vector<carl::Relation> relations;
-	for (int i = 0; i < ancestorSet.generator().rows(); i++){
-		if ( upperIndex <= i && i <= lowerIndex && 0 == candidate[i] ) {
+	for (int i = 0; i < newSourceSet.generator().rows(); i++){
+		if ( upperIndex <= i && i <= lowerIndex && 0 == newSource[i] ) {
 			relations.push_back( carl::Relation::LEQ);
 		} else {
 			relations.push_back( carl::Relation::EQ);	
 		}
 	}
 	
-	assert(relations.size() == ancestorSet.generator().rows());
-	EvaluationResult<Number> result = hypro::z3GetInternalPoint(ancestorSet.shape(),ancestorSet.limits(),ancestorSet.generator(), ancestorSet.center(), candidate, relations);	
+	assert(relations.size() == newSourceSet.generator().rows());
+	EvaluationResult<Number> result = hypro::z3GetInternalPoint(newSourceSet.shape(),newSourceSet.limits(),newSourceSet.generator(), newSourceSet.center(), newSource, relations);	
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:						
-            return std::make_pair(Point<Number>( ancestorSet.generator() * result.optimumValue + ancestorSet.center()), Point<Number>(result.optimumValue));
+            return std::make_pair(Point<Number>( newSourceSet.generator() * result.optimumValue + newSourceSet.center()), Point<Number>(result.optimumValue));
 		case SOLUTION::INFEAS:
             return std::make_pair(Point<Number>(), Point<Number>());
 		default:
@@ -161,7 +160,7 @@ std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::propagateCandidateBack
 }
 
 template <typename Number>
-std::tuple<int, Point<Number>, Point<Number>>  ReLULayer<Number>::traceUnsatCore(Point<Number> knownSource, Point<Number> alpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const{
+std::tuple<int, Point<Number>, Point<Number>>  ReLULayer<Number>::traceUnsatCore(Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const{
 	std::vector<carl::Relation> relations;
 	for (int i = 0; i < newSourceSet.generator().rows(); i++){
 		if ( upperIndex <= i && i <= lowerIndex && 0 == knownSource[i] ) {
