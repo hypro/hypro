@@ -92,7 +92,28 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 */
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
+
+	/**
+	 * @brief Traces knownSource back to the previous neuron
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] neuronNumber the number of the neuron at which we apply tracing
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @return the new source of the couterexample in newSourceSet
+	 */
 	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const;
+	
+	/**
+	 * @brief Traces knownSource back to the previous neuron
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] neuronNumber the number of the neuron at which we apply tracing
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @param[in] knownSourceSet the star containing knownSource
+	 * @return the new source of the couterexample in newSourceSet
+	 */
 	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
 
 	/**

@@ -57,21 +57,44 @@ class LayerBase {
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const = 0;
 
 	/**
-	 * @brief Propagates back y to the previous neuron in the layer. I.e. given y, y = f(x), x \in I, return x
+	 * @brief Traces knownSource back to the previous neuron
 	 *
-	 * @param[in] y, the counterexample candidate to propagate back
-	 * @param[in] neuronNumber, the number of the neuron at which we apply the backpropagation
-	 * @param[in] inputSet, the input set which should include the result of the backpropagation
-	 * @return Point<Number> the backpropagated final result
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] neuronNumber the number of the neuron at which we apply tracing
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @return the new source of the couterexample in newSourceSet
 	 */
 	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const = 0;
+	
+	/**
+	 * @brief Traces knownSource back to the previous neuron
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] neuronNumber the number of the neuron at which we apply tracing
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @param[in] knownSourceSet the star containing knownSource
+	 * @return the new source of the couterexample in newSourceSet
+	 */
 	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet, Starset<Number> knownSourceSet ) const {
 		return traceSourceBack( knownSource, knownSourceAlpha, neuronNumber, newSourceSet );
 	};
+
+	/**
+	 * @brief Traces knownSource back through a sequence of activation function operations
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] lowerIndex, upperIndex the start and end of the sequence
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @return the new source of the couterexample in newSourceSet
+	 */
 	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const {
 		assert( false && "binary backpropagation not possible for this layertype" );
 		return std::make_pair( Point<Number>(), Point<Number>() );
 	}
+	
 	/**
 	 * @brief Attempts to trace counterexample to a potential source neuron
 	 *

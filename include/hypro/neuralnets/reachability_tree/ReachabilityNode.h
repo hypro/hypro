@@ -36,18 +36,52 @@ class ReachabilityNode {
 	int mNeuronNumber;	// the number of neuron in the current layer
 
 	NN_REACH_METHOD mMethod; // method by which mRepresentation was computed (for roots this is the input method or OVERAPPRX for CEGAR)
-	Starset<Number> mRepresentation;
-	bool mHasCounterExample;
-	bool mHasCounterExampleAlpha;
+	Starset<Number> mRepresentation; // reachable set corresponding to this node
+	bool mHasCounterExample; // indicates whether the value mCounterExample is initialised
+	bool mHasCounterExampleAlpha; // indicates whether the value mCounterExampleAplha is initialised
 	Point<Number> mCounterExample; 		// a counterexample, if node is a leaf and unsafe, the empty point otherwise
 	Point<Number> mCounterExampleAlpha; // the predicate value corresponding to the counterexample
 	hypro::Plotter<Number>& mPlotter;
 
 
-	// Returns a pair (x,alpha) where x is an counterexample (or the empty point if it does not exist) and alpha is the corresponding predicate value (if it is calculated and the empty point otherwise)
+	
+	
+	/**
+	 * @brief Checks the safety of a star and returns a counterexample with asmall represnetaion if possible
+	 * 
+	 * @param[in] set the star that is checked for 
+	 * @param[in] safeSetMatrices, safeSetVectors safety specificaiton
+	 * @return a pair (x,alpha) where x is an counterexample (or the empty point if it does not exist) and alpha is the corresponding predicate value (if it is calculated and the empty point otherwise)
+	 */
 	std::pair<Point<Number>,Point<Number>> _checkSafetyZ3SmallRepresentation(Starset<Number> set,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
+	
+	/**
+	 * @brief Checks the safety of a star and returns a counterexample using Z3
+	 * 
+	 * @param[in] set the star that is checked for 
+	 * @param[in] safeSetMatrices, safeSetVectors safety specificaiton
+	 * @return a pair (x,alpha) where x is an counterexample (or the empty point if it does not exist) and alpha is the corresponding predicate value (if it is calculated and the empty point otherwise)
+	 */
 	std::pair<Point<Number>,Point<Number>> _checkSafetyZ3(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors ) const;
+	
+	/**
+	 * @brief Checks the safety of a star and returns a counterexample
+	 * 
+	 * @param[in] set the star that is checked for 
+	 * @param[in] safeSetMatrices, safeSetVectors safety specification
+	 * @param[in] iterations specifies the amount of tries befor defaulting to _checkSafteyZ3
+	 * @return a pair (x,alpha) where x is an counterexample (or the empty point if it does not exist) and alpha is the corresponding predicate value (if it is calculated and the empty point otherwise)
+	 */
 	std::pair<Point<Number>,Point<Number>> _checkSafetyRandom(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, int iterations) const;
+
+	/**
+	 * @brief Checks the safety of a star and returns a counterexample using previous counterexamples
+	 * 
+	 * @param[in] set the star that is checked for 
+	 * @param[in] safeSetMatrices, safeSetVectors safety specification
+	 * @param[in] previousCounterexamples set of previous counterxamples to check before defaulting to _checkSafetyZ3
+	 * @return a pair (x,alpha) where x is an counterexample (or the empty point if it does not exist) and alpha is the corresponding predicate value (if it is calculated and the empty point otherwise)
+	 */
 	std::pair<Point<Number>,Point<Number>> _checkSafetyRemembering(Starset<Number> set, const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, const std::set<Point<Number>> previousCounterexamples) const;
 
   public:
@@ -91,7 +125,26 @@ class ReachabilityNode {
 	void setRepresentation( const Starset<Number>& representation );
 
 	// functionalities
+	
+	/**
+	 * @brief Checks the safety of a star using the method specified by strategy
+	 * 
+	 * @param[in] currentSet the star that is checked
+	 * @param[in] safeSetMatrices, safeSetVectors safety specification
+	 * @param[in] previousCounterexamples set of previous counterxamples 
+	 * @param[in] strategy the method used to check safety
+	 * @return safety of currentSet
+	 */
 	bool checkSafeRecursive( Starset<Number> currentSet,  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy, const std::set<Point<Number>> previousCounterexamples = std::set<Point<Number>>());
+	
+	/**
+	 * @brief Checks the safety of the this node
+	 * 
+	 * @param[in] safeSetMatrices, safeSetVectors safety specification
+	 * @param[in] previousCounterexamples set of previous counterxamples 
+	 * @param[in] strategy the method used to check safety of final leaves
+	 * @return safety of currentSet
+	 */
 	bool checkSafe(  const std::vector<matrix_t<Number>> safeSetMatrices, const std::vector<vector_t<Number>> safeSetVectors, COUNTEREXAMPLE_STRATEGY strategy = COUNTEREXAMPLE_STRATEGY::Z3_BASIC, const std::set<Point<Number>> previousCounterexamples = std::set<Point<Number>>());
 
 	// utility methods
