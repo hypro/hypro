@@ -59,11 +59,11 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 * @brief Applies the LeakyReLU function at the given index to the input vector
 	 *
 	 * @param inputVec The input vector
-	 * @param i The index
+	 * @param dimension The index
 	 * @return The resulting vector after applying the LeakyReLU function
 	 */
-	vector_t<Number> forwardPass( const vector_t<Number>& inputVec, int i ) const;
-
+	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const;
+	
 	/**
 	 * @brief Applies the LeakyReLU function element-wise to the input vector
 	 *

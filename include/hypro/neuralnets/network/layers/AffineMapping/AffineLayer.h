@@ -29,6 +29,13 @@ class AffineLayer : public LayerBase<Number> {
 	matrix_t<Number> weights() const;
 
 	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec ) const;
+	
+	/**
+	 * @brief Computes the affine mapping on the input vector 
+	 * @param inputVec Vector to which the affine mapping is applied
+	 * @param dimension unused
+	 */
+	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const;
 	virtual std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const;
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
@@ -65,6 +72,13 @@ class AffineLayer : public LayerBase<Number> {
 	 * @return tuple<int, Point<Number>, Point<Number>> were the first number indicates the next neuron to attempt tracing or is -1 and the Points contain the new source and predicate value of it
 	 */
 	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
+
+	virtual std::tuple<std::vector<int>, Point<Number>, Point<Number>> reusePredicate(Point<Number> source, Point<Number> predicate, Starset<Number> newSourceSet, int upperIndex, int lowerIndex)  const{
+		assert( false && "tracing with reused predicates not implemented for this layertype" );
+		return std::make_tuple( std::vector<int>(), Point<Number>(), Point<Number>() );
+	}
+
+	
 
 	virtual void serialize( std::ostream& os ) const {
 		os << "Layer size: " << LayerBase<Number>::mLayerSize << std::endl;

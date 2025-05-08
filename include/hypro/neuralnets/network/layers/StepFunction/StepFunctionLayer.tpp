@@ -71,6 +71,17 @@ vector_t<Number> StepFunctionLayer<Number>::forwardPass( const vector_t<Number>&
 }
 
 template <typename Number>
+vector_t<Number> StepFunctionLayer<Number>::forwardPass( const vector_t<Number>& inputVec, const int dimension ) const {
+	vector_t<Number> outputVec = inputVec;
+	if ( outputVec[dimension] < mValue ) {
+		outputVec[dimension] = mMinValue;
+	} else if ( outputVec[dimension] >= mValue ) {
+		outputVec[dimension] = mMaxValue;
+	}
+	return outputVec;
+}
+
+template <typename Number>
 std::vector<hypro::Starset<Number>> StepFunctionLayer<Number>::forwardPass( const hypro::Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const {
 	auto resultSet = std::vector<hypro::Starset<Number>>();
 	resultSet.push_back( inputSet );

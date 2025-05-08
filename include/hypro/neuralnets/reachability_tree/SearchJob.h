@@ -42,6 +42,9 @@ class SearchJob {
 		Starset<Number> mSet(mNode->representation());		
 		std::vector<Starset<Number>> newSets = mLayer->forwardPass( mSet, mIndex, method );		
 		int N = newSets.size();
+		if(N == 1 && mSet.generator().cols() < newSets[0].generator().cols()){
+			std::cout << "Over-Approximation in layer " << mLayerNum << " at neuron " << mIndex << std::endl;
+		}
 
 		// the new jobs produced by calculating the current job
 		std::vector<SearchJob<Number>> newJobs;

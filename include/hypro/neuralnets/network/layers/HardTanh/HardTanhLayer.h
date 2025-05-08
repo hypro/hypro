@@ -65,6 +65,15 @@ class HardTanhLayer : public LayerBase<Number> {
 	 * @return The resulting vector after applying the Hardtanh function
 	 */
 	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec ) const;
+	
+	/**
+	 * @brief Applies the Hardtanh function element-wise to the input vector in one dimension
+	 *
+	 * @param[in] inputVec The input vector
+	 * @param[in] dimension The dimension in which HardTanh is applied
+	 * @return The resulting vector after applying the Hardtanh function
+	 */
+	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const;
 
 	/**
 	 * @brief Applies the given reachability method to the input set at the specified index

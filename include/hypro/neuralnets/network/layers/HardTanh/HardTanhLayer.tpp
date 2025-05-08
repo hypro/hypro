@@ -72,6 +72,19 @@ vector_t<Number> HardTanhLayer<Number>::forwardPass( const vector_t<Number>& inp
 }
 
 template <typename Number>
+vector_t<Number> HardTanhLayer<Number>::forwardPass( const vector_t<Number>& inputVec, const int dimension ) const {
+	vector_t<Number> outputVec = inputVec;
+	if ( outputVec[dimension] < mMinValue ) {
+		outputVec[dimension] = mMinValue;
+	} else if ( outputVec[dimension] > mMaxValue ) {
+		outputVec[dimension] = mMaxValue;
+	} else {
+		// Identity
+	}
+	return outputVec;
+}
+
+template <typename Number>
 std::vector<hypro::Starset<Number>> HardTanhLayer<Number>::forwardPass( const hypro::Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const {
 	auto resultSet = std::vector<hypro::Starset<Number>>();
 	resultSet.push_back( inputSet );

@@ -21,9 +21,11 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 	, mPlotter( hypro::Plotter<Number>::getInstance() )
 	, mCounterExampleStrategy( COUNTEREXAMPLE_STRATEGY::Z3_BASIC )
 	, mRefinmentType( REFINEMENT_TYPE::EXACT_SOURCES )
-	, mTracingStrategy( TRACING_STRATEGY::BINARYSEARCH )
+	, mTracingStrategy( TRACING_STRATEGY::UNSAT_CORE )
 	, mRemoveSafeSubtrees( false )
-	, mNumberOfTracings( 0 ) {
+	, mNumberOfTracings( 0 )
+	, mTryReusingPredicates(true)
+	, mPredicateTracingOrigin(PREDICATE_TRACING_ORIGIN::FIRST) {
 	unsigned short int depth = 1;
 	for ( auto layer : mNetwork.layers() ) {
 		if ( layer->layerType() == NN_LAYER_TYPE::AFFINE )
@@ -44,7 +46,9 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 	, mRefinmentType( refinementType )
 	, mTracingStrategy( backpropagationStrategy )
 	, mRemoveSafeSubtrees( removeSafeSubtrees )
-	, mNumberOfTracings( 0 ) {
+	, mNumberOfTracings( 0 )
+	, mTryReusingPredicates(true)
+	, mPredicateTracingOrigin(PREDICATE_TRACING_ORIGIN::FIRST) {
 	mPreviousCounterexampleSources = std::vector<std::list<int>>();
 	unsigned short int depth = 1;
 	for ( auto layer : mNetwork.layers() ) {
@@ -83,6 +87,26 @@ unsigned short int ReachabilityTree<Number>::depth( ReachabilityNode<Number>* no
 	}
 
 	return 1 + maxDepth;
+}
+
+template <typename Number>
+bool ReachabilityTree<Number>::getTryReusingPredicates() const{
+	return mTryReusingPredicates;
+}
+
+template <typename Number>
+void ReachabilityTree<Number>::setTryReusingPredicates(const bool reusePredicates){
+	mTryReusingPredicates = reusePredicates;
+}
+
+template <typename Number>
+PREDICATE_TRACING_ORIGIN ReachabilityTree<Number>::getPredicateTracingOrigin() const{
+	return mPredicateTracingOrigin;
+}
+
+template <typename Number>
+void ReachabilityTree<Number>::setPredicateTracingOrigin(const PREDICATE_TRACING_ORIGIN strategy){
+	mPredicateTracingOrigin = strategy;
 }
 
 template <typename Number>
@@ -523,6 +547,7 @@ bool ReachabilityTree<Number>::avoidentRefinement( SEARCH_STRATEGY strategy, boo
 		// Split with exact and do NOT compute the children
 		ReachabilityNode<Number>* refinedNode = std::get<2>( candidateSource );
 		rememberCounterexampleSource( refinedNode->layerNumber(), refinedNode->neuronNumber() );
+		std::cout << "Found origin at " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
 		refinedNode->removeAllChildren();
 		SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );
 		std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT );
@@ -730,12 +755,19 @@ std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> Reachability
 			case TRACING_STRATEGY::UNSAT_CORE:
 				result = unsatCoreTracing( source, sourceAlpha, node );
 				return identifyCounterExampleOrigin( std::get<0>( result ), std::get<1>( result ), std::get<2>( result ), strategy );
+			case TRACING_STRATEGY::FULL_REUSED_PREDICATE:
+				result = reusedPredicateTracing(source, sourceAlpha, node);
+				return identifyCounterExampleOrigin( std::get<0>( result ), std::get<1>( result ), std::get<2>( result ), strategy );
+			case TRACING_STRATEGY::REUSED_PREDICATE_WITH_LP:
+				result = reusedPredicateLPTracing(source, sourceAlpha, node);
+				return identifyCounterExampleOrigin( std::get<0>( result ), std::get<1>( result ), std::get<2>( result ), strategy );
 			default:
 				break;
 		}
 	}
 
 	ReachabilityNode<Number>* parent = node->getParent();
+	// std::cout << parent->layerNumber() << " " << parent->neuronNumber() << mNetwork.layers( node->getParent()->layerNumber() )->layerType() << std::endl;
 	std::pair<Point<Number>, Point<Number>> newSource = traceSourceBack( source, sourceAlpha, parent->layerNumber(), parent->neuronNumber(), parent->representation(), node->representation() );
 	if ( newSource.first.dimension() <= 0 ) {
 		std::pair<int, int> key = std::make_pair( node->layerNumber(), node->neuronNumber() );
@@ -860,7 +892,19 @@ std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> Reachability
 	// attempt to trace through the whole layer
 	std::shared_ptr<LayerBase<Number>> layer = mNetwork.layers( node->getParent()->layerNumber() );
 	ReachabilityNode<Number>* newSourceNode = getAncestor( node->getParent(), 0 );
-	std::tuple<int, Point<Number>, Point<Number>> result = layer->traceUnsatCore( source, sourceAlpha, node->getParent()->neuronNumber() + 1, 0, newSourceNode->representation() );
+	std::tuple<int, Point<Number>, Point<Number>> result;
+	
+	if(mTryReusingPredicates){
+		std::tuple<std::vector<int>, Point<Number>, Point<Number>> tmp = layer->reusePredicate(source, sourceAlpha, newSourceNode->representation(), 0, node->getParent()->neuronNumber());
+		if(std::get<0>(tmp).size() > 0){
+			result = layer->traceUnsatCore( source, sourceAlpha, node->getParent()->neuronNumber(), 0, newSourceNode->representation() );
+		} else {
+			result = std::make_tuple(-1, std::get<1>(tmp), std::get<2>(tmp));
+		}
+	} else {
+		result = layer->traceUnsatCore( source, sourceAlpha, node->getParent()->neuronNumber(), 0, newSourceNode->representation() );
+	}
+
 	if ( std::get<0>( result ) < 0 ) {
 		return std::make_tuple( std::get<1>( result ), std::get<2>( result ), newSourceNode );
 	}
@@ -870,11 +914,21 @@ std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> Reachability
 	int next = std::get<0>( result );
 	Point<Number> newSource = source;
 	Point<Number> newSourceAlpha = sourceAlpha;
-	assert( node->getParent()->neuronNumber() + 1 > next && next >= upper );
+	assert( node->getParent()->neuronNumber() + 1 > next && next > upper );
 	while ( node->getParent()->neuronNumber() + 1 > upper ) {
 		newSourceNode = getAncestor( node->getParent(), next );
 		mNumberOfTracings += 1;
-		result = layer->traceUnsatCore( newSource, newSourceAlpha, node->getParent()->neuronNumber() + 1, next, newSourceNode->representation() );
+		if(mTryReusingPredicates){
+			std::tuple<std::vector<int>, Point<Number>, Point<Number>> tmp = layer->reusePredicate(newSource, newSourceAlpha, newSourceNode->representation(), next, node->getParent()->neuronNumber());
+			if(std::get<0>(tmp).size() > 0){
+				result = layer->traceUnsatCore( newSource, newSourceAlpha, node->getParent()->neuronNumber(), next, newSourceNode->representation() );
+			} else {
+				result = std::make_tuple(-1, std::get<1>(tmp), std::get<2>(tmp));
+			}
+		} else {
+			result = layer->traceUnsatCore( newSource, newSourceAlpha, node->getParent()->neuronNumber(), next, newSourceNode->representation() );
+		}
+		
 		if ( std::get<0>( result ) < 0 ) {
 			node = newSourceNode;
 			next = upper;
@@ -894,6 +948,112 @@ std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> Reachability
 }
 
 template <typename Number>
+std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::reusedPredicateTracing( const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node ) {
+	int layerNumber = node->layerNumber();
+	int lower;
+	int upper = 0;
+	ReachabilityNode<Number>* newSourceNode;
+	if(mNetwork.layers(layerNumber)->layerType() == NN_LAYER_TYPE::AFFINE ){
+		layerNumber = node->getParent()->layerNumber();
+		lower = node->getParent()->neuronNumber();
+		newSourceNode = getAncestor(node->getParent(), upper);
+	} else {
+		lower = node->neuronNumber();
+		newSourceNode = getAncestor(node, upper);
+	}
+	
+	std::tuple<std::vector<int>, Point<Number>, Point<Number>> result = mNetwork.layers(layerNumber)->reusePredicate(source, sourceAlpha, newSourceNode->representation(), upper, lower);
+	if(std::get<0>(result).size() == 0){
+		std::cout << "Tracing succeded - Continuing wiht next layer" << std::endl;
+		return std::make_tuple(std::get<1>(result), std::get<2>(result), newSourceNode);
+	} else {
+		ReachabilityNode<Number>* originNode;
+		std::vector<int> potentialOrigins = std::get<0>(result);
+		switch (mPredicateTracingOrigin) {
+		case PREDICATE_TRACING_ORIGIN::FIRST:
+			originNode = getAncestor(node->getParent(), potentialOrigins[0]);
+			break;
+		case PREDICATE_TRACING_ORIGIN::LAST:
+			originNode = getAncestor(node->getParent(), potentialOrigins[potentialOrigins.size() - 1]);
+			break;
+		case PREDICATE_TRACING_ORIGIN::MIDDLE:
+			originNode = getAncestor(node->getParent(), potentialOrigins[(int) potentialOrigins.size()/2]);
+			break;
+		case PREDICATE_TRACING_ORIGIN::ALL:
+			for(int o : potentialOrigins ){
+				rememberCounterexampleSource(layerNumber, o);
+			}
+			// this needs to be element 0, otherwise the tree is not properly discarded/recomputed
+			originNode = getAncestor(node->getParent(), potentialOrigins[0]);
+			break;
+		default:
+			assert(false && "Undefined origin selection method!");
+			break;
+		}
+		return std::make_tuple(Point<Number>(), Point<Number>(), originNode);
+	}
+}
+
+template <typename Number>
+std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::reusedPredicateLPTracing( const Point<Number>& source, const Point<Number>& alpha, ReachabilityNode<Number>* node) {
+	
+	int layerNumber = node->layerNumber();
+	int lower;
+	int upper = 0;
+	ReachabilityNode<Number>* newSourceNode;
+
+	if(mNetwork.layers(layerNumber)->layerType() == NN_LAYER_TYPE::AFFINE ){
+		layerNumber = node->getParent()->layerNumber();
+		lower = node->getParent()->neuronNumber();
+		newSourceNode = getAncestor(node->getParent(), upper);
+	} else {
+		lower = node->neuronNumber();
+		newSourceNode = getAncestor(node, upper);
+	}
+	
+	// Try tracing through the whole layer by reusing the predicate
+	std::tuple<std::vector<int>, Point<Number>, Point<Number>> result = mNetwork.layers(layerNumber)->reusePredicate(source, alpha, newSourceNode->representation(), upper, lower);
+		
+	if(std::get<0>(result).size() == 0){
+		return std::make_tuple(std::get<1>(result), std::get<2>(result), newSourceNode);
+	}
+
+	// Confirm with LP that tracing through the layer is not possible
+	std::pair<Point<Number>, Point<Number>>  LPResult = mNetwork.layers(layerNumber)->traceSourceBack( source, alpha, lower, upper, newSourceNode->representation() );
+	
+	if (LPResult.first.dimension() > 0){
+		return std::make_tuple( LPResult.first, LPResult.second, newSourceNode );
+	}
+
+	//Try tracing to the closest node
+	upper = std::get<0>(result)[std::get<0>(result).size() - 1];
+	Point<Number> newSource = source;
+	Point<Number> newAlpha = alpha;
+	while(true){
+		if(mNetwork.layers(node->layerNumber())->layerType() == NN_LAYER_TYPE::AFFINE ){
+			newSourceNode = getAncestor(node->getParent(), upper);
+		} else {
+			newSourceNode = getAncestor(node, upper);
+		}
+
+		LPResult = mNetwork.layers(layerNumber)->traceSourceBack( newSource, newAlpha, lower, upper, newSourceNode->representation() );
+		
+		if (LPResult.first.dimension() > 0){
+			std::cout << "LP-Tracing failed" << std::endl;
+			lower = newSourceNode->neuronNumber();
+			result = mNetwork.layers(layerNumber)->reusePredicate(newSource, newAlpha, newSourceNode->representation(), 0, lower);
+			newSource = std::get<1>(result);
+			newAlpha = std::get<2>(result);
+			assert(std::get<0>(result).size() > 0); // implied by: tracing through layer failed => origin in layer after newSourceNode (LP success) => LP to neuron 0 would still fail => reusing the predicate fails
+			upper = std::get<0>(result)[std::get<0>(result).size() - 1];
+		} else {
+			return std::make_tuple( Point<Number>(), Point<Number>(), newSourceNode );
+		}
+	}
+}
+
+
+template <typename Number>
 ReachabilityNode<Number>* ReachabilityTree<Number>::getAncestor( ReachabilityNode<Number>* node, const int neuronNumber ) const {
 	if ( node->neuronNumber() == neuronNumber ) {
 		return node;
@@ -906,9 +1066,11 @@ template <typename Number>
 std::pair<Point<Number>, Point<Number>> ReachabilityTree<Number>::traceSourceBack( const Point<Number>& source, const Point<Number>& sourceAlpha, const int parentLayer, const int parentNeuron, const Starset<Number>& parentSet, const Starset<Number>& currentSet ) {
 	mNumberOfTracings += 1;
 	std::shared_ptr<LayerBase<Number>> layer = mNetwork.layers( parentLayer );
-
-	if ( layer->layerType() == NN_LAYER_TYPE::AFFINE ) {
-		return layer->traceSourceBack( source, sourceAlpha, parentNeuron, parentSet, currentSet );
+	if(mTryReusingPredicates && layer->layerType() != NN_LAYER_TYPE::AFFINE){
+		std::tuple<std::vector<int>, Point<Number>, Point<Number>> result = layer->reusePredicate(source, sourceAlpha, parentSet, parentNeuron, parentNeuron);
+		if(std::get<0>(result).size() == 0){
+			return std::make_pair(std::get<1>(result), std::get<2>(result));
+		}
 	}
 	return layer->traceSourceBack( source, sourceAlpha, parentNeuron, parentSet );
 }
@@ -920,6 +1082,12 @@ template <typename Number>
 std::pair<Point<Number>, Point<Number>> ReachabilityTree<Number>::traceSourceBack( const Point<Number>& source, const Point<Number>& sourceAlpha, int layerNumber, int lowerIndex, int upperIndex, const Starset<Number>& ancestorSet ) {
 	mNumberOfTracings += 1;
 	std::shared_ptr<LayerBase<Number>> layer = mNetwork.layers( layerNumber );
+	if(mTryReusingPredicates && layer->layerType() != NN_LAYER_TYPE::AFFINE){
+		std::tuple<std::vector<int>, Point<Number>, Point<Number>> result = layer->reusePredicate(source, sourceAlpha, ancestorSet, upperIndex, lowerIndex);
+		if(std::get<0>(result).size() == 0){
+			return std::make_pair(std::get<1>(result), std::get<2>(result));
+		}
+	}
 	return layer->traceSourceBack( source, sourceAlpha, lowerIndex, upperIndex, ancestorSet );
 }
 

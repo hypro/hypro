@@ -47,6 +47,8 @@ class ReachabilityTree {
 	COUNTEREXAMPLE_STRATEGY mCounterExampleStrategy;
 	REFINEMENT_TYPE mRefinmentType; 
 	bool mRemoveSafeSubtrees;
+	bool mTryReusingPredicates;
+	PREDICATE_TRACING_ORIGIN mPredicateTracingOrigin;
 
 	//stores the position of counterexample
 	// mPreviousCounterexampleSources[i] contains a ascending list of all nodes in layer i that were previously a counterexample source
@@ -76,6 +78,14 @@ class ReachabilityTree {
 	std::vector<ReachabilityNode<Number>*> leaves() const;
 
 	unsigned short int depth(ReachabilityNode<Number>* node) const;
+
+	bool getTryReusingPredicates() const;
+
+	void setTryReusingPredicates(const bool reusePredicates);
+
+	PREDICATE_TRACING_ORIGIN getPredicateTracingOrigin() const;
+
+	void setPredicateTracingOrigin(const PREDICATE_TRACING_ORIGIN strategy);
 
 	/**
 	 * @brief Find the specified ancestor in the same layer
@@ -181,6 +191,26 @@ class ReachabilityTree {
 	 */
 	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> unsatCoreTracing(const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node);
 	
+	/**
+	 * @brief Find a potential origin neuron of a source inside an activation function layer reusing the predicate corresponding to the source
+	 *
+	 * @param[in] source: a counter example source Point<Number>
+	 * @param[in] sourceAplha: the predicate value corresponding to source
+	 * @param[in] node: the reachability tree leaf from which we start the search
+	 * @return a reachability node corresponding to the origin and the origin if it is a counter input
+	 */
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> reusedPredicateTracing( const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node );
+
+	/**
+	 * @brief Find an origin neuron of a source inside an activation function layer reusing the predicate and checking with LP
+	 *
+	 * @param[in] source: a counter example source Point<Number>
+	 * @param[in] sourceAplha: the predicate value corresponding to source
+	 * @param[in] node: the reachability tree leaf from which we start the search
+	 * @return a reachability node corresponding to the origin and the origin if it is a counter input
+	 */
+	std::tuple<Point<Number> , Point<Number>, ReachabilityNode<Number>*> reusedPredicateLPTracing( const Point<Number>& source, const Point<Number>& alpha, ReachabilityNode<Number>* node);
+
 	/**
 	 * @brief Calculates the corresponding point from the previous set such that applying the previous nodes computations on it we would get back the counterexample source
 	 *

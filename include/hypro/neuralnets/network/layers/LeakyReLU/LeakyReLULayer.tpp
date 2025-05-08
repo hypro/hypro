@@ -58,9 +58,9 @@ const NN_LAYER_TYPE LeakyReLULayer<Number>::layerType() const {
 }
 
 template <typename Number>
-vector_t<Number> LeakyReLULayer<Number>::forwardPass( const vector_t<Number>& inputVec, int i ) const {
+vector_t<Number> LeakyReLULayer<Number>::forwardPass( const vector_t<Number>& inputVec, const int dimension ) const {
 	auto outputVec = inputVec;
-	outputVec[i] = outputVec[i] >= 0 ? outputVec[i] : ( outputVec[i] * mNegativeSlope );
+	outputVec[dimension] = outputVec[dimension] >= 0 ? outputVec[dimension] : ( outputVec[dimension] * mNegativeSlope );
 	return outputVec;
 }
 

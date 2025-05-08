@@ -65,6 +65,15 @@ class HardSigmoidLayer : public LayerBase<Number> {
 	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec ) const;
 
 	/**
+	 * @brief Applies the HardSigmoid function element-wise to the input vector
+	 *
+	 * @param inputVec
+	 * @param dimension 
+	 * @return The resulting vector after applying the HardSigmoid function
+	 */
+	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const;
+
+	/**
 	 * @brief Applies the given reachability method to the input set at the specified index
 	 *
 	 * @param inputSet The input set

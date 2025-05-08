@@ -73,6 +73,19 @@ vector_t<Number> HardSigmoidLayer<Number>::forwardPass( const vector_t<Number>& 
 }
 
 template <typename Number>
+vector_t<Number> HardSigmoidLayer<Number>::forwardPass( const vector_t<Number>& inputVec, const int dimension  ) const {
+	vector_t<Number> outputVec = inputVec;
+	if ( outputVec[dimension] <= mMinValue ) {
+		outputVec[dimension] = 0;
+	} else if ( outputVec[dimension] >= mMaxValue ) {
+		outputVec[dimension] = 1;
+	} else {
+		outputVec[dimension] = ( 1 / ( mMaxValue - mMinValue ) ) * outputVec[dimension] + ( mMinValue / ( mMinValue - mMaxValue ) );
+	}
+	return outputVec;
+}
+
+template <typename Number>
 std::vector<hypro::Starset<Number>> HardSigmoidLayer<Number>::forwardPass( const hypro::Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const {
 	auto resultSet = std::vector<hypro::Starset<Number>>();
 	resultSet.push_back( inputSet );

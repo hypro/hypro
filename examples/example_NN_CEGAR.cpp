@@ -56,6 +56,12 @@ int main( int argc, char* argv[] ) {
 
 	// define the reachability method
 	hypro::NN_REACH_METHOD method = hypro::NN_REACH_METHOD::CEGAR;
+	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;			//Z3_BASIC, RANDOM, Z3_SMALL_REPRESENTATION, REMEMBERING_COUNTEREXAMPLES
+	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::EXACT_SOURCES;						// AVOIDANT, FULL, EXACT_SOURCES, REMEMBERING_SOURCES
+	hypro::TRACING_STRATEGY backpropagationStrategy = hypro::TRACING_STRATEGY::FULL_REUSED_PREDICATE;	// SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH , UNSAT_CORE, FULL_REUSED_PREDICATE
+	hypro::PREDICATE_TRACING_ORIGIN originChoosingStrategy = hypro::PREDICATE_TRACING_ORIGIN::FIRST; // FIRST, LAST, MIDDLE, ALL
+	bool tryReusingPredicates = true;
+	bool removeSafeSubtrees = false;
 	if ( argc > 1 ) {
 		switch ( argv[1][0] ) {
 			case 'c':
@@ -73,9 +79,108 @@ int main( int argc, char* argv[] ) {
 			default:
 				method = hypro::NN_REACH_METHOD::CEGAR;
 		}
+
+		if(strlen(argv[1]) > 1){
+			switch ( argv[1][1] ) {
+				case 'b':
+					counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_BASIC;
+					break;
+				case 'r':
+					counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::RANDOM;
+					break;
+				case 's':
+					counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::Z3_SMALL_REPRESENTATION;
+					break;
+				case 'm':
+					counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::REMEMBERING_COUNTEREXAMPLES;
+					break;
+						
+				default:
+					break;
+			}
+		}
+
+		if(strlen(argv[1]) > 2){
+			switch ( argv[1][2] ) {
+				case 's':
+					backpropagationStrategy =  hypro::TRACING_STRATEGY::SINGLESTEP;
+					break;
+				case 'b':
+					backpropagationStrategy = hypro::TRACING_STRATEGY::BINARYSEARCH;
+					break;
+				case 'r':
+					backpropagationStrategy = hypro::TRACING_STRATEGY::REMEMBERING_SEARCH;
+					break;
+				case 'u':
+					backpropagationStrategy = hypro::TRACING_STRATEGY::UNSAT_CORE;
+					break;
+				case 'p':
+					backpropagationStrategy = hypro::TRACING_STRATEGY::FULL_REUSED_PREDICATE;
+					break;
+				case 'l':
+					backpropagationStrategy = hypro::TRACING_STRATEGY::REUSED_PREDICATE_WITH_LP;
+					break;
+				default:
+					break;
+			}
+		}
+
+		if(strlen(argv[1]) > 3){
+			switch ( argv[1][3] ) {
+				case 'a':
+					refinementType =  hypro::REFINEMENT_TYPE::AVOIDANT;
+					break;
+				case 'f':
+					refinementType = hypro::REFINEMENT_TYPE::FULL;
+					break;
+				case 'e':
+					refinementType = hypro::REFINEMENT_TYPE::EXACT_SOURCES;
+					break;
+				case 'r':
+					refinementType = hypro::REFINEMENT_TYPE::REMEMBERING_SOURCES;
+					break;
+				default:
+					break;
+			}
+		}
+
+		if(strlen(argv[1]) > 4){
+			switch ( argv[1][4] ) {
+				case 'f':
+					originChoosingStrategy =  hypro::PREDICATE_TRACING_ORIGIN::FIRST;
+					break;
+				case 'l':
+					originChoosingStrategy = hypro::PREDICATE_TRACING_ORIGIN::LAST;
+					break;
+				case 'm':
+					originChoosingStrategy = hypro::PREDICATE_TRACING_ORIGIN::MIDDLE;
+					break;
+				case 'a':
+					originChoosingStrategy = hypro::PREDICATE_TRACING_ORIGIN::ALL;
+					break;
+				default:
+					break;
+			}
+		}
+		
+		if(strlen(argv[1]) > 5){
+			tryReusingPredicates = argv[1][5] == 't';
+		}
+
+		if(strlen(argv[1]) > 6){
+			removeSafeSubtrees = argv[1][6] == 't';
+		}
 	}
-	std::cout << "The reachability method is " << method._to_string() << std::endl
-			  << std::endl;
+	std::cout << "The used methods are:" 
+			  << "\n Reachability: " << method
+			  << "\n Counterexample: " << counterExampleStrategy
+			  << "\n Refinment: " << refinementType
+			  << "\n Tracing: " << backpropagationStrategy
+			  << "\n Try to reuse predicates: " << (tryReusingPredicates ? "yes" : "no");
+	if (backpropagationStrategy == hypro::TRACING_STRATEGY::FULL_REUSED_PREDICATE) {
+		std::cout << "\n Choosen Origin: " << originChoosingStrategy;
+	}
+	std::cout << std::endl;
 
 	// define input file name
 	const char* filename = "../examples/nn_benchmarks/networks/nnet/small_examples/fc_2-2-2.nnet";
@@ -133,11 +238,10 @@ int main( int argc, char* argv[] ) {
 	// return 0;
 
 	// Transform input and safe polytopes to star set
-	hypro::COUNTEREXAMPLE_STRATEGY counterExampleStrategy = hypro::COUNTEREXAMPLE_STRATEGY::REMEMBERING_COUNTEREXAMPLES;			//Z3_BASIC, RANDOM, Z3_SMALL_REPRESENTATION, REMEMBERING_COUNTEREXAMPLES
-	hypro::REFINEMENT_TYPE refinementType = hypro::REFINEMENT_TYPE::AVOIDANT;						// AVOIDANT, FULL, EXACT_SOURCES, REMEMBERING_SOURCES
-	hypro::TRACING_STRATEGY backpropagationStrategy = hypro::TRACING_STRATEGY::UNSAT_CORE;	// SINGLESTEP, BINARYSEARCH, REMEMBERING_SEARCH , UNSAT_CORE
-	bool removeSafeSubtrees = !true;
+	
 	hypro::reachability::ReachabilityTree NNtree = hypro::reachability::ReachabilityTree<Number>( neuralNetwork, inputPoly, safePoly, counterExampleStrategy, refinementType, backpropagationStrategy, removeSafeSubtrees);
+	NNtree.setTryReusingPredicates(tryReusingPredicates);
+	NNtree.setPredicateTracingOrigin(originChoosingStrategy);
 	bool bothSearchStrategy = !true;
 	bool create_plots = !true;
 	bool normalize_input = true;
@@ -163,7 +267,16 @@ int main( int argc, char* argv[] ) {
 	if (argc == 5) {
 		outfile.close();
 	}
-	std::cout << "Program finished successfully." << std::endl;
+	std::cout << "The used methods are:" 
+			  << "\n Reachability: " << method
+			  << "\n Counterexample: " << counterExampleStrategy
+			  << "\n Tracing: " << backpropagationStrategy
+			  << "\n Refinment: " << refinementType
+			  << "\n Try to reuse predicates: " << (tryReusingPredicates ? "yes" : "no");
+	if (backpropagationStrategy == hypro::TRACING_STRATEGY::FULL_REUSED_PREDICATE) {
+		std::cout << "\n Choosen Origin: " << originChoosingStrategy;
+	}
+	std::cout << std::endl;
 
 	return 0;
 }

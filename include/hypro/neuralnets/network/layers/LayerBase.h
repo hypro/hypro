@@ -53,6 +53,7 @@ class LayerBase {
 	// ================== methods ==================
 
 	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec ) const = 0;
+	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const = 0;
 	virtual std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const = 0;
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const = 0;
 
@@ -108,6 +109,51 @@ class LayerBase {
 	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const {
 		assert( false && "unsat core tracing not implemented for this layertype" );
 		return std::make_tuple( -1, Point<Number>(), Point<Number>() );
+	}
+
+	/**
+	 * @brief Attempts to trace counterexample to a potential source neuron by reusing part of the predicate value
+	 *
+	 * @param[in] source the counterexample or a known source to trace to the new source
+	 * @param[in] predicate the predicate value for the source
+	 * @param[in] lowerIndex the number of the neuron source was obtained from
+	 * @param[in] upperIndex the number of the neuron for the newSourceSet
+	 * @param[in] newSourceSet the set that should include the new source
+	 * @return pair<Point<Number>, Point<Number>> the int is -1 or the dimension tracing failed and the Points contain the new source and new predicate value or empty Points
+	 */
+	virtual std::tuple<std::vector<int>, Point<Number>, Point<Number>> reusePredicate(Point<Number> source, Point<Number> predicate, Starset<Number> newSourceSet, int upperIndex, int lowerIndex)  const{
+		// Compute new predicate value
+		int varAmount = newSourceSet.generator().cols(); 	
+		vector_t<Number> newPredicate;
+		assert(varAmount <= predicate.dimension());
+		if (varAmount < predicate.dimension()){
+			newPredicate = vector_t<Number>::Zero(varAmount);
+			for (int i = 0; i < varAmount; i++){
+				newPredicate[i] = predicate[i];
+			}
+		} else {
+			newPredicate = predicate.rawCoordinates();
+		}
+		
+		// Compute corresponding starset value
+		vector_t<Number> newSource = newSourceSet.center() + newSourceSet.generator() * newPredicate;
+		
+
+		
+		// Check if newSource is actually a source of source
+		std::vector<int> t;
+		vector_t<Number> actApl = newSource;
+		std::cout << "Predicate tracing failed at: { ";
+		for (int d = upperIndex; d <= lowerIndex; d++){
+			actApl = forwardPass(actApl, d);
+			if(actApl[d] != source[d]){
+				std::cout << d  << ", ";
+				t.push_back(d);
+			}
+		}
+		std::cout << " }"<< std::endl;
+		if (t.size() > 0) return std::make_tuple(t, Point<Number>(), Point<Number>());
+		return std::make_tuple(t, Point<Number>(newSource), Point<Number>(newPredicate));
 	}
 
 	// ============= utility functions =============

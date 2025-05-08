@@ -26,9 +26,9 @@ const NN_LAYER_TYPE ReLULayer<Number>::layerType() const {
 }
 
 template <typename Number>
-vector_t<Number> ReLULayer<Number>::forwardPass( const vector_t<Number>& inputVec, int i ) const {
+vector_t<Number> ReLULayer<Number>::forwardPass( const vector_t<Number>& inputVec, const int dimension ) const {
 	vector_t<Number> outputVec = inputVec;
-	outputVec[i] = outputVec[i] >= 0 ? outputVec[i] : 0;
+	outputVec[dimension] = outputVec[dimension] >= 0 ? outputVec[dimension] : 0;
 	return outputVec;
 }
 
@@ -115,14 +115,12 @@ std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::traceSourceBack( Point
 
 	switch ( result.errorCode ) {
 		case SOLUTION::FEAS:
-			// std::cout << "Backpropagation worked -> continue backpropagation" << std::endl; 
 			if (0 == knownSource.coordinate( neuronNumber )){
 				knownSource[neuronNumber] = Point<Number>( newSourceSet.generator() * result.optimumValue + newSourceSet.center() )[neuronNumber];
 			}			
             return std::make_pair(knownSource, Point<Number>(result.optimumValue));
 
 		case SOLUTION::INFEAS:
-			// std::cout << "Backpropagation not possible; point is result of over-approximation -> use exact here"<< std::endl;
             return std::make_pair(Point<Number>(), Point<Number>());
 
 		default:
@@ -147,7 +145,7 @@ std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::traceSourceBack(Point<
 	assert(relations.size() == newSourceSet.generator().rows());
 	EvaluationResult<Number> result = hypro::z3GetInternalPoint(newSourceSet.shape(),newSourceSet.limits(),newSourceSet.generator(), newSourceSet.center(), newSource, relations);	
 	switch ( result.errorCode ) {
-		case SOLUTION::FEAS:						
+		case SOLUTION::FEAS:	 					
             return std::make_pair(Point<Number>( newSourceSet.generator() * result.optimumValue + newSourceSet.center()), Point<Number>(result.optimumValue));
 		case SOLUTION::INFEAS:
             return std::make_pair(Point<Number>(), Point<Number>());
@@ -169,17 +167,16 @@ std::tuple<int, Point<Number>, Point<Number>>  ReLULayer<Number>::traceUnsatCore
 			relations.push_back( carl::Relation::EQ);	
 		}
 	}
-	
 	assert(relations.size() == newSourceSet.generator().rows());
 	std::pair<EvaluationResult <Number>, std::vector<int>> result = hypro::z3GetInternalPointWithCore(newSourceSet.shape(),newSourceSet.limits(),newSourceSet.generator(), newSourceSet.center(), knownSource, relations);	
 	switch ( result.first.errorCode ) {
-		case SOLUTION::FEAS:						
+		case SOLUTION::FEAS:
             return std::make_tuple(-1, Point<Number>( newSourceSet.generator() * result.first.optimumValue + newSourceSet.center()), Point<Number>(result.first.optimumValue));
 		case SOLUTION::INFEAS:{
 			std::vector<int> unsatCore = result.second;
 			int next = -1;
 			for (int i : unsatCore){
-				if ( next < i && upperIndex < i && i < lowerIndex ){
+				if ( next < i && upperIndex < i && i <= lowerIndex ){
 					next = i;
 				}	
 			}
@@ -195,5 +192,41 @@ std::tuple<int, Point<Number>, Point<Number>>  ReLULayer<Number>::traceUnsatCore
 	}
 	return std::make_tuple(-1, Point<Number>(), Point<Number>());
 }
+
+// template <typename Number>
+// std::tuple<std::vector<int>, Point<Number>, Point<Number>> ReLULayer<Number>::reusePredicate(Point<Number> source, Point<Number> predicate, Starset<Number> newSourceSet, int upperIndex, int lowerIndex) const {	
+// 	// Compute new predicate value
+// 	int varAmount = newSourceSet.generator().cols(); 	
+// 	vector_t<Number> newPredicate;
+// 	assert(varAmount <= predicate.dimension());
+// 	if (varAmount < predicate.dimension()){
+// 		newPredicate = vector_t<Number>::Zero(varAmount);
+// 		for (int i = 0; i < varAmount; i++){
+// 			newPredicate[i] = predicate[i];
+// 		}
+// 	} else {
+// 		newPredicate = predicate.rawCoordinates();
+// 	}
+	
+// 	// Compute corresponding starset value
+// 	vector_t<Number> newSource = newSourceSet.center() + newSourceSet.generator() * newPredicate;
+	
+
+	
+// 	// Check if newSource is actually a source of source
+// 	std::vector<int> t;
+// 	vector_t<Number> reluApl = newSource;
+// 	std::cout << "Predicate tracing failed at: { ";
+// 	for (int d = upperIndex; d <= lowerIndex; d++){
+// 		reluApl = forwardPass(reluApl, d);
+// 		if(reluApl[d] != source[d]){
+// 			std::cout << d  << ", ";
+// 			t.push_back(d);
+// 		}
+// 	}
+// 	std::cout << " }"<< std::endl;
+// 	if (t.size() > 0) return std::make_tuple(t, Point<Number>(), Point<Number>());
+// 	return std::make_tuple(t, Point<Number>(newSource), Point<Number>(newPredicate));
+// }
 
 }  // namespace hypro

@@ -46,6 +46,11 @@ vector_t<Number> AffineLayer<Number>::forwardPass( const vector_t<Number>& input
 }
 
 template <typename Number>
+vector_t<Number> AffineLayer<Number>::forwardPass( const vector_t<Number>& inputVec, const int dimension ) const {
+	return mBias + mWeights * inputVec;
+}
+
+template <typename Number>
 std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const {
 	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
 	result.push_back( inputSet.affineTransformation( mWeights, mBias ) );

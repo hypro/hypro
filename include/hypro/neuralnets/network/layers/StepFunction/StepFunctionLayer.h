@@ -58,6 +58,8 @@ class StepFunctionLayer : public LayerBase<Number> {
 	 */
 	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec ) const;
 
+	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const;
+
 	/**
 	 * @brief Applies the given reachability method to the input set at the specified index
 	 *
