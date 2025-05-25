@@ -58,6 +58,8 @@ class ReachabilityTree {
 	// contains the value (counterexample or source) corresponding to the key
 	std::map<std::pair<int,int>, std::set<Point<Number>>> mPreviousCounterexamples;
 	
+	std::map<std::pair<int,int>, std::set<std::string>> mSafeHistories;
+
 	int mNumberOfTracings;
 
   public:
@@ -95,6 +97,8 @@ class ReachabilityTree {
 	 * @return Ancestor of node with neuron number neuronNumber
 	 */
 	ReachabilityNode<Number>* getAncestor(ReachabilityNode<Number>* node, const int neuronNumber) const;
+
+	std::vector<SearchJob<Number>> checkSafeHistory(std::vector<SearchJob<Number>> newJobs);
 
 	/**
 	 * @brief Computes a full subtree starting in rootNode according to strategy

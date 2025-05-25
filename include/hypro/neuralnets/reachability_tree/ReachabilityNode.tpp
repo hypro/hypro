@@ -23,6 +23,7 @@ ReachabilityNode<Number>::ReachabilityNode( Starset<Number> representation, NN_R
 	, mHasCounterExample(false) 
 	, mCounterExampleAlpha(Point<Number>())
 	, mHasCounterExampleAlpha(false) 
+	, mHistory("")
 	{}
 
 template <typename Number>
@@ -148,6 +149,21 @@ NN_REACH_METHOD ReachabilityNode<Number>::method() const {
 template <typename Number>
 void ReachabilityNode<Number>::setMethod( NN_REACH_METHOD method ) {
 	mMethod = method;
+}
+
+template <typename Number>
+std::string ReachabilityNode<Number>::getHistory() const {
+	return mHistory;
+}
+
+template <typename Number>
+void ReachabilityNode<Number>::setHistory(std::string history) {
+	mHistory = history;
+}
+
+template <typename Number>
+void ReachabilityNode<Number>::addToHistory(std::string newEntry) {
+	mHistory += newEntry;
 }
 
 template <typename Number>

@@ -43,7 +43,7 @@ class ReachabilityNode {
 	Point<Number> mCounterExampleAlpha; // the predicate value corresponding to the counterexample
 	hypro::Plotter<Number>& mPlotter;
 
-
+	std::string mHistory; //represents the cumputation history from the root node to this node (including computation for this node)
 	
 	
 	/**
@@ -120,6 +120,9 @@ class ReachabilityNode {
 
 	NN_REACH_METHOD method() const;
 	void setMethod( NN_REACH_METHOD method );
+	std::string getHistory() const;
+	void setHistory( std::string history );
+	void addToHistory( std::string newEntry);
 
 	Starset<Number> representation() const;
 	void setRepresentation( const Starset<Number>& representation );

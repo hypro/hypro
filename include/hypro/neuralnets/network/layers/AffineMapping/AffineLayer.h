@@ -38,7 +38,8 @@ class AffineLayer : public LayerBase<Number> {
 	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const;
 	virtual std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const;
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
-
+	virtual std::vector<std::pair<Starset<Number>, char>> forwardPassWithHistory( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const;
+	
 	/**
 	 * @brief Traces knownSource back to the previous neuron
 	 *

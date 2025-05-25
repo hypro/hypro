@@ -77,6 +77,13 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 }
 
 template <typename Number>
+std::vector<std::pair<Starset<Number>, char>> AffineLayer<Number>::forwardPassWithHistory( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const {
+	std::vector<std::pair<Starset<Number>, char>> result = std::vector<std::pair<Starset<Number>, char>>();
+	result.push_back( std::make_pair( inputSet.affineTransformation( mWeights, mBias ), 'a') );
+	return result; 
+}
+
+template <typename Number>
 std::pair<Point<Number>, Point<Number>> AffineLayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const {
 	return std::make_pair( Point<Number>( newSourceSet.generator() * knownSourceAlpha.rawCoordinates() + newSourceSet.center() ), knownSourceAlpha );
 }

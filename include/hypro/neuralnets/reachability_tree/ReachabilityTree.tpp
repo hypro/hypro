@@ -262,6 +262,51 @@ bool ReachabilityTree<Number>::isPreviousCounterexampleSource( int layerNumber, 
 	return false;
 }
 
+template <typename Number>
+std::vector<SearchJob<Number>> ReachabilityTree<Number>::checkSafeHistory(std::vector<SearchJob<Number>> newJobs){
+	if(!mRemoveSafeSubtrees){
+		return newJobs;
+	}
+	
+	std::vector<SearchJob<Number>> tmp;
+	
+	for (int i = 0; i < newJobs.size(); i++){
+		
+		ReachabilityNode<Number>* newNode = newJobs[i].getNode();
+		std::pair<int,int> key = std::make_pair(newNode->getParent()->layerNumber(), newNode->getParent()->neuronNumber());
+		
+		for (std::string safeHistory : mSafeHistories[key]){
+			
+			bool isLEQ = true; // refers to the strictness of computation
+			std::string nodeHistory = newNode->getHistory();
+			
+			assert(nodeHistory.size() == safeHistory.size());
+			for (int i = 0; i < nodeHistory.size() && isLEQ; i++){
+				// This assumes: '0' -> over-approximation
+				isLEQ = isLEQ && ( nodeHistory[i] == safeHistory[i] || safeHistory[i] == '0'); 
+				if(!isLEQ){
+					std::cout << i << " of " << safeHistory.size() << ": " <<safeHistory[i] << " !<= " << nodeHistory[i] << std::endl; 
+				}
+			}
+			
+			std::cout << "Checking safe history: "<< isLEQ  << std::endl;
+		
+			if (isLEQ) {
+				newJobs[i].setNode(nullptr);
+				newNode->getParent()->removeChild(newNode);
+				break;
+			}
+
+		}
+
+		if ( newJobs[i].getNode() != nullptr ){
+			tmp.push_back(newJobs[i]);
+		}
+	}
+
+	return tmp;
+}
+
 // This method computes the rechability tree using a specified input starset and an NN_REACH_METHOD starting from a given neuron
 // It can be used just to compute a subtree from the j. neuron of the k.th layer
 // the subtree then could be inserted into the search tree (replacing and deleting the old subtree)
@@ -296,6 +341,8 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 		}
 		jobQueue.pop_front();
 
+		newJobs = checkSafeHistory(newJobs);
+
 		for ( auto newJob : newJobs ) {
 			if ( newJob.isFinalResult() ) {
 				// check if the leaf satisfies the safety property
@@ -309,10 +356,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 						return rootNode;
 					}
 					mLeaves.push_back( leafNode );
-				} else if ( mRemoveSafeSubtrees ) {
-					newJob.setNode( nullptr );
-					removeSafeSubtree( leafNode );
-				}
+				} 
 			} else {
 				switch ( strategy ) {
 					case SEARCH_STRATEGY::BFS:
@@ -354,18 +398,20 @@ void ReachabilityTree<Number>::removeSafeSubtree( ReachabilityNode<Number>* safe
 				if ( node->hasParent() ) {
 					ReachabilityNode<Number>* parent = node->getParent();
 
-					// This could add save sets for a safe history implemenation
-					// std::pair<int,int> key = std::make_pair(parent->layerNumber(), parent->neuronNumber());
-					// mPreviousSaveSets[key].push_back(node->representation());
-
+					// This adds save sets for a safe history implemenation
+					std::pair<int,int> key = std::make_pair(parent->layerNumber(), parent->neuronNumber());
+					mSafeHistories[key].insert(node->getHistory());
+					
 					for ( int i = 0; i < parent->getNumberOfChildren(); i++ ) {
-						// std::cout << "Remove child" << std::endl;
+						// std::cout << "Remove child?" << std::endl;
 						if ( !parent->getChild( i )->isSafe() ) {
+							// std::cout << "Removed child" << std::endl;
 							parent->removeChild( node );
 							return;	 // the parent is the root of an "uncomputed" subtree
 						}
+						// std::cout << "not" << std::endl;
 					}
-					node = node->getParent();
+					node = parent;
 					break;
 				} else {
 					return;	 // root has been reached and is thus safe
@@ -422,28 +468,9 @@ std::pair<ReachabilityNode<Number>*, std::vector<ReachabilityNode<Number>*>> Rea
 					newJobs = job.compute( NN_REACH_METHOD::EXACT );
 					break;
 			}
-			/* Part of the unsuable implementation for safe history: The containment checks take segnificantly to long
-				if(mUseSafeHistory){
-					std::vector<SearchJob<Number>> tmp;
-					for (int i = 0; i < newJobs.size(); i++){
-						ReachabilityNode<Number>* newNode = newJobs[i].getNode();
-						std::pair<int,int> key = std::make_pair(newNode->getParent()->layerNumber(), newNode->getParent()->neuronNumber());
-						for (Starset<Number> safeSet : mPreviousSaveSets[key]){
-							std::cout << "Checking safe history"<< std::endl;
-							if ( safeSet.contains(newNode->representation()) ) {
-								std::cout << "Safe history helped!" << std::endl;
-								newJobs[i].setNode(nullptr);
-								newNode->getParent()->removeChild(newNode);
-								break;
-							}
-						}
-						if ( newJobs[i].getNode() != nullptr ){
-							tmp.push_back(newJobs[i]);
-						}
-					}
-					newJobs = tmp;
-			}
-			*/
+
+			newJobs = checkSafeHistory(newJobs);
+			
 		} else {
 			newJobs = job.compute( mRoot->method() );
 		}
@@ -579,9 +606,12 @@ bool ReachabilityTree<Number>::avoidentRefinement( SEARCH_STRATEGY strategy, boo
 				default: {
 					ReachabilityNode<Number>* leaf = computeReachTree( notComputedLeaves[i], safeOutput, strategy );
 					foundUnsafe = !leaf->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )] );
+					// std::cout << foundUnsafe << std::endl;
 					if ( foundUnsafe ) {
+						// std::cout << "foundUnsafe = 1" << std::endl;
 						mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )].insert( leaf->getCounterExample() );
 					} else {
+						// std::cout << "foundUnsafe = 0" << std::endl;
 						removeSafeSubtree( leaf );
 					}
 					break;

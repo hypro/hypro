@@ -97,6 +97,23 @@ std::vector<Starset<Number>> ReLULayer<Number>::forwardPass( const std::vector<S
 	return result;
 }
 
+// "0" -> over-approximation, "1" -> exact affine mapping 1x+0, "2" -> exact affine mapping 0x+0
+template <typename Number>
+std::vector<std::pair<Starset<Number>, char>> ReLULayer<Number>::forwardPassWithHistory( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const {
+	std::vector<std::pair<hypro::Starset<Number>, char>> I_n = std::vector<std::pair<hypro::Starset<Number>, char>>();
+	switch ( method ) {
+		case NN_REACH_METHOD::EXACT:
+			I_n = ReLU<Number>::stepReLUWithHistory( index, inputSet );
+			break;
+		case NN_REACH_METHOD::OVERAPPRX:
+			I_n = ReLU<Number>::approxStepReLUWithHistory( index, inputSet );
+			break;
+		default:
+			FATAL( "hypro.neuralnets.reachability", "Invalid analysis method specified" );
+	}
+	return I_n;
+}
+
 template <typename Number>
 std::pair<Point<Number>,Point<Number>> ReLULayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const {
 	assert( neuronNumber < knownSource.dimension() );

@@ -56,6 +56,12 @@ class LayerBase {
 	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const = 0;
 	virtual std::vector<Starset<Number>> forwardPass( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const = 0;
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const = 0;
+	
+	/** 
+	 * @brief Computes forward pass of a star where the result is labled with is computation type
+	 * @return A vector of stars corresponding to the reachable sets and an encoding of the computation used for the star where "0" -> over-approximation, i -> specific affine mapping named with 0 < i
+	 */
+	virtual std::vector<std::pair<Starset<Number>, char>> forwardPassWithHistory( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const = 0;
 
 	/**
 	 * @brief Traces knownSource back to the previous neuron
@@ -143,15 +149,15 @@ class LayerBase {
 		// Check if newSource is actually a source of source
 		std::vector<int> t;
 		vector_t<Number> actApl = newSource;
-		std::cout << "Predicate tracing failed at: { ";
+		//std::cout << "Predicate tracing failed at: { ";
 		for (int d = upperIndex; d <= lowerIndex; d++){
 			actApl = forwardPass(actApl, d);
 			if(actApl[d] != source[d]){
-				std::cout << d  << ", ";
+				// std::cout << d  << ", ";
 				t.push_back(d);
 			}
 		}
-		std::cout << " }"<< std::endl;
+		// std::cout << " }"<< std::endl;
 		if (t.size() > 0) return std::make_tuple(t, Point<Number>(), Point<Number>());
 		return std::make_tuple(t, Point<Number>(newSource), Point<Number>(newPredicate));
 	}

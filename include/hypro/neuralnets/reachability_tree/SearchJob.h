@@ -39,12 +39,13 @@ class SearchJob {
 		typename std::list<std::shared_ptr<hypro::LayerBase<Number>>>::iterator it = mAllLayers.begin();
 		std::advance(it, mLayerNum);
 		std::shared_ptr<hypro::LayerBase<Number>> mLayer = (*it);
-		Starset<Number> mSet(mNode->representation());		
-		std::vector<Starset<Number>> newSets = mLayer->forwardPass( mSet, mIndex, method );		
+		Starset<Number> mSet(mNode->representation());	
+		std::string mHistory = mNode->getHistory();	
+		std::vector<std::pair<Starset<Number>, char>> newSets = mLayer->forwardPassWithHistory( mSet, mIndex, method );		
 		int N = newSets.size();
-		if(N == 1 && mSet.generator().cols() < newSets[0].generator().cols()){
-			std::cout << "Over-Approximation in layer " << mLayerNum << " at neuron " << mIndex << std::endl;
-		}
+		// if(N == 1 && mSet.generator().cols() < newSets[0].first.generator().cols()){
+		// 	std::cout << "Over-Approximation in layer " << mLayerNum << " at neuron " << mIndex << std::endl;
+		// }
 
 		// the new jobs produced by calculating the current job
 		std::vector<SearchJob<Number>> newJobs;
@@ -55,10 +56,11 @@ class SearchJob {
 																	( mLayer->layerType() != NN_LAYER_TYPE::AFFINE ) && ( mIndex == mLayer->layerSize() - 1 ) ) ) {
 			// for the last neuron of the last layer all of the computed result sets is a final result
 			for ( auto newSet : newSets ) {
-				ReachabilityNode<Number>* leafNode = new ReachabilityNode<Number>( newSet, method, mLayerNum + 1, 0 );
+				ReachabilityNode<Number>* leafNode = new ReachabilityNode<Number>( newSet.first, method, mLayerNum + 1, 0 );
 				leafNode->setParent( mNode );
 				leafNode->setLeaf( true );
 				leafNode->setComputed( true );
+				leafNode->setHistory(mHistory + newSet.second);
 				mNode->addChild(leafNode);
 				newJobs.push_back( SearchJob( leafNode, mAllLayers, true ) );
 			}
@@ -77,9 +79,10 @@ class SearchJob {
 				// create the new jobs
 				for ( int i = 0; i < N; ++i ) {
 					// this for always should iterate only once
-					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
+					nextNode = new ReachabilityNode<Number>( newSets[i].first, method, newLayerNum, newIndex );
 					nextNode->setParent( mNode );
 					mNode->addChild( nextNode );
+					nextNode->setHistory( mHistory + newSets[i].second );
 					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
 				break;
@@ -102,9 +105,10 @@ class SearchJob {
 				}
 				// create the new jobs
 				for ( int i = 0; i < N; ++i ) {
-					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
+					nextNode = new ReachabilityNode<Number>( newSets[i].first, method, newLayerNum, newIndex );
 					nextNode->setParent( mNode );
 					mNode->addChild(nextNode);
+					nextNode->setHistory( mHistory + newSets[i].second );
 					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
 				break;
