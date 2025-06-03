@@ -58,10 +58,10 @@ namespace hypro {
             mHPlanes.emplace_back(A.row(i), b(i));
         }
 #ifndef NDEBUG
-        bool empty = this->empty();
+        // bool empty = this->empty();
 #endif
         // reduceNumberRepresentation();
-        assert(empty == this->empty());
+        // assert(empty == this->empty());
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer(A, b);
         }
