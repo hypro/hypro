@@ -109,7 +109,7 @@ NNet<Number>::NNet( const char* filename ) {
 	}
 
 	// Initialize variables
-	int bufferSize = 10240;
+	int bufferSize = 32768; //Previously: 10240; this is not sufficient for the MNIST benchmark;
 	char* buffer = new char[bufferSize];
 	char *record, *line;
 	int i = 0, layer = 0, row = 0, j = 0, param = 0;
