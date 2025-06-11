@@ -139,6 +139,9 @@ int main( int argc, char* argv[] ) {
 				case 'r':
 					refinementType = hypro::REFINEMENT_TYPE::REMEMBERING_SOURCES;
 					break;
+				case 'p':
+					refinementType = hypro::REFINEMENT_TYPE::PATH_WISE_ORIGINS;
+					break;
 				default:
 					break;
 			}

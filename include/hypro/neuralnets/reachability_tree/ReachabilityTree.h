@@ -33,7 +33,7 @@ class ReachabilityTree {
 	std::vector<ReachabilityNode<Number>*> mLeaves;	 // the leaves of the reachability tree
 	unsigned short int mDepth;						 // depth of the reachability tree
 
-	NeuralNetwork<Number> mNetwork;			   // the analized neural network
+	NeuralNetwork<Number> mNetwork;			   // the analyzed neural network
 	HPolytope<Number> mInputSet;			   // the input set of the network
 	std::vector<HPolytope<Number>> mSafeSets;  // the safe set specified in the form of a vector of HPolytopes
 	std::vector<matrix_t<Number>> mSafeSetMatrices; 
@@ -45,7 +45,7 @@ class ReachabilityTree {
 
 	TRACING_STRATEGY mTracingStrategy;
 	COUNTEREXAMPLE_STRATEGY mCounterExampleStrategy;
-	REFINEMENT_TYPE mRefinmentType; 
+	REFINEMENT_TYPE mRefinementType; 
 	bool mRemoveSafeSubtrees;
 	bool mTryReusingPredicates;
 	PREDICATE_TRACING_ORIGIN mPredicateTracingOrigin;
@@ -61,6 +61,13 @@ class ReachabilityTree {
 	std::map<std::pair<int,int>, std::set<std::string>> mSafeHistories;
 
 	int mNumberOfTracings;
+
+	/**
+	 * @brief Verifies the FNN corresponding to this reachability tree by using a structure tree
+	 * 
+	 * @return safety of the FNN
+	 */
+	bool _verifyWithStructureTree(size_t max_iter = 100);
 
   public:
 	// Default constructor
@@ -125,7 +132,7 @@ class ReachabilityTree {
 	 * @param[in] method: method used for reachability analysis
 	 * @param[in] strategy: method used to compute full reachability trees
 	 * @param[in] createPlots: whether plots should be create for all reachability nodes in the computed reachability trees
-	 * @return rootNode
+	 * @return safety of the FNN
 	 */
 	bool verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots = false, bool normalizeInput = false, bool normalizeOutput = false, size_t max_iter= 100 );
 

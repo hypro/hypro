@@ -20,7 +20,7 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 	, mSafeSets( safeSets )
 	, mPlotter( hypro::Plotter<Number>::getInstance() )
 	, mCounterExampleStrategy( COUNTEREXAMPLE_STRATEGY::Z3_BASIC )
-	, mRefinmentType( REFINEMENT_TYPE::EXACT_SOURCES )
+	, mRefinementType( REFINEMENT_TYPE::EXACT_SOURCES )
 	, mTracingStrategy( TRACING_STRATEGY::UNSAT_CORE )
 	, mRemoveSafeSubtrees( false )
 	, mNumberOfTracings( 0 )
@@ -43,7 +43,7 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 	, mSafeSets( safeSets )
 	, mPlotter( hypro::Plotter<Number>::getInstance() )
 	, mCounterExampleStrategy( counterExampleStrategy )
-	, mRefinmentType( refinementType )
+	, mRefinementType( refinementType )
 	, mTracingStrategy( backpropagationStrategy )
 	, mRemoveSafeSubtrees( removeSafeSubtrees )
 	, mNumberOfTracings( 0 )
@@ -334,7 +334,7 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 	while ( !jobQueue.empty() ) {
 		SearchJob<Number> job = jobQueue.front();
 		std::vector<SearchJob<Number>> newJobs;
-		if ( REFINEMENT_TYPE::EXACT_SOURCES == mRefinmentType && isPreviousCounterexampleSource( job.getNode()->layerNumber(), job.getNode()->neuronNumber() ) ) {
+		if ( REFINEMENT_TYPE::EXACT_SOURCES == mRefinementType && isPreviousCounterexampleSource( job.getNode()->layerNumber(), job.getNode()->neuronNumber() ) ) {
 			newJobs = job.compute( NN_REACH_METHOD::EXACT );
 		} else {
 			newJobs = job.compute( rootMethod );
@@ -444,7 +444,7 @@ std::pair<ReachabilityNode<Number>*, std::vector<ReachabilityNode<Number>*>> Rea
 	while ( !job.isFinalResult() ) {
 		std::vector<SearchJob<Number>> newJobs;
 		if ( isPreviousCounterexampleSource( job.getNode()->layerNumber(), job.getNode()->neuronNumber() ) ) {
-			switch ( mRefinmentType ) {
+			switch ( mRefinementType ) {
 				case REFINEMENT_TYPE::EXACT_SOURCES:
 					newJobs = job.compute( NN_REACH_METHOD::EXACT );
 					break;
@@ -588,7 +588,7 @@ bool ReachabilityTree<Number>::avoidentRefinement( SEARCH_STRATEGY strategy, boo
 		// Compute the reachability tree of the not-computed leaves, until an unsafe leaf is found or all leaves are computed
 		int i;
 		for ( i = 0; i < notComputedLeaves.size() && !foundUnsafe; i++ ) {
-			switch ( mRefinmentType ) {
+			switch ( mRefinementType ) {
 				case REFINEMENT_TYPE::REMEMBERING_SOURCES:
 				case REFINEMENT_TYPE::EXACT_SOURCES: {
 					std::pair<ReachabilityNode<Number>*, std::vector<ReachabilityNode<Number>*>> tmp = computePartiallyExactReachTree( notComputedLeaves[i], safeOutput );
@@ -633,6 +633,102 @@ bool ReachabilityTree<Number>::avoidentRefinement( SEARCH_STRATEGY strategy, boo
 	return mIsSafe;
 }
 
+
+template <typename Number>
+bool ReachabilityTree<Number>::_verifyWithStructureTree(size_t max_iter) {
+	// Create initial structure tree
+	std::list<std::shared_ptr<LayerBase<Number>>> layers = mNetwork.layers();
+	StructureNode<Number>* strucNode;
+	REACHABILITY_OPERATION prevOp;
+	for ( std::shared_ptr<LayerBase<Number>> layer : layers ){
+		REACHABILITY_OPERATION op;
+		switch ( layer->layerType() ) {
+			case NN_LAYER_TYPE::AFFINE:
+				op = REACHABILITY_OPERATION::AFFINE;
+				break;
+			case NN_LAYER_TYPE::RELU:
+				op = REACHABILITY_OPERATION::RELU_APPROX;
+				break;
+			case NN_LAYER_TYPE::LEAKY_RELU:
+			case NN_LAYER_TYPE::HARD_TANH:
+			case NN_LAYER_TYPE::HARD_SIGMOID:
+			case NN_LAYER_TYPE::STEP_FUNCTION:
+				assert(false && "not implemented");
+				break;
+			default:
+				std::cout << "This should occur exactly once for the final layer!" << std::endl;
+				op = REACHABILITY_OPERATION::DEFAULT;
+				break;
+		}
+
+		int seqSize = layer->layerType() == NN_LAYER_TYPE::AFFINE ? 1 : layer->layerSize();
+		for( int i = 0; i < seqSize; i++ ){
+			StructureNode<Number>* newStrucNode;
+			if( i == 0 && layer == layers.front() ){ // Associate root in structure and reachability
+				strucNode = new StructureNode<Number>(layers.front()->layerType(), mRoot);
+				mRoot->setStructureNode(strucNode);
+				continue;
+			} else if ( i == 0 ) { // Create non-root structure nodes without associated reachability nodes based on computation of previous layer
+				newStrucNode = new StructureNode<Number>(strucNode, false, prevOp, NN_REACH_METHOD::OVERAPPRX, layer->layerType());
+			} else { // Create non-root structure nodes without associated reachability nodes based on computation of this layer
+				newStrucNode = new StructureNode<Number>(strucNode, false, op, NN_REACH_METHOD::OVERAPPRX, layer->layerType());
+			}
+			strucNode->addChild(newStrucNode);
+			strucNode = newStrucNode;
+		}
+		prevOp = op;
+	}
+	StructureNode<Number>* newStrucNode = new StructureNode<Number>(strucNode, true, prevOp, NN_REACH_METHOD::OVERAPPRX, NN_LAYER_TYPE::DEFAULT);
+	strucNode->addChild(newStrucNode);
+
+	// Refinement and construction loop
+	ReachabilityNode<Number>* next;
+	while (max_iter-- >= 0){
+		// Compute new final leaf [can be multiple in specific case]
+		mLeaves.clear();
+		updateLeaves(mRoot);
+		int index;
+		for ( index = 0; index < mLeaves.size() && mLeaves[index]->isComputed(); index++ ){
+			//noop
+		}
+		if( index == mLeaves.size() ){
+			std::cout << "The FNN is safe\nNumber of final leaves: " << mLeaves.size() << std::endl;
+			return true;
+		} else {
+			next = mLeaves[index];
+		}
+		while(!next->isLeaf()){
+			SearchJob<Number> job( next, mNetwork.layers() );
+			std::vector<SearchJob<Number>> newJobs = job.compute( next->getStructureNode()->getNextMethod() );
+			next->getStructureNode()->correctChildren();
+			next = next->getChild(0);
+		}
+		// Check safety the new final leaves
+		next = next->getParent();
+		for (int i = 0; i < next->getNumberOfChildren(); i++){
+			ReachabilityNode<Number>* leaf = next->getChild(i);
+			if ( leaf->checkSafe(mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy) ) {
+				// leaf is safe -> noop
+			} else {
+				std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> origin = identifyCounterExampleOrigin( leaf->getCounterExample(), leaf->getCounterExampleAlpha(), leaf, mTracingStrategy );
+				// counterexample is not spurious then: return false
+				if ( std::get<0>( origin ).dimension() > 0 && !( std::get<2>( origin )->hasParent() ) ) {
+					std::cout << "The FNN is unsafe" << std::endl;
+					return false;
+				}
+				ReachabilityNode<Number>* originNode = std::get<2>( origin );
+				std::cout << "Found origin at: " << originNode->layerNumber() << " " << originNode->neuronNumber() << std::endl;
+				originNode->getStructureNode()->extendToExactSubtree();
+				originNode->removeAllChildren();
+				originNode->setComputed(false);
+				break;
+			}
+		}
+	}
+
+	return false;
+}
+
 // here in the verify method just call the forwardPass method to calculate the EXACT or OVERAPPROXIMATIVE result
 // if it is CEGAR countinue with the refinement, otherwise just stop and verify the "leaves"
 // if the method is not CEGAR than it makes no sense to save the intermediate stars into the search tree
@@ -668,6 +764,9 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 			// for the CEGAR mehtod we start with a fully overapproximate reachability analysis
 			// then we refine the result of the overapproximate reachability
 			mRoot->setMethod( NN_REACH_METHOD::OVERAPPRX );
+			if (REFINEMENT_TYPE::PATH_WISE_ORIGINS == mRefinementType){
+				return _verifyWithStructureTree();
+			}
 			computeReachTree( mRoot, safeOutput, strategy );
 			std::cout << "CEGAR first forward pass finished, the result is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
 			break;
@@ -687,7 +786,7 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 	if ( createPlots )
 		plotTree( mRoot, "0-CEGAR_Reach_" );
 
-	switch ( mRefinmentType ) {
+	switch ( mRefinementType ) {
 		case REFINEMENT_TYPE::AVOIDANT:
 		case REFINEMENT_TYPE::EXACT_SOURCES:
 		case REFINEMENT_TYPE::REMEMBERING_SOURCES:

@@ -15,6 +15,7 @@
 #include "../../util/plotting/Plotter.h"
 #include "../reachability/ReachNNMethod.h"
 #include "ReachabilitySettings.h"
+#include "StructureNode.h"
 
 namespace hypro {
 namespace reachability {
@@ -31,7 +32,8 @@ class ReachabilityNode {
 	bool mHasParent;
 	ReachabilityNode<Number>* mParent;
 	std::list<ReachabilityNode<Number>*> mChildren;
-		
+	StructureNode<Number>* mStructureNode;
+
 	int mLayerNumber;	// the number of layer in the original NNet
 	int mNeuronNumber;	// the number of neuron in the current layer
 
@@ -114,6 +116,8 @@ class ReachabilityNode {
 	void addChild(ReachabilityNode<Number>* child );
 	void removeChild(ReachabilityNode<Number>* child );
 	void removeAllChildren();
+	StructureNode<Number>* getStructureNode() const;
+	void setStructureNode( StructureNode<Number>* node );
 	
 	int layerNumber() const;
 	int neuronNumber() const;

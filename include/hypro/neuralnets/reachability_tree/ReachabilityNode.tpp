@@ -132,6 +132,16 @@ void ReachabilityNode<Number>::removeAllChildren(){
 }
 
 template <typename Number>
+StructureNode<Number>* ReachabilityNode<Number>::getStructureNode() const {
+	return mStructureNode;
+}
+
+template <typename Number>
+void ReachabilityNode<Number>::setStructureNode( StructureNode<Number>* node ) {
+	mStructureNode = node;
+}
+
+template <typename Number>
 int ReachabilityNode<Number>::layerNumber() const {
 	return mLayerNumber;
 }
