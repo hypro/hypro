@@ -1,0 +1,174 @@
+hybrid reachability
+{
+ state var x1, x2, t
+
+ setting
+ {
+  fixed steps 0.5
+  time 20
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon t, x1
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output watertanks
+  max jumps 2
+  print on
+ }
+
+ modes
+ {
+  l1 # mode false false
+  {
+   poly ode 1
+   {
+    x1' = -0.8
+    x2' = -0.6
+    t' = 1
+   }
+
+   inv
+   {
+    x1 >= 1
+    x2 >= 1
+   }
+  }
+
+  l2 # mode false true
+  {
+   poly ode 1
+   {
+    x1' = -0.8
+    x2' = 1
+    t' = 1
+   }
+
+   inv
+   {
+    x1 >= 1
+    x2 <= 9
+   }
+  }
+
+  l3 # mode true false
+  {
+   poly ode 1
+   {
+    x1' = 0.9
+    x2' = -0.6
+    t' = 1
+   }
+
+   inv
+   {
+    x1 <= 8
+    x2 >= 1
+   }
+  }
+
+  l4 # mode true true
+  {
+   poly ode 1
+   {
+    x1' = 0.9
+    x2' = 1
+    t' = 1
+   }
+
+   inv
+   {
+    x1 <= 9
+    x2 <= 9
+   }
+  }
+
+ }
+
+#############################################
+#############################################
+
+ jumps
+ {
+  l1 -> l2
+  guard { x1 <= 2 }
+  reset { }
+
+  l1 -> l3
+  guard { x2 <= 3 }
+  reset { }
+
+  #l1 -> l1
+  #guard { x1 <= 2 }
+  #reset { }
+
+  #l1 -> l1
+  #guard { x2 <= 3 }
+  #reset { }
+
+#############################################
+  l2 -> l3
+  guard { x2 >= 6 }
+  reset { }
+
+  #l2 -> l2
+  #guard { x1 <= 2 }
+  #reset { }
+
+  l2 -> l1
+  guard { x2 >= 6 }
+  reset { }
+
+  l2 -> l1
+  guard { x1 <= 2 }
+  reset { }
+
+  #############################################
+  l3 -> l2
+  guard { x1 >= 5 }
+  reset { }
+
+  #l3 -> l3
+  #guard { x2 <= 3 }
+  #reset { }
+
+  l3 -> l1
+  guard { x1 >= 5 }
+  reset { }
+
+  l3 -> l1
+  guard { x2 <= 3 }
+  reset { }
+
+  #############################################
+  l4 -> l2
+  guard { x1 >= 5 }
+  reset { }
+
+  l4 -> l3
+  guard { x2 >= 6 }
+  reset { }
+
+  l4 -> l1
+  guard { x1 >= 5 }
+  reset { }
+
+  l4 -> l1
+  guard { x2 >= 6 }
+  reset { }
+ }
+
+#############################################
+#############################################
+ 
+ init
+ {
+  l4
+  {
+   x1 in [4, 4.5]
+   x2 in [5.9, 6]
+   t  in [0, 0]
+  }
+ }
+}
+

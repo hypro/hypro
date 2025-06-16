@@ -5,7 +5,7 @@ hybrid reachability
  setting
  {
   fixed steps 0.1
-  time 5
+  time 2
   remainder estimation 1e-5
   identity precondition
   gnuplot octagon x,v
@@ -23,42 +23,42 @@ hybrid reachability
   {
    poly ode 1
    {
-    x' = v
-    v' = -9.81
+    x' = 2 * v + 1
+    v' = 1
    }
 
    inv
    {
-    x >= 0
+   }
+  }
+  l'
+  {
+   poly ode 1
+  {
+    x' = 1
+    v' = 0
+   }
+
+   inv
+   {
    }
   }
  }
 
  jumps
  {
-  l -> l
-  guard { x = 0 v <= 0 }
-  reset { v' := -0.75*v }
-  parallelotope aggregation {}
+  l -> l'
+  guard {  }
+  reset {x' := x + 5 v' := v + 5}
  }
 
  init
  {
   l
   {
-   x in [10,10.2]
-   v in [0,0]
+   x in [0, 0]
+   v in [1, 2]
   }
  }
 }
 
-
-unsafe set
-{
-  l
-  {
-   x in [2,4]
-   v in [-2.5,0]
-   
-  }
-}

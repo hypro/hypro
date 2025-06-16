@@ -153,6 +153,9 @@ namespace hypro {
                         TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
 
                         firstSegment = firstSegment.minkowskiDiff(bloatingSet);
+                        if (firstSegment.empty()) {
+                                TRACE("hypro", "first segment became empty as a result of Minkowski diff" );
+                        }
                 }
         }
 
