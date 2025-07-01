@@ -41,7 +41,8 @@ namespace hypro {
 #ifndef NDEBUG
             bool empty = this->empty();
 #endif
-            reduceNumberRepresentation();
+            // reduceNumberRepresentation();
+            reduceRepresentation();
             assert(empty == this->empty());
             if (Setting::OPTIMIZER_CACHING) {
                 setOptimizer(this->matrix(), this->vector());
@@ -65,7 +66,8 @@ namespace hypro {
 #ifndef NDEBUG
         bool empty = this->empty();
 #endif
-        reduceNumberRepresentation();
+        // reduceNumberRepresentation();
+        reduceRepresentation();
         assert(empty == this->empty());
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer(A, b);
@@ -81,6 +83,8 @@ namespace hypro {
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer(A);
         }
+
+        reduceRepresentation();
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -96,6 +100,7 @@ namespace hypro {
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer(this->matrix(), this->vector());
         }
+        reduceRepresentation();
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -140,6 +145,7 @@ namespace hypro {
                     return hplane.contains(point);
                 });
             }));
+            reduceRepresentation();
         } else {
             auto pointsCopy = points;
 
@@ -314,6 +320,7 @@ namespace hypro {
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
             setOptimizer(orig.matrix(), orig.vector());
         }
+        reduceRepresentation();
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -1082,9 +1089,17 @@ namespace hypro {
             if (lu.rank() == A.rows()) {
                 TRACE("hypro.representations.HPolytope", "A has full rank - do not use v-conversion.");
                 std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-                assert((HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
-                                                               inequalities.first * A.inverse() * b +
-                                                               inequalities.second).size() == this->size()));
+
+                // std::cout << HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
+                //                                                inequalities.first * A.inverse() * b +
+                //                                                inequalities.second).size() << std::endl;
+
+                // std::cout << "this.size = " << this->size() << std::endl;
+                
+                // removed since if I apply linear transformation on the set, there might be a different number of non-redundant halfspaces
+                // assert((HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
+                //                                                inequalities.first * A.inverse() * b +
+                //                                                inequalities.second).size() == this->size()));
                 assert(!(HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
                                                                 inequalities.first * A.inverse() * b +
                                                                 inequalities.second).empty()));
@@ -1109,6 +1124,7 @@ namespace hypro {
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::minkowskiSum(const HPolytopeT &rhs) const {
         TRACE("hypro.representations.HPolytope", "P' = P + " << rhs << std::endl);
+        TRACE("hypro.representations.HPolytope", "where P =  " << *this << std::endl);
         HPolytopeT<Number, Converter, Setting> res;
         Number result;
 
@@ -1125,6 +1141,10 @@ namespace hypro {
             }
         }
 
+
+        TRACE("hypro.representations.HPolytope", "new this = " << *this << std::endl);
+        TRACE("hypro.representations.HPolytope", "new this empty = " << this->empty() << std::endl);
+        TRACE("hypro.representations.HPolytope", "new this vertices = " << this->vertices() << std::endl);  
         // if(!oneWay) { // Todo: push to settings.
         //  evaluation of lhs in directions of rhs
         for (unsigned i = 0; i < rhs.constraints().size(); ++i) {
@@ -1132,12 +1152,14 @@ namespace hypro {
             if (evalRes.errorCode == SOLUTION::INFTY) {
                 // Do nothing - omit inserting plane.
             } else if (evalRes.errorCode == SOLUTION::INFEAS) {
+                TRACE("hypro.representations.HPolytope", "solution infeasible in direction " << rhs.constraints().at(i).normal() << ": " << evalRes.errorCode << std::endl);
                 return Empty();
             } else {
                 result = rhs.constraints().at(i).offset() + evalRes.supportValue;
                 res.insert(Halfspace<Number>(rhs.constraints().at(i).normal(), result));
             }
         }
+        TRACE("hypro.representations.HPolytope", "end of minkowski sum" << std::endl);
         //}
         return res;
     }

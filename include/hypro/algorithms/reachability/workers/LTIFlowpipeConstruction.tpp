@@ -48,6 +48,11 @@ namespace hypro {
         TRACE("hypro", "atDelta: " << atDelta.vertices());
         TRACE("hypro", "init: " << initialSet.vertices());
 
+        TRACE("hypro", "atDelta: " << atDelta << std::endl);
+        TRACE("hypro", "init: " << initialSet << std::endl);
+
+        TRACE("hypro", "firstSegment: " << firstSegment << std::endl);
+
 
         bool isFlowIdentity = rawTransformation.block(0, 0, rawTransformation.rows() - 1, rawTransformation.cols() - 1).isApprox(matrix_t<Number>::Identity(rawTransformation.rows()-1, rawTransformation.cols()-1));
         if (!isFlowIdentity) {
@@ -67,11 +72,18 @@ namespace hypro {
                 Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
 
                 TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
+                TRACE("hypro", "bloatingSet: " << bloatingSet << std::endl);
 
                 firstSegment = firstSegment.minkowskiSum(bloatingSet);
         }
+        TRACE("hypro.reachability", "first segment = " << firstSegment << std::endl);
+        TRACE("hypro.reachability", "first segment = " << firstSegment.empty() << std::endl);
+        
         firstSegment.removeRedundancy();
 
+        TRACE("hypro.reachability", "first segment after redundancy = " << firstSegment << std::endl);
+        TRACE("hypro.reachability", "first segment after redundancy = " << firstSegment.empty() << std::endl);
+        
         return firstSegment;
     }
 

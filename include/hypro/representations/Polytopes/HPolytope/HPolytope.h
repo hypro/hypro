@@ -358,7 +358,8 @@ namespace hypro {
         static HPolytopeT unite(const std::vector<HPolytopeT> &rhs);
 
         void reduceRepresentation() {
-            reduceNumberRepresentation();
+            TRACE("hypro.reduceRepresentation", "reduce representation was called");
+            // reduceNumberRepresentation();
             removeRedundancy();
         }
 
@@ -376,7 +377,8 @@ namespace hypro {
             mNonRedundant = rhs.isNonRedundant();
 
             if (Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value()) {
-                mOptimizer->cleanContexts();
+                if (mOptimizer.has_value())
+                    mOptimizer->cleanContexts();
                 setOptimizer(rhs.matrix(), rhs.vector());
             }
             assert(mEmptyState == rhs.getEmptyState());

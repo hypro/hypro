@@ -54,6 +54,7 @@ namespace hypro {
     template<class Representation, class Number>
     Representation
     applyTimeEvolution(Representation const &valuationSet, LTITimeTransformation<Number> const &transformation) {
+        TRACE("hypro.reachability", "apply time evolution");
         return valuationSet.affineTransformation(transformation.matrix, transformation.vector);
     }
 
