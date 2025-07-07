@@ -5,15 +5,15 @@ hybrid reachability
  setting
  {
   fixed steps 0.1
-  time 2
+  time 3
   remainder estimation 1e-5
   identity precondition
-  gnuplot octagon x,v
+  gnuplot octagon v,x
   fixed orders 5
   cutoff 1e-15
   precision 128
   output bouncing_ball
-  max jumps 1
+  max jumps 3
   print on
  }
 
@@ -23,42 +23,42 @@ hybrid reachability
   {
    poly ode 1
    {
-    x' = 2 * v + 1
-    v' = 1
+    x' = v
+    v' = -9.81
    }
 
    inv
    {
-   }
-  }
-  l'
-  {
-   poly ode 1
-  {
-    x' = 1
-    v' = 0
-   }
-
-   inv
-   {
+    x >= 0
    }
   }
  }
 
  jumps
  {
-  l -> l'
-  guard {  }
-  reset {x' := x + 5 v' := v + 5}
+  l -> l
+  guard { x = 0 v <= 0 }
+  reset { v' := -0.75*v }
+  parallelotope aggregation {}
  }
 
  init
  {
   l
   {
-   x in [0, 0]
-   v in [1, 2]
+   x in [10,10.2]
+   v in [0,0]
   }
  }
 }
 
+
+unsafe set
+{
+  l
+  {
+   x in [2,4]
+   v in [-2.5,0]
+   
+  }
+}

@@ -1823,8 +1823,9 @@ namespace hypro {
             opt.setVector(checkvector);
             // default relation is LEQ, set LESS for original polytop
             // GLPK cannot handle strict inequalities and throws error
+            // neither can SOPLEX
             // using weak inequalities instead is overapproximating
-#ifndef HYPRO_USE_GLPK
+#if !defined(HYPRO_USE_GLPK) && !defined(HYPRO_USE_SOPLEX)
             for (long int t = 0; t < matrix.rows(); t++) {
                 opt.setRelation(carl::Relation::LESS, t + matrix2.rows());
             }

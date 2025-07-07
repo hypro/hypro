@@ -527,13 +527,18 @@ TYPED_TEST( HPolytopeTest, SetMinus ) {
 
 	std::vector<HPolytope<TypeParam>> result1 = hpt1.setMinus2( hpt2 );
 
+	std::cout << "result1.size() = " << result1.size() << std::endl; 
+
 	EXPECT_EQ( result1.size(), (unsigned)3 );
 
 	std::vector<HPolytope<TypeParam>> result2 = hpt2.setMinus2( hpt1 );
-#ifndef HYPRO_USE_GLPK
+	std::cout << "result2.size() = " << result2.size() << std::endl;
+	std::cout << "result2 vertices = " << result2 << std::endl;
+#if !defined(HYPRO_USE_GLPK) && !defined(HYPRO_USE_SOPLEX)
 	EXPECT_TRUE( result2.empty() );
 #else
 	// without strict inequalities, the (redundant) points (2,-1) and (-2,-1) are expected
+	std::cout << "result2.size() = " << result2.size() << std::endl;
 	EXPECT_EQ( result2.size(), (unsigned)2 );
 #endif
 }

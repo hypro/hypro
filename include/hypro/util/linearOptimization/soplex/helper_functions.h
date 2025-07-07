@@ -83,21 +83,22 @@ EvaluationResult<Number> extractSolution( soplex::SoPlex& solver ) {
             vector_t<Number> optimalPoint = vector_t<Number>( solver.numCols() );
             solver.getPrimalRational( prim );
             for ( int colIndex = 0; colIndex < solver.numCols(); ++colIndex ) {
-                optimalPoint( colIndex ) = carl::convert<mpq_class, Number>( mpq_class( *( prim[colIndex] ).getMpqPtr() ) );
+                // Convert boost::multiprecision::mpq_rational -> GMP mpq_class via string
+                optimalPoint(colIndex) = carl::convert<mpq_class, Number>(mpq_class(prim[colIndex].str()));
             }
             // std::cout << "Result evaluation (optimal): " << EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class(*(solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS) << std::endl;
             // std::cout << "Optimal point: " <<  optimalPoint << std::endl;
-            return EvaluationResult<Number>( carl::convert<mpq_class, Number>( mpq_class( *( solver.objValueRational() ).getMpqPtr() ) ), optimalPoint, SOLUTION::FEAS );
+            return EvaluationResult<Number>( carl::convert<mpq_class, Number>( mpq_class(( solver.objValueRational().str()) ) ), optimalPoint, SOLUTION::FEAS );
         }
         case soplex::SPxSolver::UNBOUNDED: {
             vector_t<Number> optimalPoint = vector_t<Number>( solver.numCols() );
             solver.getPrimalRational( prim );
             for ( int colIndex = 0; colIndex < solver.numCols(); ++colIndex ) {
-                optimalPoint( colIndex ) = carl::convert<mpq_class, Number>( mpq_class( *( prim[colIndex] ).getMpqPtr() ) );
+                optimalPoint(colIndex) = carl::convert<mpq_class, Number>(mpq_class(prim[colIndex].str()));
             }
             // std::cout << "Result evaluation (optimal): " << EvaluationResult<Number>(carl::convert<mpq_class,Number>(mpq_class(*(solver.objValueRational()).getMpqPtr())), optimalPoint, SOLUTION::FEAS) << std::endl;
             // std::cout << "Optimal point: " <<  optimalPoint << std::endl;
-            return EvaluationResult<Number>( carl::convert<mpq_class, Number>( mpq_class( *( solver.objValueRational() ).getMpqPtr() ) ), optimalPoint, SOLUTION::INFTY );
+            return EvaluationResult<Number>( carl::convert<mpq_class, Number>( mpq_class(( solver.objValueRational().str()) ) ), optimalPoint, SOLUTION::INFTY );
         }
         case soplex::SPxSolver::INFEASIBLE: {
             return EvaluationResult<Number>( SOLUTION::INFEAS );

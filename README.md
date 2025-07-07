@@ -44,6 +44,15 @@ $ make allTests
 $ make test
 ```
 
+To build and run a subcategory of tests (algorithm, core, parser, datastructures, representations, utility) you can use the specific targets:
+```bash
+$ make runRepresentationTests -j4 && ./bin/runRepresentationTests
+```
+to run a single test/a subset of tests from a given target you can use the `--gtest_filter` option, where you can specify the name of the test or even a regex over the names of the tests:
+```bash
+$ make runRepresentationTests -j4 && ./bin/runRepresentationTests --gtest_filter="HPolytopeTest*"
+```
+
 HyPro registers itself to cmake which means that any further cmake-project which depends on HyPro does not necessarily require a system-installation of HyPro. Instead, it suffices to call `find_package(hypro)` from cmake to locate the local build.
 
 ## Documentation
