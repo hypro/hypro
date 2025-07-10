@@ -15,12 +15,13 @@ namespace hypro {
     template<typename OutputIt>
     REACHABILITY_RESULT
     LTISetMinusWorker<Representation, Automaton>::computeTimeSuccessors(const Representation &initialSet,
-                                                                        LocationT const *loc, OutputIt out) const {
+                                                                        LocationT const *loc, OutputIt out, int setMinusAlgoUsed) const {
         // constructing the first segment
         Representation firstSegment = constructFirstSegment(initialSet, loc->getLinearFlow(),
                                                             mTrafoCache.getTransformation(loc,
                                                                                           mSettings.timeStep).fullMatrix,
                                                             mSettings.timeStep);
+        
         // vector for result of setminus
         std::vector<Representation> result;
         // vector of urgent transitions in current location
@@ -37,6 +38,7 @@ namespace hypro {
         int tmpupper = 1;
         int urgentupper = 1;
         int tmpurgentupper = 1;
+        int numPolytopes = 0;
         // intersect with invariant
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant());
         // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
@@ -58,7 +60,8 @@ namespace hypro {
                 if (!testsegment.empty()) {
                     Representation guard(urgent_trans.at(i)->getGuard().getMatrix(),
                                          urgent_trans.at(i)->getGuard().getVector());
-                    result = segment.setMinus2(guard);
+                    result = segment.setMinus(guard, setMinusAlgoUsed);
+                    numPolytopes += result.size();
                 }
                 // insert segments into flowpipe
                 if (result.size() > 0) {
@@ -130,7 +133,9 @@ namespace hypro {
                         if (containment != CONTAINMENT::NO) {
                             Representation guard(urgent_trans.at(i)->getGuard().getMatrix(),
                                                  urgent_trans.at(i)->getGuard().getVector());
-                            result = segment.setMinus2(guard);
+                            result = segment.setMinus(guard, setMinusAlgoUsed);
+                            numPolytopes += result.size();
+
                             // insert segment
                             if (result.size() > 0) {
                                 for (unsigned long int i = 0; i < result.size(); i++) {

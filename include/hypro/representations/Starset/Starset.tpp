@@ -302,7 +302,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 	// using the result we will add one more new constraint, i.e. one more row to the shape matrix and one more element to the limits vector
 	shape.conservativeResize( shape.rows() + 1, shape.cols() );
-	limits.conservativeResize( shape.rows(), 1 );
+	limits.conservativeResize( limits.rows() + 1, 1 );
 
 	// multiply each row of the generator with the corresponding element from the normal vector and then sum up each column individually
 	shape.row( shape.rows() - 1 ) = normal.transpose() * generator;
@@ -325,7 +325,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 	// we allocate n new entries in the shape and limit matrices for the new constraints
 	shape.conservativeResize( shape.rows() + _mat.rows(), shape.cols() );
-	limits.conservativeResize( shape.rows(), 1 );
+	limits.conservativeResize( limits.rows() + _mat.rows(), 1 );
 
 	// this loop could be executed in parallel
 	// #pragma omp parallel for
@@ -373,30 +373,12 @@ bool StarsetT<Number, Converter, Setting>::containsCached( const Point<Number>& 
 
 template <typename Number, typename Converter, typename Setting> 
 hypro::EvaluationResult<Number> StarsetT<Number, Converter, Setting>::modelContains( const Point<Number>& point ) const {
-	 return hypro::z3GetInternalPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
+	return hypro::z3GetInternalPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
 }
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point ) const {
-	// if(this->dimension() == 1) {
-	// 	vector_t<Number> dir_vect = mGenerator.row(0);
-
-	// 	auto eval_low_result = mConstraints.evaluate( -1.0 * dir_vect );
-	// 	auto eval_high_result = mConstraints.evaluate( dir_vect );
-
-	// 	Number lb = -eval_low_result.supportValue + mCenter[0];
-	// 	Number ub = eval_high_result.supportValue + mCenter[0];
-
-	// 	return (lb <= point[0] && point[0] <= ub);
-	// }
-
 	return hypro::z3CheckPoint(this->shape(), this->limits(), mGenerator, mCenter, point);
-
-	// std::cout << "Contains method" << std::endl;
-	// HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> transformedStar = this->constraints().affineTransformation(mGenerator, mCenter);
-	// std::cout << "Star transformed into an H-Polytope" << std::endl;
-	// hypro::Optimizer<Number> optimizer( transformedStar.matrix(), transformedStar.vector() );
-	// return optimizer.checkPoint(point);
 }
 
 

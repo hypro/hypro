@@ -24,6 +24,7 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             UtilityTest.cpp
             #VertexEnumerationTest.cpp
             ZenoDetectionTest.cpp
+            RectangularLabelSynchronizationTest.cpp
             )
 
     SET_SOURCE_FILES_PROPERTIES(${algorithm_test_sources} PROPERTIES COMPILE_FLAGS -O0)

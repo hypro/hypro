@@ -60,7 +60,6 @@ namespace hypro {
                         for (auto pos = sortedPoints.begin(); pos != sortedPoints.end();) {
                             // if equal, take the one with bigger radial component
                             Number newAngle = points[pos->second].polarCoordinates(points[min])[1];
-                            // std::cout << newAngle << std::endl;
                             if (angle == newAngle) {
                                 // if equal, compare radial coordinate (distance)
                                 if (points[pos->second].polarCoordinates(points[min])[0] <

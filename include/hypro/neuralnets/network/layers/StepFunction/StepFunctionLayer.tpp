@@ -92,6 +92,9 @@ std::vector<hypro::Starset<Number>> StepFunctionLayer<Number>::forwardPass( cons
 		case NN_REACH_METHOD::OVERAPPRX:
 			resultSet = StepFunction<Number>::approxStepFunction( index, resultSet, mValue, mMinValue, mMaxValue );
 			break;
+		case NN_REACH_METHOD::OVERAPPRX:
+			resultSet = StepFunction<Number>::approxStepFunction( index, resultSet,mValue, mMinValue, mMaxValue );
+			break;
 		default:
 			FATAL( "hypro.neuralnets.activation_functions.stepfunction", "Invalid analysis method specified" );
 	}

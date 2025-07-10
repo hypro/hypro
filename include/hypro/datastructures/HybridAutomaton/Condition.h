@@ -199,6 +199,10 @@ namespace hypro {
             ar(mConstraints, mConditionIsBox, mConditionSetState);
         }
 
+        void addTimeToCondition(const std::vector<std::string>& haVar, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar);
+
+        void extendDimension();
+    
     private:
         void checkAxisAligned(std::size_t i) const;
 

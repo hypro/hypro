@@ -152,7 +152,6 @@ namespace hypro {
         std::size_t dim = this->dimension();
         std::size_t rows = dim;
         std::size_t cols = dim * 2;
-        std::size_t arows = A.rows();
         assert(A.rows() == dim);
         assert(A.cols() == dim);
         matrix_t<tNumber> trafo = matrix_t<tNumber>::Zero(rows, cols);

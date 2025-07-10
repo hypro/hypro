@@ -54,6 +54,7 @@ namespace hypro {
         if (glp_get_obj_dir(context.lp) == GLP_MAX) {
             for (unsigned i = 1; i <= constraints.rows(); ++i) {
                 // we search for d non-basic variables at their upper bound, which define the optimal point.
+                // TODO Jozsi: this condition is not always true, even when there are non-basic variables at their upper bounds
                 if (glp_get_row_stat(context.lp, i) == GLP_NU) {
                     exactSolutionMatrix.row(pos) = constraints.row(i - 1);
                     exactSolutionVector(pos) = constants(i - 1);

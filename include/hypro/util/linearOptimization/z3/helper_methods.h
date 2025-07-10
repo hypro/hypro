@@ -24,8 +24,8 @@ namespace hypro {
         z3::expr_vector variables(c);
         for (unsigned i = 0; i < direction.rows(); ++i) {
             z3::expr var(c);
-            const char *varName = ("x_" + std::to_string(i)).c_str();
-            var = c.real_const(varName);
+            std::string varName = "x_" + std::to_string( i );
+            var = c.real_const(varName.c_str());
             variables.push_back(var);
             // TRACE( "hypro.optimizer", "Created z3 Variable " << var );
         }

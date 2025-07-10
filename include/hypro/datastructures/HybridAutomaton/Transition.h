@@ -212,6 +212,14 @@ namespace hypro {
             mHash = 0;
         }
 
+        void extendGuardDimension() {
+            mGuard.extendDimension();
+         }
+
+         void extendResetDimension() {
+            mReset.extendDimension();
+         }
+
         std::string getDotRepresentation(const std::vector<std::string> &vars) const;
 
         /**

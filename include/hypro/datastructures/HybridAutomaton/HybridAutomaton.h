@@ -231,6 +231,11 @@ namespace hypro {
         std::string getStatistics() const;
 
         /**
+         * @brief add a time variable to the hybrid automaton
+        */
+        void addTimeVariable();
+
+        /**
          * @brief      Comparison for equality operator.
          * @param[in]  lhs   The left hand side.
          * @param[in]  rhs   The right hand side.

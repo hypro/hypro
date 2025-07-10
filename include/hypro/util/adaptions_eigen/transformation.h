@@ -139,7 +139,8 @@ namespace hypro {
                 colLhs++;
                 continue;
             }
-            if (haVar[col] < lhsVar[colLhs]) {
+            // if (haVar[col] < lhsVar[colLhs]) {
+            else {
                 col++;
                 continue;
             }
@@ -154,7 +155,8 @@ namespace hypro {
                 colRhs++;
                 continue;
             }
-            if (haVar[col] < rhsVar[colRhs]) {
+            // if (haVar[col] < rhsVar[colRhs]) {
+            else {
                 col++;
                 continue;
             }

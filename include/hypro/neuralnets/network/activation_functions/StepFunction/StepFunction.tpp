@@ -1,42 +1,43 @@
 #include "StepFunction.h"
 
 namespace hypro {
+
 template <typename Number>
 std::vector<hypro::Starset<Number>> StepFunction<Number>::exactStepFunction( int i, std::vector<hypro::Starset<Number>>& input_sets, Number value, Number minValue, Number maxValue ) {
 	auto result = std::vector<hypro::Starset<Number>>();
 
 	for ( const auto& set : input_sets ) {
-		hypro::vector_t<Number> center = set.center();
-		hypro::matrix_t<Number> basis = set.generator();
-		hypro::HPolytope<Number> polytope = set.constraints();
+		auto center = set.center();
+		auto basis = set.generator();
+		auto polytope = set.constraints();
 
 		hypro::vector_t<Number> dir_vect = basis.row( i );
-		auto eval_low_result = polytope.evaluate( -1.0 * dir_vect );
+		auto eval_low_result = polytope.evaluate( -dir_vect );
 		auto eval_high_result = polytope.evaluate( dir_vect );
 
 		// initialise lower and upper bounds
 		Number lb = -eval_low_result.supportValue + center[i];
 		Number ub = eval_high_result.supportValue + center[i];
 
-		// if upper bound is less than step value, we project the input on minValue
-		if ( ub < value ) {
-			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-			transformationMatrix( i, i ) = 0.0;
-			basis = transformationMatrix * basis;
-			hypro::vector_t<Number> center_1 = center;
-			center_1( i ) = minValue;
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, basis, polytope );
-			result.push_back( res_star );
-			continue;
-		}
-
 		// if lower bound is greater than step value, we project the input on maxValue
-		if ( lb >= value ) {
+		if ( eval_low_result.errorCode == SOLUTION::FEAS && lb >= value ) {
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = 0.0;
 			basis = transformationMatrix * basis;
 			hypro::vector_t<Number> center_1 = center;
 			center_1( i ) = maxValue;
+			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, basis, polytope );
+			result.push_back( res_star );
+			continue;
+		}
+
+		// if upper bound is less than step value, we project the input on minValue
+		if ( eval_high_result.errorCode == SOLUTION::FEAS && ub < value ) {
+			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
+			transformationMatrix( i, i ) = 0.0;
+			basis = transformationMatrix * basis;
+			hypro::vector_t<Number> center_1 = center;
+			center_1( i ) = minValue;
 			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, basis, polytope );
 			result.push_back( res_star );
 			continue;

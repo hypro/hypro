@@ -487,7 +487,7 @@ namespace hypro {
         // std::cout<<"amk"<<std::endl;
         // HPolytope temp=Converter::toHPolytope(source.constraintss());
         // temp=temp.removeRedundancy();
-        BoxT<Number, Converter<Number>, BoxSetting> tmp = Converter::toBox(source.constraintss());
+        BoxT<Number, Converter<Number>, BoxSetting> tmp = Converter::toBox(source.constraints());
         return tmp.affineTransformation(source.generator(), source.center());
         /*std::cout<<"point"<<std::endl;
         std::cout<<source.generator()<<std::endl;

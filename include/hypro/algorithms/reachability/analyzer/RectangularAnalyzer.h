@@ -35,9 +35,9 @@ namespace hypro {
         RectangularAnalyzer() = delete;
 
         /// constructor from automaton and settings with additional reachTree
-        RectangularAnalyzer(const Automaton &ha, const Settings &setting,
+        RectangularAnalyzer(Automaton const &ha, const Settings &setting,
                             std::vector<ReachTreeNode<State, LocationT>> &roots)
-                : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots) {
+                : mHybridAutomaton(&ha), mAnalysisSettings(setting), mReachTree(roots) {
         }
 
         /// main method for reachability analysis
@@ -88,7 +88,7 @@ namespace hypro {
 
     protected:
         std::queue<ReachTreeNode<State, LocationT> *> mWorkQueue;   ///< Queue holds all nodes that require processing
-        HybridAutomaton<Number> mHybridAutomaton;                   ///< Automaton which is analyzed
+        Automaton const *mHybridAutomaton;                   ///< Pointer to the automaton which is analyzed
         const Settings mAnalysisSettings;                                   ///< Settings used for analysis
         std::vector<ReachTreeNode<State, LocationT>> &mReachTree;  ///< Forest of ReachTrees computed
         int mNumThreads = std::thread::hardware_concurrency();       ///< number of used threads

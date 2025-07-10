@@ -24,12 +24,14 @@ mpq_class sqrt( const mpq_class& x ) {
 typedef mpq_class Number;  // -3090.30109487     <=>      -3090.3   (mpq_class vs double)
 
 int main( int argc, char* argv[] ) {
-	// print system arguments
+	// printing benchmark outputs to file
 	ofstream outfile;
 	if ( argc == 5 ) {
 		outfile.open( "benchmark_output.txt", ios::app );
 		outfile << "\n\n";
 	}
+
+	// print system arguments
 	std::cout << "\nSystem arguments: ";
 	for ( int i = 0; i < argc; i++ ) {
 		std::cout << argv[i] << " ";

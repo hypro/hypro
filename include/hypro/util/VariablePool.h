@@ -33,6 +33,158 @@
 
 namespace hypro {
 
+#ifdef HYPRO_ANALIZE_MULTIPLE_AUTOMATON
+
+    class VariablePool : public carl::Singleton<VariablePool> {
+        friend carl::Singleton<VariablePool>;
+
+        /**
+         * Members
+         */
+        std::vector<std::vector<carl::Variable>> mCarlVariables;
+        
+        std::vector<std::size_t> mPplId;
+        std::size_t varPoolIndex;
+        carl::VariablePool &mPool;
+
+    protected:
+        /**
+         * Default constructor 
+         */
+        VariablePool()
+                : mPool(carl::VariablePool::getInstance()) { varPoolIndex = 0; mPplId.push_back(0); mCarlVariables.push_back(std::vector<carl::Variable>()); }
+
+    public:
+        // destructor
+        ~VariablePool() {}
+
+/*
+ * Access
+ */
+        // static function to change the variable pool index
+        void changeToPool(std::size_t index) {
+            varPoolIndex = index;
+            for (std::size_t i = mCarlVariables.size(); i <= index; i++) {
+                mCarlVariables.push_back(std::vector<carl::Variable>());
+                mPplId.push_back(0);
+            }
+        }
+
+        std::size_t getPoolIndex() {
+            return varPoolIndex;
+        }
+
+        carl::Variable &carlVarByIndex(std::size_t _index, std::string prefix = "x") {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            if (_index >= mPplId[varPoolIndex]) {
+                for (std::size_t curr = mPplId[varPoolIndex]; curr <= _index; ++curr) {
+                    carl::Variable cVar = freshRealVariable(prefix + "_" + std::to_string(curr));
+                    mCarlVariables[varPoolIndex].push_back(cVar);
+                    ++mPplId[varPoolIndex];
+                }
+            }
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            return mCarlVariables[varPoolIndex].at(_index);
+        }
+
+        const carl::Variable &getTimeVariable() {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            for ( carl::Variable &cVar : mCarlVariables[varPoolIndex] ) {
+                if ( cVar.name() == "t" ) {
+                    return cVar;
+                }
+            }
+            return carl::Variable::NO_VARIABLE;
+        }
+
+        const carl::Variable &newCarlVariable(std::string _name = "", std::optional<std::size_t> index = std::nullopt) {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            if (index) {
+                // fill with new, unused variables, if the index is larger than the pool
+                while (index.value() >= mCarlVariables[varPoolIndex].size()) {
+                    newCarlVariable();
+                }
+                // set / update variable with the correct name at the correct position
+                mCarlVariables[varPoolIndex][index.value()] = freshRealVariable(_name);
+                return mCarlVariables[varPoolIndex][index.value()];
+            }
+#ifdef CARL_OLD_STRUCTURE
+            carl::Variable cVar = carl::VariablePool::getInstance().findVariableWithName( _name );
+#else
+            carl::Variable cVar = carl::VariablePool::getInstance().find_variable_with_name(_name);
+#endif
+            if (cVar == carl::Variable::NO_VARIABLE) {
+                cVar = freshRealVariable(_name);
+            }
+            mCarlVariables[varPoolIndex].push_back(cVar);
+            ++mPplId[varPoolIndex];
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            return mCarlVariables[varPoolIndex].back();
+        }
+
+        std::size_t addCarlVariable(carl::Variable var) {
+            if (std::find(mCarlVariables[varPoolIndex].begin(), mCarlVariables[varPoolIndex].end(), var) == mCarlVariables[varPoolIndex].end()) {
+                mCarlVariables[varPoolIndex].push_back(var);
+                ++mPplId[varPoolIndex];
+            }
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            // return id - decrease by one as we start counting from zero.
+            return mCarlVariables[varPoolIndex].size() - 1;
+        }
+
+        bool hasDimension(const carl::Variable &_var) const {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            for (std::size_t pos = 0; pos < mCarlVariables[varPoolIndex].size(); ++pos) {
+                if (_var == mCarlVariables[varPoolIndex][pos]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool hasDimension(std::size_t i) const {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            return mCarlVariables[varPoolIndex].size() > i;
+        }
+
+        std::size_t inline id(const carl::Variable &_var) {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            for (std::size_t pos = 0; pos < mCarlVariables[varPoolIndex].size(); ++pos) {
+                if (_var == mCarlVariables[varPoolIndex][pos]) {
+                    return pos;
+                }
+            }
+            // if the variable is not registered yet, add and return its associated dimension.
+            return addCarlVariable(_var);
+        }
+
+        std::vector<carl::Variable> carlVariables() const {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            return mCarlVariables[varPoolIndex];
+        }
+
+        std::size_t size() const {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            return mCarlVariables[varPoolIndex].size();
+        }
+
+        void clear() {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            mCarlVariables[varPoolIndex].clear();
+            mPplId[varPoolIndex] = 0;
+        }
+
+        void print() const {
+            assert(mCarlVariables[varPoolIndex].size() == mPplId[varPoolIndex]);
+            for (std::size_t pos = 0; pos < mCarlVariables[varPoolIndex].size(); ++pos) {
+                std::cout << mCarlVariables[varPoolIndex][pos] << " -> "
+                          << std::endl;  // mPplVariables[pos] << std::endl; //TODO: fix
+            }
+        }
+    };
+
+#else
+
     class VariablePool : public carl::Singleton<VariablePool> {
         friend carl::Singleton<VariablePool>;
         /**
@@ -295,5 +447,7 @@ namespace hypro {
             }
         }
     };
+
+#endif // ANALIZE_MULTIPLE_AUTOMATON
 
 }  // namespace hypro

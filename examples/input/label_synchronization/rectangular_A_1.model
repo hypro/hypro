@@ -1,0 +1,95 @@
+hybrid reachability 
+{
+    state var x3
+    
+    setting 
+    {
+        fixed steps 1
+        time 10
+        gnuplot octagon x3
+        max jumps 2
+        output rectangular_A_1
+        print on
+        remainder estimation 1e-5
+        identity precondition
+        precision 128
+    }
+
+    modes 
+    {
+        l10
+        {
+            poly ode 1
+            {
+                x3' in [0,1]
+            }
+            inv
+            {
+                -1*x3 <= 10
+                x3 <= 10
+            }
+        }
+
+        l11
+        {
+            poly ode 1
+            {
+                x3' in [-1, 0]
+            }
+            inv
+            {
+                -1*x3 <= 10
+                x3 <= 10
+            }
+        }
+    }
+
+    jumps 
+    {
+        l10 -> l11
+        label 
+        {
+            c
+        }
+        guard 
+        {
+            -1*x3 <= -5
+        }
+        reset
+        {
+            x3' := [-2, -1] 
+        }
+        parallelotope aggregation {}
+
+        l11 -> l10
+        label 
+        {
+            d
+        }
+        guard
+        {
+            x3 <= -8
+        }
+        reset
+        {
+            x3' := [0, 1]
+        }
+        parallelotope aggregation {}
+    }
+
+    init
+    {
+        l10
+        {
+            x3 in [0,1]
+        }
+    }
+}
+
+unsafe set
+{
+  l11
+  {
+    x3 in [-12,-11]
+  }
+}

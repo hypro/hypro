@@ -223,8 +223,15 @@ namespace hypro {
     template<typename VPolySetting, typename inSetting>
     VPolytopeT<Number, Converter<Number>, VPolySetting>
     Converter<Number>::toVPolytope(const HPolytopeT<Number, Converter<Number>, inSetting> &_source, const CONV_MODE) {
-        // exact conversion
-        return VPolytopeT<Number, Converter<Number>, VPolySetting>(_source.matrix(), _source.vector());
+
+        // safer to use matrix and vector
+        if (true || _source.getExtremeVertices().size() == 0) {
+            // exact conversion
+            return VPolytopeT<Number, Converter<Number>, VPolySetting>(_source.matrix(), _source.vector());
+        } else {
+           
+            return VPolytopeT<Number, Converter<Number>, VPolySetting>(_source.getExtremeVertices());
+        }
     }
 
 // conversion from Box to V-Polytope (no differentiation between conversion modes - always EXACT)
