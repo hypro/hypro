@@ -982,7 +982,7 @@ namespace hypro {
             return HPolytopeT<Number, Converter, Setting>(points);
         }
         if (!this->empty() && !mHPlanes.empty()) {
-            std::cout << "Doing LU decomposition" << std::endl;
+            // std::cout << "Doing LU decomposition" << std::endl;
             Eigen::FullPivLU<matrix_t<Number>> lu(A);
 
             // std::cout << "A: " << A << std::endl;
@@ -1005,7 +1005,7 @@ namespace hypro {
 
             // if A has full rank, we can simply re-transform, otherwise use v-representation.
             if (lu.rank() == A.rows()) {
-                std::cout << "Full rank matrix" << std::endl;
+                // std::cout << "Full rank matrix" << std::endl;
                 TRACE("hypro.representations.HPolytope", "A has full rank - do not use v-conversion.");
                 std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
                 assert((HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
@@ -1018,14 +1018,14 @@ namespace hypro {
                                                               inequalities.first * A.inverse() * b +
                                                               inequalities.second);
             } else {
-                std::cout << "Converting to V-Polytope" << std::endl;
+                // std::cout << "Converting to V-Polytope" << std::endl;
                 TRACE("hypro.representations.HPolytope", "Use V-Conversion for linear transformation.");
                 auto intermediate = Converter::toVPolytope(*this);
-                std::cout << "Converted" << std::endl;
+                // std::cout << "Converted" << std::endl;
                 intermediate = intermediate.affineTransformation(A, b);
-                std::cout << "Transforming back" << std::endl;
+                // std::cout << "Transforming back" << std::endl;
                 auto res = Converter::toHPolytope(intermediate);
-                std::cout << "Done" << std::endl;
+                // std::cout << "Done" << std::endl;
                 // assert(res.size() <= this->size());
                 res.setReduced();
                 return res;

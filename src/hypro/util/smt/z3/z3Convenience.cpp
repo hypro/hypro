@@ -103,7 +103,7 @@ SmtResult solveZ3( const FormulaT<tNumber>& inFormula ) {
     std::map<std::size_t, expr> vars;
     expr formula = toZ3( inFormula, c, vars );
 
-    std::cout << "Solve " << formula << std::endl;
+    // std::cout << "Solve " << formula << std::endl;
     solver s( c );
     s.add( formula );
     SmtResult res;

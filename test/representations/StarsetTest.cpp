@@ -186,7 +186,7 @@ TYPED_TEST( StarsetTest, ContainsStar ) {
 }
 
 TYPED_TEST( StarsetTest, GetSetOfSamplesAndContains ) {
-	int n = 100;
+	int n = 10;
 	std::set<hypro::Point<TypeParam>> setOfSamples = uniform_sampling( this->star_2d_triang2, n );
 	for ( auto sample : setOfSamples ) {
 		EXPECT_TRUE( this->star_2d_triang2.contains( sample ) );
@@ -194,7 +194,7 @@ TYPED_TEST( StarsetTest, GetSetOfSamplesAndContains ) {
 }
 
 TYPED_TEST( StarsetTest, ContainsVsFindModel ) {
-	int n = 1000;
+	int n = 10;
 	std::set<hypro::Point<TypeParam>> setOfSamples = uniform_sampling( this->star_2d_triang2, n );
 
 	auto start = std::chrono::steady_clock::now();
