@@ -110,6 +110,13 @@ $ make example_NN_CEGAR
 $ ../nnBenchmarkVerification.sh drones cegar AC2.nnet prop_AC2_02.in safe_AC2_02.in peft
 ```
 
+or
+
+```shell
+$ make example_NN_CEGAR
+$ ../nnBenchmarkVerification.sh drones cegar AC2.nnet prop_AC2_02.in safe_AC2_02.in upaf
+```
+
 
 #### ACAS Xu
 
