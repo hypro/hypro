@@ -110,12 +110,14 @@ $ make example_NN_CEGAR
 $ ../nnBenchmarkVerification.sh drones cegar AC2.nnet prop_AC2_02.in safe_AC2_02.in peft
 ```
 
-or
+or with `upaf` (i.e., UNSAT Core based tracing, with path-wise preserved origins, refining at all indices and without using safe histories):
 
 ```shell
 $ make example_NN_CEGAR
 $ ../nnBenchmarkVerification.sh drones cegar AC2.nnet prop_AC2_02.in safe_AC2_02.in upaf
 ```
+
+One can execute CEGAR using other combination of heuristics by specifying the corresponding 4 character string.
 
 
 #### ACAS Xu
