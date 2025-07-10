@@ -4,13 +4,11 @@ namespace hypro {
 
 template <typename Number>
 std::vector<hypro::Starset<Number>> LeakyReLU<Number>::exactLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, Number negativeSlope ) {
-	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
-
-	int k = input_sets.size();
-	for ( int j = 0; j < k; j++ ) {
-		hypro::vector_t<Number> center = input_sets[j].center();
-		hypro::matrix_t<Number> basis = input_sets[j].generator();
-		hypro::HPolytope<Number> polytope = input_sets[j].constraints();
+	std::vector<hypro::Starset<Number>> result;
+	for ( auto& input_set : input_sets ) {
+		auto center = input_set.center();
+		auto basis = input_set.generator();
+		auto polytope = input_set.constraints();
 
 		hypro::vector_t<Number> dir_vect = basis.row( i );
 		auto eval_low_result = polytope.evaluate( -dir_vect );
@@ -60,21 +58,24 @@ std::vector<hypro::Starset<Number>> LeakyReLU<Number>::exactLeakyReLU( int i, st
 
 template <typename Number>
 std::vector<hypro::Starset<Number>> LeakyReLU<Number>::approxLeakyReLU( int i, std::vector<hypro::Starset<Number>>& input_sets, Number negativeSlope ) {
-	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
-	int k = input_sets.size();
-	for ( int j = 0; j < k; j++ ) {
-		hypro::Starset<Number> input_star = input_sets[j];
-
-		hypro::vector_t<Number> center = input_star.center();
-		hypro::matrix_t<Number> basis = input_star.generator();
-		hypro::vector_t<Number> limits = input_star.limits();
+	std::vector<hypro::Starset<Number>> result;
+	for ( auto& input_star : input_sets ) {
+		auto center = input_star.center();
+		auto basis = input_star.generator();
+		auto shape = input_star.shape();
+		auto limits = input_star.limits();
 
 		hypro::vector_t<Number> dir_vect = basis.row( i );
-		auto eval_low_result = input_star.constraints().evaluate( -1.0 * dir_vect );
+		auto eval_low_result = input_star.constraints().evaluate( -dir_vect );
 		auto eval_high_result = input_star.constraints().evaluate( dir_vect );
 
-		Number lb = -eval_low_result.supportValue + center[i];
-		Number ub = eval_high_result.supportValue + center[i];
+        bool feas_low = (eval_low_result.errorCode == SOLUTION::FEAS);
+        bool feas_high = (eval_high_result.errorCode == SOLUTION::FEAS);
+        bool unbounded_low = (eval_low_result.errorCode == SOLUTION::INFTY);
+        bool unbounded_high = (eval_high_result.errorCode == SOLUTION::INFTY);
+
+		Number lb = feas_low ? -eval_low_result.supportValue + center[i] : Number(0);
+        Number ub = feas_high ? eval_high_result.supportValue + center[i] : Number(0);
 
 		if ( feas_low && lb >= -1e-8 ) {
 			result.emplace_back( center, shape, limits, basis );

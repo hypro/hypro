@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i, std::vector<hypro::Starset<Number>>& input_sets, Number minValue, Number maxValue ) {
+std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue ) {
 	auto result = std::vector<hypro::Starset<Number>>();
 	for ( const auto& set : input_sets ) {
 		hypro::vector_t<Number> center = set.center();
@@ -33,9 +33,8 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 			transformationMatrix( i, i ) = ( 1 / ( maxValue - minValue ) );
 			basis = transformationMatrix * basis;
 			hypro::vector_t<Number> center_1 = center;
-			center_1( i ) = ( center_1( i ) / ( maxValue - minValue ) ) +( minValue / ( minValue - maxValue ) );
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, basis, polytope );
-			result.push_back( res_star );
+			center_1( i ) = ( minValue / ( minValue - maxValue ) );
+			result.emplace_back( center_1, basis, polytope );
 			continue;
 		}
 
@@ -72,8 +71,8 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = ( 1 / ( maxValue - minValue ) );
 			basis_1 = transformationMatrix * basis_1;
-			center_1( i ) = ( center_1( i ) / ( maxValue - minValue ) ) + ( minValue / ( minValue - maxValue ) );
-			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
+			center_1( i ) = ( minValue / ( minValue - maxValue ) );
+			result.emplace_back( center_1, basis_1, polytope_1 );
 
 			// split the star input into the part that is less than minValue
 			// this part is projected on 0
@@ -107,7 +106,7 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = ( 1 / ( maxValue - minValue ) );
 			basis_1 = transformationMatrix * basis_1;
-			center_1( i ) = ( center_1( i ) / ( maxValue - minValue ) ) + ( minValue / ( minValue - maxValue ) );
+			center_1( i ) = ( minValue / ( minValue - maxValue ) );
 			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
 
 			// split the star input into the part that is greater than maxValue
@@ -148,7 +147,7 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
 			transformationMatrix( i, i ) = ( 1 / ( maxValue - minValue ) );
 			basis_1 = transformationMatrix * basis_1;
-			center_1( i ) = ( center_1( i ) / ( maxValue - minValue ) )  + ( minValue / ( minValue - maxValue ) );
+			center_1( i ) = ( minValue / ( minValue - maxValue ) );
 			hypro::Starset<Number> star_1 = hypro::Starset<Number>( center_1, basis_1, polytope_1 );
 
 			// split the star input into the part that is greater than maxValue
@@ -192,16 +191,13 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::exactHardSigmoid( int i
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int i, std::vector<hypro::Starset<Number>>& input_sets, Number minValue, Number maxValue ) {
-	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
-	int k = input_sets.size();
-	for ( int j = 0; j < k; j++ ) {
-		hypro::Starset<Number> input_star = input_sets[j];
-
-		hypro::vector_t<Number> center = input_star.center();
-		hypro::matrix_t<Number> basis = input_star.generator();
-		hypro::matrix_t<Number> shape = input_star.shape();
-		hypro::vector_t<Number> limits = input_star.limits();
+std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue ) {
+	std::vector<hypro::Starset<Number>> result;
+	for ( auto& input_star : input_sets ) {
+		auto center = input_star.center();
+		auto basis = input_star.generator();
+		auto shape = input_star.shape();
+		auto limits = input_star.limits();
 
 		hypro::vector_t<Number> dir_vect = basis.row( i );
 		auto eval_low_result = input_star.constraints().evaluate( -dir_vect );
@@ -229,9 +225,8 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int 
 			transformationMatrix( i, i ) = ( 1 / ( maxValue - minValue ) );
 			basis = transformationMatrix * basis;
 			hypro::vector_t<Number> center_1 = center;
-			center_1( i ) = ( center_1( i ) / ( maxValue - minValue ) ) + ( minValue / ( minValue - maxValue ) );
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center_1, shape, limits, basis );
-			result.push_back( res_star );
+			center_1( i ) = ( minValue / ( minValue - maxValue ) );
+			result.emplace_back( center_1, shape, limits, basis );
 			continue;
 		}
 		// if upper bound is less than minValue, we project the input on 0
@@ -260,49 +255,33 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int 
 			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
 			first_constraint[first_constraint.rows() - 1] = -1;
 			shape.row( shape.rows() - 3 ) = first_constraint;
-			limits[limits.rows() - 3] = Number(0);
+			limits[limits.rows() - 3] = 0.0;
 
-			// second constraint: x_(m+1) >= ( 1 / (maxValue - minValue ) ) * x_i + ( minValue / ( maxValue - minValue ) )
+			// second constraint: x_(m+1) >= ( 1 / (maxValue - minValue ) ) * x_i - ( minValue / ( maxValue - minValue ) )
 			hypro::vector_t<Number> second_constraint = basis.row( i );
 			second_constraint = second_constraint * ( 1 / ( maxValue - minValue ) );
 			second_constraint.conservativeResize( second_constraint.rows() + 1 );
 			second_constraint[second_constraint.rows() - 1] = -1;
 			shape.row( shape.rows() - 2 ) = second_constraint;
-			limits[limits.rows() - 2] = - ( center[i] / ( maxValue - minValue ) ) - ( minValue / ( maxValue - minValue ) );
+			limits[limits.rows() - 2] = -( ( center[i] - minValue ) / ( maxValue - minValue ) );
 
-			// third constrain: x_(m+1) <= ((ub-minValue)/(maxValue - minValue)) * x_i + ((ub-minValue)/(maxValue - minValue)) * lb
+			// third constrain: x_(m+1) <= ((ub - minValue)/(maxValue - minValue)) * ((x_i - lb)/(ub - lb))
 			hypro::vector_t<Number> third_constraint = basis.row( i );
-			third_constraint = third_constraint * ( - ( (ub - minValue) / ((maxValue - minValue) * (ub - lb)))); //changed
+			third_constraint = third_constraint * ( -( ( ub - minValue ) / ( maxValue - minValue ) ) * ( 1 / ( ub - lb ) ) );
 			third_constraint.conservativeResize( third_constraint.rows() + 1 );
 			third_constraint( third_constraint.rows() - 1 ) = 1;
 			shape.row( shape.rows() - 1 ) = third_constraint;
-			limits[limits.rows() - 1] = ( (ub - minValue) * ( center[i] - lb ) ) / ( (maxValue - minValue) * (ub - lb) );
-
-			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-			transformationMatrix( i, i ) = Number(0);
-			basis = transformationMatrix * basis;
-			center = transformationMatrix * center;
-
-			// extend the basis with the standard basis vector as last column and set the actual basis vector to the null-vector
-			basis.conservativeResize( basis.rows(), basis.cols() + 1 );
-			basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
-			basis( i, basis.cols() - 1 ) = 1;
-
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
-			result.push_back( res_star );
+			limits[limits.rows() - 1] = ( ( ( ub - minValue ) / ( maxValue - minValue ) ) * ( ( center[i] - lb ) / ( ub - lb ) ) );
 		}
 
-		if ( ( lb > minValue ) && ( lb < maxValue ) && ( ub >= maxValue ) ) {
-			// Resize the original shape matrix and limits vector, so that they have 3 more constraints and one more variable
-			shape.conservativeResize( shape.rows() + 3, shape.cols() + 1 );
-			shape.col( shape.cols() - 1 ) = hypro::vector_t<Number>::Zero( shape.rows() );
-			limits.conservativeResize( limits.rows() + 3 );
+		if ( feas_low && feas_high && ( lb > minValue ) && ( lb < maxValue ) && ( ub >= maxValue ) ) {
+			resizeShapeAndLimits( shape, limits, 3 );
 
 			// first constraint: x_(m+1) <= 1
 			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
 			first_constraint[first_constraint.rows() - 1] = 1;
 			shape.row( shape.rows() - 3 ) = first_constraint;
-			limits[limits.rows() - 3] = Number(1);
+			limits[limits.rows() - 3] = 1.0;
 
 			// second constraint: x_(m+1) <= ( 1 / (maxValue - minValue ) ) * x_i - ( minValue / ( maxValue - minValue ) )
 			hypro::vector_t<Number> second_constraint = basis.row( i );
@@ -312,45 +291,28 @@ std::vector<hypro::Starset<Number>> HardSigmoid<Number>::approxHardSigmoid( int 
 			shape.row( shape.rows() - 2 ) = second_constraint;
 			limits[limits.rows() - 2] = ( center[i] - minValue ) / ( maxValue - minValue );
 
-			// third constraint: x_(m+1) >= 1 + ( ( ( maxValue - lb ) * ( ub - x_i ) ) / ( ( lb - ub ) * ( maxValue - minValue ) ) )
+			// third constraint: x_(m+1) >= 1 + ((maxValue - lb)/(maxValue - minValue)) * ((x_i - ub)/(ub - lb))
 			hypro::vector_t<Number> third_constraint = basis.row( i );
-			third_constraint = third_constraint * ( ( lb - maxValue) / ( ( lb - ub ) * ( maxValue - minValue ) ) );
+			third_constraint = third_constraint * ( ( maxValue - lb ) / ( maxValue - minValue ) ) * ( 1 / ( ub - lb ) );
 			third_constraint.conservativeResize( third_constraint.rows() + 1 );
 			third_constraint( third_constraint.rows() - 1 ) = -1;
 			shape.row( shape.rows() - 1 ) = third_constraint;
-			limits[limits.rows() - 1] = - ( 1 + ( ( (maxValue - lb) * ( ub - center[i] ) ) / ( ( lb - ub ) * ( maxValue - minValue ) ) ) );
-
-			hypro::matrix_t<Number> transformationMatrix = hypro::matrix_t<Number>::Identity( center.rows(), center.rows() );
-			transformationMatrix( i, i ) = 0.0;
-			basis = transformationMatrix * basis;
-			center = transformationMatrix * center;
-
-			// extend the basis with the standard basis vector as last column and set the actual basis vector to the null-vector
-			basis.conservativeResize( basis.rows(), basis.cols() + 1 );
-			basis.col( basis.cols() - 1 ) = hypro::vector_t<Number>::Zero( basis.rows() );
-			basis( i, basis.cols() - 1 ) = 1;
-
-			hypro::Starset<Number> res_star = hypro::Starset<Number>( center, shape, limits, basis );
-			result.push_back( res_star );
+			limits[limits.rows() - 1] = ( ( maxValue - lb ) / ( maxValue - minValue ) ) * ( ( ub - center[i] ) / ( ub - lb ) ) - 1;
 		}
 
-		if ( ( lb <= minValue ) && ( ub >= maxValue ) ) {
-			// Resize the original shape matrix and limits vector, so that they have 3 more constraints and one more variable
-			shape.conservativeResize( shape.rows() + 4, shape.cols() + 1 );
-			shape.col( shape.cols() - 1 ) = hypro::vector_t<Number>::Zero( shape.rows() );
-			limits.conservativeResize( limits.rows() + 4 );
-
+		if ( feas_low && feas_high && ( lb <= minValue ) && ( ub >= maxValue ) ) {
+			resizeShapeAndLimits( shape, limits, 4 );
 			// first constraint: x_(m+1) <= 1
 			hypro::vector_t<Number> first_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
 			first_constraint[first_constraint.rows() - 1] = 1;
 			shape.row( shape.rows() - 4 ) = first_constraint;
-			limits[limits.rows() - 4] = Number(1);
+			limits[limits.rows() - 4] = 1.0;
 
 			// second constraint: x_(m+1) >= 0
 			hypro::vector_t<Number> second_constraint = hypro::vector_t<Number>::Zero( shape.cols() );
 			second_constraint[second_constraint.rows() - 1] = -1;
 			shape.row( shape.rows() - 3 ) = second_constraint;
-			limits[limits.rows() - 3] = Number(0);
+			limits[limits.rows() - 3] = 0.0;
 
 			// third constraint: x_(m+1) <= ( 1 / ( maxValue - lb ) ) * x_i - ( lb / ( maxValue - lb ) )
 			hypro::vector_t<Number> third_constraint = basis.row( i );
