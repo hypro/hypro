@@ -85,10 +85,10 @@ if [ $1 == "drones" ]; then
         exit 2
     fi
 
-    BINARY_FILE="./bin/example_drones_verification"
+    BINARY_FILE="./bin/example_NN_CEGAR"
     if ! [[ -f $BINARY_FILE ]]; then
         echo "Binary file $BINARY_FILE not found"
-        echo "Compile the example first: \$ make example_drones_verification"
+        echo "Compile the example first: \$ make example_NN_CEGAR"
         exit 3
     fi
 
@@ -104,13 +104,6 @@ if [ $1 == "drones" ]; then
 
             if [ "$fourth" = "t" ]; then
                 CEGAR_HEURISTIC="${CEGAR_HEURISTIC}t"
-            fi
-
-            BINARY_FILE="./bin/example_NN_CEGAR"
-            if ! [[ -f $BINARY_FILE ]]; then
-                echo "Binary file $BINARY_FILE not found"
-                echo "Compile the example first: \$ make example_NN_CEGAR"
-                exit 3
             fi
         fi
     fi
