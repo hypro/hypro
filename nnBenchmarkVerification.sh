@@ -14,7 +14,7 @@ if [[ ($1 != "acasxu") && ($1 != "drones") && ($1 != "thermostat") && ($1 != "so
 fi
 
 # check if a correct reachability method was specified
-if [[ ($2 != "exact") && ($2 != "overapprox") ]]; then
+if [[ ($2 != "exact") && ($2 != "overapprox") && ($2 != "cegar") ]]; then
     echo "Not supported reachability method: $2"
     echo "Usage: $0 <acasxu|drones|thermostat|sonar> <exact|overapprox> <network> <input_property> [safety_property]"
     exit 1
@@ -92,7 +92,30 @@ if [ $1 == "drones" ]; then
         exit 3
     fi
 
-    CMD="$BINARY_FILE $2 $NNET_FILE $INPUT_PROP $SAFETY_PROP"
+    CEGAR_HEURISTIC="$2"
+    if [ "$2" = "cegar" ] && [ $# -ge 6 ]; then
+        if [[ "$6" =~ ^[upl][ep][fla][ft]$ ]]; then
+            first="${6:0:1}"
+            second="${6:1:1}"
+            third="${6:2:1}"
+            fourth="${6:3:1}"
+
+            CEGAR_HEURISTIC="cb${first}${second}${third}t"
+
+            if [ "$fourth" = "t" ]; then
+                CEGAR_HEURISTIC="${CEGAR_HEURISTIC}t"
+            fi
+
+            BINARY_FILE="./bin/example_NN_CEGAR"
+            if ! [[ -f $BINARY_FILE ]]; then
+                echo "Binary file $BINARY_FILE not found"
+                echo "Compile the example first: \$ make example_NN_CEGAR"
+                exit 3
+            fi
+        fi
+    fi
+
+    CMD="$BINARY_FILE $CEGAR_HEURISTIC $NNET_FILE $INPUT_PROP $SAFETY_PROP"
     eval "$CMD";
 fi
 

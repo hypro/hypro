@@ -19,4 +19,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Starset copy constructor did not check whether the RHS argument has an optimizer to copy
-- 

@@ -81,7 +81,35 @@ studies.
 
 ### Neural Network Verification
 
-HyPro includes four benchmarks that interested users can use to test our reachability analysis algorithm for neural networks with piece-wise linear activation functions. The four benchmarks are: ACAS Xu, drone hovering, thermostat controller, and sonar classifier. In the following section, we list some example commands for running verification on each of these benchmarks. We provide the neural networks in .nnet format and the safety properties in a custom text format. To execute the verification with the corresponding parameters, we offer a convenient script called `nnBenchmarkVerification.sh`, which is located in the root directory of HyPro. To run the script, we assume that the user's current directory is the `build` folder.
+HyPro includes four benchmarks that interested users can use to test our reachability analysis algorithm for neural networks with piece-wise linear activation functions. The four benchmarks are: ACAS Xu, drone hovering, thermostat controller, and sonar classifier. In the following section, we list some example commands for running verification on each of these benchmarks. We provide the neural networks in .nnet format and the safety properties in a custom text format. To execute the verification with the corresponding parameters, we offer a convenience script called `nnBenchmarkVerification.sh`, which is located in the root directory of HyPro. To run the script, we assume that the user's current directory is the `build` folder.
+
+#### Verification with CEGAR
+
+Besides the previously established exact and over-approximate analysis methods, we implement and publish a counterexample-guided abstraction refinement (CEGAR) approach, providing a <em>complete</em> verification method for feedforward neural networks (FNNs). Using CEGAR one can efficiently verify FNNs with the guarantee to certify safety or to prove unsafety by providing a counter-example input.
+To execute the reachability analysis with CEGAR one need to enter `cegar` as the corresponding analysis method for the `nnBenchmarkVerification.sh` script. Furthermore, the user also need to specify a heuristic configuration that sets the heuristics used for CEGAR. The set heuristics can be specified as a string of 4 characters:
+
+* Back-tracing of counter-examples:
+    + 'u': Use the UNSAT Core based back-tracing.
+    + 'p': Use the predicate based back-tracing.
+    + 'l': Use the predicate based back-tracing supported by extra LP checks.
+* Preserved origins:
+    + 'e': Refine all paths at the given depth of a previously preserved origin.
+    + 'p': Refine paths based on previously preserved origin.
+* Index for predicate based back-tracing:
+    + 'f': Refine at the first index (closest to root).
+    + 'l': Refine at the last index (closest to leaves).
+    + 'a': Refine at all indices.
+* Pruning via safe histories:
+    + 't': Save safe histories and prune paths in the reachability tree.
+    + 'f': Do not save safe histories and do not try to prune the tree.
+
+As an example, one can analyze the drones network `AC2` proprerty #2 (i.e., `AC2_02`) using CEGAR with heuristic setting `peft` (i.e., predicate-based tracing, depth-wise preserved origins, refining the first index, and enabling the safe histories) as follows:
+
+```shell
+$ make example_NN_CEGAR
+$ ../nnBenchmarkVerification.sh drones cegar AC2.nnet prop_AC2_02.in safe_AC2_02.in peft
+```
+
 
 #### ACAS Xu
 
