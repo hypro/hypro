@@ -110,14 +110,21 @@ std::shared_ptr<LayerBase<Number>> NeuralNetwork<Number>::layers( int index ) co
 }
 
 template <typename Number>
-void NeuralNetwork<Number>::setLayer( int index, std::shared_ptr<LayerBase<Number>> layer ) {
-	if ( index >= mLayers.size() ) {
-		throw std::out_of_range("Index out of range");
+void NeuralNetwork<Number>::appendLayer(std::shared_ptr<LayerBase<Number>> layer){
+	// Update number of layers in the network
+	mNumLayers++;
+
+	// Update number of outputs of the network, if they change
+	if(layer->layerType() == NN_LAYER_TYPE::AFFINE){
+		mOutputSize = layer->layerSize();	
+	}	
+
+	// Update the maximum size of a layer in the network
+	if (mMaxLayerSize < mOutputSize){
+		mMaxLayerSize = mOutputSize;
 	}
 
-	auto it = mLayers.begin();
-	std::advance(it, index);
-	*it = layer;
+	mLayers.push_back(layer);	
 }
 
 // ============= utility functions =============

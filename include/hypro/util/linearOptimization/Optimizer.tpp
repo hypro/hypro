@@ -203,8 +203,7 @@ namespace hypro {
         res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
 
-        return res;
-#if !defined( HYPRO_SECONDARY_SOLVER )
+#if true || !defined( HYPRO_SECONDARY_SOLVER ) // added "true ||" to disable unintended second solver
         return res;
 #else
         // At this point we can check, whether the primary result is already exact and optimal.

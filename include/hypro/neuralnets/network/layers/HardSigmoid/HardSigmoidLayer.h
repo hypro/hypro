@@ -19,8 +19,8 @@ namespace hypro {
 template <typename Number>
 class HardSigmoidLayer : public LayerBase<Number> {
   private:
-	float mMinValue = -3.0;
-	float mMaxValue = 3.0;
+	Number mMinValue = Number( -3 );
+	Number mMaxValue = Number( 3 );
 
 	/**
 	 * @brief Applies the given reachability method to the input set
@@ -43,7 +43,7 @@ class HardSigmoidLayer : public LayerBase<Number> {
 	 * @param[in] layerSize The layer size
 	 * @param[in] layerIndex The layer index
 	 */
-	HardSigmoidLayer( unsigned short int layerSize, unsigned short int layerIndex, float minValue = -3.0, float maxValue = 3.0 );
+	HardSigmoidLayer( unsigned short int layerSize, unsigned short int layerIndex, Number minValue = -3, Number maxValue = 3 );
 
 	/**
 	 * @brief Default destructor
@@ -65,6 +65,15 @@ class HardSigmoidLayer : public LayerBase<Number> {
 	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec ) const;
 
 	/**
+	 * @brief Applies the HardSigmoid function element-wise to the input vector
+	 *
+	 * @param inputVec
+	 * @param dimension 
+	 * @return The resulting vector after applying the HardSigmoid function
+	 */
+	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const;
+
+	/**
 	 * @brief Applies the given reachability method to the input set at the specified index
 	 *
 	 * @param inputSet The input set
@@ -83,8 +92,40 @@ class HardSigmoidLayer : public LayerBase<Number> {
 	 * @return The resulting set after applying the reachability method
 	 */
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
+	virtual std::vector<std::pair<Starset<Number>, char>> forwardPassWithHistory( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const;
+	/**
+	 * @brief Traces knownSource back to the previous neuron
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] neuronNumber the number of the neuron at which we apply tracing
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @return the new source of the couterexample in newSourceSet
+	 */
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const;
 
-	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const;
+	/**
+	 * @brief Traces knownSource back through a sequence of activation function operations
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] lowerIndex, upperIndex the start and end of the sequence
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @return the new source of the couterexample in newSourceSet
+	 */
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
+
+	/**
+	 * @brief Attempts to trace counterexample to a potential source neuron
+	 *
+	 * @param[in] knownSource the counterexample or known source to trace to the new source
+	 * @param[in] alpha the predicate value for the known source
+	 * @param[in] lowerIndex the number of the neuron knownSource was obtained from
+	 * @param[in] upperIndex the number of the neuron for the newSourceSet
+	 * @param[in] newSourceSet the set that should include the new source
+	 * @return tuple<int, Point<Number>, Point<Number>> were the first number indicates the next neuron to attempt tracing or is -1 and the Points contain the new source and predicate value of it
+	 */
+	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
 
 	/**
 	 * @brief Serialization of the current layer.

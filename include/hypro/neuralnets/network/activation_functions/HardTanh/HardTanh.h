@@ -12,8 +12,8 @@ namespace hypro {
 template <typename Number>
 class HardTanh {
   public:
-	static std::vector<hypro::Starset<Number>> exactHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue );
-	static std::vector<hypro::Starset<Number>> approxHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue );
+	static std::vector<hypro::Starset<Number>> exactHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, Number minValue, Number maxValue );
+	static std::vector<hypro::Starset<Number>> approxHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, Number minValue, Number maxValue );
 
 	static void resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows);
 };

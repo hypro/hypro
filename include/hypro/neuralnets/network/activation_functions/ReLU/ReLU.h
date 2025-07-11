@@ -17,6 +17,9 @@ class ReLU {
 
 	static void resizeShapeAndLimits(hypro::matrix_t<Number>& shape, hypro::vector_t<Number>& limits, int rows);
 
+	static std::vector<std::pair<hypro::Starset<Number>, char>> stepReLUWithHistory( int i, const hypro::Starset<Number>& input_set );
+	static std::vector<std::pair<hypro::Starset<Number>, char>> approxStepReLUWithHistory( int i, const hypro::Starset<Number>& input_set );
+
   private:
 	ReLU(){};
 	~ReLU(){};

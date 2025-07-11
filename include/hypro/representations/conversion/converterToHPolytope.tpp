@@ -485,9 +485,11 @@ namespace hypro {
     HPolytopeT<Number, Converter<Number>, HPolytopeSetting>
     Converter<Number>::toHPolytope(const StarsetT<Number, Converter<Number>, inSetting> &source, const CONV_MODE) {
         //if basis is standard, center is zero vector and star set is not empty, return the constraints from the star set
-        if (source.generator() == (matrix_t<Number>::Identity(source.generator().cols(), source.generator().cols())) &&
-            source.center() == vector_t<Number>::Zero(source.center().rows()) && !source.empty()) {
-            return source.constraints().matrix();
+        if (source.generator().rows() == source.generator().cols() &&
+            source.generator() == (matrix_t<Number>::Identity(source.generator().cols(), source.generator().cols())) &&
+            source.center() == vector_t<Number>::Zero(source.center().rows()) &&
+            !source.empty()) {
+            return source.constraints(); // How? This is not an HPolytope!
 
         }
 

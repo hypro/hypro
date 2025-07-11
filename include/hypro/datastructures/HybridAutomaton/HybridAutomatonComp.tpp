@@ -9,7 +9,7 @@
 
 #include "HybridAutomatonComp.h"
 
-#include <Eigen/src/Core/DenseBase.h>
+#include <eigen3/Eigen/src/Core/DenseBase.h>
 
 namespace hypro {
 
@@ -22,7 +22,7 @@ void ComposedLocation<Number>::validate() const {
 	validateName();
 	// make sure caches in the composition are up to date
 	mAutomaton.setVariableMapping();
-	std::cout << "mCompositionals.size() = " + std::to_string( mCompositionals.size() ) + ", mAutomata.size() = " + std::to_string( mAutomaton.mAutomata.size() ) << std::endl;
+	// std::cout << "mCompositionals.size() = " + std::to_string( mCompositionals.size() ) + ", mAutomata.size() = " + std::to_string( mAutomaton.mAutomata.size() ) << std::endl;
 	assert( mCompositionals.size() == mAutomaton.mAutomata.size() );
 	// collect all locations taking part in the composition
 	std::vector<Location<Number>*> locs;

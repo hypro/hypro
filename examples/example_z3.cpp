@@ -93,8 +93,11 @@ void H_Polytope_to_CNF(){
     std::cout << "Relations: " << rels << std::endl;
 
     hypro::EvaluationResult<Number> result = hypro::z3GetInternalPoint(A, b, rels);
+    // This is just some satisfying value, not (neccessary) a optimum
     std::cout << "Optimum value:" << result.optimumValue << std::endl;
+    // supportValue is not set by z3GetInternalPoint(A,b,rels) and just returns the default value
     std::cout << "Support value:" << result.supportValue << std::endl;
+    // This is just the result: FEAS, INFEAS, INFTY, or UNKOWN
     std::cout << "Error code:" << result.errorCode << std::endl;
 }
 
@@ -122,6 +125,38 @@ void point_inclusion() {
     // Check consistency
     bool isConsistent = hypro::z3CheckPoint(A, b, rels, hypro::Point<Number>(x));
     std::cout << "The system is: " << (isConsistent ? "consistent" : "inconsistent") << std::endl;
+}
+
+void point_inclusion_ErrorTest() {
+    // Given system Ax <= b, check if it is consistent
+    hypro::matrix_t<Number> A(1, 2);
+    A << 2, 1;
+
+    hypro::vector_t<Number> b(1);
+    b << 0;
+
+    hypro::vector_t<Number> x(2);
+    x << -1, 1; 
+    hypro::vector_t<Number> y(2);
+    y << 1, -1; 
+
+    std::vector <carl::Relation> rels;
+    for (size_t i = 0; i < A.rows(); ++i) {
+        rels.push_back(carl::Relation::LEQ);
+    }
+
+    std::cout << "A = \n" << A << std::endl;
+    std::cout << "b = \n" << b << std::endl;
+    std::cout << "x = \n" << x << std::endl;
+    std::cout << "y = \n" << y << std::endl;
+    std::cout << "Relations: " << rels << std::endl;
+
+    // Check consistency
+    bool isConsistent = hypro::z3CheckPoint(A, b, rels, hypro::Point<Number>(x));
+    std::cout << "The system for x: " << A(0,0)*x(0) + A(0,1)*x(1) << " <= " << b << " is " <<(isConsistent ? "consistent" : "inconsistent") << std::endl;
+
+    isConsistent = hypro::z3CheckPoint(A, b, rels, hypro::Point<Number>(y));
+    std::cout << "The system for y: " << A(0,0)*y(0) + A(0,1)*y(1) << " <= " << b << " is " << (isConsistent ? "consistent" : "inconsistent") << std::endl;
 }
 
 void transformed_point_inclusion() {
@@ -157,6 +192,37 @@ void transformed_point_inclusion() {
     std::cout << "The system is: " << (result.errorCode == hypro::SOLUTION::FEAS ? "consistent" : "inconsistent") << std::endl;
 }
 
+void integer_division(){
+    z3::context c;
+    z3::expr x_1 = c.int_const("x_1");
+    z3::expr y_1 = c.int_const("y_1");
+    z3::expr z_1 = c.int_const("z_1");
+    z3::expr x_2 = c.int_const("x_2");
+    z3::expr y_2 = c.int_const("y_2");
+    z3::expr z_2 = c.int_const("z_2");
+    z3::solver s(c);
+
+    s.add(x_1 == 1);
+    s.add(y_1 == 2);
+    s.add(z_1 == -1);
+    s.add(x_2 == 5);
+    s.add(y_2 == 3);
+    s.add(z_2 == 1);
+    //Formula (-1/2 + 5/3 >= -1) <=> (-1 * 3 + 5 * 2 >= -1 * 2 * 3)
+    //       1  * -1  *  3   +   5  * 1   *  2    >=   2  *  3
+    s.add(((x_1 * z_1 * y_2) + (x_2 * z_2 * y_1)) >= (-1) * (y_1 * y_2));
+    std::cout << s.check() << "\n";
+
+    z3::model m = s.get_model();
+    std::cout << m << "\n";
+    // traversing the model
+    for (unsigned i = 0; i < m.size(); i++) {
+        z3::func_decl v = m[i];
+        // this problem contains only constants
+        assert(v.arity() == 0); 
+        std::cout << v.name() << " = " << m.get_const_interp(v) << "\n";
+    }   
+}
 
 int main() {
     // More examples at: https://github.com/Z3Prover/z3/blob/master/examples/c%2B%2B/example.cpp
@@ -166,7 +232,10 @@ int main() {
     // Own examples, useful for CEGAR
     // H_Polytope_to_CNF();
     // point_inclusion();
-    transformed_point_inclusion();
-
+    // point_inclusion_ErrorTest();
+    
+    // transformed_point_inclusion();
+    
+    integer_division(); 
     return 0;
 }

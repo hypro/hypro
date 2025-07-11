@@ -39,40 +39,29 @@ class SearchJob {
 		typename std::list<std::shared_ptr<hypro::LayerBase<Number>>>::iterator it = mAllLayers.begin();
 		std::advance(it, mLayerNum);
 		std::shared_ptr<hypro::LayerBase<Number>> mLayer = (*it);
-		Starset<Number> mSet = mNode->representation();
-
-		// std::cout << "mLayerNum: " << mLayerNum << " index: " << mIndex << std::endl;
-		// std::cout << "mSet: " << mSet << std::endl;
-		// std::cout << "method: " << method << std::endl;
-
-		// std::cout << "mLayerPointer: " << mLayer << std::endl;
-		// std::cout << "mLayer name: " << mLayer->layerType() << std::endl;
-		// std::cout << "mLayer: " << (*mLayer) << std::endl;
-
-		std::vector<Starset<Number>> newSets = mLayer->forwardPass( mSet, mIndex, method );
+		Starset<Number> mSet(mNode->representation());	
+		std::string mHistory = mNode->getHistory();	
+		std::vector<std::pair<Starset<Number>, char>> newSets = mLayer->forwardPassWithHistory( mSet, mIndex, method );		
 		int N = newSets.size();
+		// if(N == 1 && mSet.generator().cols() < newSets[0].first.generator().cols()){
+		// 	std::cout << "Over-Approximation in layer " << mLayerNum << " at neuron " << mIndex << std::endl;
+		// }
 
 		// the new jobs produced by calculating the current job
 		std::vector<SearchJob<Number>> newJobs;
 		mNode->setComputed( true );
-
+		
 		// check if it was the last neuron of the last layer, so this job produces (part of) the final result
 		if ( ( mLayer->layerIndex() == mAllLayers.size() - 1 ) && ( ( mLayer->layerType() == NN_LAYER_TYPE::AFFINE ) ||
 																	( mLayer->layerType() != NN_LAYER_TYPE::AFFINE ) && ( mIndex == mLayer->layerSize() - 1 ) ) ) {
 			// for the last neuron of the last layer all of the computed result sets is a final result
 			for ( auto newSet : newSets ) {
-				ReachabilityNode<Number>* leafNode = new ReachabilityNode<Number>( newSet, method, mLayerNum + 1, 0 );
+				ReachabilityNode<Number>* leafNode = new ReachabilityNode<Number>( newSet.first, method, mLayerNum + 1, 0 );
 				leafNode->setParent( mNode );
 				leafNode->setLeaf( true );
 				leafNode->setComputed( true );
-				if ( !mNode->hasPosChild() ) {
-					mNode->setPosChild(leafNode);
-				}
-				else {
-					if ( !mNode->hasNegChild() ) {
-						mNode->setNegChild(leafNode);
-					}
-				}
+				leafNode->setHistory(mHistory + newSet.second);
+				mNode->addChild(leafNode);
 				newJobs.push_back( SearchJob( leafNode, mAllLayers, true ) );
 			}
 			return newJobs;
@@ -90,14 +79,20 @@ class SearchJob {
 				// create the new jobs
 				for ( int i = 0; i < N; ++i ) {
 					// this for always should iterate only once
-					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
+					nextNode = new ReachabilityNode<Number>( newSets[i].first, method, newLayerNum, newIndex );
 					nextNode->setParent( mNode );
-					mNode->setPosChild( nextNode );
+					mNode->addChild( nextNode );
+					nextNode->setHistory( mHistory + newSets[i].second );
 					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
 				break;
+
+				 
 			case NN_LAYER_TYPE::RELU:
 			case NN_LAYER_TYPE::HARD_TANH:
+			case NN_LAYER_TYPE::LEAKY_RELU:
+			case NN_LAYER_TYPE::HARD_SIGMOID:
+			case NN_LAYER_TYPE::STEP_FUNCTION:
 				if ( mIndex < mLayer->layerSize() - 1 ) {
 					// get the next neuron in the current layer
 					newLayerNum = mLayerNum;
@@ -110,22 +105,12 @@ class SearchJob {
 				}
 				// create the new jobs
 				for ( int i = 0; i < N; ++i ) {
-					nextNode = new ReachabilityNode<Number>( newSets[i], method, newLayerNum, newIndex );
+					nextNode = new ReachabilityNode<Number>( newSets[i].first, method, newLayerNum, newIndex );
 					nextNode->setParent( mNode );
-					if ( !mNode->hasPosChild() ) {
-						mNode->setPosChild(nextNode);
-					}
-					else {
-						if ( !mNode->hasNegChild() ) {
-							mNode->setNegChild(nextNode);
-						}
-					}
-
+					mNode->addChild(nextNode);
+					nextNode->setHistory( mHistory + newSets[i].second );
 					newJobs.push_back( SearchJob( nextNode, mAllLayers ) );
 				}
-
-				if ( mLayer->layerType() == NN_LAYER_TYPE::HARD_TANH )
-					TRACE( "hypro.neuralnets.reachability_tree.SearchJob", "HARD_TANH layer type not implemented yet." );
 				break;
 			default:
 				TRACE( "hypro.neuralnets.reachability_tree.SearchJob", "Unknown layer type " << layer->layerType() );
@@ -139,6 +124,10 @@ class SearchJob {
 
 	ReachabilityNode<Number>* getNode() const {
 		return mNode;
+	}
+
+	void setNode(ReachabilityNode<Number>* newNode) {
+		mNode = newNode;
 	}
 };
 

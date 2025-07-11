@@ -22,7 +22,7 @@ AffineLayer<Number>::AffineLayer( unsigned short int layerSize, unsigned short i
 	, mBias( bias )
 	, mWeights( weights ) {
 	assert( bias.rows() == weights.rows() );
-	assert( bias.rows() == mLayerSize );
+	assert( bias.rows() == LayerBase<Number>::mLayerSize );
 }
 
 template <typename Number>
@@ -46,6 +46,11 @@ vector_t<Number> AffineLayer<Number>::forwardPass( const vector_t<Number>& input
 }
 
 template <typename Number>
+vector_t<Number> AffineLayer<Number>::forwardPass( const vector_t<Number>& inputVec, const int dimension ) const {
+	return mBias + mWeights * inputVec;
+}
+
+template <typename Number>
 std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const {
 	std::vector<Starset<Number>> result = std::vector<Starset<Number>>();
 	result.push_back( inputSet.affineTransformation( mWeights, mBias ) );
@@ -59,13 +64,13 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 	std::cout << "Number of variables: " << inputSets[0].shape().cols() << std::endl;
 
 	// #pragma omp parallel for  // TODO: try to set up the thread pool in advance (at the start of the analysis), then here at the for loops just use the existing threads
-		for ( int i = 0; i < N; ++i ) {
-			Starset<Number> temp = inputSets[i].affineTransformation( mWeights, mBias );
-			{
-	// #pragma omp critical
-				result.push_back( temp );
-			}
+	for ( int i = 0; i < N; ++i ) {
+		Starset<Number> temp = inputSets[i].affineTransformation( mWeights, mBias );
+		{
+			// #pragma omp critical
+			result.push_back( temp );
 		}
+	}
 	// for ( int i = 0; i < N; ++i ) {
 	// 	result.push_back( inputSets[i].affineTransformation( mWeights, mBias ) );
 	// }
@@ -73,17 +78,25 @@ std::vector<Starset<Number>> AffineLayer<Number>::forwardPass( const std::vector
 }
 
 template <typename Number>
-Point<Number> AffineLayer<Number>::propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const {
-	// TODO: implement a smarter way to do this backpropagation which works in all cases
-	matrix_t<Number> weightsInverse = mWeights.completeOrthogonalDecomposition().pseudoInverse();
-	// std::cout << "affine backpropagation" << std::endl;
-	Point<Number> prev_y = Point<Number>(weightsInverse * (y.rawCoordinates() - mBias));
+std::vector<std::pair<Starset<Number>, char>> AffineLayer<Number>::forwardPassWithHistory( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const {
+	std::vector<std::pair<Starset<Number>, char>> result = std::vector<std::pair<Starset<Number>, char>>();
+	result.push_back( std::make_pair( inputSet.affineTransformation( mWeights, mBias ), 'a') );
+	return result; 
+}
 
-	// std::cout << "Previous y: " << prev_y << std::endl;
-	// std::cout << "Next y: " << y << std::endl;
-	// std::cout << "Transformed prev y: " << mBias + mWeights * prev_y.rawCoordinates() << std::endl;
-	
-	return prev_y;
+template <typename Number>
+std::pair<Point<Number>, Point<Number>> AffineLayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const {
+	return std::make_pair( Point<Number>( newSourceSet.generator() * knownSourceAlpha.rawCoordinates() + newSourceSet.center() ), knownSourceAlpha );
+}
+
+template <typename Number>
+std::pair<Point<Number>, Point<Number>> AffineLayer<Number>::traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet, Starset<Number> knownSourceSet ) const {
+	return std::make_pair( Point<Number>( newSourceSet.generator() * knownSourceAlpha.rawCoordinates() + newSourceSet.center() ), knownSourceAlpha );
+}
+
+template <typename Number>
+std::tuple<int, Point<Number>, Point<Number>> AffineLayer<Number>::traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const {
+	return std::make_tuple( -1, Point<Number>( newSourceSet.generator() * knownSourceAlpha.rawCoordinates() + newSourceSet.center() ), knownSourceAlpha );
 }
 
 }  // namespace hypro

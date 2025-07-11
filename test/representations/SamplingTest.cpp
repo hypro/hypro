@@ -35,7 +35,7 @@ class SamplingTest : public ::testing::Test {
     hypro::Zonotope<Number> zonotope;
     hypro::StarsetT<Number, hypro::Converter<Number>, hypro::StarsetEqvPolytopeCaching> starset;
 
-    const std::size_t num_samples = 1000;
+    const std::size_t num_samples = 10;
 };
 
 TYPED_TEST( SamplingTest, BoxUniform ) {

@@ -214,13 +214,266 @@ namespace hypro {
                     // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
                     size_t varIndex = std::stoull(var.name().str().substr(2));
                     // std::cout << "varIndex: " << varIndex << std::endl;
-                    pointCoordinates(varIndex) = Number(Z3_get_numeral_double(c, m.get_const_interp(var)));
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
                 }
             }
             res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
         } else {
             res = EvaluationResult<Number>(SOLUTION::INFEAS);
         }
+        return res;
+    }
+
+    template<typename Number>
+    EvaluationResult <Number> 
+    z3GetInternalPoint( const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+                        const matrix_t <Number> &linTransform, const vector_t <Number> &offset,
+                        const Point <Number> &point,
+                        const int &dimension,
+                        const carl::Relation &relation
+                        ) {
+        z3Context c;
+        EvaluationResult <Number> res;
+        z3::solver z3Solver(c);
+
+        // create formula and objective
+        z3::expr formula = createFormula<Number>(point, constraints, constants, linTransform, offset, c, dimension, relation);
+
+        // inform and add constraints
+        z3Solver.add(formula);
+
+        // verify and set result
+        if (z3Solver.check() == z3::sat) {
+            z3::model m = z3Solver.get_model();
+            // std::cout << "Model:\n" << m << std::endl;
+            vector_t <Number> pointCoordinates = vector_t<Number>::Zero(constraints.cols());
+            for (unsigned i = 0; i < constraints.cols(); ++i) {
+                z3::func_decl var = m.get_const_decl(i);
+                // std::cout << var << std::endl;
+                if (Z3_model_get_const_interp(c, m, var) != nullptr) {
+                    // std::cout << "varName: " << var.name() << std::endl;
+                    // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
+                    size_t varIndex = std::stoull(var.name().str().substr(2));
+                    // std::cout << "varIndex: " << varIndex << std::endl;
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
+                }
+            }
+            res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
+        } else {
+            res = EvaluationResult<Number>(SOLUTION::INFEAS);
+        }
+        return res;
+    }
+
+    template<typename Number>
+    EvaluationResult <Number> 
+    z3GetInternalPoint( const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+                        const matrix_t <Number> &linTransform, const vector_t <Number> &offset,
+                        const Point <Number> &point,
+                        const std::vector<carl::Relation> &relations
+                        ) {
+        z3Context c;
+        EvaluationResult <Number> res;
+        z3::solver z3Solver(c);
+
+        // create formula and objective
+        z3::expr formula = createFormula<Number>(point, constraints, constants, linTransform, offset, c, relations);
+
+        // inform and add constraints
+        z3Solver.add(formula);
+
+        // verify and set result
+        if (z3Solver.check() == z3::sat) {
+            z3::model m = z3Solver.get_model();
+            // std::cout << "Model:\n" << m << std::endl;
+            vector_t <Number> pointCoordinates = vector_t<Number>::Zero(constraints.cols());
+            for (unsigned i = 0; i < constraints.cols(); ++i) {
+                z3::func_decl var = m.get_const_decl(i);
+                // std::cout << var << std::endl;
+                if (Z3_model_get_const_interp(c, m, var) != nullptr) {
+                    // std::cout << "varName: " << var.name() << std::endl;
+                    // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
+                    size_t varIndex = std::stoull(var.name().str().substr(2));
+                    // std::cout << "varIndex: " << varIndex << std::endl;
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
+                }
+            }
+            res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
+        } else {
+            res = EvaluationResult<Number>(SOLUTION::INFEAS);
+        }
+        return res;
+    }
+
+    template<typename Number>
+    std::pair<EvaluationResult <Number>, std::vector<int>>
+    z3GetInternalPointWithCore( const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+                                const matrix_t <Number> &linTransform, const vector_t <Number> &offset,
+                                const Point <Number> &point,
+                                const std::vector<carl::Relation> &relations
+                                ) {
+        z3Context c;
+        EvaluationResult <Number> res;
+        z3::solver z3Solver(c);
+        std::vector<int> unsatCore;
+
+        //enable unsat_core tracking
+        z3::params z3Parameter(c);
+        z3Parameter.set("unsat_core", true);        
+        z3Solver.set(z3Parameter);
+
+        // create formulas
+        // assume: the first constraints.rows() formulas are for the predicate inclusion
+        //         and the second linTransform.rows() for the new value (note: this could be less if some formulas are excluded)
+        std::vector<z3::expr> formulas = createFormulas<Number>(point, constraints, constants, linTransform, offset, c, relations);
+        assert(formulas.size() <= constraints.rows() + linTransform.rows() && "wrong amout of formulas created");
+        // inform and add constraints
+        for (int i = 0; i < formulas.size(); i++){
+            std::string label;
+            if (i < constraints.rows()){
+                // label = "p_" + std::to_string(i);
+                z3Solver.add(formulas[i]);
+            } else {
+                label = "q_" + std::to_string(i - constraints.rows());
+                z3Solver.add(formulas[i], label.c_str());
+            }
+            
+        }
+
+        // verify and set result
+        if (z3Solver.check() == z3::sat) {
+            z3::model m = z3Solver.get_model();
+            // std::cout << "Model:\n" << m << std::endl;
+            vector_t <Number> pointCoordinates = vector_t<Number>::Zero(constraints.cols());
+           for (unsigned i = 0; i < m.num_consts(); ++i) {
+                z3::func_decl var = m.get_const_decl(i);
+                // std::cout << var << std::endl;
+                if (Z3_model_get_const_interp(c, m, var) != nullptr && var.name().str()[0] == 'x') {
+                    // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
+                    size_t varIndex = std::stoull(var.name().str().substr(2));
+                    // std::cout << "varIndex: " << varIndex << std::endl;
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
+                }
+            }
+            res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
+        } else {
+            z3::expr_vector core = z3Solver.unsat_core();
+            for (int i = 0; i < core.size(); i++){
+                assert(core[i].is_app());
+                std::string var = core[i].decl().name().str();
+                if(var[0] == 'q'){
+                    unsatCore.push_back(std::stoul(var.substr(2)));    
+                }
+               
+            }
+            res = EvaluationResult<Number>(SOLUTION::INFEAS);
+        }
+        return std::make_pair(res, unsatCore);
+    }
+
+    template<typename Number>
+    EvaluationResult <Number> 
+    z3GetCounterexample( const matrix_t <Number> &constraints, const vector_t <Number> &constants, const matrix_t <Number> &linTransform, const vector_t <Number> &offset, const std::vector<matrix_t<Number>> rejectionMatrices,  const std::vector<vector_t<Number>> rejectionVectors) {
+        z3Context c;
+        EvaluationResult <Number> res;
+        z3::solver z3Solver(c);
+
+        // create formula and objective        
+        z3::expr formula = createFormula<Number>(constraints, constants, linTransform, offset, rejectionMatrices, rejectionVectors, c);
+        // inform and add constraints
+        z3Solver.add(formula);
+
+        // verify and set result
+        if (z3Solver.check() == z3::sat) {
+            z3::model m = z3Solver.get_model();
+            vector_t <Number> pointCoordinates = vector_t<Number>::Zero(constraints.cols());
+            for (unsigned i = 0; i < constraints.cols(); ++i) {
+                z3::func_decl var = m.get_const_decl(i);
+                if (Z3_model_get_const_interp(c, m, var) != nullptr) {
+                    // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
+                    size_t varIndex = std::stoull(var.name().str().substr(2));
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
+                }
+            }
+            res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);
+        } else {
+            res = EvaluationResult<Number>(SOLUTION::INFEAS);
+        }
+        return res;
+    }
+
+    template<typename Number>
+    EvaluationResult <Number> 
+    z3GetCounterexampleSmall( const matrix_t <Number> &constraints, const vector_t <Number> &constants, const matrix_t <Number> &linTransform, const vector_t <Number> &offset, const std::vector<matrix_t<Number>> rejectionMatrices,  const std::vector<vector_t<Number>> rejectionVectors) {
+        z3Context c;
+        EvaluationResult <Number> res;
+        z3::optimize z3Optimizer(c);
+
+        // create formula and objective        
+        std::pair <z3::expr, z3::expr> formulaObjectivePair = createFormulaAndObjective<Number>(constraints, constants, linTransform, offset, rejectionMatrices, rejectionVectors, c);
+        std::cout << "Prepared the formula" << std::endl;
+        // inform and add constraints
+        z3Optimizer.add(formulaObjectivePair.first);
+        std::cout << "Added the formula to optimizer" << std::endl;
+        z3Optimizer.push();
+        std::cout << "Pushed the formula" << std::endl;
+        z3::optimize::handle result = z3Optimizer.minimize(formulaObjectivePair.second);
+        std::cout << "Found minimal result" << std::endl;
+
+        // verify and set result
+        std::cout << "Checking forumla";
+        switch(z3Optimizer.check()){
+            case z3::sat:
+                std::cout << std::endl;
+                {
+                    z3::expr z3res = z3Optimizer.lower(result);
+                    assert(z3res.is_arith());
+
+                    z3::model m = z3Optimizer.get_model();
+                    // check whether unbounded
+                    std::stringstream sstr;
+                    sstr << z3res;
+
+                    if (sstr.str() == std::string("oo") || sstr.str() == std::string("(* (- 1) oo)")) {
+                        std::cout << "Got an infinite result ... using the complete method";
+                        res = z3GetCounterexample(constraints, constants, linTransform, offset, rejectionMatrices,  rejectionVectors);
+                        break;
+                    }
+    
+                    res.supportValue = z3ResToNumber<Number>(c,z3res);
+                    vector_t <Number> pointCoordinates = vector_t<Number>::Ones(constraints.cols());
+                    for (unsigned i = 0; i < constraints.cols() * 3; ++i) {
+                        z3::func_decl var = m.get_const_decl(i);
+                        if (Z3_model_get_const_interp(c, m, var) != nullptr) {
+                            std::cout << var.name().str() << std::endl;
+                            size_t varIndex = std::stoull(var.name().str().substr(2));
+                            z3::ast varValue = m.get_const_interp(var);
+                            if(var.name().str().substr(0) == "d"){
+                                pointCoordinates(varIndex) = pointCoordinates(varIndex) / z3ResToNumber<Number>(c, varValue);    
+                            } else {
+                                pointCoordinates(varIndex) = pointCoordinates(varIndex) * z3ResToNumber<Number>(c, varValue);    
+                            }
+                        }
+                    }
+                    res.errorCode = SOLUTION::FEAS;
+                    res.optimumValue = pointCoordinates;
+                    break;
+                }
+            case z3::unsat:
+                std::cout << std::endl;
+                res = EvaluationResult<Number>(SOLUTION::INFEAS);
+                break;
+            default:
+                std::cout << "Neither sat nor unsat ... using the complete method" << std::endl;
+                res = z3GetCounterexample(constraints, constants, linTransform, offset, rejectionMatrices,  rejectionVectors);
+                break;
+        }
+        std::cout << "Found a result"<< std::endl;
         return res;
     }
 
@@ -250,7 +503,8 @@ namespace hypro {
                     // extract the true variable index from the name of the variable, i.e., for variable x_i, the index should be i
                     size_t varIndex = std::stoull(var.name().str().substr(2));
                     // std::cout << "varIndex: " << varIndex << std::endl;
-                    pointCoordinates(varIndex) = Number(Z3_get_numeral_double(c, m.get_const_interp(var)));
+                    z3::ast varValue = m.get_const_interp(var);
+                    pointCoordinates(varIndex) = z3ResToNumber<Number>(c, varValue);
                 }
             }
             res = EvaluationResult<Number>(pointCoordinates, SOLUTION::FEAS);

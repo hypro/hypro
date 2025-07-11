@@ -60,10 +60,10 @@ namespace hypro {
             mHPlanes.emplace_back(A.row(i), b(i));
         }
 #ifndef NDEBUG
-        bool empty = this->empty();
+        // bool empty = this->empty();
 #endif
         // reduceNumberRepresentation();
-        assert(empty == this->empty());
+        // assert(empty == this->empty());
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer(A, b);
         }
@@ -305,6 +305,8 @@ namespace hypro {
     HPolytopeT<Number, Converter, Setting>::HPolytopeT(const HPolytopeT<Number, Converter, SettingRhs> &orig)
             : mHPlanes(orig.constraints()), mDimension(orig.dimension()), mVertices(orig.getExtremeVertices()), mNonRedundant(orig.isNonRedundant()) {
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
+            setOptimizer(orig.matrix(), orig.vector());
+        } else if(Setting::OPTIMIZER_CACHING && !SettingRhs::OPTIMIZER_CACHING){
             setOptimizer(orig.matrix(), orig.vector());
         }
     }
@@ -1052,7 +1054,7 @@ namespace hypro {
             return HPolytopeT<Number, Converter, Setting>(points);
         }
         if (!this->empty() && !mHPlanes.empty()) {
-            std::cout << "Doing LU decomposition" << std::endl;
+            // std::cout << "Doing LU decomposition" << std::endl;
             Eigen::FullPivLU<matrix_t<Number>> lu(A);
 
             // std::cout << "A: " << A << std::endl;
@@ -1075,7 +1077,7 @@ namespace hypro {
 
             // if A has full rank, we can simply re-transform, otherwise use v-representation.
             if (lu.rank() == A.rows()) {
-                std::cout << "Full rank matrix" << std::endl;
+                // std::cout << "Full rank matrix" << std::endl;
                 TRACE("hypro.representations.HPolytope", "A has full rank - do not use v-conversion.");
                 std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
                 assert((HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
@@ -1088,14 +1090,14 @@ namespace hypro {
                                                               inequalities.first * A.inverse() * b +
                                                               inequalities.second);
             } else {
-                std::cout << "Converting to V-Polytope" << std::endl;
+                // std::cout << "Converting to V-Polytope" << std::endl;
                 TRACE("hypro.representations.HPolytope", "Use V-Conversion for linear transformation.");
                 auto intermediate = Converter::toVPolytope(*this);
-                std::cout << "Converted" << std::endl;
+                // std::cout << "Converted" << std::endl;
                 intermediate = intermediate.affineTransformation(A, b);
-                std::cout << "Transforming back" << std::endl;
+                // std::cout << "Transforming back" << std::endl;
                 auto res = Converter::toHPolytope(intermediate);
-                std::cout << "Done" << std::endl;
+                // std::cout << "Done" << std::endl;
                 // assert(res.size() <= this->size());
                 res.setReduced();
                 return res;

@@ -17,9 +17,9 @@ namespace hypro {
 template <typename Number>
 class StepFunctionLayer : public LayerBase<Number> {
   private:
-	float mValue;
-	float mMinValue;
-	float mMaxValue;
+	Number mValue;
+	Number mMinValue;
+	Number mMaxValue;
 
 	/**
 	 * @brief Applies the given reachability method to the input set
@@ -42,7 +42,7 @@ class StepFunctionLayer : public LayerBase<Number> {
 	 * @param[in] maxValue The maximum value of the linear region range. Default: 1
 	 *
 	 */
-	StepFunctionLayer( unsigned short int layerSize, unsigned short int layerIndex, float value = 0, float minValue = 0, float maxValue = 1 );
+	StepFunctionLayer( unsigned short int layerSize, unsigned short int layerIndex, Number value = 0, Number minValue = 0, Number maxValue = 1 );
 
 	/**
 	 * @brief The type of the layer in the form of an enum member
@@ -57,6 +57,8 @@ class StepFunctionLayer : public LayerBase<Number> {
 	 * @return The resulting vector after applying the Step function
 	 */
 	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec ) const;
+
+	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const;
 
 	/**
 	 * @brief Applies the given reachability method to the input set at the specified index
@@ -78,7 +80,41 @@ class StepFunctionLayer : public LayerBase<Number> {
 	 */
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
-	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const;
+	virtual std::vector<std::pair<Starset<Number>, char>> forwardPassWithHistory( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const;
+
+	/**
+	 * @brief Traces knownSource back to the previous neuron
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] neuronNumber the number of the neuron at which we apply tracing
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @return the new source of the couterexample in newSourceSet
+	 */
+	virtual std::pair<Point<Number>,Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const;
+
+	/**
+	 * @brief Traces knownSource back through a sequence of activation function operations
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] lowerIndex, upperIndex the start and end of the sequence
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @return the new source of the couterexample in newSourceSet
+	 */
+	virtual std::pair<Point<Number>,Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const;
+
+	/**
+	 * @brief Attempts to trace counterexample to a potential source neuron
+	 * 
+	 * @param[in] knownSource the counterexample or known source to trace to the new source
+	 * @param[in] alpha the predicate value for the known source
+	 * @param[in] lowerIndex the number of the neuron knownSource was obtained from
+	 * @param[in] upperIndex the number of the neuron for the newSourceSet
+	 * @param[in] newSourceSet the set that should include the new source
+	 * @return tuple<int, Point<Number>, Point<Number>> were the first number indicates the next neuron to attempt tracing or is -1 and the Points contain the new source and predicate value of it
+	 */
+	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore(Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet) const;
 
 	/**
 	 * @brief Serialization of the current layer.

@@ -9,7 +9,8 @@ ReachabilityTree<Number>::ReachabilityTree()
 
 template <typename Number>
 ReachabilityTree<Number>::~ReachabilityTree() {
-	// TODO: deallocate all nodes recursively from the root to the leafs
+	mLeaves.clear();
+	delete mRoot;
 }
 
 template <typename Number>
@@ -17,7 +18,14 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 	: mNetwork( network )
 	, mInputSet( inputSet )
 	, mSafeSets( safeSets )
-	, mPlotter( hypro::Plotter<Number>::getInstance() ) {
+	, mPlotter( hypro::Plotter<Number>::getInstance() )
+	, mCounterExampleStrategy( COUNTEREXAMPLE_STRATEGY::Z3_BASIC )
+	, mRefinementType( REFINEMENT_TYPE::EXACT_SOURCES )
+	, mTracingStrategy( TRACING_STRATEGY::UNSAT_CORE )
+	, mRemoveSafeSubtrees( false )
+	, mNumberOfTracings( 0 )
+	, mTryReusingPredicates(true)
+	, mPredicateTracingOrigin(PREDICATE_TRACING_ORIGIN::FIRST) {
 	unsigned short int depth = 1;
 	for ( auto layer : mNetwork.layers() ) {
 		if ( layer->layerType() == NN_LAYER_TYPE::AFFINE )
@@ -29,29 +37,76 @@ ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network
 }
 
 template <typename Number>
+ReachabilityTree<Number>::ReachabilityTree( const NeuralNetwork<Number>& network, const HPolytope<Number>& inputSet, const std::vector<HPolytope<Number>>& safeSets, const COUNTEREXAMPLE_STRATEGY counterExampleStrategy, const REFINEMENT_TYPE refinementType, const TRACING_STRATEGY backpropagationStrategy, const bool removeSafeSubtrees )
+	: mNetwork( network )
+	, mInputSet( inputSet )
+	, mSafeSets( safeSets )
+	, mPlotter( hypro::Plotter<Number>::getInstance() )
+	, mCounterExampleStrategy( counterExampleStrategy )
+	, mRefinementType( refinementType )
+	, mTracingStrategy( backpropagationStrategy )
+	, mRemoveSafeSubtrees( removeSafeSubtrees )
+	, mNumberOfTracings( 0 )
+	, mTryReusingPredicates(true)
+	, mPredicateTracingOrigin(PREDICATE_TRACING_ORIGIN::FIRST) {
+	mPreviousCounterexampleSources = std::vector<std::list<int>>();
+	unsigned short int depth = 1;
+	for ( auto layer : mNetwork.layers() ) {
+		mPreviousCounterexampleSources.push_back( std::list<int>() );
+		if ( layer->layerType() == NN_LAYER_TYPE::AFFINE )
+			depth = depth + 1;
+		else
+			depth = depth + layer->layerSize();
+	}
+	mDepth = depth;
+	assert( mPreviousCounterexampleSources.size() == network.numLayers() );
+	mPreviousCounterexamples[std::make_pair( network.numLayers() - 1, 0 )] = std::set<Point<Number>>();
+}
+
+template <typename Number>
 ReachabilityNode<Number>* ReachabilityTree<Number>::root() const {
 	return mRoot;
 }
 
 template <typename Number>
-std::vector<ReachabilityNode<Number>*> ReachabilityTree<Number>::leaves() const {}
+std::vector<ReachabilityNode<Number>*> ReachabilityTree<Number>::leaves() const {
+	return mLeaves;
+}
+
+/*
+ * Returns the depth of the ReachabilityTree starting at node
+ * depth := longest path to a leaf node
+ */
+template <typename Number>
+unsigned short int ReachabilityTree<Number>::depth( ReachabilityNode<Number>* node ) const {
+	unsigned short int maxDepth = 0;
+	for ( int i = 0; i < node->getNumberOfChildren(); i++ ) {
+		// std::cout << "Depth child" << std::endl;
+		unsigned short int depthChild = depth( node->getChild( i ) );
+		maxDepth = maxDepth < depthChild ? depthChild : maxDepth;
+	}
+
+	return 1 + maxDepth;
+}
 
 template <typename Number>
-unsigned short int ReachabilityTree<Number>::depth() const {
-	unsigned short int depth = 1;
-	ReachabilityNode<Number>* node = mRoot;
-	while ( node->hasPosChild() || node->hasNegChild() ) {
-		depth++;
-		if ( node->hasPosChild() ) {
-			node = node->getPosChild();
-			continue;
-		}
-		if ( node->hasNegChild() ) {
-			node = node->getNegChild();
-			continue;
-		}
-	}
-	return depth;
+bool ReachabilityTree<Number>::getTryReusingPredicates() const{
+	return mTryReusingPredicates;
+}
+
+template <typename Number>
+void ReachabilityTree<Number>::setTryReusingPredicates(const bool reusePredicates){
+	mTryReusingPredicates = reusePredicates;
+}
+
+template <typename Number>
+PREDICATE_TRACING_ORIGIN ReachabilityTree<Number>::getPredicateTracingOrigin() const{
+	return mPredicateTracingOrigin;
+}
+
+template <typename Number>
+void ReachabilityTree<Number>::setPredicateTracingOrigin(const PREDICATE_TRACING_ORIGIN strategy){
+	mPredicateTracingOrigin = strategy;
 }
 
 template <typename Number>
@@ -136,31 +191,8 @@ Starset<Number> ReachabilityTree<Number>::prepareInput( bool normalize ) const {
 		}
 
 		return Starset<Number>( HPolytope<Number>( halfplanes ) );
-
-		// TODO: implement the replacement of an equality constraint in the form of two inequalities (e.g., x >= 5 AND x <= 5 replaced by x = 5)
-		// vector_t<Number> center = vector_t<Number>::Zero( dimension );
-		// matrix_t<Number> generator = matrix_t<Number>::Identity( dimension, dimension );
-		// // eliminate pair of inequalities which would reseult as an equality
-		// for(int i = 0; i < halfplanes.size() - 1; i++) {
-		// 	for(int j = i + 1; j < halfplanes.size(); j++) {
-		// 		vector_t<Number> normal1 = halfplanes[i].normal();
-		// 		vector_t<Number> normal2 = halfplanes[j].normal();
-		// 		Number offset1 = halfplanes[i].offset();
-		// 		Number offset2 = halfplanes[j].offset();
-
-		// 		if(offset1 + offset2 == 0 && (normal1 + normal2).isZero()) {
-		// 			halfplanes[j] = halfplanes.back();
-		// 			halfplanes.pop_back();
-		// 			halfplanes[i] = halfplanes.back();
-		// 			halfplanes.pop_back();
-
-		// 			// how should the basis and center change in order to simulate the mergeing of two inequalities into one equality in the star-set?
-		// 		}
-		// 	}
-		// }
-
-		// return Starset<Number>( center, generator, HPolytope<Number>( new_halfplanes ) );
 	}
+
 	return Starset<Number>( mInputSet );
 }
 
@@ -198,86 +230,133 @@ std::vector<HPolytope<Number>> ReachabilityTree<Number>::prepareSafeSet( bool no
 }
 
 template <typename Number>
-bool ReachabilityTree<Number>::isSubResultSafe( const std::vector<Starset<Number>>& subResult, const std::vector<HPolytope<Number>>& safeSets ) const {
-	// TODO: implement this method
-	return true;
-}
+void ReachabilityTree<Number>::rememberCounterexampleSource( int layerNumber, int neuronNumber ) {
+	if ( mPreviousCounterexampleSources[layerNumber].empty() ) {
+		mPreviousCounterexampleSources[layerNumber].push_back( neuronNumber );
+		return;
+	}
 
-template <typename Number>
-std::vector<Starset<Number>> ReachabilityTree<Number>::forwardPass( const Starset<Number>& inputSet, NN_REACH_METHOD method, SEARCH_STRATEGY strategy ) const {
-	// TODO: update this method accordingly to the new implementation
-	std::vector<Starset<Number>> outputSets;
-
-	// BFS -> we always push to the end and we pop the first
-	// DFS -> we always push to the beginning and we pop the first
-
-	// create the root_job and add to the queue
-	SearchJob root_job( inputSet, mNetwork.layers( 0 ), mNetwork.layers(), 0 );
-	std::deque<SearchJob<Number>> jobQueue;
-	jobQueue.push_back( root_job );
-
-	// perform BFS / DFS until the queue is empty
-	while ( !jobQueue.empty() ) {
-		SearchJob job = jobQueue.front();
-		std::vector<SearchJob<Number>> newJobs = job.compute( method );
-		jobQueue.pop_front();
-		for ( auto newJob : newJobs ) {
-			if ( newJob.isFinalResult() ) {
-				for ( auto finalResult : newJob.finalResult() ) {
-					outputSets.push_back( finalResult );
-				}
-			} else {
-				switch ( strategy ) {
-					case SEARCH_STRATEGY::BFS:
-						jobQueue.push_back( newJob );
-						break;
-					case SEARCH_STRATEGY::DFS:
-						jobQueue.push_front( newJob );
-						break;
-					default:
-						FATAL( "hypro.neuralnets.reachability_tree.ReachabilityTree", "Unknown search strategy" << strategy );
-				}
-			}
+	std::list<int>::iterator it;
+	for ( it = mPreviousCounterexampleSources[layerNumber].begin(); *it <= neuronNumber && it != mPreviousCounterexampleSources[layerNumber].end(); it++ ) {
+		if ( *it == neuronNumber ) {
+			return;
 		}
 	}
 
-	std::cout << "In total the final number of reachable sets is " << outputSets.size() << std::endl;
+	mPreviousCounterexampleSources[layerNumber].insert( it, neuronNumber );
+}
 
-	return outputSets;
+template <typename Number>
+bool ReachabilityTree<Number>::isPreviousCounterexampleSource( int layerNumber, int neuronNumber ) {
+	if ( mPreviousCounterexampleSources[layerNumber].empty() ) {
+		return false;
+	}
+
+	std::list<int>::iterator it;
+	for ( it = mPreviousCounterexampleSources[layerNumber].begin(); *it <= neuronNumber && it != mPreviousCounterexampleSources[layerNumber].end(); it++ ) {
+		if ( *it == neuronNumber ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+template <typename Number>
+std::vector<SearchJob<Number>> ReachabilityTree<Number>::checkSafeHistory(std::vector<SearchJob<Number>> newJobs){
+	if(!mRemoveSafeSubtrees){
+		return newJobs;
+	}
+	
+	std::vector<SearchJob<Number>> tmp;
+	
+	for (int i = 0; i < newJobs.size(); i++){
+		
+		ReachabilityNode<Number>* newNode = newJobs[i].getNode();
+		std::pair<int,int> key = std::make_pair(newNode->getParent()->layerNumber(), newNode->getParent()->neuronNumber());
+		
+		for (std::string safeHistory : mSafeHistories[key]){
+			
+			bool isLEQ = true; // refers to the strictness of computation
+			std::string nodeHistory = newNode->getHistory();
+			
+			assert(nodeHistory.size() == safeHistory.size());
+			for (int i = 0; i < nodeHistory.size() && isLEQ; i++){
+				// This assumes: '0' -> over-approximation
+				isLEQ = isLEQ && ( nodeHistory[i] == safeHistory[i] || safeHistory[i] == '0'); 
+				if(!isLEQ){
+					std::cout << i << " of " << safeHistory.size() << ": " <<safeHistory[i] << " !<= " << nodeHistory[i] << std::endl; 
+				}
+			}
+			
+			std::cout << "Checking safe history: "<< isLEQ  << std::endl;
+		
+			if (isLEQ) {
+				newJobs[i].setNode(nullptr);
+				newNode->getParent()->removeChild(newNode);
+				break;
+			}
+
+		}
+
+		if ( newJobs[i].getNode() != nullptr ){
+			tmp.push_back(newJobs[i]);
+		}
+	}
+
+	return tmp;
 }
 
 // This method computes the rechability tree using a specified input starset and an NN_REACH_METHOD starting from a given neuron
 // It can be used just to compute a subtree from the j. neuron of the k.th layer
 // the subtree then could be inserted into the search tree (replacing and deleting the old subtree)
+// Note: This only computes the reachability tree until an unsafe leaf is found
 template <typename Number>
 ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets, SEARCH_STRATEGY strategy ) {
+	if ( rootNode->isLeaf() ) {
+		if ( !rootNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )] ) ) {
+			mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )].insert( rootNode->getCounterExample() );
+			mIsSafe = false;
+		} else if ( mRemoveSafeSubtrees ) {
+			removeSafeSubtree( rootNode );
+		}
+		mIsComplete = true;
+		return rootNode;
+	}
+
 	// create the root_job and add to the queue
 	SearchJob<Number> root_job( rootNode, mNetwork.layers() );
+	NN_REACH_METHOD rootMethod = mRoot->method();
 	std::deque<SearchJob<Number>> jobQueue;
 	jobQueue.push_back( root_job );
 
 	// perform BFS / DFS until the queue is not empty and the network is still safe
-	while ( !jobQueue.empty() ) {  // TODO: && mIsSafe  do not forget to break the search erlier if tree is not safe
+	while ( !jobQueue.empty() ) {
 		SearchJob<Number> job = jobQueue.front();
-		// std::cout << job.getNode()->layerNumber() << " " << job.getNode()->neuronNumber() << std::endl;
-		// std::cout << job.getNode()->representation() << std::endl;
-		std::vector<SearchJob<Number>> newJobs = job.compute( rootNode->method() );
+		std::vector<SearchJob<Number>> newJobs;
+		if ( REFINEMENT_TYPE::EXACT_SOURCES == mRefinementType && isPreviousCounterexampleSource( job.getNode()->layerNumber(), job.getNode()->neuronNumber() ) ) {
+			newJobs = job.compute( NN_REACH_METHOD::EXACT );
+		} else {
+			newJobs = job.compute( rootMethod );
+		}
 		jobQueue.pop_front();
+
+		newJobs = checkSafeHistory(newJobs);
+
 		for ( auto newJob : newJobs ) {
 			if ( newJob.isFinalResult() ) {
 				// check if the leaf satisfies the safety property
 				// if not then early stop condition is met and the loop can be stopped
-				// std::cout << newJob.getNode()->layerNumber() << " " << newJob.getNode()->neuronNumber() << std::endl;
-				// std::cout << newJob.getNode()->representation() << std::endl;
 				ReachabilityNode<Number>* leafNode = newJob.getNode();
-				mLeaves.push_back( leafNode );   // maybe this is not needed
-
-				if ( !leafNode->checkSafe( safeSets ) ) {
-					leafNode->setSafe( false );
+				if ( !leafNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )] ) ) {
 					mIsSafe = false;
-				} else {
-					leafNode->setSafe( true );
-				}
+					mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )].insert( leafNode->getCounterExample() );
+					if ( rootMethod == NN_REACH_METHOD::EXACT ) {
+						mIsComplete = true;
+						return rootNode;
+					}
+					mLeaves.push_back( leafNode );
+				} 
 			} else {
 				switch ( strategy ) {
 					case SEARCH_STRATEGY::BFS:
@@ -297,33 +376,385 @@ ReachabilityNode<Number>* ReachabilityTree<Number>::computeReachTree( Reachabili
 	return rootNode;
 }
 
+template <typename Number>
+void ReachabilityTree<Number>::removeSafeSubtree( ReachabilityNode<Number>* safeLeaf ) {
+	if ( !mRemoveSafeSubtrees ) {
+		return;
+	}
+
+	ReachabilityNode<Number>* node = safeLeaf;
+
+	while ( true ) {
+		node->setSafe( true );
+		switch ( node->method() ) {
+			case NN_REACH_METHOD::OVERAPPRX:
+				if ( node->hasParent() ) {
+					node = node->getParent();
+				} else {
+					return;	 // root has been reached and is thus safe
+				}
+				break;
+			case NN_REACH_METHOD::EXACT: {
+				if ( node->hasParent() ) {
+					ReachabilityNode<Number>* parent = node->getParent();
+
+					// This adds save sets for a safe history implemenation
+					std::pair<int,int> key = std::make_pair(parent->layerNumber(), parent->neuronNumber());
+					mSafeHistories[key].insert(node->getHistory());
+					
+					for ( int i = 0; i < parent->getNumberOfChildren(); i++ ) {
+						// std::cout << "Remove child?" << std::endl;
+						if ( !parent->getChild( i )->isSafe() ) {
+							// std::cout << "Removed child" << std::endl;
+							parent->removeChild( node );
+							return;	 // the parent is the root of an "uncomputed" subtree
+						}
+						// std::cout << "not" << std::endl;
+					}
+					node = parent;
+					break;
+				} else {
+					return;	 // root has been reached and is thus safe
+				}
+			}
+			case NN_REACH_METHOD::CEGAR:  // nodes can only be computed via EXACT or OVERAPPRX activation function application
+			default:
+				assert( false && "This should not be reachable!" );
+				break;
+		}
+	}
+}
+
+template <typename Number>
+std::pair<ReachabilityNode<Number>*, std::vector<ReachabilityNode<Number>*>> ReachabilityTree<Number>::computePartiallyExactReachTree( ReachabilityNode<Number>* rootNode, const std::vector<HPolytope<Number>>& safeSets ) {
+	std::vector<ReachabilityNode<Number>*> notComputedNodes;
+
+	// This is a special case, where an activation function is computed producing final leaves
+	if ( rootNode->isLeaf() ) {
+		if ( !rootNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )] ) ) {
+			mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )].insert( rootNode->getCounterExample() );
+			mIsSafe = false;
+		}
+		mIsComplete = true;
+		return std::make_pair( rootNode, notComputedNodes );
+	}
+
+	SearchJob<Number> job( rootNode, mNetwork.layers() );
+
+	while ( !job.isFinalResult() ) {
+		std::vector<SearchJob<Number>> newJobs;
+		if ( isPreviousCounterexampleSource( job.getNode()->layerNumber(), job.getNode()->neuronNumber() ) ) {
+			switch ( mRefinementType ) {
+				case REFINEMENT_TYPE::EXACT_SOURCES:
+					newJobs = job.compute( NN_REACH_METHOD::EXACT );
+					break;
+				case REFINEMENT_TYPE::REMEMBERING_SOURCES: {
+					newJobs = job.compute( NN_REACH_METHOD::OVERAPPRX );
+					assert( newJobs.size() == 1 );
+					bool useExact = false;
+					for ( Point<Number> prevCounterexample : mPreviousCounterexamples[std::make_pair( job.getNode()->layerNumber(), job.getNode()->neuronNumber() )] ) {
+						if ( newJobs[0].getNode()->representation().contains( prevCounterexample ) ) {
+							useExact = true;
+							break;
+						}
+					}
+					if ( useExact ) {
+						job.getNode()->removeAllChildren();
+						newJobs = job.compute( NN_REACH_METHOD::EXACT );
+					}
+					break;
+				}
+				default:  // This defaults to EXACT_SOURCES and should not be reachable
+					newJobs = job.compute( NN_REACH_METHOD::EXACT );
+					break;
+			}
+
+			newJobs = checkSafeHistory(newJobs);
+			
+		} else {
+			newJobs = job.compute( mRoot->method() );
+		}
+		for ( int i = 1; i < newJobs.size(); i++ ) {
+			notComputedNodes.push_back( newJobs[i].getNode() );
+		}
+		job = newJobs[0];
+	}
+
+	ReachabilityNode<Number>* leafNode = job.getNode();
+	mLeaves.push_back( leafNode );
+	if ( !leafNode->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )] ) ) {
+		mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )].insert( leafNode->getCounterExample() );
+		mIsSafe = false;
+	}
+	mIsComplete = true;
+	return std::make_pair( leafNode, notComputedNodes );
+}
+
+// The refinement loop for CEGAR where each new sub-tree is allways computed fully
+template <typename Number>
+bool ReachabilityTree<Number>::fullRefinement( SEARCH_STRATEGY strategy, bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput ) {
+	// repeat until we either find a real counterexample or we can verify that the network is safe
+	int ctx = 0;
+	while ( !mIsSafe && ctx < max_iter ) {
+		mLeaves.clear();
+		updateLeaves( mRoot );
+		ReachabilityNode<Number>* chosenLeaf = getFirstUnsafeLeaf();
+
+		if ( chosenLeaf == mRoot ) {
+			mIsSafe = true;
+			return true;
+		}
+
+		// generate a counterexample
+		Point<Number> candidate = chosenLeaf->getCounterExample();
+		Point<Number> candidateAlpha = chosenLeaf->getCounterExampleAlpha();
+
+		// Otherwise chosenLeaf is safe
+		assert( candidate.dimension() > 0 );
+		std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleOrigin( candidate, candidateAlpha, chosenLeaf, mTracingStrategy );
+
+		// If an actual counterexample can be propagated back to the root, the the counterexample is not the result of approximation
+		if ( std::get<0>( candidateSource ).dimension() > 0 && !( std::get<2>( candidateSource )->hasParent() ) ) {
+			mIsSafe = false;
+			return false;
+		}
+
+		// source of the spurious counterexample
+		ReachabilityNode<Number>* refinedNode = std::get<2>( candidateSource );
+		rememberCounterexampleSource( refinedNode->layerNumber(), refinedNode->neuronNumber() );
+
+		// do the refinement step
+		mIsComplete = false;
+
+		// calculate the children of the refined node using exact computation
+		refinedNode->removeAllChildren();
+		SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );
+		std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT );
+
+		for ( int i = 0; i < newJobs.size(); i++ ) {
+			// use the compute reach tree function to compute the subtrees of the children
+			computeReachTree( newJobs[i].getNode(), safeOutput, strategy );
+		}
+
+		ctx++;
+		if ( createPlots )
+			plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
+	}
+
+	if ( !mIsSafe && ctx >= max_iter ) {
+		std::cout << "Reached maximum number of refinment steps. Safety of the NN is not known!" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+// The refinment loop for CEGAR where a subtree is only computed, when its safety is checked
+template <typename Number>
+bool ReachabilityTree<Number>::avoidentRefinement( SEARCH_STRATEGY strategy, bool createPlots, size_t max_iter, const std::vector<HPolytope<Number>> safeOutput ) {
+	bool foundResult = false;
+	bool foundUnsafe = true;
+	assert( mLeaves.size() == 1 && "Over-approximate reachability computation did not result in 1 leaf" );
+	ReachabilityNode<Number>* unsafeLeaf = mLeaves[0];
+	std::vector<ReachabilityNode<Number>*> notComputedLeaves;
+
+	// Using for-loops appears to be faster somehow
+	for ( int count = 0; !foundResult && count < max_iter; count++ ) {
+		// Split the unsafe leaf exists
+		// Backpropagate the counterexample: Identify the source neuron of the counterexample
+		std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleOrigin( unsafeLeaf->getCounterExample(), unsafeLeaf->getCounterExampleAlpha(), unsafeLeaf, mTracingStrategy );
+
+		// If the counterexample is not spurious then: return false
+		if ( std::get<0>( candidateSource ).dimension() > 0 && !( std::get<2>( candidateSource )->hasParent() ) ) {
+			mIsSafe = false;
+			foundResult = true;
+			continue;
+		}
+
+		// Split with exact and do NOT compute the children
+		ReachabilityNode<Number>* refinedNode = std::get<2>( candidateSource );
+		rememberCounterexampleSource( refinedNode->layerNumber(), refinedNode->neuronNumber() );
+		std::cout << "Found origin at " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
+		refinedNode->removeAllChildren();
+		SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );
+		std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT );
+		foundUnsafe = false;
+
+		// Update leaves
+		notComputedLeaves.clear();
+		mLeaves.clear();
+		updateLeaves( mRoot, &notComputedLeaves );
+
+		// Compute the reachability tree of the not-computed leaves, until an unsafe leaf is found or all leaves are computed
+		int i;
+		for ( i = 0; i < notComputedLeaves.size() && !foundUnsafe; i++ ) {
+			switch ( mRefinementType ) {
+				case REFINEMENT_TYPE::REMEMBERING_SOURCES:
+				case REFINEMENT_TYPE::EXACT_SOURCES: {
+					std::pair<ReachabilityNode<Number>*, std::vector<ReachabilityNode<Number>*>> tmp = computePartiallyExactReachTree( notComputedLeaves[i], safeOutput );
+					foundUnsafe = !( tmp.first->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )] ) );
+					if ( !foundUnsafe ) {
+						for ( ReachabilityNode<Number>* notComputedLeaf : tmp.second ) {
+							notComputedLeaves.push_back( notComputedLeaf );
+						}
+						removeSafeSubtree( tmp.first );
+					} else {
+						mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )].insert( tmp.first->getCounterExample() );
+					}
+					break;
+				}
+				default: {
+					ReachabilityNode<Number>* leaf = computeReachTree( notComputedLeaves[i], safeOutput, strategy );
+					foundUnsafe = !leaf->checkSafe( mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy, mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )] );
+					// std::cout << foundUnsafe << std::endl;
+					if ( foundUnsafe ) {
+						// std::cout << "foundUnsafe = 1" << std::endl;
+						mPreviousCounterexamples[std::make_pair( mPreviousCounterexampleSources.size() - 1, 0 )].insert( leaf->getCounterExample() );
+					} else {
+						// std::cout << "foundUnsafe = 0" << std::endl;
+						removeSafeSubtree( leaf );
+					}
+					break;
+				}
+			}
+		}
+
+		if ( foundUnsafe ) {  // set the unsafeLeaf
+			unsafeLeaf = notComputedLeaves[--i];
+			while ( !unsafeLeaf->isLeaf() ) {
+				// std::cout << "unsafe leaf child" << std::endl;
+				unsafeLeaf = unsafeLeaf->getChild( 0 );
+			}
+		} else {  // all leaves are safe and computed -> the tree is safe
+			mIsSafe = true;
+			foundResult = true;
+		}
+	}
+	return mIsSafe;
+}
+
+
+template <typename Number>
+bool ReachabilityTree<Number>::_verifyWithStructureTree(size_t max_iter) {
+	// Create initial structure tree
+	std::list<std::shared_ptr<LayerBase<Number>>> layers = mNetwork.layers();
+	StructureNode<Number>* strucNode;
+	REACHABILITY_OPERATION prevOp;
+	for ( std::shared_ptr<LayerBase<Number>> layer : layers ){
+		REACHABILITY_OPERATION op;
+		switch ( layer->layerType() ) {
+			case NN_LAYER_TYPE::AFFINE:
+				op = REACHABILITY_OPERATION::AFFINE;
+				break;
+			case NN_LAYER_TYPE::RELU:
+				op = REACHABILITY_OPERATION::RELU_APPROX;
+				break;
+			case NN_LAYER_TYPE::LEAKY_RELU:
+			case NN_LAYER_TYPE::HARD_TANH:
+			case NN_LAYER_TYPE::HARD_SIGMOID:
+			case NN_LAYER_TYPE::STEP_FUNCTION:
+				assert(false && "not implemented");
+				break;
+			default:
+				std::cout << "This should occur exactly once for the final layer!" << std::endl;
+				op = REACHABILITY_OPERATION::DEFAULT;
+				break;
+		}
+
+		int seqSize = layer->layerType() == NN_LAYER_TYPE::AFFINE ? 1 : layer->layerSize();
+		for( int i = 0; i < seqSize; i++ ){
+			StructureNode<Number>* newStrucNode;
+			if( i == 0 && layer == layers.front() ){ // Associate root in structure and reachability
+				strucNode = new StructureNode<Number>(layers.front()->layerType(), mRoot);
+				mRoot->setStructureNode(strucNode);
+				continue;
+			} else if ( i == 0 ) { // Create non-root structure nodes without associated reachability nodes based on computation of previous layer
+				newStrucNode = new StructureNode<Number>(strucNode, false, prevOp, NN_REACH_METHOD::OVERAPPRX, layer->layerType());
+			} else { // Create non-root structure nodes without associated reachability nodes based on computation of this layer
+				newStrucNode = new StructureNode<Number>(strucNode, false, op, NN_REACH_METHOD::OVERAPPRX, layer->layerType());
+			}
+			strucNode->addChild(newStrucNode);
+			strucNode = newStrucNode;
+		}
+		prevOp = op;
+	}
+	StructureNode<Number>* newStrucNode = new StructureNode<Number>(strucNode, true, prevOp, NN_REACH_METHOD::OVERAPPRX, NN_LAYER_TYPE::DEFAULT);
+	strucNode->addChild(newStrucNode);
+
+	// Refinement and construction loop
+	ReachabilityNode<Number>* next;
+	while (max_iter-- >= 0){
+		// Compute new final leaf [can be multiple in specific case]
+		mLeaves.clear();
+		updateLeaves(mRoot);
+		int index;
+		for ( index = 0; index < mLeaves.size() && mLeaves[index]->isComputed(); index++ ){
+			//noop
+		}
+		if( index == mLeaves.size() ){
+			std::cout << "The FNN is safe\nNumber of final leaves: " << mLeaves.size() << std::endl;
+			return true;
+		} else {
+			next = mLeaves[index];
+		}
+		while(!next->isLeaf()){
+			SearchJob<Number> job( next, mNetwork.layers() );
+			std::vector<SearchJob<Number>> newJobs = job.compute( next->getStructureNode()->getNextMethod() );
+			next->getStructureNode()->correctChildren();
+			next = next->getChild(0);
+		}
+		// Check safety the new final leaves
+		next = next->getParent();
+		for (int i = 0; i < next->getNumberOfChildren(); i++){
+			ReachabilityNode<Number>* leaf = next->getChild(i);
+			if ( leaf->checkSafe(mSafeSetMatrices, mSafeSetVectors, mCounterExampleStrategy) ) {
+				// leaf is safe -> noop
+			} else {
+				std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> origin = identifyCounterExampleOrigin( leaf->getCounterExample(), leaf->getCounterExampleAlpha(), leaf, mTracingStrategy );
+				// counterexample is not spurious then: return false
+				if ( std::get<0>( origin ).dimension() > 0 && !( std::get<2>( origin )->hasParent() ) ) {
+					std::cout << "The FNN is unsafe" << std::endl;
+					return false;
+				}
+				ReachabilityNode<Number>* originNode = std::get<2>( origin );
+				std::cout << "Found origin at: " << originNode->layerNumber() << " " << originNode->neuronNumber() << std::endl;
+				originNode->getStructureNode()->extendToExactSubtree();
+				originNode->removeAllChildren();
+				originNode->setComputed(false);
+				break;
+			}
+		}
+	}
+
+	return false;
+}
+
 // here in the verify method just call the forwardPass method to calculate the EXACT or OVERAPPROXIMATIVE result
 // if it is CEGAR countinue with the refinement, otherwise just stop and verify the "leaves"
 // if the method is not CEGAR than it makes no sense to save the intermediate stars into the search tree
 
 template <typename Number>
-bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots, bool normalizeInput, bool normalizeOutput, size_t max_iter) {
+bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY strategy, bool createPlots, bool normalizeInput, bool normalizeOutput, size_t max_iter ) {
 	Starset<Number> starInput = prepareInput( normalizeInput );
 	std::vector<HPolytope<Number>> safeOutput = prepareSafeSet( normalizeOutput );
-	// let's assume for now that the safeSet could only be a conjunction of halfspaces and it describes the set of all safe output vectors
-	// TODO: later add some generalization to it
-	// TODO: make the safe set an arbitrary number of conjunctions and/or disjunctions of halfspaces, i.e. it is a vector of HPolytopes (DNF)
 
-	std::cout << "Normalized input set:\n" << starInput << std::endl;
-	std::cout << "Denormalized output set:\n" << safeOutput << std::endl;
+	for ( unsigned i = 0; i < safeOutput.size(); i++ ) {
+		mSafeSetMatrices.push_back( safeOutput[i].matrix() );
+		mSafeSetVectors.push_back( safeOutput[i].vector() );
+	}
 
 	mLeaves.clear();
 	mIsSafe = true;
 	mIsComplete = false;
 
 	// create the root node of the reachability tree
-	ReachabilityNode<Number>* rootNode = new ReachabilityNode<Number>( starInput, method, 0, 0 );
+	mRoot = new ReachabilityNode<Number>( starInput, method, 0, 0 );
 	switch ( method ) {
 		case NN_REACH_METHOD::EXACT:
 		case NN_REACH_METHOD::OVERAPPRX:
 			// if we apply the EXACT or OVERAPPROX method, regardless if the computation of the reachability tree is complete or not
 			// we can surely return the answer
-			mRoot = computeReachTree( rootNode, safeOutput, strategy );
+			computeReachTree( mRoot, safeOutput, strategy );
 			if ( createPlots )
 				plotTree( mRoot, method._to_string() );
 			std::cout << "The neural network is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
@@ -332,8 +763,11 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 		case NN_REACH_METHOD::CEGAR:
 			// for the CEGAR mehtod we start with a fully overapproximate reachability analysis
 			// then we refine the result of the overapproximate reachability
-			rootNode->setMethod( NN_REACH_METHOD::OVERAPPRX );
-			mRoot = computeReachTree( rootNode, safeOutput, strategy );
+			mRoot->setMethod( NN_REACH_METHOD::OVERAPPRX );
+			if (REFINEMENT_TYPE::PATH_WISE_ORIGINS == mRefinementType){
+				return _verifyWithStructureTree();
+			}
+			computeReachTree( mRoot, safeOutput, strategy );
 			std::cout << "CEGAR first forward pass finished, the result is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
 			break;
 		default:
@@ -341,337 +775,449 @@ bool ReachabilityTree<Number>::verify( NN_REACH_METHOD method, SEARCH_STRATEGY s
 	}
 
 	if ( mIsSafe ) {
-		// if the method is CEGAR and the reachable sets are all safe then the whole network is safe
-		std::cout << "The neural network is safe" << std::endl;
+		// if the method is CEGAR and the reachable set is safe then the whole network is safe
 		return true;
 	}
 
 	// std::cout << "Neural network structure: " << mNetwork << std::endl;
-	std::cout << "Search tree depth: " << this->depth() << std::endl;
+	// std::cout << "Search tree depth: " << depth(mRoot) << std::endl;
 
 	// else we start the refinement
-	int ctx = 0;
 	if ( createPlots )
-		plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
+		plotTree( mRoot, "0-CEGAR_Reach_" );
 
-	// repeat until we either find a real counterexample or we can verify that the network is safe
-	// TODO: introduce a max number of iterations
-	while ( !mIsSafe && ctx < max_iter ) {
-		mLeaves.clear();  // TODO: do not clear the leaves that are not affected
-		updateLeaves( mRoot );
-		std::cout << "Number of leaves: " << mLeaves.size() << std::endl;
-
-		ReachabilityNode<Number>* refinedNode = nullptr;
-
-		bool counterExampleFound = false;
-		while ( !counterExampleFound ) {
-			ReachabilityNode<Number>* chosenLeaf = getFirstNonEmptyLeaf();
-
-			// generate a potential counterexample candidate
-			std::cout << "Generating a counterexample..." << std::endl;
-			Point<Number> candidate = produceCounterExampleCandidate( chosenLeaf->representation(), safeOutput );
-			std::cout << "The counterexample candidate is " << candidate << std::endl;
-
-			// // ================== FOR TESTING =================
-			// std::cout << "Counterexample contained in the reachable set: " << chosenLeaf->representation().contains( candidate ) << std::endl;
-			// for ( int i = 0; i < safeOutput.size(); i++ ) {
-			// 	std::cout << "Countexample contained in safe set " << i << ": " << safeOutput[i].contains( candidate ) << std::endl;
-			// }
-			// // ================================================
-
-			// identify the source neuron of the counterexample
-			std::cout << "Identifying the source of the counterexample..." << std::endl;
-			std::pair<Point<Number>, ReachabilityNode<Number>*> candidateSource = identifyCounterExampleSource( candidate, chosenLeaf );
-
-			// TODO: check if the source is the last neuron we get a segmentation fault
-
-			// do not forget to test if the backpropagated counterexample candidate is still a valid counterexample !!!
-			if ( counterExampleIsValid( candidateSource.first, candidateSource.second ) ) {
-				if ( candidateSource.second->representation().contains( candidateSource.first ) ) {
-					std::cout << "True countereaxmple found, refinement process stops" << std::endl;
-					std::cout << "The true counterexample is: " << candidateSource.first << std::endl;
-					mIsSafe = false;
-					return false;
-				}
-
-				refinedNode = candidateSource.second;
-				counterExampleFound = true;
-				std::cout << "The source of the counterexample candidate is: " << refinedNode->layerNumber() << " " << refinedNode->neuronNumber() << std::endl;
-			}
-		}
-
-		// do the refinement step
-		mIsSafe = true;
-		mIsComplete = false;
-
-		// if ( refinedNode->hasPosChild() ) {
-		// 	delete refinedNode->getPosChild();
-		// }
-		// if ( refinedNode->hasNegChild() ) {
-		// 	delete refinedNode->getNegChild();
-		// }
-		refinedNode->setHasPosChild( false );
-		refinedNode->setPosChild( nullptr );
-		refinedNode->setHasNegChild( false );
-		refinedNode->setNegChild( nullptr );
-
-		// calculate the childs of the refined node using exact computation
-		std::cout << "Refining the selected node" << std::endl;
-		SearchJob<Number> refinedJob( refinedNode, mNetwork.layers() );
-		std::cout << "refinedJob created" << std::endl;
-		std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT );
-		std::cout << "New jobs size: " << newJobs.size() << std::endl;
-
-		// set the childs of the refined node
-		newJobs[0].getNode()->setMethod( NN_REACH_METHOD::OVERAPPRX );
-		newJobs[1].getNode()->setMethod( NN_REACH_METHOD::OVERAPPRX );
-
-		// use the compute reach tree function to compute the subtrees of the childs
-		std::cout << "Computing positive subtree" << std::endl;
-		ReachabilityNode<Number>* posSubTree = computeReachTree( newJobs[0].getNode(), safeOutput, strategy );
-		std::cout << "Computing negative subtree" << std::endl;
-		ReachabilityNode<Number>* negSubTree = computeReachTree( newJobs[1].getNode(), safeOutput, strategy );
-
-		// TODO: are these even necessary?  std::vector<SearchJob<Number>> newJobs = refinedJob.compute( NN_REACH_METHOD::EXACT ); ... should already handle
-		refinedNode->setPosChild( posSubTree );
-		refinedNode->setNegChild( negSubTree );
-
-		ctx++;
-		if ( createPlots )
-			plotTree( mRoot, std::to_string( ctx ) + "-CEGAR_Reach_" );
+	switch ( mRefinementType ) {
+		case REFINEMENT_TYPE::AVOIDANT:
+		case REFINEMENT_TYPE::EXACT_SOURCES:
+		case REFINEMENT_TYPE::REMEMBERING_SOURCES:
+			avoidentRefinement( strategy, createPlots, max_iter, safeOutput );
+			break;
+		case REFINEMENT_TYPE::FULL:
+			fullRefinement( strategy, createPlots, max_iter, safeOutput );
+			break;
+		default:
+			FATAL( "hypro.neuralnets.reachability_tree", "Invalid refinement method specified" );
 	}
 
-	mLeaves.clear();  // TODO: do not clear the leaves that are not affected
+	mLeaves.clear();
 	updateLeaves( mRoot );
-	std::cout << "Number of leaves: " << mLeaves.size() << std::endl;
-
-	// TODO: do not forget to delete the reachability tree when it is not used anymore
-
-	// candidate = Point<Number>( { 0.25, 1.0 } );
-	// candidateSource = identifyCounterExampleSource( candidate, mLeaves[0] );
-	// std::cout << "The source of the counterexample candidate is: " << candidateSource.first << " " << candidateSource.second << std::endl;
-
-	// candidate = Point<Number>( { 0.35, 0.75 } );
-	// candidateSource = identifyCounterExampleSource( candidate, mLeaves[0] );
-	// std::cout << "The source of the counterexample candidate is: " << candidateSource.first << " " << candidateSource.second << std::endl;
 
 	std::cout << "The neural network is " << ( mIsSafe ? "safe" : "unsafe" ) << std::endl;
 	std::cout << "The number of final sets is " << mLeaves.size() << std::endl;
-
-	return false;
+	std::cout << "Number of Tracings performed is " << mNumberOfTracings << std::endl;
+	return mIsSafe;
 }
 
+// Returns the first unsafe leaf or root
 template <typename Number>
-bool ReachabilityTree<Number>::counterExampleIsValid( Point<Number> candidate, ReachabilityNode<Number>* node ) const {
-	// TODO: consider here using exact arithmetic instead floating point (you can use for this purpose the representation converter class)
-
-	return true;
-}
-
-template <typename Number>
-Point<Number> ReachabilityTree<Number>::produceCounterExampleCandidate( Starset<Number> set, std::vector<HPolytope<Number>> rejectionSets ) const {
-	// TODO: this should be with random sampling (with the preference of picking the counterexample close or far away from the safe set but in the first (?) output set)
-	// TODO: the sampling becomes very slow when the rejectionSet covers a high portion of the sampling set in this case some other algorithm for sampling should be used
-
-	std::cout << "Trying to generate a counterexample candidate" << std::endl;
-
-	// int sampling_trials = 10;
-
-	// // try to find a counterexmaple with MC sampling
-	// std::set<Point<Number>> samples = uniform_constrained_sampling( set, rejectionSets, 1, sampling_trials );
-	// if ( samples.size() > 0 )
-	// 	return *( samples.begin() );
-
-	// // if the sampling does not work out for the whole set try to reduce it to multiple smaller sets
-	// for ( auto rejectionSet : rejectionSets ) {
-	// 	for ( auto constraint : rejectionSet.constraints() ) {
-	// 		Starset<Number> intermediateSet = set.intersectHalfspace( Halfspace<Number>( -1 * constraint.normal(), -constraint.offset() ) );
-	// 		if ( !intermediateSet.empty() ) {
-	// 			std::set<Point<Number>> newSamples = uniform_constrained_sampling( intermediateSet, rejectionSets, 1, sampling_trials );
-	// 			if ( newSamples.size() > 0 ) {
-	// 				return *( newSamples.begin() );
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// // if sampling does not work at all, just try LP solving
-	// for ( auto rejectionSet : rejectionSets ) {
-	// 	for ( auto constraint : rejectionSet.constraints() ) {
-	// 		// add the reversed constraint (with a little bloating)
-	// 		Starset<Number> intermediateSet = set.intersectHalfspace( Halfspace<Number>( -1 * constraint.normal(), -constraint.offset() ) );
-	// 		std::vector<Point<Number>> vertices = intermediateSet.vertices();
-	// 		if ( vertices.size() > 0 ) {
-	// 			vector_t<Number> middle_point = vertices[0].rawCoordinates();
-	// 			for ( int i = 1; i < vertices.size(); i++ ) {
-	// 				middle_point += vertices[i].rawCoordinates();
-	// 			}
-	// 			middle_point /= vertices.size();
-	// 			return Point<Number>( middle_point );
-	// 		}
-	// 	}
-	// }
-
-	std::random_device rdev;
-	std::mt19937 rgen( rdev() );
-
-	while ( true ) {
-		// Do only SAT checking on the set of constrains (set and not rejectionSet)
-		// here we need to check for all combinations of the rejectionSet
-		// i.e. if the rejection set is the form (c1_1 n c1_2 n ... n c1_k1) u (c2_1 n c2_2 n ... n c2_k2) u ... u (cm_1 n cm_2 n ... n cm_km)
-		// then the set needs to be interesected with the negation of the previous set in DNF form
-		// i.e. we intersect with (!c1_1 u !c1_2 u ... u !c1_k1) n (!c2_1 u !c2_2 u ... u !c2_k2) n ... n (!cm_1 u !cm_2 u ... u !cm_km)
-
-		// std::cout << set << std::endl;
-		// std::cout << "Empty:" << set.empty() << std::endl;
-
-		Starset<Number> setCopy( set );
-		for ( HPolytope<Number> poly : rejectionSets ) {
-			std::uniform_int_distribution<int> idist( 0, poly.constraints().size() - 1 );  //(inclusive, inclusive)
-			int ind = idist( rgen );													   // CONSIDER: you can pick not only one constraint but a subset of constraints (with each additional constraint the solution space gets smaller)
-			Halfspace<Number> hspace = poly.constraints()[ind];
-			vector_t<Number> normal = Number(-1) * hspace.normal();
-			Number offset = Number(-1) * hspace.offset();
-			setCopy = setCopy.intersectHalfspace( Halfspace<Number>( normal, offset ) );
-		}
-
-		bool empty = setCopy.empty();
-		// std::cout << setCopy << std::endl;
-		std::cout << "Empty:" << empty << std::endl;
-		
-		if ( empty )
-			continue;
-
-		// ================= METHOD 1 =================
-		// // std::cout << "set: " << setCopy << std::endl;
-		// Optimizer<Number> op( setCopy.shape(), setCopy.limits() );
-		// auto res = op.getInternalPoint(true);
-
-		// if ( res.errorCode == SOLUTION::FEAS ) {
-		// 	// std::cout << "res: " << res << std::endl;
-		// 	Point<Number> point( res.optimumValue );
-		// 	bool consistent = op.checkPoint( point );
-		// 	// std::cout << "Consistent: " << consistent << std::endl;
-		// 	// std::cout << "Point dimension: " << point.dimension() << std::endl;
-
-		// 	if ( consistent ) {
-		// 		// std::cout << "Sampled point (inner polytope): " << point << std::endl;
-		// 		// std::cout << "Sampled point (starset): " << point.affineTransformation( setCopy.generator(), setCopy.center() ) << std::endl;
-		// 		int b;
-		// 		std::cout << "Found a solution!" << std::endl;
-		// 		// std::cin >> b;
-
-		// 		std::cout << "Point is contained in polytope: " << HPolytope<Number>( setCopy.shape(), setCopy.limits() ).contains( point ) << std::endl;
-		// 		std::cout << "Point is contained in starset: " << setCopy.contains( point.affineTransformation( setCopy.generator(), setCopy.center() ) ) << std::endl;
-
-		// 		return point.affineTransformation( setCopy.generator(), setCopy.center() );
-		// 	}
-		// }
-		// int a;
-		// std::cout << "Could not find a solution now!" << std::endl;
-		// // std::cin >> a;
-		// ============================================
-
-		// ================= METHOD 2 =================
-
-		HPolytope<Number> currentPoly = setCopy.constraints();
-		std::uniform_int_distribution<int> idist( 0, currentPoly.size() - 1 );  //(inclusive, inclusive)
-		for(int tmp = 0; tmp < 10; tmp++) {
-			int ind = idist( rgen );
-			Optimizer<Number> op( setCopy.shape(), setCopy.limits() );
-
-			hypro::vector_t<Number> dir_vect = currentPoly.constraints()[ind].normal();
-			auto eval_low_result = op.evaluate( -1.0 * dir_vect, true );
-			auto eval_high_result = op.evaluate( dir_vect, true );
-			
-			Point<Number> midPoint = Point<Number>((eval_low_result.optimumValue + eval_high_result.optimumValue) / 2.0);
-			Point<Number> transformedPoint = midPoint.affineTransformation(setCopy.generator(), setCopy.center());
-
-			if(setCopy.contains(transformedPoint)) {
-				std::cout << "Solution found: " << transformedPoint << std::endl;
-				return transformedPoint;
-			}
-			else {
-				std::cout << "transormation was not included in the starset" << std::endl;
-				std::cout << "Midpoint contained in HPoly: " << currentPoly.contains(midPoint) << std::endl;
-				std::cout << "Transformedpoint contained in StarSet: " << setCopy.contains(transformedPoint) << std::endl;
-				int a;
-				std::cin >> a;
-			}
-		}
-		// ============================================
-
-	}
-
-	// this line means that the sampling failed (should return a pair <bool, point> instead)
-	return Point<Number>( { 0, 0 } );
-}
-
-template <typename Number>
-ReachabilityNode<Number>* ReachabilityTree<Number>::getFirstNonEmptyLeaf() const {
-	// TODO: if a leaf is empty then it should be safe (?)
-	// TODO: what if there is no leaf which is not empty, then the whole tree should be safe (?) -> return pair <bool, Starset<Number>>
+ReachabilityNode<Number>* ReachabilityTree<Number>::getFirstUnsafeLeaf() const {
 	for ( auto leaf : mLeaves ) {
-		if ( !leaf->representation().empty() && !leaf->isSafe() ) {
+		if ( !leaf->isSafe() ) {
 			return leaf;
 		}
 	}
-	return mLeaves[0];
+	return mRoot;
 }
 
+/*
+ * Adds all leaves with ancestor node to the mLeaves vector
+ * This does NOT clear the mLeaves vector before adding new leaves!
+ */
 template <typename Number>
 void ReachabilityTree<Number>::updateLeaves( ReachabilityNode<Number>* node ) {
-	// std::cout << "preorder: " << node->layerNumber() << " " << node->neuronNumber() << std::endl;
-	if ( node->isLeaf() ) {
+	if ( node->isLeaf() || !node->isComputed() ) {
 		mLeaves.push_back( node );
 	} else {
-		if ( node->hasPosChild() ) {
-			updateLeaves( node->getPosChild() );
-		}
-		if ( node->hasNegChild() ) {
-			updateLeaves( node->getNegChild() );
+		for ( int i = 0; i < node->getNumberOfChildren(); i++ ) {
+			// std::cout << "Update leaves 1 child" << std::endl;
+			updateLeaves( node->getChild( i ) );
 		}
 	}
 }
 
 template <typename Number>
-std::pair<Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::identifyCounterExampleSource( const Point<Number>& candidate, ReachabilityNode<Number>* node ) const {
-	if ( !node->hasParent() ) {
-		std::cout << "Node does not have parent" << std::endl;
-		return std::make_pair( candidate, node );  // indicates that the backpropagated counterexample originates from the very first neuron
-	}
-
-	// std::cout << "Representation: " << node->representation() << std::endl;
-	// std::cout << "Vertices: " << node->representation().vertices() << std::endl;
-	// std::cout << "Candidate: " << candidate << std::endl;
-	// // TODO: either with the containment check is wrong or it is a floating point error
-	// std::cout << "Contains: " << node->representation().contains(candidate) << std::endl;
-
-	// here: should I check if the candidate is contained in the current set or would the backpropagated candidate be in in the parent set?
-	// if ( checkForwardContainment( candidate, parentLayer, parentNeuron, parentSet ) ) {	 // TODO: do not forget to check also the exact result of the relu function
-	std::cout << "Checking containment" << std::endl;
-	std::cout << "Representation is: " << node->representation() << std::endl;
-	std::cout << "Candidate is: " << candidate << std::endl;
-	if ( node->representation().contains( candidate ) ) {
-		// if the counterexample candidate is still included in the current node go back to the previous node
-		ReachabilityNode<Number>* parent = node->getParent();
-		Point<Number> newCandidate = propagateCandidateBack( candidate, parent->layerNumber(), parent->neuronNumber(), parent->representation() );
-		std::cout << "newCandidate: " << newCandidate << std::endl;
-		return identifyCounterExampleSource( newCandidate, parent );
+void ReachabilityTree<Number>::updateLeaves( ReachabilityNode<Number>* node, std::vector<ReachabilityNode<Number>*>* notComputedLeaves ) {
+	if ( node->isLeaf() || !node->isComputed() ) {
+		if ( ( !node->isComputed() ) || ( !node->hasCounterExample() ) ) {
+			notComputedLeaves->push_back( node );
+		}
+		mLeaves.push_back( node );
 	} else {
-		// std::cout << "Candidate: " << candidate << std::endl;
-		// std::cout << "Layer: " << node->layerNumber() << " Neuron: " << node->neuronNumber() << std::endl;
+		for ( int i = 0; i < node->getNumberOfChildren(); i++ ) {
+			// std::cout << "Update leaves 2 child" << std::endl;
+			updateLeaves( node->getChild( i ), notComputedLeaves );
+		}
+	}
+}
 
-		// if it is not included the current neuron introduces the counterexample
-		return std::make_pair( candidate, node );  // the source of the counterexample
+/*
+ * If node is the root, then return pair of inputs
+ * Else if source is non-empty, then propagate the source back and return a call of this method on the parent of node and the backpropagated source
+ * Else if source is empty, return pair of inputs
+ *
+ * Returns:
+ *	a) a node (including the root) and the empty point (indicates that the node is the sources of the original counterexample)
+ *	b) the root and a non-empty point (indicates a true counterexample)
+ */
+
+template <typename Number>
+std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::identifyCounterExampleOrigin( const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node, TRACING_STRATEGY strategy ) {
+	if ( !node->hasParent() ) {
+		// indicates that the backpropagated counterexample originates from the very first neuron
+		return std::make_tuple( source, sourceAlpha, node );
+	}
+
+	if ( source.dimension() <= 0 ) {
+		// if it is not included the operation performed on the current neuron introduces the counterexample
+		return std::make_tuple( source, sourceAlpha, node );
+	}
+
+	std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> result;
+	if ( NN_LAYER_TYPE::AFFINE != mNetwork.layers( node->getParent()->layerNumber() )->layerType() ) {
+		switch ( strategy ) {
+			case TRACING_STRATEGY::BINARYSEARCH:
+				result = binarySearchTracing( source, sourceAlpha, node, 0, 0 );
+				return identifyCounterExampleOrigin( std::get<0>( result ), std::get<1>( result ), std::get<2>( result ), strategy );
+			case TRACING_STRATEGY::REMEMBERING_SEARCH:
+				result = rememberingSearchTracing( source, sourceAlpha, node );
+				return identifyCounterExampleOrigin( std::get<0>( result ), std::get<1>( result ), std::get<2>( result ), strategy );
+			case TRACING_STRATEGY::UNSAT_CORE:
+				result = unsatCoreTracing( source, sourceAlpha, node );
+				return identifyCounterExampleOrigin( std::get<0>( result ), std::get<1>( result ), std::get<2>( result ), strategy );
+			case TRACING_STRATEGY::FULL_REUSED_PREDICATE:
+				result = reusedPredicateTracing(source, sourceAlpha, node);
+				return identifyCounterExampleOrigin( std::get<0>( result ), std::get<1>( result ), std::get<2>( result ), strategy );
+			case TRACING_STRATEGY::REUSED_PREDICATE_WITH_LP:
+				result = reusedPredicateLPTracing(source, sourceAlpha, node);
+				return identifyCounterExampleOrigin( std::get<0>( result ), std::get<1>( result ), std::get<2>( result ), strategy );
+			default:
+				break;
+		}
+	}
+
+	ReachabilityNode<Number>* parent = node->getParent();
+	// std::cout << parent->layerNumber() << " " << parent->neuronNumber() << mNetwork.layers( node->getParent()->layerNumber() )->layerType() << std::endl;
+	std::pair<Point<Number>, Point<Number>> newSource = traceSourceBack( source, sourceAlpha, parent->layerNumber(), parent->neuronNumber(), parent->representation(), node->representation() );
+	if ( newSource.first.dimension() <= 0 ) {
+		std::pair<int, int> key = std::make_pair( node->layerNumber(), node->neuronNumber() );
+		mPreviousCounterexamples[key].insert( source );
+	}
+	return identifyCounterExampleOrigin( newSource.first, newSource.second, parent, mTracingStrategy );
+}
+
+// Where we know, that we can backpropgate to:       l = node->neuronNumber()
+// Where we want to try to backpropagate to:         c = nextIndex = ancestorNode->neuronNumber()
+// Where we know, that we cannot backpropagate to:   u = upperIndex
+// Returns a origin of source and the node corresponding to the neuron with number 0 OR the source-node of the counterexample and the empty point
+template <typename Number>
+std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::binarySearchTracing( const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node, const int upperIndex, const int nextIndex ) {
+	// For very small layers, this method is not useful, therefore the default method is used
+	//  first: neuronNumber == 0 -> layer size = 0 -> very small activation function sequence with subsequent affine mapping (thus parent has layersize = 1)
+	//                                             or a node resulting form the last dimension of activation function application -> parent layer needs to be checked for size
+	//  second: neuronNumber > 0 -> node is in a sequence of activation functions and can thus be directly checked
+	if ( ( node->neuronNumber() == 0 && mNetwork.layers( node->getParent()->layerNumber() )->layerSize() <= 2 ) || ( node->neuronNumber() > 0 && mNetwork.layers( node->layerNumber() )->layerSize() <= 2 ) ) {
+		return identifyCounterExampleOrigin( source, sourceAlpha, node, TRACING_STRATEGY::SINGLESTEP );
+	}
+
+	ReachabilityNode<Number>* ancestorNode = getAncestor( node->getParent(), nextIndex );
+	std::pair<Point<Number>, Point<Number>> origin = traceSourceBack( source, sourceAlpha, node->getParent()->layerNumber(), node->getParent()->neuronNumber(), nextIndex, ancestorNode->representation() );
+
+	int u;
+	int c;
+	ReachabilityNode<Number>* newNode;
+	Point<Number> newSource;
+	Point<Number> newSourceAlpha;
+
+	// This is the "binary search" part
+	if ( origin.first.dimension() > 0 ) {
+		// If backpropagation to the start of the layer is possible, continue propagating through the other layers
+		if ( nextIndex == 0 && upperIndex == 0 ) {
+			return std::make_tuple( origin.first, origin.second, ancestorNode );
+		}
+
+		newSource = origin.first;
+		newSourceAlpha = origin.second;
+		newNode = ancestorNode;
+		u = upperIndex;
+		c = ( upperIndex + nextIndex ) / 2;
+
+	} else {
+		newSource = source;
+		newSourceAlpha = sourceAlpha;
+		newNode = node;
+		u = nextIndex;
+		c = ( nextIndex + node->getParent()->neuronNumber() + 1 ) / 2;
+	}
+
+	// At this point newNode->neuronNumber() != 0 thus the parent has the next lower neuron number
+	// If backpropagation to the starset in node is possible, but backpropagation to the next one is not possible, the source is identified
+	if ( newNode->getParent()->neuronNumber() == u ) {
+		std::pair<int, int> key = std::make_pair( newNode->getParent()->layerNumber(), u );
+		mPreviousCounterexamples[key].insert( newSource );
+		return std::make_tuple( Point<Number>(), Point<Number>(), newNode->getParent() );
+	}
+
+	return binarySearchTracing( newSource, newSourceAlpha, newNode, u, c );	 // rounding of integer division is correct
+}
+
+template <typename Number>
+std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::rememberingSearchTracing( const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node ) {
+	std::list<int> previousSources = mPreviousCounterexampleSources[node->getParent()->layerNumber()];
+
+	if ( previousSources.empty() ) {
+		return binarySearchTracing( source, sourceAlpha, node, 0, 0 );
+	}
+
+	// For very small layers, this method is not useful, therefore the default method is used
+	if ( mNetwork.layers( node->getParent()->layerNumber() )->layerSize() <= 2 ) {
+		return identifyCounterExampleOrigin( source, sourceAlpha, node, TRACING_STRATEGY::SINGLESTEP );
+	}
+
+	ReachabilityNode<Number>* ancestorNode;
+	std::pair<Point<Number>, Point<Number>> origin;
+	int layerNumber = node->getParent()->layerNumber();
+	int nodeNumber = node->getParent()->neuronNumber();
+
+	// If backpropagation to the start of the layer is possible, continue propagating through the other layers
+	ancestorNode = getAncestor( node->getParent(), 0 );
+	origin = traceSourceBack( source, sourceAlpha, layerNumber, nodeNumber, 0, ancestorNode->representation() );
+	if ( 0 < origin.first.dimension() ) {
+		return std::make_tuple( origin.first, origin.second, ancestorNode );
+	}
+
+	for ( std::list<int>::iterator it = previousSources.begin(); it != previousSources.end(); it++ ) {
+		ancestorNode = getAncestor( node->getParent(), *it );
+		origin = traceSourceBack( source, sourceAlpha, layerNumber, nodeNumber, *it, ancestorNode->representation() );
+		// If backpropagation is possible, check if prev(it) is the source
+		if ( 0 < origin.first.dimension() ) {
+			if ( it == previousSources.begin() ) {
+				return binarySearchTracing( origin.first, origin.second, ancestorNode, 0, ( *it ) / 2 );
+			}
+			ReachabilityNode<Number>* beforeSourceNode = getAncestor( ancestorNode, *std::prev( it ) + 1 );
+			std::pair<Point<Number>, Point<Number>> tmpOrigin = traceSourceBack( origin.first, origin.second, layerNumber, ancestorNode->getParent()->neuronNumber(), *std::prev( it ) + 1, beforeSourceNode->representation() );
+			if ( 0 < tmpOrigin.first.dimension() ) {
+				return std::make_tuple( Point<Number>(), Point<Number>(), beforeSourceNode->getParent() );
+			}
+			return binarySearchTracing( origin.first, origin.second, ancestorNode, *std::prev( it ) + 1, ( ( *it ) + *std::prev( it ) + 1 ) / 2 );
+		}
+		if ( next( it ) == previousSources.end() ) {
+			ReachabilityNode<Number>* beforeSourceNode = getAncestor( node->getParent(), ( *it ) + 1 );
+			std::pair<Point<Number>, Point<Number>> tmpOrigin = traceSourceBack( source, sourceAlpha, layerNumber, nodeNumber, ( *it ) + 1, beforeSourceNode->representation() );
+			if ( 0 < tmpOrigin.first.dimension() ) {
+				return std::make_tuple( Point<Number>(), Point<Number>(), ancestorNode );
+			}
+			return binarySearchTracing( source, sourceAlpha, node, ( *it ) + 1, ( nodeNumber + ( *it ) ) / 2 + 1 );
+		}
+	}
+	return binarySearchTracing( source, sourceAlpha, node, ( *previousSources.begin() ) + 1, ( nodeNumber + ( *previousSources.begin() ) ) / 2 + 1 );
+}
+
+template <typename Number>
+std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::unsatCoreTracing( const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node ) {
+	if ( ( node->neuronNumber() == 0 && mNetwork.layers( node->getParent()->layerNumber() )->layerSize() <= 2 ) || ( node->neuronNumber() > 0 && mNetwork.layers( node->layerNumber() )->layerSize() <= 2 ) ) {
+		return identifyCounterExampleOrigin( source, sourceAlpha, node, TRACING_STRATEGY::SINGLESTEP );
+	}
+
+	// attempt to trace through the whole layer
+	std::shared_ptr<LayerBase<Number>> layer = mNetwork.layers( node->getParent()->layerNumber() );
+	ReachabilityNode<Number>* newSourceNode = getAncestor( node->getParent(), 0 );
+	std::tuple<int, Point<Number>, Point<Number>> result;
+	
+	if(mTryReusingPredicates){
+		std::tuple<std::vector<int>, Point<Number>, Point<Number>> tmp = layer->reusePredicate(source, sourceAlpha, newSourceNode->representation(), 0, node->getParent()->neuronNumber());
+		if(std::get<0>(tmp).size() > 0){
+			result = layer->traceUnsatCore( source, sourceAlpha, node->getParent()->neuronNumber(), 0, newSourceNode->representation() );
+		} else {
+			result = std::make_tuple(-1, std::get<1>(tmp), std::get<2>(tmp));
+		}
+	} else {
+		result = layer->traceUnsatCore( source, sourceAlpha, node->getParent()->neuronNumber(), 0, newSourceNode->representation() );
+	}
+
+	if ( std::get<0>( result ) < 0 ) {
+		return std::make_tuple( std::get<1>( result ), std::get<2>( result ), newSourceNode );
+	}
+
+	// use unsat cores to find an origin in the activation function sequence
+	int upper = 0;
+	int next = std::get<0>( result );
+	Point<Number> newSource = source;
+	Point<Number> newSourceAlpha = sourceAlpha;
+	assert( node->getParent()->neuronNumber() + 1 > next && next > upper );
+	while ( node->getParent()->neuronNumber() + 1 > upper ) {
+		newSourceNode = getAncestor( node->getParent(), next );
+		mNumberOfTracings += 1;
+		if(mTryReusingPredicates){
+			std::tuple<std::vector<int>, Point<Number>, Point<Number>> tmp = layer->reusePredicate(newSource, newSourceAlpha, newSourceNode->representation(), next, node->getParent()->neuronNumber());
+			if(std::get<0>(tmp).size() > 0){
+				result = layer->traceUnsatCore( newSource, newSourceAlpha, node->getParent()->neuronNumber(), next, newSourceNode->representation() );
+			} else {
+				result = std::make_tuple(-1, std::get<1>(tmp), std::get<2>(tmp));
+			}
+		} else {
+			result = layer->traceUnsatCore( newSource, newSourceAlpha, node->getParent()->neuronNumber(), next, newSourceNode->representation() );
+		}
+		
+		if ( std::get<0>( result ) < 0 ) {
+			node = newSourceNode;
+			next = upper;
+			newSource = std::get<1>( result );
+			newSourceAlpha = std::get<2>( result );
+		} else if ( node->getParent()->neuronNumber() == next ) {
+			std::pair<int, int> key = std::make_pair( node->getParent()->layerNumber(), next );
+			mPreviousCounterexamples[key].insert( newSource );
+			return std::make_tuple( Point<Number>(), Point<Number>(), newSourceNode );
+		} else {
+			upper = next;
+			next = std::get<0>( result );
+		}
+	}
+
+	return std::make_tuple( Point<Number>(), Point<Number>(), newSourceNode );
+}
+
+template <typename Number>
+std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::reusedPredicateTracing( const Point<Number>& source, const Point<Number>& sourceAlpha, ReachabilityNode<Number>* node ) {
+	int layerNumber = node->layerNumber();
+	int lower;
+	int upper = 0;
+	ReachabilityNode<Number>* newSourceNode;
+	if(mNetwork.layers(layerNumber)->layerType() == NN_LAYER_TYPE::AFFINE ){
+		layerNumber = node->getParent()->layerNumber();
+		lower = node->getParent()->neuronNumber();
+		newSourceNode = getAncestor(node->getParent(), upper);
+	} else {
+		lower = node->neuronNumber();
+		newSourceNode = getAncestor(node, upper);
+	}
+	
+	std::tuple<std::vector<int>, Point<Number>, Point<Number>> result = mNetwork.layers(layerNumber)->reusePredicate(source, sourceAlpha, newSourceNode->representation(), upper, lower);
+	if(std::get<0>(result).size() == 0){
+		std::cout << "Tracing succeded - Continuing wiht next layer" << std::endl;
+		return std::make_tuple(std::get<1>(result), std::get<2>(result), newSourceNode);
+	} else {
+		ReachabilityNode<Number>* originNode;
+		std::vector<int> potentialOrigins = std::get<0>(result);
+		switch (mPredicateTracingOrigin) {
+		case PREDICATE_TRACING_ORIGIN::FIRST:
+			originNode = getAncestor(node->getParent(), potentialOrigins[0]);
+			break;
+		case PREDICATE_TRACING_ORIGIN::LAST:
+			originNode = getAncestor(node->getParent(), potentialOrigins[potentialOrigins.size() - 1]);
+			break;
+		case PREDICATE_TRACING_ORIGIN::MIDDLE:
+			originNode = getAncestor(node->getParent(), potentialOrigins[(int) potentialOrigins.size()/2]);
+			break;
+		case PREDICATE_TRACING_ORIGIN::ALL:
+			for(int o : potentialOrigins ){
+				rememberCounterexampleSource(layerNumber, o);
+			}
+			// this needs to be element 0, otherwise the tree is not properly discarded/recomputed
+			originNode = getAncestor(node->getParent(), potentialOrigins[0]);
+			break;
+		default:
+			assert(false && "Undefined origin selection method!");
+			break;
+		}
+		return std::make_tuple(Point<Number>(), Point<Number>(), originNode);
 	}
 }
 
 template <typename Number>
-Point<Number> ReachabilityTree<Number>::propagateCandidateBack( const Point<Number>& candidate, int parentLayer, int parentNeuron, const Starset<Number>& parentSet ) const {
-	std::cout << "Propagating candidate back..." << std::endl;
+std::tuple<Point<Number>, Point<Number>, ReachabilityNode<Number>*> ReachabilityTree<Number>::reusedPredicateLPTracing( const Point<Number>& source, const Point<Number>& alpha, ReachabilityNode<Number>* node) {
+	
+	int layerNumber = node->layerNumber();
+	int lower;
+	int upper = 0;
+	ReachabilityNode<Number>* newSourceNode;
+
+	if(mNetwork.layers(layerNumber)->layerType() == NN_LAYER_TYPE::AFFINE ){
+		layerNumber = node->getParent()->layerNumber();
+		lower = node->getParent()->neuronNumber();
+		newSourceNode = getAncestor(node->getParent(), upper);
+	} else {
+		lower = node->neuronNumber();
+		newSourceNode = getAncestor(node, upper);
+	}
+	
+	// Try tracing through the whole layer by reusing the predicate
+	std::tuple<std::vector<int>, Point<Number>, Point<Number>> result = mNetwork.layers(layerNumber)->reusePredicate(source, alpha, newSourceNode->representation(), upper, lower);
+		
+	if(std::get<0>(result).size() == 0){
+		return std::make_tuple(std::get<1>(result), std::get<2>(result), newSourceNode);
+	}
+
+	// Confirm with LP that tracing through the layer is not possible
+	std::pair<Point<Number>, Point<Number>>  LPResult = mNetwork.layers(layerNumber)->traceSourceBack( source, alpha, lower, upper, newSourceNode->representation() );
+	
+	if (LPResult.first.dimension() > 0){
+		return std::make_tuple( LPResult.first, LPResult.second, newSourceNode );
+	}
+
+	//Try tracing to the closest node
+	upper = std::get<0>(result)[std::get<0>(result).size() - 1];
+	Point<Number> newSource = source;
+	Point<Number> newAlpha = alpha;
+	while(true){
+		if(mNetwork.layers(node->layerNumber())->layerType() == NN_LAYER_TYPE::AFFINE ){
+			newSourceNode = getAncestor(node->getParent(), upper);
+		} else {
+			newSourceNode = getAncestor(node, upper);
+		}
+
+		LPResult = mNetwork.layers(layerNumber)->traceSourceBack( newSource, newAlpha, lower, upper, newSourceNode->representation() );
+		
+		if (LPResult.first.dimension() > 0){
+			std::cout << "LP-Tracing failed" << std::endl;
+			lower = newSourceNode->neuronNumber();
+			result = mNetwork.layers(layerNumber)->reusePredicate(newSource, newAlpha, newSourceNode->representation(), 0, lower);
+			newSource = std::get<1>(result);
+			newAlpha = std::get<2>(result);
+			assert(std::get<0>(result).size() > 0); // implied by: tracing through layer failed => origin in layer after newSourceNode (LP success) => LP to neuron 0 would still fail => reusing the predicate fails
+			upper = std::get<0>(result)[std::get<0>(result).size() - 1];
+		} else {
+			return std::make_tuple( Point<Number>(), Point<Number>(), newSourceNode );
+		}
+	}
+}
+
+
+template <typename Number>
+ReachabilityNode<Number>* ReachabilityTree<Number>::getAncestor( ReachabilityNode<Number>* node, const int neuronNumber ) const {
+	if ( node->neuronNumber() == neuronNumber ) {
+		return node;
+	}
+	assert( node->hasParent() && node->layerNumber() == node->getParent()->layerNumber() );
+	return getAncestor( node->getParent(), neuronNumber );
+}
+
+template <typename Number>
+std::pair<Point<Number>, Point<Number>> ReachabilityTree<Number>::traceSourceBack( const Point<Number>& source, const Point<Number>& sourceAlpha, const int parentLayer, const int parentNeuron, const Starset<Number>& parentSet, const Starset<Number>& currentSet ) {
+	mNumberOfTracings += 1;
 	std::shared_ptr<LayerBase<Number>> layer = mNetwork.layers( parentLayer );
-	return layer->propagateCandidateBack( candidate, parentNeuron, parentSet );
+	if(mTryReusingPredicates && layer->layerType() != NN_LAYER_TYPE::AFFINE){
+		std::tuple<std::vector<int>, Point<Number>, Point<Number>> result = layer->reusePredicate(source, sourceAlpha, parentSet, parentNeuron, parentNeuron);
+		if(std::get<0>(result).size() == 0){
+			return std::make_pair(std::get<1>(result), std::get<2>(result));
+		}
+	}
+	return layer->traceSourceBack( source, sourceAlpha, parentNeuron, parentSet );
+}
+
+// [upperIndex, lowerIndex] is inclusive
+// For all dimensions in this interval (in the natural numbers) the backpropagation takes place!
+// Thus if the source comes from neuron (n+1) and is propagated back to neuron n, the correct interval is [n,n]
+template <typename Number>
+std::pair<Point<Number>, Point<Number>> ReachabilityTree<Number>::traceSourceBack( const Point<Number>& source, const Point<Number>& sourceAlpha, int layerNumber, int lowerIndex, int upperIndex, const Starset<Number>& ancestorSet ) {
+	mNumberOfTracings += 1;
+	std::shared_ptr<LayerBase<Number>> layer = mNetwork.layers( layerNumber );
+	if(mTryReusingPredicates && layer->layerType() != NN_LAYER_TYPE::AFFINE){
+		std::tuple<std::vector<int>, Point<Number>, Point<Number>> result = layer->reusePredicate(source, sourceAlpha, ancestorSet, upperIndex, lowerIndex);
+		if(std::get<0>(result).size() == 0){
+			return std::make_pair(std::get<1>(result), std::get<2>(result));
+		}
+	}
+	return layer->traceSourceBack( source, sourceAlpha, lowerIndex, upperIndex, ancestorSet );
 }
 
 template <typename Number>
@@ -680,11 +1226,9 @@ void ReachabilityTree<Number>::plotTree( ReachabilityNode<Number>* current, std:
 	mPlotter.setFilename( filename + "_pdf.plt" );
 	current->plot();
 
-	if ( current->hasPosChild() ) {
-		plotTree( current->getPosChild(), filename + "+" );
-	}
-	if ( current->hasNegChild() ) {
-		plotTree( current->getNegChild(), filename + "-" );
+	for ( int i = 0; i < current->getNumberOfChildren(); i++ ) {
+		// std::cout << "Plot child" << std::endl;
+		plotTree( current->getChild( i ), filename + "." + std::to_string( i ) );
 	}
 }
 

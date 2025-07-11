@@ -3,7 +3,7 @@
 namespace hypro {
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue ) {
+std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, Number minValue, Number maxValue ) {
 	auto result = std::vector<hypro::Starset<Number>>();
 	for ( const auto& set : input_sets ) {
 		auto center = set.center();
@@ -178,7 +178,7 @@ std::vector<hypro::Starset<Number>> HardTanh<Number>::exactHardTanh( int i, std:
 }
 
 template <typename Number>
-std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, float minValue, float maxValue ) {
+std::vector<hypro::Starset<Number>> HardTanh<Number>::approxHardTanh( int i, std::vector<hypro::Starset<Number>>& input_sets, Number minValue, Number maxValue ) {
 	std::vector<hypro::Starset<Number>> result = std::vector<hypro::Starset<Number>>();
 	for ( auto& input_star : input_sets ) {
 		auto center = input_star.center();

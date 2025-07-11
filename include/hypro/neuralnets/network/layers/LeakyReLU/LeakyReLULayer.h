@@ -18,7 +18,7 @@ namespace hypro {
 template <typename Number>
 class LeakyReLULayer : public LayerBase<Number> {
   private:
-	float mNegativeSlope = 0.01;
+	Number mNegativeSlope = 0.01;
 
 	/**
 	 * @brief Applies the given reachability method to the input set
@@ -42,7 +42,7 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 * @param[in] layerIndex The layer index
 	 * @param[in] negativeSlope The factor for the negative part of LeakyReLU. Default: 0.01
 	 */
-	LeakyReLULayer( unsigned short int layerSize, unsigned short int layerIndex, float negativeSlope = 0.01 );
+	LeakyReLULayer( unsigned short int layerSize, unsigned short int layerIndex, Number negativeSlope = Number( 1 ) / Number( 100 ) );
 
 	/**
 	 * @brief Default destructor
@@ -59,11 +59,11 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 * @brief Applies the LeakyReLU function at the given index to the input vector
 	 *
 	 * @param inputVec The input vector
-	 * @param i The index
+	 * @param dimension The index
 	 * @return The resulting vector after applying the LeakyReLU function
 	 */
-	vector_t<Number> forwardPass( const vector_t<Number>& inputVec, int i ) const;
-
+	virtual vector_t<Number> forwardPass( const vector_t<Number>& inputVec, const int dimension ) const;
+	
 	/**
 	 * @brief Applies the LeakyReLU function element-wise to the input vector
 	 *
@@ -92,7 +92,42 @@ class LeakyReLULayer : public LayerBase<Number> {
 	 */
 	virtual std::vector<Starset<Number>> forwardPass( const std::vector<Starset<Number>>& inputSets, NN_REACH_METHOD method, bool plotIntermediates ) const;
 
-	virtual Point<Number> propagateCandidateBack( Point<Number> y, int neuronNumber, Starset<Number> inputSet ) const;
+	virtual std::vector<std::pair<Starset<Number>, char>> forwardPassWithHistory( const Starset<Number>& inputSet, unsigned short int index, NN_REACH_METHOD method ) const;
+
+	/**
+	 * @brief Traces knownSource back to the previous neuron
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] neuronNumber the number of the neuron at which we apply tracing
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @return the new source of the couterexample in newSourceSet
+	 */
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int neuronNumber, Starset<Number> newSourceSet ) const;
+	
+	/**
+	 * @brief Traces knownSource back to the previous neuron
+	 *
+	 * @param[in] knownSource the counterexample candidate to trace back
+	 * @param[in] knownSourceAlpha the perdicate value corresponding to knownSource
+	 * @param[in] neuronNumber the number of the neuron at which we apply tracing
+	 * @param[in] newSourceSet the star which should include the new source
+	 * @param[in] knownSourceSet the star containing knownSource
+	 * @return the new source of the couterexample in newSourceSet
+	 */
+	virtual std::pair<Point<Number>, Point<Number>> traceSourceBack( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
+
+	/**
+	 * @brief Attempts to trace counterexample to a potential source neuron
+	 *
+	 * @param[in] knownSource the counterexample or known source to trace to the new source
+	 * @param[in] alpha the predicate value for the known source
+	 * @param[in] lowerIndex the number of the neuron knownSource was obtained from
+	 * @param[in] upperIndex the number of the neuron for the newSourceSet
+	 * @param[in] newSourceSet the set that should include the new source
+	 * @return tuple<int, Point<Number>, Point<Number>> were the first number indicates the next neuron to attempt tracing or is -1 and the Points contain the new source and predicate value of it
+	 */
+	virtual std::tuple<int, Point<Number>, Point<Number>> traceUnsatCore( Point<Number> knownSource, Point<Number> knownSourceAlpha, int lowerIndex, int upperIndex, Starset<Number> newSourceSet ) const;
 
 	/**
 	 * @brief Serialization of the current layer.
