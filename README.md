@@ -26,6 +26,7 @@ To be able to compile HyPro, the following dependencies must be met:
 * a Java runtime environment (e.g. openjdk-re)
 * uuid-dev
 * iputils-ping
+* libz3-dev
 
 ### Compiling the library
 
