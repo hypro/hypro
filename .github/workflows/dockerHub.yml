@@ -23,7 +23,7 @@ jobs:
     steps:
 
       - name: Check Out Repo
-        uses: actions/checkout@4
+        uses: actions/checkout@v4
 
       - name: Extract branch name
         shell: bash
