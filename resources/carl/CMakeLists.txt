@@ -10,8 +10,8 @@ ExternalProject_Add(
         CArL-EP-download
         SOURCE_DIR ${TARGETDIR}/src/CArL-EP
         BINARY_DIR ${TARGETDIR}/src/CArL-EP-build
-        GIT_TAG 19.10
-        GIT_REPOSITORY https://github.com/smtrat/carl
+        GIT_TAG 25.04
+        GIT_REPOSITORY https://github.com/ths-rwth/carl.git
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR> ${CMAKE_OPTIONS}
         BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} carl
         INSTALL_COMMAND ""
