@@ -11,6 +11,7 @@
 #ifdef HYPRO_USE_SOPLEX
 #include "../../../types.h"
 #include "soplex_hypro.h"
+#include <soplex/rational.h>
 
 namespace hypro {
 namespace detail {
@@ -23,7 +24,11 @@ soplex::SoPlex initializeSolver( const matrix_t<Number>& constraints, const vect
     solver.setIntParam( soplex::SoPlex::SOLVEMODE, soplex::SoPlex::SOLVEMODE_RATIONAL );
     solver.setIntParam( soplex::SoPlex::READMODE, soplex::SoPlex::READMODE_RATIONAL );
     solver.setIntParam( soplex::SoPlex::SYNCMODE, soplex::SoPlex::SYNCMODE_AUTO );
+    // solver.setIntParam(soplex::SoPlex::SIMPLIFIER, soplex::SoPlex::SIMPLIFIER_OFF);       // Disable presolving
+    // solver.setIntParam(soplex::SoPlex::SCALER, soplex::SoPlex::SCALER_OFF);          // Avoid numeric scaling
     solver.setIntParam( soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_ERROR );
+    // solver.setIntParam(soplex::SoPlex::VERBOSITY, soplex::SoPlex::VERBOSITY_FULL);
+
     solver.setRealParam( soplex::SoPlex::FEASTOL, 0.0 );
     solver.setRealParam( soplex::SoPlex::OPTTOL, 0.0 );
 
@@ -72,8 +77,7 @@ soplex::SoPlex initializeSolver( const matrix_t<Number>& constraints, const vect
 
 template <typename Number>
 EvaluationResult<Number> extractSolution( soplex::SoPlex& solver ) {
-    soplex::SPxSolver::Status stat;
-    stat = solver.solve();
+    auto stat = solver.solve();
 
     soplex::DVectorRational prim( solver.numCols() );
     soplex::DVectorRational dual( solver.numRows() );
@@ -103,7 +107,10 @@ EvaluationResult<Number> extractSolution( soplex::SoPlex& solver ) {
         case soplex::SPxSolver::INFEASIBLE: {
             return EvaluationResult<Number>( SOLUTION::INFEAS );
         }
-        default:
+        default: 
+            solver.writeFileReal("real_lp.lp");
+            solver.writeFileRational("rational_lp.lp");
+
             assert( false );
             return EvaluationResult<Number>();
     }

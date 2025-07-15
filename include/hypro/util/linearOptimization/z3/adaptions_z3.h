@@ -16,6 +16,7 @@
 #include "z3Convenience.h"
 
 #include <z3.h>
+#include "../../logging/Logger.h"
 
 namespace hypro {
     /**

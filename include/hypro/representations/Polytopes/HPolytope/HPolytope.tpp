@@ -1141,26 +1141,21 @@ namespace hypro {
             }
         }
 
-
-        TRACE("hypro.representations.HPolytope", "new this = " << *this << std::endl);
-        TRACE("hypro.representations.HPolytope", "new this empty = " << this->empty() << std::endl);
-        TRACE("hypro.representations.HPolytope", "new this vertices = " << this->vertices() << std::endl);  
-        // if(!oneWay) { // Todo: push to settings.
+        // we need to maximize inside both polytopes
+        // while shifting halfspaces in the directions which are only inside *this, we will get an over-approximation
+        // in the result of the minkowski sum, there should be also halfspaces which have the same norm as the ones in rhs  
         //  evaluation of lhs in directions of rhs
         for (unsigned i = 0; i < rhs.constraints().size(); ++i) {
             EvaluationResult<Number> evalRes = this->evaluate(rhs.constraints().at(i).normal());
             if (evalRes.errorCode == SOLUTION::INFTY) {
                 // Do nothing - omit inserting plane.
             } else if (evalRes.errorCode == SOLUTION::INFEAS) {
-                TRACE("hypro.representations.HPolytope", "solution infeasible in direction " << rhs.constraints().at(i).normal() << ": " << evalRes.errorCode << std::endl);
                 return Empty();
             } else {
                 result = rhs.constraints().at(i).offset() + evalRes.supportValue;
                 res.insert(Halfspace<Number>(rhs.constraints().at(i).normal(), result));
             }
         }
-        TRACE("hypro.representations.HPolytope", "end of minkowski sum" << std::endl);
-        //}
         return res;
     }
 

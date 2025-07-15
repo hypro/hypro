@@ -86,7 +86,7 @@ static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Numbe
     pointConstraint = c.int_val( 0 );
 
     std::vector<z3::expr> variables;
-    for ( unsigned i = 1; i <= _constraints.cols(); ++i ) {
+    for ( unsigned i = 0; i < _constraints.cols(); ++i ) {
         std::string name = "x_" + std::to_string( i );
         variables.push_back( c.real_const( name.c_str() ) );
     }
@@ -133,7 +133,7 @@ static std::pair<z3::expr, z3::expr> createFormula( const matrix_t<Number>& _con
     z3::expr objective( c );
     objective = c.int_val( 0 );
     formula = c.bool_val( true );
-    for ( unsigned i = 1; i <= _constraints.cols(); ++i ) {
+    for ( unsigned i = 0; i < _constraints.cols(); ++i ) {
         std::string name = "x_" + std::to_string( i );
         variables.push_back( c.real_const( name.c_str() ) );
     }
@@ -189,19 +189,14 @@ static z3::expr createFormula( const ConstraintsT<Number>& constraint_conjunctio
 
 template <typename Number>
 Number z3ResToNumber( z3::context& c, z3::ast& resZ3 ) {
-    int* p = new int;
-    unsigned* q = new unsigned;
-    mpq_t resRational;
+    
+    Z3_string numeral_str = Z3_get_numeral_string(c, resZ3);
+    std::string value_str(numeral_str);
 
-    Z3_get_numeral_int( c, Z3_get_numerator( c, resZ3 ), p );
-    Z3_get_numeral_uint( c, Z3_get_denominator( c, resZ3 ), q );
-
-    mpq_init( resRational );
-    mpq_set_si( resRational, *p, *q );
+    // Construct exact rational number
+    mpq_class resRational(value_str);
     Number resNumber = carl::convert<mpq_class, Number>( mpq_class( resRational ) );
-    mpq_clear( resRational );
-    delete p;
-    delete q;
+    
     return resNumber;
 }
 

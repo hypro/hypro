@@ -83,6 +83,10 @@ namespace hypro {
     z3OptimizeLinear(bool maximize, const vector_t <Number> &_direction, const matrix_t <Number> &constraints,
                      const vector_t <Number> &constants, const std::vector <carl::Relation> &relations) {
         // std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
+        
+        // DEBUG("hypro.linearOpt.z3 ", " in direction " << _direction.transpose() << std::endl);
+        // DEBUG("hypro.linearOpt.z3 ", " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl);
+
         EvaluationResult <Number> res;
         z3Context c;
         z3::optimize z3Optimizer(c);
