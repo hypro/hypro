@@ -65,10 +65,19 @@ namespace hypro {
                 // Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
                 auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
                 Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
+                //define projectdim
+                std::vector<std::size_t> projectionDims;
 
-                TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
+                matrix_t<Number> flowmatrix = flow.getFlowMatrix();
 
-                firstSegment = firstSegment.minkowskiSum(bloatingSet);
+                for (std::size_t i = 0; i < flow.dimension(); ++i) {
+                        if (flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){
+                                projectionDims.push_back(i);
+                        }
+                }
+                auto bloatingSetpro = bloatingSet.projectOn(projectionDims);
+                TRACE("hypro", "bloatingSet: " << bloatingSetpro.vertices());
+                firstSegment = firstSegment.minkowskiSum(bloatingSetpro);
         }
         firstSegment.removeRedundancy();
 
@@ -105,10 +114,17 @@ namespace hypro {
                 // Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
                 auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
                 auto bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
-
-                TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
-
-                firstSegment = firstSegment.minkowskiSum(bloatingSet);
+                //reduce dimensions
+                std::vector<std::size_t> projectionDims;
+                matrix_t<Number> flowmatrix = flow.getFlowMatrix();
+                for (std::size_t i = 0; i < flow.dimension(); ++i) {
+                        if (flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){
+                                projectionDims.push_back(i);
+                        }
+                }
+                auto bloatingSetpro = bloatingSet.projectOn(projectionDims);
+                TRACE("hypro", "bloatingSet: " << bloatingSetpro.vertices());
+                firstSegment = firstSegment.minkowskiSum(bloatingSetpro);
         }
 
         firstSegment.removeRedundancy();
@@ -150,9 +166,17 @@ namespace hypro {
                                 externalInput);
                         auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
                         Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
-                        TRACE("hypro", "bloatingSet: " << bloatingSet.vertices());
-
-                        firstSegment = firstSegment.minkowskiDiff(bloatingSet);
+                        //define projectdim as the dimensions with linear flow
+                        std::vector<std::size_t> projectionDims;
+                        matrix_t<Number> flowmatrix = flow.getFlowMatrix();
+                        for (std::size_t i = 0; i < flow.dimension(); ++i) {
+                                if (flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){
+                                        projectionDims.push_back(i);
+                                }
+                        }
+                        auto bloatingSetpro = bloatingSet.projectOn(projectionDims);
+                        TRACE("hypro", "bloatingSet: " << bloatingSetpro.vertices());
+                        firstSegment = firstSegment.minkowskiDiff(bloatingSetpro);
                 }
         }
 
