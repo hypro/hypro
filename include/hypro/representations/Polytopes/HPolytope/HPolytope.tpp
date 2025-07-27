@@ -41,7 +41,8 @@ namespace hypro {
 #ifndef NDEBUG
             bool empty = this->empty();
 #endif
-            reduceNumberRepresentation();
+            // reduceNumberRepresentation();
+            reduceRepresentation();
             assert(empty == this->empty());
             if (Setting::OPTIMIZER_CACHING) {
                 setOptimizer(this->matrix(), this->vector());
@@ -65,7 +66,8 @@ namespace hypro {
 #ifndef NDEBUG
         bool empty = this->empty();
 #endif
-        reduceNumberRepresentation();
+        // reduceNumberRepresentation();
+        reduceRepresentation();
         assert(empty == this->empty());
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer(A, b);
@@ -81,6 +83,8 @@ namespace hypro {
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer(A);
         }
+
+        reduceRepresentation();
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -96,6 +100,7 @@ namespace hypro {
         if (Setting::OPTIMIZER_CACHING) {
             setOptimizer(this->matrix(), this->vector());
         }
+        reduceRepresentation();
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -140,6 +145,7 @@ namespace hypro {
                     return hplane.contains(point);
                 });
             }));
+            reduceRepresentation();
         } else {
             auto pointsCopy = points;
 
@@ -314,6 +320,7 @@ namespace hypro {
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
             setOptimizer(orig.matrix(), orig.vector());
         }
+        reduceRepresentation();
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -1082,9 +1089,17 @@ namespace hypro {
             if (lu.rank() == A.rows()) {
                 TRACE("hypro.representations.HPolytope", "A has full rank - do not use v-conversion.");
                 std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-                assert((HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
-                                                               inequalities.first * A.inverse() * b +
-                                                               inequalities.second).size() == this->size()));
+
+                // std::cout << HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
+                //                                                inequalities.first * A.inverse() * b +
+                //                                                inequalities.second).size() << std::endl;
+
+                // std::cout << "this.size = " << this->size() << std::endl;
+                
+                // removed since if I apply linear transformation on the set, there might be a different number of non-redundant halfspaces
+                // assert((HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
+                //                                                inequalities.first * A.inverse() * b +
+                //                                                inequalities.second).size() == this->size()));
                 assert(!(HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
                                                                 inequalities.first * A.inverse() * b +
                                                                 inequalities.second).empty()));
@@ -1109,6 +1124,7 @@ namespace hypro {
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::minkowskiSum(const HPolytopeT &rhs) const {
         TRACE("hypro.representations.HPolytope", "P' = P + " << rhs << std::endl);
+        TRACE("hypro.representations.HPolytope", "where P =  " << *this << std::endl);
         HPolytopeT<Number, Converter, Setting> res;
         Number result;
 
@@ -1125,7 +1141,9 @@ namespace hypro {
             }
         }
 
-        // if(!oneWay) { // Todo: push to settings.
+        // we need to maximize inside both polytopes
+        // while shifting halfspaces in the directions which are only inside *this, we will get an over-approximation
+        // in the result of the minkowski sum, there should be also halfspaces which have the same norm as the ones in rhs  
         //  evaluation of lhs in directions of rhs
         for (unsigned i = 0; i < rhs.constraints().size(); ++i) {
             EvaluationResult<Number> evalRes = this->evaluate(rhs.constraints().at(i).normal());
@@ -1138,7 +1156,6 @@ namespace hypro {
                 res.insert(Halfspace<Number>(rhs.constraints().at(i).normal(), result));
             }
         }
-        //}
         return res;
     }
 
@@ -1801,8 +1818,9 @@ namespace hypro {
             opt.setVector(checkvector);
             // default relation is LEQ, set LESS for original polytop
             // GLPK cannot handle strict inequalities and throws error
+            // neither can SOPLEX
             // using weak inequalities instead is overapproximating
-#ifndef HYPRO_USE_GLPK
+#if !defined(HYPRO_USE_GLPK) && !defined(HYPRO_USE_SOPLEX)
             for (long int t = 0; t < matrix.rows(); t++) {
                 opt.setRelation(carl::Relation::LESS, t + matrix2.rows());
             }

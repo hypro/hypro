@@ -130,7 +130,7 @@ namespace hypro {
                 segmentsToCompute = 0;
             }
 
-            if (!node->getInitialSetUnderApprox().empty()) {
+            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty()) {
                 safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
                                                                 std::back_inserter(node->getFlowpipeUnderApprox()), segmentsToCompute);
             }
@@ -140,7 +140,7 @@ namespace hypro {
             }
         } else {
 
-            if (!node->getInitialSetUnderApprox().empty()) {
+            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty()) {
                 safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
                                                             std::back_inserter(node->getFlowpipeUnderApprox()));
             }

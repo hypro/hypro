@@ -38,6 +38,17 @@ namespace hypro {
         if (containment == CONTAINMENT::NO) {
             DEBUG("hypro.reachability",
                   "First segment is not contained in the invariant, abort time successor computation.");
+            DEBUG("hypro.reachability",   
+                  "With invariant " << loc->getInvariant() << std::endl);
+
+            DEBUG("hypro.reachability",   
+                  "flow  " << loc->getLinearFlow(mSubspace) << std::endl);
+
+            
+            DEBUG("hypro.reachability",   
+                  "firstSegment " << firstSegment << std::endl);
+            DEBUG("hypro.reachability",   
+                "initialSet " << initialSet << std::endl);
             return REACHABILITY_RESULT::SAFE;
         }
 

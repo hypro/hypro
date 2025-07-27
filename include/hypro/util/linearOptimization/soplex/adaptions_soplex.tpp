@@ -11,6 +11,7 @@
 #pragma once
 
 #include "adaptions_soplex.h"
+#include <soplex/rational.h>
 
 namespace hypro {
 
@@ -19,7 +20,7 @@ namespace hypro {
     soplexOptimizeLinearPostSolve(const vector_t<Number> &direction, const matrix_t<Number> &constraints,
                                   const vector_t<Number> &constants, const std::vector<carl::Relation> &relations,
                                   bool maximize, const EvaluationResult <Number> &preSolution) {
-        soplex::SoPlex solver = detail::initializeSolver(constraints, constants, relations);
+        auto solver = detail::initializeSolver(constraints, constants, relations);
 
         // set objective
         for (unsigned varIndex = 0; varIndex < direction.rows(); ++varIndex) {
@@ -68,7 +69,7 @@ namespace hypro {
     soplexOptimizeLinear(const vector_t<Number> &direction, const matrix_t<Number> &constraints,
                          const vector_t<Number> &constants, const std::vector<carl::Relation> &relations,
                          bool maximize) {
-        soplex::SoPlex solver = detail::initializeSolver(constraints, constants, relations);
+        auto solver = detail::initializeSolver(constraints, constants, relations);
         if (maximize) {
             solver.setIntParam(soplex::SoPlex::OBJSENSE, soplex::SoPlex::OBJSENSE_MAXIMIZE);
         } else {
@@ -91,9 +92,9 @@ namespace hypro {
     template<typename Number>
     bool soplexCheckConsistency(const matrix_t<Number> &constraints, const vector_t<Number> &constants,
                                 const std::vector<carl::Relation> &relations) {
-        soplex::SoPlex solver = detail::initializeSolver(constraints, constants, relations);
+        auto solver = detail::initializeSolver(constraints, constants, relations);
 
-        std::cout << "Constraints: " << constraints << ", constants " << constants << std::endl;
+        // std::cout << "Constraints: " << constraints << ", constants " << constants << std::endl;
 
         solver.solve();
         return solver.isPrimalFeasible();
@@ -103,7 +104,7 @@ namespace hypro {
     bool soplexCheckPoint(const matrix_t<Number> &constraints, const vector_t<Number> &constants,
                           const std::vector<carl::Relation> &relations, const Point <Number> &point) {
         // Set column bounds equal to the point and check whether lp is feasible
-        soplex::SoPlex solver = detail::initializeSolver(constraints, constants, relations);
+        auto solver = detail::initializeSolver(constraints, constants, relations);
         for (unsigned varIndex = 0; varIndex < constraints.cols(); ++varIndex) {
             mpq_t a;
             mpq_init(a);
@@ -123,7 +124,7 @@ namespace hypro {
         std::vector<std::size_t> res;
 
         // first call to check satisfiability
-        soplex::SoPlex solver = detail::initializeSolver(constraints, constants, relations);
+        auto solver = detail::initializeSolver(constraints, constants, relations);
         solver.solve();
         if (!solver.isPrimalFeasible()) {
             return res;
@@ -227,7 +228,7 @@ namespace hypro {
     EvaluationResult <Number>
     soplexGetInternalPoint(const matrix_t<Number> &constraints, const vector_t<Number> &constants,
                            const std::vector<carl::Relation> &relations) {
-        soplex::SoPlex solver = detail::initializeSolver(constraints, constants, relations);
+        auto solver = detail::initializeSolver(constraints, constants, relations);
 
         EvaluationResult <Number> res = detail::extractSolution<Number>(solver);
         return res;

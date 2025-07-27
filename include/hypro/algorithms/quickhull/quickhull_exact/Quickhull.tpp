@@ -34,8 +34,9 @@ namespace hypro {
 
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::compute() {
+        TRACE("hypro.quickhull", "nr points = " << points.size());
         TRACE("hypro.quickhull", points);
-        removeDuplicateInputs();
+        removeDuplicateInputs(); // remove duplicate points
 
         // There's only a single point, so we fix it from both sides.
         if (dimension == 1 && points.size() == 1) {
@@ -43,7 +44,7 @@ namespace hypro {
             return;
         }
 
-        buildInitialPolytope();
+        buildInitialPolytope(); // builds initial polytope, which is the starting point of the quickhull alg.
 #ifdef HYPRO_LOGGING
         for (Facet &facet: fSpace.facets) {
             TRACE("hypro.quickhull", ", furthest point " << facet.furthestPoint << std::endl
@@ -53,6 +54,7 @@ namespace hypro {
 
         processPoints();
 #ifdef HYPRO_LOGGING
+        TRACE("hypro.quickhull", "ALL facets size  = " << fSpace.facets.size() << std::endl);
         TRACE("hypro.quickhull", "ALL facets:" << std::endl
                                                << fSpace.printAll());
 #endif
@@ -61,7 +63,8 @@ namespace hypro {
         fSpace.removeCoplanarFacets();
 
 #ifdef HYPRO_LOGGING
-        TRACE("hypro.quickhull", "ALL facets:" << std::endl
+        TRACE("hypro.quickhull", "ALL facets size  = " << fSpace.facets.size() << std::endl);
+        TRACE("hypro.quickhull", "ALL facets after compress vector and remove:" << std::endl
                                                << fSpace.printAll());
 
         for (facet_ind_t facet_i = 0; facet_i < fSpace.facets.size(); ++facet_i) {

@@ -171,6 +171,10 @@ namespace hypro {
         updateConstraints();
         assert(_direction.rows() == mConstraintMatrix.cols());
 
+        DEBUG("hypro.optimizer",   "useExactGlpk = " << useExactGlpk << std::endl);
+        DEBUG("hypro.optimizer",   "mConstraintMatrix = " << mConstraintMatrix << std::endl);
+        DEBUG("hypro.optimizer",   "mConstraintVector = " << mConstraintVector << std::endl);
+
         if (mConstraintMatrix.rows() == 0) {
             return EvaluationResult<Number>(Number(0), vector_t<Number>::Zero(1), SOLUTION::INFTY);
         }
