@@ -121,7 +121,7 @@ namespace hypro {
         }
 
         Representation firstSegment;
-        if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
+        if constexpr (std::is_same_v<Representation, HPolytope<Number>> || std::is_same_v<Representation, Starset<Number>> ) {
             if (initialSetUnder.universal()) { // in case the initial set is universal the minkowski diff will fail, this is to avoid that happening
                 return REACHABILITY_RESULT::SAFE;
             }

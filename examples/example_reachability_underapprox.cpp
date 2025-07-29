@@ -20,7 +20,7 @@
 #include "hypro/util/statistics/statistics.h"
 
 template<typename Number, typename Representation>
-static void computeReachableStates(const std::string &filename) {
+static void computeReachableStates(const std::string &filename, const std::string reprString ) {
     using Automaton = hypro::HybridAutomaton<Number>;
     using clock = std::chrono::high_resolution_clock;
     using timeunit = std::chrono::microseconds;
@@ -54,9 +54,7 @@ static void computeReachableStates(const std::string &filename) {
         clock::time_point startPlotting = clock::now();
 
         auto &plotter = hypro::Plotter<Number>::getInstance();
-        std::string extendedFilename = settings.plotting().plotFileNames.front() + "_hpoly" ;
-
-
+        std::string extendedFilename = settings.plotting().plotFileNames.front() + reprString;
          
         std::cout << "filename is " << extendedFilename << std::endl;
         plotter.setFilename(extendedFilename);
@@ -138,8 +136,13 @@ int main(int argc, char **argv) {
     using Number = mpq_class;
     // using Number = double; // with double it gets stuck in HPolytope->satisfiesHalfspaces
 
-    using Representation = hypro::HPolytope<Number>;
-    computeReachableStates<Number, Representation>(filename);
+    // using Representation = hypro::HPolytope<Number>;
+    // std::string reprString = "_hpoly";
+
+    using Representation = hypro::Starset<Number>;
+    std::string reprString = "_star";
+
+    computeReachableStates<Number, Representation>(filename, reprString);
      
 
     exit(0);

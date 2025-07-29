@@ -45,13 +45,14 @@ namespace hypro {
                                                                  timeTrafoVectorBlock(rawTransformation));
         Representation firstSegment = atDelta.unite(initialSet);
 
-        TRACE("hypro", "atDelta: " << atDelta.vertices());
-        TRACE("hypro", "init: " << initialSet.vertices());
+        DEBUG("hypro", "atDelta: " << atDelta.vertices());
+        DEBUG("hypro", "init: " << initialSet.vertices());
 
-        TRACE("hypro", "atDelta: " << atDelta << std::endl);
-        TRACE("hypro", "init: " << initialSet << std::endl);
+        DEBUG("hypro", "atDelta: " << atDelta << std::endl);
+        DEBUG("hypro", "init: " << initialSet << std::endl);
 
-        TRACE("hypro", "firstSegment: " << firstSegment << std::endl);
+        DEBUG("hypro", "firstSegment: " << firstSegment << std::endl);
+        DEBUG("hypro", "firstSegment: " << firstSegment.vertices() << std::endl);
 
 
         bool isFlowIdentity = rawTransformation.block(0, 0, rawTransformation.rows() - 1, rawTransformation.cols() - 1).isApprox(matrix_t<Number>::Identity(rawTransformation.rows()-1, rawTransformation.cols()-1));
@@ -71,28 +72,27 @@ namespace hypro {
                 auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
                 Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
                 //define projectdim as the dimensions with linear flow
+                
                 std::vector<std::size_t> projectionDims;
-
                 matrix_t<Number> flowmatrix = flow.getFlowMatrix();
-
+                matrix_t<Number> projMatrix = matrix_t<Number>::Identity(flow.dimension(), flow.dimension());
                 for (std::size_t i = 0; i < flow.dimension(); ++i) {
-                        if (flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){
+                        if (!flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){ // get dimensions where the flow is not constant
                                 projectionDims.push_back(i);
+                                projMatrix(i, i) = 0;
                         }
                 }
-                auto bloatingSetpro = bloatingSet.projectOn(projectionDims);
-                TRACE("hypro", "bloatingSet: " << bloatingSetpro.vertices());
-                TRACE("hypro", "bloatingSet: " << bloatingSetpro << std::endl);
+                auto bloatingSetpro = bloatingSet.linearTransformation(projMatrix);
+                // auto bloatingSetpro = bloatingSet.projectOn(projectionDims);
+                DEBUG("hypro", "bloatingSet: " << bloatingSetpro.vertices());
+                DEBUG("hypro", "bloatingSet: " << bloatingSetpro << std::endl);
+
                 firstSegment = firstSegment.minkowskiSum(bloatingSetpro);
         }
-        TRACE("hypro.reachability", "first segment = " << firstSegment << std::endl);
-        TRACE("hypro.reachability", "first segment = " << firstSegment.empty() << std::endl);
+        DEBUG("hypro.reachability", "first segment = " << firstSegment << std::endl);
+        DEBUG("hypro.reachability", "first segment = " << firstSegment.empty() << std::endl);
         
         firstSegment.removeRedundancy();
-
-        TRACE("hypro.reachability", "first segment after redundancy = " << firstSegment << std::endl);
-        TRACE("hypro.reachability", "first segment after redundancy = " << firstSegment.empty() << std::endl);
-        
         return firstSegment;
     }
 
@@ -106,9 +106,6 @@ namespace hypro {
         auto atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
                                                        timeTrafoVectorBlock(rawTransformation));
         auto firstSegment = atDelta.unite(initialSet);
-
-        TRACE("hypro", "atDelta: " << atDelta.vertices());
-        TRACE("hypro", "init: " << initialSet.vertices());
 
         bool isFlowIdentity = rawTransformation.block(0, 0, rawTransformation.rows() - 1, rawTransformation.cols() - 1).isApprox(matrix_t<Number>::Identity(rawTransformation.rows()-1, rawTransformation.cols()-1));
         if (!isFlowIdentity) {
@@ -126,20 +123,21 @@ namespace hypro {
                 // Means bloatingSet = convert(1/4 * errorBoxes.DifferenceBox)
                 auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
                 auto bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
-                //define projectdim as the dimensions with linear flow
-                std::vector<std::size_t> projectionDims;
+                
                 matrix_t<Number> flowmatrix = flow.getFlowMatrix();
+                matrix_t<Number> projMatrix = matrix_t<Number>::Identity(flow.dimension(), flow.dimension());
                 for (std::size_t i = 0; i < flow.dimension(); ++i) {
-                        if (flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){
-                                projectionDims.push_back(i);
+                        if (!flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){ // get dimensions where the flow is not constant
+                                projMatrix(i, i) = 0;
                         }
                 }
-                auto bloatingSetpro = bloatingSet.projectOn(projectionDims);
-                TRACE("hypro", "bloatingSet: " << bloatingSetpro.vertices());
+                auto bloatingSetpro = bloatingSet.linearTransformation(projMatrix);
+                DEBUG("hypro", "bloatingSet: " << bloatingSetpro.vertices());
+
                 firstSegment = firstSegment.minkowskiSum(bloatingSetpro);
         }
 
-        firstSegment.removeRedundancy();
+        // firstSegment.removeRedundancy();
 
         return firstSegment;
     }
@@ -153,17 +151,21 @@ namespace hypro {
                                          tNumber timeStep) {
 
         TRACE("hypro", " inside constructFirstSegmentUnder");
+        DEBUG("hypro", "init: " << initialSet.vertices());
+        DEBUG("hypro", "init: " << initialSet << std::endl);
 
         Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
                                                                  timeTrafoVectorBlock(rawTransformation));
+        DEBUG("hypro", "atDelta: " << atDelta.vertices());
+        DEBUG("hypro", "atDelta: " << atDelta << std::endl);
+                                                                 
         Representation firstSegment = atDelta.unite(initialSet);
 
-        TRACE("hypro", "atDelta: " << atDelta.vertices());
-        TRACE("hypro", "init: " << initialSet.vertices());
+        DEBUG("hypro", "firstSegment: " << firstSegment << std::endl);
 
         bool isFlowIdentity = rawTransformation.block(0, 0, rawTransformation.rows() - 1, rawTransformation.cols() - 1).isApprox(matrix_t<Number>::Identity(rawTransformation.rows()-1, rawTransformation.cols()-1));
         // had to add it this way, because the representation check has to be a const expression (so it can be evaluated in compile time)
-        if constexpr (std::is_same<Representation, HPolytope<Number>>::value) {
+        if constexpr (std::is_same_v<Representation, HPolytope<Number>> || std::is_same_v<Representation, Starset<Number>>) {
                 if (!isFlowIdentity) { //cannot combine the two if-s because this one is not a constant expression
                         // Zero'd dummy external input
                         Box<Number> externalInput{std::make_pair(
@@ -178,25 +180,30 @@ namespace hypro {
                                 externalInput);
                         auto scaledErrorBox = Number(Number(1) / Number(4)) * errorBoxes.DifferenceBox;
                         Representation bloatingSet = Representation(scaledErrorBox.matrix(), scaledErrorBox.vector());
-                        //define projectdim as the dimensions with linear flow
-                        std::vector<std::size_t> projectionDims;
+                        
                         matrix_t<Number> flowmatrix = flow.getFlowMatrix();
+                        matrix_t<Number> projMatrix = matrix_t<Number>::Identity(flow.dimension(), flow.dimension());
                         for (std::size_t i = 0; i < flow.dimension(); ++i) {
-                                if (flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){
-                                        projectionDims.push_back(i);
+                                if (!flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){ // get dimensions where the flow is not constant
+                                        projMatrix(i, i) = 0;
                                 }
                         }
-                        auto bloatingSetpro = bloatingSet.projectOn(projectionDims);
-                        TRACE("hypro", "bloatingSet: " << bloatingSetpro.vertices());
+
+                        auto bloatingSetpro = bloatingSet.linearTransformation(projMatrix);
+                        DEBUG("hypro", "bloatingSet: " << bloatingSetpro.vertices());
+
+                        DEBUG("hypro", "under firstSegment: " << firstSegment.vertices() << std::endl);
                         firstSegment = firstSegment.minkowskiDiff(bloatingSetpro);
+                        DEBUG("hypro", "under firstSegment: " << firstSegment << std::endl);
+                        DEBUG("hypro", "under firstSegment: " << firstSegment.vertices() << std::endl);
+
                         if (firstSegment.empty()) {
                                 TRACE("hypro", "first segment became empty as a result of Minkowski diff" );
                         }
                 }
         }
 
-        firstSegment.removeRedundancy();
-
+        // firstSegment.removeRedundancy();
         return firstSegment;
     }
 

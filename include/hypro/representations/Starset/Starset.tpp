@@ -109,6 +109,11 @@ bool StarsetT<Number, Converter, Setting>::empty() const {
 }
 
 template <typename Number, typename Converter, typename Setting>
+bool StarsetT<Number, Converter, Setting>::universal() const {
+	return mConstraints.universal();
+}
+
+template <typename Number, typename Converter, typename Setting>
 void StarsetT<Number, Converter, Setting>::setCenter( const vector_t<Number>& center ) {
 	mCenter = center;
 }
@@ -209,6 +214,19 @@ std::pair<CONTAINMENT, StarsetT<Number, Converter, Setting>> StarsetT<Number, Co
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::projectOn( const std::vector<std::size_t>& dimensions ) const {
+
+	// auto projHPoly = this->eqvPolytope().projectOn(dimensions);
+	// return StarsetT<Number, Converter, Setting>(projHPoly);
+
+	matrix_t<Number> newGenerator = matrix_t<Number>::Zero(mGenerator.rows(), mGenerator.cols());
+	vector_t<Number> center = vector_t<Number>::Zero(mCenter.size());
+
+	for (std::size_t i = 0; i < dimensions.size(); i++) {
+		center[i] = mCenter[dimensions[i]];
+		newGenerator.block(i, 0, 1, mGenerator.cols()) = mGenerator.row(dimensions[i]);
+	}
+
+	return StarsetT<Number, Converter, Setting>(center, newGenerator, mConstraints);
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -277,6 +295,152 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minko
 
 	return StarsetT<Number, Converter, Setting>( newmCenter, newmGenerator, HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>( newmShapeMatrix, newmLimits ).removeRedundancy() );
 }
+
+template <typename Number, typename Converter, typename Setting>
+StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minkowskiDiff( const StarsetT<Number, Converter, Setting>& rhs ) const {
+	assert( this->dimension() == rhs.dimension() );
+
+	// // assuming same dimension
+	// if ( mGenerator.cols() < 10 ) {
+	// 	auto intermediate1 = this->eqvPolytope();
+	// 	auto intermediate2 = rhs.eqvPolytope();
+	// 	return Converter::toStarset( intermediate1.minkowskiDiff( intermediate2 ) );
+	// }
+
+	if ( this->generator().rows() != rhs.generator().rows() ) {
+		return *this;
+	}
+
+	if ( rhs.empty() ) {
+		return *this;
+	}
+
+	if ( this->empty() ) {
+		return rhs;
+	}
+
+
+	// here we should check the rank of both matrices, this is just a quick fix TODO: check rank < nr_cols
+	auto thisReduced =  *this;
+	if (this->generator().cols() > this->generator().rows())
+		thisReduced =  this->dimensionReduction();
+
+	auto rhsReduced = rhs;
+	if (rhs.generator().cols() < rhs.generator().rows())
+		rhsReduced = rhs.dimensionReduction();
+
+
+	auto P1 = thisReduced.constraints();
+	auto P2 = rhsReduced.constraints();
+	matrix_t<Number> C1 = P1.matrix(); // the halfspaces from *this
+	vector_t<Number> d1 = P1.vector();
+	matrix_t<Number> V1Inv = thisReduced.generator().inverse();
+
+
+
+	HPolytopeT<Number, Converter, HPolytopeOptimizerCaching> res;
+
+	// the star sets have to be the same dimension and the generator matrix has to be a square, invertible matrix  
+	for (unsigned i = 0; i < C1.rows(); ++i) {
+		matrix_t<Number> b1 = (V1Inv * rhsReduced.generator());
+		vector_t<Number> evalDir = C1.row(i) * b1;
+		
+		EvaluationResult<Number> evalRes = rhsReduced.constraints().evaluate(evalDir);
+			if (evalRes.errorCode == SOLUTION::INFTY) {
+			// Do nothing - omit inserting plane.
+		} else if (evalRes.errorCode == SOLUTION::INFEAS) {
+			std::cout << "solution is infeasible " << std::endl;
+			return Empty();
+		} else {
+			vector_t<Number> a1 = C1.row(i) * V1Inv;
+			Number a2 = a1.transpose() * (thisReduced.center() - rhsReduced.center());
+			Number result = d1(i) + a2;
+			res.insert(Halfspace<Number>(C1.row(i), result));
+		}
+
+	}
+	return StarsetT<Number, Converter, Setting>( thisReduced.center(), thisReduced.generator(), res.removeRedundancy() );	
+}
+
+
+// implementation from Vahe Vkhkryan
+// it reduces the interior dimension of the star set
+template <typename Number, typename Converter, typename Setting>
+StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::dimensionReduction() const {
+	
+	Eigen::FullPivLU<hypro::matrix_t<Number>> luDecompGen( mGenerator );
+	hypro::matrix_t<Number> imageGenerator = luDecompGen.image( mGenerator );
+	auto rank_generator = imageGenerator.cols();
+
+	if ( rank_generator < mGenerator.cols() ) {
+		// detecting the linear dependent columns in mGenerator
+		std::vector<std::size_t> linDependent;
+		for ( int i = 0; i < mGenerator.cols(); i++ ) { 
+			// for ( int j = 0; j < imageGenerator.cols(); j++ ) {
+			int j = 0;
+			while (j < imageGenerator.cols()) {
+				if ( mGenerator.col( i ) == imageGenerator.col( j ) ) { //remove the column from the image, which was already found in the original
+					hypro::matrix_t<Number> aux(imageGenerator.rows(), imageGenerator.cols() - 1);
+					// Copy all columns before colToRemove
+					aux.leftCols(j) = imageGenerator.leftCols(j);
+					// Copy all columns after colToRemove
+					aux.rightCols(imageGenerator.cols() - j - 1) = imageGenerator.rightCols(imageGenerator.cols() - j - 1);
+					imageGenerator = aux;
+
+					break;
+				} else {
+					if ( j == ( imageGenerator.cols() - 1 ) ) {
+						linDependent.push_back( i );
+					}
+				}
+				j++;
+			}
+
+			if (imageGenerator.cols() == 0) {
+				for (int k = i+1; k < mGenerator.cols(); k++)
+					linDependent.push_back(k);
+				break;
+			}
+		}
+
+		// computing the nullity of V_slice, which are to the columns in the G, which corresponding columns in generator prime is 0-column (which are linearly dependent)
+		hypro::matrix_t<Number> generatorNullSpace = luDecompGen.kernel();  // => TODO: cannot this be used for computing the linearly dependent vectors?
+		hypro::matrix_t<Number> G_star = hypro::matrix_t<Number>::Identity( mGenerator.cols(), mGenerator.cols() );
+		for ( int i = 0; i < linDependent.size(); i++ ) {
+			G_star.col( linDependent[i] ) = generatorNullSpace.col( i );
+		}
+
+		hypro::matrix_t<Number> G = G_star;
+		// computing the generator that has only linearly independent columns
+		int col_counter = 0;
+		hypro::matrix_t<Number> generator_prime = hypro::matrix_t<Number>( mGenerator.rows(), mGenerator.cols() - linDependent.size() );
+		for ( int i = 0; i < mGenerator.cols(); i++ ) {
+			if ( std::find( linDependent.begin(), linDependent.end(), i ) == linDependent.end() ) {
+				generator_prime.col( col_counter ) = mGenerator.col( i );
+				col_counter++;
+			}
+		}
+
+		hypro::matrix_t<Number> C_prime = shape() * G;
+		hypro::vector_t<Number> d_prime = limits();
+		// std::cout << "C_prime shape = ( " << C_prime.rows() << ", " << C_prime.cols() << " ) " << std::endl;
+
+		// std::cout << "FMPLEX STARTING " << std::endl;
+		// auto startFMplex = std::chrono::steady_clock::now();
+		std::pair<hypro::matrix_t<mpq_class>, hypro::vector_t<mpq_class>> result = smtrat::fmplex::eliminate_cols( C_prime, d_prime, linDependent );
+		// auto endFMplex = std::chrono::steady_clock::now();
+		// std::cout << "Total time for FMPlex: " << std::chrono::duration_cast<std::chrono::seconds>( endFMplex - startFMplex ).count() << " s" << std::endl;
+		// std::cout << "FMPLEX FINISHED" << std::endl;
+		hypro::matrix_t<mpq_class> new_C_FMplex = result.first;
+		hypro::vector_t<mpq_class> new_d_FMplex = result.second;
+
+		return StarsetT<Number, Converter, Setting>( mCenter, generator_prime, hypro::HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>( new_C_FMplex, new_d_FMplex ).removeRedundancy() );
+	}
+
+	return *this;
+
+}
+
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersect( const StarsetT<Number, Converter, Setting>& rhs ) const {
@@ -408,14 +572,14 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 	if ( mGenerator.cols() < 10 ) {
 		auto intermediate = this->eqvPolytope();
 		auto intermediate2 = rhs.eqvPolytope();
-		return Converter::toStarset( intermediate.unite( intermediate2 ) );
+		return Converter::toStarset( intermediate.unite( intermediate2 ) ).dimensionReduction();
 	}
 	auto tmp1 = StarsetT<Number, Converter, Setting>( this->center(), this->generator(), this->constraints().removeRedundancy() );
 	auto tmp2 = StarsetT<Number, Converter, Setting>( rhs.center(), rhs.generator(), rhs.constraints().removeRedundancy() );
 
 	// option 2 in bachelor thesis
 	if ( this->constraints() == rhs.constraints() ) {
-		if ( this->generator() == matrix_t<Number>::Identity( this->generator().cols(), this->generator().cols() ) ) {
+		if ( this->generator().rows() == this->generator().cols() && this->generator() == matrix_t<Number>::Identity( this->generator().cols(), this->generator().cols() ) ) {
 			if ( rhs.generator() == rhs.generator() * this->generator() ) {
 				matrix_t<Number> m = matrix_t<Number>::Identity( this->generator().cols(), this->generator().cols() ) - rhs.generator();
 				StarsetT<Number, Converter, Setting> S2 = this->affineTransformation( m, ( -rhs.center() ) );
@@ -441,7 +605,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 
 				return ( StarsetT<Number, Converter, Setting>( tmp2.center(), newmGenerator, HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>( newmShapeMatrix, newmLimits ).removeRedundancy() ) );  //.removeRedundancy() ;
 			}
-		} else if ( rhs.generator() == matrix_t<Number>::Identity( rhs.generator().cols(), rhs.generator().cols() ) ) {
+		} else if (rhs.generator().rows() == rhs.generator().cols() && rhs.generator() == matrix_t<Number>::Identity( rhs.generator().cols(), rhs.generator().cols() ) ) {
 			if ( this->generator() == this->generator() * rhs.generator() ) {
 				matrix_t<Number> m = matrix_t<Number>::Identity( this->generator().cols(), this->generator().cols() ) - this->generator();
 
@@ -470,30 +634,42 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 			}
 		}
 	}
-	/*
-	 matrix_t<Number> newmGenerator=matrix_t<Number>::Zero(tmp1.generator().rows(),tmp1.generator().cols()+tmp2.generator().cols());
-	 matrix_t<Number> newmShapeMatrix=matrix_t<Number>::Zero(tmp1.shape().rows()+tmp2.shape().rows(),tmp1.shape().cols()+tmp2.shape().cols());
-	 vector_t<Number> newmLimits=vector_t<Number>::Zero(tmp1.limits().rows()+tmp2.limits().rows());
 
-	 vector_t<Number> newmCenter=tmp1.center()-tmp2.center();
-
-	 newmGenerator.block(0,0,tmp1.generator().rows(),mGenerator.cols())=tmp1.generator();
-	 newmGenerator.block(0, tmp1.generator().cols(), tmp2.generator().rows() , tmp2.generator().cols())=-tmp2.generator();
-
-	 newmShapeMatrix.topLeftCorner(tmp1.shape().rows(),tmp1.shape().cols())=tmp1.shape();
-	 newmShapeMatrix.bottomRightCorner(tmp2.shape().rows(),tmp2.shape().cols())=tmp2.shape();
-
-	 newmLimits.head(tmp1.limits().rows())=tmp1.limits();
-	 newmLimits.tail(tmp2.limits().rows())=tmp2.limits();
-	 return tmp2.minkowskiSum( StarsetT<Number, Converter, Setting>(newmCenter,newmGenerator,HPolytopeT<Number,Converter, HPolytopeOptimizerCaching>(newmShapeMatrix,newmLimits).removeRedundancy()));//.removeRedundancy() ;
-*/
 	// option 3 in bachelor thesis
+
+	// implementation from the thesis
+	// matrix_t<Number> newmGenerator = matrix_t<Number>::Zero( tmp1.generator().rows(), tmp1.generator().cols() + tmp2.generator().cols() * 2 + 1 );
+	// matrix_t<Number> newmShapeMatrix = matrix_t<Number>::Zero( tmp1.shape().rows() + tmp2.shape().rows() * 2 + 2, tmp1.shape().cols() + tmp2.shape().cols() * 2 + 1 );
+	// vector_t<Number> newmLimits = vector_t<Number>::Zero( tmp1.limits().rows() + tmp2.limits().rows() * 2 + 2 );
+
+	// newmGenerator.block( 0, 0, tmp2.generator().rows(), tmp2.generator().cols() ) = tmp2.generator();
+	// matrix_t<Number> cent( ( matrix_t<Number>::Identity( this->generator().rows(), this->generator().rows() ) ) * ( tmp1.center() - tmp2.center() ) );
+	// newmGenerator.block( 0, tmp2.generator().cols(), tmp1.generator().rows(), 1 ) = cent;
+	// newmGenerator.block( 0, tmp2.generator().cols() + 1, tmp1.generator().rows(), tmp1.generator().cols() ) = tmp1.generator();
+	// newmGenerator.block( 0, tmp2.generator().cols() + tmp1.generator().cols() + 1, tmp2.generator().rows(), tmp2.generator().cols() ) = tmp2.generator();
+
+	// newmShapeMatrix.topLeftCorner( tmp2.shape().rows(), tmp2.shape().cols() ) = tmp2.shape();
+	// newmShapeMatrix( tmp2.shape().rows(), tmp2.shape().cols() ) = -1;
+	// newmShapeMatrix( tmp2.shape().rows() + 1, tmp2.shape().cols() ) = 1;
+	// newmShapeMatrix.block( tmp2.shape().rows() + 2, tmp2.shape().cols() + 1, tmp1.shape().rows(), tmp1.shape().cols() ) = tmp1.shape();
+	// newmShapeMatrix.bottomRightCorner( tmp2.shape().rows(), tmp2.shape().cols() ) = -tmp2.shape();
+
+	// std::cout << " newmShapeMatrix = " << newmShapeMatrix << std::endl;
+
+	// newmLimits.head( tmp2.limits().rows() ) = tmp2.limits();
+	// newmLimits( tmp2.limits().rows() ) = Number( 0 );
+	// newmLimits( tmp2.limits().rows() + 1 ) = Number( 1 );
+	// newmLimits.segment( tmp2.limits().rows() + 2, tmp1.limits().rows() ) = tmp1.limits();
+
+	// newmLimits.tail( tmp2.limits().rows() ) = tmp2.limits();
+
+	// original implementation
 	matrix_t<Number> newmGenerator = matrix_t<Number>::Zero( tmp1.generator().rows(), tmp1.generator().cols() + tmp2.generator().cols() * 2 + 1 );
 	matrix_t<Number> newmShapeMatrix = matrix_t<Number>::Zero( tmp1.shape().rows() + tmp2.shape().rows() * 2 + 2, tmp1.shape().cols() + tmp2.shape().cols() * 2 + 1 );
 	vector_t<Number> newmLimits = vector_t<Number>::Zero( tmp1.limits().rows() + tmp2.limits().rows() * 2 + 2 );
 
 	newmGenerator.block( 0, 0, tmp2.generator().rows(), mGenerator.cols() ) = tmp2.generator();
-	matrix_t<Number> cent( ( matrix_t<Number>::Identity( this->generator().cols(), this->generator().cols() ) ) * ( tmp1.center() - tmp2.center() ) );
+	matrix_t<Number> cent( ( matrix_t<Number>::Identity( this->generator().rows(), this->generator().rows() ) ) * ( tmp1.center() - tmp2.center() ) );
 	newmGenerator.block( 0, tmp2.generator().cols(), tmp1.generator().rows(), 1 ) = cent;
 	newmGenerator.block( 0, tmp2.generator().cols() + 1, tmp1.generator().rows(), tmp1.generator().cols() ) = tmp1.generator();
 	newmGenerator.block( 0, tmp2.generator().cols() + tmp1.generator().cols() + 1, tmp2.generator().rows(), tmp2.generator().cols() ) = -tmp2.generator();
@@ -511,7 +687,8 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::unite
 
 	newmLimits.tail( tmp2.limits().rows() ) = tmp2.limits();
 
-	return ( StarsetT<Number, Converter, Setting>( tmp2.center(), newmGenerator, HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>( newmShapeMatrix, newmLimits ).removeRedundancy() ) );  //.removeRedundancy() ;
+
+	return ( StarsetT<Number, Converter, Setting>( tmp2.center(), newmGenerator, HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>( newmShapeMatrix, newmLimits ).removeRedundancy() ).dimensionReduction() );  //.dimensionReduction() ;
 }
 
 template <typename Number, typename Converter, typename Setting>

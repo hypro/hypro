@@ -71,12 +71,15 @@ int main(int argc, char ** argv) {
 
 
 
-    hypro::HPolytope<Number> stateSetH = hypro::Converter<Number>::toHPolytope(vpoly1);
-    hypro::HPolytope<Number> bloatBoxH = hypro::Converter<Number>::toHPolytope(bloatBox);
+    // hypro::HPolytope<Number> stateSetH = hypro::Converter<Number>::toHPolytope(vpoly1);
+    // hypro::HPolytope<Number> bloatBoxH = hypro::Converter<Number>::toHPolytope(bloatBox);
+
+    hypro::HPolytope<Number> hpoly1 = hypro::Converter<Number>::toHPolytope(vpoly1);
+    hypro::Starset<Number> stateSetH = hypro::Converter<Number>::toStarset(hpoly1);
+    hypro::Starset<Number> bloatBoxH = hypro::Converter<Number>::toStarset(bloatBox);
+    
     auto resultOfMinkSum = stateSetH.minkowskiSum(bloatBoxH);
-
     auto resultOfMinkDiff = stateSetH.minkowskiDiff(bloatBoxH);
-
     auto maybeOriginal = resultOfMinkSum.minkowskiDiff(bloatBoxH);
 
 
@@ -89,7 +92,7 @@ int main(int argc, char ** argv) {
 
 
     // plotter.addObject(stateSetH.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[0]);
-    plotter.addObject(maybeOriginal.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[0]);
+    // plotter.addObject(maybeOriginal.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[0]);
     plotter.addObject(resultOfMinkSum.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[1]);
     plotter.addObject(resultOfMinkDiff.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[2]);
 

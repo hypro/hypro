@@ -146,6 +146,9 @@ class StarsetT : private GeometricObjectBase {
 	 */
 	bool empty() const;
 
+	// check if the predicate is a universal polytope
+	bool universal() const;
+
 	/**
 	 * Replaces the current center with the parameter center
 	 * @param center a nx1 matrix
@@ -297,6 +300,9 @@ class StarsetT : private GeometricObjectBase {
 	StarsetT<Number, Converter, Setting>
 	minkowskiSum( const StarsetT<Number, Converter, Setting>& rhs ) const;
 
+	StarsetT<Number, Converter, Setting>
+	minkowskiDiff( const StarsetT<Number, Converter, Setting>& rhs ) const;
+
 	/**
 	 * @brief      Computes the intersection of two Starsetes.
 	 * @param[in]  rhs   The right hand side Starset.
@@ -369,6 +375,7 @@ class StarsetT : private GeometricObjectBase {
 	void updateEquivalentPolytope() const;
 	void updateCache() const;
 	void invalidateCache() const;
+	StarsetT<Number, Converter, Setting> dimensionReduction() const;
 };
 /** @} */
 /*

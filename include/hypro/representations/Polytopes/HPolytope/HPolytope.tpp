@@ -146,6 +146,9 @@ namespace hypro {
                 });
             }));
             reduceRepresentation();
+            if (Setting::OPTIMIZER_CACHING) {
+                setOptimizer(this->matrix(), this->vector());
+            }
         } else {
             auto pointsCopy = points;
 
@@ -1123,6 +1126,8 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::minkowskiSum(const HPolytopeT &rhs) const {
+        assert(dimension() == rhs.dimension());
+
         TRACE("hypro.representations.HPolytope", "P' = P + " << rhs << std::endl);
         TRACE("hypro.representations.HPolytope", "where P =  " << *this << std::endl);
         HPolytopeT<Number, Converter, Setting> res;

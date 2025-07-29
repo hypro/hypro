@@ -90,6 +90,10 @@ static void computeReachableStates(const std::string &filename,
                 extendedFilename += "_sfn";
                 break;
             }
+            case hypro::representation_name::Starset: {
+                extendedFilename += "_starset";
+                break;
+            }
             default:
                 extendedFilename += "_unknownRep";
         }
@@ -153,11 +157,17 @@ int main(int argc, char **argv) {
 #ifdef USE_CLN_NUMBERS
     using Number = cln::cl_RA;
 #else
-    // using Number = mpq_class;
-    using Number = double;
+    using Number = mpq_class;
+    // using Number = double;
 #endif
 
     switch (rep) {
+        case 10: {
+            using Representation = hypro::Starset<Number>;
+            std::cout << "Using a Starset representation." << std::endl;
+            computeReachableStates<Number, Representation>(filename, hypro::representation_name::Starset);
+            break;
+        }
         case 9: {
             using Representation = hypro::TemplatePolyhedron<Number>;
             std::cout << "Using a template polytope representation." << std::endl;
