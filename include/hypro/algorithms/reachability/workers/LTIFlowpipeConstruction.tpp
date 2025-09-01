@@ -77,7 +77,7 @@ namespace hypro {
                 matrix_t<Number> flowmatrix = flow.getFlowMatrix();
                 matrix_t<Number> projMatrix = matrix_t<Number>::Identity(flow.dimension(), flow.dimension());
                 for (std::size_t i = 0; i < flow.dimension(); ++i) {
-                        if (!flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){ // get dimensions where the flow is not constant
+                        if (flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){ // get dimensions where the flow is not constant
                                 projectionDims.push_back(i);
                                 projMatrix(i, i) = 0;
                         }
@@ -127,7 +127,7 @@ namespace hypro {
                 matrix_t<Number> flowmatrix = flow.getFlowMatrix();
                 matrix_t<Number> projMatrix = matrix_t<Number>::Identity(flow.dimension(), flow.dimension());
                 for (std::size_t i = 0; i < flow.dimension(); ++i) {
-                        if (!flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){ // get dimensions where the flow is not constant
+                        if (flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){ // get dimensions where the flow is not constant
                                 projMatrix(i, i) = 0;
                         }
                 }
@@ -184,7 +184,7 @@ namespace hypro {
                         matrix_t<Number> flowmatrix = flow.getFlowMatrix();
                         matrix_t<Number> projMatrix = matrix_t<Number>::Identity(flow.dimension(), flow.dimension());
                         for (std::size_t i = 0; i < flow.dimension(); ++i) {
-                                if (!flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){ // get dimensions where the flow is not constant
+                                if (flowmatrix.block(i, 0, 1, flowmatrix.cols()-1).isZero()){ // get dimensions where the flow is not constant
                                         projMatrix(i, i) = 0;
                                 }
                         }

@@ -1167,7 +1167,7 @@ namespace hypro {
         template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::minkowskiDiff(const HPolytopeT &rhs) const {
-        TRACE("hypro.representations.HPolytope", "P' = P + " << rhs << std::endl);
+        TRACE("hypro.representations.HPolytope", "P' = P - " << rhs << std::endl);
         HPolytopeT<Number, Converter, Setting> res;
         Number result;
 

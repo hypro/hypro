@@ -359,8 +359,8 @@ namespace hypro {
 
         void reduceRepresentation() {
             TRACE("hypro.reduceRepresentation", "reduce representation was called");
-            // reduceNumberRepresentation();
-            // removeRedundancy();
+            reduceNumberRepresentation();
+            removeRedundancy();
         }
 
         void clear();
