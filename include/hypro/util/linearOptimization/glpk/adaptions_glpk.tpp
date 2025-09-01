@@ -128,8 +128,8 @@ namespace hypro {
         // std::cout << __func__ << " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl << "Glpk Problem: " << std::endl;
         // std::cout << __func__ << " useExact = " << useExact << std::endl;
         
-        DEBUG("hypro.linearOpt.glpk ", " in direction " << _direction.transpose() << std::endl);
-        DEBUG("hypro.linearOpt.glpk ", " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl << "Glpk Problem: " << std::endl);
+        // DEBUG("hypro.linearOpt.glpk ", " in direction " << _direction.transpose() << std::endl);
+        // DEBUG("hypro.linearOpt.glpk ", " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl << "Glpk Problem: " << std::endl);
 
         // setup glpk
         for (unsigned i = 0; i < constraints.cols(); i++) {
@@ -144,7 +144,7 @@ namespace hypro {
         }
 
         vector_t<Number> exactSolution;
-        DEBUG("hypro.linearOpt.glpk ", " result of glpk " << glp_get_status(context.lp) << std::endl);
+        // DEBUG("hypro.linearOpt.glpk ", " result of glpk " << glp_get_status(context.lp) << std::endl);
     
         switch (glp_get_status(context.lp)) {
             case GLP_OPT:

@@ -354,7 +354,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::minko
 		} else {
 			vector_t<Number> a1 = C1.row(i) * V1Inv;
 			Number a2 = a1.transpose() * (thisReduced.center() - rhsReduced.center());
-			Number result = d1(i) + a2;
+			Number result = d1(i) + a2 - evalRes.supportValue;
 			res.insert(Halfspace<Number>(C1.row(i), result));
 		}
 

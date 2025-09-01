@@ -136,11 +136,11 @@ int main(int argc, char **argv) {
     using Number = mpq_class;
     // using Number = double; // with double it gets stuck in HPolytope->satisfiesHalfspaces
 
-    // using Representation = hypro::HPolytope<Number>;
-    // std::string reprString = "_hpoly";
+    using Representation = hypro::HPolytope<Number>;
+    std::string reprString = "_hpoly";
 
-    using Representation = hypro::Starset<Number>;
-    std::string reprString = "_star";
+    // using Representation = hypro::Starset<Number>;
+    // std::string reprString = "_star";
 
     computeReachableStates<Number, Representation>(filename, reprString);
      

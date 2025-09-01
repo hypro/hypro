@@ -360,7 +360,7 @@ namespace hypro {
         void reduceRepresentation() {
             TRACE("hypro.reduceRepresentation", "reduce representation was called");
             // reduceNumberRepresentation();
-            removeRedundancy();
+            // removeRedundancy();
         }
 
         void clear();
