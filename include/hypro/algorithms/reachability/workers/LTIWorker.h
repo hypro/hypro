@@ -42,7 +42,7 @@ namespace hypro {
 
         template<typename OutputIt>
         REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, LocationT const *loc, OutputIt out,
-                                                long int segmentsToCompute, bool checkSafety = true) const;
+                                                long int segmentsToCompute, bool checkSafety = true, bool forward = true ) const;
 
         template<typename OutputIt>
         REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, LocationT const *loc, OutputIt out,

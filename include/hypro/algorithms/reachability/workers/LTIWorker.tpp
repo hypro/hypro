@@ -14,10 +14,12 @@ namespace hypro {
     template<typename Representation, typename HybridAutomaton>
     template<typename OutputIt>
     REACHABILITY_RESULT
+    // bool if for or back
     LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessors(const Representation &initialSet,
                                                                       LocationT const *loc, OutputIt out,
                                                                       long int segmentsToCompute,
-                                                                      bool checkSafety) const {
+                                                                      bool checkSafety,
+                                                                      bool forward) const {
                                                                 
         DEBUG("hypro.reachability", "inside computeTimeSuccessors");            
 
@@ -28,11 +30,18 @@ namespace hypro {
                   "No segments to compute (reached global time horizon, segmentsToCompute == 0), return.");
             return REACHABILITY_RESULT::SAFE;
         }
-        Representation firstSegment = constructFirstSegment(initialSet, loc->getLinearFlow(mSubspace),
-                                                            mTrafoCache.getTransformation(loc, mSettings.timeStep,
-                                                                                          mSubspace).fullMatrix,
-                                                            mSettings.timeStep);
+  
 
+        auto transformation = mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace);
+        auto trafo = forward ? transformation.fullMatrix : transformation.fullMatrix.inverse();
+
+        DEBUG("Trafo:{}", trafo);
+        Representation firstSegment = constructFirstSegment(
+            initialSet,
+            loc->getLinearFlow(mSubspace),
+            trafo,
+            mSettings.timeStep
+        );
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
         // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
         if (containment == CONTAINMENT::NO) {
@@ -68,7 +77,13 @@ namespace hypro {
 
         // while not done
         for (size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount) {
-            segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
+            // trickier -> need same struct but with matrices ivsersed
+            if( forward ){
+                segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
+            }
+            else {
+                segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace).inverse());
+            }
 #ifdef HYPRO_LOGGING
             auto tmp = segment;
 #endif
@@ -90,6 +105,7 @@ namespace hypro {
                 std::tie(containment, std::ignore) = ltiIntersectBadStates(segment, loc, mHybridAutomaton, mSubspace);
                 if (containment != CONTAINMENT::NO) {
                     // Todo: memorize the intersecting state set and keep state.
+                   
                     DEBUG("hypro.reachability",
                           "Segment " << segment << " intersects the set of bad states, terminate.");
                     DEBUG("hypro.reachability", "Compute time successor states done.");
@@ -160,6 +176,7 @@ namespace hypro {
             std::tie(containment, segment) = intersect(segment, loc->getInvariant(), mSubspace);
             if (containment == CONTAINMENT::NO) {
 #ifdef HYPRO_LOGGING
+                 std::cout << "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.";
                 DEBUG("hypro.reachability",
                         "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.");
                 DEBUG("hypro.reachability", "Compute time successor states done.");

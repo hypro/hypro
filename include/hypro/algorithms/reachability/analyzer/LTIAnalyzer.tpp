@@ -135,6 +135,7 @@ namespace hypro {
                                                                 std::back_inserter(node->getFlowpipeUnderApprox()), segmentsToCompute);
             }
             if (!node->getInitialSet().empty()) {
+                //
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
                                             std::back_inserter(node->getFlowpipe()), segmentsToCompute);
             }
@@ -145,6 +146,7 @@ namespace hypro {
                                                             std::back_inserter(node->getFlowpipeUnderApprox()));
             }
             if (!node->getInitialSet().empty()) {
+                //
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
                                                         std::back_inserter(node->getFlowpipe()));
             }
