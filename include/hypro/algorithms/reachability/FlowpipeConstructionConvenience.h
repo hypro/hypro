@@ -56,7 +56,7 @@ namespace hypro {
     applyTimeEvolution(Representation const &valuationSet, LTITimeTransformation<Number> const &transformation) {
         TRACE("hypro.reachability", "apply time evolution");
      
-        return valuationSet.affineTransformation(transformation.matrix, transformation.vector);
+        return valuationSet.affineTransformation(transformation.matrix, -1 * transformation.matrix * transformation.vector);
     }
 
 /**
