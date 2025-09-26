@@ -40,9 +40,13 @@ namespace hypro {
                                          matrix_t<Number> const &rawTransformation,
                                          tNumber timeStep) {
         
+        auto matrix = timeTrafoMatrixBlock(rawTransformation).inverse();
+        auto vector = timeTrafoVectorBlock(rawTransformation);
+        Representation atDelta = initialSet.affineTransformation(matrix, matrix * (-1 * vector));
 
-        Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
-                                                                 timeTrafoVectorBlock(rawTransformation));
+
+        // Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
+                                                                //  timeTrafoVectorBlock(rawTransformation));
         Representation firstSegment = atDelta.unite(initialSet);
 
         DEBUG("hypro", "atDelta: " << atDelta.vertices());
@@ -103,8 +107,11 @@ namespace hypro {
                                          tNumber timeStep) {
         
 
-        auto atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
-                                                       timeTrafoVectorBlock(rawTransformation));
+        auto matrix = timeTrafoMatrixBlock(rawTransformation).inverse();
+        auto vector = timeTrafoVectorBlock(rawTransformation);
+        auto atDelta = initialSet.affineTransformation(matrix, matrix * (-1 * vector));
+
+
         auto firstSegment = atDelta.unite(initialSet);
 
         bool isFlowIdentity = rawTransformation.block(0, 0, rawTransformation.rows() - 1, rawTransformation.cols() - 1).isApprox(matrix_t<Number>::Identity(rawTransformation.rows()-1, rawTransformation.cols()-1));

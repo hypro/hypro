@@ -33,7 +33,7 @@ namespace hypro {
   
 
         auto transformation = mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace);
-        auto trafo = forward ? transformation.fullMatrix : transformation.fullMatrix.inverse();
+        auto trafo = forward ? transformation.fullMatrix : transformation.fullMatrix;
 
         DEBUG("Trafo:{}", trafo);
         Representation firstSegment = constructFirstSegment(

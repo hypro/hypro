@@ -66,7 +66,7 @@ namespace hypro {
             // std::cout << "matrix_inv = " << matrix.inverse() << std::endl; 
             // std::cout << "result = " << matrix * matrix.inverse() << std::endl; 
 
-            inv.fullMatrix = fullMatrix.inverse();
+            inv.fullMatrix = fullMatrix; //.inverse();
             inv.matrix = timeTrafoMatrixBlock(inv.fullMatrix);
             inv.vector = timeTrafoVectorBlock(inv.fullMatrix);
 
