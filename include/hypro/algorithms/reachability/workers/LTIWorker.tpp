@@ -33,15 +33,17 @@ namespace hypro {
   
 
         auto transformation = mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace);
-        auto trafo = forward ? transformation.fullMatrix : transformation.fullMatrix;
+        auto trafo = transformation.fullMatrix;
 
         DEBUG("Trafo:{}", trafo);
         Representation firstSegment = constructFirstSegment(
             initialSet,
             loc->getLinearFlow(mSubspace),
             trafo,
-            mSettings.timeStep
+            mSettings.timeStep,
+            forward
         );
+        
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
         // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
         if (containment == CONTAINMENT::NO) {
@@ -78,12 +80,9 @@ namespace hypro {
         // while not done
         for (size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount) {
             // trickier -> need same struct but with matrices ivsersed
-            if( forward ){
-                segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace));
-            }
-            else {
-                segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace).inverse());
-            }
+
+            segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace), forward);
+            
 #ifdef HYPRO_LOGGING
             auto tmp = segment;
 #endif

@@ -37,7 +37,8 @@ namespace hypro {
     Representation constructFirstSegment(Representation const &initialSet,
                                          linearFlow<Number> const &flow,
                                          matrix_t<Number> const &rawTransformation,
-                                         tNumber timeStep);
+                                         tNumber timeStep,
+                                         bool forward = true );
 
     template<class Representation, class Number>
     Representation constructFirstSegmentUnder(Representation const &initialSet, Representation const &initialSetUnder,

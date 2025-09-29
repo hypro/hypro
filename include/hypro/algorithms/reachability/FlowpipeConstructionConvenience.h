@@ -53,10 +53,12 @@ namespace hypro {
  */
     template<class Representation, class Number>
     Representation
-    applyTimeEvolution(Representation const &valuationSet, LTITimeTransformation<Number> const &transformation) {
+    applyTimeEvolution(Representation const &valuationSet, LTITimeTransformation<Number> const &transformation, bool forward = true) {
         TRACE("hypro.reachability", "apply time evolution");
-     
+        if (!forward) {
             return valuationSet.affineTransformation(transformation.matrix.inverse(),  transformation.matrix.inverse() * (-1 * transformation.vector));
+        }
+        return valuationSet.affineTransformation(transformation.matrix,  transformation.matrix * transformation.vector);
     }
 
 /**
