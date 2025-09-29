@@ -58,7 +58,7 @@ namespace hypro {
         if (!forward) {
             return valuationSet.affineTransformation(transformation.matrix.inverse(),  transformation.matrix.inverse() * (-1 * transformation.vector));
         }
-        return valuationSet.affineTransformation(transformation.matrix,  transformation.matrix * transformation.vector);
+        return valuationSet.affineTransformation(transformation.matrix,  transformation.vector);
     }
 
 /**

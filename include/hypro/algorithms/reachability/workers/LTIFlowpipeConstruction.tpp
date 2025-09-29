@@ -40,16 +40,14 @@ namespace hypro {
                                          matrix_t<Number> const &rawTransformation,
                                          tNumber timeStep,
                                          bool forward) {
-        
-        std::cout << "First option with " << forward << std::endl;
 
-       /* auto matrix = forward ? timeTrafoMatrixBlock(rawTransformation) : timeTrafoMatrixBlock(rawTransformation).inverse();
+        auto matrix = forward ? timeTrafoMatrixBlock(rawTransformation).eval() : timeTrafoMatrixBlock(rawTransformation).inverse().eval();
         auto vector = timeTrafoVectorBlock(rawTransformation);
         Representation atDelta = forward ? initialSet.affineTransformation(matrix, vector) : initialSet.affineTransformation(matrix, matrix * (-1 * vector));
-*/
 
-        Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
-                                                                  timeTrafoVectorBlock(rawTransformation));
+
+        //Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
+                                                               //   timeTrafoVectorBlock(rawTransformation));
         Representation firstSegment = atDelta.unite(initialSet);
 
         DEBUG("hypro", "atDelta: " << atDelta.vertices());
@@ -109,9 +107,8 @@ namespace hypro {
                                          matrix_t<Number> const &rawTransformation,
                                          tNumber timeStep,
                                          bool forward) {
-        
-        std::cout << "Second option with " << forward << std::endl;
-        auto matrix = forward ? timeTrafoMatrixBlock(rawTransformation) : timeTrafoMatrixBlock(rawTransformation).inverse();
+
+        auto matrix = forward ? timeTrafoMatrixBlock(rawTransformation).eval() : timeTrafoMatrixBlock(rawTransformation).inverse().eval();
         auto vector = timeTrafoVectorBlock(rawTransformation);
         Representation atDelta = forward ? initialSet.affineTransformation(matrix, vector) : initialSet.affineTransformation(matrix, matrix * (-1 * vector));
 

@@ -44,34 +44,6 @@ namespace hypro {
         matrix_t<Number> matrix;
         vector_t<Number> vector;
 
-       LTITimeTransformation inverse() const {
-            LTITimeTransformation inv;
-
-            // // Invert linear block
-            // inv.matrix = matrix.inverse();
-
-            // // Compute inverse translation: -A^{-1} b
-            // inv.vector = -1 * inv.matrix * vector;
-
-            // // Rebuild full homogeneous matrix
-            // inv.fullMatrix.setIdentity(matrix.rows() + 1, matrix.cols() + 1);
-            // inv.fullMatrix.template block<Eigen::Dynamic, Eigen::Dynamic>(
-            // 0, 0, matrix.rows(), matrix.cols()
-            // ) = inv.matrix;
-            // inv.fullMatrix.template block<Eigen::Dynamic, 1>(
-            // 0, matrix.cols(), matrix.rows(), 1
-            // ) = inv.vector;
-
-            // std::cout << "matrix = " << matrix << std::endl;
-            // std::cout << "matrix_inv = " << matrix.inverse() << std::endl; 
-            // std::cout << "result = " << matrix * matrix.inverse() << std::endl; 
-
-            inv.fullMatrix = fullMatrix; //.inverse();
-            inv.matrix = timeTrafoMatrixBlock(inv.fullMatrix);
-            inv.vector = timeTrafoVectorBlock(inv.fullMatrix);
-
-            return inv;
-        }
     };
 
     template<typename Location>
