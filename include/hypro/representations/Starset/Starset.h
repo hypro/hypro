@@ -318,17 +318,22 @@ class StarsetT : private GeometricObjectBase {
 	/**
 	 * @brief 		Containment check for a given Point, using the cached H-Polytope
 	 * @param 		point 	The given Point
-	 * @return 		true, of the point is contained in the Starset
+	 * @return 		true, if the point is contained in the Starset
 	 */
 	bool containsCached( const Point<Number>& point ) const;
 
 	/**
 	 * @brief 		Containment check for a given Point, using LP solving
 	 * @param 		point 	The given Point
-	 * @return 		true, of the point is contained in the Starset
+	 * @return 		true, if the point is contained in the Starset
 	 */
 	bool contains( const Point<Number>& point ) const;
-
+	/**
+	 * @brief 		Containment check for a given Vector, using LP solving (for Realyst Integration.cpp)
+	 * @param 		vec 	The given Vector
+	 * @return 		true, if the point decribed by the vector is contained in the Starset
+	 */
+	bool contains(const hypro::vector_t<Number>& vec) const;
 
 	/**
 	 * @brief      Containment check for a Starset.
