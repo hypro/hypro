@@ -1,6 +1,6 @@
 hybrid reachability
 {
- state var x,v
+ state var v, x
 
  setting
  {
