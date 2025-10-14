@@ -783,7 +783,7 @@ namespace hypro {
             // return EvaluationResult<Number>( Number(1), SOLUTION::INFTY );
             return EvaluationResult<Number>();
         }
-        // reduceNumberRepresentation();
+        reduceNumberRepresentation();
         if (Setting::OPTIMIZER_CACHING) {
             assert(mOptimizer.has_value());
             if (!mUpdated) {
