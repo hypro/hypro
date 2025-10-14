@@ -294,12 +294,12 @@ namespace hypro {
     std::string ExactQuickhull<Number, Euclidian>::FacetSpace::printFacet(Facet const &facet) {
         std::stringstream out;
 
-        out << "(" << carl::convert<mpq_class, double>(facet.mNormal[0]) << ")x_0";
+        out << "(" << (facet.mNormal[0]) << ")x_0";
         for (size_t i = 1; i < dimension; ++i) {
-            out << " + (" << carl::convert<mpq_class, double>(facet.mNormal[i]) << ") x_" << i;
+            out << " + (" << (facet.mNormal[i]) << ") x_" << i;
         }
 
-        out << " = " << carl::convert<mpq_class, double>(facet.mOffset) << std::endl;
+        out << " = " << (facet.mOffset) << std::endl;
 
         return out.str();
     }
