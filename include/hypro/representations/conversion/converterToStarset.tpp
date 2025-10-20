@@ -73,7 +73,7 @@ namespace hypro {
     template<typename StarsetSetting, typename inSetting>
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const VPolytopeT<Number, Converter<Number>, inSetting> &_source, const CONV_MODE) {
-        return StarsetT<Number, Converter<Number>, StarsetSetting>();
+        return toStarset(toHPolytope(_source));
     }
 
     template<typename Number>

@@ -293,6 +293,8 @@ class StarsetT : private GeometricObjectBase {
 	StarsetT<Number, Converter, Setting>
 	projectOn( const std::vector<std::size_t>& dimensions ) const;
 	StarsetT<Number, Converter, Setting>
+	projectOut( const std::vector<std::size_t>& dimensions ) const;
+	StarsetT<Number, Converter, Setting>
 	linearTransformation( const matrix_t<Number>& A ) const;
 	StarsetT<Number, Converter, Setting>
 	affineTransformation( const matrix_t<Number>& A,

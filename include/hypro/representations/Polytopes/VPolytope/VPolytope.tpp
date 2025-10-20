@@ -566,7 +566,8 @@ namespace hypro {
                 bool isEmpty = !z3CheckConsistency(_constraints, _constants,
                                                    std::vector<carl::Relation>(_constraints.rows(),
                                                                                carl::Relation::LEQ));
-                if (isEmpty) {
+                TRACE("hypro.representations.vpolytope", isEmpty);
+                if (isEmpty || _constraints.rows() == 0) {
                     TRACE("hypro.representations.vpolytope",
                           "Construction from matrix and vector produced an empty polytope.");
                     this->mEmptyState = SETSTATE::EMPTY;
