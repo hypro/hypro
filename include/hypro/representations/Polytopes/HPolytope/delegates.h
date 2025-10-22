@@ -28,12 +28,12 @@ namespace hypro::impl {
 
     template<>
     inline bool isEmptySafe(const matrix_t<mpq_class> &constraints, const vector_t<mpq_class> &constants) {
-#ifdef HYPRO_USE_Z3
-        return !z3CheckConsistency(constraints, constants,
-                                   std::vector<carl::Relation>(constraints.rows(), carl::Relation::LEQ));
-#else
+// #ifdef HYPRO_USE_Z3
+//         return !z3CheckConsistency(constraints, constants,
+//                                    std::vector<carl::Relation>(constraints.rows(), carl::Relation::LEQ));
+// #else
         return !Optimizer<mpq_class>(constraints, constants).checkConsistency();
-#endif
+// #endif
     }
 
 } // namespace

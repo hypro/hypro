@@ -32,7 +32,7 @@ namespace hypro {
      */
     template<typename Number>
     EvaluationResult<Number>
-    z3OptimizeLinearPostSolve(bool maximize, const vector_t<Number> &_direction, const matrix_t<Number> &constraints,
+    z3OptimizeLinearPostSolve(z3Context& c , bool maximize, const vector_t<Number> &_direction, const matrix_t<Number> &constraints,
                               const vector_t<Number> &constants, const std::vector<carl::Relation> &relations,
                               const EvaluationResult<Number> &preSolution);
 
@@ -48,7 +48,7 @@ namespace hypro {
      */
     template<typename Number>
     EvaluationResult<Number>
-    z3OptimizeLinear(bool maximize, const vector_t<Number> &_direction, const matrix_t<Number> &constraints,
+    z3OptimizeLinear(z3Context& c , bool maximize, const vector_t<Number> &_direction, const matrix_t<Number> &constraints,
                      const vector_t<Number> &constants, const std::vector<carl::Relation> &relations);
 
     /**
@@ -62,7 +62,7 @@ namespace hypro {
      */
     template<>
     EvaluationResult<double>
-    z3OptimizeLinear(bool maximize, const vector_t<double> &_direction, const matrix_t<double> &constraints,
+    z3OptimizeLinear(z3Context& c , bool maximize, const vector_t<double> &_direction, const matrix_t<double> &constraints,
                      const vector_t<double> &constants, const std::vector<carl::Relation> &relations);
 
     /**
@@ -74,7 +74,7 @@ namespace hypro {
      * @return True, if the solution space is non-empty, false otherwise
      */
     template<typename Number>
-    bool z3CheckConsistency(const matrix_t<Number> &constraints, const vector_t<Number> &constants,
+    bool z3CheckConsistency(z3Context& c , const matrix_t<Number> &constraints, const vector_t<Number> &constants,
                             const std::vector<carl::Relation> &relations);
 
     /**
@@ -87,7 +87,7 @@ namespace hypro {
      * @return True, if the given point is contained in the solution space defined by the constraints
      */
     template<typename Number>
-    bool z3CheckPoint(const matrix_t<Number> &constraints, const vector_t<Number> &constants,
+    bool z3CheckPoint(z3Context& c , const matrix_t<Number> &constraints, const vector_t<Number> &constants,
                       const std::vector<carl::Relation> &relations, const Point<Number> &point);
 
     /**
@@ -100,7 +100,7 @@ namespace hypro {
      */
     template<typename Number>
     std::vector<std::size_t>
-    z3RedundantConstraints(const matrix_t<Number> &constraints, const vector_t<Number> &constants,
+    z3RedundantConstraints(z3Context& c , const matrix_t<Number> &constraints, const vector_t<Number> &constants,
                            const std::vector<carl::Relation> &relations);
 
 }  // namespace hypro

@@ -16,11 +16,10 @@ namespace hypro {
 
     template<typename Number>
     EvaluationResult <Number>
-    z3OptimizeLinearPostSolve(bool maximize, const vector_t <Number> &_direction, const matrix_t <Number> &constraints,
+    z3OptimizeLinearPostSolve(z3Context& c , bool maximize, const vector_t <Number> &_direction, const matrix_t <Number> &constraints,
                               const vector_t <Number> &constants, const std::vector <carl::Relation> &relations,
                               const EvaluationResult <Number> &preSolution) {
         EvaluationResult <Number> res;
-        z3Context c;
         z3::optimize z3Optimizer(c);
         std::vector <z3::expr> variables;
 
@@ -80,7 +79,7 @@ namespace hypro {
 
     template<typename Number>
     EvaluationResult <Number>
-    z3OptimizeLinear(bool maximize, const vector_t <Number> &_direction, const matrix_t <Number> &constraints,
+    z3OptimizeLinear(z3Context& c , bool maximize, const vector_t <Number> &_direction, const matrix_t <Number> &constraints,
                      const vector_t <Number> &constants, const std::vector <carl::Relation> &relations) {
         // std::cout << __func__ << " in direction " << convert<Number,double>(_direction).transpose() << " with constraints" << std::endl << constraints << std::endl << constants << std::endl;
         
@@ -88,7 +87,6 @@ namespace hypro {
         // DEBUG("hypro.linearOpt.z3 ", " constraints: " << std::endl << constraints << std::endl << "constants: " << std::endl << constants << std::endl);
 
         EvaluationResult <Number> res;
-        z3Context c;
         z3::optimize z3Optimizer(c);
         std::vector <z3::expr> variables;
 
@@ -139,9 +137,8 @@ namespace hypro {
     }
 
     template<typename Number>
-    bool z3CheckConsistency(const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+    bool z3CheckConsistency(z3Context& c , const matrix_t <Number> &constraints, const vector_t <Number> &constants,
                             const std::vector <carl::Relation> &relations) {
-        z3Context c;
         z3::optimize z3Optimizer(c);
 
         // create formula and objective
@@ -158,9 +155,8 @@ namespace hypro {
     }
 
     template<typename Number>
-    bool z3CheckPoint(const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+    bool z3CheckPoint(z3Context& c , const matrix_t <Number> &constraints, const vector_t <Number> &constants,
                       const std::vector <carl::Relation> &relations, const Point <Number> &point) {
-        z3Context c;
         z3::solver z3Solver(c);
 
         // create formula and objective
@@ -175,9 +171,8 @@ namespace hypro {
 
     template<typename Number>
     EvaluationResult <Number>
-    z3GetInternalPoint(const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+    z3GetInternalPoint(z3Context& c , const matrix_t <Number> &constraints, const vector_t <Number> &constants,
                        const std::vector <carl::Relation> &relations) {
-        z3Context c;
         EvaluationResult <Number> res;
         z3::solver z3Solver(c);
 
@@ -204,10 +199,9 @@ namespace hypro {
 
     template<typename Number>
     std::vector <std::size_t>
-    z3RedundantConstraints(const matrix_t <Number> &constraints, const vector_t <Number> &constants,
+    z3RedundantConstraints(z3Context& c , const matrix_t <Number> &constraints, const vector_t <Number> &constants,
                            const std::vector <carl::Relation> &relations) {
         std::vector <std::size_t> res;
-        z3Context c;
         z3::solver z3Solver(c);
         z3Solver.push();
 

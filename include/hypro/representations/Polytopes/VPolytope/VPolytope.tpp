@@ -562,19 +562,19 @@ namespace hypro {
             // TODO ensure that this is robust
             {
                 TRACE("hypro.representations.vpolytope", "Check for emptiness.");
-#ifdef HYPRO_USE_Z3
-                bool isEmpty = !z3CheckConsistency(_constraints, _constants,
-                                                   std::vector<carl::Relation>(_constraints.rows(),
-                                                                               carl::Relation::LEQ));
-                TRACE("hypro.representations.vpolytope", isEmpty);
-                if (isEmpty || _constraints.rows() == 0) {
-                    TRACE("hypro.representations.vpolytope",
-                          "Construction from matrix and vector produced an empty polytope.");
-                    this->mEmptyState = SETSTATE::EMPTY;
-                    this->mReduced = true;
-                    return;
-                }
-#else
+// #ifdef HYPRO_USE_Z3
+//                 bool isEmpty = !z3CheckConsistency(_constraints, _constants,
+//                                                    std::vector<carl::Relation>(_constraints.rows(),
+//                                                                                carl::Relation::LEQ));
+//                 TRACE("hypro.representations.vpolytope", isEmpty);
+//                 if (isEmpty || _constraints.rows() == 0) {
+//                     TRACE("hypro.representations.vpolytope",
+//                           "Construction from matrix and vector produced an empty polytope.");
+//                     this->mEmptyState = SETSTATE::EMPTY;
+//                     this->mReduced = true;
+//                     return;
+//                 }
+// #else
                 auto opt = hypro::Optimizer<Number>(_constraints, _constants);
                 if (!opt.checkConsistency()) {
                     TRACE("hypro.representations.vpolytope",
@@ -591,7 +591,7 @@ namespace hypro {
                     this->mReduced = true;
                     return;
                 }
-#endif
+// #endif
             }
 
             auto dimension = _constraints.cols();
