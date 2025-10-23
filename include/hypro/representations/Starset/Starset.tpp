@@ -378,6 +378,11 @@ bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point 
 	return optimizer.checkPoint(point);
 }
 
+template <typename Number, typename Converter, typename Setting>
+bool StarsetT<Number, Converter, Setting>::contains( const vector_t<Number>& vec ) const {
+	Point<Number> point(vec);
+	return this->contains(point);
+}
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const StarsetT<Number, Converter, Setting>& Starset ) const {
