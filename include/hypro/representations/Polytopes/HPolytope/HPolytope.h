@@ -357,15 +357,15 @@ namespace hypro {
 
         void print() const;
 
-        std::string printWithGenericVarIdents() {
+        std::string printWithDifferentVariableNames(std::vector<std::string> names = {}) {
             std::stringstream result;
             if (this->constraints().size() > 0) {
                 result << "[ ";
                 for (unsigned i = 0; i < this->constraints().size() - 1; ++i) {
-                    result << convert<Number, double>(this->constraints()[i]).printWithGenericVarIdents()
+                    result << convert<Number, double>(this->constraints()[i]).printWithDifferentVariableNames(names)
                            << ",\n";
                 }
-                result << convert<Number, double>(this->constraints()[this->constraints().size() - 1]).printWithGenericVarIdents()
+                result << convert<Number, double>(this->constraints()[this->constraints().size() - 1]).printWithDifferentVariableNames(names)
                        << " ]";
             }
             result << " isEmpty: " << this->mEmptyState;

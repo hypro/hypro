@@ -382,15 +382,26 @@ namespace hypro {
 #endif
         }
 
-    std::string printWithGenericVarIdents() {
+    std::string printWithDifferentVariableNames(std::vector<std::string> names = {}) {
         std::stringstream result;
+		bool useGenericNames = false;
+		if(names.empty() || !(this->mNormal.rows()==names.size())) {
+			useGenericNames = true;
+			//std::cout << "useGenericNames is true; names.empty?:" << names.empty() << ", rows: " << this->mNormal.rows() << ", names: " << names.size() << std::endl;
+			//std::cout << "names: " << names << std::endl;
+		}
         result << "( ";
         bool first = true;
         for (Eigen::Index i = 0; i < this->mNormal.rows(); ++i) {
             bool notnull = this->mNormal(i) != 0;
             bool printVal = notnull && abs(this->mNormal(i)) != 1;
             bool neg = this->mNormal(i) < 0;
-            std::string varname = "x" + std::to_string(i);
+			std::string varname;
+			if(useGenericNames) {
+				varname = "x" + std::to_string(i);
+			} else {
+				varname = names[i];
+			}
             if (notnull) {
                 if (printVal) {
                     if (first) {
