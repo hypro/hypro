@@ -13,7 +13,7 @@ Makefile
 *.plt
 *.png
 *.csv
-resources/glpk-5.0/
+resources/glpk-5.0/*
 *.sublime-*
 *.tokens
 .travis/sonar-project.properties
