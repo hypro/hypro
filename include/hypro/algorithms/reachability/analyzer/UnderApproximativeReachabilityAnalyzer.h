@@ -128,7 +128,7 @@ class UnderApproximativeReachabilityAnalyzer {
 			if (row_interval.upper() > 0 || row_interval.contains(0)) {
 				result_factors.conservativeResize(result_factors.rows() + 1, result_factors.cols());
 
-				result_factors.row(result_factors.rows() - 1) = factors.row(row_index);
+				result_factors.row(result_factors.rows() - 1) = factors.row(row_index).eval();
 				result_b.conservativeResize(result_b.size() + 1);
 				result_b(result_b.size() - 1) = b(row_index);
 			}

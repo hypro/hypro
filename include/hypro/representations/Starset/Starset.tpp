@@ -288,7 +288,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::intersectHalfspace( const Halfspace<Number>& hspace ) const {
 	// check if the dimension of the halfspace is the same as the dimension of the starset
-	assert( hspace.normal.rows() == mGenerator.rows() );
+	assert( hspace.normal().rows() == mGenerator.rows() );
 
 	// get the attributes of the starset
 	vector_t<Number> center = mCenter;
