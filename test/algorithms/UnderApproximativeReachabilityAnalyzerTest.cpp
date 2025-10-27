@@ -176,7 +176,8 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
 	using Pol = PolyT<mpq_class>;
 	using Constr = ConstraintT<mpq_class>;
 
-
+	// IMPORTANT.
+	hypro::VariablePool::getInstance().clear();
 
 	typename rectangularFlow<Number>::flowMap fMap;
 	carl::Variable x = freshRealVariable( "x" );
@@ -205,18 +206,18 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
 		i++;
 	}
 
-
 	// TODO fix this test. generate cases
+	// TODO I think the error is because detect dimension gives 13 instead of 2. This probably is due to the VariablePool which is non-empty
 	// cols == 13, this->cols == 2
 	// factors.cols() == 13
 	// results_factors.cols() == rates.size() == 2
-	// auto [matrix, constants] = analyzer.solve(bad.matrix(), bad.vector(),rates);
-//
-//	auto result = rectangularUnderapproximateReverseTimeEvolution(bad,flow);
-//
-//	CarlPolytope<Number> res = CarlPolytope<Number>(matrix,constants);
-//	ASSERT_TRUE(result.matrix() == res.matrix());
-//	ASSERT_TRUE(result.vector() == res.vector());
+	 auto [matrix, constants] = analyzer.solve(bad.matrix(), bad.vector(),rates);
+
+	auto result = rectangularUnderapproximateReverseTimeEvolution(bad,flow);
+
+	CarlPolytope<Number> res = CarlPolytope<Number>(matrix,constants);
+	ASSERT_TRUE(result.matrix() == res.matrix());
+	ASSERT_TRUE(result.vector() == res.vector());
 	SUCCEED();
 }
 
