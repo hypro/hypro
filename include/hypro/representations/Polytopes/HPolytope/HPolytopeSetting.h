@@ -22,7 +22,7 @@ namespace hypro {
         static constexpr int type_enum = hPolytopeSetting_name::HPolytopeSetting;
         static constexpr bool REDUCE_NUMBERS = true;
         static constexpr bool AVOID_CONVERSION = false;
-        static constexpr bool OPTIMIZER_CACHING = true;
+        static constexpr bool OPTIMIZER_CACHING = false;
         static constexpr bool NAIVE_ALGORITHMS = false;
         static constexpr bool CACHE_BOUNDING_BOX = false;
         static constexpr bool SAFE_LP_CALLS = true;

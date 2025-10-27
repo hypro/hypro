@@ -311,7 +311,7 @@ namespace hypro {
                 }
             }
         }
-        reduceRepresentation();
+        // reduceRepresentation();
         // EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
     }
 
@@ -323,7 +323,7 @@ namespace hypro {
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
             setOptimizer(orig.matrix(), orig.vector());
         }
-        reduceRepresentation();
+        // reduceRepresentation();
     }
 
     template<typename Number, typename Converter, class Setting>
