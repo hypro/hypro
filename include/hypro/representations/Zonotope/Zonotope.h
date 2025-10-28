@@ -238,6 +238,8 @@ namespace hypro {
 
         ZonotopeT projectOn(const std::vector<std::size_t> &dimensions) const;
 
+        ZonotopeT projectOut(const std::vector<std::size_t> &dimensions) const;
+
         ZonotopeT assignIntervals(const std::map<std::size_t, carl::Interval<Number>> &) const {
             WARN("hypro", "Not implemented.");
             return *this;

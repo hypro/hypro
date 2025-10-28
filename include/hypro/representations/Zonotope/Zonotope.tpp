@@ -440,6 +440,35 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     ZonotopeT<Number, Converter, Setting>
+    ZonotopeT<Number, Converter, Setting>::projectOut(const std::vector<std::size_t> &dimensions) const {
+        if (dimensions.empty()) {
+            return *this;
+        }
+
+        matrix_t<Number> projectedGenerators = matrix_t<Number>::Zero(mGenerators.rows() - dimensions.size(), mGenerators.cols());
+        vector_t<Number> newCenter = vector_t<Number>::Zero(mCenter.size() - dimensions.size());
+
+
+        int index = 0;
+        for (std::size_t dim = 0; dim < mCenter.size(); ++dim) {
+            if (std::find(dimensions.begin(), dimensions.end(), dim) != dimensions.end())
+			    continue;
+
+            newCenter[index] = mCenter[dim];
+            projectedGenerators.block(index, 0, 1, mGenerator.cols()) = mGenerator.row(dim);
+            index++;
+    
+        }
+
+        ZonotopeT<Number, Converter, Setting> res = ZonotopeT<Number, Converter, Setting>(newCenter.rows(),
+                newCenter, projectedGenerators);
+        res.reduceOrder();
+
+        return res;
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    ZonotopeT<Number, Converter, Setting>
     ZonotopeT<Number, Converter, Setting>::linearTransformation(const matrix_t<Number> &A) const {
         assert(A.cols() == mCenter.rows() &&
                "Matrix's dimensionality is different "
