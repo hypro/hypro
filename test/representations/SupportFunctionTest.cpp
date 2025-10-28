@@ -166,6 +166,10 @@ TYPED_TEST( SupportFunctionTest, simpleEvaluation ) {
 }
 
 TYPED_TEST( SupportFunctionTest, Supremum ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	SupportFunction<TypeParam> psf1 = SupportFunction<TypeParam>( this->constraints, this->constants );
 	TypeParam supremum = psf1.supremum();
 
@@ -677,6 +681,10 @@ TYPED_TEST( SupportFunctionTest, projection ) {
 }
 
 TYPED_TEST( SupportFunctionTest, plotting ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	std::vector<std::size_t> projectionDimensions;
 	projectionDimensions.push_back( 0 );
 	projectionDimensions.push_back( 1 );

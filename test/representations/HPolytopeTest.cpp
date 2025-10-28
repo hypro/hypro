@@ -124,6 +124,10 @@ TYPED_TEST( HPolytopeTest, Swap ) {
 
 ////////////TODO: change this test to work with a 3D HPolytope<TypeParam>
 TYPED_TEST( HPolytopeTest, VertexEnumeration ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>( this->planes2 );
 
@@ -151,6 +155,10 @@ TYPED_TEST( HPolytopeTest, VertexEnumeration ) {
 }
 
 TYPED_TEST( HPolytopeTest, Insertion ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	// create unit box (scaled by 2)
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 
@@ -188,6 +196,10 @@ TYPED_TEST( HPolytopeTest, Insertion ) {
 }
 
 TYPED_TEST( HPolytopeTest, Union ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>( this->planes2 );
 	HPolytope<TypeParam> res = hpt1.unite( hpt2 );
@@ -287,6 +299,10 @@ TYPED_TEST( HPolytopeTest, Evaluate ) {
 }
 
 TYPED_TEST( HPolytopeTest, LinearTransformation ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 	matrix_t<TypeParam> A( 2, 2 );
 	A( 0, 0 ) = 1;
@@ -307,6 +323,10 @@ TYPED_TEST( HPolytopeTest, LinearTransformation ) {
 }
 
 TYPED_TEST( HPolytopeTest, MinkowskiSum ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>( this->planes2 );
 
@@ -334,6 +354,10 @@ TYPED_TEST( HPolytopeTest, MinkowskiSum ) {
 }
 
 TYPED_TEST( HPolytopeTest, Intersection ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	HPolytope<TypeParam> hpt1 = HPolytope<TypeParam>( this->planes1 );
 	HPolytope<TypeParam> hpt2 = HPolytope<TypeParam>( this->planes2 );
 

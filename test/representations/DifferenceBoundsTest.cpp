@@ -156,6 +156,10 @@ TYPED_TEST( DifferenceBoundsTest, DBMEntryPlus ) {
 }
 
 TYPED_TEST( DifferenceBoundsTest, Vertices ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	DifferenceBounds<TypeParam> dbm = DifferenceBounds<TypeParam>();
 	dbm.setDBM( this->mat );
 	dbm.setTimeHorizon( TypeParam( 20 ) );

@@ -217,6 +217,10 @@ TYPED_TEST( TemplatePolyhedronTest, Emptiness ) {
 }
 
 TYPED_TEST( TemplatePolyhedronTest, Vertices ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	// Empty TPoly
 	EXPECT_EQ( this->empty.vertices(), std::vector<Point<TypeParam>>() );
 
@@ -241,6 +245,10 @@ TYPED_TEST( TemplatePolyhedronTest, Vertices ) {
 }
 
 TYPED_TEST( TemplatePolyhedronTest, Supremum ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	// Empty TPoly
 	EXPECT_EQ( this->empty.supremum(), TypeParam( 0 ) );
 
@@ -411,6 +419,10 @@ TYPED_TEST( TemplatePolyhedronTest, AffineTransformation ) {
 }
 
 TYPED_TEST( TemplatePolyhedronTest, MinkowskiSum ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 #ifndef NDEBUG
 	// Both matrices not defined
 	auto resEmpty = this->empty.minkowskiSum( this->empty );

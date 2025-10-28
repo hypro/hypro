@@ -302,7 +302,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 	// using the result we will add one more new constraint, i.e. one more row to the shape matrix and one more element to the limits vector
 	shape.conservativeResize( shape.rows() + 1, shape.cols() );
-	limits.conservativeResize( shape.rows() + 1, 1 );
+	limits.conservativeResize( limits.rows() + 1, 1 );
 
 	// multiply each row of the generator with the corresponding element from the normal vector and then sum up each column individually
 	shape.row( shape.rows() - 1 ) = normal.transpose() * generator;
@@ -325,7 +325,7 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::inter
 
 	// we allocate n new entries in the shape and limit matrices for the new constraints
 	shape.conservativeResize( shape.rows() + _mat.rows(), shape.cols() );
-	limits.conservativeResize( shape.rows() + _mat.rows(), 1 );
+	limits.conservativeResize( limits.rows() + _mat.rows(), 1 );
 
 	// this loop could be executed in parallel
 	// #pragma omp parallel for

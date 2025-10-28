@@ -171,13 +171,13 @@ TEST( UnderApproximativeReachabilityAnalyzer, test4d ) {
 
 
 TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
+	// IMPORTANT.
+	hypro::VariablePool::getInstance().clear();
+
 	using Number = mpq_class;
 	using Vector = hypro::vector_t<Number>;
 	using Pol = PolyT<mpq_class>;
 	using Constr = ConstraintT<mpq_class>;
-
-	// IMPORTANT.
-	hypro::VariablePool::getInstance().clear();
 
 	typename rectangularFlow<Number>::flowMap fMap;
 	carl::Variable x = freshRealVariable( "x" );
@@ -206,11 +206,6 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
 		i++;
 	}
 
-	// TODO fix this test. generate cases
-	// TODO I think the error is because detect dimension gives 13 instead of 2. This probably is due to the VariablePool which is non-empty
-	// cols == 13, this->cols == 2
-	// factors.cols() == 13
-	// results_factors.cols() == rates.size() == 2
 	 auto [matrix, constants] = analyzer.solve(bad.matrix(), bad.vector(),rates);
 
 	auto result = rectangularUnderapproximateReverseTimeEvolution(bad,flow);
@@ -235,17 +230,16 @@ TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolution) {
  * 		-2 -1
  * 	TODO FIX test and remove 'DISABLED_' prefix.
  */
-TEST(UnderApproximativeReachabilityAnalyzer, DISABLED_ReverseTimeEvolutionWithConstantInput) {
+TEST(UnderApproximativeReachabilityAnalyzer, ReverseTimeEvolutionWithConstantInput) {
+	// IMPORTANT.
+	hypro::VariablePool::getInstance().clear();
+
 	using Number = mpq_class;
 	using Vector = hypro::vector_t<Number>;
 	using Pol = PolyT<mpq_class>;
 	using Constr = ConstraintT<mpq_class>;
 
-
-
 	typename rectangularFlow<Number>::flowMap fMap;
-
-
 
 
 	carl::Variable x = freshRealVariable( "x" );
@@ -255,12 +249,10 @@ TEST(UnderApproximativeReachabilityAnalyzer, DISABLED_ReverseTimeEvolutionWithCo
 	fMap[y] = carl::Interval<Number>{ -2, 2 };
 	rectangularFlow<Number> flow = hypro::rectangularFlow<Number>{ fMap };
 
-
 	Converter<Number>::CarlPolytope bad;
 
 	bad.addConstraint( Constr( Pol(2) *Pol(x) - Pol(y) - Pol(2) , carl::Relation::LEQ ) );
 	bad.addConstraint( Constr( - Pol(3)*Pol( x ) + Pol( y ) + Pol( 3 ), carl::Relation::LEQ ) );
-
 
 	// Ax <= b
 	matrix_t<mpq_class> a = matrix_t<mpq_class>::Zero( 2, 2 );
@@ -269,15 +261,12 @@ TEST(UnderApproximativeReachabilityAnalyzer, DISABLED_ReverseTimeEvolutionWithCo
 	a << 2,-1,-3,1;
 	b << 2,-3;
 
-
 	vector_t<carl::Interval<mpq_class>> rates_vector = vector_t<carl::Interval<mpq_class>>(2);
 	rates_vector << carl::Interval<mpq_class>(1,2), carl::Interval<mpq_class>(-2,2);
 
 	UnderApproximativeReachabilityAnalyzer<Number> analyzer = UnderApproximativeReachabilityAnalyzer<Number>();
 
-
 	auto vars = bad.getVariables();
-
 
 	vector_t<carl::Interval<Number>> rates = vector_t<carl::Interval<Number>>(vars.size());
 	auto flowMap = flow.getFlowIntervals();

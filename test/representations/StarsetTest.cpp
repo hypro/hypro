@@ -194,6 +194,10 @@ TYPED_TEST( StarsetTest, GetSetOfSamplesAndContains ) {
 }
 
 TYPED_TEST( StarsetTest, Vertices ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	std::vector<hypro::Point<TypeParam>> v = this->star_2d_triang2.vertices();
 	hypro::Point<TypeParam> p1( { -6, -2 } );
 	hypro::Point<TypeParam> p2( { 2, 2 } );
@@ -249,6 +253,9 @@ TYPED_TEST( StarsetTest, Empty ) {
 }
 
 TYPED_TEST( StarsetTest, IntersectHalfspaceEmpty ) {
+	// IMPORTANT.
+	hypro::VariablePool::getInstance().clear();
+
 	hypro::Halfspace<TypeParam> halfplane = hypro::Halfspace<TypeParam>( { 1, 0 }, -2 );
 	hypro::Starset<TypeParam> sliced_star = this->star_2d_rect.intersectHalfspace( halfplane );
 	EXPECT_TRUE( sliced_star.empty() );

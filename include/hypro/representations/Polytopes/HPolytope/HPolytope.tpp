@@ -468,7 +468,8 @@ namespace hypro {
     HPolytopeT<Number, Converter, Setting>::vertices(const matrix_t<Number> &) const {
         if constexpr (std::is_same_v<Number, double>) {
             DEBUG("hypro.hPolytope", "Conversion not supported for not exact number type.");
-            return  std::vector<Point<Number>>();
+			throw ("Conversion not supported for not exact number type.");
+//            return  std::vector<Point<Number>>();
         };
 
         typename std::vector<Point<Number>> vertices;

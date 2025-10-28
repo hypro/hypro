@@ -1324,6 +1324,10 @@ TYPED_TEST( SupportFunctionNewTest, CollectProjections ) {
 }
 
 TYPED_TEST( SupportFunctionNewTest, Vertices ) {
+	if constexpr (std::is_same_v<TypeParam, double>) {
+		GTEST_SKIP() << "Skipping tests where representation is converted via .vertices() using a double type";
+	}
+
 	// 3d box
 	Point<TypeParam> p1 = Point<TypeParam>( { TypeParam( 0 ), TypeParam( -4 ), TypeParam( -22 ) } );
 	Point<TypeParam> p2 = Point<TypeParam>( { TypeParam( 3 ), TypeParam( 6.789 ), TypeParam( -3.1415 ) } );
