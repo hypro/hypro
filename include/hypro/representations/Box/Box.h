@@ -504,6 +504,8 @@ namespace hypro {
 
         BoxT projectOn(const std::vector<std::size_t> &dimensions) const;
 
+        BoxT projectOut(const std::vector<std::size_t> &dimensions) const;
+
         BoxT assignIntervals(const std::map<std::size_t, carl::Interval<Number>> &assignments) const;
 
         /**

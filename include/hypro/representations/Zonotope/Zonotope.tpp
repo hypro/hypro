@@ -99,7 +99,6 @@ namespace hypro {
 
         // conversion is from here done just like V -> Zonotope
         *this = Converter::toZonotope(temp);
-        std::cout << "I was called " << std::endl;
 
         uniteEqualVectors();
         removeEmptyGenerators();
