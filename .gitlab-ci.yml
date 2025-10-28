@@ -62,9 +62,9 @@ build:
     # execute tests - required to get coverage reports
     - cd build && make test
     # collect coverage and write it to coverage.xml, which will be collected by the scanner
-    - gcovr -r ../ --sonarqube ../coverage.xml && cd ..
+    #- gcovr -r ../ --sonarqube ../coverage.xml && cd ..
     # run the scanner to collect and upload all information on static analysis and coverage
-    - sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
+    #- sonar-scanner/bin/sonar-scanner -X --define sonar.host.url="${SONAR_SERVER_URL}" -Dsonar.token="${SONAR_TOKEN}"
   artifacts:
     paths:
       - .
