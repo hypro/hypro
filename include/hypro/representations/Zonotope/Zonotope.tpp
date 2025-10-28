@@ -455,7 +455,7 @@ namespace hypro {
 			    continue;
 
             newCenter[index] = mCenter[dim];
-            projectedGenerators.block(index, 0, 1, mGenerator.cols()) = mGenerator.row(dim);
+            projectedGenerators.block(index, 0, 1, mGenerators.cols()) = mGenerators.row(dim);
             index++;
     
         }
