@@ -16,6 +16,10 @@
  */
 #pragma once
 
+#include <cereal/cereal.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/utility.hpp>
+
 #include "../config.h"
 #include "../types.h"
 #include "../util/VariablePool.h"
@@ -505,6 +509,18 @@ namespace hypro {
          * @return     True, if for all coordinates the comparison holds.
          */
         bool operator!=(const Point<Number> &_p2) const { return !(*this == _p2); }
+
+        // Serialization function required by cereal
+#ifdef HYPRO_USE_SERIALIZATION
+template <class Archive>
+void serialize(Archive &ar) {
+    ar(cereal::make_nvp("coordinates", mCoordinates));
+
+#else
+            ar(mCoordinates);
+#endif
+}
+
 
         //@{
         /**

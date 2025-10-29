@@ -705,6 +705,15 @@ namespace hypro {
         return VPolytopeT<Number, Converter, S>(projectedVertices);
     }
 
+//Right now it is the same as the nonconservative method. This could lead to loss of points...
+template<typename Number, typename Converter, typename S>
+    VPolytopeT<Number, Converter, S>
+    VPolytopeT<Number, Converter, S>::projectOutConservative(const std::vector<std::size_t> &dimensions) const {
+
+        return projectOut(dimensions);
+    }
+
+
     template<typename Number, typename Converter, typename S>
     VPolytopeT<Number, Converter, S>
     VPolytopeT<Number, Converter, S>::projectOn(const std::vector<std::size_t> &dimensions) const {
@@ -1157,7 +1166,7 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename S>
-    void VPolytopeT<Number, Converter, S>::removeRedundancy() {
+    const VPolytopeT<Number, Converter, S> &VPolytopeT<Number, Converter, S>::removeRedundancy() {
         if (!mReduced && !this->empty()) {
 #ifdef USE_SMTRAT
             std::set<Point<Number>> toDelete;
@@ -1225,6 +1234,7 @@ namespace hypro {
 #endif
         }
         mReduced = true;
+        return *this;
     }
 
     template<typename Number, typename Converter, typename S>

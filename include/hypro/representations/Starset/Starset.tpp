@@ -250,6 +250,12 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::proje
 
 	return StarsetT<Number, Converter, Setting>(center, newGenerator, mConstraints);
 }
+//Right now it is the same as the nonconservative method. This could lead to loss of points...
+template <typename Number, typename Converter, typename Setting>
+StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::projectOutConservative( const std::vector<std::size_t>& dimensions ) const {
+
+	return projectOut(dimensions);
+}
 
 template <typename Number, typename Converter, typename Setting>
 StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::linearTransformation( const matrix_t<Number>& A ) const {
