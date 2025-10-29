@@ -1329,7 +1329,7 @@ namespace hypro {
         }
         // at this point, none is empty.
         if (Setting::AVOID_CONVERSION == true) {
-            std::size_t numberOfDirections = 22; // TODO: need to increase this based on dimension, at least 2 per dimension
+            std::size_t numberOfDirections = 8; // TODO: need to increase this based on dimension, at least 2 per dimension
             TRACE("hypro.representations.HPolytope",
                   "Unite using templated evaluation using " << numberOfDirections << " directions.");
             assert(this->dimension() == _rhs.dimension());

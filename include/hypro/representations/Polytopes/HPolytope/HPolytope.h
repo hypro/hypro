@@ -429,7 +429,7 @@ namespace hypro {
                     // normal reduction
                     bool needToReduce = false;
                     for (unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
-                        auto hPlaneCopy = mHPlanes.at(planeIndex);
+                        Halfspace<Number> hPlaneCopy = mHPlanes.at(planeIndex);
                         hPlaneCopy.makeInteger();
 
                         // find maximal value
