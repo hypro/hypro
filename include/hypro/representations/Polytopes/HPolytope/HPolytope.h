@@ -417,58 +417,119 @@ namespace hypro {
             b.setExtremeVertices(tmpVertices);
         }
 
+        // template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
+        // void reduceNumberRepresentation(const std::vector<Point<Number>> &_vertices = std::vector<Point<Number>>(),
+        //                                 unsigned limit = fReach_DENOMINATOR) const {
+        //     // #ifdef REDUCE_NUMBERS
+        //     if (Setting::REDUCE_NUMBERS == true) {
+        //         std::vector<Number> largest (mHPlanes.size(), Number(0));
+
+        //         if (!this->empty()) {
+
+        //             // normal reduction
+        //             bool needToReduce = false;
+        //             for (unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
+        //                 Halfspace<Number> hPlaneCopy = mHPlanes.at(planeIndex);
+        //                 hPlaneCopy.makeInteger();
+
+        //                 // find maximal value
+        //                 largest[planeIndex] = carl::abs(hPlaneCopy.offset());
+        //                 for (unsigned i = 0; i < mDimension; ++i) {
+        //                     if (carl::abs(hPlaneCopy.normal()(i)) > largest[planeIndex]) {
+        //                         largest[planeIndex] = carl::abs(hPlaneCopy.normal()(i));
+        //                     }
+        //                 }
+        //                 if (largest[planeIndex] > limit * limit) {
+        //                     needToReduce = true;
+        //                 }
+        //             }
+
+        //             if (needToReduce) {
+        //                 TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
+        //                 std::vector<Point<Number>> originalVertices;
+        //                 if (_vertices.empty()) {
+        //                     TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
+        //                     originalVertices = this->vertices();
+        //                 } else {
+        //                     TRACE("hypro.hPolytope", "Use passed vertices.");
+        //                     originalVertices = _vertices;
+        //                 }
+        //                 TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
+                        
+        //                 for (unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
+        //                     mHPlanes.at(planeIndex).makeInteger();
+        //                     vector_t<Number> newNormal(mDimension);
+        //                     for (unsigned i = 0; i < mDimension; ++i) {
+        //                         newNormal(i) = carl::floor(
+        //                                 Number((mHPlanes.at(planeIndex).normal()(i) / largest[planeIndex]) * Number(limit)));
+        //                         assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i) / largest[planeIndex])) <= Number(1));
+        //                         assert(isInteger(newNormal(i)));
+        //                         assert(newNormal(i) <= Number(limit));
+        //                     }
+        //                     mHPlanes.at(planeIndex).setNormal(newNormal);
+        //                     Number newOffset = mHPlanes.at(planeIndex).offset();
+        //                     newOffset = carl::ceil(Number((newOffset / largest[planeIndex]) * Number(limit)));
+        //                     for (const auto &vertex: originalVertices) {
+        //                         Number tmp = newNormal.dot(vertex.rawCoordinates());
+        //                         if (tmp > newOffset) {
+        //                             newOffset = newOffset + (tmp - newOffset);
+        //                             assert(newNormal.dot(vertex.rawCoordinates()) <= newOffset);
+        //                         }
+        //                         assert(Halfspace<Number>(newNormal, newOffset).contains(vertex));
+        //                     }
+        //                     newOffset = carl::ceil(newOffset);
+        //                     mHPlanes.at(planeIndex).setOffset(newOffset);
+        //                 }
+        //             }
+        //         }
+        //         mVertices.clear();
+        //     }
+        //     // #endif
+        // }
+
+
         template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
         void reduceNumberRepresentation(const std::vector<Point<Number>> &_vertices = std::vector<Point<Number>>(),
                                         unsigned limit = fReach_DENOMINATOR) const {
             // #ifdef REDUCE_NUMBERS
             if (Setting::REDUCE_NUMBERS == true) {
-                std::vector<Number> largest (mHPlanes.size(), Number(0));
+                TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
+                std::vector<Point<Number>> originalVertices;
+                if (_vertices.empty()) {
+                    TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
+                    originalVertices = this->vertices();
+                } else {
+                    TRACE("hypro.hPolytope", "Use passed vertices.");
+                    originalVertices = _vertices;
+                }
+                TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
 
                 if (!this->empty()) {
-
                     // normal reduction
-                    bool needToReduce = false;
                     for (unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
-                        Halfspace<Number> hPlaneCopy = mHPlanes.at(planeIndex);
-                        hPlaneCopy.makeInteger();
-
                         // find maximal value
-                        largest[planeIndex] = carl::abs(hPlaneCopy.offset());
+                        Number largest = Number(0);
+                        mHPlanes.at(planeIndex).makeInteger();
+                        largest = carl::abs(mHPlanes.at(planeIndex).offset());
                         for (unsigned i = 0; i < mDimension; ++i) {
-                            if (carl::abs(hPlaneCopy.normal()(i)) > largest[planeIndex]) {
-                                largest[planeIndex] = carl::abs(hPlaneCopy.normal()(i));
+                            if (carl::abs(mHPlanes.at(planeIndex).normal()(i)) > largest) {
+                                largest = carl::abs(mHPlanes.at(planeIndex).normal()(i));
                             }
                         }
-                        if (largest[planeIndex] > limit * limit) {
-                            needToReduce = true;
-                        }
-                    }
 
-                    if (needToReduce) {
-                        TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
-                        std::vector<Point<Number>> originalVertices;
-                        if (_vertices.empty()) {
-                            TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
-                            originalVertices = this->vertices();
-                        } else {
-                            TRACE("hypro.hPolytope", "Use passed vertices.");
-                            originalVertices = _vertices;
-                        }
-                        TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
-                        
-                        for (unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
-                            mHPlanes.at(planeIndex).makeInteger();
+                        // reduce, if reduction is required
+                        if (largest > (limit * limit)) {
                             vector_t<Number> newNormal(mDimension);
                             for (unsigned i = 0; i < mDimension; ++i) {
                                 newNormal(i) = carl::floor(
-                                        Number((mHPlanes.at(planeIndex).normal()(i) / largest[planeIndex]) * Number(limit)));
-                                assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i) / largest[planeIndex])) <= Number(1));
+                                        Number((mHPlanes.at(planeIndex).normal()(i) / largest) * Number(limit)));
+                                assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i) / largest)) <= Number(1));
                                 assert(isInteger(newNormal(i)));
                                 assert(newNormal(i) <= Number(limit));
                             }
                             mHPlanes.at(planeIndex).setNormal(newNormal);
                             Number newOffset = mHPlanes.at(planeIndex).offset();
-                            newOffset = carl::ceil(Number((newOffset / largest[planeIndex]) * Number(limit)));
+                            newOffset = carl::ceil(Number((newOffset / largest) * Number(limit)));
                             for (const auto &vertex: originalVertices) {
                                 Number tmp = newNormal.dot(vertex.rawCoordinates());
                                 if (tmp > newOffset) {
