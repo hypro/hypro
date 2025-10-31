@@ -29,7 +29,12 @@ namespace hypro {
         mNonRedundant = orig.isNonRedundant();
 
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
-            setOptimizer(orig.matrix(), orig.vector());
+            if (orig.matrix().size() == 0) {
+                setOptimizer();
+            } else {
+                setOptimizer(orig.matrix(), orig.vector());
+            } 
+
         }
     }
 
@@ -1329,7 +1334,9 @@ namespace hypro {
         }
         // at this point, none is empty.
         if (Setting::AVOID_CONVERSION == true) {
-            std::size_t numberOfDirections = 12; // TODO: need to increase this based on dimension, at least 2 per dimension
+            // this is misleading, for 8 it gives you ack a 50 sided template polytope
+            // nr directions = 2 * dim + 4 * C(dim, 2) 
+            std::size_t numberOfDirections = 8; 
             TRACE("hypro.representations.HPolytope",
                   "Unite using templated evaluation using " << numberOfDirections << " directions.");
             assert(this->dimension() == _rhs.dimension());
