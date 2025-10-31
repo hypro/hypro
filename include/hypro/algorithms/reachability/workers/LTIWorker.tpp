@@ -21,6 +21,29 @@ namespace hypro {
                                                                 
         DEBUG("hypro.reachability", "inside computeTimeSuccessors");            
 
+        if (loc->isUrgent()) {
+            DEBUG("hypro.reachability", "Location is urgent, no time successors computation is necessary.");
+
+            auto [containment, segment] = intersect(initialSet, loc->getInvariant(), mSubspace);
+            if (containment == CONTAINMENT::NO) {
+                DEBUG("hypro.reachability",
+                      "Initial set is not contained in the invariant, abort");
+                return REACHABILITY_RESULT::SAFE;
+            } else {
+                *out = segment;
+                if (checkSafety) {
+                    std::tie(containment, std::ignore) = ltiIntersectBadStates(segment, loc, mHybridAutomaton, mSubspace);
+                    if (containment != CONTAINMENT::NO) {
+                        DEBUG("hypro.reachability", "First segment intersects the set of bad states, terminate.");
+                        return REACHABILITY_RESULT::UNKNOWN;
+                    }   
+                }
+                DEBUG("hypro.reachability", "Initial set is safe.");
+                return REACHABILITY_RESULT::SAFE;
+            }
+
+        }
+
         if (segmentsToCompute < 0) {
             segmentsToCompute = mNumSegments;
         } else if (segmentsToCompute == 0) {
