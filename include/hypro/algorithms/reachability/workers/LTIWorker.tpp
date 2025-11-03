@@ -439,7 +439,9 @@ namespace hypro {
         for (auto &[transition, valuationSets, valuationSetsUnder]: enabledSegments) {         
             // no aggregation
             std::size_t blockSize = 1;
-            if (mSettings.aggregation == AGG_SETTING::AGG ||
+            if (loc->isUrgent()) {
+                blockSize = 1;
+            } else if (mSettings.aggregation == AGG_SETTING::AGG ||
                 (mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() == AGG_SETTING::AGG)) {
                 if (mSettings.clustering > 0) {
                     blockSize = (valuationSets.size() + mSettings.clustering) /
