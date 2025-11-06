@@ -29,7 +29,14 @@ namespace hypro {
         mNonRedundant = orig.isNonRedundant();
 
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
-            setOptimizer(orig.matrix(), orig.vector());
+            if (orig.matrix().size() == 0) {
+                setOptimizer();
+            } else {
+                setOptimizer(orig.matrix(), orig.vector());
+            } 
+
+
+        
         }
     }
 
