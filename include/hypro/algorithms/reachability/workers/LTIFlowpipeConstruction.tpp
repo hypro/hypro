@@ -155,14 +155,20 @@ namespace hypro {
     Representation constructFirstSegmentUnder(Representation const &initialSet,
                                          linearFlow<Number> const &flow,
                                          matrix_t<Number> const &rawTransformation,
-                                         tNumber timeStep) {
+                                         tNumber timeStep,
+                                         bool forward) {
 
         TRACE("hypro", " inside constructFirstSegmentUnder");
         DEBUG("hypro", "init: " << initialSet.vertices());
         DEBUG("hypro", "init: " << initialSet << std::endl);
 
-        Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
-                                                                 timeTrafoVectorBlock(rawTransformation));
+        auto matrix = forward ? timeTrafoMatrixBlock(rawTransformation).eval() : timeTrafoMatrixBlock(rawTransformation).inverse().eval();
+        auto vector = timeTrafoVectorBlock(rawTransformation);
+        Representation atDelta = forward ? initialSet.affineTransformation(matrix, vector) : initialSet.affineTransformation(matrix, matrix * (-1 * vector));
+
+
+       // Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
+         //                                                        timeTrafoVectorBlock(rawTransformation));
         DEBUG("hypro", "atDelta: " << atDelta.vertices());
         DEBUG("hypro", "atDelta: " << atDelta << std::endl);
                                                                  

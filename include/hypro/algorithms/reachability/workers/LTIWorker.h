@@ -60,6 +60,28 @@ namespace hypro {
             return computeTimeSuccessorsUnder(initialSet, loc, out, mNumSegments, checkSafety);
         }
 
+                template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsBackwards(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  long int segmentsToCompute, bool checkSafety = true) const;
+
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsBackwards(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  bool checkSafety = true) const {
+            return computeTimeSuccessorsBackwards(initialSet, loc, out, mNumSegments, checkSafety);
+        }
+
+                template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsForwards(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  long int segmentsToCompute, bool checkSafety = true) const;
+
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsForwards(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  bool checkSafety = true) const {
+            return computeTimeSuccessorsForwards(initialSet, loc, out, mNumSegments, checkSafety);
+        }
+
+
+
 
         std::vector<JumpSuccessorOverUnder<Representation, LocationT>>
         computeJumpSuccessors(std::vector<Representation> const &flowpipe, LocationT const *loc, std::vector<Representation> const &flowpipeUnderApprox = {}) const;

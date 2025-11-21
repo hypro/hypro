@@ -20,8 +20,23 @@ namespace hypro {
                                                                       long int segmentsToCompute,
                                                                       bool checkSafety,
                                                                       bool forward) const {
-                                                                
-        DEBUG("hypro.reachability", "inside computeTimeSuccessors");            
+        if ( forward ){
+            return computeTimeSuccessorsForwards(initialSet, loc, out, segmentsToCompute, checkSafety);
+        }
+
+        return computeTimeSuccessorsBackwards(initialSet, loc, out, segmentsToCompute, checkSafety);
+    }                                                                   
+
+    template<typename Representation, typename HybridAutomaton>
+    template<typename OutputIt>
+    REACHABILITY_RESULT
+    LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessorsBackwards(const Representation &initialSet,
+                                                                            LocationT const *loc, OutputIt out,
+                                                                            long int segmentsToCompute,
+                                                                            bool checkSafety) const {
+
+        DEBUG("hypro.reachability", "inside computeTimeSuccessors");
+       // std::cout << "hypro.reachability: inside computeTimeSuccessors " << loc->getName()<< "\n";
 
         if (segmentsToCompute < 0) {
             segmentsToCompute = mNumSegments;
@@ -41,7 +56,7 @@ namespace hypro {
             loc->getLinearFlow(mSubspace),
             trafo,
             mSettings.timeStep,
-            forward
+            false
         );
         
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
@@ -81,7 +96,116 @@ namespace hypro {
         for (size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount) {
             // trickier -> need same struct but with matrices ivsersed
 
-            segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace), forward);
+            segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace), false);
+            
+#ifdef HYPRO_LOGGING
+            auto tmp = segment;
+#endif
+            std::tie(containment, segment) = intersect(segment, loc->getInvariant(), mSubspace);
+            if (containment == CONTAINMENT::NO) {
+#ifdef HYPRO_LOGGING
+                DEBUG("hypro.reachability",
+                      "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.");
+                DEBUG("hypro.reachability", "Compute time successor states done.");
+#endif
+             //  std::cout << "Reachability done\n";
+                return REACHABILITY_RESULT::SAFE;
+            }
+
+            *out = segment;
+            ++out;
+
+            // intersect with badstates
+            if (checkSafety) {
+                std::tie(containment, std::ignore) = ltiIntersectBadStates(segment, loc, mHybridAutomaton, mSubspace);
+                if (containment != CONTAINMENT::NO) {
+                    // Todo: memorize the intersecting state set and keep state.
+                   
+                    DEBUG("hypro.reachability",
+                          "Segment " << segment << " intersects the set of bad states, terminate.");
+                    DEBUG("hypro.reachability", "Compute time successor states done.");
+                    return REACHABILITY_RESULT::UNKNOWN;
+                }
+            }
+        }
+        DEBUG("hypro.reachability", "Compute time successor states done.");
+        //std::cout << "Reachability done at the end\n";
+        return REACHABILITY_RESULT::SAFE;
+    }
+
+
+
+    template<typename Representation, typename HybridAutomaton>
+    template<typename OutputIt>
+    REACHABILITY_RESULT
+    // bool if for or back
+    LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessorsForwards(const Representation &initialSet,
+                                                                      LocationT const *loc, OutputIt out,
+                                                                      long int segmentsToCompute,
+                                                                      bool checkSafety)
+                                                                    const {
+                                                                
+        DEBUG("hypro.reachability", "inside computeTimeSuccessors");            
+
+        if (segmentsToCompute < 0) {
+            segmentsToCompute = mNumSegments;
+        } else if (segmentsToCompute == 0) {
+            DEBUG("hypro.reachability",
+                  "No segments to compute (reached global time horizon, segmentsToCompute == 0), return.");
+            return REACHABILITY_RESULT::SAFE;
+        }
+  
+
+        auto transformation = mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace);
+        auto trafo = transformation.fullMatrix;
+
+        DEBUG("Trafo:{}", trafo);
+        Representation firstSegment = constructFirstSegment(
+            initialSet,
+            loc->getLinearFlow(mSubspace),
+            trafo,
+            mSettings.timeStep,
+            true
+        );
+        
+        auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
+        // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
+        if (containment == CONTAINMENT::NO) {
+            DEBUG("hypro.reachability",
+                  "First segment is not contained in the invariant, abort time successor computation.");
+            DEBUG("hypro.reachability",   
+                  "With invariant " << loc->getInvariant() << std::endl);
+
+            DEBUG("hypro.reachability",   
+                  "flow  " << loc->getLinearFlow(mSubspace) << std::endl);
+
+            
+            DEBUG("hypro.reachability",   
+                  "firstSegment " << firstSegment << std::endl);
+            DEBUG("hypro.reachability",   
+                "initialSet " << initialSet << std::endl);
+            return REACHABILITY_RESULT::SAFE;
+        }
+
+        // insert segment
+        *out = segment;
+        ++out;
+
+        // intersect with badstates
+        if (checkSafety) {
+            std::tie(containment, std::ignore) = ltiIntersectBadStates(segment, loc, mHybridAutomaton, mSubspace);
+            if (containment != CONTAINMENT::NO) {
+                // Todo: memorize the intersecting state set and keep state.
+                DEBUG("hypro.reachability", "First segment intersects the set of bad states, terminate.");
+                return REACHABILITY_RESULT::UNKNOWN;
+            }
+        }
+
+        // while not done
+        for (size_t segmentCount = 1; segmentCount < (std::size_t) segmentsToCompute; ++segmentCount) {
+            // trickier -> need same struct but with matrices ivsersed
+
+            segment = applyTimeEvolution(segment, mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace), true);
             
 #ifdef HYPRO_LOGGING
             auto tmp = segment;
@@ -175,7 +299,7 @@ namespace hypro {
             std::tie(containment, segment) = intersect(segment, loc->getInvariant(), mSubspace);
             if (containment == CONTAINMENT::NO) {
 #ifdef HYPRO_LOGGING
-                 std::cout << "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.";
+               //  std::cout << "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.";
                 DEBUG("hypro.reachability",
                         "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.");
                 DEBUG("hypro.reachability", "Compute time successor states done.");

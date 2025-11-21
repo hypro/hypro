@@ -342,7 +342,7 @@ namespace hypro {
         if (mEmptyState == SETSTATE::NONEMPTY || mEmptyState == SETSTATE::UNIVERSAL) {
             return false;
         }
-
+ 
         if (mHPlanes.empty()) {
             mEmptyState = SETSTATE::UNIVERSAL;
             return false;
@@ -1086,9 +1086,13 @@ namespace hypro {
             points.emplace_back(b);
             return HPolytopeT<Number, Converter, Setting>(points);
         }
-        if (!this->empty() && !mHPlanes.empty()) {
+        auto isEmpty = this->empty();
+       // std::count << "mHPlanes" << mHPlanes << std::endl;
+        if ( !this->empty() && !mHPlanes.empty()) {
+
             Eigen::FullPivLU<matrix_t<Number>> lu(A);
             // if A has full rank, we can simply re-transform, otherwise use v-representation.
+ 
             if (lu.rank() == A.rows()) {
                 TRACE("hypro.representations.HPolytope", "A has full rank - do not use v-conversion.");
                 std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
@@ -1111,6 +1115,7 @@ namespace hypro {
                                                               inequalities.second);
             } else {
                 TRACE("hypro.representations.HPolytope", "Use V-Conversion for linear transformation.");
+               // std::cout << "hypro.representations.HPolytope. Use V-Conversion for linear transformation." << std::endl;
                 auto intermediate = Converter::toVPolytope(*this);
                 intermediate = intermediate.affineTransformation(A, b);
                 auto res = Converter::toHPolytope(intermediate);
@@ -1203,6 +1208,7 @@ namespace hypro {
         if (rhs.mEmptyState == SETSTATE::EMPTY || this->mEmptyState == SETSTATE::EMPTY) {
             res.mEmptyState = SETSTATE::EMPTY;
         }
+        std::cout << "mEmptyState: " << res.mEmptyState << std::endl;
 
         return res;
 
