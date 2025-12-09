@@ -435,6 +435,40 @@ TEST_F( ReachabilityAnalysisTest, GlobalTimeHorizonOverrideLocal ) {
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
 }
 
+TEST_F( ReachabilityAnalysisTest, ConvisederLocalAndGlobalTimeHorizon ) {
+	// create initial states - chose a state set representation, here: boxes
+	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );
+
+	EXPECT_TRUE( roots.size() == std::size_t( 1 ) );
+
+	using tNumber = hypro::tNumber;
+	hypro::FixedAnalysisParameters fixedParameters;
+	fixedParameters.jumpDepth = 3;
+	fixedParameters.localTimeHorizon = 3;
+	fixedParameters.fixedTimeStep = tNumber( 1 ) / tNumber( 10 );
+	fixedParameters.globalTimeHorizon = tNumber( 6 );
+
+	hypro::AnalysisParameters analysisParameters;
+	analysisParameters.timeStep = tNumber( 1 ) / tNumber( 10 );
+	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
+	analysisParameters.representation_type = hypro::representation_name::box;
+	analysisParameters.considerLocalAndGlobalTimeHorizon = true;
+
+	hypro::Settings settings{ {}, fixedParameters, { analysisParameters } };
+
+	auto reacher = hypro::reachability::Reach<hypro::Box<Number>, hypro::HybridAutomaton<Number>>( this->bball_ha, settings.fixedParameters(),
+																								   settings.strategy().front(), roots );
+
+	// run reacher. Return type explicit to be able to monitor changes
+	auto reachabilityResult = reacher.computeForwardReachability();
+
+	EXPECT_EQ( std::size_t( 4 ), hypro::getNumberNodes( roots.front() ) );
+	EXPECT_LE( roots.front().getFlowpipe().size(), hypro::SegmentInd( 31 ) );
+	EXPECT_LE( ( *roots.front().getChildren().begin() )->getFlowpipe().size(), hypro::SegmentInd( 31 ) );
+	EXPECT_LE( ( *roots.front().getChildren().begin() )->getChildren()[0]->getFlowpipe().size(), hypro::SegmentInd( 22 ) );
+	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
+}
+
 TEST_F( ReachabilityAnalysisTest, ReachabilityDontSaveReachedSegments ) {
 	
 	auto roots = hypro::makeRoots<hypro::Box<Number>>( this->bball_ha );

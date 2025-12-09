@@ -74,7 +74,7 @@ namespace hypro {
         // reduceNumberRepresentation();
         reduceRepresentation();
         assert(empty == this->empty());
-        if (Setting::OPTIMIZER_CACHING) {
+        if (Setting::OPTIMIZER_CACHING && A.rows() > 0) {
             setOptimizer(A, b);
         }
     }
