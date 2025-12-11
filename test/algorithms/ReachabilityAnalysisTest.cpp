@@ -466,6 +466,7 @@ TEST_F( ReachabilityAnalysisTest, ConvisederLocalAndGlobalTimeHorizon ) {
 	EXPECT_LE( roots.front().getFlowpipe().size(), hypro::SegmentInd( 31 ) );
 	EXPECT_LE( ( *roots.front().getChildren().begin() )->getFlowpipe().size(), hypro::SegmentInd( 31 ) );
 	EXPECT_LE( ( *roots.front().getChildren().begin() )->getChildren()[0]->getFlowpipe().size(), hypro::SegmentInd( 22 ) );
+	EXPECT_LE( (*( *roots.front().getChildren().begin() )->getChildren().begin())->getChildren()[0]->getFlowpipe().size(), hypro::SegmentInd( 21 ) );
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult );
 }
 

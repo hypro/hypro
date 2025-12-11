@@ -1050,6 +1050,28 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, class Setting>
+    typename std::vector<Point<Number>>
+    HPolytopeT<Number, Converter, Setting>::projectOnAndVertices(const std::vector<std::size_t> &dimensions) const {
+        TRACE("hypro.representations.HPolytope", "out dimensions " << dimensions);
+        if (dimensions.empty() || this->empty()) {
+            return {};
+        }
+
+        // projection by means of a linear transformation
+        matrix_t<Number> A = matrix_t<Number>::Zero(this->dimension(), this->dimension());
+        for (auto i: dimensions) {
+            A(i, i) = 1;
+        }
+
+        TRACE("hypro.representations.HPolytope", "Use V-Conversion for linear transformation.");
+        auto intermediate = Converter::toVPolytope(*this);
+        auto res = intermediate.linearTransformation(A);
+    
+        return res.vertices();        
+    }
+
+
+    template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::linearTransformation(const matrix_t<Number> &A) const {
         TRACE("hypro.representations.HPolytope", "P' = A*P, A:" << std::endl

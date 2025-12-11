@@ -326,6 +326,9 @@ namespace hypro {
 
         HPolytopeT projectOn(const std::vector<std::size_t> &dimensions) const;
 
+        // if we want to project on and get the vertices, we can combine the two operations to one conversion 
+        std::vector<Point<Number>> projectOnAndVertices(const std::vector<std::size_t> &dimensions) const;
+
         HPolytopeT assignIntervals(const std::map<std::size_t, carl::Interval<Number>> &) const {
             WARN("hypro", "Not implemented.");
             return *this;
