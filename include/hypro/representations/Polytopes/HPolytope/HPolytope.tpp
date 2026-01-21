@@ -354,6 +354,7 @@ namespace hypro {
                 this->setOptimizer(this->matrix(), this->vector());
             }
             res = !mOptimizer->checkConsistency();
+
         } else {
             if (Setting::SAFE_LP_CALLS) {
                 res = hypro::impl::isEmptySafe(this->matrix(), this->vector());
@@ -361,9 +362,11 @@ namespace hypro {
                 Optimizer<Number> opt{this->matrix(), this->vector()};
                 res = !opt.checkConsistency();
             }
+             
         }
 
         mEmptyState = (res == true ? SETSTATE::EMPTY : SETSTATE::NONEMPTY);
+
         return res;
     }
 
@@ -750,7 +753,6 @@ namespace hypro {
                     --cnt;
                 }
             }
-
             assert(redundant.empty());
         }
         mNonRedundant = true;
@@ -1208,8 +1210,7 @@ namespace hypro {
         if (rhs.mEmptyState == SETSTATE::EMPTY || this->mEmptyState == SETSTATE::EMPTY) {
             res.mEmptyState = SETSTATE::EMPTY;
         }
-        std::cout << "mEmptyState: " << res.mEmptyState << std::endl;
-
+        std::cout << " res.mEmptyState" <<  res.mEmptyState << std::endl;
         return res;
 
     }

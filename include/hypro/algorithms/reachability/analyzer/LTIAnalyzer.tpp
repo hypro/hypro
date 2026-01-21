@@ -52,6 +52,7 @@ namespace hypro {
                         }
 
                         auto result = processNode(worker, currentNode, transformationCache);
+                        //std::cout << "Result: " << result << std::endl;
                         if (!mParameters.saveReachableSegments) {  
                             currentNode->forgetFlowpipe();
                         }
