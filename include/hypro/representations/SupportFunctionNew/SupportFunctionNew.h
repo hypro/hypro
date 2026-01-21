@@ -454,6 +454,13 @@ namespace hypro {
          */
         SupportFunctionNewT<Number, Converter, Setting> projectOn(const std::vector<std::size_t> &dimensions) const;
 
+        /**
+         * @brief	   Projects out the given dimensions from the SupportFunction, it calls the projecton internally
+         * @param[in]  dimensions  The dimensions to project out, all other dimensions will be kept
+         * @return 	   The projected SupportFunction
+         */
+        SupportFunctionNewT<Number, Converter, Setting> projectOut(const std::vector<std::size_t> &dimensions) const;
+
         SupportFunctionNewT<Number, Converter, Setting>
         assignIntervals(const std::map<std::size_t, carl::Interval<Number>> &) const {
             WARN("hypro", "Not implemented.");
