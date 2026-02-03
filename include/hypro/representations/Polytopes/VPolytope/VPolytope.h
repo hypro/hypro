@@ -162,6 +162,21 @@ namespace hypro {
         VPolytopeT(const VPolytopeT &orig) = default;
 
         /**
+         * @brief      Number conversion constructor.
+         * @param[in]  in  The input.
+         */
+        template<typename M, typename C, typename SettingsRhs, carl::DisableIf<std::is_same<M, Number>> = carl::dummy>
+        VPolytopeT(const VPolytopeT<M, C, SettingsRhs> &in) {
+            std::vector<Point<Number>> convertedVertices;
+            convertedVertices.reserve(in.vertices().size());
+
+            for(const auto& v : in.vertices()){
+                convertedVertices.push_back(convert<M, Number>(v));            
+            }
+        *this=VPolytopeT(convertedVertices);
+        }
+
+        /**
          * @brief      Move constructor.
          * @param[in]  <unnamed>  The original.
          */
@@ -194,6 +209,8 @@ namespace hypro {
          * @return VPolytopeT
          */
         VPolytopeT projectOut(const std::vector<std::size_t> &dimensions) const;
+
+        VPolytopeT projectOutConservative(const std::vector<std::size_t> &dimensions) const;
 
         VPolytopeT projectOn(const std::vector<std::size_t> &dimensions) const;
 
@@ -405,7 +422,10 @@ namespace hypro {
 
         typename pointVector::const_iterator end() const { return mVertices.end(); }
 
-        void removeRedundancy();
+        /**
+	    * @brief      Removes redundancy.
+	    */
+	    const VPolytopeT &removeRedundancy();
 
         template<typename N = Number, carl::DisableIf<is_float<N>> = carl::dummy>
         void reduceNumberRepresentation(std::size_t limit = fReach_DENOMINATOR) const {
@@ -454,6 +474,17 @@ namespace hypro {
 
         template<typename N = Number, carl::EnableIf<is_float<N>> = carl::dummy>
         void reduceNumberRepresentation(unsigned = fReach_DENOMINATOR) const {}
+
+        /// Serialization function required by cereal
+        template<typename Archive>
+        void serialize(Archive &ar) {
+#ifdef HYPRO_USE_SERIALIZATION
+            ar(cereal::make_nvp("vertices", mVertices)
+            ,cereal::make_nvp("reduced", mReduced));
+#else
+            ar(mVertices,mReduced);
+#endif
+        }
 
         void updateNeighbors();
 

@@ -34,7 +34,6 @@ namespace hypro {
             } else {
                 setOptimizer(orig.matrix(), orig.vector());
             } 
-
         }
     }
 
