@@ -785,8 +785,6 @@ template<typename Number, typename Converter, typename S>
     template<typename Number, typename Converter, typename S>
     VPolytopeT<Number, Converter, S>
     VPolytopeT<Number, Converter, S>::intersect(const VPolytopeT<Number, Converter, S> &rhs) const {
-        std::cout << "VPolytope intersection " << std::endl;
-        std::cout << "LHS vertices: " << mVertices << std::endl << ", RHS vertices: " << rhs.mVertices << std::endl;
         // create a set of possible points via combination of all coordinates
         if (rhs.size() == 0) {
             return VPolytopeT<Number, Converter, S>();
