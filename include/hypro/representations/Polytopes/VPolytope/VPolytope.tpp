@@ -557,6 +557,13 @@ namespace hypro {
     template<typename Number, typename Converter, typename S>
     VPolytopeT<Number, Converter, S>::VPolytopeT(const matrix_t<Number> &_constraints,
                                                  const vector_t<Number> _constants) {
+        if (_constraints.rows() == 0) {
+            // construct universe
+            TRACE("hypro.representations.vpolytope", "Construction from empty constraints yields universe.");
+            this->mEmptyState = SETSTATE::UNIVERSAL;
+            mReduced = true;
+            return;
+        }
         if constexpr (is_exact<Number>) {
             // check consistency, i.e., if the polytope potentially is empty
             // TODO ensure that this is robust
