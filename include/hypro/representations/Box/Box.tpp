@@ -453,6 +453,29 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, class Setting>
+    BoxT<Number, Converter, Setting>
+    BoxT<Number, Converter, Setting>::projectOut(const std::vector<std::size_t> &dimensions) const {
+        if (dimensions.empty()) {
+            return Empty(0);
+        }
+        if (this->empty()) {
+            return Empty(dimensions.size());
+        }
+
+        std::vector<carl::Interval<Number>> newIntervals;
+
+        for (std::size_t i = 0; i < this->dimension(); i++) {
+            if (std::find(dimensions.begin(), dimensions.end(), i) != dimensions.end())
+                continue;
+            newIntervals.push_back(mLimits[i]);
+
+        }
+
+        return BoxT<Number, Converter, Setting>(newIntervals);
+    }
+
+
+    template<typename Number, typename Converter, class Setting>
     BoxT<Number, Converter, Setting> BoxT<Number, Converter, Setting>::assignIntervals(
             const std::map<std::size_t, carl::Interval<Number>> &assignments) const {
         std::vector<carl::Interval<Number>> newIntervals{mLimits};

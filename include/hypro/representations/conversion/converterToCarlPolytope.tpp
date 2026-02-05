@@ -450,6 +450,6 @@ namespace hypro {
     template<typename CarlPolySetting, typename inSetting>
     CarlPolytopeT<Number, Converter<Number>, CarlPolySetting>
     Converter<Number>::toCarlPolytope(const StarsetT<Number, Converter<Number>, inSetting> &source, const CONV_MODE) {
-        return CarlPolytopeT<Number, Converter<Number>, CarlPolySetting>();
+        return toCarlPolytope<CarlPolySetting>(Converter<Number>::toHPolytope(source));
     }
 }

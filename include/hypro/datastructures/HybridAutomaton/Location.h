@@ -325,9 +325,15 @@ namespace hypro {
 
         /// outstream operator
         friend std::ostream &operator<<(std::ostream &ostr, const Location<Number> &l) {
-            ostr << l.getName() << " @" << &l << " {\n"
+            if (l.isUrgent()) {
+                ostr << l.getName() << "* @" << &l << " {\n"
                  << "Flow.: "
                  << "\n";
+            } else {
+                ostr << l.getName() << " @" << &l << " {\n"
+                 << "Flow.: "
+                 << "\n";
+            }
             for (size_t i = 0; i < l.getNumberSubspaces(); i++) {
                 switch (l.getFlowTypes()[i]) {
                     case DynamicType::linear:

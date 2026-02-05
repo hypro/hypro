@@ -106,6 +106,19 @@ class StarsetT : private GeometricObjectBase {
 	StarsetT( const StarsetT<Number, Converter, SettingRhs>& orig ) {}
 
 	/**
+	 * @brief      	Number conversion constructor.
+	 * @param[in]  	in  The original.
+	 */
+	template<typename M, typename C, typename S, carl::DisableIf<std::is_same<M, Number>> = carl::dummy>
+        StarsetT(const StarsetT<M, C, S> &in)
+		: mCenter(convert<M, Number>(in.center()))
+		, mGenerator(convert<M, Number>(in.generator()))
+		, mConstraints(HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>(in.constraints()))
+		{
+
+		}
+
+	/**
 	 * @brief      	Move constructor.
 	 * @param[in]  	orig  The original.
 	 */
@@ -293,6 +306,10 @@ class StarsetT : private GeometricObjectBase {
 	StarsetT<Number, Converter, Setting>
 	projectOn( const std::vector<std::size_t>& dimensions ) const;
 	StarsetT<Number, Converter, Setting>
+	projectOut( const std::vector<std::size_t>& dimensions ) const;
+	StarsetT<Number, Converter, Setting>
+	projectOutConservative( const std::vector<std::size_t>& dimensions ) const;
+	StarsetT<Number, Converter, Setting>
 	linearTransformation( const matrix_t<Number>& A ) const;
 	StarsetT<Number, Converter, Setting>
 	affineTransformation( const matrix_t<Number>& A,
@@ -324,17 +341,23 @@ class StarsetT : private GeometricObjectBase {
 	/**
 	 * @brief 		Containment check for a given Point, using the cached H-Polytope
 	 * @param 		point 	The given Point
-	 * @return 		true, of the point is contained in the Starset
+	 * @return 		true, if the point is contained in the Starset
 	 */
 	bool containsCached( const Point<Number>& point ) const;
 
 	/**
 	 * @brief 		Containment check for a given Point, using LP solving
 	 * @param 		point 	The given Point
-	 * @return 		true, of the point is contained in the Starset
+	 * @return 		true, if the point is contained in the Starset
 	 */
 	bool contains( const Point<Number>& point ) const;
 
+	/**
+	 * @brief 		Containment check for a given Vector, using LP solving (for Realyst Integration.cpp)
+	 * @param 		vec 	The given Vector
+	 * @return 		true, if the point decribed by the vector is contained in the Starset
+	 */
+	bool contains(const hypro::vector_t<Number>& vec) const;
 
 	/**
 	 * @brief      Containment check for a Starset.
@@ -366,6 +389,18 @@ class StarsetT : private GeometricObjectBase {
 	 * @brief      Reduces the representation of the current Starset.
 	 */
 	void reduceRepresentation();
+	
+	        /// Serialization function required by cereal
+        template<typename Archive>
+        void serialize(Archive &ar) {
+#ifdef HYPRO_USE_SERIALIZATION
+            ar(cereal::make_nvp("center", mCenter),
+       		cereal::make_nvp("generator", mGenerator),
+       		cereal::make_nvp("constraints", mConstraints));
+#else
+             ar(mCenter, mGenerator, mConstraints);
+#endif
+        }
 
 	/**
 	 * @brief      Makes this Starset equal to the empty Starset.

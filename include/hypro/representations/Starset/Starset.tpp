@@ -218,8 +218,11 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::proje
 	// auto projHPoly = this->eqvPolytope().projectOn(dimensions);
 	// return StarsetT<Number, Converter, Setting>(projHPoly);
 
-	matrix_t<Number> newGenerator = matrix_t<Number>::Zero(mGenerator.rows(), mGenerator.cols());
-	vector_t<Number> center = vector_t<Number>::Zero(mCenter.size());
+	// matrix_t<Number> newGenerator = matrix_t<Number>::Zero(mGenerator.rows(), mGenerator.cols());
+	// vector_t<Number> center = vector_t<Number>::Zero(mCenter.size());
+
+	matrix_t<Number> newGenerator = matrix_t<Number>::Zero(dimensions.size() , mGenerator.cols());
+	vector_t<Number> center = vector_t<Number>::Zero(dimensions.size());
 
 	for (std::size_t i = 0; i < dimensions.size(); i++) {
 		center[i] = mCenter[dimensions[i]];
@@ -227,6 +230,31 @@ StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::proje
 	}
 
 	return StarsetT<Number, Converter, Setting>(center, newGenerator, mConstraints);
+}
+
+template <typename Number, typename Converter, typename Setting>
+StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::projectOut( const std::vector<std::size_t>& dimensions ) const {
+
+	matrix_t<Number> newGenerator = matrix_t<Number>::Zero(mGenerator.rows() - dimensions.size() , mGenerator.cols());
+	vector_t<Number> center = vector_t<Number>::Zero(mCenter.size() - dimensions.size());
+
+	int index = 0;
+	for (std::size_t i = 0; i < mCenter.size(); i++) {
+		if (std::find(dimensions.begin(), dimensions.end(), i) != dimensions.end())
+			continue;
+		
+		center[index] = mCenter[i];
+		newGenerator.block(index, 0, 1, mGenerator.cols()) = mGenerator.row(i);
+		index++;
+	}
+
+	return StarsetT<Number, Converter, Setting>(center, newGenerator, mConstraints);
+}
+//Right now it is the same as the nonconservative method. This could lead to loss of points...
+template <typename Number, typename Converter, typename Setting>
+StarsetT<Number, Converter, Setting> StarsetT<Number, Converter, Setting>::projectOutConservative( const std::vector<std::size_t>& dimensions ) const {
+
+	return projectOut(dimensions);
 }
 
 template <typename Number, typename Converter, typename Setting>
@@ -542,6 +570,11 @@ bool StarsetT<Number, Converter, Setting>::contains( const Point<Number>& point 
 	return optimizer.checkPoint(point);
 }
 
+template <typename Number, typename Converter, typename Setting>
+bool StarsetT<Number, Converter, Setting>::contains( const vector_t<Number>& vec ) const {
+	Point<Number> point(vec);
+	return this->contains(point);
+}
 
 template <typename Number, typename Converter, typename Setting>
 bool StarsetT<Number, Converter, Setting>::contains( const StarsetT<Number, Converter, Setting>& Starset ) const {

@@ -120,8 +120,35 @@ namespace hypro {
             node->setBoundingBox(Converter<Number>::toBox(node->getInitialSet()).intervals());
         }
 
-        // bounded time evolution
-        if (mFixedParameters.globalTimeHorizon > 0) {
+        if ( mParameters.considerLocalAndGlobalTimeHorizon && mFixedParameters.globalTimeHorizon > 0 && mFixedParameters.localTimeHorizon > 0) { // if both time horizons are set, we need to compute the minimum of both
+
+            long int globalSegmentCount = std::ceil(std::nextafter(
+                    carl::convert<tNumber, double>(mFixedParameters.globalTimeHorizon / mParameters.timeStep),
+                    std::numeric_limits<double>::infinity())) - node->getTimings().lower();
+            
+
+            long int localSegmentCount = long(std::ceil(
+                std::nextafter(carl::convert<tNumber, double>(mFixedParameters.localTimeHorizon / mParameters.timeStep),
+                               std::numeric_limits<double>::max())));
+
+
+
+            long int segmentsToCompute = std::min(globalSegmentCount, localSegmentCount);
+
+            DEBUG("hypro.reachability", "localSegmentCount = " << localSegmentCount);
+            DEBUG("hypro.reachability", "globalSegmentCount = " << globalSegmentCount);
+            DEBUG("hypro.reachability", "Start to compute " << segmentsToCompute << " segments.");
+
+            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty()) {
+                safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
+                                                                std::back_inserter(node->getFlowpipeUnderApprox()), segmentsToCompute);
+            }
+            if (!node->getInitialSet().empty()) {
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+                                            std::back_inserter(node->getFlowpipe()), segmentsToCompute);
+            }
+
+        } else if (mFixedParameters.globalTimeHorizon > 0) {         // bounded time evolution
             // the number of required segments is the difference of the number of segments required to reach the global time horizon and the minimally current covered number of segments
             SegmentInd segmentsToCompute = std::ceil(std::nextafter(
                     carl::convert<tNumber, double>(mFixedParameters.globalTimeHorizon / mParameters.timeStep),

@@ -92,12 +92,14 @@ static z3::expr createFormula( const Point<Number>& _point, const matrix_t<Numbe
     }
 
     for ( unsigned d = 0; d < _point.dimension(); ++d ) {
-        if ( _point.at( d ) != carl::constant_zero<Number>::get() ) {
-            pointConstraint = pointConstraint + c.real_val( carl::convert<Number, mpq_class>( -_point.at( d ) ) ) + variables.at( d );
-        }
+        // if ( _point.at( d ) != carl::constant_zero<Number>::get() ) {
+            pointConstraint = c.real_val( carl::convert<Number, mpq_class>( -_point.at( d ) ) ) + variables.at( d );
+            formula = formula && ( pointConstraint == 0 );
+
+        // }
     }
 
-    formula = formula && ( pointConstraint == 0 );
+
 
     for ( unsigned i = 0; i < _constraints.rows(); ++i ) {
         z3::expr constraint( c );

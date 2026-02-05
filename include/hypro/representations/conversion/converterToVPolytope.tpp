@@ -652,6 +652,6 @@ namespace hypro {
     template<typename VPolytopeSetting, typename inSetting>
     VPolytopeT<Number, Converter<Number>, VPolytopeSetting>
     Converter<Number>::toVPolytope(const StarsetT<Number, Converter<Number>, inSetting> &source, const CONV_MODE) {
-        return VPolytopeT<Number, Converter<Number>, VPolytopeSetting>();
+        return toVPolytope(toHPolytope(source));
     }
 }

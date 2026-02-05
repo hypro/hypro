@@ -29,7 +29,11 @@ namespace hypro {
         mNonRedundant = orig.isNonRedundant();
 
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
-            setOptimizer(orig.matrix(), orig.vector());
+            if (orig.matrix().size() == 0) {
+                setOptimizer();
+            } else {
+                setOptimizer(orig.matrix(), orig.vector());
+            } 
         }
     }
 
@@ -69,7 +73,7 @@ namespace hypro {
         // reduceNumberRepresentation();
         reduceRepresentation();
         assert(empty == this->empty());
-        if (Setting::OPTIMIZER_CACHING) {
+        if (Setting::OPTIMIZER_CACHING && A.rows() > 0) {
             setOptimizer(A, b);
         }
     }
@@ -145,7 +149,6 @@ namespace hypro {
                     return hplane.contains(point);
                 });
             }));
-            reduceRepresentation();
             if (Setting::OPTIMIZER_CACHING) {
                 setOptimizer(this->matrix(), this->vector());
             }
@@ -312,6 +315,7 @@ namespace hypro {
                 }
             }
         }
+        // reduceRepresentation();
         // EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
     }
 
@@ -323,7 +327,7 @@ namespace hypro {
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
             setOptimizer(orig.matrix(), orig.vector());
         }
-        reduceRepresentation();
+        // reduceRepresentation();
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -1047,6 +1051,28 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, class Setting>
+    typename std::vector<Point<Number>>
+    HPolytopeT<Number, Converter, Setting>::projectOnAndVertices(const std::vector<std::size_t> &dimensions) const {
+        TRACE("hypro.representations.HPolytope", "out dimensions " << dimensions);
+        if (dimensions.empty() || this->empty()) {
+            return {};
+        }
+
+        // projection by means of a linear transformation
+        matrix_t<Number> A = matrix_t<Number>::Zero(this->dimension(), this->dimension());
+        for (auto i: dimensions) {
+            A(i, i) = 1;
+        }
+
+        TRACE("hypro.representations.HPolytope", "Use V-Conversion for linear transformation.");
+        auto intermediate = Converter::toVPolytope(*this);
+        auto res = intermediate.linearTransformation(A);
+    
+        return res.vertices();        
+    }
+
+
+    template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::linearTransformation(const matrix_t<Number> &A) const {
         TRACE("hypro.representations.HPolytope", "P' = A*P, A:" << std::endl
@@ -1336,7 +1362,9 @@ namespace hypro {
         }
         // at this point, none is empty.
         if (Setting::AVOID_CONVERSION == true) {
-            std::size_t numberOfDirections = 8;
+            // this is misleading, for 8 it gives you ack a 50 sided template polytope
+            // nr directions = 2 * dim + 4 * C(dim, 2) 
+            std::size_t numberOfDirections = 8; 
             TRACE("hypro.representations.HPolytope",
                   "Unite using templated evaluation using " << numberOfDirections << " directions.");
             assert(this->dimension() == _rhs.dimension());

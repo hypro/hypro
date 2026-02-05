@@ -121,7 +121,12 @@ static void computeReachableStates(const std::string &filename,
         for (const auto &flowpipe: flowpipes) {
             std::cout << "Flowpipe size " << flowpipe.size() << std::endl;
             for (const auto &segment: flowpipe) {
-                plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+                if constexpr (std::is_same_v<Representation, hypro::HPolytope<Number>> ){ // if it's an HPolytope, we can do better
+                    // plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+                    plotter.addObject(segment.projectOnAndVertices(plottingDimensions), hypro::plotting::colors[cnt % 10]);
+                } else {
+                    plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+                }
             }
             ++cnt;
         }

@@ -557,23 +557,31 @@ namespace hypro {
     template<typename Number, typename Converter, typename S>
     VPolytopeT<Number, Converter, S>::VPolytopeT(const matrix_t<Number> &_constraints,
                                                  const vector_t<Number> _constants) {
+        if (_constraints.rows() == 0) {
+            // construct universe
+            TRACE("hypro.representations.vpolytope", "Construction from empty constraints yields universe.");
+            this->mEmptyState = SETSTATE::UNIVERSAL;
+            mReduced = true;
+            return;
+        }
         if constexpr (is_exact<Number>) {
             // check consistency, i.e., if the polytope potentially is empty
             // TODO ensure that this is robust
             {
                 TRACE("hypro.representations.vpolytope", "Check for emptiness.");
-#ifdef HYPRO_USE_Z3
-                bool isEmpty = !z3CheckConsistency(_constraints, _constants,
-                                                   std::vector<carl::Relation>(_constraints.rows(),
-                                                                               carl::Relation::LEQ));
-                if (isEmpty) {
-                    TRACE("hypro.representations.vpolytope",
-                          "Construction from matrix and vector produced an empty polytope.");
-                    this->mEmptyState = SETSTATE::EMPTY;
-                    this->mReduced = true;
-                    return;
-                }
-#else
+// #ifdef HYPRO_USE_Z3
+//                 bool isEmpty = !z3CheckConsistency(_constraints, _constants,
+//                                                    std::vector<carl::Relation>(_constraints.rows(),
+//                                                                                carl::Relation::LEQ));
+//                 TRACE("hypro.representations.vpolytope", isEmpty);
+//                 if (isEmpty || _constraints.rows() == 0) {
+//                     TRACE("hypro.representations.vpolytope",
+//                           "Construction from matrix and vector produced an empty polytope.");
+//                     this->mEmptyState = SETSTATE::EMPTY;
+//                     this->mReduced = true;
+//                     return;
+//                 }
+// #else
                 auto opt = hypro::Optimizer<Number>(_constraints, _constants);
                 if (!opt.checkConsistency()) {
                     TRACE("hypro.representations.vpolytope",
@@ -590,7 +598,7 @@ namespace hypro {
                     this->mReduced = true;
                     return;
                 }
-#endif
+// #endif
             }
 
             auto dimension = _constraints.cols();
@@ -704,6 +712,15 @@ namespace hypro {
         return VPolytopeT<Number, Converter, S>(projectedVertices);
     }
 
+//Right now it is the same as the nonconservative method. This could lead to loss of points...
+template<typename Number, typename Converter, typename S>
+    VPolytopeT<Number, Converter, S>
+    VPolytopeT<Number, Converter, S>::projectOutConservative(const std::vector<std::size_t> &dimensions) const {
+
+        return projectOut(dimensions);
+    }
+
+
     template<typename Number, typename Converter, typename S>
     VPolytopeT<Number, Converter, S>
     VPolytopeT<Number, Converter, S>::projectOn(const std::vector<std::size_t> &dimensions) const {
@@ -772,27 +789,36 @@ namespace hypro {
         if (rhs.size() == 0) {
             return VPolytopeT<Number, Converter, S>();
         } else {
-            pointVector possibleVertices;
-            for (const auto &lhsVertex: mVertices) {
-                possibleVertices.push_back(lhsVertex);
-                for (unsigned coordIndex = 0; coordIndex < lhsVertex.rawCoordinates().rows(); ++coordIndex) {
-                    for (const auto &rhsVertex: rhs.mVertices) {
-                        vector_t<Number> newVertex = rhsVertex.rawCoordinates();
-                        newVertex(coordIndex) = lhsVertex.at(coordIndex);
-                        possibleVertices.push_back(Point<Number>(newVertex));
-                        possibleVertices.push_back(Point<Number>(rhsVertex.rawCoordinates()));
-                    }
-                }
-            }
-            // remove all vertices, which are only contained in one of the polytopes
-            for (auto vertexIt = possibleVertices.begin(); vertexIt != possibleVertices.end();) {
-                if (!(this->contains(*vertexIt) && rhs.contains(*vertexIt))) {
-                    vertexIt = possibleVertices.erase(vertexIt);
-                } else {
-                    ++vertexIt;
-                }
-            }
-            return VPolytopeT<Number, Converter, S>(std::move(possibleVertices));
+            // pointVector possibleVertices;
+            // for (const auto &lhsVertex: mVertices) {
+            //     possibleVertices.push_back(lhsVertex);
+            //     for (unsigned coordIndex = 0; coordIndex < lhsVertex.rawCoordinates().rows(); ++coordIndex) {
+            //         for (const auto &rhsVertex: rhs.mVertices) {
+            //             vector_t<Number> newVertex = rhsVertex.rawCoordinates();
+            //             newVertex(coordIndex) = lhsVertex.at(coordIndex);
+            //             possibleVertices.push_back(Point<Number>(newVertex));
+            //             possibleVertices.push_back(Point<Number>(rhsVertex.rawCoordinates()));
+            //         }
+            //     }
+            // }
+            // // remove all vertices, which are only contained in one of the polytopes
+            // for (auto vertexIt = possibleVertices.begin(); vertexIt != possibleVertices.end();) {
+            //     if (!(this->contains(*vertexIt) && rhs.contains(*vertexIt))) {
+            //         vertexIt = possibleVertices.erase(vertexIt);
+            //     } else {
+            //         ++vertexIt;
+            //     }
+            // }
+            // std::cout << "Intersection vertices: " << possibleVertices << std::endl;
+            // auto result = VPolytopeT<Number, Converter, S>(std::move(possibleVertices));
+            // result.removeRedundancy();
+            // std::cout << "Intersection vertices: " << possibleVertices << std::endl;    
+            // return result;
+            auto intermediate = Converter::toHPolytope(*this);
+            auto intermediateRhs = Converter::toHPolytope(rhs);
+            auto intersection = intermediate.intersect(intermediateRhs);
+            return VPolytopeT<Number, Converter, S>(Converter::toVPolytope(intersection));
+
         }
     }
 
@@ -1156,7 +1182,7 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename S>
-    void VPolytopeT<Number, Converter, S>::removeRedundancy() {
+    const VPolytopeT<Number, Converter, S> &VPolytopeT<Number, Converter, S>::removeRedundancy() {
         if (!mReduced && !this->empty()) {
 #ifdef USE_SMTRAT
             std::set<Point<Number>> toDelete;
@@ -1224,6 +1250,7 @@ namespace hypro {
 #endif
         }
         mReduced = true;
+        return *this;
     }
 
     template<typename Number, typename Converter, typename S>
