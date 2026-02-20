@@ -138,7 +138,7 @@ namespace hypro {
         if (loc->isUrgent()) {
             DEBUG("hypro.reachability", "Location is urgent, no time successors computation is necessary.");
 
-            auto [containment, segment] = intersect(initialSet, loc->getInvariant(), mSubspace);
+            auto [containment, segment] = intersect(initialSetUnder, loc->getInvariant(), mSubspace);
             if (containment == CONTAINMENT::NO) {
                 DEBUG("hypro.reachability",
                       "Initial set is not contained in the invariant, abort");
