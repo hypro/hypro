@@ -363,6 +363,15 @@ namespace hypro {
             }
             str << "\n";
         }
+
+        str << "under-approx sets:\n";
+
+        for (auto &pipe: pipes) {
+            for (auto &indSet: pipe.valuationSetsUnder) {
+                str << "[" << indSet.index << "] " << indSet.valuationSet << " ";
+            }
+            str << "\n";
+        }
         str << "\n";
 
         return str.str();
