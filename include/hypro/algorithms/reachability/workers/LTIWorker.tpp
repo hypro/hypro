@@ -451,12 +451,13 @@ namespace hypro {
             cnt = 0;
             for (auto const &valuationSet: flowpipeUnderApprox) {
 
-
+                std::cout << "cnt: " << cnt << "  valuationSet under: " << valuationSet << std::endl;
                 auto [containment, intersected] = intersect(valuationSet, transition->getGuard());
 
                 if (containment != CONTAINMENT::NO) {
                     currentSucc.valuationSetsUnder.push_back({intersected, cnt});
                 }
+                std::cout << "containment: " << containment << "  intersected under: " << intersected << std::endl;
                 ++cnt;
             }
 
