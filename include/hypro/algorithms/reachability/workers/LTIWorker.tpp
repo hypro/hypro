@@ -358,21 +358,21 @@ namespace hypro {
         std::stringstream str{};
 
         for (auto &pipe: pipes) {
+            str << pipe.transition->getSource()->getName() << " -> " << pipe.transition->getTarget()->getName() << " : \n";
+            
             for (auto &indSet: pipe.valuationSets) {
                 str << "[" << indSet.index << "] " << indSet.valuationSet << " ";
             }
-            str << "\n";
-        }
-
-        str << "under-approx sets:\n";
-
-        for (auto &pipe: pipes) {
+            
+            str << "\n";    
+            str << "under-approximation: \n";
+            
             for (auto &indSet: pipe.valuationSetsUnder) {
                 str << "[" << indSet.index << "] " << indSet.valuationSet << " ";
             }
+            
             str << "\n";
         }
-        str << "\n";
 
         return str.str();
     }
@@ -431,10 +431,6 @@ namespace hypro {
         // transition x enabled segments, segment ind
         std::vector<EnabledSetsUnderOver<Representation, typename HybridAutomaton::LocationType>> enabledSegments{};
 
-        if (loc->isUrgent()) {
-          return enabledSegments; // no jump successors if location is urgent, return empty vector      
-        } 
-
         TRACE("hypro.reachability", "Find non-empty guard intersections");
         for (const auto &transition: loc->getTransitions()) {
             TRACE("hypro.reachability", "Consider transition " << (*transition.get()));
@@ -475,7 +471,9 @@ namespace hypro {
         for (auto &[transition, valuationSets, valuationSetsUnder]: enabledSegments) {         
             // no aggregation
             std::size_t blockSize = 1;
-            if (mSettings.aggregation == AGG_SETTING::AGG ||
+             if (loc->isUrgent()) {
+                blockSize = 1;
+            } else if (mSettings.aggregation == AGG_SETTING::AGG ||
                 (mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() == AGG_SETTING::AGG)) {
                 if (mSettings.clustering > 0) {
                     blockSize = (valuationSets.size() + mSettings.clustering) /
