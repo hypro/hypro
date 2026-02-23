@@ -422,6 +422,10 @@ namespace hypro {
         // transition x enabled segments, segment ind
         std::vector<EnabledSetsUnderOver<Representation, typename HybridAutomaton::LocationType>> enabledSegments{};
 
+        if (loc->isUrgent()) {
+          return enabledSegments; // no jump successors if location is urgent, return empty vector      
+        } 
+
         TRACE("hypro.reachability", "Find non-empty guard intersections");
         for (const auto &transition: loc->getTransitions()) {
             TRACE("hypro.reachability", "Consider transition " << (*transition.get()));
@@ -462,9 +466,7 @@ namespace hypro {
         for (auto &[transition, valuationSets, valuationSetsUnder]: enabledSegments) {         
             // no aggregation
             std::size_t blockSize = 1;
-            if (loc->isUrgent()) {
-                blockSize = 1;
-            } else if (mSettings.aggregation == AGG_SETTING::AGG ||
+            if (mSettings.aggregation == AGG_SETTING::AGG ||
                 (mSettings.aggregation == AGG_SETTING::MODEL && transition->getAggregation() == AGG_SETTING::AGG)) {
                 if (mSettings.clustering > 0) {
                     blockSize = (valuationSets.size() + mSettings.clustering) /
@@ -522,14 +524,14 @@ namespace hypro {
             for (auto it = valuationSetsUnder.begin(); it != valuationSetsUnder.end();) {
                 it->valuationSet = applyReset(it->valuationSet, transition->getReset());
 
-                TRACE("hypro.reachability", "Set after reset " << it->valuationSet);
+                TRACE("hypro.reachability", "Set under after reset " << it->valuationSet);
                 TRACE("hypro.reachability", transition->getSource()->getName() << " -> " << transition->getTarget()->getName()
                                                          << ": Reset is: " << transition->getReset());
 
                 CONTAINMENT containment;
                 std::tie(containment, it->valuationSet) = intersect(it->valuationSet, transition->getTarget()->getInvariant());
 
-                TRACE("hypro.reachability", "Set after reset and intersection with invariant " << it->valuationSet);
+                TRACE("hypro.reachability", "Set under after reset and intersection with invariant " << it->valuationSet);
                 
                 if (containment == CONTAINMENT::NO) {
                     it = valuationSetsUnder.erase(it);
