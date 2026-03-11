@@ -127,7 +127,7 @@ namespace hypro {
         // computes vertices from source object
         typename std::vector<Point<Number>> vertices = _source.vertices();
         if (vertices.empty()) {
-            return HPolytopeT<Number, Converter<Number>, HPolytopeSetting>();
+            return HPolytope::Empty();
         }
         Converter<Number>::VPolytope vpoly = VPolytope(vertices);
 
@@ -357,6 +357,9 @@ namespace hypro {
     Converter<Number>::toHPolytope(const SupportFunctionNewT<Number, Converter<Number>, inSetting> &_source,
                                    const std::vector<vector_t<Number>> &additionalDirections, const CONV_MODE,
                                    std::size_t numberOfDirections) {
+        if (_source.empty()) {
+            return HPolytope::Empty();
+        }
         // gets dimension of source object
         // assert(!_source.empty());
         std::size_t dim = _source.dimension();
