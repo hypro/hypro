@@ -79,6 +79,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		, mInitialSetUnderApprox( initialSet )
 		, mTimings( timings ) {
 			
+		//TODO: add the same for starset??
 		if constexpr (std::is_same_v<Representation, HPolytope<Number>>) {
 			mInitialSet = Representation::Empty();
 		}
