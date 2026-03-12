@@ -157,7 +157,6 @@ namespace hypro {
                                          matrix_t<Number> const &rawTransformation,
                                          tNumber timeStep,
                                          bool forward) {
-
         TRACE("hypro", " inside constructFirstSegmentUnder");
         DEBUG("hypro", "init: " << initialSet.vertices());
         DEBUG("hypro", "init: " << initialSet << std::endl);

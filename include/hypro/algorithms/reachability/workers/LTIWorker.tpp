@@ -190,7 +190,7 @@ namespace hypro {
             mSettings.timeStep,
             true
         );
-        
+
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
         // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
         if (containment == CONTAINMENT::NO) {
@@ -273,7 +273,6 @@ namespace hypro {
 
 
         DEBUG("hypro.reachability", "inside computeTimeSuccessorsUnder");
-
         if (segmentsToCompute < 0) {
             segmentsToCompute = mNumSegments;
         } else if (segmentsToCompute == 0) {
@@ -290,7 +289,6 @@ namespace hypro {
             firstSegment = constructFirstSegmentUnder(initialSetUnder, loc->getLinearFlow(mSubspace),
                                         mTrafoCache.getTransformation(loc, mSettings.timeStep, mSubspace).fullMatrix,mSettings.timeStep);
         }
-
         auto [containment, segment] = intersect(firstSegment, loc->getInvariant(), mSubspace);
         // If the first segment did not fulfill the invariant of the location, the jump here should not have been made
         if (containment == CONTAINMENT::NO) {
@@ -535,7 +533,7 @@ namespace hypro {
     LTIWorker<Representation, HybridAutomaton>::computeJumpSuccessors(std::vector<Representation> const &flowpipe,
                                                                       LocationT const *loc, std::vector<Representation> const &flowpipeUnderApprox) const {
         // TRACE( "hypro.reachability", "flowpipe: " << print( flowpipe ) );
-
+        std::cout << "Compute Jump Successors" << std::endl;
         // transition x enabled segments, segment ind
         std::vector<EnabledSetsUnderOver<Representation, typename HybridAutomaton::LocationType>> enabledSegments{};
 

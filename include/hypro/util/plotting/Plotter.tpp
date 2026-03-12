@@ -178,7 +178,6 @@ namespace hypro {
             mId++;
             return (mId - 1);
         }
-        
         return 0;
     }
 
