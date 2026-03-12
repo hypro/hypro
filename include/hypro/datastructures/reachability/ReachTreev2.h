@@ -63,6 +63,11 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		, mTransition( transition )
 		, mInitialSet( initialSet )
 		, mTimings( timings ) {
+
+		// the default constructor of HPoly create a universal polytope, not an empty one 
+		if constexpr (std::is_same_v<Representation, HPolytope<Number>>) {
+			mInitialSetUnderApprox = Representation::Empty();
+		}
 	}
 
 	// it will create a node only with the under-approximative sets  
@@ -73,7 +78,11 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		, mTransition( transition )
 		, mInitialSetUnderApprox( initialSet )
 		, mTimings( timings ) {
+			
+		if constexpr (std::is_same_v<Representation, HPolytope<Number>>) {
+			mInitialSet = Representation::Empty();
 		}
+	}
 
 	ReachTreeNode( ReachTreeNode *parent, TransitionT const *transition, Location const *loc,
 				   Representation initialSet, Representation initialSetUnder, carl::Interval<SegmentInd> timings )
@@ -89,6 +98,10 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		: mLocation( loc )
 		, mInitialSet( initialSet )
 		, mTimings( timings ) {
+
+		if constexpr (std::is_same_v<Representation, HPolytope<Number>>) {
+			mInitialSetUnderApprox = Representation::Empty();
+		}
 	}
 
 	ReachTreeNode( Location const *loc, Representation initialSet, Representation initialSetUnder, carl::Interval<SegmentInd> timings )
