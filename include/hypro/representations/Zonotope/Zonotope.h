@@ -105,6 +105,18 @@ namespace hypro {
          */
         ZonotopeT(const ZonotopeT &other, unsigned d1, unsigned d2);
 
+        ZonotopeT(const std::vector<Point<Number>> &points);
+
+        template<typename M, typename C, typename S, carl::DisableIf<std::is_same<M, Number>> = carl::dummy>
+        ZonotopeT(const ZonotopeT<M, C, S> &in) {
+
+            auto dim = in.dimension();
+            auto center = convert<M, Number>(in.center());
+            auto generators = convert<M, Number>(in.generators());
+            
+            *this = ZonotopeT(dim, center, generators);
+        }
+
         virtual ~ZonotopeT();
 
         /*****************************************************************************
@@ -240,6 +252,8 @@ namespace hypro {
 
         ZonotopeT projectOut(const std::vector<std::size_t> &dimensions) const;
 
+        ZonotopeT projectOutConservative(const std::vector<std::size_t> &dimensions) const;
+
         ZonotopeT assignIntervals(const std::map<std::size_t, carl::Interval<Number>> &) const {
             WARN("hypro", "Not implemented.");
             return *this;
@@ -344,6 +358,8 @@ namespace hypro {
         ZonotopeT intervalHull() const;
 
         bool contains(const Point<Number> &point) const;
+
+        bool contains(const vector_t<Number> &vec) const;
 
         bool contains(const ZonotopeT<Number, Converter, Setting> &) const {
             assert(false && "NOT IMPLEMENTED.");
