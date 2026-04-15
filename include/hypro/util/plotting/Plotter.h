@@ -35,7 +35,6 @@
 #include <stack>
 #include <string>
 #include <vector>
-#include <iostream>
 
 namespace hypro {
     namespace plotting {
@@ -85,8 +84,6 @@ namespace hypro {
          * @param[in]  _filename  The filename (default = "out").
          */
         void setFilename(const std::string &_filename = "out");
-
-        std::string getFilename();
 
         /**
          * @brief      Overrides the current plotting settings with the passed ones.

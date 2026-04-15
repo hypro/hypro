@@ -52,7 +52,6 @@ namespace hypro {
                         }
 
                         auto result = processNode(worker, currentNode, transformationCache);
-                        //std::cout << "Result: " << result << std::endl;
                         if (!mParameters.saveReachableSegments) {  
                             currentNode->forgetFlowpipe();
                         }
@@ -163,7 +162,6 @@ namespace hypro {
                                                                 std::back_inserter(node->getFlowpipeUnderApprox()), segmentsToCompute);
             }
             if (!node->getInitialSet().empty()) {
-                //
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
                                             std::back_inserter(node->getFlowpipe()), segmentsToCompute);
             }
@@ -174,7 +172,6 @@ namespace hypro {
                                                             std::back_inserter(node->getFlowpipeUnderApprox()));
             }
             if (!node->getInitialSet().empty()) {
-                //
                 safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
                                                         std::back_inserter(node->getFlowpipe()));
             }

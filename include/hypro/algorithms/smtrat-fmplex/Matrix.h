@@ -222,9 +222,7 @@ inline void gcd_normalize(std::vector<typename Matrix<Number>::RowEntry>& row) {
     }
 }
 
-
 template<typename Number, std::enable_if_t<std::is_same<Number, double>::value, bool> = true>
 inline void gcd_normalize(std::vector<typename Matrix<Number>::RowEntry>& row) {}
-
 
 }

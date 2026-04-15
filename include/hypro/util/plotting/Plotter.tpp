@@ -10,7 +10,6 @@
 #include "Plotter.h"
 
 #include <future>
-#include <iostream>
 
 
 namespace hypro {
@@ -29,11 +28,6 @@ namespace hypro {
         mSettings.filename = _filename;
         mSettings.name = _filename;
         std::replace(mSettings.name.begin(), mSettings.name.end(), '_', '-');
-    }
-
-        template<typename Number>
-     std::string Plotter<Number>::getFilename() {
-        return mSettings.filename;
     }
 
     template<typename Number>
@@ -57,7 +51,7 @@ namespace hypro {
         std::string filename = mSettings.filename;
 
         std::string title = mSettings.name;
-        if (!mSettings.overwriteFiles && !mSettings.append) {
+        if (!mSettings.overwriteFiles ) {
             while (file_exists(filename + "_" + plotting::to_string(outformat) + ".plt")) {
                 std::stringstream ss;
                 ss << mSettings.filename << "-" << cnt;
@@ -66,12 +60,8 @@ namespace hypro {
             }
         }
 
-        if (mSettings.append){
-            mOutfile.open(filename + "_" + plotting::to_string(outformat) + ".plt", std::ios_base::app);
-        }
-        else{
-            mOutfile.open(filename + "_" + plotting::to_string(outformat) + ".plt");
-        }
+        mOutfile.open(filename + "_" + plotting::to_string(outformat) + ".plt");
+        
         if ((!mObjects.empty() && !mObjects.begin()->second.vertices.empty()) || !mPoints.empty() ||
             !mVectors.empty()) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
@@ -168,11 +158,10 @@ namespace hypro {
         if (!_points.empty()) {
             if (_points.begin()->dimension() != 2) {
                 WARN("hypro.plotting", "Attempted to plot an object that is not 2-dimensional. Object was skipped.")
-                std::cout << "Object was skipped. " << std::endl;
                 return 0;
             }
             updateLimits(_points);
-            std::cout << "Object was plotted. " << std::endl;
+            DEBUG("hypro.plotting", "Object was plotted.")
             mObjects.insert(std::make_pair(mId, plotting::PlotObject<Number>{_points, false, false, _color, settings,
                                                                              _objectTitle, isPoints}));
             mId++;

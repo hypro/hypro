@@ -321,8 +321,6 @@ std::vector<ReachTreeNode<Representation, typename Automaton::LocationType>> mak
 	std::transform( ha.getInitialStates().begin(), ha.getInitialStates().end(), std::back_inserter( roots ),
 					[]( auto const &locCond ) {
 						auto const &[location, condition] = locCond;
-						std::cout << "Location" << location << std::endl;
-						std::cout << "initial State location condition: " << condition.getMatrix() << " , "  << condition.getVector() << std::endl;
 						return ReachTreeNode<Representation, typename Automaton::LocationType>{ location,
 																								Representation{
 																									  condition.getMatrix(),

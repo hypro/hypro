@@ -152,7 +152,6 @@ namespace hypro {
             }
         }
         DEBUG("hypro.reachability", "Compute time successor states done.");
-        //std::cout << "Reachability done at the end\n";
         return REACHABILITY_RESULT::SAFE;
     }
 
@@ -161,7 +160,6 @@ namespace hypro {
     template<typename Representation, typename HybridAutomaton>
     template<typename OutputIt>
     REACHABILITY_RESULT
-    // bool if for or back
     LTIWorker<Representation, HybridAutomaton>::computeTimeSuccessorsForwards(const Representation &initialSet,
                                                                       LocationT const *loc, OutputIt out,
                                                                       long int segmentsToCompute,
@@ -320,7 +318,6 @@ namespace hypro {
             std::tie(containment, segment) = intersect(segment, loc->getInvariant(), mSubspace);
             if (containment == CONTAINMENT::NO) {
 #ifdef HYPRO_LOGGING
-               //  std::cout << "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.";
                 DEBUG("hypro.reachability",
                         "Segment no " << segmentCount << ", which is " << tmp << " invalidates the invariant condition.");
                 DEBUG("hypro.reachability", "Compute time successor states done.");
@@ -532,8 +529,6 @@ namespace hypro {
     std::vector<JumpSuccessorOverUnder<Representation, typename HybridAutomaton::LocationType>>
     LTIWorker<Representation, HybridAutomaton>::computeJumpSuccessors(std::vector<Representation> const &flowpipe,
                                                                       LocationT const *loc, std::vector<Representation> const &flowpipeUnderApprox) const {
-        // TRACE( "hypro.reachability", "flowpipe: " << print( flowpipe ) );
-        std::cout << "Compute Jump Successors" << std::endl;
         // transition x enabled segments, segment ind
         std::vector<EnabledSetsUnderOver<Representation, typename HybridAutomaton::LocationType>> enabledSegments{};
 

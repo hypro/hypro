@@ -34,6 +34,7 @@ namespace hypro {
         return resultMatrix;
     }
 
+    // forward -> build first Segment with time succesor, backward -> build first Segment mit time predecessor
     template<class Representation, class Number>
     Representation constructFirstSegment(Representation const &initialSet,
                                          linearFlow<Number> const &flow,
@@ -41,13 +42,11 @@ namespace hypro {
                                          tNumber timeStep,
                                          bool forward) {
 
+        // inverse the time transformation for backward
         auto matrix = forward ? timeTrafoMatrixBlock(rawTransformation).eval() : timeTrafoMatrixBlock(rawTransformation).inverse().eval();
         auto vector = timeTrafoVectorBlock(rawTransformation);
         Representation atDelta = forward ? initialSet.affineTransformation(matrix, vector) : initialSet.affineTransformation(matrix, matrix * (-1 * vector));
 
-
-        //Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
-                                                               //   timeTrafoVectorBlock(rawTransformation));
         Representation firstSegment = atDelta.unite(initialSet);
 
         DEBUG("hypro", "atDelta: " << atDelta.vertices());
@@ -101,6 +100,7 @@ namespace hypro {
         return firstSegment;
     }
 
+    // forward -> build first Segment with time succesor, backward -> build first Segment mit time predecessor
     template<class Number, class Representation, class... Rargs>
     Representation constructFirstSegment(State<Number, Representation, Rargs...> const &initialSet,
                                          linearFlow<Number> const &flow,
@@ -108,6 +108,7 @@ namespace hypro {
                                          tNumber timeStep,
                                          bool forward) {
 
+        // inverse the time transformation for backward
         auto matrix = forward ? timeTrafoMatrixBlock(rawTransformation).eval() : timeTrafoMatrixBlock(rawTransformation).inverse().eval();
         auto vector = timeTrafoVectorBlock(rawTransformation);
         Representation atDelta = forward ? initialSet.affineTransformation(matrix, vector) : initialSet.affineTransformation(matrix, matrix * (-1 * vector));
@@ -151,6 +152,7 @@ namespace hypro {
 
     // it creates the under- and over-approximation of the first segment
     // it inly work with HPolytope since the Minkowski difference is only implemented for that state set representation
+    // forward -> build first Segment with time succesor, backward -> build first Segment mit time predecessor
     template<class Representation, class Number>
     Representation constructFirstSegmentUnder(Representation const &initialSet,
                                          linearFlow<Number> const &flow,
@@ -161,13 +163,12 @@ namespace hypro {
         DEBUG("hypro", "init: " << initialSet.vertices());
         DEBUG("hypro", "init: " << initialSet << std::endl);
 
+        // inverse the time transformation for backward
         auto matrix = forward ? timeTrafoMatrixBlock(rawTransformation).eval() : timeTrafoMatrixBlock(rawTransformation).inverse().eval();
         auto vector = timeTrafoVectorBlock(rawTransformation);
         Representation atDelta = forward ? initialSet.affineTransformation(matrix, vector) : initialSet.affineTransformation(matrix, matrix * (-1 * vector));
 
 
-       // Representation atDelta = initialSet.affineTransformation(timeTrafoMatrixBlock(rawTransformation),
-         //                                                        timeTrafoVectorBlock(rawTransformation));
         DEBUG("hypro", "atDelta: " << atDelta.vertices());
         DEBUG("hypro", "atDelta: " << atDelta << std::endl);
                                                                  

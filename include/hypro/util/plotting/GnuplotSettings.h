@@ -45,7 +45,6 @@ namespace hypro::plotting {
         bool overwriteFiles = true;                                  //< set to enable file overwriting
         std::size_t writeIntermediate = 0;                              //< set to a strictly positve number n to write (append) every n objects to a file, those objects are deleted from the plotter afterwards
         std::pair<std::size_t, std::size_t> resolution{1280, 800};  //< image resolution
-        bool append = false;
     };
 
 }  // namespace hypro::plotting
