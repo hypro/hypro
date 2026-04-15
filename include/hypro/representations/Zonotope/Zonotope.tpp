@@ -134,6 +134,12 @@ namespace hypro {
     }
 
     template<typename Number, typename Converter, typename Setting>
+    ZonotopeT<Number, Converter, Setting>::ZonotopeT(const std::vector<Point<Number>> &points) {
+        // Implementation for constructing Zonotope from a vector of points
+        *this = Converter::toZonotope(hypro::VPolytopeT<Number, Converter, Setting>(points));
+    }
+
+    template<typename Number, typename Converter, typename Setting>
     ZonotopeT<Number, Converter, Setting>::~ZonotopeT() {
     }
 
@@ -435,6 +441,12 @@ namespace hypro {
         res.reduceOrder();
 
         return res;
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    ZonotopeT<Number, Converter, Setting>
+    ZonotopeT<Number, Converter, Setting>::projectOutConservative(const std::vector<std::size_t> &dimensions) const {
+        return this->projectOut(dimensions);
     }
 
     template<typename Number, typename Converter, typename Setting>
@@ -1056,7 +1068,7 @@ namespace hypro {
             unsigned firstConstraintIndex = linePairs.at(lineIndex).first;
             res = res.intersect(
                     Halfspace<Number>(vector_t<Number>(mat.row(firstConstraintIndex)), vec(firstConstraintIndex)),
-                    ZUtility::NDPROJECTION);
+                    ZUtility::ALAMO);
         }
 
         if (res.empty()) {
@@ -1331,6 +1343,12 @@ namespace hypro {
 
         result = temp;
         return result;
+    }
+
+
+    template<typename Number, typename Converter, typename Setting>
+    bool ZonotopeT<Number, Converter, Setting>::contains(const vector_t<Number> &vec) const {
+        return this->contains(Point<Number>(vec));
     }
 
     template<typename Number, typename Converter, typename Setting>
