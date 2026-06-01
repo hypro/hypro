@@ -58,9 +58,9 @@ namespace hypro {
                                                                          const rectangularFlow<Number> &flow);
 	template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
 	PolyhedralRepresentation<Number, Converter, Setting>
-	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant) {
+	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<size_t> stochasticJumpDimension) {
 		auto convertedSet = Converter::toCarlPolytope(badSet);
-		auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, flow, invariant);
+		auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, flow, invariant, stochasticJumpDimension);
 		// std::cout << __func__ << ": Set before conversion: " << convertedResult << std::endl;
 		PolyhedralRepresentation<Number, Converter, Setting> res;
 		convert(convertedResult, res);
@@ -80,6 +80,8 @@ namespace hypro {
         // std::cout << __func__ << ": Set after conversion: " << res << std::endl;
         return res;
     }
+
+//TODO
 
     template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
     PolyhedralRepresentation<Number, Converter, Setting>

@@ -121,6 +121,18 @@ namespace hypro {
             return mFlowTypes;
         }
 
+        void addEmptyFlowInLastDimension() {
+            auto rectFlow = std::get<rectangularFlow<Number>>(mFlows[0]);
+            auto &vpool = VariablePool::getInstance();
+            // rectangularFlow<NT> rectFlow = current_task.backwardsTreeNode->getHyproNode().getLocation()->getRectangularFlow();
+            rectFlow.setFlowIntervalForDimension( carl::Interval<Number>{ 0 },  rectFlow.dimension());
+            // current_task.backwardsTreeNode->getHyproNode().getLocation()->setRectangularFlow( rectFlow );
+            // setRectangularFlow(rectFlow);
+            mFlows.push_back(rectFlow);
+            mFlowTypes.push_back(DynamicType::rectangular);
+            mHash = 0;
+        }
+
         /// returns index of the subspace the requested state space dimension is contained in (assuming linear, ascending order of subspaces and variables)
         std::size_t getSubspaceIndexForStateSpaceDimension(std::size_t dimension) const;
 

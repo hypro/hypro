@@ -37,6 +37,7 @@ namespace hypro {
                 // store var to eliminate later
                 variablesToEliminate.push_back( newV );
                 // add flow conditions for new variables, we use the variable mapping provided by the flow
+
                 std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createFlowConstraints<hypro::tNumber, typename State::NumberType>( v, newV, t, flow.getFlowIntervalForDimension( v ) );
 
                 TRACE( "hydra.worker", "Use flow constraints: " );
@@ -255,7 +256,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
     }
 
     template <typename Number>
-    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant ) {
+    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<size_t> stochasticJumpDimension ) {
 #ifdef HYPRO_USE_QE_REDUNDANCY_CHECKS
         constexpr bool REMOVE_REDUNDANDY_IN_QE = true;
 #else
@@ -288,7 +289,15 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
                 variablesToEliminate.push_back( newV );
                 // add flow conditions for new variables, we use the variable mapping provided by the flow
 
+                std::cout << "bad: \n" << bad << std::endl;
+                std::cout << "bad variables:" << std::endl;
+                for (carl::Variable& carlVar : bad.getVariables()) std::cout << carlVar << ", " << std::endl;
+                std::cout << "find flow interval for dimension v: " << v.name() << " flow interval: " << flow.getFlowIntervalForDimension( v ) << std::endl;
+
                 std::vector<ConstraintT<hypro::tNumber>> flowConstraints = createReverseFlowConstraints<hypro::tNumber, Number>( v, newV, t, flow.getFlowIntervalForDimension( v ) );
+                for ( const auto& c : flowConstraints ) {
+                    std::cout << c << std::endl;
+                }
 
 #ifdef HYPRO_LOGGING
                 TRACE( "hypro.worker", "Use flow constraints: " );
@@ -298,6 +307,20 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 #endif
 
                 bad.addConstraints( flowConstraints );
+
+                // if (stochasticJumpDimension.has_value()) {
+                //     std::cout << "stochasticJumpDimension: " << stochasticJumpDimension.value() << std::endl;
+                //     auto carlvarbyindex = vpool.carlVarByIndex(stochasticJumpDimension.value());
+                //     std::cout << "carlvarbyindex: " << carlvarbyindex << " v: " << v << std::endl;
+                //     if (v == carlvarbyindex) {
+                //         ConstraintT<hypro::tNumber> zeroConstraint_lower = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::LEQ );
+                //         ConstraintT<hypro::tNumber> zeroConstraint_upper = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::GEQ );
+                //         std::cout << "zeroConstraintLower: " << zeroConstraint_lower << "zeroConstraintUpper: " << zeroConstraint_upper << std::endl;
+                //         bad.addConstraint(zeroConstraint_lower);
+                //         bad.addConstraint(zeroConstraint_upper);
+                //     }
+                //
+                // }
             }
         }
         // add invariant constraints, if the invariant is specified and does not represent the empty set
@@ -312,6 +335,8 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 
         TRACE( "hypro.worker", "Full constraint set describing the dynamic behavior: \n"
                 << bad );
+
+        std::cout << "Full constraint set describing the dynamic behavior: \n" << bad << std::endl;
 
         if(REMOVE_REDUNDANDY_IN_QE) {
             TRACE("qe.redundancy_check", "number of constraints during elimination: ");
@@ -347,6 +372,8 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 
         DEBUG( "hydra.worker", "State set after reverse time elapse: " << bad );
 
+        std::cout << "State set after reverse time elapse: \n" << bad << std::endl;
+
         return bad;
     }
 
@@ -356,8 +383,6 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         auto invariant = loc->getInvariant();
         return rectangularApplyReverseTimeEvolution(badSet, flow, invariant);
     }
-
-
 
 
     template <typename Number>
