@@ -256,7 +256,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
     }
 
     template <typename Number>
-    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<size_t> stochasticJumpDimension ) {
+    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::optional<CarlPolytope<Number>> initialState ) {
 #ifdef HYPRO_USE_QE_REDUNDANCY_CHECKS
         constexpr bool REMOVE_REDUNDANDY_IN_QE = true;
 #else
@@ -308,19 +308,24 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 
                 bad.addConstraints( flowConstraints );
 
-                // if (stochasticJumpDimension.has_value()) {
-                //     std::cout << "stochasticJumpDimension: " << stochasticJumpDimension.value() << std::endl;
-                //     auto carlvarbyindex = vpool.carlVarByIndex(stochasticJumpDimension.value());
-                //     std::cout << "carlvarbyindex: " << carlvarbyindex << " v: " << v << std::endl;
-                //     if (v == carlvarbyindex) {
-                //         ConstraintT<hypro::tNumber> zeroConstraint_lower = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::LEQ );
-                //         ConstraintT<hypro::tNumber> zeroConstraint_upper = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::GEQ );
-                //         std::cout << "zeroConstraintLower: " << zeroConstraint_lower << "zeroConstraintUpper: " << zeroConstraint_upper << std::endl;
-                //         bad.addConstraint(zeroConstraint_lower);
-                //         bad.addConstraint(zeroConstraint_upper);
-                //     }
-                //
-                // }
+                if (initialState.has_value()) {
+                    std::cout << "initialState: " << initialState.value() << std::endl;
+                }
+
+                 if (stochJumpAndMappedDim.has_value()) {
+                     std::cout << "stochJumpAndMappedDim: " << stochJumpAndMappedDim.value().first << ", " << stochJumpAndMappedDim.value().second << std::endl;
+                     auto carlvarbyindexJump = vpool.carlVarByIndex(stochJumpAndMappedDim.value().first);
+                     auto carlvarbyindexMappedDim = vpool.carlVarByIndex(stochJumpAndMappedDim.value().second);
+                     std::cout << "carlvarbyindexJump: " << carlvarbyindexJump << "carlvarbyindexMappedDim: " << carlvarbyindexMappedDim << " v: " << v << std::endl;
+                     if (v == carlvarbyindexJump) {
+                         ConstraintT<hypro::tNumber> zeroConstraint_lower = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::LEQ );
+                         ConstraintT<hypro::tNumber> zeroConstraint_upper = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::GEQ );
+                         std::cout << "zeroConstraintLower: " << zeroConstraint_lower << " zeroConstraintUpper: " << zeroConstraint_upper << std::endl;
+                         bad.addConstraint(zeroConstraint_lower);
+                         bad.addConstraint(zeroConstraint_upper);
+                     }
+
+                 }
             }
         }
         // add invariant constraints, if the invariant is specified and does not represent the empty set
