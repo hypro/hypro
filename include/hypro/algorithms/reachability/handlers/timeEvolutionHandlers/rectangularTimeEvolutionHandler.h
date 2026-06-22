@@ -58,14 +58,14 @@ namespace hypro {
                                                                          const rectangularFlow<Number> &flow);
 	template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
 	PolyhedralRepresentation<Number, Converter, Setting>
-	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::optional<PolyhedralRepresentation<Number, Converter, Setting>> initialState) {
+	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::optional<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions) {
 		auto convertedSet = Converter::toCarlPolytope(badSet);
-		std::optional<CarlPolytope<Number>> convertedInitialState = std::nullopt;
-		if (initialState.has_value()) {
-		    convertedInitialState = Converter::toCarlPolytope(*initialState);
-		}
+		//std::optional<CarlPolytope<Number>> convertedInitialState = std::nullopt;
+		//if (initialState.has_value()) {
+		//    convertedInitialState = Converter::toCarlPolytope(*initialState);
+		//}
 
-		auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, flow, invariant, stochJumpAndMappedDim, convertedInitialState);
+		auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, flow, invariant, stochJumpAndMappedDim, firstEnabledIndex, initialConditions);
 		// std::cout << __func__ << ": Set before conversion: " << convertedResult << std::endl;
 		PolyhedralRepresentation<Number, Converter, Setting> res;
 		convert(convertedResult, res);

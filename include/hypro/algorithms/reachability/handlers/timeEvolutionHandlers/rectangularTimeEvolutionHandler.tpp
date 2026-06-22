@@ -256,7 +256,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
     }
 
     template <typename Number>
-    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::optional<CarlPolytope<Number>> initialState ) {
+    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::optional<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions ) {
 #ifdef HYPRO_USE_QE_REDUNDANCY_CHECKS
         constexpr bool REMOVE_REDUNDANDY_IN_QE = true;
 #else
@@ -308,26 +308,81 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 
                 bad.addConstraints( flowConstraints );
 
-                if (initialState.has_value()) {
-                    std::cout << "initialState: " << initialState.value() << std::endl;
+                if (initialConditions.has_value()) {
+                    for(auto& condition : initialConditions.value()) {
+                        std::cout << "condition: " << condition.first << " " << condition.second << std::endl;
+                        auto carlvar = vpool.carlVarByIndex(condition.first);
+                        auto interval = condition.second;
+                        std::cout << "carlvar: " << carlvar << ", interval: [" << interval.lower() << ", " << interval.upper() << "], v: " << v << std::endl;
+                        if (v == carlvar) {
+                            ConstraintT<hypro::tNumber> lower_bound = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ) - interval.upper(), carl::Relation::LEQ );
+                            ConstraintT<hypro::tNumber> upper_bound = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ) - interval.lower(), carl::Relation::GEQ );
+                            std::cout << "lower_bound: " << lower_bound << " upper_bound: " << upper_bound << std::endl;
+                            bad.addConstraint(lower_bound);
+                            bad.addConstraint(upper_bound);
+                        }
+                    }
                 }
 
                  if (stochJumpAndMappedDim.has_value()) {
                      std::cout << "stochJumpAndMappedDim: " << stochJumpAndMappedDim.value().first << ", " << stochJumpAndMappedDim.value().second << std::endl;
                      auto carlvarbyindexJump = vpool.carlVarByIndex(stochJumpAndMappedDim.value().first);
                      auto carlvarbyindexMappedDim = vpool.carlVarByIndex(stochJumpAndMappedDim.value().second);
-                     std::cout << "carlvarbyindexJump: " << carlvarbyindexJump << "carlvarbyindexMappedDim: " << carlvarbyindexMappedDim << " v: " << v << std::endl;
+                     std::cout << "carlvarbyindexJump: " << carlvarbyindexJump << ", carlvarbyindexMappedDim: " << carlvarbyindexMappedDim << ", v: " << v << std::endl;
                      if (v == carlvarbyindexJump) {
-                         ConstraintT<hypro::tNumber> zeroConstraint_lower = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::LEQ );
-                         ConstraintT<hypro::tNumber> zeroConstraint_upper = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::GEQ );
-                         std::cout << "zeroConstraintLower: " << zeroConstraint_lower << " zeroConstraintUpper: " << zeroConstraint_upper << std::endl;
-                         bad.addConstraint(zeroConstraint_lower);
-                         bad.addConstraint(zeroConstraint_upper);
+                         // ConstraintT<hypro::tNumber> zeroConstraint_lower = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::LEQ );
+                         // ConstraintT<hypro::tNumber> zeroConstraint_upper = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::GEQ );
+                         // std::cout << "zeroConstraintLower: " << zeroConstraint_lower << " zeroConstraintUpper: " << zeroConstraint_upper << std::endl;
+                         // bad.addConstraint(zeroConstraint_lower);
+                         // bad.addConstraint(zeroConstraint_upper);
+                         std::cout << "as v == carlvarbyindexJump holds, add zero constraint for v" << std::endl;
+                         ConstraintT<hypro::tNumber> zeroConstraint = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::EQ );
+                         std::cout << "zeroConstraint: " << zeroConstraint << std::endl;
+                         bad.addConstraint(zeroConstraint);
                      }
-
                  }
+
             }
         }
+
+        if (firstEnabledIndex.has_value()) {
+            std::cout << "firstEnabledIndex: " << firstEnabledIndex.value().first << ", " << firstEnabledIndex.value().second << std::endl;
+            auto carlvarbyindex = vpool.carlVarByIndex(firstEnabledIndex.value().first);
+            std::cout << "carlvarbyindex: " << carlvarbyindex << std::endl;
+            auto carlvarbyindex2 = vpool.carlVarByIndex(firstEnabledIndex.value().second);
+            std::cout << "carlvarbyindex2: " << carlvarbyindex2 << std::endl;
+
+
+            std::optional<carl::Variable> current_var;
+            std::optional<carl::Variable> current_var_instance;
+
+            for (const auto& v : bad.getVariables()) {
+                std::string vname = v.name();
+                std::string carlvarname = carlvarbyindex.name();
+                std::string carlvarnameprime = carlvarname.append("_prime");
+
+                std::string carlvarname2 = carlvarbyindex2.name();
+                std::string carlvarname2prime = carlvarname2.append("_prime");
+
+                if (vname == carlvarnameprime) {
+                    std::cout << "vname == carlvarnameprime: " << vname << ", " << carlvarnameprime << std::endl;
+                    current_var = v;
+                } else if (vname == carlvarname2prime) {
+                    std::cout << "vname == carlvarname2prime: " << vname << ", " << carlvarname2prime << std::endl;
+                    current_var_instance = v;
+                }
+            }
+
+            if (current_var.has_value() && current_var_instance.has_value()) {
+                // std::cout << "found firstEnabledIndex and firstEnabledIndexPrime, "
+                ConstraintT<hypro::tNumber> saveInstanceValueConstraint = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( current_var.value() ) - PolyT<hypro::tNumber>( current_var_instance.value() ), carl::Relation::EQ );
+                std::cout << "saveInstanceValueConstraint: " << saveInstanceValueConstraint << std::endl;
+                bad.addConstraint(saveInstanceValueConstraint);
+            }
+
+
+        }
+
         // add invariant constraints, if the invariant is specified and does not represent the empty set
         if ( !invariant.isTrue() ) {
             if ( invariant.isFalse() ) {
@@ -354,7 +409,10 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
             quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
 
             bad.setDimension( dim + variablesToEliminate.size() + 1); ///TODO
-            bad.removeRedundancy();
+            std::cout << "dimension of bad: \n" << bad << "\n set to: " << dim + variablesToEliminate.size() + 1 << std::endl;
+
+            //TODO removed redundancy for now because of s_r=0 could cause problems.
+            // bad.removeRedundancy();
             bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
 
             quOrder.at(0).second = std::vector<carl::Variable>{t};

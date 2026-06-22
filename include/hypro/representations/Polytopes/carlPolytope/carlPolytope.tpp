@@ -378,11 +378,11 @@ namespace hypro {
 				mFormula = eliminateQuantifiers(mFormula, quOrder);
 				setDimension(dimension() - 1);
 
-				if(current_size != mFormula.size())
-					{
-						removeRedundancy();
-						current_size = mFormula.size();
-					}
+				// if(current_size != mFormula.size())
+				// 	{
+				// 		// removeRedundancy();
+				// 		current_size = mFormula.size();
+				// 	}
 			}
 		}
     }
