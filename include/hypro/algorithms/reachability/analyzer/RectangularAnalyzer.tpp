@@ -136,6 +136,34 @@ namespace hypro {
             return safetyResult;
         }
 
+    	bool goalReached = false;
+    	if (mSpecs.has_value()) {
+    		const Flowpipe<State>& flowpipe = worker.getFlowpipe();
+    		const State& state = *( flowpipe.begin() );
+    		const Location<Number>* location = node->getLocation();
+			// std::cout << "mSpecs has value" << std::endl;
+
+    		for (const auto& spec : mSpecs.value()) {
+    			const Location<Number>* _loc = spec.first;
+    			if (_loc == nullptr || _loc == location) {
+    				const hypro::Condition<Number>& _constraints = spec.second;
+					if (_constraints.isTrue()) {
+						// std::cout << "constraint is true" << std::endl;
+						goalReached = true;
+						break;
+					}
+    				auto [isEmpty, states] = state.satisfiesHalfspaces(_constraints.getMatrix(), _constraints.getVector());
+    				if (isEmpty != hypro::CONTAINMENT::NO) {
+    					// std::cout << "constraint is satisfies halfspaces" << std::endl;
+    					goalReached = true;
+    				}
+    			}
+    		}
+
+    	}
+
+    	if (goalReached) return REACHABILITY_RESULT::SAFE;
+
         // create jump successor tasks
         for (const auto &transitionStatesPair: worker.getJumpSuccessorSets()) {
             for (const auto jmpSucc: transitionStatesPair.second) {

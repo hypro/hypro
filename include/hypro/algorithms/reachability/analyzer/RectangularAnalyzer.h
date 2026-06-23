@@ -36,8 +36,8 @@ namespace hypro {
 
         /// constructor from automaton and settings with additional reachTree
         RectangularAnalyzer(const Automaton &ha, const Settings &setting,
-                            std::vector<ReachTreeNode<State, LocationT>> &roots)
-                : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots) {
+                            std::vector<ReachTreeNode<State, LocationT>> &roots, std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> specs)
+                : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots), mSpecs(specs) {
         }
 
         /// main method for reachability analysis
@@ -101,6 +101,7 @@ namespace hypro {
         std::atomic<bool> mStopped = false;                           ///< indicator, whether shutdown was already invoked
         std::mutex mIdleWorkerMutex;                               ///< mutex to access the idle-flag array
         std::condition_variable mAllIdle;                           ///< notification variable to trigger shutdown of the threadpool
+        std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> mSpecs;
     };
 
 }  // namespace hypro
