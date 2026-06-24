@@ -36,8 +36,8 @@ namespace hypro {
 
         /// constructor from automaton and settings with additional reachTree
         RectangularAnalyzer(const Automaton &ha, const Settings &setting,
-                            std::vector<ReachTreeNode<State, LocationT>> &roots, std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> specs)
-                : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots), mSpecs(specs) {
+                            std::vector<ReachTreeNode<State, LocationT>> &roots, std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> specs, std::optional<std::set<const hypro::Transition<hypro::Location<Number>>*>> stochasticTransitions)
+                : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots), mSpecs(specs), mStochasticTransitions(stochasticTransitions) {
         }
 
         /// main method for reachability analysis
@@ -102,6 +102,7 @@ namespace hypro {
         std::mutex mIdleWorkerMutex;                               ///< mutex to access the idle-flag array
         std::condition_variable mAllIdle;                           ///< notification variable to trigger shutdown of the threadpool
         std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> mSpecs;
+        std::optional<std::set<const hypro::Transition<hypro::Location<Number>>*>> mStochasticTransitions;
     };
 
 }  // namespace hypro
