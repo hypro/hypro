@@ -848,6 +848,14 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     const HPolytopeT<Number, Converter, Setting> &HPolytopeT<Number, Converter, Setting>::removeRedundancy() {
+        size_t d = this->dimension();
+        size_t m = this->size();
+        size_t alpha = 15; // alpha between 10 and 20?
+        //heuristic; O(d) facets required for simple polytope. if number of constraints is much higher than dimension, this scales poorly.
+        if (m <= alpha * d) {
+            return *this;
+        }
+
         // std::cout << __func__ << std::endl;
         if (!mNonRedundant && mHPlanes.size() > 1) {
             std::vector<std::size_t> redundant;
@@ -1261,6 +1269,7 @@ namespace hypro {
         for (unsigned i = 0; i < _mat.rows(); ++i) {
             changed = res.insert(Halfspace<Number>(_mat.row(i), _vec(i))) | changed;
         }
+
         if (changed) {
             res.removeRedundancy();
         }

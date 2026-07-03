@@ -135,27 +135,24 @@ namespace hypro {
         if (safetyResult != REACHABILITY_RESULT::SAFE) {
             return safetyResult;
         }
-
+    	
     	bool goalReached = false;
     	if (mSpecs.has_value()) {
     		assert(mStochasticTransitions.has_value());
     		const Flowpipe<State>& flowpipe = worker.getFlowpipe();
     		const State& state = *( flowpipe.begin() );
     		const Location<Number>* location = node->getLocation();
-			//std::cout << "mSpecs has value" << std::endl;
 
     		for (const auto& spec : mSpecs.value()) {
     			const Location<Number>* _loc = spec.first;
     			if (_loc == nullptr || _loc == location) {
     				const hypro::Condition<Number>& _constraints = spec.second;
 					if (_constraints.isTrue()) {
-						//std::cout << "constraint is true" << std::endl;
 						goalReached = true;
 						break;
 					}
     				auto [isEmpty, states] = state.satisfiesHalfspaces(_constraints.getMatrix(), _constraints.getVector());
     				if (isEmpty != hypro::CONTAINMENT::NO) {
-    					//std::cout << "constraint is satisfies halfspaces" << std::endl;
     					goalReached = true;
     				}
     			}
@@ -167,19 +164,14 @@ namespace hypro {
         for (const auto &transitionStatesPair: worker.getJumpSuccessorSets()) {
         	//TODO wieso kann eine transition zu mehreren nachfolge zuständen führen?
         	if (goalReached && mStochasticTransitions.has_value()) {
-        		//std::cout << "goal reached; check for stochastic transition as child" << std::endl;
         		if (mStochasticTransitions.value().find(transitionStatesPair.first) != mStochasticTransitions.value().end()) {
-        			//std::cout << "stochastic transition found - keep that subtree" << std::endl;
         			assert(transitionStatesPair.second.size() == 1);
         			auto &childNode = node->addChild(transitionStatesPair.second.front(), carl::Interval<SegmentInd>(0, 0), transitionStatesPair.first);
         			assert(childNode.getDepth() == node->getDepth() + 1);
 
         			// create Task
         			addToQueue(&childNode);
-        		} else {
-        			//std::cout << "no stochastic transition found - can remove subtree" << std::endl;
         		}
-
         	} else {
         		for (const auto jmpSucc: transitionStatesPair.second) {
         			// update reachTree
