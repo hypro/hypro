@@ -36,7 +36,7 @@ namespace hypro {
 
         /// constructor from automaton and settings with additional reachTree
         RectangularAnalyzer(const Automaton &ha, const Settings &setting,
-                            std::vector<ReachTreeNode<State, LocationT>> &roots, std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> specs, std::optional<std::set<const hypro::Transition<hypro::Location<Number>>*>> stochasticTransitions)
+                            std::vector<ReachTreeNode<State, LocationT>> &roots, std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> specs = std::nullopt, std::optional<std::set<const hypro::Transition<hypro::Location<Number>>*>> stochasticTransitions = std::nullopt)
                 : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots), mSpecs(specs), mStochasticTransitions(stochasticTransitions) {
         }
 

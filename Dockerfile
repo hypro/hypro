@@ -14,8 +14,10 @@ RUN apt-get update \
     iputils-ping
 COPY / /root/hypro/
 WORKDIR /root/hypro
-RUN cd /root/hypro && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DHYPRO_LOGGING=OFF -DHYPRO_STATISTICS=ON -DHYPRO_USE_Z3=ON ..
-RUN cd /root/hypro/build && make ${PROJECT_NAME}-resources -j`nproc`
-RUN cd /root/hypro/build && cmake .. && make hypro -j`nproc`
 
+ARG BUILD_JOBS=1
+
+RUN cd /root/hypro && mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DHYPRO_LOGGING=OFF -DHYPRO_STATISTICS=ON -DHYPRO_USE_Z3=ON ..
+RUN cd /root/hypro/build && make ${PROJECT_NAME}-resources -j ${BUILD_JOBS}
+RUN cd /root/hypro/build && cmake .. && make hypro -j ${BUILD_JOBS}
 # docker run -it hashOfImage bash
