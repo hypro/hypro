@@ -110,8 +110,16 @@ namespace hypro {
                               << VariablePool::getInstance().id(getVar(var)));
             if (c.relation() == carl::Relation::LEQ || c.relation() == carl::Relation::LESS ||
                 c.relation() == carl::Relation::EQ) {
+                //auto multivaritePoly = c.lhs().coeff(getVar(var), 1);
+                //std::cout << "Multivarite poly: " << multivaritePoly << std::endl;
+                //auto constantPartMultivaritePoly = constantPart(multivaritePoly);
+                //std::cout << "Constant part of multivarite poly: " << constantPartMultivaritePoly << std::endl;
+                //auto converted = carl::convert<N, D>(constantPartMultivaritePoly);
+                //std::cout << "Converted: " << converted << std::endl;
+                //std::cout << "index: " << VariablePool::getInstance().id(getVar(var)) << std::endl;
+                //normal(VariablePool::getInstance().id(getVar(var))) = converted;
                 normal(VariablePool::getInstance().id(getVar(var))) =
-                        carl::convert<N, D>(constantPart(c.lhs().coeff(getVar(var), 1)));
+                       carl::convert<N, D>(constantPart(c.lhs().coeff(getVar(var), 1)));
             } else {
                 normal(VariablePool::getInstance().id(getVar(var))) =
                         -carl::convert<N, D>(constantPart(c.lhs().coeff(getVar(var), 1)));

@@ -378,11 +378,11 @@ namespace hypro {
 				mFormula = eliminateQuantifiers(mFormula, quOrder);
 				setDimension(dimension() - 1);
 
-				if(current_size != mFormula.size())
-					{
-						removeRedundancy();
-						current_size = mFormula.size();
-					}
+				// if(current_size != mFormula.size())
+				// 	{
+				// 		// removeRedundancy();
+				// 		current_size = mFormula.size();
+				// 	}
 			}
 		}
     }
@@ -420,14 +420,25 @@ namespace hypro {
         matrix_t<Number> res = matrix_t<Number>(mFormula.size(), dimension());
         std::vector<ConstraintT<tNumber>> constraints;
         getConstraints(mFormula, constraints);
+        //hypro::VariablePool& pool = hypro::VariablePool::getInstance();
+        //pool.print();
+        //std::cout << "constraints size: " << constraints.size() << " mFormula size: " << mFormula.size() << std::endl;
         std::size_t i = 0;
         for (const auto &c: constraints) {
+            //std::cout << "current constraint: " << c << std::endl;
             res.row(i) = constraintNormal<tNumber, Number>(c, dimension());
+            //auto normal = constraintNormal<tNumber, Number>(c, dimension());
+            //std::cout << "normal.size(): " << normal.size() << " res.cols(): " << res.cols() << std::endl;
+            //res.row(i) = normal;
+
             if (c.relation() == carl::Relation::EQ) {
                 // res.conservativeResize(res.rows()+1, Eigen::NoChange_t);
                 res.conservativeResize(res.rows() + 1, res.cols());
                 ++i;
                 res.row(i) = -constraintNormal<tNumber, Number>(c, dimension());
+                //auto neg_normal = -constraintNormal<tNumber, Number>(c, dimension());
+                //std::cout << "neg_normal.size(): " << neg_normal.size() << " res.cols(): " << res.cols() << std::endl;
+                //res.row(i) = neg_normal;
             }
             ++i;
         }

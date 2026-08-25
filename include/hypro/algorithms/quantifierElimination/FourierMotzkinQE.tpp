@@ -26,9 +26,11 @@ namespace hypro {
                 // combine all lower-upper bound pairs.
                 FormulasT<Number> newConstraints;
                 if (!bounds[2].empty()) {
+                    std::cout << "Found equations(s), substitute." << std::endl;
                     DEBUG("hypro.algorithms.qe", "Found equation(s), substitute.");
                     newConstraints = substituteEquations(bounds, var);
                 } else {
+                    std::cout << "Create lower-upper bound pairs." << std::endl;
                     DEBUG("hypro.algorithms.qe", "Create lower-upper bound pairs.");
                     newConstraints = createNewConstraints(bounds, var);
                 }
@@ -44,11 +46,13 @@ namespace hypro {
                 DEBUG("hypro.algorithms.qe",
                       "Done elimiating " << var << ", new formula size: " << mFormula.size() << ", new formula: "
                                          << mFormula);
+                std::cout << "Done elimiating " << var << ", new formula size: " << mFormula.size() << ", new formula: " << mFormula << std::endl       ;
             }
         }
         TRACE("qe.redundancy_check", mFormula.size() << ",");
 
         DEBUG("hypro.algorithms.qe", "Formula after elimination: " << mFormula);
+        std::cout << "Formula after elimination: " << mFormula << std::endl;;
 
         return mFormula;
     }
@@ -172,6 +176,8 @@ namespace hypro {
                         substitutes.push_back(FormulaT<Number>(*f));
                         substitutes.push_back(FormulaT<Number>(*g));
                         // Todo: We could add the constraint y = z.
+                        //TODO 16-06 bugfix.
+                        constraints.emplace_back(newEq); // s_r_1 = s_r_prime muss erhalten bleiben
                     }
                 }
             }
