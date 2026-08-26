@@ -268,6 +268,15 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         // get bad state
         CarlPolytope<Number> bad = badSet;
         auto dim = badSet.dimension();
+        // vpool is a single, monotonically growing pool shared by everything that has ever created a
+        // carl variable (e.g. callers that keep other, unrelated variables registered for later re-use,
+        // such as realyst's REUSE_INTEGRATION instance variables). badSet's own dimension() only reflects
+        // the variables it actually uses and can therefore be smaller than vpool's current size, i.e.
+        // there can be a "gap" of pool indices already in use by variables badSet never references. The
+        // post/time variables created below always get indices at the *current end* of vpool, not
+        // necessarily right after `dim`, so track that gap to size bad correctly instead of assuming
+        // vpool was exactly `dim` entries large.
+        auto poolGap = vpool.size() - dim;
         // storage to build elimination query
         std::vector<carl::Variable> variablesToEliminate;
         // add variable for time elapse
@@ -408,8 +417,11 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
             QEQuery quOrder;
             quOrder.push_back( std::make_pair( QuantifierType::EXISTS, variablesToEliminate ) );
 
-            bad.setDimension( dim + variablesToEliminate.size() + 1); ///TODO
-            std::cout << "dimension of bad: \n" << bad << "\n set to: " << dim + variablesToEliminate.size() + 1 << std::endl;
+            // vpool.size() at this point already reflects t and all post/prime variables just created
+            // above, so it is always large enough to index any variable referenced in bad, regardless of
+            // poolGap (unlike the previous `dim + variablesToEliminate.size() + 1`, which assumed no gap).
+            bad.setDimension( vpool.size() );
+            std::cout << "dimension of bad: \n" << bad << "\n set to: " << vpool.size() << std::endl;
 
             //TODO removed redundancy for now because of s_r=0 could cause problems.
             // bad.removeRedundancy();
@@ -417,7 +429,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 
             quOrder.at(0).second = std::vector<carl::Variable>{t};
 
-            assert(bad.dimension() == dim + 1);
+            assert(bad.dimension() == dim + poolGap + 1);
 
             bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
             TRACE("qe.redundancy_check", "\n");
@@ -431,7 +443,12 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
             bad.eliminateVariables( quOrder );
             TRACE("qe.redundancy_check", "\n");
         }
-        assert(bad.dimension() == dim);
+        assert(bad.dimension() == dim + poolGap);
+        // the poolGap dimensions were never referenced by bad (they belong to variables some other,
+        // unrelated part of the pool is using) and were only carried along so intermediate elimination
+        // steps had enough room to index into; strip them back off so the result has the same dimension
+        // as badSet, as callers expect.
+        bad.setDimension( dim );
 
         DEBUG( "hydra.worker", "State set after reverse time elapse: " << bad );
 
