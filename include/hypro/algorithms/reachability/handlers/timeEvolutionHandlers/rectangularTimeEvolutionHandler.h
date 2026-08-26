@@ -51,54 +51,24 @@ namespace hypro {
 
 	template<typename Number>
 	CarlPolytope<Number>
-	rectangularApplyReverseTimeEvolution(const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant);
+	rectangularApplyReverseTimeEvolution(const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim = std::nullopt, std::optional<std::pair<size_t,size_t>> firstEnabledIndex = std::nullopt, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions = std::nullopt);
 
     template<typename Number>
-    CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution(const CarlPolytope<Number> &badSet,
-                                                                         const rectangularFlow<Number> &flow);
+    CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution(const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow);
+
 	template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
 	PolyhedralRepresentation<Number, Converter, Setting>
-	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::optional<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions) {
-		auto convertedSet = Converter::toCarlPolytope(badSet);
-		//std::optional<CarlPolytope<Number>> convertedInitialState = std::nullopt;
-		//if (initialState.has_value()) {
-		//    convertedInitialState = Converter::toCarlPolytope(*initialState);
-		//}
-
-		auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, flow, invariant, stochJumpAndMappedDim, firstEnabledIndex, initialConditions);
-		// std::cout << __func__ << ": Set before conversion: " << convertedResult << std::endl;
-		PolyhedralRepresentation<Number, Converter, Setting> res;
-		convert(convertedResult, res);
-		// std::cout << __func__ << ": Set after conversion: " << res << std::endl;
-		return res;
-	}
+	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim = std::nullopt, std::optional<std::pair<size_t,size_t>> firstEnabledIndex = std::nullopt, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions = std::nullopt);
 
     template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
     PolyhedralRepresentation<Number, Converter, Setting>
     rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet,
-                                         const Location<Number> *loc) {
-        auto convertedSet = Converter::toCarlPolytope(badSet);
-        auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, loc);
-        // std::cout << __func__ << ": Set before conversion: " << convertedResult << std::endl;
-        PolyhedralRepresentation<Number, Converter, Setting> res;
-        convert(convertedResult, res);
-        // std::cout << __func__ << ": Set after conversion: " << res << std::endl;
-        return res;
-    }
-
-//TODO
+                                         const Location<Number> *loc);
 
     template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
     PolyhedralRepresentation<Number, Converter, Setting>
     rectangularUnderapproximateReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet,
-													 const Location<Number> *loc) {
-
-        auto convertedSet = Converter::toCarlPolytope(badSet);
-        auto convertedResult = rectangularUnderapproximateReverseTimeEvolution(convertedSet, loc->getRectangularFlow());
-        PolyhedralRepresentation<Number, Converter, Setting> res;
-        convert(convertedResult, res);
-        return res;
-    }
+													 const Location<Number> *loc);
 
     template<typename Number>
     CarlPolytope<Number>
