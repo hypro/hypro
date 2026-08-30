@@ -6,8 +6,13 @@ if (MSVC)
             RESULT_VARIABLE NO_CONNECTION
     )
 else ()
+    # ping requires a raw socket (CAP_NET_RAW), which rootless containers (e.g. podman/docker
+    # build without --cap-add=NET_RAW) typically don't grant even to root -- ping then fails
+    # regardless of actual connectivity, incorrectly forcing offline mode. curl only needs a
+    # normal TCP/TLS connection, which works in that environment, so use it instead.
     execute_process(
-            COMMAND ping www.google.com -c 2
+            COMMAND curl --silent --head --fail --max-time 5 https://www.google.com
+            OUTPUT_QUIET
             ERROR_QUIET
             RESULT_VARIABLE NO_CONNECTION
     )
