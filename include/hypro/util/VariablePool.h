@@ -20,6 +20,7 @@
 #pragma once
 
 #include "../types.h"
+#include "logging/Logger.h"
 
 #include <algorithm>
 #include <cassert>
@@ -290,8 +291,7 @@ namespace hypro {
             assert( mPplVariables.size() == mPplId );
 #endif
             for (std::size_t pos = 0; pos < mCarlVariables.size(); ++pos) {
-                std::cout << mCarlVariables[pos] << " -> "
-                          << std::endl;  // mPplVariables[pos] << std::endl; //TODO: fix
+                DEBUG("hypro.util.variablepool", mCarlVariables[pos] << " -> ");  // mPplVariables[pos]; //TODO: fix
             }
         }
     };
