@@ -284,17 +284,16 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         // add constraint t <= 0
         bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
 
-        // Variables referenced by stochJumpAndMappedDim/firstEnabledIndex must always go through the
-        // substitute/eliminate treatment below, even if their flow is zero: the "_prime" copies created
-        // for them are looked up *by name* further down (the stochJumpAndMappedDim.first check inside
-        // this same loop, and the firstEnabledIndex block right after it) to attach extra equality
-        // constraints. Skipping substitution for one of these would leave those lookups silently unable
-        // to find a "_prime" variable, silently dropping a needed constraint rather than failing loudly.
+        // Variables referenced by firstEnabledIndex must always go through the substitute/eliminate
+        // treatment below, even if their flow is zero: the "_prime" copies created for them are looked
+        // up *by name* further down (the firstEnabledIndex block right after this loop) to attach an
+        // extra equality constraint between the two. Skipping substitution for one of these would leave
+        // that lookup silently unable to find a "_prime" variable, silently dropping a needed constraint
+        // rather than failing loudly.
+        // (stochJumpAndMappedDim.first's own extra constraint, added right after this loop, only ever
+        // references the plain pre-image variable -- never a "_prime" name -- so it needs no such
+        // protection; stochJumpAndMappedDim.second isn't referenced anywhere in this function at all.)
         std::vector<carl::Variable> protectedVars;
-        if ( stochJumpAndMappedDim.has_value() ) {
-            protectedVars.push_back( vpool.carlVarByIndex( stochJumpAndMappedDim.value().first ) );
-            protectedVars.push_back( vpool.carlVarByIndex( stochJumpAndMappedDim.value().second ) );
-        }
         if ( firstEnabledIndex.has_value() ) {
             protectedVars.push_back( vpool.carlVarByIndex( firstEnabledIndex.value().first ) );
             protectedVars.push_back( vpool.carlVarByIndex( firstEnabledIndex.value().second ) );
@@ -353,21 +352,19 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
                     }
                 }
 
-                 if (stochJumpAndMappedDim.has_value()) {
-                     auto carlvarbyindexJump = vpool.carlVarByIndex(stochJumpAndMappedDim.value().first);
-                     auto carlvarbyindexMappedDim = vpool.carlVarByIndex(stochJumpAndMappedDim.value().second);
-                     if (v == carlvarbyindexJump) {
-                         // ConstraintT<hypro::tNumber> zeroConstraint_lower = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::LEQ );
-                         // ConstraintT<hypro::tNumber> zeroConstraint_upper = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::GEQ );
-                         // std::cout << "zeroConstraintLower: " << zeroConstraint_lower << " zeroConstraintUpper: " << zeroConstraint_upper << std::endl;
-                         // bad.addConstraint(zeroConstraint_lower);
-                         // bad.addConstraint(zeroConstraint_upper);
-                         ConstraintT<hypro::tNumber> zeroConstraint = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ), carl::Relation::EQ );
-                         bad.addConstraint(zeroConstraint);
-                     }
-                 }
-
             }
+        }
+
+        // stochJumpAndMappedDim.first's pre-image must be exactly 0 at this point -- unlike
+        // firstEnabledIndex below, this only ever constrains the plain (never "_prime") variable, so it
+        // needs neither a "_prime" lookup nor stochJumpAndMappedDim.first to have gone through the
+        // substitute/eliminate treatment above: whether v was frozen (left untouched) or substituted
+        // (reintroduced via its flow constraints), the pool variable at that index already correctly
+        // denotes its pre-image value either way. stochJumpAndMappedDim.second is unused here.
+        if ( stochJumpAndMappedDim.has_value() ) {
+            auto carlvarbyindexJump = vpool.carlVarByIndex( stochJumpAndMappedDim.value().first );
+            ConstraintT<hypro::tNumber> zeroConstraint = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( carlvarbyindexJump ), carl::Relation::EQ );
+            bad.addConstraint( zeroConstraint );
         }
 
         if (firstEnabledIndex.has_value()) {
