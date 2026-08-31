@@ -284,9 +284,40 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         // add constraint t <= 0
         bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
 
+        // Variables referenced by stochJumpAndMappedDim/firstEnabledIndex must always go through the
+        // substitute/eliminate treatment below, even if their flow is zero: the "_prime" copies created
+        // for them are looked up *by name* further down (the stochJumpAndMappedDim.first check inside
+        // this same loop, and the firstEnabledIndex block right after it) to attach extra equality
+        // constraints. Skipping substitution for one of these would leave those lookups silently unable
+        // to find a "_prime" variable, silently dropping a needed constraint rather than failing loudly.
+        std::vector<carl::Variable> protectedVars;
+        if ( stochJumpAndMappedDim.has_value() ) {
+            protectedVars.push_back( vpool.carlVarByIndex( stochJumpAndMappedDim.value().first ) );
+            protectedVars.push_back( vpool.carlVarByIndex( stochJumpAndMappedDim.value().second ) );
+        }
+        if ( firstEnabledIndex.has_value() ) {
+            protectedVars.push_back( vpool.carlVarByIndex( firstEnabledIndex.value().first ) );
+            protectedVars.push_back( vpool.carlVarByIndex( firstEnabledIndex.value().second ) );
+        }
+
+        // A variable whose flow is the exact constant zero never changes value over time -- for such a
+        // variable, createReverseFlowConstraints (see rectangularOperations.h) reduces to the single
+        // equality "original == primed", so substituting it, adding that equality, and then existentially
+        // eliminating the substitute back out is a mathematical no-op: the variable ends up with exactly
+        // its original constraints, unchanged. Detecting this and skipping the whole round-trip avoids a
+        // full QE elimination step per such variable, which matters when many dimensions are frozen (e.g.
+        // realyst's reuse encoding pads every location's flow with an explicit zero interval for every
+        // previously-discovered, now-frozen instance dimension not live at that location).
+        auto isFrozenDimension = [&]( const carl::Variable& v ) {
+            if ( std::find( protectedVars.begin(), protectedVars.end(), v ) != protectedVars.end() ) return false;
+            const auto& interval = flow.getFlowIntervalForDimension( v );
+            return lowerBoundType( interval ) == carl::BoundType::WEAK && upperBoundType( interval ) == carl::BoundType::WEAK
+                && interval.lower() == interval.upper() && interval.lower() == 0;
+        };
+
         // introduce post variables and substitute
         for ( const auto& v : bad.getVariables() ) {
-            if ( v != t ) {
+            if ( v != t && !isFrozenDimension( v ) ) {
                 // create pre var
                 std::stringstream ss;
                 ss << v.name() << "_prime";
