@@ -162,6 +162,44 @@ namespace hypro {
 
         // create jump successor tasks
         for (const auto &transitionStatesPair: worker.getJumpSuccessorSets()) {
+        	// Opt-in cycle-group filter (mTransitionCycleGroup/mMaxCycleGroupRepetitions, both
+        	// std::nullopt by default -- no-op for every caller that doesn't set them). Decided once
+        	// per transitionStatesPair since every jmpSucc sharing this transition shares the same
+        	// group id and the same ancestor path, so the skip/keep decision is identical for all of
+        	// them. node->getTreePath()/getTransition() only read already-finalized ancestor nodes
+        	// (a node's ancestors are fully built, via addChild below, before any descendant is ever
+        	// enqueued), so this is safe to call here even when processNode runs concurrently across
+        	// worker threads under UseMultithreading -- no additional locking needed.
+        	//
+        	// This intentionally counts only plain root-to-node-path occurrences of the transition's
+        	// group, unlike the authoritative post-hoc pass (librealyst::recursivelyConvertSubtreeLimitCycles)
+        	// which also folds in sibling transitions at the same branch point and an extra
+        	// exactly-at-the-boundary exception -- both of which can only ever *shrink* that pass's
+        	// keep-set relative to plain path counting. So this filter's keep-set is always a
+        	// superset of the post-hoc pass's keep-set: it can never prune a branch the post-hoc pass
+        	// would have kept (safe), it just may leave a few extra branches for the post-hoc pass
+        	// (still run unconditionally downstream) to trim afterward, same as before this filter
+        	// existed.
+        	bool skipDueToCycleLimit = false;
+        	if (mTransitionCycleGroup.has_value() && mMaxCycleGroupRepetitions.has_value()) {
+        		auto groupIt = mTransitionCycleGroup->find(transitionStatesPair.first);
+        		if (groupIt != mTransitionCycleGroup->end()) {
+        			std::size_t occurrences = 1;  // this prospective occurrence
+        			for (const auto *ancestor : node->getTreePath()) {
+        				const auto *ancestorTransition = ancestor->getTransition();
+        				if (ancestorTransition == nullptr) continue;
+        				auto ancestorGroupIt = mTransitionCycleGroup->find(ancestorTransition);
+        				if (ancestorGroupIt != mTransitionCycleGroup->end() && ancestorGroupIt->second == groupIt->second) {
+        					++occurrences;
+        				}
+        			}
+        			skipDueToCycleLimit = occurrences > mMaxCycleGroupRepetitions.value() + 1;
+        		}
+        	}
+        	if (skipDueToCycleLimit) {
+        		continue;
+        	}
+
         	//TODO wieso kann eine transition zu mehreren nachfolge zuständen führen?
         	if (goalReached && mStochasticTransitions.has_value()) {
         		if (mStochasticTransitions.value().find(transitionStatesPair.first) != mStochasticTransitions.value().end()) {

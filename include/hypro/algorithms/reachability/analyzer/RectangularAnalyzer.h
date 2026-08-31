@@ -36,8 +36,11 @@ namespace hypro {
 
         /// constructor from automaton and settings with additional reachTree
         RectangularAnalyzer(const Automaton &ha, const Settings &setting,
-                            std::vector<ReachTreeNode<State, LocationT>> &roots, std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> specs = std::nullopt, std::optional<std::set<const hypro::Transition<hypro::Location<Number>>*>> stochasticTransitions = std::nullopt)
-                : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots), mSpecs(specs), mStochasticTransitions(stochasticTransitions) {
+                            std::vector<ReachTreeNode<State, LocationT>> &roots, std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> specs = std::nullopt, std::optional<std::set<const hypro::Transition<hypro::Location<Number>>*>> stochasticTransitions = std::nullopt,
+                            std::optional<std::map<const hypro::Transition<hypro::Location<Number>>*, std::size_t>> transitionCycleGroup = std::nullopt,
+                            std::optional<std::size_t> maxCycleGroupRepetitions = std::nullopt)
+                : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots), mSpecs(specs), mStochasticTransitions(stochasticTransitions),
+                  mTransitionCycleGroup(transitionCycleGroup), mMaxCycleGroupRepetitions(maxCycleGroupRepetitions) {
         }
 
         /// main method for reachability analysis
@@ -103,6 +106,17 @@ namespace hypro {
         std::condition_variable mAllIdle;                           ///< notification variable to trigger shutdown of the threadpool
         std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> mSpecs;
         std::optional<std::set<const hypro::Transition<hypro::Location<Number>>*>> mStochasticTransitions;
+        /// Opt-in, realyst-specific: maps a transition to a "cycle group" id (e.g. the pool index of
+        /// the stochastic-resettable clock it's associated with, with coupled clocks folded to a
+        /// shared id). When set together with mMaxCycleGroupRepetitions, processNode will not expand
+        /// a jump successor whose transition's group has already recurred too often along the
+        /// current root-to-node path -- a conservative, search-time approximation of the equivalent
+        /// post-hoc pruning realyst already performs after the full tree is built (see
+        /// librealyst::recursivelyConvertSubtreeLimitCycles); this cannot prune anything that pass
+        /// would have kept (see processNode for the argument), it can only skip some of the
+        /// wasted-anyway forward-search work that pass currently throws away afterward.
+        std::optional<std::map<const hypro::Transition<hypro::Location<Number>>*, std::size_t>> mTransitionCycleGroup;
+        std::optional<std::size_t> mMaxCycleGroupRepetitions;
     };
 
 }  // namespace hypro
