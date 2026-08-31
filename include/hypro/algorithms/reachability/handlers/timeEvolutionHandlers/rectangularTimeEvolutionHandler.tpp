@@ -256,7 +256,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
     }
 
     template <typename Number>
-    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::optional<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions ) {
+    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions ) {
 #ifdef HYPRO_USE_QE_REDUNDANCY_CHECKS
         constexpr bool REMOVE_REDUNDANDY_IN_QE = true;
 #else
@@ -294,9 +294,9 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         // references the plain pre-image variable -- never a "_prime" name -- so it needs no such
         // protection; stochJumpAndMappedDim.second isn't referenced anywhere in this function at all.)
         std::vector<carl::Variable> protectedVars;
-        if ( firstEnabledIndex.has_value() ) {
-            protectedVars.push_back( vpool.carlVarByIndex( firstEnabledIndex.value().first ) );
-            protectedVars.push_back( vpool.carlVarByIndex( firstEnabledIndex.value().second ) );
+        for ( const auto& entry : firstEnabledIndex ) {
+            protectedVars.push_back( vpool.carlVarByIndex( entry.first ) );
+            protectedVars.push_back( vpool.carlVarByIndex( entry.second ) );
         }
 
         // A variable whose flow is the exact constant zero never changes value over time -- for such a
@@ -355,21 +355,22 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
             }
         }
 
-        // stochJumpAndMappedDim.first's pre-image must be exactly 0 at this point -- unlike
-        // firstEnabledIndex below, this only ever constrains the plain (never "_prime") variable, so it
-        // needs neither a "_prime" lookup nor stochJumpAndMappedDim.first to have gone through the
-        // substitute/eliminate treatment above: whether v was frozen (left untouched) or substituted
-        // (reintroduced via its flow constraints), the pool variable at that index already correctly
-        // denotes its pre-image value either way. stochJumpAndMappedDim.second is unused here.
-        if ( stochJumpAndMappedDim.has_value() ) {
-            auto carlvarbyindexJump = vpool.carlVarByIndex( stochJumpAndMappedDim.value().first );
+        // Each entry's .first pre-image must be exactly 0 at this point -- unlike firstEnabledIndex
+        // below, this only ever constrains the plain (never "_prime") variable, so it needs neither a
+        // "_prime" lookup nor .first to have gone through the substitute/eliminate treatment above:
+        // whether v was frozen (left untouched) or substituted (reintroduced via its flow constraints),
+        // the pool variable at that index already correctly denotes its pre-image value either way.
+        // .second is unused here. More than one entry can be present at once when several stochastic-
+        // resettable clocks are simultaneously timed in the same location (e.g. racing each other).
+        for ( const auto& entry : stochJumpAndMappedDim ) {
+            auto carlvarbyindexJump = vpool.carlVarByIndex( entry.first );
             ConstraintT<hypro::tNumber> zeroConstraint = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( carlvarbyindexJump ), carl::Relation::EQ );
             bad.addConstraint( zeroConstraint );
         }
 
-        if (firstEnabledIndex.has_value()) {
-            auto carlvarbyindex = vpool.carlVarByIndex(firstEnabledIndex.value().first);
-            auto carlvarbyindex2 = vpool.carlVarByIndex(firstEnabledIndex.value().second);
+        for ( const auto& entry : firstEnabledIndex ) {
+            auto carlvarbyindex = vpool.carlVarByIndex(entry.first);
+            auto carlvarbyindex2 = vpool.carlVarByIndex(entry.second);
 
 
             std::optional<carl::Variable> current_var;
@@ -510,7 +511,7 @@ template<template<typename, typename, typename> class PolyhedralRepresentation, 
 
 template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
 	PolyhedralRepresentation<Number, Converter, Setting>
-	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::optional<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::optional<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions) {
+	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions) {
     	auto convertedSet = Converter::toCarlPolytope(badSet);
 
     	auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, flow, invariant, stochJumpAndMappedDim, firstEnabledIndex, initialConditions);
