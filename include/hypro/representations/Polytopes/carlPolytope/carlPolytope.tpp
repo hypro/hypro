@@ -365,7 +365,13 @@ namespace hypro {
 	template<typename Number, typename Converter, typename Setting>
 	void CarlPolytopeT<Number, Converter, Setting>::eliminateVariablesSuccessivelyWithRedundancyCheck(const QEQuery &vars) {
 		DEBUG("hypro.representations.carlPolytope", "Eliminate variables in " << mFormula);
-		if (this->empty()) {
+		// Callers of this method (currently only rectangularApplyReverseTimeEvolution's
+		// QE-with-redundancy-check path) inflate dimension() to vpool.size() beforehand so that
+		// matrix()/vector() have room to index freshly-created elimination variables living at
+		// the shared VariablePool's tail. Using empty() here would build that LP with a column
+		// for every unrelated variable ever registered in the pool, not just the ones this
+		// polytope actually references -- use the compact variant instead.
+		if (this->emptyCompact()) {
 			return;
 		}
 
@@ -467,6 +473,54 @@ namespace hypro {
             ++i;
         }
         return res;
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    std::pair<matrix_t<Number>, vector_t<Number>>
+    CarlPolytopeT<Number, Converter, Setting>::compactMatrixVector() const {
+        std::vector<ConstraintT<tNumber>> constraints;
+        getConstraints(mFormula, constraints);
+
+        std::unordered_map<carl::Variable, std::size_t> colOf;
+        for (const auto &v: getVariables()) {
+            colOf.emplace(v, colOf.size());
+        }
+        std::size_t cols = colOf.size();
+
+        matrix_t<Number> mat(constraints.size(), cols);
+        vector_t<Number> vec(constraints.size());
+        std::size_t i = 0;
+        for (const auto &c: constraints) {
+            mat.row(i) = constraintNormalCompact<tNumber, Number>(c, colOf, cols);
+            vec(i) = normalizedOffset<tNumber, Number>(c);
+            if (c.relation() == carl::Relation::EQ) {
+                mat.conservativeResize(mat.rows() + 1, mat.cols());
+                vec.conservativeResize(vec.rows() + 1);
+                ++i;
+                mat.row(i) = -constraintNormalCompact<tNumber, Number>(c, colOf, cols);
+                vec(i) = -normalizedOffset<tNumber, Number>(c);
+            }
+            ++i;
+        }
+        return {mat, vec};
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    bool CarlPolytopeT<Number, Converter, Setting>::emptyCompact() const {
+        if (mEmptyState == SETSTATE::UNKNOWN) {
+            if (isFalse(mFormula)) {
+                mEmptyState = SETSTATE::EMPTY;
+                return true;
+            }
+            if (mFormula.size() <= 1) {
+                mEmptyState = mFormula.size() == 0 ? SETSTATE::UNIVERSAL : SETSTATE::NONEMPTY;
+                return false;
+            }
+            auto [mat, vec] = compactMatrixVector();
+            Optimizer<Number> opt = Optimizer<Number>(mat, vec);
+            mEmptyState = opt.checkConsistency() ? SETSTATE::NONEMPTY : SETSTATE::EMPTY;
+        }
+        return mEmptyState == SETSTATE::EMPTY;
     }
 
     template<typename Number, typename Converter, typename Setting>
