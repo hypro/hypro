@@ -209,6 +209,19 @@ namespace hypro {
          * @brief Should only be used in assertions to detect inconsistency in mDimension.
          */
         bool dimensionWasCorrectlySet() const;
+
+        // Builds matrix()/vector() equivalents sized by the number of variables actually
+        // referenced by mFormula, not by dimension(). See emptyCompact().
+        std::pair<matrix_t<Number>, vector_t<Number>> compactMatrixVector() const;
+
+        // Same emptiness check as empty(), but builds its LP via compactMatrixVector() instead
+        // of matrix()/vector(). Intended for callers (currently only
+        // eliminateVariablesSuccessivelyWithRedundancyCheck(), invoked from
+        // rectangularApplyReverseTimeEvolution()) that have deliberately inflated dimension()
+        // to index freshly-created elimination variables living at the shared VariablePool's
+        // tail; empty() would otherwise build an LP with a column for every unrelated variable
+        // ever registered in that pool, not just the ones this polytope references.
+        bool emptyCompact() const;
     };
 
 /** @} */
