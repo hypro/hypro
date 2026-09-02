@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include <unordered_map>
-
 #include "../../../carlTypes.h"
 #include "../../../datastructures/Halfspace.h"
 #include "../../../types.h"
@@ -125,32 +123,6 @@ namespace hypro {
             } else {
                 normal(VariablePool::getInstance().id(getVar(var))) =
                         -carl::convert<N, D>(constantPart(c.lhs().coeff(getVar(var), 1)));
-            }
-        }
-        return normal;
-    }
-
-    // Same as constraintNormal(), but places each variable's coefficient at a caller-supplied
-    // dense column instead of its raw VariablePool index. VariablePool is a single pool shared
-    // by everything that has ever created a carl variable, so a polytope that only references a
-    // handful of variables can still have a huge raw index range if those variables happen to sit
-    // near the pool's tail (e.g. freshly-created elimination variables) while unrelated variables
-    // occupy the indices in between. Building the LP from this compact mapping instead of
-    // constraintNormal()/dimension() avoids paying, in matrix columns, for pool slots the
-    // constraint never references.
-    template<typename N, typename D>
-    vector_t<D> constraintNormalCompact(const ConstraintT<N> &c, const std::unordered_map<carl::Variable, std::size_t> &colOf, std::size_t dim) {
-        vector_t<D> normal = vector_t<D>::Zero(dim);
-        for (const auto &var: c.variables()) {
-            assert(colOf.find(getVar(var)) != colOf.end());
-            assert(isLinear(c.lhs()));
-            assert(isNumber(c.lhs().coeff(getVar(var), 1)));
-            std::size_t col = colOf.at(getVar(var));
-            if (c.relation() == carl::Relation::LEQ || c.relation() == carl::Relation::LESS ||
-                c.relation() == carl::Relation::EQ) {
-                normal(col) = carl::convert<N, D>(constantPart(c.lhs().coeff(getVar(var), 1)));
-            } else {
-                normal(col) = -carl::convert<N, D>(constantPart(c.lhs().coeff(getVar(var), 1)));
             }
         }
         return normal;
