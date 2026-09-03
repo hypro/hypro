@@ -268,6 +268,16 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         // get bad state
         CarlPolytope<Number> bad = badSet;
         auto dim = badSet.dimension();
+        if ( dim > 6 ) {
+            std::cerr << "[HYPRO-DIAG] ON ENTRY, badSet = " << badSet << std::endl;
+            std::cerr << "[HYPRO-DIAG] stochJumpAndMappedDim.size=" << stochJumpAndMappedDim.size() << " firstEnabledIndex.size=" << firstEnabledIndex.size() << " initialConditions.has_value=" << initialConditions.has_value() << std::endl;
+            for ( const auto& e : stochJumpAndMappedDim ) {
+                std::cerr << "[HYPRO-DIAG]   stochJumpAndMappedDim entry: .first=" << e.first << " name=" << vpool.carlVarByIndex(e.first).name() << "  .second=" << e.second << " name=" << vpool.carlVarByIndex(e.second).name() << std::endl;
+            }
+            for ( const auto& e : firstEnabledIndex ) {
+                std::cerr << "[HYPRO-DIAG]   firstEnabledIndex entry: .first=" << e.first << " name=" << vpool.carlVarByIndex(e.first).name() << "  .second=" << e.second << " name=" << vpool.carlVarByIndex(e.second).name() << std::endl;
+            }
+        }
         // vpool is a single, monotonically growing pool shared by everything that has ever created a
         // carl variable (e.g. callers that keep other, unrelated variables registered for later re-use,
         // such as realyst's REUSE_INTEGRATION instance variables). badSet's own dimension() only reflects
@@ -367,6 +377,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
             ConstraintT<hypro::tNumber> zeroConstraint = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( carlvarbyindexJump ), carl::Relation::EQ );
             bad.addConstraint( zeroConstraint );
         }
+        if ( dim > 6 ) std::cerr << "[HYPRO-DIAG] AFTER stochJumpAndMappedDim block, bad = " << bad << std::endl;
 
         for ( const auto& entry : firstEnabledIndex ) {
             auto carlvarbyindex = vpool.carlVarByIndex(entry.first);
@@ -399,6 +410,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 
 
         }
+        if ( dim > 6 ) std::cerr << "[HYPRO-DIAG] AFTER firstEnabledIndex block, bad = " << bad << std::endl;
 
         // add invariant constraints, if the invariant is specified and does not represent the empty set
         if ( !invariant.isTrue() ) {
@@ -435,7 +447,13 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 
             assert(bad.dimension() == dim + poolGap + 1);
 
+            if ( dim > 6 ) {
+                std::cerr << "[HYPRO-DIAG] BEFORE elimination, bad = " << bad << std::endl;
+            }
             bad.eliminateVariablesSuccessivelyWithRedundancyCheck( quOrder );
+            if ( dim > 6 ) {
+                std::cerr << "[HYPRO-DIAG] AFTER elimination, bad = " << bad << std::endl;
+            }
             TRACE("qe.redundancy_check", "\n");
         } else {
             TRACE("qe.redundancy_check", "number of constraints during elimination: ");
