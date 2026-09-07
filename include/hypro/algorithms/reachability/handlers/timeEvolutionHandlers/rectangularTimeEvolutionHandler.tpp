@@ -268,14 +268,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         // get bad state
         CarlPolytope<Number> bad = badSet;
         auto dim = badSet.dimension();
-        // vpool is a single, monotonically growing pool shared by everything that has ever created a
-        // carl variable (e.g. callers that keep other, unrelated variables registered for later re-use,
-        // such as realyst's REUSE_INTEGRATION instance variables). badSet's own dimension() only reflects
-        // the variables it actually uses and can therefore be smaller than vpool's current size, i.e.
-        // there can be a "gap" of pool indices already in use by variables badSet never references. The
-        // post/time variables created below always get indices at the *current end* of vpool, not
-        // necessarily right after `dim`, so track that gap to size bad correctly instead of assuming
-        // vpool was exactly `dim` entries large.
+        // vpool is a single, monotonically growing pool shared by everything that has ever created a carl variable (e.g. callers that keep other, unrelated variables registered for later re-use, such as realyst's REUSE_INTEGRATION instance variables). badSet's own dimension() only reflects the variables it actually uses and can therefore be smaller than vpool's current size, i.e. there can be a "gap" of pool indices already in use by variables badSet never references. The post/time variables created below always get indices at the *current end* of vpool, not necessarily right after `dim`, so track that gap to size bad correctly instead of assuming vpool was exactly `dim` entries large.
         auto poolGap = vpool.size() - dim;
         // storage to build elimination query
         std::vector<carl::Variable> variablesToEliminate;
@@ -284,29 +277,14 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         // add constraint t <= 0
         bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
 
-        // Variables referenced by firstEnabledIndex must always go through the substitute/eliminate
-        // treatment below, even if their flow is zero: the "_prime" copies created for them are looked
-        // up *by name* further down (the firstEnabledIndex block right after this loop) to attach an
-        // extra equality constraint between the two. Skipping substitution for one of these would leave
-        // that lookup silently unable to find a "_prime" variable, silently dropping a needed constraint
-        // rather than failing loudly.
-        // (stochJumpAndMappedDim.first's own extra constraint, added right after this loop, only ever
-        // references the plain pre-image variable -- never a "_prime" name -- so it needs no such
-        // protection; stochJumpAndMappedDim.second isn't referenced anywhere in this function at all.)
+        // Variables referenced by firstEnabledIndex must always go through the substitute/eliminate treatment below, even if their flow is zero: the "_prime" copies created for them are looked up *by name* further down (the firstEnabledIndex block right after this loop) to attach an extra equality constraint between the two. Skipping substitution for one of these would leave that lookup silently unable to find a "_prime" variable, silently dropping a needed constraint rather than failing loudly. (stochJumpAndMappedDim.first's own extra constraint, added right after this loop, only ever references the plain pre-image variable -- never a "_prime" name -- so it needs no such protection; stochJumpAndMappedDim.second isn't referenced anywhere in this function at all.)
         std::vector<carl::Variable> protectedVars;
         for ( const auto& entry : firstEnabledIndex ) {
             protectedVars.push_back( vpool.carlVarByIndex( entry.first ) );
             protectedVars.push_back( vpool.carlVarByIndex( entry.second ) );
         }
 
-        // A variable whose flow is the exact constant zero never changes value over time -- for such a
-        // variable, createReverseFlowConstraints (see rectangularOperations.h) reduces to the single
-        // equality "original == primed", so substituting it, adding that equality, and then existentially
-        // eliminating the substitute back out is a mathematical no-op: the variable ends up with exactly
-        // its original constraints, unchanged. Detecting this and skipping the whole round-trip avoids a
-        // full QE elimination step per such variable, which matters when many dimensions are frozen (e.g.
-        // realyst's reuse encoding pads every location's flow with an explicit zero interval for every
-        // previously-discovered, now-frozen instance dimension not live at that location).
+        // A variable whose flow is the exact constant zero never changes value over time -- for such a variable, createReverseFlowConstraints (see rectangularOperations.h) reduces to the single equality "original == primed", so substituting it, adding that equality, and then existentially eliminating the substitute back out is a mathematical no-op: the variable ends up with exactly its original constraints, unchanged. Detecting this and skipping the whole round-trip avoids a full QE elimination step per such variable, which matters when many dimensions are frozen (e.g. realyst's reuse encoding pads every location's flow with an explicit zero interval for every previously-discovered, now-frozen instance dimension not live at that location).
         auto isFrozenDimension = [&]( const carl::Variable& v ) {
             if ( std::find( protectedVars.begin(), protectedVars.end(), v ) != protectedVars.end() ) return false;
             const auto& interval = flow.getFlowIntervalForDimension( v );
