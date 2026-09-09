@@ -256,7 +256,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
     }
 
     template <typename Number>
-    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions ) {
+    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<ConstraintT<hypro::tNumber>>> initialConditions ) {
 #ifdef HYPRO_USE_QE_REDUNDANCY_CHECKS
         constexpr bool REMOVE_REDUNDANDY_IN_QE = true;
 #else
@@ -316,21 +316,19 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
 #endif
 
                 bad.addConstraints( flowConstraints );
-
-                if (initialConditions.has_value()) {
-                    for(auto& condition : initialConditions.value()) {
-                        auto carlvar = vpool.carlVarByIndex(condition.first);
-                        auto interval = condition.second;
-                        if (v == carlvar) {
-                            ConstraintT<hypro::tNumber> lower_bound = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ) - interval.upper(), carl::Relation::LEQ );
-                            ConstraintT<hypro::tNumber> upper_bound = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( v ) - interval.lower(), carl::Relation::GEQ );
-                            bad.addConstraint(lower_bound);
-                            bad.addConstraint(upper_bound);
-                        }
-                    }
-                }
-
             }
+        }
+
+        // initialConditions rows are added once, after every non-frozen variable above has already been
+        // substituted to its entry-side identity (and every frozen variable was left untouched, meaning
+        // "itself" == entry-side there too) -- so by this point every variable a row could reference
+        // already has its final, stable meaning for the rest of this function, regardless of whether the
+        // row is a single-variable bound or genuinely correlates several variables together (e.g.
+        // "x <= 2*y + 3"). Adding rows interleaved with the loop above (as an earlier version of this code
+        // did) only happened to work because every row was single-variable; a multi-variable row added
+        // mid-loop could reference a variable whose substitution hadn't happened yet.
+        if (initialConditions.has_value()) {
+            bad.addConstraints( initialConditions.value() );
         }
 
         // Each entry's .first pre-image must be exactly 0 at this point -- unlike firstEnabledIndex
@@ -489,7 +487,7 @@ template<template<typename, typename, typename> class PolyhedralRepresentation, 
 
 template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
 	PolyhedralRepresentation<Number, Converter, Setting>
-	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions) {
+	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<ConstraintT<hypro::tNumber>>> initialConditions) {
     	auto convertedSet = Converter::toCarlPolytope(badSet);
 
     	auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, flow, invariant, stochJumpAndMappedDim, firstEnabledIndex, initialConditions);

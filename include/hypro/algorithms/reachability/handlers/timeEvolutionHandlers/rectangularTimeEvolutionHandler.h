@@ -55,16 +55,22 @@ namespace hypro {
 	// its own pre-image pin (stochJumpAndMappedDim) and/or closing-value capture (firstEnabledIndex)
 	// applied within the same reverse time evolution call, since they share one location's flow/
 	// invariant and must be eliminated together. An empty vector is exactly the old std::nullopt case.
+	// initialConditions now carries genuine (possibly multi-variable, correlated) constraint rows rather
+	// than one axis-aligned interval per variable -- e.g. a caller can inject "x <= 2*y + 3" to correlate
+	// two variables' entry-side values, not just bound each independently. See the injection site inside
+	// this function's .tpp for exactly how/when these rows are added (after every non-frozen variable has
+	// already been substituted to its entry-side identity, so every row's meaning is well-defined
+	// regardless of how many variables it spans).
 	template<typename Number>
 	CarlPolytope<Number>
-	rectangularApplyReverseTimeEvolution(const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim = {}, std::vector<std::pair<size_t,size_t>> firstEnabledIndex = {}, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions = std::nullopt);
+	rectangularApplyReverseTimeEvolution(const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim = {}, std::vector<std::pair<size_t,size_t>> firstEnabledIndex = {}, std::optional<std::vector<ConstraintT<hypro::tNumber>>> initialConditions = std::nullopt);
 
     template<typename Number>
     CarlPolytope<Number> rectangularUnderapproximateReverseTimeEvolution(const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow);
 
 	template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
 	PolyhedralRepresentation<Number, Converter, Setting>
-	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim = {}, std::vector<std::pair<size_t,size_t>> firstEnabledIndex = {}, std::optional<std::vector<std::pair<size_t, carl::Interval<Number>>>> initialConditions = std::nullopt);
+	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim = {}, std::vector<std::pair<size_t,size_t>> firstEnabledIndex = {}, std::optional<std::vector<ConstraintT<hypro::tNumber>>> initialConditions = std::nullopt);
 
     template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
     PolyhedralRepresentation<Number, Converter, Setting>
