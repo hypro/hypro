@@ -256,7 +256,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
     }
 
     template <typename Number>
-    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<ConstraintT<hypro::tNumber>>> initialConditions ) {
+    CarlPolytope<Number> rectangularApplyReverseTimeEvolution( const CarlPolytope<Number> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<ConstraintT<hypro::tNumber>>> initialConditions, std::vector<std::pair<size_t,size_t>> firstEnabledIndexLowerBoundOnly ) {
 #ifdef HYPRO_USE_QE_REDUNDANCY_CHECKS
         constexpr bool REMOVE_REDUNDANDY_IN_QE = true;
 #else
@@ -277,9 +277,13 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         // add constraint t <= 0
         bad.addConstraint( ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( t ), carl::Relation::GEQ ) );
 
-        // Variables referenced by firstEnabledIndex must always go through the substitute/eliminate treatment below, even if their flow is zero: the "_prime" copies created for them are looked up *by name* further down (the firstEnabledIndex block right after this loop) to attach an extra equality constraint between the two. Skipping substitution for one of these would leave that lookup silently unable to find a "_prime" variable, silently dropping a needed constraint rather than failing loudly. (stochJumpAndMappedDim.first's own extra constraint, added right after this loop, only ever references the plain pre-image variable -- never a "_prime" name -- so it needs no such protection; stochJumpAndMappedDim.second isn't referenced anywhere in this function at all.)
+        // Variables referenced by firstEnabledIndex must always go through the substitute/eliminate treatment below, even if their flow is zero: the "_prime" copies created for them are looked up *by name* further down (the firstEnabledIndex block right after this loop) to attach an extra equality constraint between the two. Skipping substitution for one of these would leave that lookup silently unable to find a "_prime" variable, silently dropping a needed constraint rather than failing loudly. (stochJumpAndMappedDim.first's own extra constraint, added right after this loop, only ever references the plain pre-image variable -- never a "_prime" name -- so it needs no such protection; stochJumpAndMappedDim.second isn't referenced anywhere in this function at all.) firstEnabledIndexLowerBoundOnly needs the exact same protection -- its own block below does the identical by-name "_prime" lookup, just adding a one-sided constraint instead of an equality.
         std::vector<carl::Variable> protectedVars;
         for ( const auto& entry : firstEnabledIndex ) {
+            protectedVars.push_back( vpool.carlVarByIndex( entry.first ) );
+            protectedVars.push_back( vpool.carlVarByIndex( entry.second ) );
+        }
+        for ( const auto& entry : firstEnabledIndexLowerBoundOnly ) {
             protectedVars.push_back( vpool.carlVarByIndex( entry.first ) );
             protectedVars.push_back( vpool.carlVarByIndex( entry.second ) );
         }
@@ -374,6 +378,41 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
             }
 
 
+        }
+
+        // Same by-name "_prime" lookup as firstEnabledIndex above, but the epoch this entry describes
+        // never reached its own firing transition (see this function's header doc comment) -- the
+        // instance's eventual real value (whenever/if it is ever genuinely captured by a firing) can only
+        // be bounded below by this epoch's closing value, not pinned to it exactly: had the clock's
+        // (unknown, distribution-governed) threshold actually been reached before now, the firing
+        // transition would have taken this trace down a different path instead of reaching here. Asserts
+        // current_var_instance >= current_var, i.e. current_var - current_var_instance <= 0.
+        for ( const auto& entry : firstEnabledIndexLowerBoundOnly ) {
+            auto carlvarbyindex = vpool.carlVarByIndex(entry.first);
+            auto carlvarbyindex2 = vpool.carlVarByIndex(entry.second);
+
+            std::optional<carl::Variable> current_var;
+            std::optional<carl::Variable> current_var_instance;
+
+            for (const auto& v : bad.getVariables()) {
+                std::string vname = v.name();
+                std::string carlvarname = carlvarbyindex.name();
+                std::string carlvarnameprime = carlvarname.append("_prime");
+
+                std::string carlvarname2 = carlvarbyindex2.name();
+                std::string carlvarname2prime = carlvarname2.append("_prime");
+
+                if (vname == carlvarnameprime) {
+                    current_var = v;
+                } else if (vname == carlvarname2prime) {
+                    current_var_instance = v;
+                }
+            }
+
+            if (current_var.has_value() && current_var_instance.has_value()) {
+                ConstraintT<hypro::tNumber> saveInstanceLowerBoundConstraint = ConstraintT<hypro::tNumber>( PolyT<hypro::tNumber>( current_var.value() ) - PolyT<hypro::tNumber>( current_var_instance.value() ), carl::Relation::LEQ );
+                bad.addConstraint(saveInstanceLowerBoundConstraint);
+            }
         }
 
         // add invariant constraints, if the invariant is specified and does not represent the empty set
@@ -487,10 +526,10 @@ template<template<typename, typename, typename> class PolyhedralRepresentation, 
 
 template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
 	PolyhedralRepresentation<Number, Converter, Setting>
-	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<ConstraintT<hypro::tNumber>>> initialConditions) {
+	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<ConstraintT<hypro::tNumber>>> initialConditions, std::vector<std::pair<size_t,size_t>> firstEnabledIndexLowerBoundOnly) {
     	auto convertedSet = Converter::toCarlPolytope(badSet);
 
-    	auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, flow, invariant, stochJumpAndMappedDim, firstEnabledIndex, initialConditions);
+    	auto convertedResult = rectangularApplyReverseTimeEvolution(convertedSet, flow, invariant, stochJumpAndMappedDim, firstEnabledIndex, initialConditions, firstEnabledIndexLowerBoundOnly);
     	PolyhedralRepresentation<Number, Converter, Setting> res;
     	convert(convertedResult, res);
     	return res;
