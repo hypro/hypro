@@ -89,6 +89,12 @@ namespace hypro {
             for (point_ind_t point_j = point_i + 1; point_j < points.size(); ++point_j) {
                 if (points[point_i] == points[point_j]) {
                     points.erase(points.begin() + point_j);
+                    // erase() shifts every later element down by one, so without this the
+                    // loop's own ++point_j would skip the element that just moved into slot
+                    // point_j, silently under-deduplicating any run of 3+ equal points (e.g. 4
+                    // identical points would leave 2 behind instead of 1). Step back so the
+                    // next ++point_j re-checks the shifted-down element.
+                    --point_j;
                 }
             }
         }
@@ -162,6 +168,16 @@ namespace hypro {
 
     template<typename Number, bool Euclidian>
     bool ExactQuickhull<Number, Euclidian>::constructInitialFacet() {
+        // dimension == 0 has no valid facet to construct (matrix.row(0) below would be an
+        // out-of-bounds access on a zero-row matrix). This should be unreachable now that
+        // removeDuplicateInputs() correctly collapses a fully-degenerate point set down to a
+        // single point, which compute()'s own dimension==1/points.size()==1 trivial-hull case
+        // catches before any recursive constructLowerDimensional() call could reduce dimension
+        // to 0. Kept as a cheap, debug-only guard against a future regression of that invariant
+        // (previously silently corrupted memory instead of failing loudly -- see the fix to
+        // removeDuplicateInputs() in this same file for the actual root cause).
+        assert(dimension > 0 && "constructInitialFacet called with dimension == 0 -- a fully-degenerate point set was not caught by compute()'s trivial-hull case before recursing here");
+
         Facet &facet = fSpace.insertNew();
 
         Eigen::FullPivLU<matrix_t<Number>> lu(dimension, dimension + 1);
