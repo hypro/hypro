@@ -74,9 +74,30 @@ namespace hypro {
             // busy wait?
             {
                 std::unique_lock<std::mutex> lock{mThreadPoolMutex};
+                // The predicate below reads mWorkQueue and mIdle, which are otherwise only ever
+                // touched while holding mQueueMutex / mIdleWorkerMutex respectively (see the worker
+                // lambda above). mThreadPoolMutex (held here by `lock`, required by
+                // condition_variable::wait) protects neither of them, so reading them without also
+                // taking their own mutexes here is a genuine data race with the concurrently-running
+                // worker threads (confirmed via ThreadSanitizer: concurrent std::deque::empty() vs.
+                // pop_front()/push_back(), and concurrent std::vector<bool> element read vs. write on
+                // mIdle) -- not just a theoretical one. Taking mQueueMutex/mIdleWorkerMutex here is
+                // deadlock-safe since no other code path ever holds mThreadPoolMutex while acquiring
+                // them.
                 mAllIdle.wait(lock, [this]() {
-                    return mTerminate || (mWorkQueue.empty() &&
-                                          std::all_of(std::begin(mIdle), std::end(mIdle), [](bool in) { return in; }));
+                    if (mTerminate) {
+                        return true;
+                    }
+                    bool queueEmpty;
+                    {
+                        std::unique_lock<std::mutex> queueLock(mQueueMutex);
+                        queueEmpty = mWorkQueue.empty();
+                    }
+                    if (!queueEmpty) {
+                        return false;
+                    }
+                    std::unique_lock<std::mutex> idleLock(mIdleWorkerMutex);
+                    return std::all_of(std::begin(mIdle), std::end(mIdle), [](bool in) { return in; });
                 });
             }
             shutdown();
