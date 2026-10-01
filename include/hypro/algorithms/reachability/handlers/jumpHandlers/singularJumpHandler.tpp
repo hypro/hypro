@@ -58,8 +58,10 @@ namespace hypro {
         // Todo: Decide for one implementation and remove other 2
         if (!transitionPtr->getReset().empty()) {
             const auto &reset = transitionPtr->getReset();
-            assert(reset.getAffineReset(subspace).isSingular() &&
-                   "Singular automata do not support linear/affine resets.");
+            // Rows of the affine part: identity, constant (zero row), or a copy x_i := x_j (see singularResetCopies).
+            const auto copies = singularResetCopies(reset, subspace);
+            assert((reset.getAffineReset(subspace).isSingular() || !copies.empty()) &&
+                   "Singular automata support constant, interval and copy resets only.");
 
             auto intervalReset = transitionPtr->getReset().getIntervalReset(subspace);
             // if affine reset is singular and not identity, get constant resets
@@ -100,7 +102,59 @@ namespace hypro {
                 convert(transformedSet1, stateSet);
                 TRACE("hypro.reachability", "Resulting state set " << stateSet);
             }
+            // Copies read the state after the interval and constant resets: x_i := x_j assigns x_j's new value.
+            if (!copies.empty()) {
+                auto copied = applyResetCopies(stateSet, copies);
+                convert(copied, stateSet);
+                TRACE("hypro.reachability", "Resulting state set after copies " << stateSet);
+            }
         }
+    }
+
+    template<typename Number>
+    std::vector<std::pair<std::size_t, std::size_t>> singularResetCopies(const Reset<Number> &reset, std::size_t subspace) {
+        std::vector<std::pair<std::size_t, std::size_t>> copies;
+        if (reset.getAffineResets().size() <= subspace) return copies;
+        const auto &A = reset.getMatrix(subspace);
+        const auto &b = reset.getVector(subspace);
+        for (Eigen::Index i = 0; i < A.rows(); ++i) {
+            if (b(i) != 0) continue;
+            Eigen::Index nonzero = 0, j = -1;
+            for (Eigen::Index c = 0; c < A.cols(); ++c) {
+                if (A(i, c) != 0) {
+                    ++nonzero;
+                    j = c;
+                }
+            }
+            if (nonzero == 1 && j != i && A(i, j) == 1) copies.emplace_back(std::size_t(i), std::size_t(j));
+        }
+        return copies;
+    }
+
+    template<typename Representation>
+    HPolytope<typename Representation::NumberType>
+    applyResetCopies(Representation &stateSet, const std::vector<std::pair<std::size_t, std::size_t>> &copies) {
+        // Exact: forget the old values of the targets, then add target = source. A source that is itself a target
+        // is not supported (the copy would read an already overwritten value).
+        using Number = typename Representation::NumberType;
+        HPolytope<Number> result = Converter<Number>::toHPolytope(stateSet);
+        std::vector<std::size_t> targets;
+        for (const auto &copy: copies) targets.push_back(copy.first);
+        for (const auto &copy: copies) {
+            assert(std::find(targets.begin(), targets.end(), copy.second) == targets.end() &&
+                   "copy reset reads a variable that is itself overwritten by a copy");
+        }
+        result = result.projectOutConservative(targets);
+        std::vector<Halfspace<Number>> equalities;
+        for (const auto &[target, source]: copies) {
+            vector_t<Number> normal = vector_t<Number>::Zero(result.dimension());
+            normal(target) = Number(1);
+            normal(source) = Number(-1);
+            equalities.emplace_back(normal, Number(0));
+            equalities.emplace_back(vector_t<Number>(-normal), Number(0));
+        }
+        result.insert(equalities.begin(), equalities.end());
+        return result.removeRedundancy();
     }
 
     template<typename Representation, typename Number>
