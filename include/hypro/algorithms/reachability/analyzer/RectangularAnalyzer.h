@@ -39,9 +39,11 @@ namespace hypro {
                             std::vector<ReachTreeNode<State, LocationT>> &roots, std::optional<std::vector<std::pair<const hypro::Location<Number>*, hypro::Condition<Number>>>> specs = std::nullopt, std::optional<std::set<const hypro::Transition<hypro::Location<Number>>*>> stochasticTransitions = std::nullopt,
                             std::optional<std::map<const hypro::Transition<hypro::Location<Number>>*, std::size_t>> transitionCycleGroup = std::nullopt,
                             std::optional<std::size_t> maxCycleGroupRepetitions = std::nullopt,
-                            std::optional<std::set<std::vector<const hypro::Transition<hypro::Location<Number>>*>>> allowedPaths = std::nullopt)
+                            std::optional<std::set<std::vector<const hypro::Transition<hypro::Location<Number>>*>>> allowedPaths = std::nullopt,
+                            std::optional<std::map<const hypro::Transition<hypro::Location<Number>>*, std::size_t>> transitionCycleLimit = std::nullopt)
                 : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots), mSpecs(specs), mStochasticTransitions(stochasticTransitions),
-                  mTransitionCycleGroup(transitionCycleGroup), mMaxCycleGroupRepetitions(maxCycleGroupRepetitions), mAllowedPaths(std::move(allowedPaths)) {
+                  mTransitionCycleGroup(transitionCycleGroup), mMaxCycleGroupRepetitions(maxCycleGroupRepetitions), mAllowedPaths(std::move(allowedPaths)),
+                  mTransitionCycleLimit(std::move(transitionCycleLimit)) {
         }
 
         /// main method for reachability analysis
@@ -122,6 +124,10 @@ namespace hypro {
         /// only expands a jump successor whose path, extended by its transition, is in the set (e.g. the prefixes of
         /// the goal paths of a relaxed automaton).
         std::optional<std::set<std::vector<const hypro::Transition<hypro::Location<Number>>*>>> mAllowedPaths;
+        /// Opt-in, realyst-specific, with mTransitionCycleGroup: per transition, the most occurrences of its group
+        /// (counting this one) a path may have when it takes the transition. Replaces mMaxCycleGroupRepetitions + 1
+        /// for the transitions it maps (e.g. a tighter budget for some clocks, or for the last firing of a budget).
+        std::optional<std::map<const hypro::Transition<hypro::Location<Number>>*, std::size_t>> mTransitionCycleLimit;
     };
 
 }  // namespace hypro

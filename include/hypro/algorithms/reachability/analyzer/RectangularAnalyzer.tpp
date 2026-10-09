@@ -200,7 +200,8 @@ namespace hypro {
         	// superset of the post-hoc pass's keep-set: it can never prune a branch the post-hoc pass
         	// would have kept (safe), it just may leave a few extra branches for the post-hoc pass
         	// (still run unconditionally downstream) to trim afterward, same as before this filter
-        	// existed.
+        	// existed. mTransitionCycleLimit lets the caller replace the bound per transition by the exact one of
+        	// that pass, so that the search skips exactly the branches it would prune.
         	bool skipDueToCycleLimit = false;
         	if (mTransitionCycleGroup.has_value() && mMaxCycleGroupRepetitions.has_value()) {
         		auto groupIt = mTransitionCycleGroup->find(transitionStatesPair.first);
@@ -214,7 +215,12 @@ namespace hypro {
         					++occurrences;
         				}
         			}
-        			skipDueToCycleLimit = occurrences > mMaxCycleGroupRepetitions.value() + 1;
+        			std::size_t limit = mMaxCycleGroupRepetitions.value() + 1;
+        			if (mTransitionCycleLimit.has_value()) {
+        				auto limitIt = mTransitionCycleLimit->find(transitionStatesPair.first);
+        				if (limitIt != mTransitionCycleLimit->end()) limit = limitIt->second;
+        			}
+        			skipDueToCycleLimit = occurrences > limit;
         		}
         	}
         	if (skipDueToCycleLimit) {
