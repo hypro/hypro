@@ -220,6 +220,18 @@ namespace hypro {
         	if (skipDueToCycleLimit) {
         		continue;
         	}
+        	// Opt-in path filter (mAllowedPaths): only the allowed transition sequences are expanded.
+        	if (mAllowedPaths.has_value()) {
+        		std::vector<const hypro::Transition<hypro::Location<Number>>*> path;
+        		const auto treePath = node->getTreePath();	// from node to (excluding) the root
+        		for (auto it = treePath.rbegin(); it != treePath.rend(); ++it) {
+        			if ((*it)->getTransition() != nullptr) path.push_back((*it)->getTransition());
+        		}
+        		path.push_back(transitionStatesPair.first);
+        		if (mAllowedPaths->count(path) == 0) {
+        			continue;
+        		}
+        	}
 
         	//TODO wieso kann eine transition zu mehreren nachfolge zuständen führen?
         	if (goalReached && mStochasticTransitions.has_value()) {
