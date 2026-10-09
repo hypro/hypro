@@ -200,31 +200,24 @@ namespace hypro {
         for (std::size_t constraintIndex = std::size_t(constraints.rows() - 1);; --constraintIndex) {
             bool redundant = true;
             carl::Relation relation = relations[constraintIndex];
-            EvaluationResult<Number> actualRes;
-            EvaluationResult<Number> updatedRes;
+            // One LP per bound: without the constraint, its direction must stay within its constant. Removing a
+            // constraint never lowers the maximum, so this equals comparing the optima with and without it.
+            glp_set_row_bnds(context.lp, int(constraintIndex) + 1, GLP_FR, 0.0, 0.0);
             if (relation == carl::Relation::LEQ || relation == carl::Relation::EQ) {
                 // test if upper bound is redundant
                 glp_set_obj_dir(context.lp, GLP_MAX);
-                actualRes = glpkOptimizeLinear(context, vector_t<Number>(constraints.row(constraintIndex)), constraints,
-                                               constants, true);
-                glp_set_row_bnds(context.lp, int(constraintIndex) + 1, GLP_FR, 0.0, 0.0);
-                updatedRes = glpkOptimizeLinear(context, vector_t<Number>(constraints.row(constraintIndex)),
-                                                constraints, constants, true);
-                // actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
-                if (actualRes.errorCode != updatedRes.errorCode || actualRes.supportValue != updatedRes.supportValue) {
+                EvaluationResult<Number> updatedRes = glpkOptimizeLinear(context, vector_t<Number>(constraints.row(constraintIndex)),
+                                                                         constraints, constants, true);
+                if (updatedRes.errorCode != SOLUTION::FEAS || updatedRes.supportValue > constants(constraintIndex)) {
                     redundant = false;
                 }
             }
-            if (relation == carl::Relation::GEQ || relation == carl::Relation::EQ) {
+            if (redundant && (relation == carl::Relation::GEQ || relation == carl::Relation::EQ)) {
                 // test if lower bound is redundant
                 glp_set_obj_dir(context.lp, GLP_MIN);
-                actualRes = glpkOptimizeLinear(context, vector_t<Number>(constraints.row(constraintIndex)), constraints,
-                                               constants, true);
-                glp_set_row_bnds(context.lp, int(constraintIndex) + 1, GLP_FR, 0.0, 0.0);
-                updatedRes = glpkOptimizeLinear(context, vector_t<Number>(constraints.row(constraintIndex)),
-                                                constraints, constants, true);
-                // actual solution is always bounded because of the constraint, so updated should still be bounded if redundant
-                if (actualRes.errorCode != updatedRes.errorCode || actualRes.supportValue != updatedRes.supportValue) {
+                EvaluationResult<Number> updatedRes = glpkOptimizeLinear(context, vector_t<Number>(constraints.row(constraintIndex)),
+                                                                         constraints, constants, true);
+                if (updatedRes.errorCode != SOLUTION::FEAS || updatedRes.supportValue < constants(constraintIndex)) {
                     redundant = false;
                 }
             }
