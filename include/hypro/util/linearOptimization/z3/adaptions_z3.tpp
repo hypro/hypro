@@ -137,19 +137,18 @@ namespace hypro {
     template<typename Number>
     bool z3CheckConsistency(const matrix_t <Number> &constraints, const vector_t <Number> &constants,
                             const std::vector <carl::Relation> &relations) {
-        z3Context c;
+        // Creating a context costs more than a small consistency check, so each thread keeps one (never destroyed, so
+        // that no z3 teardown runs at exit). The optimizer stays: z3's default solver is several times slower here.
+        static thread_local z3Context *context = new z3Context();
+        z3Context &c = *context;
         z3::optimize z3Optimizer(c);
 
-        // create formula and objective
+        // create formula
         z3::expr_vector constraintsExpression = createFormula<Number>(constraints, constants, relations, c);
-        // std::cout << "constraints " << constraintsExpression << std::endl;
-        // std::cout << constraints << std::endl << constants << std::endl;
         for (unsigned i = 0; i < constraintsExpression.size(); i++) {
             z3Optimizer.add(constraintsExpression[i]);
-            // std::cout << "constraint " << constraintsExpression[i] << std::endl;
         }
         z3::check_result res = z3Optimizer.check();
-        // std::cout << "result: " << res << std::endl;
         return (z3::sat == res);
     }
 
