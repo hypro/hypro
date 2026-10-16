@@ -73,6 +73,7 @@ namespace hypro {
 
     template<typename Number>
     bool Condition<Number>::isAxisAligned(std::size_t i) const {
+        std::lock_guard<std::mutex> lock{cacheMutex()};
         checkAxisAligned(i);
         if (mConditionIsBox[i] == TRIBOOL::FALSE) {
             return false;
@@ -106,6 +107,7 @@ namespace hypro {
 
     template<typename Number>
     std::size_t Condition<Number>::hash() const {
+        std::lock_guard<std::mutex> lock{cacheMutex()};
         if (mHash == 0) {
             mHash = std::hash<Condition<Number>>()(*this);
         }
@@ -268,6 +270,47 @@ namespace hypro {
         mHash = 0;
         DEBUG("hypro.datastructures",
               "Decomposed Condition, created " << mConstraints.size() << " new constraint sets.");
+    }
+
+    template<typename Number>
+    void Condition<Number>::addTimeToCondition(const std::vector<std::string>& haVar, const std::vector<std::string> &lhsVar, const std::vector<std::string> &rhsVar) {
+        assert(haVar.size() == lhsVar.size() + rhsVar.size());
+        Condition<Number> timeCond = conditionFromIntervals(std::vector<carl::Interval<Number>>{carl::Interval<Number>(Number(0), Number(0))});
+        
+        matrix_t<Number> lhsMatrix = matrix_t<Number>::Zero(0, lhsVar.size());
+        matrix_t<Number> rhsMatrix = matrix_t<Number>::Zero(0, rhsVar.size());;
+        vector_t<Number> lhsVector = vector_t<Number>::Zero(0);
+        vector_t<Number> rhsVector = vector_t<Number>::Zero(0);;
+
+        assert((size() != 0 && timeCond.size() != 0));
+        
+        lhsMatrix = getMatrix();
+        lhsVector = getVector();
+        
+        rhsMatrix = timeCond.getMatrix();
+        rhsVector = timeCond.getVector();
+
+        matrix_t<Number> newMat = combine(lhsMatrix, rhsMatrix, haVar, lhsVar, rhsVar);
+        vector_t<Number> newVec = combine(lhsVector, rhsVector);
+
+        assert(newMat.cols() == haVar.size());
+        assert(newVec.size() == newMat.rows());
+
+        setMatrix(newMat, 0);
+        setVector(newVec, 0);
+    }
+
+    template<typename Number>
+    void Condition<Number>::extendDimension() {
+        if (!empty()) {
+            matrix_t<Number> extendedMatrix = getMatrix();
+
+            // extend the matrix by one zero-column
+            extendedMatrix.conservativeResize(extendedMatrix.rows(), extendedMatrix.cols() + 1);
+            extendedMatrix.col(extendedMatrix.cols() - 1) = vector_t<Number>::Zero(extendedMatrix.rows());
+            
+            setMatrix(extendedMatrix, 0);
+        }
     }
 
     template<typename Number>

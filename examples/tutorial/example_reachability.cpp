@@ -90,6 +90,10 @@ static void computeReachableStates(const std::string &filename,
                 extendedFilename += "_sfn";
                 break;
             }
+            case hypro::representation_name::Starset: {
+                extendedFilename += "_starset";
+                break;
+            }
             default:
                 extendedFilename += "_unknownRep";
         }
@@ -117,7 +121,12 @@ static void computeReachableStates(const std::string &filename,
         for (const auto &flowpipe: flowpipes) {
             std::cout << "Flowpipe size " << flowpipe.size() << std::endl;
             for (const auto &segment: flowpipe) {
-                plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+                if constexpr (std::is_same_v<Representation, hypro::HPolytope<Number>> ){ // if it's an HPolytope, we can do better
+                    // plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+                    plotter.addObject(segment.projectOnAndVertices(plottingDimensions), hypro::plotting::colors[cnt % 10]);
+                } else {
+                    plotter.addObject(segment.projectOn(plottingDimensions).vertices(), hypro::plotting::colors[cnt % 10]);
+                }
             }
             ++cnt;
         }
@@ -139,20 +148,31 @@ static void computeReachableStates(const std::string &filename,
 
 int main(int argc, char **argv) {
     int rep = 0;
-    std::string filename = argv[1];
+    std::string filename;
+
     if (argc > 2) {
+        filename = argv[1];
         char *p;
         rep = strtol(argv[2], &p, 10);
+    } else {
+        std::cout << "usage: ./example_reachability model_file.model representation_index" << std::endl;
+        return 0;
     }
 
 #ifdef USE_CLN_NUMBERS
     using Number = cln::cl_RA;
 #else
-    // using Number = mpq_class;
-    using Number = double;
+    using Number = mpq_class;
+    // using Number = double;
 #endif
 
     switch (rep) {
+        case 10: {
+            using Representation = hypro::Starset<Number>;
+            std::cout << "Using a Starset representation." << std::endl;
+            computeReachableStates<Number, Representation>(filename, hypro::representation_name::Starset);
+            break;
+        }
         case 9: {
             using Representation = hypro::TemplatePolyhedron<Number>;
             std::cout << "Using a template polytope representation." << std::endl;

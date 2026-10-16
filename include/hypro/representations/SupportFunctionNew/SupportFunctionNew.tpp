@@ -743,6 +743,16 @@ namespace hypro {
 
     template<typename Number, typename Converter, typename Setting>
     SupportFunctionNewT<Number, Converter, Setting>
+    SupportFunctionNewT<Number, Converter, Setting>::projectOut(const std::vector<std::size_t> &dimensionsNotToPrint) const {
+        std::vector<std::size_t> dimensionsToPrint( this->dimension() );
+        iota( dimensionsToPrint.begin(), dimensionsToPrint.end(), 0 );
+        for ( auto dimensionNotToPrint : dimensionsNotToPrint ) dimensionsToPrint.erase( std::remove( dimensionsToPrint.begin(), dimensionsToPrint.end(), dimensionNotToPrint ), dimensionsToPrint.end() );
+
+        return this->projectOn(dimensionsToPrint);
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    SupportFunctionNewT<Number, Converter, Setting>
     SupportFunctionNewT<Number, Converter, Setting>::linearTransformation(const matrix_t<Number> &A) const {
         std::shared_ptr<TrafoOp<Number, Converter, Setting>> trafo = std::make_shared<TrafoOp<Number, Converter, Setting>>(
                 *this, A, vector_t<Number>::Zero(A.rows()));

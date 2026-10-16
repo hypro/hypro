@@ -14,10 +14,10 @@
 
 namespace hypro {
 
-    template<typename State, typename Automaton, typename Heuristics, typename Multithreading>
-    auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::run() -> LTIResult {
+    template<typename State, typename Automaton, typename Heuristics>
+    auto LTIAnalyzer<State, Automaton, Heuristics>::run() -> LTIResult {
         DEBUG("hypro.reachability", "Start LTI Reachability Analysis.");
-        if constexpr (std::is_same_v<Multithreading, UseMultithreading>) {
+        if (mParameters.useMultithreading) {
             mIdle = std::vector(mNumThreads, true);
             std::mutex resultMutex;
             LTIResult res{LTISuccess{}};
@@ -52,28 +52,52 @@ namespace hypro {
                         }
 
                         auto result = processNode(worker, currentNode, transformationCache);
-                        if (result.isFailure()) {
-                            mTerminate = true;
+                        if (!mParameters.saveReachableSegments) {  
+                            currentNode->forgetFlowpipe();
+                        }
+                        const bool failure = result.isFailure();
+                        if (failure) {
                             {
                                 std::lock_guard<std::mutex> lock{resultMutex};
                                 res = result;
                             }
-                            break;
+                            // before the notification below, so that the main thread sees it when it wakes up
+                            mTerminate = true;
                         }
                         {
                             std::unique_lock<std::mutex> idleLock{mIdleWorkerMutex};
                             mIdle[i] = true;
+                        }
+                        // Notify while holding mThreadPoolMutex, the mutex the main thread waits with: otherwise the
+                        // notification can fall between its check of the predicate and its wait, and is lost.
+                        {
+                            std::lock_guard<std::mutex> poolLock{mThreadPoolMutex};
                             mAllIdle.notify_all();
+                        }
+                        if (failure) {
+                            break;
                         }
                     }
                 }));
             }
-            // busy wait?
             {
+                // mWorkQueue and mIdle are read under their own mutexes (they are written under those by the
+                // workers); a failure of a worker ends the wait through mTerminate.
                 std::unique_lock<std::mutex> lock{mThreadPoolMutex};
                 mAllIdle.wait(lock, [this]() {
-                    return mWorkQueue.empty() &&
-                           std::all_of(std::begin(mIdle), std::end(mIdle), [](bool in) { return in; });
+                    if (mTerminate) {
+                        return true;
+                    }
+                    bool queueEmpty;
+                    {
+                        std::unique_lock<std::mutex> queueLock(mQueueMutex);
+                        queueEmpty = mWorkQueue.empty();
+                    }
+                    if (!queueEmpty) {
+                        return false;
+                    }
+                    std::unique_lock<std::mutex> idleLock(mIdleWorkerMutex);
+                    return std::all_of(std::begin(mIdle), std::end(mIdle), [](bool in) { return in; });
                 });
             }
             shutdown();
@@ -96,25 +120,55 @@ namespace hypro {
                     DEBUG("hypro.reachability", "End LTI Reachability Analysis.");
                     return result;
                 }
+                // if we should not save the reachable segments in the node, we will delete them at this point
+                if (!mParameters.saveReachableSegments) {
+                    currentNode->forgetFlowpipe();
+                }
             }
             DEBUG("hypro.reachability", "End LTI Reachability Analysis.");
             return {LTISuccess{}};
         }
     }
 
-    template<typename State, typename Automaton, typename Heuristics, typename Multithreading>
-    auto LTIAnalyzer<State, Automaton, Heuristics, Multithreading>::processNode(LTIWorker<State, Automaton> &worker,
+    template<typename State, typename Automaton, typename Heuristics>
+    auto LTIAnalyzer<State, Automaton, Heuristics>::processNode(LTIWorker<State, Automaton> &worker,
                                                                                 ReachTreeNode<State, LocationT> *node,
                                                                                 TimeTransformationCache<LocationT> &transformationCache) -> LTIResult {
-        REACHABILITY_RESULT safetyResult;
-
+        REACHABILITY_RESULT safetyResult;   
         // set bounding box required for fixed-point test
         if (mParameters.detectJumpFixedPoints && !node->getInitialBoundingBox()) {
             node->setBoundingBox(Converter<Number>::toBox(node->getInitialSet()).intervals());
         }
 
-        // bounded time evolution
-        if (mFixedParameters.globalTimeHorizon > 0) {
+        if ( mParameters.considerLocalAndGlobalTimeHorizon && mFixedParameters.globalTimeHorizon > 0 && mFixedParameters.localTimeHorizon > 0) { // if both time horizons are set, we need to compute the minimum of both
+
+            long int globalSegmentCount = std::ceil(std::nextafter(
+                    carl::convert<tNumber, double>(mFixedParameters.globalTimeHorizon / mParameters.timeStep),
+                    std::numeric_limits<double>::infinity())) - node->getTimings().lower();
+            
+
+            long int localSegmentCount = long(std::ceil(
+                std::nextafter(carl::convert<tNumber, double>(mFixedParameters.localTimeHorizon / mParameters.timeStep),
+                               std::numeric_limits<double>::max())));
+
+
+
+            long int segmentsToCompute = std::min(globalSegmentCount, localSegmentCount);
+
+            DEBUG("hypro.reachability", "localSegmentCount = " << localSegmentCount);
+            DEBUG("hypro.reachability", "globalSegmentCount = " << globalSegmentCount);
+            DEBUG("hypro.reachability", "Start to compute " << segmentsToCompute << " segments.");
+
+            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty()) {
+                safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
+                                                                std::back_inserter(node->getFlowpipeUnderApprox()), segmentsToCompute);
+            }
+            if (!node->getInitialSet().empty()) {
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+                                            std::back_inserter(node->getFlowpipe()), segmentsToCompute);
+            }
+
+        } else if (mFixedParameters.globalTimeHorizon > 0) {         // bounded time evolution
             // the number of required segments is the difference of the number of segments required to reach the global time horizon and the minimally current covered number of segments
             SegmentInd segmentsToCompute = std::ceil(std::nextafter(
                     carl::convert<tNumber, double>(mFixedParameters.globalTimeHorizon / mParameters.timeStep),
@@ -123,11 +177,25 @@ namespace hypro {
             if (segmentsToCompute < 0) {
                 segmentsToCompute = 0;
             }
-            safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
-                                                        std::back_inserter(node->getFlowpipe()), segmentsToCompute);
+
+            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty()) {
+                safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
+                                                                std::back_inserter(node->getFlowpipeUnderApprox()), segmentsToCompute);
+            }
+            if (!node->getInitialSet().empty()) {
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+                                            std::back_inserter(node->getFlowpipe()), segmentsToCompute);
+            }
         } else {
-            safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
+
+            if (mParameters.underapproxReach && !node->getInitialSetUnderApprox().empty()) {
+                safetyResult = worker.computeTimeSuccessorsUnder(node->getInitialSetUnderApprox(), node->getLocation(),
+                                                            std::back_inserter(node->getFlowpipeUnderApprox()));
+            }
+            if (!node->getInitialSet().empty()) {
+                safetyResult = worker.computeTimeSuccessors(node->getInitialSet(), node->getLocation(),
                                                         std::back_inserter(node->getFlowpipe()));
+            }
         }
 
         // check, whether the full time horizon has been exploited - if not, an invariant has bound the evolution and we might have a timelock
@@ -171,8 +239,9 @@ namespace hypro {
         }
 
         // create jump successor tasks
-        for (const auto &[transition, timedValuationSets]: worker.computeJumpSuccessors(node->getFlowpipe(),
-                                                                                        node->getLocation())) {
+        for (const auto &[transition, timedValuationSets, timedValuationSetsUnder]: worker.computeJumpSuccessors(node->getFlowpipe(), node->getLocation(), 
+                                                                                        node->getFlowpipeUnderApprox())) {
+            
             // Omit Zeno-transitions
             if (mParameters.detectZenoBehavior &&
                 std::find(std::begin(ZenoTransitions), std::end(ZenoTransitions), transition) !=
@@ -183,14 +252,22 @@ namespace hypro {
                 continue;
             }
 
-            for (const auto [valuationSet, segmentsInterval]: timedValuationSets) {
+            auto itUnder = timedValuationSetsUnder.begin();
+            auto it = timedValuationSets.begin();
+
+            while (itUnder != timedValuationSetsUnder.end() || it != timedValuationSets.end()) {
+
+            // for (const auto [valuationSet, segmentsInterval]: timedValuationSets) {
                 // update reachTree
                 // convert local time to global time
                 carl::Interval<SegmentInd> const &initialSetDuration = node->getTimings();
+
+                auto lower = (it != timedValuationSets.end()) ? it->time.lower() : itUnder->time.lower();
+                auto upper = (it != timedValuationSets.end()) ? it->time.upper() : itUnder->time.upper();
                 // add one to upper to convert from segment indices to time points
                 // multiply by timeStepFactor to convert from analyzer specific timeStep to fixedTimeStep
-                carl::Interval<SegmentInd> enabledDuration{segmentsInterval.lower() * mParameters.timeStepFactor,
-                                                           (segmentsInterval.upper() + 1) * mParameters.timeStepFactor};
+                carl::Interval<SegmentInd> enabledDuration{lower * mParameters.timeStepFactor,
+                                                           (upper + 1) * mParameters.timeStepFactor};
                 carl::Interval<TimePoint> globalDuration{initialSetDuration.lower() + enabledDuration.lower(),
                                                          initialSetDuration.upper() + enabledDuration.upper()};
                 // if this transition is enabled in the last segment of a flowpipe which is bounded by an invariant, we do not have a timelock
@@ -198,14 +275,35 @@ namespace hypro {
                     DEBUG("hypro.reachability", "Node does not have a timelock");
                     timelock = TRIBOOL::FALSE;
                 }
+                // auto valSetUnder = (mParameters.underapproxReach) ? itUnder->valuationSet : decltype(valuationSet)() ;
                 // in any case add node to the search tree
-                ReachTreeNode<State, LocationT> &childNode = node->addChild(valuationSet, globalDuration, transition);
+            
+                ReachTreeNode<State, LocationT> *childNode;
+
+                if (mParameters.underapproxReach) { 
+                    if (it != timedValuationSets.end() && itUnder != timedValuationSetsUnder.end() ) {
+                        childNode = &node->addChild(it->valuationSet, itUnder->valuationSet, globalDuration, transition);
+                        ++itUnder;
+                        it++;
+                    } else if (it != timedValuationSets.end()) {
+                        childNode = &node->addChild(it->valuationSet, globalDuration, transition);
+                        ++it;
+                    } else  { // itUnder != timedValuationSetsUnder.end()
+                        childNode = &node->addChild(itUnder->valuationSet, globalDuration, transition, true);
+                        ++itUnder;
+                    }
+                } else {
+                    childNode = &node->addChild(it->valuationSet, globalDuration, transition);
+                    it++;
+                }
+                
+                
                 // if desired, try to detect fixed-point
                 bool fixedPointReached = mParameters.detectJumpFixedPoints;
                 auto boundingBox = std::vector<carl::Interval<Number>>{};
                 if (mParameters.detectJumpFixedPoints) {
-                    boundingBox = Converter<Number>::toBox(childNode.getInitialSet()).intervals();
-                    fixedPointReached = detectJumpFixedPoint(childNode, mRoots, mCallbacks.fixedPointCallback,
+                    boundingBox = Converter<Number>::toBox(childNode->getInitialSet()).intervals();
+                    fixedPointReached = detectJumpFixedPoint(*childNode, mRoots, mCallbacks.fixedPointCallback,
                                                              mParameters.detectFixedPointsByCoverage,
                                                              mParameters.numberSetsForContinuousCoverage);
                 }
@@ -213,13 +311,13 @@ namespace hypro {
                 // set bounding box to speed up search in case the option is enabled.
                 // IMPORTANT: This has to be done *after* fp-detection to ensure that the node does not consider itself during fp-detection
                 if (mParameters.detectJumpFixedPoints) {
-                    childNode.setBoundingBox(boundingBox);
+                    childNode->setBoundingBox(boundingBox);
                 }
                 // create Task, push only to queue, in case no fixed-point has been detected or detection is disabled
                 if (!fixedPointReached) {
                     DEBUG("hypro.reachability",
-                          "Add node-successor (@ " << &childNode << ") to work-queue, path: " << childNode.getPath());
-                    addToQueue(&childNode);
+                          "Add node-successor (@ " << *childNode << ") to work-queue, path: " << childNode->getPath());
+                    addToQueue(childNode);
                     // mWorkQueue.push_front( &childNode );
                 } else {
                     DEBUG("hypro.reachability", "Fixed point detected in node-successor");

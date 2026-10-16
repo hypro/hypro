@@ -1,0 +1,119 @@
+hybrid reachability
+{
+ state var x,y,vx,t
+
+ setting 
+ {
+  fixed steps 0.01
+  time 20
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,y
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output vehicle_urgent
+  max jumps 500000
+  print on
+ }
+
+ modes
+	{
+		loc_driving
+		{
+			poly ode 1
+			{
+				x' = vx
+        y' = 0
+        vx' = 0
+        t' = 0
+			}
+			inv
+			{
+				x <= 15
+			}
+		}
+		loc_braking
+		{
+			poly ode 1
+			{
+				x' = vx
+        y' = 0
+        vx' = 0
+        t' = 1
+			}
+			inv
+			{
+				x <= 15
+        t <= 1
+			}
+		}
+	}
+
+ jumps
+ {
+  loc_driving -> loc_braking
+  guard { x >= 2 x <= 3 y >= 1 }
+  reset {}
+  parallelotope aggregation {}
+  urgent 
+
+  loc_driving -> loc_braking
+  guard { x >= 5 x <= 8 y >= 3 y <= 4 }
+  reset {}
+  parallelotope aggregation {}
+  urgent 
+
+  loc_driving -> loc_braking
+  guard { x >= 11 x <= 12 y <= 2 }
+  reset { }
+  parallelotope aggregation {}
+  urgent 
+
+  loc_driving -> loc_braking
+  guard { x >= 6 x <= 7 y >= 2 y <= 3 }
+  reset { }
+  parallelotope aggregation {}
+  urgent 
+
+  loc_driving -> loc_braking
+  guard { x >= 10 x <= 12 y >= 4 }
+  reset { }
+  parallelotope aggregation {}
+  urgent 
+
+  loc_driving -> loc_braking
+  guard { x >= 12 x <= 13 y >= 2 }
+  reset { }
+  parallelotope aggregation {}
+  urgent 
+
+  loc_braking -> loc_driving
+  guard { t >= 1 }
+  reset { t' := 0 }
+  parallelotope aggregation {}
+
+ }
+
+ init
+ {
+  loc_driving
+  {
+   x in [0,0]
+   y in [0,5]
+   vx in [1,1]
+   t in [0,0]
+  }
+ }
+}
+
+
+unsafe set
+{
+  loc_driving
+  {
+   x in [2,4]
+   y in [-2.5,0]
+   
+  }
+}

@@ -106,6 +106,19 @@ class StarsetT : private GeometricObjectBase {
 	StarsetT( const StarsetT<Number, Converter, SettingRhs>& orig ) {}
 
 	/**
+	 * @brief      	Number conversion constructor.
+	 * @param[in]  	in  The original.
+	 */
+	template<typename M, typename C, typename S, carl::DisableIf<std::is_same<M, Number>> = carl::dummy>
+        StarsetT(const StarsetT<M, C, S> &in)
+		: mCenter(convert<M, Number>(in.center()))
+		, mGenerator(convert<M, Number>(in.generator()))
+		, mConstraints(HPolytopeT<Number, Converter, HPolytopeOptimizerCaching>(in.constraints()))
+		{
+
+		}
+
+	/**
 	 * @brief      	Move constructor.
 	 * @param[in]  	orig  The original.
 	 */
@@ -145,6 +158,9 @@ class StarsetT : private GeometricObjectBase {
 	 * @return True, if Starset is empty. False otherwise.
 	 */
 	bool empty() const;
+
+	// check if the predicate is a universal polytope
+	bool universal() const;
 
 	/**
 	 * Replaces the current center with the parameter center
@@ -290,12 +306,19 @@ class StarsetT : private GeometricObjectBase {
 	StarsetT<Number, Converter, Setting>
 	projectOn( const std::vector<std::size_t>& dimensions ) const;
 	StarsetT<Number, Converter, Setting>
+	projectOut( const std::vector<std::size_t>& dimensions ) const;
+	StarsetT<Number, Converter, Setting>
+	projectOutConservative( const std::vector<std::size_t>& dimensions ) const;
+	StarsetT<Number, Converter, Setting>
 	linearTransformation( const matrix_t<Number>& A ) const;
 	StarsetT<Number, Converter, Setting>
 	affineTransformation( const matrix_t<Number>& A,
 						  const vector_t<Number>& b ) const;
 	StarsetT<Number, Converter, Setting>
 	minkowskiSum( const StarsetT<Number, Converter, Setting>& rhs ) const;
+
+	StarsetT<Number, Converter, Setting>
+	minkowskiDiff( const StarsetT<Number, Converter, Setting>& rhs ) const;
 
 	/**
 	 * @brief      Computes the intersection of two Starsetes.
@@ -365,6 +388,18 @@ class StarsetT : private GeometricObjectBase {
 	 * @brief      Reduces the representation of the current Starset.
 	 */
 	void reduceRepresentation();
+	
+	        /// Serialization function required by cereal
+        template<typename Archive>
+        void serialize(Archive &ar) {
+#ifdef HYPRO_USE_SERIALIZATION
+            ar(cereal::make_nvp("center", mCenter),
+       		cereal::make_nvp("generator", mGenerator),
+       		cereal::make_nvp("constraints", mConstraints));
+#else
+             ar(mCenter, mGenerator, mConstraints);
+#endif
+        }
 
 	/**
 	 * @brief      Makes this Starset equal to the empty Starset.
@@ -374,6 +409,7 @@ class StarsetT : private GeometricObjectBase {
 	void updateEquivalentPolytope() const;
 	void updateCache() const;
 	void invalidateCache() const;
+	StarsetT<Number, Converter, Setting> dimensionReduction() const;
 };
 /** @} */
 /*

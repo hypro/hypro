@@ -11,6 +11,7 @@
 
 #include <future>
 
+
 namespace hypro {
 
     template<typename Number>
@@ -48,8 +49,9 @@ namespace hypro {
     void Plotter<Number>::plot2d(PLOTTYPE outformat, bool runGnuplot) const {
         std::size_t cnt = 0;
         std::string filename = mSettings.filename;
+
         std::string title = mSettings.name;
-        if (!mSettings.overwriteFiles) {
+        if (!mSettings.overwriteFiles ) {
             while (file_exists(filename + "_" + plotting::to_string(outformat) + ".plt")) {
                 std::stringstream ss;
                 ss << mSettings.filename << "-" << cnt;
@@ -59,7 +61,7 @@ namespace hypro {
         }
 
         mOutfile.open(filename + "_" + plotting::to_string(outformat) + ".plt");
-
+        
         if ((!mObjects.empty() && !mObjects.begin()->second.vertices.empty()) || !mPoints.empty() ||
             !mVectors.empty()) {  // || mSettings.dimensions() != std::pair<unsigned,unsigned>()) {
 
@@ -113,7 +115,10 @@ namespace hypro {
                 oldestTask.wait();
                 gnuplotThreads.pop();
             }
-            gnuplotThreads.emplace(std::async(std::launch::async, [&]() { std::system(ss.str().c_str()); }));
+            
+            //TODO: the async version doesn't work, so calling it directly now. 
+            std::system(ss.str().c_str());
+            // gnuplotThreads.emplace(std::async(std::launch::async, [&]() { std::system(ss.str().c_str()); }));
 #endif
         }
     }
@@ -156,6 +161,7 @@ namespace hypro {
                 return 0;
             }
             updateLimits(_points);
+            DEBUG("hypro.plotting", "Object was plotted.")
             mObjects.insert(std::make_pair(mId, plotting::PlotObject<Number>{_points, false, false, _color, settings,
                                                                              _objectTitle, isPoints}));
             mId++;

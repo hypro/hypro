@@ -16,6 +16,7 @@
 #include "decomposition/Decomposition.h"
 
 #include <iosfwd>
+#include <mutex>
 #include <numeric>
 #include <variant>
 
@@ -32,6 +33,13 @@ namespace hypro {
         mutable std::vector<TRIBOOL> mConditionIsBox;       ///< cache to check whether constraints are axis-aligned
         mutable std::vector<SETSTATE> mConditionSetState;  ///< cache to hold whether the set defined is empty or universal
         mutable std::size_t mHash = 0;                       ///< cache for the hash value
+
+        /// Guards the three caches above, which const functions fill on first use: a condition (e.g. a guard or an
+        /// invariant) is read by all worker threads of a multithreaded analysis at the same time.
+        static std::mutex &cacheMutex() {
+            static std::mutex mutex;
+            return mutex;
+        }
     public:
         /// default constructor
         Condition() = default;
@@ -82,6 +90,7 @@ namespace hypro {
 
         /// checks, whether the condition is unbounded
         bool isTrue() const {
+            std::lock_guard<std::mutex> lock{cacheMutex()};
             assert(cacheIsSane());
             updateSetState();
             return this->empty() || std::all_of(mConditionSetState.begin(), mConditionSetState.end(),
@@ -90,6 +99,7 @@ namespace hypro {
 
         /// checks, whether the condition is unsatisfiable by its own
         bool isFalse() const {
+            std::lock_guard<std::mutex> lock{cacheMutex()};
             assert(cacheIsSane());
             updateSetState();
             return std::any_of(mConditionSetState.begin(), mConditionSetState.end(),
@@ -199,6 +209,10 @@ namespace hypro {
             ar(mConstraints, mConditionIsBox, mConditionSetState);
         }
 
+        void addTimeToCondition(const std::vector<std::string>& haVar, const std::vector<std::string>& lhsVar, const std::vector<std::string>& rhsVar);
+
+        void extendDimension();
+    
     private:
         void checkAxisAligned(std::size_t i) const;
 

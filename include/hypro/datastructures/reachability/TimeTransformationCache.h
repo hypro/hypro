@@ -37,16 +37,19 @@ namespace hypro {
         return timeTrafo.col(timeTrafo.cols() - 1).head(timeTrafo.rows() - 1);
     }
 
+// need to get inverser of matrix -> fullMatrix inverse, other two through the functions
     template<typename Number>
     struct LTITimeTransformation {
         matrix_t<Number> fullMatrix;
         matrix_t<Number> matrix;
         vector_t<Number> vector;
+
     };
 
     template<typename Location>
     class TimeTransformationCache {
         using Number = typename Location::NumberType;
+        // for each loc, matrix multiplies by itself
         std::unordered_map<Location const *, LTITimeTransformation<Number>> mMatrices{};
 
     public:

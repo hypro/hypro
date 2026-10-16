@@ -32,6 +32,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include "../TemplatePolyhedron/TemplatePolyhedron.h"
 #include "../Zonotope/Zonotope.h"
 
+#include "../../util/logging/Logger.h"
 #include <hypro/flags.h>
 // #include "../Orthoplex/Orthoplex.h"
 

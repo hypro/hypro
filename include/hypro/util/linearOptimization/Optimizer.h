@@ -87,6 +87,10 @@ namespace hypro {
         // Glpk as a presolver
         mutable std::map<std::thread::id, glpk_context> mGlpkContexts;
 #endif
+#if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
+        // map for z3 contexts
+        mutable std::map<std::thread::id, z3Context> mZ3Contexts;
+#endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
         // CLP as a solver
         mutable std::map<std::thread::id, clp_context> mClpContexts;
@@ -186,6 +190,9 @@ namespace hypro {
             std::swap(lhs.mRelationSymbols, rhs.mRelationSymbols);
 #if HYPRO_PRIMARY_SOLVER == SOLVER_GLPK or HYPRO_SECONDARY_SOLVER == SOLVER_GLPK
             std::swap(lhs.mGlpkContexts, rhs.mGlpkContexts);
+#endif
+#if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
+        	std::swap(lhs.mZ3Contexts, rhs.mZ3Contexts);
 #endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
             std::swap( lhs.mClpContexts, rhs.mClpContexts );

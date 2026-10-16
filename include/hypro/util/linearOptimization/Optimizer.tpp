@@ -31,6 +31,19 @@ namespace hypro {
                                                << mGlpkContexts.size());
         }
 #endif
+#if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
+        auto ctxtItZ3 = mZ3Contexts.find(std::this_thread::get_id());  
+        if (ctxtItZ3 != mZ3Contexts.end()) {
+            TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " z3 instances left (before erase): "
+                                                << mZ3Contexts.size());
+            TRACE("hypro.optimizer",
+                "Thread " << std::this_thread::get_id() << " erases its context. (@" << this << ")");
+            TRACE("hypro.optimizer", "Deleted z3 context." );
+            mZ3Contexts.erase(ctxtItZ3);
+            TRACE("hypro.optimizer", "Thread " << std::this_thread::get_id() << " z3 instances left (after erase): "
+                                                << mZ3Contexts.size());
+        }
+#endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
         auto ctxtItClp = mClpContexts.find( std::this_thread::get_id() );
         if ( ctxtItClp != mClpContexts.end() ) {
@@ -157,6 +170,11 @@ namespace hypro {
             mGlpkContexts.erase(mGlpkContexts.begin());
         }
 #endif
+#if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
+        while( !mZ3Contexts.empty() ) {
+            mZ3Contexts.erase( mZ3Contexts.begin() );
+        }
+#endif  
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
         while ( !mClpContexts.empty() ) {
             mClpContexts.erase( mClpContexts.begin() );
@@ -170,6 +188,10 @@ namespace hypro {
         assert(isSane());
         updateConstraints();
         assert(_direction.rows() == mConstraintMatrix.cols());
+
+        // DEBUG("hypro.optimizer",   "useExactGlpk = " << useExactGlpk << std::endl);
+        // DEBUG("hypro.optimizer",   "mConstraintMatrix = " << mConstraintMatrix << std::endl);
+        // DEBUG("hypro.optimizer",   "mConstraintVector = " << mConstraintVector << std::endl);
 
         if (mConstraintMatrix.rows() == 0) {
             return EvaluationResult<Number>(Number(0), vector_t<Number>::Zero(1), SOLUTION::INFTY);
@@ -198,7 +220,7 @@ namespace hypro {
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT
         res = smtratOptimizeLinear( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE
-        res = z3OptimizeLinear( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols );
+        res = z3OptimizeLinear( mZ3Contexts[std::this_thread::get_id()], maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #endif
 
 #if !defined( HYPRO_SECONDARY_SOLVER )
@@ -278,7 +300,7 @@ namespace hypro {
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
             res = smtratOptimizeLinearPostSolve( _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, maximize, res );
 #elif HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-            res = z3OptimizeLinearPostSolve( maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, res );
+            res = z3OptimizeLinearPostSolve( mZ3Contexts[std::this_thread::get_id()], maximize, _direction, mConstraintMatrix, mConstraintVector, mRelationSymbols, res );
 #endif
         }
         return res;
@@ -302,7 +324,7 @@ namespace hypro {
         mLastConsistencyAnswer = smtratCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
         mConsistencyChecked = true;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-        mLastConsistencyAnswer = z3CheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
+        mLastConsistencyAnswer = z3CheckConsistency( mZ3Contexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
         mConsistencyChecked = true;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
         mLastConsistencyAnswer = soplexCheckConsistency( mConstraintMatrix, mConstraintVector, mRelationSymbols ) == true ? SOLUTION::FEAS : SOLUTION::INFEAS;
@@ -336,7 +358,7 @@ namespace hypro {
         }
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-        return z3CheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
+        return z3CheckPoint( mZ3Contexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
         return smtratCheckPoint( mConstraintMatrix, mConstraintVector, mRelationSymbols, _point );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
@@ -378,7 +400,7 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
         mConsistencyChecked = true;
         mLastConsistencyAnswer = res.errorCode;
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE
-        res = z3GetInternalPoint<Number>( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+        res = z3GetInternalPoint<Number>( mZ3Contexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
         mConsistencyChecked = true;
         mLastConsistencyAnswer = res.errorCode;
 #endif
@@ -396,7 +418,7 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
         }
 
 #if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
-        res = z3RedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
+        res = z3RedundantConstraints( mZ3Contexts[std::this_thread::get_id()], mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SMTRAT or HYPRO_SECONDARY_SOLVER == SOLVER_SMTRAT
         res = smtratRedundantConstraints( mConstraintMatrix, mConstraintVector, mRelationSymbols );
 #elif HYPRO_PRIMARY_SOLVER == SOLVER_SOPLEX or HYPRO_SECONDARY_SOLVER == SOLVER_SOPLEX
@@ -455,10 +477,21 @@ EvaluationResult<Number> Optimizer<Number>::getInternalPoint( bool useExactGlpk 
             mGlpkContexts.emplace(std::this_thread::get_id(), glpk_context());
         }
 #endif
+#if HYPRO_PRIMARY_SOLVER == SOLVER_ZTHREE or HYPRO_SECONDARY_SOLVER == SOLVER_ZTHREE
+        if ( mZ3Contexts.find( std::this_thread::get_id() ) == mZ3Contexts.end() ) {
+            std::lock_guard<std::mutex> lock( mContextLock );
+            TRACE( "hypro.optimizer", "Actual creation." );
+            
+            // mZ3Contexts.try_emplace( std::this_thread::get_id(), z3Context() );
+            mZ3Contexts.try_emplace(std::this_thread::get_id()).first->second;
+
+        }
+#endif
 #if HYPRO_PRIMARY_SOLVER == SOLVER_CLP or HYPRO_SECONDARY_SOLVER == SOLVER_CLP
             if ( mClpContexts.find( std::this_thread::get_id() ) == mClpContexts.end() ) {
                 std::lock_guard<std::mutex> lock( mContextLock );
                 TRACE( "hypro.optimizer", "Actual creation." );
+
                 mClpContexts.emplace( std::this_thread::get_id(), clp_context() );
             }
 #endif

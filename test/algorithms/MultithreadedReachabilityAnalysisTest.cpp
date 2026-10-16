@@ -98,13 +98,14 @@ TEST( MultithreadedReachabilityAnalysisTest, LTIBouncingBallNoAggregation ) {
 	// settings: jump depth 3, local time horizon 5, delta 0.01, no aggregation, clustering 2
 	hypro::FixedAnalysisParameters fixedSettings{ 2, 5, 0.01 };
 	hypro::AnalysisParameters dynamicSettings{ 0.01, hypro::AGG_SETTING::NO_AGG, 2 };
+	dynamicSettings.useMultithreading = true;
 
 	auto roots_mt = hypro::makeRoots<Representation, Automaton>( automaton );
-	auto reacher_mt = hypro::reachability::Reach<Representation, Automaton, hypro::DepthFirst<Representation, typename Automaton::LocationType>, hypro::UseMultithreading>( automaton, fixedSettings, dynamicSettings, roots_mt );
+	auto reacher_mt = hypro::reachability::Reach<Representation, Automaton, hypro::DepthFirst<Representation, typename Automaton::LocationType>>( automaton, fixedSettings, dynamicSettings, roots_mt );
 	auto result_mt = reacher_mt.computeForwardReachability();
 
 	auto roots_st = hypro::makeRoots<Representation, Automaton>( automaton );
-	auto reacher_st = hypro::reachability::Reach<Representation, Automaton, hypro::DepthFirst<Representation, typename Automaton::LocationType>, hypro::NoMultithreading>( automaton, fixedSettings, dynamicSettings, roots_st );
+	auto reacher_st = hypro::reachability::Reach<Representation, Automaton, hypro::DepthFirst<Representation, typename Automaton::LocationType>>( automaton, fixedSettings, dynamicSettings, roots_st );
 	auto result_st = reacher_st.computeForwardReachability();
 
 	EXPECT_EQ( result_mt, result_st );
@@ -122,6 +123,8 @@ TEST( MultithreadedReachabilityAnalysisTest, Rectangular ) {
 	analysisParameters.timeStep = hypro::tNumber( 1 ) / hypro::tNumber( 100 );
 	analysisParameters.aggregation = hypro::AGG_SETTING::AGG;
 	analysisParameters.representation_type = hypro::representation_name::polytope_v;
+	analysisParameters.useMultithreading = true;
+
 
 	hypro::Settings settings{ {},
 							  hypro::FixedAnalysisParameters{ 5, hypro::tNumber( 4 ), hypro::tNumber( 0.01 ) },
@@ -129,7 +132,7 @@ TEST( MultithreadedReachabilityAnalysisTest, Rectangular ) {
 
 	auto roots_mt = hypro::makeRoots<Representation, Automaton>( automaton );
 	EXPECT_EQ( std::size_t( 1 ), roots_mt.size() );
-	auto reach_mt = hypro::reachability::ReachBase<Representation, decltype( automaton ), hypro::RectangularAnalyzer<Representation, decltype( automaton ), hypro::UseMultithreading>>( automaton, settings,
+	auto reach_mt = hypro::reachability::ReachBase<Representation, decltype( automaton ), hypro::RectangularAnalyzer<Representation, decltype( automaton )>>( automaton, settings,
 																																														roots_mt );
 
 	// call verifier, validate result
@@ -137,7 +140,7 @@ TEST( MultithreadedReachabilityAnalysisTest, Rectangular ) {
 	EXPECT_EQ( hypro::REACHABILITY_RESULT::SAFE, reachabilityResult_mt );
 
 	auto roots_st = hypro::makeRoots<Representation, Automaton>( automaton );
-	auto reach_st = hypro::reachability::ReachBase<Representation, decltype( automaton ), hypro::RectangularAnalyzer<Representation, decltype( automaton ), hypro::NoMultithreading>>( automaton, settings,
+	auto reach_st = hypro::reachability::ReachBase<Representation, decltype( automaton ), hypro::RectangularAnalyzer<Representation, decltype( automaton )>>( automaton, settings,
 																																													   roots_st );
 
 	// call verifier, validate result

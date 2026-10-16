@@ -18,9 +18,8 @@ namespace hypro {
 
 // specialization for double to get result directly from z3 via Z3_get_numeral_double
 template <>
-EvaluationResult<double> z3OptimizeLinear( bool maximize, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants, const std::vector<carl::Relation>& relations ) {
+EvaluationResult<double> z3OptimizeLinear( z3Context& c , bool maximize, const vector_t<double>& _direction, const matrix_t<double>& constraints, const vector_t<double>& constants, const std::vector<carl::Relation>& relations ) {
     EvaluationResult<double> res;
-    z3Context c;
     z3::optimize z3Optimizer( c );
     std::vector<z3::expr> variables;
 

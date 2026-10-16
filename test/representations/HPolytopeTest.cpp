@@ -554,7 +554,7 @@ TYPED_TEST( HPolytopeTest, SetMinus ) {
 	EXPECT_EQ( result1.size(), (unsigned)3 );
 
 	std::vector<HPolytope<TypeParam>> result2 = hpt2.setMinus2( hpt1 );
-#ifndef HYPRO_USE_GLPK
+#if !defined(HYPRO_USE_GLPK) && !defined(HYPRO_USE_SOPLEX)
 	EXPECT_TRUE( result2.empty() );
 #else
 	// without strict inequalities, the (redundant) points (2,-1) and (-2,-1) are expected

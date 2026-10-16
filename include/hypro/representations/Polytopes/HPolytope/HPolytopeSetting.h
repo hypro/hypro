@@ -22,7 +22,7 @@ namespace hypro {
         static constexpr int type_enum = hPolytopeSetting_name::HPolytopeSetting;
         static constexpr bool REDUCE_NUMBERS = false;
         static constexpr bool AVOID_CONVERSION = true;
-        static constexpr bool OPTIMIZER_CACHING = false;
+        static constexpr bool OPTIMIZER_CACHING = false; // TODO: change this if you want the tests to pass in the pipeline
         static constexpr bool NAIVE_ALGORITHMS = false;
 //        static constexpr bool NAIVE_ALGORITHMS = true;
         static constexpr bool CACHE_BOUNDING_BOX = false;

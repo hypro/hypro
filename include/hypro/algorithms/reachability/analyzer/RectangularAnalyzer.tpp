@@ -11,11 +11,11 @@
 
 namespace hypro {
 
-    template<typename State, typename Automaton, typename Multithreading>
-    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::run() {
+    template<typename State, typename Automaton>
+    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton>::run() {
         // create reachTree if not already present
         if (mReachTree.empty()) {
-            mReachTree = makeRoots<State>(mHybridAutomaton);
+            mReachTree = makeRoots<State, Automaton>(*mHybridAutomaton);
         }
         // initialize queue
         for (auto &rtNode: mReachTree) {
@@ -23,13 +23,13 @@ namespace hypro {
         }
         DEBUG("hypro.reachability.rectangular", "Added " << mWorkQueue.size() << " initial states to the work queue");
 
-        if (std::is_same_v<Multithreading, UseMultithreading>) {
+        if (mAnalysisSettings.strategy().front().useMultithreading) {
             mIdle = std::vector(mNumThreads, true);
             std::mutex resultMutex;
             REACHABILITY_RESULT res{REACHABILITY_RESULT::SAFE};
             for (int i = 0; i < mNumThreads; i++) {
                 mThreads.push_back(std::thread([this, i, &resultMutex, &res]() {
-                    RectangularWorker<State, Automaton> worker{mHybridAutomaton, mAnalysisSettings};
+                    RectangularWorker<State, Automaton> worker{*mHybridAutomaton, mAnalysisSettings};
                     ReachTreeNode<State, LocationT> *currentNode;
                     while (!mTerminate) {
                         {
@@ -54,18 +54,29 @@ namespace hypro {
 
                         auto result = processNode(worker, currentNode);
 
-                        {
-                            std::unique_lock<std::mutex> idleLock{mIdleWorkerMutex};
-                            mIdle[i] = true;
-                            mAllIdle.notify_all();
-                        }
-
-                        if (result != REACHABILITY_RESULT::SAFE) {
-                            mTerminate = true;
+                        const bool unsafe = result != REACHABILITY_RESULT::SAFE;
+                        if (unsafe) {
                             {
                                 std::lock_guard<std::mutex> lock{resultMutex};
                                 res = result;
                             }
+                            // before the notification below, so that the main thread sees it when it wakes up
+                            mTerminate = true;
+                        }
+
+                        {
+                            std::unique_lock<std::mutex> idleLock{mIdleWorkerMutex};
+                            mIdle[i] = true;
+                        }
+                        // Notify while holding mThreadPoolMutex, the mutex the main thread waits with: otherwise the
+                        // notification can fall between its check of the predicate and its wait, and is lost, so
+                        // that it waits forever while all workers wait for an empty queue.
+                        {
+                            std::lock_guard<std::mutex> poolLock{mThreadPoolMutex};
+                            mAllIdle.notify_all();
+                        }
+
+                        if (unsafe) {
                             break;
                         }
                     }
@@ -117,11 +128,11 @@ namespace hypro {
         }
     }
 
-    template<typename State, typename Automaton, typename Multithreading>
-    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton, Multithreading>::forwardRun() {
+    template<typename State, typename Automaton>
+    REACHABILITY_RESULT RectangularAnalyzer<State, Automaton>::forwardRun() {
         DEBUG("hypro.reachability.rectangular", "Start forward analysis");
 
-        RectangularWorker<State, Automaton> worker{mHybridAutomaton, mAnalysisSettings};
+        RectangularWorker<State, Automaton> worker{*mHybridAutomaton, mAnalysisSettings};
         while (!mWorkQueue.empty()) {
             auto *currentNode = getNodeFromQueue();
             DEBUG("hypro.reachability",
@@ -137,9 +148,9 @@ namespace hypro {
         return REACHABILITY_RESULT::SAFE;
     }
 
-    template<typename State, typename Automaton, typename Multithreading>
+    template<typename State, typename Automaton>
     REACHABILITY_RESULT
-    RectangularAnalyzer<State, Automaton, Multithreading>::processNode(RectangularWorker<State, Automaton> &worker,
+    RectangularAnalyzer<State, Automaton>::processNode(RectangularWorker<State, Automaton> &worker,
                                                                        ReachTreeNode<State, LocationT> *node) {
         REACHABILITY_RESULT safetyResult;
         TRACE("hypro.reachability.rectangular", "Analyze node at depth " << node->getDepth());

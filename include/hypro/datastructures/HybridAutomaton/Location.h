@@ -237,6 +237,11 @@ namespace hypro {
         /// decomposes location into subspaces defined in the passed decomposition
         void decompose(const std::vector<std::vector<std::size_t>> &partition);
 
+        /**
+         * @brief add a rectangular flow in the location for a time variable "t" and update the dimensions of the Invariant and transition guards
+         */
+        void addTimeToLocation();
+
         /// hash-based less operator
         inline bool operator<(const Location<Number> &rhs) const {
             if (this->hash() != rhs.hash()) {
@@ -332,9 +337,15 @@ namespace hypro {
 
         /// outstream operator
         friend std::ostream &operator<<(std::ostream &ostr, const Location<Number> &l) {
-            ostr << l.getName() << " @" << &l << " {\n"
+            if (l.isUrgent()) {
+                ostr << l.getName() << "* @" << &l << " {\n"
                  << "Flow.: "
                  << "\n";
+            } else {
+                ostr << l.getName() << " @" << &l << " {\n"
+                 << "Flow.: "
+                 << "\n";
+            }
             for (size_t i = 0; i < l.getNumberSubspaces(); i++) {
                 switch (l.getFlowTypes()[i]) {
                     case DynamicType::linear:

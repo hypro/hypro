@@ -484,27 +484,28 @@ namespace hypro {
     template<typename BoxSetting, typename inSetting>
     BoxT<Number, Converter<Number>, BoxSetting>
     Converter<Number>::toBox(const StarsetT<Number, Converter<Number>, inSetting> &source, const CONV_MODE) {
-        // std::cout<<"amk"<<std::endl;
-        // HPolytope temp=Converter::toHPolytope(source.constraintss());
-        // temp=temp.removeRedundancy();
-        BoxT<Number, Converter<Number>, BoxSetting> tmp = Converter::toBox(source.constraints());
-        return tmp.affineTransformation(source.generator(), source.center());
-        /*std::cout<<"point"<<std::endl;
-        std::cout<<source.generator()<<std::endl;
-        std::cout<<source.center()<<std::endl;
-        std::cout<<source.constraintss().matrix()<<std::endl;
-        std::cout<<source.constraintss().vector()<<std::endl;
+        
+        // BoxT<Number, Converter<Number>, BoxSetting> tmp = Converter::toBox(source.constraints());
+        // return tmp.affineTransformation(source.generator(), source.center());
+        
+        std::vector<carl::Interval<Number>> intervals;
 
-        std::vector<Point<Number>> res;
-        ////std::cout<<"vertices"<<std::endl;
-        auto placeholder= tmp.vertices();
-        std::cout<<"point"<<std::endl;
+        auto center = source.center();
+        auto predicate = source.constraints();
+        auto generator = source.generator();
 
-        for ( auto point : placeholder ) {
-            std::cout<<"point"<<point<<std::endl;
-            point=point.affineTransformation(source.generator(),source.center());
-            res.push_back(point);
+        for (size_t i = 0; i < generator.rows(); i++) {
+            auto eval_low_result = predicate.evaluate(-1.0 * generator.row(i));
+            auto eval_high_result = predicate.evaluate(generator.row(i));
+
+            Number lb = -eval_low_result.supportValue + center[i];
+            Number ub = eval_high_result.supportValue + center[i];
+
+            intervals.push_back(carl::Interval<Number>(lb, ub));
         }
-        return BoxT<Number,Converter<Number>,BoxSetting>(res);*/
+
+        BoxT<Number, Converter<Number>, BoxSetting> tmp(intervals);
+
+        return tmp;
     }
 }  // namespace hypro

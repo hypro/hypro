@@ -42,16 +42,49 @@ namespace hypro {
 
         template<typename OutputIt>
         REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, LocationT const *loc, OutputIt out,
-                                                  long segmentsToCompute, bool checkSafety = true) const;
+                                                long int segmentsToCompute, bool checkSafety = true, bool forward = true ) const;
 
         template<typename OutputIt>
         REACHABILITY_RESULT computeTimeSuccessors(const Representation &initialSet, LocationT const *loc, OutputIt out,
-                                                  bool checkSafety = true) const {
+                                                bool checkSafety = true) const {
             return computeTimeSuccessors(initialSet, loc, out, mNumSegments, checkSafety);
         }
+          
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsUnder(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  long int segmentsToCompute, bool checkSafety = true) const;
 
-        std::vector<JumpSuccessor<Representation, LocationT>>
-        computeJumpSuccessors(std::vector<Representation> const &flowpipe, LocationT const *loc) const;
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsUnder(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  bool checkSafety = true) const {
+            return computeTimeSuccessorsUnder(initialSet, loc, out, mNumSegments, checkSafety);
+        }
+
+                template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsBackwards(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  long int segmentsToCompute, bool checkSafety = true) const;
+
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsBackwards(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  bool checkSafety = true) const {
+            return computeTimeSuccessorsBackwards(initialSet, loc, out, mNumSegments, checkSafety);
+        }
+
+                template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsForwards(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  long int segmentsToCompute, bool checkSafety = true) const;
+
+        template<typename OutputIt>
+        REACHABILITY_RESULT computeTimeSuccessorsForwards(const Representation &initialSet, LocationT const *loc, OutputIt out,
+                                                  bool checkSafety = true) const {
+            return computeTimeSuccessorsForwards(initialSet, loc, out, mNumSegments, checkSafety);
+        }
+
+
+
+
+        std::vector<JumpSuccessorOverUnder<Representation, LocationT>>
+        computeJumpSuccessors(std::vector<Representation> const &flowpipe, LocationT const *loc, std::vector<Representation> const &flowpipeUnderApprox = {}) const;
 
         JumpSuccessorGen
         getJumpSuccessors(std::vector<Representation> const &flowpipe, Transition<LocationT> const *transition) const;

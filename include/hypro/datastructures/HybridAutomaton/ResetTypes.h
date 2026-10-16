@@ -207,6 +207,7 @@ namespace hypro {
                     ++pos;
                 } else {
                     out << "x" << pos << " := " << i;
+                    ++pos;
                 }
             }
             return out;

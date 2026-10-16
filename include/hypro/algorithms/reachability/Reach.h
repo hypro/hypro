@@ -41,9 +41,8 @@ namespace hypro {
  * @tparam Representation The used state set representation type.
  * @tparam Automaton The used automaton type.
  * @tparam SearchHeuristic The used search heurstics.
- * @tparam Multithreading Use multithreading?
  */
-        template<typename Representation, typename Automaton, typename SearchHeuristic = DepthFirst<Representation, typename Automaton::LocationType>, typename Multithreading = NoMultithreading>
+        template<typename Representation, typename Automaton, typename SearchHeuristic = DepthFirst<Representation, typename Automaton::LocationType>>
         class Reach {
             using Number = typename Representation::NumberType;
             using LocationT = typename Automaton::LocationType;
@@ -52,7 +51,7 @@ namespace hypro {
             using VerificationResult = AnalysisResult<VerificationSuccess, Failure<Representation, LocationT>>;
 
         protected:
-            LTIAnalyzer<Representation, Automaton, SearchHeuristic, Multithreading> mAnalyzer;
+            LTIAnalyzer<Representation, Automaton, SearchHeuristic> mAnalyzer;
 
         public:
             /**

@@ -504,6 +504,8 @@ namespace hypro {
 
         BoxT projectOn(const std::vector<std::size_t> &dimensions) const;
 
+        BoxT projectOut(const std::vector<std::size_t> &dimensions) const;
+
         BoxT assignIntervals(const std::map<std::size_t, carl::Interval<Number>> &assignments) const;
 
         /**
@@ -562,7 +564,7 @@ namespace hypro {
          * @param minusbox
          * @return std::vector<BoxT<Number,Converter,Setting>>
          */
-        std::vector<BoxT<Number, Converter, Setting>> setMinus(const BoxT<Number, Converter, Setting> &minusbox) const;
+        std::vector<BoxT<Number, Converter, Setting>> setMinusOld(const BoxT<Number, Converter, Setting> &minusbox) const;
 
         /**
          * @brief Allows to compute the set-difference of a box with another box and returns the resulting vector of boxes.
@@ -572,6 +574,12 @@ namespace hypro {
          * @return std::vector<BoxT<Number,Converter, Setting>>
          */
         std::vector<BoxT<Number, Converter, Setting>> setMinus2(const BoxT<Number, Converter, Setting> &minusbox) const;
+
+        std::vector<BoxT<Number, Converter, Setting>> setMinus(const BoxT<Number, Converter, Setting> &minusbox, int setMinusAlgoUsed) const;
+
+        /// set difference with the algorithm used before setMinus took an algorithm (setMinusOld)
+        std::vector<BoxT<Number, Converter, Setting>> setMinus(const BoxT<Number, Converter, Setting> &minusbox) const { return setMinusOld(minusbox); }
+
 
         /**
          * @brief      Containment check for a box.

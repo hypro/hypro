@@ -16,6 +16,7 @@
 #include "../../../datastructures/Point.h"
 #include "../EvaluationResult.h"
 #include "../glpk_context.h"
+#include "../../logging/Logger.h"
 
 #include <glpk.h>
 

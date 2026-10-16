@@ -42,6 +42,8 @@ namespace hypro {
 
         size_t getDepth() const { return mDepth; }
 
+        void setDepth(size_t depth) {this->mDepth = depth;}
+
         template<class... Args>
         DerivedNode &addChild(Args &&... args) {
             return *mChildren.emplace_back(std::make_unique<DerivedNode>(args...));
@@ -99,6 +101,16 @@ namespace hypro {
         }
 
         bool isLeaf() const { return mChildren.empty(); }
+
+        bool isAncestorOf(const DerivedNode *node) const {
+            if (node == nullptr) {
+                return false;
+            }
+            if (node == this) {
+                return true;
+            }
+            return isAncestorOf(node->getParent());
+        }
     };
 
 }  // namespace hypro

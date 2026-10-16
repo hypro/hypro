@@ -34,8 +34,9 @@ namespace hypro {
 
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::compute() {
+        TRACE("hypro.quickhull", "nr points = " << points.size());
         TRACE("hypro.quickhull", points);
-        removeDuplicateInputs();
+        removeDuplicateInputs(); // remove duplicate points
 
         // There's only a single point, so we fix it from both sides.
         if (dimension == 1 && points.size() == 1) {
@@ -43,7 +44,7 @@ namespace hypro {
             return;
         }
 
-        buildInitialPolytope();
+        buildInitialPolytope(); // builds initial polytope, which is the starting point of the quickhull alg.
 #ifdef HYPRO_LOGGING
         for (Facet &facet: fSpace.facets) {
             TRACE("hypro.quickhull", ", furthest point " << facet.furthestPoint << std::endl
@@ -53,6 +54,7 @@ namespace hypro {
 
         processPoints();
 #ifdef HYPRO_LOGGING
+        TRACE("hypro.quickhull", "ALL facets size  = " << fSpace.facets.size() << std::endl);
         TRACE("hypro.quickhull", "ALL facets:" << std::endl
                                                << fSpace.printAll());
 #endif
@@ -61,7 +63,8 @@ namespace hypro {
         fSpace.removeCoplanarFacets();
 
 #ifdef HYPRO_LOGGING
-        TRACE("hypro.quickhull", "ALL facets:" << std::endl
+        TRACE("hypro.quickhull", "ALL facets size  = " << fSpace.facets.size() << std::endl);
+        TRACE("hypro.quickhull", "ALL facets after compress vector and remove:" << std::endl
                                                << fSpace.printAll());
 
         for (facet_ind_t facet_i = 0; facet_i < fSpace.facets.size(); ++facet_i) {
@@ -131,8 +134,9 @@ namespace hypro {
 
         // baryCenter /= dimension + 1;
 
+        // fpace.facets.back() and fspace.facets.front() are the same here, since there is only one facet in the space
         // Set orientation
-        if (fSpace.facets.front().visible(points[furthestPoint_i])) {
+        if (fSpace.facets.front().visible(points[furthestPoint_i])) { // if distance between fSpace.facets.front() and furthestPoint is positive invert first facet
             fSpace.facets.front().invert();
         }
 
@@ -183,7 +187,7 @@ namespace hypro {
         Eigen::FullPivLU<matrix_t<Number>> lu(dimension, dimension + 1);
         matrix_t<Number> matrix = matrix_t<Number>::Zero(dimension, dimension + 1);
 
-        // Do first iteration
+        // Do first iteration, choose the first point and add it to the facet
         facet.mVertices[0] = 0;
 
         // Set the first row
@@ -195,12 +199,14 @@ namespace hypro {
         }
 
         // Compute normal and offset
-        lu.compute(matrix);
-        vector_t<Number> result = lu.kernel().col(0);
+        lu.compute(matrix);                                 // compute LU decomposition of matrix
+        vector_t<Number> result = lu.kernel().col(0);       // get kernel vector of matrix (also called null space)
 
         facet.mNormal = result.head(dimension);
         facet.mOffset = -result[dimension];
 
+        // we are looking for the other d-1 points, 
+        // want to find a plane spanned by d points, for them n^t*x + d = 0 where n is normal vector, d offset, x is the points on plane
         for (size_t d = 1; d < dimension; ++d) {
             auto [onPlane, furthestPoint_i] = findFurthestPoint(facet);
 
@@ -255,10 +261,10 @@ namespace hypro {
 
     template<typename Number, bool Euclidian>
     void ExactQuickhull<Number, Euclidian>::processPoints() {
-        facet_ind_t facetToProcess_i = getFacetToProcess();
+        facet_ind_t facetToProcess_i = getFacetToProcess(); // get first facet with non empty outside set (outside set contains points outside the facet)
 
         while (facetToProcess_i != fSpace.facets.size()) {
-            bitset_t visited{fSpace.facets.size()};
+            bitset_t visited{fSpace.facets.size()};         // keep track of visited facets, the ones we'll remove or replace??
             visited.set(facetToProcess_i);
             buildCone(facetToProcess_i, fSpace.facets[facetToProcess_i].furthestPoint, visited);
 
@@ -277,7 +283,7 @@ namespace hypro {
     }
 
     template<typename Number, bool Euclidean>
-    void ExactQuickhull<Number, Euclidean>::buildCone(facet_ind_t currentFacet_i, point_ind_t visiblePoint_i,
+    void ExactQuickhull<Number, Euclidean>::buildCone(facet_ind_t currentFacet_i, point_ind_t visiblePoint_i, // this is the furthest point
                                                       bitset_t &visited) {
         /*
         #ifndef NDEBUG

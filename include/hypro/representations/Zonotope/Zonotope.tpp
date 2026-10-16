@@ -99,7 +99,6 @@ namespace hypro {
 
         // conversion is from here done just like V -> Zonotope
         *this = Converter::toZonotope(temp);
-        std::cout << "I was called " << std::endl;
 
         uniteEqualVectors();
         removeEmptyGenerators();
@@ -132,6 +131,12 @@ namespace hypro {
         mGenerators = generators;
         uniteEqualVectors();
         removeEmptyGenerators();
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    ZonotopeT<Number, Converter, Setting>::ZonotopeT(const std::vector<Point<Number>> &points) {
+        // Implementation for constructing Zonotope from a vector of points
+        *this = Converter::toZonotope(hypro::VPolytopeT<Number, Converter, Setting>(points));
     }
 
     template<typename Number, typename Converter, typename Setting>
@@ -431,6 +436,41 @@ namespace hypro {
         }
 
         auto newCenter = hypro::projectOn(mCenter, dimensions);
+        ZonotopeT<Number, Converter, Setting> res = ZonotopeT<Number, Converter, Setting>(newCenter.rows(),
+                newCenter, projectedGenerators);
+        res.reduceOrder();
+
+        return res;
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    ZonotopeT<Number, Converter, Setting>
+    ZonotopeT<Number, Converter, Setting>::projectOutConservative(const std::vector<std::size_t> &dimensions) const {
+        return this->projectOut(dimensions);
+    }
+
+    template<typename Number, typename Converter, typename Setting>
+    ZonotopeT<Number, Converter, Setting>
+    ZonotopeT<Number, Converter, Setting>::projectOut(const std::vector<std::size_t> &dimensions) const {
+        if (dimensions.empty()) {
+            return *this;
+        }
+
+        matrix_t<Number> projectedGenerators = matrix_t<Number>::Zero(mGenerators.rows() - dimensions.size(), mGenerators.cols());
+        vector_t<Number> newCenter = vector_t<Number>::Zero(mCenter.size() - dimensions.size());
+
+
+        int index = 0;
+        for (std::size_t dim = 0; dim < mCenter.size(); ++dim) {
+            if (std::find(dimensions.begin(), dimensions.end(), dim) != dimensions.end())
+			    continue;
+
+            newCenter[index] = mCenter[dim];
+            projectedGenerators.block(index, 0, 1, mGenerators.cols()) = mGenerators.row(dim);
+            index++;
+    
+        }
+
         ZonotopeT<Number, Converter, Setting> res = ZonotopeT<Number, Converter, Setting>(newCenter.rows(),
                 newCenter, projectedGenerators);
         res.reduceOrder();
@@ -1028,7 +1068,7 @@ namespace hypro {
             unsigned firstConstraintIndex = linePairs.at(lineIndex).first;
             res = res.intersect(
                     Halfspace<Number>(vector_t<Number>(mat.row(firstConstraintIndex)), vec(firstConstraintIndex)),
-                    ZUtility::NDPROJECTION);
+                    ZUtility::ALAMO);
         }
 
         if (res.empty()) {
@@ -1303,6 +1343,12 @@ namespace hypro {
 
         result = temp;
         return result;
+    }
+
+
+    template<typename Number, typename Converter, typename Setting>
+    bool ZonotopeT<Number, Converter, Setting>::contains(const vector_t<Number> &vec) const {
+        return this->contains(Point<Number>(vec));
     }
 
     template<typename Number, typename Converter, typename Setting>

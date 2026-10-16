@@ -106,6 +106,7 @@ namespace hypro {
             std::vector<Halfspace<Number>> planes = pca.box();
             target = HPolytope(planes);
         }
+        target.setExtremeVertices(_source.vertices());
         return target;
     }
 
@@ -126,7 +127,7 @@ namespace hypro {
         // computes vertices from source object
         typename std::vector<Point<Number>> vertices = _source.vertices();
         if (vertices.empty()) {
-            return HPolytopeT<Number, Converter<Number>, HPolytopeSetting>();
+            return HPolytope::Empty();
         }
         Converter<Number>::VPolytope vpoly = VPolytope(vertices);
 
@@ -356,6 +357,9 @@ namespace hypro {
     Converter<Number>::toHPolytope(const SupportFunctionNewT<Number, Converter<Number>, inSetting> &_source,
                                    const std::vector<vector_t<Number>> &additionalDirections, const CONV_MODE,
                                    std::size_t numberOfDirections) {
+        if (_source.empty()) {
+            return HPolytope::Empty();
+        }
         // gets dimension of source object
         // assert(!_source.empty());
         std::size_t dim = _source.dimension();
@@ -484,10 +488,10 @@ namespace hypro {
     HPolytopeT<Number, Converter<Number>, HPolytopeSetting>
     Converter<Number>::toHPolytope(const StarsetT<Number, Converter<Number>, inSetting> &source, const CONV_MODE) {
         //if basis is standard, center is zero vector and star set is not empty, return the constraints from the star set
-        if (source.generator() == (matrix_t<Number>::Identity(source.generator().cols(), source.generator().cols())) &&
+        if ( source.generator().rows() == source.generator().cols() && source.generator() == (matrix_t<Number>::Identity(source.generator().cols(), source.generator().cols())) &&
             source.center() == vector_t<Number>::Zero(source.center().rows()) && !source.empty()) {
-            return source.constraints().matrix();
 
+            return source.constraints();
         }
 
         //HPolytopeT<Number,Converter<Number>,HPolytopeSetting> temp=source.constraints();

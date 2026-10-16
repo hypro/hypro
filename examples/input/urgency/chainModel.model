@@ -1,0 +1,179 @@
+hybrid reachability
+{
+ state var x,y
+
+ setting
+ {
+  fixed steps 0.1
+  time 10
+  remainder estimation 1e-5
+  identity precondition
+  gnuplot octagon x,y
+  fixed orders 5
+  cutoff 1e-15
+  precision 128
+  output simple_example
+  max jumps 2
+  print on
+ }
+
+ modes
+ {
+  loc1
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+  loc2
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+  loc3
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+  loc4
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+  loc5
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+  loc6
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+  loc7
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+  loc8
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+  loc9
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+  loc10
+  {
+   poly ode 1
+   {
+    x' = 1
+    y' = 0
+   }
+  }
+ }
+
+ jumps
+ {
+  loc1 -> loc2
+  guard {2 <= x 2 <= y}
+  reset { x':= x+1 y':= y }
+  parallelotope aggregation {}
+  urgent
+  
+  loc2 -> loc3
+  guard {4 <= x 4 <= y}
+  reset { x':= x+1 y':= y }
+  parallelotope aggregation {}
+  urgent
+  
+  loc3 -> loc4
+  guard {6 <= x 6 <= y}
+  reset { x':= x+1 y':= y }
+  parallelotope aggregation {}
+  urgent
+  
+  loc4 -> loc5
+  guard {8 <= x 8 <= y}
+  reset { x':= x+1 y':= y }
+  parallelotope aggregation {}
+  urgent
+  
+  loc5 -> loc6
+  guard {10 <= x 10 <= y}
+  reset { x':= x+1 y':= y }
+  parallelotope aggregation {}
+  urgent
+  
+  loc6 -> loc7
+  guard {12 <= x 12 <= y}
+  reset { x':= x+1 y':= y }
+  parallelotope aggregation {}
+  urgent
+  
+  loc7 -> loc8
+  guard {14 <= x 14 <= y}
+  reset { x':= x+1 y':= y }
+  parallelotope aggregation {}
+  urgent
+  
+  loc8 -> loc9
+  guard {16 <= x 16 <= y}
+  reset { x':= x+1 y':= y }
+  parallelotope aggregation {}
+  urgent
+  
+  loc9 -> loc10
+  guard {18 <= x 18 <= y}
+  reset { x':= x+1 y':= y }
+  parallelotope aggregation {}
+  urgent
+  
+ }
+
+ init
+ {
+  loc1
+  {
+   x in [1,1]
+   y in [1,20]
+  }
+ }
+}
+
+unsafe set
+{
+ loc1
+ {
+    x in [-5,0]
+    y in [-5,0]
+ }
+}

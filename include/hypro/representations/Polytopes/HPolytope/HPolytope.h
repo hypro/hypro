@@ -20,6 +20,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 
 #include "../../../algorithms/quantifierElimination/qe.h"
 #include "../../../algorithms/quickhull/Quickhull.h"
+#include "../../../algorithms/smtrat-fmplex/eliminate.h"
 #include "../../../types.h"
 #include "../../../util/convexHull.h"
 #include "../../../util/linearOptimization/Optimizer.h"
@@ -44,6 +45,7 @@ static_assert( false, "This file may only be included indirectly by GeometricObj
 #include <algorithm>
 #include <cassert>
 #include <optional>
+#include <random>
 
 namespace hypro {
 
@@ -72,6 +74,7 @@ namespace hypro {
         };
 
         using HalfspaceVector = std::vector<Halfspace<Number>>;
+        using pointVector = std::vector<Point<Number>>;
 
         typedef Setting Settings;
         typedef Number NumberType;
@@ -84,7 +87,7 @@ namespace hypro {
         mutable std::optional<Optimizer<Number>> mOptimizer = std::nullopt;                 ///< optional cache (settings-dependent) for an LP instance
         mutable bool mUpdated = false;                                                     ///< cache flag to mark a required update of the optional LP instance
         mutable std::optional<std::vector<carl::Interval<Number>>> mBox = std::nullopt;     ///< cache of the bounding box
-
+        mutable pointVector mVertices = {}; ///< cache of the extreme points defining the v polytope
     public:
         /**
          * @brief Constructor for the universal H-polytope.
@@ -160,6 +163,18 @@ namespace hypro {
         ~HPolytopeT();
 
         /**
+         * @brief Getter of the extreme points of v polytope
+         * @return extreme vertices as a vector
+         */
+        pointVector getExtremeVertices() const { return mVertices; }
+
+        /**
+         * @brief Setter of the extreme points of v polytope
+         * @param vertices extreme vertices as a vector
+         */
+        void setExtremeVertices(const pointVector &vertices) { mVertices = vertices; }
+
+        /**
          * @brief Approximates the storage usage of the current polytope.
          * @details [long description]
          * @return The size.
@@ -174,6 +189,8 @@ namespace hypro {
          * @return True if the polytope is empty, false otherwise.
          */
         bool empty() const;
+
+        bool universal() const;
 
         /**
          * @brief Static method for construction of an empty H-polytope.
@@ -321,6 +338,9 @@ namespace hypro {
 
         HPolytopeT projectOn(const std::vector<std::size_t> &dimensions) const;
 
+        // if we want to project on and get the vertices, we can combine the two operations to one conversion 
+        std::vector<Point<Number>> projectOnAndVertices(const std::vector<std::size_t> &dimensions) const;
+
         HPolytopeT assignIntervals(const std::map<std::size_t, carl::Interval<Number>> &) const {
             WARN("hypro", "Not implemented.");
             return *this;
@@ -332,11 +352,15 @@ namespace hypro {
 
         HPolytopeT minkowskiSum(const HPolytopeT &rhs) const;
 
+        HPolytopeT minkowskiDiff(const HPolytopeT &rhs) const;
+
         HPolytopeT intersect(const HPolytopeT &rhs) const;
 
         HPolytopeT intersectHalfspace(const Halfspace<Number> &rhs) const;
 
         HPolytopeT intersectHalfspaces(const matrix_t<Number> &_mat, const vector_t<Number> &_vec) const;
+        
+        HPolytopeT getTimeProjection() const;
 
         bool contains(const Point<Number> &point) const;
 
@@ -349,6 +373,7 @@ namespace hypro {
         static HPolytopeT unite(const std::vector<HPolytopeT> &rhs);
 
         void reduceRepresentation() {
+            TRACE("hypro.reduceRepresentation", "reduce representation was called");
             reduceNumberRepresentation();
             removeRedundancy();
         }
@@ -382,7 +407,8 @@ namespace hypro {
             mNonRedundant = rhs.isNonRedundant();
 
             if (Setting::OPTIMIZER_CACHING && rhs.getOptimizer().has_value()) {
-                mOptimizer->cleanContexts();
+                if (mOptimizer.has_value())
+                    mOptimizer->cleanContexts();
                 setOptimizer(rhs.matrix(), rhs.vector());
             }
             assert(mEmptyState == rhs.getEmptyState());
@@ -416,7 +442,81 @@ namespace hypro {
             swap(a.mHPlanes, b.mHPlanes);
             a.setUpdated(false);
             b.setUpdated(false);
+            pointVector tmpVertices = a.getExtremeVertices();
+            a.setExtremeVertices(b.getExtremeVertices());
+            b.setExtremeVertices(tmpVertices);
         }
+
+        // template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
+        // void reduceNumberRepresentation(const std::vector<Point<Number>> &_vertices = std::vector<Point<Number>>(),
+        //                                 unsigned limit = fReach_DENOMINATOR) const {
+        //     // #ifdef REDUCE_NUMBERS
+        //     if (Setting::REDUCE_NUMBERS == true) {
+        //         std::vector<Number> largest (mHPlanes.size(), Number(0));
+
+        //         if (!this->empty()) {
+
+        //             // normal reduction
+        //             bool needToReduce = false;
+        //             for (unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
+        //                 Halfspace<Number> hPlaneCopy = mHPlanes.at(planeIndex);
+        //                 hPlaneCopy.makeInteger();
+
+        //                 // find maximal value
+        //                 largest[planeIndex] = carl::abs(hPlaneCopy.offset());
+        //                 for (unsigned i = 0; i < mDimension; ++i) {
+        //                     if (carl::abs(hPlaneCopy.normal()(i)) > largest[planeIndex]) {
+        //                         largest[planeIndex] = carl::abs(hPlaneCopy.normal()(i));
+        //                     }
+        //                 }
+        //                 if (largest[planeIndex] > limit * limit) {
+        //                     needToReduce = true;
+        //                 }
+        //             }
+
+        //             if (needToReduce) {
+        //                 TRACE("hypro.hPolytope", "Attempt to reduce numbers.");
+        //                 std::vector<Point<Number>> originalVertices;
+        //                 if (_vertices.empty()) {
+        //                     TRACE("hypro.hPolytope", "No passed vertices, computed vertices.");
+        //                     originalVertices = this->vertices();
+        //                 } else {
+        //                     TRACE("hypro.hPolytope", "Use passed vertices.");
+        //                     originalVertices = _vertices;
+        //                 }
+        //                 TRACE("hypro.hPolytope", "Vertices empty: " << originalVertices.empty());
+                        
+        //                 for (unsigned planeIndex = 0; planeIndex < mHPlanes.size(); ++planeIndex) {
+        //                     mHPlanes.at(planeIndex).makeInteger();
+        //                     vector_t<Number> newNormal(mDimension);
+        //                     for (unsigned i = 0; i < mDimension; ++i) {
+        //                         newNormal(i) = carl::floor(
+        //                                 Number((mHPlanes.at(planeIndex).normal()(i) / largest[planeIndex]) * Number(limit)));
+        //                         assert(carl::abs(Number(mHPlanes.at(planeIndex).normal()(i) / largest[planeIndex])) <= Number(1));
+        //                         assert(isInteger(newNormal(i)));
+        //                         assert(newNormal(i) <= Number(limit));
+        //                     }
+        //                     mHPlanes.at(planeIndex).setNormal(newNormal);
+        //                     Number newOffset = mHPlanes.at(planeIndex).offset();
+        //                     newOffset = carl::ceil(Number((newOffset / largest[planeIndex]) * Number(limit)));
+        //                     for (const auto &vertex: originalVertices) {
+        //                         Number tmp = newNormal.dot(vertex.rawCoordinates());
+        //                         if (tmp > newOffset) {
+        //                             newOffset = newOffset + (tmp - newOffset);
+        //                             assert(newNormal.dot(vertex.rawCoordinates()) <= newOffset);
+        //                         }
+        //                         assert(Halfspace<Number>(newNormal, newOffset).contains(vertex));
+        //                     }
+        //                     newOffset = carl::ceil(newOffset);
+        //                     mHPlanes.at(planeIndex).setOffset(newOffset);
+        //                 }
+        //             }
+        //         }
+        //         mVertices.clear();
+        //     }
+        //     // #endif
+        // }
+
 
         template<typename N = Number, carl::DisableIf<std::is_same<N, double>> = carl::dummy>
         void reduceNumberRepresentation(const std::vector<Point<Number>> &_vertices = std::vector<Point<Number>>(),
@@ -488,9 +588,24 @@ namespace hypro {
                         }
                     }
                 }
+                mVertices.clear();
             }
             // #endif
         }
+
+
+        /**
+        * calculates the set difference of two polytopes under-approximation 
+        */    
+        HPolytopeT<Number, Converter, Setting>
+        setMinusUnder(const HPolytopeT<Number, Converter, Setting> &minus) const;
+
+
+        /**
+        * returns an estimation of the polytope volume in double 
+        */    
+        double getVolumeEstimation() const;
+
 
         /**
          * calculates the set difference of two polytopes
@@ -498,8 +613,28 @@ namespace hypro {
         std::vector<HPolytopeT<Number, Converter, Setting>>
         setMinus2(const HPolytopeT<Number, Converter, Setting> &minus) const;
 
+        /**
+         * calculates the set difference of two H-Polytopes with crossing points
+         */
         std::vector<HPolytopeT<Number, Converter, Setting>>
-        setMinus(const HPolytopeT<Number, Converter, Setting> &minus) const;
+        setMinusCrossing(const HPolytopeT<Number, Converter, Setting> &minus) const;
+
+         /**
+         * calculates the set difference of two H-Polytopes
+         * general algorithm which selects the algorithm to be used
+         */
+        std::vector<HPolytopeT<Number, Converter, Setting>>
+        setMinus(const HPolytopeT<Number, Converter, Setting> &minus, int setMinusAlgoUsed) const;
+
+        /**
+         * calculates the set difference of two H-Polytopes with the algorithm used before setMinus took an algorithm
+         * (setMinusOld); realyst's minimizing scheduler relies on its results
+         */
+        std::vector<HPolytopeT<Number, Converter, Setting>>
+        setMinus(const HPolytopeT<Number, Converter, Setting> &minus) const { return setMinusOld(minus); }
+
+        std::vector<HPolytopeT<Number, Converter, Setting>>
+        setMinusOld(const HPolytopeT<Number, Converter, Setting> &minus) const;
 
         template<typename N = Number, carl::EnableIf<std::is_same<N, double>> = carl::dummy>
         void reduceNumberRepresentation(const std::vector<Point<double>> & = std::vector<Point<double>>(),
@@ -576,6 +711,14 @@ namespace hypro {
         void setUpdated(const bool &b) { mUpdated = b; }
 
         bool getUpdated() const { return mUpdated; }
+
+        /**
+        * @brief      Rertuns the crossing point of an edge (pair of points).
+        * @details    The function is used for the convex set minus of VPolytope P and HPolytope G.
+        * @param[in]  fromPoint  The starting point.
+        * @param[in]  toPoint  The ending point.
+        */
+       Point<Number> getCrossingPoint(Point<Number> fromPoint, Point<Number> toPoint) const; 
     };
 
 /** @} */

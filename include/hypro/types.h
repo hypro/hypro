@@ -59,11 +59,6 @@ namespace hypro {
         UNSAFE
     };
 
-/// Enum to have more meaningful types for flags
-    enum class MULTITHREADING {
-        ENABLED,
-        DISABLED
-    };
 
     BETTER_ENUM(PLOTTYPE, int,
                 pdf,
@@ -169,12 +164,6 @@ namespace hypro {
                 VOLUME,
                 COUNT,
                 SUCCESSCOUNT)
-
-    struct UseMultithreading {
-    };
-
-    struct NoMultithreading {
-    };
 
 }  // namespace hypro
 

@@ -21,10 +21,19 @@ namespace hypro {
 // copy constructor
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>::HPolytopeT(const HPolytopeT &orig)
-            : GeometricObjectBase(orig), mHPlanes(orig.constraints()), mDimension(orig.dimension()),
-              mNonRedundant(orig.isNonRedundant()) {
+            : GeometricObjectBase(orig) {
+
+        mHPlanes = orig.constraints(); 
+        mDimension = orig.dimension(); 
+        mVertices = orig.getExtremeVertices();
+        mNonRedundant = orig.isNonRedundant();
+
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
-            setOptimizer(orig.matrix(), orig.vector());
+            if (orig.matrix().size() == 0) {
+                setOptimizer();
+            } else {
+                setOptimizer(orig.matrix(), orig.vector());
+            } 
         }
     }
 
@@ -62,7 +71,7 @@ namespace hypro {
 #endif
         reduceNumberRepresentation();
         assert(empty == this->empty());
-        if (Setting::OPTIMIZER_CACHING) {
+        if (Setting::OPTIMIZER_CACHING && A.rows() > 0) {
             setOptimizer(A, b);
         }
     }
@@ -95,7 +104,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>::HPolytopeT(const std::vector<Point<Number>> &points)
-            : mHPlanes(), mDimension(0), mNonRedundant(true) {
+            : mHPlanes(), mDimension(0), mNonRedundant(true), mVertices(points) {
         mEmptyState = points.empty() ? SETSTATE::EMPTY : SETSTATE::NONEMPTY;
         // START_BENCHMARK_OPERATION( "HPoly_vertices_constructor" )
         //  skip
@@ -203,6 +212,9 @@ namespace hypro {
                 });
             }));
 #endif
+            if (Setting::OPTIMIZER_CACHING) {
+                setOptimizer(this->matrix(), this->vector());
+            }
         } else {
             auto pointsCopy = points;
 
@@ -345,7 +357,6 @@ namespace hypro {
                         ch.convexHullVertices();
                         mHPlanes = ch.getHsv();
                         */
-
                     std::vector<std::shared_ptr<Facet<Number>>> facets = convexHull(pointsCopy).first;
                     for (auto &facet: facets) {
 #ifndef NDEBUG
@@ -367,6 +378,7 @@ namespace hypro {
                 }
             }
         }
+        // reduceRepresentation();
         // EVALUATE_BENCHMARK_RESULT( "HPoly_vertices_constructor" )
     }
 
@@ -374,10 +386,11 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     template<typename SettingRhs, carl::DisableIf<std::is_same<Setting, SettingRhs>>>
     HPolytopeT<Number, Converter, Setting>::HPolytopeT(const HPolytopeT<Number, Converter, SettingRhs> &orig)
-            : mHPlanes(orig.constraints()), mDimension(orig.dimension()), mNonRedundant(orig.isNonRedundant()) {
+            : mHPlanes(orig.constraints()), mDimension(orig.dimension()), mVertices(orig.getExtremeVertices()), mNonRedundant(orig.isNonRedundant()) {
         if (Setting::OPTIMIZER_CACHING && orig.getOptimizer().has_value()) {
             setOptimizer(orig.matrix(), orig.vector());
         }
+        // reduceRepresentation();
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -396,7 +409,6 @@ namespace hypro {
         if (mEmptyState == SETSTATE::NONEMPTY || mEmptyState == SETSTATE::UNIVERSAL) {
             return false;
         }
-
         if (mHPlanes.empty()) {
             mEmptyState = SETSTATE::UNIVERSAL;
             return false;
@@ -415,10 +427,22 @@ namespace hypro {
                 Optimizer<Number> opt{this->matrix(), this->vector()};
                 res = !opt.checkConsistency();
             }
+             
         }
 
         mEmptyState = (res == true ? SETSTATE::EMPTY : SETSTATE::NONEMPTY);
+
         return res;
+    }
+
+    template<typename Number, typename Converter, class Setting>
+    bool HPolytopeT<Number, Converter, Setting>::universal() const {
+        if (mEmptyState == SETSTATE::UNIVERSAL) {
+            return true;
+        }
+
+        return false;
+
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -787,6 +811,7 @@ namespace hypro {
             mHPlanes.push_back(plane);
             mEmptyState = SETSTATE::NONEMPTY;
             mNonRedundant = true;
+            mVertices.clear();
             invalidateCache();
             return true;
         } else {
@@ -802,6 +827,7 @@ namespace hypro {
                 mEmptyState = SETSTATE::UNKNOWN;
                 mNonRedundant = false;
                 mUpdated = false;
+                mVertices.clear();
                 invalidateCache();
                 return true;
             }
@@ -829,6 +855,7 @@ namespace hypro {
             setEmptyState(SETSTATE::UNKNOWN);
         }
         mUpdated = false;
+        mVertices.clear();
         invalidateCache();
     }
 
@@ -882,7 +909,6 @@ namespace hypro {
                     --cnt;
                 }
             }
-
             assert(redundant.empty());
         }
         mNonRedundant = true;
@@ -983,6 +1009,85 @@ namespace hypro {
         }
     }
 
+    template<typename Number, typename Converter, typename S> 
+    Point<Number> HPolytopeT<Number, Converter, S>::getCrossingPoint(Point<Number> fromPoint, Point<Number> toPoint) const{
+
+        /**
+         * 
+         * fromPoint = ui
+         * toPoint = uj
+         * 
+         *  MATRIX A (at end) consists of:
+         *                                         points
+         *                       halfspaces                     rel      b 
+         *                 h1:   sum_i(h1.ai*(uj.xi-ui.xi))     <=       h1.b - sum_i(h1.ai * ui.xi)
+         * A =             h2:   sum_i(h2.ai*(uj.xi-ui.xi))     <=       h2.b - sum_i(h2.ai * ui.xi)
+         *                       .                              .        .
+         *                 hn:   sum_i(hn.ai*(uj.xi-ui.xi))     <=       hn.b - sum_i(hn.ai * ui.xi)
+         * 0 <= lambda                   1                      >=       0
+         *      lambda <= 1              1                      <=       1   
+        */  
+
+        matrix_t<Number> A = matrix_t<Number>(mHPlanes.size(), 1);
+
+        assert(mHPlanes.size() > 0);
+        assert(fromPoint.dimension() == toPoint.dimension());
+        assert(fromPoint.dimension() == mHPlanes.at(0).dimension());
+
+        
+        std::vector<Number> scalarB = {};
+
+        // Fill the matrix A for each hyperplane
+        for (Eigen::Index i = 0; i < A.rows(); ++i) {
+            // LP left side of the equation
+            Number sum = 0;
+            for (Eigen::Index j = 0; j < fromPoint.dimension(); ++j) {
+                sum += mHPlanes.at(i).normal()[j] * (toPoint.at(j) - fromPoint.at(j));
+            }
+            A.row(i)[0] = sum;
+
+            // LP right side of the equation
+            Number sum2 = mHPlanes.at(i).vector()[0];
+
+            for (Eigen::Index j = 0; j < fromPoint.dimension(); ++j) {
+                sum2 -= mHPlanes.at(i).normal()[j] * fromPoint.at(j);
+            }
+            scalarB.push_back(sum2);
+        }
+        vector_t<Number> vec_tr = vector_t<Number>::Map(scalarB.data(), scalarB.size());
+        Optimizer<Number> opt(A, vec_tr);
+
+        // 3 bound cols    
+        vector_t<Number> constraint = vector_t<Number>::Ones(A.cols());
+
+        opt.addConstraint(constraint, Number(1), carl::Relation::LEQ);
+        opt.addConstraint(constraint, Number(0), carl::Relation::GEQ);
+        
+        // Check that the point can be represented (EQ).
+        opt.setRelations(std::vector<carl::Relation>(mHPlanes.size(), carl::Relation::LEQ));
+
+        // direction : 1 (for lambda)
+        vector_t<Number> direction = vector_t<Number>::Zero(A.cols());
+        direction(0) = Number(1);
+        opt.setMaximize(false);    
+
+        EvaluationResult<Number> result = opt.evaluate(direction, true);
+
+        // std::cout << "From: " << fromPoint << std::endl;
+        // std::cout << "To: " << toPoint << std::endl; 
+
+        Number resultValue = result.supportValue;
+
+        // std::cout << "Result: " << resultValue << std::endl;
+
+        Point<Number> cp = fromPoint + resultValue * (toPoint - fromPoint);
+
+        // std::cout << "Crossing point: " << cp << std::endl;
+
+
+        return cp;
+    }
+
 /*
  * General interface
  */
@@ -1015,8 +1120,10 @@ namespace hypro {
     std::pair<CONTAINMENT, HPolytopeT<Number, Converter, Setting>>
     HPolytopeT<Number, Converter, Setting>::satisfiesHalfspaces(const matrix_t<Number> &_mat,
                                                                 const vector_t<Number> &_vec) const {
+
         TRACE("hypro.representations.HPolytope", "(P AND Ax <= b) == emptyset?, A: " << _mat << "b: " << _vec);
         assert(_mat.rows() == _vec.rows());
+
         if (this->empty()) {
             return std::make_pair(CONTAINMENT::NO, *this);
         }
@@ -1102,7 +1209,6 @@ namespace hypro {
         if (dimensions.empty()) {
             return Empty();
         }
-
         // projection by means of a linear transformation
         matrix_t<Number> projectionMatrix = matrix_t<Number>::Zero(this->dimension(), this->dimension());
         for (auto i: dimensions) {
@@ -1111,6 +1217,28 @@ namespace hypro {
 
         return this->linearTransformation(projectionMatrix);
     }
+
+    template<typename Number, typename Converter, class Setting>
+    typename std::vector<Point<Number>>
+    HPolytopeT<Number, Converter, Setting>::projectOnAndVertices(const std::vector<std::size_t> &dimensions) const {
+        TRACE("hypro.representations.HPolytope", "out dimensions " << dimensions);
+        if (dimensions.empty() || this->empty()) {
+            return {};
+        }
+
+        // projection by means of a linear transformation
+        matrix_t<Number> A = matrix_t<Number>::Zero(this->dimension(), this->dimension());
+        for (auto i: dimensions) {
+            A(i, i) = 1;
+        }
+
+        TRACE("hypro.representations.HPolytope", "Use V-Conversion for linear transformation.");
+        auto intermediate = Converter::toVPolytope(*this);
+        auto res = intermediate.linearTransformation(A);
+    
+        return res.vertices();        
+    }
+
 
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>
@@ -1154,15 +1282,25 @@ namespace hypro {
             points.emplace_back(b);
             return HPolytopeT<Number, Converter, Setting>(points);
         }
-        if (!this->empty() && !mHPlanes.empty()) {
+        if ( !this->empty() && !mHPlanes.empty()) {
+
             Eigen::FullPivLU<matrix_t<Number>> lu(A);
             // if A has full rank, we can simply re-transform, otherwise use v-representation.
+ 
             if (lu.rank() == A.rows()) {
                 TRACE("hypro.representations.HPolytope", "A has full rank - do not use v-conversion.");
                 std::pair<matrix_t<Number>, vector_t<Number>> inequalities = this->inequalities();
-                assert((HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
-                                                               inequalities.first * A.inverse() * b +
-                                                               inequalities.second).size() == this->size()));
+
+                // std::cout << HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
+                //                                                inequalities.first * A.inverse() * b +
+                //                                                inequalities.second).size() << std::endl;
+
+                // std::cout << "this.size = " << this->size() << std::endl;
+                
+                // removed since if I apply linear transformation on the set, there might be a different number of non-redundant halfspaces
+                // assert((HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
+                //                                                inequalities.first * A.inverse() * b +
+                //                                                inequalities.second).size() == this->size()));
                 assert(!(HPolytopeT<Number, Converter, Setting>(inequalities.first * A.inverse(),
                                                                 inequalities.first * A.inverse() * b +
                                                                 inequalities.second).empty()));
@@ -1186,7 +1324,10 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::minkowskiSum(const HPolytopeT &rhs) const {
+        assert(dimension() == rhs.dimension());
+
         TRACE("hypro.representations.HPolytope", "P' = P + " << rhs << std::endl);
+        TRACE("hypro.representations.HPolytope", "where P =  " << *this << std::endl);
         HPolytopeT<Number, Converter, Setting> res;
         Number result;
 
@@ -1203,7 +1344,9 @@ namespace hypro {
             }
         }
 
-        // if(!oneWay) { // Todo: push to settings.
+        // we need to maximize inside both polytopes
+        // while shifting halfspaces in the directions which are only inside *this, we will get an over-approximation
+        // in the result of the minkowski sum, there should be also halfspaces which have the same norm as the ones in rhs  
         //  evaluation of lhs in directions of rhs
         for (unsigned i = 0; i < rhs.constraints().size(); ++i) {
             EvaluationResult<Number> evalRes = this->evaluate(rhs.constraints().at(i).normal());
@@ -1216,7 +1359,29 @@ namespace hypro {
                 res.insert(Halfspace<Number>(rhs.constraints().at(i).normal(), result));
             }
         }
-        //}
+        return res;
+    }
+
+        template<typename Number, typename Converter, class Setting>
+    HPolytopeT<Number, Converter, Setting>
+    HPolytopeT<Number, Converter, Setting>::minkowskiDiff(const HPolytopeT &rhs) const {
+        TRACE("hypro.representations.HPolytope", "P' = P - " << rhs << std::endl);
+        HPolytopeT<Number, Converter, Setting> res;
+        Number result;
+
+        // evaluation of rhs in directions of lhs
+        for (unsigned i = 0; i < mHPlanes.size(); ++i) {
+            EvaluationResult<Number> evalRes = rhs.evaluate(mHPlanes.at(i).normal());
+            if (evalRes.errorCode == SOLUTION::INFTY) {
+                // Do nothing - omit inserting plane.
+            } else if (evalRes.errorCode == SOLUTION::INFEAS) {
+                return Empty();
+            } else {
+                result = mHPlanes.at(i).offset() - evalRes.supportValue;
+                res.insert(Halfspace<Number>(mHPlanes.at(i).normal(), result));
+            }
+        }
+
         return res;
     }
 
@@ -1224,7 +1389,6 @@ namespace hypro {
     HPolytopeT<Number, Converter, Setting>
     HPolytopeT<Number, Converter, Setting>::intersect(const HPolytopeT &rhs) const {
         TRACE("hypro.representations.HPolytope", "with " << rhs << std::endl);
-
         HPolytopeT<Number, Converter, Setting> res;
         for (const auto &plane: mHPlanes) {
             res.insert(plane);
@@ -1237,7 +1401,6 @@ namespace hypro {
         if (rhs.mEmptyState == SETSTATE::EMPTY || this->mEmptyState == SETSTATE::EMPTY) {
             res.mEmptyState = SETSTATE::EMPTY;
         }
-
         return res;
 
     }
@@ -1274,6 +1437,27 @@ namespace hypro {
             res.removeRedundancy();
         }
         return res;
+    }
+
+    
+
+ 
+ 
+
+    template<typename Number, typename Converter, class Setting>
+    HPolytopeT<Number, Converter, Setting>
+    HPolytopeT<Number, Converter, Setting>::getTimeProjection() const {
+        // h.s. TODO add assertion dimension greater equal 2
+        if (this->empty()) {
+            return *this;
+        }
+        //create a vector with all but the last column index
+        std::vector<std::size_t> cols(this->dimension() - 1);
+        for (std::size_t i = 0; i < cols.size(); i++) {
+            cols[i] = i;
+        }
+        std::pair<smtrat::fmplex::EigenMat<Number>, smtrat::fmplex::EigenVec<Number>> result = smtrat::fmplex::eliminate_cols(this->matrix(), this->vector(), cols);
+        return HPolytopeT<Number, Converter, Setting>(result.first, result.second);
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -1343,7 +1527,9 @@ namespace hypro {
         }
         // at this point, none is empty.
         if (Setting::AVOID_CONVERSION == true) {
-            std::size_t numberOfDirections = 8;
+            // this is misleading, for 8 it gives you ack a 50 sided template polytope
+            // nr directions = 2 * dim + 4 * C(dim, 2) 
+            std::size_t numberOfDirections = 8; 
             TRACE("hypro.representations.HPolytope",
                   "Unite using templated evaluation using " << numberOfDirections << " directions.");
             assert(this->dimension() == _rhs.dimension());
@@ -1433,6 +1619,7 @@ namespace hypro {
     template<typename Number, typename Converter, class Setting>
     void HPolytopeT<Number, Converter, Setting>::clear() {
         mHPlanes.clear();
+        mVertices.clear();
         mDimension = 0;
         mEmptyState = SETSTATE::UNIVERSAL;
         mNonRedundant = true;
@@ -1498,6 +1685,7 @@ namespace hypro {
         }
         mDimension = existingDimensions.size() + newDimensions.size();
         mUpdated = false;
+        mVertices.clear();
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -1542,7 +1730,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     void HPolytopeT<Number, Converter, Setting>::setOptimizer(const matrix_t<Number> &mat,
-                                                              const vector_t<Number> &vec) const {
+                                                              const vector_t<Number> &vec) const {                                                       
         if (mOptimizer.has_value()) {
             mOptimizer->setMatrix(mat);
             mOptimizer->setVector(vec);
@@ -1557,7 +1745,7 @@ namespace hypro {
 
     template<typename Number, typename Converter, class Setting>
     std::vector<HPolytopeT<Number, Converter, Setting>>
-    HPolytopeT<Number, Converter, Setting>::setMinus(const HPolytopeT<Number, Converter, Setting> &minus) const {
+    HPolytopeT<Number, Converter, Setting>::setMinusOld(const HPolytopeT<Number, Converter, Setting> &minus) const {
         std::vector<HPolytopeT<Number, Converter, Setting>> result;
         if (this->dimension() != minus.dimension()) {
             return result;
@@ -1602,6 +1790,182 @@ namespace hypro {
             }
         }
         return result;
+    }
+
+    template<typename Number, typename Converter, class Setting>
+    std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinus(const HPolytopeT<Number, Converter, Setting> &minus, int setMinusAlgoUsed) const {
+
+        std::vector<HPolytopeT<Number, Converter, Setting>> result;
+
+        switch (setMinusAlgoUsed){
+        case 0:
+            result = this->setMinus2(minus);
+            break;
+
+        case 1:
+            result = this->setMinusCrossing(minus);
+            break;
+        case 2:
+            result = this->setMinusOld(minus);
+            break;
+        }
+
+        return result; 
+
+    }
+
+    // new
+    // consider the P polytope is always bounded
+    template<typename Number, typename Converter, class Setting>
+    std::vector<HPolytopeT<Number, Converter, Setting>> HPolytopeT<Number, Converter, Setting>::setMinusCrossing(const HPolytopeT<Number, Converter, Setting> &minus) const {
+        using clock = std::chrono::high_resolution_clock;
+        using timeunit = std::chrono::milliseconds;
+
+        std::vector<HPolytopeT<Number, Converter, Setting>> result;
+        clock::time_point time1 = clock::now();
+
+        auto P_V = Converter::toVPolytope(*this);
+
+        clock::time_point time2 = clock::now();
+
+        auto polytope = P_V.setMinusCrossingH(minus);
+
+        clock::time_point time3 = clock::now();
+
+        auto polytope_H = Converter::toHPolytope(polytope);
+
+
+        clock::time_point time4 = clock::now();
+
+        auto timeConvP = std::chrono::duration_cast<timeunit>(time2 - time1);
+        auto timeSetMinus = std::chrono::duration_cast<timeunit>(time3 - time2);
+        auto timeConvRes = std::chrono::duration_cast<timeunit>(time4 - time3);
+        
+        result.push_back(polytope_H);
+        return result;
+    }
+
+    template<typename Number, typename Converter, class Setting>
+    HPolytopeT<Number, Converter, Setting>
+    HPolytopeT<Number, Converter, Setting>::setMinusUnder(const HPolytopeT<Number, Converter, Setting> &minus) const {
+
+        std::vector<HPolytopeT<Number, Converter, Setting>> vectorPolytopes;
+               
+        HPolytopeT<Number, Converter, Setting> minuspoly(minus.matrix(), minus.vector());
+        std::vector<hypro::Halfspace<Number>> minusconstraints = minuspoly.constraints();
+
+        for (std::size_t i = 0; i < minusconstraints.size(); i++) {
+            hypro::HPolytopeT<Number, Converter, Setting> p_copy(this->matrix(), this->vector());
+            hypro::Halfspace<Number> h = minusconstraints.at(i);
+            h.invert();
+            p_copy.insert(h);
+            vectorPolytopes.push_back(p_copy);
+        }
+
+        hypro::HPolytopeT<Number, Converter, Setting> biggestPolytope;
+        double biggestVolume = 0;
+        double currentVolume = 0;
+
+        for (auto cur_p : vectorPolytopes) {
+            currentVolume = cur_p.getVolumeEstimation();
+            if (currentVolume > biggestVolume) {
+                biggestPolytope = cur_p;
+                biggestVolume = currentVolume;
+            }
+        }
+
+        return biggestPolytope;              
+    }
+
+    template<typename Number, typename Converter, class Setting>
+    double HPolytopeT<Number, Converter, Setting>::getVolumeEstimation() const {
+
+        if (this->empty()) {
+            return 0;
+        }
+
+        if (this->dimension() == 0) {
+            return 0;
+        }
+        
+        // min and max values of each dimension
+        std::vector<std::pair<Number,Number>> bounds;
+
+        // A*x <= b
+        hypro::Optimizer<Number> opt;
+
+        opt.setMatrix(this->matrix());
+        opt.setVector(this->vector());
+
+        for (int i = 0; i < this->dimension(); i++) {
+            // direction : 1,0, ..., 0,0  (ith element is 1)
+            vector_t<Number> direction = vector_t<Number>::Zero(this->dimension());
+            direction(i) = 1;   
+
+            // set it to minimize
+            opt.setMaximize(false);
+            EvaluationResult<Number> result = opt.evaluate(direction, true);
+            Number minValue;
+            if(result.errorCode == SOLUTION::INFEAS){
+                return 0;
+            }
+            if(result.errorCode == SOLUTION::INFTY){
+                minValue = std::numeric_limits<Number>::min();
+            }else{
+                minValue = result.supportValue;
+            }
+
+            // set it to maximize
+            opt.setMaximize(true);
+            result = opt.evaluate(direction, true);
+            Number maxValue ;
+            if(result.errorCode == SOLUTION::INFEAS){
+                return 0;
+            }
+            if(result.errorCode == SOLUTION::INFTY){
+                maxValue = std::numeric_limits<Number>::max();
+            }else{
+                maxValue = result.supportValue;
+            }
+
+            // insert the min and max value of each dimension in the vector bounds
+            bounds.push_back(std::make_pair(minValue, maxValue));            
+        }
+
+        // calculate the volume
+        double estimatedVolume = 1;
+        for (int i = 0; i < this->dimension(); i++) {
+            estimatedVolume *= (bounds[i].second - bounds[i].first);
+        }
+
+        const int numberSamples = 1000;
+        int pointsInside = 0;
+        std::mt19937 generator;
+        std::vector<std::uniform_real_distribution<Number>> dist_vector;
+
+        // generate for every dimension a uniform distribution
+        for(int i = 0; i < this->dimension(); i++){
+            dist_vector.push_back(std::uniform_real_distribution<Number>(bounds[i].first, bounds[i].second));
+        }
+
+        // generate numberSamples points and check if they are inside the polytope
+        for(int i = 0; i < numberSamples; i++){
+            std::vector<Number> point_coordinates;
+
+            // generate a point
+            for(int j = 0; j < this->dimension(); j++){
+                point_coordinates.push_back(dist_vector[j](generator));
+            }
+            Point point(point_coordinates);
+            if(this->contains(point)){
+                pointsInside++;
+            }
+        }
+
+        // calculate the volume
+        double fractionPoints = (double)pointsInside / numberSamples;
+        double volume = fractionPoints * estimatedVolume;
+        return volume;
     }
 
     template<typename Number, typename Converter, class Setting>
@@ -1659,8 +2023,9 @@ namespace hypro {
             opt.setVector(checkvector);
             // default relation is LEQ, set LESS for original polytop
             // GLPK cannot handle strict inequalities and throws error
+            // neither can SOPLEX
             // using weak inequalities instead is overapproximating
-#ifndef HYPRO_USE_GLPK
+#if !defined(HYPRO_USE_GLPK) && !defined(HYPRO_USE_SOPLEX)
             for (long int t = 0; t < matrix.rows(); t++) {
                 opt.setRelation(carl::Relation::LESS, t + matrix2.rows());
             }
@@ -1678,5 +2043,6 @@ namespace hypro {
         }
         return result;
     }
+
 
 }  // namespace hypro

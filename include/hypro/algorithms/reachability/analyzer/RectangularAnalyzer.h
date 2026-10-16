@@ -22,9 +22,8 @@ namespace hypro {
  * @details Requires the usage of a suitable state set representation, e.g., carlPolytope.
  * @tparam State state set representation type (must be polyhedral)
  * @tparam Automaton hybrid automaton type
- * @tparam Multithreading enable/disable multithreading
  */
-    template<typename State, typename Automaton, typename Multithreading = NoMultithreading>
+    template<typename State, typename Automaton>
     class RectangularAnalyzer {
         static_assert(std::is_same<typename State::NumberType, typename Automaton::NumberType>());
         using Number = typename State::NumberType;
@@ -41,7 +40,7 @@ namespace hypro {
                             std::optional<std::size_t> maxCycleGroupRepetitions = std::nullopt,
                             std::optional<std::set<std::vector<const hypro::Transition<hypro::Location<Number>>*>>> allowedPaths = std::nullopt,
                             std::optional<std::map<const hypro::Transition<hypro::Location<Number>>*, std::size_t>> transitionCycleLimit = std::nullopt)
-                : mHybridAutomaton(ha), mAnalysisSettings(setting), mReachTree(roots), mSpecs(specs), mStochasticTransitions(stochasticTransitions),
+                : mHybridAutomaton(&ha), mAnalysisSettings(setting), mReachTree(roots), mSpecs(specs), mStochasticTransitions(stochasticTransitions),
                   mTransitionCycleGroup(transitionCycleGroup), mMaxCycleGroupRepetitions(maxCycleGroupRepetitions), mAllowedPaths(std::move(allowedPaths)),
                   mTransitionCycleLimit(std::move(transitionCycleLimit)) {
         }
@@ -54,7 +53,7 @@ namespace hypro {
         // REACHABILITY_RESULT backwardRun();
 
         void addToQueue(ReachTreeNode<State, LocationT> *node) {
-            if (std::is_same_v<Multithreading, UseMultithreading>) {
+            if (mAnalysisSettings.strategy().front().useMultithreading) {
                 {
                     std::unique_lock<std::mutex> lock(mQueueMutex);
                     mWorkQueue.push(node);
@@ -73,7 +72,9 @@ namespace hypro {
 
         void shutdown() {
             {
-                std::unique_lock<std::mutex> lock(mThreadPoolMutex);
+                // under mQueueMutex, the mutex the workers wait with, so that a worker cannot check the predicate
+                // before this and wait after the notification below
+                std::unique_lock<std::mutex> lock(mQueueMutex);
                 mTerminate = true;    // use this flag in condition.wait
             }
 
@@ -94,7 +95,7 @@ namespace hypro {
 
     protected:
         std::queue<ReachTreeNode<State, LocationT> *> mWorkQueue;   ///< Queue holds all nodes that require processing
-        HybridAutomaton<Number> mHybridAutomaton;                   ///< Automaton which is analyzed
+        Automaton const *mHybridAutomaton;                   ///< Pointer to the automaton which is analyzed
         const Settings mAnalysisSettings;                                   ///< Settings used for analysis
         std::vector<ReachTreeNode<State, LocationT>> &mReachTree;  ///< Forest of ReachTrees computed
         int mNumThreads = std::thread::hardware_concurrency();       ///< number of used threads

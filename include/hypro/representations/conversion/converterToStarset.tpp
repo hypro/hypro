@@ -25,7 +25,7 @@ namespace hypro {
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const TemplatePolyhedronT<Number, Converter<Number>, inSetting> &_source,
                                  const CONV_MODE) {
-
+        throw std::logic_error("not yet implemented toStarset(TemplatePolyhedronT)!");                          
         return StarsetT<Number, Converter<Number>, StarsetSetting>();
 
     }
@@ -44,13 +44,14 @@ namespace hypro {
     template<typename StarsetSetting, typename inSetting>
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const CarlPolytopeT<Number, Converter<Number>, inSetting> &_source, const CONV_MODE) {
-        return StarsetT<Number, Converter<Number>, StarsetSetting>();
+        return toStarset(toHPolytope(_source));
     }
 
     template<typename Number>
     template<typename StarsetSetting, typename inSetting>
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const ConstraintSetT<Number, inSetting> &_source, const CONV_MODE) {
+        throw std::logic_error("not yet implemented toStarset(ConstraintSetT)!");
         return StarsetT<Number, Converter<Number>, StarsetSetting>();
     }
 
@@ -58,6 +59,7 @@ namespace hypro {
     template<typename StarsetSetting>
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const Ellipsoid &_source, const CONV_MODE) {
+        throw std::logic_error("not yet implemented toStarset(Ellipsoid)!");
         return StarsetT<Number, Converter<Number>, StarsetSetting>();
     }
 
@@ -73,7 +75,7 @@ namespace hypro {
     template<typename StarsetSetting, typename inSetting>
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const VPolytopeT<Number, Converter<Number>, inSetting> &_source, const CONV_MODE) {
-        return StarsetT<Number, Converter<Number>, StarsetSetting>();
+        return toStarset(toHPolytope(_source));
     }
 
     template<typename Number>
@@ -81,6 +83,7 @@ namespace hypro {
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const DifferenceBoundsT<Number, Converter<Number>, inSetting> &_source,
                                  const CONV_MODE) {
+        throw std::logic_error("not yet implemented toStarset(DifferenceBoundsT)!");
         return StarsetT<Number, Converter<Number>, StarsetSetting>();
     }
 
@@ -97,6 +100,7 @@ namespace hypro {
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const SupportFunctionT<Number, Converter<Number>, inSetting> &_source,
                                  const CONV_MODE) {
+        throw std::logic_error("not yet implemented toStarset(SupportFunctionT)!");
         return StarsetT<Number, Converter<Number>, StarsetSetting>();
     }
 
@@ -104,6 +108,7 @@ namespace hypro {
     template<typename StarsetSetting, typename inSetting>
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const ZonotopeT<Number, Converter<Number>, inSetting> &_source, const CONV_MODE) {
+        throw std::logic_error("not yet implemented toStarset(ZonotopeT)!");
         return StarsetT<Number, Converter<Number>, StarsetSetting>();
     }
 
@@ -112,6 +117,7 @@ namespace hypro {
     StarsetT<Number, Converter<Number>, StarsetSetting>
     Converter<Number>::toStarset(const SupportFunctionNewT<Number, Converter<Number>, inSetting> &_source,
                                  const CONV_MODE) {
+        throw std::logic_error("not yet implemented toStarset(SupportFunctionNewT)!");
         return StarsetT<Number, Converter<Number>, StarsetSetting>();
     }
 

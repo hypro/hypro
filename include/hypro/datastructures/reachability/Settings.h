@@ -21,19 +21,24 @@ namespace hypro {
     class Settings;
 
     struct AnalysisParameters {
-        tNumber timeStep = 0;                                                   ///< time step size for time-successor computation
-        AGG_SETTING aggregation = AGG_SETTING::MODEL;                           ///< the forced aggregation settings
-        int clustering = -1;                                                   ///< if clustering is used: number of clusters
-        representation_name representation_type = representation_name::UNDEF;  ///< type of representation
-        int representation_setting = 0;                                           ///< used settings for the representation
+        tNumber timeStep = 0;                                                       ///< time step size for time-successor computation
+        AGG_SETTING aggregation = AGG_SETTING::MODEL;                               ///< the forced aggregation settings
+        int clustering = -1;                                                        ///< if clustering is used: number of clusters
+        representation_name representation_type = representation_name::UNDEF;       ///< type of representation
+        int representation_setting = 0;                                             ///< used settings for the representation
         bool uniformBloating = false;
-        REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;  ///< method of reachability analysis
-        int timeStepFactor = 1;                                                  ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep. Can be negative.
-        bool detectJumpFixedPoints = false;                                      ///< true if an analyzer should try to detect a fixed point by analyzing initial sets of other flowpipes
-        bool detectFixedPointsByCoverage = false;                              ///< if true, fixed points for jumps are also detected if multiple sets achieve coverage of the current set (more expensive)
-        std::size_t numberSetsForContinuousCoverage = 0;                      ///< number of sets at the beginning of a flowpipe that are used for coverage tests to detect fixed points within other nodes
-        bool detectContinuousFixedPointsLocally = false;                      ///< true if an analyzer should try to find fixed points within the current flowpipe (set-containment)
-        bool detectZenoBehavior = true;                                          ///< if true, a lightweight check for Zeno cycles is preformed during analysis
+        REACH_SETTING reachability_analysis_method = REACH_SETTING::FORWARD;        ///< method of reachability analysis
+        int timeStepFactor = 1;                                                     ///< the factor between the fixed time step and this time step, i.e. fixedTimeStep * timeStepFactor = timeStep. Can be negative.
+        bool detectJumpFixedPoints = false;                                         ///< true if an analyzer should try to detect a fixed point by analyzing initial sets of other flowpipes
+        bool detectFixedPointsByCoverage = false;                                   ///< if true, fixed points for jumps are also detected if multiple sets achieve coverage of the current set (more expensive)
+        std::size_t numberSetsForContinuousCoverage = 0;                            ///< number of sets at the beginning of a flowpipe that are used for coverage tests to detect fixed points within other nodes
+        bool detectContinuousFixedPointsLocally = false;                            ///< true if an analyzer should try to find fixed points within the current flowpipe (set-containment)
+        bool detectZenoBehavior = true;                                             ///< if true, a lightweight check for Zeno cycles is preformed during analysis
+        int setMinusAlgoUsed = 0;                                                   ///< 0 = use the setMinus2, 1 = use the setMinusCrossing, 2 = use the setMinusOld
+        bool useMultithreading = false;                                             ///< use multithreading for reachability or not, bool variable introduced in order to get rif of one template parameter 
+        bool saveReachableSegments = true;                                          ///< if true the reachable segment will be save in the modes of the reach tree, for example for plotting purposes 
+        bool underapproxReach = false;                                               ///< used to turn on under-approximative calculations for LTI 
+        bool considerLocalAndGlobalTimeHorizon = false;                            ///< if true, both local and global time horizons are considered during analysis, if false and both horizons are set, the global time horizon is prioritized 
     };
 
     struct FixedAnalysisParameters {
