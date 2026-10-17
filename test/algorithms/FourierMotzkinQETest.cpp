@@ -172,8 +172,11 @@ TEST( FourierMotzkinEliminationTest, SingleVariableEquationInconsistent2 ) {
 
 	auto newFormula = eliminateQuantifiers( inFormula, query );
 
+	// x = -y and x = -z give y = z, which the substitution keeps (FourierMotzkinQE::substituteEquations); without it,
+	// e.g. y = 0, z = 1 would satisfy the result but not the input
 	EXPECT_EQ( Form( carl::FormulaType::AND,
-					 FormulasT<mpq_class>{ Form( Constr( Pol( y ) - Pol( z ), carl::Relation::LEQ ) ),
+					 FormulasT<mpq_class>{ Form( Constr( -Pol( y ) + Pol( z ), carl::Relation::EQ ) ),
+										   Form( Constr( Pol( y ) - Pol( z ), carl::Relation::LEQ ) ),
 										   Form( Constr( -Pol( y ), carl::Relation::LEQ ) ),
 										   Form( Constr( -Pol( z ) - Pol( y ), carl::Relation::LEQ ) ) } ),
 			   newFormula );

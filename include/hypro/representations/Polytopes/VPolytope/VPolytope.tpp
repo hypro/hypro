@@ -557,6 +557,29 @@ namespace hypro {
     template<typename Number, typename Converter, typename S>
     VPolytopeT<Number, Converter, S>::VPolytopeT(const matrix_t<Number> &_constraints,
                                                  const vector_t<Number> _constants) {
+        // A row without coefficients, 0 <= b, holds for every point if b >= 0 and for none if b < 0. Fourier-Motzkin
+        // leaves such rows (0 = 0 after substituting x = 0 into itself, e.g. when a reset projects out the last
+        // variable). QuickIntersection below maps a row 0 <= b to the origin of the dual space and the result became
+        // empty, so the rows are decided here.
+        std::vector<Eigen::Index> rowsToKeep;
+        for (Eigen::Index row = 0; row < _constraints.rows(); ++row) {
+            if (!_constraints.row(row).isZero()) {
+                rowsToKeep.push_back(row);
+            } else if (_constants(row) < 0) {
+                *this = Empty();
+                return;
+            }
+        }
+        if (rowsToKeep.size() < std::size_t(_constraints.rows())) {
+            matrix_t<Number> constraints(rowsToKeep.size(), _constraints.cols());
+            vector_t<Number> constants(rowsToKeep.size());
+            for (std::size_t i = 0; i < rowsToKeep.size(); ++i) {
+                constraints.row(i) = _constraints.row(rowsToKeep[i]);
+                constants(i) = _constants(rowsToKeep[i]);
+            }
+            *this = VPolytopeT(constraints, constants);
+            return;
+        }
         if (_constraints.rows() == 0) {
             // construct universe
             TRACE("hypro.representations.vpolytope", "Construction from empty constraints yields universe.");
