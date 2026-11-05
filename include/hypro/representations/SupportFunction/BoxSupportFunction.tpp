@@ -43,7 +43,7 @@ namespace hypro {
 
     template<typename Number, typename Setting>
     BoxSupportFunction<Number, Setting>::BoxSupportFunction(const BoxSupportFunction<Number, Setting> &_origin)
-            : mBox(_origin.getBox()) {
+            : mBox(_origin.mBox) {
     }
 
     template<typename Number, typename Setting>
@@ -54,6 +54,7 @@ namespace hypro {
     BoxSupportFunction<Number, Setting> &
     BoxSupportFunction<Number, Setting>::operator=(const BoxSupportFunction<Number, Setting> &_orig) {
         this->mBox = _orig.mBox;
+        return *this;
     }
 
     template<typename Number, typename Setting>
@@ -68,7 +69,7 @@ namespace hypro {
 
     template<typename Number, typename Setting>
     matrix_t<Number> BoxSupportFunction<Number, Setting>::constraints() const {
-        std::vector<vector_t<Number>> constraints = computeTemplate(mBox.size(), 4);
+        std::vector<vector_t<Number>> constraints = computeTemplate<Number>(mBox.size(), 4);
         matrix_t<Number> res = matrix_t<Number>(constraints.size(), mBox.size());
         Eigen::Index row = 0;
         for (const auto &r: constraints) {
