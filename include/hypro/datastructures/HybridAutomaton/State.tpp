@@ -497,7 +497,7 @@ namespace hypro {
         assert(checkConsistency());
         for (std::size_t i = 0; i < rhs.getSets().size(); i++) {
             res.setSetDirect(std::visit(genericMinkowskiSumVisitor<repVariant>(), mSets.at(i), rhs.getSet(i)), i);
-            if (rhs.getEmptyState()[i] == TRIBOOL::TRUE || this->getEmptyState()[i] == TRIBOOL::TRUE) {
+            if (rhs.getEmptyStates()[i] == TRIBOOL::TRUE || this->getEmptyStates()[i] == TRIBOOL::TRUE) {
                 res.rGetEmptyStates()[i] = TRIBOOL::TRUE;
             }
         }

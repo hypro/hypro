@@ -501,7 +501,7 @@ PolyhedralRepresentation<Number, Converter, Setting> rectangularApplyReverseTime
         return result;
     }
 
-template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
+template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>>>
    PolyhedralRepresentation<Number, Converter, Setting>
    rectangularUnderapproximateReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet,
 													const Location<Number> *loc) {
@@ -513,7 +513,7 @@ template<template<typename, typename, typename> class PolyhedralRepresentation, 
     	return res;
     }
 
-template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
+template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>>>
   PolyhedralRepresentation<Number, Converter, Setting>
   rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet,
 									   const Location<Number> *loc) {
@@ -524,7 +524,7 @@ template<template<typename, typename, typename> class PolyhedralRepresentation, 
     	return res;
     }
 
-template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>> = 0>
+template<template<typename, typename, typename> class PolyhedralRepresentation, typename Number, typename Converter, typename Setting, enable_if<!std::is_same_v<CarlPolytope<Number>, PolyhedralRepresentation<Number, Converter, Setting>>>>
 	PolyhedralRepresentation<Number, Converter, Setting>
 	rectangularApplyReverseTimeEvolution(const PolyhedralRepresentation<Number, Converter, Setting> &badSet, const rectangularFlow<Number> &flow, const Condition<Number> &invariant, std::vector<std::pair<size_t,size_t>> stochJumpAndMappedDim, std::vector<std::pair<size_t,size_t>> firstEnabledIndex, std::optional<std::vector<ConstraintT<hypro::tNumber>>> initialConditions, std::vector<std::pair<size_t,size_t>> firstEnabledIndexLowerBoundOnly) {
     	auto convertedSet = Converter::toCarlPolytope(badSet);
