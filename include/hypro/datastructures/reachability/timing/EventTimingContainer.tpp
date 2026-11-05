@@ -205,12 +205,8 @@ namespace hypro {
         s << "node" << startIndex << " [label=<<TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">";
         // add common info
         std::size_t colspan = 1;  //> mRefinements.size()? 1 : mRefinements.size();
-        if (this->getParent() == nullptr) {
-            s << "<TR><TD COLSPAN=\"" << colspan << "\">@" << this;
-        } else {
-            s << "<TR><TD COLSPAN=\"" << colspan << "\">@" << this << "<BR/>" << this->getLocation()->getName() << "("
-              << this->getLocation()->getId() << ")";
-        }
+        // EventTimingContainer has no parent/location (those belong to the old tree-node version)
+        s << "<TR><TD COLSPAN=\"" << colspan << "\">@" << this;
 
         s << "</TD></TR>";
         s << "<TR><TD> Inv. " << mInvariantEvents << "</TD></TR>";
