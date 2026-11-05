@@ -25,8 +25,11 @@ if (${STATICLIB_SWITCH} STREQUAL "OFF")
             UtilityTest.cpp
             #VertexEnumerationTest.cpp
             ZenoDetectionTest.cpp
-            RectangularLabelSynchronizationTest.cpp
             )
+    # switches between the variable pools of several automata (VariablePool::changeToPool), which exists only with this option
+    if (HYPRO_ANALIZE_MULTIPLE_AUTOMATON)
+        list(APPEND algorithm_test_sources RectangularLabelSynchronizationTest.cpp)
+    endif ()
 
     SET_SOURCE_FILES_PROPERTIES(${algorithm_test_sources} PROPERTIES COMPILE_FLAGS -O0)
 

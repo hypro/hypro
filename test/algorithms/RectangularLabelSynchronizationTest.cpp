@@ -24,10 +24,12 @@ using VPoly = hypro::VPolytope<Number>;
 using Matrix = hypro::matrix_t<Number>;
 using Interval = carl::Interval<Number>;
 using Vector = hypro::vector_t<Number>;
-using Point = hypro::Point<Number>;
+// not "Point" and "testing": a hypro header has "using namespace hypro" at global scope, which makes hypro::Point and
+// hypro::testing (test/algorithms/automata/automataCreation.h) ambiguous with them
+using TestPoint = hypro::Point<Number>;
 
 template <typename Number>
-class RectangularLabelSynchronizationTest : public testing::Test {
+class RectangularLabelSynchronizationTest : public ::testing::Test {
   protected:
 	virtual void SetUp() {}
 	virtual void TearDown() {}
@@ -845,25 +847,25 @@ TYPED_TEST (RectangularLabelSynchronizationTest, TwoAutomataNoSync ) {
 		} );
 	} );
 	EXPECT_EQ( std::size_t( 2 ), flowpipes1.size() );
-	EXPECT_TRUE( is_reachable_in( Point{ 0, 0 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 1, 0 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 10, 9 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 9, 9 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 0, 2 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 0, 5 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 9, 11 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 9, 14 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{0, 0 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{1, 0 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{10, 9 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{9, 9 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{0, 2 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{0, 5 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{9, 11 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{9, 14 }, flowpipes1 ) );
 
-	EXPECT_FALSE( is_reachable_in( Point{ -0.1, 0 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 1.1, 0 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10.1, 9 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10, 9.1 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10, 9.1 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10.1, 9 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 0, 1.9 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 0, 5.1 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 9.1, 11 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 9, 14.1 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{-0.1, 0 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{1.1, 0 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10.1, 9 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10, 9.1 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10, 9.1 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10.1, 9 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{0, 1.9 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{0, 5.1 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{9.1, 11 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{9, 14.1 }, flowpipes1 ) );
 
 	// validate computed flowpipes for automaton 2
 	std::vector<TypeParam> flowpipes2;
@@ -874,23 +876,23 @@ TYPED_TEST (RectangularLabelSynchronizationTest, TwoAutomataNoSync ) {
 		} );
 	} );
 	EXPECT_EQ( std::size_t( 2 ), flowpipes2.size() );
-	EXPECT_TRUE( is_reachable_in( Point{ 10, 0 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 11, 0 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 20, 9 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 19, 9 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 10, 3 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 10, 6 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 19, 12 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 19, 15 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{10, 0 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{11, 0 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{20, 9 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{19, 9 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{10, 3 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{10, 6 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{19, 12 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{19, 15 }, flowpipes2 ) );
 
-	EXPECT_FALSE( is_reachable_in( Point{ 9.9, 0 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 11.1, 0 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 20.1, 9 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 19.5, 9.1 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10, 2.9 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10, 6.1 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 19.1, 12 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 19, 15.1 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{9.9, 0 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{11.1, 0 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{20.1, 9 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{19.5, 9.1 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10, 2.9 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10, 6.1 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{19.1, 12 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{19, 15.1 }, flowpipes2 ) );
 
 	// clear variable pool
 	hypro::VariablePool::getInstance().changeToPool(0);
@@ -940,28 +942,28 @@ TYPED_TEST( RectangularLabelSynchronizationTest, TwoAutomataWithSync ) {
 		} );
 	} );
 	EXPECT_EQ( std::size_t( 2 ), flowpipes1.size() );
-	EXPECT_TRUE( is_reachable_in( Point{ 0, 0 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 1, 0 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 10, 9 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 9, 9 }, flowpipes1 ) );	
-	EXPECT_TRUE( is_reachable_in( Point{ 0, 3 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 0, 5 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 9, 12 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 9, 14 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{0, 0 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{1, 0 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{10, 9 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{9, 9 }, flowpipes1 ) );	
+	EXPECT_TRUE( is_reachable_in( TestPoint{0, 3 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{0, 5 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{9, 12 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{9, 14 }, flowpipes1 ) );
 
-	EXPECT_FALSE( is_reachable_in( Point{ 9, 11 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 0, 2 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 5, 7.5 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ -0.1, 0 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 1.1, 0 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10.1, 9 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10, 9.1 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10, 9.1 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10.1, 9 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 0, 1.9 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 0, 5.1 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 9.1, 11 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 9, 14.1 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{9, 11 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{0, 2 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{5, 7.5 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{-0.1, 0 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{1.1, 0 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10.1, 9 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10, 9.1 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10, 9.1 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10.1, 9 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{0, 1.9 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{0, 5.1 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{9.1, 11 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{9, 14.1 }, flowpipes1 ) );
 
 	// validate computed flowpipes for automaton 2
 	std::vector<TypeParam> flowpipes2;
@@ -972,24 +974,24 @@ TYPED_TEST( RectangularLabelSynchronizationTest, TwoAutomataWithSync ) {
 		} );
 	} );
 	EXPECT_EQ( std::size_t( 2 ), flowpipes2.size() );
-	EXPECT_TRUE( is_reachable_in( Point{ 10, 0 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 11, 0 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 20, 9 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 19, 9 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 10, 3 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 10, 5 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 19, 12 }, flowpipes2 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ 19, 14 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{10, 0 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{11, 0 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{20, 9 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{19, 9 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{10, 3 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{10, 5 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{19, 12 }, flowpipes2 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{19, 14 }, flowpipes2 ) );
 
-	EXPECT_FALSE( is_reachable_in( Point{ 19, 14.1 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10, 5.1 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 9.9, 0 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 11.1, 0 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 20.1, 9 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 19.5, 9.1 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 10, 2.9 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 19.1, 12 }, flowpipes2 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 14, 9.5 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{19, 14.1 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10, 5.1 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{9.9, 0 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{11.1, 0 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{20.1, 9 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{19.5, 9.1 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{10, 2.9 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{19.1, 12 }, flowpipes2 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{14, 9.5 }, flowpipes2 ) );
 	
 	// clear variable pool
 	hypro::VariablePool::getInstance().changeToPool(0);
@@ -1151,13 +1153,13 @@ TYPED_TEST ( RectangularLabelSynchronizationTest, ThreeAutomataTransitiveSync ) 
 		} );
 	} );
 	EXPECT_EQ( std::size_t( 4 ), flowpipes1.size() );
-	EXPECT_TRUE( is_reachable_in( Point{ -1, 3 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ -1, 5 }, flowpipes1 ) );
-	EXPECT_TRUE( is_reachable_in( Point{ -1, 7 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{-1, 3 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{-1, 5 }, flowpipes1 ) );
+	EXPECT_TRUE( is_reachable_in( TestPoint{-1, 7 }, flowpipes1 ) );
 
-	EXPECT_FALSE( is_reachable_in( Point{ 4, 3.5 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 4, 5 }, flowpipes1 ) );
-	EXPECT_FALSE( is_reachable_in( Point{ 4, 7 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{4, 3.5 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{4, 5 }, flowpipes1 ) );
+	EXPECT_FALSE( is_reachable_in( TestPoint{4, 7 }, flowpipes1 ) );
 
 	// clear variable pools
 	hypro::VariablePool::getInstance().changeToPool(0);

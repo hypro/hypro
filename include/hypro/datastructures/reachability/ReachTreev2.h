@@ -20,12 +20,22 @@
 
 namespace hypro {
 
+// Declared here so that this header does not need the representations: HPolytope<Number> is
+// HPolytopeT<Number, Converter<Number>, HPolytopeSetting> (conversion/Converter.h).
+template <typename Number>
+class Converter;
+template <typename Number, typename Converter, class Setting>
+class HPolytopeT;
+struct HPolytopeSetting;
+
 template <class Representation, class Location>
 class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 	static_assert( is_location_type<Location>() );
 
   private:
 	using Number = rep_number<Representation>;
+	/// whether Representation is HPolytope<Number>, whose default constructor gives the universe, not the empty set
+	static constexpr bool isHPolytope = std::is_same_v<Representation, HPolytopeT<Number, Converter<Number>, HPolytopeSetting>>;
 	using Base = TreeNode<ReachTreeNode<Representation, Location>>;
 	using TransitionT = Transition<Location>;
 
@@ -65,7 +75,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		, mTimings( timings ) {
 
 		// the default constructor of HPoly create a universal polytope, not an empty one 
-		if constexpr (std::is_same_v<Representation, HPolytope<Number>>) {
+		if constexpr (isHPolytope) {
 			mInitialSetUnderApprox = Representation::Empty();
 		}
 	}
@@ -80,7 +90,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		, mTimings( timings ) {
 			
 		//TODO: add the same for starset??
-		if constexpr (std::is_same_v<Representation, HPolytope<Number>>) {
+		if constexpr (isHPolytope) {
 			mInitialSet = Representation::Empty();
 		}
 	}
@@ -100,7 +110,7 @@ class ReachTreeNode : public TreeNode<ReachTreeNode<Representation, Location>> {
 		, mInitialSet( initialSet )
 		, mTimings( timings ) {
 
-		if constexpr (std::is_same_v<Representation, HPolytope<Number>>) {
+		if constexpr (isHPolytope) {
 			mInitialSetUnderApprox = Representation::Empty();
 		}
 	}
