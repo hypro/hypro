@@ -213,7 +213,14 @@ if (HYPRO_USE_Z3)
         message(STATUS "Downloading Z3")
         include(z3.cmake)
     endif ()
+    # As for GLPK: the objects of libhypro must be compiled against the z3++.h that is exported to the users of hypro.
+    # z3++.h is header-only, and its classes changed their layout between z3 versions (4.13.4: z3::object got a virtual
+    # destructor). With only hypro-shared linked, the objects took <z3++.h> from the default search path while users
+    # got z3_INCLUDE_DIR; with two z3 installations (e.g. one in /usr/include, Fedora's z3-devel in /usr/include/z3),
+    # libhypro and its users then disagree on the layout of z3::expr, and z3 crashes in Z3_inc_ref.
+    target_link_libraries(${PROJECT_NAME}-objects PUBLIC z3_SHARED)
     target_link_libraries(${PROJECT_NAME}-shared PUBLIC z3_SHARED)
+    target_link_libraries(${PROJECT_NAME}-static PUBLIC z3_SHARED)
 endif ()
 
 if (HYPRO_USE_SOPLEX)
